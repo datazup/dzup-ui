@@ -30,6 +30,13 @@ export const dataGridVariants = tv({
     ].join(' '),
     cell: 'text-left',
     sortIcon: 'inline-flex ml-[var(--dz-spacing-1)]',
+    filterIcon: [
+      'inline-flex items-center justify-center',
+      'h-5 w-5 ml-[var(--dz-spacing-1)]',
+      'rounded-[var(--dz-radius-sm)]',
+      'hover:bg-[var(--dz-muted)]',
+      'transition-[var(--dz-transition-fast)]',
+    ].join(' '),
     checkbox: [
       'h-4 w-4 rounded-[var(--dz-radius-sm)]',
       'border border-[var(--dz-border)]',

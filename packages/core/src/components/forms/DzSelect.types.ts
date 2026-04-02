@@ -48,6 +48,16 @@ export interface DzSelectProps extends BaseAccessibilityProps, BaseValidationPro
   variant?: InputVariant
   /** Form field name */
   name?: string
+  /** Whether the dropdown should be open by default (uncontrolled) */
+  defaultOpen?: boolean
+  /** Enable search/filter input in the dropdown */
+  searchable?: boolean
+  /** Placeholder text for the search input */
+  searchPlaceholder?: string
+  /** Custom filter function — overrides default case-insensitive label match */
+  filterFn?: (option: DzSelectItem, query: string) => boolean
+  /** Text shown when no options match the search query */
+  noResultsText?: string
 }
 
 // ---------------------------------------------------------------------------

@@ -64,6 +64,44 @@ describe('dzDialog -- Contract Spec v1', () => {
     wrapper.unmount()
   })
 
+  // ── Animation props ──
+
+  it('accepts animated prop (default true)', () => {
+    const wrapper = mount(DzDialog, {
+      props: { animated: true },
+      slots: { default: () => h('div', 'child') },
+    })
+    expect(wrapper.exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('accepts animated=false prop', () => {
+    const wrapper = mount(DzDialog, {
+      props: { animated: false },
+      slots: { default: () => h('div', 'child') },
+    })
+    expect(wrapper.exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('accepts overlayTransition prop', () => {
+    const wrapper = mount(DzDialog, {
+      props: { overlayTransition: 'my-overlay' },
+      slots: { default: () => h('div', 'child') },
+    })
+    expect(wrapper.exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('accepts contentTransition prop', () => {
+    const wrapper = mount(DzDialog, {
+      props: { contentTransition: 'my-content' },
+      slots: { default: () => h('div', 'child') },
+    })
+    expect(wrapper.exists()).toBe(true)
+    wrapper.unmount()
+  })
+
   // ── v-model:open ──
 
   it('supports v-model:open', async () => {

@@ -11,6 +11,7 @@ interface TestRow extends Record<string, unknown> {
   name: string
   email: string
   age: number
+  status?: string
 }
 
 const testColumns = [
@@ -19,10 +20,17 @@ const testColumns = [
   { field: 'age', header: 'Age', sortable: true, align: 'right' as const },
 ] satisfies ColumnDef<TestRow>[] as ColumnDef<Record<string, unknown>>[]
 
+const filterableColumns = [
+  { field: 'name', header: 'Name', sortable: true, filterable: true, filterType: 'text' as const },
+  { field: 'email', header: 'Email', filterable: true },
+  { field: 'age', header: 'Age', sortable: true, filterable: true, filterType: 'number' as const, align: 'right' as const },
+  { field: 'status', header: 'Status', filterable: true, filterType: 'select' as const, filterOptions: ['active', 'inactive'] },
+] satisfies ColumnDef<TestRow>[] as ColumnDef<Record<string, unknown>>[]
+
 const testData: TestRow[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com', age: 30 },
-  { id: 2, name: 'Bob', email: 'bob@example.com', age: 25 },
-  { id: 3, name: 'Charlie', email: 'charlie@example.com', age: 35 },
+  { id: 1, name: 'Alice', email: 'alice@example.com', age: 30, status: 'active' },
+  { id: 2, name: 'Bob', email: 'bob@example.com', age: 25, status: 'inactive' },
+  { id: 3, name: 'Charlie', email: 'charlie@example.com', age: 35, status: 'active' },
 ]
 
 function mountGrid(gridProps = {}) {
@@ -199,6 +207,126 @@ describe('dzDataGrid — Pagination', () => {
     const wrapper = mountGrid({ pagination: true })
     const prevBtn = wrapper.find('button[aria-label="Previous page"]')
     expect(prevBtn.attributes('disabled')).toBeDefined()
+  })
+})
+
+describe('dzDataGrid — Filtering', () => {
+  it('does not render filter icons when filterable=false (default)', () => {
+    const wrapper = mountGrid()
+    expect(wrapper.findAll('[data-testid="filter-trigger"]')).toHaveLength(0)
+  })
+
+  it('renders filter icons when filterable=true on columns', () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const triggers = wrapper.findAll('[data-testid="filter-trigger"]')
+    expect(triggers.length).toBeGreaterThan(0)
+  })
+
+  it('opens filter popover when filter icon is clicked', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    expect(wrapper.find('[data-testid="filter-popover"]').exists()).toBe(true)
+  })
+
+  it('renders text input for text filter type', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    expect(wrapper.find('[data-testid="filter-text-input"]').exists()).toBe(true)
+  })
+
+  it('text filtering filters rows (case-insensitive)', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('alice')
+    await input.trigger('input')
+    // After filtering, only Alice should be visible
+    expect(wrapper.text()).toContain('Alice')
+    expect(wrapper.text()).not.toContain('Bob')
+  })
+
+  it('emits update:filters when filter is applied', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('alice')
+    await input.trigger('input')
+    expect(wrapper.emitted('update:filters')).toBeTruthy()
+  })
+
+  it('emits filter event when filter is applied', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('alice')
+    await input.trigger('input')
+    expect(wrapper.emitted('filter')).toBeTruthy()
+  })
+
+  it('shows active filter indicator', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('alice')
+    await input.trigger('input')
+    // The trigger button should now have data-active attribute
+    const updatedTrigger = wrapper.find('[data-testid="filter-trigger"][data-active]')
+    expect(updatedTrigger.exists()).toBe(true)
+  })
+
+  it('shows clear filter button when filter is active', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('alice')
+    await input.trigger('input')
+    expect(wrapper.find('[data-testid="filter-clear-button"]').exists()).toBe(true)
+  })
+
+  it('clear filter button restores all rows', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('alice')
+    await input.trigger('input')
+    expect(wrapper.text()).not.toContain('Bob')
+
+    const clearBtn = wrapper.find('[data-testid="filter-clear-button"]')
+    await clearBtn.trigger('click')
+    expect(wrapper.text()).toContain('Bob')
+    expect(wrapper.text()).toContain('Alice')
+  })
+
+  it('filter composes with sorting', async () => {
+    const wrapper = mountGrid({ columns: filterableColumns, filterable: true, sortable: true })
+    // Apply filter first
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('a')
+    await input.trigger('input')
+    // Then sort
+    const nameHeader = wrapper.findAll('th').find(h => h.text().includes('Name'))
+    await nameHeader?.trigger('click')
+    expect(wrapper.emitted('sort')).toBeTruthy()
+  })
+
+  it('filter composes with pagination', async () => {
+    const wrapper = mountGrid({
+      columns: filterableColumns,
+      filterable: true,
+      pagination: { pageSize: 2 },
+    })
+    // Initially should show pagination
+    expect(wrapper.text()).toContain('Showing')
   })
 })
 

@@ -44,10 +44,15 @@ defineSlots<DzTabsSlots>()
 
 const attrs = useAttrs()
 
+function handleClose(value: string): void {
+  emit('close', value)
+}
+
 const context: DzTabsContext = {
   variant: toRef(() => props.variant),
   size: toRef(() => props.size),
   orientation: toRef(() => props.orientation),
+  onClose: handleClose,
 }
 
 provide(DZ_TABS_KEY, context)

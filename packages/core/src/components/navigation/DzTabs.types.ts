@@ -27,6 +27,8 @@ export interface DzTabsContext {
   size: Ref<CanonicalSize>
   /** Layout orientation */
   orientation: Ref<'horizontal' | 'vertical'>
+  /** Handler called when a closable tab's close button is clicked */
+  onClose: ((value: string) => void) | undefined
 }
 
 /** Typed injection key for DzTabs context (ADR-08, SCREAMING_SNAKE) */
@@ -56,6 +58,8 @@ export interface DzTabsProps extends BaseAccessibilityProps {
 export interface DzTabsEmits {
   /** Active tab value changed */
   change: [value: string]
+  /** A closable tab's close button was activated */
+  close: [value: string]
 }
 
 // ---------------------------------------------------------------------------
@@ -94,6 +98,8 @@ export interface DzTabTriggerProps {
   value: string
   /** Whether this tab trigger is disabled */
   disabled?: boolean
+  /** Whether this tab shows a close button for removal */
+  closable?: boolean
 }
 
 /** Slot definitions for DzTabTrigger */

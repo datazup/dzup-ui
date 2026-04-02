@@ -3,6 +3,7 @@ import type {
   ColumnDef,
   DzDataGridContext,
   DzDataGridEmits,
+  DzDataGridFilter,
   DzDataGridProps,
   DzDataGridSlots,
   PaginationConfig,
@@ -36,6 +37,8 @@ const props = withDefaults(defineProps<DzDataGridProps<T>>(), {
   loading: false,
   sortable: false,
   sortModel: () => [],
+  filterable: false,
+  filters: () => [],
   pagination: false,
   selectable: false,
   selectedRows: () => [],
@@ -54,6 +57,8 @@ const grid = useDataGrid<T>({
   columns: toRef(() => props.columns as ColumnDef<T>[]),
   sortable: toRef(() => props.sortable),
   sortModel: toRef(() => props.sortModel ?? []),
+  filterable: toRef(() => props.filterable),
+  filters: toRef(() => props.filters ?? []),
   pagination: toRef(() => props.pagination),
   selectable: toRef(() => props.selectable),
   selectedRows: toRef(() => props.selectedRows ?? []),
@@ -61,6 +66,10 @@ const grid = useDataGrid<T>({
   onSortChange: (model) => {
     emit('update:sortModel', model)
     emit('sort', model)
+  },
+  onFilterChange: (filterState: DzDataGridFilter[]) => {
+    emit('update:filters', filterState)
+    emit('filter', filterState)
   },
   onSelectionChange: (rows) => {
     emit('update:selectedRows', rows)
@@ -80,10 +89,15 @@ const context: DzDataGridContext = {
   size: toRef(() => props.size),
   sortable: toRef(() => props.sortable),
   sortModel: grid.sortModel as DzDataGridContext['sortModel'],
+  filterable: toRef(() => props.filterable),
+  filters: grid.filters as DzDataGridContext['filters'],
   selectable: toRef(() => props.selectable),
   selectedRows: grid.selectedRows as DzDataGridContext['selectedRows'],
   loading: toRef(() => props.loading),
   sort: grid.sort,
+  setFilter: grid.setFilter,
+  clearFilter: grid.clearFilter,
+  clearAllFilters: grid.clearAllFilters,
   toggleRowSelection: grid.toggleRowSelection as DzDataGridContext['toggleRowSelection'],
   toggleAllSelection: grid.toggleAllSelection,
   isRowSelected: grid.isRowSelected as DzDataGridContext['isRowSelected'],

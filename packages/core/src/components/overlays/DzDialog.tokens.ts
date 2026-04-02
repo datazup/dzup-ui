@@ -42,5 +42,13 @@ export const dialogTokens = {
     focusRing: 'var(--dz-primary)',
   },
   /** Transition timing */
-  transition: 'var(--dz-transition-fast)',
+  transition: {
+    /** Duration for open/close animations */
+    duration: 'var(--dz-transition-fast)',
+    /** Easing curve for open/close animations */
+    easing: 'ease',
+    /** Content transform on enter-from / leave-to */
+    contentScale: '0.95',
+    contentTranslateY: '4px',
+  },
 } as const

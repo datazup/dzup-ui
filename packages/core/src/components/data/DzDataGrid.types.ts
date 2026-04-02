@@ -29,8 +29,12 @@ export interface ColumnDef<T> {
   width?: number | string
   /** Whether this column is sortable */
   sortable?: boolean
-  /** Whether this column is filterable (Phase 2) */
+  /** Whether this column is filterable */
   filterable?: boolean
+  /** Filter type for this column */
+  filterType?: FilterType
+  /** Filter options for select type filter */
+  filterOptions?: string[]
   /** Custom cell renderer component */
   cellRenderer?: Component
   /** Custom header renderer component */
@@ -39,6 +43,26 @@ export interface ColumnDef<T> {
   align?: 'left' | 'center' | 'right'
   /** Pin column to left or right */
   pinned?: 'left' | 'right'
+}
+
+// ---------------------------------------------------------------------------
+// Filter types
+// ---------------------------------------------------------------------------
+
+/** Filter type for column filtering */
+export type FilterType = 'text' | 'number' | 'select'
+
+/** Filter comparison operator */
+export type FilterOperator = 'contains' | 'equals' | 'gt' | 'lt' | 'gte' | 'lte'
+
+/** Filter state for a single column */
+export interface DzDataGridFilter {
+  /** Column field key being filtered */
+  column: string
+  /** Filter value */
+  value: string | number
+  /** Comparison operator */
+  operator: FilterOperator
 }
 
 // ---------------------------------------------------------------------------
@@ -93,6 +117,10 @@ export interface DzDataGridContext<T = Record<string, unknown>> {
   sortable: Ref<boolean>
   /** Current sort model */
   sortModel: Ref<SortModel[]>
+  /** Whether filtering is enabled */
+  filterable: Ref<boolean>
+  /** Current filter state */
+  filters: Ref<DzDataGridFilter[]>
   /** Whether selection is enabled */
   selectable: Ref<boolean | 'single' | 'multiple'>
   /** Currently selected rows */
@@ -101,6 +129,12 @@ export interface DzDataGridContext<T = Record<string, unknown>> {
   loading: Ref<boolean>
   /** Sort a column */
   sort: (field: string) => void
+  /** Set a filter on a column */
+  setFilter: (column: string, filter: DzDataGridFilter) => void
+  /** Clear a filter on a column */
+  clearFilter: (column: string) => void
+  /** Clear all filters */
+  clearAllFilters: () => void
   /** Toggle row selection */
   toggleRowSelection: (row: T) => void
   /** Toggle all row selection */
@@ -132,6 +166,10 @@ export interface DzDataGridProps<T = Record<string, unknown>> extends BaseAccess
   sortable?: boolean
   /** Current sort model (controlled) */
   sortModel?: SortModel[]
+  /** Whether column filtering is enabled */
+  filterable?: boolean
+  /** Current filter state (controlled) */
+  filters?: DzDataGridFilter[]
   /** Whether pagination is enabled */
   pagination?: boolean | PaginationConfig
   /** Selection mode */
@@ -154,12 +192,16 @@ export interface DzDataGridProps<T = Record<string, unknown>> extends BaseAccess
 export interface DzDataGridEmits<T = Record<string, unknown>> {
   /** Sort model changed */
   'update:sortModel': [value: SortModel[]]
+  /** Filter state changed */
+  'update:filters': [value: DzDataGridFilter[]]
   /** Selected rows changed */
   'update:selectedRows': [value: T[]]
   /** A row was clicked */
   'rowClick': [row: T, index: number]
   /** Sort changed (convenience alias) */
   'sort': [sortModel: SortModel[]]
+  /** Filter changed (convenience alias) */
+  'filter': [filters: DzDataGridFilter[]]
   /** Page changed */
   'pageChange': [page: number]
   /** Page size changed */

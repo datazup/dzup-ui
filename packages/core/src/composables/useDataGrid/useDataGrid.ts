@@ -10,6 +10,7 @@
 import type { MaybeRef, Ref } from 'vue'
 import type {
   ColumnDef,
+  DzDataGridFilter,
   PaginationConfig,
   SortDirection,
   SortModel,
@@ -32,6 +33,10 @@ export interface UseDataGridOptions<T> {
   sortModel?: MaybeRef<SortModel[]>
   /** Pagination configuration */
   pagination?: MaybeRef<boolean | PaginationConfig>
+  /** Whether filtering is enabled */
+  filterable?: MaybeRef<boolean>
+  /** Initial filter state */
+  filters?: MaybeRef<DzDataGridFilter[]>
   /** Selection mode */
   selectable?: MaybeRef<boolean | 'single' | 'multiple'>
   /** Initially selected rows */
@@ -40,6 +45,8 @@ export interface UseDataGridOptions<T> {
   rowKey?: keyof T & string
   /** Callback when sort changes */
   onSortChange?: (sortModel: SortModel[]) => void
+  /** Callback when filter changes */
+  onFilterChange?: (filters: DzDataGridFilter[]) => void
   /** Callback when selection changes */
   onSelectionChange?: (rows: T[]) => void
   /** Callback when page changes */
@@ -60,6 +67,8 @@ export interface UseDataGridReturn<T> {
   totalRows: Ref<number>
   /** Current sort model */
   sortModel: Ref<SortModel[]>
+  /** Current filter state */
+  filters: Ref<DzDataGridFilter[]>
   /** Current page (1-based) */
   currentPage: Ref<number>
   /** Current page size */
@@ -74,6 +83,12 @@ export interface UseDataGridReturn<T> {
   isSomeSelected: Ref<boolean>
   /** Sort by a column field */
   sort: (field: string) => void
+  /** Set a filter on a column */
+  setFilter: (column: string, filter: DzDataGridFilter) => void
+  /** Clear a filter on a column */
+  clearFilter: (column: string) => void
+  /** Clear all filters */
+  clearAllFilters: () => void
   /** Toggle selection on a row */
   toggleRowSelection: (row: T) => void
   /** Toggle all rows selection */
@@ -101,12 +116,16 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
   const data = toRef(() => toValue(options.data))
   const columns = toRef(() => toValue(options.columns))
   const sortable = toRef(() => toValue(options.sortable) ?? false)
+  const filterableMode = toRef(() => toValue(options.filterable) ?? false)
   const selectableMode = toRef(() => toValue(options.selectable) ?? false)
   const paginationConfig = toRef(() => toValue(options.pagination) ?? false)
   const rowKey = options.rowKey
 
   // ── Sort state ──
   const sortModel = ref<SortModel[]>(toValue(options.sortModel) ?? []) as Ref<SortModel[]>
+
+  // ── Filter state ──
+  const filters = ref<DzDataGridFilter[]>(toValue(options.filters) ?? []) as Ref<DzDataGridFilter[]>
 
   // ── Pagination state ──
   const currentPage = ref(1)
@@ -130,9 +149,52 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
     return getRowId(a) === getRowId(b)
   }
 
+  // ── Filter helpers ──
+  function applyFilter(cellValue: unknown, filter: DzDataGridFilter): boolean {
+    if (filter.value === '' || filter.value === undefined)
+      return true
+
+    switch (filter.operator) {
+      case 'contains': {
+        const strCell = String(cellValue ?? '').toLowerCase()
+        const strFilter = String(filter.value).toLowerCase()
+        return strCell.includes(strFilter)
+      }
+      case 'equals': {
+        if (typeof filter.value === 'number')
+          return Number(cellValue) === filter.value
+        return String(cellValue ?? '').toLowerCase() === String(filter.value).toLowerCase()
+      }
+      case 'gt':
+        return Number(cellValue) > Number(filter.value)
+      case 'lt':
+        return Number(cellValue) < Number(filter.value)
+      case 'gte':
+        return Number(cellValue) >= Number(filter.value)
+      case 'lte':
+        return Number(cellValue) <= Number(filter.value)
+      default:
+        return true
+    }
+  }
+
+  // ── Filtered data (applied before sorting) ──
+  const filteredData = computed<T[]>(() => {
+    const raw = data.value
+    if (!filterableMode.value || filters.value.length === 0)
+      return raw
+
+    return raw.filter((row) => {
+      return filters.value.every((filter) => {
+        const cellValue = row[filter.column as keyof T]
+        return applyFilter(cellValue, filter)
+      })
+    })
+  })
+
   // ── Sorted data ──
   const sortedData = computed<T[]>(() => {
-    const raw = data.value
+    const raw = filteredData.value
     if (!sortable.value || sortModel.value.length === 0)
       return raw
 
@@ -222,6 +284,36 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
     options.onSortChange?.(newModel)
   }
 
+  // ── Filter actions ──
+  function setFilter(column: string, filter: DzDataGridFilter): void {
+    if (!filterableMode.value)
+      return
+
+    const existing = filters.value.findIndex(f => f.column === column)
+    if (existing >= 0) {
+      const updated = [...filters.value]
+      updated[existing] = filter
+      filters.value = updated
+    }
+    else {
+      filters.value = [...filters.value, filter]
+    }
+    currentPage.value = 1
+    options.onFilterChange?.(filters.value)
+  }
+
+  function clearFilter(column: string): void {
+    filters.value = filters.value.filter(f => f.column !== column)
+    currentPage.value = 1
+    options.onFilterChange?.(filters.value)
+  }
+
+  function clearAllFilters(): void {
+    filters.value = []
+    currentPage.value = 1
+    options.onFilterChange?.(filters.value)
+  }
+
   // ── Selection actions ──
   function isRowSelected(row: T): boolean {
     return selectedRows.value.some(sel => rowsEqual(sel, row))
@@ -284,6 +376,7 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
     displayData,
     totalRows,
     sortModel,
+    filters,
     currentPage,
     pageSize,
     totalPages,
@@ -291,6 +384,9 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
     isAllSelected,
     isSomeSelected,
     sort,
+    setFilter,
+    clearFilter,
+    clearAllFilters,
     toggleRowSelection,
     toggleAllSelection,
     isRowSelected,

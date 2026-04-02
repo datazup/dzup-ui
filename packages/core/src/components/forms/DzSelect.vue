@@ -32,7 +32,7 @@ import {
  * />
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, nextTick, ref, useAttrs } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
@@ -53,6 +53,11 @@ const props = withDefaults(defineProps<DzSelectProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  defaultOpen: false,
+  searchable: false,
+  searchPlaceholder: 'Search...',
+  filterFn: undefined,
+  noResultsText: 'No results found',
 })
 
 const emit = defineEmits<DzSelectEmits>()
@@ -77,6 +82,29 @@ const styles = computed(() =>
   }),
 )
 
+// -- Search state -----------------------------------------------------------
+
+const searchQuery = ref('')
+const searchInputRef = ref<HTMLInputElement | null>(null)
+
+/** Default filter: case-insensitive label match */
+function defaultFilter(option: { label: string, value: string, disabled?: boolean }, query: string): boolean {
+  return option.label.toLowerCase().includes(query.toLowerCase())
+}
+
+const filteredItems = computed(() => {
+  if (!props.searchable || !searchQuery.value.trim()) {
+    return props.items
+  }
+  const filterFn = props.filterFn ?? defaultFilter
+  return props.items.filter(item => filterFn(item, searchQuery.value))
+})
+
+function handleSearchInput(event: Event): void {
+  const target = event.target as HTMLInputElement
+  searchQuery.value = target.value
+}
+
 function handleValueChange(value: string): void {
   model.value = value
   emit('change', value)
@@ -86,8 +114,14 @@ function handleValueChange(value: string): void {
 function handleOpenChange(open: boolean): void {
   if (open) {
     emit('open')
+    if (props.searchable) {
+      void nextTick(() => {
+        searchInputRef.value?.focus()
+      })
+    }
   }
   else {
+    searchQuery.value = ''
     emit('close')
   }
 }
@@ -117,6 +151,7 @@ export default {
     :disabled="resolvedDisabled"
     :name="name"
     :required="required || fieldContext?.isRequired.value"
+    :default-open="defaultOpen"
     @update:model-value="handleValueChange"
     @update:open="handleOpenChange"
   >
@@ -144,9 +179,27 @@ export default {
     <SelectPortal>
       <SelectContent :class="styles.content()" position="popper" :side-offset="4">
         <SelectViewport :class="styles.viewport()">
-          <template v-if="items.length > 0">
+          <div
+            v-if="searchable"
+            :class="styles.searchWrapper()"
+            @pointerdown.stop
+          >
+            <input
+              ref="searchInputRef"
+              type="text"
+              :value="searchQuery"
+              :placeholder="searchPlaceholder"
+              :class="styles.searchInput()"
+              role="searchbox"
+              aria-label="Filter options"
+              data-dz-search-input
+              @input="handleSearchInput"
+              @keydown.stop
+            >
+          </div>
+          <template v-if="filteredItems.length > 0">
             <SelectItem
-              v-for="item in items"
+              v-for="item in filteredItems"
               :key="item.value"
               :value="item.value"
               :disabled="item.disabled"
@@ -160,6 +213,13 @@ export default {
               </SelectItemText>
             </SelectItem>
           </template>
+          <div
+            v-else-if="searchable && searchQuery.trim()"
+            :class="styles.noResults()"
+            data-dz-no-results
+          >
+            {{ noResultsText }}
+          </div>
           <div
             v-else
             class="px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]"

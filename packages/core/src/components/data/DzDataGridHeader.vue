@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { ColumnDef, DzDataGridContext } from './DzDataGrid.types.ts'
+import type { ColumnDef, DzDataGridContext, FilterOperator } from './DzDataGrid.types.ts'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
  *
- * Renders column headers with sort indicators and select-all checkbox.
+ * Renders column headers with sort indicators, select-all checkbox,
+ * and column filter UI (when filterable is enabled).
  * Injects DzDataGrid context (ADR-08).
  */
-import { computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
@@ -19,6 +20,9 @@ const styles = computed(() =>
     density: ctx.density.value,
   }),
 )
+
+/** Track which column's filter popover is open */
+const openFilterField = ref<string | null>(null)
 
 function getAlignClass(align?: 'left' | 'center' | 'right'): string {
   if (align === 'center')
@@ -40,6 +44,60 @@ function handleHeaderKeyDown(event: KeyboardEvent, field: string): void {
     event.preventDefault()
     ctx.sort(field)
   }
+}
+
+function isColumnFilterable(col: ColumnDef<Record<string, unknown>>): boolean {
+  return ctx.filterable.value && col.filterable !== false
+}
+
+function hasActiveFilter(field: string): boolean {
+  return ctx.filters.value.some(f => f.column === field)
+}
+
+function getFilterValue(field: string): string | number {
+  const filter = ctx.filters.value.find(f => f.column === field)
+  return filter?.value ?? ''
+}
+
+function getFilterOperator(field: string): FilterOperator {
+  const filter = ctx.filters.value.find(f => f.column === field)
+  return filter?.operator ?? 'contains'
+}
+
+function toggleFilterPopover(event: Event, field: string): void {
+  event.stopPropagation()
+  openFilterField.value = openFilterField.value === field ? null : field
+}
+
+function handleFilterInput(field: string, value: string, col: ColumnDef<Record<string, unknown>>): void {
+  const filterType = col.filterType ?? 'text'
+  const operator = filterType === 'number' ? getFilterOperator(field) : filterType === 'select' ? 'equals' : 'contains'
+
+  if (value === '') {
+    ctx.clearFilter(field)
+    return
+  }
+
+  const filterValue = filterType === 'number' ? Number(value) : value
+  ctx.setFilter(field, { column: field, value: filterValue, operator })
+}
+
+function handleOperatorChange(field: string, operator: FilterOperator): void {
+  const currentValue = getFilterValue(field)
+  if (currentValue === '' || currentValue === undefined)
+    return
+  ctx.setFilter(field, { column: field, value: currentValue, operator })
+}
+
+function handleFilterKeyDown(event: KeyboardEvent): void {
+  if (event.key === 'Escape') {
+    openFilterField.value = null
+  }
+}
+
+function handleClearFilter(event: Event, field: string): void {
+  event.stopPropagation()
+  ctx.clearFilter(field)
 }
 </script>
 
@@ -69,7 +127,7 @@ export default {
       <th
         v-for="col in ctx.columns.value"
         :key="col.field"
-        :class="cn(styles.headerCell(), getAlignClass(col.align))"
+        :class="cn(styles.headerCell(), getAlignClass(col.align), 'relative')"
         :style="getColumnStyle(col)"
         :aria-sort="
           ctx.sortModel.value.find(s => s.field === col.field)?.direction === 'asc' ? 'ascending'
@@ -95,7 +153,147 @@ export default {
               <path v-else d="M7 10l5 5 5-5" />
             </svg>
           </span>
+          <!-- Filter icon button -->
+          <button
+            v-if="isColumnFilterable(col)"
+            type="button"
+            :class="cn(
+              'inline-flex items-center justify-center h-5 w-5 rounded-[var(--dz-radius-sm)]',
+              'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
+              hasActiveFilter(col.field) ? 'text-[var(--dz-primary)]' : 'text-[var(--dz-muted-foreground)]',
+            )"
+            :aria-label="`Filter ${col.header}`"
+            :data-active="hasActiveFilter(col.field) ? '' : undefined"
+            data-testid="filter-trigger"
+            @click="toggleFilterPopover($event, col.field)"
+            @keydown.escape="openFilterField = null"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5" aria-hidden="true">
+              <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" :fill="hasActiveFilter(col.field) ? 'currentColor' : 'none'" />
+            </svg>
+          </button>
         </span>
+
+        <!-- Filter popover -->
+        <div
+          v-if="isColumnFilterable(col) && openFilterField === col.field"
+          :class="cn(
+            'absolute top-full left-0 z-50 mt-1',
+            'bg-[var(--dz-background)] border border-[var(--dz-border)]',
+            'rounded-[var(--dz-radius-md)] shadow-[var(--dz-shadow-md)]',
+            'p-[var(--dz-spacing-3)] min-w-[200px]',
+          )"
+          role="dialog"
+          :aria-label="`Filter ${col.header}`"
+          data-testid="filter-popover"
+          @click.stop
+          @keydown="handleFilterKeyDown"
+        >
+          <!-- Text filter -->
+          <template v-if="(col.filterType ?? 'text') === 'text'">
+            <input
+              type="text"
+              :class="cn(
+                'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
+                'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
+                'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
+                'focus:outline-none focus:ring-2 focus:ring-[var(--dz-ring)]',
+              )"
+              :value="getFilterValue(col.field)"
+              placeholder="Filter..."
+              :aria-label="`Filter ${col.header} by text`"
+              data-testid="filter-text-input"
+              @input="handleFilterInput(col.field, ($event.target as HTMLInputElement).value, col)"
+              @keydown="handleFilterKeyDown"
+            >
+          </template>
+
+          <!-- Number filter -->
+          <template v-else-if="col.filterType === 'number'">
+            <div class="flex flex-col gap-[var(--dz-spacing-2)]">
+              <select
+                :class="cn(
+                  'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
+                  'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
+                  'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
+                )"
+                :value="getFilterOperator(col.field)"
+                :aria-label="`Filter operator for ${col.header}`"
+                data-testid="filter-operator-select"
+                @change="handleOperatorChange(col.field, ($event.target as HTMLSelectElement).value as FilterOperator)"
+              >
+                <option value="equals">
+                  Equals
+                </option>
+                <option value="gt">
+                  Greater than
+                </option>
+                <option value="lt">
+                  Less than
+                </option>
+                <option value="gte">
+                  Greater or equal
+                </option>
+                <option value="lte">
+                  Less or equal
+                </option>
+              </select>
+              <input
+                type="number"
+                :class="cn(
+                  'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
+                  'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
+                  'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
+                  'focus:outline-none focus:ring-2 focus:ring-[var(--dz-ring)]',
+                )"
+                :value="getFilterValue(col.field)"
+                placeholder="Value..."
+                :aria-label="`Filter ${col.header} by number`"
+                data-testid="filter-number-input"
+                @input="handleFilterInput(col.field, ($event.target as HTMLInputElement).value, col)"
+                @keydown="handleFilterKeyDown"
+              >
+            </div>
+          </template>
+
+          <!-- Select filter -->
+          <template v-else-if="col.filterType === 'select'">
+            <select
+              :class="cn(
+                'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
+                'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
+                'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
+              )"
+              :value="getFilterValue(col.field)"
+              :aria-label="`Filter ${col.header} by selection`"
+              data-testid="filter-select-input"
+              @change="handleFilterInput(col.field, ($event.target as HTMLSelectElement).value, col)"
+            >
+              <option value="">
+                All
+              </option>
+              <option v-for="opt in (col.filterOptions ?? [])" :key="opt" :value="opt">
+                {{ opt }}
+              </option>
+            </select>
+          </template>
+
+          <!-- Clear filter button -->
+          <button
+            v-if="hasActiveFilter(col.field)"
+            type="button"
+            :class="cn(
+              'mt-[var(--dz-spacing-2)] w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
+              'text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
+              'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
+              'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
+            )"
+            data-testid="filter-clear-button"
+            @click="handleClearFilter($event, col.field)"
+          >
+            Clear filter
+          </button>
+        </div>
       </th>
     </tr>
   </thead>

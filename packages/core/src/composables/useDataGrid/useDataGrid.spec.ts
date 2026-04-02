@@ -10,11 +10,12 @@ interface TestRow extends Record<string, unknown> {
   id: number
   name: string
   age: number
+  status?: string
 }
 
 const testColumns: ColumnDef<TestRow>[] = [
-  { field: 'name', header: 'Name', sortable: true },
-  { field: 'age', header: 'Age', sortable: true },
+  { field: 'name', header: 'Name', sortable: true, filterable: true },
+  { field: 'age', header: 'Age', sortable: true, filterable: true, filterType: 'number' },
 ]
 
 const testData: TestRow[] = [
@@ -349,5 +350,278 @@ describe('useDataGrid — Row key', () => {
     // Create a new object with the same id
     const duplicate: TestRow = { ...testData[0]! }
     expect(grid.isRowSelected(duplicate)).toBe(true)
+  })
+})
+
+describe('useDataGrid — Filtering (text)', () => {
+  it('filters data with text contains (case-insensitive)', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'ali', operator: 'contains' })
+    expect(grid.displayData.value).toHaveLength(1)
+    expect(grid.displayData.value[0]!.name).toBe('Alice')
+  })
+
+  it('filters with case-insensitive contains', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'CHARLIE', operator: 'contains' })
+    expect(grid.displayData.value).toHaveLength(1)
+    expect(grid.displayData.value[0]!.name).toBe('Charlie')
+  })
+
+  it('clears filter restores all data', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'Alice', operator: 'contains' })
+    expect(grid.displayData.value).toHaveLength(1)
+
+    grid.clearFilter('name')
+    expect(grid.displayData.value).toHaveLength(5)
+    expect(grid.filters.value).toHaveLength(0)
+  })
+
+  it('clearAllFilters removes all filters', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'a', operator: 'contains' })
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'gte' })
+    expect(grid.filters.value).toHaveLength(2)
+
+    grid.clearAllFilters()
+    expect(grid.filters.value).toHaveLength(0)
+    expect(grid.displayData.value).toHaveLength(5)
+  })
+
+  it('does nothing when filterable is false', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: false,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'Alice', operator: 'contains' })
+    expect(grid.displayData.value).toHaveLength(5)
+  })
+
+  it('calls onFilterChange callback', () => {
+    const onFilterChange = vi.fn()
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+      onFilterChange,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'Bob', operator: 'contains' })
+    expect(onFilterChange).toHaveBeenCalledWith([
+      { column: 'name', value: 'Bob', operator: 'contains' },
+    ])
+  })
+
+  it('updates existing filter for same column', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'Alice', operator: 'contains' })
+    expect(grid.filters.value).toHaveLength(1)
+
+    grid.setFilter('name', { column: 'name', value: 'Bob', operator: 'contains' })
+    expect(grid.filters.value).toHaveLength(1)
+    expect(grid.displayData.value[0]!.name).toBe('Bob')
+  })
+
+  it('clears filter when value is empty string', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'Alice', operator: 'contains' })
+    expect(grid.displayData.value).toHaveLength(1)
+
+    // Empty value still stored but filter passes all rows
+    grid.setFilter('name', { column: 'name', value: '', operator: 'contains' })
+    expect(grid.displayData.value).toHaveLength(5)
+  })
+
+  it('text equals filter works', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'alice', operator: 'equals' })
+    expect(grid.displayData.value).toHaveLength(1)
+    expect(grid.displayData.value[0]!.name).toBe('Alice')
+  })
+})
+
+describe('useDataGrid — Filtering (number)', () => {
+  it('filters with gt operator', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'gt' })
+    const ages = grid.displayData.value.map(r => r.age)
+    expect(ages.every(a => a > 30)).toBe(true)
+  })
+
+  it('filters with lt operator', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'lt' })
+    const ages = grid.displayData.value.map(r => r.age)
+    expect(ages.every(a => a < 30)).toBe(true)
+  })
+
+  it('filters with gte operator', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'gte' })
+    const ages = grid.displayData.value.map(r => r.age)
+    expect(ages.every(a => a >= 30)).toBe(true)
+  })
+
+  it('filters with lte operator', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'lte' })
+    const ages = grid.displayData.value.map(r => r.age)
+    expect(ages.every(a => a <= 30)).toBe(true)
+  })
+
+  it('filters with number equals operator', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'equals' })
+    expect(grid.displayData.value).toHaveLength(1)
+    expect(grid.displayData.value[0]!.name).toBe('Alice')
+  })
+})
+
+describe('useDataGrid — Filtering (select)', () => {
+  const selectColumns: ColumnDef<TestRow>[] = [
+    { field: 'name', header: 'Name' },
+    { field: 'status', header: 'Status', filterable: true, filterType: 'select', filterOptions: ['active', 'inactive'] },
+  ]
+
+  const selectData: TestRow[] = [
+    { id: 1, name: 'Alice', age: 30, status: 'active' },
+    { id: 2, name: 'Bob', age: 25, status: 'inactive' },
+    { id: 3, name: 'Charlie', age: 35, status: 'active' },
+  ]
+
+  it('filters with select equals operator', () => {
+    const grid = useDataGrid({
+      data: selectData,
+      columns: selectColumns,
+      filterable: true,
+    })
+
+    grid.setFilter('status', { column: 'status', value: 'active', operator: 'equals' })
+    expect(grid.displayData.value).toHaveLength(2)
+    expect(grid.displayData.value.every(r => r.status === 'active')).toBe(true)
+  })
+})
+
+describe('useDataGrid — Filtering + Sorting + Pagination', () => {
+  it('filters are applied before sorting', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+      sortable: true,
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'gte' })
+    grid.sort('age')
+    expect(grid.displayData.value[0]!.name).toBe('Alice')
+    expect(grid.displayData.value[1]!.name).toBe('Eve')
+    expect(grid.displayData.value[2]!.name).toBe('Charlie')
+  })
+
+  it('filters are applied before pagination', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+      pagination: { pageSize: 2 },
+    })
+
+    grid.setFilter('age', { column: 'age', value: 30, operator: 'gte' })
+    expect(grid.totalRows.value).toBe(3)
+    expect(grid.displayData.value).toHaveLength(2)
+    expect(grid.totalPages.value).toBe(2)
+  })
+
+  it('resets to page 1 when filter is set', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+      pagination: { pageSize: 2 },
+    })
+
+    grid.goToPage(2)
+    expect(grid.currentPage.value).toBe(2)
+
+    grid.setFilter('name', { column: 'name', value: 'a', operator: 'contains' })
+    expect(grid.currentPage.value).toBe(1)
+  })
+
+  it('resets to page 1 when filter is cleared', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+      pagination: { pageSize: 2 },
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'a', operator: 'contains' })
+    grid.goToPage(2)
+
+    grid.clearFilter('name')
+    expect(grid.currentPage.value).toBe(1)
   })
 })

@@ -54,4 +54,65 @@ describe('dzDataGrid — Contract Spec v1', () => {
     const wrapper = mount(DzDataGrid, { props: { data, columns, loading: true } })
     expect(wrapper.exists()).toBe(true)
   })
+
+  it('accepts filterable prop', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns, filterable: true },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('accepts filters prop', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: {
+        data,
+        columns,
+        filterable: true,
+        filters: [{ column: 'name', value: 'Alice', operator: 'contains' as const }],
+      },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('renders filter UI when filterable=true and column.filterable=true', () => {
+    const filterColumns = [{ field: 'name', header: 'Name', filterable: true }]
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns: filterColumns, filterable: true },
+    })
+    const triggers = wrapper.findAll('[data-testid="filter-trigger"]')
+    expect(triggers.length).toBeGreaterThan(0)
+  })
+
+  it('does not render filter UI when filterable=false', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns, filterable: false },
+    })
+    expect(wrapper.findAll('[data-testid="filter-trigger"]')).toHaveLength(0)
+  })
+
+  it('emits update:filters event', async () => {
+    const filterColumns = [{ field: 'name', header: 'Name', filterable: true }]
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns: filterColumns, filterable: true },
+    })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('test')
+    await input.trigger('input')
+    expect(wrapper.emitted('update:filters')).toBeTruthy()
+  })
+
+  it('emits filter event', async () => {
+    const filterColumns = [{ field: 'name', header: 'Name', filterable: true }]
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns: filterColumns, filterable: true },
+    })
+    const trigger = wrapper.find('[data-testid="filter-trigger"]')
+    await trigger.trigger('click')
+    const input = wrapper.find('[data-testid="filter-text-input"]')
+    await input.setValue('test')
+    await input.trigger('input')
+    expect(wrapper.emitted('filter')).toBeTruthy()
+  })
 })

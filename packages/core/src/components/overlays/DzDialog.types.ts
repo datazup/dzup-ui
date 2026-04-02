@@ -19,6 +19,12 @@ import type { InjectionKey, Ref } from 'vue'
 export interface DzDialogContext {
   /** Current size for content panel */
   size: Ref<'sm' | 'md' | 'lg' | 'xl' | 'full'>
+  /** Whether open/close transitions are enabled */
+  animated: Ref<boolean>
+  /** CSS transition name for the overlay */
+  overlayTransition: Ref<string>
+  /** CSS transition name for the content panel */
+  contentTransition: Ref<string>
 }
 
 /** Typed injection key for DzDialog compound context (ADR-08, SCREAMING_SNAKE) */
@@ -35,6 +41,12 @@ export type DialogContentSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
 export interface DzDialogProps {
   /** Whether the dialog is modal (default true) */
   modal?: boolean
+  /** Whether open/close transitions are enabled (default true) */
+  animated?: boolean
+  /** CSS transition name for the overlay backdrop (default 'dz-dialog-overlay') */
+  overlayTransition?: string
+  /** CSS transition name for the content panel (default 'dz-dialog-content') */
+  contentTransition?: string
 }
 
 // ---------------------------------------------------------------------------

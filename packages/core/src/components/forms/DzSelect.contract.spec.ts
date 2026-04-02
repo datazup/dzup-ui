@@ -63,6 +63,39 @@ describe('dzSelect — Contract Spec v1', () => {
     expect(trigger.exists()).toBe(true)
   })
 
+  // ── Searchable prop ──
+
+  it('accepts searchable prop', () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, searchable: true },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('accepts searchPlaceholder prop', () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, searchable: true, searchPlaceholder: 'Find...' },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('accepts noResultsText prop', () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, searchable: true, noResultsText: 'Nothing' },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('accepts filterFn prop', () => {
+    const customFilter = (option: { label: string, value: string }, query: string): boolean => {
+      return option.value === query
+    }
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, searchable: true, filterFn: customFilter },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
   // ── CSS containment ──
 
   it('has contain: layout style on trigger element', () => {

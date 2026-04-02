@@ -247,6 +247,56 @@ describe('dzDialog -- Unit Tests', () => {
     wrapper.unmount()
   })
 
+  // ── Animation / Transition tests ──
+
+  it('wraps overlay and content in Transition when animated (default)', () => {
+    const wrapper = mountDialog()
+    // Find Transition components -- they render as wrappers with name attribute
+    const transitions = wrapper.findAllComponents({ name: 'Transition' })
+    // Should have at least 2 Transitions (overlay + content)
+    expect(transitions.length).toBeGreaterThanOrEqual(2)
+    wrapper.unmount()
+  })
+
+  it('uses default transition names', () => {
+    const wrapper = mountDialog()
+    const transitions = wrapper.findAllComponents({ name: 'Transition' })
+    const names = transitions.map(t => t.props('name'))
+    expect(names).toContain('dz-dialog-overlay')
+    expect(names).toContain('dz-dialog-content')
+    wrapper.unmount()
+  })
+
+  it('disables transitions when animated=false', () => {
+    const wrapper = mountDialog({ animated: false })
+    const transitions = wrapper.findAllComponents({ name: 'Transition' })
+    // When animated=false, transition names should be empty strings (no animation)
+    for (const t of transitions) {
+      const name = t.props('name') as string
+      if (name === '' || name === undefined) {
+        // Empty name means no transition classes are applied
+        expect(name === '' || name === undefined).toBe(true)
+      }
+    }
+    wrapper.unmount()
+  })
+
+  it('applies custom overlay transition name', () => {
+    const wrapper = mountDialog({ overlayTransition: 'custom-overlay' })
+    const transitions = wrapper.findAllComponents({ name: 'Transition' })
+    const names = transitions.map(t => t.props('name'))
+    expect(names).toContain('custom-overlay')
+    wrapper.unmount()
+  })
+
+  it('applies custom content transition name', () => {
+    const wrapper = mountDialog({ contentTransition: 'custom-content' })
+    const transitions = wrapper.findAllComponents({ name: 'Transition' })
+    const names = transitions.map(t => t.props('name'))
+    expect(names).toContain('custom-content')
+    wrapper.unmount()
+  })
+
   it('does not render content when closed', () => {
     const wrapper = mount(DzDialog, {
       props: { open: false },

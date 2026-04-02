@@ -10,6 +10,7 @@ import type {
   CanonicalSize,
   CanonicalTone,
 } from '@dzup-ui/contracts'
+import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -31,6 +32,24 @@ export interface DzButtonProps extends BaseAccessibilityProps {
   type?: 'button' | 'submit' | 'reset'
   /** Render as child element (slot content becomes the root) */
   asChild?: boolean
+  /**
+   * Element or component to render as (polymorphic root).
+   * Overrides the default `<button>` element.
+   *
+   * @example
+   * ```vue
+   * <DzButton as="a" href="/about">About</DzButton>
+   * <DzButton :as="RouterLink" to="/home">Home</DzButton>
+   * ```
+   */
+  as?: string | Component
+  /** When set, renders as `<a>` automatically and forwards href */
+  href?: string
+  /**
+   * When set, renders as `<router-link>` (with `<a>` fallback).
+   * Accepts a string path or a vue-router location object.
+   */
+  to?: string | Record<string, unknown>
 }
 
 // ---------------------------------------------------------------------------

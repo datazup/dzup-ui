@@ -13,7 +13,7 @@ import type { DzButtonEmits, DzButtonProps, DzButtonSlots } from './DzButton.typ
  * <DzButton variant="outline" size="sm" loading>Processing</DzButton>
  * ```
  */
-import { computed, inject, useAttrs } from 'vue'
+import { computed, inject, resolveComponent, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
@@ -26,6 +26,9 @@ const props = withDefaults(defineProps<DzButtonProps>(), {
   loading: false,
   type: 'button',
   asChild: false,
+  as: undefined,
+  href: undefined,
+  to: undefined,
 })
 
 const emit = defineEmits<DzButtonEmits>()
@@ -48,6 +51,34 @@ const resolvedDisabled = computed(() => props.disabled || (groupContext?.disable
 
 /** Whether interaction is blocked */
 const isInert = computed(() => resolvedDisabled.value || props.loading)
+
+/**
+ * Resolved root element/component for polymorphic rendering.
+ * Priority: explicit `as` > `href` (renders <a>) > `to` (renders router-link) > 'button'
+ */
+const computedTag = computed(() => {
+  if (props.as)
+    return props.as
+  if (props.href)
+    return 'a'
+  if (props.to) {
+    try {
+      const resolved = resolveComponent('RouterLink')
+      // resolveComponent returns a string when the component is not found
+      return typeof resolved === 'string' ? 'a' : resolved
+    }
+    catch {
+      return 'a'
+    }
+  }
+  return 'button'
+})
+
+/** Whether the resolved tag is a native anchor element */
+const isAnchor = computed(() => computedTag.value === 'a')
+
+/** Whether the resolved tag is a native button element */
+const isButton = computed(() => computedTag.value === 'button')
 
 /** Merged class string using cn() (ADR-10) */
 const classes = computed(() =>
@@ -86,11 +117,16 @@ export default {
 </script>
 
 <template>
-  <button
+  <component
+    :is="computedTag"
     :id="id"
-    :type="type"
+    :type="isButton ? type : undefined"
     :class="classes"
-    :disabled="resolvedDisabled || undefined"
+    :disabled="isButton ? (resolvedDisabled || undefined) : undefined"
+    :href="isAnchor && !resolvedDisabled ? (href ?? (to && typeof to === 'string' ? to : undefined)) : undefined"
+    :to="!isAnchor && !isButton && to ? to : undefined"
+    :role="!isButton ? 'button' : undefined"
+    :tabindex="!isButton && isInert ? -1 : (!isButton ? 0 : undefined)"
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :aria-label="ariaLabel"
@@ -144,5 +180,5 @@ export default {
 
     <!-- Suffix slot -->
     <slot name="suffix" />
-  </button>
+  </component>
 </template>

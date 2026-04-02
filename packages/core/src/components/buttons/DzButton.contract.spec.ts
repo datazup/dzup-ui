@@ -190,4 +190,79 @@ describe('dzButton — Contract Spec v1', () => {
     })
     expect(wrapper.find('[data-testid="prefix"]').exists()).toBe(false)
   })
+
+  // ── Polymorphic rendering (as / href / to) ──
+
+  it('accepts as prop for polymorphic rendering', () => {
+    const wrapper = mount(DzButton, {
+      props: { as: 'a', href: '/test' },
+      slots: { default: 'Link' },
+    })
+    expect(wrapper.element.tagName).toBe('A')
+  })
+
+  it('renders as <a> when href prop is set', () => {
+    const wrapper = mount(DzButton, {
+      props: { href: 'https://example.com' },
+      slots: { default: 'Link' },
+    })
+    expect(wrapper.element.tagName).toBe('A')
+    expect(wrapper.attributes('href')).toBe('https://example.com')
+  })
+
+  it('renders with to prop (router-link fallback to <a>)', () => {
+    const wrapper = mount(DzButton, {
+      props: { to: '/dashboard' },
+      slots: { default: 'Dashboard' },
+    })
+    // Without router installed, falls back to <a>
+    expect(wrapper.element.tagName).toBe('A')
+  })
+
+  it('omits type attribute for non-button elements', () => {
+    const wrapper = mount(DzButton, {
+      props: { href: '/test' },
+      slots: { default: 'Link' },
+    })
+    expect(wrapper.attributes('type')).toBeUndefined()
+  })
+
+  it('sets role="button" for non-button elements', () => {
+    const wrapper = mount(DzButton, {
+      props: { as: 'div' },
+      slots: { default: 'Div' },
+    })
+    expect(wrapper.attributes('role')).toBe('button')
+  })
+
+  it('does not set role for native button element', () => {
+    const wrapper = mount(DzButton, { slots: { default: 'btn' } })
+    expect(wrapper.attributes('role')).toBeUndefined()
+  })
+
+  it('disabled anchor omits href and gets tabindex=-1', () => {
+    const wrapper = mount(DzButton, {
+      props: { href: '/test', disabled: true },
+      slots: { default: 'Link' },
+    })
+    expect(wrapper.attributes('href')).toBeUndefined()
+    expect(wrapper.attributes('tabindex')).toBe('-1')
+    expect(wrapper.attributes('aria-disabled')).toBe('true')
+  })
+
+  it('preserves data-tone on polymorphic elements', () => {
+    const wrapper = mount(DzButton, {
+      props: { as: 'a', href: '/test', tone: 'danger' },
+      slots: { default: 'Link' },
+    })
+    expect(wrapper.attributes('data-tone')).toBe('danger')
+  })
+
+  it('preserves contain: layout style on polymorphic elements', () => {
+    const wrapper = mount(DzButton, {
+      props: { href: '/test' },
+      slots: { default: 'Link' },
+    })
+    expect(wrapper.attributes('style')).toContain('contain: layout style')
+  })
 })
