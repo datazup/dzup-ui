@@ -1,0 +1,21 @@
+{
+  "name": "@dzup-ui/contracts",
+  "type": "module",
+  "version": "0.1.0-alpha.0",
+  "description": "Canonical public API contracts for dzip-ui components",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vue": "^3.5.0"
+  }
+}

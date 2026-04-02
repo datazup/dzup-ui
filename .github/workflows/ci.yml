@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ──────────────────────────────────────────────
+  # G0: PR Gates (blocking)
+  # ──────────────────────────────────────────────
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Typecheck (core + pro)
+        run: yarn typecheck
+      - name: Typecheck (all packages)
+        run: yarn typecheck:all
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: ESLint
+        run: yarn lint
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Run tests
+        run: yarn test
+      - name: Run contract tests
+        run: yarn test:contracts
+
+  validate:
+    name: Validate (boundaries + tokens)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Import boundary validation
+        run: yarn validate:boundaries
+      - name: Token compliance check
+        run: yarn validate:tokens
+      - name: Token build artifacts unchanged
+        run: |
+          yarn tokens:generate
+          git diff --exit-code packages/tokens/dist/
+
+  # ──────────────────────────────────────────────
+  # G1: Merge Gates (main branch)
+  # ──────────────────────────────────────────────
+
+  build:
+    name: Build (library mode)
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint, test, validate]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build all packages
+        run: yarn build
+      - name: Verify ESM-only output (no CJS)
+        run: |
+          # ADR-11: ESM-only distribution
+          if find packages/core/dist packages/pro/dist -name "*.cjs" -o -name "*.cjs.js" | grep -q .; then
+            echo "ERROR: CJS output detected — ADR-11 violation"
+            exit 1
+          fi
+          echo "ESM-only output verified"
+      - name: Verify dist artifacts exist
+        run: |
+          test -f packages/core/dist/index.js || (echo "core/dist/index.js missing" && exit 1)
+          test -f packages/pro/dist/index.js || (echo "pro/dist/index.js missing" && exit 1)
+          echo "Build artifacts verified"
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            packages/core/dist/
+            packages/pro/dist/
+          retention-days: 7
+
+  storybook:
+    name: Storybook Build
+    runs-on: ubuntu-latest
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build Storybook
+        run: yarn storybook:build
+      - name: Upload Storybook
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook
+          path: apps/storybook/storybook-static/
+          retention-days: 7
+
+  coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Run coverage
+        run: yarn test:coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7

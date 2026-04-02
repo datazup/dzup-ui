@@ -1,0 +1,69 @@
+{/* Introduction.mdx */}
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Introduction" />
+
+# dzip-ui Component Library
+
+Welcome to the **dzip-ui** component library documentation. This library provides a comprehensive set of Vue 3 components built with TypeScript, Tailwind CSS 4, and design tokens.
+
+## Architecture
+
+- **Vue 3.5+** with Composition API and `<script setup lang="ts">`
+- **TypeScript** with strict mode and full type coverage
+- **Tailwind CSS 4** with CSS-first design tokens
+- **tailwind-variants (tv)** for type-safe variant styling
+- **Reka UI** for headless interaction primitives
+- **OKLCH color system** for perceptually uniform colors
+
+## Packages
+
+### Core (`@dzup-ui/core`)
+
+Foundational, broadly reusable components organized by family:
+
+| Family | Components |
+|--------|-----------|
+| **Buttons** | DzButton, DzIconButton, DzButtonGroup |
+| **Cards** | DzCard, DzStatCard |
+| **Forms** | DzSelect, DzCheckbox, DzRadio, DzSwitch, DzFormField |
+| **Inputs** | DzInput, DzTextarea, DzNumberInput |
+| **Layout** | DzContainer, DzGrid, DzFlex, DzStack |
+| **Navigation** | DzTabs, DzBreadcrumb, DzPagination, DzMenu |
+| **Overlays** | DzDialog, DzSheet, DzTooltip, DzPopover |
+| **Feedback** | DzAlert, DzBadge, DzProgress, DzToast |
+| **Data** | DzDataGrid, DzTable, DzAccordion |
+| **Media** | DzAvatar, DzImage, DzIcon |
+| **Typography** | DzHeading, DzText |
+
+### Pro (`@dzup-ui/pro`)
+
+Enterprise and domain-specific components:
+
+| Family | Components |
+|--------|-----------|
+| **Data Pro** | DzDataGridPro, DzFilterBuilder |
+| **Builders** | DzFormBuilder |
+| **Planning** | DzKanban, DzGantt, DzCalendar |
+| **Editors** | DzCodeEditor, DzRichTextEditor |
+| **Communication** | DzChat, DzComments |
+| **Workflow** | DzWorkflowDesigner |
+
+## Design Tokens
+
+All components use a three-tier token system:
+
+1. **Primitive** -- raw palette and scale values (OKLCH colors)
+2. **Semantic** -- intent-based mappings that adapt to light/dark themes
+3. **Component** -- per-component overrides
+
+Use the **Theme** toolbar toggle above to switch between light and dark modes.
+
+## Contract Spec
+
+Every component follows the Contract Spec v1 with canonical prop groups:
+
+- **Appearance**: `size` (xs/sm/md/lg/xl), `variant`, `tone`
+- **Behavior**: `disabled`, `loading`, `readonly`
+- **State**: `invalid`, `error`, `required`
+- **Accessibility**: `id`, `ariaLabel`, `ariaLabelledby`

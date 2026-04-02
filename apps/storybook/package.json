@@ -1,0 +1,29 @@
+{
+  "name": "@dzup-ui/storybook",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "description": "Storybook for dzip-ui component library",
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "dependencies": {
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/pro": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.5.0",
+    "@storybook/addon-essentials": "^8.5.0",
+    "@storybook/addon-interactions": "^8.5.0",
+    "@storybook/blocks": "^8.5.0",
+    "@storybook/vue3": "^8.5.0",
+    "@storybook/vue3-vite": "^8.5.0",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "storybook": "^8.5.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.1.0",
+    "vue": "^3.5.13"
+  }
+}

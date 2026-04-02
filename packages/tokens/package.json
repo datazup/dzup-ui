@@ -1,0 +1,37 @@
+{
+  "name": "@dzup-ui/tokens",
+  "type": "module",
+  "version": "0.1.0-alpha.0",
+  "description": "Design tokens for the dzip-ui component library",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./css": "./dist/tokens.css",
+    "./tailwind": {
+      "types": "./dist/tailwind-theme.d.ts",
+      "import": "./dist/tailwind-theme.js"
+    },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "import": "./src/utils/index.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "generate": "tsx src/generate.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsx src/generate.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

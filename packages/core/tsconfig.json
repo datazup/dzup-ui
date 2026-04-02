@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@dzup-ui/tokens": ["../tokens/src/index.ts"],
+      "@dzup-ui/tokens/*": ["../tokens/src/*"],
+      "@dzup-ui/contracts": ["../contracts/src/index.ts"],
+      "@dzup-ui/contracts/*": ["../contracts/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@dzup-ui/codemods",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Code transforms for migrating from old dzup-ui to vNext",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

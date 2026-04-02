@@ -1,0 +1,23 @@
+{
+  "name": "@dzup-ui/sandbox",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "description": "Development sandbox for testing dzip-ui components",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/pro": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.1.0"
+  }
+}

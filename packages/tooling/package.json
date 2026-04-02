@@ -1,0 +1,18 @@
+{
+  "name": "@dzup-ui/tooling",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Validators, boundary checks, and token compliance tools for dzip-ui",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "validate:boundaries": "tsx src/validators/import-boundary.ts",
+    "validate:tokens": "tsx src/token-checks/color-lint.ts",
+    "validate:exports": "echo 'TODO: export map validation'",
+    "generate:exports": "tsx src/manifest-generator.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,95 @@
+/**
+ * DzCombobox -- Component-specific token mappings.
+ * Maps semantic design tokens to component styling (ADR-04).
+ *
+ * Wraps Reka UI Combobox with search input, dropdown content,
+ * item list, and clear button.
+ */
+export const comboboxTokens = {
+  /** Root container */
+  background: 'var(--dz-background)',
+  foreground: 'var(--dz-foreground)',
+  border: 'var(--dz-border)',
+  radius: 'var(--dz-radius-md)',
+  transition: 'var(--dz-transition-fast)',
+  focusRingColor: 'var(--dz-primary)',
+  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  /** Filled variant background */
+  filledBackground: 'var(--dz-muted)',
+  /** Invalid state */
+  invalidBorder: 'var(--dz-danger)',
+  invalidFocusRing: 'var(--dz-danger)',
+  /** Search input placeholder */
+  placeholder: 'var(--dz-muted-foreground)',
+  /** Dropdown content */
+  content: {
+    background: 'var(--dz-background)',
+    foreground: 'var(--dz-foreground)',
+    border: 'var(--dz-border)',
+    radius: 'var(--dz-radius-md)',
+    shadow: 'var(--dz-shadow-md)',
+    padding: 'var(--dz-spacing-1)',
+  },
+  /** Dropdown item */
+  item: {
+    foreground: 'var(--dz-foreground)',
+    radius: 'var(--dz-radius-sm)',
+    highlightBackground: 'var(--dz-muted)',
+    checkedBackground: 'var(--dz-primary-muted)',
+    checkedForeground: 'var(--dz-primary)',
+  },
+  /** Icon colors */
+  iconColor: 'var(--dz-muted-foreground)',
+  checkIconColor: 'var(--dz-primary)',
+  /** Clear button */
+  clearButton: {
+    color: 'var(--dz-muted-foreground)',
+    hoverColor: 'var(--dz-foreground)',
+    radius: 'var(--dz-radius-sm)',
+  },
+  /** Empty state */
+  emptyColor: 'var(--dz-muted-foreground)',
+  /** Size scale */
+  size: {
+    xs: {
+      height: 'var(--dz-button-xs-height)',
+      paddingX: 'var(--dz-spacing-2)',
+      fontSize: 'var(--dz-text-xs)',
+      itemPaddingX: 'var(--dz-spacing-2)',
+      itemPaddingY: 'var(--dz-spacing-1)',
+      itemFontSize: 'var(--dz-text-xs)',
+    },
+    sm: {
+      height: 'var(--dz-button-sm-height)',
+      paddingX: 'var(--dz-spacing-3)',
+      fontSize: 'var(--dz-text-sm)',
+      itemPaddingX: 'var(--dz-spacing-2)',
+      itemPaddingY: 'var(--dz-spacing-1_5)',
+      itemFontSize: 'var(--dz-text-sm)',
+    },
+    md: {
+      height: 'var(--dz-button-md-height)',
+      paddingX: 'var(--dz-spacing-3)',
+      fontSize: 'var(--dz-text-sm)',
+      itemPaddingX: 'var(--dz-spacing-2)',
+      itemPaddingY: 'var(--dz-spacing-1_5)',
+      itemFontSize: 'var(--dz-text-sm)',
+    },
+    lg: {
+      height: 'var(--dz-button-lg-height)',
+      paddingX: 'var(--dz-spacing-4)',
+      fontSize: 'var(--dz-text-base)',
+      itemPaddingX: 'var(--dz-spacing-3)',
+      itemPaddingY: 'var(--dz-spacing-2)',
+      itemFontSize: 'var(--dz-text-base)',
+    },
+    xl: {
+      height: 'var(--dz-button-xl-height)',
+      paddingX: 'var(--dz-spacing-4)',
+      fontSize: 'var(--dz-text-lg)',
+      itemPaddingX: 'var(--dz-spacing-3)',
+      itemPaddingY: 'var(--dz-spacing-2)',
+      itemFontSize: 'var(--dz-text-lg)',
+    },
+  },
+} as const
