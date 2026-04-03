@@ -13,7 +13,9 @@
     "validate:changelog": "tsx scripts/validate-changelog.ts",
     "validate:dts": "tsx scripts/validate-dts.ts",
     "validate:peers": "tsx scripts/validate-peers.ts",
-    "generate:exports": "tsx src/manifest-generator.ts"
+    "generate:exports": "tsx src/manifest-generator.ts",
+    "validate:tree-shake": "tsx src/tree-shake-check.ts",
+    "test:perf": "vitest run src/perf-bench.spec.ts"
   },
   "devDependencies": {
     "tsx": "^4.19.0",

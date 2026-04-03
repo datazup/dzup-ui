@@ -18,10 +18,12 @@
 export { CodemodRunner } from './runner.js'
 export type { RunnerOptions, RunResult, TransformFn } from './runner.js'
 
+export { default as renameComponents } from './transforms/rename-components.js'
 export { default as renameEvents } from './transforms/rename-events.js'
 // Transforms
 export { default as renameImports } from './transforms/rename-imports.js'
 export { default as renameProps } from './transforms/rename-props.js'
+export { default as renameSlots } from './transforms/rename-slots.js'
 
 // Utilities
 export { CodemodLogger } from './utils/logger.js'
@@ -36,6 +38,11 @@ export {
   extractTemplate,
   renameTemplateAttrs,
   renameTemplateAttrValues,
+  renameTemplateComponents,
   renameTemplateEvents,
+  renameTemplateSlots,
   replaceTemplate,
+} from './utils/vue-template.js'
+export type {
+  TemplateSlotRenameRule,
 } from './utils/vue-template.js'

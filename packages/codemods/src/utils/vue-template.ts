@@ -203,15 +203,26 @@ export function extractTemplate(source: string): {
   end: number
 } | null {
   const openTag = /<template[^>]*>/
-  const closeTag = /<\/template>/
   const openMatch = openTag.exec(source)
   if (!openMatch)
     return null
   const contentStart = openMatch.index + openMatch[0].length
-  const closeMatch = closeTag.exec(source.slice(contentStart))
-  if (!closeMatch)
+
+  // Find the LAST </template> in the source — this is the closing tag of the
+  // root <template> block.  Inner <template #slot> tags use </template> too,
+  // so taking the first match would truncate the content prematurely.
+  const closeTag = /<\/template>/g
+  let lastCloseMatch: RegExpExecArray | null = null
+  let match: RegExpExecArray | null = closeTag.exec(source)
+  while (match !== null) {
+    lastCloseMatch = match
+    match = closeTag.exec(source)
+  }
+
+  if (!lastCloseMatch || lastCloseMatch.index <= contentStart)
     return null
-  const contentEnd = contentStart + closeMatch.index
+
+  const contentEnd = lastCloseMatch.index
   return {
     content: source.slice(contentStart, contentEnd),
     start: contentStart,
@@ -228,6 +239,94 @@ export function replaceTemplate(
   positions: { start: number, end: number },
 ): string {
   return source.slice(0, positions.start) + newContent + source.slice(positions.end)
+}
+
+/** A slot rename rule scoped to one or more component tags. */
+export interface TemplateSlotRenameRule {
+  /** Component tag names this rule applies to (PascalCase). */
+  components: string[]
+  /** Old slot name (without `#` or `v-slot:` prefix). */
+  oldSlot: string
+  /** New slot name (without prefix). */
+  newSlot: string
+}
+
+/**
+ * Rename slot names on `<template>` tags within matching component blocks.
+ *
+ * Handles:
+ * - `<template #oldSlot>` -> `<template #newSlot>`
+ * - `<template v-slot:oldSlot>` -> `<template v-slot:newSlot>`
+ * - `<template #oldSlot="props">` -> `<template #newSlot="props">`
+ * - `<template v-slot:oldSlot="props">` -> `<template v-slot:newSlot="props">`
+ *
+ * Uses a two-pass approach: find matching component blocks, then rename
+ * slot names only within those blocks.
+ */
+export function renameTemplateSlots(
+  template: string,
+  rules: TemplateSlotRenameRule[],
+): string {
+  let result = template
+
+  for (const rule of rules) {
+    for (const component of rule.components) {
+      // Find each component block: opening tag to closing tag.
+      // Self-closing components cannot have slot children, so skip those.
+      const blockRegex = new RegExp(
+        `(<${escapeRegex(component)}\\b[^>]*>)([\\s\\S]*?)(<\\/${escapeRegex(component)}>)`,
+        'g',
+      )
+
+      result = result.replace(
+        blockRegex,
+        (_match: string, openTag: string, inner: string, closeTag: string) => {
+          // Within the inner content, rename slot directives on <template> tags.
+          const slotPattern = new RegExp(
+            `(<template\\s[^>]*?)(#|v-slot:)(${escapeRegex(rule.oldSlot)})(\\b)`,
+            'g',
+          )
+          const newInner = inner.replace(
+            slotPattern,
+            (_m: string, before: string, prefix: string, _name: string, boundary: string) =>
+              `${before}${prefix}${rule.newSlot}${boundary}`,
+          )
+          return `${openTag}${newInner}${closeTag}`
+        },
+      )
+    }
+  }
+
+  return result
+}
+
+/**
+ * Rename component tag names in a template.
+ *
+ * Handles:
+ * - `<OldName` -> `<NewName`
+ * - `</OldName>` -> `</NewName>`
+ */
+export function renameTemplateComponents(
+  template: string,
+  rules: Array<{ oldName: string, newName: string }>,
+): string {
+  let result = template
+
+  for (const rule of rules) {
+    // Opening tags: <OldName or <OldName (with attributes)
+    const openTagPattern = new RegExp(
+      `(<\\/?)${escapeRegex(rule.oldName)}(\\b)`,
+      'g',
+    )
+    result = result.replace(
+      openTagPattern,
+      (_m: string, prefix: string, boundary: string) =>
+        `${prefix}${rule.newName}${boundary}`,
+    )
+  }
+
+  return result
 }
 
 /** Escape special regex characters in a string. */
