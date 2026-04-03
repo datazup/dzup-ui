@@ -97,10 +97,8 @@ export default {
     :orientation="orientation"
     :name="name"
     :class="rootClasses"
-    :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
-    :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-tone="tone"
@@ -114,6 +112,7 @@ export default {
     <SliderThumb
       :class="styles.thumb()"
       :aria-label="ariaLabel ?? 'Slider thumb'"
+      :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
       @focus="handleFocus"
       @blur="handleBlur"
     />

@@ -63,7 +63,7 @@ export default {
   <span
     :id="id"
     :class="classes"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel ?? alt"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     role="img"
