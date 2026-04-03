@@ -84,6 +84,7 @@ async function benchmark(
 }
 
 function logResult(name: string, result: BenchResult): void {
+  // eslint-disable-next-line no-console
   console.log(
     `  ${name}: avg=${result.average.toFixed(2)}ms `
     + `min=${result.min.toFixed(2)}ms max=${result.max.toFixed(2)}ms`,

@@ -65,6 +65,9 @@ export default {
     :aria-disabled="isInert || undefined"
     :aria-busy="ctx?.loading.value || undefined"
     :aria-label="ariaLabel"
+    :data-state="ctx?.loading.value ? 'loading' : 'idle'"
+    :data-disabled="ctx?.disabled.value ? '' : undefined"
+    :data-loading="ctx?.loading.value ? '' : undefined"
     v-bind="{ ...$attrs, class: undefined }"
     @click="handleClick"
   >

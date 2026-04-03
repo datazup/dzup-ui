@@ -5,76 +5,95 @@
  * All design values reference --dz-* tokens from @dzup-ui/tokens.
  *
  * Sections:
- *   1. Box model reset
- *   2. Document defaults
- *   3. Focus ring utility
- *   4. Reduced motion
- *   5. Print styles
+ *   1. Layer order declaration
+ *   2. Box model reset
+ *   3. Document defaults
+ *   4. Focus ring utility
+ *   5. Reduced motion
+ *   6. Print styles
  */
 
 /* ==========================================================================
-   1. Box Model Reset
+   1. Layer Order Declaration
+   Establishes specificity hierarchy for the library. Consumer utilities
+   (unlayered by default in Tailwind CSS 4) always beat layered styles,
+   making overrides predictable without !important.
    ========================================================================== */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@layer dz-tokens, dz-base, dz-components;
 
 /* ==========================================================================
-   2. Document Defaults
-   Minimal body resets. Consumers may layer their own resets on top.
+   2–5. Base Reset & Utilities (layered)
    ========================================================================== */
 
-body {
-  margin: 0;
-  font-family: var(--dz-font-sans);
-  line-height: var(--dz-leading-normal);
-  color: var(--dz-foreground);
-  background-color: var(--dz-background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer dz-base {
+  /* ==========================================================================
+     2. Box Model Reset
+     ========================================================================== */
 
-html {
-  scroll-behavior: smooth;
-}
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-/* ==========================================================================
-   3. Focus Ring Utility
-   Reusable focus-visible outline for interactive components.
-   Applied via class="dz-focus-ring" or composed in tailwind-variants.
-   ========================================================================== */
+  /* ==========================================================================
+     3. Document Defaults
+     Minimal body resets. Consumers may layer their own resets on top.
+     ========================================================================== */
 
-.dz-focus-ring:focus-visible {
-  outline: 2px solid var(--dz-ring);
-  outline-offset: 2px;
-}
+  body {
+    margin: 0;
+    font-family: var(--dz-font-sans);
+    line-height: var(--dz-leading-normal);
+    color: var(--dz-foreground);
+    background-color: var(--dz-background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-/* Remove default outline for non-keyboard focus */
-.dz-focus-ring:focus:not(:focus-visible) {
-  outline: none;
-}
-
-/* ==========================================================================
-   4. Reduced Motion
-   Respects user preference for reduced motion. Complements the token-level
-   reduced-motion overrides in tokens.css (which zero out transition/animation
-   durations). This block handles scroll-behavior specifically.
-   ========================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
+  }
+
+  /* ==========================================================================
+     4. Focus Ring Utility
+     Reusable focus-visible outline for interactive components.
+     Applied via class="dz-focus-ring" or composed in tailwind-variants.
+     ========================================================================== */
+
+  .dz-focus-ring:focus-visible {
+    outline: 2px solid var(--dz-ring);
+    outline-offset: 2px;
+  }
+
+  /* Remove default outline for non-keyboard focus */
+  .dz-focus-ring:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ==========================================================================
+     5. Reduced Motion
+     Respects user preference for reduced motion. Complements the token-level
+     reduced-motion overrides in tokens.css (which zero out transition/animation
+     durations). This block handles scroll-behavior specifically.
+     ========================================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
 /* ==========================================================================
-   5. Print Styles
+   6. Print Styles
    Force legible output and hide interactive-only elements.
    Black/white literals are intentional here — print output must be
    predictable regardless of theme tokens.
+
+   Kept outside @layer so print overrides always win regardless of
+   layer specificity.
    ========================================================================== */
 
 @media print {

@@ -22,9 +22,11 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        resolver: resolve(__dirname, 'src/resolver.ts'),
+      },
       formats: ['es'],
-      fileName: 'index',
     },
     rollupOptions: {
       external: [

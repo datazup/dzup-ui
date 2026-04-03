@@ -86,7 +86,14 @@ function generateCss(): string {
  *   Tier 1 — Primitive: raw palette and scale values
  *   Tier 2 — Semantic: intent-based mappings (light/dark)
  *   Tier 3 — Component: per-component overrides
+ *
+ * All token declarations are wrapped in @layer dz-tokens so that
+ * consumer utilities (unlayered) can override them without !important.
+ * The layer order is declared in packages/core/src/styles/base.css:
+ *   @layer dz-tokens, dz-base, dz-components;
  */
+
+@layer dz-tokens {
 
 /* ==========================================================================
    Tier 1: Primitive Tokens
@@ -158,8 +165,11 @@ ${formatVars(shadowsDark, '    ')}
 ${formatVars(componentTokens)}
 }
 
+} /* end @layer dz-tokens */
+
 /* ==========================================================================
    Reduced Motion
+   Kept outside @layer — these safety overrides must always win.
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {

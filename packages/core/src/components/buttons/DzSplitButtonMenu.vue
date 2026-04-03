@@ -45,7 +45,7 @@ export default {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative" :data-state="ctx?.disabled.value ? 'disabled' : 'idle'" :data-disabled="ctx?.disabled.value ? '' : undefined">
     <slot>
       <button
         type="button"

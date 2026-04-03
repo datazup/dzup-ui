@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Buffer } from 'node:buffer'
 import { execSync } from 'node:child_process'
 /**
