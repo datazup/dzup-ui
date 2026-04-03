@@ -74,6 +74,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :data-state="disabled ? 'disabled' : 'idle'"
     :data-tone="tone"
     :data-disabled="disabled ? '' : undefined"
     :tabindex="closable ? 0 : undefined"

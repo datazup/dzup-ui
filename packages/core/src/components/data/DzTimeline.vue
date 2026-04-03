@@ -59,6 +59,7 @@ export default {
     :id="id"
     :class="rootClasses"
     :aria-label="ariaLabel ?? 'Timeline'"
+    data-state="ready"
     :data-tone="tone"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"

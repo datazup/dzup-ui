@@ -62,6 +62,7 @@ export default {
     role="group"
     :class="classes"
     :aria-label="ariaLabel"
+    :data-state="disabled ? 'disabled' : 'ready'"
     :data-disabled="disabled ? '' : undefined"
     :data-tone="tone"
     style="contain: layout style"

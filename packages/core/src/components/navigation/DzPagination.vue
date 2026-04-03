@@ -80,6 +80,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :data-state="disabled ? 'disabled' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

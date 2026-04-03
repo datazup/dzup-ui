@@ -61,6 +61,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    data-state="ready"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <ol :class="styles.list()">

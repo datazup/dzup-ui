@@ -79,6 +79,7 @@ export default {
 <template>
   <div
     :class="rootClasses"
+    :data-state="loading ? 'loading' : 'ready'"
     :data-loading="loading ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

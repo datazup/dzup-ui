@@ -65,6 +65,7 @@ export default {
     :model-value="model"
     :disabled="disabled"
     :class="rootClasses"
+    :data-state="disabled ? 'disabled' : 'idle'"
     :aria-label="ariaLabel"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

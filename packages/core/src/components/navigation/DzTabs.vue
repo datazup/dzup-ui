@@ -91,6 +91,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    data-state="ready"
     :data-variant="variant"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

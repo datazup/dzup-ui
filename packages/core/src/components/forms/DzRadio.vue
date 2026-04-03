@@ -45,6 +45,7 @@ export default {
 <template>
   <label
     :class="rootClasses"
+    :data-state="disabled ? 'disabled' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

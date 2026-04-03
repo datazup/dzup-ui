@@ -44,6 +44,7 @@ export default {
 <template>
   <span
     :class="classes"
+    data-state="ready"
     :data-tone="tone"
     v-bind="{ ...$attrs, class: undefined }"
   >

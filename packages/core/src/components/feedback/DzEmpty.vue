@@ -44,6 +44,7 @@ export default {
   <div
     :id="id"
     :class="rootClasses"
+    data-state="ready"
     role="status"
     v-bind="{ ...$attrs, class: undefined }"
   >

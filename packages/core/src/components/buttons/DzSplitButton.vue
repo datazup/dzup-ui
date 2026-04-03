@@ -62,6 +62,7 @@ export default {
     role="group"
     :class="classes"
     :aria-label="ariaLabel"
+    :data-state="disabled ? 'disabled' : loading ? 'loading' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :data-tone="tone"

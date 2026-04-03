@@ -88,6 +88,7 @@ export default {
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
     :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
     :class="classes"
+    :data-state="disabled ? 'disabled' : 'ready'"
     :data-disabled="disabled ? '' : undefined"
     :data-orientation="orientation"
     style="contain: layout style"

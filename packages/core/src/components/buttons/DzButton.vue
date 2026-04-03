@@ -132,6 +132,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : 'idle'"
     :data-tone="resolvedTone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"

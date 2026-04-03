@@ -108,6 +108,7 @@ export default {
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :aria-label="ariaLabel"
+    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : 'idle'"
     :data-tone="resolvedTone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"

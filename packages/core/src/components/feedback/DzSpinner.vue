@@ -43,6 +43,7 @@ export default {
   <span
     role="status"
     :aria-label="label"
+    data-state="loading"
     :data-tone="tone"
     v-bind="{ ...$attrs, class: undefined }"
   >

@@ -51,6 +51,7 @@ export default {
   <div
     :id="id"
     :class="rootClasses"
+    data-state="ready"
     :data-variant="variant"
     v-bind="{ ...$attrs, class: undefined }"
   >

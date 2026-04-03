@@ -68,6 +68,7 @@ export default {
   <div
     v-if="isMultiline"
     aria-hidden="true"
+    data-state="loading"
     class="flex flex-col gap-[var(--dz-spacing-2)]"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -84,6 +85,7 @@ export default {
     :class="classes"
     :style="elementStyle"
     aria-hidden="true"
+    data-state="loading"
     v-bind="{ ...$attrs, class: undefined }"
   />
 </template>

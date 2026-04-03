@@ -101,6 +101,7 @@ export default {
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
     :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
+    :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-tone="tone"
     style="contain: layout style"

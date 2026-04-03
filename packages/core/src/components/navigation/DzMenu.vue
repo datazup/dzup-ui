@@ -60,6 +60,7 @@ export default {
     :id="id"
     :class="rootClasses"
     :aria-label="ariaLabel"
+    data-state="ready"
     role="navigation"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

@@ -125,6 +125,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :data-state="disabled ? 'disabled' : loading ? 'loading' : 'ready'"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     style="contain: layout style"

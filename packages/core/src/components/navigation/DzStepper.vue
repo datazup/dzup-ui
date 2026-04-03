@@ -65,6 +65,7 @@ export default {
     :id="id"
     :class="rootClasses"
     :aria-label="ariaLabel ?? 'Progress steps'"
+    data-state="ready"
     role="group"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

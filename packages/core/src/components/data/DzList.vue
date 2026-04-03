@@ -77,6 +77,7 @@ export default {
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :aria-busy="loading || undefined"
+    :data-state="loading ? 'loading' : 'ready'"
     :data-loading="loading ? '' : undefined"
     :data-tone="tone"
     role="list"

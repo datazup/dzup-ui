@@ -90,6 +90,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :data-state="disabled ? 'disabled' : 'ready'"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"

@@ -84,6 +84,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :data-state="disabled ? 'disabled' : 'ready'"
     :data-disabled="disabled ? '' : undefined"
     :data-orientation="orientation"
     role="group"

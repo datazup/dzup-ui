@@ -162,6 +162,7 @@ export default {
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
       :class="triggerClasses"
+      :data-state="resolvedDisabled ? 'disabled' : 'idle'"
       :data-tone="undefined"
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
