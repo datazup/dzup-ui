@@ -1,9 +1,8 @@
 /**
  * useSelect — Generic select/listbox behavior composable.
  *
- * Encapsulates open/close state, keyboard navigation (Arrow Up/Down,
- * Home/End, Enter, Escape), type-ahead search filtering, and item
- * selection logic for select-like components.
+ * Encapsulates open/close state, keyboard navigation (via useSelectKeyboard),
+ * type-ahead search filtering, and item selection logic for select-like components.
  *
  * SSR-safe: no `window` or `document` access at module level.
  *
@@ -12,6 +11,7 @@
 
 import type { ComputedRef, MaybeRef, Ref } from 'vue'
 import { computed, ref, toValue, watch } from 'vue'
+import { useSelectKeyboard } from './useSelectKeyboard.ts'
 
 // ---------------------------------------------------------------------------
 // Options interface
@@ -133,7 +133,6 @@ export function useSelect<T>(
 
   // -- Watchers -------------------------------------------------------------
 
-  // Reset highlighted index when filtered items change
   watch(filteredItems, () => {
     if (highlightedIndex.value >= filteredItems.value.length) {
       highlightedIndex.value = filteredItems.value.length > 0 ? 0 : -1
@@ -148,7 +147,6 @@ export function useSelect<T>(
       return
     isOpen.value = true
 
-    // Highlight selected item if present, otherwise first
     const sel = selectedItem.value
     if (sel !== undefined) {
       const idx = filteredItems.value.findIndex(
@@ -203,88 +201,21 @@ export function useSelect<T>(
     highlightedIndex.value = len > 0 ? len - 1 : -1
   }
 
-  /**
-   * Keyboard event handler for select interactions.
-   *
-   * - ArrowDown: open (if closed) or highlight next
-   * - ArrowUp: open (if closed) or highlight previous
-   * - Home: highlight first
-   * - End: highlight last
-   * - Enter / Space: select highlighted item (if open)
-   * - Escape: close
-   */
-  function onKeydown(event: KeyboardEvent): void {
-    switch (event.key) {
-      case 'ArrowDown': {
-        event.preventDefault()
-        if (!isOpen.value) {
-          open()
-        }
-        else {
-          highlightNext()
-        }
-        break
-      }
-      case 'ArrowUp': {
-        event.preventDefault()
-        if (!isOpen.value) {
-          open()
-        }
-        else {
-          highlightPrev()
-        }
-        break
-      }
-      case 'Home': {
-        if (isOpen.value) {
-          event.preventDefault()
-          highlightFirst()
-        }
-        break
-      }
-      case 'End': {
-        if (isOpen.value) {
-          event.preventDefault()
-          highlightLast()
-        }
-        break
-      }
-      case 'Enter':
-      case ' ': {
-        event.preventDefault()
-        if (isOpen.value) {
-          const idx = highlightedIndex.value
-          const item = idx >= 0 && idx < filteredItems.value.length
-            ? filteredItems.value[idx]
-            : undefined
-          if (item !== undefined) {
-            select(item)
-          }
-        }
-        else {
-          open()
-        }
-        break
-      }
-      case 'Escape': {
-        if (isOpen.value) {
-          event.preventDefault()
-          close()
-        }
-        break
-      }
-      default: {
-        // Type-ahead: append printable single characters to search query
-        if (options.searchable && event.key.length === 1 && !event.ctrlKey && !event.metaKey) {
-          if (!isOpen.value) {
-            open()
-          }
-          searchQuery.value += event.key
-        }
-        break
-      }
-    }
-  }
+  // Keyboard navigation via extracted composable
+  const { onKeydown } = useSelectKeyboard({
+    isOpen,
+    filteredItems,
+    highlightedIndex,
+    searchQuery,
+    searchable: options.searchable ?? false,
+    open,
+    close,
+    select,
+    highlightNext,
+    highlightPrev,
+    highlightFirst,
+    highlightLast,
+  })
 
   return {
     isOpen,

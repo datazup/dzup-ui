@@ -1,7 +1,7 @@
 /**
  * useDataGrid — Composable managing data grid state (sorting, pagination, selection).
  *
- * Encapsulates the core logic for the DzDataGrid compound component.
+ * Orchestrates useDataGridSort and useDataGridPagination, adding row selection.
  * Phase 1 scope: sorting, pagination, row selection.
  *
  * @module @dzup-ui/core/composables/useDataGrid
@@ -16,6 +16,8 @@ import type {
   SortModel,
 } from '../../components/data/DzDataGrid.types.ts'
 import { computed, ref, toRef, toValue } from 'vue'
+import { useDataGridPagination } from './useDataGridPagination.ts'
+import { useDataGridSort } from './useDataGridSort.ts'
 
 // ---------------------------------------------------------------------------
 // Options
@@ -121,19 +123,40 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
   const paginationConfig = toRef(() => toValue(options.pagination) ?? false)
   const rowKey = options.rowKey
 
-  // ── Sort state ──
-  const sortModel = ref<SortModel[]>(toValue(options.sortModel) ?? []) as Ref<SortModel[]>
+  // ── Pagination (created first so resetPage is available) ──
+  const initialPageSize = typeof toValue(options.pagination) === 'object'
+    ? (toValue(options.pagination) as PaginationConfig).pageSize
+    : undefined
 
-  // ── Filter state ──
-  const filters = ref<DzDataGridFilter[]>(toValue(options.filters) ?? []) as Ref<DzDataGridFilter[]>
+  // Shared ref for resetPage callback (set after pagination is created)
+  const resetPageRef = ref<(() => void) | undefined>(undefined)
 
-  // ── Pagination state ──
-  const currentPage = ref(1)
-  const pageSize = ref<number>(
-    typeof toValue(options.pagination) === 'object'
-      ? (toValue(options.pagination) as PaginationConfig).pageSize
-      : 10,
+  // ── Sort + Filter ──
+  const sortResult = useDataGridSort<T>(
+    {
+      data,
+      columns,
+      sortable,
+      filterable: filterableMode,
+      initialSortModel: toValue(options.sortModel) ?? undefined,
+      initialFilters: toValue(options.filters) ?? undefined,
+      onSortChange: options.onSortChange,
+      onFilterChange: options.onFilterChange,
+    },
+    resetPageRef,
   )
+
+  // ── Pagination ──
+  const paginationResult = useDataGridPagination<T>({
+    sortedData: sortResult.sortedData,
+    paginationConfig,
+    initialPageSize,
+    onPageChange: options.onPageChange,
+    onPageSizeChange: options.onPageSizeChange,
+  })
+
+  // Wire resetPage into sort/filter operations
+  resetPageRef.value = paginationResult.resetPage
 
   // ── Selection state ──
   const selectedRows = ref<T[]>(toValue(options.selectedRows) ?? []) as Ref<T[]>
@@ -149,170 +172,23 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
     return getRowId(a) === getRowId(b)
   }
 
-  // ── Filter helpers ──
-  function applyFilter(cellValue: unknown, filter: DzDataGridFilter): boolean {
-    if (filter.value === '' || filter.value === undefined)
-      return true
-
-    switch (filter.operator) {
-      case 'contains': {
-        const strCell = String(cellValue ?? '').toLowerCase()
-        const strFilter = String(filter.value).toLowerCase()
-        return strCell.includes(strFilter)
-      }
-      case 'equals': {
-        if (typeof filter.value === 'number')
-          return Number(cellValue) === filter.value
-        return String(cellValue ?? '').toLowerCase() === String(filter.value).toLowerCase()
-      }
-      case 'gt':
-        return Number(cellValue) > Number(filter.value)
-      case 'lt':
-        return Number(cellValue) < Number(filter.value)
-      case 'gte':
-        return Number(cellValue) >= Number(filter.value)
-      case 'lte':
-        return Number(cellValue) <= Number(filter.value)
-      default:
-        return true
-    }
-  }
-
-  // ── Filtered data (applied before sorting) ──
-  const filteredData = computed<T[]>(() => {
-    const raw = data.value
-    if (!filterableMode.value || filters.value.length === 0)
-      return raw
-
-    return raw.filter((row) => {
-      return filters.value.every((filter) => {
-        const cellValue = row[filter.column as keyof T]
-        return applyFilter(cellValue, filter)
-      })
-    })
-  })
-
-  // ── Sorted data ──
-  const sortedData = computed<T[]>(() => {
-    const raw = filteredData.value
-    if (!sortable.value || sortModel.value.length === 0)
-      return raw
-
-    const sorted = [...raw]
-    const sorts = sortModel.value
-
-    sorted.sort((a, b) => {
-      for (const sort of sorts) {
-        const field = sort.field as keyof T
-        const aVal = a[field]
-        const bVal = b[field]
-        const dir = sort.direction === 'asc' ? 1 : -1
-
-        if (aVal < bVal)
-          return -1 * dir
-        if (aVal > bVal)
-          return 1 * dir
-      }
-      return 0
-    })
-
-    return sorted
-  })
-
-  // ── Total rows ──
-  const totalRows = computed(() => sortedData.value.length)
-
-  // ── Total pages ──
-  const totalPages = computed(() => {
-    if (!paginationConfig.value)
-      return 1
-    return Math.max(1, Math.ceil(totalRows.value / pageSize.value))
-  })
-
-  // ── Display data (sorted + paginated) ──
-  const displayData = computed<T[]>(() => {
-    const sorted = sortedData.value
-    if (!paginationConfig.value)
-      return sorted
-
-    const start = (currentPage.value - 1) * pageSize.value
-    const end = start + pageSize.value
-    return sorted.slice(start, end)
-  })
-
   // ── Selection computed ──
   const isAllSelected = computed(() => {
-    if (!selectableMode.value || displayData.value.length === 0)
+    if (!selectableMode.value || paginationResult.displayData.value.length === 0)
       return false
-    return displayData.value.every(row =>
+    return paginationResult.displayData.value.every(row =>
       selectedRows.value.some(sel => rowsEqual(sel, row)),
     )
   })
 
   const isSomeSelected = computed(() => {
-    if (!selectableMode.value || displayData.value.length === 0)
+    if (!selectableMode.value || paginationResult.displayData.value.length === 0)
       return false
-    const someSelected = displayData.value.some(row =>
+    const someSelected = paginationResult.displayData.value.some(row =>
       selectedRows.value.some(sel => rowsEqual(sel, row)),
     )
     return someSelected && !isAllSelected.value
   })
-
-  // ── Sort action ──
-  function sort(field: string): void {
-    if (!sortable.value)
-      return
-
-    const col = columns.value.find(c => c.field === field)
-    if (col && col.sortable === false)
-      return
-
-    const existing = sortModel.value.find(s => s.field === field)
-
-    let newModel: SortModel[]
-    if (!existing) {
-      newModel = [{ field, direction: 'asc' }]
-    }
-    else if (existing.direction === 'asc') {
-      newModel = [{ field, direction: 'desc' }]
-    }
-    else {
-      newModel = []
-    }
-
-    sortModel.value = newModel
-    options.onSortChange?.(newModel)
-  }
-
-  // ── Filter actions ──
-  function setFilter(column: string, filter: DzDataGridFilter): void {
-    if (!filterableMode.value)
-      return
-
-    const existing = filters.value.findIndex(f => f.column === column)
-    if (existing >= 0) {
-      const updated = [...filters.value]
-      updated[existing] = filter
-      filters.value = updated
-    }
-    else {
-      filters.value = [...filters.value, filter]
-    }
-    currentPage.value = 1
-    options.onFilterChange?.(filters.value)
-  }
-
-  function clearFilter(column: string): void {
-    filters.value = filters.value.filter(f => f.column !== column)
-    currentPage.value = 1
-    options.onFilterChange?.(filters.value)
-  }
-
-  function clearAllFilters(): void {
-    filters.value = []
-    currentPage.value = 1
-    options.onFilterChange?.(filters.value)
-  }
 
   // ── Selection actions ──
   function isRowSelected(row: T): boolean {
@@ -349,49 +225,32 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
       selectedRows.value = []
     }
     else {
-      selectedRows.value = [...displayData.value]
+      selectedRows.value = [...paginationResult.displayData.value]
     }
 
     options.onSelectionChange?.(selectedRows.value)
   }
 
-  // ── Pagination actions ──
-  function goToPage(page: number): void {
-    const clamped = Math.max(1, Math.min(page, totalPages.value))
-    currentPage.value = clamped
-    options.onPageChange?.(clamped)
-  }
-
-  function changePageSize(size: number): void {
-    pageSize.value = size
-    currentPage.value = 1
-    options.onPageSizeChange?.(size)
-  }
-
-  function getSortDirection(field: string): SortDirection | undefined {
-    return sortModel.value.find(s => s.field === field)?.direction
-  }
-
   return {
-    displayData,
-    totalRows,
-    sortModel,
-    filters,
-    currentPage,
-    pageSize,
-    totalPages,
+    displayData: paginationResult.displayData,
+    totalRows: paginationResult.totalRows,
+    sortModel: sortResult.sortModel,
+    filters: sortResult.filters,
+    currentPage: paginationResult.currentPage,
+    pageSize: paginationResult.pageSize,
+    totalPages: paginationResult.totalPages,
     selectedRows,
     isAllSelected,
     isSomeSelected,
-    sort,
-    setFilter,
-    clearFilter,
-    clearAllFilters,
+    sort: sortResult.sort,
+    setFilter: sortResult.setFilter,
+    clearFilter: sortResult.clearFilter,
+    clearAllFilters: sortResult.clearAllFilters,
     toggleRowSelection,
     toggleAllSelection,
     isRowSelected,
-    goToPage,
-    changePageSize,
-    getSortDirection,
+    goToPage: paginationResult.goToPage,
+    changePageSize: paginationResult.changePageSize,
+    getSortDirection: sortResult.getSortDirection,
   }
 }

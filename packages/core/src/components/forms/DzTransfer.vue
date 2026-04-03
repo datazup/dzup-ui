@@ -3,26 +3,16 @@ import type {
   DzTransferEmits,
   DzTransferProps,
   DzTransferSlots,
-  TransferItem,
 } from './DzTransfer.types.ts'
 /**
  * DzTransfer — Dual-list transfer component.
  *
  * Built from scratch (no Reka UI primitive).
  * v-model via defineModel<string[]>() -- selected keys (ADR-16).
- *
- * @example
- * ```vue
- * <DzTransfer
- *   v-model="selectedKeys"
- *   :source="allItems"
- *   searchable
- *   @change="handleChange"
- * />
- * ```
  */
-import { computed, ref, useAttrs } from 'vue'
+import { computed, toRef, useAttrs } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useTransfer } from '../../composables/useTransfer/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { transferVariants } from './DzTransfer.variants.ts'
 
@@ -51,11 +41,6 @@ defineSlots<DzTransferSlots>()
 const attrs = useAttrs()
 const fieldContext = useFormFieldContext()
 
-const sourceSearch = ref('')
-const targetSearch = ref('')
-const sourceSelected = ref<Set<string>>(new Set())
-const targetSelected = ref<Set<string>>(new Set())
-
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
 )
@@ -71,84 +56,42 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 
-/** Source items: those NOT in model (not transferred) */
-const sourceItems = computed(() =>
-  props.source.filter(item => !model.value.includes(item.key)),
-)
-
-/** Target items: those IN model (transferred) */
-const targetItems = computed(() =>
-  props.source.filter(item => model.value.includes(item.key)),
-)
-
-/** Filtered source items by search */
-const filteredSourceItems = computed(() => {
-  if (!sourceSearch.value)
-    return sourceItems.value
-  const q = sourceSearch.value.toLowerCase()
-  return sourceItems.value.filter(item =>
-    item.label.toLowerCase().includes(q),
-  )
+const {
+  sourceSearch,
+  targetSearch,
+  sourceSelected,
+  targetSelected,
+  sourceItems,
+  targetItems,
+  filteredSourceItems,
+  filteredTargetItems,
+  toggleSourceItem,
+  toggleTargetItem,
+  moveToTarget: transferMoveToTarget,
+  moveToSource: transferMoveToSource,
+} = useTransfer({
+  source: toRef(() => props.source),
+  modelValue: model,
+  searchable: toRef(() => props.searchable),
 })
-
-/** Filtered target items by search */
-const filteredTargetItems = computed(() => {
-  if (!targetSearch.value)
-    return targetItems.value
-  const q = targetSearch.value.toLowerCase()
-  return targetItems.value.filter(item =>
-    item.label.toLowerCase().includes(q),
-  )
-})
-
-function toggleSourceItem(item: TransferItem): void {
-  if (item.disabled)
-    return
-  const set = new Set(sourceSelected.value)
-  if (set.has(item.key)) {
-    set.delete(item.key)
-  }
-  else {
-    set.add(item.key)
-  }
-  sourceSelected.value = set
-}
-
-function toggleTargetItem(item: TransferItem): void {
-  if (item.disabled)
-    return
-  const set = new Set(targetSelected.value)
-  if (set.has(item.key)) {
-    set.delete(item.key)
-  }
-  else {
-    set.add(item.key)
-  }
-  targetSelected.value = set
-}
-
-/** Move selected source items to target */
-function moveToTarget(): void {
-  const newModel = [...model.value, ...sourceSelected.value]
-  model.value = newModel
-  sourceSelected.value = new Set()
-  emitChange(newModel)
-}
-
-/** Move selected target items back to source */
-function moveToSource(): void {
-  const toRemove = targetSelected.value
-  const newModel = model.value.filter(key => !toRemove.has(key))
-  model.value = newModel
-  targetSelected.value = new Set()
-  emitChange(newModel)
-}
 
 function emitChange(targetKeys: string[]): void {
   const sourceKeys = props.source
     .map(i => i.key)
     .filter(k => !targetKeys.includes(k))
   emit('change', { source: sourceKeys, target: targetKeys })
+}
+
+function moveToTarget(): void {
+  const newModel = transferMoveToTarget()
+  model.value = newModel
+  emitChange(newModel)
+}
+
+function moveToSource(): void {
+  const newModel = transferMoveToSource()
+  model.value = newModel
+  emitChange(newModel)
 }
 
 function handleFocus(event: FocusEvent): void {

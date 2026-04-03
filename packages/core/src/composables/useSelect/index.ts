@@ -8,3 +8,9 @@ export {
   type UseSelectOptions,
   type UseSelectReturn,
 } from './useSelect.ts'
+
+export {
+  useSelectKeyboard,
+  type UseSelectKeyboardOptions,
+  type UseSelectKeyboardReturn,
+} from './useSelectKeyboard.ts'
