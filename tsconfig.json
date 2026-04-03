@@ -7,6 +7,7 @@
     { "path": "./packages/pro" },
     { "path": "./packages/compat" },
     { "path": "./packages/codemods" },
-    { "path": "./packages/tooling" }
+    { "path": "./packages/tooling" },
+    { "path": "./apps/sandbox" }
   ]
 }

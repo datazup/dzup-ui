@@ -1,0 +1,103 @@
+/**
+ * @dzup-ui/core — Base Styles
+ *
+ * Minimal, non-destructive resets and shared utilities for dzip-ui components.
+ * All design values reference --dz-* tokens from @dzup-ui/tokens.
+ *
+ * Sections:
+ *   1. Box model reset
+ *   2. Document defaults
+ *   3. Focus ring utility
+ *   4. Reduced motion
+ *   5. Print styles
+ */
+
+/* ==========================================================================
+   1. Box Model Reset
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. Document Defaults
+   Minimal body resets. Consumers may layer their own resets on top.
+   ========================================================================== */
+
+body {
+  margin: 0;
+  font-family: var(--dz-font-sans);
+  line-height: var(--dz-leading-normal);
+  color: var(--dz-foreground);
+  background-color: var(--dz-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ==========================================================================
+   3. Focus Ring Utility
+   Reusable focus-visible outline for interactive components.
+   Applied via class="dz-focus-ring" or composed in tailwind-variants.
+   ========================================================================== */
+
+.dz-focus-ring:focus-visible {
+  outline: 2px solid var(--dz-ring);
+  outline-offset: 2px;
+}
+
+/* Remove default outline for non-keyboard focus */
+.dz-focus-ring:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ==========================================================================
+   4. Reduced Motion
+   Respects user preference for reduced motion. Complements the token-level
+   reduced-motion overrides in tokens.css (which zero out transition/animation
+   durations). This block handles scroll-behavior specifically.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ==========================================================================
+   5. Print Styles
+   Force legible output and hide interactive-only elements.
+   Black/white literals are intentional here — print output must be
+   predictable regardless of theme tokens.
+   ========================================================================== */
+
+@media print {
+  .dz-no-print {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: transparent;
+    color: black;
+    box-shadow: none;
+    text-shadow: none;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+}

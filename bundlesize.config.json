@@ -1,0 +1,10 @@
+{
+  "files": [
+    { "path": "packages/core/dist/index.js", "maxSize": "5 kB" },
+    { "path": "packages/core/dist/index.css", "maxSize": "1 kB" },
+    { "path": "packages/pro/dist/index.js", "maxSize": "2.5 kB" },
+    { "path": "packages/pro/dist/index.css", "maxSize": "0.5 kB" },
+    { "path": "packages/tokens/dist/tokens.css", "maxSize": "4 kB" },
+    { "path": "packages/tokens/dist/tailwind-theme.js", "maxSize": "1.5 kB" }
+  ]
+}

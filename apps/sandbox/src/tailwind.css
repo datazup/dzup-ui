@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Scan sandbox and workspace package sources for utility classes */
+@source "./**/*.{ts,vue}";
+@source "../../../packages/core/src/**/*.{ts,vue}";
+@source "../../../packages/pro/src/**/*.{ts,vue}";

@@ -8,7 +8,11 @@
     "typecheck": "tsc --noEmit",
     "validate:boundaries": "tsx src/validators/import-boundary.ts",
     "validate:tokens": "tsx src/token-checks/color-lint.ts",
-    "validate:exports": "echo 'TODO: export map validation'",
+    "validate:exports": "tsx ../scripts/validate-exports.ts",
+    "validate:bundle": "tsx ../scripts/validate-bundle.ts",
+    "validate:changelog": "tsx scripts/validate-changelog.ts",
+    "validate:dts": "tsx scripts/validate-dts.ts",
+    "validate:peers": "tsx scripts/validate-peers.ts",
     "generate:exports": "tsx src/manifest-generator.ts"
   },
   "devDependencies": {

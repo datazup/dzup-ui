@@ -18,7 +18,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:a11y": "vitest run --reporter=verbose packages/**/a11y/**/*.a11y.spec.ts",
     "test:contracts": "vitest run --reporter=verbose packages/**/contract.spec.ts",
+    "test:ssr": "vitest run --reporter=verbose packages/**/ssr/**/*.spec.ts",
     "build": "yarn workspace @dzup-ui/tokens generate && yarn workspace @dzup-ui/core build && yarn workspace @dzup-ui/pro build",
     "build:all": "yarn workspaces foreach -Apt run build",
     "tokens:generate": "yarn workspace @dzup-ui/tokens generate",
@@ -27,12 +29,21 @@
     "generate:exports:pro": "tsx packages/tooling/src/manifest-generator.ts packages/pro",
     "validate:boundaries": "tsx packages/tooling/src/validators/import-boundary.ts",
     "validate:tokens": "tsx packages/tooling/src/token-checks/color-lint.ts",
-    "validate:all": "yarn typecheck && yarn lint && yarn validate:boundaries && yarn validate:tokens",
+    "validate:exports": "tsx packages/tooling/scripts/validate-exports.ts",
+    "validate:bundle": "tsx packages/tooling/scripts/validate-bundle.ts",
+    "validate:changelog": "tsx packages/tooling/scripts/validate-changelog.ts",
+    "validate:dts": "tsx packages/tooling/scripts/validate-dts.ts",
+    "validate:peers": "tsx packages/tooling/scripts/validate-peers.ts",
+    "validate:all": "yarn typecheck && yarn lint && yarn validate:boundaries && yarn validate:tokens && yarn validate:exports && yarn validate:dts && yarn validate:changelog && yarn validate:peers",
     "storybook": "yarn workspace @dzup-ui/storybook dev",
-    "storybook:build": "yarn workspace @dzup-ui/storybook build"
+    "storybook:build": "yarn workspace @dzup-ui/storybook build",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "yarn build && changeset publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.0",
+    "@changesets/cli": "^2.30.0",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/vue": "^8.1.0",
     "@types/node": "^22.13.0",
@@ -48,6 +59,7 @@
     "vite": "^6.1.0",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.0.0",
+    "vitest-axe": "^0.1.0",
     "vue-tsc": "^2.2.0"
   },
   "dependencies": {

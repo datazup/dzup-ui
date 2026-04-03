@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@dzup-ui/tokens": ["../../packages/tokens/src/index.ts"],
+      "@dzup-ui/tokens/*": ["../../packages/tokens/src/*"],
+      "@dzup-ui/contracts": ["../../packages/contracts/src/index.ts"],
+      "@dzup-ui/contracts/*": ["../../packages/contracts/src/*"],
+      "@dzup-ui/core": ["../../packages/core/src/index.ts"],
+      "@dzup-ui/core/*": ["../../packages/core/src/*"],
+      "@dzup-ui/pro": ["../../packages/pro/src/index.ts"],
+      "@dzup-ui/pro/*": ["../../packages/pro/src/*"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

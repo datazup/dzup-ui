@@ -2,13 +2,21 @@
   "name": "@dzup-ui/compat",
   "type": "module",
   "version": "0.0.1",
-  "private": true,
   "description": "Migration adapters from old dzup-ui to vNext",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "typecheck": "vue-tsc --noEmit",

@@ -25,6 +25,14 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: Typecheck (core + pro)
@@ -42,27 +50,50 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: ESLint
         run: yarn lint
 
   test:
-    name: Unit Tests
+    name: Unit Tests (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: Run tests
         run: yarn test
       - name: Run contract tests
         run: yarn test:contracts
+      - name: Run a11y tests
+        run: yarn test:a11y
+      - name: Run SSR smoke tests
+        run: yarn test:ssr
 
   validate:
     name: Validate (boundaries + tokens)
@@ -74,16 +105,30 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: Import boundary validation
         run: yarn validate:boundaries
       - name: Token compliance check
         run: yarn validate:tokens
+      - name: Export map validation
+        run: yarn validate:exports
       - name: Token build artifacts unchanged
         run: |
           yarn tokens:generate
           git diff --exit-code packages/tokens/dist/
+      - name: Changelog validation
+        run: yarn validate:changelog
+      - name: Peer dependency validation
+        run: yarn validate:peers
 
   # ──────────────────────────────────────────────
   # G1: Merge Gates (main branch)
@@ -100,6 +145,14 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build all packages
@@ -117,6 +170,10 @@ jobs:
           test -f packages/core/dist/index.js || (echo "core/dist/index.js missing" && exit 1)
           test -f packages/pro/dist/index.js || (echo "pro/dist/index.js missing" && exit 1)
           echo "Build artifacts verified"
+      - name: Validate type declarations
+        run: yarn validate:dts
+      - name: Bundle budget check
+        run: yarn validate:bundle
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -137,6 +194,14 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build Storybook
@@ -160,10 +225,19 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Run coverage
-        run: yarn test:coverage
+      - name: Run coverage with threshold enforcement
+        run: |
+          yarn test:coverage -- --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 --coverage.thresholds.branches=80 --coverage.thresholds.statements=80
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:

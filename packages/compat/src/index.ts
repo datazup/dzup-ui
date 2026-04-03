@@ -4,6 +4,29 @@
  *
  * IMPORTANT: Stable core/pro must NOT import from compat (ADR-06).
  * This package provides backward-compatible wrappers for migration.
+ *
+ * @example
+ * ```ts
+ * // Before (old dzup-ui)
+ * import { DzButton } from 'dzup-ui'
+ * // <DzButton type="primary" size="small">Click</DzButton>
+ *
+ * // Migration step (use compat adapters)
+ * import { DzButtonCompat as DzButton } from '@dzup-ui/compat'
+ * // <DzButton type="primary" size="small">Click</DzButton>  -- still works
+ *
+ * // Final (migrate to vNext API)
+ * import { DzButton } from '@dzup-ui/core'
+ * // <DzButton variant="solid" tone="primary" size="sm">Click</DzButton>
+ * ```
  */
 
-export {}
+export { default as DzAlertCompat } from './adapters/DzAlertCompat.vue'
+// ── Compat Adapters ──
+export { default as DzButtonCompat } from './adapters/DzButtonCompat.vue'
+export { default as DzDialogCompat } from './adapters/DzDialogCompat.vue'
+export { default as DzInputCompat } from './adapters/DzInputCompat.vue'
+export { default as DzSelectCompat } from './adapters/DzSelectCompat.vue'
+
+// ── Utilities ──
+export { resetDeprecationWarnings, warnDeprecated } from './utils/deprecation.ts'

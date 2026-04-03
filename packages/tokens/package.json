@@ -19,6 +19,7 @@
     }
   },
   "files": [
+    "!src/generate.ts",
     "dist",
     "src"
   ],
