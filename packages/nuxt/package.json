@@ -1,0 +1,43 @@
+{
+  "name": "@dzup-ui/nuxt",
+  "type": "module",
+  "version": "0.1.0-alpha.0",
+  "description": "Nuxt module for dzip-ui — auto-imports all Dz* components",
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.js"
+    }
+  },
+  "main": "./dist/module.js",
+  "types": "./dist/module.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*",
+    "nuxt": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@dzup-ui/pro": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/kit": "^3.14.0",
+    "@nuxt/schema": "^3.14.0",
+    "typescript": "^5.7.0"
+  }
+}

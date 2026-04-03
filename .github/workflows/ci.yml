@@ -129,6 +129,8 @@ jobs:
         run: yarn validate:changelog
       - name: Peer dependency validation
         run: yarn validate:peers
+      - name: License audit
+        run: yarn validate:licenses
 
   # ──────────────────────────────────────────────
   # G1: Merge Gates (main branch)
@@ -176,6 +178,8 @@ jobs:
         run: yarn validate:bundle
       - name: Bundle budget check (CI report)
         run: npx tsx packages/tooling/src/bundle-budget-check.ts --ci
+      - name: Per-component size report
+        run: npx tsx packages/tooling/src/component-size-report.ts --top=30
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
