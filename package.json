@@ -31,6 +31,7 @@
     "validate:tokens": "tsx packages/tooling/src/token-checks/color-lint.ts",
     "validate:exports": "tsx packages/tooling/scripts/validate-exports.ts",
     "validate:bundle": "tsx packages/tooling/scripts/validate-bundle.ts",
+    "validate:bundle-budget": "tsx packages/tooling/src/bundle-budget-check.ts",
     "validate:changelog": "tsx packages/tooling/scripts/validate-changelog.ts",
     "validate:dts": "tsx packages/tooling/scripts/validate-dts.ts",
     "validate:peers": "tsx packages/tooling/scripts/validate-peers.ts",

@@ -1,5 +1,30 @@
 # @dzup-ui/core
 
+## 0.1.0-alpha.1 (2026-04-03)
+
+### Features
+
+- Keyboard navigation composables for Calendar, Gantt, Kanban, Diagram components
+- File size extractions: DzDiagramEditor, DzTreeMap, useWorkflowDesigner decomposed
+- Contributing guide (CONTRIBUTING.md)
+- Playwright E2E test setup with visual regression and keyboard navigation tests
+- Performance benchmarks for DataGrid, Accordion, Tabs
+- Tree-shaking validation script
+- Bundle size budget enforcement with CI integration
+- Consumer integration test app validating DX
+
+### Migration
+
+- 3 new compat adapters: DzTabsCompat, DzCheckboxCompat, DzRadioCompat
+- 3 more compat adapters: DzSwitchCompat, DzAccordionCompat, DzTooltipCompat (11 total)
+- 2 new codemods: rename-slots, rename-components (5 total)
+- extractTemplate() bugfix: handles nested `<template #slot>` correctly
+
+### Accessibility
+
+- axe-core accessibility tests for complex components
+- DzChartDataTable: screen reader data table for Chart.js visualizations
+
 ## 0.1.0-alpha.0 (2026-04-02)
 
 ### Features

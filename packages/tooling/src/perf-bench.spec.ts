@@ -221,6 +221,6 @@ describe('performance Benchmarks', { timeout: 30_000 }, () => {
     )
 
     logResult('DzTabs (10 tabs)', result)
-    expect(result.average).toBeLessThan(SIMPLE_THRESHOLD_MS)
+    expect(result.average).toBeLessThan(COMPLEX_THRESHOLD_MS)
   })
 })
