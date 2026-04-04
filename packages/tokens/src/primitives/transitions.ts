@@ -24,8 +24,22 @@ export const EASINGS = {
 export type DurationStep = keyof typeof DURATIONS
 export type EasingStep = keyof typeof EASINGS
 
+/** Shorthand transition names that map to a duration + easing pair */
+const TRANSITION_SHORTHANDS: Record<string, keyof typeof DURATIONS> = {
+  fast: 'fast',
+  normal: 'normal',
+  slow: 'slow',
+} as const
+
+export type TransitionStep = keyof typeof TRANSITION_SHORTHANDS
+
 /**
  * Generate CSS custom properties for transitions.
+ *
+ * Produces three groups:
+ *  1. --dz-duration-{name}   — raw duration values (e.g. 150ms)
+ *  2. --dz-ease-{name}       — easing curves (e.g. cubic-bezier(...))
+ *  3. --dz-transition-{name} — shorthand: var(--dz-duration-{name}) var(--dz-ease-default)
  */
 export function generateTransitionCssVars(): Record<string, string> {
   const vars: Record<string, string> = {}
@@ -36,6 +50,10 @@ export function generateTransitionCssVars(): Record<string, string> {
 
   for (const [name, value] of Object.entries(EASINGS)) {
     vars[`--dz-ease-${name}`] = value
+  }
+
+  for (const [shorthand, durationKey] of Object.entries(TRANSITION_SHORTHANDS)) {
+    vars[`--dz-transition-${shorthand}`] = `var(--dz-duration-${durationKey}) var(--dz-ease-default)`
   }
 
   return vars

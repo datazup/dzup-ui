@@ -999,6 +999,8 @@ __metadata:
       optional: true
     "@vue-dnd-kit/core":
       optional: true
+    chart.js:
+      optional: true
     monaco-editor:
       optional: true
   languageName: unknown
@@ -1032,6 +1034,7 @@ __metadata:
     "@storybook/blocks": "npm:^8.5.0"
     "@storybook/vue3": "npm:^8.5.0"
     "@storybook/vue3-vite": "npm:^8.5.0"
+    "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
     storybook: "npm:^8.5.0"
     typescript: "npm:^5.7.0"
