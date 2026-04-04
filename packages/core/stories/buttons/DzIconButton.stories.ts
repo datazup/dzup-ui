@@ -103,7 +103,8 @@ export const Default: Story = {}
 export const AllSizes: Story = {
   name: 'Size Gallery',
   render: () => ({
-    components: { DzIconButton, Plus },
+    components: { DzIconButton },
+    setup() { return { Plus } },
     template: `
       <div class="flex items-end gap-4">
         <div class="text-center">
@@ -138,7 +139,8 @@ export const AllSizes: Story = {
 export const AllVariants: Story = {
   name: 'Variant Gallery',
   render: () => ({
-    components: { DzIconButton, Heart },
+    components: { DzIconButton },
+    setup() { return { Heart } },
     template: `
       <div class="flex gap-4 items-center">
         <div class="text-center">
@@ -173,7 +175,8 @@ export const AllVariants: Story = {
 export const AllTones: Story = {
   name: 'Tone Gallery',
   render: () => ({
-    components: { DzIconButton, Star },
+    components: { DzIconButton },
+    setup() { return { Star } },
     template: `
       <div class="flex gap-4 items-center">
         <div class="text-center">
@@ -211,7 +214,8 @@ export const AllTones: Story = {
 
 export const States: Story = {
   render: () => ({
-    components: { DzIconButton, Plus },
+    components: { DzIconButton },
+    setup() { return { Plus } },
     template: `
       <div class="flex gap-4 items-center">
         <div class="text-center">
@@ -265,7 +269,8 @@ export const DarkMode: Story = {
     }),
   ],
   render: () => ({
-    components: { DzIconButton, Heart },
+    components: { DzIconButton },
+    setup() { return { Heart } },
     template: `
       <div class="flex gap-4 items-center">
         <DzIconButton :icon="Heart" aria-label="Solid" variant="solid" />
@@ -283,7 +288,8 @@ export const DarkMode: Story = {
 export const Interactive: Story = {
   name: 'Interactive: Toggle',
   render: () => ({
-    components: { DzIconButton, Heart },
+    components: { DzIconButton },
+    setup() { return { Heart } },
     data() {
       return { favorited: false }
     },
@@ -309,7 +315,8 @@ export const Interactive: Story = {
 export const RealWorldToolbar: Story = {
   name: 'Real World: Toolbar',
   render: () => ({
-    components: { DzIconButton, Pencil, Trash2, Settings, Search },
+    components: { DzIconButton },
+    setup() { return { Pencil, Trash2, Settings, Search } },
     template: `
       <div class="flex gap-1 p-2 border rounded-lg">
         <DzIconButton :icon="Search" aria-label="Search" variant="ghost" tone="neutral" />
@@ -329,7 +336,8 @@ export const RealWorldToolbar: Story = {
 export const RealWorldPagination: Story = {
   name: 'Real World: Pagination',
   render: () => ({
-    components: { DzIconButton, ChevronLeft, ChevronRight },
+    components: { DzIconButton },
+    setup() { return { ChevronLeft, ChevronRight } },
     template: `
       <div class="flex items-center gap-2">
         <DzIconButton :icon="ChevronLeft" aria-label="Previous page" variant="outline" tone="neutral" size="sm" />
@@ -347,7 +355,8 @@ export const RealWorldPagination: Story = {
 export const RealWorldClose: Story = {
   name: 'Real World: Close Button',
   render: () => ({
-    components: { DzIconButton, X },
+    components: { DzIconButton },
+    setup() { return { X } },
     template: `
       <div class="relative border rounded-lg p-4 pr-10 max-w-xs">
         <DzIconButton

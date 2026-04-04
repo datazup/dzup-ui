@@ -201,7 +201,7 @@ export const States: Story = {
 export const WithSlots: Story = {
   name: 'Custom Item Slot (Icons)',
   render: () => ({
-    components: { DzSegmented, List, LayoutGrid, Table2 },
+    components: { DzSegmented },
     setup() {
       const items = [
         { value: 'list', label: 'List View' },
@@ -213,7 +213,7 @@ export const WithSlots: Story = {
         grid: 'LayoutGrid',
         table: 'Table2',
       }
-      return { items, iconMap }
+      return { items, iconMap, List, LayoutGrid, Table2 }
     },
     data() {
       return { value: 'list' }
@@ -327,14 +327,14 @@ export const Accessibility: Story = {
 export const RealWorldViewSwitcher: Story = {
   name: 'Real World: View Mode Switcher',
   render: () => ({
-    components: { DzSegmented, List, LayoutGrid, Table2 },
+    components: { DzSegmented },
     setup() {
       const items = [
         { value: 'list', label: 'List' },
         { value: 'grid', label: 'Grid' },
         { value: 'table', label: 'Table' },
       ]
-      return { items }
+      return { items, List, LayoutGrid, Table2 }
     },
     data() {
       return { view: 'grid' }
@@ -405,14 +405,14 @@ export const RealWorldCalendarRange: Story = {
 export const RealWorldTextAlignment: Story = {
   name: 'Real World: Text Alignment',
   render: () => ({
-    components: { DzSegmented, AlignLeft, AlignCenter, AlignRight },
+    components: { DzSegmented },
     setup() {
       const items = [
         { value: 'left', label: 'Left' },
         { value: 'center', label: 'Center' },
         { value: 'right', label: 'Right' },
       ]
-      return { items }
+      return { items, AlignLeft, AlignCenter, AlignRight }
     },
     data() {
       return { align: 'left' }

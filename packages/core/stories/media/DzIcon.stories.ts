@@ -77,7 +77,8 @@ export const Default: Story = {}
 export const AllSizes: Story = {
   name: 'Size Gallery',
   render: () => ({
-    components: { DzIcon, Heart },
+    components: { DzIcon },
+    setup() { return { Heart } },
     template: `
       <div class="flex items-end gap-6">
         <div class="text-center">
@@ -112,7 +113,8 @@ export const AllSizes: Story = {
 export const StrokeWidths: Story = {
   name: 'Stroke Width Variations',
   render: () => ({
-    components: { DzIcon, Star },
+    components: { DzIcon },
+    setup() { return { Star } },
     template: `
       <div class="flex items-end gap-6">
         <div class="text-center">
@@ -151,21 +153,7 @@ export const StrokeWidths: Story = {
 export const IconGallery: Story = {
   name: 'Icon Gallery (Sample)',
   render: () => ({
-    components: {
-      DzIcon,
-      Search,
-      Heart,
-      Star,
-      Settings,
-      Bell,
-      Home,
-      User,
-      Mail,
-      Calendar,
-      Trash2,
-      Download,
-      Upload,
-    },
+    components: { DzIcon },
     template: `
       <div class="grid grid-cols-6 gap-6">
         <div class="text-center" v-for="[name, icon] in icons" :key="name">
@@ -201,7 +189,8 @@ export const IconGallery: Story = {
 export const AccessibleIcon: Story = {
   name: 'Accessibility: Decorative vs Meaningful',
   render: () => ({
-    components: { DzIcon, Search, Bell },
+    components: { DzIcon },
+    setup() { return { Search, Bell } },
     template: `
       <div class="space-y-6">
         <div class="space-y-2">
@@ -234,7 +223,8 @@ export const DarkMode: Story = {
     }),
   ],
   render: () => ({
-    components: { DzIcon, Search, Heart, Star, Settings },
+    components: { DzIcon },
+    setup() { return { Search, Heart, Star, Settings } },
     template: `
       <div class="flex gap-6">
         <DzIcon :icon="Search" size="lg" />
@@ -253,7 +243,8 @@ export const DarkMode: Story = {
 export const RealWorldIconWithText: Story = {
   name: 'Real World: Icon + Text Patterns',
   render: () => ({
-    components: { DzIcon, Mail, Calendar, User, Bell },
+    components: { DzIcon },
+    setup() { return { Mail, Calendar, User, Bell } },
     template: `
       <div class="space-y-4">
         <div class="flex items-center gap-2">
@@ -280,7 +271,8 @@ export const RealWorldIconWithText: Story = {
 export const RealWorldNavigation: Story = {
   name: 'Real World: Navigation Items',
   render: () => ({
-    components: { DzIcon, Home, Settings, Bell, User },
+    components: { DzIcon },
+    setup() { return { Home, Settings, Bell, User } },
     template: `
       <nav class="w-56 space-y-1">
         <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-100 text-sm font-medium">

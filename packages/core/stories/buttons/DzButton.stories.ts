@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
+import { userEvent, within } from '@storybook/test'
 import { ChevronRight, Download, Mail, Plus, Search } from 'lucide-vue-next'
 import { DzButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
@@ -222,7 +223,10 @@ export const States: Story = {
 export const WithPrefixIcon: Story = {
   name: 'With Prefix Icon',
   render: () => ({
-    components: { DzButton, DzIcon, Plus, Mail },
+    components: { DzButton, DzIcon },
+    setup() {
+      return { Plus, Mail }
+    },
     template: `
       <div class="flex gap-4 items-center">
         <DzButton>
@@ -245,7 +249,10 @@ export const WithPrefixIcon: Story = {
 export const WithSuffixIcon: Story = {
   name: 'With Suffix Icon',
   render: () => ({
-    components: { DzButton, DzIcon, ChevronRight, Download },
+    components: { DzButton, DzIcon },
+    setup() {
+      return { ChevronRight, Download }
+    },
     template: `
       <div class="flex gap-4 items-center">
         <DzButton>
@@ -268,7 +275,10 @@ export const WithSuffixIcon: Story = {
 export const WithPrefixAndSuffix: Story = {
   name: 'With Prefix and Suffix Icons',
   render: () => ({
-    components: { DzButton, DzIcon, Search, ChevronRight },
+    components: { DzButton, DzIcon },
+    setup() {
+      return { Search, ChevronRight }
+    },
     template: `
       <DzButton>
         <template #prefix><DzIcon :icon="Search" size="sm" /></template>
@@ -351,6 +361,12 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: /clicked/i })
+    await userEvent.click(button)
+    button.focus()
+  },
 }
 
 // ---------------------------------------------------------------------------

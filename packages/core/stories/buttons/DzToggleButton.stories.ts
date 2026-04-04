@@ -85,10 +85,10 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: args => ({
-    components: { DzToggleButton, DzIcon, Bold },
+    components: { DzToggleButton, DzIcon },
     setup() {
       const pressed = ref(args.modelValue)
-      return { args, pressed }
+      return { args, pressed, Bold }
     },
     template: `
       <DzToggleButton v-bind="args" v-model="pressed" aria-label="Toggle bold">
@@ -227,7 +227,8 @@ export const States: Story = {
 export const WithSlots: Story = {
   name: 'With Prefix and Suffix Slots',
   render: () => ({
-    components: { DzToggleButton, DzIcon, Star, Pin },
+    components: { DzToggleButton, DzIcon },
+    setup() { return { Star, Pin } },
     template: `
       <div class="flex gap-4 items-center">
         <DzToggleButton aria-label="Toggle star">
@@ -272,12 +273,12 @@ export const DarkMode: Story = {
 
 export const Interactive: Story = {
   render: () => ({
-    components: { DzToggleButton, DzIcon, Bold, Italic, Underline },
+    components: { DzToggleButton, DzIcon },
     setup() {
       const bold = ref(false)
       const italic = ref(false)
       const underline = ref(false)
-      return { bold, italic, underline }
+      return { bold, italic, underline, Bold, Italic, Underline }
     },
     template: `
       <div class="space-y-4">
@@ -307,7 +308,8 @@ export const Interactive: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: Focus States',
   render: () => ({
-    components: { DzToggleButton, DzIcon, AlignLeft, AlignCenter, AlignRight },
+    components: { DzToggleButton, DzIcon },
+    setup() { return { AlignLeft, AlignCenter, AlignRight } },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -337,12 +339,12 @@ export const Accessibility: Story = {
 export const RealWorldToolbar: Story = {
   name: 'Real World: Text Formatting Toolbar',
   render: () => ({
-    components: { DzToggleButton, DzIcon, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight },
+    components: { DzToggleButton, DzIcon },
     setup() {
       const bold = ref(true)
       const italic = ref(false)
       const underline = ref(false)
-      return { bold, italic, underline }
+      return { bold, italic, underline, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight }
     },
     template: `
       <div class="inline-flex items-center gap-1 p-1 rounded-md border border-[var(--dz-colors-border,#e5e7eb)]">

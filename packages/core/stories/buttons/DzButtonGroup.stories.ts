@@ -263,7 +263,8 @@ export const DarkMode: Story = {
 export const RealWorldToolbar: Story = {
   name: 'Real World: Formatting Toolbar',
   render: () => ({
-    components: { DzButtonGroup, DzIconButton, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight },
+    components: { DzButtonGroup, DzIconButton },
+    setup() { return { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } },
     template: `
       <div class="flex gap-3">
         <DzButtonGroup variant="ghost" tone="neutral" size="sm" aria-label="Text formatting">

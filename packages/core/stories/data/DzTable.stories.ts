@@ -514,6 +514,48 @@ export const Accessibility: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Responsive – Mobile
+// ---------------------------------------------------------------------------
+
+export const ResponsiveMobile: Story = {
+  name: 'Responsive – Mobile',
+  decorators: [
+    () => ({ template: '<div style="max-width: 375px; overflow-x: auto;"><story /></div>' }),
+  ],
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
+    template: `
+      <DzTable variant="bordered" size="sm" aria-label="Mobile responsive table">
+        <DzTableHeader>
+          <DzTableRow>
+            <DzTableCell header>Name</DzTableCell>
+            <DzTableCell header>Role</DzTableCell>
+            <DzTableCell header align="right">Salary</DzTableCell>
+          </DzTableRow>
+        </DzTableHeader>
+        <DzTableBody>
+          <DzTableRow>
+            <DzTableCell>Alice Johnson</DzTableCell>
+            <DzTableCell>Engineer</DzTableCell>
+            <DzTableCell align="right">$120k</DzTableCell>
+          </DzTableRow>
+          <DzTableRow>
+            <DzTableCell>Bob Smith</DzTableCell>
+            <DzTableCell>Designer</DzTableCell>
+            <DzTableCell align="right">$95k</DzTableCell>
+          </DzTableRow>
+          <DzTableRow>
+            <DzTableCell>Charlie Lee</DzTableCell>
+            <DzTableCell>PM</DzTableCell>
+            <DzTableCell align="right">$110k</DzTableCell>
+          </DzTableRow>
+        </DzTableBody>
+      </DzTable>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // Real World: Invoice Line Items
 // ---------------------------------------------------------------------------
 

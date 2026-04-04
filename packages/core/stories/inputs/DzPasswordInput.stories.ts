@@ -177,7 +177,8 @@ export const AllSizes: Story = {
 export const WithPrefixIcon: Story = {
   name: 'With Prefix Icon',
   render: () => ({
-    components: { DzPasswordInput, DzIcon, Lock, Shield },
+    components: { DzPasswordInput, DzIcon },
+    setup() { return { Lock, Shield } },
     template: `
       <div class="flex flex-col gap-4 max-w-xs">
         <DzPasswordInput placeholder="Password">
@@ -319,7 +320,8 @@ export const Accessibility: Story = {
 export const RealWorldChangePassword: Story = {
   name: 'Real World: Change Password',
   render: () => ({
-    components: { DzPasswordInput, DzIcon, Lock },
+    components: { DzPasswordInput, DzIcon },
+    setup() { return { Lock } },
     data() {
       return { current: '', newPass: '', confirm: '' }
     },

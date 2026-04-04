@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
+import { userEvent, within } from '@storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDialog,
@@ -216,6 +217,11 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open controlled dialog/i })
+    await userEvent.click(trigger)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -278,6 +284,76 @@ export const Accessibility: Story = {
               </DzDialogClose>
               <DzDialogClose as-child>
                 <DzButton tone="primary">OK</DzButton>
+              </DzDialogClose>
+            </div>
+          </DzDialogContent>
+        </DzDialog>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Compound Composition: All Sub-Parts Annotated
+// ---------------------------------------------------------------------------
+
+export const CompoundComposition: Story = {
+  name: 'Compound: All Sub-Parts',
+  render: () => ({
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
+    template: `
+      <div class="space-y-4">
+        <p class="text-sm text-gray-500 max-w-md">
+          DzDialog is a compound component. All five sub-parts are shown here:
+          <code>DzDialogTrigger</code>, <code>DzDialogContent</code>,
+          <code>DzDialogTitle</code>, <code>DzDialogDescription</code>, and
+          <code>DzDialogClose</code>.
+        </p>
+
+        <!-- DzDialogTrigger: renders the element that opens the dialog -->
+        <DzDialog>
+          <DzDialogTrigger as-child>
+            <!-- DzDialogTrigger: as-child delegates the open behavior to DzButton -->
+            <DzButton tone="primary">Open (DzDialogTrigger)</DzButton>
+          </DzDialogTrigger>
+
+          <!-- DzDialogContent: the modal panel, portaled to body -->
+          <DzDialogContent size="md">
+            <!-- DzDialogTitle: required for accessibility (aria-labelledby) -->
+            <DzDialogTitle>Compound Sub-Parts Demo</DzDialogTitle>
+
+            <!-- DzDialogDescription: optional, linked via aria-describedby -->
+            <DzDialogDescription>
+              This dialog demonstrates every sub-part: Trigger, Content, Title,
+              Description, and Close. Each part communicates via Reka UI Dialog
+              context (ADR-07) and provides scoped IDs automatically.
+            </DzDialogDescription>
+
+            <div class="mt-4 rounded border p-3 text-xs font-mono space-y-1">
+              <p>&lt;DzDialog&gt;</p>
+              <p class="pl-4">&lt;DzDialogTrigger /&gt;</p>
+              <p class="pl-4">&lt;DzDialogContent&gt;</p>
+              <p class="pl-8">&lt;DzDialogTitle /&gt;</p>
+              <p class="pl-8">&lt;DzDialogDescription /&gt;</p>
+              <p class="pl-8">&lt;DzDialogClose /&gt;</p>
+              <p class="pl-4">&lt;/DzDialogContent&gt;</p>
+              <p>&lt;/DzDialog&gt;</p>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-4">
+              <!-- DzDialogClose: closes the dialog when activated -->
+              <DzDialogClose as-child>
+                <DzButton variant="outline" tone="neutral">
+                  Close (DzDialogClose)
+                </DzButton>
               </DzDialogClose>
             </div>
           </DzDialogContent>

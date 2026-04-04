@@ -54,7 +54,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => ({
-    components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Settings, Users },
+    components: { DzMenu, DzMenuItem, DzMenuSeparator },
+    setup() { return { Home, Settings, Users } },
     template: `
       <DzMenu class="w-56" aria-label="Main navigation">
         <DzMenuItem active>
@@ -82,7 +83,8 @@ export const Default: Story = {
 export const Interactive: Story = {
   name: 'Interactive Selection',
   render: () => ({
-    components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Users, BarChart3, Settings, Shield, LogOut },
+    components: { DzMenu, DzMenuItem, DzMenuSeparator },
+    setup() { return { Home, Users, BarChart3, Settings, Shield, LogOut } },
     data() {
       return { active: 'dashboard' }
     },
@@ -129,7 +131,8 @@ export const Interactive: Story = {
 export const DisabledItems: Story = {
   name: 'Disabled Items',
   render: () => ({
-    components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Settings, Shield },
+    components: { DzMenu, DzMenuItem, DzMenuSeparator },
+    setup() { return { Home, Settings, Shield } },
     template: `
       <DzMenu class="w-56" aria-label="Menu with disabled items">
         <DzMenuItem active>
@@ -157,7 +160,8 @@ export const DisabledItems: Story = {
 export const CollapsedMode: Story = {
   name: 'Collapsed Mode (Icon Only)',
   render: () => ({
-    components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Users, Settings },
+    components: { DzMenu, DzMenuItem, DzMenuSeparator },
+    setup() { return { Home, Users, Settings } },
     template: `
       <DzMenu collapsed class="w-12" aria-label="Collapsed navigation">
         <DzMenuItem active>

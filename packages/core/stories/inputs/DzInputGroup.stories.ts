@@ -201,7 +201,8 @@ export const WithPrefixAndSuffix: Story = {
 export const WithIconAddons: Story = {
   name: 'With Icon Addons',
   render: () => ({
-    components: { DzInputGroup, DzInput, DzIcon, Globe, Mail },
+    components: { DzInputGroup, DzInput, DzIcon },
+    setup() { return { Globe, Mail } },
     template: `
       <div class="flex flex-col gap-4 max-w-sm">
         <DzInputGroup>
@@ -224,7 +225,8 @@ export const WithIconAddons: Story = {
 export const WithButtonAddon: Story = {
   name: 'With Button Addon',
   render: () => ({
-    components: { DzInputGroup, DzInput, DzButton, DzIcon, Copy },
+    components: { DzInputGroup, DzInput, DzButton, DzIcon },
+    setup() { return { Copy } },
     template: `
       <div class="flex flex-col gap-4 max-w-md">
         <DzInputGroup>

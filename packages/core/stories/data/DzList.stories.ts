@@ -428,6 +428,28 @@ export const RealWorldSettingsMenu: Story = {
 // Real World: Activity Feed
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Responsive – Mobile
+// ---------------------------------------------------------------------------
+
+export const ResponsiveMobile: Story = {
+  name: 'Responsive – Mobile',
+  decorators: [
+    () => ({ template: '<div style="max-width: 375px; overflow-x: auto;"><story /></div>' }),
+  ],
+  render: () => ({
+    components: { DzList, DzListItem },
+    template: `
+      <DzList variant="divided" aria-label="Mobile list">
+        <DzListItem>Dashboard</DzListItem>
+        <DzListItem>Analytics</DzListItem>
+        <DzListItem>Settings</DzListItem>
+        <DzListItem>Profile</DzListItem>
+      </DzList>
+    `,
+  }),
+}
+
 export const RealWorldActivityFeed: Story = {
   name: 'Real World: Activity Feed',
   render: () => ({

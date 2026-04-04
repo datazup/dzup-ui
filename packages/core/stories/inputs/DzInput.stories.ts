@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
+import { userEvent, within } from '@storybook/test'
 import { Lock, Mail, Search, User } from 'lucide-vue-next'
 import { DzInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
@@ -262,7 +263,8 @@ export const Invalid: Story = {
 export const WithPrefixIcon: Story = {
   name: 'With Prefix Icon',
   render: () => ({
-    components: { DzInput, DzIcon, Mail, User },
+    components: { DzInput, DzIcon },
+    setup() { return { Mail, User } },
     template: `
       <div class="flex flex-col gap-4 max-w-xs">
         <DzInput placeholder="Email address">
@@ -283,7 +285,8 @@ export const WithPrefixIcon: Story = {
 export const WithSuffixIcon: Story = {
   name: 'With Suffix Icon',
   render: () => ({
-    components: { DzInput, DzIcon, Search },
+    components: { DzInput, DzIcon },
+    setup() { return { Search } },
     template: `
       <DzInput placeholder="Search..." class="max-w-xs">
         <template #suffix><DzIcon :icon="Search" size="sm" /></template>
@@ -299,7 +302,8 @@ export const WithSuffixIcon: Story = {
 export const WithPrefixAndSuffix: Story = {
   name: 'With Prefix and Suffix',
   render: () => ({
-    components: { DzInput, DzIcon, Lock, Search },
+    components: { DzInput, DzIcon },
+    setup() { return { Lock, Search } },
     template: `
       <DzInput placeholder="Secure search" class="max-w-xs">
         <template #prefix><DzIcon :icon="Lock" size="sm" /></template>
@@ -380,6 +384,12 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('textbox')
+    await userEvent.click(input)
+    await userEvent.type(input, 'Hello, Storybook!')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -408,7 +418,8 @@ export const Accessibility: Story = {
 export const RealWorldLoginForm: Story = {
   name: 'Real World: Login Form',
   render: () => ({
-    components: { DzInput, DzIcon, Mail, Lock },
+    components: { DzInput, DzIcon },
+    setup() { return { Mail, Lock } },
     template: `
       <div class="space-y-4 max-w-sm">
         <div>

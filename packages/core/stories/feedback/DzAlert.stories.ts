@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
+import { userEvent, within } from '@storybook/test'
 import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-vue-next'
 import { DzAlert } from '../../src/components/feedback'
 
@@ -176,7 +177,8 @@ export const WithTitle: Story = {
 export const WithIcon: Story = {
   name: 'With Icon',
   render: () => ({
-    components: { DzAlert, AlertCircle, CheckCircle, Info, AlertTriangle },
+    components: { DzAlert },
+    setup() { return { AlertCircle, CheckCircle, Info, AlertTriangle } },
     template: `
       <div class="space-y-4">
         <DzAlert tone="info" title="Information" :icon="Info">Check out the new features in this release.</DzAlert>
@@ -253,6 +255,11 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const closeButton = canvas.getByRole('button', { name: /close/i })
+    await userEvent.click(closeButton)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -311,7 +318,8 @@ export const DarkMode: Story = {
 export const RealWorldSystemStatus: Story = {
   name: 'Real World: System Status',
   render: () => ({
-    components: { DzAlert, CheckCircle, AlertTriangle, AlertCircle },
+    components: { DzAlert },
+    setup() { return { CheckCircle, AlertTriangle, AlertCircle } },
     template: `
       <div class="space-y-3 max-w-lg">
         <DzAlert tone="success" title="All Systems Operational" :icon="CheckCircle" />

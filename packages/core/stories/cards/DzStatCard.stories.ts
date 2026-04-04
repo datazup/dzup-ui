@@ -119,7 +119,7 @@ export const AllTrends: Story = {
 export const WithIcon: Story = {
   name: 'With Icon',
   render: () => ({
-    components: { DzStatCard, DollarSign, Users, ShoppingCart },
+    components: { DzStatCard },
     setup() {
       return { DollarSign, Users, ShoppingCart }
     },
@@ -176,7 +176,7 @@ export const DarkMode: Story = {
     }),
   ],
   render: () => ({
-    components: { DzStatCard, DollarSign, Users, ShoppingCart },
+    components: { DzStatCard },
     setup() {
       return { DollarSign, Users, ShoppingCart }
     },
@@ -197,7 +197,7 @@ export const DarkMode: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: Semantic Structure',
   render: () => ({
-    components: { DzStatCard, DollarSign },
+    components: { DzStatCard },
     setup() {
       return { DollarSign }
     },
@@ -230,7 +230,7 @@ export const Accessibility: Story = {
 export const RealWorldDashboard: Story = {
   name: 'Real World: Dashboard KPI Row',
   render: () => ({
-    components: { DzStatCard, DollarSign, Users, ShoppingCart, TrendingUp, Activity, Package },
+    components: { DzStatCard },
     setup() {
       return { DollarSign, Users, ShoppingCart, TrendingUp, Activity, Package }
     },

@@ -67,7 +67,8 @@ export const Default: Story = {
 export const WithIcon: Story = {
   name: 'With Icon',
   render: () => ({
-    components: { DzEmpty, Search, Inbox, FileX },
+    components: { DzEmpty },
+    setup() { return { Search, Inbox, FileX } },
     template: `
       <div class="space-y-8">
         <DzEmpty title="No search results" description="Try different keywords." :icon="Search" />
@@ -85,7 +86,8 @@ export const WithIcon: Story = {
 export const WithActions: Story = {
   name: 'With Action Buttons',
   render: () => ({
-    components: { DzEmpty, Search },
+    components: { DzEmpty },
+    setup() { return { Search } },
     template: `
       <DzEmpty title="No results found" description="Try adjusting your search criteria." :icon="Search">
         <template #actions>
@@ -128,7 +130,8 @@ export const WithSlots: Story = {
 
 export const Interactive: Story = {
   render: () => ({
-    components: { DzEmpty, FolderOpen },
+    components: { DzEmpty },
+    setup() { return { FolderOpen } },
     data() {
       return { items: [] as string[] }
     },
@@ -161,7 +164,8 @@ export const Interactive: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: role="status"',
   render: () => ({
-    components: { DzEmpty, Inbox },
+    components: { DzEmpty },
+    setup() { return { Inbox } },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -187,7 +191,8 @@ export const DarkMode: Story = {
     }),
   ],
   render: () => ({
-    components: { DzEmpty, Search },
+    components: { DzEmpty },
+    setup() { return { Search } },
     template: `
       <DzEmpty title="No results" description="Try a different search term." :icon="Search">
         <template #actions>
@@ -205,7 +210,8 @@ export const DarkMode: Story = {
 export const RealWorldEmptyTable: Story = {
   name: 'Real World: Empty Table',
   render: () => ({
-    components: { DzEmpty, FileX },
+    components: { DzEmpty },
+    setup() { return { FileX } },
     template: `
       <div class="border rounded max-w-lg">
         <div class="flex items-center justify-between p-3 border-b bg-gray-50 text-sm font-medium">

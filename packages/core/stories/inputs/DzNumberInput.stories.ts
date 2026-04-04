@@ -214,7 +214,8 @@ export const MinMaxStep: Story = {
 export const WithPrefixIcon: Story = {
   name: 'With Prefix Icon',
   render: () => ({
-    components: { DzNumberInput, DzIcon, DollarSign, Hash },
+    components: { DzNumberInput, DzIcon },
+    setup() { return { DollarSign, Hash } },
     template: `
       <div class="flex flex-col gap-4 max-w-[200px]">
         <DzNumberInput :min="0" :step="0.01" placeholder="0.00">

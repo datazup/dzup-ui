@@ -286,6 +286,41 @@ export const Accessibility: Story = {
 // Real World: Registration Form
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Responsive – Mobile
+// ---------------------------------------------------------------------------
+
+export const ResponsiveMobile: Story = {
+  name: 'Responsive – Mobile',
+  decorators: [
+    () => ({ template: '<div style="max-width: 375px; overflow-x: auto;"><story /></div>' }),
+  ],
+  render: () => ({
+    components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzSelect },
+    setup() {
+      const items = [
+        { value: 'option-a', label: 'Option A' },
+        { value: 'option-b', label: 'Option B' },
+        { value: 'option-c', label: 'Option C' },
+      ]
+      return { items }
+    },
+    data() {
+      return { value: '' }
+    },
+    template: `
+      <div class="space-y-4">
+        <DzFormField required>
+          <DzFormLabel>Category</DzFormLabel>
+          <DzSelect :items="items" v-model="value" placeholder="Select..." />
+          <DzFormDescription>Choose a category for your item.</DzFormDescription>
+          <DzFormMessage />
+        </DzFormField>
+      </div>
+    `,
+  }),
+}
+
 export const RealWorldRegistrationForm: Story = {
   name: 'Real World: Registration Form',
   render: () => ({

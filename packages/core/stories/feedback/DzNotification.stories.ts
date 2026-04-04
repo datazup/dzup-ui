@@ -123,7 +123,8 @@ export const AllTones: Story = {
 export const WithIcon: Story = {
   name: 'With Icon',
   render: () => ({
-    components: { DzNotification, CheckCircle, AlertTriangle, AlertCircle, Info },
+    components: { DzNotification },
+    setup() { return { CheckCircle, AlertTriangle, AlertCircle, Info } },
     template: `
       <div class="space-y-4 max-w-md">
         <DzNotification tone="success" title="Saved" description="Your changes have been saved." :icon="CheckCircle" closable />
@@ -162,7 +163,8 @@ export const Closable: Story = {
 export const WithSlots: Story = {
   name: 'With Slots',
   render: () => ({
-    components: { DzNotification, Bell },
+    components: { DzNotification },
+    setup() { return { Bell } },
     template: `
       <div class="max-w-md">
         <DzNotification tone="primary" title="New message" closable :icon="Bell">
@@ -184,7 +186,8 @@ export const WithSlots: Story = {
 export const AutoDismiss: Story = {
   name: 'Auto-dismiss (5s)',
   render: () => ({
-    components: { DzNotification, CheckCircle },
+    components: { DzNotification },
+    setup() { return { CheckCircle } },
     data() {
       return { key: 0 }
     },
@@ -268,7 +271,8 @@ export const DarkMode: Story = {
     }),
   ],
   render: () => ({
-    components: { DzNotification, CheckCircle, AlertCircle },
+    components: { DzNotification },
+    setup() { return { CheckCircle, AlertCircle } },
     template: `
       <div class="space-y-4 max-w-md">
         <DzNotification tone="success" title="Success" description="Changes saved." :icon="CheckCircle" closable />
@@ -285,7 +289,8 @@ export const DarkMode: Story = {
 export const RealWorldNotificationStack: Story = {
   name: 'Real World: Notification Stack',
   render: () => ({
-    components: { DzNotification, CheckCircle, AlertTriangle, Info },
+    components: { DzNotification },
+    setup() { return { CheckCircle, AlertTriangle, Info } },
     template: `
       <div class="space-y-3 max-w-md">
         <DzNotification

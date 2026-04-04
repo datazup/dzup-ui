@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
+import { userEvent, within } from '@storybook/test'
 import { DzCheckbox } from '../../src/components/forms'
 
 /**
@@ -191,6 +192,11 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const checkbox = canvas.getByRole('checkbox')
+    await userEvent.click(checkbox)
+  },
 }
 
 // ---------------------------------------------------------------------------
