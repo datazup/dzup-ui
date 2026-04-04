@@ -132,7 +132,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : 'idle'"
+    :data-state="loading ? 'loading' : resolvedDisabled ? 'disabled' : 'idle'"
     :data-tone="resolvedTone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
@@ -183,3 +183,15 @@ export default {
     <slot name="suffix" />
   </component>
 </template>
+
+<style scoped>
+/* Accessibility: respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :deep(*),
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>

@@ -45,7 +45,13 @@ export default {
 </script>
 
 <template>
-  <div class="relative" :data-state="ctx?.disabled.value ? 'disabled' : 'idle'" :data-disabled="ctx?.disabled.value ? '' : undefined">
+  <div
+    class="relative"
+    :data-state="ctx?.loading.value ? 'loading' : ctx?.disabled.value ? 'disabled' : 'idle'"
+    :data-tone="ctx?.tone.value"
+    :data-disabled="ctx?.disabled.value ? '' : undefined"
+    :data-loading="ctx?.loading.value ? '' : undefined"
+  >
     <slot>
       <button
         type="button"

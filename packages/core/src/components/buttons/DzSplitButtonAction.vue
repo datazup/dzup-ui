@@ -65,7 +65,8 @@ export default {
     :aria-disabled="isInert || undefined"
     :aria-busy="ctx?.loading.value || undefined"
     :aria-label="ariaLabel"
-    :data-state="ctx?.loading.value ? 'loading' : 'idle'"
+    :data-state="ctx?.loading.value ? 'loading' : ctx?.disabled.value ? 'disabled' : 'idle'"
+    :data-tone="ctx?.tone.value"
     :data-disabled="ctx?.disabled.value ? '' : undefined"
     :data-loading="ctx?.loading.value ? '' : undefined"
     v-bind="{ ...$attrs, class: undefined }"
@@ -86,3 +87,15 @@ export default {
     <slot v-else />
   </button>
 </template>
+
+<style scoped>
+/* Accessibility: respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :deep(*),
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>

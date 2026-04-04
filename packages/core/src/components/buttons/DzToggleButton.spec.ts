@@ -54,20 +54,20 @@ describe('dzToggleButton — Unit Tests', () => {
     expect(wrapper.emitted('change')?.[0]).toEqual([true])
   })
 
-  it('sets data-state to off when not pressed', () => {
+  it('sets data-state to idle when not pressed', () => {
     const wrapper = mount(DzToggleButton, {
       props: { modelValue: false },
       slots: { default: 'Toggle' },
     })
-    expect(wrapper.attributes('data-state')).toBe('off')
+    expect(wrapper.attributes('data-state')).toBe('idle')
   })
 
-  it('sets data-state to on when pressed', () => {
+  it('sets data-state to pressed when pressed', () => {
     const wrapper = mount(DzToggleButton, {
       props: { modelValue: true },
       slots: { default: 'Toggle' },
     })
-    expect(wrapper.attributes('data-state')).toBe('on')
+    expect(wrapper.attributes('data-state')).toBe('pressed')
   })
 
   it('merges consumer class via cn()', () => {

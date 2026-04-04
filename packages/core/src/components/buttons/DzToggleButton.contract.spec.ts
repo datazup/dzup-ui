@@ -30,20 +30,20 @@ describe('dzToggleButton — Contract Spec v1', () => {
 
   // ── Data attributes ──
 
-  it('sets data-state to "on" when pressed', () => {
+  it('sets data-state to "pressed" when pressed', () => {
     const wrapper = mount(DzToggleButton, {
       props: { modelValue: true },
       slots: { default: 'Bold' },
     })
-    expect(wrapper.attributes('data-state')).toBe('on')
+    expect(wrapper.attributes('data-state')).toBe('pressed')
   })
 
-  it('sets data-state to "off" when not pressed', () => {
+  it('sets data-state to "idle" when not pressed', () => {
     const wrapper = mount(DzToggleButton, {
       props: { modelValue: false },
       slots: { default: 'Bold' },
     })
-    expect(wrapper.attributes('data-state')).toBe('off')
+    expect(wrapper.attributes('data-state')).toBe('idle')
   })
 
   it('sets data-disabled when disabled=true', () => {

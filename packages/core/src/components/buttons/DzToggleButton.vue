@@ -79,7 +79,7 @@ export default {
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
-    :data-state="model ? 'on' : 'off'"
+    :data-state="disabled ? 'disabled' : model ? 'pressed' : 'idle'"
     :data-tone="tone"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"

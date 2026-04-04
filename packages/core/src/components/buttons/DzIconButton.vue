@@ -108,7 +108,7 @@ export default {
     :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :aria-label="ariaLabel"
-    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : 'idle'"
+    :data-state="loading ? 'loading' : resolvedDisabled ? 'disabled' : 'idle'"
     :data-tone="resolvedTone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
@@ -152,3 +152,15 @@ export default {
     />
   </button>
 </template>
+
+<style scoped>
+/* Accessibility: respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :deep(*),
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
