@@ -25,9 +25,11 @@ export const badgeVariants = tv({
     },
 
     size: {
-      sm: 'px-[var(--dz-spacing-1.5)] py-px text-[length:var(--dz-text-xs)]',
+      xs: 'px-[var(--dz-spacing-1_5)] py-px text-[length:var(--dz-text-xs)]',
+      sm: 'px-[var(--dz-spacing-1_5)] py-px text-[length:var(--dz-text-xs)]',
       md: 'px-[var(--dz-spacing-2)] py-0.5 text-[length:var(--dz-text-xs)]',
       lg: 'px-[var(--dz-spacing-3)] py-1 text-[length:var(--dz-text-sm)]',
+      xl: 'px-[var(--dz-spacing-3)] py-1 text-[length:var(--dz-text-sm)]',
     },
 
     tone: {

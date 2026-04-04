@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ColumnDef, DzDataGridContext, FilterOperator } from './DzDataGrid.types.ts'
+import type { ColumnDef, FilterOperator } from './DzDataGrid.types.ts'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
  *
@@ -12,12 +12,17 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
 
-const ctx = inject(DZ_DATA_GRID_KEY) as DzDataGridContext
+const ctx = inject(DZ_DATA_GRID_KEY, null)
+if (!ctx) {
+  if (import.meta.env?.DEV) {
+    console.warn('[DzDataGridHeader] must be used inside a <DzDataGrid> parent.')
+  }
+}
 
 const styles = computed(() =>
   dataGridVariants({
-    size: ctx.size.value,
-    density: ctx.density.value,
+    size: ctx!.size.value,
+    density: ctx!.density.value,
   }),
 )
 
@@ -42,25 +47,25 @@ function getColumnStyle(col: ColumnDef<Record<string, unknown>>): string | undef
 function handleHeaderKeyDown(event: KeyboardEvent, field: string): void {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault()
-    ctx.sort(field)
+    ctx!.sort(field)
   }
 }
 
 function isColumnFilterable(col: ColumnDef<Record<string, unknown>>): boolean {
-  return ctx.filterable.value && col.filterable !== false
+  return ctx!.filterable.value && col.filterable !== false
 }
 
 function hasActiveFilter(field: string): boolean {
-  return ctx.filters.value.some(f => f.column === field)
+  return ctx!.filters.value.some(f => f.column === field)
 }
 
 function getFilterValue(field: string): string | number {
-  const filter = ctx.filters.value.find(f => f.column === field)
+  const filter = ctx!.filters.value.find(f => f.column === field)
   return filter?.value ?? ''
 }
 
 function getFilterOperator(field: string): FilterOperator {
-  const filter = ctx.filters.value.find(f => f.column === field)
+  const filter = ctx!.filters.value.find(f => f.column === field)
   return filter?.operator ?? 'contains'
 }
 
@@ -74,19 +79,19 @@ function handleFilterInput(field: string, value: string, col: ColumnDef<Record<s
   const operator = filterType === 'number' ? getFilterOperator(field) : filterType === 'select' ? 'equals' : 'contains'
 
   if (value === '') {
-    ctx.clearFilter(field)
+    ctx!.clearFilter(field)
     return
   }
 
   const filterValue = filterType === 'number' ? Number(value) : value
-  ctx.setFilter(field, { column: field, value: filterValue, operator })
+  ctx!.setFilter(field, { column: field, value: filterValue, operator })
 }
 
 function handleOperatorChange(field: string, operator: FilterOperator): void {
   const currentValue = getFilterValue(field)
   if (currentValue === '' || currentValue === undefined)
     return
-  ctx.setFilter(field, { column: field, value: currentValue, operator })
+  ctx!.setFilter(field, { column: field, value: currentValue, operator })
 }
 
 function handleFilterKeyDown(event: KeyboardEvent): void {
@@ -97,7 +102,7 @@ function handleFilterKeyDown(event: KeyboardEvent): void {
 
 function handleClearFilter(event: Event, field: string): void {
   event.stopPropagation()
-  ctx.clearFilter(field)
+  ctx!.clearFilter(field)
 }
 </script>
 
@@ -111,45 +116,45 @@ export default {
   <thead :class="styles.header()">
     <tr :class="styles.headerRow()" role="row">
       <th
-        v-if="ctx.selectable.value === 'multiple'"
+        v-if="ctx!.selectable.value === 'multiple'"
         :class="cn(styles.headerCell(), 'w-[var(--dz-spacing-10)]')"
         role="columnheader"
       >
         <input
           type="checkbox"
           :class="styles.checkbox()"
-          :checked="ctx.isAllSelected.value"
-          :indeterminate="ctx.isSomeSelected.value"
+          :checked="ctx!.isAllSelected.value"
+          :indeterminate="ctx!.isSomeSelected.value"
           aria-label="Select all rows"
-          @change="ctx.toggleAllSelection()"
+          @change="ctx!.toggleAllSelection()"
         >
       </th>
       <th
-        v-for="col in ctx.columns.value"
+        v-for="col in ctx!.columns.value"
         :key="col.field"
         :class="cn(styles.headerCell(), getAlignClass(col.align), 'relative')"
         :style="getColumnStyle(col)"
         :aria-sort="
-          ctx.sortModel.value.find(s => s.field === col.field)?.direction === 'asc' ? 'ascending'
-          : ctx.sortModel.value.find(s => s.field === col.field)?.direction === 'desc' ? 'descending'
-            : ctx.sortable.value && col.sortable !== false ? 'none'
+          ctx!.sortModel.value.find(s => s.field === col.field)?.direction === 'asc' ? 'ascending'
+          : ctx!.sortModel.value.find(s => s.field === col.field)?.direction === 'desc' ? 'descending'
+            : ctx!.sortable.value && col.sortable !== false ? 'none'
               : undefined
         "
-        :tabindex="ctx.sortable.value && col.sortable !== false ? 0 : undefined"
+        :tabindex="ctx!.sortable.value && col.sortable !== false ? 0 : undefined"
         role="columnheader"
-        @click="ctx.sortable.value && col.sortable !== false ? ctx.sort(col.field) : undefined"
-        @keydown="ctx.sortable.value && col.sortable !== false ? handleHeaderKeyDown($event, col.field) : undefined"
+        @click="ctx!.sortable.value && col.sortable !== false ? ctx!.sort(col.field) : undefined"
+        @keydown="ctx!.sortable.value && col.sortable !== false ? handleHeaderKeyDown($event, col.field) : undefined"
       >
         <span class="inline-flex items-center gap-[var(--dz-spacing-1)]">
           {{ col.header }}
           <span
-            v-if="ctx.sortable.value && col.sortable !== false"
+            v-if="ctx!.sortable.value && col.sortable !== false"
             :class="styles.sortIcon()"
             aria-hidden="true"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
-              <path v-if="!ctx.sortModel.value.find(s => s.field === col.field)" d="M7 15l5 5 5-5M7 9l5-5 5 5" />
-              <path v-else-if="ctx.sortModel.value.find(s => s.field === col.field)?.direction === 'asc'" d="M7 14l5-5 5 5" />
+              <path v-if="!ctx!.sortModel.value.find(s => s.field === col.field)" d="M7 15l5 5 5-5M7 9l5-5 5 5" />
+              <path v-else-if="ctx!.sortModel.value.find(s => s.field === col.field)?.direction === 'asc'" d="M7 14l5-5 5 5" />
               <path v-else d="M7 10l5 5 5-5" />
             </svg>
           </span>
@@ -298,3 +303,15 @@ export default {
     </tr>
   </thead>
 </template>
+
+<style scoped>
+/* Accessibility: respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :deep(*),
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>

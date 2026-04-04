@@ -8,6 +8,7 @@
 
 import type {
   BaseAccessibilityProps,
+  CanonicalSize,
   CanonicalTone,
   ChipVariant,
 } from '@dzup-ui/contracts'
@@ -23,7 +24,7 @@ export interface DzChipProps extends BaseAccessibilityProps {
   /** Semantic color tone */
   tone?: CanonicalTone
   /** Component size */
-  size?: 'sm' | 'md' | 'lg'
+  size?: CanonicalSize
   /** Whether the chip can be dismissed/closed */
   closable?: boolean
   /** Disabled state -- prevents interaction */

@@ -57,18 +57,36 @@ describe('dzBadge — Unit Tests', () => {
     expect(classStr).toContain('text-[var(--dz-success)]')
   })
 
+  it('applies xs size classes', () => {
+    const wrapper = mount(DzBadge, {
+      props: { size: 'xs' },
+      slots: { default: 'Tag' },
+    })
+    const classStr = wrapper.classes().join(' ')
+    expect(classStr).toContain('px-[var(--dz-spacing-1_5)]')
+  })
+
   it('applies sm size classes', () => {
     const wrapper = mount(DzBadge, {
       props: { size: 'sm' },
       slots: { default: 'Tag' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('px-[var(--dz-spacing-1.5)]')
+    expect(classStr).toContain('px-[var(--dz-spacing-1_5)]')
   })
 
   it('applies lg size classes', () => {
     const wrapper = mount(DzBadge, {
       props: { size: 'lg' },
+      slots: { default: 'Tag' },
+    })
+    const classStr = wrapper.classes().join(' ')
+    expect(classStr).toContain('px-[var(--dz-spacing-3)]')
+  })
+
+  it('applies xl size classes', () => {
+    const wrapper = mount(DzBadge, {
+      props: { size: 'xl' },
       slots: { default: 'Tag' },
     })
     const classStr = wrapper.classes().join(' ')

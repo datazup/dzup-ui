@@ -6,6 +6,7 @@
 
 import type {
   BadgeVariant,
+  CanonicalSize,
   CanonicalTone,
 } from '@dzup-ui/contracts'
 
@@ -20,7 +21,7 @@ export interface DzBadgeProps {
   /** Semantic color tone */
   tone?: CanonicalTone
   /** Badge size */
-  size?: 'sm' | 'md' | 'lg'
+  size?: CanonicalSize
 }
 
 // ---------------------------------------------------------------------------

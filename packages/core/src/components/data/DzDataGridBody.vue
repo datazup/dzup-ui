@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ColumnDef, DzDataGridContext } from './DzDataGrid.types.ts'
+import type { ColumnDef } from './DzDataGrid.types.ts'
 /**
  * DzDataGridBody — Internal body sub-part for DzDataGrid.
  *
@@ -20,12 +20,17 @@ const emit = defineEmits<{
   rowClick: [row: Record<string, unknown>, index: number]
 }>()
 
-const ctx = inject(DZ_DATA_GRID_KEY) as DzDataGridContext
+const ctx = inject(DZ_DATA_GRID_KEY, null)
+if (!ctx) {
+  if (import.meta.env?.DEV) {
+    console.warn('[DzDataGridBody] must be used inside a <DzDataGrid> parent.')
+  }
+}
 
 const styles = computed(() =>
   dataGridVariants({
-    size: ctx.size.value,
-    density: ctx.density.value,
+    size: ctx!.size.value,
+    density: ctx!.density.value,
   }),
 )
 
@@ -46,8 +51,8 @@ function getColumnStyle(col: ColumnDef<Record<string, unknown>>): string | undef
 
 function handleRowClick(row: Record<string, unknown>, index: number): void {
   emit('rowClick', row, index)
-  if (ctx.selectable.value) {
-    ctx.toggleRowSelection(row)
+  if (ctx!.selectable.value) {
+    ctx!.toggleRowSelection(row)
   }
 }
 </script>
@@ -61,30 +66,30 @@ export default {
 <template>
   <tbody :class="styles.body()">
     <tr
-      v-for="(row, index) in ctx.data.value"
+      v-for="(row, index) in ctx!.data.value"
       :key="rowKey ? String(row[rowKey]) : index"
-      :class="cn(styles.row(), ctx.isRowSelected(row) ? 'bg-[var(--dz-primary-muted)]' : '')"
-      :aria-selected="ctx.isRowSelected(row) || undefined"
-      :data-state="ctx.isRowSelected(row) ? 'selected' : undefined"
+      :class="cn(styles.row(), ctx!.isRowSelected(row) ? 'bg-[var(--dz-primary-muted)]' : '')"
+      :aria-selected="ctx!.isRowSelected(row) || undefined"
+      :data-state="ctx!.isRowSelected(row) ? 'selected' : undefined"
       role="row"
       @click="handleRowClick(row, index)"
     >
       <td
-        v-if="ctx.selectable.value === 'multiple'"
+        v-if="ctx!.selectable.value === 'multiple'"
         :class="cn(styles.cell(), 'w-[var(--dz-spacing-10)]')"
         role="gridcell"
       >
         <input
           type="checkbox"
           :class="styles.checkbox()"
-          :checked="ctx.isRowSelected(row)"
+          :checked="ctx!.isRowSelected(row)"
           :aria-label="`Select row ${index + 1}`"
           @click.stop
-          @change="ctx.toggleRowSelection(row)"
+          @change="ctx!.toggleRowSelection(row)"
         >
       </td>
       <td
-        v-for="col in ctx.columns.value"
+        v-for="col in ctx!.columns.value"
         :key="col.field"
         :class="cn(styles.cell(), getAlignClass(col.align))"
         :style="getColumnStyle(col)"

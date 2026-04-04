@@ -10,6 +10,7 @@
 import type {
   BadgeVariant,
   BaseAccessibilityProps,
+  CanonicalSize,
   CanonicalTone,
 } from '@dzup-ui/contracts'
 
@@ -24,7 +25,7 @@ export interface DzTagProps extends BaseAccessibilityProps {
   /** Semantic color tone */
   tone?: CanonicalTone
   /** Component size */
-  size?: 'sm' | 'md' | 'lg'
+  size?: CanonicalSize
   /** Whether the tag can be dismissed/closed */
   closable?: boolean
   /** Disabled state -- prevents interaction */
