@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import type { ColumnDef, FilterOperator } from './DzDataGrid.types.ts'
+import type { FilterOperator } from './DzDataGrid.types.ts'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
  *
  * Renders column headers with sort indicators, select-all checkbox,
  * and column filter UI (when filterable is enabled).
  * Injects DzDataGrid context (ADR-08).
+ * Logic extracted to useDataGridHeader composable.
  */
-import { computed, inject, ref } from 'vue'
+import { computed, inject } from 'vue'
+import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
@@ -26,84 +28,21 @@ const styles = computed(() =>
   }),
 )
 
-/** Track which column's filter popover is open */
-const openFilterField = ref<string | null>(null)
-
-function getAlignClass(align?: 'left' | 'center' | 'right'): string {
-  if (align === 'center')
-    return 'text-center'
-  if (align === 'right')
-    return 'text-right'
-  return 'text-left'
-}
-
-function getColumnStyle(col: ColumnDef<Record<string, unknown>>): string | undefined {
-  if (!col.width)
-    return undefined
-  const w = typeof col.width === 'number' ? `${col.width}px` : col.width
-  return `width: ${w}; min-width: ${w}`
-}
-
-function handleHeaderKeyDown(event: KeyboardEvent, field: string): void {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault()
-    ctx!.sort(field)
-  }
-}
-
-function isColumnFilterable(col: ColumnDef<Record<string, unknown>>): boolean {
-  return ctx!.filterable.value && col.filterable !== false
-}
-
-function hasActiveFilter(field: string): boolean {
-  return ctx!.filters.value.some(f => f.column === field)
-}
-
-function getFilterValue(field: string): string | number {
-  const filter = ctx!.filters.value.find(f => f.column === field)
-  return filter?.value ?? ''
-}
-
-function getFilterOperator(field: string): FilterOperator {
-  const filter = ctx!.filters.value.find(f => f.column === field)
-  return filter?.operator ?? 'contains'
-}
-
-function toggleFilterPopover(event: Event, field: string): void {
-  event.stopPropagation()
-  openFilterField.value = openFilterField.value === field ? null : field
-}
-
-function handleFilterInput(field: string, value: string, col: ColumnDef<Record<string, unknown>>): void {
-  const filterType = col.filterType ?? 'text'
-  const operator = filterType === 'number' ? getFilterOperator(field) : filterType === 'select' ? 'equals' : 'contains'
-
-  if (value === '') {
-    ctx!.clearFilter(field)
-    return
-  }
-
-  const filterValue = filterType === 'number' ? Number(value) : value
-  ctx!.setFilter(field, { column: field, value: filterValue, operator })
-}
-
-function handleOperatorChange(field: string, operator: FilterOperator): void {
-  const currentValue = getFilterValue(field)
-  if (currentValue === '' || currentValue === undefined)
-    return
-  ctx!.setFilter(field, { column: field, value: currentValue, operator })
-}
-
-function handleFilterKeyDown(event: KeyboardEvent): void {
-  if (event.key === 'Escape') {
-    openFilterField.value = null
-  }
-}
-
-function handleClearFilter(event: Event, field: string): void {
-  event.stopPropagation()
-  ctx!.clearFilter(field)
-}
+const {
+  openFilterField,
+  getAlignClass,
+  getColumnStyle,
+  handleHeaderKeyDown,
+  isColumnFilterable,
+  hasActiveFilter,
+  getFilterValue,
+  getFilterOperator,
+  toggleFilterPopover,
+  handleFilterInput,
+  handleOperatorChange,
+  handleFilterKeyDown,
+  handleClearFilter,
+} = useDataGridHeader({ ctx: ctx! })
 </script>
 
 <script lang="ts">
