@@ -20,7 +20,7 @@ import { RadioGroupRoot } from 'reka-ui'
  * </DzRadioGroup>
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 
@@ -43,7 +43,11 @@ const emit = defineEmits<DzRadioGroupEmits>()
 defineSlots<DzRadioGroupSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 /** Reka UI emits AcceptableValue; we narrow to string for our API */
 function handleValueChange(value: unknown): void {
@@ -77,7 +81,7 @@ export default {
 
 <template>
   <RadioGroupRoot
-    :id="id ?? fieldContext?.fieldId"
+    :id="resolvedId"
     :model-value="model"
     :disabled="disabled"
     :name="name"

@@ -10,7 +10,7 @@ import type {
  * Built from scratch (no Reka UI primitive).
  * v-model via defineModel<string[]>() -- selected keys (ADR-16).
  */
-import { computed, toRef, useAttrs } from 'vue'
+import { computed, toRef, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useTransfer } from '../../composables/useTransfer/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -39,7 +39,11 @@ const emit = defineEmits<DzTransferEmits>()
 defineSlots<DzTransferSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
@@ -111,6 +115,7 @@ export default {
 
 <template>
   <div
+    :id="resolvedId"
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"

@@ -15,7 +15,7 @@ import { TimeFieldInput, TimeFieldRoot } from 'reka-ui'
  * <DzTimePicker v-model="time" :step="15" :hour12="false" />
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { timePickerVariants } from './DzTimePicker.variants.ts'
@@ -47,7 +47,11 @@ const emit = defineEmits<DzTimePickerEmits>()
 defineSlots<DzTimePickerSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
@@ -112,7 +116,7 @@ export default {
 
 <template>
   <TimeFieldRoot
-    :id="id ?? fieldContext?.fieldId"
+    :id="resolvedId"
     :model-value="timeValue"
     :locale="locale ?? 'en-US'"
     :hour-cycle="hour12 === true ? 12 : hour12 === false ? 24 : undefined"

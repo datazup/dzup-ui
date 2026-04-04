@@ -12,7 +12,7 @@ import { SwitchRoot, SwitchThumb } from 'reka-ui'
  * <DzSwitch v-model="notifications">Enable notifications</DzSwitch>
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { switchVariants } from './DzSwitch.variants.ts'
@@ -35,7 +35,11 @@ const emit = defineEmits<DzSwitchEmits>()
 defineSlots<DzSwitchSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
@@ -73,7 +77,7 @@ export default {
     v-bind="{ ...$attrs, class: undefined }"
   >
     <SwitchRoot
-      :id="id ?? fieldContext?.fieldId"
+      :id="resolvedId"
       :checked="model"
       :disabled="resolvedDisabled"
       :name="name"

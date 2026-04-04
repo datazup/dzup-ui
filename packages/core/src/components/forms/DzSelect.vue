@@ -32,7 +32,7 @@ import {
  * />
  * ```
  */
-import { computed, nextTick, ref, useAttrs } from 'vue'
+import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
@@ -64,7 +64,11 @@ const emit = defineEmits<DzSelectEmits>()
 defineSlots<DzSelectSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
@@ -156,7 +160,7 @@ export default {
     @update:open="handleOpenChange"
   >
     <SelectTrigger
-      :id="id ?? fieldContext?.fieldId"
+      :id="resolvedId"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"

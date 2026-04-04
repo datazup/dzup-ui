@@ -15,7 +15,7 @@ import type { DzCheckboxGroupContext, DzCheckboxGroupEmits, DzCheckboxGroupProps
  * </DzCheckboxGroup>
  * ```
  */
-import { computed, provide, toRef, useAttrs } from 'vue'
+import { computed, provide, toRef, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import {
   DZ_CHECKBOX_GROUP_KEY,
@@ -39,6 +39,10 @@ const emit = defineEmits<DzCheckboxGroupEmits>()
 defineSlots<DzCheckboxGroupSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
+
+/** Resolved element ID — prop overrides auto-generated */
+const resolvedId = computed(() => props.id ?? autoId)
 
 function toggle(value: string): void {
   const current = [...model.value]
@@ -79,7 +83,7 @@ export default {
 
 <template>
   <div
-    :id="id"
+    :id="resolvedId"
     :class="classes"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"

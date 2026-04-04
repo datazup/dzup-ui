@@ -33,7 +33,7 @@ import {
  * />
  * ```
  */
-import { computed, ref, useAttrs } from 'vue'
+import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { comboboxVariants } from './DzCombobox.variants.ts'
@@ -62,8 +62,12 @@ const emit = defineEmits<DzComboboxEmits>()
 defineSlots<DzComboboxSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
 const searchQuery = ref('')
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
@@ -156,7 +160,7 @@ export default {
       v-bind="{ ...$attrs, class: undefined }"
     >
       <ComboboxInput
-        :id="id ?? fieldContext?.fieldId"
+        :id="resolvedId"
         v-model="searchQuery"
         :placeholder="placeholder"
         :class="styles.input()"

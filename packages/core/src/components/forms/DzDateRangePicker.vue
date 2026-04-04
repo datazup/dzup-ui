@@ -38,7 +38,7 @@ import {
  * <DzDateRangePicker v-model="range" placeholder="Select range" />
  * ```
  */
-import { computed, toRef, useAttrs } from 'vue'
+import { computed, toRef, useAttrs, useId } from 'vue'
 import { useDatePicker } from '../../composables/useDatePicker/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -69,7 +69,11 @@ const emit = defineEmits<DzDateRangePickerEmits>()
 defineSlots<DzDateRangePickerSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const startPicker = useDatePicker({
   modelValue: toRef(() => model.value.start),
@@ -167,7 +171,7 @@ export default {
   >
     <DateRangePickerAnchor>
       <DateRangePickerField
-        :id="id ?? fieldContext?.fieldId"
+        :id="resolvedId"
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"

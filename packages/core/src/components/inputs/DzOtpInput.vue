@@ -12,7 +12,7 @@ import { PinInputInput, PinInputRoot } from 'reka-ui'
  * <DzOtpInput v-model="pin" :length="4" type="number" mask />
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { otpInputVariants } from './DzOtpInput.variants.ts'
@@ -40,7 +40,11 @@ const emit = defineEmits<DzOtpInputEmits>()
 defineSlots<DzOtpInputSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
@@ -101,7 +105,7 @@ export default {
     style="contain: layout style"
   >
     <PinInputRoot
-      :id="id ?? fieldContext?.fieldId"
+      :id="resolvedId"
       :model-value="pinValues"
       :disabled="resolvedDisabled"
       :name="name"
@@ -130,7 +134,7 @@ export default {
     <!-- Error message -->
     <p
       v-if="error"
-      :id="id ? `${id}-error` : undefined"
+      :id="`${resolvedId}-error`"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
       role="alert"
     >

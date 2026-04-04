@@ -15,7 +15,7 @@ import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
  * </DzRadioGroup>
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { radioVariants } from './DzRadio.variants.ts'
 
@@ -32,6 +32,11 @@ const props = withDefaults(defineProps<DzRadioProps>(), {
 defineSlots<DzRadioSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
+
+/** Resolved element ID — prop overrides auto-generated */
+const resolvedId = computed(() => props.id ?? autoId)
+
 const styles = computed(() => radioVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 </script>
@@ -51,7 +56,7 @@ export default {
     v-bind="{ ...$attrs, class: undefined }"
   >
     <RadioGroupItem
-      :id="id"
+      :id="resolvedId"
       :value="value"
       :disabled="disabled"
       :aria-label="ariaLabel"

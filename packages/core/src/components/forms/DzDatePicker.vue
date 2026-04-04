@@ -34,7 +34,7 @@ import {
  * <DzDatePicker v-model="date" min="2026-01-01" max="2026-12-31" />
  * ```
  */
-import { computed, toRef, useAttrs } from 'vue'
+import { computed, toRef, useAttrs, useId } from 'vue'
 import { useDatePicker } from '../../composables/useDatePicker/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -65,7 +65,11 @@ const emit = defineEmits<DzDatePickerEmits>()
 defineSlots<DzDatePickerSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const { dateValue, minValue, maxValue, placeholderDate, resolvedLocale, toISOString }
   = useDatePicker({
@@ -141,7 +145,7 @@ export default {
   >
     <DatePickerAnchor>
       <DatePickerField
-        :id="id ?? fieldContext?.fieldId"
+        :id="resolvedId"
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"

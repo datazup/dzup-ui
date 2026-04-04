@@ -14,7 +14,7 @@ import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
  * <DzCheckbox v-model="partial" indeterminate>Select all</DzCheckbox>
  * ```
  */
-import { computed, inject, useAttrs } from 'vue'
+import { computed, inject, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { checkboxVariants } from './DzCheckbox.variants.ts'
@@ -40,8 +40,12 @@ const emit = defineEmits<DzCheckboxEmits>()
 defineSlots<DzCheckboxSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const fieldContext = useFormFieldContext()
 const groupContext = inject(DZ_CHECKBOX_GROUP_KEY, null)
+
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 /** Resolved size from prop, group, or default */
 const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
@@ -111,7 +115,7 @@ export default {
     v-bind="{ ...$attrs, class: undefined }"
   >
     <CheckboxRoot
-      :id="id ?? fieldContext?.fieldId"
+      :id="resolvedId"
       :checked="checkedState"
       :disabled="resolvedDisabled"
       :name="name"
