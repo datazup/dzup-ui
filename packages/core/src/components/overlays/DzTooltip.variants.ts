@@ -18,7 +18,7 @@ export const tooltipVariants = tv({
       'border border-[var(--dz-border)]',
       'bg-[var(--dz-foreground)]',
       'text-[var(--dz-background)]',
-      'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1.5)]',
+      'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1_5)]',
       'text-[length:var(--dz-text-sm)]',
       'shadow-[var(--dz-shadow-md)]',
       'transition-opacity',

@@ -147,7 +147,7 @@ export default {
 
 .dz-tab-close-btn:hover {
   opacity: 1 !important;
-  background: var(--dz-muted, rgba(0, 0, 0, 0.1));
+  background: var(--dz-muted);
 }
 
 .dz-tab-close-btn:disabled {

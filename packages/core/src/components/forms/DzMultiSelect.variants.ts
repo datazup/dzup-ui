@@ -49,7 +49,7 @@ export const multiSelectVariants = tv({
       'rounded-[var(--dz-radius-sm)]',
       'bg-[var(--dz-primary-muted)]',
       'text-[var(--dz-primary)]',
-      'px-[var(--dz-spacing-1.5)]',
+      'px-[var(--dz-spacing-1_5)]',
     ].join(' '),
     tagClose: [
       'inline-flex items-center justify-center',
@@ -73,22 +73,22 @@ export const multiSelectVariants = tv({
     },
     size: {
       xs: {
-        root: 'min-h-[var(--dz-button-xs-height)] px-[var(--dz-spacing-2)] py-[var(--dz-spacing-0.5)] text-[length:var(--dz-text-xs)]',
+        root: 'min-h-[var(--dz-button-xs-height)] px-[var(--dz-spacing-2)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-text-xs)]',
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
         tag: 'text-[length:var(--dz-text-xs)] py-0',
         icon: 'h-3 w-3',
         checkIcon: 'h-3 w-3',
       },
       sm: {
-        root: 'min-h-[var(--dz-button-sm-height)] px-[var(--dz-spacing-3)] py-[var(--dz-spacing-0.5)] text-[length:var(--dz-text-sm)]',
-        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        root: 'min-h-[var(--dz-button-sm-height)] px-[var(--dz-spacing-3)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         tag: 'text-[length:var(--dz-text-xs)] py-0.5',
         icon: 'h-3.5 w-3.5',
         checkIcon: 'h-3.5 w-3.5',
       },
       md: {
         root: 'min-h-[var(--dz-button-md-height)] px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-sm)]',
-        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         tag: 'text-[length:var(--dz-text-xs)] py-0.5',
         icon: 'h-4 w-4',
         checkIcon: 'h-4 w-4',
@@ -101,7 +101,7 @@ export const multiSelectVariants = tv({
         checkIcon: 'h-5 w-5',
       },
       xl: {
-        root: 'min-h-[var(--dz-button-xl-height)] px-[var(--dz-spacing-4)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-lg)]',
+        root: 'min-h-[var(--dz-button-xl-height)] px-[var(--dz-spacing-4)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-lg)]',
         item: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-2)] text-[length:var(--dz-text-lg)]',
         tag: 'text-[length:var(--dz-text-sm)] py-1',
         icon: 'h-5 w-5',

@@ -29,7 +29,7 @@ export const sheetTokens = {
   description: {
     fontSize: 'var(--dz-text-sm)',
     color: 'var(--dz-muted-foreground)',
-    marginTop: 'var(--dz-spacing-1.5)',
+    marginTop: 'var(--dz-spacing-1_5)',
   },
   /** Close button */
   close: {

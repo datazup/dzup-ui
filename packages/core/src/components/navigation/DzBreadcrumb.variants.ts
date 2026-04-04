@@ -12,8 +12,8 @@ import { tv } from 'tailwind-variants'
 export const breadcrumbVariants = tv({
   slots: {
     nav: '',
-    list: 'flex flex-wrap items-center gap-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
-    item: 'inline-flex items-center gap-[var(--dz-spacing-1.5)]',
+    list: 'flex flex-wrap items-center gap-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
+    item: 'inline-flex items-center gap-[var(--dz-spacing-1_5)]',
     link: [
       'transition-[var(--dz-transition-fast)]',
       'hover:text-[var(--dz-foreground)]',

@@ -65,12 +65,12 @@ export const dateRangePickerVariants = tv({
     ].join(' '),
     icon: 'shrink-0 text-[var(--dz-muted-foreground)]',
     field: [
-      'inline-flex items-center gap-[var(--dz-spacing-0.5)]',
+      'inline-flex items-center gap-[var(--dz-spacing-0_5)]',
       'text-[var(--dz-foreground)]',
     ].join(' '),
     fieldInput: [
       'rounded-[var(--dz-radius-sm)]',
-      'px-[var(--dz-spacing-0.5)]',
+      'px-[var(--dz-spacing-0_5)]',
       'text-center',
       'outline-none',
       'focus:bg-[var(--dz-primary-muted)]',

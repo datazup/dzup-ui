@@ -13,7 +13,7 @@ export const sheetVariants = tv({
   slots: {
     overlay: [
       'fixed inset-0 z-50',
-      'bg-black/50',
+      'bg-[var(--dz-overlay-bg)]',
       'transition-opacity',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
@@ -34,7 +34,7 @@ export const sheetVariants = tv({
     description: [
       'text-[length:var(--dz-text-sm)]',
       'text-[var(--dz-muted-foreground)]',
-      'mt-[var(--dz-spacing-1.5)]',
+      'mt-[var(--dz-spacing-1_5)]',
     ].join(' '),
     close: [
       'absolute right-[var(--dz-spacing-4)] top-[var(--dz-spacing-4)]',

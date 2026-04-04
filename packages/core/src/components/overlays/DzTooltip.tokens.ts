@@ -15,7 +15,7 @@ export const tooltipTokens = {
     radius: 'var(--dz-radius-md)',
     shadow: 'var(--dz-shadow-md)',
     paddingX: 'var(--dz-spacing-3)',
-    paddingY: 'var(--dz-spacing-1.5)',
+    paddingY: 'var(--dz-spacing-1_5)',
     fontSize: 'var(--dz-text-sm)',
   },
   /** Arrow fill */

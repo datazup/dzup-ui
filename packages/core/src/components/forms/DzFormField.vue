@@ -42,7 +42,7 @@ useFormField({
 })
 
 const classes = computed(() =>
-  cn('flex flex-col gap-[var(--dz-spacing-1.5)]', attrs.class as string | undefined),
+  cn('flex flex-col gap-[var(--dz-spacing-1_5)]', attrs.class as string | undefined),
 )
 </script>
 

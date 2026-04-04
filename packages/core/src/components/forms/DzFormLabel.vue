@@ -48,7 +48,7 @@ export default {
     <slot />
     <span
       v-if="context?.isRequired.value"
-      class="text-[var(--dz-danger)] ml-[var(--dz-spacing-0.5)]"
+      class="text-[var(--dz-danger)] ml-[var(--dz-spacing-0_5)]"
       aria-hidden="true"
     >*</span>
   </label>

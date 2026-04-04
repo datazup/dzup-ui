@@ -75,14 +75,14 @@ export const comboboxVariants = tv({
       },
       sm: {
         root: 'h-[var(--dz-button-sm-height)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-sm)]',
-        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         icon: 'h-3.5 w-3.5',
         checkIcon: 'h-3.5 w-3.5',
         clearButton: 'h-3.5 w-3.5',
       },
       md: {
         root: 'h-[var(--dz-button-md-height)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-sm)]',
-        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         icon: 'h-4 w-4',
         checkIcon: 'h-4 w-4',
         clearButton: 'h-4 w-4',

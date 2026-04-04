@@ -70,17 +70,17 @@ export const selectVariants = tv({
       },
       sm: {
         trigger: 'h-[var(--dz-button-sm-height)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-sm)]',
-        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         icon: 'h-3.5 w-3.5',
         checkIcon: 'h-3.5 w-3.5',
-        searchInput: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        searchInput: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
       },
       md: {
         trigger: 'h-[var(--dz-button-md-height)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-sm)]',
-        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         icon: 'h-4 w-4',
         checkIcon: 'h-4 w-4',
-        searchInput: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1.5)] text-[length:var(--dz-text-sm)]',
+        searchInput: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
       },
       lg: {
         trigger: 'h-[var(--dz-button-lg-height)] px-[var(--dz-spacing-4)] text-[length:var(--dz-text-base)]',

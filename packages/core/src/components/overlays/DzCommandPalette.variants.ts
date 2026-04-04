@@ -13,7 +13,7 @@ export const commandPaletteVariants = tv({
   slots: {
     overlay: [
       'fixed inset-0 z-50',
-      'bg-black/50',
+      'bg-[var(--dz-overlay-bg)]',
       'transition-opacity',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),

@@ -76,7 +76,8 @@ export interface UseFormFieldOptions {
  * can connect their ARIA relationships automatically.
  */
 export function useFormField(options: UseFormFieldOptions = {}): DzFormFieldContext {
-  const baseId = computed(() => toValue(options.id) ?? useId())
+  const generatedId = useId()
+  const baseId = computed(() => toValue(options.id) ?? generatedId)
   const fieldId = computed(() => `${baseId.value}-field`)
   const labelId = computed(() => `${baseId.value}-label`)
   const descriptionId = computed(() => `${baseId.value}-description`)

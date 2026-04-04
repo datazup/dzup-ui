@@ -10,13 +10,13 @@
 export const breadcrumbTokens = {
   /** Overall list styling */
   list: {
-    gap: 'var(--dz-spacing-1.5)',
+    gap: 'var(--dz-spacing-1_5)',
     fontSize: 'var(--dz-text-sm)',
     color: 'var(--dz-muted-foreground)',
   },
   /** Item gap between icon/text within a single breadcrumb */
   item: {
-    gap: 'var(--dz-spacing-1.5)',
+    gap: 'var(--dz-spacing-1_5)',
   },
   /** Link styling (non-current items) */
   link: {

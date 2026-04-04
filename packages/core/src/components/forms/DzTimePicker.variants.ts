@@ -22,7 +22,7 @@ export const timePickerVariants = tv({
     ].join(' '),
     input: [
       'rounded-[var(--dz-radius-sm)]',
-      'px-[var(--dz-spacing-0.5)]',
+      'px-[var(--dz-spacing-0_5)]',
       'text-center',
       'outline-none',
       'text-[var(--dz-foreground)]',
