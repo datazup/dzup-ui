@@ -57,6 +57,7 @@ export default {
     :class="classes"
     :data-disabled="disabled ? '' : undefined"
     :data-invalid="invalid || !!error ? '' : undefined"
+    style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
     role="group"
   >

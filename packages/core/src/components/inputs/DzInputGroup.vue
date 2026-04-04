@@ -15,7 +15,7 @@ import type { DzInputGroupProps, DzInputGroupSlots } from './DzInputGroup.types.
  * </DzInputGroup>
  * ```
  */
-import { computed, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { inputGroupVariants } from './DzInputGroup.variants.ts'
 
@@ -27,6 +27,11 @@ const props = withDefaults(defineProps<DzInputGroupProps>(), {
 defineSlots<DzInputGroupSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
+
+/** Resolved element ID — prop overrides auto-generated */
+const resolvedId = computed(() => props.id ?? autoId)
+
 const styles = computed(() => inputGroupVariants({ size: props.size }))
 
 const rootClasses = computed(() =>
@@ -42,10 +47,11 @@ export default {
 
 <template>
   <div
-    :id="id"
+    :id="resolvedId"
     :class="rootClasses"
     :aria-label="ariaLabel"
     :data-disabled="disabled ? '' : undefined"
+    style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Prefix addon -->

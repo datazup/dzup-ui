@@ -51,6 +51,7 @@ export default {
     :data-tone="ctx?.tone.value"
     :data-disabled="ctx?.disabled.value ? '' : undefined"
     :data-loading="ctx?.loading.value ? '' : undefined"
+    style="contain: layout style"
   >
     <slot>
       <button

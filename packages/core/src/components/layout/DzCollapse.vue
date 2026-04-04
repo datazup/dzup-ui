@@ -49,7 +49,7 @@ export default {
     :id="id"
     ref="contentRef"
     :class="classes"
-    :style="contentStyle"
+    :style="{ contain: 'layout style', ...contentStyle }"
     :aria-hidden="!model || undefined"
     :data-state="model ? 'open' : 'closed'"
     role="region"

@@ -62,6 +62,7 @@ export default {
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     data-state="ready"
+    style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <ol :class="styles.list()">
