@@ -165,9 +165,9 @@ function simulateLoading(): void {
         Icon Button
       </h2>
       <div class="demo-row">
-        <DzIconButton :icon="SettingsIcon" aria-label="Settings" variant="outline" />
-        <DzIconButton :icon="EditIcon" aria-label="Edit" tone="primary" />
-        <DzIconButton :icon="DeleteIcon" aria-label="Delete" tone="danger" variant="ghost" />
+        <DzIconButton :icon="SettingsIcon" ariaLabel="Settings" variant="outline" />
+        <DzIconButton :icon="EditIcon" ariaLabel="Edit" tone="primary" />
+        <DzIconButton :icon="DeleteIcon" ariaLabel="Delete" tone="danger" variant="ghost" />
       </div>
     </section>
 
@@ -216,28 +216,28 @@ function simulateLoading(): void {
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 8px;
 }
 
 .page-description {
   font-size: 15px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   margin: 0 0 32px;
 }
 
 .demo-section {
   margin-bottom: 32px;
   padding: 24px;
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   border-radius: var(--dz-radius-lg, 8px);
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 16px;
 }
 
@@ -254,7 +254,7 @@ function simulateLoading(): void {
 
 .state-label {
   font-size: 13px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   font-family: monospace;
 }
 </style>

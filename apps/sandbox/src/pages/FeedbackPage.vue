@@ -74,14 +74,14 @@ const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as 
         Alert Variants
       </h2>
       <div class="demo-stack">
-        <DzAlert tone="primary" variant="solid" title="Solid Variant">
-          Solid background style.
+        <DzAlert tone="primary" variant="filled" title="Filled Variant">
+          Filled background style.
         </DzAlert>
         <DzAlert tone="primary" variant="outline" title="Outline Variant">
           Outline border style.
         </DzAlert>
-        <DzAlert tone="primary" variant="soft" title="Soft Variant">
-          Soft background style.
+        <DzAlert tone="primary" variant="subtle" title="Subtle Variant">
+          Subtle background style.
         </DzAlert>
       </div>
     </section>
@@ -163,28 +163,28 @@ const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as 
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 8px;
 }
 
 .page-description {
   font-size: 15px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   margin: 0 0 32px;
 }
 
 .demo-section {
   margin-bottom: 24px;
   padding: 24px;
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   border-radius: var(--dz-radius-lg, 8px);
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 16px;
 }
 
@@ -203,7 +203,7 @@ const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as 
 
 .state-label {
   font-size: 13px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   font-family: monospace;
   min-width: 40px;
   text-align: center;
@@ -211,14 +211,14 @@ const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as 
 
 .plain-btn {
   padding: 4px 12px;
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
   border-radius: var(--dz-radius-sm, 4px);
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   cursor: pointer;
   font-size: 13px;
 }
 
 .plain-btn:hover {
-  background: var(--dz-colors-muted, #f1f5f9);
+  background: var(--dz-muted, #f1f5f9);
 }
 </style>

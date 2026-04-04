@@ -56,14 +56,16 @@ const currentPath = computed(() => route.path)
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background: var(--dz-colors-background, #f8f9fa);
+  background:
+    radial-gradient(circle at 10% -20%, color-mix(in oklch, var(--dz-primary, #3b82f6) 14%, transparent), transparent 48%),
+    var(--dz-background, #f8f9fa);
 }
 
 .sidebar {
-  width: 240px;
+  width: 252px;
   flex-shrink: 0;
-  background: var(--dz-colors-surface, #ffffff);
-  border-right: 1px solid var(--dz-colors-border, #e2e8f0);
+  background: var(--dz-surface, #ffffff);
+  border-right: 1px solid var(--dz-border, #e2e8f0);
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -73,11 +75,11 @@ const currentPath = computed(() => route.path)
 }
 
 .sidebar-header {
-  padding: 20px 16px 12px;
+  padding: 20px 16px 14px;
   display: flex;
   align-items: baseline;
   gap: 8px;
-  border-bottom: 1px solid var(--dz-colors-border, #e2e8f0);
+  border-bottom: 1px solid var(--dz-border, #e2e8f0);
   margin-bottom: 8px;
 }
 
@@ -85,13 +87,13 @@ const currentPath = computed(() => route.path)
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
 }
 
 .sidebar-badge {
   font-size: 11px;
-  font-weight: 500;
-  padding: 2px 6px;
+  font-weight: 600;
+  padding: 3px 8px;
   border-radius: var(--dz-radius-sm, 4px);
   background: var(--dz-colors-primary-100, #dbeafe);
   color: var(--dz-colors-primary-700, #1d4ed8);
@@ -111,15 +113,15 @@ const currentPath = computed(() => route.path)
   padding: 8px 12px;
   border-radius: var(--dz-radius-md, 6px);
   text-decoration: none;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.15s ease;
+  transition: all var(--dz-duration-fast, 150ms) var(--dz-ease-default, ease);
 }
 
 .nav-link:hover {
-  background: var(--dz-colors-muted, #f1f5f9);
-  color: var(--dz-colors-foreground, #1a202c);
+  background: var(--dz-muted, #f1f5f9);
+  color: var(--dz-foreground, #1a202c);
 }
 
 .nav-link.active {
@@ -134,7 +136,7 @@ const currentPath = computed(() => route.path)
   width: 24px;
   height: 24px;
   border-radius: var(--dz-radius-sm, 4px);
-  background: var(--dz-colors-muted, #f1f5f9);
+  background: var(--dz-muted, #f1f5f9);
   font-size: 10px;
   font-weight: 700;
   flex-shrink: 0;
@@ -147,8 +149,49 @@ const currentPath = computed(() => route.path)
 
 .main-content {
   flex: 1;
+  width: 100%;
   padding: 32px 40px;
-  max-width: 1200px;
+  max-width: 1280px;
   overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--dz-border, #e2e8f0);
+    overflow-y: visible;
+  }
+
+  .sidebar-header {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 0 12px 12px;
+    scrollbar-width: thin;
+  }
+
+  .nav-link {
+    white-space: nowrap;
+  }
+
+  .main-content {
+    max-width: none;
+    padding: 24px 16px;
+  }
 }
 </style>

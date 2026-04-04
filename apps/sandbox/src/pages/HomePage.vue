@@ -76,13 +76,13 @@ const families = [
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 8px;
 }
 
 .page-description {
   font-size: 15px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   margin: 0;
   line-height: 1.6;
 }
@@ -91,9 +91,9 @@ const families = [
   display: flex;
   gap: 24px;
   padding: 20px 24px;
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   border-radius: var(--dz-radius-lg, 8px);
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
   margin-bottom: 32px;
 }
 
@@ -111,7 +111,7 @@ const families = [
 
 .stat-label {
   font-size: 12px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -125,9 +125,9 @@ const families = [
 .family-card {
   display: block;
   padding: 20px;
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   border-radius: var(--dz-radius-lg, 8px);
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
   text-decoration: none;
   transition: all 0.15s ease;
 }
@@ -141,7 +141,7 @@ const families = [
   margin: 0 0 4px;
   font-size: 16px;
   font-weight: 600;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
 }
 
 .family-count {
@@ -153,7 +153,7 @@ const families = [
 .family-desc {
   margin: 8px 0 0;
   font-size: 13px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   line-height: 1.5;
 }
 </style>

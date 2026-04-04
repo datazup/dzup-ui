@@ -57,7 +57,7 @@ const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
       <div class="demo-stack">
         <DzInput variant="outline" placeholder="Outline variant" />
         <DzInput variant="filled" placeholder="Filled variant" />
-        <DzInput variant="ghost" placeholder="Ghost variant" />
+        <DzInput variant="underlined" placeholder="Underlined variant" />
       </div>
     </section>
 
@@ -150,28 +150,28 @@ const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 8px;
 }
 
 .page-description {
   font-size: 15px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   margin: 0 0 32px;
 }
 
 .demo-section {
   margin-bottom: 24px;
   padding: 24px;
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   border-radius: var(--dz-radius-lg, 8px);
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 16px;
 }
 
@@ -184,7 +184,7 @@ const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 
 .state-label {
   font-size: 13px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   font-family: monospace;
 }
 </style>

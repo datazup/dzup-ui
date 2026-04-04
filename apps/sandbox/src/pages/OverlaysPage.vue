@@ -195,28 +195,28 @@ const sheetOpen = ref(false)
 .page-title {
   font-size: 28px;
   font-weight: 700;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 8px;
 }
 
 .page-description {
   font-size: 15px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   margin: 0 0 32px;
 }
 
 .demo-section {
   margin-bottom: 24px;
   padding: 24px;
-  background: var(--dz-colors-surface, #ffffff);
+  background: var(--dz-surface, #ffffff);
   border-radius: var(--dz-radius-lg, 8px);
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--dz-colors-foreground, #1a202c);
+  color: var(--dz-foreground, #1a202c);
   margin: 0 0 16px;
 }
 
@@ -245,12 +245,12 @@ const sheetOpen = ref(false)
 
 .trigger-btn.outline {
   background: transparent;
-  border: 1px solid var(--dz-colors-border, #e2e8f0);
-  color: var(--dz-colors-foreground, #1a202c);
+  border: 1px solid var(--dz-border, #e2e8f0);
+  color: var(--dz-foreground, #1a202c);
 }
 
 .trigger-btn.outline:hover {
-  background: var(--dz-colors-muted, #f1f5f9);
+  background: var(--dz-muted, #f1f5f9);
 }
 
 .dialog-actions {
@@ -262,7 +262,7 @@ const sheetOpen = ref(false)
 
 .state-label {
   font-size: 13px;
-  color: var(--dz-colors-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #64748b);
   font-family: monospace;
 }
 </style>
