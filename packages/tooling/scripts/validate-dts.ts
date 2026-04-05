@@ -60,11 +60,6 @@ const PACKAGES: Array<{ name: string, manifestPath: string, distDir: string }> =
     manifestPath: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
     distDir: resolve(ROOT, 'packages/core/dist'),
   },
-  {
-    name: '@dzup-ui/pro',
-    manifestPath: resolve(ROOT, 'packages/pro/manifests/public-api.manifest.json'),
-    distDir: resolve(ROOT, 'packages/pro/dist'),
-  },
 ]
 
 // --- Helpers ---

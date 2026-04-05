@@ -10,17 +10,7 @@
       "maxSize": "50 kB",
       "compression": "gzip"
     },
-    {
-      "path": "packages/pro/dist/index.js",
-      "maxSize": "200 kB",
-      "compression": "gzip"
-    },
-    {
-      "path": "packages/pro/dist/index.css",
-      "maxSize": "50 kB",
-      "compression": "gzip"
-    },
-    {
+{
       "path": "packages/tokens/dist/tokens.css",
       "maxSize": "15 kB",
       "compression": "gzip"

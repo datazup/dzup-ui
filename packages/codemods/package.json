@@ -12,7 +12,9 @@
   "bin": {
     "dzup-codemod": "./bin/dzup-codemod.js"
   },
+  "license": "MIT",
   "files": [
+    "LICENSE",
     "!src/**/*.spec.ts",
     "!src/**/*.test.ts",
     "!src/**/__tests__",

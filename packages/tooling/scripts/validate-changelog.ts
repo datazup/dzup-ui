@@ -37,7 +37,6 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
 const PUBLISHABLE_PACKAGES: Array<{ name: string, dir: string }> = [
   { name: '@dzup-ui/core', dir: resolve(ROOT, 'packages/core') },
-  { name: '@dzup-ui/pro', dir: resolve(ROOT, 'packages/pro') },
   { name: '@dzup-ui/tokens', dir: resolve(ROOT, 'packages/tokens') },
 ]
 

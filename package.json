@@ -11,8 +11,8 @@
     "apps/*"
   ],
   "scripts": {
-    "typecheck": "vue-tsc --noEmit -p packages/core/tsconfig.json && vue-tsc --noEmit -p packages/pro/tsconfig.json",
-    "typecheck:all": "vue-tsc --noEmit -p packages/tokens/tsconfig.json && vue-tsc --noEmit -p packages/contracts/tsconfig.json && vue-tsc --noEmit -p packages/core/tsconfig.json && vue-tsc --noEmit -p packages/pro/tsconfig.json",
+    "typecheck": "vue-tsc --noEmit -p packages/core/tsconfig.json",
+    "typecheck:all": "vue-tsc --noEmit -p packages/tokens/tsconfig.json && vue-tsc --noEmit -p packages/contracts/tsconfig.json && vue-tsc --noEmit -p packages/core/tsconfig.json",
     "lint": "eslint packages/",
     "lint:fix": "eslint packages/ --fix",
     "test": "vitest run",
@@ -21,12 +21,12 @@
     "test:a11y": "vitest run --reporter=verbose packages/**/a11y/**/*.a11y.spec.ts",
     "test:contracts": "vitest run --reporter=verbose packages/**/contract.spec.ts",
     "test:ssr": "vitest run --reporter=verbose packages/**/ssr/**/*.spec.ts",
-    "build": "yarn workspace @dzup-ui/tokens generate && yarn workspace @dzup-ui/core build && yarn workspace @dzup-ui/pro build",
+    "build": "yarn workspace @dzup-ui/tokens generate && yarn workspace @dzup-ui/core build",
     "build:all": "yarn workspaces foreach -Apt run build",
     "tokens:generate": "yarn workspace @dzup-ui/tokens generate",
     "generate:exports": "tsx packages/tooling/src/manifest-generator.ts",
     "generate:exports:core": "tsx packages/tooling/src/manifest-generator.ts packages/core",
-    "generate:exports:pro": "tsx packages/tooling/src/manifest-generator.ts packages/pro",
+
     "validate:boundaries": "tsx packages/tooling/src/validators/import-boundary.ts",
     "validate:tokens": "tsx packages/tooling/src/token-checks/color-lint.ts",
     "validate:exports": "tsx packages/tooling/scripts/validate-exports.ts",

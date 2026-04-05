@@ -18,7 +18,9 @@
       "import": "./src/utils/index.ts"
     }
   },
+  "license": "MIT",
   "files": [
+    "LICENSE",
     "!src/generate.ts",
     "dist",
     "src"

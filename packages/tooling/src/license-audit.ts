@@ -150,7 +150,7 @@ function getPackageLicense(rootDir: string, pkgName: string): { version: string,
 // ---------------------------------------------------------------------------
 
 export function runLicenseAudit(rootDir: string): LicenseAuditResult {
-  const packages = ['packages/core', 'packages/pro', 'packages/tokens']
+  const packages = ['packages/core', 'packages/tokens']
   const allDeps = new Map<string, string>()
 
   for (const pkg of packages) {

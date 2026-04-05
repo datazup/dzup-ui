@@ -35,7 +35,7 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Typecheck (core + pro)
+      - name: Typecheck (core)
         run: yarn typecheck
       - name: Typecheck (all packages)
         run: yarn typecheck:all
@@ -162,7 +162,7 @@ jobs:
       - name: Verify ESM-only output (no CJS)
         run: |
           # ADR-11: ESM-only distribution
-          if find packages/core/dist packages/pro/dist -name "*.cjs" -o -name "*.cjs.js" | grep -q .; then
+          if find packages/core/dist -name "*.cjs" -o -name "*.cjs.js" | grep -q .; then
             echo "ERROR: CJS output detected — ADR-11 violation"
             exit 1
           fi
@@ -170,7 +170,6 @@ jobs:
       - name: Verify dist artifacts exist
         run: |
           test -f packages/core/dist/index.js || (echo "core/dist/index.js missing" && exit 1)
-          test -f packages/pro/dist/index.js || (echo "pro/dist/index.js missing" && exit 1)
           echo "Build artifacts verified"
       - name: Validate type declarations
         run: yarn validate:dts
@@ -186,7 +185,6 @@ jobs:
           name: dist
           path: |
             packages/core/dist/
-            packages/pro/dist/
           retention-days: 7
 
   storybook:

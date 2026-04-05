@@ -9,14 +9,8 @@ export default defineConfig({
       '@dzup-ui/tokens': resolve(__dirname, 'packages/tokens/src'),
       '@dzup-ui/contracts': resolve(__dirname, 'packages/contracts/src'),
       '@dzup-ui/core': resolve(__dirname, 'packages/core/src'),
-      '@dzup-ui/pro': resolve(__dirname, 'packages/pro/src'),
       '@dzup-ui/compat': resolve(__dirname, 'packages/compat/src'),
       '@dzup-ui/tooling': resolve(__dirname, 'packages/tooling/src'),
-      // Mock optional peer dependencies not installed in dev
-      'monaco-editor': resolve(__dirname, '__mocks__/monaco-editor.ts'),
-      '@tiptap/vue-3': resolve(__dirname, '__mocks__/@tiptap/vue-3.ts'),
-      '@tiptap/starter-kit': resolve(__dirname, '__mocks__/@tiptap/starter-kit.ts'),
-      'chart.js': resolve(__dirname, '__mocks__/chart.js.ts'),
     },
   },
   test: {

@@ -28,8 +28,6 @@
       "@dzup-ui/contracts/*": ["./packages/contracts/src/*"],
       "@dzup-ui/core": ["./packages/core/src/index.ts"],
       "@dzup-ui/core/*": ["./packages/core/src/*"],
-      "@dzup-ui/pro": ["./packages/pro/src/index.ts"],
-      "@dzup-ui/pro/*": ["./packages/pro/src/*"],
       "@dzup-ui/compat": ["./packages/compat/src/index.ts"],
       "@dzup-ui/compat/*": ["./packages/compat/src/*"],
       "@dzup-ui/tooling": ["./packages/tooling/src/index.ts"],

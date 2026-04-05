@@ -4,7 +4,6 @@
     { "path": "./packages/tokens" },
     { "path": "./packages/contracts" },
     { "path": "./packages/core" },
-    { "path": "./packages/pro" },
     { "path": "./packages/compat" },
     { "path": "./packages/codemods" },
     { "path": "./packages/tooling" },

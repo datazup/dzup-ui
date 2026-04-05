@@ -27,7 +27,7 @@ import { gzipSync } from 'node:zlib'
 export interface ComponentSizeEntry {
   name: string
   family: string
-  package: 'core' | 'pro'
+  package: 'core'
   rawBytes: number
   gzipBytes: number
   files: string[]
@@ -38,7 +38,6 @@ export interface SizeReport {
   components: ComponentSizeEntry[]
   totals: {
     core: { raw: number, gzip: number, count: number }
-    pro: { raw: number, gzip: number, count: number }
   }
 }
 
@@ -62,7 +61,7 @@ function getGzipSize(content: Buffer): number {
 // Component Discovery
 // ---------------------------------------------------------------------------
 
-function discoverComponents(distDir: string, pkg: 'core' | 'pro'): ComponentSizeEntry[] {
+function discoverComponents(distDir: string, pkg: 'core'): ComponentSizeEntry[] {
   const componentsDir = join(distDir, 'components')
   if (!existsSync(componentsDir))
     return []
@@ -122,17 +121,11 @@ function discoverComponents(distDir: string, pkg: 'core' | 'pro'): ComponentSize
 
 export function generateSizeReport(rootDir: string): SizeReport {
   const coreDistDir = join(rootDir, 'packages/core/dist')
-  const proDistDir = join(rootDir, 'packages/pro/dist')
 
   const coreComponents = discoverComponents(coreDistDir, 'core')
-  const proComponents = discoverComponents(proDistDir, 'pro')
-  const components = [...coreComponents, ...proComponents].sort((a, b) => b.gzipBytes - a.gzipBytes)
+  const components = [...coreComponents].sort((a, b) => b.gzipBytes - a.gzipBytes)
 
   const coreTotals = coreComponents.reduce(
-    (acc, c) => ({ raw: acc.raw + c.rawBytes, gzip: acc.gzip + c.gzipBytes, count: acc.count + 1 }),
-    { raw: 0, gzip: 0, count: 0 },
-  )
-  const proTotals = proComponents.reduce(
     (acc, c) => ({ raw: acc.raw + c.rawBytes, gzip: acc.gzip + c.gzipBytes, count: acc.count + 1 }),
     { raw: 0, gzip: 0, count: 0 },
   )
@@ -140,7 +133,7 @@ export function generateSizeReport(rootDir: string): SizeReport {
   return {
     generated: new Date().toISOString(),
     components,
-    totals: { core: coreTotals, pro: proTotals },
+    totals: { core: coreTotals },
   }
 }
 
@@ -173,12 +166,6 @@ function printHumanReport(report: SizeReport, topN: number): void {
   console.log(
     `Core:  ${report.totals.core.count} components, ${formatBytes(report.totals.core.raw)} raw, ${formatBytes(report.totals.core.gzip)} gzip`,
   )
-  console.log(
-    `Pro:   ${report.totals.pro.count} components, ${formatBytes(report.totals.pro.raw)} raw, ${formatBytes(report.totals.pro.gzip)} gzip`,
-  )
-  console.log(
-    `Total: ${report.totals.core.count + report.totals.pro.count} components, ${formatBytes(report.totals.core.raw + report.totals.pro.raw)} raw, ${formatBytes(report.totals.core.gzip + report.totals.pro.gzip)} gzip`,
-  )
 }
 
 function printCiReport(report: SizeReport): void {
@@ -191,13 +178,6 @@ function printCiReport(report: SizeReport): void {
         gzipBytes: report.totals.core.gzip,
         rawLabel: formatBytes(report.totals.core.raw),
         gzipLabel: formatBytes(report.totals.core.gzip),
-      },
-      pro: {
-        count: report.totals.pro.count,
-        rawBytes: report.totals.pro.raw,
-        gzipBytes: report.totals.pro.gzip,
-        rawLabel: formatBytes(report.totals.pro.raw),
-        gzipLabel: formatBytes(report.totals.pro.gzip),
       },
     },
     components: report.components.map(c => ({

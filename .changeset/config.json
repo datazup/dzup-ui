@@ -4,7 +4,7 @@
   "commit": false,
   "fixed": [],
   "linked": [
-    ["@dzup-ui/core", "@dzup-ui/pro", "@dzup-ui/tokens"]
+    ["@dzup-ui/core", "@dzup-ui/tokens"]
   ],
   "access": "public",
   "baseBranch": "main",

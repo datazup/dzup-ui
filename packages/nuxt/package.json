@@ -11,7 +11,9 @@
   },
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
+  "license": "MIT",
   "files": [
+    "LICENSE",
     "dist"
   ],
   "publishConfig": {

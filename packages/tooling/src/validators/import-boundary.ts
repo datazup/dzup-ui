@@ -2,11 +2,10 @@
  * Import Boundary Validator
  *
  * Scans all .ts and .vue files in packages/ and enforces the dependency rules:
- *   - tokens    -> no deps on contracts, core, pro, compat
- *   - contracts -> tokens types only (no core, pro, compat)
- *   - core      -> tokens + contracts only (no pro, compat)
- *   - pro       -> core + contracts + tokens only (no compat)
- *   - compat    -> core + pro + contracts + tokens
+ *   - tokens    -> no deps on contracts, core, compat
+ *   - contracts -> tokens types only (no core, compat)
+ *   - core      -> tokens + contracts only (no compat)
+ *   - compat    -> core + contracts + tokens
  *   - No deep imports into other packages (only through public exports)
  *
  * Usage:
@@ -35,7 +34,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../')
 const PACKAGES_DIR = resolve(ROOT, 'packages')
 
 /** Package names that are part of the monorepo */
-const PACKAGE_NAMES = ['tokens', 'contracts', 'core', 'pro', 'compat', 'codemods', 'tooling'] as const
+const PACKAGE_NAMES = ['tokens', 'contracts', 'core', 'compat', 'codemods', 'tooling'] as const
 type PackageName = typeof PACKAGE_NAMES[number]
 
 /**
@@ -46,9 +45,8 @@ const ALLOWED_DEPS: Record<PackageName, readonly PackageName[]> = {
   tokens: [],
   contracts: ['tokens'],
   core: ['tokens', 'contracts'],
-  pro: ['tokens', 'contracts', 'core'],
-  compat: ['tokens', 'contracts', 'core', 'pro'],
-  codemods: ['tokens', 'contracts', 'core', 'pro', 'compat'],
+  compat: ['tokens', 'contracts', 'core'],
+  codemods: ['tokens', 'contracts', 'core', 'compat'],
   tooling: [],
 }
 

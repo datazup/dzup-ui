@@ -12,7 +12,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "license": "MIT",
   "files": [
+    "LICENSE",
     "dist"
   ],
   "publishConfig": {
@@ -27,8 +29,7 @@
   },
   "dependencies": {
     "@dzup-ui/contracts": "workspace:*",
-    "@dzup-ui/core": "workspace:*",
-    "@dzup-ui/pro": "workspace:*"
+    "@dzup-ui/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
