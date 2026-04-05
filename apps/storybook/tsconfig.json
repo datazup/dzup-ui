@@ -15,8 +15,7 @@
       "@dzup-ui/tokens": ["../../packages/tokens/src"],
       "@dzup-ui/tokens/*": ["../../packages/tokens/*"],
       "@dzup-ui/contracts": ["../../packages/contracts/src"],
-      "@dzup-ui/core": ["../../packages/core/src"],
-      "@dzup-ui/pro": ["../../packages/pro/src"]
+      "@dzup-ui/core": ["../../packages/core/src"]
     }
   },
   "include": [
@@ -24,8 +23,6 @@
     "stories/**/*.ts",
     "stories/**/*.mdx",
     "../../packages/core/src/**/*.stories.ts",
-    "../../packages/pro/src/**/*.stories.ts",
-    "../../packages/core/stories/**/*.stories.ts",
-    "../../packages/pro/stories/**/*.stories.ts"
+    "../../packages/core/stories/**/*.stories.ts"
   ]
 }

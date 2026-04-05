@@ -3,9 +3,11 @@ import { Meta } from '@storybook/blocks'
 
 <Meta title="Introduction" />
 
-# dzip-ui Component Library
+# dzup-ui Component Library
 
-Welcome to the **dzip-ui** component library documentation. This library provides a comprehensive set of Vue 3 components built with TypeScript, Tailwind CSS 4, and design tokens.
+Welcome to the **dzup-ui** component library documentation — 147 foundational Vue 3 components built with TypeScript, Tailwind CSS 4, and design tokens.
+
+> **Enterprise components** (Kanban, Gantt, FormBuilder, WorkflowDesigner, etc.) are available in [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro) under a commercial license.
 
 ## Architecture
 
@@ -16,11 +18,7 @@ Welcome to the **dzip-ui** component library documentation. This library provide
 - **Reka UI** for headless interaction primitives
 - **OKLCH color system** for perceptually uniform colors
 
-## Packages
-
-### Core (`@dzup-ui/core`)
-
-Foundational, broadly reusable components organized by family:
+## Component Families
 
 | Family | Components |
 |--------|-----------|
@@ -36,26 +34,13 @@ Foundational, broadly reusable components organized by family:
 | **Media** | DzAvatar, DzImage, DzIcon |
 | **Typography** | DzHeading, DzText |
 
-### Pro (`@dzup-ui/pro`)
-
-Enterprise and domain-specific components:
-
-| Family | Components |
-|--------|-----------|
-| **Data Pro** | DzDataGridPro, DzFilterBuilder |
-| **Builders** | DzFormBuilder |
-| **Planning** | DzKanban, DzGantt, DzCalendar |
-| **Editors** | DzCodeEditor, DzRichTextEditor |
-| **Communication** | DzChat, DzComments |
-| **Workflow** | DzWorkflowDesigner |
-
 ## Design Tokens
 
 All components use a three-tier token system:
 
-1. **Primitive** -- raw palette and scale values (OKLCH colors)
-2. **Semantic** -- intent-based mappings that adapt to light/dark themes
-3. **Component** -- per-component overrides
+1. **Primitive** — raw palette and scale values (OKLCH colors)
+2. **Semantic** — intent-based mappings that adapt to light/dark themes
+3. **Component** — per-component overrides
 
 Use the **Theme** toolbar toggle above to switch between light and dark modes.
 
