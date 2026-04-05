@@ -1,12 +1,15 @@
-import type { Preview } from '@storybook/vue3'
+import addonA11y from '@storybook/addon-a11y'
+import addonDocs from '@storybook/addon-docs'
 import { withThemeByDataAttribute } from '@storybook/addon-themes'
+import { definePreview } from '@storybook/vue3-vite'
 
 // Import Tailwind CSS 4 (processes utility classes used in component variants)
 import '../src/tailwind.css'
 // Import design tokens CSS for all stories
 import '@dzup-ui/tokens/css'
 
-const preview: Preview = {
+export default definePreview({
+  addons: [addonDocs(), addonA11y()],
   parameters: {
     controls: {
       matchers: {
@@ -26,6 +29,4 @@ const preview: Preview = {
       attributeName: 'data-theme',
     }),
   ],
-}
-
-export default preview
+})
