@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { DzButton } from '../src/components/buttons'
-import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../src/components/cards'
-import { DzFormDescription, DzFormField, DzFormLabel, DzFormMessage } from '../src/components/forms'
-import { DzInput } from '../src/components/inputs'
-import { DzDialog, DzDialogClose, DzDialogContent, DzDialogDescription, DzDialogTitle, DzDialogTrigger } from '../src/components/overlays'
+import { DzButton } from '../../src/components/buttons'
+import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
+import { DzFormDescription, DzFormField, DzFormLabel, DzFormMessage } from '../../src/components/forms'
+import { DzInput } from '../../src/components/inputs'
+import { DzDialog, DzDialogClose, DzDialogContent, DzDialogDescription, DzDialogTitle, DzDialogTrigger } from '../../src/components/overlays'
 
 /**
  * FormComposition demonstrates how DzDialog, DzInput, DzFormField, and DzButton

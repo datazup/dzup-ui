@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { Activity, DollarSign, Package, TrendingUp, Users } from 'lucide-vue-next'
-import { DzCard, DzCardBody, DzCardHeader, DzStatCard } from '../src/components/cards'
-import { DzGrid } from '../src/components/layout'
+import { DzCard, DzCardBody, DzCardHeader, DzStatCard } from '../../src/components/cards'
+import { DzGrid } from '../../src/components/layout'
 
 /**
  * DashboardCard demonstrates how DzStatCard and DzCard compose with DzGrid
