@@ -8,9 +8,7 @@
       "@dzup-ui/contracts": ["../../packages/contracts/src/index.ts"],
       "@dzup-ui/contracts/*": ["../../packages/contracts/src/*"],
       "@dzup-ui/core": ["../../packages/core/src/index.ts"],
-      "@dzup-ui/core/*": ["../../packages/core/src/*"],
-      "@dzup-ui/pro": ["../../packages/pro/src/index.ts"],
-      "@dzup-ui/pro/*": ["../../packages/pro/src/*"]
+      "@dzup-ui/core/*": ["../../packages/core/src/*"]
     },
     "types": ["node"]
   },

@@ -16,7 +16,6 @@ export default defineConfig({
       { find: '@dzup-ui/core/styles', replacement: resolve(__dirname, '../../packages/core/src/styles/base.css') },
       { find: '@dzup-ui/contracts', replacement: resolve(__dirname, '../../packages/contracts/src/index.ts') },
       { find: '@dzup-ui/core', replacement: resolve(__dirname, '../../packages/core/src') },
-      { find: '@dzup-ui/pro', replacement: resolve(__dirname, '../../packages/pro/src') },
     ],
   },
   server: {

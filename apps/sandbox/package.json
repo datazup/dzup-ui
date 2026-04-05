@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@dzup-ui/core": "workspace:*",
-    "@dzup-ui/pro": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
