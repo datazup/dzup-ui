@@ -1,7 +1,7 @@
 /**
  * DzButtonGroup — tailwind-variants (tv) style definitions.
  *
- * @module @dzup-ui/core/components/buttons/DzButtonGroup.variants
+ * @module @dzip-ui/core/components/buttons/DzButtonGroup.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

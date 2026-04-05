@@ -4,7 +4,7 @@
  * Maps semantic design tokens to lightbox overlay components (ADR-04).
  * Multi-slot component: overlay, content, image, caption, nav, close, counter.
  *
- * @module @dzup-ui/core/components/media/DzLightbox.tokens
+ * @module @dzip-ui/core/components/media/DzLightbox.tokens
  */
 
 export const lightboxTokens = {

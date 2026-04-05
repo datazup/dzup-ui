@@ -4,7 +4,7 @@
  * Maps semantic design tokens to vertical navigation menu styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/navigation/DzMenu.tokens
+ * @module @dzip-ui/core/components/navigation/DzMenu.tokens
  */
 
 export const menuTokens = {

@@ -6,13 +6,13 @@
  *
  * Context injection via DZ_DATA_GRID_KEY (ADR-08).
  *
- * @module @dzup-ui/core/components/data/DzDataGrid
+ * @module @dzip-ui/core/components/data/DzDataGrid
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 import type { Component, InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

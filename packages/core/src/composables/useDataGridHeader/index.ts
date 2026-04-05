@@ -1,7 +1,7 @@
 /**
  * useDataGridHeader composable — public exports.
  *
- * @module @dzup-ui/core/composables/useDataGridHeader
+ * @module @dzip-ui/core/composables/useDataGridHeader
  */
 export {
   useDataGridHeader,

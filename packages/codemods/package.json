@@ -1,8 +1,8 @@
 {
-  "name": "@dzup-ui/codemods",
+  "name": "@dzip-ui/codemods",
   "type": "module",
   "version": "0.0.1",
-  "description": "Code transforms for migrating from old dzup-ui to vNext",
+  "description": "Code transforms for migrating from old dzip-ui to vNext",
   "exports": {
     ".": {
       "types": "./src/index.ts",

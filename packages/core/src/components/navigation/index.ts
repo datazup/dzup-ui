@@ -1,7 +1,7 @@
 /**
  * Navigation family — public exports.
  *
- * @module @dzup-ui/core/components/navigation
+ * @module @dzip-ui/core/components/navigation
  */
 
 // ── Tabs (Compound) ──

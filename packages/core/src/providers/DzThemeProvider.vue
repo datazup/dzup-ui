@@ -9,7 +9,7 @@
 
   SSR-safe: all window/document access is deferred to onMounted().
 
-  @module @dzup-ui/core/providers/DzThemeProvider
+  @module @dzip-ui/core/providers/DzThemeProvider
 -->
 
 <script setup lang="ts">

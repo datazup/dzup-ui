@@ -4,10 +4,10 @@
  * Groups DzCheckbox components and manages a string[] model value.
  * Uses typed injection key (ADR-08).
  *
- * @module @dzup-ui/core/components/forms/DzCheckboxGroup
+ * @module @dzip-ui/core/components/forms/DzCheckboxGroup
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzip-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

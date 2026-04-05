@@ -1,14 +1,14 @@
 /**
  * DzAlert — type definitions.
  *
- * @module @dzup-ui/core/components/feedback/DzAlert
+ * @module @dzip-ui/core/components/feedback/DzAlert
  */
 
 import type {
   AlertVariant,
   BaseAccessibilityProps,
   CanonicalTone,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------

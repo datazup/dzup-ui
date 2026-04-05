@@ -3,10 +3,10 @@
  *
  * Uses Reka UI DropdownMenu primitives (ADR-07).
  *
- * @module @dzup-ui/core/components/overlays/DzDropdownMenu
+ * @module @dzip-ui/core/components/overlays/DzDropdownMenu
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Side / Align

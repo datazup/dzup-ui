@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // TODO: Import DzTabs, DzBreadcrumbs, DzNavbar, DzSidebar, DzSteps
-// from @dzup-ui/core and create navigation demos.
+// from @dzip-ui/core and create navigation demos.
 </script>
 
 <template>

@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzup-ui/core/components/forms/DzFileUpload.variants
+ * @module @dzip-ui/core/components/forms/DzFileUpload.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

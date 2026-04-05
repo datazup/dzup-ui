@@ -3,7 +3,7 @@
  *
  * v-model via defineModel<boolean>() (ADR-16).
  *
- * @module @dzup-ui/core/components/buttons/DzToggleButton
+ * @module @dzip-ui/core/components/buttons/DzToggleButton
  */
 
 import type {
@@ -11,7 +11,7 @@ import type {
   ButtonVariant,
   CanonicalSize,
   CanonicalTone,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

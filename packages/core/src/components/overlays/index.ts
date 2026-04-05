@@ -1,7 +1,7 @@
 /**
  * Overlays family -- public exports.
  *
- * @module @dzup-ui/core/components/overlays
+ * @module @dzip-ui/core/components/overlays
  */
 
 export type {

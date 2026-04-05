@@ -5,7 +5,7 @@
  * DzTooltip, DzPopover, DzDropdownMenu and other overlay components.
  * SSR-safe: positioning only runs in the browser.
  *
- * @module @dzup-ui/core/composables/useFloating
+ * @module @dzip-ui/core/composables/useFloating
  */
 
 import type { Placement } from '@floating-ui/vue'

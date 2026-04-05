@@ -5,14 +5,14 @@
  * v-model via defineModel<string>() (ADR-16).
  * Context injection via DZ_TABS_KEY (ADR-08).
  *
- * @module @dzup-ui/core/components/navigation/DzTabs
+ * @module @dzip-ui/core/components/navigation/DzTabs
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
   TabsVariant,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

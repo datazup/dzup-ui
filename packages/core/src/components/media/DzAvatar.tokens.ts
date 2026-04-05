@@ -4,7 +4,7 @@
  * Maps semantic design tokens to avatar components (ADR-04).
  * Supports five sizes and two shapes (circle, square).
  *
- * @module @dzup-ui/core/components/media/DzAvatar.tokens
+ * @module @dzip-ui/core/components/media/DzAvatar.tokens
  */
 
 export const avatarTokens = {

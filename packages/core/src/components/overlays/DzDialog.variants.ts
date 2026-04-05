@@ -4,7 +4,7 @@
  * Uses semantic CSS token variables exclusively (ADR-04).
  * Slot-based compound variant pattern for overlay + content.
  *
- * @module @dzup-ui/core/components/overlays/DzDialog.variants
+ * @module @dzip-ui/core/components/overlays/DzDialog.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

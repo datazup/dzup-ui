@@ -1,5 +1,5 @@
 /**
- * @dzup-ui/tooling
+ * @dzip-ui/tooling
  *
  * Internal validators and quality enforcement tools for dzip-ui.
  *

@@ -4,7 +4,7 @@
  * Uses semantic CSS token variables exclusively (ADR-04).
  * Component token tier (--dz-input-*) overrides where available.
  *
- * @module @dzup-ui/core/components/inputs/DzInput.variants
+ * @module @dzip-ui/core/components/inputs/DzInput.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

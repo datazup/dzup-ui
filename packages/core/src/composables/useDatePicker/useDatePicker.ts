@@ -4,7 +4,7 @@
  * Handles conversion between ISO 8601 strings and @internationalized/date
  * CalendarDate objects used by Reka UI date primitives (ADR-13).
  *
- * @module @dzup-ui/core/composables/useDatePicker
+ * @module @dzip-ui/core/composables/useDatePicker
  */
 
 import type { DateValue } from '@internationalized/date'

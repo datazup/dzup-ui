@@ -16,8 +16,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@dzup-ui/tokens': resolve(__dirname, '../tokens/src'),
-      '@dzup-ui/contracts': resolve(__dirname, '../contracts/src'),
+      '@dzip-ui/tokens': resolve(__dirname, '../tokens/src'),
+      '@dzip-ui/contracts': resolve(__dirname, '../contracts/src'),
     },
   },
   build: {
@@ -35,8 +35,8 @@ export default defineConfig({
         '@floating-ui/vue',
         'lucide-vue-next',
         '@internationalized/date',
-        '@dzup-ui/tokens',
-        '@dzup-ui/contracts',
+        '@dzip-ui/tokens',
+        '@dzip-ui/contracts',
         'clsx',
         'tailwind-merge',
         'tailwind-variants',

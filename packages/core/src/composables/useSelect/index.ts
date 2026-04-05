@@ -1,7 +1,7 @@
 /**
  * useSelect composable — public exports.
  *
- * @module @dzup-ui/core/composables/useSelect
+ * @module @dzip-ui/core/composables/useSelect
  */
 export {
   useSelect,

@@ -1,7 +1,7 @@
 /**
  * Layout family -- public exports.
  *
- * @module @dzup-ui/core/components/layout
+ * @module @dzip-ui/core/components/layout
  */
 
 export type {

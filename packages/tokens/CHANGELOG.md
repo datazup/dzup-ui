@@ -1,4 +1,4 @@
-# @dzup-ui/tokens
+# @dzip-ui/tokens
 
 ## 0.1.0-alpha.0 (2026-04-02)
 

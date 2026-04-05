@@ -1,7 +1,7 @@
 /**
  * useFloating — public exports.
  *
- * @module @dzup-ui/core/composables/useFloating
+ * @module @dzip-ui/core/composables/useFloating
  */
 export { useFloating } from './useFloating.ts'
 export type {

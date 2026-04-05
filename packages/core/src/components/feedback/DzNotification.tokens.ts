@@ -4,7 +4,7 @@
  * Maps semantic design tokens to notification panel components (ADR-04).
  * Notifications use a left-border accent for tone indication.
  *
- * @module @dzup-ui/core/components/feedback/DzNotification.tokens
+ * @module @dzip-ui/core/components/feedback/DzNotification.tokens
  */
 
 export const notificationTokens = {

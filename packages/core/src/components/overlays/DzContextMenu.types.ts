@@ -3,10 +3,10 @@
  *
  * Uses Reka UI ContextMenu primitives (ADR-07).
  *
- * @module @dzup-ui/core/components/overlays/DzContextMenu
+ * @module @dzip-ui/core/components/overlays/DzContextMenu
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Side / Align

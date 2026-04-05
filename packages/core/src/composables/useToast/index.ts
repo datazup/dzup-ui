@@ -1,7 +1,7 @@
 /**
  * useToast composable — public exports.
  *
- * @module @dzup-ui/core/composables/useToast
+ * @module @dzip-ui/core/composables/useToast
  */
 
 export {

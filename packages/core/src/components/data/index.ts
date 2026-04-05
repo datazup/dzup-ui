@@ -1,7 +1,7 @@
 /**
  * Data family — public exports.
  *
- * @module @dzup-ui/core/components/data
+ * @module @dzip-ui/core/components/data
  */
 
 export type {

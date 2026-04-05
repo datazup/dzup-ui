@@ -38,7 +38,7 @@ const PACKAGE_NAMES = ['tokens', 'contracts', 'core', 'compat', 'codemods', 'too
 type PackageName = typeof PACKAGE_NAMES[number]
 
 /**
- * Allowed @dzup-ui/* dependencies for each package.
+ * Allowed @dzip-ui/* dependencies for each package.
  * If a package is not listed, it has no allowed cross-package imports.
  */
 const ALLOWED_DEPS: Record<PackageName, readonly PackageName[]> = {
@@ -50,14 +50,14 @@ const ALLOWED_DEPS: Record<PackageName, readonly PackageName[]> = {
   tooling: [],
 }
 
-/** Regex to match @dzup-ui/ imports, including deep imports */
-const DZUP_IMPORT_RE = /(?:from\s|import\s*\(?)['"](@dzup-ui\/[^'"]+)['"]/g
+/** Regex to match @dzip-ui/ imports, including deep imports */
+const DZUP_IMPORT_RE = /(?:from\s|import\s*\(?)['"](@dzip-ui\/[^'"]+)['"]/g
 
-/** Regex to extract the package name from a @dzup-ui/ path */
-const PACKAGE_NAME_RE = /^@dzup-ui\/([\w-]+)/
+/** Regex to extract the package name from a @dzip-ui/ path */
+const PACKAGE_NAME_RE = /^@dzip-ui\/([\w-]+)/
 
-/** Deep import pattern: @dzup-ui/pkg/anything-beyond-root */
-const DEEP_IMPORT_RE = /^@dzup-ui\/[\w-]+\/.+/
+/** Deep import pattern: @dzip-ui/pkg/anything-beyond-root */
+const DEEP_IMPORT_RE = /^@dzip-ui\/[\w-]+\/.+/
 
 // --- File scanning ---
 
@@ -185,7 +185,7 @@ function validateFile(filePath: string): Violation[] {
           file: relative(ROOT, filePath),
           line: i + 1,
           importPath,
-          reason: `Package "${pkg}" cannot import from "@dzup-ui/${importedPkg}". Allowed: ${allowed.length > 0 ? allowed.map(a => `@dzup-ui/${a}`).join(', ') : 'none'}`,
+          reason: `Package "${pkg}" cannot import from "@dzip-ui/${importedPkg}". Allowed: ${allowed.length > 0 ? allowed.map(a => `@dzip-ui/${a}`).join(', ') : 'none'}`,
         })
       }
 
@@ -195,7 +195,7 @@ function validateFile(filePath: string): Violation[] {
           file: relative(ROOT, filePath),
           line: i + 1,
           importPath,
-          reason: `Deep import into "${importPath}" is forbidden. Import from the package root "@dzup-ui/${importedPkg}" instead.`,
+          reason: `Deep import into "${importPath}" is forbidden. Import from the package root "@dzip-ui/${importedPkg}" instead.`,
         })
       }
 

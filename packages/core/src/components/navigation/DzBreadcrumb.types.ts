@@ -4,10 +4,10 @@
  * Built from scratch (not a Reka UI component).
  * Semantic <nav> with ordered list for accessible breadcrumb navigation.
  *
- * @module @dzup-ui/core/components/navigation/DzBreadcrumb
+ * @module @dzip-ui/core/components/navigation/DzBreadcrumb
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

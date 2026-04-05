@@ -4,7 +4,7 @@
  * Maps semantic design tokens to custom scrollbar styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/layout/DzScrollArea.tokens
+ * @module @dzip-ui/core/components/layout/DzScrollArea.tokens
  */
 
 export const scrollAreaTokens = {

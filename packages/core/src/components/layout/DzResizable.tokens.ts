@@ -4,7 +4,7 @@
  * Maps semantic design tokens to resizable panel component styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/layout/DzResizable.tokens
+ * @module @dzip-ui/core/components/layout/DzResizable.tokens
  */
 
 export const resizableTokens = {

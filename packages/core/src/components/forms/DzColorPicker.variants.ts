@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzup-ui/core/components/forms/DzColorPicker.variants
+ * @module @dzip-ui/core/components/forms/DzColorPicker.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

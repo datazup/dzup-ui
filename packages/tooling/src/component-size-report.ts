@@ -11,7 +11,7 @@
  *   npx tsx packages/tooling/src/component-size-report.ts --ci
  *   npx tsx packages/tooling/src/component-size-report.ts --top=20
  *
- * @module @dzup-ui/tooling/component-size-report
+ * @module @dzip-ui/tooling/component-size-report
  */
 
 import type { Buffer } from 'node:buffer'

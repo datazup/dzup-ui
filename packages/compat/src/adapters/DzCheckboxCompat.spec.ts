@@ -1,7 +1,7 @@
 /**
  * DzCheckboxCompat -- Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzup-ui
+ * Validates that the compat adapter correctly maps old dzip-ui
  * checkbox API to the new vNext DzCheckbox API.
  */
 import { mount } from '@vue/test-utils'
@@ -135,7 +135,7 @@ describe('dzCheckboxCompat', () => {
       props: { label: 'Test' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzCheckboxCompat is deprecated. Use DzCheckbox from @dzup-ui/core instead.',
+      '[dzip-ui/compat] DzCheckboxCompat is deprecated. Use DzCheckbox from @dzip-ui/core instead.',
     )
   })
 

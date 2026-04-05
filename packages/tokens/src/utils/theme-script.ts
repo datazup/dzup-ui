@@ -9,7 +9,7 @@
  * ADR-15: Theme persistence and FOUC prevention.
  *
  * Usage:
- *   import { themeScript } from '@dzup-ui/tokens/utils'
+ *   import { themeScript } from '@dzip-ui/tokens/utils'
  *
  *   // In your HTML template or SSR head:
  *   `<script>${themeScript}</script>`

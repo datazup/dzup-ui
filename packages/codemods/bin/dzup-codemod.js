@@ -7,7 +7,7 @@
  *   dzup-codemod <transform> <target-directory> [options]
  *
  * Transforms:
- *   rename-imports   Rewrite old import paths to @dzup-ui/core and @dzup-ui/pro
+ *   rename-imports   Rewrite old import paths to @dzip-ui/core and @dzip-ui/pro
  *   rename-props     Rename deprecated props to vNext equivalents
  *   rename-events    Rename deprecated events to vNext equivalents
  *   all              Run all transforms in sequence
@@ -32,13 +32,13 @@ const TRANSFORMS = ['rename-imports', 'rename-props', 'rename-events', 'all']
 
 function printHelp() {
   process.stdout.write(`
-dzup-codemod - Migrate from old dzup-ui to vNext
+dzup-codemod - Migrate from old dzip-ui to vNext
 
 Usage:
   dzup-codemod <transform> <target-directory> [options]
 
 Transforms:
-  rename-imports   Rewrite old import paths to @dzup-ui/core and @dzup-ui/pro
+  rename-imports   Rewrite old import paths to @dzip-ui/core and @dzip-ui/pro
   rename-props     Rename deprecated props to vNext equivalents
   rename-events    Rename deprecated events to vNext equivalents
   all              Run all transforms in sequence

@@ -5,7 +5,7 @@
  * `update:modelValue` is NOT included because ADR-16 mandates
  * `defineModel<T>()` which handles it implicitly.
  *
- * @module @dzup-ui/contracts/events
+ * @module @dzip-ui/contracts/events
  */
 
 // ---------------------------------------------------------------------------

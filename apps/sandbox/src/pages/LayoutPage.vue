@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // TODO: Import DzContainer, DzStack, DzGrid, DzDivider, DzSpacer, DzAspectRatio
-// from @dzup-ui/core and create layout composition demos.
+// from @dzip-ui/core and create layout composition demos.
 </script>
 
 <template>

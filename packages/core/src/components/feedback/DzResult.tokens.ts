@@ -4,7 +4,7 @@
  * Maps semantic design tokens to result/outcome display components (ADR-04).
  * Result is a multi-slot component (root, icon, title, description, actions).
  *
- * @module @dzup-ui/core/components/feedback/DzResult.tokens
+ * @module @dzip-ui/core/components/feedback/DzResult.tokens
  */
 
 export const resultTokens = {

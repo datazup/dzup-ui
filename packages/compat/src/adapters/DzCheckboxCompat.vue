@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { CanonicalSize } from '@dzup-ui/contracts'
-import { DzCheckbox } from '@dzup-ui/core'
+import type { CanonicalSize } from '@dzip-ui/contracts'
+import { DzCheckbox } from '@dzip-ui/core'
 /**
  * DzCheckboxCompat -- backward-compatible wrapper for DzCheckbox.
  *
- * Maps old dzup-ui checkbox API to the new vNext API:
+ * Maps old dzip-ui checkbox API to the new vNext API:
  * - `label` prop -> rendered as default slot content
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `@input` -> emits `change`
  *
- * @deprecated Use DzCheckbox from @dzup-ui/core instead.
+ * @deprecated Use DzCheckbox from @dzip-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
 
-/** Old dzup-ui size values */
+/** Old dzip-ui size values */
 type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface DzCheckboxCompatProps {

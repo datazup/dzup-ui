@@ -1,14 +1,14 @@
 /**
  * DzSearchInput — Type definitions for search input with icon and clear.
  *
- * @module @dzup-ui/core/components/inputs/DzSearchInput
+ * @module @dzip-ui/core/components/inputs/DzSearchInput
  */
 
 import type {
   BaseFormControlProps,
   ChangeEvents,
   InputVariant,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

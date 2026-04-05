@@ -4,7 +4,7 @@
  * Uses Reka UI ComboboxRoot in multiple mode (ADR-07).
  * v-model via defineModel (ADR-16).
  *
- * @module @dzup-ui/core/components/forms/DzMultiSelect
+ * @module @dzip-ui/core/components/forms/DzMultiSelect
  */
 
 import type {
@@ -13,7 +13,7 @@ import type {
   CanonicalSize,
   InputVariant,
   SelectOpenableEvents,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 import type { DzSelectItem } from './DzSelect.types.ts'
 
 // ---------------------------------------------------------------------------

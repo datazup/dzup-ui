@@ -1,7 +1,7 @@
 /**
  * Feedback family — public exports.
  *
- * @module @dzup-ui/core/components/feedback
+ * @module @dzip-ui/core/components/feedback
  */
 
 // Types — DzAlert

@@ -4,7 +4,7 @@
  * Uses Reka UI Slider primitives (ADR-07).
  * v-model via defineModel (ADR-16).
  *
- * @module @dzup-ui/core/components/forms/DzSlider
+ * @module @dzip-ui/core/components/forms/DzSlider
  */
 
 import type {
@@ -13,7 +13,7 @@ import type {
   CanonicalSize,
   CanonicalTone,
   ChangeEvents,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

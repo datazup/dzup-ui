@@ -57,7 +57,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
 const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string }> = [
   {
-    name: '@dzup-ui/core',
+    name: '@dzip-ui/core',
     path: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
     packageDir: resolve(ROOT, 'packages/core'),
   },

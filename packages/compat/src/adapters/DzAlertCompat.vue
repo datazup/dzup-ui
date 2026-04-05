@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { CanonicalTone } from '@dzup-ui/contracts'
-import { DzAlert } from '@dzup-ui/core'
+import type { CanonicalTone } from '@dzip-ui/contracts'
+import { DzAlert } from '@dzip-ui/core'
 /**
  * DzAlertCompat — backward-compatible wrapper for DzAlert.
  *
- * Maps old dzup-ui alert API to the new vNext API:
+ * Maps old dzip-ui alert API to the new vNext API:
  * - `type` prop -> `tone` prop (e.g. "error" -> "danger", "warning" -> "warning")
  * - `closable` -> `closable` (same name, forwarded directly)
  * - `title` -> `title` (same name, forwarded directly)
  *
- * @deprecated Use DzAlert from @dzup-ui/core instead.
+ * @deprecated Use DzAlert from @dzip-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
 
-/** Old dzup-ui alert type values */
+/** Old dzip-ui alert type values */
 type OldAlertType = 'success' | 'warning' | 'error' | 'info' | 'default'
 
 interface DzAlertCompatProps {

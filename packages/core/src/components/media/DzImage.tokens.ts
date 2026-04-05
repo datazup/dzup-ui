@@ -4,7 +4,7 @@
  * Maps semantic design tokens to image components (ADR-04).
  * Includes placeholder/fallback styling for loading and error states.
  *
- * @module @dzup-ui/core/components/media/DzImage.tokens
+ * @module @dzip-ui/core/components/media/DzImage.tokens
  */
 
 export const imageTokens = {

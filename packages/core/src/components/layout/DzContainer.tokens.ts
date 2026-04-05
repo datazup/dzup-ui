@@ -4,7 +4,7 @@
  * Maps semantic design tokens to container layout properties (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/layout/DzContainer.tokens
+ * @module @dzip-ui/core/components/layout/DzContainer.tokens
  */
 
 export const containerTokens = {

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import type { CanonicalSize } from '@dzup-ui/contracts'
-import { DzSwitch } from '@dzup-ui/core'
+import type { CanonicalSize } from '@dzip-ui/contracts'
+import { DzSwitch } from '@dzip-ui/core'
 /**
  * DzSwitchCompat — backward-compatible wrapper for DzSwitch.
  *
- * Maps old dzup-ui switch API to the new vNext API:
+ * Maps old dzip-ui switch API to the new vNext API:
  * - `activeText` / `inactiveText` → rendered as label slot content
  * - `activeColor` / `inactiveColor` → dropped (use tokens), warned in dev
  * - `width` → dropped (CSS-controlled in vNext)
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `@input` → emits `change`
  *
- * @deprecated Use DzSwitch from @dzup-ui/core instead.
+ * @deprecated Use DzSwitch from @dzip-ui/core instead.
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
 
-/** Old dzup-ui size values */
+/** Old dzip-ui size values */
 type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface DzSwitchCompatProps {
@@ -58,17 +58,17 @@ onMounted(() => {
   if (import.meta.env?.DEV) {
     if (props.activeColor) {
       console.warn(
-        '[dzup-ui/compat] DzSwitchCompat: "activeColor" prop is dropped in vNext. Use design tokens instead.',
+        '[dzip-ui/compat] DzSwitchCompat: "activeColor" prop is dropped in vNext. Use design tokens instead.',
       )
     }
     if (props.inactiveColor) {
       console.warn(
-        '[dzup-ui/compat] DzSwitchCompat: "inactiveColor" prop is dropped in vNext. Use design tokens instead.',
+        '[dzip-ui/compat] DzSwitchCompat: "inactiveColor" prop is dropped in vNext. Use design tokens instead.',
       )
     }
     if (props.width) {
       console.warn(
-        '[dzup-ui/compat] DzSwitchCompat: "width" prop is dropped in vNext. Use CSS to control width.',
+        '[dzip-ui/compat] DzSwitchCompat: "width" prop is dropped in vNext. Use CSS to control width.',
       )
     }
   }

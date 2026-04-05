@@ -5,7 +5,7 @@ import {
   DzPasswordInput,
   DzSearchInput,
   DzTextarea,
-} from '@dzup-ui/core'
+} from '@dzip-ui/core'
 import { ref } from 'vue'
 
 const textValue = ref('')

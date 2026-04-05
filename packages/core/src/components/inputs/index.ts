@@ -1,7 +1,7 @@
 /**
  * Inputs family — public exports.
  *
- * @module @dzup-ui/core/components/inputs
+ * @module @dzip-ui/core/components/inputs
  */
 
 // Types

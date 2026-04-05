@@ -4,14 +4,14 @@
  * Provides shared context (size, variant, tone) to child DzButton components
  * via provide/inject (ADR-08).
  *
- * @module @dzup-ui/core/components/buttons/DzButtonGroup
+ * @module @dzip-ui/core/components/buttons/DzButtonGroup
  */
 
 import type {
   ButtonVariant,
   CanonicalSize,
   CanonicalTone,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

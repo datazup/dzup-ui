@@ -4,10 +4,10 @@
  * Uses Reka UI RadioGroupRoot (ADR-07).
  * v-model via defineModel<string>() (ADR-16).
  *
- * @module @dzup-ui/core/components/forms/DzRadioGroup
+ * @module @dzip-ui/core/components/forms/DzRadioGroup
  */
 
-import type { BaseAccessibilityProps, BaseEvents, CanonicalSize } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, BaseEvents, CanonicalSize } from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

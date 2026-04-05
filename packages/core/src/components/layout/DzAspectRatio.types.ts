@@ -1,7 +1,7 @@
 /**
  * DzAspectRatio — Type definitions for the aspect ratio container.
  *
- * @module @dzup-ui/core/components/layout/DzAspectRatio
+ * @module @dzip-ui/core/components/layout/DzAspectRatio
  */
 
 /** Props for the DzAspectRatio component */

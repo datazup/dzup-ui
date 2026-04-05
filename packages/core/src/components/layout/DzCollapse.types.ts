@@ -1,10 +1,10 @@
 /**
  * DzCollapse — Type definitions for the animated expand/collapse component.
  *
- * @module @dzup-ui/core/components/layout/DzCollapse
+ * @module @dzip-ui/core/components/layout/DzCollapse
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

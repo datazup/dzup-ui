@@ -4,7 +4,7 @@
  * Manages filter popover state, column alignment/styling helpers,
  * keyboard navigation, and filter input/operator handling.
  *
- * @module @dzup-ui/core/composables/useDataGridHeader
+ * @module @dzip-ui/core/composables/useDataGridHeader
  */
 
 import type { Ref } from 'vue'

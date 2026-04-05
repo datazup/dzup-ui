@@ -2,7 +2,7 @@
  * Canonical type definitions shared across all component contracts.
  * These enforce Contract Spec v1 taxonomy.
  *
- * @module @dzup-ui/contracts/canonical
+ * @module @dzip-ui/contracts/canonical
  */
 
 // ---------------------------------------------------------------------------

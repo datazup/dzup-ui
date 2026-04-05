@@ -5,7 +5,7 @@
  * toast notifications from any component. Requires a DzToastProvider
  * ancestor in the component tree.
  *
- * @module @dzup-ui/core/composables/useToast
+ * @module @dzip-ui/core/composables/useToast
  */
 
 import type { DzToastContext, ToastItem } from '../../components/feedback/DzToast.types.ts'

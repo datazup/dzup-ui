@@ -1,7 +1,7 @@
 /**
  * useTabs composable — public exports.
  *
- * @module @dzup-ui/core/composables/useTabs
+ * @module @dzip-ui/core/composables/useTabs
  */
 export { useTabs } from './useTabs.ts'
 export type {

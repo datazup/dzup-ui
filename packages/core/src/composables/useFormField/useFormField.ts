@@ -4,7 +4,7 @@
  * Generates unique IDs via Vue 3.5 `useId()` and provides them to
  * DzFormLabel, DzFormDescription, and DzFormMessage via inject (ADR-08).
  *
- * @module @dzup-ui/core/composables/useFormField
+ * @module @dzip-ui/core/composables/useFormField
  */
 
 import type { ComputedRef, InjectionKey, MaybeRef } from 'vue'

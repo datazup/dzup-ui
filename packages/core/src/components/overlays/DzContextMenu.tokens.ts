@@ -5,7 +5,7 @@
  * Mirrors DzDropdownMenu token structure.
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/overlays/DzContextMenu.tokens
+ * @module @dzip-ui/core/components/overlays/DzContextMenu.tokens
  */
 
 export const contextMenuTokens = {

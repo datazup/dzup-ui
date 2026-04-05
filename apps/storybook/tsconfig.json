@@ -12,10 +12,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "paths": {
-      "@dzup-ui/tokens": ["../../packages/tokens/src"],
-      "@dzup-ui/tokens/*": ["../../packages/tokens/*"],
-      "@dzup-ui/contracts": ["../../packages/contracts/src"],
-      "@dzup-ui/core": ["../../packages/core/src"]
+      "@dzip-ui/tokens": ["../../packages/tokens/src"],
+      "@dzip-ui/tokens/*": ["../../packages/tokens/*"],
+      "@dzip-ui/contracts": ["../../packages/contracts/src"],
+      "@dzip-ui/core": ["../../packages/core/src"]
     }
   },
   "include": [

@@ -4,10 +4,10 @@
  * v-model via defineModel<number>() (ADR-16).
  * Typed injection key (ADR-08).
  *
- * @module @dzup-ui/core/components/navigation/DzStepper
+ * @module @dzip-ui/core/components/navigation/DzStepper
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 /** Stepper orientation */

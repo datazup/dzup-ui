@@ -1,7 +1,7 @@
 /**
  * useFormField composable — public exports.
  *
- * @module @dzup-ui/core/composables/useFormField
+ * @module @dzip-ui/core/composables/useFormField
  */
 export {
   DZ_FORM_FIELD_KEY,

@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@dzup-ui/tokens': resolve(__dirname, 'packages/tokens/src'),
-      '@dzup-ui/contracts': resolve(__dirname, 'packages/contracts/src'),
-      '@dzup-ui/core': resolve(__dirname, 'packages/core/src'),
-      '@dzup-ui/compat': resolve(__dirname, 'packages/compat/src'),
-      '@dzup-ui/tooling': resolve(__dirname, 'packages/tooling/src'),
+      '@dzip-ui/tokens': resolve(__dirname, 'packages/tokens/src'),
+      '@dzip-ui/contracts': resolve(__dirname, 'packages/contracts/src'),
+      '@dzip-ui/core': resolve(__dirname, 'packages/core/src'),
+      '@dzip-ui/compat': resolve(__dirname, 'packages/compat/src'),
+      '@dzip-ui/tooling': resolve(__dirname, 'packages/tooling/src'),
     },
   },
   test: {

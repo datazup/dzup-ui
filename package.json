@@ -21,9 +21,9 @@
     "test:a11y": "vitest run --reporter=verbose packages/**/a11y/**/*.a11y.spec.ts",
     "test:contracts": "vitest run --reporter=verbose packages/**/contract.spec.ts",
     "test:ssr": "vitest run --reporter=verbose packages/**/ssr/**/*.spec.ts",
-    "build": "yarn workspace @dzup-ui/tokens generate && yarn workspace @dzup-ui/core build",
+    "build": "yarn workspace @dzip-ui/tokens generate && yarn workspace @dzip-ui/core build",
     "build:all": "yarn workspaces foreach -Apt run build",
-    "tokens:generate": "yarn workspace @dzup-ui/tokens generate",
+    "tokens:generate": "yarn workspace @dzip-ui/tokens generate",
     "generate:exports": "tsx packages/tooling/src/manifest-generator.ts",
     "generate:exports:core": "tsx packages/tooling/src/manifest-generator.ts packages/core",
 
@@ -43,8 +43,8 @@
     "test:perf": "vitest run packages/tooling/src/perf-bench.spec.ts",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
-    "storybook": "yarn workspace @dzup-ui/storybook dev",
-    "storybook:build": "yarn workspace @dzup-ui/storybook build",
+    "storybook": "yarn workspace @dzip-ui/storybook dev",
+    "storybook:build": "yarn workspace @dzip-ui/storybook build",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "yarn build && changeset publish"

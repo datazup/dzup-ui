@@ -3,7 +3,7 @@
  *
  * Reuses the same visual pattern as DzSlider. Token-only styling (ADR-04).
  *
- * @module @dzup-ui/core/components/forms/DzRangeSlider.variants
+ * @module @dzip-ui/core/components/forms/DzRangeSlider.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

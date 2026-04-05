@@ -4,7 +4,7 @@
  * Maps semantic design tokens to tree view components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/data/DzTree.tokens
+ * @module @dzip-ui/core/components/data/DzTree.tokens
  */
 
 export const treeTokens = {

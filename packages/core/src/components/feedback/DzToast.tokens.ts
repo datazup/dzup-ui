@@ -4,7 +4,7 @@
  * Maps semantic design tokens to toast notification components (ADR-04).
  * Toast is a multi-slot component (viewport, root, title, description, actions, close).
  *
- * @module @dzup-ui/core/components/feedback/DzToast.tokens
+ * @module @dzip-ui/core/components/feedback/DzToast.tokens
  */
 
 export const toastTokens = {

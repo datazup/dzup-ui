@@ -3,10 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@dzup-ui/tokens": ["../tokens/src/index.ts"],
-      "@dzup-ui/tokens/*": ["../tokens/src/*"],
-      "@dzup-ui/contracts": ["../contracts/src/index.ts"],
-      "@dzup-ui/contracts/*": ["../contracts/src/*"]
+      "@dzip-ui/tokens": ["../tokens/src/index.ts"],
+      "@dzip-ui/tokens/*": ["../tokens/src/*"],
+      "@dzip-ui/contracts": ["../contracts/src/index.ts"],
+      "@dzip-ui/contracts/*": ["../contracts/src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue"],

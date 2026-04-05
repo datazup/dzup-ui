@@ -3,10 +3,10 @@
  *
  * CSS Grid layout component with responsive column support.
  *
- * @module @dzup-ui/core/components/layout/DzGrid
+ * @module @dzip-ui/core/components/layout/DzGrid
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

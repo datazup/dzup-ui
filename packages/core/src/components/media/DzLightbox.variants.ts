@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04). Uses --dz-* CSS variables exclusively.
  *
- * @module @dzup-ui/core/components/media/DzLightbox.variants
+ * @module @dzip-ui/core/components/media/DzLightbox.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

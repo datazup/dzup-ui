@@ -4,7 +4,7 @@
  * Reuses the same slot structure as DzDatePicker with range-specific additions.
  * Uses semantic CSS token variables exclusively (ADR-04).
  *
- * @module @dzup-ui/core/components/forms/DzDateRangePicker.variants
+ * @module @dzip-ui/core/components/forms/DzDateRangePicker.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

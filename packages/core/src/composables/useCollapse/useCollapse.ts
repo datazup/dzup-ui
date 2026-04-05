@@ -3,7 +3,7 @@
  *
  * Manages height transitions for collapsible content sections.
  *
- * @module @dzup-ui/core/composables/useCollapse
+ * @module @dzip-ui/core/composables/useCollapse
  */
 
 import type { Ref } from 'vue'

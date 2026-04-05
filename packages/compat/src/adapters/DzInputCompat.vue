@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { CanonicalSize } from '@dzup-ui/contracts'
-import { DzInput } from '@dzup-ui/core'
+import type { CanonicalSize } from '@dzip-ui/contracts'
+import { DzInput } from '@dzip-ui/core'
 /**
  * DzInputCompat — backward-compatible wrapper for DzInput.
  *
- * Maps old dzup-ui input API to the new vNext API:
+ * Maps old dzip-ui input API to the new vNext API:
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `v-model` is forwarded directly (same behavior)
  * - `clearable` is forwarded directly (same prop name)
  *
- * @deprecated Use DzInput from @dzup-ui/core instead.
+ * @deprecated Use DzInput from @dzip-ui/core instead.
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
 
-/** Old dzup-ui size values */
+/** Old dzip-ui size values */
 type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface DzInputCompatProps {

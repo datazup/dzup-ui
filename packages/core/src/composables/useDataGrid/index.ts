@@ -1,7 +1,7 @@
 /**
  * useDataGrid composable — public exports.
  *
- * @module @dzup-ui/core/composables/useDataGrid
+ * @module @dzip-ui/core/composables/useDataGrid
  */
 export {
   useDataGrid,

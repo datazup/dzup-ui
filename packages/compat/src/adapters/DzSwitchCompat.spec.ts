@@ -1,7 +1,7 @@
 /**
  * DzSwitchCompat — Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzup-ui
+ * Validates that the compat adapter correctly maps old dzip-ui
  * switch API to the new vNext DzSwitch API.
  */
 import { mount } from '@vue/test-utils'
@@ -132,7 +132,7 @@ describe('dzSwitchCompat', () => {
       props: { modelValue: false, activeColor: '#ff0000' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzSwitchCompat: "activeColor" prop is dropped in vNext. Use design tokens instead.',
+      '[dzip-ui/compat] DzSwitchCompat: "activeColor" prop is dropped in vNext. Use design tokens instead.',
     )
   })
 
@@ -142,7 +142,7 @@ describe('dzSwitchCompat', () => {
       props: { modelValue: false, inactiveColor: '#cccccc' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzSwitchCompat: "inactiveColor" prop is dropped in vNext. Use design tokens instead.',
+      '[dzip-ui/compat] DzSwitchCompat: "inactiveColor" prop is dropped in vNext. Use design tokens instead.',
     )
   })
 
@@ -152,7 +152,7 @@ describe('dzSwitchCompat', () => {
       props: { modelValue: false, width: 60 },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzSwitchCompat: "width" prop is dropped in vNext. Use CSS to control width.',
+      '[dzip-ui/compat] DzSwitchCompat: "width" prop is dropped in vNext. Use CSS to control width.',
     )
   })
 
@@ -162,7 +162,7 @@ describe('dzSwitchCompat', () => {
       props: { modelValue: false },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzSwitchCompat is deprecated. Use DzSwitch from @dzup-ui/core instead.',
+      '[dzip-ui/compat] DzSwitchCompat is deprecated. Use DzSwitch from @dzip-ui/core instead.',
     )
   })
 

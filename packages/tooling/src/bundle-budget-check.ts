@@ -15,7 +15,7 @@
  *   npx tsx packages/tooling/src/bundle-budget-check.ts
  *   npx tsx packages/tooling/src/bundle-budget-check.ts --ci
  *
- * @module @dzup-ui/tooling/bundle-budget-check
+ * @module @dzip-ui/tooling/bundle-budget-check
  */
 
 import { existsSync, readFileSync } from 'node:fs'

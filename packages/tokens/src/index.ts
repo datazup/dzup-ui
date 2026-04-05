@@ -1,5 +1,5 @@
 /**
- * @dzup-ui/tokens
+ * @dzip-ui/tokens
  *
  * Single source of truth for all design tokens in the dzip-ui component library.
  *
@@ -10,16 +10,16 @@
  *
  * ```ts
  * // Import the generated CSS (typically in your app entry or Tailwind config)
- * import '@dzup-ui/tokens/css'
+ * import '@dzip-ui/tokens/css'
  *
  * // Import Tailwind theme extension
- * import { dzTokens } from '@dzup-ui/tokens/tailwind'
+ * import { dzTokens } from '@dzip-ui/tokens/tailwind'
  *
  * // Import the FOUC-prevention script for SSR
- * import { themeScript } from '@dzup-ui/tokens/utils'
+ * import { themeScript } from '@dzip-ui/tokens/utils'
  *
  * // Import token type definitions
- * import type { DesignToken, ThemeMode } from '@dzup-ui/tokens'
+ * import type { DesignToken, ThemeMode } from '@dzip-ui/tokens'
  * ```
  */
 

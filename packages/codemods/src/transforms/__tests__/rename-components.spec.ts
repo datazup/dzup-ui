@@ -32,7 +32,7 @@ describe('rename-components transform', () => {
       '  </DzModal>',
       '</template>',
       '<script setup lang="ts">',
-      'import { DzModal } from \'@dzup-ui/core\'',
+      'import { DzModal } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -49,7 +49,7 @@ describe('rename-components transform', () => {
       '  <DzNotification message="Hello" />',
       '</template>',
       '<script setup lang="ts">',
-      'import { DzNotification } from \'@dzup-ui/core\'',
+      'import { DzNotification } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -66,7 +66,7 @@ describe('rename-components transform', () => {
       '  </DzDropdownMenu>',
       '</template>',
       '<script setup lang="ts">',
-      'import { DzDropdownMenu } from \'@dzup-ui/core\'',
+      'import { DzDropdownMenu } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -84,7 +84,7 @@ describe('rename-components transform', () => {
       '  </DzToolTip>',
       '</template>',
       '<script setup lang="ts">',
-      'import { DzToolTip } from \'@dzup-ui/core\'',
+      'import { DzToolTip } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -100,7 +100,7 @@ describe('rename-components transform', () => {
       '  <DzLoading size="lg" />',
       '</template>',
       '<script setup lang="ts">',
-      'import { DzLoading } from \'@dzup-ui/core\'',
+      'import { DzLoading } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -114,7 +114,7 @@ describe('rename-components transform', () => {
   // -----------------------------------------------------------------------
 
   it('renames import specifier DzModal to DzDialog', () => {
-    const input = `import { DzModal } from '@dzup-ui/core'`
+    const input = `import { DzModal } from '@dzip-ui/core'`
     const result = applyTransform(input, 'test.ts')
     expect(result).not.toBeNull()
     expect(result).toContain('DzDialog')
@@ -122,7 +122,7 @@ describe('rename-components transform', () => {
   })
 
   it('renames import specifier DzNotification to DzToast', () => {
-    const input = `import { DzNotification } from '@dzup-ui/core'`
+    const input = `import { DzNotification } from '@dzip-ui/core'`
     const result = applyTransform(input, 'test.ts')
     expect(result).not.toBeNull()
     expect(result).toContain('DzToast')
@@ -131,7 +131,7 @@ describe('rename-components transform', () => {
 
   it('renames import specifier and all references', () => {
     const input = [
-      `import { DzLoading } from '@dzup-ui/core'`,
+      `import { DzLoading } from '@dzip-ui/core'`,
       `const spinner = DzLoading`,
     ].join('\n')
     const result = applyTransform(input, 'test.ts')
@@ -142,7 +142,7 @@ describe('rename-components transform', () => {
   })
 
   it('preserves aliased imports (renames imported but keeps local)', () => {
-    const input = `import { DzModal as MyDialog } from '@dzup-ui/core'`
+    const input = `import { DzModal as MyDialog } from '@dzip-ui/core'`
     const result = applyTransform(input, 'test.ts')
     expect(result).not.toBeNull()
     expect(result).toContain('DzDialog as MyDialog')
@@ -150,7 +150,7 @@ describe('rename-components transform', () => {
   })
 
   it('handles multiple renames in one import', () => {
-    const input = `import { DzModal, DzLoading, DzButton } from '@dzup-ui/core'`
+    const input = `import { DzModal, DzLoading, DzButton } from '@dzip-ui/core'`
     const result = applyTransform(input, 'test.ts')
     expect(result).not.toBeNull()
     expect(result).toContain('DzDialog')
@@ -170,7 +170,7 @@ describe('rename-components transform', () => {
       '  <DzModal :open="show">Content</DzModal>',
       '</template>',
       '<script setup lang="ts">',
-      'import { DzModal } from \'@dzup-ui/core\'',
+      'import { DzModal } from \'@dzip-ui/core\'',
       'const show = ref(false)',
       '</script>',
     ].join('\n')
@@ -192,7 +192,7 @@ describe('rename-components transform', () => {
     const input = [
       '<template><DzDialog :open="show">Content</DzDialog></template>',
       '<script setup lang="ts">',
-      'import { DzDialog } from \'@dzup-ui/core\'',
+      'import { DzDialog } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -203,7 +203,7 @@ describe('rename-components transform', () => {
     const input = [
       '<template><DzModal :open="show">Content</DzModal></template>',
       '<script setup lang="ts">',
-      'import { DzModal } from \'@dzup-ui/core\'',
+      'import { DzModal } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const first = applyTransform(input)
@@ -220,7 +220,7 @@ describe('rename-components transform', () => {
     const input = [
       '<template><DzButton>Click</DzButton></template>',
       '<script setup lang="ts">',
-      'import { DzButton } from \'@dzup-ui/core\'',
+      'import { DzButton } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)
@@ -246,7 +246,7 @@ describe('rename-components transform', () => {
     const input = [
       '<template><DzLoading /></template>',
       '<script setup lang="ts">',
-      'import { DzLoading } from \'@dzup-ui/core\'',
+      'import { DzLoading } from \'@dzip-ui/core\'',
       '</script>',
     ].join('\n')
     const result = applyTransform(input)

@@ -4,14 +4,14 @@
  * Uses Reka UI SwitchRoot + SwitchThumb (ADR-07).
  * v-model via defineModel<boolean>() (ADR-16).
  *
- * @module @dzup-ui/core/components/forms/DzSwitch
+ * @module @dzip-ui/core/components/forms/DzSwitch
  */
 
 import type {
   BaseAccessibilityProps,
   BaseEvents,
   CanonicalSize,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

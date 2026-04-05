@@ -4,17 +4,17 @@
   "commit": false,
   "fixed": [],
   "linked": [
-    ["@dzup-ui/core", "@dzup-ui/tokens"]
+    ["@dzip-ui/core", "@dzip-ui/tokens"]
   ],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "@dzup-ui/compat",
-    "@dzup-ui/codemods",
-    "@dzup-ui/tooling",
-    "@dzup-ui/storybook",
-    "@dzup-ui/sandbox"
+    "@dzip-ui/compat",
+    "@dzip-ui/codemods",
+    "@dzip-ui/tooling",
+    "@dzip-ui/storybook",
+    "@dzip-ui/sandbox"
   ],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true

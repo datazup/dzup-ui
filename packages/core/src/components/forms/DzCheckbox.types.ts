@@ -4,14 +4,14 @@
  * Uses Reka UI CheckboxRoot + CheckboxIndicator (ADR-07).
  * v-model via defineModel<boolean>() (ADR-16).
  *
- * @module @dzup-ui/core/components/forms/DzCheckbox
+ * @module @dzip-ui/core/components/forms/DzCheckbox
  */
 
 import type {
   BaseAccessibilityProps,
   BaseEvents,
   CanonicalSize,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

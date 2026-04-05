@@ -15,13 +15,13 @@ distribution, and OKLCH design tokens.
 
 #### Packages
 
-- **@dzup-ui/core** (v0.1.0-alpha.0) — 146 foundational components across 11 families
-- **@dzup-ui/pro** (v0.1.0-alpha.0) — 40 enterprise components across 8 families
-- **@dzup-ui/tokens** (v0.1.0-alpha.0) — OKLCH design token system with Tailwind CSS 4
-- **@dzup-ui/contracts** — Canonical public API type contracts
-- **@dzup-ui/tooling** — Import boundary validator, token compliance checker, manifest generator
-- **@dzup-ui/compat** — Migration adapters (old to new)
-- **@dzup-ui/codemods** — Code transforms for migration
+- **@dzip-ui/core** (v0.1.0-alpha.0) — 146 foundational components across 11 families
+- **@dzip-ui/pro** (v0.1.0-alpha.0) — 40 enterprise components across 8 families
+- **@dzip-ui/tokens** (v0.1.0-alpha.0) — OKLCH design token system with Tailwind CSS 4
+- **@dzip-ui/contracts** — Canonical public API type contracts
+- **@dzip-ui/tooling** — Import boundary validator, token compliance checker, manifest generator
+- **@dzip-ui/compat** — Migration adapters (old to new)
+- **@dzip-ui/codemods** — Code transforms for migration
 
 #### Core Components (146 across 11 families)
 
@@ -106,5 +106,5 @@ distribution, and OKLCH design tokens.
 
 | Package | Packed | Unpacked | Files |
 |---------|--------|----------|-------|
-| @dzup-ui/core | 200.6 kB | 1.3 MB | 803 |
-| @dzup-ui/pro | 104.8 kB | 597.9 kB | 263 |
+| @dzip-ui/core | 200.6 kB | 1.3 MB | 803 |
+| @dzip-ui/pro | 104.8 kB | 597.9 kB | 263 |

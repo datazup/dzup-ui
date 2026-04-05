@@ -3,14 +3,14 @@
  *
  * DzList provides context to DzListItem children via inject (ADR-08).
  *
- * @module @dzup-ui/core/components/data/DzList
+ * @module @dzip-ui/core/components/data/DzList
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
   CanonicalTone,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

@@ -4,7 +4,7 @@
  * Uses Reka UI Tooltip primitives (ADR-07).
  * Open state via defineModel<boolean>('open') (ADR-16).
  *
- * @module @dzup-ui/core/components/overlays/DzTooltip
+ * @module @dzip-ui/core/components/overlays/DzTooltip
  */
 
 // ---------------------------------------------------------------------------

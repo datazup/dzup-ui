@@ -89,8 +89,8 @@ const faqItems = `
   <DzAccordionItem value="item-2">
     <DzAccordionTrigger>How do I install it?</DzAccordionTrigger>
     <DzAccordionContent>
-      Install via yarn: <code>yarn add @dzup-ui/core</code>. For enterprise
-      components, also install <code>@dzup-ui/pro</code>.
+      Install via yarn: <code>yarn add @dzip-ui/core</code>. For enterprise
+      components, also install <code>@dzip-ui/pro</code>.
     </DzAccordionContent>
   </DzAccordionItem>
   <DzAccordionItem value="item-3">

@@ -1,5 +1,5 @@
 {
-  "name": "@dzup-ui/storybook",
+  "name": "@dzip-ui/storybook",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -9,8 +9,8 @@
     "build": "storybook build"
   },
   "dependencies": {
-    "@dzup-ui/core": "workspace:*",
-    "@dzup-ui/tokens": "workspace:*"
+    "@dzip-ui/core": "workspace:*",
+    "@dzip-ui/tokens": "workspace:*"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^10.3.4",

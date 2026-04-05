@@ -1,10 +1,10 @@
 /**
  * DzImage — Type definitions for the enhanced image component.
  *
- * @module @dzup-ui/core/components/media/DzImage
+ * @module @dzip-ui/core/components/media/DzImage
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

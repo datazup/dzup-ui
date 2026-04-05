@@ -28,12 +28,12 @@ export default defineMain({
     config.resolve.alias = [
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
       // Token sub-path exports must come before the base alias
-      { find: '@dzup-ui/tokens/css', replacement: resolve(pkgRoot, 'packages/tokens/dist/tokens.css') },
-      { find: '@dzup-ui/tokens/tailwind', replacement: resolve(pkgRoot, 'packages/tokens/dist/tailwind-theme.js') },
-      { find: '@dzup-ui/tokens/utils', replacement: resolve(pkgRoot, 'packages/tokens/src/utils/index.ts') },
-      { find: '@dzup-ui/tokens', replacement: resolve(pkgRoot, 'packages/tokens/src') },
-      { find: '@dzup-ui/contracts', replacement: resolve(pkgRoot, 'packages/contracts/src/index.ts') },
-      { find: '@dzup-ui/core', replacement: resolve(pkgRoot, 'packages/core/src') },
+      { find: '@dzip-ui/tokens/css', replacement: resolve(pkgRoot, 'packages/tokens/dist/tokens.css') },
+      { find: '@dzip-ui/tokens/tailwind', replacement: resolve(pkgRoot, 'packages/tokens/dist/tailwind-theme.js') },
+      { find: '@dzip-ui/tokens/utils', replacement: resolve(pkgRoot, 'packages/tokens/src/utils/index.ts') },
+      { find: '@dzip-ui/tokens', replacement: resolve(pkgRoot, 'packages/tokens/src') },
+      { find: '@dzip-ui/contracts', replacement: resolve(pkgRoot, 'packages/contracts/src/index.ts') },
+      { find: '@dzip-ui/core', replacement: resolve(pkgRoot, 'packages/core/src') },
     ]
 
     return config

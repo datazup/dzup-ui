@@ -1,11 +1,11 @@
 /**
- * @dzup-ui/codemods
+ * @dzip-ui/codemods
  *
- * Automated code transforms for migrating from old dzup-ui to vNext.
+ * Automated code transforms for migrating from old dzip-ui to vNext.
  *
  * @example
  * ```ts
- * import { CodemodRunner, renameImports } from '@dzup-ui/codemods'
+ * import { CodemodRunner, renameImports } from '@dzip-ui/codemods'
  *
  * const runner = new CodemodRunner({ dryRun: true, verbose: true })
  * await runner.run(renameImports, './src')

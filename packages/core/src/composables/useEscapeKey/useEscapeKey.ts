@@ -5,7 +5,7 @@
  * when the Escape key is pressed and the composable is active.
  * SSR-safe: no `document` access at module level.
  *
- * @module @dzup-ui/core/composables/useEscapeKey
+ * @module @dzip-ui/core/composables/useEscapeKey
  */
 
 import type { MaybeRef } from 'vue'

@@ -5,7 +5,7 @@
  * elements within the container. Useful for modals, dialogs, and drawers.
  * SSR-safe: no DOM access until explicitly activated.
  *
- * @module @dzup-ui/core/composables/useFocusTrap
+ * @module @dzip-ui/core/composables/useFocusTrap
  */
 
 import type { Ref } from 'vue'

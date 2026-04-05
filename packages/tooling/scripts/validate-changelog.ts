@@ -3,7 +3,7 @@
  *
  * Checks that CHANGELOG.md exists in each publishable package and validates
  * basic format:
- *   1. Has a top-level heading (# Changelog or # @dzup-ui/*)
+ *   1. Has a top-level heading (# Changelog or # @dzip-ui/*)
  *   2. Has at least one version entry (## [x.y.z] or ## x.y.z)
  *   3. Version entries have date in ISO format (YYYY-MM-DD)
  *
@@ -36,8 +36,8 @@ interface CheckResult {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
 const PUBLISHABLE_PACKAGES: Array<{ name: string, dir: string }> = [
-  { name: '@dzup-ui/core', dir: resolve(ROOT, 'packages/core') },
-  { name: '@dzup-ui/tokens', dir: resolve(ROOT, 'packages/tokens') },
+  { name: '@dzip-ui/core', dir: resolve(ROOT, 'packages/core') },
+  { name: '@dzip-ui/tokens', dir: resolve(ROOT, 'packages/tokens') },
 ]
 
 // --- Validation ---
@@ -52,10 +52,10 @@ function validateChangelogFormat(content: string, packageName: string): string[]
 
   // Check 1: Top-level heading
   const hasTopHeading = lines.some(line =>
-    /^#\s+(?:Changelog|@dzup-ui\/)/.test(line),
+    /^#\s+(?:Changelog|@dzip-ui\/)/.test(line),
   )
   if (!hasTopHeading) {
-    issues.push('Missing top-level heading (expected "# Changelog" or "# @dzup-ui/*")')
+    issues.push('Missing top-level heading (expected "# Changelog" or "# @dzip-ui/*")')
   }
 
   // Check 2: At least one version entry (## [x.y.z] or ## x.y.z)

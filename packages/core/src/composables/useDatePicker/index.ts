@@ -1,7 +1,7 @@
 /**
  * useDatePicker composable — public exports.
  *
- * @module @dzup-ui/core/composables/useDatePicker
+ * @module @dzip-ui/core/composables/useDatePicker
  */
 
 export {

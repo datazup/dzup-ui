@@ -4,7 +4,7 @@
  * Maps semantic design tokens to badge component styling (ADR-04).
  * Badges support three variants (solid, outline, subtle), three sizes, and six tones.
  *
- * @module @dzup-ui/core/components/feedback/DzBadge.tokens
+ * @module @dzip-ui/core/components/feedback/DzBadge.tokens
  */
 
 export const badgeTokens = {

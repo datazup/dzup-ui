@@ -1,5 +1,5 @@
 {
-  "name": "@dzup-ui/sandbox",
+  "name": "@dzip-ui/sandbox",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dzup-ui/core": "workspace:*",
-    "@dzup-ui/tokens": "workspace:*",
+    "@dzip-ui/core": "workspace:*",
+    "@dzip-ui/tokens": "workspace:*",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },

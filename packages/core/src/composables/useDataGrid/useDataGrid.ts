@@ -4,7 +4,7 @@
  * Orchestrates useDataGridSort and useDataGridPagination, adding row selection.
  * Phase 1 scope: sorting, pagination, row selection.
  *
- * @module @dzup-ui/core/composables/useDataGrid
+ * @module @dzip-ui/core/composables/useDataGrid
  */
 
 import type { MaybeRef, Ref } from 'vue'

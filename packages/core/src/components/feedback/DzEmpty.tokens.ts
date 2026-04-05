@@ -4,7 +4,7 @@
  * Maps semantic design tokens to empty-state placeholder components (ADR-04).
  * Empty is a multi-slot component (root, icon, title, description, actions).
  *
- * @module @dzup-ui/core/components/feedback/DzEmpty.tokens
+ * @module @dzip-ui/core/components/feedback/DzEmpty.tokens
  */
 
 export const emptyTokens = {

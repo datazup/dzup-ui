@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// TODO: Import DzTable, DzDataGrid, DzPagination, DzTree, DzList from @dzup-ui/core
+// TODO: Import DzTable, DzDataGrid, DzPagination, DzTree, DzList from @dzip-ui/core
 // and create interactive demos with sample data.
 </script>
 

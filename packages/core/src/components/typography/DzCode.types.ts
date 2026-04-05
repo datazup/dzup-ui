@@ -3,7 +3,7 @@
  *
  * Renders inline or block code with consistent styling.
  *
- * @module @dzup-ui/core/components/typography/DzCode
+ * @module @dzip-ui/core/components/typography/DzCode
  */
 
 /** Code display variant */

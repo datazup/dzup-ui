@@ -5,7 +5,7 @@ import {
   DzProgress,
   DzSkeleton,
   DzSpinner,
-} from '@dzup-ui/core'
+} from '@dzip-ui/core'
 import { ref } from 'vue'
 
 const progressValue = ref(45)

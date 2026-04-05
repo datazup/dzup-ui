@@ -4,7 +4,7 @@
  * Components define their own `Dz{Name}Slots` interface by picking or
  * extending from these canonical slot shapes.
  *
- * @module @dzup-ui/contracts/slots
+ * @module @dzip-ui/contracts/slots
  */
 
 // ---------------------------------------------------------------------------

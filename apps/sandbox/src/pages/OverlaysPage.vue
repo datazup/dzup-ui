@@ -18,7 +18,7 @@ import {
   DzTooltip,
   DzTooltipContent,
   DzTooltipTrigger,
-} from '@dzup-ui/core'
+} from '@dzip-ui/core'
 import { ref } from 'vue'
 
 const dialogOpen = ref(false)

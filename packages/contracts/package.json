@@ -1,5 +1,5 @@
 {
-  "name": "@dzup-ui/contracts",
+  "name": "@dzip-ui/contracts",
   "type": "module",
   "version": "0.1.0-alpha.0",
   "description": "Canonical public API contracts for dzip-ui components",

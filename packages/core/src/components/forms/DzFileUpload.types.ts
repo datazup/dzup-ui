@@ -4,14 +4,14 @@
  * Built from scratch (no Reka UI primitive).
  * v-model via defineModel (ADR-16).
  *
- * @module @dzup-ui/core/components/forms/DzFileUpload
+ * @module @dzip-ui/core/components/forms/DzFileUpload
  */
 
 import type {
   BaseAccessibilityProps,
   BaseValidationProps,
   CanonicalSize,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Error type

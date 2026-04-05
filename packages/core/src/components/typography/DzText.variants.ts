@@ -1,7 +1,7 @@
 /**
  * DzText — Variant definitions using tailwind-variants (tv).
  *
- * Token-only styling: all colors reference CSS custom properties from @dzup-ui/tokens.
+ * Token-only styling: all colors reference CSS custom properties from @dzip-ui/tokens.
  */
 import { tv } from 'tailwind-variants'
 

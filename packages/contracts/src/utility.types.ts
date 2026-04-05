@@ -1,7 +1,7 @@
 /**
  * Shared utility types used across contracts and component implementations.
  *
- * @module @dzup-ui/contracts/utility
+ * @module @dzip-ui/contracts/utility
  */
 
 // ---------------------------------------------------------------------------

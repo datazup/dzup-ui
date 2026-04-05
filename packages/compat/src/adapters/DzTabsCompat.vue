@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import type { CanonicalSize, TabsVariant } from '@dzup-ui/contracts'
-import { DzTabList, DzTabs, DzTabTrigger } from '@dzup-ui/core'
+import type { CanonicalSize, TabsVariant } from '@dzip-ui/contracts'
+import { DzTabList, DzTabs, DzTabTrigger } from '@dzip-ui/core'
 /**
  * DzTabsCompat -- backward-compatible wrapper for DzTabs compound components.
  *
- * Maps old dzup-ui single-component tabs API to the new vNext compound API:
+ * Maps old dzip-ui single-component tabs API to the new vNext compound API:
  * - `tabs` prop (array of tab items) -> DzTabList with DzTabTrigger children
  * - `type` prop: "line" -> "line", "card" -> "enclosed", "border-card" -> "enclosed"
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `@tab-click` -> `@change`, `@tab-close` -> `@close`
  *
- * @deprecated Use DzTabs, DzTabList, DzTabTrigger, and DzTabContent from @dzup-ui/core instead.
+ * @deprecated Use DzTabs, DzTabList, DzTabTrigger, and DzTabContent from @dzip-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
 
-/** Old dzup-ui tab item shape */
+/** Old dzip-ui tab item shape */
 interface TabItem {
   /** Display label for the tab */
   label: string
@@ -27,10 +27,10 @@ interface TabItem {
   closable?: boolean
 }
 
-/** Old dzup-ui tab type values */
+/** Old dzip-ui tab type values */
 type OldTabType = 'line' | 'card' | 'border-card'
 
-/** Old dzup-ui size values */
+/** Old dzip-ui size values */
 type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface DzTabsCompatProps {

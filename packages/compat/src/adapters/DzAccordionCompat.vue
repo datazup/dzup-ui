@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import type { CanonicalSize } from '@dzup-ui/contracts'
+import type { CanonicalSize } from '@dzip-ui/contracts'
 import {
   DzAccordion,
   DzAccordionContent,
   DzAccordionItem,
   DzAccordionTrigger,
-} from '@dzup-ui/core'
+} from '@dzip-ui/core'
 /**
  * DzAccordionCompat — backward-compatible wrapper for DzAccordion compound.
  *
- * Maps old dzup-ui single-component accordion API to the new vNext compound API:
+ * Maps old dzip-ui single-component accordion API to the new vNext compound API:
  * - `items` prop (array) → rendered as DzAccordionItem + DzAccordionTrigger + DzAccordionContent
  * - `accordion` / `multiple` → maps to `type`: "single" | "multiple"
  * - `expandIcon` → dropped (CSS-controlled in vNext)
  * - `@change` forwarded
  *
- * @deprecated Use DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent from @dzup-ui/core instead.
+ * @deprecated Use DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent from @dzip-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
@@ -32,7 +32,7 @@ interface OldAccordionItem {
   content?: string
 }
 
-/** Old dzup-ui size values */
+/** Old dzip-ui size values */
 type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface DzAccordionCompatProps {
@@ -70,7 +70,7 @@ onMounted(() => {
 
   if (import.meta.env?.DEV && props.expandIcon) {
     console.warn(
-      '[dzup-ui/compat] DzAccordionCompat: "expandIcon" prop is dropped in vNext. Use CSS to control the expand icon.',
+      '[dzip-ui/compat] DzAccordionCompat: "expandIcon" prop is dropped in vNext. Use CSS to control the expand icon.',
     )
   }
 })

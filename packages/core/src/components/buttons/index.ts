@@ -1,7 +1,7 @@
 /**
  * Buttons family — public exports.
  *
- * @module @dzup-ui/core/components/buttons
+ * @module @dzip-ui/core/components/buttons
  */
 
 // Types

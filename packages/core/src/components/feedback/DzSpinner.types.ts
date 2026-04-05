@@ -1,13 +1,13 @@
 /**
  * DzSpinner — type definitions.
  *
- * @module @dzup-ui/core/components/feedback/DzSpinner
+ * @module @dzip-ui/core/components/feedback/DzSpinner
  */
 
 import type {
   CanonicalSize,
   CanonicalTone,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

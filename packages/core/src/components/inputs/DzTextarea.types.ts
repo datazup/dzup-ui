@@ -3,14 +3,14 @@
  *
  * Multiline text input with optional auto-resize behavior.
  *
- * @module @dzup-ui/core/components/inputs/DzTextarea
+ * @module @dzip-ui/core/components/inputs/DzTextarea
  */
 
 import type {
   BaseFormControlProps,
   ChangeEvents,
   InputVariant,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

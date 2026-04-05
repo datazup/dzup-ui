@@ -7,7 +7,7 @@ import {
   DzSplitButtonAction,
   DzSplitButtonMenu,
   DzToggleButton,
-} from '@dzup-ui/core'
+} from '@dzip-ui/core'
 import { h, ref } from 'vue'
 
 const clickCount = ref(0)

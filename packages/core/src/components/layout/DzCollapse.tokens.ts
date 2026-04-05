@@ -4,7 +4,7 @@
  * Maps semantic design tokens to collapse/expand animation (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/layout/DzCollapse.tokens
+ * @module @dzip-ui/core/components/layout/DzCollapse.tokens
  */
 
 export const collapseTokens = {

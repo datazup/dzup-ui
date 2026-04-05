@@ -3,10 +3,10 @@
  *
  * Uses Reka UI Dialog + Combobox primitives (ADR-07).
  *
- * @module @dzup-ui/core/components/overlays/DzCommandPalette
+ * @module @dzip-ui/core/components/overlays/DzCommandPalette
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------

@@ -1,14 +1,14 @@
 /**
  * DzPasswordInput — Type definitions for password input with visibility toggle.
  *
- * @module @dzup-ui/core/components/inputs/DzPasswordInput
+ * @module @dzip-ui/core/components/inputs/DzPasswordInput
  */
 
 import type {
   BaseFormControlProps,
   ChangeEvents,
   InputVariant,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

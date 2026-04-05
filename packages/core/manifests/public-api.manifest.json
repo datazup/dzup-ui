@@ -1,8 +1,8 @@
 {
   "$schema": "../../tooling/src/validators/manifest.schema.json",
-  "package": "@dzup-ui/core",
+  "package": "@dzip-ui/core",
   "version": "0.0.1",
-  "description": "Public API manifest for @dzup-ui/core — barrel exports are generated from this file (ADR-01).",
+  "description": "Public API manifest for @dzip-ui/core — barrel exports are generated from this file (ADR-01).",
   "exports": {
     "components": {
       "buttons": {

@@ -4,7 +4,7 @@
  * Maps semantic design tokens to CSS Grid layout properties (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/layout/DzGrid.tokens
+ * @module @dzip-ui/core/components/layout/DzGrid.tokens
  */
 
 export const gridTokens = {

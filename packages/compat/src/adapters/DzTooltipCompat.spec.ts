@@ -1,7 +1,7 @@
 /**
  * DzTooltipCompat — Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzup-ui
+ * Validates that the compat adapter correctly maps old dzip-ui
  * single-component tooltip API to the new vNext compound DzTooltip API.
  */
 import { mount } from '@vue/test-utils'
@@ -110,7 +110,7 @@ describe('dzTooltipCompat', () => {
       slots: { default: '<span>Trigger</span>' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzTooltipCompat: "trigger" prop is dropped in vNext. Tooltips use hover by default.',
+      '[dzip-ui/compat] DzTooltipCompat: "trigger" prop is dropped in vNext. Tooltips use hover by default.',
     )
   })
 
@@ -121,7 +121,7 @@ describe('dzTooltipCompat', () => {
       slots: { default: '<span>Trigger</span>' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzup-ui/compat] DzTooltipCompat is deprecated. Use DzTooltip from @dzup-ui/core instead.',
+      '[dzip-ui/compat] DzTooltipCompat is deprecated. Use DzTooltip from @dzip-ui/core instead.',
     )
   })
 

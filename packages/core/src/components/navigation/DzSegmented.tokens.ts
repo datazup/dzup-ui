@@ -4,7 +4,7 @@
  * Maps semantic design tokens to segmented control styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/navigation/DzSegmented.tokens
+ * @module @dzip-ui/core/components/navigation/DzSegmented.tokens
  */
 
 export const segmentedTokens = {

@@ -5,7 +5,7 @@
  * DzStack is a convenience wrapper over DzFlex; it shares the same gap scale.
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzup-ui/core/components/layout/DzStack.tokens
+ * @module @dzip-ui/core/components/layout/DzStack.tokens
  */
 
 export const stackTokens = {

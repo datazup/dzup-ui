@@ -2,8 +2,8 @@ import { addComponent, createResolver, defineNuxtModule } from '@nuxt/kit'
 
 export interface DzupUiModuleOptions {
   /**
-   * Include @dzup-ui/pro components in auto-imports.
-   * Requires @dzup-ui/pro to be installed.
+   * Include @dzip-ui/pro components in auto-imports.
+   * Requires @dzip-ui/pro to be installed.
    * @default false
    */
   includePro?: boolean
@@ -16,7 +16,7 @@ export interface DzupUiModuleOptions {
 }
 
 /**
- * Component names exported from @dzup-ui/core.
+ * Component names exported from @dzip-ui/core.
  * These are auto-registered when the module is installed.
  */
 const CORE_COMPONENTS = [
@@ -167,7 +167,7 @@ const CORE_COMPONENTS = [
 ] as const
 
 /**
- * Component names exported from @dzup-ui/pro.
+ * Component names exported from @dzip-ui/pro.
  */
 const PRO_COMPONENTS = [
   // builders
@@ -224,7 +224,7 @@ const PRO_COMPONENTS = [
 
 export default defineNuxtModule<DzupUiModuleOptions>({
   meta: {
-    name: '@dzup-ui/nuxt',
+    name: '@dzip-ui/nuxt',
     configKey: 'dzupUi',
     compatibility: {
       nuxt: '>=3.0.0',
@@ -237,16 +237,16 @@ export default defineNuxtModule<DzupUiModuleOptions>({
   setup(options, nuxt) {
     const _resolver = createResolver(import.meta.url)
 
-    // Add @dzup-ui/tokens CSS
-    nuxt.options.css.push('@dzup-ui/tokens/dist/tokens.css')
+    // Add @dzip-ui/tokens CSS
+    nuxt.options.css.push('@dzip-ui/tokens/dist/tokens.css')
 
-    // Add @dzup-ui/core styles
-    nuxt.options.css.push('@dzup-ui/core/styles')
+    // Add @dzip-ui/core styles
+    nuxt.options.css.push('@dzip-ui/core/styles')
 
     // Transpile packages
-    nuxt.options.build.transpile.push('@dzup-ui/core', '@dzup-ui/tokens')
+    nuxt.options.build.transpile.push('@dzip-ui/core', '@dzip-ui/tokens')
     if (options.includePro) {
-      nuxt.options.build.transpile.push('@dzup-ui/pro')
+      nuxt.options.build.transpile.push('@dzip-ui/pro')
     }
 
     // Register core components
@@ -254,7 +254,7 @@ export default defineNuxtModule<DzupUiModuleOptions>({
       addComponent({
         name: options.prefix ? `${options.prefix}${name.slice(2)}` : name,
         export: name,
-        filePath: '@dzup-ui/core',
+        filePath: '@dzip-ui/core',
       })
     }
 
@@ -264,7 +264,7 @@ export default defineNuxtModule<DzupUiModuleOptions>({
         addComponent({
           name: options.prefix ? `${options.prefix}${name.slice(2)}` : name,
           export: name,
-          filePath: '@dzup-ui/pro',
+          filePath: '@dzip-ui/pro',
         })
       }
     }

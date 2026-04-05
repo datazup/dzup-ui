@@ -3,7 +3,7 @@
  *
  * Uses semantic CSS token variables exclusively (ADR-04).
  *
- * @module @dzup-ui/core/components/layout/DzFlex.variants
+ * @module @dzip-ui/core/components/layout/DzFlex.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

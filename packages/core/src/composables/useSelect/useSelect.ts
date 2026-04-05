@@ -6,7 +6,7 @@
  *
  * SSR-safe: no `window` or `document` access at module level.
  *
- * @module @dzup-ui/core/composables/useSelect
+ * @module @dzip-ui/core/composables/useSelect
  */
 
 import type { ComputedRef, MaybeRef, Ref } from 'vue'

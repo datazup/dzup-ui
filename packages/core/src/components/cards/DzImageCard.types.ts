@@ -1,7 +1,7 @@
 /**
  * DzImageCard — Type definitions for the card with prominent image.
  *
- * @module @dzup-ui/core/components/cards/DzImageCard
+ * @module @dzip-ui/core/components/cards/DzImageCard
  */
 
 /** Card variant */

@@ -4,14 +4,14 @@
  * Uses Reka UI PinInput primitives (ADR-07).
  * v-model via defineModel (ADR-16).
  *
- * @module @dzup-ui/core/components/inputs/DzOtpInput
+ * @module @dzip-ui/core/components/inputs/DzOtpInput
  */
 
 import type {
   BaseAccessibilityProps,
   BaseValidationProps,
   CanonicalSize,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

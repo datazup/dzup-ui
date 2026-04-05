@@ -5,7 +5,7 @@
  * v-model via defineModel<string>() (ADR-16).
  * Generic version comes in W2.
  *
- * @module @dzup-ui/core/components/forms/DzSelect
+ * @module @dzip-ui/core/components/forms/DzSelect
  */
 
 import type {
@@ -14,7 +14,7 @@ import type {
   CanonicalSize,
   InputVariant,
   SelectOpenableEvents,
-} from '@dzup-ui/contracts'
+} from '@dzip-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Item shape

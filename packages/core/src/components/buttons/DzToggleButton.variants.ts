@@ -4,7 +4,7 @@
  * Extends button variants with pressed state styling.
  * Token-only styling (ADR-04).
  *
- * @module @dzup-ui/core/components/buttons/DzToggleButton.variants
+ * @module @dzip-ui/core/components/buttons/DzToggleButton.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

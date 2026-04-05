@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process'
  *
  * Usage: npx tsx packages/tooling/src/tree-shake-check.ts
  *
- * @module @dzup-ui/tooling/tree-shake-check
+ * @module @dzip-ui/tooling/tree-shake-check
  */
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -43,7 +43,7 @@ async function checkTreeShaking(): Promise<void> {
       // Create a minimal entry file that imports only this component
       const entryPath = join(tmpDir, 'entry.ts')
       const entryContent = [
-        `import { ${component} } from '@dzup-ui/core'`,
+        `import { ${component} } from '@dzip-ui/core'`,
         `console.log(${component})`,
         '',
       ].join('\n')
@@ -71,9 +71,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@dzup-ui/core': '${coreAlias}',
-      '@dzup-ui/contracts': '${contractsAlias}',
-      '@dzup-ui/tokens': '${tokensAlias}',
+      '@dzip-ui/core': '${coreAlias}',
+      '@dzip-ui/contracts': '${contractsAlias}',
+      '@dzip-ui/tokens': '${tokensAlias}',
     }
   }
 })
