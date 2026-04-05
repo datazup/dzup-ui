@@ -1,10 +1,13 @@
-import type { UseThemeReturn } from './useTheme.ts'
 /**
- * useTheme — Unit tests.
+ * useTheme — Unit tests (provider-based).
+ *
+ * Tests the canonical useTheme which requires a DzThemeProvider ancestor.
  */
+import type { DzThemeContext } from '../../providers/DzThemeProvider.types.ts'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
+import DzThemeProvider from '../../providers/DzThemeProvider.vue'
 import { useTheme } from './useTheme.ts'
 
 // ---------------------------------------------------------------------------
@@ -12,14 +15,12 @@ import { useTheme } from './useTheme.ts'
 // ---------------------------------------------------------------------------
 
 /**
- * Mount a component that calls useTheme and captures the return value.
- * We store the composable return in a variable outside the component
- * so we can access Refs directly (avoiding Vue's proxy unwrapping issues).
+ * Mount a component that calls useTheme inside a DzThemeProvider.
  */
-function mountWithTheme() {
-  let api: UseThemeReturn = undefined as unknown as UseThemeReturn
+function mountWithTheme(providerProps: Record<string, unknown> = {}) {
+  let api: DzThemeContext = undefined as unknown as DzThemeContext
 
-  const TestComponent = defineComponent({
+  const TestChild = defineComponent({
     setup() {
       api = useTheme()
       return {}
@@ -29,7 +30,12 @@ function mountWithTheme() {
     },
   })
 
-  const wrapper = mount(TestComponent)
+  const wrapper = mount(DzThemeProvider, {
+    props: providerProps,
+    slots: {
+      default: () => h(TestChild),
+    },
+  })
   return { wrapper, api }
 }
 
@@ -41,17 +47,11 @@ let mediaQueryListeners: Array<(event: MediaQueryListEvent) => void> = []
 let matchesValue = false
 
 beforeEach(() => {
-  // Clear localStorage
   localStorage.clear()
-
-  // Remove any data-theme attribute
   document.documentElement.removeAttribute('data-theme')
-
-  // Reset media query mocks
   mediaQueryListeners = []
   matchesValue = false
 
-  // Mock matchMedia
   vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
     matches: matchesValue,
     media: query,
@@ -85,23 +85,14 @@ function simulateMediaChange(prefersDark: boolean): void {
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('useTheme', () => {
-  // -----------------------------------------------------------------------
-  // Return shape
-  // -----------------------------------------------------------------------
-
+describe('useTheme (provider-based)', () => {
   it('returns theme, resolvedTheme, setTheme, and toggleTheme', () => {
     const { api } = mountWithTheme()
-
     expect(api.theme).toBeDefined()
     expect(api.resolvedTheme).toBeDefined()
     expect(typeof api.setTheme).toBe('function')
     expect(typeof api.toggleTheme).toBe('function')
   })
-
-  // -----------------------------------------------------------------------
-  // Default state
-  // -----------------------------------------------------------------------
 
   it('defaults to system theme when no localStorage value', () => {
     const { api } = mountWithTheme()
@@ -119,10 +110,6 @@ describe('useTheme', () => {
     const { api } = mountWithTheme()
     expect(api.resolvedTheme.value).toBe('dark')
   })
-
-  // -----------------------------------------------------------------------
-  // Persistence (ADR-15)
-  // -----------------------------------------------------------------------
 
   it('reads persisted theme from localStorage', () => {
     localStorage.setItem('dz-theme', 'dark')
@@ -142,10 +129,6 @@ describe('useTheme', () => {
     const { api } = mountWithTheme()
     expect(api.theme.value).toBe('system')
   })
-
-  // -----------------------------------------------------------------------
-  // setTheme
-  // -----------------------------------------------------------------------
 
   it('sets theme to light', async () => {
     const { api } = mountWithTheme()
@@ -171,10 +154,6 @@ describe('useTheme', () => {
     await nextTick()
     expect(api.theme.value).toBe('system')
   })
-
-  // -----------------------------------------------------------------------
-  // toggleTheme
-  // -----------------------------------------------------------------------
 
   it('toggles from light to dark', async () => {
     const { api } = mountWithTheme()
@@ -212,10 +191,6 @@ describe('useTheme', () => {
     expect(api.theme.value).toBe('light')
   })
 
-  // -----------------------------------------------------------------------
-  // DOM attribute (ADR-15)
-  // -----------------------------------------------------------------------
-
   it('sets data-theme attribute on mount', () => {
     mountWithTheme()
     const attr = document.documentElement.getAttribute('data-theme')
@@ -229,14 +204,9 @@ describe('useTheme', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
   })
 
-  // -----------------------------------------------------------------------
-  // System preference change
-  // -----------------------------------------------------------------------
-
   it('reacts to system color scheme changes when theme is system', async () => {
     const { api } = mountWithTheme()
     expect(api.resolvedTheme.value).toBe('light')
-
     simulateMediaChange(true)
     await nextTick()
     expect(api.resolvedTheme.value).toBe('dark')
@@ -246,23 +216,30 @@ describe('useTheme', () => {
     const { api } = mountWithTheme()
     api.setTheme('light')
     await nextTick()
-
     simulateMediaChange(true)
     await nextTick()
     expect(api.resolvedTheme.value).toBe('light')
   })
 
-  // -----------------------------------------------------------------------
-  // Cleanup
-  // -----------------------------------------------------------------------
-
   it('cleans up media query listener on unmount', () => {
     const { wrapper } = mountWithTheme()
     const listenerCount = mediaQueryListeners.length
     expect(listenerCount).toBeGreaterThan(0)
-
     wrapper.unmount()
-    // removeEventListener was called — verified by the mock tracking
     expect(window.matchMedia).toHaveBeenCalled()
+  })
+
+  it('throws when used outside DzThemeProvider', () => {
+    const TestComponent = defineComponent({
+      setup() {
+        useTheme()
+        return {}
+      },
+      render() {
+        return h('div')
+      },
+    })
+
+    expect(() => mount(TestComponent)).toThrow(/DzThemeProvider/)
   })
 })
