@@ -208,17 +208,9 @@
       }
     },
     "composables": {
-      "useFormField": {
-        "path": "./src/composables/useFormField/index.ts",
-        "exports": ["useFormField", "useFormFieldContext", "DZ_FORM_FIELD_KEY"]
-      },
-      "useDatePicker": {
-        "path": "./src/composables/useDatePicker/index.ts",
-        "exports": ["useDatePicker"]
-      },
-      "useToast": {
-        "path": "./src/composables/useToast/index.ts",
-        "exports": ["useToast"]
+      "useClickOutside": {
+        "path": "./src/composables/useClickOutside/index.ts",
+        "exports": ["useClickOutside"]
       },
       "useCollapse": {
         "path": "./src/composables/useCollapse/index.ts",
@@ -227,6 +219,56 @@
       "useDataGrid": {
         "path": "./src/composables/useDataGrid/index.ts",
         "exports": ["useDataGrid"]
+      },
+      "useDataGridHeader": {
+        "path": "./src/composables/useDataGridHeader/index.ts",
+        "exports": ["useDataGridHeader"]
+      },
+      "useDatePicker": {
+        "path": "./src/composables/useDatePicker/index.ts",
+        "exports": ["useDatePicker"]
+      },
+      "useDialog": {
+        "path": "./src/composables/useDialog/index.ts",
+        "exports": ["useDialog"]
+      },
+      "useEscapeKey": {
+        "path": "./src/composables/useEscapeKey/index.ts",
+        "exports": ["useEscapeKey"]
+      },
+      "useFloating": {
+        "path": "./src/composables/useFloating/index.ts",
+        "exports": ["useFloating"]
+      },
+      "useFocusTrap": {
+        "path": "./src/composables/useFocusTrap/index.ts",
+        "exports": ["useFocusTrap"]
+      },
+      "useFormField": {
+        "path": "./src/composables/useFormField/index.ts",
+        "exports": ["useFormField", "useFormFieldContext", "DZ_FORM_FIELD_KEY"]
+      },
+      "useSelect": {
+        "path": "./src/composables/useSelect/index.ts",
+        "exports": ["useSelect", "useSelectKeyboard"]
+      },
+      "useTabs": {
+        "path": "./src/composables/useTabs/index.ts",
+        "exports": ["useTabs"]
+      },
+      "useToast": {
+        "path": "./src/composables/useToast/index.ts",
+        "exports": ["useToast"]
+      },
+      "useTransfer": {
+        "path": "./src/composables/useTransfer/index.ts",
+        "exports": ["useTransfer"]
+      }
+    },
+    "providers": {
+      "themeProvider": {
+        "path": "./src/providers/index.ts",
+        "exports": ["DzThemeProvider", "DZ_THEME_KEY", "useTheme", "themeScript", "getThemeScript"]
       }
     },
     "utilities": {

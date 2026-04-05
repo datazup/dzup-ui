@@ -32,10 +32,16 @@ interface ManifestUtilityEntry {
   exports: string[]
 }
 
+interface ManifestProviderEntry {
+  path: string
+  exports: string[]
+}
+
 interface ManifestExports {
   components: Record<string, ManifestComponentFamily>
   composables: Record<string, ManifestComposableEntry>
   utilities: Record<string, ManifestUtilityEntry>
+  providers?: Record<string, ManifestProviderEntry>
   injectionKeys?: string[]
   variants?: string[]
   runtimeExports?: string[]
@@ -98,17 +104,19 @@ function generate(packageDir: string): void {
   let composableCount = 0
   let utilityCount = 0
 
-  // Components — keyed by family name, each has a path to re-export
+  // Components — keyed by family name, each has a path to re-export (sorted alphabetically)
   if (me.components && Object.keys(me.components).length > 0) {
     const lines: string[] = []
-    for (const [family, entry] of Object.entries(me.components)) {
+    for (const [family, entry] of Object.entries(me.components).sort(([a], [b]) => a.localeCompare(b))) {
       const familyLabel = family.charAt(0).toUpperCase() + family.slice(1)
       lines.push(`// ${familyLabel} family`)
       lines.push(`export * from '${toRelativeImport(entry.path)}'`)
       lines.push('')
       componentCount += entry.exports.length
     }
-    sections.push(`// ── Components ──\n\n${lines.join('\n')}`)
+    // Trim trailing empty line from last family entry
+    const componentBlock = lines.join('\n').replace(/\n+$/, '')
+    sections.push(`// ── Components ──\n\n${componentBlock}`)
   }
 
   // Composables — keyed by name, each has a path
@@ -119,6 +127,18 @@ function generate(packageDir: string): void {
       composableCount += entry.exports.length
     }
     sections.push(`// ── Composables ──\n\n${lines.join('\n')}`)
+  }
+
+  // Providers — keyed by name, each has a path to re-export
+  if (me.providers && Object.keys(me.providers).length > 0) {
+    const lines: string[] = []
+    let providerCount = 0
+    for (const [, entry] of Object.entries(me.providers).sort(([a], [b]) => a.localeCompare(b))) {
+      lines.push(`export * from '${toRelativeImport(entry.path)}'`)
+      providerCount += entry.exports.length
+    }
+    sections.push(`// ── Providers ──\n\n${lines.join('\n')}`)
+    componentCount += providerCount
   }
 
   // Utilities — keyed by name, each has specific exports
