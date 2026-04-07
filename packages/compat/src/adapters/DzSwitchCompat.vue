@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { DzSwitchCompatProps, OldSize } from '../adapter-types.ts'
 import { DzSwitch } from '@dzip-ui/core'
 /**
  * DzSwitchCompat — backward-compatible wrapper for DzSwitch.
@@ -15,28 +16,6 @@ import { DzSwitch } from '@dzip-ui/core'
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzSwitchCompatProps {
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Disabled state */
-  disabled?: boolean
-  /** Form field name */
-  name?: string
-  /** Text displayed when switch is active (old API) */
-  activeText?: string
-  /** Text displayed when switch is inactive (old API) */
-  inactiveText?: string
-  /** Active color — dropped in vNext (use tokens) */
-  activeColor?: string
-  /** Inactive color — dropped in vNext (use tokens) */
-  inactiveColor?: string
-  /** Width — dropped in vNext (CSS-controlled) */
-  width?: number
-}
 
 const model = defineModel<boolean>({ default: false })
 

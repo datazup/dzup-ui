@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalTone } from '@dzip-ui/contracts'
+import type { DzAlertCompatProps, OldAlertType } from '../adapter-types.ts'
 import { DzAlert } from '@dzip-ui/core'
 /**
  * DzAlertCompat — backward-compatible wrapper for DzAlert.
@@ -13,18 +14,6 @@ import { DzAlert } from '@dzip-ui/core'
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui alert type values */
-type OldAlertType = 'success' | 'warning' | 'error' | 'info' | 'default'
-
-interface DzAlertCompatProps {
-  /** Old `type` prop — maps to `tone` in vNext */
-  type?: OldAlertType
-  /** Whether the alert can be dismissed */
-  closable?: boolean
-  /** Alert title text */
-  title?: string
-}
 
 const props = withDefaults(defineProps<DzAlertCompatProps>(), {
   type: 'default',

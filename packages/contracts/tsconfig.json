@@ -2,6 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
+    "allowImportingTsExtensions": false,
+    "declaration": true,
+    "noEmit": false,
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"],

@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.1.0-alpha.0",
   "description": "Code transforms for migrating from old dzip-ui to vNext",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -12,7 +13,6 @@
   "bin": {
     "dzup-codemod": "./bin/dzup-codemod.js"
   },
-  "license": "MIT",
   "files": [
     "LICENSE",
     "bin",

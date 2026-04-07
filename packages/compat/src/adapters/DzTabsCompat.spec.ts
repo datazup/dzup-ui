@@ -43,9 +43,9 @@ describe('dzTabsCompat', () => {
     // Should render tab trigger buttons
     const buttons = wrapper.findAll('button')
     expect(buttons.length).toBeGreaterThanOrEqual(3)
-    expect(buttons[0].text()).toContain('Tab 1')
-    expect(buttons[1].text()).toContain('Tab 2')
-    expect(buttons[2].text()).toContain('Tab 3')
+    expect(buttons[0]!.text()).toContain('Tab 1')
+    expect(buttons[1]!.text()).toContain('Tab 2')
+    expect(buttons[2]!.text()).toContain('Tab 3')
   })
 
   it('renders disabled tab triggers', () => {
@@ -54,7 +54,7 @@ describe('dzTabsCompat', () => {
     })
     const buttons = wrapper.findAll('button')
     // Tab 3 should be disabled
-    expect((buttons[2].element as HTMLButtonElement).disabled).toBe(true)
+    expect((buttons[2]!.element as HTMLButtonElement).disabled).toBe(true)
   })
 
   it('maps old type="line" to variant="line"', () => {
@@ -106,7 +106,7 @@ describe('dzTabsCompat', () => {
       props: { tabs: sampleTabs, modelValue: 'tab1' },
     })
     const buttons = wrapper.findAll('button')
-    await buttons[1].trigger('click')
+    await buttons[1]!.trigger('click')
     // Should emit both old-style tabClick and new-style change
     const changeEvents = wrapper.emitted('change')
     const tabClickEvents = wrapper.emitted('tabClick')
@@ -126,7 +126,7 @@ describe('dzTabsCompat', () => {
     expect(wrapper.element).toBeTruthy()
     // Change tab
     const buttons = wrapper.findAll('button')
-    await buttons[1].trigger('click')
+    await buttons[1]!.trigger('click')
     const modelEvents = wrapper.emitted('update:modelValue')
     if (modelEvents) {
       expect(modelEvents[0]).toEqual(['tab2'])

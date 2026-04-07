@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DialogContentSize } from '@dzip-ui/core'
+import type { DzDialogCompatProps } from '../adapter-types.ts'
 import {
   DzDialog,
   DzDialogClose,
@@ -25,19 +25,6 @@ import {
  */
 import { onMounted, watch } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-interface DzDialogCompatProps {
-  /** Dialog title text (maps to DzDialogTitle) */
-  title?: string
-  /** Dialog description text (maps to DzDialogDescription) */
-  description?: string
-  /** Dialog content size */
-  size?: DialogContentSize
-  /** Whether the dialog is modal */
-  modal?: boolean
-  /** Whether to show a close button */
-  showClose?: boolean
-}
 
 /**
  * Old API: v-model:visible  ->  New API: v-model:open

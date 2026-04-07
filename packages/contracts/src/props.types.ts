@@ -8,7 +8,7 @@
  * @module @dzip-ui/contracts/props
  */
 
-import type { CanonicalSize, CanonicalTone } from './canonical.types.ts'
+import type { CanonicalSize, CanonicalTone } from './canonical.types'
 
 // ---------------------------------------------------------------------------
 // Behavior

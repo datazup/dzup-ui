@@ -24,19 +24,19 @@ export type {
   InputVariant,
   ProgressVariant,
   TabsVariant,
-} from './canonical.types.ts'
+} from './canonical.types'
 
 // Compound component context types
 export type {
   CompoundContext,
   CompoundRegistration,
-} from './compound.types.ts'
+} from './compound.types'
 
 // Data attribute types
 export type {
   DataAttributes,
   DataState,
-} from './data-attributes.types.ts'
+} from './data-attributes.types'
 
 // Event interfaces
 export type {
@@ -47,7 +47,7 @@ export type {
   OpenableEvents,
   SelectEvents,
   SelectOpenableEvents,
-} from './events.types.ts'
+} from './events.types'
 
 // Base prop interfaces
 export type {
@@ -57,7 +57,7 @@ export type {
   BaseFormControlProps,
   BaseInteractiveProps,
   BaseValidationProps,
-} from './props.types.ts'
+} from './props.types'
 
 // Slot prop interfaces
 export type {
@@ -71,7 +71,7 @@ export type {
   ItemSlotProps,
   LabelSlotProps,
   TriggerSlotProps,
-} from './slots.types.ts'
+} from './slots.types'
 
 // Utility types
 export type {
@@ -80,7 +80,7 @@ export type {
   OptionalProps,
   Prettify,
   RequireProps,
-} from './utility.types.ts'
+} from './utility.types'
 
 // Runtime exports
-export { assertNever } from './utility.types.ts'
+export { assertNever } from './utility.types'

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize, TabsVariant } from '@dzip-ui/contracts'
+import type { DzTabsCompatProps, OldSize, OldTabType } from '../adapter-types.ts'
 import { DzTabList, DzTabs, DzTabTrigger } from '@dzip-ui/core'
 /**
  * DzTabsCompat -- backward-compatible wrapper for DzTabs compound components.
@@ -14,35 +15,6 @@ import { DzTabList, DzTabs, DzTabTrigger } from '@dzip-ui/core'
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui tab item shape */
-interface TabItem {
-  /** Display label for the tab */
-  label: string
-  /** Unique value identifying this tab */
-  value: string
-  /** Whether this tab trigger is disabled */
-  disabled?: boolean
-  /** Whether this tab shows a close button */
-  closable?: boolean
-}
-
-/** Old dzip-ui tab type values */
-type OldTabType = 'line' | 'card' | 'border-card'
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzTabsCompatProps {
-  /** Tab items — each rendered as a DzTabTrigger */
-  tabs?: TabItem[]
-  /** Old `type` prop — maps to `variant` in vNext */
-  type?: OldTabType
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Whether all tabs are closable (individual tab closable overrides this) */
-  closable?: boolean
-}
 
 const model = defineModel<string>({ default: '' })
 

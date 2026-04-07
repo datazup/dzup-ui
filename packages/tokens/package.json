@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.1.0-alpha.0",
   "description": "Design tokens for the dzip-ui component library",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,7 +19,6 @@
       "import": "./dist/utils/index.js"
     }
   },
-  "license": "MIT",
   "files": [
     "LICENSE",
     "dist"

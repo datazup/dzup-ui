@@ -12,8 +12,11 @@ import transformer from '../rename-slots.js'
 /** Helper to run the transform on a Vue SFC string. */
 function applyTransform(source: string, path = 'test.vue'): string | null {
   const fileInfo = { path, source }
+  const j = jscodeshift.withParser('tsx')
   const api = {
-    jscodeshift: jscodeshift.withParser('tsx'),
+    jscodeshift: j,
+    j,
+    report: () => {},
     stats: () => {},
   }
   return transformer(fileInfo, api, {})

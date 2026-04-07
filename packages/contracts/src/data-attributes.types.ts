@@ -7,7 +7,7 @@
  * @module @dzip-ui/contracts/data-attributes
  */
 
-import type { CanonicalTone } from './canonical.types.ts'
+import type { CanonicalTone } from './canonical.types'
 
 // ---------------------------------------------------------------------------
 // State values

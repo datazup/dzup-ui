@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TooltipAlign, TooltipSide } from '@dzip-ui/core'
+import type { DzTooltipCompatProps, OldPlacement } from '../adapter-types.ts'
 import {
   DzTooltip,
   DzTooltipContent,
@@ -20,31 +21,6 @@ import {
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old placement values */
-type OldPlacement
-  = | 'top' | 'top-start' | 'top-end'
-    | 'bottom' | 'bottom-start' | 'bottom-end'
-    | 'left' | 'left-start' | 'left-end'
-    | 'right' | 'right-start' | 'right-end'
-
-/** Old trigger type */
-type OldTriggerType = 'hover' | 'click' | 'focus'
-
-interface DzTooltipCompatProps {
-  /** Tooltip content text */
-  content?: string
-  /** Placement — maps to side + align in vNext */
-  placement?: OldPlacement
-  /** Whether the tooltip is disabled */
-  disabled?: boolean
-  /** Delay before showing (ms) — maps to delayDuration */
-  delay?: number
-  /** Alias for delay (old API used both) */
-  showDelay?: number
-  /** Trigger mode — dropped in vNext (hover by default) */
-  trigger?: OldTriggerType
-}
 
 const props = withDefaults(defineProps<DzTooltipCompatProps>(), {
   placement: 'top',

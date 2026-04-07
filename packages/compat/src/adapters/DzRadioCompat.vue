@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { DzRadioCompatProps, OldSize } from '../adapter-types.ts'
 import { DzRadio, DzRadioGroup } from '@dzip-ui/core'
 /**
  * DzRadioCompat -- backward-compatible wrapper for DzRadioGroup + DzRadio.
@@ -13,30 +14,6 @@ import { DzRadio, DzRadioGroup } from '@dzip-ui/core'
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui radio option shape */
-interface RadioOption {
-  /** Display label for the radio */
-  label: string
-  /** Value used for selection */
-  value: string
-  /** Whether this option is disabled */
-  disabled?: boolean
-}
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzRadioCompatProps {
-  /** Radio options — each rendered as a DzRadio child */
-  options?: RadioOption[]
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Disabled state propagated to all child radios */
-  disabled?: boolean
-  /** Form field name */
-  name?: string
-}
 
 const model = defineModel<string>({ default: '' })
 

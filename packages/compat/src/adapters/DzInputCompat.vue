@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { DzInputCompatProps, OldSize } from '../adapter-types.ts'
 import { DzInput } from '@dzip-ui/core'
 /**
  * DzInputCompat — backward-compatible wrapper for DzInput.
@@ -13,26 +14,6 @@ import { DzInput } from '@dzip-ui/core'
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzInputCompatProps {
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Placeholder text */
-  placeholder?: string
-  /** Whether the input shows a clear button */
-  clearable?: boolean
-  /** Disabled state */
-  disabled?: boolean
-  /** Read-only state */
-  readonly?: boolean
-  /** HTML input type */
-  type?: 'text' | 'email' | 'password' | 'url' | 'tel' | 'search'
-  /** Maximum character length */
-  maxlength?: number
-}
 
 const model = defineModel<string>({ default: '' })
 

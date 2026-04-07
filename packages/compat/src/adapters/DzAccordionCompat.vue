@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { DzAccordionCompatProps, OldSize } from '../adapter-types.ts'
 import {
   DzAccordion,
   DzAccordionContent,
@@ -19,36 +20,6 @@ import {
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old accordion item shape */
-interface OldAccordionItem {
-  /** Display title for the accordion trigger */
-  title: string
-  /** Unique value identifying this item */
-  value: string
-  /** Whether this item is disabled */
-  disabled?: boolean
-  /** Content text (used as fallback if no scoped slot) */
-  content?: string
-}
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzAccordionCompatProps {
-  /** Accordion items — each rendered as a compound item */
-  items?: OldAccordionItem[]
-  /** Whether to allow multiple items open (old API) */
-  multiple?: boolean
-  /** Whether the component behaves as an accordion (old API alias for single mode) */
-  accordion?: boolean
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Disabled state */
-  disabled?: boolean
-  /** Expand icon — dropped in vNext (CSS-controlled) */
-  expandIcon?: string
-}
 
 const model = defineModel<string | string[]>({ default: '' })
 

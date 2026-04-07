@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { DzCheckboxCompatProps, OldSize } from '../adapter-types.ts'
 import { DzCheckbox } from '@dzip-ui/core'
 /**
  * DzCheckboxCompat -- backward-compatible wrapper for DzCheckbox.
@@ -13,24 +14,6 @@ import { DzCheckbox } from '@dzip-ui/core'
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzCheckboxCompatProps {
-  /** Label text — rendered as slot content in the new API */
-  label?: string
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Disabled state */
-  disabled?: boolean
-  /** Indeterminate (mixed) state */
-  indeterminate?: boolean
-  /** Form field name */
-  name?: string
-  /** Value for checkbox groups */
-  value?: string
-}
 
 const model = defineModel<boolean>({ default: false })
 

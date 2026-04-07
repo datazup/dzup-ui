@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.1.0-alpha.0",
   "description": "Nuxt module for dzip-ui — auto-imports all Dz* components",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/module.d.ts",
@@ -11,7 +12,6 @@
   },
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
-  "license": "MIT",
   "files": [
     "LICENSE",
     "dist"

@@ -94,7 +94,7 @@ describe('dzRadioCompat', () => {
     })
     // Click the Green radio button
     const buttons = wrapper.findAll('button')
-    await buttons[1].trigger('click')
+    await buttons[1]!.trigger('click')
     const changeEvents = wrapper.emitted('change')
     const inputEvents = wrapper.emitted('input')
     if (changeEvents) {
@@ -110,7 +110,7 @@ describe('dzRadioCompat', () => {
       props: { options: sampleOptions, modelValue: 'red' },
     })
     const buttons = wrapper.findAll('button')
-    await buttons[1].trigger('click')
+    await buttons[1]!.trigger('click')
     const modelEvents = wrapper.emitted('update:modelValue')
     if (modelEvents) {
       expect(modelEvents[0]).toEqual(['green'])

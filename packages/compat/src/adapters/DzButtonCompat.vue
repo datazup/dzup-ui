@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ButtonVariant, CanonicalSize, CanonicalTone } from '@dzip-ui/contracts'
+import type { DzButtonCompatProps, OldButtonType, OldSize } from '../adapter-types.ts'
 import { DzButton } from '@dzip-ui/core'
 /**
  * DzButtonCompat — backward-compatible wrapper for DzButton.
@@ -13,23 +14,6 @@ import { DzButton } from '@dzip-ui/core'
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui button type prop values */
-type OldButtonType = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default' | 'text' | 'link'
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzButtonCompatProps {
-  /** Old `type` prop — maps to variant + tone in vNext */
-  type?: OldButtonType
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Disabled state */
-  disabled?: boolean
-  /** Loading state */
-  loading?: boolean
-}
 
 const props = withDefaults(defineProps<DzButtonCompatProps>(), {
   type: 'default',

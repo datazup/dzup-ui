@@ -41,9 +41,9 @@ describe('dzAccordionCompat', () => {
     })
     const buttons = wrapper.findAll('button')
     expect(buttons.length).toBeGreaterThanOrEqual(3)
-    expect(buttons[0].text()).toContain('Section 1')
-    expect(buttons[1].text()).toContain('Section 2')
-    expect(buttons[2].text()).toContain('Section 3')
+    expect(buttons[0]!.text()).toContain('Section 1')
+    expect(buttons[1]!.text()).toContain('Section 2')
+    expect(buttons[2]!.text()).toContain('Section 3')
   })
 
   it('renders disabled accordion items', () => {
@@ -52,7 +52,7 @@ describe('dzAccordionCompat', () => {
     })
     const buttons = wrapper.findAll('button')
     // Section 3 should be disabled
-    expect((buttons[2].element as HTMLButtonElement).disabled).toBe(true)
+    expect((buttons[2]!.element as HTMLButtonElement).disabled).toBe(true)
   })
 
   it('maps multiple=false to type="single"', () => {
@@ -97,7 +97,7 @@ describe('dzAccordionCompat', () => {
       props: { items: sampleItems, modelValue: '' },
     })
     const buttons = wrapper.findAll('button')
-    await buttons[0].trigger('click')
+    await buttons[0]!.trigger('click')
     const changeEvents = wrapper.emitted('change')
     if (changeEvents) {
       expect(changeEvents[0]).toEqual(['section1'])
@@ -109,7 +109,7 @@ describe('dzAccordionCompat', () => {
       props: { items: sampleItems, modelValue: '' },
     })
     const buttons = wrapper.findAll('button')
-    await buttons[0].trigger('click')
+    await buttons[0]!.trigger('click')
     const modelEvents = wrapper.emitted('update:modelValue')
     if (modelEvents) {
       expect(modelEvents[0]).toEqual(['section1'])

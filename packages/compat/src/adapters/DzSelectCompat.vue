@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CanonicalSize } from '@dzip-ui/contracts'
 import type { DzSelectItem } from '@dzip-ui/core'
+import type { DzSelectCompatProps, OldSize } from '../adapter-types.ts'
 import { DzSelect } from '@dzip-ui/core'
 /**
  * DzSelectCompat — backward-compatible wrapper for DzSelect.
@@ -15,36 +16,6 @@ import { DzSelect } from '@dzip-ui/core'
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
-
-/** Old dzip-ui option shape */
-interface OldSelectOption {
-  /** Display text — old API used both `label` and `text` */
-  label?: string
-  /** Alternative display text key from old API */
-  text?: string
-  /** Value used for selection */
-  value: string
-  /** Whether this option is disabled */
-  disabled?: boolean
-}
-
-/** Old dzip-ui size values */
-type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-interface DzSelectCompatProps {
-  /** Options list — accepts both old and new shapes */
-  options?: OldSelectOption[]
-  /** New-style items (forwarded directly if provided) */
-  items?: DzSelectItem[]
-  /** Placeholder text */
-  placeholder?: string
-  /** Old `size` prop — accepts both old and new values */
-  size?: OldSize
-  /** Disabled state */
-  disabled?: boolean
-  /** Form field name */
-  name?: string
-}
 
 const model = defineModel<string>({ default: '' })
 

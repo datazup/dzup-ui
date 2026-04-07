@@ -12,8 +12,11 @@ import transformer from '../rename-imports.js'
 /** Helper to run the transform on a source string and return the result. */
 function applyTransform(source: string): string | null {
   const fileInfo = { path: 'test.ts', source }
+  const j = jscodeshift.withParser('tsx')
   const api = {
-    jscodeshift: jscodeshift.withParser('tsx'),
+    jscodeshift: j,
+    j,
+    report: () => {},
     stats: () => {},
   }
   return transformer(fileInfo, api, {})

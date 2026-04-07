@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.1.0-alpha.0",
   "description": "Core foundational components for dzip-ui",
+  "license": "MIT",
   "sideEffects": [
     "*.css"
   ],
@@ -20,7 +21,6 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "license": "MIT",
   "files": [
     "LICENSE",
     "README.md",

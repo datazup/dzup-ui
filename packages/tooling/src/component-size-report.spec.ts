@@ -1,8 +1,11 @@
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { generateSizeReport } from './component-size-report'
 
 const ROOT_DIR = resolve(import.meta.dirname, '..', '..', '..')
+const CORE_DIST = resolve(ROOT_DIR, 'packages/core/dist/components')
+const hasBuiltDist = existsSync(CORE_DIST)
 
 describe('component-size-report', () => {
   it('generates a size report with components from built dist', () => {
@@ -14,7 +17,7 @@ describe('component-size-report', () => {
     // TODO: totals.pro support requires pro dist integration (tracked separately)
   })
 
-  it('discovers core components from dist/components/', () => {
+  it.skipIf(!hasBuiltDist)('discovers core components from dist/components/', () => {
     const report = generateSizeReport(ROOT_DIR)
 
     const coreComponents = report.components.filter(c => c.package === 'core')

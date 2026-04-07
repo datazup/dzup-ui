@@ -50,9 +50,6 @@ function generateGridColumns() {
 
 const ITERATIONS = 5
 
-/** Mount threshold in ms — simple components */
-const SIMPLE_THRESHOLD_MS = 100
-
 /** Mount threshold in ms — complex compound components */
 const COMPLEX_THRESHOLD_MS = 500
 
