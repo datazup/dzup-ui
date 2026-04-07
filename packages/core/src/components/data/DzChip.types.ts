@@ -3,7 +3,7 @@
  *
  * Closable chip component with tone/variant styling.
  *
- * @module @dzip-ui/core/components/data/DzChip
+ * @module @dzup-ui/core/components/data/DzChip
  */
 
 import type {
@@ -11,7 +11,7 @@ import type {
   CanonicalSize,
   CanonicalTone,
   ChipVariant,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

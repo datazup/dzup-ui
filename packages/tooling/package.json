@@ -1,9 +1,9 @@
 {
-  "name": "@dzip-ui/tooling",
+  "name": "@dzup-ui/tooling",
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "Validators, boundary checks, and token compliance tools for dzip-ui",
+  "description": "Validators, boundary checks, and token compliance tools for dzup-ui",
   "scripts": {
     "typecheck": "tsc --noEmit",
     "validate:boundaries": "tsx src/validators/import-boundary.ts",

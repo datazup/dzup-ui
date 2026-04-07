@@ -1,22 +1,22 @@
 /**
- * @dzip-ui/compat
- * Migration adapters from old dzip-ui API to vNext.
+ * @dzup-ui/compat
+ * Migration adapters from old dzup-ui API to vNext.
  *
  * IMPORTANT: Stable core/pro must NOT import from compat (ADR-06).
  * This package provides backward-compatible wrappers for migration.
  *
  * @example
  * ```ts
- * // Before (old dzip-ui)
- * import { DzButton } from 'dzip-ui'
+ * // Before (old dzup-ui)
+ * import { DzButton } from 'dzup-ui'
  * // <DzButton type="primary" size="small">Click</DzButton>
  *
  * // Migration step (use compat adapters)
- * import { DzButtonCompat as DzButton } from '@dzip-ui/compat'
+ * import { DzButtonCompat as DzButton } from '@dzup-ui/compat'
  * // <DzButton type="primary" size="small">Click</DzButton>  -- still works
  *
  * // Final (migrate to vNext API)
- * import { DzButton } from '@dzip-ui/core'
+ * import { DzButton } from '@dzup-ui/core'
  * // <DzButton variant="solid" tone="primary" size="sm">Click</DzButton>
  * ```
  */

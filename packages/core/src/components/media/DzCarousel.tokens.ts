@@ -4,7 +4,7 @@
  * Maps semantic design tokens to carousel components (ADR-04).
  * Multi-slot component: root, viewport, slide, navButton, dots.
  *
- * @module @dzip-ui/core/components/media/DzCarousel.tokens
+ * @module @dzup-ui/core/components/media/DzCarousel.tokens
  */
 
 export const carouselTokens = {

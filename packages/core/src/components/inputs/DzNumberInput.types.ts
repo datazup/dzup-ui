@@ -3,14 +3,14 @@
  *
  * Numeric input with increment/decrement buttons and value clamping.
  *
- * @module @dzip-ui/core/components/inputs/DzNumberInput
+ * @module @dzup-ui/core/components/inputs/DzNumberInput
  */
 
 import type {
   BaseFormControlProps,
   ChangeEvents,
   InputVariant,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

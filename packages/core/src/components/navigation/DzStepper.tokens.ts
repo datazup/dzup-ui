@@ -4,7 +4,7 @@
  * Maps semantic design tokens to step indicator and connector styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/navigation/DzStepper.tokens
+ * @module @dzup-ui/core/components/navigation/DzStepper.tokens
  */
 
 export const stepperTokens = {

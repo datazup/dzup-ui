@@ -4,13 +4,13 @@
  * Uses Reka UI AccordionRoot/AccordionItem/AccordionTrigger/AccordionContent
  * primitives (ADR-07). Context injection via DZ_ACCORDION_KEY (ADR-08).
  *
- * @module @dzip-ui/core/components/data/DzAccordion
+ * @module @dzup-ui/core/components/data/DzAccordion
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

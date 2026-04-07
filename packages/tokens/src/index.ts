@@ -1,7 +1,7 @@
 /**
- * @dzip-ui/tokens
+ * @dzup-ui/tokens
  *
- * Single source of truth for all design tokens in the dzip-ui component library.
+ * Single source of truth for all design tokens in the dzup-ui component library.
  *
  * Tokens are consumed via CSS custom properties using `var()`.
  * No `getToken()` or `getCssVar()` API exists — use CSS `var()` directly (ADR-09).
@@ -10,16 +10,16 @@
  *
  * ```ts
  * // Import the generated CSS (typically in your app entry or Tailwind config)
- * import '@dzip-ui/tokens/css'
+ * import '@dzup-ui/tokens/css'
  *
  * // Import Tailwind theme extension
- * import { dzTokens } from '@dzip-ui/tokens/tailwind'
+ * import { dzTokens } from '@dzup-ui/tokens/tailwind'
  *
  * // Import the FOUC-prevention script for SSR
- * import { themeScript } from '@dzip-ui/tokens/utils'
+ * import { themeScript } from '@dzup-ui/tokens/utils'
  *
  * // Import token type definitions
- * import type { DesignToken, ThemeMode } from '@dzip-ui/tokens'
+ * import type { DesignToken, ThemeMode } from '@dzup-ui/tokens'
  * ```
  */
 

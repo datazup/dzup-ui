@@ -69,30 +69,30 @@ interface PackageDef {
 
 const PACKAGES: PackageDef[] = [
   {
-    name: '@dzip-ui/contracts',
+    name: '@dzup-ui/contracts',
     distDir: resolve(ROOT, 'packages/contracts/dist'),
   },
   {
-    name: '@dzip-ui/tokens',
+    name: '@dzup-ui/tokens',
     distDir: resolve(ROOT, 'packages/tokens/dist'),
   },
   {
-    name: '@dzip-ui/core',
+    name: '@dzup-ui/core',
     distDir: resolve(ROOT, 'packages/core/dist'),
     hasViteChunks: true,
     manifestPath: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
   },
   {
-    name: '@dzip-ui/compat',
+    name: '@dzup-ui/compat',
     distDir: resolve(ROOT, 'packages/compat/dist'),
     hasViteChunks: true,
   },
   {
-    name: '@dzip-ui/codemods',
+    name: '@dzup-ui/codemods',
     distDir: resolve(ROOT, 'packages/codemods/dist'),
   },
   {
-    name: '@dzip-ui/nuxt',
+    name: '@dzup-ui/nuxt',
     distDir: resolve(ROOT, 'packages/nuxt/dist'),
     rootDts: 'module.d.ts',
   },

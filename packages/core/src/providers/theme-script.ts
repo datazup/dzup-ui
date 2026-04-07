@@ -17,13 +17,13 @@
  * Or with a bundler / SSR helper:
  *
  * ```ts
- * import { getThemeScript } from '@dzip-ui/core/providers'
+ * import { getThemeScript } from '@dzup-ui/core/providers'
  *
  * // Custom storage key and attribute
  * const script = getThemeScript({ storageKey: 'my-theme', attribute: 'data-mode' })
  * ```
  *
- * @module @dzip-ui/core/providers/theme-script
+ * @module @dzup-ui/core/providers/theme-script
  */
 
 /** Options for generating the theme initialization script */

@@ -4,7 +4,7 @@
  * Maps semantic design tokens to spacer size scale (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/layout/DzSpacer.tokens
+ * @module @dzup-ui/core/components/layout/DzSpacer.tokens
  */
 
 export const spacerTokens = {

@@ -222,7 +222,7 @@ export const RealWorldImageCaption: Story = {
           <figcaption class="mt-2">
             <DzCaption tone="muted">
               Figure 1: Architecture diagram showing the component composition pattern
-              used in the dzip-ui design system.
+              used in the dzup-ui design system.
             </DzCaption>
           </figcaption>
         </figure>

@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/navigation/DzStepper.variants
+ * @module @dzup-ui/core/components/navigation/DzStepper.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

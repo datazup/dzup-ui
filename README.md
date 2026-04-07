@@ -1,12 +1,12 @@
-# dzip-ui
+# dzup-ui
 
 **Open-source Vue 3 component library — 147 foundational components.**
 
-![npm version](https://img.shields.io/npm/v/@dzip-ui/core?label=%40dzip-ui%2Fcore)
-![build status](https://img.shields.io/github/actions/workflow/status/datazup/dzip-ui/ci.yml?branch=main)
+![npm version](https://img.shields.io/npm/v/@dzup-ui/core?label=%40dzup-ui%2Fcore)
+![build status](https://img.shields.io/github/actions/workflow/status/datazup/dzup-ui/ci.yml?branch=main)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
-> Looking for enterprise components? See [@dzip-ui/pro](https://github.com/datazup/dzip-ui-pro).
+> Looking for enterprise components? See [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro).
 
 ## Features
 
@@ -22,21 +22,21 @@
 **1. Install packages**
 
 ```bash
-yarn add @dzip-ui/core @dzip-ui/tokens vue@^3.5.0 reka-ui@^2.0.0
+yarn add @dzup-ui/core @dzup-ui/tokens vue@^3.5.0 reka-ui@^2.0.0
 ```
 
 **2. Import styles**
 
 ```css
-@import "@dzip-ui/tokens/css";
-@import "@dzip-ui/core/styles";
+@import "@dzup-ui/tokens/css";
+@import "@dzup-ui/core/styles";
 ```
 
 **3. Use components**
 
 ```vue
 <script setup lang="ts">
-import { DzButton, DzInput, DzThemeProvider } from '@dzip-ui/core'
+import { DzButton, DzInput, DzThemeProvider } from '@dzup-ui/core'
 import { ref } from 'vue'
 
 const name = ref('')
@@ -54,12 +54,12 @@ const name = ref('')
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [`@dzip-ui/core`](./packages/core) | 0.1.0-alpha.0 | 147 foundational components (buttons, inputs, forms, layout, navigation, overlays, feedback, data, media, typography) |
-| [`@dzip-ui/tokens`](./packages/tokens) | 0.1.0-alpha.0 | Design tokens — CSS custom properties, Tailwind theme, TypeScript definitions |
-| [`@dzip-ui/contracts`](./packages/contracts) | 0.1.0-alpha.0 | Canonical public API contract types (props, events, slots) |
-| [`@dzip-ui/compat`](./packages/compat) | 0.0.1 | Migration adapters from old dzip-ui to vNext |
-| [`@dzip-ui/codemods`](./packages/codemods) | 0.0.1 | Automated code transforms for migration (CLI: `dzup-codemod`) |
-| [`@dzip-ui/nuxt`](./packages/nuxt) | 0.1.0-alpha.0 | Nuxt 3 module for auto-importing Dz* components |
+| [`@dzup-ui/core`](./packages/core) | 0.1.0-alpha.0 | 147 foundational components (buttons, inputs, forms, layout, navigation, overlays, feedback, data, media, typography) |
+| [`@dzup-ui/tokens`](./packages/tokens) | 0.1.0-alpha.0 | Design tokens — CSS custom properties, Tailwind theme, TypeScript definitions |
+| [`@dzup-ui/contracts`](./packages/contracts) | 0.1.0-alpha.0 | Canonical public API contract types (props, events, slots) |
+| [`@dzup-ui/compat`](./packages/compat) | 0.0.1 | Migration adapters from old dzup-ui to vNext |
+| [`@dzup-ui/codemods`](./packages/codemods) | 0.0.1 | Automated code transforms for migration (CLI: `dzup-codemod`) |
+| [`@dzup-ui/nuxt`](./packages/nuxt) | 0.1.0-alpha.0 | Nuxt 3 module for auto-importing Dz* components |
 
 ## Component Families
 
@@ -106,7 +106,7 @@ yarn storybook
 ## Enterprise Components
 
 Need Kanban, Gantt, FormBuilder, DashboardBuilder, WorkflowDesigner, and more?
-See **[@dzip-ui/pro](https://github.com/datazup/dzip-ui-pro)** — 40 enterprise components available under a commercial license.
+See **[@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro)** — 40 enterprise components available under a commercial license.
 
 ## Contributing
 
@@ -114,7 +114,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development workflow and guidelines
 
 ## Migration
 
-Upgrading from old `dzip-ui`? See [`@dzip-ui/compat`](./packages/compat) and [`@dzip-ui/codemods`](./packages/codemods).
+Upgrading from old `dzup-ui`? See [`@dzup-ui/compat`](./packages/compat) and [`@dzup-ui/codemods`](./packages/codemods).
 
 ## License
 

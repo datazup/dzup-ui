@@ -6,7 +6,7 @@ import { definePreview } from '@storybook/vue3-vite'
 // Import Tailwind CSS 4 (processes utility classes used in component variants)
 import '../src/tailwind.css'
 // Import design tokens CSS for all stories
-import '@dzip-ui/tokens/css'
+import '@dzup-ui/tokens/css'
 
 export default definePreview({
   addons: [addonDocs(), addonA11y()],

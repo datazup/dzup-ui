@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/overlays/DzCommandPalette.variants
+ * @module @dzup-ui/core/components/overlays/DzCommandPalette.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

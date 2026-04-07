@@ -34,7 +34,7 @@ describe('license-audit', () => {
     const result = runLicenseAudit(ROOT_DIR)
 
     const workspaceDeps = result.entries.filter(e =>
-      e.package.startsWith('@dzip-ui/'),
+      e.package.startsWith('@dzup-ui/'),
     )
     expect(workspaceDeps.length).toBe(0)
   })

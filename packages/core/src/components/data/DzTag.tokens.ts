@@ -4,7 +4,7 @@
  * Maps semantic design tokens to tag components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/data/DzTag.tokens
+ * @module @dzup-ui/core/components/data/DzTag.tokens
  */
 
 export const tagTokens = {

@@ -1,14 +1,14 @@
 /**
  * DzBadge — type definitions.
  *
- * @module @dzip-ui/core/components/feedback/DzBadge
+ * @module @dzup-ui/core/components/feedback/DzBadge
  */
 
 import type {
   BadgeVariant,
   CanonicalSize,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

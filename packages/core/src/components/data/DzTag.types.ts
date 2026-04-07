@@ -4,7 +4,7 @@
  * Categorization tag with tone/variant styling.
  * Similar to DzChip but semantically for categorization (labels, filters).
  *
- * @module @dzip-ui/core/components/data/DzTag
+ * @module @dzup-ui/core/components/data/DzTag
  */
 
 import type {
@@ -12,7 +12,7 @@ import type {
   BaseAccessibilityProps,
   CanonicalSize,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { CanonicalSize } from '@dzup-ui/contracts'
 import type { DzRadioCompatProps, OldSize } from '../adapter-types.ts'
-import { DzRadio, DzRadioGroup } from '@dzip-ui/core'
+import { DzRadio, DzRadioGroup } from '@dzup-ui/core'
 /**
  * DzRadioCompat -- backward-compatible wrapper for DzRadioGroup + DzRadio.
  *
- * Maps old dzip-ui single-component radio API to the new vNext compound API:
+ * Maps old dzup-ui single-component radio API to the new vNext compound API:
  * - `options` prop (array of radio items) -> DzRadioGroup with DzRadio children
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `@input` -> emits `change`
  *
- * @deprecated Use DzRadioGroup and DzRadio from @dzip-ui/core instead.
+ * @deprecated Use DzRadioGroup and DzRadio from @dzup-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'

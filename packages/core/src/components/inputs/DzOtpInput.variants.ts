@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/inputs/DzOtpInput.variants
+ * @module @dzup-ui/core/components/inputs/DzOtpInput.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

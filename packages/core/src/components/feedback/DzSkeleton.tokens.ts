@@ -4,7 +4,7 @@
  * Maps semantic design tokens to skeleton placeholder components (ADR-04).
  * Supports three shape variants (text, circular, rectangular) with optional pulse animation.
  *
- * @module @dzip-ui/core/components/feedback/DzSkeleton.tokens
+ * @module @dzup-ui/core/components/feedback/DzSkeleton.tokens
  */
 
 export const skeletonTokens = {

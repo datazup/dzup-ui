@@ -8,14 +8,14 @@ export default defineConfig({
   resolve: {
     alias: [
       // Token sub-path exports must come before the base alias
-      { find: '@dzip-ui/tokens/css', replacement: resolve(__dirname, '../../packages/tokens/dist/tokens.css') },
-      { find: '@dzip-ui/tokens/tailwind', replacement: resolve(__dirname, '../../packages/tokens/dist/tailwind-theme.js') },
-      { find: '@dzip-ui/tokens/utils', replacement: resolve(__dirname, '../../packages/tokens/src/utils/index.ts') },
-      { find: '@dzip-ui/tokens', replacement: resolve(__dirname, '../../packages/tokens/src') },
+      { find: '@dzup-ui/tokens/css', replacement: resolve(__dirname, '../../packages/tokens/dist/tokens.css') },
+      { find: '@dzup-ui/tokens/tailwind', replacement: resolve(__dirname, '../../packages/tokens/dist/tailwind-theme.js') },
+      { find: '@dzup-ui/tokens/utils', replacement: resolve(__dirname, '../../packages/tokens/src/utils/index.ts') },
+      { find: '@dzup-ui/tokens', replacement: resolve(__dirname, '../../packages/tokens/src') },
       // Other workspace packages
-      { find: '@dzip-ui/core/styles', replacement: resolve(__dirname, '../../packages/core/src/styles/base.css') },
-      { find: '@dzip-ui/contracts', replacement: resolve(__dirname, '../../packages/contracts/src/index.ts') },
-      { find: '@dzip-ui/core', replacement: resolve(__dirname, '../../packages/core/src') },
+      { find: '@dzup-ui/core/styles', replacement: resolve(__dirname, '../../packages/core/src/styles/base.css') },
+      { find: '@dzup-ui/contracts', replacement: resolve(__dirname, '../../packages/contracts/src/index.ts') },
+      { find: '@dzup-ui/core', replacement: resolve(__dirname, '../../packages/core/src') },
     ],
   },
   server: {

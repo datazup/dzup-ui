@@ -1,17 +1,17 @@
 {
-  "name": "@dzip-ui/sandbox",
+  "name": "@dzup-ui/sandbox",
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "Development sandbox for testing dzip-ui components",
+  "description": "Development sandbox for testing dzup-ui components",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dzip-ui/core": "workspace:*",
-    "@dzip-ui/tokens": "workspace:*",
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },

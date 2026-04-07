@@ -4,7 +4,7 @@
  * Maps semantic design tokens to pagination navigation styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/navigation/DzPagination.tokens
+ * @module @dzup-ui/core/components/navigation/DzPagination.tokens
  */
 
 export const paginationTokens = {

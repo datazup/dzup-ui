@@ -1,8 +1,8 @@
 {
-  "name": "@dzip-ui/compat",
+  "name": "@dzup-ui/compat",
   "type": "module",
   "version": "0.1.0-alpha.0",
-  "description": "Migration adapters from old dzip-ui to vNext",
+  "description": "Migration adapters from old dzup-ui to vNext",
   "license": "MIT",
   "exports": {
     ".": {
@@ -28,8 +28,8 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
-    "@dzip-ui/contracts": "workspace:*",
-    "@dzip-ui/core": "workspace:*"
+    "@dzup-ui/contracts": "workspace:*",
+    "@dzup-ui/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.0",

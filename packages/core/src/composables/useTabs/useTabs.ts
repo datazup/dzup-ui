@@ -4,7 +4,7 @@
  * Handles tab registration, active tab tracking, and keyboard navigation
  * following WAI-ARIA Tabs pattern (Arrow keys, Home, End).
  *
- * @module @dzip-ui/core/composables/useTabs
+ * @module @dzup-ui/core/composables/useTabs
  */
 
 import type { MaybeRef, Ref } from 'vue'

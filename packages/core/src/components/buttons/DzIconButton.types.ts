@@ -4,14 +4,14 @@
  * Extends DzButton API for icon-only buttons.
  * Requires `ariaLabel` for accessibility since there is no visible text.
  *
- * @module @dzip-ui/core/components/buttons/DzIconButton
+ * @module @dzup-ui/core/components/buttons/DzIconButton
  */
 
 import type {
   ButtonVariant,
   CanonicalSize,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------

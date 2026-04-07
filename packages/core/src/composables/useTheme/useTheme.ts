@@ -5,7 +5,7 @@
  * which requires a DzThemeProvider ancestor. This file re-exports it
  * for backward compatibility.
  *
- * @module @dzip-ui/core/composables/useTheme
+ * @module @dzup-ui/core/composables/useTheme
  * @deprecated Use the provider-based useTheme from DzThemeProvider instead.
  */
 

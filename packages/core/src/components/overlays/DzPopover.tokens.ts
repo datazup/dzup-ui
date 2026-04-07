@@ -3,7 +3,7 @@
  *
  * Maps semantic design tokens to popover components (ADR-04).
  *
- * @module @dzip-ui/core/components/overlays/DzPopover.tokens
+ * @module @dzup-ui/core/components/overlays/DzPopover.tokens
  */
 
 export const popoverTokens = {

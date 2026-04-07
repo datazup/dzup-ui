@@ -4,13 +4,13 @@
  * Wraps Reka UI SplitterGroup/SplitterPanel/SplitterResizeHandle (ADR-07).
  * Context injection via DZ_RESIZABLE_KEY (ADR-08).
  *
- * @module @dzip-ui/core/components/layout/DzResizable
+ * @module @dzup-ui/core/components/layout/DzResizable
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

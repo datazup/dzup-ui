@@ -1,7 +1,7 @@
 /**
  * DzBlockquote — Type definitions for the styled blockquote component.
  *
- * @module @dzip-ui/core/components/typography/DzBlockquote
+ * @module @dzup-ui/core/components/typography/DzBlockquote
  */
 
 /** Props for the DzBlockquote component */

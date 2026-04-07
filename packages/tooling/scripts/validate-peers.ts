@@ -4,7 +4,7 @@
  * Reads package.json from each workspace package and checks that every
  * peerDependencies entry is satisfied by:
  *   - The version installed in root node_modules/ (for external deps)
- *   - The workspace package version (for @dzip-ui/* workspace deps)
+ *   - The workspace package version (for @dzup-ui/* workspace deps)
  *
  * Usage:
  *   tsx packages/tooling/scripts/validate-peers.ts

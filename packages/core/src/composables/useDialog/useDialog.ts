@@ -4,7 +4,7 @@
  * Manages focus trap, scroll lock, escape-to-close, click-outside-to-close,
  * focus restoration, and aria-hidden on sibling elements.
  *
- * @module @dzip-ui/core/composables/useDialog
+ * @module @dzup-ui/core/composables/useDialog
  */
 
 import type { MaybeRef, Ref } from 'vue'

@@ -1,8 +1,8 @@
 {
-  "name": "@dzip-ui/tokens",
+  "name": "@dzup-ui/tokens",
   "type": "module",
   "version": "0.1.0-alpha.0",
-  "description": "Design tokens for the dzip-ui component library",
+  "description": "Design tokens for the dzup-ui component library",
   "license": "MIT",
   "exports": {
     ".": {

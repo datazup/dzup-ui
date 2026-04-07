@@ -4,7 +4,7 @@
  * Uses Reka UI TimeFieldRoot primitive (ADR-07).
  * v-model via defineModel (ADR-16).
  *
- * @module @dzip-ui/core/components/forms/DzTimePicker
+ * @module @dzup-ui/core/components/forms/DzTimePicker
  */
 
 import type {
@@ -13,7 +13,7 @@ import type {
   CanonicalSize,
   ChangeEvents,
   InputVariant,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

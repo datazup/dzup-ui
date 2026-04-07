@@ -1,7 +1,7 @@
 /**
  * DzSkeleton — type definitions.
  *
- * @module @dzip-ui/core/components/feedback/DzSkeleton
+ * @module @dzup-ui/core/components/feedback/DzSkeleton
  */
 
 // ---------------------------------------------------------------------------

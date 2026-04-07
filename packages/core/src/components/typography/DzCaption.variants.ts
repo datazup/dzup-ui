@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/typography/DzCaption.variants
+ * @module @dzup-ui/core/components/typography/DzCaption.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

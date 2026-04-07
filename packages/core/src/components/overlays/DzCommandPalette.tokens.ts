@@ -4,7 +4,7 @@
  * Maps semantic design tokens to command palette components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/overlays/DzCommandPalette.tokens
+ * @module @dzup-ui/core/components/overlays/DzCommandPalette.tokens
  */
 
 export const commandPaletteTokens = {

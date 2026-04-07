@@ -3,10 +3,10 @@
  *
  * Groups an input with addons (prefix/suffix text, buttons, icons).
  *
- * @module @dzip-ui/core/components/inputs/DzInputGroup
+ * @module @dzup-ui/core/components/inputs/DzInputGroup
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

@@ -1,8 +1,8 @@
 {
-  "name": "@dzip-ui/core",
+  "name": "@dzup-ui/core",
   "type": "module",
   "version": "0.1.0-alpha.0",
-  "description": "Core foundational components for dzip-ui",
+  "description": "Core foundational components for dzup-ui",
   "license": "MIT",
   "sideEffects": [
     "*.css"
@@ -40,8 +40,8 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
-    "@dzip-ui/contracts": "workspace:*",
-    "@dzip-ui/tokens": "workspace:*",
+    "@dzup-ui/contracts": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.0",
     "tailwind-variants": "^0.3.0"

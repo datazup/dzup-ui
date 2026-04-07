@@ -4,7 +4,7 @@
  * Extracted from DzTransfer.vue to keep the component under 300 lines.
  * Manages source/target filtering, selection toggling, and item movement.
  *
- * @module @dzip-ui/core/composables/useTransfer
+ * @module @dzup-ui/core/composables/useTransfer
  */
 
 import type { ComputedRef, Ref } from 'vue'

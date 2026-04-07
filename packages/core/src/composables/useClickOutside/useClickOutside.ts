@@ -5,7 +5,7 @@
  * when the click target is not contained within the referenced element.
  * SSR-safe: no `document` access at module level.
  *
- * @module @dzip-ui/core/composables/useClickOutside
+ * @module @dzup-ui/core/composables/useClickOutside
  */
 
 import type { MaybeRef, Ref } from 'vue'

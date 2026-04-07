@@ -4,7 +4,7 @@
  * Maps semantic design tokens to avatar group layout (ADR-04).
  * Avatars overlap via negative spacing; overflow counter shares avatar styling.
  *
- * @module @dzip-ui/core/components/media/DzAvatarGroup.tokens
+ * @module @dzup-ui/core/components/media/DzAvatarGroup.tokens
  */
 
 export const avatarGroupTokens = {

@@ -5,7 +5,7 @@
  * their concrete prop types. `modelValue` is NOT included here because
  * ADR-16 mandates `defineModel<T>()` — the prop is implicit.
  *
- * @module @dzip-ui/contracts/props
+ * @module @dzup-ui/contracts/props
  */
 
 import type { CanonicalSize, CanonicalTone } from './canonical.types'

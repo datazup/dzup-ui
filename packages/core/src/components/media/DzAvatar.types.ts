@@ -3,10 +3,10 @@
  *
  * Displays a user avatar with image, fallback initials, or icon.
  *
- * @module @dzip-ui/core/components/media/DzAvatar
+ * @module @dzup-ui/core/components/media/DzAvatar
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

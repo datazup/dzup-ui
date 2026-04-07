@@ -1,6 +1,6 @@
-# Contributing to dzip-ui
+# Contributing to dzup-ui
 
-Thank you for your interest in contributing to dzip-ui! This document outlines the process for contributing to this MIT-licensed Vue 3 component library.
+Thank you for your interest in contributing to dzup-ui! This document outlines the process for contributing to this MIT-licensed Vue 3 component library.
 
 ## Code of Conduct
 
@@ -16,8 +16,8 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) before contribu
 ### Setup
 
 ```bash
-git clone https://github.com/datazup/dzip-ui.git
-cd dzip-ui
+git clone https://github.com/datazup/dzup-ui.git
+cd dzup-ui
 yarn install
 ```
 

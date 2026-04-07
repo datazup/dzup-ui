@@ -224,7 +224,7 @@ export const RealWorldCodeBlock: Story = {
     template: `
       <DzScrollArea orientation="both" class="h-48 w-96 bg-gray-900 rounded-lg">
         <pre class="p-4 text-sm text-gray-300 font-mono"><code>import { createApp } from 'vue'
-import { DzScrollArea, DzContainer, DzGrid, DzFlex, DzStack } from '@dzip-ui/core'
+import { DzScrollArea, DzContainer, DzGrid, DzFlex, DzStack } from '@dzup-ui/core'
 
 const app = createApp({
   template: \`

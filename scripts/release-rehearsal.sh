@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# release-rehearsal.sh — full pre-publish smoke test for dzip-ui
+# release-rehearsal.sh — full pre-publish smoke test for dzup-ui
 # Simulates what CI does on a clean checkout, but runs locally.
 #
 # Usage:
@@ -30,7 +30,7 @@ fail() { echo -e "${RED}✗ FAILED: $*${NC}"; exit 1; }
 warn() { echo -e "${YELLOW}⚠ $*${NC}"; }
 
 echo ""
-echo -e "${BOLD}dzip-ui release rehearsal${NC}"
+echo -e "${BOLD}dzup-ui release rehearsal${NC}"
 echo "Repo: $REPO_ROOT"
 echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "Node: $(node --version)"

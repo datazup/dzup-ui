@@ -4,10 +4,10 @@
  * Uses Reka UI DialogRoot with sheet styling (ADR-07).
  * v-model via defineModel<boolean>('open') (ADR-16).
  *
- * @module @dzip-ui/core/components/overlays/DzSheet
+ * @module @dzup-ui/core/components/overlays/DzSheet
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 
 /** Sheet slide direction */
 export type SheetSide = 'top' | 'right' | 'bottom' | 'left'

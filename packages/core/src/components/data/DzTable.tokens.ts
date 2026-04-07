@@ -4,7 +4,7 @@
  * Maps semantic design tokens to table components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/data/DzTable.tokens
+ * @module @dzup-ui/core/components/data/DzTable.tokens
  */
 
 export const tableTokens = {

@@ -14,8 +14,8 @@ import {
   DzSelect,
   DzSlider,
   DzSwitch,
-} from '@dzip-ui/core'
-import type { DzSelectItem } from '@dzip-ui/core'
+} from '@dzup-ui/core'
+import type { DzSelectItem } from '@dzup-ui/core'
 import { computed, ref } from 'vue'
 
 const accountType = ref('')

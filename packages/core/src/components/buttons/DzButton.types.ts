@@ -1,7 +1,7 @@
 /**
  * DzButton — type definitions.
  *
- * @module @dzip-ui/core/components/buttons/DzButton
+ * @module @dzup-ui/core/components/buttons/DzButton
  */
 
 import type {
@@ -9,7 +9,7 @@ import type {
   ButtonVariant,
   CanonicalSize,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------

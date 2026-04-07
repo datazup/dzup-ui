@@ -1,7 +1,7 @@
 /**
  * DzAccordionCompat — Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzip-ui
+ * Validates that the compat adapter correctly maps old dzup-ui
  * single-component accordion API to the new vNext compound DzAccordion API.
  */
 import { mount } from '@vue/test-utils'
@@ -137,7 +137,7 @@ describe('dzAccordionCompat', () => {
       props: { items: sampleItems, expandIcon: 'chevron-down', modelValue: '' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] DzAccordionCompat: "expandIcon" prop is dropped in vNext. Use CSS to control the expand icon.',
+      '[dzup-ui/compat] DzAccordionCompat: "expandIcon" prop is dropped in vNext. Use CSS to control the expand icon.',
     )
   })
 
@@ -147,7 +147,7 @@ describe('dzAccordionCompat', () => {
       props: { items: sampleItems, modelValue: '' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] DzAccordionCompat is deprecated. Use DzAccordion from @dzip-ui/core instead.',
+      '[dzup-ui/compat] DzAccordionCompat is deprecated. Use DzAccordion from @dzup-ui/core instead.',
     )
   })
 

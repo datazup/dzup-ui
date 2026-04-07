@@ -1,7 +1,7 @@
 /**
  * DzTabsCompat -- Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzip-ui
+ * Validates that the compat adapter correctly maps old dzup-ui
  * single-component tabs API to the new vNext compound DzTabs API.
  */
 import { mount } from '@vue/test-utils'
@@ -154,7 +154,7 @@ describe('dzTabsCompat', () => {
       props: { tabs: sampleTabs, modelValue: 'tab1' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] DzTabsCompat is deprecated. Use DzTabs from @dzip-ui/core instead.',
+      '[dzup-ui/compat] DzTabsCompat is deprecated. Use DzTabs from @dzup-ui/core instead.',
     )
   })
 

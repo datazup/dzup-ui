@@ -1,4 +1,4 @@
-# @dzip-ui/core
+# @dzup-ui/core
 
 ## 0.1.0-alpha.1 (2026-04-03)
 
@@ -29,7 +29,7 @@
 
 ### Features
 
-- Initial alpha release of dzip-ui core component library
+- Initial alpha release of dzup-ui core component library
 - 11 component families: buttons, cards, data, feedback, forms, inputs, layout, media, navigation, overlays, typography
 - 146 Vue 3 components with TypeScript strict mode
 - Tailwind CSS 4 integration with design token system

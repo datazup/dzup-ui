@@ -4,10 +4,10 @@
  * Uses Reka UI RadioGroupItem + RadioGroupIndicator (ADR-07).
  * Must be used within a DzRadioGroup.
  *
- * @module @dzip-ui/core/components/forms/DzRadio
+ * @module @dzup-ui/core/components/forms/DzRadio
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

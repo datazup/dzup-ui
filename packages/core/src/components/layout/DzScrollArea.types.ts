@@ -3,10 +3,10 @@
  *
  * Uses Reka UI ScrollArea primitives (ADR-07).
  *
- * @module @dzip-ui/core/components/layout/DzScrollArea
+ * @module @dzup-ui/core/components/layout/DzScrollArea
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 
 /** Scrollbar orientation */
 export type ScrollOrientation = 'vertical' | 'horizontal' | 'both'

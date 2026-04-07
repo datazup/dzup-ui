@@ -4,7 +4,7 @@
  * Split button = primary action button + dropdown trigger button.
  * Uses typed injection key (ADR-08).
  *
- * @module @dzip-ui/core/components/buttons/DzSplitButton
+ * @module @dzup-ui/core/components/buttons/DzSplitButton
  */
 
 import type {
@@ -12,7 +12,7 @@ import type {
   ButtonVariant,
   CanonicalSize,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

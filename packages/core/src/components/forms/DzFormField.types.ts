@@ -4,7 +4,7 @@
  * Compound wrapper that provides form field context (IDs, validation state)
  * to child sub-parts via provide/inject (ADR-08).
  *
- * @module @dzip-ui/core/components/forms/DzFormField
+ * @module @dzup-ui/core/components/forms/DzFormField
  */
 
 // ---------------------------------------------------------------------------

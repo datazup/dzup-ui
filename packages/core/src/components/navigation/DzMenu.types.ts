@@ -3,10 +3,10 @@
  *
  * Uses typed injection key (ADR-08).
  *
- * @module @dzip-ui/core/components/navigation/DzMenu
+ * @module @dzup-ui/core/components/navigation/DzMenu
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

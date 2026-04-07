@@ -5,7 +5,7 @@ import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
 /**
  * DzCheckbox -- Checkbox component using Reka UI (ADR-07).
  *
- * Wraps Reka UI's CheckboxRoot + CheckboxIndicator with dzip-ui
+ * Wraps Reka UI's CheckboxRoot + CheckboxIndicator with dzup-ui
  * styling via tailwind-variants. v-model via defineModel<boolean>() (ADR-16).
  *
  * @example

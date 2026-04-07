@@ -1,10 +1,10 @@
 /**
  * DzAvatarGroup — Type definitions for the stacked avatar group.
  *
- * @module @dzip-ui/core/components/media/DzAvatarGroup
+ * @module @dzup-ui/core/components/media/DzAvatarGroup
  */
 
-import type { CanonicalSize } from '@dzip-ui/contracts'
+import type { CanonicalSize } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

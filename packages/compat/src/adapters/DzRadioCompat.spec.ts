@@ -1,7 +1,7 @@
 /**
  * DzRadioCompat -- Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzip-ui
+ * Validates that the compat adapter correctly maps old dzup-ui
  * single-component radio API to the new vNext DzRadioGroup + DzRadio API.
  */
 import { mount } from '@vue/test-utils'
@@ -138,7 +138,7 @@ describe('dzRadioCompat', () => {
       props: { options: sampleOptions, modelValue: 'red' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] DzRadioCompat is deprecated. Use DzRadioGroup from @dzip-ui/core instead.',
+      '[dzup-ui/compat] DzRadioCompat is deprecated. Use DzRadioGroup from @dzup-ui/core instead.',
     )
   })
 

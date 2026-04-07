@@ -4,7 +4,7 @@
  * DzSplitter is a naming alias for DzResizable. Both provide
  * the same resizable panel functionality backed by Reka UI Splitter.
  *
- * @module @dzip-ui/core/components/layout/DzSplitter
+ * @module @dzup-ui/core/components/layout/DzSplitter
  */
 
 export type {

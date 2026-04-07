@@ -1,7 +1,7 @@
 /**
  * DzCaption — Type definitions for the small caption text component.
  *
- * @module @dzip-ui/core/components/typography/DzCaption
+ * @module @dzup-ui/core/components/typography/DzCaption
  */
 
 /** Semantic tone for caption */

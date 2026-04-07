@@ -1,7 +1,7 @@
 /**
- * @dzip-ui/tooling
+ * @dzup-ui/tooling
  *
- * Internal validators and quality enforcement tools for dzip-ui.
+ * Internal validators and quality enforcement tools for dzup-ui.
  *
  * Tools are designed to be run as CLI scripts via tsx:
  *   - import-boundary.ts  — validates cross-package import rules

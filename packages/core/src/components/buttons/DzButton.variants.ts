@@ -4,7 +4,7 @@
  * Uses semantic CSS token variables exclusively (ADR-04).
  * Component token tier (--dz-button-*) overrides where available.
  *
- * @module @dzip-ui/core/components/buttons/DzButton.variants
+ * @module @dzup-ui/core/components/buttons/DzButton.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

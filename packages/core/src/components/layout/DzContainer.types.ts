@@ -3,10 +3,10 @@
  *
  * Centered content container with responsive padding and max-width.
  *
- * @module @dzip-ui/core/components/layout/DzContainer
+ * @module @dzup-ui/core/components/layout/DzContainer
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

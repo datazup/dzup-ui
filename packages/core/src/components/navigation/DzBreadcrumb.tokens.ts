@@ -4,7 +4,7 @@
  * Maps semantic design tokens to breadcrumb navigation styling (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/navigation/DzBreadcrumb.tokens
+ * @module @dzup-ui/core/components/navigation/DzBreadcrumb.tokens
  */
 
 export const breadcrumbTokens = {

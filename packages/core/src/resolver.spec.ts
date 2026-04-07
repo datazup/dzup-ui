@@ -4,13 +4,13 @@ import { DzResolver } from './resolver'
 
 describe('dzResolver', () => {
   describe('core component resolution', () => {
-    it('resolves Dz-prefixed components to @dzip-ui/core', () => {
+    it('resolves Dz-prefixed components to @dzup-ui/core', () => {
       const resolver = DzResolver()
       const result = resolver.resolve('DzButton')
 
       expect(result).toEqual({
         name: 'DzButton',
-        from: '@dzip-ui/core',
+        from: '@dzup-ui/core',
       })
     })
 
@@ -33,7 +33,7 @@ describe('dzResolver', () => {
         const result = resolver.resolve(name)
         expect(result).toEqual({
           name,
-          from: '@dzip-ui/core',
+          from: '@dzup-ui/core',
         })
       }
     })
@@ -64,7 +64,7 @@ describe('dzResolver', () => {
 
       expect(resolver.resolve('DzFormBuilder')).toEqual({
         name: 'DzFormBuilder',
-        from: '@dzip-ui/pro',
+        from: '@dzup-ui/pro',
       })
     })
 
@@ -93,7 +93,7 @@ describe('dzResolver', () => {
         const result = resolver.resolve(name)
         expect(result).toEqual({
           name,
-          from: '@dzip-ui/pro',
+          from: '@dzup-ui/pro',
         })
       }
     })
@@ -127,7 +127,7 @@ describe('dzResolver', () => {
 
       for (const name of proFamilyRoots) {
         const result = resolver.resolve(name)
-        expect(result?.from).toBe('@dzip-ui/pro')
+        expect(result?.from).toBe('@dzup-ui/pro')
       }
     })
 
@@ -137,7 +137,7 @@ describe('dzResolver', () => {
       const result = resolver.resolve('DzButton')
       expect(result).toEqual({
         name: 'DzButton',
-        from: '@dzip-ui/core',
+        from: '@dzup-ui/core',
       })
     })
   })

@@ -30,7 +30,7 @@ labels: bug
 
 | Item | Version |
 |------|---------|
-| `@dzip-ui/core` | |
+| `@dzup-ui/core` | |
 | Vue | |
 | Node | |
 | Browser / runtime | |

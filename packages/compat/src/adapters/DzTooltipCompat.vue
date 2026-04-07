@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { TooltipAlign, TooltipSide } from '@dzip-ui/core'
+import type { TooltipAlign, TooltipSide } from '@dzup-ui/core'
 import type { DzTooltipCompatProps, OldPlacement } from '../adapter-types.ts'
 import {
   DzTooltip,
   DzTooltipContent,
   DzTooltipTrigger,
-} from '@dzip-ui/core'
+} from '@dzup-ui/core'
 /**
  * DzTooltipCompat — backward-compatible wrapper for DzTooltip compound.
  *
- * Maps old dzip-ui single-component tooltip API to the new vNext compound API:
+ * Maps old dzup-ui single-component tooltip API to the new vNext compound API:
  * - `content` prop → DzTooltipContent slot content
  * - `placement` → maps to `side` + `align` props on DzTooltipContent
  * - `delay` / `showDelay` → maps to `delayDuration` on DzTooltip root
@@ -17,7 +17,7 @@ import {
  * - `disabled` → controls whether tooltip renders
  * - Default slot → wraps DzTooltipTrigger
  *
- * @deprecated Use DzTooltip, DzTooltipTrigger, DzTooltipContent from @dzip-ui/core instead.
+ * @deprecated Use DzTooltip, DzTooltipTrigger, DzTooltipContent from @dzup-ui/core instead.
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'
@@ -33,7 +33,7 @@ onMounted(() => {
 
   if (import.meta.env?.DEV && props.trigger) {
     console.warn(
-      '[dzip-ui/compat] DzTooltipCompat: "trigger" prop is dropped in vNext. Tooltips use hover by default.',
+      '[dzup-ui/compat] DzTooltipCompat: "trigger" prop is dropped in vNext. Tooltips use hover by default.',
     )
   }
 })

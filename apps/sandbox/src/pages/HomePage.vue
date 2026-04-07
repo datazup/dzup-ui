@@ -18,10 +18,10 @@ const families = [
   <div class="home-page">
     <header class="page-header">
       <h1 class="page-title">
-        dzip-ui Sandbox
+        dzup-ui Sandbox
       </h1>
       <p class="page-description">
-        Development playground for testing and exploring dzip-ui components.
+        Development playground for testing and exploring dzup-ui components.
         Select a component family from the sidebar to view interactive demos.
       </p>
     </header>

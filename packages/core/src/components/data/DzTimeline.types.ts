@@ -3,14 +3,14 @@
  *
  * DzTimeline provides context to DzTimelineItem children via inject (ADR-08).
  *
- * @module @dzip-ui/core/components/data/DzTimeline
+ * @module @dzup-ui/core/components/data/DzTimeline
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

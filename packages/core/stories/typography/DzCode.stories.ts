@@ -165,8 +165,8 @@ export const WithLanguage: Story = {
           The language prop sets data-language on the element for future
           syntax highlighting integration.
         </p>
-        <DzCode variant="block" language="bash">npm install @dzip-ui/core @dzip-ui/tokens
-yarn add @dzip-ui/core @dzip-ui/tokens</DzCode>
+        <DzCode variant="block" language="bash">npm install @dzup-ui/core @dzup-ui/tokens
+yarn add @dzup-ui/core @dzup-ui/tokens</DzCode>
         <DzCode variant="block" language="json">{
   "compilerOptions": {
     "strict": true,
@@ -243,12 +243,12 @@ export const RealWorldInstallGuide: Story = {
 
         <div>
           <h3 class="text-lg font-semibold mb-2">1. Install packages</h3>
-          <DzCode variant="block" language="bash">yarn add @dzip-ui/core @dzip-ui/tokens</DzCode>
+          <DzCode variant="block" language="bash">yarn add @dzup-ui/core @dzup-ui/tokens</DzCode>
         </div>
 
         <div>
           <h3 class="text-lg font-semibold mb-2">2. Import the component</h3>
-          <DzCode variant="block" language="typescript">import { DzButton } from '@dzip-ui/core'</DzCode>
+          <DzCode variant="block" language="typescript">import { DzButton } from '@dzup-ui/core'</DzCode>
         </div>
 
         <div>

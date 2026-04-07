@@ -3,7 +3,7 @@
  *
  * Handles page state, page size, and slicing of sorted data for display.
  *
- * @module @dzip-ui/core/composables/useDataGrid
+ * @module @dzup-ui/core/composables/useDataGrid
  */
 
 import type { ComputedRef, Ref } from 'vue'

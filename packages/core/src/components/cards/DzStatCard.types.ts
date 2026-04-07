@@ -1,7 +1,7 @@
 /**
  * DzStatCard — Type definitions for the statistics display card.
  *
- * @module @dzip-ui/core/components/cards/DzStatCard
+ * @module @dzup-ui/core/components/cards/DzStatCard
  */
 
 import type { Component } from 'vue'

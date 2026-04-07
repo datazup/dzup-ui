@@ -9,7 +9,7 @@ import { RadioGroupRoot } from 'reka-ui'
  * DzRadioGroup -- Radio group using Reka UI RadioGroupRoot (ADR-07).
  *
  * v-model via defineModel<string>() (ADR-16).
- * Wraps Reka UI's RadioGroupRoot with dzip-ui styling.
+ * Wraps Reka UI's RadioGroupRoot with dzup-ui styling.
  *
  * @example
  * ```vue

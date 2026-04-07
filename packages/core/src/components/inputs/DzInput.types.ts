@@ -4,14 +4,14 @@
  * Text input component with prefix/suffix slots, clearable behavior,
  * and full form-control contract compliance.
  *
- * @module @dzip-ui/core/components/inputs/DzInput
+ * @module @dzup-ui/core/components/inputs/DzInput
  */
 
 import type {
   BaseFormControlProps,
   ChangeEvents,
   InputVariant,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

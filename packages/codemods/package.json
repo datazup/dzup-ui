@@ -1,8 +1,8 @@
 {
-  "name": "@dzip-ui/codemods",
+  "name": "@dzup-ui/codemods",
   "type": "module",
   "version": "0.1.0-alpha.0",
-  "description": "Code transforms for migrating from old dzip-ui to vNext",
+  "description": "Code transforms for migrating from old dzup-ui to vNext",
   "license": "MIT",
   "exports": {
     ".": {

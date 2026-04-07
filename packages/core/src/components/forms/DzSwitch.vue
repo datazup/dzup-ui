@@ -4,7 +4,7 @@ import { SwitchRoot, SwitchThumb } from 'reka-ui'
 /**
  * DzSwitch -- Toggle switch using Reka UI (ADR-07).
  *
- * Wraps Reka UI's SwitchRoot + SwitchThumb with dzip-ui styling.
+ * Wraps Reka UI's SwitchRoot + SwitchThumb with dzup-ui styling.
  * v-model via defineModel<boolean>() (ADR-16).
  *
  * @example

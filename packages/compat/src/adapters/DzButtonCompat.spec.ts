@@ -1,7 +1,7 @@
 /**
  * DzButtonCompat — Unit tests.
  *
- * Validates that the compat adapter correctly maps old dzip-ui
+ * Validates that the compat adapter correctly maps old dzup-ui
  * button API to the new vNext DzButton API.
  */
 import { mount } from '@vue/test-utils'
@@ -111,7 +111,7 @@ describe('dzButtonCompat', () => {
       slots: { default: 'Test' },
     })
     expect(warnSpy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] DzButtonCompat is deprecated. Use DzButton from @dzip-ui/core instead.',
+      '[dzup-ui/compat] DzButtonCompat is deprecated. Use DzButton from @dzup-ui/core instead.',
     )
   })
 

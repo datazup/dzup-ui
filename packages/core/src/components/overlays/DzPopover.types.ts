@@ -4,7 +4,7 @@
  * Uses Reka UI Popover primitives (ADR-07).
  * Open state via defineModel<boolean>('open') (ADR-16).
  *
- * @module @dzip-ui/core/components/overlays/DzPopover
+ * @module @dzup-ui/core/components/overlays/DzPopover
  */
 
 // ---------------------------------------------------------------------------

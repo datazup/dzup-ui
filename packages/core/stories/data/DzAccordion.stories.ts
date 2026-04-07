@@ -80,17 +80,17 @@ type Story = StoryObj<typeof meta>
 
 const faqItems = `
   <DzAccordionItem value="item-1">
-    <DzAccordionTrigger>What is dzip-ui?</DzAccordionTrigger>
+    <DzAccordionTrigger>What is dzup-ui?</DzAccordionTrigger>
     <DzAccordionContent>
-      dzip-ui is a Vue 3 component library built with TypeScript, Tailwind CSS 4,
+      dzup-ui is a Vue 3 component library built with TypeScript, Tailwind CSS 4,
       and Reka UI headless primitives. It provides both Core and Pro components.
     </DzAccordionContent>
   </DzAccordionItem>
   <DzAccordionItem value="item-2">
     <DzAccordionTrigger>How do I install it?</DzAccordionTrigger>
     <DzAccordionContent>
-      Install via yarn: <code>yarn add @dzip-ui/core</code>. For enterprise
-      components, also install <code>@dzip-ui/pro</code>.
+      Install via yarn: <code>yarn add @dzup-ui/core</code>. For enterprise
+      components, also install <code>@dzup-ui/pro</code>.
     </DzAccordionContent>
   </DzAccordionItem>
   <DzAccordionItem value="item-3">

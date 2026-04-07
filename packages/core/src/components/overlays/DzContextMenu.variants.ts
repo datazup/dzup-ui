@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04). Mirrors DzDropdownMenu variants.
  *
- * @module @dzip-ui/core/components/overlays/DzContextMenu.variants
+ * @module @dzup-ui/core/components/overlays/DzContextMenu.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

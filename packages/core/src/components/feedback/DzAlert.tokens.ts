@@ -4,7 +4,7 @@
  * Maps semantic design tokens to alert component styling (ADR-04).
  * Alerts support four variants (filled, outline, subtle, ghost) across six tones.
  *
- * @module @dzip-ui/core/components/feedback/DzAlert.tokens
+ * @module @dzup-ui/core/components/feedback/DzAlert.tokens
  */
 
 export const alertTokens = {

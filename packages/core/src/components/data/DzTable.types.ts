@@ -6,13 +6,13 @@
  *
  * DzTable provides context to sub-parts via inject (ADR-08).
  *
- * @module @dzip-ui/core/components/data/DzTable
+ * @module @dzup-ui/core/components/data/DzTable
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

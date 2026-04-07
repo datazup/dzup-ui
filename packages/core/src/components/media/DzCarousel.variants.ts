@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04). Uses --dz-* CSS variables exclusively.
  *
- * @module @dzip-ui/core/components/media/DzCarousel.variants
+ * @module @dzup-ui/core/components/media/DzCarousel.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

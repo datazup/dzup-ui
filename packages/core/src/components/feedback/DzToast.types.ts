@@ -4,10 +4,10 @@
  * Uses Reka UI Toast primitives (ADR-07).
  * Typed injection key for compound context (ADR-08).
  *
- * @module @dzip-ui/core/components/feedback/DzToast
+ * @module @dzup-ui/core/components/feedback/DzToast
  */
 
-import type { BaseAccessibilityProps, CanonicalTone } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalTone } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

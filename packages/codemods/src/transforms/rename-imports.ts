@@ -1,14 +1,14 @@
 /**
  * rename-imports transform
  *
- * Updates import paths from the old dzip-ui package structure to the new
- * vNext `@dzip-ui/core` and `@dzip-ui/pro` packages.
+ * Updates import paths from the old dzup-ui package structure to the new
+ * vNext `@dzup-ui/core` and `@dzup-ui/pro` packages.
  *
  * Handled rewrites:
- * - `import { X } from 'dzip-ui'`              -> `import { X } from '@dzip-ui/core'`
- * - `import { X } from '@dzip-ui/components'`   -> `import { X } from '@dzip-ui/core'`
- * - `import { X } from 'dzip-ui/pro'`           -> `import { X } from '@dzip-ui/pro'`
- * - `import { X } from '@dzip-ui/pro-components'`-> `import { X } from '@dzip-ui/pro'`
+ * - `import { X } from 'dzup-ui'`              -> `import { X } from '@dzup-ui/core'`
+ * - `import { X } from '@dzup-ui/components'`   -> `import { X } from '@dzup-ui/core'`
+ * - `import { X } from 'dzup-ui/pro'`           -> `import { X } from '@dzup-ui/pro'`
+ * - `import { X } from '@dzup-ui/pro-components'`-> `import { X } from '@dzup-ui/pro'`
  *
  * This transform is idempotent: running it on already-migrated imports
  * produces no changes.
@@ -21,19 +21,19 @@ import type { API, FileInfo, Options } from 'jscodeshift'
 /** Map from old import source to new import source. */
 const IMPORT_SOURCE_MAP: ReadonlyMap<string, string> = new Map([
   // Bare package name -> core
-  ['dzip-ui', '@dzip-ui/core'],
+  ['dzup-ui', '@dzup-ui/core'],
   // Old scoped names -> core
-  ['@dzip-ui/components', '@dzip-ui/core'],
-  ['@dzip-ui/ui', '@dzip-ui/core'],
+  ['@dzup-ui/components', '@dzup-ui/core'],
+  ['@dzup-ui/ui', '@dzup-ui/core'],
   // Pro paths
-  ['dzip-ui/pro', '@dzip-ui/pro'],
-  ['@dzip-ui/pro-components', '@dzip-ui/pro'],
+  ['dzup-ui/pro', '@dzup-ui/pro'],
+  ['@dzup-ui/pro-components', '@dzup-ui/pro'],
 ])
 
 /**
  * Well-known Pro component prefixes / names.
- * If a specifier name matches, it is routed to `@dzip-ui/pro` even when
- * imported from a generic source like `'dzip-ui'`.
+ * If a specifier name matches, it is routed to `@dzup-ui/pro` even when
+ * imported from a generic source like `'dzup-ui'`.
  */
 const PRO_COMPONENT_NAMES: ReadonlySet<string> = new Set([
   // Builders
@@ -73,12 +73,12 @@ const PRO_COMPONENT_NAMES: ReadonlySet<string> = new Set([
 
 /**
  * Determine the correct target package for a specifier name.
- * Pro components go to `@dzip-ui/pro`, everything else to the mapped target
- * (which defaults to `@dzip-ui/core`).
+ * Pro components go to `@dzup-ui/pro`, everything else to the mapped target
+ * (which defaults to `@dzup-ui/core`).
  */
 function resolveTarget(specifierName: string, defaultTarget: string): string {
   if (PRO_COMPONENT_NAMES.has(specifierName)) {
-    return '@dzip-ui/pro'
+    return '@dzup-ui/pro'
   }
   return defaultTarget
 }

@@ -4,7 +4,7 @@
  * Components set these on their root element so consumers (and CSS)
  * can query component state via attribute selectors.
  *
- * @module @dzip-ui/contracts/data-attributes
+ * @module @dzup-ui/contracts/data-attributes
  */
 
 import type { CanonicalTone } from './canonical.types'

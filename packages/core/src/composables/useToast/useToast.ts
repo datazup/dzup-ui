@@ -5,7 +5,7 @@
  * toast notifications from any component. Requires a DzToastProvider
  * ancestor in the component tree.
  *
- * @module @dzip-ui/core/composables/useToast
+ * @module @dzup-ui/core/composables/useToast
  */
 
 import type { DzToastContext, ToastItem } from '../../components/feedback/DzToast.types.ts'
@@ -53,7 +53,7 @@ export function useToast(): UseToastReturn {
 
   if (!context && import.meta.env?.DEV) {
     console.warn(
-      '[dzip-ui] useToast() must be used within a <DzToastProvider>. '
+      '[dzup-ui] useToast() must be used within a <DzToastProvider>. '
       + 'Toast calls will be silently ignored.',
     )
   }

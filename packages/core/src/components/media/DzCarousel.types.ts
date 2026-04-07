@@ -3,13 +3,13 @@
  *
  * Built from scratch. Context injection via DZ_CAROUSEL_KEY (ADR-08).
  *
- * @module @dzip-ui/core/components/media/DzCarousel
+ * @module @dzup-ui/core/components/media/DzCarousel
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

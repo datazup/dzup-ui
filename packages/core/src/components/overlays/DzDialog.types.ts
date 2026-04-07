@@ -5,10 +5,10 @@
  * Open state via defineModel<boolean>('open') (ADR-16).
  * Typed injection key for compound context (ADR-08).
  *
- * @module @dzip-ui/core/components/overlays/DzDialog
+ * @module @dzup-ui/core/components/overlays/DzDialog
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

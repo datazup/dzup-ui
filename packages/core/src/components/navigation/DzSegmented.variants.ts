@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/navigation/DzSegmented.variants
+ * @module @dzup-ui/core/components/navigation/DzSegmented.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

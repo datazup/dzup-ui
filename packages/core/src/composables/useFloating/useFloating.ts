@@ -5,7 +5,7 @@
  * DzTooltip, DzPopover, DzDropdownMenu and other overlay components.
  * SSR-safe: positioning only runs in the browser.
  *
- * @module @dzip-ui/core/composables/useFloating
+ * @module @dzup-ui/core/composables/useFloating
  */
 
 import type { Placement } from '@floating-ui/vue'
@@ -60,7 +60,7 @@ export interface UseFloatingReturn {
 }
 
 /**
- * Wraps `@floating-ui/vue` with sensible defaults for dzip-ui overlay components.
+ * Wraps `@floating-ui/vue` with sensible defaults for dzup-ui overlay components.
  *
  * @param options - Positioning configuration
  * @returns Refs, styles, and controls for the floating element

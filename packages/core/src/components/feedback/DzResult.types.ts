@@ -1,7 +1,7 @@
 /**
  * DzResult — Type definitions for the operation result display component.
  *
- * @module @dzip-ui/core/components/feedback/DzResult
+ * @module @dzup-ui/core/components/feedback/DzResult
  */
 
 /** Result status options */

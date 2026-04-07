@@ -3,7 +3,7 @@
  *
  * Uses semantic CSS token variables exclusively (ADR-04).
  *
- * @module @dzip-ui/core/components/data/DzTimeline.variants
+ * @module @dzup-ui/core/components/data/DzTimeline.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

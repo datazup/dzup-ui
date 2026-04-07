@@ -17,9 +17,9 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@dzip-ui/tokens': resolve(__dirname, '../tokens/src'),
-      '@dzip-ui/contracts': resolve(__dirname, '../contracts/src'),
-      '@dzip-ui/core': resolve(__dirname, '../core/src'),
+      '@dzup-ui/tokens': resolve(__dirname, '../tokens/src'),
+      '@dzup-ui/contracts': resolve(__dirname, '../contracts/src'),
+      '@dzup-ui/core': resolve(__dirname, '../core/src'),
     },
   },
   build: {
@@ -30,9 +30,9 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'vue',
-        '@dzip-ui/core',
-        '@dzip-ui/tokens',
-        '@dzip-ui/contracts',
+        '@dzup-ui/core',
+        '@dzup-ui/tokens',
+        '@dzup-ui/contracts',
       ],
       output: {
         preserveModules: true,

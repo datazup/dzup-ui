@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 // Test the module configuration and component lists
-describe('@dzip-ui/nuxt module', () => {
+describe('@dzup-ui/nuxt module', () => {
   it('exports a defineNuxtModule-compatible default export', async () => {
     const mod = await import('./module')
     expect(mod.default).toBeDefined()

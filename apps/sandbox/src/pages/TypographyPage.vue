@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// TODO: Import DzHeading, DzText, DzCode from @dzip-ui/core
+// TODO: Import DzHeading, DzText, DzCode from @dzup-ui/core
 // and create typography demos with sizes, weights, and styles.
 </script>
 

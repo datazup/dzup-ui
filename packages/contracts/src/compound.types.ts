@@ -9,7 +9,7 @@
  * - Key constant: `DZ_{FAMILY}_KEY` (SCREAMING_SNAKE)
  * - Context interface: `Dz{Family}Context`
  *
- * @module @dzip-ui/contracts/compound
+ * @module @dzup-ui/contracts/compound
  */
 
 import type { Ref } from 'vue'

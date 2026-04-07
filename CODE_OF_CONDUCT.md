@@ -2,7 +2,7 @@
 
 ## Our Standards
 
-We are committed to a welcoming, inclusive, and professional environment for everyone contributing to dzip-ui.
+We are committed to a welcoming, inclusive, and professional environment for everyone contributing to dzup-ui.
 
 **Expected behavior:**
 - Be respectful and constructive in all interactions

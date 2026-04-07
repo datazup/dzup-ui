@@ -7,7 +7,7 @@ import {
   DzImageCard,
   DzStatCard,
   DzButton,
-} from '@dzip-ui/core'
+} from '@dzup-ui/core'
 import { computed, ref } from 'vue'
 
 const clickCount = ref(0)

@@ -4,7 +4,7 @@
  * Maps semantic design tokens to visual separator properties (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/layout/DzDivider.tokens
+ * @module @dzup-ui/core/components/layout/DzDivider.tokens
  */
 
 export const dividerTokens = {

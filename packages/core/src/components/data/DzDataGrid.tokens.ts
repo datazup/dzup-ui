@@ -4,7 +4,7 @@
  * Maps semantic design tokens to data grid components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/data/DzDataGrid.tokens
+ * @module @dzup-ui/core/components/data/DzDataGrid.tokens
  */
 
 export const dataGridTokens = {

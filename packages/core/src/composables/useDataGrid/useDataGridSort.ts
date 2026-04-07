@@ -3,7 +3,7 @@
  *
  * Handles multi-column sorting with direction cycling (asc → desc → none).
  *
- * @module @dzip-ui/core/composables/useDataGrid
+ * @module @dzup-ui/core/composables/useDataGrid
  */
 
 import type { ComputedRef, Ref } from 'vue'

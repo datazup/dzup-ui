@@ -4,7 +4,7 @@
  * Maps semantic design tokens to list and list-item components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/data/DzList.tokens
+ * @module @dzup-ui/core/components/data/DzList.tokens
  */
 
 export const listTokens = {

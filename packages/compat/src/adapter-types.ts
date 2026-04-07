@@ -10,7 +10,7 @@
  * also exported here.
  */
 
-import type { DialogContentSize, DzSelectItem } from '@dzip-ui/core'
+import type { DialogContentSize, DzSelectItem } from '@dzup-ui/core'
 
 // ─── DzSelectCompat ───────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ export interface OldAccordionItem {
   content?: string
 }
 
-/** Old dzip-ui size values shared across multiple adapters */
+/** Old dzup-ui size values shared across multiple adapters */
 export type OldSize = 'small' | 'medium' | 'large' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 export interface DzAccordionCompatProps {
@@ -48,7 +48,7 @@ export interface DzAccordionCompatProps {
 
 // ─── DzAlertCompat ────────────────────────────────────────────────────────────
 
-/** Old dzip-ui alert type values */
+/** Old dzup-ui alert type values */
 export type OldAlertType = 'success' | 'warning' | 'error' | 'info' | 'default'
 
 export interface DzAlertCompatProps {
@@ -62,7 +62,7 @@ export interface DzAlertCompatProps {
 
 // ─── DzButtonCompat ───────────────────────────────────────────────────────────
 
-/** Old dzip-ui button type prop values */
+/** Old dzup-ui button type prop values */
 export type OldButtonType = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default' | 'text' | 'link'
 
 export interface DzButtonCompatProps {
@@ -129,7 +129,7 @@ export interface DzInputCompatProps {
 
 // ─── DzRadioCompat ────────────────────────────────────────────────────────────
 
-/** Old dzip-ui radio option shape */
+/** Old dzup-ui radio option shape */
 export interface RadioOption {
   /** Display label for the radio */
   label: string
@@ -150,7 +150,7 @@ export interface DzRadioCompatProps {
   name?: string
 }
 
-/** Old dzip-ui option shape */
+/** Old dzup-ui option shape */
 export interface OldSelectOption {
   /** Display text — old API used both `label` and `text` */
   label?: string
@@ -200,7 +200,7 @@ export interface DzSwitchCompatProps {
 
 // ─── DzTabsCompat ─────────────────────────────────────────────────────────────
 
-/** Old dzip-ui tab item shape */
+/** Old dzup-ui tab item shape */
 export interface TabItem {
   /** Display label for the tab */
   label: string
@@ -212,7 +212,7 @@ export interface TabItem {
   closable?: boolean
 }
 
-/** Old dzip-ui tab type values */
+/** Old dzup-ui tab type values */
 export type OldTabType = 'line' | 'card' | 'border-card'
 
 export interface DzTabsCompatProps {

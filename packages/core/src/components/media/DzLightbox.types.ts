@@ -4,12 +4,12 @@
  * Uses Reka UI DialogRoot internally for the overlay (ADR-07).
  * v-model via defineModel<boolean> (ADR-16).
  *
- * @module @dzip-ui/core/components/media/DzLightbox
+ * @module @dzup-ui/core/components/media/DzLightbox
  */
 
 import type {
   BaseAccessibilityProps,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Data types

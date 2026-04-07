@@ -4,7 +4,7 @@
  * Uses Reka UI ComboboxRoot (ADR-07) for searchable select.
  * v-model via defineModel (ADR-16).
  *
- * @module @dzip-ui/core/components/forms/DzCombobox
+ * @module @dzup-ui/core/components/forms/DzCombobox
  */
 
 import type {
@@ -13,7 +13,7 @@ import type {
   CanonicalSize,
   InputVariant,
   SelectOpenableEvents,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { DzSelectItem } from './DzSelect.types.ts'
 
 // ---------------------------------------------------------------------------

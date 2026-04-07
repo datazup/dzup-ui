@@ -4,13 +4,13 @@
  * Unlike DzToast (ephemeral, time-based), DzNotification is persistent
  * until explicitly dismissed by the user.
  *
- * @module @dzip-ui/core/components/feedback/DzNotification
+ * @module @dzup-ui/core/components/feedback/DzNotification
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalTone,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------

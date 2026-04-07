@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { CanonicalSize } from '@dzip-ui/contracts'
-import type { DzSelectItem } from '@dzip-ui/core'
+import type { CanonicalSize } from '@dzup-ui/contracts'
+import type { DzSelectItem } from '@dzup-ui/core'
 import type { DzSelectCompatProps, OldSize } from '../adapter-types.ts'
-import { DzSelect } from '@dzip-ui/core'
+import { DzSelect } from '@dzup-ui/core'
 /**
  * DzSelectCompat — backward-compatible wrapper for DzSelect.
  *
- * Maps old dzip-ui select API to the new vNext API:
+ * Maps old dzup-ui select API to the new vNext API:
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `options` prop (old) -> `items` prop (new), with shape mapping
  * - `v-model` is forwarded directly (string-based)
  * - `placeholder` -> `placeholder` (same name)
  *
- * @deprecated Use DzSelect from @dzip-ui/core instead.
+ * @deprecated Use DzSelect from @dzup-ui/core instead.
  */
 import { computed, onMounted } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'

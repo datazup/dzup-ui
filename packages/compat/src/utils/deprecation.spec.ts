@@ -19,15 +19,15 @@ describe('warnDeprecated', () => {
     const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     warnDeprecated('OldComp', 'NewComp')
     expect(spy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] OldComp is deprecated. Use NewComp from @dzip-ui/core instead.',
+      '[dzup-ui/compat] OldComp is deprecated. Use NewComp from @dzup-ui/core instead.',
     )
   })
 
   it('supports custom package name', () => {
     const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    warnDeprecated('OldComp', 'NewComp', '@dzip-ui/pro')
+    warnDeprecated('OldComp', 'NewComp', '@dzup-ui/pro')
     expect(spy).toHaveBeenCalledWith(
-      '[dzip-ui/compat] OldComp is deprecated. Use NewComp from @dzip-ui/pro instead.',
+      '[dzup-ui/compat] OldComp is deprecated. Use NewComp from @dzup-ui/pro instead.',
     )
   })
 

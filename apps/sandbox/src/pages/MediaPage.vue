@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// TODO: Import DzAvatar, DzImage, DzIcon from @dzip-ui/core
+// TODO: Import DzAvatar, DzImage, DzIcon from @dzup-ui/core
 // and create media component demos.
 </script>
 

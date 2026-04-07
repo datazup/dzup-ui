@@ -3,7 +3,7 @@
  *
  * Flexible space filler component for layout spacing.
  *
- * @module @dzip-ui/core/components/layout/DzSpacer
+ * @module @dzup-ui/core/components/layout/DzSpacer
  */
 
 // ---------------------------------------------------------------------------

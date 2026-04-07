@@ -5,7 +5,7 @@
  * @internationalized/date for date handling (ADR-13).
  * v-model via defineModel (ADR-16).
  *
- * @module @dzip-ui/core/components/forms/DzDateRangePicker
+ * @module @dzup-ui/core/components/forms/DzDateRangePicker
  */
 
 import type {
@@ -14,7 +14,7 @@ import type {
   CanonicalSize,
   InputVariant,
   SelectOpenableEvents,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Value type

@@ -4,7 +4,7 @@
  * Handles Arrow Up/Down, Home/End, Enter/Space, Escape, and type-ahead
  * search for select/listbox components.
  *
- * @module @dzip-ui/core/composables/useSelect
+ * @module @dzup-ui/core/composables/useSelect
  */
 
 import type { ComputedRef, Ref } from 'vue'

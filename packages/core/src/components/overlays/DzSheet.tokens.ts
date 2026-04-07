@@ -4,7 +4,7 @@
  * Maps semantic design tokens to sheet (side-drawer) overlay components (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/overlays/DzSheet.tokens
+ * @module @dzup-ui/core/components/overlays/DzSheet.tokens
  */
 
 export const sheetTokens = {

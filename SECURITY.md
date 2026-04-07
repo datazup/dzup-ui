@@ -22,4 +22,4 @@ You will receive a response within 5 business days. We aim to release a fix with
 
 ## Scope
 
-This policy applies to the `@dzip-ui/core`, `@dzip-ui/tokens`, `@dzip-ui/contracts`, and `@dzip-ui/nuxt` packages published under the `dzip-ui` repository.
+This policy applies to the `@dzup-ui/core`, `@dzup-ui/tokens`, `@dzup-ui/contracts`, and `@dzup-ui/nuxt` packages published under the `dzup-ui` repository.

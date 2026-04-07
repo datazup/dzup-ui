@@ -5,7 +5,7 @@
  * Pure functions are tested directly; file-dependent functions use
  * a temporary directory with real files.
  *
- * @module @dzip-ui/tooling/bundle-budget-check.spec
+ * @module @dzup-ui/tooling/bundle-budget-check.spec
  */
 
 import { Buffer } from 'node:buffer'

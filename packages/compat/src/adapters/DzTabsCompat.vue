@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { CanonicalSize, TabsVariant } from '@dzip-ui/contracts'
+import type { CanonicalSize, TabsVariant } from '@dzup-ui/contracts'
 import type { DzTabsCompatProps, OldSize, OldTabType } from '../adapter-types.ts'
-import { DzTabList, DzTabs, DzTabTrigger } from '@dzip-ui/core'
+import { DzTabList, DzTabs, DzTabTrigger } from '@dzup-ui/core'
 /**
  * DzTabsCompat -- backward-compatible wrapper for DzTabs compound components.
  *
- * Maps old dzip-ui single-component tabs API to the new vNext compound API:
+ * Maps old dzup-ui single-component tabs API to the new vNext compound API:
  * - `tabs` prop (array of tab items) -> DzTabList with DzTabTrigger children
  * - `type` prop: "line" -> "line", "card" -> "enclosed", "border-card" -> "enclosed"
  * - `size` values: "small" -> "sm", "medium" -> "md", "large" -> "lg"
  * - `@tab-click` -> `@change`, `@tab-close` -> `@close`
  *
- * @deprecated Use DzTabs, DzTabList, DzTabTrigger, and DzTabContent from @dzip-ui/core instead.
+ * @deprecated Use DzTabs, DzTabList, DzTabTrigger, and DzTabContent from @dzup-ui/core instead.
  */
 import { computed, onMounted, useAttrs } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'

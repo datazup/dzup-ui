@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/cards/DzImageCard.variants
+ * @module @dzup-ui/core/components/cards/DzImageCard.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

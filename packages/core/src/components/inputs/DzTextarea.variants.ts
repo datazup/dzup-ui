@@ -3,7 +3,7 @@
  *
  * Uses semantic CSS token variables exclusively (ADR-04).
  *
- * @module @dzip-ui/core/components/inputs/DzTextarea.variants
+ * @module @dzup-ui/core/components/inputs/DzTextarea.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

@@ -3,12 +3,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@dzip-ui/tokens": ["../../packages/tokens/src/index.ts"],
-      "@dzip-ui/tokens/*": ["../../packages/tokens/src/*"],
-      "@dzip-ui/contracts": ["../../packages/contracts/src/index.ts"],
-      "@dzip-ui/contracts/*": ["../../packages/contracts/src/*"],
-      "@dzip-ui/core": ["../../packages/core/src/index.ts"],
-      "@dzip-ui/core/*": ["../../packages/core/src/*"]
+      "@dzup-ui/tokens": ["../../packages/tokens/src/index.ts"],
+      "@dzup-ui/tokens/*": ["../../packages/tokens/src/*"],
+      "@dzup-ui/contracts": ["../../packages/contracts/src/index.ts"],
+      "@dzup-ui/contracts/*": ["../../packages/contracts/src/*"],
+      "@dzup-ui/core": ["../../packages/core/src/index.ts"],
+      "@dzup-ui/core/*": ["../../packages/core/src/*"]
     },
     "types": ["node"]
   },

@@ -7,7 +7,7 @@ import { mount } from '@vue/test-utils'
  *
  * Usage: npx vitest run packages/tooling/src/perf-bench.spec.ts
  *
- * @module @dzip-ui/tooling/perf-bench
+ * @module @dzup-ui/tooling/perf-bench
  */
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
@@ -95,7 +95,7 @@ function logResult(name: string, result: BenchResult): void {
 describe('performance Benchmarks', { timeout: 30_000 }, () => {
   it('dzDataGrid with 100 rows x 5 columns mounts under threshold', async () => {
     const { default: DzDataGrid } = await import(
-      '@dzip-ui/core/components/data/DzDataGrid.vue'
+      '@dzup-ui/core/components/data/DzDataGrid.vue'
     )
 
     const rows = generateGridRows(100)
@@ -119,16 +119,16 @@ describe('performance Benchmarks', { timeout: 30_000 }, () => {
 
   it('dzAccordion with 20 items mounts under threshold', async () => {
     const { default: DzAccordion } = await import(
-      '@dzip-ui/core/components/data/DzAccordion.vue'
+      '@dzup-ui/core/components/data/DzAccordion.vue'
     )
     const { default: DzAccordionItem } = await import(
-      '@dzip-ui/core/components/data/DzAccordionItem.vue'
+      '@dzup-ui/core/components/data/DzAccordionItem.vue'
     )
     const { default: DzAccordionTrigger } = await import(
-      '@dzip-ui/core/components/data/DzAccordionTrigger.vue'
+      '@dzup-ui/core/components/data/DzAccordionTrigger.vue'
     )
     const { default: DzAccordionContent } = await import(
-      '@dzip-ui/core/components/data/DzAccordionContent.vue'
+      '@dzup-ui/core/components/data/DzAccordionContent.vue'
     )
 
     const items = Array.from({ length: 20 }, (_, i) => ({
@@ -173,16 +173,16 @@ describe('performance Benchmarks', { timeout: 30_000 }, () => {
 
   it('dzTabs with 10 tabs mounts under threshold', async () => {
     const { default: DzTabs } = await import(
-      '@dzip-ui/core/components/navigation/DzTabs.vue'
+      '@dzup-ui/core/components/navigation/DzTabs.vue'
     )
     const { default: DzTabList } = await import(
-      '@dzip-ui/core/components/navigation/DzTabList.vue'
+      '@dzup-ui/core/components/navigation/DzTabList.vue'
     )
     const { default: DzTabTrigger } = await import(
-      '@dzip-ui/core/components/navigation/DzTabTrigger.vue'
+      '@dzup-ui/core/components/navigation/DzTabTrigger.vue'
     )
     const { default: DzTabContent } = await import(
-      '@dzip-ui/core/components/navigation/DzTabContent.vue'
+      '@dzup-ui/core/components/navigation/DzTabContent.vue'
     )
 
     const tabs = Array.from({ length: 10 }, (_, i) => ({

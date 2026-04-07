@@ -10,7 +10,7 @@
  *   npx tsx packages/tooling/src/license-audit.ts
  *   npx tsx packages/tooling/src/license-audit.ts --ci
  *
- * @module @dzip-ui/tooling/license-audit
+ * @module @dzup-ui/tooling/license-audit
  */
 
 import { existsSync, readFileSync } from 'node:fs'
@@ -157,7 +157,7 @@ export function runLicenseAudit(rootDir: string): LicenseAuditResult {
     const deps = getProductionDeps(join(rootDir, pkg, 'package.json'))
     for (const [name, version] of deps) {
       // Skip workspace and internal dependencies
-      if (version === 'workspace:*' || name.startsWith('@dzip-ui/'))
+      if (version === 'workspace:*' || name.startsWith('@dzup-ui/'))
         continue
       allDeps.set(name, version)
     }

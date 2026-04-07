@@ -1,7 +1,7 @@
 /**
  * Forms family -- public exports.
  *
- * @module @dzip-ui/core/components/forms
+ * @module @dzup-ui/core/components/forms
  */
 
 // Types — DzCheckbox

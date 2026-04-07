@@ -4,7 +4,7 @@
  * Built from scratch with Popover for the panel.
  * v-model via defineModel (ADR-16).
  *
- * @module @dzip-ui/core/components/forms/DzColorPicker
+ * @module @dzup-ui/core/components/forms/DzColorPicker
  */
 
 import type {
@@ -12,7 +12,7 @@ import type {
   BaseValidationProps,
   CanonicalSize,
   ChangeEvents,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

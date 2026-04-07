@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/media/DzAvatarGroup.variants
+ * @module @dzup-ui/core/components/media/DzAvatarGroup.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

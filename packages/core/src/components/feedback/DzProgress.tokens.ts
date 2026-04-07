@@ -4,7 +4,7 @@
  * Maps semantic design tokens to linear and circular progress components (ADR-04).
  * Supports five sizes and six tones.
  *
- * @module @dzip-ui/core/components/feedback/DzProgress.tokens
+ * @module @dzup-ui/core/components/feedback/DzProgress.tokens
  */
 
 export const progressTokens = {

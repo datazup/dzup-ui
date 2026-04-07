@@ -3,7 +3,7 @@
  *
  * Token-only styling (ADR-04).
  *
- * @module @dzip-ui/core/components/layout/DzScrollArea.variants
+ * @module @dzup-ui/core/components/layout/DzScrollArea.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

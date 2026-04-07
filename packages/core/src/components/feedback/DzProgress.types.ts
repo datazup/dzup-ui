@@ -1,7 +1,7 @@
 /**
  * DzProgress — type definitions.
  *
- * @module @dzip-ui/core/components/feedback/DzProgress
+ * @module @dzup-ui/core/components/feedback/DzProgress
  */
 
 import type {
@@ -9,7 +9,7 @@ import type {
   CanonicalSize,
   CanonicalTone,
   ProgressVariant,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

@@ -5,7 +5,7 @@ import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
  * DzRadio -- Radio option using Reka UI (ADR-07).
  *
  * Must be used within a DzRadioGroup. Wraps Reka UI's RadioGroupItem
- * + RadioGroupIndicator with dzip-ui styling.
+ * + RadioGroupIndicator with dzup-ui styling.
  *
  * @example
  * ```vue

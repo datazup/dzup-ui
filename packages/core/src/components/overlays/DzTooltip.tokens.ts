@@ -3,7 +3,7 @@
  *
  * Maps semantic design tokens to tooltip components (ADR-04).
  *
- * @module @dzip-ui/core/components/overlays/DzTooltip.tokens
+ * @module @dzup-ui/core/components/overlays/DzTooltip.tokens
  */
 
 export const tooltipTokens = {

@@ -6,8 +6,8 @@ import router from './router.ts'
 import './tailwind.css'
 
 /* Import design tokens CSS from package export */
-import '@dzip-ui/tokens/css'
-import '@dzip-ui/core/styles'
+import '@dzup-ui/tokens/css'
+import '@dzup-ui/core/styles'
 
 const app = createApp(App)
 app.use(router)

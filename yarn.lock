@@ -865,9 +865,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dzip-ui/codemods@workspace:packages/codemods":
+"@dzup-ui/codemods@workspace:packages/codemods":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/codemods@workspace:packages/codemods"
+  resolution: "@dzup-ui/codemods@workspace:packages/codemods"
   dependencies:
     "@types/jscodeshift": "npm:^0.12.0"
     glob: "npm:^11.0.0"
@@ -878,12 +878,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/compat@workspace:packages/compat":
+"@dzup-ui/compat@workspace:packages/compat":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/compat@workspace:packages/compat"
+  resolution: "@dzup-ui/compat@workspace:packages/compat"
   dependencies:
-    "@dzip-ui/contracts": "workspace:*"
-    "@dzip-ui/core": "workspace:*"
+    "@dzup-ui/contracts": "workspace:*"
+    "@dzup-ui/core": "workspace:*"
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
     vue: "npm:^3.5.13"
@@ -892,9 +892,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/contracts@workspace:*, @dzip-ui/contracts@workspace:packages/contracts":
+"@dzup-ui/contracts@workspace:*, @dzup-ui/contracts@workspace:packages/contracts":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/contracts@workspace:packages/contracts"
+  resolution: "@dzup-ui/contracts@workspace:packages/contracts"
   dependencies:
     typescript: "npm:^5.7.0"
     vue: "npm:^3.5.0"
@@ -903,12 +903,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/core@workspace:*, @dzip-ui/core@workspace:packages/core":
+"@dzup-ui/core@workspace:*, @dzup-ui/core@workspace:packages/core":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/core@workspace:packages/core"
+  resolution: "@dzup-ui/core@workspace:packages/core"
   dependencies:
-    "@dzip-ui/contracts": "workspace:*"
-    "@dzip-ui/tokens": "workspace:*"
+    "@dzup-ui/contracts": "workspace:*"
+    "@dzup-ui/tokens": "workspace:*"
     "@floating-ui/vue": "npm:^1.1.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
     clsx: "npm:^2.1.1"
@@ -926,31 +926,31 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/nuxt@workspace:packages/nuxt":
+"@dzup-ui/nuxt@workspace:packages/nuxt":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/nuxt@workspace:packages/nuxt"
+  resolution: "@dzup-ui/nuxt@workspace:packages/nuxt"
   dependencies:
-    "@dzip-ui/core": "workspace:*"
-    "@dzip-ui/tokens": "workspace:*"
+    "@dzup-ui/core": "workspace:*"
+    "@dzup-ui/tokens": "workspace:*"
     "@nuxt/kit": "npm:^3.14.0"
     "@nuxt/schema": "npm:^3.14.0"
     typescript: "npm:^5.7.0"
   peerDependencies:
-    "@dzip-ui/core": "workspace:*"
-    "@dzip-ui/tokens": "workspace:*"
+    "@dzup-ui/core": "workspace:*"
+    "@dzup-ui/tokens": "workspace:*"
     nuxt: ">=3.0.0"
   peerDependenciesMeta:
-    "@dzip-ui/pro":
+    "@dzup-ui/pro":
       optional: true
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/sandbox@workspace:apps/sandbox":
+"@dzup-ui/sandbox@workspace:apps/sandbox":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/sandbox@workspace:apps/sandbox"
+  resolution: "@dzup-ui/sandbox@workspace:apps/sandbox"
   dependencies:
-    "@dzip-ui/core": "workspace:*"
-    "@dzip-ui/tokens": "workspace:*"
+    "@dzup-ui/core": "workspace:*"
+    "@dzup-ui/tokens": "workspace:*"
     "@vitejs/plugin-vue": "npm:^5.2.0"
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
@@ -959,12 +959,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/storybook@workspace:apps/storybook":
+"@dzup-ui/storybook@workspace:apps/storybook":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/storybook@workspace:apps/storybook"
+  resolution: "@dzup-ui/storybook@workspace:apps/storybook"
   dependencies:
-    "@dzip-ui/core": "workspace:*"
-    "@dzip-ui/tokens": "workspace:*"
+    "@dzup-ui/core": "workspace:*"
+    "@dzup-ui/tokens": "workspace:*"
     "@storybook/addon-a11y": "npm:^10.3.4"
     "@storybook/addon-docs": "npm:^10.3.4"
     "@storybook/addon-themes": "npm:^10.3.4"
@@ -979,18 +979,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/tokens@workspace:*, @dzip-ui/tokens@workspace:packages/tokens":
+"@dzup-ui/tokens@workspace:*, @dzup-ui/tokens@workspace:packages/tokens":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/tokens@workspace:packages/tokens"
+  resolution: "@dzup-ui/tokens@workspace:packages/tokens"
   dependencies:
     tsx: "npm:^4.19.0"
     typescript: "npm:^5.7.0"
   languageName: unknown
   linkType: soft
 
-"@dzip-ui/tooling@workspace:packages/tooling":
+"@dzup-ui/tooling@workspace:packages/tooling":
   version: 0.0.0-use.local
-  resolution: "@dzip-ui/tooling@workspace:packages/tooling"
+  resolution: "@dzup-ui/tooling@workspace:packages/tooling"
   dependencies:
     tsx: "npm:^4.19.0"
     typescript: "npm:^5.7.0"
@@ -4756,9 +4756,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dzip-ui@workspace:.":
+"dzup-ui@workspace:.":
   version: 0.0.0-use.local
-  resolution: "dzip-ui@workspace:."
+  resolution: "dzup-ui@workspace:."
   dependencies:
     "@antfu/eslint-config": "npm:^4.13.0"
     "@changesets/cli": "npm:^2.30.0"

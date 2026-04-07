@@ -8,7 +8,7 @@
  * ```ts
  * // vite.config.ts
  * import Components from 'unplugin-vue-components/vite'
- * import { DzResolver } from '@dzip-ui/core/resolver'
+ * import { DzResolver } from '@dzup-ui/core/resolver'
  *
  * export default defineConfig({
  *   plugins: [
@@ -22,17 +22,17 @@
 
 export interface DzResolverOptions {
   /**
-   * When true, also resolves pro components from `@dzip-ui/pro`.
+   * When true, also resolves pro components from `@dzup-ui/pro`.
    * When false (default), only resolves core components.
    */
   includePro?: boolean
 }
 
 /**
- * Component prefixes that belong to `@dzip-ui/pro`.
+ * Component prefixes that belong to `@dzup-ui/pro`.
  *
  * This list is derived from the actual pro package component inventory.
- * Components not matching any of these prefixes resolve to `@dzip-ui/core`.
+ * Components not matching any of these prefixes resolve to `@dzup-ui/core`.
  */
 const PRO_COMPONENT_PREFIXES = [
   // builders family
@@ -77,7 +77,7 @@ const PRO_COMPONENT_PREFIXES = [
  *
  * All components prefixed with `Dz` are resolved. By default only core
  * components are resolved; set `includePro: true` to also resolve pro
- * components from `@dzip-ui/pro`.
+ * components from `@dzup-ui/pro`.
  *
  * @param options - Resolver configuration
  * @returns A component resolver compatible with unplugin-vue-components
@@ -98,7 +98,7 @@ export function DzResolver(options: DzResolverOptions = {}) {
       if (isPro && !includePro)
         return
 
-      const packageName = isPro ? '@dzip-ui/pro' : '@dzip-ui/core'
+      const packageName = isPro ? '@dzup-ui/pro' : '@dzup-ui/core'
 
       return {
         name,

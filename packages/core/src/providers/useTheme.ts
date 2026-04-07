@@ -6,7 +6,7 @@
  *
  * Returns the ADR-09 minimal API: theme, resolvedTheme, setTheme, toggleTheme.
  *
- * @module @dzip-ui/core/providers/useTheme
+ * @module @dzup-ui/core/providers/useTheme
  */
 
 import type { DzThemeContext } from './DzThemeProvider.types'
@@ -22,7 +22,7 @@ import { DZ_THEME_KEY } from './DzThemeProvider.types'
  * @example
  * ```vue
  * <script setup lang="ts">
- * import { useTheme } from '@dzip-ui/core/providers'
+ * import { useTheme } from '@dzup-ui/core/providers'
  *
  * const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme()
  * </script>

@@ -7,11 +7,11 @@ import {
   DzDialogDescription,
   DzDialogOverlay,
   DzDialogTitle,
-} from '@dzip-ui/core'
+} from '@dzup-ui/core'
 /**
  * DzDialogCompat — backward-compatible wrapper for DzDialog.
  *
- * Maps old dzip-ui dialog API to the new vNext API:
+ * Maps old dzup-ui dialog API to the new vNext API:
  * - `visible` / `v-model:visible` -> `open` / `v-model:open` (via defineModel)
  * - `title` prop -> forwarded to DzDialogTitle slot
  * - `width` prop -> mapped to `size` on DzDialogContent
@@ -21,7 +21,7 @@ import {
  * DzDialogOverlay, DzDialogTitle, etc.). This compat adapter provides the
  * simpler old single-component API.
  *
- * @deprecated Use DzDialog compound components from @dzip-ui/core instead.
+ * @deprecated Use DzDialog compound components from @dzup-ui/core instead.
  */
 import { onMounted, watch } from 'vue'
 import { warnDeprecated } from '../utils/deprecation.ts'

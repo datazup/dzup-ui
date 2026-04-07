@@ -4,10 +4,10 @@
  * Visual separator with horizontal/vertical orientation
  * and semantic role handling.
  *
- * @module @dzip-ui/core/components/layout/DzDivider
+ * @module @dzup-ui/core/components/layout/DzDivider
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

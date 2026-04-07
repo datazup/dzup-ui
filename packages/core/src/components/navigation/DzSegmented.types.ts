@@ -4,10 +4,10 @@
  * Uses Reka UI ToggleGroupRoot (ADR-07).
  * v-model via defineModel<string>() (ADR-16).
  *
- * @module @dzip-ui/core/components/navigation/DzSegmented
+ * @module @dzup-ui/core/components/navigation/DzSegmented
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 
 /** A segmented item option */
 export interface SegmentedItem {

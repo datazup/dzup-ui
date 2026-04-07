@@ -1,7 +1,7 @@
 /**
  * Providers — Public exports.
  *
- * @module @dzip-ui/core/providers
+ * @module @dzup-ui/core/providers
  */
 
 export { DZ_THEME_KEY } from './DzThemeProvider.types.ts'

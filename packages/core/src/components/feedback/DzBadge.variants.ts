@@ -3,7 +3,7 @@
  *
  * Uses semantic CSS token variables exclusively (ADR-04).
  *
- * @module @dzip-ui/core/components/feedback/DzBadge.variants
+ * @module @dzup-ui/core/components/feedback/DzBadge.variants
  */
 
 import type { VariantProps } from 'tailwind-variants'

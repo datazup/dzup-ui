@@ -1,7 +1,7 @@
 /**
  * DzEmpty — Type definitions for the empty state placeholder component.
  *
- * @module @dzip-ui/core/components/feedback/DzEmpty
+ * @module @dzup-ui/core/components/feedback/DzEmpty
  */
 
 import type { Component } from 'vue'

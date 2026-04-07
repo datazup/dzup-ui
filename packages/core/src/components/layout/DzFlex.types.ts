@@ -3,10 +3,10 @@
  *
  * Flexbox layout component with full alignment and direction control.
  *
- * @module @dzip-ui/core/components/layout/DzFlex
+ * @module @dzup-ui/core/components/layout/DzFlex
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 import type { LayoutGap } from './DzGrid.types.ts'
 
 // ---------------------------------------------------------------------------

@@ -5,7 +5,7 @@
  * Covers line, enclosed, and pills variants across all size tiers.
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/navigation/DzTabs.tokens
+ * @module @dzup-ui/core/components/navigation/DzTabs.tokens
  */
 
 export const tabsTokens = {

@@ -1,14 +1,14 @@
 /**
- * @dzip-ui/contracts
+ * @dzup-ui/contracts
  *
- * Canonical public API contracts (types, events, slots) for all dzip-ui
+ * Canonical public API contracts (types, events, slots) for all dzup-ui
  * components. Every public component MUST conform to these interfaces.
  *
  * This package is types-only with one exception: {@link assertNever} is a
  * tiny runtime helper for exhaustive switch checking.
  *
  * Dependency: `vue` (for `Ref`, `InjectionKey` types only).
- * Does NOT depend on `@dzip-ui/tokens` at runtime.
+ * Does NOT depend on `@dzup-ui/tokens` at runtime.
  */
 
 // Canonical taxonomies & variant enums

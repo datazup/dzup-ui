@@ -4,13 +4,13 @@
  * Hierarchical tree with expand/collapse, selection, and optional checkboxes.
  * Context injection via DZ_TREE_KEY (ADR-08).
  *
- * @module @dzip-ui/core/components/data/DzTree
+ * @module @dzup-ui/core/components/data/DzTree
  */
 
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 import type { Component, InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------

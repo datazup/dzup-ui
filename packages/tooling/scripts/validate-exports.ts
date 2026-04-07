@@ -67,7 +67,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
 const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string }> = [
   {
-    name: '@dzip-ui/core',
+    name: '@dzup-ui/core',
     path: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
     packageDir: resolve(ROOT, 'packages/core'),
   },
@@ -79,12 +79,12 @@ const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string }> 
  */
 const FLAT_EXPORT_PACKAGES: Array<{ name: string, packageDir: string, entryFile: string }> = [
   {
-    name: '@dzip-ui/compat',
+    name: '@dzup-ui/compat',
     packageDir: resolve(ROOT, 'packages/compat'),
     entryFile: 'src/index.ts',
   },
   {
-    name: '@dzip-ui/nuxt',
+    name: '@dzup-ui/nuxt',
     packageDir: resolve(ROOT, 'packages/nuxt'),
     entryFile: 'src/module.ts',
   },

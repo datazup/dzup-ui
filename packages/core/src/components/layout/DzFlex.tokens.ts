@@ -4,7 +4,7 @@
  * Maps semantic design tokens to Flexbox layout properties (ADR-04).
  * All values reference CSS custom properties from the tokens package.
  *
- * @module @dzip-ui/core/components/layout/DzFlex.tokens
+ * @module @dzup-ui/core/components/layout/DzFlex.tokens
  */
 
 export const flexTokens = {

@@ -4,14 +4,14 @@
  * Uses Reka UI Pagination primitives (ADR-07).
  * v-model via defineModel<number>() (ADR-16).
  *
- * @module @dzip-ui/core/components/navigation/DzPagination
+ * @module @dzup-ui/core/components/navigation/DzPagination
  */
 
 import type {
   BaseAccessibilityProps,
   BaseEvents,
   CanonicalSize,
-} from '@dzip-ui/contracts'
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props

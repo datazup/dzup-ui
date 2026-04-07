@@ -27,7 +27,7 @@ const currentPath = computed(() => route.path)
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1 class="sidebar-title">
-          dzip-ui
+          dzup-ui
         </h1>
         <span class="sidebar-badge">sandbox</span>
       </div>

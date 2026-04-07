@@ -1,16 +1,16 @@
 {
-  "name": "@dzip-ui/storybook",
+  "name": "@dzup-ui/storybook",
   "version": "0.0.1",
   "type": "module",
   "private": true,
-  "description": "Storybook for dzip-ui component library",
+  "description": "Storybook for dzup-ui component library",
   "scripts": {
     "dev": "storybook dev -p 6006",
     "build": "storybook build"
   },
   "dependencies": {
-    "@dzip-ui/core": "workspace:*",
-    "@dzip-ui/tokens": "workspace:*"
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^10.3.4",

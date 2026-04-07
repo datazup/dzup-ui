@@ -5,7 +5,7 @@
  * The context shape follows ADR-09: minimal useTheme API
  * (theme, resolvedTheme, setTheme, toggleTheme — no getToken/getCssVar).
  *
- * @module @dzip-ui/core/providers/DzThemeProvider
+ * @module @dzup-ui/core/providers/DzThemeProvider
  */
 
 import type { ComputedRef, InjectionKey, Ref } from 'vue'

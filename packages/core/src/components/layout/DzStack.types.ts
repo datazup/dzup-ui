@@ -4,10 +4,10 @@
  * Simplified vertical/horizontal stack layout.
  * Convenience wrapper over flexbox.
  *
- * @module @dzip-ui/core/components/layout/DzStack
+ * @module @dzup-ui/core/components/layout/DzStack
  */
 
-import type { BaseAccessibilityProps } from '@dzip-ui/contracts'
+import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 import type { LayoutGap } from './DzGrid.types.ts'
 
 // ---------------------------------------------------------------------------

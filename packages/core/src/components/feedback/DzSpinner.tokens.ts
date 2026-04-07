@@ -4,7 +4,7 @@
  * Maps semantic design tokens to spinner/loading indicator (ADR-04).
  * Renders as an animated SVG circle; size controls dimensions, tone controls color.
  *
- * @module @dzip-ui/core/components/feedback/DzSpinner.tokens
+ * @module @dzup-ui/core/components/feedback/DzSpinner.tokens
  */
 
 export const spinnerTokens = {
