@@ -1,7 +1,7 @@
 {
   "name": "@dzip-ui/compat",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "Migration adapters from old dzip-ui to vNext",
   "exports": {
     ".": {

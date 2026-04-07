@@ -1,11 +1,15 @@
 /**
  * Export Validation Script (ADR-01)
  *
- * Reads public-api.manifest.json from core and pro packages,
- * then validates that:
+ * For manifest-driven packages (core): reads public-api.manifest.json and validates:
  *   1. Every referenced source file exists on disk
  *   2. Every declared export symbol is actually exported from its source file
  *   3. No orphaned manifest entries (file exists but exports nothing declared)
+ *
+ * For flat-export packages (compat, nuxt): validates that:
+ *   1. The package entry file exists
+ *   2. The file exports at least one symbol (non-empty barrel)
+ *   3. The package.json `exports` map points to resolvable paths
  *
  * Usage:
  *   tsx packages/tooling/scripts/validate-exports.ts
@@ -51,6 +55,12 @@ interface ValidationError {
   message: string
 }
 
+interface PackageJson {
+  exports?: Record<string, unknown>
+  main?: string
+  module?: string
+}
+
 // --- Constants ---
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
@@ -60,6 +70,23 @@ const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string }> 
     name: '@dzip-ui/core',
     path: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
     packageDir: resolve(ROOT, 'packages/core'),
+  },
+]
+
+/**
+ * Flat-export packages: no manifest — validate the entry file and export map.
+ * entryFile is relative to packageDir (src/ path, the source of truth pre-build).
+ */
+const FLAT_EXPORT_PACKAGES: Array<{ name: string, packageDir: string, entryFile: string }> = [
+  {
+    name: '@dzip-ui/compat',
+    packageDir: resolve(ROOT, 'packages/compat'),
+    entryFile: 'src/index.ts',
+  },
+  {
+    name: '@dzip-ui/nuxt',
+    packageDir: resolve(ROOT, 'packages/nuxt'),
+    entryFile: 'src/module.ts',
   },
 ]
 
@@ -184,6 +211,64 @@ function validateCategory(
   return errors
 }
 
+// --- Flat-export validation (compat, nuxt) ---
+
+/**
+ * Validates a flat-export package (no manifest):
+ *  1. Entry source file exists
+ *  2. Entry file exports at least one symbol
+ *  3. package.json `exports` map has a "." entry pointing to a path (dist existence
+ *     is skipped pre-build — we validate the source barrel only)
+ */
+function validateFlatExportPackage(
+  pkg: { name: string, packageDir: string, entryFile: string },
+): ValidationError[] {
+  const errors: ValidationError[] = []
+  const entryPath = resolve(pkg.packageDir, pkg.entryFile)
+  const relEntry = relative(ROOT, entryPath)
+
+  // Check 1: entry source file exists
+  if (!existsSync(entryPath)) {
+    errors.push({
+      package: pkg.name,
+      category: 'entry',
+      entry: pkg.entryFile,
+      filePath: relEntry,
+      message: `Entry file does not exist: ${relEntry}`,
+    })
+    return errors
+  }
+
+  // Check 2: entry file exports at least one symbol
+  const { symbols, hasStarExport } = getExportedSymbols(entryPath)
+  if (symbols.size === 0 && !hasStarExport) {
+    errors.push({
+      package: pkg.name,
+      category: 'entry',
+      entry: pkg.entryFile,
+      filePath: relEntry,
+      message: `Entry file exports nothing: ${relEntry}`,
+    })
+  }
+
+  // Check 3: package.json exports map has a "." entry
+  const pkgJsonPath = resolve(pkg.packageDir, 'package.json')
+  if (existsSync(pkgJsonPath)) {
+    const pkgJson = JSON.parse(readFileSync(pkgJsonPath, 'utf-8')) as PackageJson
+    if (!pkgJson.exports || !('.' in pkgJson.exports)) {
+      errors.push({
+        package: pkg.name,
+        category: 'package.json',
+        entry: '.',
+        filePath: relative(ROOT, pkgJsonPath),
+        message: `package.json "exports" map is missing a "." entry`,
+      })
+    }
+  }
+
+  return errors
+}
+
 // --- Main ---
 
 function main(): void {
@@ -224,8 +309,28 @@ function main(): void {
     }
   }
 
+  // Validate flat-export packages (no manifest — check entry file + export map)
+  for (const pkg of FLAT_EXPORT_PACKAGES) {
+    console.warn(`\nValidating ${pkg.name} (flat-export: ${pkg.entryFile})`)
+    const errors = validateFlatExportPackage(pkg)
+    allErrors.push(...errors)
+
+    const { symbols, hasStarExport } = existsSync(resolve(pkg.packageDir, pkg.entryFile))
+      ? getExportedSymbols(resolve(pkg.packageDir, pkg.entryFile))
+      : { symbols: new Set<string>(), hasStarExport: false }
+    const exportCount = hasStarExport ? '(re-exports via export *)' : `${symbols.size} named exports`
+    const status = errors.length === 0 ? 'PASS' : 'FAIL'
+    console.warn(`  ${status}  entry: ${pkg.entryFile} — ${exportCount}`)
+    if (errors.length > 0) {
+      for (const err of errors) {
+        console.warn(`         ${err.message}`)
+      }
+    }
+  }
+
   console.warn(`\n${'='.repeat(60)}`)
-  console.warn(`Total: ${totalEntries} entries, ${totalExports} declared exports`)
+  console.warn(`Total: ${totalEntries} entries, ${totalExports} declared exports (manifest packages)`)
+  console.warn(`       + ${FLAT_EXPORT_PACKAGES.length} flat-export packages validated`)
 
   if (allErrors.length === 0) {
     console.warn(`\nExport validation passed: 0 errors`)

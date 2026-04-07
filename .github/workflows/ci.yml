@@ -35,8 +35,6 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Typecheck (core)
-        run: yarn typecheck
       - name: Typecheck (all packages)
         run: yarn typecheck:all
 
@@ -169,7 +167,12 @@ jobs:
           echo "ESM-only output verified"
       - name: Verify dist artifacts exist
         run: |
+          test -f packages/contracts/dist/index.js || (echo "contracts/dist/index.js missing" && exit 1)
+          test -f packages/tokens/dist/index.js || (echo "tokens/dist/index.js missing" && exit 1)
           test -f packages/core/dist/index.js || (echo "core/dist/index.js missing" && exit 1)
+          test -f packages/compat/dist/index.js || (echo "compat/dist/index.js missing" && exit 1)
+          test -f packages/codemods/dist/index.js || (echo "codemods/dist/index.js missing" && exit 1)
+          test -f packages/nuxt/dist/module.js || (echo "nuxt/dist/module.js missing" && exit 1)
           echo "Build artifacts verified"
       - name: Validate type declarations
         run: yarn validate:dts
@@ -179,6 +182,21 @@ jobs:
         run: npx tsx packages/tooling/src/bundle-budget-check.ts --ci
       - name: Per-component size report
         run: npx tsx packages/tooling/src/component-size-report.ts --top=30
+      - name: Pack smoke test (all publishable packages)
+        run: |
+          for pkg in contracts tokens core compat codemods nuxt; do
+            echo "--- packing packages/$pkg ---"
+            (cd packages/$pkg && npm pack --dry-run 2>&1) | tee /tmp/pack-$pkg.txt
+            if grep -q "link:" /tmp/pack-$pkg.txt; then
+              echo "ERROR: link: dependency in packages/$pkg tarball"
+              exit 1
+            fi
+            if grep -q "workspace:" /tmp/pack-$pkg.txt; then
+              echo "ERROR: workspace: dependency in packages/$pkg tarball"
+              exit 1
+            fi
+          done
+          echo "Pack smoke test passed for all packages"
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:

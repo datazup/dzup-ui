@@ -36,8 +36,12 @@ interface CheckResult {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
 const PUBLISHABLE_PACKAGES: Array<{ name: string, dir: string }> = [
-  { name: '@dzip-ui/core', dir: resolve(ROOT, 'packages/core') },
+  { name: '@dzip-ui/contracts', dir: resolve(ROOT, 'packages/contracts') },
   { name: '@dzip-ui/tokens', dir: resolve(ROOT, 'packages/tokens') },
+  { name: '@dzip-ui/core', dir: resolve(ROOT, 'packages/core') },
+  { name: '@dzip-ui/compat', dir: resolve(ROOT, 'packages/compat') },
+  { name: '@dzip-ui/codemods', dir: resolve(ROOT, 'packages/codemods') },
+  { name: '@dzip-ui/nuxt', dir: resolve(ROOT, 'packages/nuxt') },
 ]
 
 // --- Validation ---

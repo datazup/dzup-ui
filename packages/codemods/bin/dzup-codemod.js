@@ -100,19 +100,9 @@ function parseArgs(argv) {
 }
 
 async function loadTransform(name) {
-  const modulePath = new URL(`../src/transforms/${name}.ts`, import.meta.url)
-  // In production this would point to compiled JS; for development with
-  // tsx / ts-node the .ts extension works directly.
-  try {
-    const mod = await import(modulePath.href)
-    return mod.default ?? mod.transformer
-  }
-  catch {
-    // Fallback: try .js extension (compiled output)
-    const jsPath = new URL(`../src/transforms/${name}.js`, import.meta.url)
-    const mod = await import(jsPath.href)
-    return mod.default ?? mod.transformer
-  }
+  const modulePath = new URL(`../dist/transforms/${name}.js`, import.meta.url)
+  const mod = await import(modulePath.href)
+  return mod.default ?? mod.transformer
 }
 
 async function main() {
@@ -137,7 +127,7 @@ async function main() {
   }
 
   // Dynamically import the runner
-  const { CodemodRunner } = await import('../src/runner.ts')
+  const { CodemodRunner } = await import('../dist/runner.js')
 
   const runnerOpts = {
     dryRun: opts.dryRun,

@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# yarn local state
+.yarn/install-state.gz
+
+# build outputs
+coverage/
+dist/
+storybook-static/
+playwright-report/
+test-results/
+
+# caches
+*.tsbuildinfo
+
+# env
+.env
+.env.*
+!.env.example
+
+# IDE/editor
+.idea/
+.vscode/
+
+# local AI/dev tooling
+.serena/
+
+# OS
+.DS_Store
+Thumbs.db

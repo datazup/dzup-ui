@@ -1,0 +1,4 @@
+# Exclude test files from published tarball
+src/**/*.spec.ts
+src/**/*.test.ts
+src/**/__tests__/

@@ -1,12 +1,12 @@
 {
   "name": "@dzip-ui/codemods",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "Code transforms for migrating from old dzip-ui to vNext",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
   "bin": {
@@ -15,16 +15,15 @@
   "license": "MIT",
   "files": [
     "LICENSE",
-    "!src/**/*.spec.ts",
-    "!src/**/*.test.ts",
-    "!src/**/__tests__",
     "bin",
-    "src"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "postbuild": "chmod +x bin/dzup-codemod.js",
     "typecheck": "tsc --noEmit",
     "codemod": "node bin/dzup-codemod.js"
   },

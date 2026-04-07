@@ -6,18 +6,26 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
+  "files": [
+    "LICENSE",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "build": "tsc --project tsconfig.json"
   },
   "peerDependencies": {
     "vue": "^3.5.0"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
-    "vue": "^3.5.0"
+    "vue": "^3.5.13"
   }
 }

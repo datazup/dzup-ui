@@ -12,21 +12,20 @@
   ],
   "scripts": {
     "typecheck": "vue-tsc --noEmit -p packages/core/tsconfig.json",
-    "typecheck:all": "vue-tsc --noEmit -p packages/tokens/tsconfig.json && vue-tsc --noEmit -p packages/contracts/tsconfig.json && vue-tsc --noEmit -p packages/core/tsconfig.json",
+    "typecheck:all": "tsc --noEmit -p packages/tokens/tsconfig.json && tsc --noEmit -p packages/contracts/tsconfig.json && vue-tsc --noEmit -p packages/core/tsconfig.json && vue-tsc --noEmit -p packages/compat/tsconfig.json && tsc --noEmit -p packages/codemods/tsconfig.json",
     "lint": "eslint packages/",
     "lint:fix": "eslint packages/ --fix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "vitest run --reporter=verbose packages/**/a11y/**/*.a11y.spec.ts",
-    "test:contracts": "vitest run --reporter=verbose packages/**/contract.spec.ts",
+    "test:contracts": "vitest run --reporter=verbose packages/**/*.contract.spec.ts",
     "test:ssr": "vitest run --reporter=verbose packages/**/ssr/**/*.spec.ts",
-    "build": "yarn workspace @dzip-ui/tokens generate && yarn workspace @dzip-ui/core build",
+    "build": "yarn workspace @dzip-ui/contracts build && yarn workspace @dzip-ui/tokens build && yarn workspace @dzip-ui/core build && yarn workspace @dzip-ui/compat build && yarn workspace @dzip-ui/codemods build && yarn workspace @dzip-ui/nuxt build",
     "build:all": "yarn workspaces foreach -Apt run build",
     "tokens:generate": "yarn workspace @dzip-ui/tokens generate",
     "generate:exports": "tsx packages/tooling/src/manifest-generator.ts",
     "generate:exports:core": "tsx packages/tooling/src/manifest-generator.ts packages/core",
-
     "validate:boundaries": "tsx packages/tooling/src/validators/import-boundary.ts",
     "validate:tokens": "tsx packages/tooling/src/token-checks/color-lint.ts",
     "validate:exports": "tsx packages/tooling/scripts/validate-exports.ts",
@@ -47,7 +46,9 @@
     "storybook:build": "yarn workspace @dzip-ui/storybook build",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "yarn build && changeset publish"
+    "release": "yarn build && changeset publish",
+    "scan:credentials": "bash scripts/credential-scan.sh",
+    "rehearse:release": "bash scripts/release-rehearsal.sh"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.0",

@@ -1,12 +1,14 @@
 /**
  * Declaration File (.d.ts) Validator
  *
- * Reads public-api.manifest.json from core and pro packages,
- * then validates that:
+ * For each publishable package validates that:
  *   1. dist/ directories exist (skip with warning if not — pre-build state)
  *   2. Every .js file in dist/ has a corresponding .d.ts file
- *   3. The root dist/index.d.ts contains export statements for major
- *      manifest categories (components, composables, utilities)
+ *      (Vite SFC runtime chunks are excluded from this check for Vue packages)
+ *   3. The root declaration file (dist/index.d.ts or dist/module.d.ts for nuxt)
+ *      contains at least one export statement
+ *
+ * Covers all 6 publishable packages: contracts, tokens, core, compat, codemods, nuxt.
  *
  * Usage:
  *   tsx packages/tooling/scripts/validate-dts.ts
@@ -54,11 +56,45 @@ interface ValidationError {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 
-const PACKAGES: Array<{ name: string, manifestPath: string, distDir: string }> = [
+interface PackageDef {
+  name: string
+  distDir: string
+  /** Filename of the root declaration file inside distDir (default: "index.d.ts") */
+  rootDts?: string
+  /** Whether to apply Vite SFC chunk exclusion (Vue packages only) */
+  hasViteChunks?: boolean
+  /** Optional path to public-api.manifest.json — used only for index.d.ts export coverage */
+  manifestPath?: string
+}
+
+const PACKAGES: PackageDef[] = [
+  {
+    name: '@dzip-ui/contracts',
+    distDir: resolve(ROOT, 'packages/contracts/dist'),
+  },
+  {
+    name: '@dzip-ui/tokens',
+    distDir: resolve(ROOT, 'packages/tokens/dist'),
+  },
   {
     name: '@dzip-ui/core',
-    manifestPath: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
     distDir: resolve(ROOT, 'packages/core/dist'),
+    hasViteChunks: true,
+    manifestPath: resolve(ROOT, 'packages/core/manifests/public-api.manifest.json'),
+  },
+  {
+    name: '@dzip-ui/compat',
+    distDir: resolve(ROOT, 'packages/compat/dist'),
+    hasViteChunks: true,
+  },
+  {
+    name: '@dzip-ui/codemods',
+    distDir: resolve(ROOT, 'packages/codemods/dist'),
+  },
+  {
+    name: '@dzip-ui/nuxt',
+    distDir: resolve(ROOT, 'packages/nuxt/dist'),
+    rootDts: 'module.d.ts',
   },
 ]
 
@@ -106,16 +142,18 @@ function isViteChunk(filePath: string): boolean {
 
 /**
  * Checks that every non-chunk .js file in dist/ has a corresponding .d.ts file.
+ * Pass `hasViteChunks: true` for Vue (Vite-built) packages to skip SFC runtime chunks.
  */
 function validateDtsParity(
   packageName: string,
   distDir: string,
+  hasViteChunks = false,
 ): { errors: ValidationError[], jsCount: number, dtsCount: number, chunkCount: number } {
   const errors: ValidationError[] = []
   const allFiles = collectFiles(distDir)
 
   const allJsFiles = allFiles.filter(f => f.endsWith('.js') || f.endsWith('.mjs'))
-  const jsFiles = allJsFiles.filter(f => !isViteChunk(f))
+  const jsFiles = hasViteChunks ? allJsFiles.filter(f => !isViteChunk(f)) : allJsFiles
   const chunkCount = allJsFiles.length - jsFiles.length
   const dtsFiles = new Set(allFiles.filter(f => f.endsWith('.d.ts') || f.endsWith('.d.mts')))
 
@@ -138,35 +176,42 @@ function validateDtsParity(
 }
 
 /**
- * Reads dist/index.d.ts and checks that it contains export statements
- * covering the major categories declared in the manifest.
+ * Reads the root declaration file and checks that it contains export statements.
+ * For manifest-backed packages (core), also verifies category coverage.
+ * For manifest-less packages, only verifies that exports exist (non-empty barrel).
  */
-function validateIndexDtsExports(
+function validateRootDtsExports(
   packageName: string,
   distDir: string,
-  manifest: Manifest,
+  rootDtsName: string,
+  manifest: Manifest | null,
 ): ValidationError[] {
   const errors: ValidationError[] = []
-  const indexDts = resolve(distDir, 'index.d.ts')
+  const rootDts = resolve(distDir, rootDtsName)
 
-  if (!existsSync(indexDts)) {
+  if (!existsSync(rootDts)) {
     errors.push({
       package: packageName,
-      file: relative(ROOT, indexDts),
-      message: `Root declaration file missing: ${relative(ROOT, indexDts)}`,
+      file: relative(ROOT, rootDts),
+      message: `Root declaration file missing: ${relative(ROOT, rootDts)}`,
     })
     return errors
   }
 
-  const content = readFileSync(indexDts, 'utf-8')
+  const content = readFileSync(rootDts, 'utf-8')
 
-  // Check that the index.d.ts contains at least one export statement
-  if (!/export\s/.test(content)) {
+  // Check that the root .d.ts contains at least one export statement
+  if (!/export[\s{*]/.test(content)) {
     errors.push({
       package: packageName,
-      file: relative(ROOT, indexDts),
-      message: 'Root index.d.ts contains no export statements',
+      file: relative(ROOT, rootDts),
+      message: `Root ${rootDtsName} contains no export statements`,
     })
+    return errors
+  }
+
+  // For manifest-less packages, the above check is sufficient
+  if (manifest === null) {
     return errors
   }
 
@@ -227,8 +272,8 @@ function validateIndexDtsExports(
     if (!coveredByReExport) {
       errors.push({
         package: packageName,
-        file: relative(ROOT, indexDts),
-        message: `Category "${cat.name}" has ${allSymbols.length} declared exports but none found in index.d.ts (no direct symbols or re-export paths match)`,
+        file: relative(ROOT, rootDts),
+        message: `Category "${cat.name}" has ${allSymbols.length} declared exports but none found in ${rootDtsName} (no direct symbols or re-export paths match)`,
       })
     }
   }
@@ -247,13 +292,6 @@ function main(): void {
   console.warn('Declaration file (.d.ts) validation\n')
 
   for (const pkg of PACKAGES) {
-    // Check manifest exists
-    if (!existsSync(pkg.manifestPath)) {
-      console.warn(`  SKIP  ${pkg.name} — manifest not found: ${relative(ROOT, pkg.manifestPath)}`)
-      skippedCount++
-      continue
-    }
-
     // Gracefully handle pre-build state
     if (!existsSync(pkg.distDir) || !statSync(pkg.distDir).isDirectory()) {
       console.warn(`  SKIP  ${pkg.name} — dist/ not found (run build first)`)
@@ -261,26 +299,41 @@ function main(): void {
       continue
     }
 
-    const raw = readFileSync(pkg.manifestPath, 'utf-8')
-    const manifest: Manifest = JSON.parse(raw) as Manifest
+    // Load manifest if available (core only)
+    let manifest: Manifest | null = null
+    if (pkg.manifestPath !== undefined) {
+      if (!existsSync(pkg.manifestPath)) {
+        console.warn(`  SKIP  ${pkg.name} — manifest not found: ${relative(ROOT, pkg.manifestPath)}`)
+        skippedCount++
+        continue
+      }
+      const raw = readFileSync(pkg.manifestPath, 'utf-8')
+      manifest = JSON.parse(raw) as Manifest
+    }
 
+    const rootDtsName = pkg.rootDts ?? 'index.d.ts'
     console.warn(`Validating ${pkg.name} (${relative(ROOT, pkg.distDir)})`)
 
-    // Check 1: .js → .d.ts parity (excludes Vite SFC chunks)
-    const { errors: parityErrors, jsCount, dtsCount, chunkCount } = validateDtsParity(pkg.name, pkg.distDir)
+    // Check 1: .js → .d.ts parity
+    const { errors: parityErrors, jsCount, dtsCount, chunkCount } = validateDtsParity(
+      pkg.name,
+      pkg.distDir,
+      pkg.hasViteChunks ?? false,
+    )
     allErrors.push(...parityErrors)
     totalJs += jsCount
     totalDts += dtsCount
 
+    const chunkNote = chunkCount > 0 ? ` (${chunkCount} Vite chunks skipped)` : ''
     const parityStatus = parityErrors.length === 0 ? 'PASS' : 'FAIL'
-    console.warn(`  ${parityStatus}  .d.ts parity: ${jsCount} .js files, ${dtsCount} .d.ts files, ${parityErrors.length} missing (${chunkCount} Vite chunks skipped)`)
+    console.warn(`  ${parityStatus}  .d.ts parity: ${jsCount} .js files, ${dtsCount} .d.ts files, ${parityErrors.length} missing${chunkNote}`)
 
-    // Check 2: index.d.ts export coverage
-    const indexErrors = validateIndexDtsExports(pkg.name, pkg.distDir, manifest)
-    allErrors.push(...indexErrors)
+    // Check 2: root declaration file export coverage
+    const rootErrors = validateRootDtsExports(pkg.name, pkg.distDir, rootDtsName, manifest)
+    allErrors.push(...rootErrors)
 
-    const indexStatus = indexErrors.length === 0 ? 'PASS' : 'FAIL'
-    console.warn(`  ${indexStatus}  index.d.ts export coverage`)
+    const rootStatus = rootErrors.length === 0 ? 'PASS' : 'FAIL'
+    console.warn(`  ${rootStatus}  ${rootDtsName} export coverage`)
   }
 
   console.warn(`\n${'='.repeat(60)}`)

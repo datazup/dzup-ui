@@ -167,7 +167,11 @@ describe('performance Benchmarks', { timeout: 30_000 }, () => {
     )
 
     logResult('DzAccordion (20 items)', result)
-    expect(result.average).toBeLessThan(SIMPLE_THRESHOLD_MS)
+    // Accordion is a compound component with 20 × 3 sub-nodes — use the
+    // compound threshold, not the simple one.  The assertion is intentionally
+    // generous; it gates catastrophic regressions rather than enforcing a
+    // tight budget (CI machines vary widely).
+    expect(result.average).toBeLessThan(COMPLEX_THRESHOLD_MS)
   })
 
   it('dzTabs with 10 tabs mounts under threshold', async () => {

@@ -24,8 +24,8 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@dzip-ui/core": "workspace:*",
-    "@dzip-ui/tokens": "workspace:*",
+    "@dzip-ui/core": ">=0.1.0-alpha.0",
+    "@dzip-ui/tokens": ">=0.1.0-alpha.0",
     "nuxt": ">=3.0.0"
   },
   "peerDependenciesMeta": {
@@ -34,11 +34,11 @@
     }
   },
   "dependencies": {
-    "@dzip-ui/core": "workspace:*",
-    "@dzip-ui/tokens": "workspace:*"
+    "@nuxt/kit": "^3.14.0"
   },
   "devDependencies": {
-    "@nuxt/kit": "^3.14.0",
+    "@dzip-ui/core": "workspace:*",
+    "@dzip-ui/tokens": "workspace:*",
     "@nuxt/schema": "^3.14.0",
     "typescript": "^5.7.0"
   }
