@@ -24,15 +24,21 @@
  */
 
 // Re-export component tokens
-export { BUTTON_TOKENS } from './component/index.js'
-
-export { INPUT_TOKENS } from './component/index.js'
-
-export { CARD_TOKENS } from './component/index.js'
+export { APPSHELL_TOKENS } from './component/index.js'
 
 export { BADGE_TOKENS } from './component/index.js'
 
+export { BUTTON_TOKENS } from './component/index.js'
+
+export { CARD_TOKENS } from './component/index.js'
+
+export { CODEBLOCK_TOKENS } from './component/index.js'
+
 export { DIALOG_TOKENS } from './component/index.js'
+
+export { INPUT_TOKENS } from './component/index.js'
+
+export { SIDEBAR_TOKENS } from './component/index.js'
 
 // Re-export primitives
 export {

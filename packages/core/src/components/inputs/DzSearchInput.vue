@@ -15,7 +15,7 @@ import type {
  * <DzSearchInput v-model="query" placeholder="Search..." @search="handleSearch" />
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 
@@ -31,6 +31,7 @@ const props = withDefaults(defineProps<DzSearchInputProps>(), {
   invalid: false,
   required: false,
   clearable: true,
+  debounce: 0,
 })
 
 const emit = defineEmits<DzSearchInputEmits>()
@@ -68,13 +69,37 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 
+// Debounced auto-search on input change
+let debounceTimer: ReturnType<typeof setTimeout> | undefined
+
+function cancelDebounce(): void {
+  if (debounceTimer !== undefined) {
+    clearTimeout(debounceTimer)
+    debounceTimer = undefined
+  }
+}
+
+if (props.debounce > 0) {
+  watch(model, (value) => {
+    cancelDebounce()
+    if (!value) return
+    debounceTimer = setTimeout(() => {
+      emit('search', value)
+    }, props.debounce)
+  })
+}
+
+onBeforeUnmount(cancelDebounce)
+
 function handleKeydown(event: KeyboardEvent): void {
   if (event.key === 'Enter') {
+    cancelDebounce()
     emit('search', model.value)
   }
 }
 
 function handleClear(): void {
+  cancelDebounce()
   model.value = ''
   emit('clear')
   emit('change', '', { source: 'user' })

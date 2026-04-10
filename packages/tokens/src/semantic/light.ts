@@ -86,6 +86,31 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Overlay ── */
   '--dz-overlay-bg': 'oklch(0 0 0 / 0.5)',
 
+  /* ── Sidebar ── */
+  '--dz-sidebar-bg': 'var(--dz-colors-neutral-900)',
+  '--dz-sidebar-foreground': 'var(--dz-colors-neutral-300)',
+  '--dz-sidebar-border': 'var(--dz-colors-neutral-800)',
+  '--dz-sidebar-heading': 'var(--dz-colors-neutral-400)',
+  '--dz-sidebar-item-hover-bg': 'var(--dz-colors-neutral-800)',
+  '--dz-sidebar-item-hover-text': 'var(--dz-colors-neutral-100)',
+  '--dz-sidebar-item-active-bg': 'var(--dz-colors-primary-600)',
+  '--dz-sidebar-item-active-text': 'oklch(1 0 0)',
+  '--dz-sidebar-header-bg': 'var(--dz-colors-neutral-950)',
+  '--dz-sidebar-footer-bg': 'var(--dz-colors-neutral-950)',
+
+  /* ── AppShell ── */
+  '--dz-appshell-header-bg': 'oklch(1 0 0)',
+  '--dz-appshell-header-border': 'var(--dz-colors-neutral-200)',
+  '--dz-appshell-main-bg': 'var(--dz-colors-neutral-50)',
+
+  /* ── CodeBlock ── */
+  '--dz-codeblock-bg': 'var(--dz-colors-neutral-900)',
+  '--dz-codeblock-text': 'var(--dz-colors-neutral-100)',
+  '--dz-codeblock-border': 'var(--dz-colors-neutral-800)',
+  '--dz-codeblock-header-bg': 'var(--dz-colors-neutral-800)',
+  '--dz-codeblock-header-text': 'var(--dz-colors-neutral-400)',
+  '--dz-codeblock-line-number': 'var(--dz-colors-neutral-600)',
+
   /* ── Chart Colors ── */
   '--dz-chart-1': 'var(--dz-colors-primary-500)',
   '--dz-chart-2': 'var(--dz-colors-secondary-500)',

@@ -4,6 +4,15 @@
  * @module @dzup-ui/core/components/layout
  */
 
+// ── DzAppShell ──
+export type {
+  DzAppShellProps,
+  DzAppShellSlots,
+} from './DzAppShell.types.ts'
+
+export { type AppShellVariantProps, appShellVariants } from './DzAppShell.variants.ts'
+export { default as DzAppShell } from './DzAppShell.vue'
+
 export type {
   DzAspectRatioProps,
   DzAspectRatioSlots,

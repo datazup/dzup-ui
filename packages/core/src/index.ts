@@ -55,6 +55,8 @@ export * from './composables/useSelect/index.ts'
 export * from './composables/useTabs/index.ts'
 export * from './composables/useToast/index.ts'
 export * from './composables/useTransfer/index.ts'
+export * from './composables/useClipboard/index.ts'
+export * from './composables/useSidebar/index.ts'
 
 // ── Providers ──
 

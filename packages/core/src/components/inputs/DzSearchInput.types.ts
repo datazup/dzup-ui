@@ -20,6 +20,8 @@ export interface DzSearchInputProps extends BaseFormControlProps<InputVariant> {
   placeholder?: string
   /** Whether to show the clear button when input has value */
   clearable?: boolean
+  /** Debounce delay in ms for the search emit. 0 = no debounce. */
+  debounce?: number
 }
 
 // ---------------------------------------------------------------------------
