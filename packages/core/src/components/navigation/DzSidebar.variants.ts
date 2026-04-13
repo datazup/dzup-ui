@@ -13,12 +13,13 @@ export const sidebarVariants = tv({
   slots: {
     root: [
       'fixed inset-y-0 left-0 z-40',
-      'flex flex-col',
+      'flex flex-col overflow-hidden',
       'border-r border-[var(--dz-border)]',
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
-      'transition-[width] duration-300 ease-in-out',
+      'transition-[width,transform] duration-300 ease-in-out',
     ].join(' '),
+    body: 'flex-1 flex flex-col overflow-y-auto overflow-x-hidden min-h-0',
     item: [
       'flex items-center gap-[var(--dz-spacing-3)]',
       'rounded-[var(--dz-radius-md)]',
@@ -69,7 +70,12 @@ export const sidebarVariants = tv({
     },
     mobile: {
       true: {
-        root: 'w-64',
+        root: 'w-64 translate-x-0',
+      },
+    },
+    mobileHidden: {
+      true: {
+        root: '-translate-x-full',
       },
     },
   },

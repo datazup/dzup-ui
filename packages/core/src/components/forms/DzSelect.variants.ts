@@ -23,7 +23,7 @@ export const selectVariants = tv({
       'data-[placeholder]:text-[var(--dz-muted-foreground)]',
     ].join(' '),
     content: [
-      'overflow-hidden rounded-[var(--dz-radius-md)]',
+      'z-[51] overflow-hidden rounded-[var(--dz-radius-md)]',
       'border border-[var(--dz-border)]',
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',

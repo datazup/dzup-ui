@@ -42,6 +42,13 @@ const styles = computed(() =>
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+/** CSS custom property for sidebar content offset + containment */
+const rootStyles = computed(() => {
+  const base: Record<string, string> = { contain: 'layout style' }
+  base['--dz-appshell-sidebar-width'] = props.hasSidebar ? props.sidebarWidth : '0px'
+  return base
+})
 </script>
 
 <script lang="ts">
@@ -54,8 +61,8 @@ export default {
   <div
     :id="id"
     :class="rootClasses"
+    :style="rootStyles"
     :aria-label="ariaLabel"
-    style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Sidebar slot -->

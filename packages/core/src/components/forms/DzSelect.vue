@@ -7,7 +7,6 @@ import {
   SelectItem,
   SelectItemIndicator,
   SelectItemText,
-  SelectPortal,
   SelectRoot,
   SelectTrigger,
   SelectValue,
@@ -181,60 +180,58 @@ export default {
       </SelectIcon>
     </SelectTrigger>
 
-    <SelectPortal>
-      <SelectContent :class="styles.content()" position="popper" :side-offset="4">
-        <SelectViewport :class="styles.viewport()">
-          <div
-            v-if="searchable"
-            :class="styles.searchWrapper()"
-            @pointerdown.stop
+    <SelectContent :class="styles.content()" position="popper" :side-offset="4">
+      <SelectViewport :class="styles.viewport()">
+        <div
+          v-if="searchable"
+          :class="styles.searchWrapper()"
+          @pointerdown.stop
+        >
+          <input
+            ref="searchInputRef"
+            type="text"
+            :value="searchQuery"
+            :placeholder="searchPlaceholder"
+            :class="styles.searchInput()"
+            role="searchbox"
+            aria-label="Filter options"
+            data-dz-search-input
+            @input="handleSearchInput"
+            @keydown.stop
           >
-            <input
-              ref="searchInputRef"
-              type="text"
-              :value="searchQuery"
-              :placeholder="searchPlaceholder"
-              :class="styles.searchInput()"
-              role="searchbox"
-              aria-label="Filter options"
-              data-dz-search-input
-              @input="handleSearchInput"
-              @keydown.stop
-            >
-          </div>
-          <template v-if="filteredItems.length > 0">
-            <SelectItem
-              v-for="item in filteredItems"
-              :key="item.value"
-              :value="item.value"
-              :disabled="item.disabled"
-              :class="styles.item()"
-            >
-              <SelectItemIndicator class="absolute left-1 flex items-center justify-center">
-                <Check :class="styles.checkIcon()" aria-hidden="true" />
-              </SelectItemIndicator>
-              <SelectItemText class="pl-6">
-                {{ item.label }}
-              </SelectItemText>
-            </SelectItem>
-          </template>
-          <div
-            v-else-if="searchable && searchQuery.trim()"
-            :class="styles.noResults()"
-            data-dz-no-results
+        </div>
+        <template v-if="filteredItems.length > 0">
+          <SelectItem
+            v-for="item in filteredItems"
+            :key="item.value"
+            :value="item.value"
+            :disabled="item.disabled"
+            :class="styles.item()"
           >
-            {{ noResultsText }}
-          </div>
-          <div
-            v-else
-            class="px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]"
-          >
-            <slot name="empty">
-              No options available
-            </slot>
-          </div>
-        </SelectViewport>
-      </SelectContent>
-    </SelectPortal>
+            <SelectItemIndicator class="absolute left-1 flex items-center justify-center">
+              <Check :class="styles.checkIcon()" aria-hidden="true" />
+            </SelectItemIndicator>
+            <SelectItemText class="pl-6">
+              {{ item.label }}
+            </SelectItemText>
+          </SelectItem>
+        </template>
+        <div
+          v-else-if="searchable && searchQuery.trim()"
+          :class="styles.noResults()"
+          data-dz-no-results
+        >
+          {{ noResultsText }}
+        </div>
+        <div
+          v-else
+          class="px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]"
+        >
+          <slot name="empty">
+            No options available
+          </slot>
+        </div>
+      </SelectViewport>
+    </SelectContent>
   </SelectRoot>
 </template>

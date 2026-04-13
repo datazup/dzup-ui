@@ -14,7 +14,7 @@ export const appShellVariants = tv({
     root: 'relative flex h-screen w-full overflow-hidden',
     header: 'sticky top-0 z-30 flex h-16 items-center border-b px-4',
     main: 'flex-1 overflow-y-auto',
-    content: 'flex flex-1 flex-col',
+    content: 'flex flex-1 flex-col transition-[margin-left] duration-300 ease-in-out ml-[var(--dz-appshell-sidebar-width,0px)]',
   },
   variants: {
     hasSidebar: {

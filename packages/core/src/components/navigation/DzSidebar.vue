@@ -19,7 +19,7 @@ import type { DzSidebarContext, DzSidebarEmits, DzSidebarProps, DzSidebarSlots }
  * </DzSidebar>
  * ```
  */
-import { computed, provide, useAttrs } from 'vue'
+import { computed, onMounted, onUnmounted, provide, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
@@ -42,12 +42,19 @@ defineSlots<DzSidebarSlots>()
 
 const attrs = useAttrs()
 
-/** Detect mobile viewport via matchMedia */
-const isMobile = computed(() => {
-  if (typeof window === 'undefined')
-    return false
-  return window.innerWidth < 1024
+/** Detect mobile viewport reactively via matchMedia */
+const mobileMatch = ref(typeof window !== 'undefined' && window.innerWidth < 768)
+
+let mql: MediaQueryList | null = null
+onMounted(() => {
+  mql = window.matchMedia('(max-width: 768px)')
+  mobileMatch.value = mql.matches
+  const handler = (e: MediaQueryListEvent) => { mobileMatch.value = e.matches }
+  mql.addEventListener('change', handler)
+  onUnmounted(() => mql?.removeEventListener('change', handler))
 })
+
+const isMobile = computed(() => mobileMatch.value)
 
 const context: DzSidebarContext = {
   collapsed: collapsedModel,
@@ -60,6 +67,7 @@ const styles = computed(() =>
   sidebarVariants({
     collapsed: isMobile.value ? false : collapsedModel.value,
     mobile: isMobile.value && mobileOpenModel.value,
+    mobileHidden: isMobile.value && !mobileOpenModel.value,
   }),
 )
 
@@ -121,7 +129,9 @@ export default {
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <slot :collapsed="collapsedModel" />
+    <div :class="styles.body()">
+      <slot :collapsed="collapsedModel" />
+    </div>
   </nav>
 </template>
 
