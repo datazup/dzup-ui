@@ -36,7 +36,19 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
 
+const EMPTY_VALUE_SENTINEL = '__DZ_SELECT_EMPTY__'
+
 const model = defineModel<string>({ default: '' })
+
+/** Maps external value → internal reka-ui safe value (empty string → sentinel) */
+function toInternal(v: string): string {
+  return v === '' ? EMPTY_VALUE_SENTINEL : v
+}
+
+/** Maps internal reka-ui value → external value (sentinel → empty string) */
+function toExternal(v: string): string {
+  return v === EMPTY_VALUE_SENTINEL ? '' : v
+}
 
 const props = withDefaults(defineProps<DzSelectProps>(), {
   placeholder: undefined,
@@ -109,9 +121,10 @@ function handleSearchInput(event: Event): void {
 }
 
 function handleValueChange(value: string): void {
-  model.value = value
-  emit('change', value)
-  emit('select', value)
+  const external = toExternal(value)
+  model.value = external
+  emit('change', external)
+  emit('select', external)
 }
 
 function handleOpenChange(open: boolean): void {
@@ -150,7 +163,7 @@ export default {
 
 <template>
   <SelectRoot
-    :model-value="model"
+    :model-value="toInternal(model)"
     :disabled="resolvedDisabled"
     :name="name"
     :required="required || fieldContext?.isRequired.value"
@@ -203,8 +216,8 @@ export default {
         <template v-if="filteredItems.length > 0">
           <SelectItem
             v-for="item in filteredItems"
-            :key="item.value"
-            :value="item.value"
+            :key="toInternal(item.value)"
+            :value="toInternal(item.value)"
             :disabled="item.disabled"
             :class="styles.item()"
           >
