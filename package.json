@@ -6,6 +6,10 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "typecheck": "vue-tsc --noEmit -p packages/core/tsconfig.json",
     "typecheck:all": "tsc --noEmit -p packages/tokens/tsconfig.json && tsc --noEmit -p packages/contracts/tsconfig.json && vue-tsc --noEmit -p packages/core/tsconfig.json && vue-tsc --noEmit -p packages/compat/tsconfig.json && tsc --noEmit -p packages/codemods/tsconfig.json",
