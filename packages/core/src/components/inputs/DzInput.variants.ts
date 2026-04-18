@@ -16,7 +16,7 @@ export const inputWrapperVariants = tv({
     'flex items-center w-full',
     'font-[family-name:var(--dz-input-font-family)]',
     'transition-[var(--dz-input-transition)]',
-    'focus-within:outline-none focus-within:ring-[length:var(--dz-input-focus-ring-width)] focus-within:ring-[var(--dz-input-focus-ring-color)]',
+    'focus-within:outline-none focus-within:ring-[length:var(--dz-input-focus-ring-width)] focus-within:ring-[var(--dz-input-focus-ring-color)] focus-within:ring-offset-1',
     'has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-[var(--dz-input-disabled-opacity)]',
   ].join(' '),
 
