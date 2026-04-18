@@ -306,6 +306,14 @@
   --dz-chart-3: var(--dz-colors-success-500);
   --dz-chart-4: var(--dz-colors-warning-500);
   --dz-chart-5: var(--dz-colors-danger-500);
+  --dz-status-pending: var(--dz-muted-foreground);
+  --dz-status-running: var(--dz-info);
+  --dz-status-paused: var(--dz-warning);
+  --dz-status-completed: var(--dz-success);
+  --dz-status-failed: var(--dz-danger);
+  --dz-status-cancelled: var(--dz-muted-foreground);
+  --dz-progress-amber: var(--dz-warning);
+  --dz-progress-red: var(--dz-danger);
 }
 
 /* ==========================================================================
@@ -385,6 +393,14 @@
   --dz-chart-3: var(--dz-colors-success-400);
   --dz-chart-4: var(--dz-colors-warning-400);
   --dz-chart-5: var(--dz-colors-danger-400);
+  --dz-status-pending: var(--dz-muted-foreground);
+  --dz-status-running: var(--dz-info);
+  --dz-status-paused: var(--dz-warning);
+  --dz-status-completed: var(--dz-success);
+  --dz-status-failed: var(--dz-danger);
+  --dz-status-cancelled: var(--dz-muted-foreground);
+  --dz-progress-amber: var(--dz-warning);
+  --dz-progress-red: var(--dz-danger);
 
   /* ── Dark mode shadow overrides (increased opacity) ── */
   --dz-shadow-none: none;
@@ -475,6 +491,14 @@
     --dz-chart-3: var(--dz-colors-success-400);
     --dz-chart-4: var(--dz-colors-warning-400);
     --dz-chart-5: var(--dz-colors-danger-400);
+    --dz-status-pending: var(--dz-muted-foreground);
+    --dz-status-running: var(--dz-info);
+    --dz-status-paused: var(--dz-warning);
+    --dz-status-completed: var(--dz-success);
+    --dz-status-failed: var(--dz-danger);
+    --dz-status-cancelled: var(--dz-muted-foreground);
+    --dz-progress-amber: var(--dz-warning);
+    --dz-progress-red: var(--dz-danger);
 
     /* ── Dark mode shadow overrides ── */
     --dz-shadow-none: none;

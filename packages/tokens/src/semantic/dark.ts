@@ -120,4 +120,16 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-chart-3': 'var(--dz-colors-success-400)',
   '--dz-chart-4': 'var(--dz-colors-warning-400)',
   '--dz-chart-5': 'var(--dz-colors-danger-400)',
+
+  /* ── Orchestration run status ── */
+  '--dz-status-pending': 'var(--dz-muted-foreground)',
+  '--dz-status-running': 'var(--dz-info)',
+  '--dz-status-paused': 'var(--dz-warning)',
+  '--dz-status-completed': 'var(--dz-success)',
+  '--dz-status-failed': 'var(--dz-danger)',
+  '--dz-status-cancelled': 'var(--dz-muted-foreground)',
+
+  /* ── Progress thresholds (token-usage bars) ── */
+  '--dz-progress-amber': 'var(--dz-warning)',
+  '--dz-progress-red': 'var(--dz-danger)',
 }

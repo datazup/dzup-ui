@@ -270,7 +270,15 @@ export type SemanticToken =
   | '--dz-chart-2'
   | '--dz-chart-3'
   | '--dz-chart-4'
-  | '--dz-chart-5';
+  | '--dz-chart-5'
+  | '--dz-status-pending'
+  | '--dz-status-running'
+  | '--dz-status-paused'
+  | '--dz-status-completed'
+  | '--dz-status-failed'
+  | '--dz-status-cancelled'
+  | '--dz-progress-amber'
+  | '--dz-progress-red';
 
 /** All component token CSS custom property names */
 export type ComponentToken =

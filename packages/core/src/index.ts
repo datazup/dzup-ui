@@ -52,11 +52,10 @@ export * from './composables/useFloating/index.ts'
 export * from './composables/useFocusTrap/index.ts'
 export * from './composables/useFormField/index.ts'
 export * from './composables/useSelect/index.ts'
+export * from './composables/useSidebar/index.ts'
 export * from './composables/useTabs/index.ts'
 export * from './composables/useToast/index.ts'
 export * from './composables/useTransfer/index.ts'
-export * from './composables/useClipboard/index.ts'
-export * from './composables/useSidebar/index.ts'
 
 // ── Providers ──
 

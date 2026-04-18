@@ -90,6 +90,15 @@ export { type MultiSelectVariantProps, multiSelectVariants } from './DzMultiSele
 
 export { default as DzMultiSelect } from './DzMultiSelect.vue'
 
+// Types — DzPersonaSelector
+export type {
+  DzPersonaSelectorEmits,
+  DzPersonaSelectorProps,
+  DzPersonaSelectorSlots,
+  Persona,
+} from './DzPersonaSelector.types.ts'
+export { default as DzPersonaSelector } from './DzPersonaSelector.vue'
+
 // Types — DzRadio
 export type { DzRadioProps, DzRadioSlots } from './DzRadio.types.ts'
 
