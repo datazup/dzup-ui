@@ -88,7 +88,7 @@ export const inputWrapperVariants = tv({
 /** Inner <input> element styles — reset native appearance */
 export const inputElementVariants = tv({
   base: [
-    'flex-1 w-full bg-transparent outline-none focus-visible:outline-none border-none',
+    'flex-1 w-full bg-transparent outline-none focus:outline-none focus-visible:outline-none border-none',
     'text-[var(--dz-foreground)]',
     'placeholder:text-[var(--dz-input-placeholder)]',
     'disabled:cursor-not-allowed',

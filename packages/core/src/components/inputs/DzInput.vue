@@ -192,6 +192,12 @@ export default {
 </template>
 
 <style scoped>
+/* Remove native browser focus outline — the wrapper handles focus styling */
+input:focus,
+input:focus-visible {
+  outline: none;
+}
+
 /* Neutralise browser autofill background (Chrome/Edge light-blue tint) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
