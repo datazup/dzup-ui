@@ -316,6 +316,7 @@ export type ComponentToken =
   | '--dz-input-transition'
   | '--dz-input-focus-ring-width'
   | '--dz-input-focus-ring-color'
+  | '--dz-input-focus-ring-offset'
   | '--dz-input-disabled-opacity'
   | '--dz-input-sm-height'
   | '--dz-input-sm-padding-x'
