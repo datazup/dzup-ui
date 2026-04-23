@@ -1,0 +1,79 @@
+# 07 Operability and Release Readiness
+
+## Repository Overview
+`ui/dzup-ui` is a Yarn 4 monorepo for publishable UI packages, not a deployed backend service. The primary operational outcome is package publication to npm, with release governance centered on CI/workflow automation and artifact correctness rather than uptime of a long-running process.
+
+- **Monorepo/package model:** workspace root with `packages/*` and `apps/*` ([package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/package.json:9)).
+- **Primary product surface:** `@dzup-ui/core`, `tokens`, `contracts`, `compat`, `codemods`, `nuxt` ([README.md](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/README.md:53)).
+- **Release path:** Changesets + GitHub Actions publish flows ([release.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/release.yml:51), [publish-prerelease.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/publish-prerelease.yml:57)).
+- **Operational implication:** release readiness is mainly “can we safely build/test/version/publish and recover from bad publishes,” not “can we keep an API/worker fleet healthy.”
+
+## Operational Surface
+- **Runtime services:** no API server entrypoint, worker daemon, or queue processor exists in repo scripts; operational commands are build/test/validate/release oriented ([package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/package.json:13)).
+- **Queues/schedulers/background jobs:** no first-party queue/cron/job subsystem is defined; Playwright “workers” are test parallelism only ([playwright.config.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/playwright.config.ts:8)).
+- **Migration model:** migration is code/API migration for consumers (`compat` adapters + `codemods`), not data/schema migration ([packages/compat/src/index.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/compat/src/index.ts:3), [packages/codemods/bin/dzup-codemod.js](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/bin/dzup-codemod.js:16)).
+- **Dry-run safety for migrations:** codemod CLI supports `--dry-run`; runner avoids writes in dry-run mode ([packages/codemods/bin/dzup-codemod.js](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/bin/dzup-codemod.js:16), [packages/codemods/src/runner.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/src/runner.ts:151)).
+- **Environment handling:** env usage is minimal and mostly CI/dev toggles (`process.env.CI`, `import.meta.env?.DEV`) ([playwright.config.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/playwright.config.ts:6), [packages/compat/src/utils/deprecation.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/compat/src/utils/deprecation.ts:25)).
+- **Env files:** `.env` and `.env.*` are ignored with `!.env.example`, but no committed `.env.example` exists, so operator bootstrap contract is implicit ([.gitignore](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.gitignore:17)).
+- **Health paths/endpoints:** no HTTP health/readiness endpoint surface in repo runtime; closest health concept is Storybook smoke tests ([e2e/smoke/storybook.spec.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/e2e/smoke/storybook.spec.ts:6)).
+- **Deployment assumption:** “deployment” is npm publish from GitHub Actions with npm credentials from secrets ([release.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/release.yml:59), [publish-prerelease.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/publish-prerelease.yml:60)).
+
+## Observability Review
+- **What is strong now:** CI gives meaningful operator feedback through artifact uploads and failure diagnostics (dist/storybook/coverage/playwright-report) ([ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:200), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:231), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:296), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:263)).
+- **Tracing:** Playwright captures retry traces (`trace: on-first-retry`), improving post-failure debugging ([playwright.config.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/playwright.config.ts:12)).
+- **Logging:** codemod pipeline has structured run counters and per-file error reporting, but this is local CLI observability, not centralized release telemetry ([packages/codemods/src/utils/logger.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/src/utils/logger.ts:11)).
+- **Key gaps:** no dedicated metrics/tracing/alerting framework for release SLOs (publish success rate, time-to-publish, flaky-job trend, rollback MTTR).
+- **Coverage visibility gap:** threshold enforcement only runs for PR events, not all push/release paths ([ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:275)).
+- **Secondary telemetry quality:** `out/` summaries are inconsistent for operational decision-making (example: “components=40” and “Features: 0”), so they should be advisory only unless regenerated in gated CI ([ui-dzup-ui.md](/media/ninel/Second/code/datazup/ai-internal-dev/out/code-features-current/extracted/ui-dzup-ui.md:9), [ui-dzup-ui.md](/media/ninel/Second/code/datazup/ai-internal-dev/out/code-features-live-sample-3/summaries/repos/ui-dzup-ui.md:5)).
+
+## Release And Migration Risks
+- **Schema migration risk:** not applicable in the DB sense; risk is API compatibility and package export correctness.
+- **Backward compatibility controls exist:** compat package plus codemods provide staged migration path ([packages/compat/src/index.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/compat/src/index.ts:6), [packages/codemods/bin/dzup-codemod.js](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/bin/dzup-codemod.js:31)).
+- **Rollout control weakness:** release and prerelease jobs run narrower checks than CI merge gates (`build` + `test` only before publish) ([release.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/release.yml:45), [publish-prerelease.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/publish-prerelease.yml:51)).
+- **Backwards-compatibility drift risk:** Nuxt auto-import list is hand-maintained (`CORE_COMPONENTS`) while core API is manifest-driven/generated, creating two sources of truth ([packages/nuxt/src/module.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/nuxt/src/module.ts:22), [packages/core/src/index.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/core/src/index.ts:2), [public-api.manifest.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/core/manifests/public-api.manifest.json:8)).
+- **Observed drift signal:** comparison during this review between manifest component exports and Nuxt `CORE_COMPONENTS` found substantial mismatch (36 missing from Nuxt list, 19 extra stale names).
+- **Versioning governance ambiguity:** Changesets config ignores `compat` and `codemods`, but both packages are configured public-publishable ([config.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.changeset/config.json:12), [packages/compat/package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/compat/package.json:20), [packages/codemods/package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/package.json:21)).
+- **Rollback safety concern:** npm publishes are effectively immutable; no explicit rollback/deprecate/forward-fix runbook is codified in repo docs/workflows.
+
+## CI And Automation Review
+- **Strong pre-merge gates:** typecheck, lint, tests (Node 20/22), validate lane, build checks, Storybook build, Playwright e2e, PR coverage ([ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:18), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:64), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:96), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:238)).
+- **Release-quality build checks in CI:** ESM-only enforcement, dist artifact checks, declaration validation, bundle checks, pack smoke for all publishables ([ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:160), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:168), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:177), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:185)).
+- **Automation gap 1:** publish workflows do not run the same strict gate set as CI ([release.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/release.yml:45), [publish-prerelease.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/publish-prerelease.yml:51)).
+- **Automation gap 2:** `validate:interaction-contract` is present in scripts but not run in CI `validate` lane ([package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/package.json:30), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:116)).
+- **Automation gap 3:** credential scan and release rehearsal are manual scripts, not enforced in CI/release workflows ([package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/package.json:51), [credential-scan.sh](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/scripts/credential-scan.sh:53), [release-rehearsal.sh](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/scripts/release-rehearsal.sh:49)).
+- **Automation gap 4:** Playwright config defines Chromium/Firefox/WebKit, but CI runs only Chromium project ([playwright.config.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/playwright.config.ts:14), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:261)).
+
+## Findings
+1. **High: Publish workflows are under-gated compared to CI merge checks.**  
+Evidence: release/prerelease publish after install/build/test only; they skip lint, validate lanes, pack smoke, SSR/a11y/contracts, and e2e ([release.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/release.yml:45), [publish-prerelease.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/publish-prerelease.yml:51), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:96)).
+
+2. **High: Nuxt auto-import registration is drift-prone against the manifest-driven core API.**  
+Evidence: static `CORE_COMPONENTS` list in Nuxt module vs generated/manifest-driven core export strategy; observed mismatch during review (36 missing, 19 extra) ([module.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/nuxt/src/module.ts:22), [index.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/core/src/index.ts:2), [public-api.manifest.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/core/manifests/public-api.manifest.json:8)).
+
+3. **Medium-High: Versioning policy for migration packages is ambiguous.**  
+Evidence: `@dzup-ui/compat` and `@dzup-ui/codemods` are ignored by Changesets while also marked publishable/public ([config.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.changeset/config.json:12), [packages/compat/package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/compat/package.json:20), [packages/codemods/package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/packages/codemods/package.json:21)).
+
+4. **Medium: Critical release hardening scripts are optional/manual.**  
+Evidence: `scan:credentials` and `rehearse:release` exist but are not wired into CI/release automation ([package.json](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/package.json:51), [credential-scan.sh](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/scripts/credential-scan.sh:53), [release-rehearsal.sh](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/scripts/release-rehearsal.sh:49)).
+
+5. **Medium: Rollback safety is process-dependent and under-documented.**  
+Evidence: immutable npm publish model is used, but no explicit rollback playbook is encoded in workflows/docs ([release.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/release.yml:51), [publish-prerelease.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/publish-prerelease.yml:57)).
+
+6. **Low-Medium: Cross-browser confidence is lower than declared test matrix.**  
+Evidence: config defines 3 browser projects, CI executes only Chromium ([playwright.config.ts](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/playwright.config.ts:14), [ci.yml](/media/ninel/Second/code/datazup/ai-internal-dev/ui/dzup-ui/.github/workflows/ci.yml:261)).
+
+7. **Low: Secondary `out/` artifacts are not reliable as release telemetry.**  
+Evidence: contradictory/incomplete summaries (“components=40”, “Features: 0”) vs actual repository scope ([ui-dzup-ui.md](/media/ninel/Second/code/datazup/ai-internal-dev/out/code-features-current/extracted/ui-dzup-ui.md:9), [ui-dzup-ui.md](/media/ninel/Second/code/datazup/ai-internal-dev/out/code-features-live-sample-3/summaries/repos/ui-dzup-ui.md:5)).
+
+## Recommended Hardening Plan
+1. Create one canonical `verify:release` script and require it in both publish workflows before any publish action. Include: typecheck-all, lint, full test lanes, validate lanes, build, pack smoke, and at least release-smoke e2e.
+2. Generate Nuxt `CORE_COMPONENTS` from the same manifest source used for core exports, then add CI assertion that Nuxt auto-import list equals manifest component exports.
+3. Resolve Changesets policy for `compat` and `codemods`: either version/publish them through normal changesets flow or mark them non-publishable and enforce the choice in CI.
+4. Promote `scan:credentials` and release rehearsal checks into automated release gates (or split rehearsal into machine-friendly subchecks for CI).
+5. Add a documented npm rollback incident runbook: deprecate bad version, patch-forward release, consumer communication template, and ownership/on-call path.
+6. Expand release confidence beyond Chromium by adding scheduled Firefox/WebKit smoke or running one secondary browser on release candidates.
+7. Add lightweight release telemetry: publish attempt count, success/failure rate, duration, and flaky-job trend; persist as CI artifacts with threshold alerts.
+8. Treat `out/` summaries as advisory unless regenerated in CI with commit SHA + timestamp provenance.
+
+## Overall Assessment
+`dzup-ui` is reasonably mature for a library release pipeline, with strong CI quality gates and artifact integrity checks. It is not yet fully hardened for scale-grade operability because publish workflows are less strict than merge gates, compatibility/export drift is possible in Nuxt registration, and rollback/release governance is under-specified. With unified publish gating and generated Nuxt registration, the repository would move to a substantially safer release posture.

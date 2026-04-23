@@ -54,11 +54,38 @@ yarn validate:all
 
 4. Ensure all tests pass and coverage does not drop below 80%.
 
+### Interaction Contract
+
+Interactive components should use the shared semantic utilities for focus and disabled states instead of duplicating token plumbing inline.
+
+- Use `button` semantics for explicit actions.
+- Use `control` semantics for navigation, selection, toggles, and interactive surfaces.
+- Use `input` semantics for direct text entry.
+- Use `input-shell` semantics for composite fields that wrap nested inputs.
+
+Reference:
+- [packages/core/src/styles/INTERACTION_CONTRACT.md](./packages/core/src/styles/INTERACTION_CONTRACT.md)
+
+The repo now enforces this with:
+
+```bash
+yarn validate:interaction-contract
+```
+
+### Token Ownership
+
+Use `@dzup-ui/tokens` for primitives, semantic tokens, and shared public token families. Use component-local `*.tokens.ts` files for component anatomy mapping and implementation-level adaptation when centralization would not improve reuse.
+
+Reference:
+- [docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md](./docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md)
+
 ### Adding a Component
 
 - Place new components under `packages/core/src/components/<family>/`.
 - Add a contract spec (`*.contract.spec.ts`) alongside the component.
 - Add an a11y spec (`*.a11y.spec.ts`) for interactive components.
+- Follow the semantic interaction contract instead of inlining raw focus-ring token classes or one-off invalid outlines.
+- Prefer shared tokens first; add local `*.tokens.ts` indirection only when the component needs its own anatomy mapping or stable subpart semantics.
 - Export the component from `packages/core/src/index.ts`.
 - Add a Storybook story under `apps/storybook/src/stories/`.
 

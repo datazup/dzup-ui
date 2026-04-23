@@ -97,6 +97,22 @@ export const buttonVariants = tv({
 **Token naming**: `--dz-{component}-{property}` (e.g. `--dz-button-md-height`)
 **Global tokens**: `--dz-primary`, `--dz-radius-sm`, `--dz-shadow-xs`, etc.
 
+## Token Ownership (ADR-17)
+
+`@dzup-ui/tokens` is canonical for:
+
+- primitive token scales
+- semantic theme tokens
+- shared public token families
+
+Component-local `*.tokens.ts` files in `core` remain valid for:
+
+- component anatomy mapping
+- local implementation adaptation
+- family-specific subpart token indirection
+
+Do not describe the current system as fully centralized at the component-token level. The repo currently uses a hybrid model.
+
 ## Import Patterns
 
 ```ts
@@ -161,6 +177,7 @@ export interface DzButtonSlots {
 | ADR-12 | Committed dist artifacts                           |
 | ADR-15 | FOUC prevention                                    |
 | ADR-16 | `defineModel` for v-model                          |
+| ADR-17 | Token source of truth and component token ownership |
 
 ## Tooling
 
