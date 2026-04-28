@@ -8,9 +8,9 @@
 // GovernanceBadge.contract.spec.ts, GovernanceBadge.spec.ts and a
 // corresponding contracts entry before graduating this from a stub.
 //
-// NOTE: the prop type mirrors `CoordinatorPattern` from
-// `@datazup/dzupagent-orchestration-kit`. Kept as a local string union
-// here to avoid pulling a server-only dep into @dzup-ui/core.
+// NOTE: the prop type mirrors a team-run coordinator pattern vocabulary.
+// Kept as a local string union here to avoid pulling product-specific
+// runtime dependencies into @dzup-ui/core.
 
 type CoordinatorPattern =
   | 'supervisor'

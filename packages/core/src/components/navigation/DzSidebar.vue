@@ -43,10 +43,13 @@ defineSlots<DzSidebarSlots>()
 const attrs = useAttrs()
 
 /** Detect mobile viewport reactively via matchMedia */
+const canUseMatchMedia = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
 const mobileMatch = ref(typeof window !== 'undefined' && window.innerWidth < 768)
 
 let mql: MediaQueryList | null = null
 onMounted(() => {
+  if (!canUseMatchMedia)
+    return
   mql = window.matchMedia('(max-width: 768px)')
   mobileMatch.value = mql.matches
   const handler = (e: MediaQueryListEvent) => { mobileMatch.value = e.matches }

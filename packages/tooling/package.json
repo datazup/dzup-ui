@@ -7,6 +7,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "validate:boundaries": "tsx src/validators/import-boundary.ts",
+    "validate:interaction-contract": "tsx src/validators/interaction-contract.ts",
     "validate:tokens": "tsx src/token-checks/color-lint.ts",
     "validate:exports": "tsx ../scripts/validate-exports.ts",
     "validate:bundle": "tsx ../scripts/validate-bundle.ts",

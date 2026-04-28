@@ -14,6 +14,11 @@ export const INPUT_TOKENS: Record<string, string> = {
   '--dz-input-focus-ring-offset': '1px',
   '--dz-input-disabled-opacity': '0.5',
 
+  /* Size: xs */
+  '--dz-input-xs-height': 'var(--dz-spacing-7)',
+  '--dz-input-xs-padding-x': 'var(--dz-spacing-2)',
+  '--dz-input-xs-font-size': 'var(--dz-text-xs)',
+
   /* Size: sm */
   '--dz-input-sm-height': 'var(--dz-spacing-8)',
   '--dz-input-sm-padding-x': 'var(--dz-spacing-2_5)',
@@ -28,4 +33,9 @@ export const INPUT_TOKENS: Record<string, string> = {
   '--dz-input-lg-height': 'var(--dz-spacing-10)',
   '--dz-input-lg-padding-x': 'var(--dz-spacing-3_5)',
   '--dz-input-lg-font-size': 'var(--dz-text-base)',
+
+  /* Size: xl */
+  '--dz-input-xl-height': 'var(--dz-spacing-12)',
+  '--dz-input-xl-padding-x': 'var(--dz-spacing-4)',
+  '--dz-input-xl-font-size': 'var(--dz-text-lg)',
 }

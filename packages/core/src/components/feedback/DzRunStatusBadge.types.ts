@@ -1,12 +1,24 @@
 /**
  * DzRunStatusBadge — type definitions.
  *
- * Orchestration run-status badge: wraps DzBadge with status→token mapping.
+ * Run-status badge: wraps DzBadge with status→token mapping.
  *
  * @module @dzup-ui/core/components/feedback/DzRunStatusBadge
  */
 
-import type { RunStatus } from '@datazup/dzupagent-orchestration-kit'
+/**
+ * Canonical run-status vocabulary used by DzRunStatusBadge.
+ *
+ * Kept local to @dzup-ui/core to avoid leaking product-specific runtime
+ * dependencies into the base design-system package.
+ */
+export type DzRunStatus
+  = | 'PENDING'
+    | 'RUNNING'
+    | 'PAUSED'
+    | 'COMPLETED'
+    | 'FAILED'
+    | 'CANCELLED'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -14,8 +26,8 @@ import type { RunStatus } from '@datazup/dzupagent-orchestration-kit'
 
 /** Props for the DzRunStatusBadge component */
 export interface DzRunStatusBadgeProps {
-  /** Canonical orchestration run status (imported from orchestration-kit) */
-  status: RunStatus
+  /** Canonical run status */
+  status: DzRunStatus
   /** Badge size — maps to DzBadge size */
   size?: 'sm' | 'md'
 }
@@ -27,5 +39,5 @@ export interface DzRunStatusBadgeProps {
 /** Slot definitions for DzRunStatusBadge */
 export interface DzRunStatusBadgeSlots {
   /** Override the human-readable label (defaults to title-cased status) */
-  default?: (props: { status: RunStatus, label: string }) => unknown
+  default?: (props: { status: DzRunStatus, label: string }) => unknown
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import type { DzSelectItem } from '../../src/components/forms'
+import type { DzComboboxItem, DzSelectItem } from '../../src/components/forms'
 import { DzCombobox } from '../../src/components/forms'
 
 const sampleItems: DzSelectItem[] = [
@@ -58,6 +58,11 @@ const meta = {
     allowCustomValue: {
       control: 'boolean',
       description: 'Allow typing a custom value not in the items list',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Show loading state instead of the item list',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
     name: {
@@ -232,6 +237,21 @@ export const States: Story = {
   }),
 }
 
+export const LoadingState: Story = {
+  name: 'Loading State',
+  args: {
+    loading: true,
+    loadingText: 'Loading options…',
+  },
+  render: args => ({
+    components: { DzCombobox },
+    setup() {
+      return { args }
+    },
+    template: '<DzCombobox v-bind="args" class="max-w-xs" />',
+  }),
+}
+
 // ---------------------------------------------------------------------------
 // With Slots
 // ---------------------------------------------------------------------------
@@ -249,6 +269,51 @@ export const WithSlots: Story = {
           <div class="p-4 text-center text-sm text-gray-400">No cities found. Try a different search.</div>
         </template>
       </DzCombobox>
+    `,
+  }),
+}
+
+export const RichObjects: Story = {
+  name: 'Rich Objects',
+  render: () => ({
+    components: { DzCombobox },
+    setup() {
+      const people: DzComboboxItem[] = [
+        { id: 'p1', name: 'Annie Case', role: 'Planner', summary: 'Breaks work into subtasks' },
+        { id: 'p2', name: 'John Smith', role: 'Reviewer', summary: 'Checks correctness and risks' },
+        { id: 'p3', name: 'Rita Chen', role: 'Engineer', summary: 'Executes implementation tasks' },
+      ]
+      return { people }
+    },
+    data() {
+      return { selected: 'p2' }
+    },
+    template: `
+      <div class="space-y-4 max-w-sm">
+        <DzCombobox
+          v-model="selected"
+          :items="people"
+          :get-item-value="(item) => item.id"
+          :get-item-label="(item) => item.name"
+          placeholder="Assign a collaborator"
+        >
+          <template #item="{ item, selected }">
+            <div class="flex items-start gap-3 pl-6">
+              <span class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-700">
+                {{ item.label.charAt(0) }}
+              </span>
+              <span class="flex flex-col">
+                <span class="text-sm font-medium text-slate-900">
+                  {{ item.label }}
+                  <span v-if="selected" class="ml-1 text-xs text-sky-600">(selected)</span>
+                </span>
+                <span class="text-xs text-slate-500">{{ item.raw.role }} · {{ item.raw.summary }}</span>
+              </span>
+            </div>
+          </template>
+        </DzCombobox>
+        <p class="text-sm text-gray-500">Selected: <strong>{{ selected || 'none' }}</strong></p>
+      </div>
     `,
   }),
 }

@@ -18,8 +18,7 @@ export const resizableVariants = tv({
       'bg-[var(--dz-border)]',
       'transition-colors duration-150',
       'hover:bg-[var(--dz-primary)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-1',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'dz-focus-ring-control dz-disabled-control',
       'after:absolute after:inset-0',
     ].join(' '),
     handleIndicator: [

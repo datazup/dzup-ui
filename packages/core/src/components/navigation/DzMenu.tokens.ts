@@ -25,7 +25,7 @@ export const menuTokens = {
     /** Hover state */
     hoverBackground: 'var(--dz-muted)',
     /** Focus ring */
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
     /** Border radius */
     radius: 'var(--dz-radius-md)',
   },
@@ -42,7 +42,7 @@ export const menuTokens = {
   },
   /** Disabled item */
   disabled: {
-    opacity: '0.5',
+    opacity: 'var(--dz-control-disabled-opacity)',
   },
   /** Size scale for item padding and font size */
   size: {

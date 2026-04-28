@@ -14,15 +14,15 @@ export const checkboxVariants = tv({
     root: [
       'inline-flex items-center gap-[var(--dz-spacing-2)]',
       'cursor-pointer select-none',
-      'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--dz-button-disabled-opacity)]',
+      'dz-disabled-control',
     ].join(' '),
     indicator: [
       'shrink-0 flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',
       'border border-[var(--dz-border)]',
       'bg-[var(--dz-background)]',
-      'transition-[var(--dz-transition-fast)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
+      'transition-[var(--dz-control-transition)]',
+      'dz-focus-ring-control',
       'data-[state=checked]:bg-[var(--dz-primary)] data-[state=checked]:border-[var(--dz-primary)] data-[state=checked]:text-[var(--dz-primary-foreground)]',
       'data-[state=indeterminate]:bg-[var(--dz-primary)] data-[state=indeterminate]:border-[var(--dz-primary)] data-[state=indeterminate]:text-[var(--dz-primary-foreground)]',
     ].join(' '),

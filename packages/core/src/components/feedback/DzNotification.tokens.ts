@@ -37,7 +37,7 @@ export const notificationTokens = {
       top: 'var(--dz-spacing-2)',
     },
     radius: 'var(--dz-radius-sm)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
   },
 
   /** Tone-specific left border accent colors */

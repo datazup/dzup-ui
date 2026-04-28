@@ -32,7 +32,7 @@ export const contextMenuVariants = tv({
       'outline-none',
       'transition-colors',
       'focus:bg-[var(--dz-muted)] focus:text-[var(--dz-foreground)]',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'dz-disabled-control',
     ].join(' '),
     separator: [
       '-mx-[var(--dz-spacing-1)]',

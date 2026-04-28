@@ -28,7 +28,7 @@ export const sidebarVariants = tv({
       'transition-[var(--dz-transition-fast)]',
       'cursor-pointer',
       'hover:bg-[var(--dz-muted)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
+      'dz-focus-ring-control',
     ].join(' '),
     section: 'flex flex-col py-[var(--dz-spacing-2)]',
     sectionTitle: [

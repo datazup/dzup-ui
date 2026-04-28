@@ -15,9 +15,9 @@ export const resizableTokens = {
     /** Handle background on hover (uses primary token) */
     hoverBackground: 'var(--dz-primary)',
     /** Focus ring color */
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
     /** Disabled state opacity */
-    disabledOpacity: '0.5',
+    disabledOpacity: 'var(--dz-control-disabled-opacity)',
   },
   /** Grip indicator displayed inside the handle */
   handleIndicator: {

@@ -19,6 +19,7 @@ import { BADGE_TOKENS } from './component/badge.js'
 // Component
 import { BUTTON_TOKENS } from './component/button.js'
 import { CARD_TOKENS } from './component/card.js'
+import { CONTROL_TOKENS } from './component/control.js'
 import { DIALOG_TOKENS } from './component/dialog.js'
 import { INPUT_TOKENS } from './component/input.js'
 import { SIDEBAR_TOKENS } from './component/sidebar.js'
@@ -71,6 +72,7 @@ function generateCss(): string {
 
   const componentTokens = {
     ...BUTTON_TOKENS,
+    ...CONTROL_TOKENS,
     ...INPUT_TOKENS,
     ...CARD_TOKENS,
     ...BADGE_TOKENS,
@@ -204,6 +206,7 @@ function generateTypes(): string {
 
   const componentTokens = {
     ...BUTTON_TOKENS,
+    ...CONTROL_TOKENS,
     ...INPUT_TOKENS,
     ...CARD_TOKENS,
     ...BADGE_TOKENS,

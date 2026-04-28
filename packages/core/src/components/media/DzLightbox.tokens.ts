@@ -30,7 +30,7 @@ export const lightboxTokens = {
   navButton: {
     background: 'var(--dz-background)',
     foreground: 'var(--dz-background)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
     size: '2.5rem',
   },
 
@@ -41,7 +41,7 @@ export const lightboxTokens = {
   closeButton: {
     background: 'var(--dz-background)',
     foreground: 'var(--dz-background)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
     size: '2rem',
     position: {
       right: 'var(--dz-spacing-4)',

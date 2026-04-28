@@ -69,7 +69,7 @@ const itemClasses = computed(() =>
   cn(
     styles.value.item(),
     props.active && 'bg-[var(--dz-muted)] text-[var(--dz-foreground)] border-l-[3px] border-l-[var(--dz-primary)] !pl-[calc(var(--dz-spacing-3)-3px)]',
-    props.disabled && 'pointer-events-none opacity-50',
+    'dz-disabled-control',
     attrs.class as string | undefined,
   ),
 )

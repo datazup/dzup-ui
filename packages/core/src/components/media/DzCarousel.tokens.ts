@@ -15,7 +15,7 @@ export const carouselTokens = {
     border: 'var(--dz-border)',
     shadow: 'var(--dz-shadow-sm)',
     hoverBackground: 'var(--dz-muted)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
   },
 
   /** Navigation button sizes per size variant */

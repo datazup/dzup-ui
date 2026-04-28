@@ -29,6 +29,8 @@ export const sidebarTokens = {
     hoverText: 'var(--dz-sidebar-item-hover-text)',
     activeBg: 'var(--dz-sidebar-item-active-bg)',
     activeText: 'var(--dz-sidebar-item-active-text)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
+    disabledOpacity: 'var(--dz-control-disabled-opacity)',
   },
   /** Section tokens */
   section: {

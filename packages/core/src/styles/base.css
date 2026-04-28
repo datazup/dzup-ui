@@ -57,9 +57,17 @@
   }
 
   /* ==========================================================================
-     4. Focus Ring Utility
-     Reusable focus-visible outline for interactive components.
-     Applied via class="dz-focus-ring" or composed in tailwind-variants.
+     4. Interaction Utilities
+     Reusable focus and disabled contracts for semantic interactive surfaces.
+     - dz-focus-ring: generic semantic ring
+     - dz-focus-ring-button: action buttons and button-like controls
+     - dz-button-state-ring: persistent emphasis ring for selected/pressed button states
+     - dz-focus-ring-control: navigation, selection, and surface controls
+     - dz-focus-ring-control-inset: inset treatment for list-row style items
+     - dz-focus-ring-input: direct text-entry controls
+     - dz-focus-within-ring-input: composite field shells
+     - dz-disabled-{button|control|input|input-shell}: semantic disabled states
+     - dz-native-field-sm: small native input/select for internal filter surfaces
      ========================================================================== */
 
   .dz-focus-ring:focus-visible {
@@ -67,9 +75,130 @@
     outline-offset: 2px;
   }
 
+  .dz-focus-ring-button:focus-visible {
+    outline: var(--dz-button-focus-ring-width) solid var(--dz-button-focus-ring-color);
+    outline-offset: var(--dz-button-focus-ring-offset);
+  }
+
+  .dz-button-state-ring {
+    box-shadow:
+      0 0 0 var(--dz-button-focus-ring-width) var(--dz-button-focus-ring-color);
+  }
+
+  .dz-focus-ring-control:focus-visible {
+    outline: var(--dz-control-focus-ring-width) solid var(--dz-control-focus-ring-color);
+    outline-offset: var(--dz-control-focus-ring-offset);
+  }
+
+  .dz-focus-ring-control-inset:focus-visible {
+    outline: var(--dz-control-focus-ring-width) solid var(--dz-control-focus-ring-color);
+    outline-offset: calc(var(--dz-control-focus-ring-width) * -1);
+  }
+
+  .dz-focus-ring-input:focus-visible {
+    outline: var(--dz-input-focus-ring-width) solid var(--dz-input-focus-ring-color);
+    outline-offset: var(--dz-input-focus-ring-offset);
+  }
+
+  .dz-focus-within-ring-input:focus-within {
+    outline: var(--dz-input-focus-ring-width) solid var(--dz-input-focus-ring-color);
+    outline-offset: var(--dz-input-focus-ring-offset);
+  }
+
   /* Remove default outline for non-keyboard focus */
-  .dz-focus-ring:focus:not(:focus-visible) {
+  .dz-focus-ring:focus:not(:focus-visible),
+  .dz-focus-ring-button:focus:not(:focus-visible),
+  .dz-focus-ring-control:focus:not(:focus-visible),
+  .dz-focus-ring-control-inset:focus:not(:focus-visible),
+  .dz-focus-ring-input:focus:not(:focus-visible),
+  .dz-focus-within-ring-input:focus:not(:focus-visible) {
     outline: none;
+  }
+
+  .dz-disabled-button:disabled,
+  .dz-disabled-button[aria-disabled='true'],
+  .dz-disabled-button[data-disabled],
+  .dz-disabled-button[data-disabled='true'],
+  .dz-disabled-button[data-state='disabled'] {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: var(--dz-button-disabled-opacity);
+  }
+
+  .dz-disabled-control:disabled,
+  .dz-disabled-control[aria-disabled='true'],
+  .dz-disabled-control[data-disabled],
+  .dz-disabled-control[data-disabled='true'],
+  .dz-disabled-control[data-state='disabled'] {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: var(--dz-control-disabled-opacity);
+  }
+
+  .dz-disabled-input:disabled,
+  .dz-disabled-input[aria-disabled='true'],
+  .dz-disabled-input[data-disabled],
+  .dz-disabled-input[data-disabled='true'],
+  .dz-disabled-input[data-state='disabled'] {
+    cursor: not-allowed;
+    opacity: var(--dz-input-disabled-opacity);
+  }
+
+  .dz-disabled-input-shell:has(:disabled),
+  .dz-disabled-input-shell[aria-disabled='true'],
+  .dz-disabled-input-shell[data-disabled],
+  .dz-disabled-input-shell[data-disabled='true'],
+  .dz-disabled-input-shell[data-state='disabled'] {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: var(--dz-input-disabled-opacity);
+  }
+
+  .dz-native-field-sm {
+    width: 100%;
+    padding: var(--dz-spacing-1) var(--dz-spacing-2);
+    border: 1px solid var(--dz-border);
+    border-radius: var(--dz-radius-sm);
+    background-color: var(--dz-background);
+    color: var(--dz-foreground);
+    font-size: var(--dz-text-sm);
+  }
+
+  .dz-native-field-sm::placeholder {
+    color: var(--dz-muted-foreground);
+  }
+
+  .dz-native-field-sm:focus-visible {
+    outline: var(--dz-input-focus-ring-width) solid var(--dz-input-focus-ring-color);
+    outline-offset: var(--dz-input-focus-ring-offset);
+  }
+
+  .dz-native-field-sm:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .dz-native-field-sm:disabled,
+  .dz-native-field-sm[aria-disabled='true'],
+  .dz-native-field-sm[data-disabled],
+  .dz-native-field-sm[data-state='disabled'] {
+    cursor: not-allowed;
+    opacity: var(--dz-input-disabled-opacity);
+  }
+
+  /* ==========================================================================
+     4b. Native Field Reset
+     Composite field components keep focus chrome on the outer shell, not the
+     nested native input element. This utility hard-resets browser focus paint
+     for inner inputs used by combobox/select/time field primitives.
+     ========================================================================== */
+
+  .dz-field-input-reset,
+  .dz-field-input-reset:focus,
+  .dz-field-input-reset:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   /* ==========================================================================

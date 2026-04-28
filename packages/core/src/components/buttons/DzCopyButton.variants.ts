@@ -8,7 +8,11 @@ import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
 export const copyButtonVariants = tv({
-  base: 'inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  base: [
+    'inline-flex items-center justify-center rounded-md transition-colors',
+    'dz-focus-ring-button',
+    'dz-disabled-button',
+  ].join(' '),
   variants: {
     size: {
       sm: 'h-7 w-7 text-xs',

@@ -13,7 +13,7 @@ export const tagTokens = {
     gap: 'var(--dz-spacing-1)',
     radius: 'var(--dz-radius-md)',
     transition: 'var(--dz-transition-fast)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
   },
   /** Size scale */
   size: {

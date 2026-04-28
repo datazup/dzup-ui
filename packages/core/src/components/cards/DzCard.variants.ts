@@ -44,10 +44,7 @@ export const cardVariants = tv({
     clickable: {
       true: [
         'cursor-pointer',
-        'focus-visible:outline-none',
-        'focus-visible:ring-2',
-        'focus-visible:ring-[var(--dz-ring)]',
-        'focus-visible:ring-offset-2',
+        'dz-focus-ring-control',
       ].join(' '),
     },
   },

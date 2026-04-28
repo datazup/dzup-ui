@@ -60,7 +60,7 @@ export const transferTokens = {
     border: 'var(--dz-border)',
     radius: 'var(--dz-radius-md)',
     hoverBackground: 'var(--dz-muted)',
-    focusRingColor: 'var(--dz-primary)',
+    focusRingColor: 'var(--dz-button-focus-ring-color)',
     disabledOpacity: '0.5',
   },
   /** Actions column gap */
@@ -69,7 +69,7 @@ export const transferTokens = {
   emptyColor: 'var(--dz-muted-foreground)',
   emptyFontSize: 'var(--dz-text-sm)',
   /** Disabled state */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-input-disabled-opacity)',
   /** Size scale */
   size: {
     xs: { listMinHeight: '120px', listBodyMaxHeight: '120px', actionButtonSize: '1.5rem' },

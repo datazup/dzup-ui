@@ -97,7 +97,7 @@ export default {
       type="button"
       :disabled="disabled || undefined"
       :aria-label="`Remove ${ariaLabel ?? ''}`"
-      class="inline-flex items-center justify-center rounded-full hover:bg-[var(--dz-foreground)]/10 focus-visible:outline-none"
+      class="dz-focus-ring-button dz-disabled-button inline-flex items-center justify-center rounded-full hover:bg-[var(--dz-foreground)]/10"
       :class="[
         size === 'sm' ? 'h-3.5 w-3.5' : '',
         size === 'md' ? 'h-4 w-4' : '',

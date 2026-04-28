@@ -38,7 +38,7 @@ export const sheetTokens = {
       top: 'var(--dz-spacing-4)',
     },
     radius: 'var(--dz-radius-sm)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
   },
   /** Side-constrained sizes (right/left panels) */
   size: {

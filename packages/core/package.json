@@ -40,7 +40,6 @@
     "vue": "^3.5.0"
   },
   "dependencies": {
-    "@datazup/dzupagent-orchestration-kit": "workspace:*",
     "@dzup-ui/contracts": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
     "clsx": "^2.1.1",

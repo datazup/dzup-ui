@@ -103,7 +103,7 @@ export default {
     <button
       v-if="closable"
       type="button"
-      class="shrink-0 inline-flex items-center justify-center rounded-[var(--dz-radius-sm)] p-[var(--dz-spacing-1)] opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 transition-opacity"
+      class="shrink-0 inline-flex items-center justify-center rounded-[var(--dz-radius-sm)] p-[var(--dz-spacing-1)] opacity-70 hover:opacity-100 dz-focus-ring-button transition-opacity"
       aria-label="Close"
       @click="handleClose"
     >

@@ -23,7 +23,6 @@ const styles = computed(() =>
   menuVariants({
     size: ctx?.size.value ?? 'md',
     active: props.active || undefined,
-    disabled: props.disabled || undefined,
   }),
 )
 

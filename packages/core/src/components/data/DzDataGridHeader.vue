@@ -14,6 +14,29 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
 
+const filterTriggerClasses = [
+  'dz-focus-ring-button',
+  'inline-flex items-center justify-center h-5 w-5 rounded-[var(--dz-radius-sm)]',
+  'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
+].join(' ')
+
+const filterPopoverClasses = [
+  'absolute top-full left-0 z-50 mt-1',
+  'bg-[var(--dz-background)] border border-[var(--dz-border)]',
+  'rounded-[var(--dz-radius-md)] shadow-[var(--dz-shadow-md)]',
+  'p-[var(--dz-spacing-3)] min-w-[200px]',
+].join(' ')
+
+const filterFieldClasses = 'dz-native-field-sm'
+
+const filterClearButtonClasses = [
+  'dz-focus-ring-button',
+  'mt-[var(--dz-spacing-2)] w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
+  'text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
+  'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
+  'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
+].join(' ')
+
 const ctx = inject(DZ_DATA_GRID_KEY, null)
 if (!ctx) {
   if (import.meta.env?.DEV) {
@@ -52,7 +75,7 @@ export default {
 </script>
 
 <template>
-  <thead :class="styles.header()">
+  <thead :class="styles.header()" role="rowgroup">
     <tr :class="styles.headerRow()" role="row">
       <th
         v-if="ctx!.selectable.value === 'multiple'"
@@ -102,8 +125,7 @@ export default {
             v-if="isColumnFilterable(col)"
             type="button"
             :class="cn(
-              'inline-flex items-center justify-center h-5 w-5 rounded-[var(--dz-radius-sm)]',
-              'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
+              filterTriggerClasses,
               hasActiveFilter(col.field) ? 'text-[var(--dz-primary)]' : 'text-[var(--dz-muted-foreground)]',
             )"
             :aria-label="`Filter ${col.header}`"
@@ -121,12 +143,7 @@ export default {
         <!-- Filter popover -->
         <div
           v-if="isColumnFilterable(col) && openFilterField === col.field"
-          :class="cn(
-            'absolute top-full left-0 z-50 mt-1',
-            'bg-[var(--dz-background)] border border-[var(--dz-border)]',
-            'rounded-[var(--dz-radius-md)] shadow-[var(--dz-shadow-md)]',
-            'p-[var(--dz-spacing-3)] min-w-[200px]',
-          )"
+          :class="filterPopoverClasses"
           role="dialog"
           :aria-label="`Filter ${col.header}`"
           data-testid="filter-popover"
@@ -137,12 +154,7 @@ export default {
           <template v-if="(col.filterType ?? 'text') === 'text'">
             <input
               type="text"
-              :class="cn(
-                'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
-                'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
-                'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
-                'focus:outline-none focus:ring-2 focus:ring-[var(--dz-ring)]',
-              )"
+              :class="filterFieldClasses"
               :value="getFilterValue(col.field)"
               placeholder="Filter..."
               :aria-label="`Filter ${col.header} by text`"
@@ -156,11 +168,7 @@ export default {
           <template v-else-if="col.filterType === 'number'">
             <div class="flex flex-col gap-[var(--dz-spacing-2)]">
               <select
-                :class="cn(
-                  'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
-                  'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
-                  'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
-                )"
+                :class="filterFieldClasses"
                 :value="getFilterOperator(col.field)"
                 :aria-label="`Filter operator for ${col.header}`"
                 data-testid="filter-operator-select"
@@ -184,12 +192,7 @@ export default {
               </select>
               <input
                 type="number"
-                :class="cn(
-                  'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
-                  'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
-                  'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
-                  'focus:outline-none focus:ring-2 focus:ring-[var(--dz-ring)]',
-                )"
+                :class="filterFieldClasses"
                 :value="getFilterValue(col.field)"
                 placeholder="Value..."
                 :aria-label="`Filter ${col.header} by number`"
@@ -203,11 +206,7 @@ export default {
           <!-- Select filter -->
           <template v-else-if="col.filterType === 'select'">
             <select
-              :class="cn(
-                'w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
-                'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
-                'text-[length:var(--dz-text-sm)] bg-[var(--dz-background)]',
-              )"
+              :class="filterFieldClasses"
               :value="getFilterValue(col.field)"
               :aria-label="`Filter ${col.header} by selection`"
               data-testid="filter-select-input"
@@ -226,12 +225,7 @@ export default {
           <button
             v-if="hasActiveFilter(col.field)"
             type="button"
-            :class="cn(
-              'mt-[var(--dz-spacing-2)] w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
-              'text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
-              'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
-              'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
-            )"
+            :class="filterClearButtonClasses"
             data-testid="filter-clear-button"
             @click="handleClearFilter($event, col.field)"
           >

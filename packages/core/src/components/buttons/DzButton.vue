@@ -13,7 +13,7 @@ import type { DzButtonEmits, DzButtonProps, DzButtonSlots } from './DzButton.typ
  * <DzButton variant="outline" size="sm" loading>Processing</DzButton>
  * ```
  */
-import { computed, inject, resolveComponent, useAttrs } from 'vue'
+import { computed, getCurrentInstance, inject, isProxy, markRaw, toRaw, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
@@ -36,6 +36,7 @@ defineSlots<DzButtonSlots>()
 
 const attrs = useAttrs()
 const groupContext = inject(DZ_BUTTON_GROUP_KEY, null)
+const instance = getCurrentInstance()
 
 /** Resolved size: prop wins, then group context, then default */
 const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
@@ -57,19 +58,18 @@ const isInert = computed(() => resolvedDisabled.value || props.loading)
  * Priority: explicit `as` > `href` (renders <a>) > `to` (renders router-link) > 'button'
  */
 const computedTag = computed(() => {
-  if (props.as)
+  if (props.as) {
+    if (typeof props.as === 'object' && props.as !== null) {
+      const component = isProxy(props.as) ? toRaw(props.as) : props.as
+      return markRaw(component)
+    }
     return props.as
+  }
   if (props.href)
     return 'a'
   if (props.to) {
-    try {
-      const resolved = resolveComponent('RouterLink')
-      // resolveComponent returns a string when the component is not found
-      return typeof resolved === 'string' ? 'a' : resolved
-    }
-    catch {
-      return 'a'
-    }
+    const routerLink = instance?.appContext.components.RouterLink
+    return routerLink ? markRaw(routerLink) : 'a'
   }
   return 'button'
 })

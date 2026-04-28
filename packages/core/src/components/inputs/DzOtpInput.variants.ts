@@ -16,6 +16,7 @@ export const otpInputVariants = tv({
       'gap-[var(--dz-spacing-2)]',
     ].join(' '),
     input: [
+      'dz-field-input-reset',
       'flex items-center justify-center',
       'text-center',
       'rounded-[var(--dz-radius-md)]',
@@ -24,9 +25,8 @@ export const otpInputVariants = tv({
       'text-[var(--dz-foreground)]',
       'shadow-[var(--dz-shadow-sm)]',
       'transition-[var(--dz-transition-fast)]',
-      'outline-none',
-      'focus:border-[var(--dz-primary)] focus:ring-[length:2px] focus:ring-[var(--dz-primary)] focus:ring-offset-[length:1px]',
-      'disabled:cursor-not-allowed disabled:opacity-50',
+      'dz-focus-ring-input dz-disabled-input',
+      'focus:border-[var(--dz-input-border-focus)]',
       'placeholder:text-[var(--dz-muted-foreground)]',
     ].join(' '),
   },
@@ -40,12 +40,12 @@ export const otpInputVariants = tv({
     },
     invalid: {
       true: {
-        input: 'border-[var(--dz-danger)] focus:ring-[var(--dz-danger)]',
+        input: 'border-[var(--dz-danger)] focus:border-[var(--dz-danger)] focus:outline-[var(--dz-danger)]',
       },
     },
     disabled: {
       true: {
-        root: 'pointer-events-none opacity-[var(--dz-button-disabled-opacity)]',
+        root: 'dz-disabled-input-shell',
       },
     },
   },

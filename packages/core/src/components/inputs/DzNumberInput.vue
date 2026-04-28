@@ -196,7 +196,7 @@ export default {
       <!-- Decrement button -->
       <button
         type="button"
-        class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] disabled:opacity-[var(--dz-input-disabled-opacity)] disabled:cursor-not-allowed transition-colors"
+        class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
         :disabled="!canDecrement"
         aria-label="Decrease value"
         tabindex="-1"
@@ -248,7 +248,7 @@ export default {
       <!-- Increment button -->
       <button
         type="button"
-        class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] disabled:opacity-[var(--dz-input-disabled-opacity)] disabled:cursor-not-allowed transition-colors"
+        class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
         :disabled="!canIncrement"
         aria-label="Increase value"
         tabindex="-1"

@@ -44,7 +44,7 @@ const classes = computed(() =>
   cn(
     styles.value.item(),
     props.active ? 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]' : '',
-    props.disabled ? 'opacity-50 pointer-events-none' : '',
+    'dz-disabled-control',
     attrs.class as string | undefined,
   ),
 )

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import type { RunStatus } from '@datazup/dzupagent-orchestration-kit'
-import type { DzRunStatusBadgeProps, DzRunStatusBadgeSlots } from './DzRunStatusBadge.types.ts'
+import type {
+  DzRunStatus,
+  DzRunStatusBadgeProps,
+  DzRunStatusBadgeSlots,
+} from './DzRunStatusBadge.types.ts'
 /**
- * DzRunStatusBadge — Orchestration run-status pill.
+ * DzRunStatusBadge — Run-status pill.
  *
- * Wraps DzBadge and maps a canonical `RunStatus`
+ * Wraps DzBadge and maps a canonical run status
  * (PENDING | RUNNING | PAUSED | COMPLETED | FAILED | CANCELLED)
  * to a status CSS variable + accessible label.
  *
@@ -26,8 +29,8 @@ defineSlots<DzRunStatusBadgeSlots>()
 
 const attrs = useAttrs()
 
-/** Map a RunStatus to its status CSS var (see tokens/semantic/{light,dark}.ts) */
-const STATUS_VAR_MAP: Readonly<Record<RunStatus, string>> = Object.freeze({
+/** Map a run status to its status CSS var (see tokens/semantic/{light,dark}.ts) */
+const STATUS_VAR_MAP: Readonly<Record<DzRunStatus, string>> = Object.freeze({
   PENDING: 'var(--dz-status-pending)',
   RUNNING: 'var(--dz-status-running)',
   PAUSED: 'var(--dz-status-paused)',
@@ -37,7 +40,7 @@ const STATUS_VAR_MAP: Readonly<Record<RunStatus, string>> = Object.freeze({
 })
 
 /** Human-readable labels (Title Case) */
-const STATUS_LABEL_MAP: Readonly<Record<RunStatus, string>> = Object.freeze({
+const STATUS_LABEL_MAP: Readonly<Record<DzRunStatus, string>> = Object.freeze({
   PENDING: 'Pending',
   RUNNING: 'Running',
   PAUSED: 'Paused',

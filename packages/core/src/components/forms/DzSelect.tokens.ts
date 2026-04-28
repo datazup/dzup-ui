@@ -16,9 +16,9 @@ export const selectTokens = {
   /** Trigger transition */
   transition: 'var(--dz-transition-fast)',
   /** Trigger focus ring color */
-  focusRingColor: 'var(--dz-primary)',
+  focusRingColor: 'var(--dz-input-focus-ring-color)',
   /** Disabled state opacity */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-input-disabled-opacity)',
   /** Placeholder text color */
   placeholder: 'var(--dz-muted-foreground)',
   /** Filled variant background */
@@ -53,41 +53,41 @@ export const selectTokens = {
   /** Size scale */
   size: {
     xs: {
-      triggerHeight: 'var(--dz-button-xs-height)',
-      triggerPaddingX: 'var(--dz-spacing-2)',
-      triggerFontSize: 'var(--dz-text-xs)',
+      triggerHeight: 'var(--dz-input-xs-height)',
+      triggerPaddingX: 'var(--dz-input-xs-padding-x)',
+      triggerFontSize: 'var(--dz-input-xs-font-size)',
       itemPaddingX: 'var(--dz-spacing-2)',
       itemPaddingY: 'var(--dz-spacing-1)',
       itemFontSize: 'var(--dz-text-xs)',
     },
     sm: {
-      triggerHeight: 'var(--dz-button-sm-height)',
-      triggerPaddingX: 'var(--dz-spacing-3)',
-      triggerFontSize: 'var(--dz-text-sm)',
+      triggerHeight: 'var(--dz-input-sm-height)',
+      triggerPaddingX: 'var(--dz-input-sm-padding-x)',
+      triggerFontSize: 'var(--dz-input-sm-font-size)',
       itemPaddingX: 'var(--dz-spacing-2)',
       itemPaddingY: 'var(--dz-spacing-1_5)',
       itemFontSize: 'var(--dz-text-sm)',
     },
     md: {
-      triggerHeight: 'var(--dz-button-md-height)',
-      triggerPaddingX: 'var(--dz-spacing-3)',
-      triggerFontSize: 'var(--dz-text-sm)',
+      triggerHeight: 'var(--dz-input-md-height)',
+      triggerPaddingX: 'var(--dz-input-md-padding-x)',
+      triggerFontSize: 'var(--dz-input-md-font-size)',
       itemPaddingX: 'var(--dz-spacing-2)',
       itemPaddingY: 'var(--dz-spacing-1_5)',
       itemFontSize: 'var(--dz-text-sm)',
     },
     lg: {
-      triggerHeight: 'var(--dz-button-lg-height)',
-      triggerPaddingX: 'var(--dz-spacing-4)',
-      triggerFontSize: 'var(--dz-text-base)',
+      triggerHeight: 'var(--dz-input-lg-height)',
+      triggerPaddingX: 'var(--dz-input-lg-padding-x)',
+      triggerFontSize: 'var(--dz-input-lg-font-size)',
       itemPaddingX: 'var(--dz-spacing-3)',
       itemPaddingY: 'var(--dz-spacing-2)',
       itemFontSize: 'var(--dz-text-base)',
     },
     xl: {
-      triggerHeight: 'var(--dz-button-xl-height)',
-      triggerPaddingX: 'var(--dz-spacing-4)',
-      triggerFontSize: 'var(--dz-text-lg)',
+      triggerHeight: 'var(--dz-input-xl-height)',
+      triggerPaddingX: 'var(--dz-input-xl-padding-x)',
+      triggerFontSize: 'var(--dz-input-xl-font-size)',
       itemPaddingX: 'var(--dz-spacing-3)',
       itemPaddingY: 'var(--dz-spacing-2)',
       itemFontSize: 'var(--dz-text-lg)',

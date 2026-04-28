@@ -27,10 +27,9 @@ export const sliderVariants = tv({
       'border-[length:2px] border-[var(--dz-primary)]',
       'bg-[var(--dz-background)]',
       'shadow-[var(--dz-shadow-sm)]',
-      'transition-[var(--dz-transition-fast)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
+      'transition-[var(--dz-control-transition)]',
+      'dz-focus-ring-control dz-disabled-control',
       'hover:border-[var(--dz-primary-hover)]',
-      'disabled:pointer-events-none disabled:opacity-50',
     ].join(' '),
   },
   variants: {
@@ -81,7 +80,7 @@ export const sliderVariants = tv({
       },
     },
     disabled: {
-      true: { root: 'pointer-events-none opacity-[var(--dz-button-disabled-opacity)]' },
+      true: { root: 'dz-disabled-control' },
     },
   },
   defaultVariants: {

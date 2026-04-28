@@ -54,7 +54,7 @@ export const listVariants = tv({
 
     interactive: {
       true: {
-        item: 'cursor-pointer hover:bg-[var(--dz-muted)] focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-inset focus-visible:ring-[var(--dz-primary)]',
+        item: 'cursor-pointer hover:bg-[var(--dz-muted)] dz-focus-ring-control-inset',
       },
       false: {},
     },

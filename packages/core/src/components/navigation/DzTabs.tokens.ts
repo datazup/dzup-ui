@@ -21,9 +21,9 @@ export const tabsTokens = {
     /** Hover text color */
     hoverColor: 'var(--dz-foreground)',
     /** Focus ring color */
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
     /** Disabled state opacity */
-    disabledOpacity: '0.5',
+    disabledOpacity: 'var(--dz-control-disabled-opacity)',
     transition: 'var(--dz-transition-fast)',
   },
   /** Line variant tokens */
@@ -56,7 +56,7 @@ export const tabsTokens = {
   /** Content area */
   content: {
     marginTop: 'var(--dz-spacing-2)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
   },
   /** Size scale for trigger height, padding, and font size */
   size: {

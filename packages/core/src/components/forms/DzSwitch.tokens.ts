@@ -9,15 +9,15 @@ export const switchTokens = {
   /** Root label gap between track and text */
   gap: 'var(--dz-spacing-2)',
   /** Disabled state opacity */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-control-disabled-opacity)',
   /** Track (slider rail) */
   track: {
     background: 'var(--dz-muted)',
     checkedBackground: 'var(--dz-primary)',
-    transition: 'var(--dz-transition-fast)',
-    focusRingColor: 'var(--dz-primary)',
-    focusRingWidth: '2px',
-    focusRingOffset: '2px',
+    transition: 'var(--dz-control-transition)',
+    focusRingColor: 'var(--dz-control-focus-ring-color)',
+    focusRingWidth: 'var(--dz-control-focus-ring-width)',
+    focusRingOffset: 'var(--dz-control-focus-ring-offset)',
   },
   /** Thumb (slider knob) */
   thumb: {

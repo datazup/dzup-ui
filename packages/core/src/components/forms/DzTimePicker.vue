@@ -65,7 +65,6 @@ const styles = computed(() =>
   timePickerVariants({
     variant: props.variant,
     size: props.size,
-    disabled: resolvedDisabled.value || undefined,
     invalid: resolvedInvalid.value || undefined,
   }),
 )

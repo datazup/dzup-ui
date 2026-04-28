@@ -15,9 +15,9 @@ export const fileUploadTokens = {
     radius: 'var(--dz-radius-lg)',
     hoverBorder: 'var(--dz-primary)',
     hoverBackground: 'var(--dz-muted)',
-    focusRingColor: 'var(--dz-primary)',
-    focusRingWidth: '2px',
-    focusRingOffset: '2px',
+    focusRingColor: 'var(--dz-input-focus-ring-color)',
+    focusRingWidth: 'var(--dz-input-focus-ring-width)',
+    focusRingOffset: 'var(--dz-input-focus-ring-offset)',
     invalidBorder: 'var(--dz-danger)',
     /** Drag-over active state */
     dragOverBorder: 'var(--dz-primary)',
@@ -47,10 +47,10 @@ export const fileUploadTokens = {
     color: 'var(--dz-muted-foreground)',
     hoverColor: 'var(--dz-danger)',
     radius: 'var(--dz-radius-sm)',
-    focusRingColor: 'var(--dz-primary)',
+    focusRingColor: 'var(--dz-button-focus-ring-color)',
   },
   /** Disabled state */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-input-disabled-opacity)',
   /** Error display */
   errorColor: 'var(--dz-danger)',
   errorFontSize: 'var(--dz-text-xs)',
