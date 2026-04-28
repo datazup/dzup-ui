@@ -1,12 +1,12 @@
 /**
  * DzRunStatusBadge — Unit / behavior tests.
  */
-import type { RunStatus } from '@datazup/dzupagent-orchestration-kit'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import type { DzRunStatus } from './DzRunStatusBadge.types.ts'
 import DzRunStatusBadge from './DzRunStatusBadge.vue'
 
-const STATUSES: readonly RunStatus[] = [
+const STATUSES: readonly DzRunStatus[] = [
   'PENDING',
   'RUNNING',
   'PAUSED',
@@ -40,7 +40,7 @@ describe('dzRunStatusBadge — Unit Tests', () => {
   })
 
   it('maps each status to its CSS var', () => {
-    const expected: Record<RunStatus, string> = {
+    const expected: Record<DzRunStatus, string> = {
       PENDING: '--dz-status-pending',
       RUNNING: '--dz-status-running',
       PAUSED: '--dz-status-paused',

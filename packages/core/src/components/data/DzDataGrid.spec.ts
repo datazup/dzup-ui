@@ -44,9 +44,10 @@ function mountGrid(gridProps = {}) {
 }
 
 describe('dzDataGrid — Rendering', () => {
-  it('renders a root element with role="grid"', () => {
+  it('renders a root region and an inner grid table', () => {
     const wrapper = mountGrid()
-    expect(wrapper.attributes('role')).toBe('grid')
+    expect(wrapper.attributes('role')).toBe('region')
+    expect(wrapper.find('[role="grid"]').exists()).toBe(true)
   })
 
   it('renders column headers', () => {
@@ -331,9 +332,10 @@ describe('dzDataGrid — Filtering', () => {
 })
 
 describe('dzDataGrid — Accessibility', () => {
-  it('has role="grid" on root', () => {
+  it('has role="region" on root and role="grid" on the table', () => {
     const wrapper = mountGrid()
-    expect(wrapper.attributes('role')).toBe('grid')
+    expect(wrapper.attributes('role')).toBe('region')
+    expect(wrapper.find('[role="grid"]').exists()).toBe(true)
   })
 
   it('header cells have role="columnheader"', () => {

@@ -15,7 +15,7 @@ describe('dzTimePicker — Unit Tests', () => {
     const wrapper = mount(DzTimePicker, {
       props: { size: 'lg' },
     })
-    expect(wrapper.html()).toContain('dz-button-lg-height')
+    expect(wrapper.html()).toContain('dz-input-lg-height')
   })
 
   it('applies variant classes (outline)', () => {
