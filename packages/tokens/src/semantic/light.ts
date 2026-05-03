@@ -86,17 +86,20 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Overlay ── */
   '--dz-overlay-bg': 'oklch(0 0 0 / 0.5)',
 
-  /* ── Sidebar ── */
-  '--dz-sidebar-bg': 'var(--dz-colors-neutral-900)',
-  '--dz-sidebar-foreground': 'var(--dz-colors-neutral-300)',
-  '--dz-sidebar-border': 'var(--dz-colors-neutral-800)',
-  '--dz-sidebar-heading': 'var(--dz-colors-neutral-400)',
-  '--dz-sidebar-item-hover-bg': 'var(--dz-colors-neutral-800)',
-  '--dz-sidebar-item-hover-text': 'var(--dz-colors-neutral-100)',
-  '--dz-sidebar-item-active-bg': 'var(--dz-colors-primary-600)',
-  '--dz-sidebar-item-active-text': 'oklch(1 0 0)',
-  '--dz-sidebar-header-bg': 'var(--dz-colors-neutral-950)',
-  '--dz-sidebar-footer-bg': 'var(--dz-colors-neutral-950)',
+  /* ── Sidebar ──
+   * Sidebar token values are NOT written at the semantic tier. Tier 3 component
+   * defaults in `src/component/sidebar.ts` provide neutral fallbacks (which
+   * resolve to `var(--dz-surface)` etc.). Brand overrides — including the
+   * "always-dark" Datazup sidebar look — live in
+   * `@datazup/dzup-theme/styles/preset-dark-sidebar.css`. Apps opt in by
+   * importing that preset; apps that don't import it get a neutral light
+   * sidebar that follows the page surface.
+   *
+   * Writing concrete dark-neutrals here used to silently override the Tier 3
+   * defaults regardless of whether the consumer wanted a dark sidebar — that
+   * cascade collision was the bug Phase 6 of the shell improvement plan
+   * resolved at the brand-preset level. Now that the preset writes the full
+   * canonical set, this block is redundant and removed. */
 
   /* ── AppShell ── */
   '--dz-appshell-header-bg': 'oklch(1 0 0)',

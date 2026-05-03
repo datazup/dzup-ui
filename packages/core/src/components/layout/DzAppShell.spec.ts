@@ -117,4 +117,59 @@ describe('dzAppShell -- Unit Tests', () => {
     })
     expect(wrapper.classes()).toContain('custom-class')
   })
+
+  it('content area has no auto sidebar margin', () => {
+    const wrapper = mount(DzAppShell, {
+      props: { sidebarWidth: '16rem' },
+      slots: {
+        sidebar: () => h('aside', 'Sidebar'),
+        default: 'Content',
+      },
+    })
+    const contentDiv = wrapper.find('main').element.parentElement
+    expect(contentDiv?.className ?? '').not.toMatch(/\bml-\[/)
+  })
+
+  it('header reads token-backed height', () => {
+    const wrapper = mount(DzAppShell, {
+      slots: { header: () => h('span', 'Hi'), default: 'Content' },
+    })
+    const header = wrapper.find('header')
+    expect(header.classes().some(c => c.includes('var(--dz-appshell-header-height)'))).toBe(true)
+  })
+
+  it('main reads token-backed background and padding', () => {
+    const wrapper = mount(DzAppShell, {
+      slots: { default: 'Content' },
+    })
+    const main = wrapper.find('main')
+    expect(main.classes().some(c => c.includes('var(--dz-appshell-main-bg)'))).toBe(true)
+    expect(main.classes().some(c => c.includes('var(--dz-appshell-main-padding)'))).toBe(true)
+  })
+
+  it('renders header-start and header-end slots in order around header center', () => {
+    const wrapper = mount(DzAppShell, {
+      slots: {
+        'header-start': () => h('span', { 'data-testid': 'hs' }, 'L'),
+        header: () => h('span', { 'data-testid': 'hc' }, 'C'),
+        'header-end': () => h('span', { 'data-testid': 'he' }, 'R'),
+        default: 'x',
+      },
+    })
+    const headerHtml = wrapper.find('header').html()
+    const idxL = headerHtml.indexOf('data-testid="hs"')
+    const idxC = headerHtml.indexOf('data-testid="hc"')
+    const idxR = headerHtml.indexOf('data-testid="he"')
+    expect(idxL).toBeGreaterThan(-1)
+    expect(idxC).toBeGreaterThan(idxL)
+    expect(idxR).toBeGreaterThan(idxC)
+  })
+
+  it('still writes --dz-appshell-sidebar-width from sidebarWidth prop', () => {
+    const wrapper = mount(DzAppShell, {
+      props: { sidebarWidth: '20rem' },
+      slots: { sidebar: () => h('aside'), default: 'x' },
+    })
+    expect(wrapper.attributes('style') ?? '').toContain('--dz-appshell-sidebar-width: 20rem')
+  })
 })

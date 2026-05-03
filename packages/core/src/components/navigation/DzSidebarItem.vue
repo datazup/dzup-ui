@@ -41,6 +41,7 @@ const attrs = useAttrs()
 const sidebarContext = inject(DZ_SIDEBAR_KEY, null)
 
 const isCollapsed = computed(() => sidebarContext?.collapsed.value ?? false)
+const activeStyle = computed(() => sidebarContext?.activeStyle.value ?? 'filled')
 
 /** Determine which HTML element or component to render */
 const computedTag = computed(() => {
@@ -62,13 +63,14 @@ const computedTag = computed(() => {
 const styles = computed(() =>
   sidebarVariants({
     collapsed: isCollapsed.value,
+    active: props.active,
+    activeStyle: activeStyle.value,
   }),
 )
 
 const itemClasses = computed(() =>
   cn(
     styles.value.item(),
-    props.active && 'bg-[var(--dz-muted)] text-[var(--dz-foreground)] border-l-[3px] border-l-[var(--dz-primary)] !pl-[calc(var(--dz-spacing-3)-3px)]',
     'dz-disabled-control',
     attrs.class as string | undefined,
   ),

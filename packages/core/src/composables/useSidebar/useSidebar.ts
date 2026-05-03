@@ -7,7 +7,7 @@
  * @module @dzup-ui/core/composables/useSidebar
  */
 
-import type { ComputedRef, Ref } from 'vue'
+import type { ComputedRef, Ref, WatchSource } from 'vue'
 import {
   computed,
   onMounted,
@@ -26,10 +26,16 @@ export interface UseSidebarOptions {
   collapsedWidth?: string
   /** Width when expanded (default: '16rem') */
   expandedWidth?: string
-  /** Pixel breakpoint for mobile mode (default: 768) */
+  /** Pixel breakpoint for mobile mode (default: 1024) */
   mobileBreakpoint?: number
   /** localStorage key for persisting collapsed state */
   storageKey?: string
+  /**
+   * Optional reactive source (e.g., `() => route.fullPath`). When the source
+   * changes, automatically close the mobile drawer if open. Use this to wire
+   * route-change auto-close without importing vue-router into core.
+   */
+  closeMobileOn?: WatchSource<unknown>
 }
 
 /** Return value of the useSidebar composable */
@@ -119,8 +125,9 @@ export function useSidebar(options: UseSidebarOptions = {}): UseSidebarReturn {
     defaultMobileOpen = false,
     collapsedWidth = '4rem',
     expandedWidth = '16rem',
-    mobileBreakpoint = 768,
+    mobileBreakpoint = 1024,
     storageKey,
+    closeMobileOn,
   } = options
 
   // ---- State ----
@@ -204,15 +211,18 @@ export function useSidebar(options: UseSidebarOptions = {}): UseSidebarReturn {
     }
   }
 
-  // ---- Close mobile sidebar on route change ----
-
-  // Watch mobileMatch: when entering mobile mode, auto-close overlay;
-  // this also acts as a proxy for viewport changes that a route change triggers.
+  // Auto-close mobile drawer when transitioning out of mobile mode (proxy for viewport resize).
   watch(isMobile, () => {
     if (mobileOpen.value) {
       closeMobile()
     }
   })
+
+  if (closeMobileOn) {
+    watch(closeMobileOn, () => {
+      if (mobileOpen.value) closeMobile()
+    })
+  }
 
   // ---- Keyboard shortcut: Ctrl+B / Cmd+B ----
 

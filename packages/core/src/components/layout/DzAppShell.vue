@@ -10,7 +10,9 @@ import type { DzAppShellProps, DzAppShellSlots } from './DzAppShell.types.ts'
  * ```vue
  * <DzAppShell>
  *   <template #sidebar>Navigation</template>
+ *   <template #header-start>Toggle</template>
  *   <template #header>Top bar</template>
+ *   <template #header-end>User menu</template>
  *   Main content here
  * </DzAppShell>
  * ```
@@ -65,20 +67,22 @@ export default {
     :aria-label="ariaLabel"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <!-- Sidebar slot -->
     <slot v-if="hasSidebar" name="sidebar" />
 
-    <!-- Content area (header + main) -->
     <div :class="styles.content()">
-      <!-- Header -->
       <header
         v-if="hasHeader"
         :class="styles.header()"
       >
-        <slot name="header" />
+        <slot name="header-start" />
+        <div class="flex-1 min-w-0">
+          <slot name="header" />
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <slot name="header-end" />
+        </div>
       </header>
 
-      <!-- Main content -->
       <main :class="styles.main()">
         <slot />
       </main>

@@ -6,6 +6,18 @@
  */
 
 export const APPSHELL_TOKENS: Record<string, string> = {
+  /* ── Sidebar offset ── */
+  /**
+   * Width the AppShell content area reserves for the sidebar slot.
+   * Defaults to the canonical sidebar width so flex-sibling and fixed
+   * sidebar layouts share one source of truth.
+   *
+   * Phase 2 of the shell improvement plan removes the auto-margin from
+   * `DzAppShell.variants.ts`; this token remains exposed for apps that
+   * read it directly.
+   */
+  '--dz-appshell-sidebar-width': 'var(--dz-sidebar-width)',
+
   /* ── Header ── */
   '--dz-appshell-header-height': '4rem',
   '--dz-appshell-header-bg': 'var(--dz-surface)',

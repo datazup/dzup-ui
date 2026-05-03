@@ -11,7 +11,7 @@ import {
   it,
   vi,
 } from 'vitest'
-import { defineComponent, h, nextTick } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import { useSidebar } from './useSidebar.ts'
 
 /**
@@ -390,5 +390,25 @@ describe('useSidebar', () => {
 
     wrapper.unmount()
     vi.unstubAllGlobals()
+  })
+
+  it('default mobileBreakpoint is 1024', () => {
+    const matchMediaSpy = vi.spyOn(window, 'matchMedia')
+    const { wrapper } = mountSidebar()
+    expect(matchMediaSpy).toHaveBeenCalledWith('(max-width: 1024px)')
+    wrapper.unmount()
+    matchMediaSpy.mockRestore()
+  })
+
+  it('closeMobileOn watcher closes drawer when source changes', async () => {
+    const routeKey = ref('/a')
+    const { getSidebar, wrapper } = mountSidebar({ closeMobileOn: routeKey })
+    const sb = getSidebar()
+    sb.openMobile()
+    expect(sb.mobileOpen.value).toBe(true)
+    routeKey.value = '/b'
+    await nextTick()
+    expect(sb.mobileOpen.value).toBe(false)
+    wrapper.unmount()
   })
 })

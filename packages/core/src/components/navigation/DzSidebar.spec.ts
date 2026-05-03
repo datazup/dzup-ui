@@ -2,7 +2,7 @@
  * DzSidebar -- Unit / behavior tests.
  */
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { h, nextTick } from 'vue'
 import DzSidebar from './DzSidebar.vue'
 import DzSidebarFooter from './DzSidebarFooter.vue'
@@ -46,6 +46,21 @@ function mountSidebar(sidebarProps: Record<string, unknown> = {}) {
 }
 
 describe('dzSidebar -- Unit Tests', () => {
+  beforeAll(() => {
+    // Stub matchMedia for jsdom since it lacks the API
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    })
+  })
+
   it('renders with default props', () => {
     const wrapper = mountSidebar()
     const nav = wrapper.find('nav')
@@ -59,13 +74,13 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mountSidebar({ collapsed: true })
     const nav = wrapper.find('nav')
     expect(nav.attributes('data-state')).toBe('collapsed')
-    expect(nav.classes().some((c: string) => c.includes('w-16'))).toBe(true)
+    expect(nav.classes().some((c: string) => c.includes('var(--dz-sidebar-collapsed-width)'))).toBe(true)
   })
 
-  it('renders in expanded state with w-64 class', () => {
+  it('renders in expanded state with token-backed width', () => {
     const wrapper = mountSidebar({ collapsed: false })
     const nav = wrapper.find('nav')
-    expect(nav.classes().some((c: string) => c.includes('w-64'))).toBe(true)
+    expect(nav.classes().some((c: string) => c.includes('var(--dz-sidebar-width)'))).toBe(true)
   })
 
   it('emits update:collapsed when toggling', async () => {
@@ -184,5 +199,64 @@ describe('dzSidebar -- Unit Tests', () => {
       await nextTick()
       expect(wrapper.text()).not.toContain('Hidden Item')
     }
+  })
+
+  it('defaults to position=static and renders relative root', () => {
+    const wrapper = mountSidebar()
+    const nav = wrapper.find('nav')
+    expect(nav.classes()).toContain('relative')
+    expect(nav.classes()).not.toContain('fixed')
+  })
+
+  it('with position=fixed renders fixed root with z-index token', () => {
+    const wrapper = mountSidebar({ position: 'fixed' })
+    const nav = wrapper.find('nav')
+    expect(nav.classes()).toContain('fixed')
+    expect(nav.classes().some(c => c.includes('var(--dz-sidebar-z-index)'))).toBe(true)
+  })
+
+  it('overlay class uses sidebar overlay token', () => {
+    // isMobile=true and mobileOpen=true are passed directly to skip matchMedia.
+    // Teleport renders to document.body in jsdom, so we check document.body.innerHTML.
+    const wrapper = mount(DzSidebar, {
+      props: { isMobile: true, mobileOpen: true },
+      attachTo: document.body,
+      global: { stubs: { Teleport: false } },
+      slots: { default: () => h('div') },
+    })
+    const overlayClass = 'var(--dz-sidebar-overlay-bg)'
+    // Check both the wrapper html and the full document body for the overlay token class
+    const fullHtml = document.body.innerHTML + wrapper.html()
+    expect(fullHtml.includes(overlayClass)).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('active item with default activeStyle uses filled tokens', () => {
+    const wrapper = mount(DzSidebar, {
+      global: { stubs: { Teleport: true } },
+      slots: {
+        default: () => [
+          h(DzSidebarItem, { active: true }, { default: () => 'Active' }),
+        ],
+      },
+    })
+    const item = wrapper.find('[data-state="active"]')
+    expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-bg)'))).toBe(true)
+    expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-text)'))).toBe(true)
+  })
+
+  it('active item with activeStyle=rail uses border-left accent', () => {
+    const wrapper = mount(DzSidebar, {
+      props: { activeStyle: 'rail' },
+      global: { stubs: { Teleport: true } },
+      slots: {
+        default: () => [
+          h(DzSidebarItem, { active: true }, { default: () => 'Active' }),
+        ],
+      },
+    })
+    const item = wrapper.find('[data-state="active"]')
+    expect(item.classes().some(c => c.includes('border-l-[3px]'))).toBe(true)
+    expect(item.classes().some(c => c.includes('border-l-[var(--dz-sidebar-item-active-bg)]'))).toBe(true)
   })
 })

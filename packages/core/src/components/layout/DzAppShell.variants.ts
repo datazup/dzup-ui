@@ -12,9 +12,20 @@ import { tv } from 'tailwind-variants'
 export const appShellVariants = tv({
   slots: {
     root: 'relative flex h-screen w-full overflow-hidden',
-    header: 'sticky top-0 z-30 flex h-16 items-center border-b px-4',
-    main: 'flex-1 overflow-y-auto',
-    content: 'flex flex-1 flex-col transition-[margin-left] duration-300 ease-in-out ml-[var(--dz-appshell-sidebar-width,0px)]',
+    content: 'flex flex-1 flex-col min-w-0 overflow-hidden',
+    header: [
+      'sticky top-0 z-[var(--dz-appshell-header-z-index)]',
+      'flex items-center gap-3 shrink-0',
+      'h-[var(--dz-appshell-header-height)]',
+      'px-[var(--dz-appshell-header-padding-x)]',
+      'bg-[var(--dz-appshell-header-bg)]',
+      'border-b border-[var(--dz-appshell-header-border)]',
+    ].join(' '),
+    main: [
+      'flex-1 overflow-y-auto',
+      'bg-[var(--dz-appshell-main-bg)]',
+      'p-[var(--dz-appshell-main-padding)]',
+    ].join(' '),
   },
   variants: {
     hasSidebar: {
@@ -34,5 +45,4 @@ export const appShellVariants = tv({
   },
 })
 
-/** Variant prop types extracted from the tv() definition */
 export type AppShellVariantProps = VariantProps<typeof appShellVariants>

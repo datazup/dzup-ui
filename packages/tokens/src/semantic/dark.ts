@@ -89,17 +89,10 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Overlay ── */
   '--dz-overlay-bg': 'oklch(0 0 0 / 0.7)',
 
-  /* ── Sidebar ── */
-  '--dz-sidebar-bg': 'var(--dz-colors-neutral-950)',
-  '--dz-sidebar-foreground': 'var(--dz-colors-neutral-400)',
-  '--dz-sidebar-border': 'var(--dz-colors-neutral-800)',
-  '--dz-sidebar-heading': 'var(--dz-colors-neutral-500)',
-  '--dz-sidebar-item-hover-bg': 'var(--dz-colors-neutral-800)',
-  '--dz-sidebar-item-hover-text': 'var(--dz-colors-neutral-50)',
-  '--dz-sidebar-item-active-bg': 'var(--dz-colors-primary-500)',
-  '--dz-sidebar-item-active-text': 'oklch(1 0 0)',
-  '--dz-sidebar-header-bg': 'oklch(0 0 0)',
-  '--dz-sidebar-footer-bg': 'oklch(0 0 0)',
+  /* ── Sidebar ──
+   * See `light.ts` for the rationale. Sidebar values live in the brand
+   * preset, not the semantic tier. Tier 3 component defaults provide the
+   * neutral fallback for apps that don't import a sidebar preset. */
 
   /* ── AppShell ── */
   '--dz-appshell-header-bg': 'var(--dz-colors-neutral-900)',

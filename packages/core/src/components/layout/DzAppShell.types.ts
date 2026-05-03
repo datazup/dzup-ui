@@ -26,8 +26,12 @@ export interface DzAppShellProps {
 export interface DzAppShellSlots {
   /** Sidebar content (navigation, branding, etc.). */
   sidebar?: () => unknown
-  /** Header content (breadcrumbs, user menu, etc.). */
+  /** Header center content (breadcrumbs, page title, etc.). */
   header?: () => unknown
+  /** Header left-side content. Renders before the center header slot — typical use: sidebar toggle button. */
+  'header-start'?: () => unknown
+  /** Header right-side content. Renders after the center header slot — typical use: theme toggle, user menu. */
+  'header-end'?: () => unknown
   /** Main content area (default slot). */
   default?: () => unknown
 }
