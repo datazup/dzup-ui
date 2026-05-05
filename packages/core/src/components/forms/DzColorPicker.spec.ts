@@ -62,7 +62,7 @@ describe('dzColorPicker — Unit Tests', () => {
     const wrapper = mount(DzColorPicker, {
       props: { size: 'lg' },
     })
-    expect(wrapper.html()).toContain('h-12')
+    expect(wrapper.html()).toContain('h-[var(--dz-input-lg-height)]')
   })
 
   it('renders hidden form input when name is provided', () => {

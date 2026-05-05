@@ -23,6 +23,10 @@ export type {
 export { type CommandPaletteVariantProps, commandPaletteVariants } from './DzCommandPalette.variants.ts'
 // ── DzCommandPalette ──
 export { default as DzCommandPalette } from './DzCommandPalette.vue'
+// ── DzConfirmDialog ──
+export type { DzConfirmDialogEmits, DzConfirmDialogProps, DzConfirmDialogSlots } from './DzConfirmDialog.types.ts'
+export { type ConfirmDialogVariantProps, confirmDialogVariants } from './DzConfirmDialog.variants.ts'
+export { default as DzConfirmDialog } from './DzConfirmDialog.vue'
 export type {
   ContextMenuAlign,
   ContextMenuSide,
@@ -37,6 +41,7 @@ export type {
   DzContextMenuSlots,
   DzContextMenuTriggerSlots,
 } from './DzContextMenu.types.ts'
+
 export { type ContextMenuVariantProps, contextMenuVariants } from './DzContextMenu.variants.ts'
 // ── DzContextMenu (Compound) ──
 export { default as DzContextMenu } from './DzContextMenu.vue'
@@ -61,8 +66,10 @@ export type {
   DzDialogTitleSlots,
   DzDialogTriggerSlots,
 } from './DzDialog.types.ts'
+
 // ── Injection keys (runtime exports) ──
 export { DZ_DIALOG_KEY } from './DzDialog.types.ts'
+
 // ── Variants (for consumer customization) ──
 export { type DialogVariantProps, dialogVariants } from './DzDialog.variants.ts'
 
@@ -70,15 +77,12 @@ export { type DialogVariantProps, dialogVariants } from './DzDialog.variants.ts'
 export { default as DzDialog } from './DzDialog.vue'
 
 export { default as DzDialogClose } from './DzDialogClose.vue'
-
 export { default as DzDialogContent } from './DzDialogContent.vue'
-
 export { default as DzDialogDescription } from './DzDialogDescription.vue'
 
 export { default as DzDialogOverlay } from './DzDialogOverlay.vue'
 export { default as DzDialogTitle } from './DzDialogTitle.vue'
 export { default as DzDialogTrigger } from './DzDialogTrigger.vue'
-
 export type {
   DropdownAlign,
   DropdownSide,
@@ -96,12 +100,13 @@ export type {
 export { type DropdownMenuVariantProps, dropdownMenuVariants } from './DzDropdownMenu.variants.ts'
 // ── DzDropdownMenu (Compound) ──
 export { default as DzDropdownMenu } from './DzDropdownMenu.vue'
+
 export { default as DzDropdownMenuContent } from './DzDropdownMenuContent.vue'
+
 export { default as DzDropdownMenuItem } from './DzDropdownMenuItem.vue'
+
 export { default as DzDropdownMenuSeparator } from './DzDropdownMenuSeparator.vue'
-
 export { default as DzDropdownMenuTrigger } from './DzDropdownMenuTrigger.vue'
-
 // ── Types — DzPopover ──
 export type {
   DzPopoverContentEmits,
@@ -114,12 +119,14 @@ export type {
   PopoverContentSize,
   PopoverSide,
 } from './DzPopover.types.ts'
-
 export { type PopoverVariantProps, popoverVariants } from './DzPopover.variants.ts'
 // ── DzPopover (Compound) ──
 export { default as DzPopover } from './DzPopover.vue'
+
 export { default as DzPopoverContent } from './DzPopoverContent.vue'
+
 export { default as DzPopoverTrigger } from './DzPopoverTrigger.vue'
+
 export type {
   DzSheetCloseSlots,
   DzSheetContentEmits,
@@ -132,16 +139,16 @@ export type {
   DzSheetTriggerSlots,
   SheetSide,
 } from './DzSheet.types.ts'
-
 export { type SheetVariantProps, sheetVariants } from './DzSheet.variants.ts'
-
 // ── DzSheet (Compound) ──
 export { default as DzSheet } from './DzSheet.vue'
-
 export { default as DzSheetClose } from './DzSheetClose.vue'
 export { default as DzSheetContent } from './DzSheetContent.vue'
+
 export { default as DzSheetDescription } from './DzSheetDescription.vue'
+
 export { default as DzSheetTitle } from './DzSheetTitle.vue'
+
 export { default as DzSheetTrigger } from './DzSheetTrigger.vue'
 
 // ── Types — DzTooltip ──
@@ -159,7 +166,5 @@ export { type TooltipVariantProps, tooltipVariants } from './DzTooltip.variants.
 
 // ── DzTooltip (Compound) ──
 export { default as DzTooltip } from './DzTooltip.vue'
-
 export { default as DzTooltipContent } from './DzTooltipContent.vue'
-
 export { default as DzTooltipTrigger } from './DzTooltipTrigger.vue'

@@ -58,6 +58,7 @@
           "DzTimePicker",
           "DzMultiSelect",
           "DzCombobox",
+          "DzPersonaSelector",
           "DzSlider",
           "DzFileUpload",
           "DzColorPicker",
@@ -145,6 +146,8 @@
           "DzAlert",
           "DzBadge",
           "DzProgress",
+          "DzRunStatusBadge",
+          "DzTokenProgressBar",
           "DzSpinner",
           "DzSkeleton",
           "DzToastProvider",
@@ -251,6 +254,10 @@
       "useSelect": {
         "path": "./src/composables/useSelect/index.ts",
         "exports": ["useSelect", "useSelectKeyboard"]
+      },
+      "useSidebar": {
+        "path": "./src/composables/useSidebar/index.ts",
+        "exports": ["useSidebar", "UseSidebarOptions", "UseSidebarReturn"]
       },
       "useTabs": {
         "path": "./src/composables/useTabs/index.ts",
@@ -883,7 +890,9 @@
       "UseCollapseOptions",
       "UseCollapseReturn",
       "UseDataGridOptions",
-      "UseDataGridReturn"
+      "UseDataGridReturn",
+      "UseSidebarOptions",
+      "UseSidebarReturn"
     ]
   }
 }

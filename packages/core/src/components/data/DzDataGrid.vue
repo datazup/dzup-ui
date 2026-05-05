@@ -135,15 +135,14 @@ export default {
 
 <template>
   <div
-    :id="id"
     :class="rootClasses"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel ?? 'Data grid'"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :aria-busy="loading || undefined"
     :data-state="loading ? 'loading' : 'ready'"
     :data-loading="loading ? '' : undefined"
-    role="grid"
+    role="region"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -165,7 +164,15 @@ export default {
     </div>
 
     <!-- Table -->
-    <table v-else :class="styles.table()">
+    <table
+      v-else
+      :id="id"
+      :class="styles.table()"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledby"
+      :aria-describedby="ariaDescribedby"
+      role="grid"
+    >
       <DzDataGridHeader />
       <DzDataGridBody :row-key="(rowKey as string | undefined)" @row-click="handleRowClick">
         <template v-if="$slots.cell" #cell="cellProps">

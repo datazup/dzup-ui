@@ -26,7 +26,7 @@ export const accordionTokens = {
   /** Trigger button */
   trigger: {
     transition: 'var(--dz-transition-fast)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
   },
   /** Content panel */
   content: {

@@ -7,7 +7,6 @@ import {
   SelectItem,
   SelectItemIndicator,
   SelectItemText,
-  SelectPortal,
   SelectRoot,
   SelectTrigger,
   SelectValue,
@@ -37,7 +36,19 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
 
+const EMPTY_VALUE_SENTINEL = '__DZ_SELECT_EMPTY__'
+
 const model = defineModel<string>({ default: '' })
+
+/** Maps external value → internal reka-ui safe value (empty string → sentinel) */
+function toInternal(v: string): string {
+  return v === '' ? EMPTY_VALUE_SENTINEL : v
+}
+
+/** Maps internal reka-ui value → external value (sentinel → empty string) */
+function toExternal(v: string): string {
+  return v === EMPTY_VALUE_SENTINEL ? '' : v
+}
 
 const props = withDefaults(defineProps<DzSelectProps>(), {
   placeholder: undefined,
@@ -110,9 +121,10 @@ function handleSearchInput(event: Event): void {
 }
 
 function handleValueChange(value: string): void {
-  model.value = value
-  emit('change', value)
-  emit('select', value)
+  const external = toExternal(value)
+  model.value = external
+  emit('change', external)
+  emit('select', external)
 }
 
 function handleOpenChange(open: boolean): void {
@@ -151,7 +163,7 @@ export default {
 
 <template>
   <SelectRoot
-    :model-value="model"
+    :model-value="toInternal(model)"
     :disabled="resolvedDisabled"
     :name="name"
     :required="required || fieldContext?.isRequired.value"
@@ -181,60 +193,58 @@ export default {
       </SelectIcon>
     </SelectTrigger>
 
-    <SelectPortal>
-      <SelectContent :class="styles.content()" position="popper" :side-offset="4">
-        <SelectViewport :class="styles.viewport()">
-          <div
-            v-if="searchable"
-            :class="styles.searchWrapper()"
-            @pointerdown.stop
+    <SelectContent :class="styles.content()" position="popper" :side-offset="4">
+      <SelectViewport :class="styles.viewport()">
+        <div
+          v-if="searchable"
+          :class="styles.searchWrapper()"
+          @pointerdown.stop
+        >
+          <input
+            ref="searchInputRef"
+            type="text"
+            :value="searchQuery"
+            :placeholder="searchPlaceholder"
+            :class="styles.searchInput()"
+            role="searchbox"
+            aria-label="Filter options"
+            data-dz-search-input
+            @input="handleSearchInput"
+            @keydown.stop
           >
-            <input
-              ref="searchInputRef"
-              type="text"
-              :value="searchQuery"
-              :placeholder="searchPlaceholder"
-              :class="styles.searchInput()"
-              role="searchbox"
-              aria-label="Filter options"
-              data-dz-search-input
-              @input="handleSearchInput"
-              @keydown.stop
-            >
-          </div>
-          <template v-if="filteredItems.length > 0">
-            <SelectItem
-              v-for="item in filteredItems"
-              :key="item.value"
-              :value="item.value"
-              :disabled="item.disabled"
-              :class="styles.item()"
-            >
-              <SelectItemIndicator class="absolute left-1 flex items-center justify-center">
-                <Check :class="styles.checkIcon()" aria-hidden="true" />
-              </SelectItemIndicator>
-              <SelectItemText class="pl-6">
-                {{ item.label }}
-              </SelectItemText>
-            </SelectItem>
-          </template>
-          <div
-            v-else-if="searchable && searchQuery.trim()"
-            :class="styles.noResults()"
-            data-dz-no-results
+        </div>
+        <template v-if="filteredItems.length > 0">
+          <SelectItem
+            v-for="item in filteredItems"
+            :key="toInternal(item.value)"
+            :value="toInternal(item.value)"
+            :disabled="item.disabled"
+            :class="styles.item()"
           >
-            {{ noResultsText }}
-          </div>
-          <div
-            v-else
-            class="px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]"
-          >
-            <slot name="empty">
-              No options available
-            </slot>
-          </div>
-        </SelectViewport>
-      </SelectContent>
-    </SelectPortal>
+            <SelectItemIndicator class="absolute left-1 flex items-center justify-center">
+              <Check :class="styles.checkIcon()" aria-hidden="true" />
+            </SelectItemIndicator>
+            <SelectItemText class="pl-6">
+              {{ item.label }}
+            </SelectItemText>
+          </SelectItem>
+        </template>
+        <div
+          v-else-if="searchable && searchQuery.trim()"
+          :class="styles.noResults()"
+          data-dz-no-results
+        >
+          {{ noResultsText }}
+        </div>
+        <div
+          v-else
+          class="px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]"
+        >
+          <slot name="empty">
+            No options available
+          </slot>
+        </div>
+      </SelectViewport>
+    </SelectContent>
   </SelectRoot>
 </template>

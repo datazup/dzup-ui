@@ -70,6 +70,6 @@ export const toggleButtonTokens = {
   pressed: {
     background: 'var(--dz-muted)',
     border: 'var(--dz-primary)',
-    ring: 'var(--dz-primary)',
+    ring: 'var(--dz-button-focus-ring-color)',
   },
 } as const

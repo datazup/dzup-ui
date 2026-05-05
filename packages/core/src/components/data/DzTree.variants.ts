@@ -18,8 +18,7 @@ export const treeVariants = tv({
       'cursor-pointer select-none',
       'transition-colors duration-150',
       'hover:bg-[var(--dz-muted)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-1',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'dz-focus-ring-control dz-disabled-control',
     ].join(' '),
     itemSelected: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]',
     expandIcon: [

@@ -12,14 +12,14 @@ export const timePickerTokens = {
   border: 'var(--dz-border)',
   radius: 'var(--dz-radius-md)',
   transition: 'var(--dz-transition-fast)',
-  focusRingColor: 'var(--dz-primary)',
+  focusRingColor: 'var(--dz-input-focus-ring-color)',
   /** Filled variant background */
   filledBackground: 'var(--dz-muted)',
   /** Invalid state */
   invalidBorder: 'var(--dz-danger)',
   invalidFocusRing: 'var(--dz-danger)',
   /** Disabled state */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-input-disabled-opacity)',
   /** Segment input */
   input: {
     foreground: 'var(--dz-foreground)',
@@ -35,29 +35,29 @@ export const timePickerTokens = {
   /** Size scale */
   size: {
     xs: {
-      height: 'var(--dz-button-xs-height)',
-      paddingX: 'var(--dz-spacing-2)',
-      fontSize: 'var(--dz-text-xs)',
+      height: 'var(--dz-input-xs-height)',
+      paddingX: 'var(--dz-input-xs-padding-x)',
+      fontSize: 'var(--dz-input-xs-font-size)',
     },
     sm: {
-      height: 'var(--dz-button-sm-height)',
-      paddingX: 'var(--dz-spacing-3)',
-      fontSize: 'var(--dz-text-sm)',
+      height: 'var(--dz-input-sm-height)',
+      paddingX: 'var(--dz-input-sm-padding-x)',
+      fontSize: 'var(--dz-input-sm-font-size)',
     },
     md: {
-      height: 'var(--dz-button-md-height)',
-      paddingX: 'var(--dz-spacing-3)',
-      fontSize: 'var(--dz-text-sm)',
+      height: 'var(--dz-input-md-height)',
+      paddingX: 'var(--dz-input-md-padding-x)',
+      fontSize: 'var(--dz-input-md-font-size)',
     },
     lg: {
-      height: 'var(--dz-button-lg-height)',
-      paddingX: 'var(--dz-spacing-4)',
-      fontSize: 'var(--dz-text-base)',
+      height: 'var(--dz-input-lg-height)',
+      paddingX: 'var(--dz-input-lg-padding-x)',
+      fontSize: 'var(--dz-input-lg-font-size)',
     },
     xl: {
-      height: 'var(--dz-button-xl-height)',
-      paddingX: 'var(--dz-spacing-4)',
-      fontSize: 'var(--dz-text-lg)',
+      height: 'var(--dz-input-xl-height)',
+      paddingX: 'var(--dz-input-xl-padding-x)',
+      fontSize: 'var(--dz-input-xl-font-size)',
     },
   },
 } as const

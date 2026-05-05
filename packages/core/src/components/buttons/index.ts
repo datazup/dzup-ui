@@ -28,11 +28,16 @@ export { type ButtonGroupVariantProps, buttonGroupVariants } from './DzButtonGro
 
 export { default as DzButtonGroup } from './DzButtonGroup.vue'
 
+// ── CopyButton ──
+export type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './DzCopyButton.types.ts'
+
+export { type CopyButtonVariantProps, copyButtonVariants } from './DzCopyButton.variants.ts'
+
+export { default as DzCopyButton } from './DzCopyButton.vue'
 export type {
   DzIconButtonEmits,
   DzIconButtonProps,
 } from './DzIconButton.types.ts'
-
 export { default as DzIconButton } from './DzIconButton.vue'
 
 export type {
@@ -45,12 +50,12 @@ export type {
   DzSplitButtonProps,
   DzSplitButtonSlots,
 } from './DzSplitButton.types.ts'
+
 export { DZ_SPLIT_BUTTON_KEY } from './DzSplitButton.types.ts'
+
 // ── DzSplitButton (Compound) ──
 export { default as DzSplitButton } from './DzSplitButton.vue'
-
 export { default as DzSplitButtonAction } from './DzSplitButtonAction.vue'
-
 export { default as DzSplitButtonMenu } from './DzSplitButtonMenu.vue'
 
 export type {

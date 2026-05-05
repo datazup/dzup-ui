@@ -43,7 +43,7 @@ export const toastTokens = {
     radius: 'var(--dz-radius-sm)',
     paddingX: 'var(--dz-spacing-2)',
     fontSize: 'var(--dz-text-xs)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
   },
 
   /** Close button */
@@ -55,7 +55,7 @@ export const toastTokens = {
     radius: 'var(--dz-radius-sm)',
     color: 'var(--dz-muted-foreground)',
     hoverColor: 'var(--dz-foreground)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-button-focus-ring-color)',
   },
 
   /** Tone indicator (left accent bar) */

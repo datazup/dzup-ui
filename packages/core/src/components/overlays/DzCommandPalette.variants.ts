@@ -31,20 +31,21 @@ export const commandPaletteVariants = tv({
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     input: [
+      'dz-field-input-reset',
       'flex w-full',
-      'border-b border-[var(--dz-border)]',
       'bg-transparent',
-      'px-[var(--dz-spacing-4)]',
+      'px-[var(--dz-spacing-1)]',
       'py-[var(--dz-spacing-3)]',
       'text-[length:var(--dz-text-sm)]',
       'text-[var(--dz-foreground)]',
       'placeholder:text-[var(--dz-muted-foreground)]',
-      'outline-none',
+      'outline-none focus:outline-none focus-visible:outline-none',
     ].join(' '),
     inputWrapper: [
       'flex items-center gap-[var(--dz-spacing-2)]',
       'border-b border-[var(--dz-border)]',
       'px-[var(--dz-spacing-3)]',
+      'dz-focus-within-ring-input',
     ].join(' '),
     inputIcon: [
       'shrink-0',
@@ -64,7 +65,7 @@ export const commandPaletteVariants = tv({
       'outline-none',
       'transition-colors',
       'data-[highlighted]:bg-[var(--dz-muted)] data-[highlighted]:text-[var(--dz-foreground)]',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'dz-disabled-control',
     ].join(' '),
     itemIcon: [
       'mr-[var(--dz-spacing-2)]',

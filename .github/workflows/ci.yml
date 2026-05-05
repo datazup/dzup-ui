@@ -115,6 +115,8 @@ jobs:
         run: yarn install --immutable
       - name: Import boundary validation
         run: yarn validate:boundaries
+      - name: Interaction contract validation
+        run: yarn validate:interaction-contract
       - name: Token compliance check
         run: yarn validate:tokens
       - name: Export map validation

@@ -17,8 +17,8 @@ export const paginationTokens = {
     color: 'var(--dz-foreground)',
     hoverBackground: 'var(--dz-muted)',
     radius: 'var(--dz-radius-md)',
-    focusRing: 'var(--dz-primary)',
-    disabledOpacity: '0.5',
+    focusRing: 'var(--dz-button-focus-ring-color)',
+    disabledOpacity: 'var(--dz-button-disabled-opacity)',
     transition: 'var(--dz-transition-fast)',
   },
   /** Active (current) page button */

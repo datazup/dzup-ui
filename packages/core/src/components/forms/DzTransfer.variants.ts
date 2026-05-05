@@ -37,6 +37,7 @@ export const transferVariants = tv({
       'text-[var(--dz-muted-foreground)]',
     ].join(' '),
     searchInput: [
+      'dz-field-input-reset',
       'w-full',
       'border-b border-[var(--dz-border)]',
       'bg-transparent',
@@ -45,7 +46,9 @@ export const transferVariants = tv({
       'text-[length:var(--dz-text-sm)]',
       'text-[var(--dz-foreground)]',
       'placeholder:text-[var(--dz-muted-foreground)]',
-      'outline-none',
+      'outline-none focus:outline-none focus-visible:outline-none',
+      'focus-visible:border-b-[var(--dz-input-border-focus)]',
+      'focus-visible:ring-0',
     ].join(' '),
     listBody: [
       'flex-1 overflow-y-auto',
@@ -62,7 +65,7 @@ export const transferVariants = tv({
       'cursor-pointer',
       'transition-colors',
       'hover:bg-[var(--dz-muted)]',
-      'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50',
+      'dz-disabled-control',
     ].join(' '),
     itemSelected: [
       'bg-[var(--dz-muted)]',
@@ -85,8 +88,7 @@ export const transferVariants = tv({
       'text-[var(--dz-foreground)]',
       'transition-colors',
       'hover:bg-[var(--dz-muted)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)]',
-      'disabled:opacity-50 disabled:cursor-not-allowed',
+      'dz-focus-ring-button dz-disabled-button',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     empty: [
@@ -126,7 +128,7 @@ export const transferVariants = tv({
     },
     disabled: {
       true: {
-        root: 'pointer-events-none opacity-[var(--dz-button-disabled-opacity)]',
+        root: 'dz-disabled-input-shell',
       },
     },
   },

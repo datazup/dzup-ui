@@ -1,10 +1,15 @@
 /**
  * @dzup-ui/tokens
  *
- * Single source of truth for all design tokens in the dzup-ui component library.
+ * Canonical source of truth for primitive design tokens, semantic theme tokens,
+ * and selected shared component token families in the dzup-ui component library.
  *
  * Tokens are consumed via CSS custom properties using `var()`.
  * No `getToken()` or `getCssVar()` API exists — use CSS `var()` directly (ADR-09).
+ *
+ * Component-local `*.tokens.ts` files in `@dzup-ui/core` and `@dzup-ui/pro`
+ * remain valid implementation-layer adaptation files. See ADR-17 for the
+ * current hybrid ownership model.
  *
  * ## Usage
  *
@@ -24,15 +29,23 @@
  */
 
 // Re-export component tokens
-export { BUTTON_TOKENS } from './component/index.js'
-
-export { INPUT_TOKENS } from './component/index.js'
-
-export { CARD_TOKENS } from './component/index.js'
+export { APPSHELL_TOKENS } from './component/index.js'
 
 export { BADGE_TOKENS } from './component/index.js'
 
+export { BUTTON_TOKENS } from './component/index.js'
+
+export { CARD_TOKENS } from './component/index.js'
+
+export { CODEBLOCK_TOKENS } from './component/index.js'
+
+export { CONTROL_TOKENS } from './component/index.js'
+
 export { DIALOG_TOKENS } from './component/index.js'
+
+export { INPUT_TOKENS } from './component/index.js'
+
+export { SIDEBAR_TOKENS } from './component/index.js'
 
 // Re-export primitives
 export {

@@ -4,7 +4,14 @@ import type {
   DzLightboxProps,
   DzLightboxSlots,
 } from './DzLightbox.types.ts'
-import { DialogContent, DialogOverlay, DialogPortal, DialogRoot } from 'reka-ui'
+import {
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+} from 'reka-ui'
 /**
  * DzLightbox — Fullscreen image viewer overlay.
  *
@@ -16,7 +23,7 @@ import { DialogContent, DialogOverlay, DialogPortal, DialogRoot } from 'reka-ui'
  * <DzLightbox v-model="isOpen" :images="gallery" :start-index="0" />
  * ```
  */
-import { computed, ref, useAttrs, watch } from 'vue'
+import { computed, ref, useAttrs, useId, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { lightboxVariants } from './DzLightbox.variants.ts'
 
@@ -30,6 +37,7 @@ const emit = defineEmits<DzLightboxEmits>()
 defineSlots<DzLightboxSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const currentIndex = ref(props.startIndex)
 const styles = lightboxVariants()
 
@@ -42,6 +50,17 @@ watch(open, (val) => {
 const currentImage = computed(() => props.images[currentIndex.value])
 const hasPrev = computed(() => currentIndex.value > 0)
 const hasNext = computed(() => currentIndex.value < props.images.length - 1)
+const fallbackTitleId = computed(() => `${props.id ?? autoId}-title`)
+const fallbackDescriptionId = computed(() => `${props.id ?? autoId}-description`)
+const fallbackTitle = computed(() => props.ariaLabel ?? currentImage.value?.alt ?? 'Image viewer')
+const fallbackDescription = computed(() => {
+  if (!currentImage.value)
+    return 'Fullscreen image viewer'
+  const parts = [`Image ${currentIndex.value + 1} of ${props.images.length}`]
+  if (currentImage.value.caption)
+    parts.push(currentImage.value.caption)
+  return parts.join('. ')
+})
 
 function goTo(index: number): void {
   const resolved = Math.max(0, Math.min(index, props.images.length - 1))
@@ -90,12 +109,18 @@ export default {
         :id="id"
         :class="cn(styles.content, attrs.class as string | undefined)"
         :aria-label="ariaLabel ?? 'Image viewer'"
-        :aria-labelledby="ariaLabelledby"
-        :aria-describedby="ariaDescribedby"
+        :aria-labelledby="ariaLabelledby ?? fallbackTitleId"
+        :aria-describedby="ariaDescribedby ?? fallbackDescriptionId"
         style="contain: layout style"
         v-bind="{ ...$attrs, class: undefined }"
         @keydown="handleKeydown"
       >
+        <DialogTitle :id="fallbackTitleId" class="sr-only">
+          {{ fallbackTitle }}
+        </DialogTitle>
+        <DialogDescription :id="fallbackDescriptionId" class="sr-only">
+          {{ fallbackDescription }}
+        </DialogDescription>
         <!-- Counter -->
         <span v-if="images.length > 1" :class="styles.counter">
           {{ currentIndex + 1 }} / {{ images.length }}

@@ -22,7 +22,7 @@ describe('dzDateRangePicker — Unit Tests', () => {
     const wrapper = mount(DzDateRangePicker, {
       props: { size: 'sm' },
     })
-    expect(wrapper.html()).toContain('dz-button-sm-height')
+    expect(wrapper.html()).toContain('dz-input-sm-height')
   })
 
   it('applies variant classes (outline)', () => {

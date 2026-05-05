@@ -56,7 +56,7 @@ export const dataGridVariants = tv({
       'border border-[var(--dz-border)]',
       'transition-[var(--dz-transition-fast)]',
       'hover:bg-[var(--dz-muted)]',
-      'disabled:pointer-events-none disabled:opacity-50',
+      'dz-focus-ring-button dz-disabled-button',
     ].join(' '),
     empty: [
       'flex items-center justify-center',

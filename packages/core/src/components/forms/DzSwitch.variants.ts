@@ -14,13 +14,13 @@ export const switchVariants = tv({
     root: [
       'inline-flex items-center gap-[var(--dz-spacing-2)]',
       'cursor-pointer select-none',
-      'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--dz-button-disabled-opacity)]',
+      'dz-disabled-control',
     ].join(' '),
     track: [
       'relative shrink-0 rounded-full',
       'bg-[var(--dz-muted)]',
-      'transition-[var(--dz-transition-fast)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
+      'transition-[var(--dz-control-transition)]',
+      'dz-focus-ring-control',
       'data-[state=checked]:bg-[var(--dz-primary)]',
     ].join(' '),
     thumb: [

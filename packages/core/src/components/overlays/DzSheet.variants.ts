@@ -42,7 +42,7 @@ export const sheetVariants = tv({
       'rounded-[var(--dz-radius-sm)]',
       'opacity-70 transition-opacity',
       'hover:opacity-100',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)]',
+      'dz-focus-ring-button',
     ].join(' '),
   },
 

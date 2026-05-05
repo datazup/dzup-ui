@@ -17,9 +17,9 @@ export const multiSelectTokens = {
   /** Transition */
   transition: 'var(--dz-transition-fast)',
   /** Focus ring */
-  focusRingColor: 'var(--dz-primary)',
+  focusRingColor: 'var(--dz-input-focus-ring-color)',
   /** Disabled opacity */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-input-disabled-opacity)',
   /** Filled variant background */
   filledBackground: 'var(--dz-muted)',
   /** Invalid border */
@@ -62,38 +62,38 @@ export const multiSelectTokens = {
   /** Size scale */
   size: {
     xs: {
-      minHeight: 'var(--dz-button-xs-height)',
-      rootPaddingX: 'var(--dz-spacing-2)',
+      minHeight: 'var(--dz-input-xs-height)',
+      rootPaddingX: 'var(--dz-input-xs-padding-x)',
       rootPaddingY: 'var(--dz-spacing-0_5)',
-      fontSize: 'var(--dz-text-xs)',
+      fontSize: 'var(--dz-input-xs-font-size)',
       tagFontSize: 'var(--dz-text-xs)',
     },
     sm: {
-      minHeight: 'var(--dz-button-sm-height)',
-      rootPaddingX: 'var(--dz-spacing-3)',
+      minHeight: 'var(--dz-input-sm-height)',
+      rootPaddingX: 'var(--dz-input-sm-padding-x)',
       rootPaddingY: 'var(--dz-spacing-0_5)',
-      fontSize: 'var(--dz-text-sm)',
+      fontSize: 'var(--dz-input-sm-font-size)',
       tagFontSize: 'var(--dz-text-xs)',
     },
     md: {
-      minHeight: 'var(--dz-button-md-height)',
-      rootPaddingX: 'var(--dz-spacing-3)',
+      minHeight: 'var(--dz-input-md-height)',
+      rootPaddingX: 'var(--dz-input-md-padding-x)',
       rootPaddingY: 'var(--dz-spacing-1)',
-      fontSize: 'var(--dz-text-sm)',
+      fontSize: 'var(--dz-input-md-font-size)',
       tagFontSize: 'var(--dz-text-xs)',
     },
     lg: {
-      minHeight: 'var(--dz-button-lg-height)',
-      rootPaddingX: 'var(--dz-spacing-4)',
+      minHeight: 'var(--dz-input-lg-height)',
+      rootPaddingX: 'var(--dz-input-lg-padding-x)',
       rootPaddingY: 'var(--dz-spacing-1)',
-      fontSize: 'var(--dz-text-base)',
+      fontSize: 'var(--dz-input-lg-font-size)',
       tagFontSize: 'var(--dz-text-sm)',
     },
     xl: {
-      minHeight: 'var(--dz-button-xl-height)',
-      rootPaddingX: 'var(--dz-spacing-4)',
+      minHeight: 'var(--dz-input-xl-height)',
+      rootPaddingX: 'var(--dz-input-xl-padding-x)',
       rootPaddingY: 'var(--dz-spacing-1_5)',
-      fontSize: 'var(--dz-text-lg)',
+      fontSize: 'var(--dz-input-xl-font-size)',
       tagFontSize: 'var(--dz-text-sm)',
     },
   },

@@ -15,8 +15,7 @@ export const tagVariants = tv({
     'font-medium',
     'rounded-[var(--dz-radius-md)]',
     'transition-[var(--dz-transition-fast)]',
-    'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
-    'disabled:pointer-events-none disabled:opacity-50',
+    'dz-focus-ring-control dz-disabled-control',
   ].join(' '),
 
   variants: {

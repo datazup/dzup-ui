@@ -29,9 +29,9 @@ export const segmentedTokens = {
     /** Font weight */
     fontWeight: 'var(--dz-font-medium)',
     /** Focus ring color */
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
     /** Disabled state opacity */
-    disabledOpacity: '0.5',
+    disabledOpacity: 'var(--dz-control-disabled-opacity)',
     /** Transition for state changes */
     transition: 'var(--dz-transition-fast)',
   },

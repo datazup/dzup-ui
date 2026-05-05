@@ -53,7 +53,7 @@ export const notificationCloseVariants = tv({
     'h-6 w-6 rounded-[var(--dz-radius-sm)]',
     'opacity-70 transition-opacity',
     'hover:opacity-100',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)]',
+    'dz-focus-ring-button',
   ].join(' '),
 })
 

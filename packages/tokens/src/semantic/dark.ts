@@ -89,10 +89,47 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Overlay ── */
   '--dz-overlay-bg': 'oklch(0 0 0 / 0.7)',
 
+  /* ── Sidebar ── */
+  '--dz-sidebar-bg': 'var(--dz-colors-neutral-950)',
+  '--dz-sidebar-foreground': 'var(--dz-colors-neutral-400)',
+  '--dz-sidebar-border': 'var(--dz-colors-neutral-800)',
+  '--dz-sidebar-heading': 'var(--dz-colors-neutral-500)',
+  '--dz-sidebar-item-hover-bg': 'var(--dz-colors-neutral-800)',
+  '--dz-sidebar-item-hover-text': 'var(--dz-colors-neutral-50)',
+  '--dz-sidebar-item-active-bg': 'var(--dz-colors-primary-500)',
+  '--dz-sidebar-item-active-text': 'oklch(1 0 0)',
+  '--dz-sidebar-header-bg': 'oklch(0 0 0)',
+  '--dz-sidebar-footer-bg': 'oklch(0 0 0)',
+
+  /* ── AppShell ── */
+  '--dz-appshell-header-bg': 'var(--dz-colors-neutral-900)',
+  '--dz-appshell-header-border': 'var(--dz-colors-neutral-700)',
+  '--dz-appshell-main-bg': 'var(--dz-colors-neutral-950)',
+
+  /* ── CodeBlock ── */
+  '--dz-codeblock-bg': 'var(--dz-colors-neutral-950)',
+  '--dz-codeblock-text': 'var(--dz-colors-neutral-100)',
+  '--dz-codeblock-border': 'var(--dz-colors-neutral-800)',
+  '--dz-codeblock-header-bg': 'var(--dz-colors-neutral-900)',
+  '--dz-codeblock-header-text': 'var(--dz-colors-neutral-500)',
+  '--dz-codeblock-line-number': 'var(--dz-colors-neutral-700)',
+
   /* ── Chart Colors (shifted lighter for dark bg) ── */
   '--dz-chart-1': 'var(--dz-colors-primary-400)',
   '--dz-chart-2': 'var(--dz-colors-secondary-400)',
   '--dz-chart-3': 'var(--dz-colors-success-400)',
   '--dz-chart-4': 'var(--dz-colors-warning-400)',
   '--dz-chart-5': 'var(--dz-colors-danger-400)',
+
+  /* ── Orchestration run status ── */
+  '--dz-status-pending': 'var(--dz-muted-foreground)',
+  '--dz-status-running': 'var(--dz-info)',
+  '--dz-status-paused': 'var(--dz-warning)',
+  '--dz-status-completed': 'var(--dz-success)',
+  '--dz-status-failed': 'var(--dz-danger)',
+  '--dz-status-cancelled': 'var(--dz-muted-foreground)',
+
+  /* ── Progress thresholds (token-usage bars) ── */
+  '--dz-progress-amber': 'var(--dz-warning)',
+  '--dz-progress-red': 'var(--dz-danger)',
 }

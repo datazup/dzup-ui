@@ -53,6 +53,21 @@ export type {
   DzProgressSlots,
 } from './DzProgress.types.ts'
 
+// Types — DzRunStatusBadge
+export type {
+  DzRunStatusBadgeProps,
+  DzRunStatusBadgeSlots,
+} from './DzRunStatusBadge.types.ts'
+export { default as DzRunStatusBadge } from './DzRunStatusBadge.vue'
+
+// Types — DzTokenProgressBar
+export type {
+  DzTokenProgressBarProps,
+  DzTokenProgressBarSlotProps,
+  DzTokenProgressBarSlots,
+} from './DzTokenProgressBar.types.ts'
+export { default as DzTokenProgressBar } from './DzTokenProgressBar.vue'
+
 export {
   circularSizeMap,
   type ProgressBarVariantProps,

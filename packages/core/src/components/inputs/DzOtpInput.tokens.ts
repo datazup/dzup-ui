@@ -24,10 +24,10 @@ export const otpInputTokens = {
   placeholder: 'var(--dz-muted-foreground)',
   /** Focus state */
   focus: {
-    borderColor: 'var(--dz-primary)',
-    ringColor: 'var(--dz-primary)',
-    ringWidth: '2px',
-    ringOffset: '1px',
+    borderColor: 'var(--dz-input-border-focus)',
+    ringColor: 'var(--dz-input-focus-ring-color)',
+    ringWidth: 'var(--dz-input-focus-ring-width)',
+    ringOffset: 'var(--dz-input-focus-ring-offset)',
   },
   /** Invalid state */
   invalid: {
@@ -36,7 +36,7 @@ export const otpInputTokens = {
   },
   /** Disabled state */
   disabled: {
-    opacity: 'var(--dz-button-disabled-opacity)',
+    opacity: 'var(--dz-input-disabled-opacity)',
   },
   /** Error display */
   errorColor: 'var(--dz-danger)',

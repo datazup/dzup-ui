@@ -19,7 +19,7 @@ export const breadcrumbVariants = tv({
       'hover:text-[var(--dz-foreground)]',
     ].join(' '),
     currentPage: 'font-medium text-[var(--dz-foreground)]',
-    disabledLink: 'pointer-events-none opacity-50',
+    disabledLink: 'dz-disabled-control',
     separator: [
       'text-[var(--dz-muted-foreground)]',
       'select-none',

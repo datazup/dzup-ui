@@ -24,7 +24,7 @@ export const fileUploadVariants = tv({
       'cursor-pointer',
       'transition-colors',
       'hover:border-[var(--dz-primary)] hover:bg-[var(--dz-muted)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
+      'dz-focus-ring-input',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
     dropzoneDragOver: [
@@ -75,8 +75,7 @@ export const fileUploadVariants = tv({
       'text-[var(--dz-muted-foreground)]',
       'hover:text-[var(--dz-danger)]',
       'transition-colors',
-      'outline-none',
-      'focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)]',
+      'dz-focus-ring-button dz-disabled-button',
     ].join(' '),
   },
   variants: {
@@ -94,7 +93,7 @@ export const fileUploadVariants = tv({
     },
     disabled: {
       true: {
-        root: 'pointer-events-none opacity-[var(--dz-button-disabled-opacity)]',
+        root: 'dz-disabled-input-shell',
         dropzone: 'cursor-not-allowed',
       },
     },

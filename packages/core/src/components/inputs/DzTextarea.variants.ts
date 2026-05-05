@@ -16,8 +16,7 @@ export const textareaVariants = tv({
     'text-[var(--dz-foreground)]',
     'placeholder:text-[var(--dz-input-placeholder)]',
     'transition-[var(--dz-input-transition)]',
-    'focus-visible:outline-none focus-visible:ring-[length:var(--dz-input-focus-ring-width)] focus-visible:ring-[var(--dz-input-focus-ring-color)]',
-    'disabled:cursor-not-allowed disabled:opacity-[var(--dz-input-disabled-opacity)]',
+    'dz-focus-ring-input dz-disabled-input',
     'resize-y',
   ].join(' '),
 
@@ -35,7 +34,7 @@ export const textareaVariants = tv({
       underlined: [
         'border-0 border-b-2 border-[var(--dz-input-border)]',
         'rounded-none bg-transparent',
-        'focus-visible:border-[var(--dz-input-border-focus)] focus-visible:ring-0',
+        'focus-visible:border-[var(--dz-input-border-focus)] focus-visible:outline-none',
       ].join(' '),
     },
 
@@ -48,7 +47,7 @@ export const textareaVariants = tv({
     },
 
     invalid: {
-      true: 'border-[var(--dz-danger)] focus-visible:border-[var(--dz-danger)] focus-visible:ring-[var(--dz-danger)]/25',
+      true: 'border-[var(--dz-danger)] focus-visible:border-[var(--dz-danger)]',
       false: '',
     },
   },

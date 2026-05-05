@@ -57,9 +57,9 @@ const name = ref('')
 | [`@dzup-ui/core`](./packages/core) | 0.1.0-alpha.0 | 147 foundational components (buttons, inputs, forms, layout, navigation, overlays, feedback, data, media, typography) |
 | [`@dzup-ui/tokens`](./packages/tokens) | 0.1.0-alpha.0 | Design tokens — CSS custom properties, Tailwind theme, TypeScript definitions |
 | [`@dzup-ui/contracts`](./packages/contracts) | 0.1.0-alpha.0 | Canonical public API contract types (props, events, slots) |
-| [`@dzup-ui/compat`](./packages/compat) | 0.0.1 | Migration adapters from old dzup-ui to vNext |
-| [`@dzup-ui/codemods`](./packages/codemods) | 0.0.1 | Automated code transforms for migration (CLI: `dzup-codemod`) |
-| [`@dzup-ui/nuxt`](./packages/nuxt) | 0.1.0-alpha.0 | Nuxt 3 module for auto-importing Dz* components |
+| [`@dzup-ui/compat`](./packages/compat) | 0.0.1 | Optional migration adapters from old dzup-ui to vNext |
+| [`@dzup-ui/codemods`](./packages/codemods) | 0.0.1 | Optional migration transforms and CLI tooling (`dzup-codemod`) |
+| [`@dzup-ui/nuxt`](./packages/nuxt) | 0.1.0-alpha.0 | Optional Nuxt 3 integration module for auto-importing Dz* components |
 
 ## Component Families
 
@@ -103,6 +103,25 @@ yarn build
 yarn storybook
 ```
 
+## Design System Architecture
+
+The core library uses semantic interaction contracts instead of per-component focus and disabled styling drift:
+
+- `button` semantics for explicit actions
+- `control` semantics for navigation, selection, toggles, and interactive surfaces
+- `input` semantics for direct text entry
+- `input-shell` semantics for composite fields that wrap nested inputs
+
+The implementation rules and utility classes live in [`packages/core/src/styles/INTERACTION_CONTRACT.md`](./packages/core/src/styles/INTERACTION_CONTRACT.md).
+
+Token ownership follows a hybrid model:
+
+- `@dzup-ui/tokens` is canonical for primitives, semantic tokens, and shared token families
+- component-local `*.tokens.ts` files in `core` and `pro` are component adaptation layers built on top of that foundation
+
+Reference:
+- [`docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md`](./docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md)
+
 ## Enterprise Components
 
 Need Kanban, Gantt, FormBuilder, DashboardBuilder, WorkflowDesigner, and more?
@@ -115,6 +134,8 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development workflow and guidelines
 ## Migration
 
 Upgrading from old `dzup-ui`? See [`@dzup-ui/compat`](./packages/compat) and [`@dzup-ui/codemods`](./packages/codemods).
+
+These are migration-layer packages, not part of the core design-system foundation.
 
 ## License
 

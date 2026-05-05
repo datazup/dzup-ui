@@ -20,13 +20,12 @@ export const tabsVariants = tv({
       'inline-flex items-center justify-center whitespace-nowrap',
       'font-medium',
       'transition-[var(--dz-transition-fast)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
-      'disabled:pointer-events-none disabled:opacity-50',
+      'dz-focus-ring-control dz-disabled-control',
       'data-[state=active]:text-[var(--dz-foreground)]',
     ].join(' '),
     content: [
       'mt-[var(--dz-spacing-2)]',
-      'focus-visible:outline-none focus-visible:ring-[length:2px] focus-visible:ring-[var(--dz-primary)] focus-visible:ring-offset-[length:2px]',
+      'dz-focus-ring-control',
     ].join(' '),
   },
 

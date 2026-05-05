@@ -29,8 +29,10 @@ export { type ColorPickerVariantProps, colorPickerVariants } from './DzColorPick
 export { default as DzColorPicker } from './DzColorPicker.vue'
 // Types — DzCombobox
 export type {
+  DzComboboxItem,
   DzComboboxEmits,
   DzComboboxProps,
+  DzComboboxResolvedItem,
   DzComboboxSlots,
 } from './DzCombobox.types.ts'
 export { type ComboboxVariantProps, comboboxVariants } from './DzCombobox.variants.ts'
@@ -89,6 +91,15 @@ export type {
 export { type MultiSelectVariantProps, multiSelectVariants } from './DzMultiSelect.variants.ts'
 
 export { default as DzMultiSelect } from './DzMultiSelect.vue'
+
+// Types — DzPersonaSelector
+export type {
+  DzPersonaSelectorEmits,
+  DzPersonaSelectorProps,
+  DzPersonaSelectorSlots,
+  Persona,
+} from './DzPersonaSelector.types.ts'
+export { default as DzPersonaSelector } from './DzPersonaSelector.vue'
 
 // Types — DzRadio
 export type { DzRadioProps, DzRadioSlots } from './DzRadio.types.ts'

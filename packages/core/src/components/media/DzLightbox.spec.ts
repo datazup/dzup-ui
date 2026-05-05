@@ -1,9 +1,9 @@
 import type { LightboxImage } from './DzLightbox.types.ts'
-import { mount } from '@vue/test-utils'
 /**
  * DzLightbox — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
+import { mountWithDialogStubs } from '../../../test-utils/dialog'
 import DzLightbox from './DzLightbox.vue'
 
 const sampleImages: LightboxImage[] = [
@@ -13,16 +13,11 @@ const sampleImages: LightboxImage[] = [
 ]
 
 function mountLightbox(lightboxProps = {}) {
-  return mount(DzLightbox, {
+  return mountWithDialogStubs(DzLightbox, {
     props: {
       images: sampleImages,
       modelValue: true,
       ...lightboxProps,
-    },
-    global: {
-      stubs: {
-        teleport: true,
-      },
     },
   })
 }
@@ -39,7 +34,7 @@ describe('dzLightbox', () => {
   })
 
   it('renders when closed', () => {
-    const wrapper = mount(DzLightbox, {
+    const wrapper = mountWithDialogStubs(DzLightbox, {
       props: {
         images: sampleImages,
         modelValue: false,
@@ -54,7 +49,7 @@ describe('dzLightbox', () => {
   })
 
   it('accepts empty images array', () => {
-    const wrapper = mount(DzLightbox, {
+    const wrapper = mountWithDialogStubs(DzLightbox, {
       props: {
         images: [],
         modelValue: false,
@@ -66,7 +61,7 @@ describe('dzLightbox', () => {
   it('renders aria-label', () => {
     // DzLightbox renders DialogContent in a portal (teleport to body).
     // Portal content is not accessible in jsdom. Verify prop is accepted without error.
-    const wrapper = mount(DzLightbox, {
+    const wrapper = mountWithDialogStubs(DzLightbox, {
       props: {
         images: sampleImages,
         modelValue: true,

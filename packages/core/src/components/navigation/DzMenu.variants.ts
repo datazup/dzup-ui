@@ -27,7 +27,7 @@ export const menuVariants = tv({
       'cursor-pointer',
       'outline-none',
       'hover:bg-[var(--dz-muted)]',
-      'focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)]',
+      'dz-focus-ring-control dz-disabled-control',
     ].join(' '),
     separator: [
       'my-[var(--dz-spacing-1)]',
@@ -46,9 +46,6 @@ export const menuVariants = tv({
     },
     active: {
       true: { item: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)] font-[var(--dz-font-medium)]' },
-    },
-    disabled: {
-      true: { item: 'opacity-50 pointer-events-none' },
     },
   },
 

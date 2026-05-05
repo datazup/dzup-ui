@@ -14,9 +14,11 @@ import {
   ComboboxLabel,
   ComboboxRoot,
   DialogContent,
+  DialogDescription,
   DialogOverlay,
   DialogPortal,
   DialogRoot,
+  DialogTitle,
 } from 'reka-ui'
 /**
  * DzCommandPalette — A combined command palette with search, items, and groups.
@@ -34,7 +36,7 @@ import {
  * />
  * ```
  */
-import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { commandPaletteVariants } from './DzCommandPalette.variants.ts'
 
@@ -56,10 +58,14 @@ const emit = defineEmits<DzCommandPaletteEmits>()
 defineSlots<DzCommandPaletteSlots>()
 
 const attrs = useAttrs()
+const autoId = useId()
 const searchQuery = ref('')
 const searchModel = ref<string>('')
 
 const styles = computed(() => commandPaletteVariants())
+
+const fallbackDescriptionId = computed(() => `${props.id ?? autoId}-description`)
+const resolvedAriaDescribedby = computed(() => props.ariaDescribedby ?? fallbackDescriptionId.value)
 
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
@@ -145,10 +151,17 @@ export default {
         :id="id"
         :class="contentClasses"
         :aria-label="ariaLabel"
+        :aria-describedby="resolvedAriaDescribedby"
         role="dialog"
         style="contain: layout style"
         v-bind="{ ...$attrs, class: undefined }"
       >
+        <DialogTitle class="sr-only">
+          {{ ariaLabel }}
+        </DialogTitle>
+        <DialogDescription v-if="!ariaDescribedby" :id="fallbackDescriptionId" class="sr-only">
+          Search commands, then use arrow keys to move through results and Enter to select.
+        </DialogDescription>
         <ComboboxRoot
           v-model="searchModel"
           v-model:search-term="searchQuery"

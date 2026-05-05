@@ -67,6 +67,37 @@ export type {
 export { type SegmentedVariantProps, segmentedVariants } from './DzSegmented.variants.ts'
 export { default as DzSegmented } from './DzSegmented.vue'
 export type {
+  DzSidebarContext,
+  DzSidebarEmits,
+  DzSidebarFooterProps,
+  DzSidebarFooterSlots,
+  DzSidebarHeaderProps,
+  DzSidebarHeaderSlots,
+  DzSidebarItemEmits,
+  DzSidebarItemProps,
+  DzSidebarItemSlots,
+  DzSidebarProps,
+  DzSidebarSectionProps,
+  DzSidebarSectionSlots,
+  DzSidebarSlots,
+} from './DzSidebar.types.ts'
+
+export { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
+
+export { type SidebarVariantProps, sidebarVariants } from './DzSidebar.variants.ts'
+
+export { default as DzSidebar } from './DzSidebar.vue'
+
+// ── Stepper (Compound) ──
+
+export { default as DzSidebarFooter } from './DzSidebarFooter.vue'
+export { default as DzSidebarHeader } from './DzSidebarHeader.vue'
+
+export { default as DzSidebarItem } from './DzSidebarItem.vue'
+
+export { default as DzSidebarSection } from './DzSidebarSection.vue'
+
+export type {
   DzStepperContext,
   DzStepperEmits,
   DzStepperItemProps,
@@ -76,15 +107,18 @@ export type {
   StepperOrientation,
 } from './DzStepper.types.ts'
 
+// ── Segmented ──
+
 export { DZ_STEPPER_KEY } from './DzStepper.types.ts'
 
 export { type StepperVariantProps, stepperVariants } from './DzStepper.variants.ts'
 
 export { default as DzStepper } from './DzStepper.vue'
 
-// ── Stepper (Compound) ──
+// ── Sidebar (Compound) ──
 
 export { default as DzStepperItem } from './DzStepperItem.vue'
+
 export { default as DzTabContent } from './DzTabContent.vue'
 
 export { default as DzTabList } from './DzTabList.vue'
@@ -103,8 +137,6 @@ export type {
 } from './DzTabs.types.ts'
 
 export { DZ_TABS_KEY } from './DzTabs.types.ts'
-
-// ── Segmented ──
 
 export { type TabsVariantProps, tabsVariants } from './DzTabs.variants.ts'
 

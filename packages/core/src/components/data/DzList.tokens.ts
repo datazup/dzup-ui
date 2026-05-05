@@ -22,7 +22,7 @@ export const listTokens = {
   /** Interactive item states */
   interactive: {
     hoverBackground: 'var(--dz-muted)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
   },
   /** Size scale */
   size: {

@@ -13,7 +13,7 @@ export const treeTokens = {
     gap: 'var(--dz-spacing-1)',
     radius: 'var(--dz-radius-sm)',
     hoverBackground: 'var(--dz-muted)',
-    focusRing: 'var(--dz-primary)',
+    focusRing: 'var(--dz-control-focus-ring-color)',
   },
   /** Selected item state */
   selected: {

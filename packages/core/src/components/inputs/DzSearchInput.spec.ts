@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 /**
  * DzSearchInput — Unit / behavior tests.
  */
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import DzSearchInput from './DzSearchInput.vue'
 
 describe('dzSearchInput — Unit Tests', () => {
@@ -74,5 +74,45 @@ describe('dzSearchInput — Unit Tests', () => {
   it('disables input when disabled', () => {
     const wrapper = mount(DzSearchInput, { props: { disabled: true } })
     expect(wrapper.find('input').attributes('disabled')).toBeDefined()
+  })
+
+  it('emits search after debounce delay', async () => {
+    vi.useFakeTimers()
+    const wrapper = mount(DzSearchInput, {
+      props: { modelValue: '', debounce: 300 },
+    })
+    await wrapper.setProps({ modelValue: 'hello' })
+    expect(wrapper.emitted('search')).toBeUndefined()
+    vi.advanceTimersByTime(300)
+    expect(wrapper.emitted('search')?.[0]).toEqual(['hello'])
+    vi.useRealTimers()
+  })
+
+  it('cancels debounce on Enter key', async () => {
+    vi.useFakeTimers()
+    const wrapper = mount(DzSearchInput, {
+      props: { modelValue: 'test', debounce: 300 },
+    })
+    await wrapper.setProps({ modelValue: 'updated' })
+    await wrapper.find('input').trigger('keydown', { key: 'Enter' })
+    // Enter fires search immediately
+    expect(wrapper.emitted('search')?.[0]).toEqual(['updated'])
+    vi.advanceTimersByTime(300)
+    // No duplicate search emit from debounce
+    expect(wrapper.emitted('search')).toHaveLength(1)
+    vi.useRealTimers()
+  })
+
+  it('cancels debounce on clear', async () => {
+    vi.useFakeTimers()
+    const wrapper = mount(DzSearchInput, {
+      props: { modelValue: 'test', debounce: 300 },
+    })
+    await wrapper.setProps({ modelValue: 'updated' })
+    await wrapper.find('button').trigger('click')
+    vi.advanceTimersByTime(300)
+    // search should not have been emitted from debounce
+    expect(wrapper.emitted('search')).toBeUndefined()
+    vi.useRealTimers()
   })
 })

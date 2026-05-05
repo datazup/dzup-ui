@@ -43,8 +43,7 @@ export const lightboxVariants = tv({
       'backdrop-blur-sm',
       'transition-all duration-150',
       'hover:bg-[var(--dz-background)]/40',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)]',
-      'disabled:pointer-events-none disabled:opacity-30',
+      'dz-focus-ring-button dz-disabled-button',
     ].join(' '),
     prevButton: 'left-[var(--dz-spacing-4)] top-1/2 -translate-y-1/2',
     nextButton: 'right-[var(--dz-spacing-4)] top-1/2 -translate-y-1/2',
@@ -56,7 +55,7 @@ export const lightboxVariants = tv({
       'backdrop-blur-sm',
       'transition-colors duration-150',
       'hover:bg-[var(--dz-background)]/40',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dz-primary)]',
+      'dz-focus-ring-button',
     ].join(' '),
     counter: [
       'absolute top-[var(--dz-spacing-4)] left-[var(--dz-spacing-4)]',

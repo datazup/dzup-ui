@@ -64,7 +64,7 @@ export default {
 </script>
 
 <template>
-  <tbody :class="styles.body()">
+  <tbody :class="styles.body()" role="rowgroup">
     <tr
       v-for="(row, index) in ctx!.data.value"
       :key="rowKey ? String(row[rowKey]) : index"

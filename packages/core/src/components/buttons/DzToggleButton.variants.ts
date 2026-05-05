@@ -16,8 +16,8 @@ export const toggleButtonVariants = tv({
     'font-[var(--dz-button-font-weight)]',
     'font-[family-name:var(--dz-button-font-family)]',
     'transition-[var(--dz-button-transition)]',
-    'focus-visible:outline-none focus-visible:ring-[length:var(--dz-button-focus-ring-width)] focus-visible:ring-[var(--dz-button-focus-ring-color)] focus-visible:ring-offset-[length:var(--dz-button-focus-ring-offset)]',
-    'disabled:pointer-events-none disabled:opacity-[var(--dz-button-disabled-opacity)]',
+    'dz-focus-ring-button',
+    'dz-disabled-button',
     'select-none',
   ].join(' '),
 
@@ -46,7 +46,11 @@ export const toggleButtonVariants = tv({
     // Pressed state: outline becomes filled
     { variant: 'outline', pressed: true, class: 'bg-[var(--dz-muted)] border-[var(--dz-primary)]' },
     { variant: 'ghost', pressed: true, class: 'bg-[var(--dz-muted)]' },
-    { variant: 'solid', pressed: true, class: 'ring-2 ring-[var(--dz-primary)] ring-offset-1' },
+    {
+      variant: 'solid',
+      pressed: true,
+      class: 'dz-button-state-ring',
+    },
   ],
 
   defaultVariants: {

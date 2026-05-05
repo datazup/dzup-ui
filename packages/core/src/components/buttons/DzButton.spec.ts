@@ -129,11 +129,11 @@ describe('dzButton — Unit Tests', () => {
 
   it('renders as <a> when as="a" is set explicitly', () => {
     const wrapper = mount(DzButton, {
-      props: { as: 'a', href: '/about' },
+      props: { as: 'a', href: '#about' },
       slots: { default: 'About' },
     })
     expect(wrapper.element.tagName).toBe('A')
-    expect(wrapper.attributes('href')).toBe('/about')
+    expect(wrapper.attributes('href')).toBe('#about')
   })
 
   it('renders with custom component via as prop', () => {
@@ -196,7 +196,7 @@ describe('dzButton — Unit Tests', () => {
     const variants = ['solid', 'outline', 'ghost', 'text', 'link'] as const
     for (const variant of variants) {
       const wrapper = mount(DzButton, {
-        props: { variant, href: '/test' },
+        props: { variant, href: '#test' },
         slots: { default: 'btn' },
       })
       expect(wrapper.element.tagName).toBe('A')
@@ -208,7 +208,7 @@ describe('dzButton — Unit Tests', () => {
     const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
     for (const size of sizes) {
       const wrapper = mount(DzButton, {
-        props: { size, href: '/test' },
+        props: { size, href: '#test' },
         slots: { default: 'btn' },
       })
       expect(wrapper.element.tagName).toBe('A')
@@ -220,7 +220,7 @@ describe('dzButton — Unit Tests', () => {
     const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as const
     for (const tone of tones) {
       const wrapper = mount(DzButton, {
-        props: { tone, href: '/test' },
+        props: { tone, href: '#test' },
         slots: { default: 'btn' },
       })
       expect(wrapper.element.tagName).toBe('A')
@@ -230,7 +230,7 @@ describe('dzButton — Unit Tests', () => {
 
   it('click event fires for <a> element', async () => {
     const wrapper = mount(DzButton, {
-      props: { href: '/test' },
+      props: { href: '#test' },
       slots: { default: 'Link' },
     })
     await wrapper.trigger('click')
@@ -249,7 +249,7 @@ describe('dzButton — Unit Tests', () => {
 
   it('as prop takes priority over href for tag resolution', () => {
     const wrapper = mount(DzButton, {
-      props: { as: 'span', href: '/test' },
+      props: { as: 'span', href: '#test' },
       slots: { default: 'Span' },
     })
     expect(wrapper.element.tagName).toBe('SPAN')
@@ -257,7 +257,7 @@ describe('dzButton — Unit Tests', () => {
 
   it('loading state works with <a> element', () => {
     const wrapper = mount(DzButton, {
-      props: { href: '/test', loading: true },
+      props: { href: '#test', loading: true },
       slots: { default: 'Loading' },
     })
     expect(wrapper.element.tagName).toBe('A')

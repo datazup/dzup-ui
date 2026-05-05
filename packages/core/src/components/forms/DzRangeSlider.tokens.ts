@@ -14,13 +14,13 @@ export const rangeSliderTokens = {
     border: 'var(--dz-primary)',
     borderHover: 'var(--dz-primary-hover)',
     shadow: 'var(--dz-shadow-sm)',
-    transition: 'var(--dz-transition-fast)',
-    focusRingColor: 'var(--dz-primary)',
-    focusRingWidth: '2px',
-    focusRingOffset: '2px',
+    transition: 'var(--dz-control-transition)',
+    focusRingColor: 'var(--dz-control-focus-ring-color)',
+    focusRingWidth: 'var(--dz-control-focus-ring-width)',
+    focusRingOffset: 'var(--dz-control-focus-ring-offset)',
   },
   /** Disabled state opacity */
-  disabledOpacity: 'var(--dz-button-disabled-opacity)',
+  disabledOpacity: 'var(--dz-control-disabled-opacity)',
   /** Range fill color per tone */
   tone: {
     neutral: 'var(--dz-foreground)',

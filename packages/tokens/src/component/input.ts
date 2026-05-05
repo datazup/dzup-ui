@@ -9,9 +9,15 @@ export const INPUT_TOKENS: Record<string, string> = {
   '--dz-input-font-size': 'var(--dz-text-sm)',
   '--dz-input-font-family': 'var(--dz-font-sans)',
   '--dz-input-transition': 'border-color var(--dz-duration-fast) var(--dz-ease-default), box-shadow var(--dz-duration-fast) var(--dz-ease-default)',
-  '--dz-input-focus-ring-width': '2px',
+  '--dz-input-focus-ring-width': '1px',
   '--dz-input-focus-ring-color': 'var(--dz-ring)',
+  '--dz-input-focus-ring-offset': '1px',
   '--dz-input-disabled-opacity': '0.5',
+
+  /* Size: xs */
+  '--dz-input-xs-height': 'var(--dz-spacing-7)',
+  '--dz-input-xs-padding-x': 'var(--dz-spacing-2)',
+  '--dz-input-xs-font-size': 'var(--dz-text-xs)',
 
   /* Size: sm */
   '--dz-input-sm-height': 'var(--dz-spacing-8)',
@@ -27,4 +33,9 @@ export const INPUT_TOKENS: Record<string, string> = {
   '--dz-input-lg-height': 'var(--dz-spacing-10)',
   '--dz-input-lg-padding-x': 'var(--dz-spacing-3_5)',
   '--dz-input-lg-font-size': 'var(--dz-text-base)',
+
+  /* Size: xl */
+  '--dz-input-xl-height': 'var(--dz-spacing-12)',
+  '--dz-input-xl-padding-x': 'var(--dz-spacing-4)',
+  '--dz-input-xl-font-size': 'var(--dz-text-lg)',
 }

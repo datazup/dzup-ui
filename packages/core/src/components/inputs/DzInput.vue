@@ -192,6 +192,27 @@ export default {
 </template>
 
 <style scoped>
+/* Remove native browser focus outline — the wrapper handles focus styling */
+input:focus,
+input:focus-visible {
+  outline: none;
+}
+
+/* Neutralise browser autofill background (Chrome/Edge light-blue tint) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--dz-input-bg, white) inset !important;
+  -webkit-text-fill-color: var(--dz-foreground) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Selection highlight uses the primary colour */
+input::selection {
+  background: var(--dz-primary, #6366f1);
+  color: white;
+}
+
 /* Accessibility: respect user's motion preference */
 @media (prefers-reduced-motion: reduce) {
   :deep(*),
