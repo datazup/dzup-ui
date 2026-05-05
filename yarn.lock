@@ -886,6 +886,7 @@ __metadata:
     "@dzup-ui/core": "workspace:*"
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
+    vite-plugin-dts: "npm:^4.5.0"
     vue: "npm:^3.5.13"
   peerDependencies:
     vue: ^3.5.0
@@ -897,7 +898,7 @@ __metadata:
   resolution: "@dzup-ui/contracts@workspace:packages/contracts"
   dependencies:
     typescript: "npm:^5.7.0"
-    vue: "npm:^3.5.0"
+    vue: "npm:^3.5.13"
   peerDependencies:
     vue: ^3.5.0
   languageName: unknown
@@ -936,8 +937,8 @@ __metadata:
     "@nuxt/schema": "npm:^3.14.0"
     typescript: "npm:^5.7.0"
   peerDependencies:
-    "@dzup-ui/core": "workspace:*"
-    "@dzup-ui/tokens": "workspace:*"
+    "@dzup-ui/core": ">=0.1.0-alpha.0"
+    "@dzup-ui/tokens": ">=0.1.0-alpha.0"
     nuxt: ">=3.0.0"
   peerDependenciesMeta:
     "@dzup-ui/pro":
@@ -985,6 +986,8 @@ __metadata:
   dependencies:
     tsx: "npm:^4.19.0"
     typescript: "npm:^5.7.0"
+    vite: "npm:^6.1.0"
+    vite-plugin-dts: "npm:^4.5.4"
   languageName: unknown
   linkType: soft
 
@@ -10259,7 +10262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-dts@npm:^4.5.4":
+"vite-plugin-dts@npm:^4.5.0, vite-plugin-dts@npm:^4.5.4":
   version: 4.5.4
   resolution: "vite-plugin-dts@npm:4.5.4"
   dependencies:
@@ -10614,7 +10617,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.5.0, vue@npm:^3.5.13":
+"vue@npm:^3.5.13":
   version: 3.5.31
   resolution: "vue@npm:3.5.31"
   dependencies:
