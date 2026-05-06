@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dzup-ui Sandbox</title>
+    <!--
+      FOUC prevention (ADR-15): reads 'dz-theme' from localStorage and sets
+      data-theme on <html> before any CSS or Vue renders. Canonical script from
+      @dzup-ui/core/providers — do not edit this IIFE manually; update themeScript instead.
+    -->
+    <script>(function(){try{var s=localStorage.getItem('dz-theme');var t=s==='light'||s==='dark'?s:null;if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})()</script>
     <style>
       /* Prevent FOUC — set base styles before Vue mounts */
       body {

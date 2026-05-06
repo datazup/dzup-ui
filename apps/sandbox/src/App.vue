@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { DzThemeProvider } from '@dzup-ui/core/providers'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import ThemeToggle from './ThemeToggle.vue'
 
 const route = useRoute()
 
@@ -23,33 +25,39 @@ const currentPath = computed(() => route.path)
 </script>
 
 <template>
-  <div class="app-layout">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h1 class="sidebar-title">
-          dzup-ui
-        </h1>
-        <span class="sidebar-badge">sandbox</span>
-      </div>
+  <DzThemeProvider default-theme="system">
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1 class="sidebar-title">
+            dzup-ui
+          </h1>
+          <span class="sidebar-badge">sandbox</span>
+        </div>
 
-      <nav class="sidebar-nav">
-        <router-link
-          v-for="family in families"
-          :key="family.path"
-          :to="family.path"
-          class="nav-link"
-          :class="{ active: currentPath === family.path }"
-        >
-          <span class="nav-icon">{{ family.icon }}</span>
-          <span class="nav-label">{{ family.name }}</span>
-        </router-link>
-      </nav>
-    </aside>
+        <nav class="sidebar-nav">
+          <router-link
+            v-for="family in families"
+            :key="family.path"
+            :to="family.path"
+            class="nav-link"
+            :class="{ active: currentPath === family.path }"
+          >
+            <span class="nav-icon">{{ family.icon }}</span>
+            <span class="nav-label">{{ family.name }}</span>
+          </router-link>
+        </nav>
 
-    <main class="main-content">
-      <router-view />
-    </main>
-  </div>
+        <div class="sidebar-footer">
+          <ThemeToggle />
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <router-view />
+      </main>
+    </div>
+  </DzThemeProvider>
 </template>
 
 <style scoped>
@@ -104,6 +112,12 @@ const currentPath = computed(() => route.path)
   flex-direction: column;
   padding: 4px 8px;
   gap: 2px;
+  flex: 1;
+}
+
+.sidebar-footer {
+  padding: 8px;
+  border-top: 1px solid var(--dz-border, #e2e8f0);
 }
 
 .nav-link {
@@ -183,6 +197,10 @@ const currentPath = computed(() => route.path)
     overflow-x: auto;
     padding: 0 12px 12px;
     scrollbar-width: thin;
+  }
+
+  .sidebar-footer {
+    display: none;
   }
 
   .nav-link {

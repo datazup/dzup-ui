@@ -6,7 +6,7 @@ import { defineMain } from '@storybook/vue3-vite/node'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 export default defineMain({
-  addons: [],
+  addons: ['@storybook/addon-docs'],
   stories: [
     // Standalone stories directories
     '../../../packages/core/stories/**/*.stories.ts',
