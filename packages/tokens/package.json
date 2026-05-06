@@ -29,6 +29,8 @@
   "scripts": {
     "generate": "tsx src/generate.ts",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "echo 'No unit tests in tokens — run yarn typecheck'",
     "build": "tsx src/generate.ts && vite build"
   },
   "devDependencies": {

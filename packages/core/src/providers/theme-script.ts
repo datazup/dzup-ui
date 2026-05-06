@@ -49,7 +49,7 @@ export function getThemeScript(options: ThemeScriptOptions = {}): string {
     defaultTheme = 'system',
   } = options
 
-  return `(function(){try{var s=localStorage.getItem(${JSON.stringify(storageKey)});var t=s==='light'||s==='dark'?s:s==='system'||!s?null:null;if(!t){var d=${JSON.stringify(defaultTheme)};t=d==='system'?window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light':d}document.documentElement.setAttribute(${JSON.stringify(attribute)},t)}catch(e){}})()`
+  return `(function(){try{var s=localStorage.getItem(${JSON.stringify(storageKey)});var t=s==='light'||s==='dark'?s:null;if(!t){var d=${JSON.stringify(defaultTheme)};t=d==='system'?window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light':d}document.documentElement.setAttribute(${JSON.stringify(attribute)},t)}catch(e){}})()`
 }
 
 /**

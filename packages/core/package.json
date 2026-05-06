@@ -16,6 +16,10 @@
       "types": "./dist/resolver.d.ts",
       "import": "./dist/resolver.js"
     },
+    "./providers": {
+      "types": "./dist/providers/index.d.ts",
+      "import": "./dist/providers/index.js"
+    },
     "./styles": "./dist/index.css"
   },
   "main": "./dist/index.js",

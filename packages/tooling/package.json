@@ -6,6 +6,7 @@
   "description": "Validators, boundary checks, and token compliance tools for dzup-ui",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
     "validate:boundaries": "tsx src/validators/import-boundary.ts",
     "validate:interaction-contract": "tsx src/validators/interaction-contract.ts",
     "validate:tokens": "tsx src/token-checks/color-lint.ts",

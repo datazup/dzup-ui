@@ -17,6 +17,7 @@ import type {
  *
  * Provides context to sub-parts via inject (ADR-08).
  *
+ *
  * @example
  * ```vue
  * <DzDataGrid :data="users" :columns="columns" sortable pagination selectable="multiple">

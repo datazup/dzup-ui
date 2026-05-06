@@ -1,4 +1,5 @@
 import { addComponent, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { themeScript } from '@dzup-ui/core/providers'
 
 export interface DzupUiModuleOptions {
   /**
@@ -269,10 +270,12 @@ export default defineNuxtModule<DzupUiModuleOptions>({
       }
     }
 
-    // Add theme script to head for FOUC prevention (ADR-15)
+    // Add theme script to head for FOUC prevention (ADR-15).
+    // Uses the canonical themeScript from @dzup-ui/core/providers so the
+    // Nuxt module stays in sync with the provider implementation.
     nuxt.options.app.head.script = nuxt.options.app.head.script || []
     nuxt.options.app.head.script.push({
-      innerHTML: `(function(){try{var t=localStorage.getItem('dz-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')}catch(e){}})()`,
+      innerHTML: themeScript,
       type: 'text/javascript',
     })
   },

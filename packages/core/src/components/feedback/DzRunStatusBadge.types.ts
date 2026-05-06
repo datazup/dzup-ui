@@ -24,12 +24,14 @@ export type DzRunStatus
 // Props
 // ---------------------------------------------------------------------------
 
+import type { CanonicalSize } from '@dzup-ui/contracts'
+
 /** Props for the DzRunStatusBadge component */
 export interface DzRunStatusBadgeProps {
   /** Canonical run status */
   status: DzRunStatus
   /** Badge size — maps to DzBadge size */
-  size?: 'sm' | 'md'
+  size?: CanonicalSize
 }
 
 // ---------------------------------------------------------------------------

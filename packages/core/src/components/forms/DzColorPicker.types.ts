@@ -30,6 +30,8 @@ export interface DzColorPickerProps extends BaseAccessibilityProps, BaseValidati
   size?: CanonicalSize
   /** Form field name */
   name?: string
+  /** Height of the color-picker canvas area in pixels (default: 120) */
+  canvasHeight?: number
 }
 
 // ---------------------------------------------------------------------------

@@ -152,6 +152,12 @@ ${formatVars(shadowsDark)}
 
 /* ==========================================================================
    System preference fallback (when no data-theme is set explicitly)
+
+   Intentional asymmetry: only [data-theme="light"] is explicitly pinned.
+   If a user picks dark and then clears localStorage, the data-theme attribute
+   disappears and the media query takes over — so OS dark preference sticks.
+   The DzThemeProvider and themeScript always write data-theme on startup, so
+   this fallback only fires if neither has run (e.g. bare CSS usage with no JS).
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {

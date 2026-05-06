@@ -25,6 +25,7 @@ const props = withDefaults(defineProps<DzThemeProviderProps>(), {
   defaultTheme: 'system',
   storageKey: 'dz-theme',
   attribute: 'data-theme',
+  disableTransitionOnChange: true,
 })
 
 // ---------------------------------------------------------------------------
@@ -69,6 +70,24 @@ function applyAttribute(resolved: ResolvedTheme): void {
   if (!isBrowser())
     return
   document.documentElement.setAttribute(props.attribute, resolved)
+}
+
+/**
+ * Briefly suppress all CSS transitions to prevent colour-flash on theme change.
+ * Injects a `<style>` tag, forces a reflow, then removes it on the next frame.
+ */
+function suppressTransitions(): void {
+  if (!isBrowser() || !props.disableTransitionOnChange)
+    return
+  const style = document.createElement('style')
+  style.id = 'dz-theme-no-transition'
+  style.textContent = '*,*::before,*::after{transition:none!important}'
+  document.head.appendChild(style)
+  // Force reflow so the style takes effect before attribute change
+  document.body.offsetHeight // eslint-disable-line @typescript-eslint/no-unused-expressions
+  requestAnimationFrame(() => {
+    style.remove()
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -140,11 +159,13 @@ onUnmounted(() => {
 
 /** Set the theme preference */
 function setTheme(value: ThemePreference): void {
+  suppressTransitions()
   theme.value = value
 }
 
 /** Toggle between light and dark (if 'system', resolves to opposite of current) */
 function toggleTheme(): void {
+  suppressTransitions()
   theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
 }
 

@@ -10,6 +10,8 @@
 // Props
 // ---------------------------------------------------------------------------
 
+import type { CanonicalSize } from '@dzup-ui/contracts'
+
 /** Props for the DzCopyButton component */
 export interface DzCopyButtonProps {
   /** Element ID */
@@ -23,7 +25,7 @@ export interface DzCopyButtonProps {
   /** Label shown after a successful copy */
   copiedLabel?: string
   /** Button size */
-  size?: 'sm' | 'md'
+  size?: CanonicalSize
   /** Disabled state -- prevents interaction */
   disabled?: boolean
 }

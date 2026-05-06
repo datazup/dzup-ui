@@ -22,9 +22,11 @@
     "access": "public"
   },
   "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
     "build": "tsc --project tsconfig.json",
     "postbuild": "chmod +x bin/dzup-codemod.js",
-    "typecheck": "tsc --noEmit",
     "codemod": "node bin/dzup-codemod.js"
   },
   "dependencies": {

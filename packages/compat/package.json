@@ -22,6 +22,8 @@
   },
   "scripts": {
     "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
     "build": "vite build"
   },
   "peerDependencies": {

@@ -9,16 +9,14 @@ import type { FilterOperator } from './DzDataGrid.types.ts'
  * Logic extracted to useDataGridHeader composable.
  */
 import { computed, inject } from 'vue'
+import { Filter } from 'lucide-vue-next'
+import DzButton from '../buttons/DzButton.vue'
+import DzCheckbox from '../forms/DzCheckbox.vue'
+import DzIconButton from '../buttons/DzIconButton.vue'
 import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
-
-const filterTriggerClasses = [
-  'dz-focus-ring-button',
-  'inline-flex items-center justify-center h-5 w-5 rounded-[var(--dz-radius-sm)]',
-  'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
-].join(' ')
 
 const filterPopoverClasses = [
   'absolute top-full left-0 z-50 mt-1',
@@ -28,14 +26,6 @@ const filterPopoverClasses = [
 ].join(' ')
 
 const filterFieldClasses = 'dz-native-field-sm'
-
-const filterClearButtonClasses = [
-  'dz-focus-ring-button',
-  'mt-[var(--dz-spacing-2)] w-full px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)]',
-  'text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
-  'border border-[var(--dz-border)] rounded-[var(--dz-radius-sm)]',
-  'hover:bg-[var(--dz-muted)] transition-[var(--dz-transition-fast)]',
-].join(' ')
 
 const ctx = inject(DZ_DATA_GRID_KEY, null)
 if (!ctx) {
@@ -82,14 +72,13 @@ export default {
         :class="cn(styles.headerCell(), 'w-[var(--dz-spacing-10)]')"
         role="columnheader"
       >
-        <input
-          type="checkbox"
-          :class="styles.checkbox()"
-          :checked="ctx!.isAllSelected.value"
+        <DzCheckbox
+          :model-value="ctx!.isAllSelected.value"
           :indeterminate="ctx!.isSomeSelected.value"
+          size="sm"
           aria-label="Select all rows"
-          @change="ctx!.toggleAllSelection()"
-        >
+          @update:model-value="ctx!.toggleAllSelection()"
+        />
       </th>
       <th
         v-for="col in ctx!.columns.value"
@@ -121,23 +110,18 @@ export default {
             </svg>
           </span>
           <!-- Filter icon button -->
-          <button
+          <DzIconButton
             v-if="isColumnFilterable(col)"
-            type="button"
-            :class="cn(
-              filterTriggerClasses,
-              hasActiveFilter(col.field) ? 'text-[var(--dz-primary)]' : 'text-[var(--dz-muted-foreground)]',
-            )"
+            :icon="Filter"
             :aria-label="`Filter ${col.header}`"
+            variant="ghost"
+            size="xs"
+            :tone="hasActiveFilter(col.field) ? 'primary' : 'neutral'"
             :data-active="hasActiveFilter(col.field) ? '' : undefined"
             data-testid="filter-trigger"
             @click="toggleFilterPopover($event, col.field)"
             @keydown.escape="openFilterField = null"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3.5 w-3.5" aria-hidden="true">
-              <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" :fill="hasActiveFilter(col.field) ? 'currentColor' : 'none'" />
-            </svg>
-          </button>
+          />
         </span>
 
         <!-- Filter popover -->
@@ -222,15 +206,17 @@ export default {
           </template>
 
           <!-- Clear filter button -->
-          <button
+          <DzButton
             v-if="hasActiveFilter(col.field)"
-            type="button"
-            :class="filterClearButtonClasses"
+            variant="ghost"
+            size="sm"
+            tone="neutral"
+            class="mt-[var(--dz-spacing-2)] w-full"
             data-testid="filter-clear-button"
             @click="handleClearFilter($event, col.field)"
           >
             Clear filter
-          </button>
+          </DzButton>
         </div>
       </th>
     </tr>

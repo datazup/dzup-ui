@@ -26,12 +26,30 @@ export type ResolvedTheme = 'light' | 'dark'
 
 /** Props for the DzThemeProvider component */
 export interface DzThemeProviderProps {
-  /** Initial theme when no persisted value exists */
+  /**
+   * Initial theme when no persisted value exists.
+   *
+   * When set to `'system'`, the provider reads `prefers-color-scheme` to
+   * resolve the actual theme. Under SSR, `prefers-color-scheme` is unavailable,
+   * so `systemPrefersDark` defaults to `false` and the SSR-rendered HTML is
+   * always light-themed. The inline `themeScript` (ADR-15) corrects this on
+   * the client before hydration, so there is no observable flash.
+   */
   defaultTheme?: ThemePreference
   /** localStorage key for theme persistence (ADR-15) */
   storageKey?: string
   /** HTML attribute name set on document.documentElement */
   attribute?: string
+  /**
+   * Suppress CSS transitions during theme switches to prevent colour-flash.
+   *
+   * When `true` (default), `setTheme` / `toggleTheme` briefly inject a
+   * `<style>` tag that sets `transition: none !important` on all elements,
+   * forces a reflow, then removes the tag on the next animation frame.
+   * This prevents the "colour sweep" effect that occurs when background-color
+   * transitions fire across the whole page.
+   */
+  disableTransitionOnChange?: boolean
 }
 
 // ---------------------------------------------------------------------------

@@ -20,8 +20,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "echo 'No unit tests in nuxt — run yarn typecheck'",
+    "build": "tsc --project tsconfig.json"
   },
   "peerDependencies": {
     "@dzup-ui/core": ">=0.1.0-alpha.0",

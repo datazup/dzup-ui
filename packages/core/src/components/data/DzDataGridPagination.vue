@@ -6,7 +6,10 @@ import type { DzDataGridPaginationEmits, DzDataGridPaginationProps } from './DzD
  * Renders page navigation and page size selector.
  */
 import { computed } from 'vue'
-import { cn } from '../../utilities/cn.ts'
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import type { DzSelectItem } from '../forms/DzSelect.types.ts'
+import DzIconButton from '../buttons/DzIconButton.vue'
+import DzSelect from '../forms/DzSelect.vue'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
 
 const props = withDefaults(defineProps<DzDataGridPaginationProps>(), {
@@ -19,14 +22,18 @@ const styles = computed(() => dataGridVariants({ size: 'md', density: 'default' 
 
 const totalPages = computed(() => Math.max(1, Math.ceil(props.total / props.pageSize)))
 
+const pageSizeItems = computed<DzSelectItem[]>(() =>
+  props.pageSizeOptions.map(n => ({ label: `${n} / page`, value: String(n) })),
+)
+
+const pageSizeModel = computed({
+  get: () => String(props.pageSize),
+  set: (val: string) => emit('update:pageSize', Number(val)),
+})
+
 function goToPage(page: number): void {
   const clamped = Math.max(1, Math.min(page, totalPages.value))
   emit('update:page', clamped)
-}
-
-function handlePageSizeChange(event: Event): void {
-  const size = Number((event.target as HTMLSelectElement).value)
-  emit('update:pageSize', size)
 }
 </script>
 
@@ -47,45 +54,36 @@ export default {
     </div>
 
     <div class="flex items-center gap-[var(--dz-spacing-1)]">
-      <select
-        :value="pageSize"
-        :class="cn(
-          'h-8 rounded-[var(--dz-radius-sm)] border border-[var(--dz-border)]',
-          'bg-transparent px-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)]',
-        )"
+      <DzSelect
+        v-model="pageSizeModel"
+        :items="pageSizeItems"
+        size="sm"
         aria-label="Rows per page"
-        @change="handlePageSizeChange"
-      >
-        <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">
-          {{ opt }} / page
-        </option>
-      </select>
+      />
 
-      <button
-        :class="styles.paginationButton()"
-        :disabled="page <= 1"
+      <DzIconButton
+        :icon="ChevronLeft"
         aria-label="Previous page"
+        variant="ghost"
+        size="sm"
+        tone="neutral"
+        :disabled="page <= 1"
         @click="goToPage(page - 1)"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </button>
+      />
 
       <span class="px-[var(--dz-spacing-2)]">
         {{ page }} / {{ totalPages }}
       </span>
 
-      <button
-        :class="styles.paginationButton()"
-        :disabled="page >= totalPages"
+      <DzIconButton
+        :icon="ChevronRight"
         aria-label="Next page"
+        variant="ghost"
+        size="sm"
+        tone="neutral"
+        :disabled="page >= totalPages"
         @click="goToPage(page + 1)"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4" aria-hidden="true">
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </button>
+      />
     </div>
   </div>
 </template>

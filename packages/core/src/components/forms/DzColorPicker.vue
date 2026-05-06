@@ -34,6 +34,7 @@ const props = withDefaults(defineProps<DzColorPickerProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  canvasHeight: 120,
 })
 
 const emit = defineEmits<DzColorPickerEmits>()
@@ -150,7 +151,7 @@ export default {
         >
           <div :class="styles.panel()">
             <!-- Native color input as main picker -->
-            <div :class="styles.colorArea()" style="height: 120px">
+            <div :class="styles.colorArea()" :style="{ height: `${props.canvasHeight}px` }">
               <input
                 type="color"
                 :value="model"

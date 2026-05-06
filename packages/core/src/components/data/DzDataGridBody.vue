@@ -7,6 +7,7 @@ import type { ColumnDef } from './DzDataGrid.types.ts'
  * Injects DzDataGrid context (ADR-08).
  */
 import { computed, inject } from 'vue'
+import DzCheckbox from '../forms/DzCheckbox.vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
@@ -79,14 +80,13 @@ export default {
         :class="cn(styles.cell(), 'w-[var(--dz-spacing-10)]')"
         role="gridcell"
       >
-        <input
-          type="checkbox"
-          :class="styles.checkbox()"
-          :checked="ctx!.isRowSelected(row)"
+        <DzCheckbox
+          :model-value="ctx!.isRowSelected(row)"
+          size="sm"
           :aria-label="`Select row ${index + 1}`"
           @click.stop
-          @change="ctx!.toggleRowSelection(row)"
-        >
+          @update:model-value="ctx!.toggleRowSelection(row)"
+        />
       </td>
       <td
         v-for="col in ctx!.columns.value"
