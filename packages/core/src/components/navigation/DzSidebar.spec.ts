@@ -215,6 +215,14 @@ describe('dzSidebar -- Unit Tests', () => {
     expect(nav.classes().some(c => c.includes('var(--dz-sidebar-z-index)'))).toBe(true)
   })
 
+  it('renders closed mobile drawer as fixed so it does not reserve layout width', () => {
+    const wrapper = mountSidebar({ isMobile: true, mobileOpen: false })
+    const nav = wrapper.find('nav')
+    expect(nav.classes()).toContain('fixed')
+    expect(nav.classes()).toContain('-translate-x-full')
+    expect(nav.classes().some(c => c.includes('var(--dz-sidebar-width)'))).toBe(true)
+  })
+
   it('overlay class uses sidebar overlay token', () => {
     // isMobile=true and mobileOpen=true are passed directly to skip matchMedia.
     // Teleport renders to document.body in jsdom, so we check document.body.innerHTML.

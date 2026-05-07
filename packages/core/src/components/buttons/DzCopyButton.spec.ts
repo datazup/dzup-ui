@@ -56,6 +56,16 @@ describe('dzCopyButton', () => {
     expect(wrapper.attributes('disabled')).toBeDefined()
   })
 
+  it('accepts all canonical size values', () => {
+    const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+    for (const size of sizes) {
+      const wrapper = mount(DzCopyButton, {
+        props: { value: 'test', size },
+      })
+      expect(wrapper.exists()).toBe(true)
+    }
+  })
+
   it('sets data-disabled when disabled', () => {
     const wrapper = mount(DzCopyButton, {
       props: { value: 'test', disabled: true },
