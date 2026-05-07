@@ -65,6 +65,7 @@ export const tabsVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: {
         trigger: 'h-[var(--dz-button-xs-height)] px-[var(--dz-spacing-2)] text-[length:var(--dz-text-xs)]',
       },

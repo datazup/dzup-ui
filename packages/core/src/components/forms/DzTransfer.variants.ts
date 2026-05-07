@@ -100,6 +100,7 @@ export const transferVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: {
         list: 'min-h-[120px]',
         listBody: 'max-h-[120px]',

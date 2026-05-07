@@ -68,6 +68,7 @@ export const comboboxVariants = tv({
       underlined: { root: 'border-b border-[var(--dz-border)] rounded-none focus-within:border-[var(--dz-input-border-focus)] focus-within:outline-none' },
     },
     size: {
+      icon: { root: '', item: '', icon: '', checkIcon: '', clearButton: '' },
       xs: {
         root: 'h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] text-[length:var(--dz-input-xs-font-size)]',
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',

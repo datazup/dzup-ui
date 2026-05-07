@@ -25,6 +25,7 @@ export const badgeVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: 'px-[var(--dz-spacing-1_5)] py-px text-[length:var(--dz-text-xs)]',
       sm: 'px-[var(--dz-spacing-1_5)] py-px text-[length:var(--dz-text-xs)]',
       md: 'px-[var(--dz-spacing-2)] py-0.5 text-[length:var(--dz-text-xs)]',

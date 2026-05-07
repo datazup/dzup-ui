@@ -26,6 +26,7 @@ export const chipVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: 'h-[var(--dz-spacing-6)] px-[var(--dz-spacing-2)] text-[length:var(--dz-text-xs)]',
       sm: 'h-[var(--dz-spacing-6)] px-[var(--dz-spacing-2)] text-[length:var(--dz-text-xs)]',
       md: 'h-[var(--dz-spacing-7)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-sm)]',

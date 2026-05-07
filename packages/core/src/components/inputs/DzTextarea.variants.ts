@@ -39,6 +39,7 @@ export const textareaVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] rounded-[var(--dz-radius-sm)]',
       sm: 'px-[var(--dz-input-sm-padding-x)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-input-sm-font-size)] rounded-[var(--dz-radius-sm)]',
       md: 'px-[var(--dz-input-md-padding-x)] py-[var(--dz-spacing-2)] text-[length:var(--dz-input-md-font-size)] rounded-[var(--dz-input-radius)]',

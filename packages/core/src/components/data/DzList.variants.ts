@@ -35,6 +35,7 @@ export const listVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: {
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
       },

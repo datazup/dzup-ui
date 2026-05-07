@@ -35,6 +35,7 @@ export const paginationVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: {
         button: 'h-[var(--dz-button-xs-height)] min-w-[var(--dz-button-xs-height)] text-[length:var(--dz-text-xs)]',
         ellipsis: 'h-[var(--dz-button-xs-height)] min-w-[var(--dz-button-xs-height)] text-[length:var(--dz-text-xs)]',

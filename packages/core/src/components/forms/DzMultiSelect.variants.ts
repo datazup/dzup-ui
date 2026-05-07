@@ -74,6 +74,7 @@ export const multiSelectVariants = tv({
       underlined: { root: 'border-b border-[var(--dz-border)] rounded-none focus-within:border-[var(--dz-input-border-focus)] focus-within:outline-none' },
     },
     size: {
+      icon: { root: '', item: '', tag: '', icon: '', checkIcon: '' },
       xs: {
         root: 'min-h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-input-xs-font-size)]',
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',

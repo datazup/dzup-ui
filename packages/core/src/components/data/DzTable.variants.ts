@@ -37,6 +37,7 @@ export const tableVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: {
         headerCell: 'text-[length:var(--dz-text-xs)]',
         cell: 'text-[length:var(--dz-text-xs)]',

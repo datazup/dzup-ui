@@ -26,6 +26,7 @@ export const inputGroupVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: { addon: 'text-[length:var(--dz-text-xs)] px-[var(--dz-spacing-1_5)]' },
       sm: { addon: 'text-[length:var(--dz-text-xs)] px-[var(--dz-spacing-2)]' },
       md: {},

@@ -81,6 +81,7 @@ export const colorPickerVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: {
         trigger: 'h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] text-[length:var(--dz-input-xs-font-size)]',
         swatch: 'h-4 w-4',

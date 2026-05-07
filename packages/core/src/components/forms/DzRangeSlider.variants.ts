@@ -34,6 +34,7 @@ export const rangeSliderVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: {
         track: 'h-1',
         range: 'h-full',

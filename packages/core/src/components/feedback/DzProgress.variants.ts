@@ -18,6 +18,7 @@ export const progressTrackVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: 'h-1',
       sm: 'h-1.5',
       md: 'h-2',

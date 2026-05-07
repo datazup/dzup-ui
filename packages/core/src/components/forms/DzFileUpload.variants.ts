@@ -80,6 +80,7 @@ export const fileUploadVariants = tv({
   },
   variants: {
     size: {
+      icon: { dropzone: '' },
       xs: { dropzone: 'p-[var(--dz-spacing-3)]' },
       sm: { dropzone: 'p-[var(--dz-spacing-4)]' },
       md: { dropzone: 'p-[var(--dz-spacing-6)]' },

@@ -42,6 +42,7 @@ export const timePickerVariants = tv({
       underlined: { root: 'border-b border-[var(--dz-border)] rounded-none focus-within:border-[var(--dz-input-border-focus)] focus-within:outline-none' },
     },
     size: {
+      icon: { root: '', input: '', icon: '' },
       xs: {
         root: 'h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] text-[length:var(--dz-input-xs-font-size)]',
         input: 'text-[length:var(--dz-input-xs-font-size)]',

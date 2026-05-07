@@ -71,6 +71,7 @@ export const dataGridVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: {
         headerCell: 'text-[length:var(--dz-text-xs)]',
         cell: 'text-[length:var(--dz-text-xs)]',

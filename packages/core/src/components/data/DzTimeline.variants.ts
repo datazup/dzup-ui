@@ -25,6 +25,7 @@ export const timelineVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: {
         indicator: 'h-[var(--dz-spacing-4)] w-[var(--dz-spacing-4)]',
         content: 'text-[length:var(--dz-text-xs)]',

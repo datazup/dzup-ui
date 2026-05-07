@@ -26,6 +26,7 @@ export const tagVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: 'h-[var(--dz-spacing-5)] px-[var(--dz-spacing-1-5)] text-[length:var(--dz-text-xs)]',
       sm: 'h-[var(--dz-spacing-5)] px-[var(--dz-spacing-1-5)] text-[length:var(--dz-text-xs)]',
       md: 'h-[var(--dz-spacing-6)] px-[var(--dz-spacing-2)] text-[length:var(--dz-text-xs)]',

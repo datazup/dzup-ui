@@ -15,6 +15,7 @@ export const copyButtonVariants = tv({
   ].join(' '),
   variants: {
     size: {
+      icon: '',
       xs: [
         'h-[var(--dz-button-xs-height)]',
         'w-[var(--dz-button-xs-height)]',

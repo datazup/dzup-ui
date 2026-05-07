@@ -31,6 +31,13 @@ export const buttonVariants = tv({
     },
 
     size: {
+      icon: [
+        'h-[var(--dz-button-icon-height)]',
+        'w-[var(--dz-button-icon-width)]',
+        'p-0',
+        'text-[length:var(--dz-button-icon-font-size)]',
+        'rounded-[var(--dz-radius-sm)]',
+      ].join(' '),
       xs: [
         'h-[var(--dz-button-xs-height)]',
         'px-[var(--dz-button-xs-padding-x)]',

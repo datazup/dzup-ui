@@ -36,6 +36,7 @@ export const radioVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: { indicator: 'h-3.5 w-3.5', dot: 'h-1.5 w-1.5', label: 'text-[length:var(--dz-text-xs)]' },
       sm: { indicator: 'h-4 w-4', dot: 'h-2 w-2', label: 'text-[length:var(--dz-text-sm)]' },
       md: { indicator: 'h-[1.125rem] w-[1.125rem]', dot: 'h-2.5 w-2.5', label: 'text-[length:var(--dz-text-sm)]' },

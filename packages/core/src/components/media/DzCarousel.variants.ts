@@ -58,6 +58,7 @@ export const carouselVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: {
         navButton: 'h-6 w-6 [&>svg]:h-3 [&>svg]:w-3',
         dot: 'h-1 w-1',

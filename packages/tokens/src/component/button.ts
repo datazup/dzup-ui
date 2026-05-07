@@ -15,6 +15,11 @@ export const BUTTON_TOKENS: Record<string, string> = {
   '--dz-button-focus-ring-color': 'var(--dz-ring)',
   '--dz-button-disabled-opacity': '0.5',
 
+  /* Size: icon (16×16px square, icon-only, no text padding) */
+  '--dz-button-icon-height': 'var(--dz-spacing-4)',
+  '--dz-button-icon-width': 'var(--dz-spacing-4)',
+  '--dz-button-icon-font-size': '0.75rem',
+
   /* Size: xs */
   '--dz-button-xs-height': 'var(--dz-spacing-7)',
   '--dz-button-xs-padding-x': 'var(--dz-spacing-2)',

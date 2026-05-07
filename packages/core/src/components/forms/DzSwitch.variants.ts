@@ -36,6 +36,7 @@ export const switchVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: {
         track: 'h-4 w-7',
         thumb: 'h-3 w-3 data-[state=checked]:translate-x-3 translate-x-0.5',

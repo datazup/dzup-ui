@@ -38,6 +38,7 @@ export const inputWrapperVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: [
         'h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)]',
         'text-[length:var(--dz-input-xs-font-size)]',

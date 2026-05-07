@@ -44,6 +44,7 @@ export const resizableVariants = tv({
     },
 
     size: {
+      icon: '',
       xs: {
         handle: 'data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
       },

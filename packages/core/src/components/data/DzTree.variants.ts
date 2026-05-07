@@ -42,6 +42,7 @@ export const treeVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: {
         item: 'py-[var(--dz-spacing-0-5)] px-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
         expandIcon: 'h-3 w-3',

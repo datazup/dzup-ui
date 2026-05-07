@@ -84,6 +84,7 @@ export const datePickerVariants = tv({
       underlined: { trigger: 'border-b border-[var(--dz-border)] rounded-none focus-visible:border-[var(--dz-input-border-focus)] focus-visible:outline-none' },
     },
     size: {
+      icon: { trigger: '', cellTrigger: '', heading: '', icon: '', fieldInput: '' },
       xs: {
         trigger: 'h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] text-[length:var(--dz-input-xs-font-size)]',
         cellTrigger: 'h-6 w-6 text-[length:var(--dz-text-xs)]',

@@ -147,6 +147,7 @@ export default {
       v-if="loading"
       class="animate-spin"
       :class="[
+        resolvedSize === 'icon' ? 'h-3 w-3' : '',
         resolvedSize === 'xs' ? 'h-3 w-3' : '',
         resolvedSize === 'sm' ? 'h-3.5 w-3.5' : '',
         resolvedSize === 'md' ? 'h-4 w-4' : '',

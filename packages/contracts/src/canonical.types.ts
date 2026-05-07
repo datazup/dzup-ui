@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 
 /** Canonical size values -- every sized component must use this exact union */
-export type CanonicalSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type CanonicalSize = 'icon' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 /** Canonical semantic tone values */
 export type CanonicalTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'

@@ -22,6 +22,7 @@ export const avatarVariants = tv({
 
   variants: {
     size: {
+      icon: '',
       xs: 'h-6 w-6 text-[length:var(--dz-text-xs)]',
       sm: 'h-8 w-8 text-[length:var(--dz-text-xs)]',
       md: 'h-10 w-10 text-[length:var(--dz-text-sm)]',

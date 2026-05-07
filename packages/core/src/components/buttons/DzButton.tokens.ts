@@ -36,6 +36,11 @@ export const buttonTokens = {
 
   /** Size variants — height, horizontal padding, font size, gap */
   size: {
+    icon: {
+      height: 'var(--dz-button-icon-height)',
+      width: 'var(--dz-button-icon-width)',
+      fontSize: 'var(--dz-button-icon-font-size)',
+    },
     xs: {
       height: 'var(--dz-button-xs-height)',
       paddingX: 'var(--dz-button-xs-padding-x)',

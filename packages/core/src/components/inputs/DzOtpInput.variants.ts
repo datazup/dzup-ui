@@ -32,6 +32,7 @@ export const otpInputVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: { input: 'h-7 w-7 text-[length:var(--dz-text-xs)]' },
       sm: { input: 'h-8 w-8 text-[length:var(--dz-text-sm)]' },
       md: { input: 'h-10 w-10 text-[length:var(--dz-text-base)]' },

@@ -30,6 +30,7 @@ export const toggleButtonVariants = tv({
       link: 'bg-transparent',
     },
     size: {
+      icon: '',
       xs: 'h-[var(--dz-button-xs-height)] px-[var(--dz-button-xs-padding-x)] text-[length:var(--dz-button-xs-font-size)] gap-[var(--dz-button-xs-gap)] rounded-[var(--dz-radius-sm)]',
       sm: 'h-[var(--dz-button-sm-height)] px-[var(--dz-button-sm-padding-x)] text-[length:var(--dz-button-sm-font-size)] gap-[var(--dz-button-sm-gap)] rounded-[var(--dz-radius-sm)]',
       md: 'h-[var(--dz-button-md-height)] px-[var(--dz-button-md-padding-x)] text-[length:var(--dz-button-md-font-size)] gap-[var(--dz-button-md-gap)] rounded-[var(--dz-button-radius)]',

@@ -33,6 +33,7 @@ export const checkboxVariants = tv({
   },
   variants: {
     size: {
+      icon: '',
       xs: { indicator: 'h-3.5 w-3.5', label: 'text-[length:var(--dz-text-xs)]' },
       sm: { indicator: 'h-4 w-4', label: 'text-[length:var(--dz-text-sm)]' },
       md: { indicator: 'h-[1.125rem] w-[1.125rem]', label: 'text-[length:var(--dz-text-sm)]' },

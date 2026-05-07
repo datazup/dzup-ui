@@ -43,9 +43,9 @@ defineSlots<DzConfirmDialogSlots>()
 
 const attrs = useAttrs()
 
-/** Map CanonicalSize to DialogContentSize (xs -> sm, rest pass through) */
+/** Map CanonicalSize to DialogContentSize (xs/icon -> sm, rest pass through) */
 const dialogSize = computed(() => {
-  if (props.size === 'xs')
+  if (props.size === 'xs' || props.size === 'icon')
     return 'sm'
   return props.size
 })
