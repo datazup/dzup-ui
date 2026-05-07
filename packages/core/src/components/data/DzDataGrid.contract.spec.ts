@@ -97,9 +97,9 @@ describe('dzDataGrid — Contract Spec v1', () => {
     })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('test')
-    await input.trigger('input')
     expect(wrapper.emitted('update:filters')).toBeTruthy()
   })
 
@@ -110,9 +110,9 @@ describe('dzDataGrid — Contract Spec v1', () => {
     })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('test')
-    await input.trigger('input')
     expect(wrapper.emitted('filter')).toBeTruthy()
   })
 })

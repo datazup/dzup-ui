@@ -150,12 +150,14 @@ describe('dzDataGrid — Sorting', () => {
 describe('dzDataGrid — Selection', () => {
   it('does not render checkboxes by default', () => {
     const wrapper = mountGrid()
-    expect(wrapper.findAll('input[type="checkbox"]')).toHaveLength(0)
+    // DzCheckbox renders as button[role="checkbox"] (Reka UI CheckboxRoot)
+    expect(wrapper.findAll('button[role="checkbox"]')).toHaveLength(0)
   })
 
   it('renders checkboxes in multiple selection mode', () => {
     const wrapper = mountGrid({ selectable: 'multiple' })
-    const checkboxes = wrapper.findAll('input[type="checkbox"]')
+    // DzCheckbox renders as button[role="checkbox"] (Reka UI CheckboxRoot)
+    const checkboxes = wrapper.findAll('button[role="checkbox"]')
     // 1 "select all" + 3 row checkboxes
     expect(checkboxes.length).toBe(4)
   })
@@ -241,9 +243,9 @@ describe('dzDataGrid — Filtering', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('alice')
-    await input.trigger('input')
     // After filtering, only Alice should be visible
     expect(wrapper.text()).toContain('Alice')
     expect(wrapper.text()).not.toContain('Bob')
@@ -253,9 +255,9 @@ describe('dzDataGrid — Filtering', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('alice')
-    await input.trigger('input')
     expect(wrapper.emitted('update:filters')).toBeTruthy()
   })
 
@@ -263,9 +265,9 @@ describe('dzDataGrid — Filtering', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('alice')
-    await input.trigger('input')
     expect(wrapper.emitted('filter')).toBeTruthy()
   })
 
@@ -273,9 +275,9 @@ describe('dzDataGrid — Filtering', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('alice')
-    await input.trigger('input')
     // The trigger button should now have data-active attribute
     const updatedTrigger = wrapper.find('[data-testid="filter-trigger"][data-active]')
     expect(updatedTrigger.exists()).toBe(true)
@@ -285,9 +287,9 @@ describe('dzDataGrid — Filtering', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('alice')
-    await input.trigger('input')
     expect(wrapper.find('[data-testid="filter-clear-button"]').exists()).toBe(true)
   })
 
@@ -295,9 +297,9 @@ describe('dzDataGrid — Filtering', () => {
     const wrapper = mountGrid({ columns: filterableColumns, filterable: true })
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('alice')
-    await input.trigger('input')
     expect(wrapper.text()).not.toContain('Bob')
 
     const clearBtn = wrapper.find('[data-testid="filter-clear-button"]')
@@ -311,9 +313,9 @@ describe('dzDataGrid — Filtering', () => {
     // Apply filter first
     const trigger = wrapper.find('[data-testid="filter-trigger"]')
     await trigger.trigger('click')
-    const input = wrapper.find('[data-testid="filter-text-input"]')
+    // DzInput wraps native <input> — target the inner input for setValue
+    const input = wrapper.find('[data-testid="filter-text-input"] input')
     await input.setValue('a')
-    await input.trigger('input')
     // Then sort
     const nameHeader = wrapper.findAll('th').find(h => h.text().includes('Name'))
     await nameHeader?.trigger('click')
@@ -358,7 +360,8 @@ describe('dzDataGrid — Accessibility', () => {
 
   it('select-all checkbox has aria-label', () => {
     const wrapper = mountGrid({ selectable: 'multiple' })
-    const selectAll = wrapper.find('input[aria-label="Select all rows"]')
+    // DzCheckbox renders as button[role="checkbox"] (Reka UI CheckboxRoot)
+    const selectAll = wrapper.find('button[aria-label="Select all rows"]')
     expect(selectAll.exists()).toBe(true)
   })
 })
