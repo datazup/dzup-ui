@@ -19,7 +19,7 @@ describe('dzButton — Contract Spec v1', () => {
   })
 
   it('accepts all canonical size values', () => {
-    const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+    const sizes = ['icon', 'xs', 'sm', 'md', 'lg', 'xl'] as const
     for (const size of sizes) {
       const wrapper = mount(DzButton, { props: { size }, slots: { default: 'btn' } })
       expect(wrapper.exists()).toBe(true)

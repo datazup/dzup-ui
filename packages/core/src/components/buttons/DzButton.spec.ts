@@ -205,7 +205,7 @@ describe('dzButton — Unit Tests', () => {
   })
 
   it('all sizes work with <a> element', () => {
-    const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+    const sizes = ['icon', 'xs', 'sm', 'md', 'lg', 'xl'] as const
     for (const size of sizes) {
       const wrapper = mount(DzButton, {
         props: { size, href: '#test' },
