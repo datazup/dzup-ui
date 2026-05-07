@@ -10,9 +10,12 @@ import type { FilterOperator } from './DzDataGrid.types.ts'
  */
 import { computed, inject } from 'vue'
 import { Filter } from 'lucide-vue-next'
+import type { DzSelectItem } from '../forms/DzSelect.types.ts'
 import DzButton from '../buttons/DzButton.vue'
 import DzCheckbox from '../forms/DzCheckbox.vue'
 import DzIconButton from '../buttons/DzIconButton.vue'
+import DzInput from '../inputs/DzInput.vue'
+import DzSelect from '../forms/DzSelect.vue'
 import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
@@ -25,7 +28,14 @@ const filterPopoverClasses = [
   'p-[var(--dz-spacing-3)] min-w-[200px]',
 ].join(' ')
 
-const filterFieldClasses = 'dz-native-field-sm'
+/** Operator options for number filters */
+const operatorItems: DzSelectItem[] = [
+  { label: 'Equals', value: 'equals' },
+  { label: 'Greater than', value: 'gt' },
+  { label: 'Less than', value: 'lt' },
+  { label: 'Greater or equal', value: 'gte' },
+  { label: 'Less or equal', value: 'lte' },
+]
 
 const ctx = inject(DZ_DATA_GRID_KEY, null)
 if (!ctx) {
@@ -136,73 +146,50 @@ export default {
         >
           <!-- Text filter -->
           <template v-if="(col.filterType ?? 'text') === 'text'">
-            <input
-              type="text"
-              :class="filterFieldClasses"
-              :value="getFilterValue(col.field)"
+            <DzInput
+              :model-value="String(getFilterValue(col.field))"
+              size="sm"
               placeholder="Filter..."
               :aria-label="`Filter ${col.header} by text`"
               data-testid="filter-text-input"
-              @input="handleFilterInput(col.field, ($event.target as HTMLInputElement).value, col)"
+              @update:model-value="handleFilterInput(col.field, $event, col)"
               @keydown="handleFilterKeyDown"
-            >
+            />
           </template>
 
           <!-- Number filter -->
           <template v-else-if="col.filterType === 'number'">
             <div class="flex flex-col gap-[var(--dz-spacing-2)]">
-              <select
-                :class="filterFieldClasses"
-                :value="getFilterOperator(col.field)"
+              <DzSelect
+                :model-value="getFilterOperator(col.field)"
+                :items="operatorItems"
+                size="sm"
                 :aria-label="`Filter operator for ${col.header}`"
                 data-testid="filter-operator-select"
-                @change="handleOperatorChange(col.field, ($event.target as HTMLSelectElement).value as FilterOperator)"
-              >
-                <option value="equals">
-                  Equals
-                </option>
-                <option value="gt">
-                  Greater than
-                </option>
-                <option value="lt">
-                  Less than
-                </option>
-                <option value="gte">
-                  Greater or equal
-                </option>
-                <option value="lte">
-                  Less or equal
-                </option>
-              </select>
-              <input
-                type="number"
-                :class="filterFieldClasses"
-                :value="getFilterValue(col.field)"
+                @update:model-value="handleOperatorChange(col.field, $event as FilterOperator)"
+              />
+              <DzInput
+                :model-value="String(getFilterValue(col.field))"
+                size="sm"
                 placeholder="Value..."
                 :aria-label="`Filter ${col.header} by number`"
                 data-testid="filter-number-input"
-                @input="handleFilterInput(col.field, ($event.target as HTMLInputElement).value, col)"
+                @update:model-value="handleFilterInput(col.field, $event, col)"
                 @keydown="handleFilterKeyDown"
-              >
+              />
             </div>
           </template>
 
           <!-- Select filter -->
           <template v-else-if="col.filterType === 'select'">
-            <select
-              :class="filterFieldClasses"
-              :value="getFilterValue(col.field)"
+            <DzSelect
+              :model-value="String(getFilterValue(col.field))"
+              :items="[{ label: 'All', value: '' }, ...(col.filterOptions ?? []).map((o: string) => ({ label: o, value: o }))]"
+              size="sm"
               :aria-label="`Filter ${col.header} by selection`"
               data-testid="filter-select-input"
-              @change="handleFilterInput(col.field, ($event.target as HTMLSelectElement).value, col)"
-            >
-              <option value="">
-                All
-              </option>
-              <option v-for="opt in (col.filterOptions ?? [])" :key="opt" :value="opt">
-                {{ opt }}
-              </option>
-            </select>
+              @update:model-value="handleFilterInput(col.field, $event, col)"
+            />
           </template>
 
           <!-- Clear filter button -->
