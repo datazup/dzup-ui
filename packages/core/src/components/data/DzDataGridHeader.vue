@@ -113,7 +113,7 @@ export default {
           <DzIconButton
             v-if="isColumnFilterable(col)"
             :icon="Filter"
-            :aria-label="`Filter ${col.header}`"
+            :ariaLabel="`Filter ${col.header}`"
             variant="ghost"
             size="xs"
             :tone="hasActiveFilter(col.field) ? 'primary' : 'neutral'"

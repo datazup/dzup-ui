@@ -67,7 +67,8 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 
-function handleValueChange(value: string | string[]): void {
+function handleValueChange(value: string | string[] | undefined): void {
+  if (value === undefined) return
   model.value = value
   emit('change', value)
 }

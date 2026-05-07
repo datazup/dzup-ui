@@ -15,8 +15,31 @@ export const copyButtonVariants = tv({
   ].join(' '),
   variants: {
     size: {
-      sm: 'h-7 w-7 text-xs',
-      md: 'h-8 w-8 text-sm',
+      xs: [
+        'h-[var(--dz-button-xs-height)]',
+        'w-[var(--dz-button-xs-height)]',
+        'text-[length:var(--dz-button-xs-font-size)]',
+      ].join(' '),
+      sm: [
+        'h-[var(--dz-button-sm-height)]',
+        'w-[var(--dz-button-sm-height)]',
+        'text-[length:var(--dz-button-sm-font-size)]',
+      ].join(' '),
+      md: [
+        'h-[var(--dz-button-md-height)]',
+        'w-[var(--dz-button-md-height)]',
+        'text-[length:var(--dz-button-md-font-size)]',
+      ].join(' '),
+      lg: [
+        'h-[var(--dz-button-lg-height)]',
+        'w-[var(--dz-button-lg-height)]',
+        'text-[length:var(--dz-button-lg-font-size)]',
+      ].join(' '),
+      xl: [
+        'h-[var(--dz-button-xl-height)]',
+        'w-[var(--dz-button-xl-height)]',
+        'text-[length:var(--dz-button-xl-font-size)]',
+      ].join(' '),
     },
     copied: {
       true: 'text-green-500',

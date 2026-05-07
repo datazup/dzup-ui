@@ -172,3 +172,7 @@ export { type TransferVariantProps, transferVariants } from './DzTransfer.varian
 
 // ── DzTransfer ──
 export { default as DzTransfer } from './DzTransfer.vue'
+
+// Types — DzFieldArray
+export type { DzFieldArrayEmits, DzFieldArrayProps, DzFieldArraySlotProps, DzFieldArraySlots } from './DzFieldArray.types.ts'
+export { default as DzFieldArray } from './DzFieldArray.vue'

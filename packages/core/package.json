@@ -20,7 +20,51 @@
       "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js"
     },
-    "./styles": "./dist/index.css"
+    "./styles": "./dist/index.css",
+    "./buttons": {
+      "types": "./dist/components/buttons/index.d.ts",
+      "import": "./dist/components/buttons/index.js"
+    },
+    "./cards": {
+      "types": "./dist/components/cards/index.d.ts",
+      "import": "./dist/components/cards/index.js"
+    },
+    "./data": {
+      "types": "./dist/components/data/index.d.ts",
+      "import": "./dist/components/data/index.js"
+    },
+    "./feedback": {
+      "types": "./dist/components/feedback/index.d.ts",
+      "import": "./dist/components/feedback/index.js"
+    },
+    "./forms": {
+      "types": "./dist/components/forms/index.d.ts",
+      "import": "./dist/components/forms/index.js"
+    },
+    "./inputs": {
+      "types": "./dist/components/inputs/index.d.ts",
+      "import": "./dist/components/inputs/index.js"
+    },
+    "./layout": {
+      "types": "./dist/components/layout/index.d.ts",
+      "import": "./dist/components/layout/index.js"
+    },
+    "./media": {
+      "types": "./dist/components/media/index.d.ts",
+      "import": "./dist/components/media/index.js"
+    },
+    "./navigation": {
+      "types": "./dist/components/navigation/index.d.ts",
+      "import": "./dist/components/navigation/index.js"
+    },
+    "./overlays": {
+      "types": "./dist/components/overlays/index.d.ts",
+      "import": "./dist/components/overlays/index.js"
+    },
+    "./typography": {
+      "types": "./dist/components/typography/index.d.ts",
+      "import": "./dist/components/typography/index.js"
+    }
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

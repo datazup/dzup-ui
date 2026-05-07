@@ -88,7 +88,7 @@ provide(DZ_SIDEBAR_KEY, context)
 
 const styles = computed(() =>
   sidebarVariants({
-    position: isMobile.value ? 'static' : props.position,
+    position: isMobile.value ? 'fixed' : props.position,
     collapsed: isMobile.value ? false : collapsedModel.value,
     mobile: isMobile.value && mobileOpenModel.value,
     mobileHidden: isMobile.value && !mobileOpenModel.value,

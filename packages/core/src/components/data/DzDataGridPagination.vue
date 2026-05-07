@@ -63,7 +63,7 @@ export default {
 
       <DzIconButton
         :icon="ChevronLeft"
-        aria-label="Previous page"
+        ariaLabel="Previous page"
         variant="ghost"
         size="sm"
         tone="neutral"
@@ -77,7 +77,7 @@ export default {
 
       <DzIconButton
         :icon="ChevronRight"
-        aria-label="Next page"
+        ariaLabel="Next page"
         variant="ghost"
         size="sm"
         tone="neutral"

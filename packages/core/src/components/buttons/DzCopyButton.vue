@@ -13,7 +13,7 @@ import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
  * <DzCopyButton value="secret" label="Copy token" copiedLabel="Copied!" />
  * ```
  */
-import { computed, ref, useAttrs } from 'vue'
+import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { copyButtonVariants } from './DzCopyButton.variants.ts'
 
@@ -94,6 +94,11 @@ async function handleCopy(): Promise<void> {
     }
   }
 }
+
+onBeforeUnmount(() => {
+  if (resetTimer !== undefined)
+    clearTimeout(resetTimer)
+})
 
 /** Textarea-based fallback for environments without Clipboard API */
 function fallbackCopy(text: string): void {

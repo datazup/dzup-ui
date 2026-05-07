@@ -126,3 +126,11 @@ export { default as DzToast } from './DzToast.vue'
 export { default as DzToastProvider } from './DzToastProvider.vue'
 
 export { default as DzToastViewport } from './DzToastViewport.vue'
+
+// Types — DzErrorBoundary
+export type { DzErrorBoundaryProps, DzErrorBoundarySlots } from './DzErrorBoundary.types.ts'
+export { default as DzErrorBoundary } from './DzErrorBoundary.vue'
+
+// Types — DzAsyncBoundary
+export type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots } from './DzAsyncBoundary.types.ts'
+export { default as DzAsyncBoundary } from './DzAsyncBoundary.vue'
