@@ -12,7 +12,7 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
  * <DzSlider v-model="progress" tone="success" size="lg" />
  * ```
  */
-import { computed, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { sliderVariants } from './DzSlider.variants.ts'
@@ -44,6 +44,9 @@ defineSlots<DzSliderSlots>()
 const attrs = useAttrs()
 const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/** Template ref for the slider thumb — exposed for programmatic focus. */
+const thumbRef = ref<{ $el?: HTMLElement } | HTMLElement | null>(null)
 
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
@@ -82,6 +85,16 @@ function handleBlur(event: FocusEvent): void {
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+/** Expose programmatic focus for parity with DzInput. */
+defineExpose({
+  focus: (): void => {
+    const ref = thumbRef.value
+    if (!ref) return
+    const el = (ref as { $el?: HTMLElement }).$el ?? (ref as HTMLElement)
+    el?.focus?.()
+  },
+})
 </script>
 
 <script lang="ts">
@@ -114,6 +127,7 @@ export default {
       <SliderRange :class="styles.range()" />
     </SliderTrack>
     <SliderThumb
+      ref="thumbRef"
       :class="styles.thumb()"
       :aria-label="ariaLabel ?? 'Slider thumb'"
       :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
