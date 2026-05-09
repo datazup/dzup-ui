@@ -11,6 +11,11 @@ storybook-static/
 playwright-report/
 test-results/
 
+# source-adjacent TypeScript emit
+packages/core/src/providers/*.js
+packages/core/src/providers/*.js.map
+packages/core/src/providers/*.d.ts
+
 # caches
 *.tsbuildinfo
 
