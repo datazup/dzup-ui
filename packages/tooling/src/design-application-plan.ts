@@ -17,6 +17,8 @@ export interface DesignApplicationPlanOptions {
   tokensPath?: string
   mappingPath?: string
   outputPath?: string
+  packagePaths?: string[]
+  includePackageGlobs?: string[]
 }
 
 export interface PackageUsage {
@@ -75,9 +77,33 @@ function rel(rootDir: string, path: string): string {
   return relative(rootDir, path).replaceAll('\\', '/')
 }
 
+function firstMatchLine(source: string, pattern: RegExp): number {
+  const match = pattern.exec(source)
+  if (!match || match.index < 0)
+    return 1
+
+  return source.slice(0, match.index).split('\n').length
+}
+
+function withLine(path: string, source: string, pattern: RegExp): string {
+  return `${path}:${firstMatchLine(source, pattern)}`
+}
+
+function isIgnoredDirectory(entry: string): boolean {
+  return entry.startsWith('.') || [
+    'node_modules',
+    'dist',
+    'build',
+    'coverage',
+    '.nuxt',
+    '.output',
+    '.vite',
+    'out',
+  ].includes(entry)
+}
+
 function listFiles(rootDir: string, options: { extensions?: Set<string>, maxFiles?: number } = {}): string[] {
   const maxFiles = options.maxFiles ?? 5000
-  const ignored = new Set(['.git', 'node_modules', 'dist', 'build', 'coverage', '.nuxt', '.output', '.vite'])
   const files: string[] = []
 
   function visit(dir: string): void {
@@ -85,12 +111,12 @@ function listFiles(rootDir: string, options: { extensions?: Set<string>, maxFile
       return
 
     for (const entry of readdirSync(dir)) {
-      if (ignored.has(entry))
-        continue
-
       const fullPath = join(dir, entry)
       const stats = statSync(fullPath)
       if (stats.isDirectory()) {
+        if (isIgnoredDirectory(entry))
+          continue
+
         visit(fullPath)
         continue
       }
@@ -114,6 +140,44 @@ function findPackageJsonFiles(appDir: string): string[] {
     .filter(file => basename(file) === 'package.json')
 }
 
+function normalizePackageSelector(appDir: string, selector: string): string {
+  const resolved = resolve(appDir, selector)
+  return basename(resolved) === 'package.json' ? resolved : join(resolved, 'package.json')
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&')
+}
+
+function globToRegExp(glob: string): RegExp {
+  const normalized = glob.replaceAll('\\', '/')
+  const packageGlob = normalized.endsWith('package.json') ? normalized : `${normalized.replace(/\/$/, '')}/package.json`
+  const source = escapeRegExp(packageGlob)
+    .replaceAll('\\*\\*', '.*')
+    .replaceAll('\\*', '[^/]*')
+
+  return new RegExp(`^${source}$`)
+}
+
+function selectPackageJsonFiles(appDir: string, options: DesignApplicationPlanOptions): string[] {
+  const packagePaths = findPackageJsonFiles(appDir)
+  const requestedPackages = new Set((options.packagePaths ?? []).map(packagePath => normalizePackageSelector(appDir, packagePath)))
+  const requestedGlobs = (options.includePackageGlobs ?? []).map(globToRegExp)
+
+  if (requestedPackages.size === 0 && requestedGlobs.length === 0)
+    return packagePaths
+
+  const selected = packagePaths.filter((packagePath) => {
+    const relativePackagePath = rel(appDir, packagePath)
+    return requestedPackages.has(packagePath) || requestedGlobs.some(glob => glob.test(relativePackagePath))
+  })
+
+  if (selected.length === 0)
+    throw new Error('No package.json files matched --package or --include-package.')
+
+  return selected
+}
+
 function readJsonObject(path: string): Record<string, unknown> {
   return JSON.parse(readText(path)) as Record<string, unknown>
 }
@@ -131,8 +195,8 @@ function getDependencyNames(pkg: Record<string, unknown>): Set<string> {
   return names
 }
 
-function detectPackageUsage(appDir: string): PackageUsage {
-  const packagePaths = findPackageJsonFiles(appDir)
+function detectPackageUsage(appDir: string, options: DesignApplicationPlanOptions): PackageUsage {
+  const packagePaths = selectPackageJsonFiles(appDir, options)
   if (packagePaths.length === 0) {
     return {
       packagePath: null,
@@ -245,26 +309,37 @@ function inspectControls(appDir: string, sourceFiles: string[]): ControlInventor
   for (const file of vueFiles) {
     const source = readText(file)
     const relativePath = rel(appDir, file)
-    if (/<button(?:\s|>)/.test(source))
-      rawButtons.push(relativePath)
-    if (/<input(?:\s|>)/.test(source))
-      rawInputs.push(relativePath)
-    if (/<textarea(?:\s|>)/.test(source))
-      rawTextareas.push(relativePath)
-    if (/<select(?:\s|>)/.test(source))
-      rawSelects.push(relativePath)
-    if (/<table(?:\s|>)/.test(source))
-      rawTables.push(relativePath)
-    if (/class=["'][^"']*(?:card|panel|surface|rounded[^"']*shadow|shadow[^"']*rounded)/i.test(source))
-      cardLikeSurfaces.push(relativePath)
-    if (/class=["'][^"']*(?:badge|pill|chip|tag|status)/i.test(source))
-      statusIndicators.push(relativePath)
-    if (/<dialog(?:\s|>)|role=["']dialog["']|class=["'][^"']*(?:modal|dialog|drawer|popover|sheet)/i.test(source))
-      overlaySurfaces.push(relativePath)
-    if (/role=["']tab(?:list|panel)?["']|class=["'][^"']*(?:\btabs?\b|tab-list|tab-trigger|tab-panel)/i.test(source))
-      tabPatterns.push(relativePath)
-    if (/class=["'][^"']*(?:focus-visible:|focus:ring|ring-|border[^"']*rounded|rounded[^"']*border)/i.test(source))
-      tokenUtilityPatterns.push(relativePath)
+    const buttonPattern = /<button(?:\s|>)/
+    const inputPattern = /<input(?:\s|>)/
+    const textareaPattern = /<textarea(?:\s|>)/
+    const selectPattern = /<select(?:\s|>)/
+    const tablePattern = /<table(?:\s|>)/
+    const cardPattern = /class=["'][^"']*(?:card|panel|surface|rounded[^"']*shadow|shadow[^"']*rounded)/i
+    const statusPattern = /class=["'][^"']*(?:badge|pill|chip|tag|status)/i
+    const overlayPattern = /<dialog(?:\s|>)|role=["']dialog["']|class=["'][^"']*(?:modal|dialog|drawer|popover|sheet)/i
+    const tabPattern = /role=["']tab(?:list|panel)?["']|class=["'][^"']*(?:\btabs?\b|tab-list|tab-trigger|tab-panel)/i
+    const tokenUtilityPattern = /class=["'][^"']*(?:focus-visible:|focus:ring|ring-|border[^"']*rounded|rounded[^"']*border)/i
+
+    if (buttonPattern.test(source))
+      rawButtons.push(withLine(relativePath, source, buttonPattern))
+    if (inputPattern.test(source))
+      rawInputs.push(withLine(relativePath, source, inputPattern))
+    if (textareaPattern.test(source))
+      rawTextareas.push(withLine(relativePath, source, textareaPattern))
+    if (selectPattern.test(source))
+      rawSelects.push(withLine(relativePath, source, selectPattern))
+    if (tablePattern.test(source))
+      rawTables.push(withLine(relativePath, source, tablePattern))
+    if (cardPattern.test(source))
+      cardLikeSurfaces.push(withLine(relativePath, source, cardPattern))
+    if (statusPattern.test(source))
+      statusIndicators.push(withLine(relativePath, source, statusPattern))
+    if (overlayPattern.test(source))
+      overlaySurfaces.push(withLine(relativePath, source, overlayPattern))
+    if (tabPattern.test(source))
+      tabPatterns.push(withLine(relativePath, source, tabPattern))
+    if (tokenUtilityPattern.test(source))
+      tokenUtilityPatterns.push(withLine(relativePath, source, tokenUtilityPattern))
     if (source.includes('@dzup-ui/core') || /<Dz[A-Z][A-Za-z0-9]*/.test(source))
       dzupUiFiles.push(relativePath)
   }
@@ -459,7 +534,7 @@ export function generateDesignApplicationPlan(options: DesignApplicationPlanOpti
   if (tokensPath && !existsSync(tokensPath))
     throw new Error(`Structured tokens file does not exist: ${tokensPath}`)
 
-  const usage = detectPackageUsage(appDir)
+  const usage = detectPackageUsage(appDir, options)
   const sourceFiles = uniq(getScanRoots(appDir, usage).flatMap(scanRoot => listFiles(scanRoot, {
     extensions: new Set(['.vue', '.ts', '.js', '.css', '.scss', '.json', '.md']),
   })))
@@ -530,6 +605,18 @@ export function parseDesignApplicationPlanArgs(argv: string[]): CliOptions {
       index += 1
       continue
     }
+    if (arg === '--package') {
+      options.packagePaths ??= []
+      options.packagePaths.push(readOptionValue(argv, index, arg))
+      index += 1
+      continue
+    }
+    if (arg === '--include-package') {
+      options.includePackageGlobs ??= []
+      options.includePackageGlobs.push(readOptionValue(argv, index, arg))
+      index += 1
+      continue
+    }
 
     throw new Error(`Unknown argument: ${arg}`)
   }
@@ -539,11 +626,12 @@ export function parseDesignApplicationPlanArgs(argv: string[]): CliOptions {
 
 function printUsage(): void {
   console.log(`Usage:
-  yarn design:application-plan --app <app-path> --design <design-md> [--tokens <tokens-json>] [--mapping <mapping-md>] [--out <plan-md>]
+  yarn design:application-plan --app <app-path> --design <design-md> [--tokens <tokens-json>] [--mapping <mapping-md>] [--out <plan-md>] [--package <package-dir-or-json>] [--include-package <glob>]
 
 Examples:
   yarn design:application-plan --app ../apps/my-app --design ../apps/my-app/DESIGN.md
   yarn design:application-plan --app ../apps/my-app --design ../apps/my-app/DESIGN.md --tokens ../apps/my-app/DESIGN.tokens.generated.json --out ../apps/my-app/docs/DESIGN_TO_DZUP_UI_PLAN.md
+  yarn design:application-plan --app ../apps/my-app --design ../apps/my-app/DESIGN.md --package apps/web
 `)
 }
 
