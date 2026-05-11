@@ -1,9 +1,9 @@
-import { mkdtempSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { mkdir, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { generateDesignApplicationPlan } from './design-application-plan'
+import { generateDesignApplicationPlan, parseDesignApplicationPlanArgs } from './design-application-plan'
 
 const tempDirs: string[] = []
 
@@ -12,6 +12,7 @@ async function createFixture(): Promise<{
   designPath: string
   mappingPath: string
   outputPath: string
+  tokensPath: string
 }> {
   const root = mkdtempSync(join(tmpdir(), 'dzup-ui-plan-'))
   tempDirs.push(root)
@@ -81,12 +82,15 @@ async function createFixture(): Promise<{
 
   const mappingPath = join(root, 'MAPPING_TOKENS.md')
   writeFileSync(mappingPath, '# Mapping DESIGN.md Tokens To dzup-ui\n')
+  const tokensPath = join(appDir, 'DESIGN.tokens.generated.json')
+  writeFileSync(tokensPath, JSON.stringify({ colors: { primary: '#2563eb' } }, null, 2))
 
   return {
     appDir,
     designPath,
     mappingPath,
     outputPath: join(appDir, 'docs', 'DESIGN_TO_DZUP_UI_PLAN.md'),
+    tokensPath,
   }
 }
 
@@ -140,5 +144,58 @@ describe('design-application-plan', () => {
     expect(result.usage.usesTokens).toBe(false)
     expect(result.markdown).toContain('Uses `@dzup-ui/core`: no')
     expect(result.markdown).toContain('Uses `@dzup-ui/tokens`: no')
+  })
+
+  it('uses the default output path and records optional structured tokens', async () => {
+    const fixture = await createFixture()
+
+    const result = generateDesignApplicationPlan({
+      appPath: fixture.appDir,
+      designPath: fixture.designPath,
+      mappingPath: fixture.mappingPath,
+      tokensPath: fixture.tokensPath,
+    })
+
+    expect(result.outputPath).toBe(join(fixture.appDir, 'DESIGN_TO_DZUP_UI_PLAN.md'))
+    expect(existsSync(result.outputPath)).toBe(true)
+    expect(result.markdown).toContain(`Structured tokens: \`${fixture.tokensPath}\``)
+  })
+})
+
+describe('design-application-plan CLI args', () => {
+  it('parses all supported options', () => {
+    expect(parseDesignApplicationPlanArgs([
+      '--app',
+      'apps/demo',
+      '--design',
+      'apps/demo/DESIGN.md',
+      '--tokens',
+      'apps/demo/DESIGN.tokens.generated.json',
+      '--mapping',
+      'MAPPING_TOKENS.md',
+      '--out',
+      'apps/demo/docs/DESIGN_TO_DZUP_UI_PLAN.md',
+    ])).toEqual({
+      help: false,
+      appPath: 'apps/demo',
+      designPath: 'apps/demo/DESIGN.md',
+      tokensPath: 'apps/demo/DESIGN.tokens.generated.json',
+      mappingPath: 'MAPPING_TOKENS.md',
+      outputPath: 'apps/demo/docs/DESIGN_TO_DZUP_UI_PLAN.md',
+    })
+  })
+
+  it('parses help aliases without requiring app inputs', () => {
+    expect(parseDesignApplicationPlanArgs(['--help'])).toEqual({ help: true })
+    expect(parseDesignApplicationPlanArgs(['-h'])).toEqual({ help: true })
+  })
+
+  it('rejects unknown arguments', () => {
+    expect(() => parseDesignApplicationPlanArgs(['--bad'])).toThrow('Unknown argument: --bad')
+  })
+
+  it('rejects missing option values before another flag is consumed', () => {
+    expect(() => parseDesignApplicationPlanArgs(['--app', '--design', 'DESIGN.md'])).toThrow('Missing value for --app')
+    expect(() => parseDesignApplicationPlanArgs(['--out'])).toThrow('Missing value for --out')
   })
 })
