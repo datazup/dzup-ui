@@ -115,6 +115,7 @@ async function createWorkspaceFixture(): Promise<{
   const apiDir = join(rootDir, 'apps', 'api')
   await mkdir(join(webDir, 'src'), { recursive: true })
   await mkdir(join(apiDir, 'src'), { recursive: true })
+  await mkdir(join(rootDir, '.claude', 'worktrees', 'agent-copy', 'apps', 'web', 'src'), { recursive: true })
 
   writeFileSync(
     join(rootDir, 'package.json'),
@@ -148,6 +149,11 @@ async function createWorkspaceFixture(): Promise<{
   writeFileSync(join(webDir, 'src', 'main.ts'), 'import "@dzup-ui/core/styles"\nimport "@dzup-ui/tokens/css"\n')
   writeFileSync(join(webDir, 'src', 'Panel.vue'), '<template><button type="button">Save</button></template>\n')
   writeFileSync(join(apiDir, 'src', 'preview-renderer.ts'), 'export const html = "<html data-theme=\\"light\\"></html>"\n')
+  writeFileSync(
+    join(rootDir, '.claude', 'worktrees', 'agent-copy', 'apps', 'web', 'package.json'),
+    JSON.stringify({ name: '@workspace-app/worktree-web', dependencies: { '@dzup-ui/core': '*', '@dzup-ui/tokens': '*' } }, null, 2),
+  )
+  writeFileSync(join(rootDir, '.claude', 'worktrees', 'agent-copy', 'apps', 'web', 'src', 'Panel.vue'), '<template><button type="button">Worktree</button></template>\n')
 
   const designPath = join(rootDir, 'DESIGN.md')
   writeFileSync(designPath, '# Workspace Design\n')
@@ -187,13 +193,13 @@ describe('design-application-plan', () => {
     expect(result.styles.coreStylesImports).toEqual(['src/main.ts'])
     expect(result.styles.tokenCssImports).toEqual(['src/main.ts'])
     expect(result.styles.candidateOverrideFiles).toEqual(['src/styles/theme.css'])
-    expect(result.controls.rawButtons).toEqual(['src/components/DemoPanel.vue'])
-    expect(result.controls.rawInputs).toEqual(['src/components/DemoPanel.vue'])
-    expect(result.controls.cardLikeSurfaces).toEqual(['src/components/DemoPanel.vue'])
-    expect(result.controls.statusIndicators).toEqual(['src/components/DemoPanel.vue'])
-    expect(result.controls.overlaySurfaces).toEqual(['src/components/DemoPanel.vue'])
-    expect(result.controls.tabPatterns).toEqual(['src/components/DemoPanel.vue'])
-    expect(result.controls.tokenUtilityPatterns).toEqual(['src/components/DemoPanel.vue'])
+    expect(result.controls.rawButtons).toEqual(['src/components/DemoPanel.vue:3'])
+    expect(result.controls.rawInputs).toEqual(['src/components/DemoPanel.vue:4'])
+    expect(result.controls.cardLikeSurfaces).toEqual(['src/components/DemoPanel.vue:5'])
+    expect(result.controls.statusIndicators).toEqual(['src/components/DemoPanel.vue:6'])
+    expect(result.controls.overlaySurfaces).toEqual(['src/components/DemoPanel.vue:8'])
+    expect(result.controls.tabPatterns).toEqual(['src/components/DemoPanel.vue:9'])
+    expect(result.controls.tokenUtilityPatterns).toEqual(['src/components/DemoPanel.vue:5'])
     expect(result.controls.dzupUiFiles).toEqual(['src/components/DemoPanel.vue'])
     expect(markdown).toContain('# DESIGN.md to dzup-ui Application Plan')
     expect(markdown).toContain('## Token Overrides')
@@ -259,9 +265,41 @@ describe('design-application-plan', () => {
     expect(result.styles.coreStylesImports).toEqual(['apps/web/src/main.ts'])
     expect(result.styles.tokenCssImports).toEqual(['apps/web/src/main.ts'])
     expect(result.styles.dataThemeFiles).toEqual([])
-    expect(result.controls.rawButtons).toEqual(['apps/web/src/Panel.vue'])
+    expect(result.controls.rawButtons).toEqual(['apps/web/src/Panel.vue:1'])
     expect(result.markdown).toContain('- Uses `@dzup-ui/core`: yes')
     expect(result.markdown).toContain('Package files scanned: `apps/api/package.json`, `apps/web/package.json`, `package.json`')
+    expect(result.markdown).not.toContain('.claude')
+  })
+
+  it('can focus planning on an explicit package root', async () => {
+    const fixture = await createWorkspaceFixture()
+
+    const result = generateDesignApplicationPlan({
+      appPath: fixture.rootDir,
+      designPath: fixture.designPath,
+      mappingPath: fixture.mappingPath,
+      outputPath: fixture.outputPath,
+      packagePaths: ['apps/web'],
+    })
+
+    expect(result.usage.packagePaths).toEqual(['apps/web/package.json'])
+    expect(result.styles.coreStylesImports).toEqual(['apps/web/src/main.ts'])
+    expect(result.controls.rawButtons).toEqual(['apps/web/src/Panel.vue:1'])
+  })
+
+  it('can focus planning with an include-package glob', async () => {
+    const fixture = await createWorkspaceFixture()
+
+    const result = generateDesignApplicationPlan({
+      appPath: fixture.rootDir,
+      designPath: fixture.designPath,
+      mappingPath: fixture.mappingPath,
+      outputPath: fixture.outputPath,
+      includePackageGlobs: ['apps/web'],
+    })
+
+    expect(result.usage.packagePaths).toEqual(['apps/web/package.json'])
+    expect(result.controls.rawButtons).toEqual(['apps/web/src/Panel.vue:1'])
   })
 })
 
@@ -278,6 +316,10 @@ describe('design-application-plan CLI args', () => {
       'MAPPING_TOKENS.md',
       '--out',
       'apps/demo/docs/DESIGN_TO_DZUP_UI_PLAN.md',
+      '--package',
+      'apps/web',
+      '--include-package',
+      'apps/*',
     ])).toEqual({
       help: false,
       appPath: 'apps/demo',
@@ -285,6 +327,8 @@ describe('design-application-plan CLI args', () => {
       tokensPath: 'apps/demo/DESIGN.tokens.generated.json',
       mappingPath: 'MAPPING_TOKENS.md',
       outputPath: 'apps/demo/docs/DESIGN_TO_DZUP_UI_PLAN.md',
+      packagePaths: ['apps/web'],
+      includePackageGlobs: ['apps/*'],
     })
   })
 
@@ -300,5 +344,6 @@ describe('design-application-plan CLI args', () => {
   it('rejects missing option values before another flag is consumed', () => {
     expect(() => parseDesignApplicationPlanArgs(['--app', '--design', 'DESIGN.md'])).toThrow('Missing value for --app')
     expect(() => parseDesignApplicationPlanArgs(['--out'])).toThrow('Missing value for --out')
+    expect(() => parseDesignApplicationPlanArgs(['--package'])).toThrow('Missing value for --package')
   })
 })
