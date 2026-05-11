@@ -411,44 +411,51 @@ export function generateDesignApplicationPlan(options: DesignApplicationPlanOpti
   }
 }
 
-function parseArgs(argv: string[]): CliOptions {
+function readOptionValue(argv: string[], index: number, option: string): string {
+  const value = argv[index + 1]
+  if (!value || value.startsWith('-'))
+    throw new Error(`Missing value for ${option}`)
+
+  return value
+}
+
+export function parseDesignApplicationPlanArgs(argv: string[]): CliOptions {
   const options: CliOptions = { help: false }
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index]
-    const next = argv[index + 1]
 
     if (arg === '--help' || arg === '-h') {
       options.help = true
       continue
     }
-    if (arg === '--app' && next) {
-      options.appPath = next
+    if (arg === '--app') {
+      options.appPath = readOptionValue(argv, index, arg)
       index += 1
       continue
     }
-    if (arg === '--design' && next) {
-      options.designPath = next
+    if (arg === '--design') {
+      options.designPath = readOptionValue(argv, index, arg)
       index += 1
       continue
     }
-    if (arg === '--tokens' && next) {
-      options.tokensPath = next
+    if (arg === '--tokens') {
+      options.tokensPath = readOptionValue(argv, index, arg)
       index += 1
       continue
     }
-    if (arg === '--mapping' && next) {
-      options.mappingPath = next
+    if (arg === '--mapping') {
+      options.mappingPath = readOptionValue(argv, index, arg)
       index += 1
       continue
     }
-    if (arg === '--out' && next) {
-      options.outputPath = next
+    if (arg === '--out') {
+      options.outputPath = readOptionValue(argv, index, arg)
       index += 1
       continue
     }
 
-    throw new Error(`Unknown or incomplete argument: ${arg}`)
+    throw new Error(`Unknown argument: ${arg}`)
   }
 
   return options
@@ -466,7 +473,7 @@ Examples:
 
 function main(): void {
   try {
-    const options = parseArgs(process.argv.slice(2))
+    const options = parseDesignApplicationPlanArgs(process.argv.slice(2))
     if (options.help) {
       printUsage()
       return
