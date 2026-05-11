@@ -652,6 +652,8 @@ function main(): void {
       tokensPath: options.tokensPath,
       mappingPath: options.mappingPath,
       outputPath: options.outputPath,
+      packagePaths: options.packagePaths,
+      includePackageGlobs: options.includePackageGlobs,
     })
 
     console.log(`Wrote ${result.outputPath}`)
