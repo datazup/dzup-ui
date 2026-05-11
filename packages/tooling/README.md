@@ -15,6 +15,7 @@ Internal build tooling, validators, and quality-gate scripts for the dzup-ui mon
 | `validate:dts` | Validates that `.d.ts` files are generated and exported correctly |
 | `validate:peers` | Verifies peer dependency declarations across all packages |
 | `generate:exports` | Regenerates `src/index.ts` barrel from `public-api.manifest.json` |
+| `design:application-plan` | Generates a read-only `DESIGN_TO_DZUP_UI_PLAN.md` for an app that should apply `DESIGN.md` through dzup-ui overrides/components |
 | `validate:tree-shake` | Checks that tree-shaking works for the main entry point |
 
 ## Usage
@@ -24,6 +25,7 @@ Run from the monorepo root via:
 ```bash
 yarn workspace @dzup-ui/tooling validate:boundaries
 yarn workspace @dzup-ui/tooling validate:tokens
+yarn workspace @dzup-ui/tooling design:application-plan --app ../apps/my-app --design ../apps/my-app/DESIGN.md
 # etc.
 ```
 
