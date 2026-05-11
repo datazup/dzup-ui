@@ -38,6 +38,7 @@
     "validate:licenses": "tsx packages/tooling/src/license-audit.ts",
     "validate:all": "yarn typecheck && yarn lint && yarn validate:boundaries && yarn validate:interaction-contract && yarn validate:tokens && yarn validate:exports && yarn validate:dts && yarn validate:changelog && yarn validate:peers && yarn validate:licenses",
     "validate:tree-shake": "tsx packages/tooling/src/tree-shake-check.ts",
+    "design:application-plan": "tsx packages/tooling/src/design-application-plan.ts",
     "report:component-sizes": "tsx packages/tooling/src/component-size-report.ts",
     "report:component-sizes:ci": "tsx packages/tooling/src/component-size-report.ts --ci",
     "test:perf": "vitest run packages/tooling/src/perf-bench.spec.ts",
