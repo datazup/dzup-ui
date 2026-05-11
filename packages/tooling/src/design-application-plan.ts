@@ -21,6 +21,7 @@ export interface DesignApplicationPlanOptions {
 
 export interface PackageUsage {
   packagePath: string | null
+  packagePaths: string[]
   usesCore: boolean
   usesTokens: boolean
   packageManager: string | null
@@ -40,6 +41,11 @@ export interface ControlInventory {
   rawTextareas: string[]
   rawSelects: string[]
   rawTables: string[]
+  cardLikeSurfaces: string[]
+  statusIndicators: string[]
+  overlaySurfaces: string[]
+  tabPatterns: string[]
+  tokenUtilityPatterns: string[]
   dzupUiFiles: string[]
 }
 
@@ -103,9 +109,9 @@ function listFiles(rootDir: string, options: { extensions?: Set<string>, maxFile
   return files
 }
 
-function findNearestPackageJson(appDir: string): string | null {
-  const packagePath = join(appDir, 'package.json')
-  return existsSync(packagePath) ? packagePath : null
+function findPackageJsonFiles(appDir: string): string[] {
+  return listFiles(appDir, { extensions: new Set(['.json']) })
+    .filter(file => basename(file) === 'package.json')
 }
 
 function readJsonObject(path: string): Record<string, unknown> {
@@ -126,24 +132,57 @@ function getDependencyNames(pkg: Record<string, unknown>): Set<string> {
 }
 
 function detectPackageUsage(appDir: string): PackageUsage {
-  const packagePath = findNearestPackageJson(appDir)
-  if (!packagePath) {
+  const packagePaths = findPackageJsonFiles(appDir)
+  if (packagePaths.length === 0) {
     return {
       packagePath: null,
+      packagePaths: [],
       usesCore: false,
       usesTokens: false,
       packageManager: null,
     }
   }
 
-  const pkg = readJsonObject(packagePath)
-  const deps = getDependencyNames(pkg)
-  return {
-    packagePath,
-    usesCore: deps.has('@dzup-ui/core'),
-    usesTokens: deps.has('@dzup-ui/tokens'),
-    packageManager: typeof pkg.packageManager === 'string' ? pkg.packageManager : null,
+  let primaryPackagePath: string | null = null
+  let packageManager: string | null = null
+  let usesCore = false
+  let usesTokens = false
+
+  for (const packagePath of packagePaths) {
+    const pkg = readJsonObject(packagePath)
+    const deps = getDependencyNames(pkg)
+    const packageUsesCore = deps.has('@dzup-ui/core')
+    const packageUsesTokens = deps.has('@dzup-ui/tokens')
+
+    usesCore ||= packageUsesCore
+    usesTokens ||= packageUsesTokens
+    if (!packageManager && typeof pkg.packageManager === 'string')
+      packageManager = pkg.packageManager
+    if (!primaryPackagePath && (packageUsesCore || packageUsesTokens))
+      primaryPackagePath = packagePath
   }
+
+  return {
+    packagePath: primaryPackagePath ?? packagePaths[0] ?? null,
+    packagePaths: uniq(packagePaths.map(file => rel(appDir, file))),
+    usesCore,
+    usesTokens,
+    packageManager,
+  }
+}
+
+function getScanRoots(appDir: string, usage: PackageUsage): string[] {
+  if (!usage.usesCore && !usage.usesTokens)
+    return [appDir]
+
+  return usage.packagePaths
+    .map(packagePath => join(appDir, packagePath))
+    .filter((packagePath) => {
+      const pkg = readJsonObject(packagePath)
+      const deps = getDependencyNames(pkg)
+      return deps.has('@dzup-ui/core') || deps.has('@dzup-ui/tokens')
+    })
+    .map(packagePath => dirname(packagePath))
 }
 
 function inspectStyleUsage(appDir: string, sourceFiles: string[]): StyleUsage {
@@ -196,6 +235,11 @@ function inspectControls(appDir: string, sourceFiles: string[]): ControlInventor
   const rawTextareas: string[] = []
   const rawSelects: string[] = []
   const rawTables: string[] = []
+  const cardLikeSurfaces: string[] = []
+  const statusIndicators: string[] = []
+  const overlaySurfaces: string[] = []
+  const tabPatterns: string[] = []
+  const tokenUtilityPatterns: string[] = []
   const dzupUiFiles: string[] = []
 
   for (const file of vueFiles) {
@@ -211,6 +255,16 @@ function inspectControls(appDir: string, sourceFiles: string[]): ControlInventor
       rawSelects.push(relativePath)
     if (/<table(?:\s|>)/.test(source))
       rawTables.push(relativePath)
+    if (/class=["'][^"']*(?:card|panel|surface|rounded[^"']*shadow|shadow[^"']*rounded)/i.test(source))
+      cardLikeSurfaces.push(relativePath)
+    if (/class=["'][^"']*(?:badge|pill|chip|tag|status)/i.test(source))
+      statusIndicators.push(relativePath)
+    if (/<dialog(?:\s|>)|role=["']dialog["']|class=["'][^"']*(?:modal|dialog|drawer|popover|sheet)/i.test(source))
+      overlaySurfaces.push(relativePath)
+    if (/role=["']tab(?:list|panel)?["']|class=["'][^"']*(?:\btabs?\b|tab-list|tab-trigger|tab-panel)/i.test(source))
+      tabPatterns.push(relativePath)
+    if (/class=["'][^"']*(?:focus-visible:|focus:ring|ring-|border[^"']*rounded|rounded[^"']*border)/i.test(source))
+      tokenUtilityPatterns.push(relativePath)
     if (source.includes('@dzup-ui/core') || /<Dz[A-Z][A-Za-z0-9]*/.test(source))
       dzupUiFiles.push(relativePath)
   }
@@ -221,6 +275,11 @@ function inspectControls(appDir: string, sourceFiles: string[]): ControlInventor
     rawTextareas: uniq(rawTextareas),
     rawSelects: uniq(rawSelects),
     rawTables: uniq(rawTables),
+    cardLikeSurfaces: uniq(cardLikeSurfaces),
+    statusIndicators: uniq(statusIndicators),
+    overlaySurfaces: uniq(overlaySurfaces),
+    tabPatterns: uniq(tabPatterns),
+    tokenUtilityPatterns: uniq(tokenUtilityPatterns),
     dzupUiFiles: uniq(dzupUiFiles),
   }
 }
@@ -271,6 +330,16 @@ function formatControlRows(controls: ControlInventory): string {
   return rows.join('\n')
 }
 
+function formatPlanningSignalRows(controls: ControlInventory): string {
+  return [
+    `| Card-like surfaces | ${formatFileList(controls.cardLikeSurfaces)} | Review for \`DzCard\`, layout primitives, or app-owned product panels; do not migrate purely by class name |`,
+    `| Status/badge/chip patterns | ${formatFileList(controls.statusIndicators)} | Review for \`DzBadge\`, \`DzTag\`, \`DzChip\`, or domain-specific status components |`,
+    `| Overlay/dialog/drawer patterns | ${formatFileList(controls.overlaySurfaces)} | Review focus trap, trigger, escape, and outside-click behavior before considering dzup-ui overlays |`,
+    `| Tabs/tablist patterns | ${formatFileList(controls.tabPatterns)} | Review for \`DzTabs\` only when active state, keyboard behavior, and panel mapping can be preserved |`,
+    `| Raw token utility styling | ${formatFileList(controls.tokenUtilityPatterns)} | Review repeated border/radius/focus utility sets for existing dzup-ui components or interaction utilities |`,
+  ].join('\n')
+}
+
 function formatTokenRows(styles: StyleUsage): string {
   const targetFile = styles.candidateOverrideFiles[0] ?? 'Add app-owned stylesheet, for example `src/styles/design-tokens.css`'
   return [
@@ -291,6 +360,7 @@ function renderMarkdown(options: {
 }): string {
   const designExcerpt = readDesignExcerpt(options.designPath)
   const packagePath = options.usage.packagePath ? rel(options.appDir, options.usage.packagePath) : 'not found'
+  const packagePaths = formatFileList(options.usage.packagePaths)
   const packageManager = options.usage.packageManager ?? 'not declared'
   const appName = basename(options.appDir)
 
@@ -302,6 +372,7 @@ function renderMarkdown(options: {
 - Structured tokens: ${options.tokensPath ? `\`${options.tokensPath}\`` : 'not provided'}
 - dzup-ui mapping rules: \`${options.mappingPath}\`
 - App package file: \`${packagePath}\`
+- Package files scanned: ${packagePaths}
 - Package manager: \`${packageManager}\`
 - Routes/components touched: pending implementation pass
 
@@ -327,6 +398,11 @@ ${formatTokenRows(options.styles)}
 | Current pattern | dzup-ui target | File | Risk |
 | --- | --- | --- | --- |
 ${formatControlRows(options.controls)}
+
+## Planning Signals
+| Signal | Files | Follow-up |
+| --- | --- | --- |
+${formatPlanningSignalRows(options.controls)}
 
 ## Implementation Checklist
 - [ ] Confirm the app's local repository instructions before editing.
@@ -383,10 +459,10 @@ export function generateDesignApplicationPlan(options: DesignApplicationPlanOpti
   if (tokensPath && !existsSync(tokensPath))
     throw new Error(`Structured tokens file does not exist: ${tokensPath}`)
 
-  const sourceFiles = listFiles(appDir, {
-    extensions: new Set(['.vue', '.ts', '.js', '.css', '.scss', '.json', '.md']),
-  })
   const usage = detectPackageUsage(appDir)
+  const sourceFiles = uniq(getScanRoots(appDir, usage).flatMap(scanRoot => listFiles(scanRoot, {
+    extensions: new Set(['.vue', '.ts', '.js', '.css', '.scss', '.json', '.md']),
+  })))
   const styles = inspectStyleUsage(appDir, sourceFiles)
   const controls = inspectControls(appDir, sourceFiles)
   const markdown = renderMarkdown({
