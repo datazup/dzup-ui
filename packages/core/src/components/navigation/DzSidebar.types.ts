@@ -40,6 +40,12 @@ export interface DzSidebarProps extends BaseAccessibilityProps {
   width?: string
   /** Collapsed sidebar width (CSS value) */
   collapsedWidth?: string
+  /**
+   * Persist the collapsed state to `localStorage` under this key.
+   * Hydrates from storage on mount (when running in the browser).
+   * No-op during SSR or when storage is unavailable.
+   */
+  storageKey?: string
 }
 
 // ---------------------------------------------------------------------------

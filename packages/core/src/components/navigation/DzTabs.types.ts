@@ -11,6 +11,7 @@
 import type {
   BaseAccessibilityProps,
   CanonicalSize,
+  CanonicalTone,
   TabsVariant,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
@@ -25,6 +26,8 @@ export interface DzTabsContext {
   variant: Ref<TabsVariant>
   /** Component size */
   size: Ref<CanonicalSize>
+  /** Semantic tone applied to the active state */
+  tone: Ref<CanonicalTone>
   /** Layout orientation */
   orientation: Ref<'horizontal' | 'vertical'>
   /** Handler called when a closable tab's close button is clicked */
@@ -46,6 +49,8 @@ export interface DzTabsProps extends BaseAccessibilityProps {
   variant?: TabsVariant
   /** Component size */
   size?: CanonicalSize
+  /** Semantic tone applied to the active tab indicator (ADR-02). Defaults to `primary`. */
+  tone?: CanonicalTone
   /** Tab activation mode: automatic (on focus) or manual (on click) */
   activationMode?: 'automatic' | 'manual'
 }

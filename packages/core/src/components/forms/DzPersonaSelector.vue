@@ -5,6 +5,7 @@ import type {
   DzPersonaSelectorSlots,
   Persona,
 } from './DzPersonaSelector.types.ts'
+import type { DzSelectItem } from './DzSelect.types.ts'
 /**
  * DzPersonaSelector — Searchable persona picker.
  *
@@ -23,7 +24,6 @@ import type {
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
-import type { DzSelectItem } from './DzSelect.types.ts'
 import DzCombobox from './DzCombobox.vue'
 
 const props = withDefaults(defineProps<DzPersonaSelectorProps>(), {

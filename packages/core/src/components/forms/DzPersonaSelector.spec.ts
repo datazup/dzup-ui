@@ -1,10 +1,10 @@
+import type { Persona } from './DzPersonaSelector.types.ts'
 /**
  * DzPersonaSelector — Unit / behavior tests.
  */
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import DzPersonaSelector from './DzPersonaSelector.vue'
-import type { Persona } from './DzPersonaSelector.types.ts'
 
 const personas: Persona[] = [
   { id: 'arch', name: 'Ada Lovelace', role: 'Architect' },

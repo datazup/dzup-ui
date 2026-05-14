@@ -48,9 +48,10 @@ const resolvedDisabled = computed(
 const styles = computed(() => switchVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 
-function handleCheckedChange(checked: boolean): void {
-  model.value = checked
-  emit('change', checked)
+function handleCheckedChange(checked: unknown): void {
+  const isChecked = checked === true
+  model.value = isChecked
+  emit('change', isChecked)
 }
 
 function handleFocus(event: FocusEvent): void {
@@ -78,7 +79,7 @@ export default {
   >
     <SwitchRoot
       :id="resolvedId"
-      :checked="model"
+      :model-value="model"
       :disabled="resolvedDisabled"
       :name="name"
       :required="required || fieldContext?.isRequired.value"
@@ -87,7 +88,7 @@ export default {
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
       :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
       :class="styles.track()"
-      @update:checked="handleCheckedChange"
+      @update:model-value="handleCheckedChange"
       @focus="handleFocus"
       @blur="handleBlur"
     >

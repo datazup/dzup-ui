@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type {
-  DzComboboxItem,
   DzComboboxEmits,
+  DzComboboxItem,
   DzComboboxProps,
   DzComboboxResolvedItem,
   DzComboboxSlots,
@@ -101,7 +101,8 @@ const styles = computed(() =>
 )
 
 function defaultItemValue(item: DzComboboxItem): string {
-  if (props.getItemValue) return props.getItemValue(item)
+  if (props.getItemValue)
+    return props.getItemValue(item)
   if (typeof item === 'object' && item !== null && 'value' in item) {
     return String((item as Record<string, unknown>).value ?? '')
   }
@@ -109,7 +110,8 @@ function defaultItemValue(item: DzComboboxItem): string {
 }
 
 function defaultItemLabel(item: DzComboboxItem): string {
-  if (props.getItemLabel) return props.getItemLabel(item)
+  if (props.getItemLabel)
+    return props.getItemLabel(item)
   if (typeof item === 'object' && item !== null && 'label' in item) {
     return String((item as Record<string, unknown>).label ?? '')
   }
@@ -117,7 +119,8 @@ function defaultItemLabel(item: DzComboboxItem): string {
 }
 
 function defaultItemDisabled(item: DzComboboxItem): boolean {
-  if (props.getItemDisabled) return props.getItemDisabled(item)
+  if (props.getItemDisabled)
+    return props.getItemDisabled(item)
   return typeof item === 'object' && item !== null && 'disabled' in item
     ? Boolean((item as Record<string, unknown>).disabled)
     : false
@@ -149,7 +152,8 @@ const filteredItems = computed(() => {
 })
 
 function getResolvedItemByValue(value: string): DzComboboxResolvedItem | undefined {
-  if (!value) return undefined
+  if (!value)
+    return undefined
   return normalizedItems.value.find(i => i.value === value)
 }
 
@@ -163,7 +167,8 @@ function resolveDisplayValue(value: unknown): string {
   if (props.displayValue) {
     return props.displayValue(item, stringValue)
   }
-  if (!value) return ''
+  if (!value)
+    return ''
   return item?.label ?? stringValue
 }
 
@@ -198,8 +203,10 @@ function handleBlur(event: FocusEvent): void {
 function handleInput(event: Event): void {
   const value = (event.target as HTMLInputElement | null)?.value ?? ''
   filterQuery.value = value
-  if (!props.allowCustomValue) return
-  if (model.value === value) return
+  if (!props.allowCustomValue)
+    return
+  if (model.value === value)
+    return
   model.value = value
   emit('change', value)
 }

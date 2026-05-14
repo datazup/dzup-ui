@@ -20,6 +20,17 @@ export interface UseDataGridPaginationOptions<T> {
   sortedData: ComputedRef<T[]>
   /** Pagination configuration (false = disabled) */
   paginationConfig: Readonly<Ref<boolean | PaginationConfig>>
+  /**
+   * Manual / server-driven mode. When `true`, `displayData` returns the
+   * supplied rows as-is (no slicing) and `totalRows` falls back to `total`
+   * for `totalPages` computation.
+   */
+  manual?: Readonly<Ref<boolean>>
+  /**
+   * Total row count across all pages, used only when `manual=true`. When
+   * `manual=false`, the total is derived from `sortedData.value.length`.
+   */
+  total?: Readonly<Ref<number | undefined>>
   /** Initial page size override */
   initialPageSize?: number
   /** Callback when page changes */
@@ -77,8 +88,17 @@ export function useDataGridPagination<T>(
 
   const pageSize = ref<number>(defaultPageSize)
 
+  const isManual = (): boolean => options.manual?.value ?? false
+
   // ── Total rows ──
-  const totalRows = computed(() => options.sortedData.value.length)
+  // In manual mode the consumer's `total` is authoritative; otherwise derive
+  // from the post-filter / post-sort length so pagination math reflects the
+  // visible dataset.
+  const totalRows = computed(() => {
+    if (isManual())
+      return options.total?.value ?? options.sortedData.value.length
+    return options.sortedData.value.length
+  })
 
   // ── Total pages ──
   const totalPages = computed(() => {
@@ -90,7 +110,7 @@ export function useDataGridPagination<T>(
   // ── Display data (sorted + paginated) ──
   const displayData = computed<T[]>(() => {
     const sorted = options.sortedData.value
-    if (!options.paginationConfig.value)
+    if (isManual() || !options.paginationConfig.value)
       return sorted
 
     const start = (currentPage.value - 1) * pageSize.value

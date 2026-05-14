@@ -36,6 +36,7 @@ const styles = computed(() =>
   tabsVariants({
     variant: tabsContext?.variant.value ?? 'line',
     size: tabsContext?.size.value ?? 'md',
+    tone: tabsContext?.tone.value ?? 'primary',
     orientation: tabsContext?.orientation.value ?? 'horizontal',
   }),
 )

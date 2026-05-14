@@ -8,7 +8,8 @@ import {
   DzSplitButtonMenu,
   DzToggleButton,
 } from '@dzup-ui/core'
-import { h, ref } from 'vue'
+import { Pencil, Settings, Trash2 } from 'lucide-vue-next'
+import { ref } from 'vue'
 
 const clickCount = ref(0)
 const isLoading = ref(false)
@@ -17,36 +18,6 @@ const togglePressed = ref(false)
 const variants = ['solid', 'outline', 'ghost', 'text', 'link'] as const
 const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as const
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
-
-const iconAttrs = {
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round',
-}
-
-const SettingsIcon = () =>
-  h('svg', iconAttrs, [
-    h('circle', { cx: '12', cy: '12', r: '3' }),
-    h('path', { d: 'M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 .6 1.65 1.65 0 0 1-2 0 1.65 1.65 0 0 0-1-.6 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-.6-1 1.65 1.65 0 0 1 0-2 1.65 1.65 0 0 0 .6-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6c.36-.05.7-.24 1-.6a1.65 1.65 0 0 1 2 0c.3.36.64.55 1 .6.65.09 1.29-.14 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06c-.19.53-.42 1.17-.33 1.82.05.36.24.7.6 1 .36.3.55.64.6 1 .09.65-.14 1.29-.33 1.82Z' }),
-  ])
-
-const EditIcon = () =>
-  h('svg', iconAttrs, [
-    h('path', { d: 'M12 20h9' }),
-    h('path', { d: 'M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z' }),
-  ])
-
-const DeleteIcon = () =>
-  h('svg', iconAttrs, [
-    h('path', { d: 'M3 6h18' }),
-    h('path', { d: 'M8 6V4h8v2' }),
-    h('path', { d: 'M19 6l-1 14H6L5 6' }),
-    h('path', { d: 'M10 11v6' }),
-    h('path', { d: 'M14 11v6' }),
-  ])
 
 function simulateLoading(): void {
   isLoading.value = true
@@ -165,9 +136,9 @@ function simulateLoading(): void {
         Icon Button
       </h2>
       <div class="demo-row">
-        <DzIconButton :icon="SettingsIcon" ariaLabel="Settings" variant="outline" />
-        <DzIconButton :icon="EditIcon" ariaLabel="Edit" tone="primary" />
-        <DzIconButton :icon="DeleteIcon" ariaLabel="Delete" tone="danger" variant="ghost" />
+        <DzIconButton :icon="Settings" ariaLabel="Settings" variant="outline" />
+        <DzIconButton :icon="Pencil" ariaLabel="Edit" tone="primary" />
+        <DzIconButton :icon="Trash2" ariaLabel="Delete" tone="danger" variant="ghost" />
       </div>
     </section>
 

@@ -19,7 +19,7 @@ import type { DzSidebarContext, DzSidebarEmits, DzSidebarProps, DzSidebarSlots }
  * </DzSidebar>
  * ```
  */
-import { computed, onMounted, onUnmounted, provide, ref, useAttrs } from 'vue'
+import { computed, onMounted, onUnmounted, provide, ref, useAttrs, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
@@ -30,12 +30,51 @@ const mobileOpenModel = defineModel<boolean>('mobileOpen', { default: false })
 const props = withDefaults(defineProps<DzSidebarProps>(), {
   width: undefined,
   collapsedWidth: undefined,
+  storageKey: undefined,
   id: undefined,
   ariaLabel: 'Sidebar navigation',
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
 })
+
+const canUseStorage = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
+
+function readStored(key: string): boolean | null {
+  if (!canUseStorage) return null
+  try {
+    const raw = window.localStorage.getItem(key)
+    if (raw === '1' || raw === 'true') return true
+    if (raw === '0' || raw === 'false') return false
+    return null
+  }
+  catch {
+    return null
+  }
+}
+
+function writeStored(key: string, value: boolean): void {
+  if (!canUseStorage) return
+  try {
+    window.localStorage.setItem(key, value ? '1' : '0')
+  }
+  catch {
+    // ignore quota / disabled storage
+  }
+}
+
+onMounted(() => {
+  if (!props.storageKey) return
+  const stored = readStored(props.storageKey)
+  if (stored !== null) collapsedModel.value = stored
+})
+
+watch(
+  () => [props.storageKey, collapsedModel.value] as const,
+  ([key, value]) => {
+    if (typeof key === 'string' && key.length > 0) writeStored(key, value)
+  },
+)
 
 defineEmits<DzSidebarEmits>()
 defineSlots<DzSidebarSlots>()

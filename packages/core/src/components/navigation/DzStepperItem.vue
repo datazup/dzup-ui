@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DzStepperItemProps, DzStepperItemSlots } from './DzStepper.types.ts'
+import type { DzStepperItemEmits, DzStepperItemProps, DzStepperItemSlots } from './DzStepper.types.ts'
 /**
  * DzStepperItem — A single step within DzStepper.
  */
@@ -8,10 +8,12 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_STEPPER_KEY } from './DzStepper.types.ts'
 import { stepperVariants } from './DzStepper.variants.ts'
 
-withDefaults(defineProps<DzStepperItemProps>(), {
+const props = withDefaults(defineProps<DzStepperItemProps>(), {
   optional: false,
+  clickable: undefined,
 })
 
+const emit = defineEmits<DzStepperItemEmits>()
 defineSlots<DzStepperItemSlots>()
 
 const attrs = useAttrs()
@@ -37,13 +39,40 @@ const status = computed(() => {
 
 const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
+const isReachable = computed(() => status.value !== 'upcoming')
+
+const isClickable = computed(() => {
+  if (!ctx) return false
+  if (!isReachable.value) return false
+  return props.clickable ?? ctx.clickable.value
+})
+
 const styles = computed(() =>
   stepperVariants({ orientation: orientation.value, status: status.value }),
 )
 
 const stepClasses = computed(() =>
-  cn(styles.value.step(), attrs.class as string | undefined),
+  cn(
+    styles.value.step(),
+    isClickable.value && 'cursor-pointer',
+    attrs.class as string | undefined,
+  ),
 )
+
+function activate(): void {
+  if (!isClickable.value || !ctx) return
+  if (stepIndex.value < 0) return
+  ctx.setActiveStep(stepIndex.value)
+  emit('navigate', stepIndex.value)
+}
+
+function handleKeydown(event: KeyboardEvent): void {
+  if (!isClickable.value) return
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    activate()
+  }
+}
 </script>
 
 <script lang="ts">
@@ -56,8 +85,13 @@ export default {
   <div
     :class="stepClasses"
     :data-state="status"
+    :data-clickable="isClickable ? '' : undefined"
     :aria-current="status === 'active' ? 'step' : undefined"
+    :role="isClickable ? 'button' : undefined"
+    :tabindex="isClickable ? 0 : undefined"
     v-bind="{ ...$attrs, class: undefined }"
+    @click="activate"
+    @keydown="handleKeydown"
   >
     <!-- Step indicator -->
     <slot name="indicator" :step="stepIndex + 1" :status="status">

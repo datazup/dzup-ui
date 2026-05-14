@@ -127,8 +127,14 @@ export interface DzDataGridContext<T = Record<string, unknown>> {
   selectedRows: Ref<T[]>
   /** Loading state */
   loading: Ref<boolean>
-  /** Sort a column */
-  sort: (field: string) => void
+  /**
+   * Sort a column.
+   *
+   * When `multi=true`, the sort entry is toggled in-place inside the existing
+   * sort model (asc → desc → removed) rather than replacing it. Used to
+   * implement Shift+click multi-column sort in DzDataGridHeader.
+   */
+  sort: (field: string, multi?: boolean) => void
   /** Set a filter on a column */
   setFilter: (column: string, filter: DzDataGridFilter) => void
   /** Clear a filter on a column */
@@ -182,6 +188,30 @@ export interface DzDataGridProps<T = Record<string, unknown>> extends BaseAccess
   size?: CanonicalSize
   /** Function to get unique row key */
   rowKey?: keyof T & string
+  /**
+   * Manual / server-driven mode.
+   *
+   * When `true`, DzDataGrid skips client-side sorting, filtering and
+   * pagination of `data` and renders the rows as-provided. The consumer is
+   * expected to listen for `update:sortModel` / `update:filters` /
+   * `pageChange` / `pageSizeChange` and supply already-processed rows
+   * (typically by re-fetching from a server).
+   *
+   * Pair with `total` so pagination knows the unpaginated row count;
+   * without `total`, pagination uses `data.length` (the current page slice)
+   * which is almost never what you want in manual mode.
+   *
+   * Defaults to `false` (client-side processing).
+   */
+  manual?: boolean
+  /**
+   * Total number of rows across all pages, used when `manual=true` so
+   * pagination can compute `totalPages` from the server's reported total
+   * rather than from the current page slice.
+   *
+   * Ignored when `manual=false`.
+   */
+  total?: number
 }
 
 // ---------------------------------------------------------------------------

@@ -160,7 +160,17 @@ export default {
         @blur="handleBlur"
       >
         <template v-if="!model && placeholder">
-          <span class="text-[var(--dz-muted-foreground)]">{{ placeholder }}</span>
+          <DatePickerTrigger
+            as-child
+            :aria-label="ariaLabel ?? 'Open date picker'"
+          >
+            <button
+              type="button"
+              class="flex-1 text-left bg-transparent border-0 outline-none text-[var(--dz-muted-foreground)] cursor-pointer"
+            >
+              {{ placeholder }}
+            </button>
+          </DatePickerTrigger>
         </template>
         <template v-else>
           <DatePickerInput part="month" :class="styles.fieldInput()" />
@@ -171,7 +181,7 @@ export default {
         </template>
 
         <DatePickerTrigger
-          class="ml-auto"
+          class="ml-auto inline-flex items-center justify-center bg-transparent border-0 outline-none cursor-pointer dz-focus-ring-button"
           :aria-label="ariaLabel ?? 'Open date picker'"
         >
           <CalendarIcon :class="styles.icon()" aria-hidden="true" />

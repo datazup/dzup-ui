@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 /**
  * DzCombobox — Unit / behavior tests.
  */
 import { defineComponent, nextTick, ref } from 'vue'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import DzCombobox from './DzCombobox.vue'
 
 const items = [

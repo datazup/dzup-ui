@@ -22,11 +22,13 @@ export const selectVariants = tv({
       'data-[placeholder]:text-[var(--dz-muted-foreground)]',
     ].join(' '),
     content: [
-      'z-[51] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'z-[60] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'min-w-[var(--reka-select-trigger-width)]',
+      'max-h-[var(--reka-select-content-available-height)]',
       'border border-[var(--dz-border)]',
-      'bg-[var(--dz-background)]',
+      'bg-[var(--dz-surface)]',
       'text-[var(--dz-foreground)]',
-      'shadow-[var(--dz-shadow-md)]',
+      'shadow-[var(--dz-shadow-lg)]',
     ].join(' '),
     viewport: 'p-[var(--dz-spacing-1)]',
     item: [

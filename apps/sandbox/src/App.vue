@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import DevDrawer from './components/DevDrawer.vue'
+import { useTheme } from './composables/useTheme.ts'
+import { sandboxRoutes } from './routes.ts'
 
 const route = useRoute()
-
-const families = [
-  { name: 'Home', path: '/', icon: 'H' },
-  { name: 'Buttons', path: '/buttons', icon: 'B' },
-  { name: 'Inputs', path: '/inputs', icon: 'I' },
-  { name: 'Forms', path: '/forms', icon: 'F' },
-  { name: 'Cards', path: '/cards', icon: 'C' },
-  { name: 'Data', path: '/data', icon: 'D' },
-  { name: 'Feedback', path: '/feedback', icon: 'Fb' },
-  { name: 'Layout', path: '/layout', icon: 'L' },
-  { name: 'Navigation', path: '/navigation', icon: 'N' },
-  { name: 'Overlays', path: '/overlays', icon: 'O' },
-  { name: 'Media', path: '/media', icon: 'M' },
-  { name: 'Typography', path: '/typography', icon: 'T' },
-] as const
+useTheme()
 
 const currentPath = computed(() => route.path)
 </script>
@@ -34,21 +23,23 @@ const currentPath = computed(() => route.path)
 
       <nav class="sidebar-nav">
         <router-link
-          v-for="family in families"
+          v-for="family in sandboxRoutes"
           :key="family.path"
           :to="family.path"
           class="nav-link"
           :class="{ active: currentPath === family.path }"
         >
           <span class="nav-icon">{{ family.icon }}</span>
-          <span class="nav-label">{{ family.name }}</span>
+          <span class="nav-label">{{ family.label }}</span>
         </router-link>
       </nav>
     </aside>
 
-    <main class="main-content">
+    <main class="main-content" data-sandbox-main>
       <router-view />
     </main>
+
+    <DevDrawer />
   </div>
 </template>
 

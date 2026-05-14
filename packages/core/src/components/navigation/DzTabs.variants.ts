@@ -36,7 +36,6 @@ export const tabsVariants = tv({
         trigger: [
           'border-b-2 border-transparent',
           '-mb-px',
-          'data-[state=active]:border-[var(--dz-primary)]',
           'hover:text-[var(--dz-foreground)]',
         ].join(' '),
       },
@@ -56,12 +55,18 @@ export const tabsVariants = tv({
         list: 'gap-[var(--dz-spacing-1)]',
         trigger: [
           'rounded-[var(--dz-radius-md)]',
-          'data-[state=active]:bg-[var(--dz-primary)]',
-          'data-[state=active]:text-[var(--dz-primary-foreground)]',
           'hover:bg-[var(--dz-muted)]',
-          'data-[state=active]:hover:bg-[var(--dz-primary-hover)]',
         ].join(' '),
       },
+    },
+
+    tone: {
+      neutral: '',
+      primary: '',
+      success: '',
+      warning: '',
+      danger: '',
+      info: '',
     },
 
     size: {
@@ -96,16 +101,39 @@ export const tabsVariants = tv({
   },
 
   compoundVariants: [
-    // Vertical line variant uses left border instead of bottom
+    // ── line variant + tone (active underline + active text color) ──
+    { variant: 'line', tone: 'primary', class: { trigger: 'data-[state=active]:border-[var(--dz-primary)] data-[state=active]:text-[var(--dz-primary)]' } },
+    { variant: 'line', tone: 'neutral', class: { trigger: 'data-[state=active]:border-[var(--dz-foreground)] data-[state=active]:text-[var(--dz-foreground)]' } },
+    { variant: 'line', tone: 'success', class: { trigger: 'data-[state=active]:border-[var(--dz-success)] data-[state=active]:text-[var(--dz-success)]' } },
+    { variant: 'line', tone: 'warning', class: { trigger: 'data-[state=active]:border-[var(--dz-warning)] data-[state=active]:text-[var(--dz-warning)]' } },
+    { variant: 'line', tone: 'danger', class: { trigger: 'data-[state=active]:border-[var(--dz-danger)] data-[state=active]:text-[var(--dz-danger)]' } },
+    { variant: 'line', tone: 'info', class: { trigger: 'data-[state=active]:border-[var(--dz-info)] data-[state=active]:text-[var(--dz-info)]' } },
+
+    // ── enclosed variant + tone (active text color; border stays neutral so the tab joins the panel cleanly) ──
+    { variant: 'enclosed', tone: 'primary', class: { trigger: 'data-[state=active]:text-[var(--dz-primary)]' } },
+    { variant: 'enclosed', tone: 'neutral', class: { trigger: 'data-[state=active]:text-[var(--dz-foreground)]' } },
+    { variant: 'enclosed', tone: 'success', class: { trigger: 'data-[state=active]:text-[var(--dz-success)]' } },
+    { variant: 'enclosed', tone: 'warning', class: { trigger: 'data-[state=active]:text-[var(--dz-warning)]' } },
+    { variant: 'enclosed', tone: 'danger', class: { trigger: 'data-[state=active]:text-[var(--dz-danger)]' } },
+    { variant: 'enclosed', tone: 'info', class: { trigger: 'data-[state=active]:text-[var(--dz-info)]' } },
+
+    // ── pills variant + tone (active background + foreground) ──
+    { variant: 'pills', tone: 'primary', class: { trigger: 'data-[state=active]:bg-[var(--dz-primary)] data-[state=active]:text-[var(--dz-primary-foreground)] data-[state=active]:hover:bg-[var(--dz-primary-hover)]' } },
+    { variant: 'pills', tone: 'neutral', class: { trigger: 'data-[state=active]:bg-[var(--dz-foreground)] data-[state=active]:text-[var(--dz-background)]' } },
+    { variant: 'pills', tone: 'success', class: { trigger: 'data-[state=active]:bg-[var(--dz-success)] data-[state=active]:text-[var(--dz-success-foreground)]' } },
+    { variant: 'pills', tone: 'warning', class: { trigger: 'data-[state=active]:bg-[var(--dz-warning)] data-[state=active]:text-[var(--dz-warning-foreground)]' } },
+    { variant: 'pills', tone: 'danger', class: { trigger: 'data-[state=active]:bg-[var(--dz-danger)] data-[state=active]:text-[var(--dz-danger-foreground)]' } },
+    { variant: 'pills', tone: 'info', class: { trigger: 'data-[state=active]:bg-[var(--dz-info)] data-[state=active]:text-[var(--dz-info-foreground)]' } },
+
+    // ── Vertical orientation re-layout (tone-agnostic) ──
     {
       variant: 'line',
       orientation: 'vertical',
       class: {
         list: 'border-b-0 border-r border-[var(--dz-border)]',
-        trigger: 'border-b-0 border-r-2 border-transparent -mr-px mb-0 data-[state=active]:border-[var(--dz-primary)]',
+        trigger: 'border-b-0 border-r-2 border-transparent -mr-px mb-0',
       },
     },
-    // Vertical enclosed variant uses left border
     {
       variant: 'enclosed',
       orientation: 'vertical',
@@ -119,6 +147,7 @@ export const tabsVariants = tv({
   defaultVariants: {
     variant: 'line',
     size: 'md',
+    tone: 'primary',
     orientation: 'horizontal',
   },
 })

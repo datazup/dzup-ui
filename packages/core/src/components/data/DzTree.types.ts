@@ -74,7 +74,15 @@ export interface DzTreeProps<T = unknown> extends BaseAccessibilityProps {
   selectable?: boolean
   /** Whether checkboxes are shown */
   checkable?: boolean
-  /** Whether nodes can be dragged (future) */
+  /**
+   * Reserved for future HTML5 drag-and-drop support. The prop is recognised
+   * by the contract but currently has no behaviour -- DzTree does not bind
+   * any drag event handlers when it is set. Kept in the contract so a later
+   * implementation can land without a breaking prop addition.
+   *
+   * TODO: ship a reference DnD implementation or remove this prop and rev
+   * the contract (tracked in sandbox/DataPage next-steps).
+   */
   draggable?: boolean
   /** Component size */
   size?: CanonicalSize

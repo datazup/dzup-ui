@@ -12,12 +12,12 @@
 // Kept as a local string union here to avoid pulling product-specific
 // runtime dependencies into @dzup-ui/core.
 
-type CoordinatorPattern =
-  | 'supervisor'
-  | 'contract_net'
-  | 'blackboard'
-  | 'peer_to_peer'
-  | 'council'
+type CoordinatorPattern
+  = | 'supervisor'
+    | 'contract_net'
+    | 'blackboard'
+    | 'peer_to_peer'
+    | 'council'
 
 defineProps<{
   /** Coordinator pattern governing the team run. */
