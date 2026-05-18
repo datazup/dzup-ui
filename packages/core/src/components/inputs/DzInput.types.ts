@@ -20,7 +20,7 @@ import type {
 /** Props for the DzInput component */
 export interface DzInputProps extends BaseFormControlProps<InputVariant> {
   /** HTML input type */
-  type?: 'text' | 'email' | 'password' | 'url' | 'tel' | 'search'
+  type?: 'text' | 'email' | 'password' | 'url' | 'tel' | 'search' | 'number'
   /** Placeholder text shown when the input is empty */
   placeholder?: string
   /** Maximum number of characters allowed */
