@@ -27,11 +27,11 @@
     "access": "public"
   },
   "scripts": {
-    "generate": "tsx src/generate.ts",
+    "generate": "node --import tsx src/generate.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "echo 'No unit tests in tokens — run yarn typecheck'",
-    "build": "tsx src/generate.ts && vite build"
+    "build": "node --import tsx src/generate.ts && vite build"
   },
   "devDependencies": {
     "tsx": "^4.19.0",
