@@ -120,7 +120,7 @@ Token ownership follows a hybrid model:
 - component-local `*.tokens.ts` files in `core` and `pro` are component adaptation layers built on top of that foundation
 
 Reference:
-- [`docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md`](./docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md)
+- [`workspace-docs/repos/dzup-ui/docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md`](workspace-docs/repos/dzup-ui/docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md)
 - [`MAPPING_TOKENS.md`](./MAPPING_TOKENS.md) explains how app `DESIGN.md` or generated design-extraction tokens map into dzup-ui primitive, semantic, and component token tiers.
 - [`DESIGN_MD_APPLICATION_PROMPT.md`](./DESIGN_MD_APPLICATION_PROMPT.md) provides a reusable LLM prompt for applying an app `DESIGN.md` to a Vue app that already uses dzup-ui.
 
