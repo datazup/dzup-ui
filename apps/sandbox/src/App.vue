@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DzToastProvider, DzToastViewport } from '@dzup-ui/core'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import DevDrawer from './components/DevDrawer.vue'
@@ -12,35 +13,38 @@ const currentPath = computed(() => route.path)
 </script>
 
 <template>
-  <div class="app-layout">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h1 class="sidebar-title">
-          dzup-ui
-        </h1>
-        <span class="sidebar-badge">sandbox</span>
-      </div>
+  <DzToastProvider>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1 class="sidebar-title">
+            dzup-ui
+          </h1>
+          <span class="sidebar-badge">sandbox</span>
+        </div>
 
-      <nav class="sidebar-nav">
-        <router-link
-          v-for="family in sandboxRoutes"
-          :key="family.path"
-          :to="family.path"
-          class="nav-link"
-          :class="{ active: currentPath === family.path }"
-        >
-          <span class="nav-icon">{{ family.icon }}</span>
-          <span class="nav-label">{{ family.label }}</span>
-        </router-link>
-      </nav>
-    </aside>
+        <nav class="sidebar-nav">
+          <router-link
+            v-for="family in sandboxRoutes"
+            :key="family.path"
+            :to="family.path"
+            class="nav-link"
+            :class="{ active: currentPath === family.path }"
+          >
+            <span class="nav-icon">{{ family.icon }}</span>
+            <span class="nav-label">{{ family.label }}</span>
+          </router-link>
+        </nav>
+      </aside>
 
-    <main class="main-content" data-sandbox-main>
-      <router-view />
-    </main>
+      <main class="main-content" data-sandbox-main>
+        <router-view />
+      </main>
 
-    <DevDrawer />
-  </div>
+      <DevDrawer />
+    </div>
+    <DzToastViewport position="bottom-right" />
+  </DzToastProvider>
 </template>
 
 <style scoped>

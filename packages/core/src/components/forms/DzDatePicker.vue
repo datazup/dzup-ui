@@ -146,6 +146,7 @@ export default {
     <DatePickerAnchor>
       <DatePickerField
         :id="resolvedId"
+        v-slot="{ segments }"
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
@@ -159,25 +160,27 @@ export default {
         @focus="handleFocus"
         @blur="handleBlur"
       >
-        <template v-if="!model && placeholder">
-          <DatePickerTrigger
-            as-child
-            :aria-label="ariaLabel ?? 'Open date picker'"
+        <DatePickerTrigger
+          v-if="!model && placeholder"
+          as-child
+          :aria-label="ariaLabel ?? 'Open date picker'"
+        >
+          <button
+            type="button"
+            class="flex-1 text-left bg-transparent border-0 outline-none text-[var(--dz-muted-foreground)] cursor-pointer"
           >
-            <button
-              type="button"
-              class="flex-1 text-left bg-transparent border-0 outline-none text-[var(--dz-muted-foreground)] cursor-pointer"
-            >
-              {{ placeholder }}
-            </button>
-          </DatePickerTrigger>
-        </template>
-        <template v-else>
-          <DatePickerInput part="month" :class="styles.fieldInput()" />
-          <span :class="styles.field()">/</span>
-          <DatePickerInput part="day" :class="styles.fieldInput()" />
-          <span :class="styles.field()">/</span>
-          <DatePickerInput part="year" :class="styles.fieldInput()" />
+            {{ placeholder }}
+          </button>
+        </DatePickerTrigger>
+        <template v-for="item in segments" v-else :key="item.part">
+          <DatePickerInput
+            v-if="item.part !== 'literal'"
+            :part="item.part"
+            :class="styles.fieldInput()"
+          >
+            {{ item.value }}
+          </DatePickerInput>
+          <span v-else :class="styles.field()">{{ item.value }}</span>
         </template>
 
         <DatePickerTrigger
