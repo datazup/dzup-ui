@@ -54,6 +54,7 @@ export { default as DzContextMenuTrigger } from './DzContextMenuTrigger.vue'
 // ── Types — DzDialog ──
 export type {
   DialogContentSize,
+  DzDialogCloseProps,
   DzDialogCloseSlots,
   DzDialogContentEmits,
   DzDialogContentProps,

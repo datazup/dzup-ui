@@ -127,6 +127,16 @@ export interface DzDialogDescriptionSlots {
   default: () => unknown
 }
 
+/** Props for DzDialogClose */
+export interface DzDialogCloseProps {
+  /**
+   * When true, the close styling (absolute top-right positioning, default X icon)
+   * is skipped and the close behaviour is forwarded onto the slotted child element.
+   * Use for action buttons (Cancel / Confirm) inside a dialog footer.
+   */
+  asChild?: boolean
+}
+
 /** Slot definitions for DzDialogClose */
 export interface DzDialogCloseSlots {
   /** Close button content */
