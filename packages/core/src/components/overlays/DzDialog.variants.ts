@@ -52,6 +52,25 @@ export const dialogVariants = tv({
       'dz-focus-ring-button dz-disabled-button',
       '@media(prefers-reduced-motion:reduce){transition:none}',
     ].join(' '),
+    header: [
+      'sticky top-0 z-10',
+      'px-[var(--dz-spacing-6)] pt-[var(--dz-spacing-5)] pb-[var(--dz-spacing-3)]',
+      'bg-[var(--dz-background)]',
+      'border-b border-[var(--dz-border)]',
+      'rounded-t-[var(--dz-radius-lg)]',
+    ].join(' '),
+    body: [
+      'flex-1 overflow-y-auto',
+      'px-[var(--dz-spacing-6)] py-[var(--dz-spacing-4)]',
+    ].join(' '),
+    footer: [
+      'sticky bottom-0 z-10',
+      'flex items-center justify-end gap-[var(--dz-spacing-2)]',
+      'px-[var(--dz-spacing-6)] pt-[var(--dz-spacing-3)] pb-[var(--dz-spacing-5)]',
+      'bg-[var(--dz-background)]',
+      'border-t border-[var(--dz-border)]',
+      'rounded-b-[var(--dz-radius-lg)]',
+    ].join(' '),
   },
   variants: {
     size: {
@@ -61,9 +80,16 @@ export const dialogVariants = tv({
       xl: { content: 'max-w-xl' },
       full: { content: 'max-w-[calc(100vw-var(--dz-spacing-8))]' },
     },
+    scrollable: {
+      true: {
+        content: 'flex flex-col p-0 max-h-[80vh] overflow-hidden',
+      },
+      false: { content: '' },
+    },
   },
   defaultVariants: {
     size: 'md',
+    scrollable: false,
   },
 })
 

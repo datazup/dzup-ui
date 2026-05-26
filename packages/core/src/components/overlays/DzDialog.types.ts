@@ -57,6 +57,12 @@ export interface DzDialogProps {
 export interface DzDialogContentProps extends BaseAccessibilityProps {
   /** Size of the dialog content panel */
   size?: DialogContentSize
+  /**
+   * When true, the dialog body scrolls within a capped max-height (80vh) and
+   * `#header` / `#footer` slots are pinned to the top and bottom of the panel.
+   * The default slot is used as the scrollable body.
+   */
+  scrollable?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -103,6 +109,10 @@ export interface DzDialogOverlaySlots {
 export interface DzDialogContentSlots {
   /** Dialog body content (DzDialogTitle, DzDialogDescription, etc.) */
   default: () => unknown
+  /** Sticky header region, rendered above the body when `scrollable` is true */
+  header?: () => unknown
+  /** Sticky footer region, rendered below the body when `scrollable` is true */
+  footer?: () => unknown
 }
 
 /** Slot definitions for DzDialogTitle */

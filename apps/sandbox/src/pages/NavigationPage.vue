@@ -3,6 +3,11 @@ import {
   DzBreadcrumb,
   DzBreadcrumbItem,
   DzBreadcrumbSeparator,
+  DzMenu,
+  DzMenuItem,
+  DzMenuSeparator,
+  DzPagination,
+  DzSegmented,
   DzSidebar,
   DzSidebarFooter,
   DzSidebarHeader,
@@ -22,9 +27,13 @@ import type {
 } from '@dzup-ui/contracts'
 import type {
   DzBreadcrumbProps,
+  DzMenuProps,
+  DzPaginationProps,
+  DzSegmentedProps,
   DzSidebarProps,
   DzStepperProps,
   DzTabsProps,
+  SegmentedItem,
   StepperOrientation,
 } from '@dzup-ui/core'
 import { computed, reactive, ref } from 'vue'
@@ -89,10 +98,12 @@ const tabsSnippet = useDemoSnippet<Partial<DzTabsProps>>(() => ({
   children: `  <DzTabList>
     <DzTabTrigger value="overview">Overview</DzTabTrigger>
     <DzTabTrigger value="usage">Usage</DzTabTrigger>
-    <DzTabTrigger value="api" disabled>API</DzTabTrigger>
+    <DzTabTrigger value="api">API</DzTabTrigger>
+    <DzTabTrigger value="examples" disabled>Examples (disabled)</DzTabTrigger>
   </DzTabList>
   <DzTabContent value="overview">…</DzTabContent>
-  <DzTabContent value="usage">…</DzTabContent>`,
+  <DzTabContent value="usage">…</DzTabContent>
+  <DzTabContent value="api">…</DzTabContent>`,
 }))
 
 // ---------------------------------------------------------------------------
@@ -114,7 +125,7 @@ const breadcrumbSnippet = useDemoSnippet<Partial<DzBreadcrumbProps>>(() => ({
 }))
 
 // ---------------------------------------------------------------------------
-// DzNavbar (composed from DzFlex + DzMenu)
+// DzNavbar (composed from raw layout primitives — no dedicated component yet)
 // ---------------------------------------------------------------------------
 
 const navbarActive = ref<'dashboard' | 'projects' | 'team' | 'settings'>('dashboard')
@@ -125,23 +136,28 @@ const navbarSections = [
   { id: 'settings', label: 'Settings' },
 ] as const
 
-const navbarSnippet = `<!-- Composed from primitives: no dedicated DzNavbar yet -->
+const navbarSnippet = `<!-- No dedicated DzNavbar yet — this is hand-rolled markup -->
 <header class="navbar">
-  <DzFlex align="center" gap="md">
+  <div class="navbar-brand">
+    <span class="navbar-mark">dz</span>
     <strong>dzup-ui</strong>
-    <DzFlex tag="nav" gap="xs">
-      <button
-        v-for="item in sections"
-        :key="item.id"
-        :data-active="active === item.id"
-        @click="active = item.id"
-      >
-        {{ item.label }}
-      </button>
-    </DzFlex>
-    <DzSpacer size="auto" />
-    <button class="navbar-account">Account</button>
-  </DzFlex>
+  </div>
+  <nav class="navbar-links" aria-label="Primary">
+    <button
+      v-for="item in sections"
+      :key="item.id"
+      type="button"
+      class="navbar-link"
+      :data-active="active === item.id"
+      :aria-current="active === item.id ? 'page' : undefined"
+      @click="active = item.id"
+    >
+      {{ item.label }}
+    </button>
+  </nav>
+  <div class="navbar-actions">
+    <button type="button" class="navbar-link navbar-trigger">Account</button>
+  </div>
 </header>`
 
 // ---------------------------------------------------------------------------
@@ -216,6 +232,90 @@ const stepperSnippet = useDemoSnippet<Partial<DzStepperProps>>(() => ({
   <DzStepperItem title="Profile" description="Name and avatar" optional />
   <DzStepperItem title="Workspace" description="Choose a team" />
   <DzStepperItem title="Review" description="Confirm and finish" />`,
+}))
+
+// ---------------------------------------------------------------------------
+// DzMenu
+// ---------------------------------------------------------------------------
+
+const menuSizeOptions: CanonicalSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
+const menuSize = useUrlState<CanonicalSize>('menu-size', 'md')
+const menuCollapsed = useUrlState<boolean>('menu-collapsed', false)
+const menuActive = ref<'home' | 'reports' | 'inbox' | 'settings'>('home')
+
+const menuSnippet = useDemoSnippet<Partial<DzMenuProps>>(() => ({
+  tag: 'DzMenu',
+  props: { size: menuSize.value, collapsed: menuCollapsed.value },
+  defaults: { size: 'md', collapsed: false },
+  attrs: { 'aria-label': 'Main navigation' },
+  children: `  <DzMenuItem active>
+    <template #icon>H</template>
+    Home
+  </DzMenuItem>
+  <DzMenuItem>
+    <template #icon>R</template>
+    Reports
+  </DzMenuItem>
+  <DzMenuSeparator />
+  <DzMenuItem disabled>
+    <template #icon>S</template>
+    Settings (disabled)
+  </DzMenuItem>`,
+}))
+
+// ---------------------------------------------------------------------------
+// DzPagination
+// ---------------------------------------------------------------------------
+
+const paginationSizeOptions: CanonicalSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
+const paginationPage = ref<number>(1)
+const paginationTotal = useUrlState<number>('pg-total', 120)
+const paginationPageSize = useUrlState<number>('pg-page-size', 10)
+const paginationSiblings = useUrlState<number>('pg-siblings', 1)
+const paginationShowEdges = useUrlState<boolean>('pg-edges', false)
+const paginationSize = useUrlState<CanonicalSize>('pg-size', 'md')
+const paginationDisabled = useUrlState<boolean>('pg-disabled', false)
+
+const paginationSnippet = useDemoSnippet<Partial<DzPaginationProps>>(() => ({
+  tag: 'DzPagination',
+  props: {
+    total: paginationTotal.value,
+    pageSize: paginationPageSize.value,
+    siblingCount: paginationSiblings.value,
+    showEdges: paginationShowEdges.value,
+    size: paginationSize.value,
+    disabled: paginationDisabled.value,
+  },
+  defaults: { pageSize: 10, siblingCount: 1, showEdges: false, size: 'md', disabled: false },
+  attrs: { 'v-model': 'page' },
+  children: null,
+}))
+
+// ---------------------------------------------------------------------------
+// DzSegmented
+// ---------------------------------------------------------------------------
+
+const segmentedSizeOptions: CanonicalSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
+const segmentedItems: SegmentedItem[] = [
+  { value: 'list', label: 'List' },
+  { value: 'grid', label: 'Grid' },
+  { value: 'table', label: 'Table' },
+  { value: 'archive', label: 'Archive', disabled: true },
+]
+const segmentedValue = ref<string>('list')
+const segmentedSize = useUrlState<CanonicalSize>('seg-size', 'md')
+const segmentedDisabled = useUrlState<boolean>('seg-disabled', false)
+
+const segmentedSnippet = useDemoSnippet<Partial<DzSegmentedProps>>(() => ({
+  tag: 'DzSegmented',
+  props: {
+    items: segmentedItems,
+    size: segmentedSize.value,
+    disabled: segmentedDisabled.value,
+  },
+  defaults: { size: 'md', disabled: false },
+  attrs: { 'v-model': 'view' },
+  children: null,
 }))
 
 // ---------------------------------------------------------------------------
@@ -451,10 +551,10 @@ const compositionState = reactive({
         <span class="title-badge">composed</span>
       </h2>
       <p class="section-description">
-        There is no dedicated <code>DzNavbar</code> component yet -- the library exposes the
-        primitives needed to build one. This demo composes a top navbar from layout primitives plus
-        <code>DzMenu</code>. Promoting this to a first-class component is on the suggested-improvements
-        list below.
+        There is no dedicated <code>DzNavbar</code> component yet. This demo is hand-rolled markup
+        (plain <code>&lt;div&gt;</code> / <code>&lt;nav&gt;</code> / <code>&lt;button&gt;</code>)
+        styled with the same token palette as the rest of the page. Promoting this pattern to a
+        first-class component is on the suggested-improvements list below.
       </p>
 
       <div class="frame frame-flush">
@@ -687,7 +787,6 @@ const compositionState = reactive({
     <section class="demo-section">
       <h2 class="section-title">
         DzStepper
-        <span class="title-badge">requested as <code>DzSteps</code></span>
       </h2>
       <p class="section-description">
         Step-by-step progress indicator. v-model binds the 0-based active index; steps register
@@ -749,6 +848,191 @@ const compositionState = reactive({
       </div>
 
       <DemoCode :code="stepperSnippet" />
+    </section>
+
+    <!-- DzMenu -->
+    <section class="demo-section">
+      <h2 class="section-title">
+        DzMenu
+      </h2>
+      <p class="section-description">
+        Vertical navigation menu. Children: <code>DzMenuItem</code> and
+        <code>DzMenuSeparator</code>. Items can be active, disabled, or rendered as
+        <code>&lt;a&gt;</code> via <code>href</code>. Collapsed mode hides labels and shows the
+        icon slot only.
+      </p>
+
+      <div class="control-row">
+        <SandboxControl label="size">
+          <select v-model="menuSize">
+            <option v-for="s in menuSizeOptions" :key="s" :value="s">
+              {{ s }}
+            </option>
+          </select>
+        </SandboxControl>
+        <SandboxControl label="collapsed">
+          <input v-model="menuCollapsed" type="checkbox">
+        </SandboxControl>
+      </div>
+
+      <div class="frame menu-frame">
+        <DzMenu
+          :size="menuSize"
+          :collapsed="menuCollapsed"
+          aria-label="Demo menu"
+        >
+          <DzMenuItem
+            :active="menuActive === 'home'"
+            @click="menuActive = 'home'"
+          >
+            <template #icon>
+              <span class="sidebar-icon">H</span>
+            </template>
+            Home
+          </DzMenuItem>
+          <DzMenuItem
+            :active="menuActive === 'reports'"
+            @click="menuActive = 'reports'"
+          >
+            <template #icon>
+              <span class="sidebar-icon">R</span>
+            </template>
+            Reports
+          </DzMenuItem>
+          <DzMenuItem
+            :active="menuActive === 'inbox'"
+            @click="menuActive = 'inbox'"
+          >
+            <template #icon>
+              <span class="sidebar-icon">I</span>
+            </template>
+            Inbox
+          </DzMenuItem>
+          <DzMenuSeparator />
+          <DzMenuItem disabled>
+            <template #icon>
+              <span class="sidebar-icon">S</span>
+            </template>
+            Settings (disabled)
+          </DzMenuItem>
+          <DzMenuItem href="https://github.com" aria-label="Open GitHub">
+            <template #icon>
+              <span class="sidebar-icon">↗</span>
+            </template>
+            GitHub (href)
+          </DzMenuItem>
+        </DzMenu>
+      </div>
+
+      <DemoCode :code="menuSnippet" />
+    </section>
+
+    <!-- DzPagination -->
+    <section class="demo-section">
+      <h2 class="section-title">
+        DzPagination
+      </h2>
+      <p class="section-description">
+        Page navigation backed by Reka UI <code>PaginationRoot</code>. v-model binds the 1-based
+        current page; <code>siblingCount</code> controls how many neighbours of the active page are
+        rendered before ellipses kick in. Enable <code>showEdges</code> for first/last buttons.
+      </p>
+
+      <div class="control-row">
+        <SandboxControl label="total">
+          <input
+            v-model.number="paginationTotal"
+            type="number"
+            min="1"
+          >
+        </SandboxControl>
+        <SandboxControl label="pageSize">
+          <input
+            v-model.number="paginationPageSize"
+            type="number"
+            min="1"
+          >
+        </SandboxControl>
+        <SandboxControl label="siblingCount">
+          <input
+            v-model.number="paginationSiblings"
+            type="number"
+            min="0"
+            max="4"
+          >
+        </SandboxControl>
+        <SandboxControl label="size">
+          <select v-model="paginationSize">
+            <option v-for="s in paginationSizeOptions" :key="s" :value="s">
+              {{ s }}
+            </option>
+          </select>
+        </SandboxControl>
+        <SandboxControl label="showEdges">
+          <input v-model="paginationShowEdges" type="checkbox">
+        </SandboxControl>
+        <SandboxControl label="disabled">
+          <input v-model="paginationDisabled" type="checkbox">
+        </SandboxControl>
+      </div>
+
+      <div class="frame">
+        <DzPagination
+          v-model="paginationPage"
+          :total="paginationTotal"
+          :page-size="paginationPageSize"
+          :sibling-count="paginationSiblings"
+          :show-edges="paginationShowEdges"
+          :size="paginationSize"
+          :disabled="paginationDisabled"
+        />
+        <p class="muted-text navigate-log">
+          page <code>{{ paginationPage }}</code> of
+          <code>{{ Math.max(1, Math.ceil(paginationTotal / Math.max(1, paginationPageSize))) }}</code>
+        </p>
+      </div>
+
+      <DemoCode :code="paginationSnippet" />
+    </section>
+
+    <!-- DzSegmented -->
+    <section class="demo-section">
+      <h2 class="section-title">
+        DzSegmented
+      </h2>
+      <p class="section-description">
+        Segmented control (single-select toggle group) backed by Reka UI
+        <code>ToggleGroupRoot</code>. Pass an array of <code>SegmentedItem</code>; v-model binds
+        the active value. Useful for view-mode switches and short filter pickers.
+      </p>
+
+      <div class="control-row">
+        <SandboxControl label="size">
+          <select v-model="segmentedSize">
+            <option v-for="s in segmentedSizeOptions" :key="s" :value="s">
+              {{ s }}
+            </option>
+          </select>
+        </SandboxControl>
+        <SandboxControl label="disabled">
+          <input v-model="segmentedDisabled" type="checkbox">
+        </SandboxControl>
+      </div>
+
+      <div class="frame">
+        <DzSegmented
+          v-model="segmentedValue"
+          :items="segmentedItems"
+          :size="segmentedSize"
+          :disabled="segmentedDisabled"
+          aria-label="View mode"
+        />
+        <p class="muted-text navigate-log">
+          active: <code>{{ segmentedValue || '(none)' }}</code>
+        </p>
+      </div>
+
+      <DemoCode :code="segmentedSnippet" />
     </section>
 
     <!-- Composition -->
@@ -859,41 +1143,44 @@ const compositionState = reactive({
           <code>DzNavbarActions</code>, with built-in mobile breakpoint behavior.
         </li>
         <li>
-          <strong>Rename or alias <code>DzStepper</code> &rarr; <code>DzSteps</code></strong> (or
-          export both). The CLAUDE.md component map and the placeholder <code>NavigationPage</code>
-          comment both reference <code>DzSteps</code>, so the public taxonomy and implementation
-          have drifted.
+          <strong>Make <code>DzSidebar</code> positioning opt-in</strong>. The root currently
+          hardcodes <code>position: fixed; inset-y: 0; left: 0; z-40</code>, which means every
+          instance escapes its parent and pins to the viewport -- breaking any embedded/demo
+          usage (this page works around it with scoped overrides). Add a prop such as
+          <code>floating</code> (default <code>true</code> for backwards compatibility, opt to
+          <code>false</code> for in-flow rendering) or split the fixed positioning into a
+          dedicated <code>app-shell</code> variant.
         </li>
         <li>
-          <strong>Expose canonical <code>tone</code> on <code>DzTabs</code></strong>. Currently only
-          <code>variant</code> and <code>size</code> are wired. Tabs frequently need to signal
-          state (e.g. <code>danger</code> for a validation-failing pane). Add <code>tone</code> per
-          ADR-02 to bring tabs in line with buttons/badges/alerts.
+          <strong>Honour <code>width</code> / <code>collapsedWidth</code> props</strong>. The
+          component writes <code>--dz-sidebar-width</code> / <code>--dz-sidebar-collapsed-width</code>
+          as inline CSS vars, but the variants use literal Tailwind <code>w-64</code> /
+          <code>w-16</code> so the prop values never take effect. Either consume the vars in the
+          variants or document that the prop is decorative.
         </li>
         <li>
-          <strong>Add closable-tab keyboard affordance</strong>. Today closing requires a click;
-          <code>Backspace</code> / <code>Delete</code> on a focused trigger should emit
-          <code>close</code> for parity with VS Code-style tab strips.
+          <strong>Storybook story for <code>DzSidebar</code></strong>. Every other navigation
+          component has a story under <code>packages/core/stories/navigation/</code>;
+          <code>DzSidebar</code> is the lone holdout. Bring it in line with the rest of the family.
         </li>
         <li>
-          <strong>Persist <code>DzSidebar</code> collapsed state</strong>. Add a
-          <code>storageKey</code> prop that round-trips through <code>localStorage</code> so the
-          rail survives reloads -- a recurring need in every app shell.
+          <strong>Migrate <code>DzTabTrigger</code> off <code>&lt;style scoped&gt;</code></strong>.
+          The trigger ships a scoped style block for the close-button affordance, which violates
+          the ADR-04 "no scoped styles -- use <code>tv()</code> in
+          <code>.variants.ts</code>" rule. Fold it into <code>tabsVariants</code> (or a sibling
+          slot in the same <code>tv()</code> call).
         </li>
         <li>
-          <strong>Linkable <code>DzStepperItem</code></strong>. Make each item clickable
-          (<code>:clickable</code> or <code>@click</code>) with an emitted <code>navigate</code>
-          event so users can jump to completed steps without manually moving v-model.
+          <strong>Route-aware <code>:active</code> on routed <code>DzSidebarItem</code></strong>.
+          The current "Navigation (this page)" item hardcodes <code>:active="true"</code>. A
+          built-in active-by-current-route mode (or a documented pattern using
+          <code>useRoute()</code>) would remove that footgun.
         </li>
         <li>
-          <strong>Storybook coverage for navigation family</strong>. Spot-check showed contract
-          tests but uneven Storybook stories for <code>DzSidebar</code>/<code>DzStepper</code>;
-          align with the buttons/inputs family for parity.
-        </li>
-        <li>
-          <strong>Sandbox: stub <code>RouterLink</code> demo for <code>DzSidebarItem</code></strong>.
-          The <code>to</code> prop is documented but unexercised in the sandbox -- worth a small
-          example wiring it to <code>vue-router</code> so consumers see the integration.
+          <strong>Wire <code>DzMenu</code> into the navbar example</strong>. Once
+          <code>DzMenu</code> covers the typical horizontal nav-link list (it currently targets
+          vertical menus), the composed navbar here can shed its hand-rolled
+          <code>&lt;button&gt;</code> loop in favor of <code>DzMenu</code>.
         </li>
       </ol>
     </section>
@@ -1093,11 +1380,33 @@ const compositionState = reactive({
   align-items: stretch;
   min-height: 360px;
   background: var(--dz-surface, #ffffff);
+  position: relative;
 }
 
 .sidebar-demo {
   flex-shrink: 0;
   border-right: 1px solid var(--dz-border, #e2e8f0);
+}
+
+/*
+ * DzSidebar ships `position: fixed; inset-y-0; left-0; z-40` on its root
+ * (see DzSidebar.variants.ts), which makes every instance escape its
+ * parent and pin to the viewport. For these in-page demos we want it to
+ * render in-flow inside the frame container, so we reset the positioning
+ * for the sidebar roots that live under demo frames. Library-side fix
+ * (e.g. a `floating` prop opt-out) is tracked in the suggestions list.
+ */
+.sidebar-frame > :deep(nav[role='navigation']),
+.composition-frame > :deep(nav[role='navigation']) {
+  position: relative;
+  top: auto;
+  bottom: auto;
+  left: auto;
+  right: auto;
+  transform: none;
+  z-index: auto;
+  height: auto;
+  align-self: stretch;
 }
 
 .sidebar-header-inner {
@@ -1165,6 +1474,11 @@ const compositionState = reactive({
 .sidebar-router-frame {
   margin-top: 8px;
   min-height: 280px;
+}
+
+.menu-frame {
+  max-width: 280px;
+  background: var(--dz-surface, #ffffff);
 }
 
 .navigate-log {

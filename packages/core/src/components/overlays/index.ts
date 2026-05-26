@@ -137,6 +137,7 @@ export type {
   DzSheetSlots,
   DzSheetTitleSlots,
   DzSheetTriggerSlots,
+  SheetContentSize,
   SheetSide,
 } from './DzSheet.types.ts'
 export { type SheetVariantProps, sheetVariants } from './DzSheet.variants.ts'

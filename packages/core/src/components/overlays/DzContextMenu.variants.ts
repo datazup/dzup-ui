@@ -25,6 +25,7 @@ export const contextMenuVariants = tv({
     ].join(' '),
     item: [
       'relative flex cursor-pointer select-none items-center',
+      'gap-[var(--dz-spacing-2)]',
       'rounded-[var(--dz-radius-sm)]',
       'px-[var(--dz-spacing-2)]',
       'py-[var(--dz-spacing-1_5)]',
@@ -33,6 +34,16 @@ export const contextMenuVariants = tv({
       'transition-colors',
       'focus:bg-[var(--dz-muted)] focus:text-[var(--dz-foreground)]',
       'dz-disabled-control',
+    ].join(' '),
+    itemPrefix: [
+      'inline-flex shrink-0 items-center justify-center',
+      'h-4 w-4',
+      'text-[var(--dz-muted-foreground)]',
+    ].join(' '),
+    itemSuffix: [
+      'ml-auto inline-flex shrink-0 items-center justify-center',
+      'text-[length:var(--dz-text-xs)]',
+      'text-[var(--dz-muted-foreground)]',
     ].join(' '),
     separator: [
       '-mx-[var(--dz-spacing-1)]',
