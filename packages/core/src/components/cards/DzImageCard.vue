@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzImageCardProps, DzImageCardSlots } from './DzImageCard.types.ts'
 /**
  * DzImageCard — Card component with a prominent image.
@@ -40,11 +44,6 @@ const imageStyle = computed(() => ({
 }))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

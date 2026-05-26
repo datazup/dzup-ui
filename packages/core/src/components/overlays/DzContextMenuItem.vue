@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzContextMenuItemEmits,
   DzContextMenuItemProps,
@@ -31,11 +35,6 @@ function handleSelect(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ContextMenuItem

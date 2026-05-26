@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTimelineContext, DzTimelineProps, DzTimelineSlots } from './DzTimeline.types.ts'
 /**
  * DzTimeline — Compound timeline root component.
@@ -48,11 +52,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

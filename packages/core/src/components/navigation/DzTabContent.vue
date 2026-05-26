@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTabContentProps, DzTabContentSlots } from './DzTabs.types.ts'
 import { TabsContent } from 'reka-ui'
 /**
@@ -40,11 +44,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <TabsContent

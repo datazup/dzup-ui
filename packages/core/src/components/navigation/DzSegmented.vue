@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSegmentedEmits, DzSegmentedProps, DzSegmentedSlots } from './DzSegmented.types.ts'
 import { ToggleGroupItem, ToggleGroupRoot } from 'reka-ui'
 /**
@@ -52,11 +56,6 @@ function handleValueChange(raw: unknown): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ToggleGroupRoot

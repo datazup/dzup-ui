@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzListContext, DzListEmits, DzListProps, DzListSlots } from './DzList.types.ts'
 /**
  * DzList — Compound list root component.
@@ -62,11 +66,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

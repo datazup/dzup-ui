@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSidebarContext, DzSidebarEmits, DzSidebarProps, DzSidebarSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebar -- Collapsible navigation sidebar root component.
@@ -111,9 +115,6 @@ const dataState = computed(() => collapsedModel.value ? 'collapsed' : 'expanded'
 function handleOverlayClick(): void { mobileOpenModel.value = false }
 </script>
 
-<script lang="ts">
-export default { inheritAttrs: false }
-</script>
 
 <template>
   <Teleport to="body">

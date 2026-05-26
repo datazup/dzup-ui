@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzStatCardProps, DzStatCardSlots } from './DzStatCard.types.ts'
 /**
  * DzStatCard — Statistics display card.
@@ -41,11 +45,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

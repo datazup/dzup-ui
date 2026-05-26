@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import { DropdownMenuSeparator } from 'reka-ui'
 /**
  * DzDropdownMenuSeparator — Visual divider between menu items.
@@ -15,11 +19,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DropdownMenuSeparator :class="classes" v-bind="{ ...$attrs, class: undefined }" />

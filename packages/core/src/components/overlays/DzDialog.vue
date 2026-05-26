@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDialogProps, DzDialogSlots } from './DzDialog.types.ts'
 import { DialogRoot } from 'reka-ui'
 /**
@@ -43,11 +47,6 @@ provide(DZ_DIALOG_KEY, {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogRoot v-model:open="open" :modal="modal">

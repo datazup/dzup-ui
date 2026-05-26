@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTabsContext, DzTabsEmits, DzTabsProps, DzTabsSlots } from './DzTabs.types.ts'
 import { TabsRoot } from 'reka-ui'
 /**
@@ -75,11 +79,6 @@ function handleValueChange(value: string): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <TabsRoot

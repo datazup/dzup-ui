@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCarouselNavProps, DzCarouselNavSlots } from './DzCarousel.types.ts'
 /**
  * DzCarouselNext — Next slide navigation button.
@@ -28,11 +32,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <button

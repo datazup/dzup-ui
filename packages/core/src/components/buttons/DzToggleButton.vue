@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzToggleButtonEmits,
   DzToggleButtonProps,
@@ -63,11 +67,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <button

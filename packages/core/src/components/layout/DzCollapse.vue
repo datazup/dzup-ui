@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
 /**
  * DzCollapse — Animated expand/collapse container.
@@ -38,11 +42,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

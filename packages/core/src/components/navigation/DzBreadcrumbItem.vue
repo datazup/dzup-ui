@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzBreadcrumbItemProps, DzBreadcrumbItemSlots } from './DzBreadcrumb.types.ts'
 /**
  * DzBreadcrumbItem — Individual breadcrumb entry.
@@ -36,11 +40,6 @@ const linkClasses = computed(() => {
 const isLink = computed(() => !!props.href && !props.current && !props.disabled)
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <li :class="styles.item()">

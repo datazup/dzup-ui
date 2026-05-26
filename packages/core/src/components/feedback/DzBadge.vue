@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzBadgeProps, DzBadgeSlots } from './DzBadge.types.ts'
 /**
  * DzBadge — Compact label for status, counts, or categories.
@@ -35,11 +39,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <span

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzPersonaSelectorEmits,
   DzPersonaSelectorProps,
@@ -62,11 +66,6 @@ function handleUpdate(value: string): void {
 const rootClass = computed(() => cn(attrs.class as string | undefined))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DzCombobox

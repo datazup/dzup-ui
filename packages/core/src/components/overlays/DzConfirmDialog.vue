@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzConfirmDialogEmits, DzConfirmDialogProps, DzConfirmDialogSlots } from './DzConfirmDialog.types.ts'
 /**
  * DzConfirmDialog -- Pre-composed confirmation dialog.
@@ -86,11 +90,6 @@ function handleInteractOutside(): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DzDialog

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAccordionContentSlots } from './DzAccordion.types.ts'
 import { AccordionContent } from 'reka-ui'
 /**
@@ -29,11 +33,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <AccordionContent

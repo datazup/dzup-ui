@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTabTriggerProps, DzTabTriggerSlots } from './DzTabs.types.ts'
 import { TabsTrigger } from 'reka-ui'
 /**
@@ -64,11 +68,6 @@ function handleKeydown(event: KeyboardEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <TabsTrigger

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzMenuItemEmits, DzMenuItemProps, DzMenuItemSlots } from './DzMenu.types.ts'
 /**
  * DzMenuItem — A single item within DzMenu.
@@ -37,11 +41,6 @@ function handleClick(event: MouseEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <a

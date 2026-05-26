@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDialogCloseSlots } from './DzDialog.types.ts'
 import { X } from 'lucide-vue-next'
 import { DialogClose } from 'reka-ui'
@@ -21,11 +25,6 @@ const closeClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogClose

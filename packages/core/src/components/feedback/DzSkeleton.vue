@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSkeletonProps } from './DzSkeleton.types.ts'
 /**
  * DzSkeleton — Placeholder loading state for content.
@@ -58,11 +62,6 @@ function lineWidth(index: number): string {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

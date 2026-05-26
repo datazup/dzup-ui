@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzDialogContentEmits,
   DzDialogContentProps,
@@ -71,11 +75,6 @@ function handleCloseAutoFocus(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogPortal>

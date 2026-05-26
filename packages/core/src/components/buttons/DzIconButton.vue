@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzIconButtonEmits, DzIconButtonProps } from './DzIconButton.types.ts'
 /**
  * DzIconButton — Icon-only button component.
@@ -93,11 +97,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <button

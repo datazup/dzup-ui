@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSelectEmits, DzSelectProps, DzSelectSlots } from './DzSelect.types.ts'
 import { Check, ChevronDown } from 'lucide-vue-next'
 import {
@@ -155,11 +159,6 @@ const triggerClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <SelectRoot

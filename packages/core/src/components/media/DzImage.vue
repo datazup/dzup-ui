@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzImageEmits, DzImageProps, DzImageSlots } from './DzImage.types.ts'
 /**
  * DzImage — Enhanced image component with loading and error states.
@@ -76,11 +80,6 @@ function handleError(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

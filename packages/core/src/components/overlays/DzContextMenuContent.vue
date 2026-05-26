@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzContextMenuContentEmits,
   DzContextMenuContentProps,
@@ -37,11 +41,6 @@ function handlePointerDownOutside(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ContextMenuPortal>

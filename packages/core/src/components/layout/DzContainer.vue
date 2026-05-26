@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzContainerProps, DzContainerSlots } from './DzContainer.types.ts'
 /**
  * DzContainer -- Centered content container.
@@ -41,11 +45,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

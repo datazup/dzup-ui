@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DateValue } from '@internationalized/date'
 import type { DzDatePickerEmits, DzDatePickerProps, DzDatePickerSlots } from './DzDatePicker.types.ts'
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-vue-next'
@@ -124,11 +128,6 @@ const triggerClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DatePickerRoot

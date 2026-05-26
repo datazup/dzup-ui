@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSwitchEmits, DzSwitchProps, DzSwitchSlots } from './DzSwitch.types.ts'
 import { SwitchRoot, SwitchThumb } from 'reka-ui'
 /**
@@ -62,11 +66,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <label

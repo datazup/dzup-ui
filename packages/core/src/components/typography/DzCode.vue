@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCodeProps, DzCodeSlots } from './DzCode.types.ts'
 /**
  * DzCode — Code display component (inline or block).
@@ -36,11 +40,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <pre

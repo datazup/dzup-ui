@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { FilterOperator } from './DzDataGrid.types.ts'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
@@ -68,11 +72,6 @@ const {
 } = useDataGridHeader({ ctx: ctx! })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <thead :class="styles.header()" role="rowgroup">

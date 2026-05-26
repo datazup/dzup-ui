@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTableCellProps, DzTableCellSlots } from './DzTable.types.ts'
 /**
  * DzTableCell — Table cell (<td> or <th>).
@@ -48,11 +52,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

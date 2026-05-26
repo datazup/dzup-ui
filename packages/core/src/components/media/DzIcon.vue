@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzIconProps } from './DzIcon.types.ts'
 /**
  * DzIcon — Icon wrapper component with consistent sizing and accessibility.
@@ -38,11 +42,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

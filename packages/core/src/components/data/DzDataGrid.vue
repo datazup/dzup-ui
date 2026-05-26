@@ -128,11 +128,6 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

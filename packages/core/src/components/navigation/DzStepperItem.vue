@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzStepperItemProps, DzStepperItemSlots } from './DzStepper.types.ts'
 /**
  * DzStepperItem — A single step within DzStepper.
@@ -46,11 +50,6 @@ const stepClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

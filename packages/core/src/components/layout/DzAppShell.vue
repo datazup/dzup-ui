@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAppShellProps, DzAppShellSlots } from './DzAppShell.types.ts'
 /**
  * DzAppShell -- Application shell layout.
@@ -53,11 +57,6 @@ const rootStyles = computed(() => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

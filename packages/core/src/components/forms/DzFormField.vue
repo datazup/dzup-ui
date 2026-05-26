@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzFormFieldProps, DzFormFieldSlots } from './DzFormField.types.ts'
 /**
  * DzFormField -- Compound wrapper that provides form field context.
@@ -46,11 +50,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

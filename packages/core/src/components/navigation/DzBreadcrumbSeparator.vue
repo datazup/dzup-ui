@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzBreadcrumbSeparatorProps, DzBreadcrumbSeparatorSlots } from './DzBreadcrumb.types.ts'
 /**
  * DzBreadcrumbSeparator — Visual separator between breadcrumb items.
@@ -39,11 +43,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <li

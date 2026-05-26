@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzStackProps, DzStackSlots } from './DzStack.types.ts'
 /**
  * DzStack -- Simplified vertical/horizontal stack layout.
@@ -53,11 +57,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

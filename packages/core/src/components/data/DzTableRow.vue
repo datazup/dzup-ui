@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTableRowProps, DzTableRowSlots } from './DzTable.types.ts'
 /**
  * DzTableRow — Table row (<tr>).
@@ -37,11 +41,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <tr

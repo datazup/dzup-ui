@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAccordionTriggerSlots } from './DzAccordion.types.ts'
 import { AccordionHeader, AccordionTrigger } from 'reka-ui'
 /**
@@ -29,11 +33,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <AccordionHeader class="flex">

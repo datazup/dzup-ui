@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSliderEmits, DzSliderProps, DzSliderSlots } from './DzSlider.types.ts'
 import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 /**
@@ -97,11 +101,6 @@ defineExpose({
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <SliderRoot

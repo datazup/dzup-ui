@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzSearchInputEmits,
   DzSearchInputProps,
@@ -109,11 +113,6 @@ function handleClear(): void {
 defineExpose({ inputRef })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

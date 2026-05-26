@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTimelineItemProps, DzTimelineItemSlots } from './DzTimeline.types.ts'
 /**
  * DzTimelineItem — Child item within a DzTimeline compound component.
@@ -56,11 +60,6 @@ const indicatorToneClass = computed(() => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

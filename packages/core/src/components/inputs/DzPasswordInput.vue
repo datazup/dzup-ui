@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzPasswordInputEmits,
   DzPasswordInputProps,
@@ -85,11 +89,6 @@ function handleBlur(event: FocusEvent): void {
 defineExpose({ inputRef })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

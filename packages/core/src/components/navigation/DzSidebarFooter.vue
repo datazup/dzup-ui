@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSidebarFooterProps, DzSidebarFooterSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebarFooter -- Bottom section of the sidebar.
@@ -40,11 +44,6 @@ const footerClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

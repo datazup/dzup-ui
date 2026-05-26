@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCheckboxEmits, DzCheckboxProps, DzCheckboxSlots } from './DzCheckbox.types.ts'
 import { Check, Minus } from 'lucide-vue-next'
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
@@ -100,11 +104,6 @@ const iconSizeClass = computed(() => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <label

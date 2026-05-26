@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAvatarEmits, DzAvatarProps, DzAvatarSlots } from './DzAvatar.types.ts'
 /**
  * DzAvatar — User avatar component with image and fallback support.
@@ -53,11 +57,6 @@ function handleImageError(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <span

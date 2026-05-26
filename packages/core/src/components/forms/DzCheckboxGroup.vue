@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCheckboxGroupContext, DzCheckboxGroupEmits, DzCheckboxGroupProps, DzCheckboxGroupSlots } from './DzCheckboxGroup.types.ts'
 /**
  * DzCheckboxGroup -- Groups DzCheckbox components with a shared string[] model.
@@ -75,11 +79,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzStepperContext, DzStepperEmits, DzStepperProps, DzStepperSlots } from './DzStepper.types.ts'
 /**
  * DzStepper — Step-by-step progress indicator.
@@ -54,11 +58,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

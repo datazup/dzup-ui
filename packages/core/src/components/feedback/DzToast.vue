@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzToastEmits, DzToastProps, DzToastSlots } from './DzToast.types.ts'
 import { X } from 'lucide-vue-next'
 import {
@@ -56,11 +60,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ToastRoot

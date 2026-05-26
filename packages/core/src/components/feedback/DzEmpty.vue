@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzEmptyProps, DzEmptySlots } from './DzEmpty.types.ts'
 /**
  * DzEmpty — Empty state placeholder component.
@@ -34,11 +38,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

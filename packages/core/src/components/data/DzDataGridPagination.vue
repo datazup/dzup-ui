@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDataGridPaginationEmits, DzDataGridPaginationProps } from './DzDataGrid.types.ts'
 /**
  * DzDataGridPagination — Internal pagination sub-part for DzDataGrid.
@@ -37,11 +41,6 @@ function goToPage(page: number): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div :class="styles.pagination()">

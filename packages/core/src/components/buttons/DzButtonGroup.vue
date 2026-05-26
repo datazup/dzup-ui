@@ -20,6 +20,10 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
 import { buttonGroupVariants } from './DzButtonGroup.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzButtonGroupProps>(), {
   orientation: 'horizontal',
   size: undefined,
@@ -48,12 +52,6 @@ const classes = computed(() =>
     attrs.class as string | undefined,
   ),
 )
-</script>
-
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
 </script>
 
 <template>

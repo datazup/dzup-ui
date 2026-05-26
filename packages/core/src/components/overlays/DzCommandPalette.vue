@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   CommandItem,
   DzCommandPaletteEmits,
@@ -137,11 +141,6 @@ watch(open, (isOpen) => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogRoot v-model:open="open">
