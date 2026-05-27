@@ -30,6 +30,13 @@ export interface UseDataGridSortOptions<T> {
   sortable: Readonly<Ref<boolean>>
   /** Whether filtering is enabled */
   filterable: Readonly<Ref<boolean>>
+  /**
+   * Manual / server-driven mode. When `true`, the composable still tracks
+   * sortModel / filters state and emits change callbacks, but does not
+   * actually sort or filter the rows -- the consumer supplies pre-processed
+   * data via `data`.
+   */
+  manual?: Readonly<Ref<boolean>>
   /** Initial sort model */
   initialSortModel?: SortModel[]
   /** Initial filter state */
@@ -52,8 +59,15 @@ export interface UseDataGridSortReturn<T> {
   filters: Ref<DzDataGridFilter[]>
   /** Sorted and filtered data (before pagination) */
   sortedData: ComputedRef<T[]>
-  /** Sort by a column field */
-  sort: (field: string) => void
+  /**
+   * Sort by a column field.
+   *
+   * When `multi=true`, the field is toggled inside the existing sort model
+   * (asc → desc → removed) preserving other columns, enabling Shift+click
+   * multi-column sort. When `multi=false`/omitted, the call replaces the
+   * sort model with a single entry (legacy single-sort behaviour).
+   */
+  sort: (field: string, multi?: boolean) => void
   /** Set a filter on a column */
   setFilter: (column: string, filter: DzDataGridFilter) => void
   /** Clear a filter on a column */
@@ -112,10 +126,12 @@ export function useDataGridSort<T>(
   const sortModel = ref<SortModel[]>(options.initialSortModel ?? []) as Ref<SortModel[]>
   const filters = ref<DzDataGridFilter[]>(options.initialFilters ?? []) as Ref<DzDataGridFilter[]>
 
+  const isManual = (): boolean => options.manual?.value ?? false
+
   // ── Filtered data (applied before sorting) ──
   const filteredData = computed<T[]>(() => {
     const raw = options.data.value
-    if (!options.filterable.value || filters.value.length === 0)
+    if (isManual() || !options.filterable.value || filters.value.length === 0)
       return raw
 
     return raw.filter((row) => {
@@ -129,7 +145,7 @@ export function useDataGridSort<T>(
   // ── Sorted data ──
   const sortedData = computed<T[]>(() => {
     const raw = filteredData.value
-    if (!options.sortable.value || sortModel.value.length === 0)
+    if (isManual() || !options.sortable.value || sortModel.value.length === 0)
       return raw
 
     const sorted = [...raw]
@@ -154,7 +170,7 @@ export function useDataGridSort<T>(
   })
 
   // ── Sort action ──
-  function sort(field: string): void {
+  function sort(field: string, multi: boolean = false): void {
     if (!options.sortable.value)
       return
 
@@ -165,7 +181,16 @@ export function useDataGridSort<T>(
     const existing = sortModel.value.find(s => s.field === field)
 
     let newModel: SortModel[]
-    if (!existing) {
+    if (multi) {
+      const others = sortModel.value.filter(s => s.field !== field)
+      if (!existing)
+        newModel = [...others, { field, direction: 'asc' }]
+      else if (existing.direction === 'asc')
+        newModel = [...others, { field, direction: 'desc' }]
+      else
+        newModel = others
+    }
+    else if (!existing) {
       newModel = [{ field, direction: 'asc' }]
     }
     else if (existing.direction === 'asc') {

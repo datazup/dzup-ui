@@ -29,8 +29,8 @@ export { type ColorPickerVariantProps, colorPickerVariants } from './DzColorPick
 export { default as DzColorPicker } from './DzColorPicker.vue'
 // Types — DzCombobox
 export type {
-  DzComboboxItem,
   DzComboboxEmits,
+  DzComboboxItem,
   DzComboboxProps,
   DzComboboxResolvedItem,
   DzComboboxSlots,

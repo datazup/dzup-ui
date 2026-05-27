@@ -145,6 +145,7 @@ const triggerClasses = computed(() =>
     <DatePickerAnchor>
       <DatePickerField
         :id="resolvedId"
+        v-slot="{ segments }"
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
@@ -158,19 +159,31 @@ const triggerClasses = computed(() =>
         @focus="handleFocus"
         @blur="handleBlur"
       >
-        <template v-if="!model && placeholder">
-          <span class="text-[var(--dz-muted-foreground)]">{{ placeholder }}</span>
-        </template>
-        <template v-else>
-          <DatePickerInput part="month" :class="styles.fieldInput()" />
-          <span :class="styles.field()">/</span>
-          <DatePickerInput part="day" :class="styles.fieldInput()" />
-          <span :class="styles.field()">/</span>
-          <DatePickerInput part="year" :class="styles.fieldInput()" />
+        <DatePickerTrigger
+          v-if="!model && placeholder"
+          as-child
+          :aria-label="ariaLabel ?? 'Open date picker'"
+        >
+          <button
+            type="button"
+            class="flex-1 text-left bg-transparent border-0 outline-none text-[var(--dz-muted-foreground)] cursor-pointer"
+          >
+            {{ placeholder }}
+          </button>
+        </DatePickerTrigger>
+        <template v-for="item in segments" v-else :key="item.part">
+          <DatePickerInput
+            v-if="item.part !== 'literal'"
+            :part="item.part"
+            :class="styles.fieldInput()"
+          >
+            {{ item.value }}
+          </DatePickerInput>
+          <span v-else :class="styles.field()">{{ item.value }}</span>
         </template>
 
         <DatePickerTrigger
-          class="ml-auto"
+          class="ml-auto inline-flex items-center justify-center bg-transparent border-0 outline-none cursor-pointer dz-focus-ring-button"
           :aria-label="ariaLabel ?? 'Open date picker'"
         >
           <CalendarIcon :class="styles.icon()" aria-hidden="true" />

@@ -100,6 +100,7 @@ export { default as DzSidebarSection } from './DzSidebarSection.vue'
 export type {
   DzStepperContext,
   DzStepperEmits,
+  DzStepperItemEmits,
   DzStepperItemProps,
   DzStepperItemSlots,
   DzStepperProps,

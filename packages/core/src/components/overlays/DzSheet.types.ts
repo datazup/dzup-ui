@@ -12,6 +12,9 @@ import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 /** Sheet slide direction */
 export type SheetSide = 'top' | 'right' | 'bottom' | 'left'
 
+/** Size options for sheet content panel */
+export type SheetContentSize = 'sm' | 'md' | 'lg'
+
 // ---------------------------------------------------------------------------
 // DzSheet (Root) Props
 // ---------------------------------------------------------------------------
@@ -30,6 +33,11 @@ export interface DzSheetProps {
 export interface DzSheetContentProps extends BaseAccessibilityProps {
   /** Side from which the sheet slides in */
   side?: SheetSide
+  /**
+   * Size of the sheet panel.
+   * For `left`/`right` controls width; for `top`/`bottom` controls height.
+   */
+  size?: SheetContentSize
 }
 
 /** Events emitted by DzSheetContent */

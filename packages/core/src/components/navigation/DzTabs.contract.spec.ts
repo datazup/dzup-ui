@@ -56,6 +56,15 @@ describe('dzTabs — Contract Spec v1', () => {
     }
   })
 
+  it('accepts all canonical tone values', () => {
+    const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as const
+    for (const tone of tones) {
+      const wrapper = mountTabs({ tone })
+      expect(wrapper.exists()).toBe(true)
+      expect(wrapper.attributes('data-tone')).toBe(tone)
+    }
+  })
+
   it('accepts horizontal and vertical orientation', () => {
     const orientations = ['horizontal', 'vertical'] as const
     for (const orientation of orientations) {

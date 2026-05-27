@@ -23,6 +23,8 @@ import type { DzContextMenuProps, DzContextMenuSlots } from './DzContextMenu.typ
  */
 import { ContextMenuRoot } from 'reka-ui'
 
+const open = defineModel<boolean>('open', { default: undefined })
+
 withDefaults(defineProps<DzContextMenuProps>(), {
   modal: true,
 })
@@ -32,7 +34,7 @@ defineSlots<DzContextMenuSlots>()
 
 
 <template>
-  <ContextMenuRoot :modal="modal">
+  <ContextMenuRoot v-model:open="open" :modal="modal">
     <slot />
   </ContextMenuRoot>
 </template>

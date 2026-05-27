@@ -1,31 +1,30 @@
 <script setup lang="ts">
+<<<<<<< HEAD
 import { DzThemeProvider } from '@dzup-ui/core/providers'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import ThemeToggle from './ThemeToggle.vue'
+=======
+import { DzToastProvider, DzToastViewport } from '@dzup-ui/core'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import DevDrawer from './components/DevDrawer.vue'
+import { useTheme } from './composables/useTheme.ts'
+import { sandboxRoutes } from './routes.ts'
+>>>>>>> esmir
 
 const route = useRoute()
-
-const families = [
-  { name: 'Home', path: '/', icon: 'H' },
-  { name: 'Buttons', path: '/buttons', icon: 'B' },
-  { name: 'Inputs', path: '/inputs', icon: 'I' },
-  { name: 'Forms', path: '/forms', icon: 'F' },
-  { name: 'Cards', path: '/cards', icon: 'C' },
-  { name: 'Data', path: '/data', icon: 'D' },
-  { name: 'Feedback', path: '/feedback', icon: 'Fb' },
-  { name: 'Layout', path: '/layout', icon: 'L' },
-  { name: 'Navigation', path: '/navigation', icon: 'N' },
-  { name: 'Overlays', path: '/overlays', icon: 'O' },
-  { name: 'Media', path: '/media', icon: 'M' },
-  { name: 'Typography', path: '/typography', icon: 'T' },
-] as const
+useTheme()
 
 const currentPath = computed(() => route.path)
 </script>
 
 <template>
+<<<<<<< HEAD
   <DzThemeProvider default-theme="system">
+=======
+  <DzToastProvider>
+>>>>>>> esmir
     <div class="app-layout">
       <aside class="sidebar">
         <div class="sidebar-header">
@@ -37,13 +36,18 @@ const currentPath = computed(() => route.path)
 
         <nav class="sidebar-nav">
           <router-link
+<<<<<<< HEAD
             v-for="family in families"
+=======
+            v-for="family in sandboxRoutes"
+>>>>>>> esmir
             :key="family.path"
             :to="family.path"
             class="nav-link"
             :class="{ active: currentPath === family.path }"
           >
             <span class="nav-icon">{{ family.icon }}</span>
+<<<<<<< HEAD
             <span class="nav-label">{{ family.name }}</span>
           </router-link>
         </nav>
@@ -58,6 +62,21 @@ const currentPath = computed(() => route.path)
       </main>
     </div>
   </DzThemeProvider>
+=======
+            <span class="nav-label">{{ family.label }}</span>
+          </router-link>
+        </nav>
+      </aside>
+
+      <main class="main-content" data-sandbox-main>
+        <router-view />
+      </main>
+
+      <DevDrawer />
+    </div>
+    <DzToastViewport position="bottom-right" />
+  </DzToastProvider>
+>>>>>>> esmir
 </template>
 
 <style scoped>

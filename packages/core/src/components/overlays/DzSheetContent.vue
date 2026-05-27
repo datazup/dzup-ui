@@ -17,13 +17,14 @@ import { sheetVariants } from './DzSheet.variants.ts'
 
 const props = withDefaults(defineProps<DzSheetContentProps>(), {
   side: 'right',
+  size: 'sm',
 })
 
 const emit = defineEmits<DzSheetContentEmits>()
 defineSlots<DzSheetContentSlots>()
 
 const attrs = useAttrs()
-const styles = computed(() => sheetVariants({ side: props.side }))
+const styles = computed(() => sheetVariants({ side: props.side, size: props.size }))
 const overlayClasses = computed(() => styles.value.overlay())
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),

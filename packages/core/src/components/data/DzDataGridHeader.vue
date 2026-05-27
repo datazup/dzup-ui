@@ -59,6 +59,7 @@ const {
   openFilterField,
   getAlignClass,
   getColumnStyle,
+  handleHeaderClick,
   handleHeaderKeyDown,
   isColumnFilterable,
   hasActiveFilter,
@@ -102,7 +103,7 @@ const {
         "
         :tabindex="ctx!.sortable.value && col.sortable !== false ? 0 : undefined"
         role="columnheader"
-        @click="ctx!.sortable.value && col.sortable !== false ? ctx!.sort(col.field) : undefined"
+        @click="ctx!.sortable.value && col.sortable !== false ? handleHeaderClick($event, col.field) : undefined"
         @keydown="ctx!.sortable.value && col.sortable !== false ? handleHeaderKeyDown($event, col.field) : undefined"
       >
         <span class="inline-flex items-center gap-[var(--dz-spacing-1)]">

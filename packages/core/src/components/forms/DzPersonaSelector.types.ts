@@ -47,7 +47,7 @@ export interface DzPersonaSelectorEmits {
   /** v-model update: emits new persona id */
   'update:modelValue': [value: string]
   /** Fires with the full persona object when one is selected */
-  change: [persona: Persona | undefined]
+  'change': [persona: Persona | undefined]
 }
 
 // ---------------------------------------------------------------------------

@@ -86,7 +86,8 @@ function cancelDebounce(): void {
 if (props.debounce > 0) {
   watch(model, (value) => {
     cancelDebounce()
-    if (!value) return
+    if (!value)
+      return
     debounceTimer = setTimeout(() => {
       emit('search', value)
     }, props.debounce)

@@ -72,7 +72,7 @@ const checkedState = computed<boolean | 'indeterminate'>(() => {
 const styles = computed(() => checkboxVariants({ size: resolvedSize.value }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 
-function handleCheckedChange(checked: boolean | 'indeterminate'): void {
+function handleCheckedChange(checked: unknown): void {
   const isChecked = checked === true
   if (groupContext && props.value !== undefined) {
     groupContext.toggle(props.value)
@@ -115,7 +115,7 @@ const iconSizeClass = computed(() => {
   >
     <CheckboxRoot
       :id="resolvedId"
-      :checked="checkedState"
+      :model-value="checkedState"
       :disabled="resolvedDisabled"
       :name="name"
       :required="required"
@@ -124,7 +124,7 @@ const iconSizeClass = computed(() => {
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
       :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
       :class="styles.indicator()"
-      @update:checked="handleCheckedChange"
+      @update:model-value="handleCheckedChange"
       @focus="handleFocus"
       @blur="handleBlur"
     >

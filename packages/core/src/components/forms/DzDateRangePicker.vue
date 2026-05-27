@@ -171,6 +171,7 @@ const triggerClasses = computed(() =>
     <DateRangePickerAnchor>
       <DateRangePickerField
         :id="resolvedId"
+        v-slot="{ segments }"
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
@@ -184,23 +185,36 @@ const triggerClasses = computed(() =>
         @focus="handleFocus"
         @blur="handleBlur"
       >
-        <template v-if="!model.start && !model.end && placeholder">
-          <span class="text-[var(--dz-muted-foreground)]">{{ placeholder }}</span>
-        </template>
+        <span
+          v-if="!model.start && !model.end && placeholder"
+          class="text-[var(--dz-muted-foreground)]"
+        >{{ placeholder }}</span>
         <template v-else>
-          <DateRangePickerInput part="month" type="start" :class="styles.fieldInput()" />
-          <span>/</span>
-          <DateRangePickerInput part="day" type="start" :class="styles.fieldInput()" />
-          <span>/</span>
-          <DateRangePickerInput part="year" type="start" :class="styles.fieldInput()" />
+          <template v-for="(item, index) in segments.start" :key="`start-${index}`">
+            <DateRangePickerInput
+              v-if="item.part !== 'literal'"
+              :part="item.part"
+              type="start"
+              :class="styles.fieldInput()"
+            >
+              {{ item.value }}
+            </DateRangePickerInput>
+            <span v-else>{{ item.value }}</span>
+          </template>
 
           <span :class="styles.separator()">-</span>
 
-          <DateRangePickerInput part="month" type="end" :class="styles.fieldInput()" />
-          <span>/</span>
-          <DateRangePickerInput part="day" type="end" :class="styles.fieldInput()" />
-          <span>/</span>
-          <DateRangePickerInput part="year" type="end" :class="styles.fieldInput()" />
+          <template v-for="(item, index) in segments.end" :key="`end-${index}`">
+            <DateRangePickerInput
+              v-if="item.part !== 'literal'"
+              :part="item.part"
+              type="end"
+              :class="styles.fieldInput()"
+            >
+              {{ item.value }}
+            </DateRangePickerInput>
+            <span v-else>{{ item.value }}</span>
+          </template>
         </template>
 
         <DateRangePickerTrigger

@@ -37,7 +37,17 @@ export interface UseDataGridHeaderReturn {
   getAlignClass: (align?: 'left' | 'center' | 'right') => string
   /** Get inline style for column width */
   getColumnStyle: (col: ColumnDef<Record<string, unknown>>) => string | undefined
-  /** Handle keyboard sort trigger on header cell */
+  /**
+   * Handle pointer-initiated sort trigger on a header cell.
+   * Forwards `event.shiftKey` so multiple columns can be combined into the
+   * sort model (Shift+click multi-sort).
+   */
+  handleHeaderClick: (event: MouseEvent, field: string) => void
+  /**
+   * Handle keyboard sort trigger on a header cell.
+   * Enter / Space cycles sort; Shift+Enter / Shift+Space appends to the
+   * existing sort model.
+   */
   handleHeaderKeyDown: (event: KeyboardEvent, field: string) => void
   /** Check if a column supports filtering */
   isColumnFilterable: (col: ColumnDef<Record<string, unknown>>) => boolean
@@ -92,10 +102,14 @@ export function useDataGridHeader(
     return `width: ${w}; min-width: ${w}`
   }
 
+  function handleHeaderClick(event: MouseEvent, field: string): void {
+    ctx.sort(field, event.shiftKey)
+  }
+
   function handleHeaderKeyDown(event: KeyboardEvent, field: string): void {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      ctx.sort(field)
+      ctx.sort(field, event.shiftKey)
     }
   }
 
@@ -166,6 +180,7 @@ export function useDataGridHeader(
     openFilterField,
     getAlignClass,
     getColumnStyle,
+    handleHeaderClick,
     handleHeaderKeyDown,
     isColumnFilterable,
     hasActiveFilter,

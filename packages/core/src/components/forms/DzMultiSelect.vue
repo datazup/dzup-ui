@@ -18,6 +18,7 @@ import {
   ComboboxItemIndicator,
   ComboboxPortal,
   ComboboxRoot,
+  ComboboxTrigger,
   ComboboxViewport,
 } from 'reka-ui'
 /**
@@ -161,6 +162,9 @@ const rootClasses = computed(() =>
     :disabled="resolvedDisabled"
     :name="name"
     multiple
+    :open-on-click="true"
+    :open-on-focus="true"
+    :ignore-filter="true"
     @update:model-value="handleValueChange"
     @update:open="handleOpenChange"
   >
@@ -215,7 +219,16 @@ const rootClasses = computed(() =>
         <X class="h-3.5 w-3.5" aria-hidden="true" />
       </button>
 
-      <ChevronDown :class="styles.icon()" aria-hidden="true" />
+      <ComboboxTrigger as-child>
+        <button
+          type="button"
+          :class="styles.icon()"
+          aria-label="Toggle options"
+          :disabled="resolvedDisabled"
+        >
+          <ChevronDown class="h-full w-full" aria-hidden="true" />
+        </button>
+      </ComboboxTrigger>
     </ComboboxAnchor>
 
     <ComboboxPortal>

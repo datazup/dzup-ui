@@ -179,6 +179,50 @@ describe('dzSidebar -- Unit Tests', () => {
     expect(nav.attributes('aria-label')).toBe('Main navigation')
   })
 
+  it('hydrates collapsed state from localStorage when storageKey is set', async () => {
+    const key = 'dz-sidebar-test-hydrate'
+    window.localStorage.setItem(key, '1')
+    try {
+      const wrapper = mountSidebar({ storageKey: key })
+      await nextTick()
+      expect(wrapper.find('nav').attributes('data-state')).toBe('collapsed')
+    }
+    finally {
+      window.localStorage.removeItem(key)
+    }
+  })
+
+  it('writes collapsed state to localStorage when storageKey is set', async () => {
+    const key = 'dz-sidebar-test-write'
+    window.localStorage.removeItem(key)
+    try {
+      const wrapper = mountSidebar({ storageKey: key, collapsed: false })
+      await wrapper.setProps({ collapsed: true })
+      await nextTick()
+      expect(window.localStorage.getItem(key)).toBe('1')
+      await wrapper.setProps({ collapsed: false })
+      await nextTick()
+      expect(window.localStorage.getItem(key)).toBe('0')
+    }
+    finally {
+      window.localStorage.removeItem(key)
+    }
+  })
+
+  it('ignores storage when storageKey is not provided', async () => {
+    const key = 'dz-sidebar-test-noop'
+    window.localStorage.setItem(key, '1')
+    try {
+      const wrapper = mountSidebar({ collapsed: false })
+      await nextTick()
+      // No storageKey → mount value (false) wins over any pre-existing entry
+      expect(wrapper.find('nav').attributes('data-state')).toBe('expanded')
+    }
+    finally {
+      window.localStorage.removeItem(key)
+    }
+  })
+
   it('section collapsible toggles content visibility', async () => {
     const wrapper = mount(DzSidebar, {
       global: { stubs: { Teleport: true } },

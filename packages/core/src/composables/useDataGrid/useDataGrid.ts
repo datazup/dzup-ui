@@ -45,6 +45,17 @@ export interface UseDataGridOptions<T> {
   selectedRows?: MaybeRef<T[]>
   /** Key field for row identity */
   rowKey?: keyof T & string
+  /**
+   * Manual / server-driven mode. When `true`, sort / filter / pagination
+   * state still mutates and emits, but the composable does not transform
+   * `data` -- the consumer is expected to provide pre-processed rows.
+   */
+  manual?: MaybeRef<boolean>
+  /**
+   * Total row count across all pages (manual mode only). When omitted,
+   * pagination falls back to `data.length`.
+   */
+  total?: MaybeRef<number | undefined>
   /** Callback when sort changes */
   onSortChange?: (sortModel: SortModel[]) => void
   /** Callback when filter changes */
@@ -83,8 +94,13 @@ export interface UseDataGridReturn<T> {
   isAllSelected: Ref<boolean>
   /** Whether some (but not all) current rows are selected */
   isSomeSelected: Ref<boolean>
-  /** Sort by a column field */
-  sort: (field: string) => void
+  /**
+   * Sort by a column field.
+   *
+   * Pass `multi=true` to toggle the entry inside the existing sort model
+   * (asc → desc → removed) for multi-column sort.
+   */
+  sort: (field: string, multi?: boolean) => void
   /** Set a filter on a column */
   setFilter: (column: string, filter: DzDataGridFilter) => void
   /** Clear a filter on a column */
@@ -121,6 +137,8 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
   const filterableMode = toRef(() => toValue(options.filterable) ?? false)
   const selectableMode = toRef(() => toValue(options.selectable) ?? false)
   const paginationConfig = toRef(() => toValue(options.pagination) ?? false)
+  const manual = toRef(() => toValue(options.manual) ?? false)
+  const total = toRef(() => toValue(options.total))
   const rowKey = options.rowKey
 
   // ── Pagination (created first so resetPage is available) ──
@@ -138,6 +156,7 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
       columns,
       sortable,
       filterable: filterableMode,
+      manual,
       initialSortModel: toValue(options.sortModel) ?? undefined,
       initialFilters: toValue(options.filters) ?? undefined,
       onSortChange: options.onSortChange,
@@ -150,6 +169,8 @@ export function useDataGrid<T>(options: UseDataGridOptions<T>): UseDataGridRetur
   const paginationResult = useDataGridPagination<T>({
     sortedData: sortResult.sortedData,
     paginationConfig,
+    manual,
+    total,
     initialPageSize,
     onPageChange: options.onPageChange,
     onPageSizeChange: options.onPageSizeChange,

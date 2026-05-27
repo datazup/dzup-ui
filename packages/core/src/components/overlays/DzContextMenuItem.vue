@@ -21,7 +21,7 @@ withDefaults(defineProps<DzContextMenuItemProps>(), {
 })
 
 const emit = defineEmits<DzContextMenuItemEmits>()
-defineSlots<DzContextMenuItemSlots>()
+const slots = defineSlots<DzContextMenuItemSlots>()
 
 const attrs = useAttrs()
 const styles = computed(() => contextMenuVariants())
@@ -29,6 +29,11 @@ const styles = computed(() => contextMenuVariants())
 const classes = computed(() =>
   cn(styles.value.item(), attrs.class as string | undefined),
 )
+const prefixClasses = computed(() => styles.value.itemPrefix())
+const suffixClasses = computed(() => styles.value.itemSuffix())
+
+const hasPrefix = computed(() => Boolean(slots.prefix))
+const hasSuffix = computed(() => Boolean(slots.suffix))
 
 function handleSelect(event: Event): void {
   emit('select', event)
@@ -43,6 +48,12 @@ function handleSelect(event: Event): void {
     v-bind="{ ...$attrs, class: undefined }"
     @select="handleSelect"
   >
+    <span v-if="hasPrefix" :class="prefixClasses">
+      <slot name="prefix" />
+    </span>
     <slot />
+    <span v-if="hasSuffix" :class="suffixClasses">
+      <slot name="suffix" />
+    </span>
   </ContextMenuItem>
 </template>
