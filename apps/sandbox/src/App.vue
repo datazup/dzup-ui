@@ -1,17 +1,10 @@
 <script setup lang="ts">
-<<<<<<< HEAD
-import { DzThemeProvider } from '@dzup-ui/core/providers'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import ThemeToggle from './ThemeToggle.vue'
-=======
 import { DzToastProvider, DzToastViewport } from '@dzup-ui/core'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import DevDrawer from './components/DevDrawer.vue'
 import { useTheme } from './composables/useTheme.ts'
 import { sandboxRoutes } from './routes.ts'
->>>>>>> esmir
 
 const route = useRoute()
 useTheme()
@@ -20,11 +13,7 @@ const currentPath = computed(() => route.path)
 </script>
 
 <template>
-<<<<<<< HEAD
-  <DzThemeProvider default-theme="system">
-=======
   <DzToastProvider>
->>>>>>> esmir
     <div class="app-layout">
       <aside class="sidebar">
         <div class="sidebar-header">
@@ -36,33 +25,13 @@ const currentPath = computed(() => route.path)
 
         <nav class="sidebar-nav">
           <router-link
-<<<<<<< HEAD
-            v-for="family in families"
-=======
             v-for="family in sandboxRoutes"
->>>>>>> esmir
             :key="family.path"
             :to="family.path"
             class="nav-link"
             :class="{ active: currentPath === family.path }"
           >
             <span class="nav-icon">{{ family.icon }}</span>
-<<<<<<< HEAD
-            <span class="nav-label">{{ family.name }}</span>
-          </router-link>
-        </nav>
-
-        <div class="sidebar-footer">
-          <ThemeToggle />
-        </div>
-      </aside>
-
-      <main class="main-content">
-        <router-view />
-      </main>
-    </div>
-  </DzThemeProvider>
-=======
             <span class="nav-label">{{ family.label }}</span>
           </router-link>
         </nav>
@@ -76,7 +45,6 @@ const currentPath = computed(() => route.path)
     </div>
     <DzToastViewport position="bottom-right" />
   </DzToastProvider>
->>>>>>> esmir
 </template>
 
 <style scoped>
