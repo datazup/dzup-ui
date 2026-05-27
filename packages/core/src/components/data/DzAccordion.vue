@@ -72,14 +72,9 @@ const rootClasses = computed(() =>
 )
 
 function handleValueChange(value: string | string[] | undefined): void {
-<<<<<<< HEAD
   if (value === undefined) return
   model.value = value
   emit('change', value)
-=======
-  model.value = value ?? ''
-  emit('change', value ?? '')
->>>>>>> esmir
 }
 </script>
 

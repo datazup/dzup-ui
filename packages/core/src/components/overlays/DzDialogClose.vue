@@ -1,13 +1,9 @@
 <script setup lang="ts">
-<<<<<<< HEAD
 defineOptions({
   inheritAttrs: false,
 })
 
-import type { DzDialogCloseSlots } from './DzDialog.types.ts'
-=======
 import type { DzDialogCloseProps, DzDialogCloseSlots } from './DzDialog.types.ts'
->>>>>>> esmir
 import { X } from 'lucide-vue-next'
 import { DialogClose } from 'reka-ui'
 /**

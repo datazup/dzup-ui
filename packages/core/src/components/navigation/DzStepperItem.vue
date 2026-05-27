@@ -1,13 +1,9 @@
 <script setup lang="ts">
-<<<<<<< HEAD
 defineOptions({
   inheritAttrs: false,
 })
 
-import type { DzStepperItemProps, DzStepperItemSlots } from './DzStepper.types.ts'
-=======
 import type { DzStepperItemEmits, DzStepperItemProps, DzStepperItemSlots } from './DzStepper.types.ts'
->>>>>>> esmir
 /**
  * DzStepperItem — A single step within DzStepper.
  */

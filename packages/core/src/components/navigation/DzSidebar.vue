@@ -34,14 +34,11 @@ const mobileOpenModel = defineModel<boolean>('mobileOpen', { default: false })
 const props = withDefaults(defineProps<DzSidebarProps>(), {
   width: undefined,
   collapsedWidth: undefined,
-<<<<<<< HEAD
   position: 'static',
   mobileBreakpoint: 1024,
   isMobile: undefined,
   activeStyle: 'filled',
-=======
   storageKey: undefined,
->>>>>>> esmir
   id: undefined,
   ariaLabel: 'Sidebar navigation',
   ariaLabelledby: undefined,
