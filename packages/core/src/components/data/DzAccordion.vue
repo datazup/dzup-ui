@@ -83,7 +83,7 @@ function handleValueChange(value: string | string[] | undefined): void {
   <AccordionRoot
     :id="id"
     :type="(type as 'single' | 'multiple')"
-    :model-value="(model as string)"
+    :model-value="model"
     :collapsible="resolvedCollapsible"
     :disabled="disabled"
     :class="rootClasses"
