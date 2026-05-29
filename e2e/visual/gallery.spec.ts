@@ -4,6 +4,11 @@ const SCREENS = [
   { name: 'dashboard', id: 'visual-refresh-dashboard--dzup-ui' },
   { name: 'form', id: 'visual-refresh-form--dzup-ui' },
   { name: 'datatable', id: 'visual-refresh-data-table--dzup-ui' },
+  { name: 'appshell', id: 'visual-refresh-app-shell--dzup-ui' },
+  { name: 'sidebar', id: 'visual-refresh-sidebar--dzup-ui' },
+  { name: 'settings', id: 'visual-refresh-settings--dzup-ui' },
+  { name: 'states', id: 'visual-refresh-states--dzup-ui' },
+  { name: 'detail', id: 'visual-refresh-detail--dzup-ui' },
 ] as const
 const THEMES = ['light', 'dark'] as const
 
