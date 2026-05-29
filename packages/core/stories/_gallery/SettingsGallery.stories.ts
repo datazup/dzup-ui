@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import BrandScope from './BrandScope.vue'
 import DzupSettings from './dzup/DzupSettings.vue'
+import FreestyleSettings from './freestyle/FreestyleSettings.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Settings',
@@ -9,6 +10,13 @@ const meta: Meta = {
 
 export default meta
 type Story = StoryObj
+
+export const FreeStyled: Story = {
+  render: () => ({
+    components: { FreestyleSettings },
+    template: '<FreestyleSettings />',
+  }),
+}
 
 export const DzupUI: Story = {
   render: () => ({

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import BrandScope from './BrandScope.vue'
 import DzupSidebar from './dzup/DzupSidebar.vue'
+import FreestyleSidebar from './freestyle/FreestyleSidebar.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Sidebar',
@@ -9,6 +10,13 @@ const meta: Meta = {
 
 export default meta
 type Story = StoryObj
+
+export const FreeStyled: Story = {
+  render: () => ({
+    components: { FreestyleSidebar },
+    template: '<FreestyleSidebar />',
+  }),
+}
 
 export const DzupUI: Story = {
   render: () => ({
