@@ -122,11 +122,9 @@ function submit() {
             </div>
           </DzCardBody>
 
-          <!-- Footer -->
+          <!-- Footer — transparent band, sits on the card surface (no muted fill, no divider) -->
           <DzCardFooter>
-            <div
-              class="flex items-center justify-end gap-3 border-t border-[var(--dz-border)] bg-[var(--dz-muted)] px-7 py-4"
-            >
+            <div class="flex items-center justify-end gap-3 px-7 pb-6 pt-2">
               <DzButton type="button" variant="outline" tone="neutral">Cancel</DzButton>
               <DzButton type="submit" variant="solid" tone="primary">Create Project</DzButton>
             </div>

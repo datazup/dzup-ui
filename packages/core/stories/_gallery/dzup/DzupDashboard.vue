@@ -131,13 +131,20 @@ const months: string[] = [
         </DzButton>
       </header>
 
-      <!-- KPI cards -->
+      <!-- KPI cards — fixed anatomy: Label → Value → Delta → time frame (F-pattern, 8px grid) -->
       <section class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <DzCard v-for="kpi in kpis" :key="kpi.label" variant="elevated" hoverable padding="md">
+        <DzCard
+          v-for="kpi in kpis"
+          :key="kpi.label"
+          variant="elevated"
+          hoverable
+          padding="md"
+          class="transition-transform duration-200 hover:-translate-y-0.5"
+        >
           <DzCardBody>
             <DzText as="p" size="sm" weight="medium" tone="muted">{{ kpi.label }}</DzText>
             <div class="mt-3 flex items-end justify-between gap-2">
-              <span class="text-3xl font-semibold tracking-tight tabular-nums">{{
+              <span class="text-3xl font-semibold leading-none tracking-tight tabular-nums">{{
                 kpi.value
               }}</span>
               <DzBadge variant="subtle" :tone="kpi.delta >= 0 ? 'success' : 'danger'" size="sm">
@@ -145,7 +152,7 @@ const months: string[] = [
                 {{ kpi.delta >= 0 ? '+' : '' }}{{ kpi.delta }}%
               </DzBadge>
             </div>
-            <DzText as="p" size="xs" tone="muted" class="mt-1">{{ kpi.hint }}</DzText>
+            <DzText as="p" size="xs" tone="muted" class="mt-2">{{ kpi.hint }}</DzText>
           </DzCardBody>
         </DzCard>
       </section>

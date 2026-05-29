@@ -200,7 +200,7 @@ const ownerItems: DzSelectItem[] = [
               </DzTableCell>
               <DzTableCell header>Status</DzTableCell>
               <DzTableCell header>Owner</DzTableCell>
-              <DzTableCell header>
+              <DzTableCell header align="right">
                 <button
                   type="button"
                   class="inline-flex items-center gap-1 text-[var(--dz-muted-foreground)] transition-colors hover:text-[var(--dz-foreground)]"
@@ -263,7 +263,7 @@ const ownerItems: DzSelectItem[] = [
                   <DzText as="span" size="sm" tone="muted">{{ row.owner }}</DzText>
                 </div>
               </DzTableCell>
-              <DzTableCell>
+              <DzTableCell align="right">
                 <DzText as="span" size="xs" tone="muted" class="font-mono tabular-nums">{{
                   row.duration
                 }}</DzText>
