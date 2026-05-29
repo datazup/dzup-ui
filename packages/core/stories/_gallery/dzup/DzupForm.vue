@@ -18,6 +18,8 @@ import type { DzSelectItem } from '../../../src/components/forms'
 
 const name = ref('')
 const visibility = ref<'private' | 'team' | 'public'>('team')
+const teamSize = ref<'solo' | 'small' | 'medium' | 'large'>('small')
+const startDate = ref('')
 const description = ref('')
 const notifications = ref(true)
 const isPublic = ref(false)
@@ -31,6 +33,13 @@ const visibilityItems: DzSelectItem[] = [
   { label: 'Private — only you', value: 'private' },
   { label: 'Team — everyone in workspace', value: 'team' },
   { label: 'Public — anyone with the link', value: 'public' },
+]
+
+const teamSizeItems: DzSelectItem[] = [
+  { label: 'Just me', value: 'solo' },
+  { label: '2–10 people', value: 'small' },
+  { label: '11–50 people', value: 'medium' },
+  { label: '50+ people', value: 'large' },
 ]
 
 function submit() {
@@ -78,11 +87,39 @@ function submit() {
                 <DzFormMessage />
               </DzFormField>
 
-              <!-- Select -->
+              <!-- Two-column row: related short fields side-by-side -->
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <DzFormField>
+                  <DzFormLabel>Visibility</DzFormLabel>
+                  <DzSelect v-model="visibility" :items="visibilityItems" />
+                </DzFormField>
+
+                <DzFormField>
+                  <DzFormLabel>Team size</DzFormLabel>
+                  <DzSelect v-model="teamSize" :items="teamSizeItems" />
+                </DzFormField>
+              </div>
+
+              <!-- Start date -->
               <DzFormField>
-                <DzFormLabel>Visibility</DzFormLabel>
-                <DzSelect v-model="visibility" :items="visibilityItems" />
+                <DzFormLabel>Start date</DzFormLabel>
+                <DzInput v-model="startDate" type="text" placeholder="e.g. 2026-06-01" />
+                <DzText as="p" size="xs" tone="muted" class="mt-1.5">
+                  When work on this project kicks off. Leave blank to start today.
+                </DzText>
               </DzFormField>
+
+              <!-- Section heading -->
+              <div class="pt-1">
+                <DzText
+                  as="p"
+                  size="xs"
+                  weight="semibold"
+                  class="uppercase tracking-[0.18em] text-[var(--dz-muted-foreground)]"
+                >
+                  Details
+                </DzText>
+              </div>
 
               <!-- Textarea -->
               <DzFormField>
@@ -92,6 +129,9 @@ function submit() {
                   :rows="3"
                   placeholder="What is this project about?"
                 />
+                <DzText as="p" size="xs" tone="muted" class="mt-1.5">
+                  A short summary helps teammates find this project later.
+                </DzText>
               </DzFormField>
 
               <div class="border-t border-[var(--dz-border)] pt-5">

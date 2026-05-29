@@ -1,9 +1,9 @@
 <script setup lang="ts">
 // dzup-ui equivalent of FreestyleDataTable — ONLY @dzup-ui/core components + --dz-* tokens.
 
-import { ref } from 'vue'
-import { ArrowUpDown, ChevronUp, MoreHorizontal, Search } from 'lucide-vue-next'
-import { DzIconButton } from '../../../src/components/buttons'
+import { computed, ref } from 'vue'
+import { ArrowUpDown, ChevronUp, MoreHorizontal, Search, SlidersHorizontal } from 'lucide-vue-next'
+import { DzButton, DzIconButton } from '../../../src/components/buttons'
 import { DzCard } from '../../../src/components/cards'
 import {
   DzTable,
@@ -16,7 +16,7 @@ import {
 import { DzBadge } from '../../../src/components/feedback'
 import { DzSelect } from '../../../src/components/forms'
 import { DzInput } from '../../../src/components/inputs'
-import { DzPagination } from '../../../src/components/navigation'
+import { DzPagination, DzTabList, DzTabs, DzTabTrigger } from '../../../src/components/navigation'
 import {
   DzDropdownMenu,
   DzDropdownMenuContent,
@@ -118,12 +118,22 @@ const statusFilter = ref('all')
 const ownerFilter = ref('all')
 const selectedId = ref<string>('dpl_6b93')
 const currentPage = ref(1)
+const activeTab = ref('all')
+const pageSize = ref('10')
 
 const statusTone: Record<Deployment['status'], CanonicalTone> = {
   active: 'success',
   pending: 'warning',
   failed: 'danger',
 }
+
+// Tab filter row with live counts (All · Active · Pending · Failed).
+const tabCounts = computed(() => ({
+  all: rows.length,
+  active: rows.filter((r) => r.status === 'active').length,
+  pending: rows.filter((r) => r.status === 'pending').length,
+  failed: rows.filter((r) => r.status === 'failed').length,
+}))
 
 const statusItems: DzSelectItem[] = [
   { label: 'All statuses', value: 'all' },
@@ -138,6 +148,19 @@ const ownerItems: DzSelectItem[] = [
   { label: 'Devon Reyes', value: 'dr' },
   { label: 'Priya Nair', value: 'pn' },
 ]
+
+const pageSizeItems: DzSelectItem[] = [
+  { label: '10 per page', value: '10' },
+  { label: '25 per page', value: '25' },
+  { label: '50 per page', value: '50' },
+]
+
+function resetFilters(): void {
+  search.value = ''
+  statusFilter.value = 'all'
+  ownerFilter.value = 'all'
+  activeTab.value = 'all'
+}
 </script>
 
 <template>
@@ -151,6 +174,38 @@ const ownerItems: DzSelectItem[] = [
       </header>
 
       <DzCard variant="elevated" padding="none">
+        <!-- Tab filter row with counts -->
+        <div class="px-5 pt-3">
+          <DzTabs v-model="activeTab" variant="line" size="sm" aria-label="Filter by status">
+            <DzTabList>
+              <DzTabTrigger value="all">
+                All
+                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                  tabCounts.all
+                }}</span>
+              </DzTabTrigger>
+              <DzTabTrigger value="active">
+                Active
+                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                  tabCounts.active
+                }}</span>
+              </DzTabTrigger>
+              <DzTabTrigger value="pending">
+                Pending
+                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                  tabCounts.pending
+                }}</span>
+              </DzTabTrigger>
+              <DzTabTrigger value="failed">
+                Failed
+                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                  tabCounts.failed
+                }}</span>
+              </DzTabTrigger>
+            </DzTabList>
+          </DzTabs>
+        </div>
+
         <!-- Filter bar -->
         <div
           class="flex flex-col gap-3 border-b border-[var(--dz-border)] px-5 py-4 sm:flex-row sm:items-center"
@@ -174,6 +229,12 @@ const ownerItems: DzSelectItem[] = [
             aria-label="Filter by owner"
             class="sm:w-40"
           />
+          <DzButton variant="outline" tone="neutral" size="md" @click="resetFilters">
+            <template #prefix>
+              <SlidersHorizontal class="h-4 w-4" aria-hidden="true" />
+            </template>
+            Reset
+          </DzButton>
         </div>
 
         <!-- Table -->
@@ -296,10 +357,19 @@ const ownerItems: DzSelectItem[] = [
         <div
           class="flex flex-col items-center justify-between gap-3 border-t border-[var(--dz-border)] px-5 py-4 sm:flex-row"
         >
-          <DzText as="p" size="sm" tone="muted">
-            Showing <span class="font-medium text-[var(--dz-foreground)]">1–10</span> of
-            <span class="font-medium text-[var(--dz-foreground)]">42</span>
-          </DzText>
+          <div class="flex items-center gap-4">
+            <DzText as="p" size="sm" tone="muted">
+              Showing <span class="font-medium text-[var(--dz-foreground)]">1–10</span> of
+              <span class="font-medium text-[var(--dz-foreground)]">42</span>
+            </DzText>
+            <DzSelect
+              v-model="pageSize"
+              :items="pageSizeItems"
+              size="sm"
+              aria-label="Rows per page"
+              class="w-36"
+            />
+          </div>
           <DzPagination v-model="currentPage" :total="42" :page-size="10" />
         </div>
       </DzCard>
