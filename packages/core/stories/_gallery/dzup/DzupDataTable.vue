@@ -318,7 +318,7 @@ function resetFilters(): void {
               <DzTableCell>
                 <div class="flex items-center gap-2.5">
                   <span
-                    class="grid h-7 w-7 shrink-0 place-items-center rounded-[var(--dz-radius-full)] bg-[var(--dz-muted)] text-center text-[11px] font-semibold leading-none text-[var(--dz-muted-foreground)]"
+                    class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-muted)] text-[11px] font-semibold leading-none text-[var(--dz-muted-foreground)]"
                     >{{ row.initials }}</span
                   >
                   <DzText as="span" size="sm" tone="muted">{{ row.owner }}</DzText>

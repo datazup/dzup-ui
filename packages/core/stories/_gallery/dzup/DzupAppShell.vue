@@ -268,7 +268,7 @@ function toggleSidebar(): void {
           <ul class="divide-y divide-[var(--dz-border)]">
             <li v-for="row in recent" :key="row.name" class="flex items-center gap-3 px-6 py-4">
               <span
-                class="grid h-9 w-9 shrink-0 place-items-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-center text-xs font-semibold leading-none tabular-nums text-[var(--dz-primary-muted-foreground)]"
+                class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-xs font-semibold leading-none tabular-nums text-[var(--dz-primary-muted-foreground)]"
                 aria-hidden="true"
               >
                 {{ row.initials }}

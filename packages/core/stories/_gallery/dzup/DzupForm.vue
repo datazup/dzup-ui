@@ -30,9 +30,9 @@ const nameError = computed(() =>
 )
 
 const visibilityItems: DzSelectItem[] = [
-  { label: 'Private — only you', value: 'private' },
-  { label: 'Team — everyone in workspace', value: 'team' },
-  { label: 'Public — anyone with the link', value: 'public' },
+  { label: 'Private', value: 'private' },
+  { label: 'Team', value: 'team' },
+  { label: 'Public', value: 'public' },
 ]
 
 const teamSizeItems: DzSelectItem[] = [
@@ -74,7 +74,7 @@ function submit() {
 
           <!-- Body -->
           <DzCardBody>
-            <div class="space-y-5 px-7 py-6">
+            <div class="space-y-6 px-7 py-7">
               <!-- Text input -->
               <DzFormField :error="nameError" :invalid="!!nameError">
                 <DzFormLabel>Project name</DzFormLabel>
@@ -109,30 +109,29 @@ function submit() {
                 </DzText>
               </DzFormField>
 
-              <!-- Section heading -->
-              <div class="pt-1">
+              <!-- Details section — eyebrow + grouped fields with clear separation -->
+              <div class="border-t border-[var(--dz-border)] pt-6">
                 <DzText
                   as="p"
                   size="xs"
                   weight="semibold"
-                  class="uppercase tracking-[0.18em] text-[var(--dz-muted-foreground)]"
+                  class="mb-4 block uppercase tracking-[0.18em] text-[var(--dz-muted-foreground)]"
                 >
                   Details
                 </DzText>
-              </div>
 
-              <!-- Textarea -->
-              <DzFormField>
-                <DzFormLabel>Description</DzFormLabel>
-                <DzTextarea
-                  v-model="description"
-                  :rows="3"
-                  placeholder="What is this project about?"
-                />
-                <DzText as="p" size="xs" tone="muted" class="mt-1.5">
-                  A short summary helps teammates find this project later.
-                </DzText>
-              </DzFormField>
+                <DzFormField>
+                  <DzFormLabel>Description</DzFormLabel>
+                  <DzTextarea
+                    v-model="description"
+                    :rows="3"
+                    placeholder="What is this project about?"
+                  />
+                  <DzText as="p" size="xs" tone="muted" class="mt-1.5">
+                    A short summary helps teammates find this project later.
+                  </DzText>
+                </DzFormField>
+              </div>
 
               <div class="border-t border-[var(--dz-border)] pt-5">
                 <!-- Checkbox row -->

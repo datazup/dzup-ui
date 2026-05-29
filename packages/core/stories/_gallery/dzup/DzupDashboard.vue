@@ -192,26 +192,26 @@ const ringStats = [
           padding="none"
           class="group h-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--dz-shadow-lg)]"
         >
-          <DzCardBody class="flex h-full flex-col p-7">
+          <DzCardBody class="flex h-full flex-col" style="padding: 1.5rem">
             <DzText as="p" size="sm" weight="medium" tone="muted">{{ kpi.label }}</DzText>
 
-            <div class="mt-3 flex items-end justify-between gap-3">
-              <span class="text-3xl font-semibold leading-none tracking-tight tabular-nums">
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <span class="text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums">
                 {{ kpi.value }}
               </span>
-              <!-- mini sparkline built from divs -->
-              <div class="flex h-8 items-end gap-[3px]" aria-hidden="true">
+              <!-- mini sparkline built from divs (fixed width so it never overflows the card) -->
+              <div class="flex h-8 w-16 shrink-0 items-end gap-[3px]" aria-hidden="true">
                 <span
                   v-for="(h, i) in sparkHeights(kpi.spark)"
                   :key="i"
-                  class="w-1 rounded-full bg-[var(--dz-primary)] opacity-30 transition-opacity duration-200 group-hover:opacity-60"
+                  class="flex-1 rounded-full bg-[var(--dz-primary)] opacity-30 transition-opacity duration-200 group-hover:opacity-60"
                   :class="{ '!opacity-100': i === kpi.spark.length - 1 }"
-                  :style="{ height: h + '%' }"
+                  :style="{ height: `${Math.round((h / 100) * 32)}px` }"
                 />
               </div>
             </div>
 
-            <div class="mt-3 flex items-center gap-2">
+            <div class="mt-4 flex items-center gap-2">
               <DzBadge variant="subtle" :tone="kpi.delta >= 0 ? 'success' : 'danger'" size="sm">
                 <span class="inline-flex items-center gap-1">
                   <component
@@ -377,7 +377,7 @@ const ringStats = [
               <DzTableCell>
                 <div class="flex items-center gap-2.5">
                   <span
-                    class="grid h-7 w-7 shrink-0 place-items-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-center text-[11px] font-semibold leading-none tabular-nums text-[var(--dz-primary-muted-foreground)]"
+                    class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-[11px] font-semibold leading-none tabular-nums text-[var(--dz-primary-muted-foreground)]"
                     >{{ row.initials }}</span
                   >
                   <DzText as="span" size="sm" tone="muted">{{ row.owner }}</DzText>
