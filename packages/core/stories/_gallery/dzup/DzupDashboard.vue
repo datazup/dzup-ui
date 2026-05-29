@@ -192,7 +192,7 @@ const ringStats = [
           padding="none"
           class="group h-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--dz-shadow-lg)]"
         >
-          <DzCardBody class="flex h-full flex-col p-6">
+          <DzCardBody class="flex h-full flex-col p-7">
             <DzText as="p" size="sm" weight="medium" tone="muted">{{ kpi.label }}</DzText>
 
             <div class="mt-3 flex items-end justify-between gap-3">
@@ -343,7 +343,7 @@ const ringStats = [
           </div>
           <DzButton variant="link" tone="primary" size="sm">View all</DzButton>
         </div>
-        <DzTable hoverable>
+        <DzTable hoverable density="comfortable">
           <DzTableHeader>
             <DzTableRow>
               <DzTableCell header>Name</DzTableCell>
@@ -377,7 +377,7 @@ const ringStats = [
               <DzTableCell>
                 <div class="flex items-center gap-2.5">
                   <span
-                    class="grid h-7 w-7 place-items-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-[11px] font-semibold tabular-nums text-[var(--dz-primary-muted-foreground)]"
+                    class="grid h-7 w-7 shrink-0 place-items-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-center text-[11px] font-semibold leading-none tabular-nums text-[var(--dz-primary-muted-foreground)]"
                     >{{ row.initials }}</span
                   >
                   <DzText as="span" size="sm" tone="muted">{{ row.owner }}</DzText>
