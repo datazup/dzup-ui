@@ -2,4 +2,5 @@
 
 /* Scan workspace package sources for utility classes */
 @source "../../../packages/core/src/**/*.{ts,vue}";
+@source "../../../packages/core/stories/**/*.{ts,vue}";
 @source "../../../packages/pro/src/**/*.{ts,vue}";
