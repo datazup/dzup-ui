@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
+import BrandScope from './BrandScope.vue'
 import DzupDashboard from './dzup/DzupDashboard.vue'
 import FreestyleDashboard from './freestyle/FreestyleDashboard.vue'
 
@@ -21,5 +22,13 @@ export const DzupUI: Story = {
   render: () => ({
     components: { DzupDashboard },
     template: '<DzupDashboard />',
+  }),
+}
+
+export const DzupUIBrand: Story = {
+  name: 'dzup-ui (datazup brand)',
+  render: () => ({
+    components: { BrandScope, DzupDashboard },
+    template: '<BrandScope><DzupDashboard /></BrandScope>',
   }),
 }
