@@ -260,18 +260,15 @@ const ringStats = [
                 class="border-t border-dashed border-[var(--dz-border)] opacity-70"
               />
             </div>
-            <!-- bars -->
+            <!-- bars — explicit PIXEL heights (h% of the 192px row) so the bars render
+                 reliably regardless of flex %-height quirks. -->
             <div class="relative flex h-48 items-end gap-2 sm:gap-3">
               <div
                 v-for="(h, i) in bars"
                 :key="i"
-                class="group/bar relative flex flex-1 flex-col items-center justify-end"
-              >
-                <div
-                  class="w-full rounded-t-[var(--dz-radius-md)] bg-[var(--dz-primary)] opacity-80 transition-all duration-300 group-hover/bar:opacity-100"
-                  :style="{ height: h + '%' }"
-                />
-              </div>
+                class="flex-1 rounded-t-[var(--dz-radius-md)] bg-[var(--dz-primary)] opacity-80 transition-all duration-300 hover:opacity-100"
+                :style="{ height: `${Math.round((h / 100) * 192)}px` }"
+              />
             </div>
             <!-- x axis -->
             <div class="mt-3 flex gap-2 sm:gap-3">
@@ -297,8 +294,8 @@ const ringStats = [
           </div>
           <div class="flex flex-col items-center gap-6 px-6 py-7">
             <div
-              class="relative grid h-36 w-36 place-items-center rounded-[var(--dz-radius-full)]"
-              :style="{ background: goalRing }"
+              class="relative grid place-items-center rounded-[var(--dz-radius-full)]"
+              :style="{ width: '9rem', height: '9rem', backgroundImage: goalRing }"
               role="img"
               :aria-label="`Quarterly goal ${goalPercent} percent complete`"
             >
