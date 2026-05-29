@@ -22,15 +22,11 @@ export const cardVariants = tv({
       elevated: [
         'bg-[var(--dz-card)]',
         'shadow-[var(--dz-shadow-md)]',
-      ].join(' '),
-      outlined: [
-        'bg-[var(--dz-card)]',
         'border',
-        'border-[var(--dz-card-border-color)]',
+        'border-[var(--dz-border)]',
       ].join(' '),
-      flat: [
-        'bg-[var(--dz-card)]',
-      ].join(' '),
+      outlined: ['bg-[var(--dz-card)]', 'border', 'border-[var(--dz-card-border-color)]'].join(' '),
+      flat: ['bg-[var(--dz-card)]'].join(' '),
     },
     padding: {
       none: 'p-0',
@@ -42,10 +38,7 @@ export const cardVariants = tv({
       true: 'hover:shadow-[var(--dz-shadow-lg)] cursor-pointer',
     },
     clickable: {
-      true: [
-        'cursor-pointer',
-        'dz-focus-ring-control',
-      ].join(' '),
+      true: ['cursor-pointer', 'dz-focus-ring-control'].join(' '),
     },
   },
   defaultVariants: {
@@ -73,10 +66,7 @@ export const cardHeaderVariants = tv({
  * Card body variant definitions.
  */
 export const cardBodyVariants = tv({
-  base: [
-    'px-[var(--dz-card-padding)]',
-    'py-[var(--dz-spacing-2)]',
-  ].join(' '),
+  base: ['px-[var(--dz-card-padding)]', 'py-[var(--dz-spacing-2)]'].join(' '),
 })
 
 /**
