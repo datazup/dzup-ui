@@ -41,42 +41,38 @@ export const Default: Story = {
     template: `
       <div class="w-full max-w-5xl space-y-6">
         <h2 class="text-lg font-semibold">Overview</h2>
-        <DzGrid cols="4" gap="md">
+        <DzGrid :cols="4" gap="md">
           <DzStatCard
-            label="Total Revenue"
+            title="Total Revenue"
             value="$48,295"
             :icon="DollarSign"
             trend="up"
             trend-value="+12.5%"
-            trend-label="vs last month"
-            tone="primary"
+            description="vs last month"
           />
           <DzStatCard
-            label="Active Users"
+            title="Active Users"
             value="3,842"
             :icon="Users"
             trend="up"
             trend-value="+8.1%"
-            trend-label="vs last month"
-            tone="success"
+            description="vs last month"
           />
           <DzStatCard
-            label="Orders"
+            title="Orders"
             value="1,203"
             :icon="Package"
             trend="down"
             trend-value="-3.2%"
-            trend-label="vs last month"
-            tone="warning"
+            description="vs last month"
           />
           <DzStatCard
-            label="Growth Rate"
+            title="Growth Rate"
             value="24.3%"
             :icon="TrendingUp"
             trend="up"
             trend-value="+5.0%"
-            trend-label="vs last month"
-            tone="info"
+            description="vs last month"
           />
         </DzGrid>
       </div>
@@ -97,30 +93,27 @@ export const WithActivityCard: Story = {
     },
     template: `
       <div class="w-full max-w-5xl space-y-6">
-        <DzGrid cols="3" gap="md">
+        <DzGrid :cols="3" gap="md">
           <DzStatCard
-            label="Total Revenue"
+            title="Total Revenue"
             value="$48,295"
             :icon="DollarSign"
             trend="up"
             trend-value="+12.5%"
-            tone="primary"
           />
           <DzStatCard
-            label="Active Users"
+            title="Active Users"
             value="3,842"
             :icon="Users"
             trend="up"
             trend-value="+8.1%"
-            tone="success"
           />
           <DzStatCard
-            label="Orders"
+            title="Orders"
             value="1,203"
             :icon="Package"
             trend="down"
             trend-value="-3.2%"
-            tone="warning"
           />
         </DzGrid>
 
@@ -173,38 +166,34 @@ export const DarkMode: Story = {
     template: `
       <div class="w-full max-w-4xl space-y-4">
         <h2 class="text-lg font-semibold">Overview</h2>
-        <DzGrid cols="4" gap="md">
+        <DzGrid :cols="4" gap="md">
           <DzStatCard
-            label="Total Revenue"
+            title="Total Revenue"
             value="$48,295"
             :icon="DollarSign"
             trend="up"
             trend-value="+12.5%"
-            tone="primary"
           />
           <DzStatCard
-            label="Active Users"
+            title="Active Users"
             value="3,842"
             :icon="Users"
             trend="up"
             trend-value="+8.1%"
-            tone="success"
           />
           <DzStatCard
-            label="Orders"
+            title="Orders"
             value="1,203"
             :icon="Package"
             trend="down"
             trend-value="-3.2%"
-            tone="warning"
           />
           <DzStatCard
-            label="Growth Rate"
+            title="Growth Rate"
             value="24.3%"
             :icon="TrendingUp"
             trend="up"
             trend-value="+5.0%"
-            tone="info"
           />
         </DzGrid>
       </div>
