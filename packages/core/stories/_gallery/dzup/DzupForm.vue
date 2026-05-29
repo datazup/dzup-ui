@@ -111,14 +111,16 @@ function submit() {
 
               <!-- Details section — eyebrow + grouped fields with clear separation -->
               <div class="border-t border-[var(--dz-border)] pt-6">
-                <DzText
-                  as="p"
-                  size="xs"
-                  weight="semibold"
-                  class="mb-4 block uppercase tracking-[0.18em] text-[var(--dz-muted-foreground)]"
-                >
-                  Details
-                </DzText>
+                <div style="margin-bottom: 1rem">
+                  <DzText
+                    as="p"
+                    size="xs"
+                    weight="semibold"
+                    class="uppercase tracking-[0.18em] text-[var(--dz-muted-foreground)]"
+                  >
+                    Details
+                  </DzText>
+                </div>
 
                 <DzFormField>
                   <DzFormLabel>Description</DzFormLabel>

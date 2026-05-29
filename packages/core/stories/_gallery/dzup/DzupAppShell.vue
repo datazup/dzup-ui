@@ -229,12 +229,14 @@ function toggleSidebar(): void {
             padding="none"
             class="group h-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--dz-shadow-lg)]"
           >
-            <DzCardBody class="flex h-full flex-col p-6">
+            <DzCardBody class="flex h-full flex-col" style="padding: 1.5rem">
               <DzText as="p" size="sm" weight="medium" tone="muted">{{ kpi.label }}</DzText>
-              <span class="mt-3 text-3xl font-semibold leading-none tracking-tight tabular-nums">
+              <span
+                class="mt-4 text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums"
+              >
                 {{ kpi.value }}
               </span>
-              <div class="mt-3 flex items-center gap-2">
+              <div class="mt-4 flex items-center gap-2">
                 <DzBadge variant="subtle" :tone="kpi.delta >= 0 ? 'success' : 'danger'" size="sm">
                   <span class="inline-flex items-center gap-1">
                     <component
@@ -254,7 +256,7 @@ function toggleSidebar(): void {
         </section>
 
         <!-- Recent items list -->
-        <DzCard variant="elevated" padding="none" class="mt-6">
+        <DzCard variant="elevated" padding="none" class="mt-10">
           <div
             class="flex items-center justify-between border-b border-[var(--dz-border)] px-6 py-4"
           >
