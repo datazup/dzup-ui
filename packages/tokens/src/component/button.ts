@@ -7,7 +7,7 @@
 
 export const BUTTON_TOKENS: Record<string, string> = {
   '--dz-button-radius': 'var(--dz-radius-md)',
-  '--dz-button-font-weight': '500',
+  '--dz-button-font-weight': '600',
   '--dz-button-font-family': 'var(--dz-font-sans)',
   '--dz-button-transition': 'all var(--dz-duration-fast) var(--dz-ease-default)',
   '--dz-button-focus-ring-width': '2px',

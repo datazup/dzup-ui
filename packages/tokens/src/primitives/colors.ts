@@ -37,7 +37,7 @@ const LIGHTNESS_SCALE: Record<Shade, number> = {
 const CHROMA_MULTIPLIER: Record<Shade, number> = {
   50: 0.12,
   100: 0.22,
-  200: 0.40,
+  200: 0.4,
   300: 0.62,
   400: 0.82,
   500: 1.0,
@@ -56,12 +56,12 @@ interface PaletteConfig {
 
 /** All required color palettes with their OKLCH base values */
 export const PALETTE_CONFIGS = {
-  primary: { chroma: 0.18, hue: 260 },
-  secondary: { chroma: 0.12, hue: 290 },
+  primary: { chroma: 0.22, hue: 260 },
+  secondary: { chroma: 0.14, hue: 290 },
   neutral: { chroma: 0.01, hue: 260 },
   success: { chroma: 0.16, hue: 145 },
   warning: { chroma: 0.16, hue: 85 },
-  danger: { chroma: 0.20, hue: 25 },
+  danger: { chroma: 0.2, hue: 25 },
   info: { chroma: 0.14, hue: 230 },
 } as const satisfies Record<string, PaletteConfig>
 

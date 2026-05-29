@@ -8,10 +8,11 @@ export const INPUT_TOKENS: Record<string, string> = {
   '--dz-input-radius': 'var(--dz-radius-md)',
   '--dz-input-font-size': 'var(--dz-text-sm)',
   '--dz-input-font-family': 'var(--dz-font-sans)',
-  '--dz-input-transition': 'border-color var(--dz-duration-fast) var(--dz-ease-default), box-shadow var(--dz-duration-fast) var(--dz-ease-default)',
-  '--dz-input-focus-ring-width': '1px',
+  '--dz-input-transition':
+    'border-color var(--dz-duration-fast) var(--dz-ease-default), box-shadow var(--dz-duration-fast) var(--dz-ease-default)',
+  '--dz-input-focus-ring-width': '2px',
   '--dz-input-focus-ring-color': 'var(--dz-ring)',
-  '--dz-input-focus-ring-offset': '1px',
+  '--dz-input-focus-ring-offset': '2px',
   '--dz-input-disabled-opacity': '0.5',
 
   /* Size: xs */

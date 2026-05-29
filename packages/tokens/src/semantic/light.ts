@@ -11,15 +11,15 @@
  */
 export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Surfaces ── */
-  '--dz-background': 'var(--dz-colors-neutral-50)',
+  '--dz-background': 'var(--dz-colors-neutral-100)',
   '--dz-foreground': 'var(--dz-colors-neutral-900)',
   '--dz-surface': 'oklch(1 0 0)',
-  '--dz-surface-raised': 'var(--dz-colors-neutral-50)',
-  '--dz-muted': 'var(--dz-colors-neutral-100)',
+  '--dz-surface-raised': 'oklch(1 0 0)',
+  '--dz-muted': 'var(--dz-colors-neutral-200)',
   '--dz-muted-foreground': 'var(--dz-colors-neutral-500)',
 
   /* ── Borders ── */
-  '--dz-border': 'var(--dz-colors-neutral-200)',
+  '--dz-border': 'var(--dz-colors-neutral-300)',
   '--dz-border-hover': 'var(--dz-colors-neutral-300)',
   '--dz-ring': 'var(--dz-colors-primary-500)',
 
@@ -84,7 +84,7 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-popover-foreground': 'var(--dz-colors-neutral-900)',
 
   /* ── Overlay ── */
-  '--dz-overlay-bg': 'oklch(0 0 0 / 0.5)',
+  '--dz-overlay-bg': 'oklch(0 0 0 / 0.6)',
 
   /* ── Sidebar ──
    * Sidebar token values are NOT written at the semantic tier. Tier 3 component
@@ -104,7 +104,7 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── AppShell ── */
   '--dz-appshell-header-bg': 'oklch(1 0 0)',
   '--dz-appshell-header-border': 'var(--dz-colors-neutral-200)',
-  '--dz-appshell-main-bg': 'var(--dz-colors-neutral-50)',
+  '--dz-appshell-main-bg': 'var(--dz-colors-neutral-100)',
 
   /* ── CodeBlock ── */
   '--dz-codeblock-bg': 'var(--dz-colors-neutral-900)',
