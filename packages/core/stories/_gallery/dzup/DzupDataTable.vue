@@ -180,25 +180,25 @@ function resetFilters(): void {
             <DzTabList>
               <DzTabTrigger value="all">
                 All
-                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                <span class="ml-2 text-[var(--dz-muted-foreground)] tabular-nums">{{
                   tabCounts.all
                 }}</span>
               </DzTabTrigger>
               <DzTabTrigger value="active">
                 Active
-                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                <span class="ml-2 text-[var(--dz-muted-foreground)] tabular-nums">{{
                   tabCounts.active
                 }}</span>
               </DzTabTrigger>
               <DzTabTrigger value="pending">
                 Pending
-                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                <span class="ml-2 text-[var(--dz-muted-foreground)] tabular-nums">{{
                   tabCounts.pending
                 }}</span>
               </DzTabTrigger>
               <DzTabTrigger value="failed">
                 Failed
-                <span class="ml-1.5 text-[var(--dz-muted-foreground)] tabular-nums">{{
+                <span class="ml-2 text-[var(--dz-muted-foreground)] tabular-nums">{{
                   tabCounts.failed
                 }}</span>
               </DzTabTrigger>
