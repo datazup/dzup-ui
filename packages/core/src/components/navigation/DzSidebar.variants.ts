@@ -30,7 +30,7 @@ export const sidebarVariants = tv({
       'hover:bg-[var(--dz-sidebar-item-hover-bg)] hover:text-[var(--dz-sidebar-item-hover-text)]',
       'dz-focus-ring-control',
     ].join(' '),
-    section: 'flex flex-col py-[var(--dz-spacing-2)]',
+    section: 'flex flex-col py-[var(--dz-spacing-2)] px-[var(--dz-sidebar-item-padding-x)]',
     sectionTitle: [
       'px-[var(--dz-sidebar-item-padding-x)]',
       'text-[length:var(--dz-text-xs)] font-semibold uppercase tracking-wider',
@@ -65,6 +65,7 @@ export const sidebarVariants = tv({
       true: {
         root: 'w-[var(--dz-sidebar-collapsed-width)]',
         item: 'justify-center px-[var(--dz-spacing-2)]',
+        section: 'px-0',
         sectionTitle: 'sr-only',
         header: 'justify-center',
         footer: 'justify-center',
