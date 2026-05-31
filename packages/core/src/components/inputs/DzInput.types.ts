@@ -7,11 +7,7 @@
  * @module @dzup-ui/core/components/inputs/DzInput
  */
 
-import type {
-  BaseFormControlProps,
-  ChangeEvents,
-  InputVariant,
-} from '@dzup-ui/contracts'
+import type { BaseFormControlProps, ChangeEvents, InputVariant } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -20,7 +16,7 @@ import type {
 /** Props for the DzInput component */
 export interface DzInputProps extends BaseFormControlProps<InputVariant> {
   /** HTML input type */
-  type?: 'text' | 'email' | 'password' | 'url' | 'tel' | 'search' | 'number'
+  type?: 'text' | 'email' | 'password' | 'url' | 'tel' | 'search' | 'number' | 'date'
   /** Placeholder text shown when the input is empty */
   placeholder?: string
   /** Maximum number of characters allowed */
