@@ -7,12 +7,70 @@
  * DzTable provides context to sub-parts via inject (ADR-08).
  *
  * @module @dzup-ui/core/components/data/DzTable
+ *
+ * ## Missing features (tracked TODOs)
+ *
+ * TODO(DzTable-column-pinning): Sticky/pinned column support.
+ *   Required by CapabilityMatrixView (skill names column must stay fixed while
+ *   category columns scroll horizontally). Design: add `pin?: 'left' | 'right'`
+ *   to DzTableCellProps; DzTableCell emits its offsetLeft into DzTableContext;
+ *   DzTable wrapper applies `position: sticky; left: <offset>` via inline style
+ *   and `z-index: var(--dz-z-sticky)` on pinned cells. Shadow on the right edge
+ *   of the last pinned column via `box-shadow: inset -4px 0 var(--dz-shadow-xs)`.
+ *   Requires token `--dz-z-sticky` in @dzup-ui/tokens.
+ *
+ * TODO(DzTable-column-sorting): Per-column sort indicator and sort-change emit.
+ *   Add `sortable?: boolean`, `sortDirection?: 'asc' | 'desc' | 'none'` to
+ *   DzTableCellProps (header cells only). DzTableCell renders a sort icon and
+ *   emits `sort` with the column key. DzTable emits
+ *   `sort-change: [key: string, direction: 'asc' | 'desc']`.
+ *   Caller owns sort state; DzTable is uncontrolled (no internal sort logic).
+ *
+ * TODO(DzTable-row-selection): Checkbox-based multi-row selection.
+ *   Add `selectable?: boolean` to DzTableProps; DzTable provides
+ *   `selected: Ref<Set<string>>` and `toggleRow(id: string)` in context.
+ *   DzTableRow accepts `rowId?: string`; renders a leading DzCheckbox cell when
+ *   selectable context is active. DzTable emits `selection-change: [ids: string[]]`.
+ *   Select-all checkbox in DzTableHeader.
+ *
+ * TODO(DzTable-virtual-scroll): Windowed rendering for large datasets.
+ *   Add `virtualScroll?: boolean` and `rowHeight?: number` to DzTableProps.
+ *   Use @vueuse/core useVirtualList on the scroll container. Requires fixed row
+ *   heights. Column pinning must work with virtual rows (sticky on container,
+ *   not tbody).
+ *
+ * TODO(DzTable-expandable-rows): Accordion-style row detail expansion.
+ *   Add `expandable?: boolean` to DzTableRow. DzTableRow renders a toggle cell
+ *   (chevron icon) and conditionally renders a `<tr class="expand-row">` with
+ *   `<td :colspan="colCount">` for the `#expand` slot. DzTableContext tracks
+ *   `expandedRows: Ref<Set<string>>`. DzTable emits `row-expand`/`row-collapse`.
+ *
+ * TODO(DzTable-column-resizing): Drag-to-resize column widths.
+ *   Add `resizable?: boolean` to DzTableCellProps (header cells only). DzTableCell
+ *   renders a drag handle at the right edge; pointer events update
+ *   `colWidths: Ref<Map<string, number>>` in context. Requires `colId` prop on
+ *   DzTableCell. Min-width via `--dz-table-col-min-width` token.
+ *
+ * TODO(DzTable-empty-state): Standardised empty state via DzEmpty slot.
+ *   Add `#empty` slot to DzTable. When DzTableBody has zero rows, render a
+ *   full-width placeholder row. DzTableContext tracks `rowCount: Ref<number>`.
+ *   Default copy: "No records found."
+ *
+ * TODO(DzTable-loading-skeleton): Skeleton rows during loading state.
+ *   Wire `loading` into DzTableContext (currently a prop but not provided).
+ *   When loading, DzTableBody renders N skeleton rows (add `skeletonRows` prop,
+ *   default 3) using DzSkeleton in place of slot content.
+ *
+ * TODO(DzTable-footer): DzTableFooter sub-part for summary/aggregate rows.
+ *   Wraps `<tfoot>` with same density/size token application. Export
+ *   DzTableFooter.vue and register in data/index.ts.
+ *
+ * TODO(DzTable-caption-visible): Make caption optionally visible (not sr-only).
+ *   Add `captionVisible?: boolean` to DzTableProps. Default false preserves
+ *   current screen-reader-only behaviour.
  */
 
-import type {
-  BaseAccessibilityProps,
-  CanonicalSize,
-} from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------
