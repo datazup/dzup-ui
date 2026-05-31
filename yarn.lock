@@ -888,6 +888,7 @@ __metadata:
     vite: "npm:^6.1.0"
     vite-plugin-dts: "npm:^4.5.0"
     vue: "npm:^3.5.13"
+    vue-tsc: "npm:^2.2.0"
   peerDependencies:
     vue: ^3.5.0
   languageName: unknown
@@ -921,6 +922,7 @@ __metadata:
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
     vue: "npm:^3.5.13"
+    vue-tsc: "npm:^2.2.0"
   peerDependencies:
     reka-ui: ^2.0.0
     vue: ^3.5.0
