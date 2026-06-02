@@ -20,7 +20,7 @@
       "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js"
     },
-    "./styles": "./dist/index.css",
+    "./styles": "./dist/core.css",
     "./buttons": {
       "types": "./dist/components/buttons/index.d.ts",
       "import": "./dist/components/buttons/index.js"
