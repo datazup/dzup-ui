@@ -1,9 +1,24 @@
-import { mount } from '@vue/test-utils'
+import { mount, type VueWrapper } from '@vue/test-utils'
 /**
  * DzAspectRatio — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
 import DzAspectRatio from './DzAspectRatio.vue'
+
+/**
+ * Read the rendered root element's bound `style` object from the component's
+ * vnode subtree. JSDOM's CSSOM does not implement the `aspect-ratio` CSS
+ * property and silently drops it from the serialized `style` attribute (a
+ * div with only `aspect-ratio` renders with no `style` attribute at all), so
+ * asserting against `wrapper.attributes('style')` is unreliable under jsdom.
+ * The vnode binding is the source of truth before jsdom serialization.
+ */
+function rootStyleBinding(wrapper: VueWrapper): Record<string, unknown> {
+  const vm = wrapper.vm as unknown as {
+    $: { subTree: { props?: { style?: Record<string, unknown> } } }
+  }
+  return vm.$.subTree.props?.style ?? {}
+}
 
 describe('dzAspectRatio — Unit Tests', () => {
   it('renders a <div> element', () => {
@@ -13,7 +28,7 @@ describe('dzAspectRatio — Unit Tests', () => {
 
   it('sets aspect-ratio: 1 by default', () => {
     const wrapper = mount(DzAspectRatio, { slots: { default: 'content' } })
-    expect(wrapper.attributes('style')).toContain('aspect-ratio: 1')
+    expect(rootStyleBinding(wrapper)['aspect-ratio']).toBe('1')
   })
 
   it('applies custom aspect ratio', () => {
@@ -21,7 +36,7 @@ describe('dzAspectRatio — Unit Tests', () => {
       props: { ratio: 16 / 9 },
       slots: { default: 'content' },
     })
-    expect(wrapper.attributes('style')).toContain('aspect-ratio')
+    expect(rootStyleBinding(wrapper)['aspect-ratio']).toBe(`${16 / 9}`)
   })
 
   it('merges consumer class via cn()', () => {

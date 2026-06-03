@@ -7,6 +7,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import DzCollapse from '../../src/components/layout/DzCollapse.vue'
 import DzContainer from '../../src/components/layout/DzContainer.vue'
 import DzDivider from '../../src/components/layout/DzDivider.vue'

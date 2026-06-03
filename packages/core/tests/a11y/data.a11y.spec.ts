@@ -7,6 +7,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import DzAccordion from '../../src/components/data/DzAccordion.vue'
 import DzAccordionContent from '../../src/components/data/DzAccordionContent.vue'
 import DzAccordionItem from '../../src/components/data/DzAccordionItem.vue'

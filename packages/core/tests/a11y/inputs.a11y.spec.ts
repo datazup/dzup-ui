@@ -7,6 +7,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import DzCheckbox from '../../src/components/forms/DzCheckbox.vue'
 import DzRadio from '../../src/components/forms/DzRadio.vue'
 import DzRadioGroup from '../../src/components/forms/DzRadioGroup.vue'

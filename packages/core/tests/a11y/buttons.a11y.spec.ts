@@ -7,6 +7,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import { defineComponent, h } from 'vue'
 import DzButton from '../../src/components/buttons/DzButton.vue'
 import DzIconButton from '../../src/components/buttons/DzIconButton.vue'
