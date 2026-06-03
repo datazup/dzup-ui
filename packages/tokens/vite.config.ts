@@ -15,6 +15,7 @@ export default defineConfig({
       entry: {
         'index': resolve(__dirname, 'src/index.ts'),
         'utils/index': resolve(__dirname, 'src/utils/index.ts'),
+        'utils/theme-script': resolve(__dirname, 'src/utils/theme-script.ts'),
       },
       formats: ['es'],
     },
