@@ -1,0 +1,33 @@
+[15:03:15.383] [INFO] storybook v10.3.4
+[15:03:17.163] [DEBUG] Getting package.json info for /media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/apps/storybook/package.json...
+[15:03:17.226] [ERROR] [38;2;241;97;97mSB_CORE-SERVER_0002 (CriticalPresetLoadError): Storybook failed to load the following preset: @storybook/vue3-vite/preset.
+
+Please check whether your setup is correct, the Storybook dependencies (and their peer dependencies) are installed correctly and there are no package version clashes.
+
+If you believe this is a bug, please open an issue on Github.
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@storybook/vue3-vite' imported from /media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/_node-chunks/chunk-QAXH75FV.js
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:256:9)
+    at packageResolve (node:internal/modules/esm/resolve:768:81)
+    at moduleResolve (node:internal/modules/esm/resolve:854:18)
+    at defaultResolve (node:internal/modules/esm/resolve:984:11)
+    at nextResolve (node:internal/modules/esm/hooks:748:28)
+    at o (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/@tailwindcss/node/dist/esm-cache.loader.mjs:1:69)
+    at nextResolve (node:internal/modules/esm/hooks:748:28)
+    at Hooks.resolve (node:internal/modules/esm/hooks:240:30)
+    at MessagePort.handleMessage (node:internal/modules/esm/worker:199:24)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:827:20)
+
+More info: 
+[39m
+    at loadPreset (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/_node-chunks/chunk-3LP2BDDH.js:10081:13)
+    at async Promise.all (index 0)
+    at async loadPresets (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/_node-chunks/chunk-3LP2BDDH.js:10090:73)
+    at async getPresets (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/_node-chunks/chunk-3LP2BDDH.js:10121:23)
+    at async buildDevStandalone (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/core-server/index.js:7967:52)
+    at async withTelemetry (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/_node-chunks/chunk-HUYNFPPD.js:225:12)
+    at async dev (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/bin/core.js:2736:3)
+    at async _Command.<anonymous> (file:///media/ninel/Third/code/datazup/ai-internal-dev/ui/dzup-ui/node_modules/storybook/dist/bin/core.js:2806:92)
+[15:03:17.263] [WARN] Broken build, fix the error above.
+You may need to refresh the browser.
+[15:03:17.313] [INFO] Storybook collects completely anonymous usage telemetry. We use it to shape Storybook's roadmap and prioritize features. You can learn more, including how to opt out, at https://storybook.js.org/telemetry
