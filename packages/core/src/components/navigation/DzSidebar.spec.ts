@@ -21,25 +21,49 @@ function mountSidebar(sidebarProps: Record<string, unknown> = {}) {
     },
     slots: {
       default: (slotProps: { collapsed: boolean }) => [
-        h(DzSidebarHeader, {}, {
-          default: () => (slotProps.collapsed ? 'Logo Icon' : 'Full Logo'),
-        }),
-        h(DzSidebarSection, { title: 'Main' }, {
-          default: () => [
-            h(DzSidebarItem, { active: true }, {
-              default: () => 'Dashboard',
-            }),
-            h(DzSidebarItem, {}, {
-              default: () => 'Settings',
-            }),
-            h(DzSidebarItem, { disabled: true }, {
-              default: () => 'Disabled Item',
-            }),
-          ],
-        }),
-        h(DzSidebarFooter, {}, {
-          default: () => 'User Info',
-        }),
+        h(
+          DzSidebarHeader,
+          {},
+          {
+            default: () => (slotProps.collapsed ? 'Logo Icon' : 'Full Logo'),
+          },
+        ),
+        h(
+          DzSidebarSection,
+          { title: 'Main' },
+          {
+            default: () => [
+              h(
+                DzSidebarItem,
+                { active: true },
+                {
+                  default: () => 'Dashboard',
+                },
+              ),
+              h(
+                DzSidebarItem,
+                {},
+                {
+                  default: () => 'Settings',
+                },
+              ),
+              h(
+                DzSidebarItem,
+                { disabled: true },
+                {
+                  default: () => 'Disabled Item',
+                },
+              ),
+            ],
+          },
+        ),
+        h(
+          DzSidebarFooter,
+          {},
+          {
+            default: () => 'User Info',
+          },
+        ),
       ],
     },
   })
@@ -74,7 +98,9 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mountSidebar({ collapsed: true })
     const nav = wrapper.find('nav')
     expect(nav.attributes('data-state')).toBe('collapsed')
-    expect(nav.classes().some((c: string) => c.includes('var(--dz-sidebar-collapsed-width)'))).toBe(true)
+    expect(nav.classes().some((c: string) => c.includes('var(--dz-sidebar-collapsed-width)'))).toBe(
+      true,
+    )
   })
 
   it('renders in expanded state with token-backed width', () => {
@@ -135,9 +161,7 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mount(DzSidebar, {
       global: { stubs: { Teleport: true } },
       slots: {
-        default: () => [
-          h(DzSidebarItem, {}, { default: () => 'Click me' }),
-        ],
+        default: () => [h(DzSidebarItem, {}, { default: () => 'Click me' })],
       },
     })
     const item = wrapper.find('button')
@@ -148,9 +172,7 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mount(DzSidebar, {
       global: { stubs: { Teleport: true } },
       slots: {
-        default: () => [
-          h(DzSidebarItem, { href: '/dashboard' }, { default: () => 'Dashboard' }),
-        ],
+        default: () => [h(DzSidebarItem, { href: '/dashboard' }, { default: () => 'Dashboard' })],
       },
     })
     const link = wrapper.find('a')
@@ -162,9 +184,7 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mount(DzSidebar, {
       global: { stubs: { Teleport: true } },
       slots: {
-        default: () => [
-          h(DzSidebarItem, {}, { default: () => 'Click me' }),
-        ],
+        default: () => [h(DzSidebarItem, {}, { default: () => 'Click me' })],
       },
     })
     const item = wrapper.find('button')
@@ -186,8 +206,7 @@ describe('dzSidebar -- Unit Tests', () => {
       const wrapper = mountSidebar({ storageKey: key })
       await nextTick()
       expect(wrapper.find('nav').attributes('data-state')).toBe('collapsed')
-    }
-    finally {
+    } finally {
       window.localStorage.removeItem(key)
     }
   })
@@ -203,8 +222,7 @@ describe('dzSidebar -- Unit Tests', () => {
       await wrapper.setProps({ collapsed: false })
       await nextTick()
       expect(window.localStorage.getItem(key)).toBe('0')
-    }
-    finally {
+    } finally {
       window.localStorage.removeItem(key)
     }
   })
@@ -217,8 +235,7 @@ describe('dzSidebar -- Unit Tests', () => {
       await nextTick()
       // No storageKey → mount value (false) wins over any pre-existing entry
       expect(wrapper.find('nav').attributes('data-state')).toBe('expanded')
-    }
-    finally {
+    } finally {
       window.localStorage.removeItem(key)
     }
   })
@@ -228,9 +245,13 @@ describe('dzSidebar -- Unit Tests', () => {
       global: { stubs: { Teleport: true } },
       slots: {
         default: () => [
-          h(DzSidebarSection, { title: 'Collapsible', collapsible: true, defaultOpen: true }, {
-            default: () => h(DzSidebarItem, {}, { default: () => 'Hidden Item' }),
-          }),
+          h(
+            DzSidebarSection,
+            { title: 'Collapsible', collapsible: true, defaultOpen: true },
+            {
+              default: () => h(DzSidebarItem, {}, { default: () => 'Hidden Item' }),
+            },
+          ),
         ],
       },
     })
@@ -256,7 +277,7 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mountSidebar({ position: 'fixed' })
     const nav = wrapper.find('nav')
     expect(nav.classes()).toContain('fixed')
-    expect(nav.classes().some(c => c.includes('var(--dz-sidebar-z-index)'))).toBe(true)
+    expect(nav.classes().some((c) => c.includes('var(--dz-sidebar-z-index)'))).toBe(true)
   })
 
   it('renders closed mobile drawer as fixed so it does not reserve layout width', () => {
@@ -264,7 +285,33 @@ describe('dzSidebar -- Unit Tests', () => {
     const nav = wrapper.find('nav')
     expect(nav.classes()).toContain('fixed')
     expect(nav.classes()).toContain('-translate-x-full')
-    expect(nav.classes().some(c => c.includes('var(--dz-sidebar-width)'))).toBe(true)
+    expect(nav.classes().some((c) => c.includes('var(--dz-sidebar-width)'))).toBe(true)
+  })
+
+  it('closed mobile drawer is inert and aria-hidden (out of a11y tree + tab order)', () => {
+    const wrapper = mountSidebar({ isMobile: true, mobileOpen: false })
+    const nav = wrapper.find('nav')
+    expect(nav.attributes('inert')).toBeDefined()
+    expect(nav.attributes('aria-hidden')).toBe('true')
+  })
+
+  it('open mobile drawer is NOT inert/aria-hidden (fully operable)', () => {
+    const wrapper = mountSidebar({ isMobile: true, mobileOpen: true })
+    const nav = wrapper.find('nav')
+    expect(nav.attributes('inert')).toBeUndefined()
+    expect(nav.attributes('aria-hidden')).toBeUndefined()
+  })
+
+  it('desktop sidebar is never inert/aria-hidden, including collapsed', () => {
+    const expanded = mountSidebar({ isMobile: false, collapsed: false })
+    const expandedNav = expanded.find('nav')
+    expect(expandedNav.attributes('inert')).toBeUndefined()
+    expect(expandedNav.attributes('aria-hidden')).toBeUndefined()
+
+    const collapsed = mountSidebar({ isMobile: false, collapsed: true })
+    const collapsedNav = collapsed.find('nav')
+    expect(collapsedNav.attributes('inert')).toBeUndefined()
+    expect(collapsedNav.attributes('aria-hidden')).toBeUndefined()
   })
 
   it('overlay class uses sidebar overlay token', () => {
@@ -287,14 +334,12 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mount(DzSidebar, {
       global: { stubs: { Teleport: true } },
       slots: {
-        default: () => [
-          h(DzSidebarItem, { active: true }, { default: () => 'Active' }),
-        ],
+        default: () => [h(DzSidebarItem, { active: true }, { default: () => 'Active' })],
       },
     })
     const item = wrapper.find('[data-state="active"]')
-    expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-bg)'))).toBe(true)
-    expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-text)'))).toBe(true)
+    expect(item.classes().some((c) => c.includes('var(--dz-sidebar-item-active-bg)'))).toBe(true)
+    expect(item.classes().some((c) => c.includes('var(--dz-sidebar-item-active-text)'))).toBe(true)
   })
 
   it('active item with activeStyle=rail uses border-left accent', () => {
@@ -302,13 +347,13 @@ describe('dzSidebar -- Unit Tests', () => {
       props: { activeStyle: 'rail' },
       global: { stubs: { Teleport: true } },
       slots: {
-        default: () => [
-          h(DzSidebarItem, { active: true }, { default: () => 'Active' }),
-        ],
+        default: () => [h(DzSidebarItem, { active: true }, { default: () => 'Active' })],
       },
     })
     const item = wrapper.find('[data-state="active"]')
-    expect(item.classes().some(c => c.includes('border-l-[3px]'))).toBe(true)
-    expect(item.classes().some(c => c.includes('border-l-[var(--dz-sidebar-item-active-bg)]'))).toBe(true)
+    expect(item.classes().some((c) => c.includes('border-l-[3px]'))).toBe(true)
+    expect(
+      item.classes().some((c) => c.includes('border-l-[var(--dz-sidebar-item-active-bg)]')),
+    ).toBe(true)
   })
 })
