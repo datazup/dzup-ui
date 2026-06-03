@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import { userEvent, within } from 'storybook/test'
 import { DzCheckbox } from '../../src/components/forms'
 
 /**

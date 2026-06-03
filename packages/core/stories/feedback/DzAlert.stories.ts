@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import { userEvent, within } from 'storybook/test'
 import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-vue-next'
 import { DzAlert } from '../../src/components/feedback'
 

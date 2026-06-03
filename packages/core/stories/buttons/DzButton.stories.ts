@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import { userEvent, within } from 'storybook/test'
 import { ChevronRight, Download, Mail, Plus, Search } from 'lucide-vue-next'
 import { DzButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
