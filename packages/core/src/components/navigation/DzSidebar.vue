@@ -3,7 +3,12 @@ defineOptions({
   inheritAttrs: false,
 })
 
-import type { DzSidebarContext, DzSidebarEmits, DzSidebarProps, DzSidebarSlots } from './DzSidebar.types.ts'
+import type {
+  DzSidebarContext,
+  DzSidebarEmits,
+  DzSidebarProps,
+  DzSidebarSlots,
+} from './DzSidebar.types.ts'
 /**
  * DzSidebar -- Collapsible navigation sidebar root component.
  *
@@ -55,8 +60,7 @@ function readStored(key: string): boolean | null {
     if (raw === '1' || raw === 'true') return true
     if (raw === '0' || raw === 'false') return false
     return null
-  }
-  catch {
+  } catch {
     return null
   }
 }
@@ -65,8 +69,7 @@ function writeStored(key: string, value: boolean): void {
   if (!canUseStorage) return
   try {
     window.localStorage.setItem(key, value ? '1' : '0')
-  }
-  catch {
+  } catch {
     // ignore quota / disabled storage
   }
 }
@@ -112,11 +115,16 @@ onMounted(() => {
 onUnmounted(() => {
   if (mql) mql.removeEventListener('change', onMqlChange as (e: MediaQueryListEvent) => void)
 })
-watch(() => props.mobileBreakpoint, (next) => {
-  if (props.isMobile === undefined) setupMql(next)
-})
+watch(
+  () => props.mobileBreakpoint,
+  (next) => {
+    if (props.isMobile === undefined) setupMql(next)
+  },
+)
 
-const isMobile = computed(() => (props.isMobile !== undefined ? props.isMobile : internalMobile.value))
+const isMobile = computed(() =>
+  props.isMobile !== undefined ? props.isMobile : internalMobile.value,
+)
 
 const positionRef = computed(() => props.position)
 const activeStyleRef = computed(() => props.activeStyle)
@@ -129,12 +137,18 @@ const context: DzSidebarContext = {
 }
 provide(DZ_SIDEBAR_KEY, context)
 
+// Closed mobile drawer: still in the DOM (transform slide-in animates from
+// off-screen), but it must leave the a11y tree + tab order so SR/keyboard
+// users are not routed through hidden links. `inert` + `aria-hidden` do this
+// without `display:none`/`hidden`, which would break the slide transition.
+const mobileClosed = computed(() => isMobile.value && !mobileOpenModel.value)
+
 const styles = computed(() =>
   sidebarVariants({
     position: isMobile.value ? 'fixed' : props.position,
     collapsed: isMobile.value ? false : collapsedModel.value,
     mobile: isMobile.value && mobileOpenModel.value,
-    mobileHidden: isMobile.value && !mobileOpenModel.value,
+    mobileHidden: mobileClosed.value,
   }),
 )
 
@@ -149,11 +163,12 @@ const rootStyles = computed(() => {
   return result
 })
 
-const dataState = computed(() => collapsedModel.value ? 'collapsed' : 'expanded')
+const dataState = computed(() => (collapsedModel.value ? 'collapsed' : 'expanded'))
 
-function handleOverlayClick(): void { mobileOpenModel.value = false }
+function handleOverlayClick(): void {
+  mobileOpenModel.value = false
+}
 </script>
-
 
 <template>
   <Teleport to="body">
@@ -174,6 +189,8 @@ function handleOverlayClick(): void { mobileOpenModel.value = false }
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
+    :aria-hidden="mobileClosed ? 'true' : undefined"
+    :inert="mobileClosed || undefined"
     :data-state="dataState"
     role="navigation"
     style="contain: layout style"
