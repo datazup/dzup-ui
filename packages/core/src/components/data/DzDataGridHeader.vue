@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { FilterOperator } from './DzDataGrid.types.ts'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
@@ -55,6 +59,7 @@ const {
   openFilterField,
   getAlignClass,
   getColumnStyle,
+  handleHeaderClick,
   handleHeaderKeyDown,
   isColumnFilterable,
   hasActiveFilter,
@@ -68,11 +73,6 @@ const {
 } = useDataGridHeader({ ctx: ctx! })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <thead :class="styles.header()" role="rowgroup">
@@ -103,7 +103,7 @@ export default {
         "
         :tabindex="ctx!.sortable.value && col.sortable !== false ? 0 : undefined"
         role="columnheader"
-        @click="ctx!.sortable.value && col.sortable !== false ? ctx!.sort(col.field) : undefined"
+        @click="ctx!.sortable.value && col.sortable !== false ? handleHeaderClick($event, col.field) : undefined"
         @keydown="ctx!.sortable.value && col.sortable !== false ? handleHeaderKeyDown($event, col.field) : undefined"
       >
         <span class="inline-flex items-center gap-[var(--dz-spacing-1)]">

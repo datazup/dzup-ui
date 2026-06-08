@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTagEmits, DzTagProps, DzTagSlots } from './DzTag.types.ts'
 /**
  * DzTag — Categorization tag component with tone/variant styling.
@@ -61,11 +65,6 @@ function handleKeyDown(event: KeyboardEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <span

@@ -4,6 +4,9 @@
   "type": "module",
   "private": true,
   "description": "Storybook for dzup-ui component library",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "scripts": {
     "dev": "storybook dev -p 6006",
     "build": "storybook build",

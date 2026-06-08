@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDropdownMenuProps, DzDropdownMenuSlots } from './DzDropdownMenu.types.ts'
 /**
  * DzDropdownMenu — Root dropdown menu using Reka UI (ADR-07).
@@ -28,11 +32,6 @@ withDefaults(defineProps<DzDropdownMenuProps>(), {
 defineSlots<DzDropdownMenuSlots>()
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DropdownMenuRoot v-model:open="open" :modal="modal">

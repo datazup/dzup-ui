@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCarouselDotsProps, DzCarouselDotsSlots } from './DzCarousel.types.ts'
 /**
  * DzCarouselDots — Dot indicators for carousel navigation.
@@ -32,11 +36,6 @@ const slideIndices = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

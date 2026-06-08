@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzResizableContext,
 } from './DzResizable.types.ts'
@@ -60,11 +64,6 @@ function handleLayoutChange(sizes: number[]): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <SplitterGroup

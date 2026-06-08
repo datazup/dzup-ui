@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSheetContentEmits, DzSheetContentProps, DzSheetContentSlots } from './DzSheet.types.ts'
 import { DialogContent, DialogOverlay, DialogPortal } from 'reka-ui'
 /**
@@ -13,13 +17,14 @@ import { sheetVariants } from './DzSheet.variants.ts'
 
 const props = withDefaults(defineProps<DzSheetContentProps>(), {
   side: 'right',
+  size: 'sm',
 })
 
 const emit = defineEmits<DzSheetContentEmits>()
 defineSlots<DzSheetContentSlots>()
 
 const attrs = useAttrs()
-const styles = computed(() => sheetVariants({ side: props.side }))
+const styles = computed(() => sheetVariants({ side: props.side, size: props.size }))
 const overlayClasses = computed(() => styles.value.overlay())
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
@@ -38,11 +43,6 @@ function handleInteractOutside(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogPortal>

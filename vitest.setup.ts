@@ -15,3 +15,10 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
     disconnect(): void {}
   } as unknown as typeof globalThis.ResizeObserver
 }
+
+// Polyfill Element.scrollIntoView for Reka UI ListboxRoot which calls it
+// when an option is highlighted (e.g. Combobox/MultiSelect opens with a
+// preselected value). jsdom does not implement scrollIntoView.
+if (typeof Element !== 'undefined' && typeof Element.prototype.scrollIntoView !== 'function') {
+  Element.prototype.scrollIntoView = function (): void {}
+}

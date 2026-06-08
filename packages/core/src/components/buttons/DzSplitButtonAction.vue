@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzSplitButtonActionEmits,
   DzSplitButtonActionProps,
@@ -51,11 +55,6 @@ function handleClick(event: MouseEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <button

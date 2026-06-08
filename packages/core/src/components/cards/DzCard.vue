@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCardEmits, DzCardProps } from './DzCard.types.ts'
 /**
  * DzCard — A surface container component.
@@ -85,11 +89,6 @@ function handleKeydown(event: KeyboardEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

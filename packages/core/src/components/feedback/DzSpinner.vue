@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSpinnerProps } from './DzSpinner.types.ts'
 /**
  * DzSpinner — Loading indicator with rotating animation.
@@ -33,11 +37,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <span

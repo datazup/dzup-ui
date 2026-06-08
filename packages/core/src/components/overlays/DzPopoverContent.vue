@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzPopoverContentEmits,
   DzPopoverContentProps,
@@ -60,11 +64,6 @@ function handleCloseAutoFocus(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <PopoverPortal>

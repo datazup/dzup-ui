@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzListItemEmits, DzListItemProps, DzListItemSlots } from './DzList.types.ts'
 /**
  * DzListItem — Child item within a DzList compound component.
@@ -58,11 +62,6 @@ function handleClick(event: MouseEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <li

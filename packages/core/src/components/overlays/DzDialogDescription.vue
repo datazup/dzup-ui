@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDialogDescriptionSlots } from './DzDialog.types.ts'
 import { DialogDescription } from 'reka-ui'
 /**
@@ -20,11 +24,6 @@ const descriptionClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogDescription

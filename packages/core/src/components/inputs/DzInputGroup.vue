@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzInputGroupContext, DzInputGroupProps, DzInputGroupSlots } from './DzInputGroup.types.ts'
 /**
  * DzInputGroup — Compound wrapper for input + addons.
@@ -50,11 +54,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

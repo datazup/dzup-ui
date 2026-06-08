@@ -29,11 +29,13 @@ export const comboboxVariants = tv({
       'placeholder:text-[var(--dz-muted-foreground)]',
     ].join(' '),
     content: [
-      'z-[51] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'z-[60] overflow-hidden rounded-[var(--dz-radius-md)]',
+      'w-[var(--reka-combobox-trigger-width)]',
+      'max-h-[var(--reka-combobox-content-available-height)]',
       'border border-[var(--dz-border)]',
-      'bg-[var(--dz-background)]',
+      'bg-[var(--dz-surface)]',
       'text-[var(--dz-foreground)]',
-      'shadow-[var(--dz-shadow-md)]',
+      'shadow-[var(--dz-shadow-lg)]',
     ].join(' '),
     viewport: 'p-[var(--dz-spacing-1)]',
     item: [

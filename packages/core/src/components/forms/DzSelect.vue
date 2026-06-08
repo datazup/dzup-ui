@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSelectEmits, DzSelectProps, DzSelectSlots } from './DzSelect.types.ts'
 import { Check, ChevronDown } from 'lucide-vue-next'
 import {
@@ -37,19 +41,7 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
 
-const EMPTY_VALUE_SENTINEL = '__DZ_SELECT_EMPTY__'
-
 const model = defineModel<string>({ default: '' })
-
-/** Maps external value → internal reka-ui safe value (empty string → sentinel) */
-function toInternal(v: string): string {
-  return v === '' ? EMPTY_VALUE_SENTINEL : v
-}
-
-/** Maps internal reka-ui value → external value (sentinel → empty string) */
-function toExternal(v: string): string {
-  return v === EMPTY_VALUE_SENTINEL ? '' : v
-}
 
 const props = withDefaults(defineProps<DzSelectProps>(), {
   placeholder: undefined,
@@ -73,7 +65,20 @@ const props = withDefaults(defineProps<DzSelectProps>(), {
 })
 
 const emit = defineEmits<DzSelectEmits>()
+
 defineSlots<DzSelectSlots>()
+
+const EMPTY_VALUE_SENTINEL = '__DZ_SELECT_EMPTY__'
+
+/** Maps external value → internal reka-ui safe value (empty string → sentinel) */
+function toInternal(v: string): string {
+  return v === '' ? EMPTY_VALUE_SENTINEL : v
+}
+
+/** Maps internal reka-ui value → external value (sentinel → empty string) */
+function toExternal(v: string): string {
+  return v === EMPTY_VALUE_SENTINEL ? '' : v
+}
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -156,11 +161,6 @@ const triggerClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <SelectRoot

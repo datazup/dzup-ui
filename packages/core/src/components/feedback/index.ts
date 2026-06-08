@@ -53,21 +53,6 @@ export type {
   DzProgressSlots,
 } from './DzProgress.types.ts'
 
-// Types — DzRunStatusBadge
-export type {
-  DzRunStatusBadgeProps,
-  DzRunStatusBadgeSlots,
-} from './DzRunStatusBadge.types.ts'
-export { default as DzRunStatusBadge } from './DzRunStatusBadge.vue'
-
-// Types — DzTokenProgressBar
-export type {
-  DzTokenProgressBarProps,
-  DzTokenProgressBarSlotProps,
-  DzTokenProgressBarSlots,
-} from './DzTokenProgressBar.types.ts'
-export { default as DzTokenProgressBar } from './DzTokenProgressBar.vue'
-
 export {
   circularSizeMap,
   type ProgressBarVariantProps,
@@ -75,7 +60,6 @@ export {
   type ProgressTrackVariantProps,
   progressTrackVariants,
 } from './DzProgress.variants.ts'
-
 export { default as DzProgress } from './DzProgress.vue'
 
 export type {
@@ -84,8 +68,17 @@ export type {
   ResultStatus,
 } from './DzResult.types.ts'
 export { type ResultVariantProps, resultVariants } from './DzResult.variants.ts'
+
 // ── DzResult ──
 export { default as DzResult } from './DzResult.vue'
+
+// Types — DzRunStatusBadge
+export type {
+  DzRunStatusBadgeProps,
+  DzRunStatusBadgeSlots,
+} from './DzRunStatusBadge.types.ts'
+
+export { default as DzRunStatusBadge } from './DzRunStatusBadge.vue'
 // Types — DzSkeleton
 export type {
   DzSkeletonProps,
@@ -93,12 +86,10 @@ export type {
 } from './DzSkeleton.types.ts'
 export { type SkeletonVariantProps, skeletonVariants } from './DzSkeleton.variants.ts'
 export { default as DzSkeleton } from './DzSkeleton.vue'
-
 // Types — DzSpinner
 export type {
   DzSpinnerProps,
 } from './DzSpinner.types.ts'
-
 export { type SpinnerVariantProps, spinnerVariants } from './DzSpinner.variants.ts'
 
 export { default as DzSpinner } from './DzSpinner.vue'
@@ -134,3 +125,12 @@ export { default as DzErrorBoundary } from './DzErrorBoundary.vue'
 // Types — DzAsyncBoundary
 export type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots } from './DzAsyncBoundary.types.ts'
 export { default as DzAsyncBoundary } from './DzAsyncBoundary.vue'
+
+// Types — DzTokenProgressBar
+export type {
+  DzTokenProgressBarProps,
+  DzTokenProgressBarSlotProps,
+  DzTokenProgressBarSlots,
+} from './DzTokenProgressBar.types.ts'
+
+export { default as DzTokenProgressBar } from './DzTokenProgressBar.vue'

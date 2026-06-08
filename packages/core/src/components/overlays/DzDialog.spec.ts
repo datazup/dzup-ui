@@ -100,8 +100,7 @@ describe('dzDialog -- Unit Tests', () => {
       props: { open: true },
       slots: {
         default: () =>
-          h(DzDialogContent, { class: 'my-dialog' }, () =>
-            h(DzDialogTitle, {}, () => 'Title')),
+          h(DzDialogContent, { class: 'my-dialog' }, () => h(DzDialogTitle, {}, () => 'Title')),
       },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
@@ -116,7 +115,9 @@ describe('dzDialog -- Unit Tests', () => {
       attrs: { class: 'my-title' },
       slots: { default: () => 'Title' },
       global: {
-        stubs: { DialogTitle: { template: '<h2 :class="$attrs.class"><slot /></h2>', inheritAttrs: false } },
+        stubs: {
+          DialogTitle: { template: '<h2 :class="$attrs.class"><slot /></h2>', inheritAttrs: false },
+        },
       },
     })
     expect(wrapper.find('h2').classes()).toContain('my-title')
@@ -128,7 +129,12 @@ describe('dzDialog -- Unit Tests', () => {
       attrs: { class: 'my-desc' },
       slots: { default: () => 'Desc' },
       global: {
-        stubs: { DialogDescription: { template: '<p :class="$attrs.class"><slot /></p>', inheritAttrs: false } },
+        stubs: {
+          DialogDescription: {
+            template: '<p :class="$attrs.class"><slot /></p>',
+            inheritAttrs: false,
+          },
+        },
       },
     })
     expect(wrapper.find('p').classes()).toContain('my-desc')
@@ -139,7 +145,9 @@ describe('dzDialog -- Unit Tests', () => {
     const wrapper = mount(DzDialogOverlay, {
       attrs: { class: 'my-overlay' },
       global: {
-        stubs: { DialogOverlay: { template: '<div :class="$attrs.class" />', inheritAttrs: false } },
+        stubs: {
+          DialogOverlay: { template: '<div :class="$attrs.class" />', inheritAttrs: false },
+        },
       },
     })
     expect(wrapper.find('div').classes()).toContain('my-overlay')
@@ -151,8 +159,7 @@ describe('dzDialog -- Unit Tests', () => {
       props: { open: true },
       slots: {
         default: () =>
-          h(DzDialogContent, { size: 'lg' }, () =>
-            h(DzDialogTitle, {}, () => 'Title')),
+          h(DzDialogContent, { size: 'lg' }, () => h(DzDialogTitle, {}, () => 'Title')),
       },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
@@ -167,8 +174,7 @@ describe('dzDialog -- Unit Tests', () => {
       props: { open: true },
       slots: {
         default: () =>
-          h(DzDialogContent, { size: 'sm' }, () =>
-            h(DzDialogTitle, {}, () => 'Title')),
+          h(DzDialogContent, { size: 'sm' }, () => h(DzDialogTitle, {}, () => 'Title')),
       },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
@@ -183,8 +189,7 @@ describe('dzDialog -- Unit Tests', () => {
       props: { open: true },
       slots: {
         default: () =>
-          h(DzDialogContent, { size: 'full' }, () =>
-            h(DzDialogTitle, {}, () => 'Title')),
+          h(DzDialogContent, { size: 'full' }, () => h(DzDialogTitle, {}, () => 'Title')),
       },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
@@ -261,7 +266,7 @@ describe('dzDialog -- Unit Tests', () => {
   it('uses default transition names', () => {
     const wrapper = mountDialog()
     const transitions = wrapper.findAllComponents({ name: 'Transition' })
-    const names = transitions.map(t => t.props('name'))
+    const names = transitions.map((t) => t.props('name'))
     expect(names).toContain('dz-dialog-overlay')
     expect(names).toContain('dz-dialog-content')
     wrapper.unmount()
@@ -284,7 +289,7 @@ describe('dzDialog -- Unit Tests', () => {
   it('applies custom overlay transition name', () => {
     const wrapper = mountDialog({ overlayTransition: 'custom-overlay' })
     const transitions = wrapper.findAllComponents({ name: 'Transition' })
-    const names = transitions.map(t => t.props('name'))
+    const names = transitions.map((t) => t.props('name'))
     expect(names).toContain('custom-overlay')
     wrapper.unmount()
   })
@@ -292,7 +297,7 @@ describe('dzDialog -- Unit Tests', () => {
   it('applies custom content transition name', () => {
     const wrapper = mountDialog({ contentTransition: 'custom-content' })
     const transitions = wrapper.findAllComponents({ name: 'Transition' })
-    const names = transitions.map(t => t.props('name'))
+    const names = transitions.map((t) => t.props('name'))
     expect(names).toContain('custom-content')
     wrapper.unmount()
   })
@@ -310,6 +315,24 @@ describe('dzDialog -- Unit Tests', () => {
       attachTo: document.body,
     })
     expect(wrapper.find('button').text()).toBe('Open')
+    wrapper.unmount()
+  })
+
+  // Regression guard: closed dialogs must unmount content via Reka Presence,
+  // never leave a role="dialog" element in the DOM (the DzSidebar defect class).
+  it('keeps no role="dialog" element in the DOM when closed', () => {
+    const wrapper = mount(DzDialog, {
+      props: { open: false },
+      slots: {
+        default: () => [
+          h(DzDialogTrigger, {}, () => h('button', 'Open')),
+          h(DzDialogContent, {}, () => h(DzDialogTitle, {}, () => 'Title')),
+        ],
+      },
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+    expect(document.querySelector('[role="dialog"]')).toBeNull()
     wrapper.unmount()
   })
 })

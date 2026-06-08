@@ -90,8 +90,12 @@ export interface DzContextMenuItemEmits {
 
 /** Slot definitions for DzContextMenuItem */
 export interface DzContextMenuItemSlots {
-  /** Item content */
+  /** Item content (label) */
   default: () => unknown
+  /** Leading icon or marker, aligned to the start of the row */
+  prefix?: () => unknown
+  /** Trailing content (e.g., keyboard shortcut hint), aligned to the end */
+  suffix?: () => unknown
 }
 
 // ---------------------------------------------------------------------------

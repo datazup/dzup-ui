@@ -65,7 +65,9 @@ describe('dzConfirmDialog -- Unit Tests', () => {
 
   it('emits confirm on confirm button click', async () => {
     const wrapper = mountConfirmDialog()
-    const confirmBtn = document.querySelector('[data-testid="confirm-dialog-confirm"]') as HTMLElement
+    const confirmBtn = document.querySelector(
+      '[data-testid="confirm-dialog-confirm"]',
+    ) as HTMLElement
     expect(confirmBtn).toBeTruthy()
     confirmBtn.click()
     await wrapper.vm.$nextTick()
@@ -88,7 +90,9 @@ describe('dzConfirmDialog -- Unit Tests', () => {
 
   it('shows loading state on confirm button', () => {
     const wrapper = mountConfirmDialog({ loading: true })
-    const confirmBtn = document.querySelector('[data-testid="confirm-dialog-confirm"]') as HTMLElement
+    const confirmBtn = document.querySelector(
+      '[data-testid="confirm-dialog-confirm"]',
+    ) as HTMLElement
     expect(confirmBtn).toBeTruthy()
     expect(confirmBtn.getAttribute('aria-busy')).toBe('true')
     expect(confirmBtn.getAttribute('data-state')).toBe('loading')
@@ -99,7 +103,9 @@ describe('dzConfirmDialog -- Unit Tests', () => {
     const wrapper = mountConfirmDialog({ loading: true })
     const cancelBtn = document.querySelector('[data-testid="confirm-dialog-cancel"]') as HTMLElement
     expect(cancelBtn).toBeTruthy()
-    expect(cancelBtn.hasAttribute('disabled') || cancelBtn.getAttribute('aria-disabled') === 'true').toBe(true)
+    expect(
+      cancelBtn.hasAttribute('disabled') || cancelBtn.getAttribute('aria-disabled') === 'true',
+    ).toBe(true)
     wrapper.unmount()
   })
 
@@ -149,9 +155,19 @@ describe('dzConfirmDialog -- Unit Tests', () => {
     wrapper.unmount()
   })
 
+  // Regression guard: closed dialog must unmount content via Reka Presence,
+  // never leave a role="dialog" element in the DOM (the DzSidebar defect class).
+  it('keeps no role="dialog" element in the DOM when closed', () => {
+    const wrapper = mountConfirmDialog({ open: false, title: 'Hidden Dialog' })
+    expect(document.querySelector('[role="dialog"]')).toBeNull()
+    wrapper.unmount()
+  })
+
   it('applies danger tone to confirm button in danger variant', () => {
     const wrapper = mountConfirmDialog({ variant: 'danger' })
-    const confirmBtn = document.querySelector('[data-testid="confirm-dialog-confirm"]') as HTMLElement
+    const confirmBtn = document.querySelector(
+      '[data-testid="confirm-dialog-confirm"]',
+    ) as HTMLElement
     expect(confirmBtn).toBeTruthy()
     expect(confirmBtn.getAttribute('data-tone')).toBe('danger')
     wrapper.unmount()
@@ -159,7 +175,9 @@ describe('dzConfirmDialog -- Unit Tests', () => {
 
   it('applies primary tone to confirm button in default variant', () => {
     const wrapper = mountConfirmDialog({ variant: 'default' })
-    const confirmBtn = document.querySelector('[data-testid="confirm-dialog-confirm"]') as HTMLElement
+    const confirmBtn = document.querySelector(
+      '[data-testid="confirm-dialog-confirm"]',
+    ) as HTMLElement
     expect(confirmBtn).toBeTruthy()
     expect(confirmBtn.getAttribute('data-tone')).toBe('primary')
     wrapper.unmount()

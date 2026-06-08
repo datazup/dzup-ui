@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTabsContext, DzTabsEmits, DzTabsProps, DzTabsSlots } from './DzTabs.types.ts'
 import { TabsRoot } from 'reka-ui'
 /**
@@ -31,6 +35,7 @@ const props = withDefaults(defineProps<DzTabsProps>(), {
   orientation: 'horizontal',
   variant: 'line',
   size: 'md',
+  tone: 'primary',
   activationMode: 'automatic',
   id: undefined,
   ariaLabel: undefined,
@@ -51,6 +56,7 @@ function handleClose(value: string): void {
 const context: DzTabsContext = {
   variant: toRef(() => props.variant),
   size: toRef(() => props.size),
+  tone: toRef(() => props.tone),
   orientation: toRef(() => props.orientation),
   onClose: handleClose,
 }
@@ -61,6 +67,7 @@ const styles = computed(() =>
   tabsVariants({
     variant: props.variant,
     size: props.size,
+    tone: props.tone,
     orientation: props.orientation,
   }),
 )
@@ -75,11 +82,6 @@ function handleValueChange(value: string): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <TabsRoot
@@ -93,6 +95,7 @@ export default {
     :aria-describedby="ariaDescribedby"
     data-state="ready"
     :data-variant="variant"
+    :data-tone="tone"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"

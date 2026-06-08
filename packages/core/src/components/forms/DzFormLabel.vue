@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 /**
  * DzFormLabel -- Label sub-part for DzFormField compound.
  *
@@ -29,11 +33,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <label

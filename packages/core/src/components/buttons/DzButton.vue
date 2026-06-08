@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzButtonEmits, DzButtonProps, DzButtonSlots } from './DzButton.types.ts'
 /**
  * DzButton — Primary button component.
@@ -110,11 +114,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

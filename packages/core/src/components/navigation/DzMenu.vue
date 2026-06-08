@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzMenuContext, DzMenuProps, DzMenuSlots } from './DzMenu.types.ts'
 /**
  * DzMenu — Vertical navigation menu.
@@ -49,11 +53,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <nav

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSpacerProps } from './DzSpacer.types.ts'
 /**
  * DzSpacer -- Flexible space filler.
@@ -51,11 +55,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

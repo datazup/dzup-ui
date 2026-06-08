@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCarouselSlideProps, DzCarouselSlideSlots } from './DzCarousel.types.ts'
 /**
  * DzCarouselSlide — Single slide within a DzCarousel.
@@ -40,11 +44,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

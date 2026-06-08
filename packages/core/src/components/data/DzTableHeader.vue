@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTableHeaderSlots } from './DzTable.types.ts'
 /**
  * DzTableHeader — Table header section (<thead>).
@@ -28,11 +32,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <thead :class="classes" v-bind="{ ...$attrs, class: undefined }">

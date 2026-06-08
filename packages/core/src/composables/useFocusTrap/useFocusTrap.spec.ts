@@ -92,6 +92,9 @@ describe('useFocusTrap', () => {
     const wrapper = createWrapper()
     wrapper.vm.activate()
 
+    // The document-first focusable element is the `.first` button. With
+    // document-order sorting, this is deterministic regardless of how the
+    // selector group is ordered by the engine.
     const firstButton = wrapper.find('.first').element as HTMLElement
     expect(document.activeElement).toBe(firstButton)
 
@@ -124,15 +127,16 @@ describe('useFocusTrap', () => {
     const wrapper = createWrapper()
     wrapper.vm.activate()
 
+    const firstElement = wrapper.find('.first').element as HTMLElement
     const lastElement = wrapper.find('.third').element as HTMLElement
     lastElement.focus()
 
     pressTab()
 
-    // In jsdom, focus() calls work but keyboard events don't move focus natively.
-    // The handler calls preventDefault + focus(), so we verify the handler runs.
-    // Due to jsdom limitations, we verify the trap is active and doesn't throw.
+    // The handler calls preventDefault + focus(); focus() works in jsdom, so the
+    // observable result is that focus wraps from the last element to the first.
     expect(wrapper.vm.isActive).toBe(true)
+    expect(document.activeElement).toBe(firstElement)
 
     wrapper.unmount()
   })
@@ -142,11 +146,14 @@ describe('useFocusTrap', () => {
     wrapper.vm.activate()
 
     const firstElement = wrapper.find('.first').element as HTMLElement
+    const lastElement = wrapper.find('.third').element as HTMLElement
     firstElement.focus()
 
     pressTab(true)
 
+    // Shift+Tab on the first element wraps focus to the last element.
     expect(wrapper.vm.isActive).toBe(true)
+    expect(document.activeElement).toBe(lastElement)
 
     wrapper.unmount()
   })

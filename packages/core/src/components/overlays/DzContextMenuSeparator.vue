@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import { ContextMenuSeparator } from 'reka-ui'
 /**
  * DzContextMenuSeparator — Visual divider between context menu items.
@@ -15,11 +19,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ContextMenuSeparator :class="classes" v-bind="{ ...$attrs, class: undefined }" />

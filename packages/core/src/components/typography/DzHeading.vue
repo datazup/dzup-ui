@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzHeadingProps, HeadingLevel, HeadingSize } from './DzHeading.types.ts'
 /**
  * DzHeading — Semantic heading component with independent visual sizing.
@@ -54,11 +58,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

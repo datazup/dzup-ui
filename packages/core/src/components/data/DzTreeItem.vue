@@ -1,4 +1,9 @@
 <script setup lang="ts">
+defineOptions({
+  name: 'DzTreeItem',
+  inheritAttrs: false,
+})
+
 import type { DzTreeItemProps, DzTreeItemSlots, TreeNode } from './DzTree.types.ts'
 /**
  * DzTreeItem — Single node in a DzTree hierarchy.
@@ -80,13 +85,6 @@ function handleKeydown(event: KeyboardEvent, node: TreeNode): void {
       }
       break
   }
-}
-</script>
-
-<script lang="ts">
-export default {
-  name: 'DzTreeItem',
-  inheritAttrs: false,
 }
 </script>
 

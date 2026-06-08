@@ -625,3 +625,165 @@ describe('useDataGrid — Filtering + Sorting + Pagination', () => {
     expect(grid.currentPage.value).toBe(1)
   })
 })
+
+describe('useDataGrid — Multi-column sort (Shift+click)', () => {
+  it('appends a column to the sort model when multi=true', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      sortable: true,
+    })
+
+    grid.sort('name')
+    grid.sort('age', true)
+
+    expect(grid.sortModel.value).toEqual([
+      { field: 'name', direction: 'asc' },
+      { field: 'age', direction: 'asc' },
+    ])
+  })
+
+  it('cycles direction in place under multi=true without dropping other columns', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      sortable: true,
+    })
+
+    grid.sort('name')
+    grid.sort('age', true) // age asc
+    grid.sort('age', true) // age desc, name asc still present
+
+    expect(grid.sortModel.value).toEqual([
+      { field: 'name', direction: 'asc' },
+      { field: 'age', direction: 'desc' },
+    ])
+  })
+
+  it('removes a column from the sort model on the third multi=true call', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      sortable: true,
+    })
+
+    grid.sort('name')
+    grid.sort('age', true)
+    grid.sort('age', true)
+    grid.sort('age', true) // removed
+
+    expect(grid.sortModel.value).toEqual([{ field: 'name', direction: 'asc' }])
+  })
+
+  it('multi=false replaces the model with a single entry (legacy behaviour)', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      sortable: true,
+    })
+
+    grid.sort('name')
+    grid.sort('age', true)
+    grid.sort('age') // no Shift -- single-sort, replaces model
+
+    expect(grid.sortModel.value).toEqual([{ field: 'age', direction: 'desc' }])
+  })
+
+  it('applies multi-column ordering to displayData', () => {
+    const grid = useDataGrid({
+      data: [
+        { id: 1, name: 'Alice', age: 30 },
+        { id: 2, name: 'Alice', age: 25 },
+        { id: 3, name: 'Bob', age: 28 },
+      ],
+      columns: testColumns,
+      sortable: true,
+    })
+
+    grid.sort('name')
+    grid.sort('age', true)
+
+    expect(grid.displayData.value.map(r => r.id)).toEqual([2, 1, 3])
+  })
+})
+
+describe('useDataGrid — Manual / server-driven mode', () => {
+  it('skips client-side sorting when manual=true', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      sortable: true,
+      manual: true,
+    })
+
+    grid.sort('name')
+    expect(grid.sortModel.value).toEqual([{ field: 'name', direction: 'asc' }])
+    // Order matches `data` exactly, no client-side reordering applied.
+    expect(grid.displayData.value.map(r => r.id)).toEqual([1, 2, 3, 4, 5])
+  })
+
+  it('skips client-side filtering when manual=true', () => {
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      filterable: true,
+      manual: true,
+    })
+
+    grid.setFilter('name', { column: 'name', value: 'Alice', operator: 'contains' })
+    expect(grid.filters.value).toHaveLength(1)
+    expect(grid.displayData.value).toHaveLength(5)
+  })
+
+  it('skips client-side pagination slicing when manual=true', () => {
+    const grid = useDataGrid({
+      data: testData.slice(0, 2),
+      columns: testColumns,
+      pagination: { pageSize: 2 },
+      manual: true,
+      total: 10,
+    })
+
+    expect(grid.displayData.value).toHaveLength(2)
+    expect(grid.totalRows.value).toBe(10)
+    expect(grid.totalPages.value).toBe(5)
+  })
+
+  it('falls back to data.length when total is omitted in manual mode', () => {
+    const grid = useDataGrid({
+      data: testData.slice(0, 2),
+      columns: testColumns,
+      pagination: { pageSize: 2 },
+      manual: true,
+    })
+
+    expect(grid.totalRows.value).toBe(2)
+  })
+
+  it('still emits onSortChange / onFilterChange / onPageChange in manual mode', () => {
+    const onSortChange = vi.fn()
+    const onFilterChange = vi.fn()
+    const onPageChange = vi.fn()
+
+    const grid = useDataGrid({
+      data: testData,
+      columns: testColumns,
+      sortable: true,
+      filterable: true,
+      pagination: { pageSize: 2 },
+      manual: true,
+      total: 10,
+      onSortChange,
+      onFilterChange,
+      onPageChange,
+    })
+
+    grid.sort('name')
+    grid.setFilter('name', { column: 'name', value: 'A', operator: 'contains' })
+    grid.goToPage(2)
+
+    expect(onSortChange).toHaveBeenCalled()
+    expect(onFilterChange).toHaveBeenCalled()
+    expect(onPageChange).toHaveBeenCalledWith(2)
+  })
+})

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSplitButtonContext, DzSplitButtonProps, DzSplitButtonSlots } from './DzSplitButton.types.ts'
 /**
  * DzSplitButton — Compound split button with primary action + dropdown.
@@ -50,11 +54,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

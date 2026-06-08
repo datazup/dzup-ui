@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTableContext, DzTableProps, DzTableSlots } from './DzTable.types.ts'
 /**
  * DzTable — Compound semantic table root component.
@@ -70,11 +74,6 @@ const rootClasses = computed(() =>
 const tableClasses = computed(() => styles.value.root())
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

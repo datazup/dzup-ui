@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDialogOverlaySlots } from './DzDialog.types.ts'
 import { DialogOverlay } from 'reka-ui'
 /**
@@ -25,11 +29,6 @@ const overlayClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <Transition :name="overlayTransitionName">

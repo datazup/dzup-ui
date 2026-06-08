@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzDialogContentEmits,
   DzDialogContentProps,
@@ -28,6 +32,7 @@ import { dialogVariants } from './DzDialog.variants.ts'
 
 const props = withDefaults(defineProps<DzDialogContentProps>(), {
   size: 'md',
+  scrollable: false,
   id: undefined,
   ariaLabel: undefined,
   ariaLabelledby: undefined,
@@ -36,7 +41,7 @@ const props = withDefaults(defineProps<DzDialogContentProps>(), {
 })
 
 const emit = defineEmits<DzDialogContentEmits>()
-defineSlots<DzDialogContentSlots>()
+const slots = defineSlots<DzDialogContentSlots>()
 
 const attrs = useAttrs()
 
@@ -44,11 +49,17 @@ const dialogCtx = inject(DZ_DIALOG_KEY, undefined)
 const overlayTransitionName = computed(() => dialogCtx?.overlayTransition.value ?? 'dz-dialog-overlay')
 const contentTransitionName = computed(() => dialogCtx?.contentTransition.value ?? 'dz-dialog-content')
 
-const styles = computed(() => dialogVariants({ size: props.size }))
+const styles = computed(() => dialogVariants({ size: props.size, scrollable: props.scrollable }))
 const overlayClasses = computed(() => styles.value.overlay())
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
+const headerClasses = computed(() => styles.value.header())
+const bodyClasses = computed(() => styles.value.body())
+const footerClasses = computed(() => styles.value.footer())
+
+const hasHeaderSlot = computed(() => Boolean(slots.header))
+const hasFooterSlot = computed(() => Boolean(slots.footer))
 
 function handleEscapeKeyDown(event: KeyboardEvent): void {
   emit('escapeKeyDown', event)
@@ -71,11 +82,6 @@ function handleCloseAutoFocus(event: Event): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogPortal>
@@ -97,7 +103,18 @@ export default {
         @open-auto-focus="handleOpenAutoFocus"
         @close-auto-focus="handleCloseAutoFocus"
       >
-        <slot />
+        <template v-if="scrollable">
+          <header v-if="hasHeaderSlot" :class="headerClasses">
+            <slot name="header" />
+          </header>
+          <div :class="bodyClasses">
+            <slot />
+          </div>
+          <footer v-if="hasFooterSlot" :class="footerClasses">
+            <slot name="footer" />
+          </footer>
+        </template>
+        <slot v-else />
       </DialogContent>
     </Transition>
   </DialogPortal>

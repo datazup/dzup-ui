@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzNumberInputEmits, DzNumberInputProps, DzNumberInputSlots } from './DzNumberInput.types.ts'
 /**
  * DzNumberInput — Numeric input with increment/decrement buttons.
@@ -182,11 +186,6 @@ function handleBlur(event: FocusEvent): void {
 defineExpose({ inputRef })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

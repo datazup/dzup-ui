@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSheetDescriptionSlots } from './DzSheet.types.ts'
 import { DialogDescription } from 'reka-ui'
 /**
@@ -17,11 +21,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogDescription :class="classes" v-bind="{ ...$attrs, class: undefined }">

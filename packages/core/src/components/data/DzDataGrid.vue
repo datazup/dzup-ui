@@ -46,6 +46,8 @@ const props = withDefaults(defineProps<DzDataGridProps<T>>(), {
   density: 'default',
   size: 'md',
   rowKey: undefined,
+  manual: false,
+  total: undefined,
 })
 
 const emit = defineEmits<DzDataGridEmits<T>>()
@@ -64,6 +66,8 @@ const grid = useDataGrid<T>({
   selectable: toRef(() => props.selectable),
   selectedRows: toRef(() => props.selectedRows ?? []),
   rowKey: props.rowKey,
+  manual: toRef(() => props.manual),
+  total: toRef(() => props.total),
   onSortChange: (model) => {
     emit('update:sortModel', model)
     emit('sort', model)
@@ -128,11 +132,6 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

@@ -54,6 +54,7 @@ export { default as DzContextMenuTrigger } from './DzContextMenuTrigger.vue'
 // ── Types — DzDialog ──
 export type {
   DialogContentSize,
+  DzDialogCloseProps,
   DzDialogCloseSlots,
   DzDialogContentEmits,
   DzDialogContentProps,
@@ -137,6 +138,7 @@ export type {
   DzSheetSlots,
   DzSheetTitleSlots,
   DzSheetTriggerSlots,
+  SheetContentSize,
   SheetSide,
 } from './DzSheet.types.ts'
 export { type SheetVariantProps, sheetVariants } from './DzSheet.variants.ts'

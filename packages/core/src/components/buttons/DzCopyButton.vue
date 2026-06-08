@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './DzCopyButton.types.ts'
 /**
  * DzCopyButton — Clipboard copy button with visual feedback.
@@ -127,11 +131,6 @@ function fallbackCopy(text: string): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <button

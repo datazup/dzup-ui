@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCaptionProps, DzCaptionSlots } from './DzCaption.types.ts'
 /**
  * DzCaption — Small caption text component.
@@ -31,11 +35,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <small

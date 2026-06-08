@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzGridProps, DzGridSlots, ResponsiveCols } from './DzGrid.types.ts'
 /**
  * DzGrid -- CSS Grid layout component.
@@ -79,11 +83,6 @@ const gridStyle = computed(() => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

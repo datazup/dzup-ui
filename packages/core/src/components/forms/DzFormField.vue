@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzFormFieldProps, DzFormFieldSlots } from './DzFormField.types.ts'
 /**
  * DzFormField -- Compound wrapper that provides form field context.
@@ -42,14 +46,8 @@ useFormField({
 })
 
 const classes = computed(() =>
-  cn('flex flex-col gap-[var(--dz-spacing-1_5)]', attrs.class as string | undefined),
+  cn('flex flex-col gap-[var(--dz-spacing-2)]', attrs.class as string | undefined),
 )
-</script>
-
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
 </script>
 
 <template>

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzRunStatus,
   DzRunStatusBadgeProps,
@@ -62,11 +66,6 @@ const statusStyle = computed(() => ({
 const consumerClass = computed(() => cn(attrs.class as string | undefined))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DzBadge

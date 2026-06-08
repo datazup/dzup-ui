@@ -43,7 +43,7 @@ export const Default: Story = {
     template: `
       <div class="w-full max-w-5xl space-y-6">
         <h2 class="text-lg font-semibold">Overview</h2>
-        <DzGrid cols="4" gap="md">
+        <DzGrid :cols="4" gap="md">
           <DzStatCard
             title="Total Revenue"
             value="$48,295"
@@ -103,7 +103,7 @@ export const WithActivityCard: Story = {
     },
     template: `
       <div class="w-full max-w-5xl space-y-6">
-        <DzGrid cols="3" gap="md">
+        <DzGrid :cols="3" gap="md">
           <DzStatCard
             title="Total Revenue"
             value="$48,295"
@@ -174,7 +174,7 @@ export const DarkMode: Story = {
     template: `
       <div class="w-full max-w-4xl space-y-4">
         <h2 class="text-lg font-semibold">Overview</h2>
-        <DzGrid cols="4" gap="md">
+        <DzGrid :cols="4" gap="md">
           <DzStatCard
             title="Total Revenue"
             value="$48,295"

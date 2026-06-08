@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DateValue } from '@internationalized/date'
 import type {
   DateRangeValue,
@@ -154,11 +158,6 @@ const triggerClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DateRangePickerRoot

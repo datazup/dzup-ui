@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzToastViewportProps, DzToastViewportSlots } from './DzToast.types.ts'
 import { ToastViewport } from 'reka-ui'
 /**
@@ -48,11 +52,6 @@ const viewportClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ToastViewport

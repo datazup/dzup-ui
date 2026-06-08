@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzOtpInputEmits, DzOtpInputProps, DzOtpInputSlots } from './DzOtpInput.types.ts'
 import { PinInputInput, PinInputRoot } from 'reka-ui'
 /**
@@ -92,11 +96,6 @@ const inputIndices = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCodeBlockProps, DzCodeBlockSlots } from './DzCodeBlock.types.ts'
 /**
  * DzCodeBlock — Code display component with line numbers and copy support.
@@ -63,11 +67,6 @@ const contentStyles = computed(() => {
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

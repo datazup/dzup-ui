@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTokenProgressBarProps, DzTokenProgressBarSlots } from './DzTokenProgressBar.types.ts'
 /**
  * DzTokenProgressBar — Token-usage progress bar with threshold colors.
@@ -72,11 +76,6 @@ const labelBindings = computed(() => ({
 }))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

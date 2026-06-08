@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAvatarGroupContext } from './DzAvatar.types.ts'
 import type { DzAvatarGroupProps, DzAvatarGroupSlots } from './DzAvatarGroup.types.ts'
 /**
@@ -61,11 +65,6 @@ const overflowClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

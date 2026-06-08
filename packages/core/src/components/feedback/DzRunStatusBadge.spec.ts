@@ -1,9 +1,9 @@
+import type { DzRunStatus } from './DzRunStatusBadge.types.ts'
 /**
  * DzRunStatusBadge — Unit / behavior tests.
  */
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import type { DzRunStatus } from './DzRunStatusBadge.types.ts'
 import DzRunStatusBadge from './DzRunStatusBadge.vue'
 
 const STATUSES: readonly DzRunStatus[] = [

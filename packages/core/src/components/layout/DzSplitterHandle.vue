@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSplitterHandleProps, DzSplitterHandleSlots } from './DzSplitter.types.ts'
 import { SplitterResizeHandle } from 'reka-ui'
 /**
@@ -36,11 +40,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <SplitterResizeHandle

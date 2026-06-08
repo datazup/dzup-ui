@@ -37,23 +37,29 @@ export interface UseFocusTrapReturn {
  * @param containerRef - Ref to the container element that will trap focus
  * @returns Controls to activate, deactivate, and check trap state
  */
-export function useFocusTrap(
-  containerRef: Ref<HTMLElement | null>,
-): UseFocusTrapReturn {
+export function useFocusTrap(containerRef: Ref<HTMLElement | null>): UseFocusTrapReturn {
   const isActive = ref(false)
 
-  /** Returns all focusable elements within the container */
+  /** Returns all focusable elements within the container, in document order */
   function getFocusableElements(): HTMLElement[] {
     const container = containerRef.value
-    if (!container)
-      return []
-    return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+    if (!container) return []
+    const list = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+    // querySelectorAll on a selector group can return selector-group order
+    // rather than document order (e.g. jsdom). Sort by document position so the
+    // first/last tab-wrap boundaries are robust to selector ordering.
+    list.sort((a, b) => {
+      const pos = a.compareDocumentPosition(b)
+      if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+      if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1
+      return 0
+    })
+    return list
   }
 
   /** Keydown handler that intercepts Tab/Shift+Tab */
   function handleKeyDown(event: KeyboardEvent): void {
-    if (event.key !== 'Tab')
-      return
+    if (event.key !== 'Tab') return
 
     const focusable = getFocusableElements()
     if (focusable.length === 0) {
@@ -71,8 +77,7 @@ export function useFocusTrap(
         event.preventDefault()
         last?.focus()
       }
-    }
-    else {
+    } else {
       // Tab: if focus is on the last element, wrap to first
       if (active === last || !containerRef.value?.contains(active)) {
         event.preventDefault()
@@ -83,8 +88,7 @@ export function useFocusTrap(
 
   /** Activate the focus trap */
   function activate(): void {
-    if (isActive.value)
-      return
+    if (isActive.value) return
 
     isActive.value = true
     document.addEventListener('keydown', handleKeyDown)
@@ -98,8 +102,7 @@ export function useFocusTrap(
 
   /** Deactivate the focus trap */
   function deactivate(): void {
-    if (!isActive.value)
-      return
+    if (!isActive.value) return
 
     isActive.value = false
     document.removeEventListener('keydown', handleKeyDown)

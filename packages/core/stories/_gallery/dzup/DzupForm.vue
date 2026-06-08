@@ -1,0 +1,177 @@
+<script setup lang="ts">
+// dzup-ui equivalent of FreestyleForm — ONLY @dzup-ui/core components + --dz-* tokens.
+
+import { computed, ref } from 'vue'
+import { DzButton } from '../../../src/components/buttons'
+import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../../src/components/cards'
+import {
+  DzCheckbox,
+  DzFormField,
+  DzFormLabel,
+  DzFormMessage,
+  DzSelect,
+  DzSwitch,
+} from '../../../src/components/forms'
+import { DzInput, DzTextarea } from '../../../src/components/inputs'
+import { DzHeading, DzText } from '../../../src/components/typography'
+import type { DzSelectItem } from '../../../src/components/forms'
+
+const name = ref('')
+const visibility = ref<'private' | 'team' | 'public'>('team')
+const teamSize = ref<'solo' | 'small' | 'medium' | 'large'>('small')
+const startDate = ref('')
+const description = ref('')
+const notifications = ref(true)
+const isPublic = ref(false)
+const touched = ref(false)
+
+const nameError = computed(() =>
+  touched.value && name.value.trim() === '' ? 'Name is required' : '',
+)
+
+const visibilityItems: DzSelectItem[] = [
+  { label: 'Private', value: 'private' },
+  { label: 'Team', value: 'team' },
+  { label: 'Public', value: 'public' },
+]
+
+const teamSizeItems: DzSelectItem[] = [
+  { label: 'Just me', value: 'solo' },
+  { label: '2–10 people', value: 'small' },
+  { label: '11–50 people', value: 'medium' },
+  { label: '50+ people', value: 'large' },
+]
+
+function submit() {
+  touched.value = true
+}
+</script>
+
+<template>
+  <div
+    class="flex min-h-screen items-center justify-center bg-[var(--dz-background)] px-4 py-12 text-[var(--dz-foreground)] antialiased"
+  >
+    <div class="w-full max-w-lg">
+      <form @submit.prevent="submit">
+        <DzCard variant="elevated" padding="none">
+          <!-- Header -->
+          <DzCardHeader>
+            <div class="px-7 pb-5 pt-6">
+              <DzText
+                as="p"
+                size="xs"
+                weight="semibold"
+                class="mb-1 uppercase tracking-[0.2em] text-[var(--dz-primary)]"
+              >
+                Workspace
+              </DzText>
+              <DzHeading :level="1" size="lg" weight="semibold">Create Project</DzHeading>
+              <DzText as="p" size="sm" tone="muted" class="mt-1">
+                Spin up a new project and invite your team.
+              </DzText>
+            </div>
+          </DzCardHeader>
+
+          <!-- Body -->
+          <DzCardBody>
+            <div class="space-y-6 px-7 py-7">
+              <!-- Text input -->
+              <DzFormField :error="nameError" :invalid="!!nameError">
+                <DzFormLabel>Project name</DzFormLabel>
+                <DzInput
+                  v-model="name"
+                  placeholder="e.g. Atlas Migration"
+                  :invalid="!!nameError"
+                  @blur="touched = true"
+                />
+                <DzFormMessage />
+              </DzFormField>
+
+              <!-- Two-column row: related short fields side-by-side -->
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <DzFormField>
+                  <DzFormLabel>Visibility</DzFormLabel>
+                  <DzSelect v-model="visibility" :items="visibilityItems" />
+                </DzFormField>
+
+                <DzFormField>
+                  <DzFormLabel>Team size</DzFormLabel>
+                  <DzSelect v-model="teamSize" :items="teamSizeItems" />
+                </DzFormField>
+              </div>
+
+              <!-- Start date -->
+              <DzFormField>
+                <DzFormLabel>Start date</DzFormLabel>
+                <DzInput v-model="startDate" type="text" placeholder="e.g. 2026-06-01" />
+                <DzText as="p" size="xs" tone="muted" class="mt-1.5">
+                  When work on this project kicks off. Leave blank to start today.
+                </DzText>
+              </DzFormField>
+
+              <!-- Details section — eyebrow + grouped fields with clear separation -->
+              <div class="border-t border-[var(--dz-border)] pt-6">
+                <div style="margin-bottom: 1rem">
+                  <DzText
+                    as="p"
+                    size="xs"
+                    weight="semibold"
+                    class="uppercase tracking-[0.18em] text-[var(--dz-muted-foreground)]"
+                  >
+                    Details
+                  </DzText>
+                </div>
+
+                <DzFormField>
+                  <DzFormLabel>Description</DzFormLabel>
+                  <DzTextarea
+                    v-model="description"
+                    :rows="3"
+                    placeholder="What is this project about?"
+                  />
+                  <DzText as="p" size="xs" tone="muted" class="mt-1.5">
+                    A short summary helps teammates find this project later.
+                  </DzText>
+                </DzFormField>
+              </div>
+
+              <div class="border-t border-[var(--dz-border)] pt-5">
+                <!-- Checkbox row -->
+                <div class="flex items-start gap-3 py-1">
+                  <DzCheckbox v-model="notifications" class="mt-0.5" />
+                  <span>
+                    <DzText as="span" size="sm" weight="medium" class="block"
+                      >Enable notifications</DzText
+                    >
+                    <DzText as="span" size="xs" tone="muted" class="block">
+                      Get an email when activity happens in this project.
+                    </DzText>
+                  </span>
+                </div>
+
+                <!-- Toggle switch -->
+                <div class="mt-3 flex items-center justify-between py-1">
+                  <span>
+                    <DzText as="span" size="sm" weight="medium" class="block">Make public</DzText>
+                    <DzText as="span" size="xs" tone="muted" class="block">
+                      Anyone with the link can view this project.
+                    </DzText>
+                  </span>
+                  <DzSwitch v-model="isPublic" aria-label="Make public" />
+                </div>
+              </div>
+            </div>
+          </DzCardBody>
+
+          <!-- Footer — transparent band, sits on the card surface (no muted fill, no divider) -->
+          <DzCardFooter>
+            <div class="flex items-center justify-end gap-3 px-7 pb-6 pt-2">
+              <DzButton type="button" variant="outline" tone="neutral">Cancel</DzButton>
+              <DzButton type="submit" variant="solid" tone="primary">Create Project</DzButton>
+            </div>
+          </DzCardFooter>
+        </DzCard>
+      </form>
+    </div>
+  </div>
+</template>

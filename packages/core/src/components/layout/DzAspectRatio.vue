@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAspectRatioProps, DzAspectRatioSlots } from './DzAspectRatio.types.ts'
 /**
  * DzAspectRatio — Maintains a consistent aspect ratio for its content.
@@ -32,11 +36,6 @@ const style = computed(() => ({
 }))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

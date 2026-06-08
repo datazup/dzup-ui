@@ -72,7 +72,7 @@ describe('dzBadge — Unit Tests', () => {
       slots: { default: 'Tag' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('px-[var(--dz-spacing-1_5)]')
+    expect(classStr).toContain('px-[var(--dz-spacing-2)]')
   })
 
   it('applies lg size classes', () => {

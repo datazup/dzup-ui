@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzInputEmits, DzInputProps, DzInputSlots } from './DzInput.types.ts'
 /**
  * DzInput — Text input component with v-model binding.
@@ -143,11 +147,6 @@ function handleClear(): void {
 defineExpose({ inputRef })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

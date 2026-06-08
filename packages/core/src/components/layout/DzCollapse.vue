@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
 /**
  * DzCollapse — Animated expand/collapse container.
@@ -14,6 +18,7 @@ import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
  * </DzCollapse>
  * ```
  */
+import type { ComponentPublicInstance } from 'vue'
 import { computed, useAttrs } from 'vue'
 import { useCollapse } from '../../composables/useCollapse/useCollapse.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -33,21 +38,21 @@ const { contentRef, contentStyle } = useCollapse({
   duration: props.duration,
 })
 
+/** Bind the composable's content ref via a function ref (type-safe template ref). */
+function setContentRef(el: Element | ComponentPublicInstance | null): void {
+  contentRef.value = (el as HTMLElement | null)
+}
+
 const classes = computed(() =>
   cn(attrs.class as string | undefined),
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div
     :id="id"
-    ref="contentRef"
+    :ref="setContentRef"
     :class="classes"
     :style="{ contain: 'layout style', ...contentStyle }"
     :aria-hidden="!model || undefined"

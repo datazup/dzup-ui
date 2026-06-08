@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzAccordionContext,
   DzAccordionEmits,
@@ -74,17 +78,12 @@ function handleValueChange(value: string | string[] | undefined): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <AccordionRoot
     :id="id"
     :type="(type as 'single' | 'multiple')"
-    :model-value="(model as string)"
+    :model-value="model"
     :collapsible="resolvedCollapsible"
     :disabled="disabled"
     :class="rootClasses"

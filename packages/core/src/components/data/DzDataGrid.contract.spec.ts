@@ -115,4 +115,55 @@ describe('dzDataGrid — Contract Spec v1', () => {
     await input.setValue('test')
     expect(wrapper.emitted('filter')).toBeTruthy()
   })
+
+  it('accepts manual prop', () => {
+    const wrapper = mount(DzDataGrid, {
+      props: { data, columns, manual: true, total: 100 },
+    })
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('renders provided rows as-is when manual=true (no client-side sort)', async () => {
+    const sortableCols = [{ field: 'name', header: 'Name', sortable: true }]
+    const wrapper = mount(DzDataGrid, {
+      props: {
+        data: [{ name: 'Bob' }, { name: 'Alice' }],
+        columns: sortableCols,
+        sortable: true,
+        manual: true,
+      },
+    })
+    const sortHeader = wrapper.find('[role="columnheader"][tabindex="0"]')
+    await sortHeader.trigger('click')
+
+    expect(wrapper.emitted('update:sortModel')).toBeTruthy()
+    const rows = wrapper.findAll('tbody tr')
+    expect(rows[0]!.text()).toContain('Bob')
+    expect(rows[1]!.text()).toContain('Alice')
+  })
+
+  it('emits update:sortModel with appended entry on Shift+click', async () => {
+    const sortableCols = [
+      { field: 'name', header: 'Name', sortable: true },
+      { field: 'age', header: 'Age', sortable: true },
+    ]
+    const sortData = [
+      { name: 'Alice', age: 30 },
+      { name: 'Bob', age: 25 },
+    ]
+    const wrapper = mount(DzDataGrid, {
+      props: { data: sortData, columns: sortableCols, sortable: true },
+    })
+
+    const headers = wrapper.findAll('[role="columnheader"][tabindex="0"]')
+    await headers[0]!.trigger('click') // sort by name
+    await headers[1]!.trigger('click', { shiftKey: true }) // shift-append age
+
+    const emitted = wrapper.emitted('update:sortModel') as Array<[unknown]> | undefined
+    expect(emitted).toBeTruthy()
+    expect(emitted!.at(-1)![0]).toEqual([
+      { field: 'name', direction: 'asc' },
+      { field: 'age', direction: 'asc' },
+    ])
+  })
 })

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzBreadcrumbContext, DzBreadcrumbProps, DzBreadcrumbSlots } from './DzBreadcrumb.types.ts'
 /**
  * DzBreadcrumb — Accessible breadcrumb navigation wrapper.
@@ -48,11 +52,6 @@ const navClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <nav

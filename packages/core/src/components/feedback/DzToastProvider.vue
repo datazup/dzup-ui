@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzToastContext, DzToastProviderProps, DzToastProviderSlots, ToastItem } from './DzToast.types.ts'
 import { ToastProvider } from 'reka-ui'
 /**
@@ -78,11 +82,6 @@ const context: DzToastContext = {
 provide(DZ_TOAST_KEY, context)
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ToastProvider :swipe-direction="swipeDirection" :duration="duration">

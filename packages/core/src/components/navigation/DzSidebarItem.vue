@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSidebarItemEmits, DzSidebarItemProps, DzSidebarItemSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebarItem -- Individual navigation item within a sidebar.
@@ -97,11 +101,6 @@ function handleClick(event: MouseEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <component

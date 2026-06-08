@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzDialogTitleSlots } from './DzDialog.types.ts'
 import { DialogTitle } from 'reka-ui'
 /**
@@ -20,11 +24,6 @@ const titleClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DialogTitle

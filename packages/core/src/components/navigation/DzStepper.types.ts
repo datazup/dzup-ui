@@ -23,10 +23,14 @@ export interface DzStepperContext {
   activeStep: Ref<number>
   /** Orientation */
   orientation: Ref<StepperOrientation>
+  /** Whether items in completed/active state may be clicked to navigate */
+  clickable: Ref<boolean>
   /** Total number of steps */
   totalSteps: Ref<number>
   /** Register a step and get its index */
   registerStep: () => number
+  /** Set the active step (used by clickable items) */
+  setActiveStep: (index: number) => void
 }
 
 /** Typed injection key for DzStepper context (ADR-08, SCREAMING_SNAKE) */
@@ -40,12 +44,22 @@ export const DZ_STEPPER_KEY: InjectionKey<DzStepperContext> = Symbol('dz-stepper
 export interface DzStepperProps extends BaseAccessibilityProps {
   /** Orientation of the stepper */
   orientation?: StepperOrientation
+  /**
+   * Allow completed/active steps to be clicked to navigate back to them.
+   * Upcoming steps remain non-interactive regardless. Defaults to `false`.
+   */
+  clickable?: boolean
 }
 
 /** Events emitted by DzStepper */
 export interface DzStepperEmits {
   /** Active step changed */
   change: [step: number]
+  /**
+   * A clickable step was activated. Fired after v-model is updated; consumers
+   * can use this for analytics or to trigger side effects.
+   */
+  navigate: [step: number]
 }
 
 /** Slot definitions for DzStepper */
@@ -66,6 +80,18 @@ export interface DzStepperItemProps {
   description?: string
   /** Whether this step is optional */
   optional?: boolean
+  /**
+   * Per-item override for clickability. Falls back to the parent
+   * <code>DzStepper.clickable</code>. Only completed/active steps respond
+   * regardless of this flag — upcoming steps never navigate.
+   */
+  clickable?: boolean
+}
+
+/** Events emitted by DzStepperItem */
+export interface DzStepperItemEmits {
+  /** Step was activated via click/keyboard (only fires when clickable and reachable) */
+  navigate: [step: number]
 }
 
 /** Slot definitions for DzStepperItem */

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzStepperContext, DzStepperEmits, DzStepperProps, DzStepperSlots } from './DzStepper.types.ts'
 /**
  * DzStepper — Step-by-step progress indicator.
@@ -24,23 +28,33 @@ const model = defineModel<number>({ default: 0 })
 
 const props = withDefaults(defineProps<DzStepperProps>(), {
   orientation: 'horizontal',
+  clickable: false,
 })
 
-defineEmits<DzStepperEmits>()
+const emit = defineEmits<DzStepperEmits>()
 defineSlots<DzStepperSlots>()
 
 const attrs = useAttrs()
 const stepCounter = ref(0)
 
+function setActiveStep(index: number): void {
+  if (index === model.value) return
+  model.value = index
+  emit('change', index)
+  emit('navigate', index)
+}
+
 const context: DzStepperContext = {
   activeStep: model,
   orientation: toRef(() => props.orientation),
+  clickable: toRef(() => props.clickable),
   totalSteps: stepCounter,
   registerStep: () => {
     const index = stepCounter.value
     stepCounter.value++
     return index
   },
+  setActiveStep,
 }
 
 provide(DZ_STEPPER_KEY, context)
@@ -54,11 +68,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

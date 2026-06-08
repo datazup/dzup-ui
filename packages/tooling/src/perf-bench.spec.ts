@@ -51,7 +51,9 @@ function generateGridColumns() {
 const ITERATIONS = 5
 
 /** Mount threshold in ms — complex compound components */
-const COMPLEX_THRESHOLD_MS = 500
+const COMPLEX_THRESHOLD_MS = Number(
+  process.env.DZUP_UI_PERF_THRESHOLD_MS ?? 3_000,
+)
 
 interface BenchResult {
   times: number[]

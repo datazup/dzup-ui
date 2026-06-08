@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzChipEmits, DzChipProps, DzChipSlots } from './DzChip.types.ts'
 /**
  * DzChip — Closable chip component with tone/variant styling.
@@ -61,11 +65,6 @@ function handleKeyDown(event: KeyboardEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <span

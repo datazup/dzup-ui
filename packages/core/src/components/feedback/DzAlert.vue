@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzAlertEmits, DzAlertProps, DzAlertSlots } from './DzAlert.types.ts'
 /**
  * DzAlert — Contextual alert messages for user feedback.
@@ -48,11 +52,6 @@ function handleClose(): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

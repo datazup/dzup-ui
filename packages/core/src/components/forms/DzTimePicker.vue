@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { TimeValue } from 'reka-ui'
 import type { DzTimePickerEmits, DzTimePickerProps, DzTimePickerSlots } from './DzTimePicker.types.ts'
 import { Time } from '@internationalized/date'
@@ -107,11 +111,6 @@ const rootClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <TimeFieldRoot

@@ -1,10 +1,15 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type {
   DzPersonaSelectorEmits,
   DzPersonaSelectorProps,
   DzPersonaSelectorSlots,
   Persona,
 } from './DzPersonaSelector.types.ts'
+import type { DzSelectItem } from './DzSelect.types.ts'
 /**
  * DzPersonaSelector — Searchable persona picker.
  *
@@ -23,7 +28,6 @@ import type {
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
-import type { DzSelectItem } from './DzSelect.types.ts'
 import DzCombobox from './DzCombobox.vue'
 
 const props = withDefaults(defineProps<DzPersonaSelectorProps>(), {
@@ -62,11 +66,6 @@ function handleUpdate(value: string): void {
 const rootClass = computed(() => cn(attrs.class as string | undefined))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DzCombobox

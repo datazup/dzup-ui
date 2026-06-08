@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzSidebarSectionProps, DzSidebarSectionSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebarSection -- Groups sidebar items with an optional title.
@@ -56,11 +60,6 @@ function toggleSection(): void {
 const showContent = computed(() => !props.collapsible || isOpen.value)
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

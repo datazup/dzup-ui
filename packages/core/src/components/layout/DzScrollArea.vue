@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzScrollAreaProps, DzScrollAreaSlots } from './DzScrollArea.types.ts'
 import {
   ScrollAreaCorner,
@@ -56,11 +60,6 @@ const showHorizontal = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <ScrollAreaRoot

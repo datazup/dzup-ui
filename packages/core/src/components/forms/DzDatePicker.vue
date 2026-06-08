@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DateValue } from '@internationalized/date'
 import type { DzDatePickerEmits, DzDatePickerProps, DzDatePickerSlots } from './DzDatePicker.types.ts'
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-vue-next'
@@ -128,11 +132,6 @@ const triggerClasses = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <DatePickerRoot
@@ -185,7 +184,7 @@ export default {
         </span>
 
         <DatePickerTrigger
-          class="ml-auto"
+          class="ml-auto inline-flex items-center justify-center bg-transparent border-0 outline-none cursor-pointer dz-focus-ring-button"
           :aria-label="ariaLabel ?? 'Open date picker'"
         >
           <CalendarIcon :class="styles.icon()" aria-hidden="true" />

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { ColumnDef } from './DzDataGrid.types.ts'
 /**
  * DzDataGridBody — Internal body sub-part for DzDataGrid.
@@ -58,11 +62,6 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <tbody :class="styles.body()" role="rowgroup">

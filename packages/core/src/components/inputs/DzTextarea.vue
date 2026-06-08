@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTextareaEmits, DzTextareaProps } from './DzTextarea.types.ts'
 /**
  * DzTextarea — Multiline text input with optional auto-resize.
@@ -177,11 +181,6 @@ function handleBlur(event: FocusEvent): void {
 defineExpose({ textareaRef })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

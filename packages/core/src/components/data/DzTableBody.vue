@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTableBodySlots } from './DzTable.types.ts'
 /**
  * DzTableBody — Table body section (<tbody>).
@@ -17,11 +21,6 @@ const classes = computed(() =>
 )
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <tbody :class="classes" v-bind="{ ...$attrs, class: undefined }">

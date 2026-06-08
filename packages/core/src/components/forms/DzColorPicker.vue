@@ -1,5 +1,9 @@
 <!-- token-check-disable-file: color picker component inherently uses raw color values -->
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzColorPickerEmits, DzColorPickerProps, DzColorPickerSlots } from './DzColorPicker.types.ts'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 /**
@@ -99,11 +103,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <div

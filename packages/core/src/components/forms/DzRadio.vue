@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzRadioProps, DzRadioSlots } from './DzRadio.types.ts'
 import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
 /**
@@ -41,11 +45,6 @@ const styles = computed(() => radioVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <label

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineOptions({
+  inheritAttrs: false,
+})
+
 import type { DzTooltipProps, DzTooltipSlots } from './DzTooltip.types.ts'
 /**
  * DzTooltip -- Root compound component wrapping Reka UI TooltipRoot (ADR-07).
@@ -28,11 +32,6 @@ const props = withDefaults(defineProps<DzTooltipProps>(), {
 defineSlots<DzTooltipSlots>()
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
-</script>
 
 <template>
   <TooltipProvider :delay-duration="props.delayDuration">
