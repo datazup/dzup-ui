@@ -149,6 +149,7 @@ const triggerClasses = computed(() =>
     <DatePickerAnchor>
       <DatePickerField
         :id="resolvedId"
+        v-slot="{ segments }"
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
@@ -167,6 +168,9 @@ const triggerClasses = computed(() =>
           Placeholder text shown only while empty. The segment inputs stay
           mounted (v-show, not v-if) so a programmatic/calendar selection is
           reflected immediately instead of mounting fresh, unpopulated segments.
+          Each DatePickerInput renders only its default slot, so the segment
+          value must be passed explicitly — otherwise only the literal "/"
+          separators show.
         -->
         <span
           v-show="!model && placeholder"
@@ -176,11 +180,14 @@ const triggerClasses = computed(() =>
           v-show="!(!model && placeholder)"
           class="inline-flex items-center"
         >
-          <DatePickerInput part="month" :class="styles.fieldInput()" />
-          <span :class="styles.field()">/</span>
-          <DatePickerInput part="day" :class="styles.fieldInput()" />
-          <span :class="styles.field()">/</span>
-          <DatePickerInput part="year" :class="styles.fieldInput()" />
+          <DatePickerInput
+            v-for="(item, index) in segments"
+            :key="`${item.part}-${index}`"
+            :part="item.part"
+            :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
+          >
+            {{ item.value }}
+          </DatePickerInput>
         </span>
 
         <DatePickerTrigger
