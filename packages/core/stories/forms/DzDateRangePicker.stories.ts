@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import type { DateRangeValue } from '../../src/components/forms'
 import { DzDateRangePicker } from '../../src/components/forms'
 
@@ -11,7 +12,7 @@ import { DzDateRangePicker } from '../../src/components/forms'
 const meta = {
   title: 'Core/Forms/DzDateRangePicker',
   component: DzDateRangePicker,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -218,9 +219,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzDateRangePicker },

@@ -1,0 +1,89 @@
+{/* Cards.mdx — Sprint 4 family overview (TASK-4.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Cards/Overview" />
+
+# Cards <StatusBadge status="stable" />
+
+Cards are surface containers that group related content and actions into a single,
+visually distinct block. The family has three members, each tuned for a different
+job:
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzCard** | A general-purpose surface with optional `header` / `body` / `footer` / `media` / `actions` slots. | [DzCard](?path=/docs/core-cards-dzcard--docs) |
+| **DzImageCard** | Media-led content where a prominent image sits above the text (campaigns, products, galleries). | [DzImageCard](?path=/docs/core-cards-dzimagecard--docs) |
+| **DzStatCard** | A single KPI/metric with a value, trend indicator, icon, and description (dashboards, overviews). | [DzStatCard](?path=/docs/core-cards-dzstatcard--docs) |
+
+## When to use
+
+- Reach for **DzCard** whenever you need a bordered/elevated surface to separate a
+  chunk of content from the page. Compose it from `DzCardHeader`, `DzCardBody`, and
+  `DzCardFooter` for predictable spacing.
+- Use **DzImageCard** when the image is the primary content — it owns the aspect
+  ratio and supports an `overlay` slot for text-on-image.
+- Use **DzStatCard** for dashboards. It already renders the title, value, trend
+  arrow, and description; you only pass props (`title`, `value`, `trend`,
+  `trend-value`, `description`, `icon`) — there is no `label`/`tone` prop.
+
+## Variant selection (DzCard)
+
+| Variant | Looks like | Reach for it when |
+|---------|-----------|-------------------|
+| `elevated` *(default)* | Shadow, no border | A primary content surface that should float above the page. |
+| `outlined` | Border, no shadow | Dense layouts where borders define structure without shadow noise. |
+| `flat` | No border, no shadow | A card nested inside an already-elevated section, to avoid stacked depth. |
+
+`DzImageCard` and `DzStatCard` expose only `elevated` and `outlined`.
+
+## Anatomy (DzCard)
+
+`DzCard` renders its named slots top-to-bottom in this fixed order:
+
+```
+┌─────────────────────────────┐
+│  #media     (image / banner) │
+├─────────────────────────────┤
+│  #header    DzCardHeader      │  ← title + optional #actions
+├─────────────────────────────┤
+│  #default   DzCardBody        │  ← primary content
+├─────────────────────────────┤
+│  #actions   (inline actions)  │
+├─────────────────────────────┤
+│  #footer    DzCardFooter      │  ← metadata / button row
+└─────────────────────────────┘
+```
+
+`DzCardHeader` / `DzCardBody` / `DzCardFooter` are structural sub-parts (no props of
+their own) that apply the family's canonical padding and typography. See the
+[With All Slots](?path=/docs/core-cards-dzcard--with-all-slots) story for a live
+example, and [States: Loading Skeleton](?path=/docs/core-cards-dzcard--loading) for
+the loading pattern.
+
+## Interactivity & accessibility
+
+- Set `clickable` to make a whole `DzCard` actionable. It gains `role="button"`,
+  `tabindex="0"`, and Enter / Space keyboard activation — verified by the
+  [Interactive play test](?path=/docs/core-cards-dzcard--interactive).
+- `DzImageCard` requires a descriptive `alt` on its image.
+- `DzStatCard` marks its icon `aria-hidden`; the value and trend remain in the
+  accessible text.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Compose `DzCard` from `DzCardHeader` / `DzCardBody` / `DzCardFooter` so padding and rhythm stay consistent.</Do>
+  <Dont>Hand-roll `<div>` padding inside a bare `DzCard` — it drifts from the token-driven spacing.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzStatCard` for single metrics and pass `title` + `value` (+ `trend`/`description`).</Do>
+  <Dont>Pass `label` or `tone` to `DzStatCard` — those props don't exist; the title would render empty.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Add `clickable` (not a nested `<button>`) when the entire card is the target.</Do>
+  <Dont>Wrap a card in an `<a>`/`<button>` and also make it `clickable` — that nests interactive roles.</Dont>
+</DoDont>

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { DzToastContext } from '../../src/components/feedback'
 import { inject } from 'vue'
 import { DzButton } from '../../src/components/buttons'
@@ -23,7 +23,7 @@ const meta = {
   title: 'Core/Feedback/DzToastParts',
   component: DzToastProvider,
   subcomponents: { DzToastViewport, DzToast },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     duration: {
       control: 'number',

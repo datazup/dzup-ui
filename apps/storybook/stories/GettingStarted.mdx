@@ -1,0 +1,78 @@
+{/* GettingStarted.mdx */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DocTable } from './_blocks/DocTable.ts'
+
+<Meta title="Getting Started" />
+
+# Getting Started
+
+**dzup-ui** is a contract-first Vue 3 component library styled with Tailwind CSS 4
+and a three-tier design-token system. This Storybook is both the **documentation**
+and the **test suite** — every story doubles as an interaction/a11y test under the
+Vitest addon.
+
+## Install
+
+```bash
+yarn add @dzup-ui/core @dzup-ui/tokens
+```
+
+`@dzup-ui/core` depends on `@dzup-ui/tokens` (design tokens) and
+`@dzup-ui/contracts` (types only, zero runtime). See the
+[architecture reference](../../CLAUDE.md) for the package dependency graph.
+
+## Wire up tokens
+
+Components read CSS variables (`var(--dz-*)`) emitted by the tokens package. Import
+the token stylesheet once at your app entry, **before** your own styles:
+
+```ts
+// main.ts
+import '@dzup-ui/tokens/css'
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')
+```
+
+## Use a component
+
+```vue
+<script setup lang="ts">
+import { DzButton } from '@dzup-ui/core'
+</script>
+
+<template>
+  <DzButton variant="solid" tone="primary" size="md">
+    Save changes
+  </DzButton>
+</template>
+```
+
+## Theme switching
+
+Dark mode keys off `[data-theme="dark"]` on an ancestor element. Set it on
+`<html>` (or any wrapper) to opt a subtree into dark mode. In this Storybook, use
+the **Theme** toolbar toggle. See **[Guides/Theming](?path=/docs/guides-theming--docs)**.
+
+## What's in the sidebar
+
+- **Getting Started / Guides / Contributing** — these docs pages.
+- **Core/&lt;Family&gt;/&lt;Component&gt;** — one entry per component, each carrying a
+  [status badge](?path=/docs/contributing--docs#component-status) (experimental /
+  beta / stable / deprecated).
+- **Core/Compositions** — real-world, multi-component arrangements.
+
+## Conventions at a glance
+
+<DocTable
+  head={['Concept', 'Values']}
+  align={['left', 'left']}
+  rows={[
+    ['`size`', '`xs` · `sm` · `md` · `lg` · `xl`'],
+    ['`tone`', '`neutral` · `primary` · `success` · `warning` · `danger` · `info`'],
+    ['`variant`', 'family-specific (see each component’s docs)'],
+  ]}
+/>
+
+These taxonomies are frozen by ADR-02 and exported from `@dzup-ui/contracts`.

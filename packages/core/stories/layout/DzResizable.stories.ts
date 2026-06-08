@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import {
   DzResizable,
   DzResizableHandle,
@@ -16,7 +18,7 @@ import {
 const meta = {
   title: 'Core/Layout/DzResizable',
   component: DzResizable,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     direction: {
@@ -319,9 +321,7 @@ export const NestedResizable: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
@@ -361,13 +361,13 @@ export const Interactive: Story = {
         </p>
         <DzResizable direction="horizontal" class="h-40 border rounded-lg" @layout-change="sizes = $event">
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2" data-testid="panel-a">
               {{ Math.round(sizes[0]) }}%
             </div>
           </DzResizablePanel>
           <DzResizableHandle with-handle />
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2" data-testid="panel-b">
               {{ Math.round(sizes[1]) }}%
             </div>
           </DzResizablePanel>
@@ -375,6 +375,26 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The Reka Splitter resize handle is exposed as role="separator", tabindex 0.
+    const handle = canvas.getByRole('separator')
+    await expect(handle).toHaveAttribute('tabindex', '0')
+
+    // Panels start at the 50/50 default.
+    await expect(canvas.getByTestId('panel-a')).toHaveTextContent('50%')
+
+    // Focus the handle and resize via the keyboard (keyboardResizeBy = 10%).
+    handle.focus()
+    await expect(handle).toHaveFocus()
+    await userEvent.keyboard('{ArrowRight}')
+
+    // The @layout-change event repaints the panel percentages away from 50/50.
+    await waitFor(() => {
+      expect(canvas.getByTestId('panel-a')).not.toHaveTextContent('50%')
+    })
+  },
 }
 
 // ---------------------------------------------------------------------------

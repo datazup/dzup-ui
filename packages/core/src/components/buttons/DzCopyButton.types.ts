@@ -10,7 +10,7 @@
 // Props
 // ---------------------------------------------------------------------------
 
-import type { CanonicalSize } from '@dzup-ui/contracts'
+import type { ButtonVariant, CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 
 /** Props for the DzCopyButton component */
 export interface DzCopyButtonProps {
@@ -24,6 +24,10 @@ export interface DzCopyButtonProps {
   label?: string
   /** Label shown after a successful copy */
   copiedLabel?: string
+  /** Visual style variant (fill / border treatment) */
+  variant?: ButtonVariant
+  /** Semantic color tone */
+  tone?: CanonicalTone
   /** Button size */
   size?: CanonicalSize
   /** Disabled state -- prevents interaction */

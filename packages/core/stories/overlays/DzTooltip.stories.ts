@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzTooltip,
@@ -20,7 +22,7 @@ const meta = {
     DzTooltipTrigger,
     DzTooltipContent,
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     delayDuration: {
@@ -231,9 +233,7 @@ export const Interactive: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzTooltip, DzTooltipTrigger, DzTooltipContent, DzButton },
@@ -281,6 +281,13 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Hovering the trigger surfaces the tooltip (portalled, role="tooltip").
+    await userEvent.hover(canvas.getByRole('button', { name: /save document/i }))
+    await expect(await screen.findByText(/save your current document/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------

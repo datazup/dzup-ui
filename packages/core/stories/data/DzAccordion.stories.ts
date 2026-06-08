@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzAccordion,
   DzAccordionContent,
@@ -18,7 +20,7 @@ import {
 const meta = {
   title: 'Core/Data/DzAccordion',
   component: DzAccordion,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -194,6 +196,19 @@ export const MultipleMode: Story = {
       </DzAccordion>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const first = canvas.getByRole('button', { name: /what is dzup-ui/i })
+    const second = canvas.getByRole('button', { name: /how do i install/i })
+
+    // In multiple mode, opening a second item does not close the first.
+    await userEvent.click(first)
+    await userEvent.click(second)
+    await waitFor(() => {
+      expect(first).toHaveAttribute('aria-expanded', 'true')
+      expect(second).toHaveAttribute('aria-expanded', 'true')
+    })
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -216,6 +231,21 @@ export const Collapsible: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /what is dzup-ui/i })
+
+    // Starts collapsed.
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click expands…
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // …and because collapsible is enabled, clicking the open item closes it again.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -273,9 +303,7 @@ export const DisabledItem: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent },

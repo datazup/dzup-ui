@@ -16,7 +16,9 @@ import type {
  * ```
  */
 import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 
 const model = defineModel<string>({ default: '' })
@@ -32,6 +34,7 @@ const props = withDefaults(defineProps<DzSearchInputProps>(), {
   required: false,
   clearable: true,
   debounce: 0,
+  loadingLabel: 'Loading',
 })
 
 const emit = defineEmits<DzSearchInputEmits>()
@@ -41,8 +44,25 @@ const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
 const autoId = useId()
 
-const resolvedId = computed(() => props.id ?? autoId)
-const isInvalid = computed(() => props.invalid || !!props.error)
+/** Optional DzFormField context (ADR-08) — present only when inside a field */
+const fieldContext = useFormFieldContext()
+
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
+const isInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
+
+/** Combined aria-describedby from prop + field context */
+const resolvedAriaDescribedby = computed(() => {
+  const parts: string[] = []
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
+  return parts.length > 0 ? parts.join(' ') : undefined
+})
 
 const wrapperClasses = computed(() =>
   cn(
@@ -56,6 +76,22 @@ const wrapperClasses = computed(() =>
 )
 
 const inputClasses = computed(() => inputElementVariants())
+
+/**
+ * Spinner size mapped down from the input size so the indicator stays
+ * proportionate to the field height (DzSpinner's md is 24px — too large).
+ */
+const spinnerSize = computed(() => {
+  switch (props.size) {
+    case 'xs':
+    case 'sm':
+      return 'xs' as const
+    case 'xl':
+      return 'md' as const
+    default:
+      return 'sm' as const
+  }
+})
 
 function handleChange(): void {
   emit('change', model.value, { source: 'user' })
@@ -117,10 +153,10 @@ export default {
 
 <template>
   <div
-    :data-state="disabled ? 'disabled' : readonly ? 'readonly' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
-    :data-disabled="disabled ? '' : undefined"
+    :data-disabled="resolvedDisabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -152,22 +188,33 @@ export default {
         :class="inputClasses"
         :name="name"
         :placeholder="placeholder ?? 'Search...'"
-        :disabled="disabled"
-        :readonly="readonly"
-        :required="required"
+        :disabled="resolvedDisabled"
+        :readonly="readonly || loading"
+        :required="resolvedRequired"
         :aria-label="ariaLabel ?? 'Search'"
         :aria-labelledby="ariaLabelledby"
-        :aria-describedby="ariaDescribedby"
+        :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="isInvalid || undefined"
+        :aria-required="resolvedRequired || undefined"
+        :aria-busy="loading || undefined"
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKeydown"
       >
 
+      <!-- Loading spinner -->
+      <DzSpinner
+        v-if="loading"
+        class="shrink-0"
+        :size="spinnerSize"
+        :tone="tone ?? 'neutral'"
+        :label="loadingLabel"
+      />
+
       <!-- Clear button -->
       <button
-        v-if="clearable && model && !disabled && !readonly"
+        v-if="clearable && model && !resolvedDisabled && !readonly && !loading"
         type="button"
         class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
         aria-label="Clear search"
@@ -206,6 +253,20 @@ export default {
 </template>
 
 <style scoped>
+/*
+ * Suppress the browser's native search affordances. `type="search"` renders a
+ * platform clear ("x") button and decoration that appear whenever the field has
+ * a value — independent of the `clearable` prop. Hiding them ensures the only
+ * clear control is our own button, which is gated on `clearable`.
+ */
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 /* Accessibility: respect user's motion preference */
 @media (prefers-reduced-motion: reduce) {
   :deep(*),

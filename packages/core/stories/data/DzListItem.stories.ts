@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { DzList, DzListItem } from '../../src/components/data'
 
 /**
@@ -12,7 +12,7 @@ import { DzList, DzListItem } from '../../src/components/data'
 const meta = {
   title: 'Core/Data/DzListItem',
   component: DzListItem,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     disabled: {
       control: 'boolean',

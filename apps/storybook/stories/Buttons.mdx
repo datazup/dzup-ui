@@ -1,0 +1,79 @@
+{/* Buttons.mdx */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Buttons/Overview" />
+
+# Buttons
+
+Buttons trigger actions. The family shares one frozen taxonomy (ADR-02) — five
+**variants**, six **tones**, five **sizes** — so any button reads consistently
+wherever it appears.
+
+| Variant  | Emphasis | Typical use |
+|----------|----------|-------------|
+| `solid`  | Highest  | The single primary action in a view |
+| `outline`| Medium   | Secondary actions next to a primary |
+| `ghost`  | Low      | Toolbar / dense UI actions, icon buttons |
+| `text`   | Low      | Inline actions inside running content |
+| `link`   | Lowest   | Navigation that should look like a link |
+
+Tones (`neutral`, `primary`, `success`, `warning`, `danger`, `info`) carry
+**meaning**, not decoration — reach for `danger` only for destructive actions and
+`primary` for the affirmative path.
+
+## Components
+
+| Component | Status | When to use |
+|-----------|--------|-------------|
+| [DzButton](?path=/docs/core-buttons-dzbutton--docs) | <StatusBadge status="stable" /> | The default action button with text (and optional prefix/suffix icons). |
+| [DzIconButton](?path=/docs/core-buttons-dziconbutton--docs) | <StatusBadge status="stable" /> | Icon-only actions in toolbars, cards, dialogs. **Requires `ariaLabel`.** |
+| [DzButtonGroup](?path=/docs/core-buttons-dzbuttongroup--docs) | <StatusBadge status="stable" /> | Visually join related buttons and share `size`/`variant`/`tone`/`disabled`. |
+| [DzSplitButton](?path=/docs/core-buttons-dzsplitbutton--docs) | <StatusBadge status="stable" /> | A primary action paired with a menu of related alternatives. |
+| [DzToggleButton](?path=/docs/core-buttons-dztogglebutton--docs) | <StatusBadge status="stable" /> | A two-state on/off control (e.g. formatting). Exposes `aria-pressed`. |
+| [DzCopyButton](?path=/docs/core-buttons-dzcopybutton--docs) | <StatusBadge status="stable" /> | Copy a value to the clipboard with built-in "copied" feedback. |
+
+## When to use which
+
+- **One affirmative action per view** → `solid` `primary` `DzButton`. Everything
+  else steps down to `outline`/`ghost`.
+- **No room for a label** → `DzIconButton` with a descriptive `ariaLabel`.
+- **A main action with close cousins** (Save / Save as Draft / Save & Close) →
+  `DzSplitButton`, not three separate buttons.
+- **A persistent on/off state** → `DzToggleButton` (not a `DzButton` whose label
+  you flip), so assistive tech hears `aria-pressed`.
+- **Choosing between mutually-exclusive options** → consider
+  [DzSegmented](?path=/docs/core-navigation-dzsegmented--docs) instead of a
+  button group of toggles.
+
+## Accessibility
+
+- Every button has an accessible name — visible text, or `ariaLabel` /
+  `ariaLabelledby` for icon-only buttons.
+- Loading buttons set `aria-busy`; toggles set `aria-pressed`; disabled buttons
+  drop out of the tab order.
+- Focus rings come from the shared `dz-focus-ring-button` utility — never remove
+  them. Verify contrast in **both** themes via each component's *Dark Mode* story.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Keep exactly one high-emphasis (`solid` `primary`) action per view and step secondary actions down to `outline`/`ghost`.</Do>
+  <Dont>Stack multiple `solid` `primary` buttons side by side — nothing reads as *the* action.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Give every `DzIconButton` a concrete `ariaLabel` ("Delete invoice").</Do>
+  <Dont>Ship an icon-only button with no label, or a vague one like "Button".</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Reserve `tone="danger"` for destructive, irreversible actions.</Do>
+  <Dont>Use `danger` for ordinary emphasis — it cries wolf and dilutes real warnings.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzToggleButton` for on/off state so screen readers hear `aria-pressed`.</Do>
+  <Dont>Fake a toggle by swapping a `DzButton` label between "On" and "Off".</Dont>
+</DoDont>

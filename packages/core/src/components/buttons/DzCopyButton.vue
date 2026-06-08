@@ -15,6 +15,7 @@ import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
  */
 import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { buttonVariants } from './DzButton.variants.ts'
 import { copyButtonVariants } from './DzCopyButton.variants.ts'
 
 const props = withDefaults(defineProps<DzCopyButtonProps>(), {
@@ -22,6 +23,8 @@ const props = withDefaults(defineProps<DzCopyButtonProps>(), {
   ariaLabel: undefined,
   label: undefined,
   copiedLabel: undefined,
+  variant: 'outline',
+  tone: 'neutral',
   size: 'sm',
   disabled: false,
 })
@@ -34,13 +37,24 @@ const attrs = useAttrs()
 const copied = ref(false)
 let resetTimer: ReturnType<typeof setTimeout> | undefined
 
+/** Whether a text label is shown next to the icon (non-square layout) */
+const hasLabel = computed(() => Boolean(props.label || props.copiedLabel))
+
+/** Active tone — flips to `success` while showing copied feedback */
+const resolvedTone = computed(() => (copied.value ? 'success' : props.tone))
+
 const classes = computed(() =>
   cn(
-    copyButtonVariants({
+    // Fill / border / tone come from the shared button taxonomy (ADR-02)
+    buttonVariants({
+      variant: props.variant,
       size: props.size,
-      copied: copied.value,
+      tone: resolvedTone.value,
     }),
-    props.label || props.copiedLabel ? 'w-auto gap-1.5 px-2' : '',
+    // Icon-only buttons are square; labelled buttons keep button padding + gap
+    hasLabel.value
+      ? 'gap-1.5'
+      : copyButtonVariants({ size: props.size }),
     attrs.class as string | undefined,
   ),
 )
@@ -127,6 +141,8 @@ export default {
     :disabled="disabled || undefined"
     :aria-label="resolvedAriaLabel"
     :data-state="copied ? 'copied' : 'idle'"
+    :data-variant="variant"
+    :data-tone="resolvedTone"
     :data-disabled="disabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

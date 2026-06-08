@@ -1,0 +1,121 @@
+{/* Contributing.mdx */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { DocTable } from './_blocks/DocTable.ts'
+
+<Meta title="Contributing" />
+
+# Contributing — Story Authoring
+
+This page is the house style for writing component stories. Stories are both
+**docs** and **tests** — treat every story as a recorded state, and add a `play()`
+to turn an interactive one into a test.
+
+## Where things live
+
+- **Stories** — `packages/core/stories/{family}/Dz*.stories.ts` (not colocated with
+  components — see [CLAUDE.md](../../CLAUDE.md)).
+- **Shared utilities** — `packages/core/stories/_shared/` (option arrays,
+  decorators, `DemoGrid`/`DemoRow`, status taxonomy). Import from `'../_shared'`.
+- **Doc blocks** — `apps/storybook/stories/_blocks/` (`StatusBadge`, `DoDont`).
+- **Template** — `packages/core/stories/_shared/Dz.stories.template.ts`. Copy it
+  to start a new story.
+
+## The shared utilities
+
+```ts
+import {
+  SIZES, TONES, VARIANTS,        // canonical option arrays (ADR-02)
+  sizeArgType, toneArgType, a11yArgTypes, // argTypes fragments
+  darkModeDecorator,             // dark-mode preview wrapper (don't inline it)
+  DemoRow, DemoGrid, DemoSection,// layout primitives for matrices
+  statusTag,                     // status:* tag helper
+} from '../_shared'
+```
+
+> **Never** re-inline the `data-theme="dark"` wrapper — import `darkModeDecorator`.
+> This was deduped across 86 stories in Sprint 0.
+
+## Required stories (Definition of Done)
+
+Every component story must include:
+
+1. **`Default`** — controls-driven, `v-bind="args"`.
+2. A **gallery/matrix** — `*Gallery` (variant × tone / sizes), laid out with `DemoRow`/`DemoGrid`.
+3. **`States`** — disabled / loading / readonly / invalid as applicable.
+4. **`DarkMode`** — via `darkModeDecorator`.
+5. **`Accessibility`** — focus-ring / ARIA demonstration.
+6. At least one **`RealWorld*`** — ported/derived from the sandbox.
+7. ≥1 **`play()`** interaction test where interactive — **await every** `userEvent`/`expect`.
+
+## `argTypes` categories
+
+Group every arg into one of four `table.category` buckets:
+
+<DocTable
+  head={['Category', 'Examples']}
+  align={['left', 'left']}
+  rows={[
+    ['`Appearance`', '`variant`, `size`, `tone`'],
+    ['`Behavior`', '`disabled`, `loading`, `type`, `asChild`'],
+    ['`State`', '`invalid`, `error`, `required`, `readonly`'],
+    ['`Accessibility`', '`id`, `ariaLabel`, `ariaLabelledby`'],
+  ]}
+/>
+
+## `play()` smoke test
+
+Always `await` interactions so the Interactions panel can log/step them, and so the
+a11y audit scans the resulting state:
+
+```ts
+import { expect, userEvent, within } from 'storybook/test'
+
+export const Interactive: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const btn = canvas.getByRole('button', { name: /save/i })
+    await userEvent.click(btn)
+    await expect(btn).toHaveFocus()
+  },
+}
+```
+
+## Component status <a id="component-status" />
+
+Tag each `meta` with exactly one status. The taxonomy is the single source in
+`_shared/status.ts`; it renders as a badge in the sidebar and (via `StatusBadge`)
+in docs headers.
+
+<DocTable
+  head={['Tag', 'Badge', 'Meaning']}
+  align={['left', 'left', 'left']}
+  rows={[
+    ['`status:experimental`', <StatusBadge status="experimental" />, 'API may change; not for production'],
+    ['`status:beta`', <StatusBadge status="beta" />, 'Feature-complete; API stabilizing'],
+    ['`status:stable`', <StatusBadge status="stable" />, 'Production-ready; semver-protected'],
+    ['`status:deprecated`', <StatusBadge status="deprecated" />, 'Scheduled for removal'],
+  ]}
+/>
+
+```ts
+const meta = {
+  title: 'Core/Buttons/DzButton',
+  component: DzButton,
+  tags: ['autodocs', 'status:stable'],
+  // …
+}
+```
+
+## Do / Don't
+
+<DoDont>
+  <Do>Import `SIZES`/`TONES`/`VARIANTS` and iterate them in matrix stories.</Do>
+  <Dont>Re-type literal option arrays in each story — they drift from contracts.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>`await` every `userEvent`/`expect` inside `play()`.</Do>
+  <Dont>Fire interactions without awaiting — the Interactions panel can't step them.</Dont>
+</DoDont>

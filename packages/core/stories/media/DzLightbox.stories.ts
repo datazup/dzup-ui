@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { LightboxImage } from '../../src/components/media'
 import { DzImage, DzLightbox } from '../../src/components/media'
 
@@ -13,7 +15,7 @@ import { DzImage, DzLightbox } from '../../src/components/media'
 const meta = {
   title: 'Core/Media/DzLightbox',
   component: DzLightbox,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     images: {
@@ -84,6 +86,26 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // The lightbox overlay is portalled to document.body (Reka Dialog, ADR-07),
+    // so it lives outside canvasElement.
+    const body = within(document.body)
+
+    // Open from the inline trigger; the modal dialog appears at the first image.
+    await userEvent.click(canvas.getByRole('button', { name: 'Open Lightbox' }))
+    const dialog = await body.findByRole('dialog')
+    await expect(dialog).toBeInTheDocument()
+    await expect(body.getByText('1 / 3')).toBeInTheDocument()
+
+    // Next advances the counter to the second image.
+    await userEvent.click(body.getByRole('button', { name: 'Next image' }))
+    await waitFor(() => expect(body.getByText('2 / 3')).toBeInTheDocument())
+
+    // Closing dismisses the overlay entirely.
+    await userEvent.click(body.getByRole('button', { name: 'Close lightbox' }))
+    await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -232,9 +254,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzLightbox },

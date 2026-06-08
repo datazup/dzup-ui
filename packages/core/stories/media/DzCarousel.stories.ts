@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzCarousel,
   DzCarouselDots,
@@ -22,7 +24,7 @@ import {
 const meta = {
   title: 'Core/Media/DzCarousel',
   component: DzCarousel,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     orientation: {
@@ -137,6 +139,30 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Region semantics (TASK-10.D): the root is a labelled carousel region.
+    const region = canvas.getByRole('region')
+    await expect(region).toHaveAttribute('aria-roledescription', 'carousel')
+
+    // The dots are a tablist; slide 1 is selected initially.
+    const dots = canvas.getAllByRole('tab')
+    await expect(dots).toHaveLength(3)
+    await expect(dots[0]).toHaveAttribute('aria-selected', 'true')
+
+    // Next advances the active slide.
+    await userEvent.click(canvas.getByRole('button', { name: 'Next slide' }))
+    await waitFor(() => expect(dots[1]).toHaveAttribute('aria-selected', 'true'))
+
+    // Dot navigation jumps directly to a slide.
+    await userEvent.click(dots[2])
+    await waitFor(() => expect(dots[2]).toHaveAttribute('aria-selected', 'true'))
+
+    // Previous steps back one slide.
+    await userEvent.click(canvas.getByRole('button', { name: 'Previous slide' }))
+    await waitFor(() => expect(dots[1]).toHaveAttribute('aria-selected', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -365,9 +391,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots },

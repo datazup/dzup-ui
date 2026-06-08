@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { userEvent, within } from 'storybook/test'
 import { ChevronRight, Download, Mail, Plus, Search } from 'lucide-vue-next'
 import { DzButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
@@ -13,7 +14,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Buttons/DzButton',
   component: DzButton,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -322,19 +323,41 @@ export const VariantToneMatrix: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzButton },
     template: `
-      <div class="flex flex-wrap gap-4 items-center">
-        <DzButton variant="solid">Solid</DzButton>
-        <DzButton variant="outline">Outline</DzButton>
-        <DzButton variant="ghost">Ghost</DzButton>
-        <DzButton variant="text">Text</DzButton>
-        <DzButton variant="link">Link</DzButton>
+      <div class="space-y-6">
+        <div>
+          <p class="text-sm font-medium mb-2 text-[var(--dz-muted-foreground)]">Variants</p>
+          <div class="flex flex-wrap gap-4 items-center">
+            <DzButton variant="solid">Solid</DzButton>
+            <DzButton variant="outline">Outline</DzButton>
+            <DzButton variant="ghost">Ghost</DzButton>
+            <DzButton variant="text">Text</DzButton>
+            <DzButton variant="link">Link</DzButton>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm font-medium mb-2 text-[var(--dz-muted-foreground)]">Tones</p>
+          <div class="flex flex-wrap gap-4 items-center">
+            <DzButton tone="neutral">Neutral</DzButton>
+            <DzButton tone="primary">Primary</DzButton>
+            <DzButton tone="success">Success</DzButton>
+            <DzButton tone="warning">Warning</DzButton>
+            <DzButton tone="danger">Danger</DzButton>
+            <DzButton tone="info">Info</DzButton>
+          </div>
+        </div>
+        <div>
+          <p class="text-sm font-medium mb-2 text-[var(--dz-muted-foreground)]">States</p>
+          <div class="flex flex-wrap gap-4 items-center">
+            <DzButton>Default</DzButton>
+            <DzButton disabled>Disabled</DzButton>
+            <DzButton loading>Loading</DzButton>
+          </div>
+        </div>
       </div>
     `,
   }),

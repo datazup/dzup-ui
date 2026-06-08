@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 import { DzGrid } from '../../src/components/layout'
 
 /**
@@ -10,7 +11,7 @@ import { DzGrid } from '../../src/components/layout'
 const meta = {
   title: 'Core/Layout/DzGrid',
   component: DzGrid,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     cols: {
@@ -198,9 +199,7 @@ export const ExplicitRows: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzGrid },
@@ -265,6 +264,56 @@ export const RealWorldDashboardStats: Story = {
       </DzGrid>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Responsive (TASK-7.D) — same responsive grid previewed at three breakpoints.
+// Switch the active viewport from the toolbar, or open each named story.
+// ---------------------------------------------------------------------------
+
+function responsiveGrid() {
+  return {
+    components: { DzGrid },
+    template: `
+      <div class="space-y-2">
+        <p class="text-xs text-gray-500">
+          cols={ sm: 2, md: 3, lg: 4 } — 1 column on mobile, 2 from sm, 3 from md, 4 from lg.
+        </p>
+        <DzGrid :cols="{ sm: 2, md: 3, lg: 4 }" gap="md">
+          <div v-for="i in 8" :key="i"
+            class="bg-blue-100 text-blue-800 text-sm p-4 rounded text-center">
+            Item {{ i }}
+          </div>
+        </DzGrid>
+      </div>
+    `,
+  }
+}
+
+const responsiveParameters = {
+  viewport: { options: RESPONSIVE_VIEWPORTS },
+  layout: 'fullscreen',
+} as const
+
+export const ResponsiveMobile: Story = {
+  name: 'Responsive: Mobile',
+  parameters: responsiveParameters,
+  globals: { viewport: { value: 'mobile' } },
+  render: responsiveGrid,
+}
+
+export const ResponsiveTablet: Story = {
+  name: 'Responsive: Tablet',
+  parameters: responsiveParameters,
+  globals: { viewport: { value: 'tablet' } },
+  render: responsiveGrid,
+}
+
+export const ResponsiveDesktop: Story = {
+  name: 'Responsive: Desktop',
+  parameters: responsiveParameters,
+  globals: { viewport: { value: 'desktop' } },
+  render: responsiveGrid,
 }
 
 // ---------------------------------------------------------------------------

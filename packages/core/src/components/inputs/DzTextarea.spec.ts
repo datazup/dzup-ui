@@ -94,4 +94,45 @@ describe('dzTextarea — Unit Tests', () => {
     })
     expect(wrapper.find('textarea').attributes('data-testid')).toBe('bio-field')
   })
+
+  // ── Loading state ──
+
+  it('renders a spinner when loading', () => {
+    const wrapper = mount(DzTextarea, { props: { loading: true } })
+    expect(wrapper.findComponent({ name: 'DzSpinner' }).exists()).toBe(true)
+  })
+
+  it('does not render a spinner when not loading', () => {
+    const wrapper = mount(DzTextarea)
+    expect(wrapper.findComponent({ name: 'DzSpinner' }).exists()).toBe(false)
+  })
+
+  it('makes the textarea readonly while loading', () => {
+    const wrapper = mount(DzTextarea, { props: { loading: true } })
+    expect((wrapper.find('textarea').element as HTMLTextAreaElement).readOnly).toBe(true)
+  })
+
+  it('sets aria-busy on the textarea while loading', () => {
+    const wrapper = mount(DzTextarea, { props: { loading: true } })
+    expect(wrapper.find('textarea').attributes('aria-busy')).toBe('true')
+  })
+
+  it('sets data-state="loading" while loading', () => {
+    const wrapper = mount(DzTextarea, { props: { loading: true } })
+    expect(wrapper.attributes('data-state')).toBe('loading')
+  })
+
+  it('forwards loadingLabel to the spinner', () => {
+    const wrapper = mount(DzTextarea, {
+      props: { loading: true, loadingLabel: 'Saving…' },
+    })
+    expect(wrapper.findComponent({ name: 'DzSpinner' }).props('label')).toBe('Saving…')
+  })
+
+  // ── Auto-resize / maxRows ──
+
+  it('drops the min-height floor when autoResize is enabled', () => {
+    const wrapper = mount(DzTextarea, { props: { autoResize: true } })
+    expect(wrapper.find('textarea').classes()).toContain('min-h-0')
+  })
 })

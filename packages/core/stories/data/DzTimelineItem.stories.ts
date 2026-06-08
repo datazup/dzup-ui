@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { DzTimeline, DzTimelineItem } from '../../src/components/data'
 
 /**
@@ -13,7 +13,7 @@ import { DzTimeline, DzTimelineItem } from '../../src/components/data'
 const meta = {
   title: 'Core/Data/DzTimelineItem',
   component: DzTimelineItem,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     tone: {
       control: 'select',

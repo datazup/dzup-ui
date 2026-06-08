@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzSheet,
@@ -29,7 +29,7 @@ const meta = {
     DzSheetClose,
     DzSheetTrigger,
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     side: {
       control: 'select',

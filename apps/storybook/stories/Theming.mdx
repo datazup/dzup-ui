@@ -1,0 +1,69 @@
+{/* Theming.mdx */}
+import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks'
+
+<Meta title="Guides/Theming" />
+
+# Theming
+
+dzup-ui ships **light** and **dark** themes out of the box. The active theme is
+resolved from a single attribute — `data-theme` — on an ancestor element. No
+JavaScript theme context is required for core components; the CSS variables
+cascade does the work.
+
+## The `data-theme` switch
+
+```html
+<!-- light (default) -->
+<html>…</html>
+
+<!-- dark: every descendant re-resolves --dz-* to dark values -->
+<html data-theme="dark">…</html>
+```
+
+You can scope a theme to any subtree, not just `<html>` — useful for a dark
+sidebar inside a light page:
+
+```vue
+<template>
+  <div data-theme="dark">
+    <!-- this region renders dark regardless of the page theme -->
+    <DzCard>…</DzCard>
+  </div>
+</template>
+```
+
+In Storybook, the **Theme** toolbar (powered by `@storybook/addon-themes`) toggles
+`data-theme` on the preview root. Individual stories can force dark with the shared
+`darkModeDecorator` (see [Contributing](?path=/docs/contributing--docs)).
+
+## OKLCH color system
+
+Palette values are authored in **OKLCH** for perceptually-uniform lightness, so a
+`-500` step reads as the same visual weight across hues, and dark-mode inversions
+stay legible. Raw palette steps are **primitive** tokens
+(`--dz-colors-primary-500`); you rarely consume these directly.
+
+## Semantic color tokens
+
+Components reference **semantic** tokens that automatically remap between light and
+dark. These are the ones to use in app code:
+
+<ColorPalette>
+  <ColorItem title="--dz-primary" subtitle="Primary action" colors={{ base: 'var(--dz-primary)', foreground: 'var(--dz-primary-foreground)', hover: 'var(--dz-primary-hover)', muted: 'var(--dz-primary-muted)' }} />
+  <ColorItem title="--dz-success" subtitle="Positive / confirm" colors={{ base: 'var(--dz-success)', foreground: 'var(--dz-success-foreground)', muted: 'var(--dz-success-muted)' }} />
+  <ColorItem title="--dz-warning" subtitle="Caution" colors={{ base: 'var(--dz-warning)', foreground: 'var(--dz-warning-foreground)', muted: 'var(--dz-warning-muted)' }} />
+  <ColorItem title="--dz-danger" subtitle="Destructive / error" colors={{ base: 'var(--dz-danger)', foreground: 'var(--dz-danger-foreground)', muted: 'var(--dz-danger-muted)' }} />
+  <ColorItem title="--dz-info" subtitle="Informational" colors={{ base: 'var(--dz-info)', foreground: 'var(--dz-info-foreground)', muted: 'var(--dz-info-muted)' }} />
+  <ColorItem title="--dz-background / --dz-foreground" subtitle="Surface + text" colors={{ background: 'var(--dz-background)', foreground: 'var(--dz-foreground)', muted: 'var(--dz-muted)', mutedForeground: 'var(--dz-muted-foreground)' }} />
+</ColorPalette>
+
+> These swatches read live from `@dzup-ui/tokens` via `var(--dz-*)`, so this page
+> can never drift from the shipped tokens. Toggle the **Theme** toolbar to see them
+> remap. (Full primitive scales live in **[Design Tokens](?path=/docs/guides-design-tokens--docs)**.)
+
+## Do / Don't
+
+✅ **Do** style with semantic tokens (`var(--dz-primary)`), so dark mode is free.
+✅ **Do** scope `data-theme` to subtrees when you need a mixed-theme layout.
+❌ **Don't** hardcode hex/Tailwind palette colors in component code (ADR-04).
+❌ **Don't** read primitive `--dz-colors-*` steps in app code — prefer semantic tokens.

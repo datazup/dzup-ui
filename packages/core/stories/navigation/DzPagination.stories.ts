@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzPagination } from '../../src/components/navigation'
 
 /**
@@ -10,7 +12,7 @@ import { DzPagination } from '../../src/components/navigation'
 const meta = {
   title: 'Core/Navigation/DzPagination',
   component: DzPagination,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modelValue: {
@@ -227,9 +229,7 @@ export const FewPages: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzPagination },
@@ -260,6 +260,24 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Page 1 is active and advertises aria-current="page".
+    await expect(canvas.getByRole('button', { name: '1' })).toHaveAttribute('aria-current', 'page')
+
+    // Next advances to page 2.
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to next page' }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page'),
+    )
+
+    // Previous returns to page 1.
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to previous page' }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: '1' })).toHaveAttribute('aria-current', 'page'),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------

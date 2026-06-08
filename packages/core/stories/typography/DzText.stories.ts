@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import { DzText } from '../../src/components/typography'
 
 /**
@@ -10,7 +11,7 @@ import { DzText } from '../../src/components/typography'
 const meta = {
   title: 'Core/Typography/DzText',
   component: DzText,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     as: {
@@ -198,15 +199,51 @@ export const Truncation: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Line Clamp (multi-line)
+// ---------------------------------------------------------------------------
+
+export const LineClamp: Story = {
+  name: 'Line Clamp (multi-line)',
+  render: () => ({
+    components: { DzText },
+    template: `
+      <div class="space-y-6 max-w-xs">
+        <div class="space-y-1">
+          <p class="text-xs font-mono text-gray-400">truncate (single line)</p>
+          <DzText truncate>
+            This is a very long line of text that is truncated to a single line with an ellipsis.
+          </DzText>
+        </div>
+        <div class="space-y-1">
+          <p class="text-xs font-mono text-gray-400">line-clamp-2 (utility class)</p>
+          <DzText class="line-clamp-2">
+            DzText exposes a single-line <strong>truncate</strong> prop. For multi-line clamping,
+            pass a Tailwind <code>line-clamp-{n}</code> utility — the class falls through to the
+            rendered element, so this paragraph stops after two lines with an ellipsis.
+          </DzText>
+        </div>
+        <div class="space-y-1">
+          <p class="text-xs font-mono text-gray-400">line-clamp-3 (utility class)</p>
+          <DzText class="line-clamp-3">
+            DzText exposes a single-line <strong>truncate</strong> prop. For multi-line clamping,
+            pass a Tailwind <code>line-clamp-{n}</code> utility — the class falls through to the
+            rendered element, so this paragraph stops after three lines with an ellipsis when the
+            content overflows its container width and height.
+          </DzText>
+        </div>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // Dark Mode
 // ---------------------------------------------------------------------------
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzText },

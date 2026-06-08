@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import type { DzComboboxItem, DzSelectItem } from '../../src/components/forms'
 import { DzCombobox } from '../../src/components/forms'
 
@@ -24,7 +26,7 @@ const sampleItems: DzSelectItem[] = [
 const meta = {
   title: 'Core/Forms/DzCombobox',
   component: DzCombobox,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -63,6 +65,11 @@ const meta = {
     loading: {
       control: 'boolean',
       description: 'Show loading state instead of the item list',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    defaultOpen: {
+      control: 'boolean',
+      description: 'Whether the dropdown is open on initial mount (uncontrolled)',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
     name: {
@@ -179,7 +186,40 @@ export const AllowCustomValue: Story = {
     setup() {
       return { args }
     },
-    template: '<DzCombobox v-bind="args" class="max-w-xs" />',
+    data() {
+      return { value: '' }
+    },
+    template: `
+      <div class="space-y-3 max-w-xs">
+        <DzCombobox v-bind="args" v-model="value" />
+        <p class="text-sm text-gray-500">
+          Bound value: <strong>{{ value || 'none' }}</strong>
+        </p>
+        <p class="text-xs text-gray-400">
+          Type a city that is not in the list (e.g. "Boston") and the typed text
+          becomes the value. With <code>allowCustomValue: false</code> the typed
+          text only filters and is discarded unless you pick an option.
+        </p>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Open by Default
+// ---------------------------------------------------------------------------
+
+export const OpenByDefault: Story = {
+  name: 'Open by Default',
+  args: {
+    defaultOpen: true,
+  },
+  render: args => ({
+    components: { DzCombobox },
+    setup() {
+      return { args }
+    },
+    template: '<div class="max-w-xs pb-72"><DzCombobox v-bind="args" /></div>',
   }),
 }
 
@@ -325,9 +365,7 @@ export const RichObjects: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCombobox },
@@ -363,6 +401,20 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open and type-ahead filter the option list.
+    const input = canvas.getByPlaceholderText(/search cities/i)
+    await userEvent.click(input)
+    await userEvent.type(input, 'Chi')
+
+    // Filtered options render in a portal; select Chicago.
+    const option = await screen.findByRole('option', { name: 'Chicago' })
+    await userEvent.click(option)
+
+    await expect(canvas.getByText(/selected:/i)).toHaveTextContent(/chi/i)
+  },
 }
 
 // ---------------------------------------------------------------------------

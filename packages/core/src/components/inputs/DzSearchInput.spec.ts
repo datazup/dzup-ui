@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
  * DzSearchInput — Unit / behavior tests.
  */
 import { describe, expect, it, vi } from 'vitest'
+import DzSpinner from '../feedback/DzSpinner.vue'
 import DzSearchInput from './DzSearchInput.vue'
 
 describe('dzSearchInput — Unit Tests', () => {
@@ -74,6 +75,26 @@ describe('dzSearchInput — Unit Tests', () => {
   it('disables input when disabled', () => {
     const wrapper = mount(DzSearchInput, { props: { disabled: true } })
     expect(wrapper.find('input').attributes('disabled')).toBeDefined()
+  })
+
+  it('shows a loading spinner when loading', () => {
+    const wrapper = mount(DzSearchInput, { props: { loading: true } })
+    expect(wrapper.findComponent(DzSpinner).exists()).toBe(true)
+    expect(wrapper.find('input').attributes('aria-busy')).toBe('true')
+  })
+
+  it('hides the clear button while loading even with a value', () => {
+    const wrapper = mount(DzSearchInput, {
+      props: { modelValue: 'test', loading: true },
+    })
+    expect(wrapper.find('button').exists()).toBe(false)
+  })
+
+  it('does not render the clear button when clearable is false', () => {
+    const wrapper = mount(DzSearchInput, {
+      props: { modelValue: 'test', clearable: false },
+    })
+    expect(wrapper.find('button').exists()).toBe(false)
   })
 
   it('emits search after debounce delay', async () => {

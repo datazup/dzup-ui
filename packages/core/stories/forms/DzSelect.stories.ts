@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import type { DzSelectItem } from '../../src/components/forms'
 import { DzSelect } from '../../src/components/forms'
 
@@ -27,7 +29,7 @@ const itemsWithDisabled: DzSelectItem[] = [
 const meta = {
   title: 'Core/Forms/DzSelect',
   component: DzSelect,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -270,9 +272,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSelect },
@@ -309,6 +309,18 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the listbox (Reka SelectTrigger has role="combobox").
+    await userEvent.click(canvas.getByRole('combobox'))
+
+    // Options render in a portal on document.body.
+    const option = await screen.findByRole('option', { name: 'Banana' })
+    await userEvent.click(option)
+
+    await expect(canvas.getByText(/selected:/i)).toHaveTextContent(/banana/i)
+  },
 }
 
 // ---------------------------------------------------------------------------

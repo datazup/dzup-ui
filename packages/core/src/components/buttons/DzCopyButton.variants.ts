@@ -1,6 +1,11 @@
 /**
  * DzCopyButton — tailwind-variants (tv) style definitions.
  *
+ * Visual treatment (fill / border / tone) is shared with DzButton via
+ * `buttonVariants` (ADR-02 frozen variant taxonomy). This layer only
+ * enforces the square icon-only footprint per canonical size; the label
+ * presentation falls back to the standard button padding.
+ *
  * @module @dzup-ui/core/components/buttons/DzCopyButton.variants
  */
 
@@ -8,48 +13,19 @@ import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
 export const copyButtonVariants = tv({
-  base: [
-    'inline-flex items-center justify-center rounded-md transition-colors',
-    'dz-focus-ring-button',
-    'dz-disabled-button',
-  ].join(' '),
+  base: 'p-0',
   variants: {
     size: {
-      icon: '',
-      xs: [
-        'h-[var(--dz-button-xs-height)]',
-        'w-[var(--dz-button-xs-height)]',
-        'text-[length:var(--dz-button-xs-font-size)]',
-      ].join(' '),
-      sm: [
-        'h-[var(--dz-button-sm-height)]',
-        'w-[var(--dz-button-sm-height)]',
-        'text-[length:var(--dz-button-sm-font-size)]',
-      ].join(' '),
-      md: [
-        'h-[var(--dz-button-md-height)]',
-        'w-[var(--dz-button-md-height)]',
-        'text-[length:var(--dz-button-md-font-size)]',
-      ].join(' '),
-      lg: [
-        'h-[var(--dz-button-lg-height)]',
-        'w-[var(--dz-button-lg-height)]',
-        'text-[length:var(--dz-button-lg-font-size)]',
-      ].join(' '),
-      xl: [
-        'h-[var(--dz-button-xl-height)]',
-        'w-[var(--dz-button-xl-height)]',
-        'text-[length:var(--dz-button-xl-font-size)]',
-      ].join(' '),
-    },
-    copied: {
-      true: 'text-green-500',
-      false: 'text-current opacity-70 hover:opacity-100',
+      icon: 'h-[var(--dz-button-icon-height)] w-[var(--dz-button-icon-width)]',
+      xs: 'h-[var(--dz-button-xs-height)] w-[var(--dz-button-xs-height)]',
+      sm: 'h-[var(--dz-button-sm-height)] w-[var(--dz-button-sm-height)]',
+      md: 'h-[var(--dz-button-md-height)] w-[var(--dz-button-md-height)]',
+      lg: 'h-[var(--dz-button-lg-height)] w-[var(--dz-button-lg-height)]',
+      xl: 'h-[var(--dz-button-xl-height)] w-[var(--dz-button-xl-height)]',
     },
   },
   defaultVariants: {
     size: 'sm',
-    copied: false,
   },
 })
 

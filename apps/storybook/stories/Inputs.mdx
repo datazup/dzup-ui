@@ -1,0 +1,79 @@
+{/* Inputs.mdx — Sprint 2 family overview (TASK-2.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Inputs/Overview" />
+
+# Inputs <StatusBadge status="stable" />
+
+The **Inputs** family covers single- and multi-line text entry. Every member
+shares the same form-control contract — `variant` (`outline` · `filled` ·
+`underlined`), five `size`s, six `tone`s, and the `disabled` / `readonly` /
+`loading` / `invalid` / `error` / `required` state set — so they compose
+predictably inside forms and `DzFormField`.
+
+| Component | Use it for | Status |
+|-----------|------------|--------|
+| [`DzInput`](?path=/docs/core-inputs-dzinput--docs) | The base text field; any `type` (text, email, url, tel…), prefix/suffix slots, clearable. | <StatusBadge status="stable" /> |
+| [`DzInputGroup`](?path=/docs/core-inputs-dzinputgroup--docs) | Framing a field with **addons** — leading/trailing labels, buttons, or icons that sit *outside* the input. | <StatusBadge status="stable" /> |
+| [`DzNumberInput`](?path=/docs/core-inputs-dznumberinput--docs) | Numeric entry with stepper buttons, `min`/`max` clamping, and keyboard arrow steps. | <StatusBadge status="stable" /> |
+| [`DzPasswordInput`](?path=/docs/core-inputs-dzpasswordinput--docs) | Secrets, with a built-in show/hide visibility toggle. | <StatusBadge status="stable" /> |
+| [`DzSearchInput`](?path=/docs/core-inputs-dzsearchinput--docs) | Search/filter boxes — search icon, clear button, Enter-to-submit, optional debounce. | <StatusBadge status="stable" /> |
+| [`DzOtpInput`](?path=/docs/core-inputs-dzotpinput--docs) | One-time codes / PINs — segmented auto-advancing cells (Reka UI PinInput). | <StatusBadge status="stable" /> |
+| [`DzTextarea`](?path=/docs/core-inputs-dztextarea--docs) | Multi-line text, with optional `autoResize` up to `maxRows`. | <StatusBadge status="stable" /> |
+
+## When to use which
+
+- **Reach for the purpose-built component first.** `DzPasswordInput`,
+  `DzSearchInput`, `DzNumberInput`, and `DzOtpInput` bake in the affordances
+  (toggle, clear, steppers, segmented cells) and the correct semantics
+  (`type`, `role="spinbutton"`, ARIA) — don't rebuild them on top of `DzInput`.
+- **Use `DzInput` with a `type`** for the long tail (email, url, tel) where no
+  specialized component exists.
+- **Use `DzTextarea`** whenever input can exceed a single line. Enable
+  `autoResize` for comment/description fields so the box grows with content.
+
+## `DzInputGroup` vs. prefix/suffix slots
+
+Both attach adornments to a field — the difference is **where the adornment
+lives and what it is**:
+
+- **`prefix` / `suffix` slots on `DzInput`** put an element *inside* the input's
+  border, sharing its focus ring. Best for **non-interactive, inline glyphs** —
+  a leading mail icon, a trailing unit. They read as part of the field.
+- **`DzInputGroup`** places addons in *adjacent* segments outside the field's
+  box, visually seamed to it. Best for **structural or interactive addons** — a
+  `https://` protocol label, a `.com` suffix, an "Apply" button, a copy action.
+
+<DoDont>
+  <Do>Use an inline `#prefix`/`#suffix` slot for a decorative icon or unit (e.g. a search glyph, `$`, `kg`).</Do>
+  <Dont>Put a clickable button in a `#prefix`/`#suffix` slot — its hit target and focus order get muddled inside the input. Reach for `DzInputGroup`.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Pair `invalid`/`error` with a visible message — the `error` prop wires `aria-describedby` and `role="alert"` for you.</Do>
+  <Dont>Signal an error with red border colour alone; it fails WCAG and is invisible to screen readers.</Dont>
+</DoDont>
+
+## Validation & labelling
+
+- Set `error="…"` (or `invalid`) to flip the field to the danger treatment;
+  `aria-invalid` and the linked `aria-describedby` message are handled for you.
+- Associate a visible label via `DzFormField` (preferred) or an explicit
+  `aria-label` / `aria-labelledby`. Placeholders are **not** labels.
+- `required` sets `aria-required`; surface the requirement visually too.
+
+## Accessibility notes
+
+- `DzSearchInput` renders `type="search"` (`role="searchbox"`) and defaults its
+  accessible name to "Search"; its clear button is labelled "Clear search".
+- `DzNumberInput` exposes `role="spinbutton"` with `aria-valuemin` /
+  `aria-valuemax` / `aria-valuenow`, and Arrow Up/Down step the value.
+- `DzPasswordInput`'s toggle announces "Show password" / "Hide password".
+- `DzOtpInput` inherits Reka UI PinInput keyboard support — type to advance,
+  Backspace to retreat, paste to fill all cells.
+
+Every component ships a **`Dark Mode Preview`**, an **`Accessibility`** story,
+and (where interactive) an awaited **`play()`** smoke test — see each
+component's stories for live examples.

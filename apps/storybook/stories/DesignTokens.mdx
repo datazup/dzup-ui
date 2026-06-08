@@ -1,0 +1,131 @@
+{/* DesignTokens.mdx */}
+import { Meta, ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/blocks'
+import { DocTable } from './_blocks/DocTable.ts'
+
+<Meta title="Guides/Design Tokens" />
+
+# Design Tokens
+
+dzup-ui uses a **three-tier** token system. `@dzup-ui/tokens` is the canonical
+source for primitive scales and semantic theme tokens (ADR-17). Components consume
+them as CSS variables — never raw values (ADR-04).
+
+## Three tiers
+
+1. **Primitive** — raw, theme-agnostic scale values (the OKLCH palette steps,
+   spacing, radii, shadows). Example: `--dz-colors-primary-500`, `--dz-spacing-4`.
+2. **Semantic** — intent-based aliases that remap per theme. Example:
+   `--dz-primary`, `--dz-background`, `--dz-muted-foreground`. **Use these in app code.**
+3. **Component** — per-component anatomy tokens for fine-grained control. Example:
+   `--dz-button-md-height`, `--dz-card-radius`. Hybrid ownership: defined in
+   `@dzup-ui/tokens` for shared families, locally in `core` for component anatomy.
+
+```
+primitive  →  semantic  →  component
+--dz-colors-primary-500  →  --dz-primary  →  (consumed by) --dz-button bg
+```
+
+## Primitive color scales
+
+Each hue ships steps `50 → 950`. Use these only when a semantic token doesn't
+express your intent.
+
+<ColorPalette>
+  <ColorItem title="Primary" subtitle="--dz-colors-primary-*" colors={{ 50: 'var(--dz-colors-primary-50)', 100: 'var(--dz-colors-primary-100)', 300: 'var(--dz-colors-primary-300)', 500: 'var(--dz-colors-primary-500)', 700: 'var(--dz-colors-primary-700)', 900: 'var(--dz-colors-primary-900)' }} />
+  <ColorItem title="Neutral" subtitle="--dz-colors-neutral-*" colors={{ 50: 'var(--dz-colors-neutral-50)', 100: 'var(--dz-colors-neutral-100)', 300: 'var(--dz-colors-neutral-300)', 500: 'var(--dz-colors-neutral-500)', 700: 'var(--dz-colors-neutral-700)', 900: 'var(--dz-colors-neutral-900)' }} />
+  <ColorItem title="Success" subtitle="--dz-colors-success-*" colors={{ 100: 'var(--dz-colors-success-100)', 300: 'var(--dz-colors-success-300)', 500: 'var(--dz-colors-success-500)', 700: 'var(--dz-colors-success-700)' }} />
+  <ColorItem title="Danger" subtitle="--dz-colors-danger-*" colors={{ 100: 'var(--dz-colors-danger-100)', 300: 'var(--dz-colors-danger-300)', 500: 'var(--dz-colors-danger-500)', 700: 'var(--dz-colors-danger-700)' }} />
+</ColorPalette>
+
+## Radius scale
+
+`--dz-radius-none` · `--dz-radius-sm` · `--dz-radius-md` · `--dz-radius-lg` ·
+`--dz-radius-xl` · `--dz-radius-2xl` · `--dz-radius-3xl` · `--dz-radius-full`
+
+<div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+  {['sm', 'md', 'lg', 'xl', '2xl'].map(r => (
+    <div key={r} style={{ textAlign: 'center' }}>
+      <div style={{ width: 64, height: 64, background: 'var(--dz-muted)', border: '1px solid var(--dz-border)', borderRadius: `var(--dz-radius-${r})` }} />
+      <code style={{ fontSize: 11 }}>{r}</code>
+    </div>
+  ))}
+</div>
+
+## Shadow scale
+
+`--dz-shadow-xs` → `--dz-shadow-2xl`, plus `--dz-shadow-inner`.
+
+<div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap', padding: 16 }}>
+  {['xs', 'sm', 'md', 'lg', 'xl'].map(s => (
+    <div key={s} style={{ textAlign: 'center' }}>
+      <div style={{ width: 64, height: 64, background: 'var(--dz-background)', borderRadius: 'var(--dz-radius-md)', boxShadow: `var(--dz-shadow-${s})` }} />
+      <code style={{ fontSize: 11 }}>{s}</code>
+    </div>
+  ))}
+</div>
+
+## Type scale
+
+The type scale is authored once in `@dzup-ui/tokens` (`--dz-text-*`) and consumed by
+`DzText`/`DzHeading`. The ramp below reads those tokens live via `var(--dz-text-*)`,
+so it can't drift from the shipped scale. The sample renders in the `--dz-font-sans`
+family (`Inter`).
+
+<Typeset
+  fontSizes={[
+    'var(--dz-text-xs)',
+    'var(--dz-text-sm)',
+    'var(--dz-text-base)',
+    'var(--dz-text-lg)',
+    'var(--dz-text-xl)',
+    'var(--dz-text-2xl)',
+    'var(--dz-text-3xl)',
+  ]}
+  fontWeight={400}
+  sampleText="The quick brown fox jumps"
+  fontFamily="var(--dz-font-sans)"
+/>
+
+<DocTable
+  head={['Token', 'Size', 'Token', 'Size']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`--dz-text-xs`', '0.75rem', '`--dz-text-xl`', '1.25rem'],
+    ['`--dz-text-sm`', '0.875rem', '`--dz-text-2xl`', '1.5rem'],
+    ['`--dz-text-base`', '1rem', '`--dz-text-3xl`', '1.875rem'],
+    ['`--dz-text-lg`', '1.125rem', '', ''],
+  ]}
+/>
+
+Weight tokens (`--dz-font-thin` → `--dz-font-black`) and line-height tokens
+(`--dz-leading-none` → `--dz-leading-loose`) round out the type system. Mono samples
+use `--dz-font-mono` (`JetBrains Mono`).
+
+## Spacing scale
+
+A 4px base scale: `--dz-spacing-1` (0.25rem) … `--dz-spacing-96`. Use the matching
+Tailwind utilities (`p-4`, `gap-2`) which map to these tokens. The bars below read the
+tokens live.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+  {['1', '2', '3', '4', '6', '8', '12', '16'].map(s => (
+    <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <code style={{ fontSize: 11, width: 120 }}>--dz-spacing-{s}</code>
+      <div style={{ height: 16, width: `var(--dz-spacing-${s})`, background: 'var(--dz-primary)', borderRadius: 'var(--dz-radius-sm)' }} />
+    </div>
+  ))}
+</div>
+
+## Naming reference
+
+<DocTable
+  head={['Pattern', 'Tier', 'Example']}
+  align={['left', 'left', 'left']}
+  rows={[
+    ['`--dz-colors-{hue}-{step}`', 'primitive', '`--dz-colors-primary-500`'],
+    ['`--dz-{intent}`', 'semantic', '`--dz-primary`, `--dz-danger`'],
+    ['`--dz-{intent}-foreground`', 'semantic', '`--dz-primary-foreground`'],
+    ['`--dz-{radius,shadow,spacing}-{step}`', 'primitive', '`--dz-radius-md`'],
+    ['`--dz-{component}-{prop}`', 'component', '`--dz-button-md-height`'],
+  ]}
+/>

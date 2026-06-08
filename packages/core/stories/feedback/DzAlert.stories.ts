@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { userEvent, within } from 'storybook/test'
 import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-vue-next'
 import { DzAlert } from '../../src/components/feedback'
 
@@ -12,7 +13,7 @@ import { DzAlert } from '../../src/components/feedback'
 const meta = {
   title: 'Core/Feedback/DzAlert',
   component: DzAlert,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -294,9 +295,7 @@ export const Accessibility: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzAlert },

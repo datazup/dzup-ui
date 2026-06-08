@@ -13,7 +13,9 @@ import type { DzTextareaEmits, DzTextareaProps } from './DzTextarea.types.ts'
  * ```
  */
 import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzSpinner from '../feedback/DzSpinner.vue'
 import { textareaVariants } from './DzTextarea.variants.ts'
 
 const model = defineModel<string>({ default: '' })
@@ -30,6 +32,7 @@ const props = withDefaults(defineProps<DzTextareaProps>(), {
   required: false,
   autoResize: false,
   maxRows: undefined,
+  loadingLabel: 'Loading',
 })
 
 const emit = defineEmits<DzTextareaEmits>()
@@ -38,11 +41,22 @@ const attrs = useAttrs()
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const autoId = useId()
 
-/** Resolved element ID */
-const resolvedId = computed(() => props.id ?? autoId)
+/** Optional DzFormField context (ADR-08) — present only when inside a field */
+const fieldContext = useFormFieldContext()
 
-/** Whether the invalid state should show (prop or error message) */
-const isInvalid = computed(() => props.invalid || !!props.error)
+/** Resolved element ID — explicit prop wins, then the field context's control ID */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+
+/** Resolved disabled: own prop OR form-field-level disabled */
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
+
+/** Resolved required: own prop OR form-field-level required */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
+
+/** Whether the invalid state should show (own prop/error OR form-field-level) */
+const isInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
 
 /** Merged class string using cn() (ADR-10) */
 const classes = computed(() =>
@@ -52,10 +66,29 @@ const classes = computed(() =>
       size: props.size,
       invalid: isInvalid.value,
     }),
-    props.autoResize ? 'resize-none overflow-hidden' : '',
+    // Auto-resize drives height inline; drop the 80px min-height floor so the
+    // computed height (incl. maxRows clamp) is honoured, and disable manual
+    // resizing/scrollbars.
+    props.autoResize ? 'resize-none overflow-hidden min-h-0' : '',
     attrs.class as string | undefined,
   ),
 )
+
+/**
+ * Spinner size mapped down from the field size so the indicator stays
+ * proportionate (mirrors DzInput).
+ */
+const spinnerSize = computed(() => {
+  switch (props.size) {
+    case 'xs':
+    case 'sm':
+      return 'xs' as const
+    case 'xl':
+      return 'md' as const
+    default:
+      return 'sm' as const
+  }
+})
 
 /** ID for the error message element */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -67,6 +100,8 @@ const resolvedAriaDescribedby = computed(() => {
     parts.push(props.ariaDescribedby)
   if (errorId.value)
     parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -76,19 +111,38 @@ function adjustHeight(): void {
   if (!el || !props.autoResize)
     return
 
-  // Reset to auto to get accurate scrollHeight
+  const style = getComputedStyle(el)
+
+  // `scrollHeight` measures content + vertical padding. The element uses
+  // border-box (Tailwind default), so the inline `height` must also include
+  // the borders to render the same number of rows.
+  const borderY
+    = Number.parseFloat(style.borderTopWidth) + Number.parseFloat(style.borderBottomWidth)
+
+  // Reset to auto to get an accurate scrollHeight for the current content.
   el.style.height = 'auto'
 
-  let targetHeight = el.scrollHeight
+  let targetHeight = el.scrollHeight + borderY
 
-  // Clamp to maxRows if specified
+  // Clamp to maxRows if specified.
   if (props.maxRows !== undefined) {
-    const lineHeight = Number.parseFloat(getComputedStyle(el).lineHeight) || 20
-    const maxHeight = lineHeight * props.maxRows
-    targetHeight = Math.min(targetHeight, maxHeight)
+    // `line-height: normal` is not a length — fall back to a ~1.2 ratio of
+    // the font size rather than a hardcoded pixel value.
+    let lineHeight = Number.parseFloat(style.lineHeight)
+    if (Number.isNaN(lineHeight))
+      lineHeight = Number.parseFloat(style.fontSize) * 1.2
 
-    // Enable scrolling if content exceeds maxRows
-    el.style.overflowY = targetHeight >= maxHeight ? 'auto' : 'hidden'
+    const paddingY
+      = Number.parseFloat(style.paddingTop) + Number.parseFloat(style.paddingBottom)
+    const maxHeight = lineHeight * props.maxRows + paddingY + borderY
+
+    if (targetHeight > maxHeight) {
+      targetHeight = maxHeight
+      el.style.overflowY = 'auto'
+    }
+    else {
+      el.style.overflowY = 'hidden'
+    }
   }
 
   el.style.height = `${targetHeight}px`
@@ -131,10 +185,11 @@ export default {
 
 <template>
   <div
-    :data-state="disabled ? 'disabled' : readonly ? 'readonly' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
-    :data-disabled="disabled ? '' : undefined"
+    :data-disabled="resolvedDisabled ? '' : undefined"
+    class="relative"
     style="contain: layout style"
   >
     <textarea
@@ -145,20 +200,30 @@ export default {
       :name="name"
       :placeholder="placeholder"
       :rows="rows"
-      :disabled="disabled"
-      :readonly="readonly"
-      :required="required"
+      :disabled="resolvedDisabled"
+      :readonly="readonly || loading"
+      :required="resolvedRequired"
       :maxlength="maxlength"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="isInvalid || undefined"
-      :aria-required="required || undefined"
+      :aria-required="resolvedRequired || undefined"
+      :aria-busy="loading || undefined"
       v-bind="{ ...$attrs, class: undefined }"
       @change="handleChange"
       @focus="handleFocus"
       @blur="handleBlur"
       @input="adjustHeight"
+    />
+
+    <!-- Loading spinner -->
+    <DzSpinner
+      v-if="loading"
+      class="absolute right-[var(--dz-spacing-2)] top-[var(--dz-spacing-2)]"
+      :size="spinnerSize"
+      :tone="tone ?? 'neutral'"
+      :label="loadingLabel"
     />
 
     <!-- Error message -->

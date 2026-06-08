@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { Copy, Globe, Mail } from 'lucide-vue-next'
 import { DzButton } from '../../src/components/buttons'
 import { DzInput, DzInputGroup } from '../../src/components/inputs'
@@ -15,7 +17,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Inputs/DzInputGroup',
   component: DzInputGroup,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -92,23 +94,23 @@ export const AllSizes: Story = {
       <div class="flex flex-col gap-4 max-w-sm">
         <DzInputGroup size="xs">
           <template #prefix>https://</template>
-          <DzInput size="xs" placeholder="example.com" />
+          <DzInput placeholder="example.com" />
         </DzInputGroup>
         <DzInputGroup size="sm">
           <template #prefix>https://</template>
-          <DzInput size="sm" placeholder="example.com" />
+          <DzInput placeholder="example.com" />
         </DzInputGroup>
         <DzInputGroup size="md">
           <template #prefix>https://</template>
-          <DzInput size="md" placeholder="example.com" />
+          <DzInput placeholder="example.com" />
         </DzInputGroup>
         <DzInputGroup size="lg">
           <template #prefix>https://</template>
-          <DzInput size="lg" placeholder="example.com" />
+          <DzInput placeholder="example.com" />
         </DzInputGroup>
         <DzInputGroup size="xl">
           <template #prefix>https://</template>
-          <DzInput size="xl" placeholder="example.com" />
+          <DzInput placeholder="example.com" />
         </DzInputGroup>
       </div>
     `,
@@ -263,7 +265,7 @@ export const States: Story = {
         </DzInputGroup>
         <DzInputGroup disabled>
           <template #prefix>$</template>
-          <DzInput disabled placeholder="Disabled" />
+          <DzInput placeholder="Disabled" />
         </DzInputGroup>
       </div>
     `,
@@ -286,7 +288,7 @@ export const Disabled: Story = {
     template: `
       <DzInputGroup v-bind="args" class="max-w-sm">
         <template #prefix>https://</template>
-        <DzInput disabled placeholder="example.com" />
+        <DzInput placeholder="example.com" />
       </DzInputGroup>
     `,
   }),
@@ -299,9 +301,7 @@ export const Disabled: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzInputGroup, DzInput },
@@ -345,6 +345,15 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  // TASK-2.C — type into the grouped input and assert the composed URL
+  // preview updates (prefix/suffix addons frame the same field).
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('textbox')
+    await userEvent.type(input, 'acme')
+    await expect(input).toHaveValue('acme')
+    await expect(await canvas.findByText('https://acme.com')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

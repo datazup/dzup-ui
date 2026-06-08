@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 
 /**
@@ -13,7 +15,7 @@ import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 const meta = {
   title: 'Core/Navigation/DzStepper',
   component: DzStepper,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modelValue: {
@@ -267,9 +269,7 @@ export const CustomIndicator: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzStepper, DzStepperItem },
@@ -329,6 +329,21 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const activeStep = (): Element | null => canvasElement.querySelector('[aria-current="step"]')
+
+    // Step 0 active — the active item exposes aria-current="step".
+    await waitFor(() => expect(activeStep()).toHaveTextContent('Account'))
+
+    // Next advances to step 1.
+    await userEvent.click(canvas.getByRole('button', { name: 'Next' }))
+    await waitFor(() => expect(activeStep()).toHaveTextContent('Profile'))
+
+    // Previous steps back to step 0.
+    await userEvent.click(canvas.getByRole('button', { name: 'Previous' }))
+    await waitFor(() => expect(activeStep()).toHaveTextContent('Account'))
+  },
 }
 
 // ---------------------------------------------------------------------------

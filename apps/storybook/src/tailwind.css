@@ -3,3 +3,8 @@
 /* Scan workspace package sources for utility classes */
 @source "../../../packages/core/src/**/*.{ts,vue}";
 @source "../../../packages/pro/src/**/*.{ts,vue}";
+/* Story templates use utility classes too (gap-*, flex, grid, spacing …).
+   Without scanning them these classes are never generated, so button groups
+   render with no spacing. */
+@source "../../../packages/core/stories/**/*.{ts,mdx}";
+@source "../../../packages/pro/stories/**/*.{ts,mdx}";

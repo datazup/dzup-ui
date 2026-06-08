@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, waitFor } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzScrollArea } from '../../src/components/layout'
 
 /**
@@ -10,7 +12,7 @@ import { DzScrollArea } from '../../src/components/layout'
 const meta = {
   title: 'Core/Layout/DzScrollArea',
   component: DzScrollArea,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     orientation: {
@@ -164,9 +166,7 @@ export const HorizontalTagList: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzScrollArea },
@@ -242,6 +242,40 @@ app.mount('#app')</code></pre>
       </DzScrollArea>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Interactive: Overflow Scroll (TASK-7.C) — content taller than the viewport.
+// ---------------------------------------------------------------------------
+
+export const OverflowScroll: Story = {
+  name: 'Interactive: Overflow Scroll',
+  render: () => ({
+    components: { DzScrollArea },
+    template: `
+      <DzScrollArea class="h-48 w-72 border rounded-lg">
+        <div class="p-4 space-y-2">
+          <p v-for="i in 40" :key="i" class="text-sm text-gray-600">
+            Row {{ i }} — content overflows the fixed-height viewport.
+          </p>
+        </div>
+      </DzScrollArea>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    // Reka exposes the scrollable element via [data-reka-scroll-area-viewport].
+    const viewport = canvasElement.querySelector<HTMLElement>(
+      '[data-reka-scroll-area-viewport]',
+    )
+    await expect(viewport).not.toBeNull()
+
+    // Content is taller than the viewport, so it is vertically scrollable.
+    await expect(viewport!.scrollHeight).toBeGreaterThan(viewport!.clientHeight)
+
+    // Programmatic scroll moves the viewport.
+    viewport!.scrollTop = 120
+    await waitFor(() => expect(viewport!.scrollTop).toBeGreaterThan(0))
+  },
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,110 @@
+{/* Feedback.mdx — Sprint 6 family overview (TASK-6.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Feedback/Overview" />
+
+# Feedback <StatusBadge status="stable" />
+
+Feedback components communicate **status, progress, and outcomes** back to the
+user. Choosing the right one is mostly a question of _urgency_ and _persistence_:
+does the message live inline with content, interrupt transiently, or block the
+flow until acknowledged?
+
+## Status-communication taxonomy
+
+| Channel | Persistence | Use it for | Components |
+|---------|-------------|------------|-----------|
+| **Inline** | Stays in the layout | Contextual status tied to a region or field | `DzAlert`, `DzBadge`, `DzProgress`, `DzSkeleton`, `DzEmpty`, `DzResult` |
+| **Transient** | Auto-dismisses | Confirmation of a completed action, undoable events | `DzToast`, `DzNotification` |
+| **Loading** | Until data arrives | Pending async work | `DzSpinner`, `DzSkeleton`, `DzProgress`, `DzAsyncBoundary` |
+| **Blocking / boundary** | Until resolved | Failures that must be surfaced or recovered | `DzErrorBoundary`, `DzResult` |
+
+## Components
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzAlert** | Inline, persistent contextual messages with tone + variant. | [DzAlert](?path=/docs/core-feedback-dzalert--docs) |
+| **DzBadge** | Compact status labels / counts. | [DzBadge](?path=/docs/core-feedback-dzbadge--docs) |
+| **DzProgress** | Determinate / indeterminate task progress (bar or circular). | [DzProgress](?path=/docs/core-feedback-dzprogress--docs) |
+| **DzSpinner** | Indeterminate "working" indicator. | [DzSpinner](?path=/docs/core-feedback-dzspinner--docs) |
+| **DzSkeleton** | Content-shaped loading placeholders. | [DzSkeleton](?path=/docs/core-feedback-dzskeleton--docs) |
+| **DzToast** | Transient, stackable notifications (Provider + Viewport + Toast). | [DzToast](?path=/docs/core-feedback-dztoast--docs) |
+| **DzNotification** | Richer, often persistent notification surface. | [DzNotification](?path=/docs/core-feedback-dznotification--docs) |
+| **DzEmpty** | Empty-state placeholder when a list/region has no content. | [DzEmpty](?path=/docs/core-feedback-dzempty--docs) |
+| **DzResult** | Full-page / panel outcome (success / error / warning / info). | [DzResult](?path=/docs/core-feedback-dzresult--docs) |
+| **DzAsyncBoundary** | Coordinate pending → resolved → error for async children. | [DzAsyncBoundary](?path=/docs/core-feedback-dzasyncboundary--docs) |
+| **DzErrorBoundary** | Catch descendant render errors and render a fallback. | [DzErrorBoundary](?path=/docs/core-feedback-dzerrorboundary--docs) |
+
+## When to use which
+
+- **DzAlert vs DzToast** — use **DzAlert** for status that should _stay_ on the
+  page (form-level errors, persistent warnings). Use **DzToast** for _transient_
+  confirmations ("Saved", "Email moved to trash") that can auto-dismiss and may
+  offer a quick **Undo**.
+- **DzProgress vs DzSpinner** — reach for **DzProgress** when you know the
+  completion ratio (uploads, multi-step jobs); use **DzSpinner** (or
+  indeterminate `DzProgress`) when you don't.
+- **DzSkeleton vs DzSpinner** — prefer **DzSkeleton** when you can mirror the
+  shape of the incoming content (lists, cards, profiles); it reduces layout shift
+  and perceived wait. Use a spinner for small, shapeless waits.
+- **DzEmpty vs DzResult** — **DzEmpty** is for "there's nothing here yet" inside a
+  region; **DzResult** is for the _outcome_ of an operation (often full-page).
+- **DzAsyncBoundary vs DzErrorBoundary** — **DzAsyncBoundary** owns the whole
+  async lifecycle via `<Suspense>` (loading + error). **DzErrorBoundary** only
+  catches synchronous render/lifecycle errors and is composable _inside_ an async
+  boundary for finer-grained recovery.
+
+## Accessibility
+
+- **Live announcements** — `DzAlert` uses `role="alert"` for danger/warning tones
+  (assertive) and `aria-live="polite"` otherwise; `DzToast`/`DzNotification` rely
+  on Reka UI's managed live regions. `DzEmpty` and `DzResult` use `role="status"`
+  so dynamic appearance is announced.
+- **Progress** — `DzProgress` and `DzTokenProgressBar` expose
+  `role="progressbar"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax`;
+  indeterminate progress omits `aria-valuenow` per WAI-ARIA.
+- **Busy regions** — wrap async content in a container with `aria-busy` bound to
+  the pending state and label the loading region (`role="status"`), as shown in
+  the `DzAsyncBoundary` Accessibility story.
+- Never rely on color alone — every tone is paired with a title, icon, or text
+  label.
+
+## App-specific components
+
+Some feedback components encode **datazup product vocabulary** rather than generic
+design-system semantics. They are grouped under **Core/Feedback/App-Specific** so
+consumers can tell them apart from the portable primitives (TASK-X.4):
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| **DzRunStatusBadge** | <StatusBadge status="experimental" /> | Run-orchestration status pill (`PENDING`…`CANCELLED`). [Docs](?path=/docs/core-feedback-app-specific-dzrunstatusbadge--docs) |
+| **DzTokenProgressBar** | <StatusBadge status="experimental" /> | LLM token-budget bar with 70%/90% thresholds. [Docs](?path=/docs/core-feedback-app-specific-dztokenprogressbar--docs) |
+
+`GovernanceBadge` and `TeamMemberBadge` are **unimplemented stubs** (placeholder
+`<span>`s, not exported from `@dzup-ui/core`). They are intentionally **excluded**
+from this Storybook until they graduate to Contract Spec v1. See
+[`storybook-decisions.md`](https://github.com/) (TASK-X.4) for the rationale.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Use a transient `DzToast` for "it worked" confirmations, with an Undo action where the operation is reversible.</Do>
+  <Dont>Use a `DzToast` for errors the user must act on — those belong inline (`DzAlert`) or as a `DzResult`/boundary fallback so they don't vanish.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Show `DzSkeleton` placeholders shaped like the incoming content to minimize layout shift.</Do>
+  <Dont>Swap a full layout for a single centered spinner when you can mirror its shape.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Wrap risky subtrees in `DzErrorBoundary` and offer a **Retry** that also clears the failing state before calling `reset()`.</Do>
+  <Dont>Call `reset()` without fixing the underlying cause — the child will just throw again immediately.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Pair every tone with text/icon and expose `aria-valuenow` on progress so the state is non-visual too.</Do>
+  <Dont>Signal status with color alone (e.g. a red bar with no label).</Dont>
+</DoDont>

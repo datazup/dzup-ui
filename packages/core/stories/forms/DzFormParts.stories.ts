@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import {
   DzFormDescription,
   DzFormField,
@@ -27,7 +27,7 @@ const meta = {
     DzFormDescription,
     DzFormMessage,
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     disabled: {
       control: 'boolean',

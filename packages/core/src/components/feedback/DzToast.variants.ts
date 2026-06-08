@@ -87,7 +87,7 @@ export const toastVariants = tv({
       },
       warning: {
         root: 'border-[var(--dz-warning)]/30',
-        actionButton: 'bg-[var(--dz-warning)] text-[var(--dz-warning-foreground)] hover:bg-[var(--dz-warning)]/90',
+        actionButton: 'bg-[var(--dz-warning-solid)] text-[var(--dz-warning-foreground)] hover:bg-[var(--dz-warning-solid-hover)]',
         toneIndicator: 'bg-[var(--dz-warning)]',
       },
       danger: {

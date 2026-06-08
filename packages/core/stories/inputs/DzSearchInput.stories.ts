@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzSearchInput } from '../../src/components/inputs'
 
@@ -13,7 +15,7 @@ import { DzSearchInput } from '../../src/components/inputs'
 const meta = {
   title: 'Core/Inputs/DzSearchInput',
   component: DzSearchInput,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -266,9 +268,7 @@ export const Invalid: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSearchInput },
@@ -316,6 +316,17 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  // TASK-2.C — type a query (clear button appears), then clear it.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('searchbox')
+    await userEvent.type(input, 'design tokens')
+    await expect(input).toHaveValue('design tokens')
+    // Clear button only renders while the field has a value.
+    const clear = await canvas.findByRole('button', { name: 'Clear search' })
+    await userEvent.click(clear)
+    await expect(input).toHaveValue('')
+  },
 }
 
 // ---------------------------------------------------------------------------

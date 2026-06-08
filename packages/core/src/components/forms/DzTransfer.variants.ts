@@ -89,7 +89,7 @@ export const transferVariants = tv({
       'transition-colors',
       'hover:bg-[var(--dz-muted)]',
       'dz-focus-ring-button dz-disabled-button',
-      '@media(prefers-reduced-motion:reduce){transition:none}',
+      'motion-reduce:transition-none',
     ].join(' '),
     empty: [
       'flex items-center justify-center',

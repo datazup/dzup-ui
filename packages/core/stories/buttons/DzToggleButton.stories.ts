@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Pin, Star, Underline } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { DzToggleButton } from '../../src/components/buttons'
@@ -14,7 +16,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Buttons/DzToggleButton',
   component: DzToggleButton,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -251,9 +253,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzToggleButton },
@@ -299,6 +299,23 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const bold = canvas.getByRole('button', { name: /toggle bold/i })
+
+    // Starts unpressed.
+    await expect(bold).toHaveAttribute('aria-pressed', 'false')
+    await expect(bold).toHaveAttribute('data-state', 'idle')
+
+    // First click presses it.
+    await userEvent.click(bold)
+    await expect(bold).toHaveAttribute('aria-pressed', 'true')
+    await expect(bold).toHaveAttribute('data-state', 'pressed')
+
+    // Second click releases it.
+    await userEvent.click(bold)
+    await expect(bold).toHaveAttribute('aria-pressed', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------

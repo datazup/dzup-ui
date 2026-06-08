@@ -75,5 +75,8 @@
   },
   "dependencies": {
     "vue": "^3.5.13"
+  },
+  "resolutions": {
+    "@storybook/addon-vitest": "10.3.4"
   }
 }

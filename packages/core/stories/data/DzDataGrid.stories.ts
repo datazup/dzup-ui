@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { ColumnDef } from '../../src/components/data'
 import {
   DzDataGrid,
@@ -51,7 +53,7 @@ const columns: ColumnDef<Employee>[] = [
 const meta = {
   title: 'Core/Data/DzDataGrid',
   component: DzDataGrid,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     loading: {
@@ -188,6 +190,19 @@ export const WithSorting: Story = {
       <DzDataGrid :data="data" :columns="columns" sortable aria-label="Sortable employee list" />
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const nameHeader = canvas.getByRole('columnheader', { name: /name/i })
+
+    // Sortable, unsorted columns advertise aria-sort="none".
+    await expect(nameHeader).toHaveAttribute('aria-sort', 'none')
+
+    // First activation sorts ascending, second toggles to descending.
+    await userEvent.click(nameHeader)
+    await waitFor(() => expect(nameHeader).toHaveAttribute('aria-sort', 'ascending'))
+    await userEvent.click(nameHeader)
+    await waitFor(() => expect(nameHeader).toHaveAttribute('aria-sort', 'descending'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -220,6 +235,19 @@ export const WithSelection: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await expect(canvas.getByText(/selected: 0 row\(s\)/i)).toBeInTheDocument()
+
+    // The header "select all" checkbox toggles every row at once.
+    const selectAll = canvas.getByRole('checkbox', { name: /select all rows/i })
+    await userEvent.click(selectAll)
+
+    await waitFor(() =>
+      expect(canvas.getByText(/selected: 8 row\(s\)/i)).toBeInTheDocument(),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -242,6 +270,18 @@ export const WithPagination: Story = {
       />
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Page 1 shows the first four rows; row 5 (Ethan Brown) is on page 2.
+    await expect(canvas.getByText('Alice Johnson')).toBeInTheDocument()
+    await expect(canvas.queryByText('Ethan Brown')).not.toBeInTheDocument()
+
+    // Advancing to the next page reveals the later rows.
+    await userEvent.click(canvas.getByRole('button', { name: /next page/i }))
+    await waitFor(() => expect(canvas.getByText('Ethan Brown')).toBeInTheDocument())
+    await expect(canvas.queryByText('Alice Johnson')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -291,9 +331,7 @@ export const Empty: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzDataGrid },
@@ -388,6 +426,69 @@ export const RealWorldCompactReport: Story = {
         sortable
         aria-label="Compact employee report"
       />
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Performance: large dataset
+// ---------------------------------------------------------------------------
+
+const roles = ['Engineer', 'Designer', 'PM', 'Analyst', 'Support'] as const
+const departments = ['Engineering', 'Design', 'Product', 'Data', 'Success'] as const
+const statuses = ['Active', 'On Leave', 'Inactive'] as const
+
+/**
+ * 1,000 synthetic rows — exercises sorting + pagination at scale.
+ *
+ * TASK-X.7 (perf budget): generated lazily inside a story `loader` rather than
+ * at module scope, so the 1k-row build cost is paid only when this story is
+ * actually viewed — not on every import of this file (e.g. when rendering the
+ * lightweight `Default`/`With Sorting` stories or the autodocs page).
+ */
+function makeLargeData(): Employee[] {
+  return Array.from({ length: 1000 }, (_, i) => ({
+    id: i + 1,
+    name: `Employee ${String(i + 1).padStart(4, '0')}`,
+    role: roles[i % roles.length],
+    department: departments[i % departments.length],
+    salary: 80000 + (i % 60) * 1000,
+    status: statuses[i % statuses.length],
+  }))
+}
+
+export const PerformanceLargeDataset: Story = {
+  name: 'Performance: 1,000 Rows',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Sorting and pagination over a 1,000-row dataset. Pagination keeps the DOM '
+          + 'small (one page rendered at a time) while sorting operates on the full set. '
+          + 'The dataset is built in a lazy `loader` so the cost is only paid when this '
+          + 'story is viewed (TASK-X.7).',
+      },
+    },
+  },
+  loaders: [async () => ({ largeData: makeLargeData() })],
+  render: (_args, { loaded }) => ({
+    components: { DzDataGrid },
+    setup() {
+      return { data: loaded.largeData, columns }
+    },
+    template: `
+      <div class="space-y-3">
+        <p class="text-sm text-gray-500">{{ data.length.toLocaleString() }} rows · sortable · paginated</p>
+        <DzDataGrid
+          :data="data"
+          :columns="columns"
+          sortable
+          density="compact"
+          size="sm"
+          :pagination="{ pageSize: 25, pageSizeOptions: [25, 50, 100] }"
+          aria-label="Large employee dataset"
+        />
+      </div>
     `,
   }),
 }

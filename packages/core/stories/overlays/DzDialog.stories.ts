@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDialog,
@@ -29,7 +30,7 @@ const meta = {
     DzDialogDescription,
     DzDialogClose,
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modal: {
@@ -221,6 +222,16 @@ export const Interactive: Story = {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('button', { name: /open controlled dialog/i })
     await userEvent.click(trigger)
+
+    // Content is portalled to document.body — assert modal dialog semantics.
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(canvas.getByText(/state: open/i)).toBeInTheDocument()
+
+    // Confirm closes the dialog and flips the confirmed flag.
+    await userEvent.click(within(dialog).getByRole('button', { name: /^confirm$/i }))
+    await expect(canvas.getByText(/confirmed!/i)).toBeInTheDocument()
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   },
 }
 
@@ -231,9 +242,7 @@ export const Interactive: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
@@ -291,6 +300,21 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open accessible dialog/i })
+    await userEvent.click(trigger)
+
+    // Modal dialog with a programmatic accessible name (aria-labelledby → title).
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(dialog).toHaveAccessibleName()
+
+    // Escape dismisses the dialog and returns focus to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+  },
 }
 
 // ---------------------------------------------------------------------------

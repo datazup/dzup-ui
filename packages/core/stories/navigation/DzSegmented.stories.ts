@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import { AlignCenter, AlignLeft, AlignRight, LayoutGrid, List, Table2 } from 'lucide-vue-next'
 import { DzSegmented } from '../../src/components/navigation'
 
@@ -11,7 +12,7 @@ import { DzSegmented } from '../../src/components/navigation'
 const meta = {
   title: 'Core/Navigation/DzSegmented',
   component: DzSegmented,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modelValue: {
@@ -240,9 +241,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSegmented },

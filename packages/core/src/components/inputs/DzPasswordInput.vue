@@ -16,6 +16,7 @@ import type {
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 
@@ -40,8 +41,15 @@ const inputRef = ref<HTMLInputElement | null>(null)
 const autoId = useId()
 const showPassword = ref(false)
 
-const resolvedId = computed(() => props.id ?? autoId)
-const isInvalid = computed(() => props.invalid || !!props.error)
+/** Optional DzFormField context (ADR-08) — present only when inside a field */
+const fieldContext = useFormFieldContext()
+
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
+const isInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
 
 const wrapperClasses = computed(() =>
   cn(
@@ -63,6 +71,8 @@ const resolvedAriaDescribedby = computed(() => {
     parts.push(props.ariaDescribedby)
   if (errorId.value)
     parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -93,10 +103,10 @@ export default {
 
 <template>
   <div
-    :data-state="disabled ? 'disabled' : readonly ? 'readonly' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
-    :data-disabled="disabled ? '' : undefined"
+    :data-disabled="resolvedDisabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -118,15 +128,15 @@ export default {
         :class="inputClasses"
         :name="name"
         :placeholder="placeholder"
-        :disabled="disabled"
+        :disabled="resolvedDisabled"
         :readonly="readonly"
-        :required="required"
+        :required="resolvedRequired"
         :maxlength="maxlength"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="isInvalid || undefined"
-        :aria-required="required || undefined"
+        :aria-required="resolvedRequired || undefined"
         autocomplete="current-password"
         @change="handleChange"
         @focus="handleFocus"
@@ -138,7 +148,7 @@ export default {
         type="button"
         class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
-        :disabled="disabled"
+        :disabled="resolvedDisabled"
         tabindex="-1"
         @click="toggleVisibility"
       >

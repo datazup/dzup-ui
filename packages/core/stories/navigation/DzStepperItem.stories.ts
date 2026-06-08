@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { DzButton } from '../../src/components/buttons'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 
@@ -15,7 +15,7 @@ import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 const meta = {
   title: 'Core/Navigation/DzStepperItem',
   component: DzStepperItem,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     title: {
       control: 'text',

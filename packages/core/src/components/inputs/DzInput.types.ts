@@ -27,6 +27,8 @@ export interface DzInputProps extends BaseFormControlProps<InputVariant> {
   maxlength?: number
   /** Whether the input shows a clear button when non-empty */
   clearable?: boolean
+  /** Accessible label for the loading spinner shown when `loading` is true */
+  loadingLabel?: string
 }
 
 // ---------------------------------------------------------------------------

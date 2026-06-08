@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzPopover,
@@ -20,7 +22,7 @@ const meta = {
     DzPopoverTrigger,
     DzPopoverContent,
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modal: {
@@ -226,6 +228,17 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Click the trigger to open; content is portalled to document.body.
+    await userEvent.click(canvas.getByRole('button', { name: /^trigger$/i }))
+    await expect(await screen.findByText(/controlled popover/i)).toBeVisible()
+
+    // Escape closes the popover.
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByText(/controlled popover/i)).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -235,9 +248,7 @@ export const Interactive: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzPopover, DzPopoverTrigger, DzPopoverContent, DzButton },

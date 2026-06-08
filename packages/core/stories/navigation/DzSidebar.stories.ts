@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import {
   DzSidebar,
@@ -34,7 +35,7 @@ import {
 const meta = {
   title: 'Core/Navigation/DzSidebar',
   component: DzSidebar,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     collapsed: {
       control: 'boolean',
@@ -304,4 +305,15 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Expanded: item labels are rendered.
+    await expect(canvas.getByText('Dashboard')).toBeInTheDocument()
+
+    // Collapsing hides the labels (icon-only rail) and flips the toggle label.
+    await userEvent.click(canvas.getByRole('button', { name: /Collapse/ }))
+    await waitFor(() => expect(canvas.queryByText('Dashboard')).not.toBeInTheDocument())
+    await expect(canvas.getByRole('button', { name: /Expand/ })).toBeInTheDocument()
+  },
 }

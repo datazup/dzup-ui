@@ -90,7 +90,7 @@ export const buttonVariants = tv({
     { variant: 'solid', tone: 'primary', class: 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] hover:bg-[var(--dz-primary-hover)]' },
     { variant: 'solid', tone: 'neutral', class: 'bg-[var(--dz-foreground)] text-[var(--dz-background)] hover:bg-[var(--dz-foreground)]/90' },
     { variant: 'solid', tone: 'success', class: 'bg-[var(--dz-success)] text-[var(--dz-success-foreground)] hover:bg-[var(--dz-success)]/90' },
-    { variant: 'solid', tone: 'warning', class: 'bg-[var(--dz-warning)] text-[var(--dz-warning-foreground)] hover:bg-[var(--dz-warning)]/90' },
+    { variant: 'solid', tone: 'warning', class: 'bg-[var(--dz-warning-solid)] text-[var(--dz-warning-foreground)] hover:bg-[var(--dz-warning-solid-hover)]' },
     { variant: 'solid', tone: 'danger', class: 'bg-[var(--dz-danger)] text-[var(--dz-danger-foreground)] hover:bg-[var(--dz-danger)]/90' },
     { variant: 'solid', tone: 'info', class: 'bg-[var(--dz-info)] text-[var(--dz-info-foreground)] hover:bg-[var(--dz-info)]/90' },
 
@@ -98,7 +98,7 @@ export const buttonVariants = tv({
     { variant: 'outline', tone: 'primary', class: 'border-[var(--dz-primary)] text-[var(--dz-primary)] hover:bg-[var(--dz-primary-muted)]' },
     { variant: 'outline', tone: 'neutral', class: 'border-[var(--dz-border)] text-[var(--dz-foreground)] hover:bg-[var(--dz-muted)]' },
     { variant: 'outline', tone: 'success', class: 'border-[var(--dz-success)] text-[var(--dz-success)] hover:bg-[var(--dz-success-muted)]' },
-    { variant: 'outline', tone: 'warning', class: 'border-[var(--dz-warning)] text-[var(--dz-warning)] hover:bg-[var(--dz-warning-muted)]' },
+    { variant: 'outline', tone: 'warning', class: 'border-[var(--dz-warning-solid)] text-[var(--dz-warning)] hover:bg-[var(--dz-warning-muted)]' },
     { variant: 'outline', tone: 'danger', class: 'border-[var(--dz-danger)] text-[var(--dz-danger)] hover:bg-[var(--dz-danger-muted)]' },
     { variant: 'outline', tone: 'info', class: 'border-[var(--dz-info)] text-[var(--dz-info)] hover:bg-[var(--dz-info-muted)]' },
 

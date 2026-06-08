@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 import { DzContainer } from '../../src/components/layout'
 
 /**
@@ -10,7 +11,7 @@ import { DzContainer } from '../../src/components/layout'
 const meta = {
   title: 'Core/Layout/DzContainer',
   component: DzContainer,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     maxWidth: {
@@ -190,9 +191,7 @@ export const PolymorphicAs: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzContainer },
@@ -240,6 +239,51 @@ export const RealWorldPageLayout: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Responsive (TASK-7.D) — the same container previewed at three breakpoints to
+// show how max-width + responsive padding adapt. Switch via the Viewport toolbar.
+// ---------------------------------------------------------------------------
+
+function responsiveContainer() {
+  return {
+    components: { DzContainer },
+    template: `
+      <DzContainer max-width="lg" class="bg-[var(--dz-muted)] py-6">
+        <div class="bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] text-sm p-4 rounded-lg text-center">
+          Centered content — capped at max-width="lg" with responsive horizontal padding.
+          The gutter grows with the viewport; the content never exceeds its max-width.
+        </div>
+      </DzContainer>
+    `,
+  }
+}
+
+const responsiveParameters = {
+  viewport: { options: RESPONSIVE_VIEWPORTS },
+  layout: 'fullscreen',
+} as const
+
+export const ResponsiveMobile: Story = {
+  name: 'Responsive: Mobile',
+  parameters: responsiveParameters,
+  globals: { viewport: { value: 'mobile' } },
+  render: responsiveContainer,
+}
+
+export const ResponsiveTablet: Story = {
+  name: 'Responsive: Tablet',
+  parameters: responsiveParameters,
+  globals: { viewport: { value: 'tablet' } },
+  render: responsiveContainer,
+}
+
+export const ResponsiveDesktop: Story = {
+  name: 'Responsive: Desktop',
+  parameters: responsiveParameters,
+  globals: { viewport: { value: 'desktop' } },
+  render: responsiveContainer,
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import {
   DzTabContent,
   DzTabList,
@@ -18,7 +20,7 @@ import {
 const meta = {
   title: 'Core/Navigation/DzTabs',
   component: DzTabs,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -277,9 +279,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzTabs, DzTabList, DzTabTrigger, DzTabContent },
@@ -335,6 +335,19 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const accountTab = canvas.getByRole('tab', { name: 'Account' })
+    const billingTab = canvas.getByRole('tab', { name: 'Billing' })
+
+    // Initial selection reflects the model.
+    await expect(accountTab).toHaveAttribute('aria-selected', 'true')
+
+    // Clicking a trigger selects it and deselects the previous tab.
+    await userEvent.click(billingTab)
+    await waitFor(() => expect(billingTab).toHaveAttribute('aria-selected', 'true'))
+    await expect(accountTab).toHaveAttribute('aria-selected', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -372,6 +385,19 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const first = canvas.getByRole('tab', { name: 'First' })
+    const second = canvas.getByRole('tab', { name: 'Second' })
+
+    await expect(first).toHaveAttribute('aria-selected', 'true')
+
+    // Roving tabindex: focus the active trigger, then Arrow Right activates the
+    // next (automatic activation mode).
+    await userEvent.click(first)
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(second).toHaveAttribute('aria-selected', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------

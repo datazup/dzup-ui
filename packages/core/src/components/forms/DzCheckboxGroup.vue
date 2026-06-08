@@ -69,7 +69,7 @@ provide(DZ_CHECKBOX_GROUP_KEY, context)
 const classes = computed(() =>
   cn(
     'flex',
-    props.orientation === 'vertical' ? 'flex-col gap-[var(--dz-spacing-2)]' : 'flex-row flex-wrap gap-[var(--dz-spacing-4)]',
+    props.orientation === 'vertical' ? 'flex-col gap-[var(--dz-spacing-3)]' : 'flex-row flex-wrap gap-[var(--dz-spacing-4)]',
     attrs.class as string | undefined,
   ),
 )

@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import type { DzSelectItem } from '../../src/components/forms'
 import { DzMultiSelect } from '../../src/components/forms'
 
@@ -20,7 +22,7 @@ const sampleItems: DzSelectItem[] = [
 const meta = {
   title: 'Core/Forms/DzMultiSelect',
   component: DzMultiSelect,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -239,9 +241,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzMultiSelect },
@@ -277,6 +277,19 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the dropdown via the search input.
+    await userEvent.click(canvas.getByPlaceholderText(/choose frameworks/i))
+
+    // Options render in a portal; pick one and confirm it becomes a removable chip.
+    const option = await screen.findByRole('option', { name: 'React' })
+    await userEvent.click(option)
+
+    await expect(canvas.getByRole('button', { name: /remove react/i })).toBeInTheDocument()
+    await expect(canvas.getByText(/selected:/i)).toHaveTextContent(/react/i)
+  },
 }
 
 // ---------------------------------------------------------------------------

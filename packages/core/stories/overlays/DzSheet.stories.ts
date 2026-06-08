@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzSheet,
@@ -25,7 +27,7 @@ const meta = {
     DzSheetDescription,
     DzSheetClose,
   },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modal: {
@@ -192,6 +194,19 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the controlled sheet (built on Reka Dialog → role="dialog").
+    await userEvent.click(canvas.getByRole('button', { name: /open controlled sheet/i }))
+    const sheet = await screen.findByRole('dialog')
+    await expect(within(sheet).getByText(/edit profile/i)).toBeVisible()
+
+    // Saving closes the sheet and increments the saved counter.
+    await userEvent.click(within(sheet).getByRole('button', { name: /save changes/i }))
+    await expect(canvas.getByText(/saved 1 time/i)).toBeInTheDocument()
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -201,9 +216,7 @@ export const Interactive: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },

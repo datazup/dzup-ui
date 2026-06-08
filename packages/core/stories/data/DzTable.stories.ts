@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, waitFor, within } from 'storybook/test'
 import {
   DzTable,
   DzTableBody,
@@ -18,7 +20,7 @@ import {
 const meta = {
   title: 'Core/Data/DzTable',
   component: DzTable,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -435,9 +437,7 @@ export const WithSpans: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
@@ -511,6 +511,88 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Renders a real <table> with an accessible name.
+    const table = canvas.getByRole('table', { name: /accessible table/i })
+    await expect(table).toBeInTheDocument()
+
+    // Header cells are <th scope="col"> so screen readers associate columns.
+    const headers = canvas.getAllByRole('columnheader')
+    await expect(headers).toHaveLength(3)
+    for (const th of headers) {
+      await expect(th).toHaveAttribute('scope', 'col')
+    }
+
+    // Two data rows are present in addition to the header row.
+    await expect(canvas.getAllByRole('row')).toHaveLength(3)
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Sticky Header (scrolling body)
+// ---------------------------------------------------------------------------
+
+const stickyRows = Array.from({ length: 12 }, (_, i) => ({
+  name: `Employee ${i + 1}`,
+  role: ['Engineer', 'Designer', 'PM', 'Analyst'][i % 4],
+  status: ['Active', 'On Leave', 'Inactive'][i % 3],
+}))
+
+export const StickyHeader: Story = {
+  name: 'Sticky Header',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'DzTable’s root is a scroll container. Give the header cells '
+          + '`sticky top-0` (plus a background) and constrain the table height to '
+          + 'keep column headers visible while the body scrolls.',
+      },
+    },
+  },
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
+    setup() {
+      // Inline styles guarantee the scroll bound + sticky positioning regardless
+      // of the Tailwind utility build; the classes show the real-world pattern.
+      const headerStyle = 'position: sticky; top: 0; z-index: 10; background: var(--dz-background)'
+      return { rows: stickyRows, headerStyle }
+    },
+    template: `
+      <DzTable variant="bordered" hoverable style="max-height: 16rem" aria-label="Scrollable table with sticky header">
+        <DzTableHeader>
+          <DzTableRow>
+            <DzTableCell header :style="headerStyle">Name</DzTableCell>
+            <DzTableCell header :style="headerStyle">Role</DzTableCell>
+            <DzTableCell header :style="headerStyle">Status</DzTableCell>
+          </DzTableRow>
+        </DzTableHeader>
+        <DzTableBody>
+          <DzTableRow v-for="row in rows" :key="row.name">
+            <DzTableCell>{{ row.name }}</DzTableCell>
+            <DzTableCell>{{ row.role }}</DzTableCell>
+            <DzTableCell>{{ row.status }}</DzTableCell>
+          </DzTableRow>
+        </DzTableBody>
+      </DzTable>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The header cells are position: sticky so they stay pinned on scroll.
+    const firstHeader = canvas.getAllByRole('columnheader')[0]
+    await expect(getComputedStyle(firstHeader).position).toBe('sticky')
+
+    // The DzTable root is the scroll container (overflow-auto) — it scrolls.
+    const scroller = canvas.getByRole('table').parentElement as HTMLElement
+    scroller.scrollTop = 200
+    await waitFor(() => expect(scroller.scrollTop).toBeGreaterThan(0))
+    // Header remains rendered after scrolling.
+    await expect(canvas.getByRole('columnheader', { name: 'Name' })).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

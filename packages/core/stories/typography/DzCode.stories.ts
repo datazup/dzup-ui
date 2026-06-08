@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import { DzCode } from '../../src/components/typography'
 
 /**
@@ -13,7 +14,7 @@ import { DzCode } from '../../src/components/typography'
 const meta = {
   title: 'Core/Typography/DzCode',
   component: DzCode,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -180,15 +181,57 @@ yarn add @dzup-ui/core @dzup-ui/tokens</DzCode>
 }
 
 // ---------------------------------------------------------------------------
+// DzCode vs DzCodeBlock
+// ---------------------------------------------------------------------------
+
+export const VsCodeBlock: Story = {
+  name: 'DzCode vs DzCodeBlock',
+  render: () => ({
+    components: { DzCode },
+    template: `
+      <div class="space-y-6 max-w-2xl">
+        <p class="text-sm text-gray-500">
+          <DzCode>DzCode</DzCode> is a lightweight typography primitive for <strong>inline</strong>
+          snippets and short, unadorned <strong>block</strong> samples. When you need a header,
+          filename, language label, line numbers, scroll bounds, or copy-to-clipboard, reach for
+          <DzCode>DzCodeBlock</DzCode> (Core/Data) instead.
+        </p>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-lg border p-4 space-y-2">
+            <p class="text-sm font-semibold">DzCode (inline)</p>
+            <p class="text-sm">
+              Run <DzCode>yarn build</DzCode> then import <DzCode>{ DzButton }</DzCode>.
+            </p>
+            <p class="text-xs text-gray-500">Best for: prose, prop names, short commands.</p>
+          </div>
+          <div class="rounded-lg border p-4 space-y-2">
+            <p class="text-sm font-semibold">DzCode (block)</p>
+            <DzCode variant="block" language="bash">yarn add @dzup-ui/core</DzCode>
+            <p class="text-xs text-gray-500">Best for: a couple of plain lines, no chrome needed.</p>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-dashed p-4 space-y-1">
+          <p class="text-sm font-semibold">Need a header, line numbers, or a copy button?</p>
+          <p class="text-sm text-gray-500">
+            Use <strong>DzCodeBlock</strong> — see
+            <a class="underline" href="?path=/docs/core-data-dzcodeblock--docs">Core/Data/DzCodeBlock</a>.
+          </p>
+        </div>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // Dark Mode
 // ---------------------------------------------------------------------------
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCode },

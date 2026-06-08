@@ -3,6 +3,8 @@ import { mount } from '@vue/test-utils'
  * DzInputGroup — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
+import DzInput from './DzInput.vue'
 import DzInputGroup from './DzInputGroup.vue'
 
 describe('dzInputGroup — Unit Tests', () => {
@@ -70,5 +72,49 @@ describe('dzInputGroup — Unit Tests', () => {
     })
     // Only the input wrapper div + the input itself
     expect(wrapper.findAll('span')).toHaveLength(0)
+  })
+})
+
+describe('dzInputGroup — context propagation (ADR-08)', () => {
+  it('propagates disabled to a grouped DzInput', () => {
+    const wrapper = mount(DzInputGroup, {
+      props: { disabled: true },
+      slots: { default: () => h(DzInput) },
+    })
+    expect((wrapper.find('input').element as HTMLInputElement).disabled).toBe(true)
+  })
+
+  it('does not disable a grouped DzInput when the group is enabled', () => {
+    const wrapper = mount(DzInputGroup, {
+      slots: { default: () => h(DzInput) },
+    })
+    expect((wrapper.find('input').element as HTMLInputElement).disabled).toBe(false)
+  })
+
+  it('propagates size to a grouped DzInput', () => {
+    const wrapper = mount(DzInputGroup, {
+      props: { size: 'lg' },
+      slots: { default: () => h(DzInput) },
+    })
+    // lg height token appears on the input wrapper when size cascades down
+    expect(wrapper.html()).toContain('--dz-input-lg-height')
+  })
+
+  it('lets an explicit child size override the group size', () => {
+    const wrapper = mount(DzInputGroup, {
+      props: { size: 'lg' },
+      slots: { default: () => h(DzInput, { size: 'sm' }) },
+    })
+    expect(wrapper.html()).toContain('--dz-input-sm-height')
+    expect(wrapper.html()).not.toContain('--dz-input-lg-height')
+  })
+
+  it('renders the grouped DzInput seamlessly (no own border)', () => {
+    const wrapper = mount(DzInputGroup, {
+      slots: { default: () => h(DzInput) },
+    })
+    // Seamless field strips its own box; the group root owns the border
+    expect(wrapper.find('input').exists()).toBe(true)
+    expect(wrapper.html()).toContain('border-0')
   })
 })

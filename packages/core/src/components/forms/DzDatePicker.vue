@@ -87,6 +87,10 @@ const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
+const resolvedRequired = computed(
+  () => props.required || (fieldContext?.isRequired.value ?? false),
+)
+
 const styles = computed(() =>
   datePickerVariants({
     variant: props.variant,
@@ -151,6 +155,7 @@ export default {
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
         :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+        :aria-required="resolvedRequired || undefined"
         :data-state="resolvedDisabled ? 'disabled' : 'idle'"
         :data-disabled="resolvedDisabled ? '' : undefined"
         :data-invalid="resolvedInvalid ? '' : undefined"
@@ -159,16 +164,25 @@ export default {
         @focus="handleFocus"
         @blur="handleBlur"
       >
-        <template v-if="!model && placeholder">
-          <span class="text-[var(--dz-muted-foreground)]">{{ placeholder }}</span>
-        </template>
-        <template v-else>
+        <!--
+          Placeholder text shown only while empty. The segment inputs stay
+          mounted (v-show, not v-if) so a programmatic/calendar selection is
+          reflected immediately instead of mounting fresh, unpopulated segments.
+        -->
+        <span
+          v-show="!model && placeholder"
+          class="text-[var(--dz-muted-foreground)]"
+        >{{ placeholder }}</span>
+        <span
+          v-show="!(!model && placeholder)"
+          class="inline-flex items-center"
+        >
           <DatePickerInput part="month" :class="styles.fieldInput()" />
           <span :class="styles.field()">/</span>
           <DatePickerInput part="day" :class="styles.fieldInput()" />
           <span :class="styles.field()">/</span>
           <DatePickerInput part="year" :class="styles.fieldInput()" />
-        </template>
+        </span>
 
         <DatePickerTrigger
           class="ml-auto"

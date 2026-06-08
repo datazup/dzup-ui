@@ -55,6 +55,14 @@ const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
 )
 
+const resolvedInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
+
+const resolvedRequired = computed(
+  () => props.required || (fieldContext?.isRequired.value ?? false),
+)
+
 const styles = computed(() =>
   sliderVariants({
     size: props.size,
@@ -118,6 +126,7 @@ export default {
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-invalid="resolvedInvalid ? '' : undefined"
     :data-tone="tone"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
@@ -128,9 +137,10 @@ export default {
     </SliderTrack>
     <SliderThumb
       ref="thumbRef"
-      :class="styles.thumb()"
+      :class="cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]')"
       :aria-label="ariaLabel ?? 'Slider thumb'"
-      :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
+      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+      :aria-required="resolvedRequired || undefined"
       @focus="handleFocus"
       @blur="handleBlur"
     />

@@ -60,7 +60,10 @@ export const PALETTE_CONFIGS = {
   secondary: { chroma: 0.12, hue: 290 },
   neutral: { chroma: 0.01, hue: 260 },
   success: { chroma: 0.16, hue: 145 },
-  warning: { chroma: 0.16, hue: 85 },
+  // hue 92 reads as a true yellow (85 leaned orange/brown); higher chroma keeps
+  // it vivid rather than muddy at mid lightness. Warning is the canonical
+  // "yellow" tone across the system.
+  warning: { chroma: 0.19, hue: 92 },
   danger: { chroma: 0.20, hue: 25 },
   info: { chroma: 0.14, hue: 230 },
 } as const satisfies Record<string, PaletteConfig>

@@ -49,6 +49,14 @@ const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
 )
 
+const resolvedInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
+
+const resolvedRequired = computed(
+  () => props.required || (fieldContext?.isRequired.value ?? false),
+)
+
 const styles = computed(() =>
   transferVariants({
     size: props.size,
@@ -56,8 +64,14 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+/** Lists row classes — danger border on each list when invalid */
+const groupClasses = computed(() =>
+  cn(styles.value.root(), resolvedInvalid.value && '[&_[data-dz-transfer-list]]:border-[var(--dz-danger)]'),
+)
+
+/** Outer wrapper carries the consumer class so the error message stacks below */
+const wrapperClasses = computed(() =>
+  cn('flex flex-col gap-[var(--dz-spacing-1_5)]', attrs.class as string | undefined),
 )
 
 const {
@@ -114,20 +128,23 @@ export default {
 </script>
 
 <template>
-  <div
-    :id="resolvedId"
-    :class="rootClasses"
-    :data-disabled="resolvedDisabled ? '' : undefined"
-    :data-state="resolvedDisabled ? 'disabled' : undefined"
-    :aria-label="ariaLabel"
-    :aria-labelledby="ariaLabelledby"
-    :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
-    role="group"
-    style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
-    @focus.capture="handleFocus"
-    @blur.capture="handleBlur"
-  >
+  <div :class="wrapperClasses" v-bind="{ ...$attrs, class: undefined }">
+    <div
+      :id="resolvedId"
+      :class="groupClasses"
+      :data-disabled="resolvedDisabled ? '' : undefined"
+      :data-state="resolvedDisabled ? 'disabled' : undefined"
+      :data-invalid="resolvedInvalid ? '' : undefined"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledby"
+      :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+      :aria-required="resolvedRequired || undefined"
+      role="group"
+      style="contain: layout style"
+      @focus.capture="handleFocus"
+      @blur.capture="handleBlur"
+    >
     <!-- Source list -->
     <div :class="styles.list()">
       <div :class="styles.listHeader()">
@@ -269,5 +286,16 @@ export default {
         </div>
       </div>
     </div>
+    </div>
+
+    <!-- Error message -->
+    <p
+      v-if="error"
+      :id="`${resolvedId}-error`"
+      class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      role="alert"
+    >
+      {{ error }}
+    </p>
   </div>
 </template>

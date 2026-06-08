@@ -1,0 +1,107 @@
+{/* Overlays.mdx — Sprint 9 family overview (TASK-9.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Overlays/Overview" />
+
+# Overlays <StatusBadge status="stable" />
+
+Overlay components render content **on top of the page**, usually in a portal,
+and are built on [Reka UI](https://reka-ui.com) headless primitives (ADR-07).
+Picking the right one is mostly a question of _how much it interrupts_: does it
+block the whole page until acknowledged, slide context in from the edge, or just
+float a small bit of content next to a trigger?
+
+## Interruption taxonomy
+
+| Level | Behavior | Use it for | Components |
+|-------|----------|------------|-----------|
+| **Blocking / modal** | Traps focus, dims the page, must be dismissed | Critical decisions, focused tasks | `DzDialog`, `DzConfirmDialog`, `DzCommandPalette` |
+| **Edge panel** | Slides in from a side, modal by default | Secondary flows, nav, detail/settings panes | `DzSheet` |
+| **Contextual float** | Anchored to a trigger, non-blocking | Rich extra content, menus, hints | `DzPopover`, `DzDropdownMenu`, `DzContextMenu`, `DzTooltip` |
+
+## Components
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzDialog** | Compound modal for focused tasks/decisions (Trigger/Content/Title/Description/Close). | [DzDialog](?path=/docs/core-overlays-dzdialog--docs) |
+| **DzConfirmDialog** | Pre-composed confirm/cancel dialog with `default`/`danger` variants + async `loading`. | [DzConfirmDialog](?path=/docs/core-overlays-dzconfirmdialog--docs) |
+| **DzSheet** | Slide-out panel (top/right/bottom/left) for nav, settings, or detail views. | [DzSheet](?path=/docs/core-overlays-dzsheet--docs) |
+| **DzPopover** | Anchored, non-modal panel for rich content next to a trigger. | [DzPopover](?path=/docs/core-overlays-dzpopover--docs) |
+| **DzTooltip** | Hover/focus hint for an element — text only, never interactive. | [DzTooltip](?path=/docs/core-overlays-dztooltip--docs) |
+| **DzDropdownMenu** | Menu of actions opened from a trigger button. | [DzDropdownMenu](?path=/docs/core-overlays-dzdropdownmenu--docs) |
+| **DzContextMenu** | Right-click (contextmenu) menu over a region. | [DzContextMenu](?path=/docs/core-overlays-dzcontextmenu--docs) |
+| **DzCommandPalette** | Searchable command launcher (Ctrl/Cmd+K), grouped items + shortcuts. | [DzCommandPalette](?path=/docs/core-overlays-dzcommandpalette--docs) |
+
+## When to use which
+
+- **DzDialog vs DzSheet** — both are modal. Reach for **DzDialog** when the task
+  is short and self-contained (confirm, a small form, a message). Use **DzSheet**
+  when the panel hosts a longer flow or persistent navigation and benefits from
+  sliding in along an edge (mobile nav, settings, record detail).
+- **DzDialog vs DzConfirmDialog** — use **DzConfirmDialog** for the plain
+  confirm/cancel pattern; it bakes in the icon, button tones, and `danger`
+  styling. Drop down to the raw **DzDialog** compound when you need custom layout,
+  multiple steps, or form fields.
+- **DzPopover vs DzTooltip** — a **DzTooltip** is a passive, text-only hint shown
+  on hover/focus and must never contain interactive content. A **DzPopover** can
+  hold focusable, interactive content (forms, buttons) and is opened by click.
+- **DzPopover vs DzDropdownMenu** — use **DzDropdownMenu** (and its arrow-key
+  roving focus + `menuitem` semantics) for a list of _actions_. Use **DzPopover**
+  for arbitrary rich content that isn't a menu.
+- **DzDropdownMenu vs DzContextMenu** — same menu semantics, different trigger:
+  dropdown opens from a **button click**, context menu from a **right-click** over
+  a region.
+
+## Layering, portals & z-index (ADR-07)
+
+- All overlays render through a **Reka UI portal** to the end of `<body>`, so they
+  escape parent `overflow`/`transform`/`z-index` stacking contexts. You generally
+  **don't** manage z-index yourself.
+- In Storybook, portalled content lands on `document.body`, **not** inside the
+  story canvas. Interaction tests query it with `screen.*` (e.g.
+  `screen.findByRole('dialog')`) rather than `within(canvasElement)`.
+- Stacking is FIFO by open order; a dialog opened from inside a sheet layers above
+  it and closes first on Escape.
+- Modal overlays apply a **scroll lock** to the body while open and restore it on
+  close.
+
+## Accessibility
+
+- **Roles & labelling** — `DzDialog`/`DzSheet`/`DzConfirmDialog` expose
+  `role="dialog"` + `aria-modal="true"`, with `aria-labelledby` wired to the title
+  and `aria-describedby` to the description. Always include a `DzDialogTitle`
+  (visually hidden if needed) so the dialog has an accessible name.
+- **Focus management** — modal overlays trap focus while open and **return focus
+  to the trigger** on close (asserted in the `DzDialog` Accessibility `play()`
+  test). Escape closes; the outside click / overlay closes non-destructively
+  (emits `cancel` on `DzConfirmDialog`).
+- **Menus** — `DzDropdownMenu`/`DzContextMenu` provide `menu`/`menuitem` semantics
+  with ArrowUp/ArrowDown roving focus and skip `disabled` items.
+- **Command palette** — the search field is a `combobox`; results are `option`s
+  navigable with arrows and selectable with Enter; the input auto-focuses on open.
+- **Tooltips** — appear on both hover **and** keyboard focus so they aren't
+  mouse-only; keep their text short and non-essential.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Give every dialog/sheet a `DzDialogTitle` (use `class="sr-only"` if the design hides it) so it has an accessible name.</Do>
+  <Dont>Render a modal with no title — screen-reader users get an unlabelled dialog.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzConfirmDialog` with `variant="danger"` for destructive, irreversible actions, and keep the confirm button open while the async action runs via `loading`.</Do>
+  <Dont>Use a transient toast to confirm a destructive action — confirmation must block until the user decides.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Put interactive content (buttons, inputs, links) inside a `DzPopover`.</Do>
+  <Dont>Put interactive content inside a `DzTooltip` — it can't be reached by keyboard or touch.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Let Reka's portal handle stacking and scroll-lock; anchor floats with the `side`/`align` props.</Do>
+  <Dont>Hand-roll `z-index` or `position: fixed` wrappers around overlays to force them on top.</Dont>
+</DoDont>

@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzRangeSlider } from '../../src/components/forms'
 
 /**
@@ -10,7 +12,7 @@ import { DzRangeSlider } from '../../src/components/forms'
 const meta = {
   title: 'Core/Forms/DzRangeSlider',
   component: DzRangeSlider,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -225,9 +227,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzRangeSlider },
@@ -257,6 +257,17 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const thumbs = canvas.getAllByRole('slider')
+    await expect(thumbs).toHaveLength(2)
+    await expect(thumbs[0]).toHaveAttribute('aria-valuenow', '200')
+
+    // Keyboard step on the lower thumb: ArrowRight advances by one step (50).
+    thumbs[0].focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(thumbs[0]).toHaveAttribute('aria-valuenow', '250')
+  },
 }
 
 // ---------------------------------------------------------------------------

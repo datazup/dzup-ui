@@ -113,6 +113,44 @@ describe('dzInput — Unit Tests', () => {
     expect(wrapper.html()).toContain('dz-danger')
   })
 
+  it('applies tone focus-color token overrides on the wrapper', () => {
+    const wrapper = mount(DzInput, { props: { tone: 'success' } })
+    // Tone recolors the focus border/ring via input token indirection
+    expect(wrapper.html()).toContain('--dz-input-border-focus:var(--dz-success)')
+    expect(wrapper.html()).toContain('--dz-input-focus-ring-color:var(--dz-success)')
+    expect(wrapper.attributes('data-tone')).toBe('success')
+  })
+
+  it('does not apply tone focus overrides when invalid (invalid wins)', () => {
+    const wrapper = mount(DzInput, { props: { tone: 'primary', invalid: true } })
+    expect(wrapper.html()).not.toContain('--dz-input-border-focus:var(--dz-primary)')
+    expect(wrapper.html()).toContain('dz-danger')
+  })
+
+  it('renders a loading spinner when loading=true', () => {
+    const wrapper = mount(DzInput, { props: { loading: true } })
+    expect(wrapper.find('[role="status"]').exists()).toBe(true)
+  })
+
+  it('marks the input as busy and read-only while loading', () => {
+    const wrapper = mount(DzInput, { props: { loading: true } })
+    const input = wrapper.find('input')
+    expect(input.attributes('aria-busy')).toBe('true')
+    expect((input.element as HTMLInputElement).readOnly).toBe(true)
+  })
+
+  it('hides the clear button while loading', () => {
+    const wrapper = mount(DzInput, {
+      props: { clearable: true, modelValue: 'hello', loading: true },
+    })
+    expect(wrapper.find('button[aria-label="Clear input"]').exists()).toBe(false)
+  })
+
+  it('does not render a spinner when loading=false', () => {
+    const wrapper = mount(DzInput, { props: { loading: false } })
+    expect(wrapper.find('[role="status"]').exists()).toBe(false)
+  })
+
   it('uses custom id when provided', () => {
     const wrapper = mount(DzInput, { props: { id: 'my-input' } })
     expect(wrapper.find('input').attributes('id')).toBe('my-input')

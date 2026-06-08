@@ -1,0 +1,77 @@
+{/* Accessibility.mdx */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DocTable } from './_blocks/DocTable.ts'
+
+<Meta title="Guides/Accessibility" />
+
+# Accessibility
+
+Accessibility is a **contract**, not an afterthought. Every component targets
+**WCAG 2.1 AA**, and the Storybook **A11y** panel audits each story live (axe-core).
+Under the Vitest addon those audits also run in a real browser as part of the test
+suite (TASK-0.9).
+
+## The a11y panel
+
+Open the **Accessibility** panel (bottom dock) on any story to see Violations,
+Passes, and Incomplete checks. Audits currently run in **report-only** mode
+(`a11y.test: 'todo'`) so they surface issues without failing the build. As each
+family is cleaned up, its assertion level is flipped to `'error'` to gate
+regressions (TASK-X.3).
+
+```ts
+// Per-story override for a known false positive:
+export const PortalledOverlay: Story = {
+  parameters: {
+    a11y: { test: 'todo', config: { rules: [{ id: 'color-contrast', enabled: false }] } },
+  },
+}
+```
+
+## Contract a11y props
+
+Every interactive component extends `BaseAccessibilityProps` from
+`@dzup-ui/contracts`, exposing a consistent set of hooks:
+
+<DocTable
+  head={['Prop', 'Purpose']}
+  align={['left', 'left']}
+  rows={[
+    ['`id`', 'Stable element id (label association)'],
+    ['`ariaLabel`', 'Accessible name when no visible label'],
+    ['`ariaLabelledby`', 'Reference an external labelling element'],
+    ['`ariaDescribedby`', 'Reference help/error text'],
+  ]}
+/>
+
+Stateful components additionally manage the right ARIA state for you, e.g.
+`aria-busy` while `loading`, `aria-pressed` on toggles, `aria-invalid` on invalid
+form controls, `aria-current` on active navigation items.
+
+## Authoring checklist
+
+- **Name** — every control has an accessible name (visible label, `ariaLabel`, or
+  `ariaLabelledby`).
+- **Keyboard** — all interactions are reachable and operable by keyboard; focus
+  order is logical and focus is visible.
+- **State** — dynamic state is exposed via ARIA (`aria-expanded`, `aria-selected`,
+  `aria-current`, live regions for async/toast).
+- **Contrast** — text meets AA (4.5:1; 3:1 for large text) in **both** themes —
+  verify with the dark-mode story.
+- **Portals** — overlays rendered in a portal may need a `play()` to open them so
+  the audit can reach the content.
+
+## Testing a11y in stories
+
+Pair an interaction `play()` with the audit so the addon scans the **interacted**
+state, not just the initial render:
+
+```ts
+export const OpenMenu: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: /open/i }))
+    // a11y audit now sees the expanded menu
+  },
+}
+```

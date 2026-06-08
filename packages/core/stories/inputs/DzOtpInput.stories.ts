@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzOtpInput } from '../../src/components/inputs'
 
 /**
@@ -12,7 +14,7 @@ import { DzOtpInput } from '../../src/components/inputs'
 const meta = {
   title: 'Core/Inputs/DzOtpInput',
   component: DzOtpInput,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -291,9 +293,7 @@ export const Invalid: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzOtpInput },
@@ -334,6 +334,21 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  // TASK-2.C — type a full 6-digit code across the auto-advancing cells and
+  // assert the model + the `complete` event both reflect it.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const cells = Array.from(
+      canvasElement.querySelectorAll<HTMLInputElement>('input'),
+    ).filter(el => el.type !== 'hidden')
+    await expect(cells.length).toBe(6)
+    // Focus the first cell; Reka PinInput advances focus as each digit lands.
+    await userEvent.click(cells[0])
+    await userEvent.keyboard('123456')
+    // The value + completed-event panels both render the joined code.
+    const matches = await canvas.findAllByText('123456')
+    await expect(matches.length).toBeGreaterThan(0)
+  },
 }
 
 // ---------------------------------------------------------------------------

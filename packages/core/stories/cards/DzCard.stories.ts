@@ -1,6 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
+import { DzSkeleton } from '../../src/components/feedback'
 import { DzHeading, DzText } from '../../src/components/typography'
 
 /**
@@ -13,7 +16,7 @@ import { DzHeading, DzText } from '../../src/components/typography'
 const meta = {
   title: 'Core/Cards/DzCard',
   component: DzCard,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -204,6 +207,77 @@ export const Clickable: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Interactive (play test)
+// ---------------------------------------------------------------------------
+
+export const Interactive: Story = {
+  name: 'Interactive (play test)',
+  render: () => ({
+    components: { DzCard, DzCardBody, DzHeading, DzText },
+    data() {
+      return { count: 0 }
+    },
+    template: `
+      <DzCard clickable variant="outlined" class="max-w-sm" @click="count++">
+        <DzCardBody>
+          <DzHeading :level="4" size="md">Activations: {{ count }}</DzHeading>
+          <DzText size="sm" tone="muted" class="mt-1">
+            Click the card, or focus it and press Enter / Space.
+          </DzText>
+        </DzCardBody>
+      </DzCard>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // A clickable card exposes button semantics + keyboard focusability.
+    const card = canvas.getByRole('button')
+    await expect(card).toHaveAttribute('tabindex', '0')
+
+    // Mouse activation.
+    await userEvent.click(card)
+    await expect(canvas.getByText('Activations: 1')).toBeInTheDocument()
+
+    // Keyboard activation: Enter and Space both fire the click handler.
+    card.focus()
+    await expect(card).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await expect(canvas.getByText('Activations: 2')).toBeInTheDocument()
+    await userEvent.keyboard(' ')
+    await expect(canvas.getByText('Activations: 3')).toBeInTheDocument()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// States: Loading Skeleton
+// ---------------------------------------------------------------------------
+
+export const Loading: Story = {
+  name: 'States: Loading Skeleton',
+  render: () => ({
+    components: { DzCard, DzCardBody, DzCardFooter, DzCardHeader, DzSkeleton },
+    template: `
+      <DzCard variant="outlined" class="max-w-sm">
+        <template #header>
+          <DzCardHeader>
+            <DzSkeleton variant="text" width="55%" />
+          </DzCardHeader>
+        </template>
+        <DzCardBody>
+          <DzSkeleton variant="text" :lines="3" />
+        </DzCardBody>
+        <template #footer>
+          <DzCardFooter>
+            <DzSkeleton variant="rectangular" width="84px" height="32px" />
+            <DzSkeleton variant="rectangular" width="84px" height="32px" />
+          </DzCardFooter>
+        </template>
+      </DzCard>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // With All Slots
 // ---------------------------------------------------------------------------
 
@@ -307,9 +381,7 @@ export const WithActions: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCard, DzCardBody, DzHeading, DzText },

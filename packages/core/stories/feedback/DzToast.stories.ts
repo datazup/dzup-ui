@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { DzToastContext, ToastItem } from '../../src/components/feedback'
 import { inject, ref } from 'vue'
 import {
@@ -22,7 +24,7 @@ import {
 const meta = {
   title: 'Core/Feedback/DzToast',
   component: DzToast,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // DzToast props (toast object)
     toast: {
@@ -242,6 +244,43 @@ export const Interactive: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Interactive: Dismiss (play test)
+// ---------------------------------------------------------------------------
+
+export const InteractiveDismiss: Story = {
+  name: 'Interactive: Dismiss',
+  render: () => ({
+    components: { DzToastProvider, DzToast },
+    setup() {
+      const visible = ref(true)
+      const toast: ToastItem = {
+        id: 'dismiss-1',
+        title: 'Changes saved',
+        description: 'Your profile has been updated.',
+        tone: 'success',
+      }
+      return { visible, toast }
+    },
+    template: `
+      <DzToastProvider>
+        <div class="max-w-sm min-h-[80px]">
+          <DzToast v-if="visible" :toast="toast" @close="visible = false" />
+          <p v-else class="text-sm text-gray-500">Toast dismissed.</p>
+        </div>
+      </DzToastProvider>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // The toast is visible on mount.
+    await expect(canvas.getByText('Changes saved')).toBeInTheDocument()
+    // Clicking the close button emits `close` → the parent hides the toast.
+    await userEvent.click(canvas.getByRole('button', { name: /close notification/i }))
+    await waitFor(() => expect(canvas.getByText(/toast dismissed/i)).toBeInTheDocument())
+  },
+}
+
+// ---------------------------------------------------------------------------
 // With Slots (custom content)
 // ---------------------------------------------------------------------------
 
@@ -317,9 +356,7 @@ export const Accessibility: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzToastProvider, DzToast },

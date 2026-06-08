@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { userEvent, within } from 'storybook/test'
 import { DzCheckbox } from '../../src/components/forms'
 
 /**
@@ -11,7 +12,7 @@ import { DzCheckbox } from '../../src/components/forms'
 const meta = {
   title: 'Core/Forms/DzCheckbox',
   component: DzCheckbox,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -91,7 +92,7 @@ export const AllSizes: Story = {
   render: () => ({
     components: { DzCheckbox },
     template: `
-      <div class="space-y-3">
+      <div class="flex flex-col items-start gap-5">
         <DzCheckbox size="xs">Extra Small</DzCheckbox>
         <DzCheckbox size="sm">Small</DzCheckbox>
         <DzCheckbox size="md">Medium</DzCheckbox>
@@ -140,7 +141,7 @@ export const States: Story = {
   render: () => ({
     components: { DzCheckbox },
     template: `
-      <div class="space-y-3">
+      <div class="flex flex-col items-start gap-4">
         <DzCheckbox>Unchecked</DzCheckbox>
         <DzCheckbox :model-value="true">Checked</DzCheckbox>
         <DzCheckbox indeterminate>Indeterminate</DzCheckbox>
@@ -158,18 +159,45 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCheckbox },
     template: `
-      <div class="space-y-3">
+      <div class="flex max-w-md flex-col items-start gap-5">
         <DzCheckbox>Unchecked</DzCheckbox>
         <DzCheckbox :model-value="true">Checked</DzCheckbox>
         <DzCheckbox indeterminate>Indeterminate</DzCheckbox>
         <DzCheckbox disabled>Disabled</DzCheckbox>
+        <DzCheckbox :model-value="true">
+          A longer confirmation label that wraps onto multiple lines so the box
+          stays aligned to the first line in dark mode too
+        </DzCheckbox>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Multi-line Alignment
+// ---------------------------------------------------------------------------
+
+export const MultiLineAlignment: Story = {
+  name: 'Multi-line Alignment',
+  render: () => ({
+    components: { DzCheckbox },
+    template: `
+      <div class="max-w-md space-y-3">
+        <DzCheckbox>Single line label</DzCheckbox>
+        <DzCheckbox :model-value="true">
+          A longer label that wraps across multiple lines — the checkbox box
+          aligns to the first line of text rather than the vertical centre of
+          the whole block
+        </DzCheckbox>
+        <DzCheckbox size="lg" :model-value="true">
+          Large size also keeps its first-line alignment when the label content
+          wraps onto a second line
+        </DzCheckbox>
       </div>
     `,
   }),
@@ -208,9 +236,9 @@ export const Accessibility: Story = {
   render: () => ({
     components: { DzCheckbox },
     template: `
-      <div class="space-y-4">
+      <div class="space-y-5">
         <p class="text-sm text-gray-500">Tab through checkboxes, press Space to toggle.</p>
-        <div class="space-y-2">
+        <div class="flex flex-col items-start gap-4">
           <DzCheckbox aria-label="Option A">Option A</DzCheckbox>
           <DzCheckbox aria-label="Option B">Option B</DzCheckbox>
           <DzCheckbox aria-label="Option C">Option C</DzCheckbox>
@@ -232,7 +260,7 @@ export const RealWorldTerms: Story = {
       return { agreed: false }
     },
     template: `
-      <div class="max-w-md space-y-4">
+      <div class="flex max-w-md flex-col items-start gap-5">
         <DzCheckbox v-model="agreed" required>
           I agree to the <a href="#" class="underline text-blue-600">Terms of Service</a>
           and <a href="#" class="underline text-blue-600">Privacy Policy</a>

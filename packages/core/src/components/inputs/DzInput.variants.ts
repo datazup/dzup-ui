@@ -16,7 +16,6 @@ export const inputWrapperVariants = tv({
     'flex items-center w-full',
     'font-[family-name:var(--dz-input-font-family)]',
     'transition-[var(--dz-input-transition)]',
-    'dz-focus-within-ring-input dz-disabled-input-shell',
   ].join(' '),
 
   variants: {
@@ -71,16 +70,54 @@ export const inputWrapperVariants = tv({
       ].join(' '),
     },
 
+    /**
+     * Semantic tone — recolors the focus border/ring via the input's
+     * `--dz-input-border-focus` / `--dz-input-focus-ring-color` token
+     * indirection. Actual classes are applied through compoundVariants so
+     * that `invalid` always wins (see below). `neutral` keeps the default.
+     */
+    tone: {
+      neutral: '',
+      primary: '',
+      success: '',
+      warning: '',
+      danger: '',
+      info: '',
+    },
+
     invalid: {
       true: 'border-[var(--dz-danger)] focus-within:border-[var(--dz-danger)] focus-within:outline-[var(--dz-danger)]',
       false: '',
     },
+
+    /**
+     * Seamless mode — used when the input is nested inside DzInputGroup, which
+     * owns the shell (border, radius, background, focus ring, disabled state).
+     * The field strips its own box so segments connect flush; `false` keeps the
+     * standalone ring + disabled-shell utilities. Declared last so its resets
+     * win the tailwind-merge over the variant/size box classes.
+     */
+    seamless: {
+      false: 'dz-focus-within-ring-input dz-disabled-input-shell',
+      true: 'rounded-none border-0 bg-transparent shadow-none',
+    },
   },
+
+  compoundVariants: [
+    // ── Tone focus color (only when not invalid; invalid forces danger) ──
+    { tone: 'primary', invalid: false, class: '[--dz-input-border-focus:var(--dz-primary)] [--dz-input-focus-ring-color:var(--dz-primary)]' },
+    { tone: 'success', invalid: false, class: '[--dz-input-border-focus:var(--dz-success)] [--dz-input-focus-ring-color:var(--dz-success)]' },
+    { tone: 'warning', invalid: false, class: '[--dz-input-border-focus:var(--dz-warning-solid)] [--dz-input-focus-ring-color:var(--dz-warning-solid)]' },
+    { tone: 'danger', invalid: false, class: '[--dz-input-border-focus:var(--dz-danger)] [--dz-input-focus-ring-color:var(--dz-danger)]' },
+    { tone: 'info', invalid: false, class: '[--dz-input-border-focus:var(--dz-info)] [--dz-input-focus-ring-color:var(--dz-info)]' },
+  ],
 
   defaultVariants: {
     variant: 'outline',
     size: 'md',
+    tone: 'neutral',
     invalid: false,
+    seamless: false,
   },
 })
 

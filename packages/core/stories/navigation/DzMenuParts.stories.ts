@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { BarChart3, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
 import {
   DzMenu,
@@ -20,7 +20,7 @@ const meta = {
   title: 'Core/Navigation/DzMenuParts',
   component: DzMenuItem,
   subcomponents: { DzMenuSeparator },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     active: {
       control: 'boolean',

@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { Lock, Shield } from 'lucide-vue-next'
 import { DzPasswordInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
@@ -13,7 +15,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Inputs/DzPasswordInput',
   component: DzPasswordInput,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -253,9 +255,7 @@ export const Invalid: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzPasswordInput },
@@ -290,6 +290,23 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  // TASK-2.C — type a password, then toggle visibility and assert the input
+  // type and the toggle button's accessible name both flip.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByPlaceholderText('Type a password...')
+    await userEvent.type(input, 'sup3r-secret')
+    await expect(input).toHaveValue('sup3r-secret')
+    // Masked by default.
+    await expect(input).toHaveAttribute('type', 'password')
+    // Reveal.
+    await userEvent.click(canvas.getByRole('button', { name: 'Show password' }))
+    await expect(input).toHaveAttribute('type', 'text')
+    await expect(canvas.getByRole('button', { name: 'Hide password' })).toBeInTheDocument()
+    // Hide again.
+    await userEvent.click(canvas.getByRole('button', { name: 'Hide password' }))
+    await expect(input).toHaveAttribute('type', 'password')
+  },
 }
 
 // ---------------------------------------------------------------------------

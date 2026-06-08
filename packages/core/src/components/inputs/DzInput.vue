@@ -14,15 +14,18 @@ import type { DzInputEmits, DzInputProps, DzInputSlots } from './DzInput.types.t
  * </DzInput>
  * ```
  */
-import { computed, ref, useAttrs, useId } from 'vue'
+import { computed, inject, ref, useAttrs, useId } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
+import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
 
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzInputProps>(), {
   variant: 'outline',
-  size: 'md',
+  size: undefined,
   tone: undefined,
   type: 'text',
   disabled: false,
@@ -31,6 +34,7 @@ const props = withDefaults(defineProps<DzInputProps>(), {
   invalid: false,
   required: false,
   clearable: false,
+  loadingLabel: 'Loading',
 })
 
 const emit = defineEmits<DzInputEmits>()
@@ -40,23 +44,63 @@ const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
 const autoId = useId()
 
-/** Resolved element ID */
-const resolvedId = computed(() => props.id ?? autoId)
+/** Optional DzInputGroup context (ADR-08) — present only when grouped */
+const groupContext = inject(DZ_INPUT_GROUP_KEY, null)
 
-/** Whether the invalid state should show (prop or error message) */
-const isInvalid = computed(() => props.invalid || !!props.error)
+/** Optional DzFormField context (ADR-08) — present only when inside a field */
+const fieldContext = useFormFieldContext()
+
+/** Whether this input is nested inside a DzInputGroup shell */
+const isGrouped = computed(() => groupContext !== null)
+
+/** Resolved size: own prop wins, then group context, then default */
+const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'md')
+
+/** Resolved disabled: own prop OR group-level OR form-field-level disabled */
+const resolvedDisabled = computed(
+  () => props.disabled || (groupContext?.disabled.value ?? false) || (fieldContext?.isDisabled.value ?? false),
+)
+
+/** Resolved required: own prop OR form-field-level required */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
+
+/** Resolved element ID — explicit prop wins, then the field context's control ID */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+
+/** Whether the invalid state should show (own prop/error OR form-field-level) */
+const isInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
 
 /** Wrapper classes merged with consumer class via cn() (ADR-10) */
 const wrapperClasses = computed(() =>
   cn(
     inputWrapperVariants({
       variant: props.variant,
-      size: props.size,
+      size: resolvedSize.value,
+      tone: props.tone ?? 'neutral',
       invalid: isInvalid.value,
+      seamless: isGrouped.value,
     }),
     attrs.class as string | undefined,
   ),
 )
+
+/**
+ * Spinner size mapped down from the input size so the indicator stays
+ * proportionate to the field height (DzSpinner's md is 24px — too large).
+ */
+const spinnerSize = computed(() => {
+  switch (resolvedSize.value) {
+    case 'xs':
+    case 'sm':
+      return 'xs' as const
+    case 'xl':
+      return 'md' as const
+    default:
+      return 'sm' as const
+  }
+})
 
 /** Inner input element classes */
 const inputClasses = computed(() => inputElementVariants())
@@ -64,13 +108,15 @@ const inputClasses = computed(() => inputElementVariants())
 /** ID for the error message element (for aria-describedby) */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 
-/** Combined aria-describedby from prop + error element */
+/** Combined aria-describedby from prop + own error element + field context */
 const resolvedAriaDescribedby = computed(() => {
   const parts: string[] = []
   if (props.ariaDescribedby)
     parts.push(props.ariaDescribedby)
   if (errorId.value)
     parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -105,10 +151,10 @@ export default {
 
 <template>
   <div
-    :data-state="disabled ? 'disabled' : readonly ? 'readonly' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
-    :data-disabled="disabled ? '' : undefined"
+    :data-disabled="resolvedDisabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -131,23 +177,33 @@ export default {
         :class="inputClasses"
         :name="name"
         :placeholder="placeholder"
-        :disabled="disabled"
-        :readonly="readonly"
-        :required="required"
+        :disabled="resolvedDisabled"
+        :readonly="readonly || loading"
+        :required="resolvedRequired"
         :maxlength="maxlength"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="isInvalid || undefined"
-        :aria-required="required || undefined"
+        :aria-required="resolvedRequired || undefined"
+        :aria-busy="loading || undefined"
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
       >
 
+      <!-- Loading spinner -->
+      <DzSpinner
+        v-if="loading"
+        class="shrink-0"
+        :size="spinnerSize"
+        :tone="tone ?? 'neutral'"
+        :label="loadingLabel"
+      />
+
       <!-- Clear button -->
       <button
-        v-if="clearable && model && !disabled && !readonly"
+        v-if="clearable && model && !resolvedDisabled && !readonly && !loading"
         type="button"
         class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
         aria-label="Clear input"

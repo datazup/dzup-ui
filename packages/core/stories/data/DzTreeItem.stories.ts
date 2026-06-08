@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { TreeNode } from '../../src/components/data'
 import { DzTree, DzTreeItem } from '../../src/components/data'
 
@@ -35,7 +35,7 @@ const sampleTree: TreeNode[] = [
 const meta = {
   title: 'Core/Data/DzTreeItem',
   component: DzTreeItem,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     node: {
       control: false,

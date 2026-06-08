@@ -1,0 +1,118 @@
+{/* Media.mdx — Sprint 10 family overview (TASK-10.E) */}
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import * as DzIconStories from '../../../packages/core/stories/media/DzIcon.stories.ts'
+
+<Meta title="Core/Media/Overview" />
+
+# Media <StatusBadge status="stable" />
+
+The Media family presents imagery and iconography: user avatars, enhanced images
+with loading/error handling, icons, and the carousel/lightbox viewers for browsing
+collections of images.
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzAvatar** | A single user/entity avatar — image, initials fallback, or icon slot. | [DzAvatar](?path=/docs/core-media-dzavatar--docs) |
+| **DzAvatarGroup** | A stacked row of avatars with a `+N` overflow indicator. | [DzAvatarGroup](?path=/docs/core-media-dzavatargroup--docs) |
+| **DzImage** | An `<img>` with a loading placeholder, error/fallback handling, lazy loading, `object-fit`, and aspect ratio. | [DzImage](?path=/docs/core-media-dzimage--docs) |
+| **DzIcon** | A sized, accessible wrapper around a `lucide-vue-next` (or any Vue) icon component. | [DzIcon](?path=/docs/core-media-dzicon--docs) |
+| **DzCarousel** | A slideshow for cycling through slides, with autoplay, looping, and dot/arrow navigation. | [DzCarousel](?path=/docs/core-media-dzcarousel--docs) |
+| **DzLightbox** | A fullscreen, focus-trapped image viewer with keyboard navigation and captions. | [DzLightbox](?path=/docs/core-media-dzlightbox--docs) |
+
+## When to use which
+
+- **One face or logo →** `DzAvatar`. **Several →** `DzAvatarGroup` (set `max` to cap the visible count and show `+N`).
+- **Any content photo →** `DzImage`, so you get a placeholder while loading and a graceful fallback if the source breaks. Reach for a raw `<img>` only for trivial, always-available assets.
+- **A UI glyph →** `DzIcon`. It standardizes sizing via tokens and gets the accessibility right (decorative vs. meaningful).
+- **Browsing a set of images/slides inline →** `DzCarousel`. **Browsing them fullscreen →** `DzLightbox` (often triggered from a thumbnail grid or a carousel slide).
+
+## DzIcon usage with lucide-vue-next
+
+`DzIcon` takes an icon **component** via the `icon` prop and renders it at a canonical
+size with a token-driven stroke width:
+
+```ts
+import { DzIcon } from '@dzup-ui/core'
+import { Search } from 'lucide-vue-next'
+```
+
+```vue
+<!-- Decorative (default): aria-hidden, paired with visible text -->
+<DzIcon :icon="Search" /> <span>Search</span>
+
+<!-- Meaningful: standalone, conveys information -->
+<DzIcon :icon="Bell" aria-label="3 new notifications" />
+```
+
+Provide `ariaLabel` **only** when the icon is the sole carrier of meaning. When it sits
+next to a text label, leave it decorative so screen readers don't announce it twice.
+
+### Icon gallery (`lucide-vue-next`)
+
+The gallery below is the live `DzIcon` **Icon Gallery** story — it renders real
+`lucide-vue-next` components through `DzIcon`, so it stays in sync with the icon set the
+library actually ships. (Storybook's React `<IconGallery>` doc block can't host Vue icon
+components, so we surface the set through this Vue story instead.)
+
+<Canvas of={DzIconStories.IconGallery} />
+
+Browse the full set at [lucide.dev/icons](https://lucide.dev/icons/) and import any glyph
+by name: `import { Search, Bell, Home } from 'lucide-vue-next'`.
+
+## Avatar fallback strategy
+
+`DzAvatar` resolves what to display in priority order:
+
+1. **Image** — when `src` is set and loads successfully (`data-state="image"`).
+2. **Slot content** — e.g. a `<UserIcon />` placed in the default slot.
+3. **`fallback` initials** — rendered (with `aria-hidden`) when there's no slot.
+
+If the image fails to load, the component automatically swaps to the slot/initials and
+flips `data-state` to `"fallback"` (and emits `error`). Always pass meaningful
+`fallback` initials **and** an `alt`/`aria-label`, so the avatar is identifiable whether
+or not the image resolves. `DzAvatarGroup` propagates its `size` to children via injection
+(ADR-08), so size the group, not each avatar.
+
+## Accessibility
+
+- **DzAvatar** is a `role="img"` labelled by `aria-label` (falling back to `alt`); the
+  initials span is `aria-hidden` to avoid a duplicate announcement.
+- **DzAvatarGroup** is a `role="group"` (give it an `aria-label`); the `+N` overflow
+  indicator is `aria-hidden`.
+- **DzImage** requires `alt`. The root exposes `data-state` (`loading` / `loaded` /
+  `error`) for styling and test hooks, and renders custom `#loading` / `#error` slots.
+- **DzIcon** is decorative by default (`aria-hidden="true"`, no role); supplying
+  `aria-label` promotes it to `role="img"` with an accessible name.
+- **DzCarousel** is a `role="region"` with `aria-roledescription="carousel"` and an
+  `aria-live="polite"` viewport; arrow buttons are labelled and the dots are a
+  `role="tablist"` of `aria-selected` tabs. Autoplay pauses on hover.
+- **DzLightbox** is built on the Reka UI Dialog (ADR-07): it traps focus, closes on
+  `Escape`, navigates with `ArrowLeft` / `ArrowRight`, and labels its nav/close buttons.
+
+These behaviours are guarded by the `play()` tests on the **Default** (carousel,
+lightbox), **Image Error (Fallback)** / **Interactive: Broken Src → Fallback**, and
+**Accessibility: Decorative vs Meaningful** stories.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Give every `DzImage` an `alt` and (where the source is remote) a `fallback`.</Do>
+  <Dont>Ship a raw `<img>` for user-supplied or remote images — you lose the loading and error states.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Leave `DzIcon` decorative when it sits beside a text label.</Do>
+  <Dont>Add `aria-label` to an icon that merely decorates adjacent text — it double-announces.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Set `max` on `DzAvatarGroup` so large teams collapse into a `+N` count.</Do>
+  <Dont>Render dozens of avatars unbounded — it overflows the row and buries the names.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzLightbox` for fullscreen, focus-trapped browsing of a gallery.</Do>
+  <Dont>Reimplement a modal image viewer by hand — you'll drop the focus trap, ESC, and arrow-key navigation it provides.</Dont>
+</DoDont>

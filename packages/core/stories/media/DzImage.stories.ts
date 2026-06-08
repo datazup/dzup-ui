@@ -1,5 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, waitFor } from 'storybook/test'
 import { DzImage } from '../../src/components/media'
+
+// Offline-safe fixtures for the fallback play() test: an invalid base64 data
+// URI that always errors, and a valid 1x1 transparent PNG that always loads.
+const BROKEN_SRC = 'data:image/png;base64,not-a-real-image'
+const VALID_PX
+  = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
 
 /**
  * DzImage is an enhanced image component with built-in loading placeholder,
@@ -11,7 +19,7 @@ import { DzImage } from '../../src/components/media'
 const meta = {
   title: 'Core/Media/DzImage',
   component: DzImage,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     src: {
@@ -265,9 +273,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzImage },
@@ -340,6 +346,38 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Interactive: Broken Src -> Fallback (play test)
+// ---------------------------------------------------------------------------
+
+export const InteractiveFallback: Story = {
+  name: 'Interactive: Broken Src -> Fallback',
+  args: {
+    src: BROKEN_SRC,
+    fallback: VALID_PX,
+    alt: 'Image that falls back when the primary source is broken',
+  },
+  render: args => ({
+    components: { DzImage },
+    setup() {
+      return { args }
+    },
+    template: '<div class="w-80"><DzImage v-bind="args" /></div>',
+  }),
+  play: async ({ canvasElement }) => {
+    // The broken primary src errors; the component swaps in the fallback, which
+    // loads successfully. Assert the rendered <img> now points at the fallback
+    // and the root reports the loaded state.
+    await waitFor(() => {
+      const img = canvasElement.querySelector('img') as HTMLImageElement | null
+      expect(img).not.toBeNull()
+      expect(img!.getAttribute('src')).toBe(VALID_PX)
+    })
+    const root = canvasElement.querySelector('[data-state]') as HTMLElement
+    await waitFor(() => expect(root).toHaveAttribute('data-state', 'loaded'))
+  },
 }
 
 // ---------------------------------------------------------------------------

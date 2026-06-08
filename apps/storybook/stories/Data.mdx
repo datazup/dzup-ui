@@ -1,0 +1,96 @@
+{/* Data.mdx — Sprint 5 family overview (TASK-5.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Data/Overview" />
+
+# Data <StatusBadge status="stable" />
+
+The Data family renders structured and hierarchical content: tabular data, disclosure
+panels, lists and trees, timelines, and labelled chips/tags.
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzTable** | A semantic, presentational table you compose by hand from parts. No built-in sorting/paging. | [DzTable](?path=/docs/core-data-dztable--docs) |
+| **DzDataGrid** | Data-driven grid with sorting, row selection, pagination, filtering, and density controls. | [DzDataGrid](?path=/docs/core-data-dzdatagrid--docs) |
+| **DzAccordion** | Disclosure panels (single or multiple open) — FAQs, settings sections. | [DzAccordion](?path=/docs/core-data-dzaccordion--docs) |
+| **DzList / DzListItem** | Vertical lists of items with optional leading/trailing content. | [DzList](?path=/docs/core-data-dzlist--docs) |
+| **DzTree / DzTreeItem** | Hierarchical, expandable data — file explorers, org charts. | [DzTree](?path=/docs/core-data-dztree--docs) |
+| **DzTimeline / DzTimelineItem** | Chronological sequences of events. | [DzTimeline](?path=/docs/core-data-dztimeline--docs) |
+| **DzTag** | Compact, often removable labels for categorization/metadata. | [DzTag](?path=/docs/core-data-dztag--docs) |
+| **DzChip** | Interactive selection/filter pills. | [DzChip](?path=/docs/core-data-dzchip--docs) |
+| **DzCodeBlock** | Display code with a header, line numbers, and copy-to-clipboard. | [DzCodeBlock](?path=/docs/core-data-dzcodeblock--docs) |
+
+## DzTable vs DzDataGrid
+
+This is the most common decision in the family. They look similar but solve different
+problems.
+
+| | **DzTable** | **DzDataGrid** |
+|---|---|---|
+| Mental model | You write the markup (`DzTableHeader` / `DzTableRow` / `DzTableCell`). | You pass `data` + `columns` and the grid renders itself. |
+| Sorting | ✗ (do it yourself) | ✓ `sortable` (click/keyboard headers, `aria-sort`) |
+| Selection | ✗ (static `selected` styling only) | ✓ `selectable="single" \| "multiple"` with select-all |
+| Pagination | ✗ | ✓ `:pagination="{ pageSize, pageSizeOptions }"` |
+| Filtering | ✗ | ✓ per-column (`filterable`) |
+| Best for | Invoices, spec sheets, fully custom cell content, small static tables. | Dashboards, admin tables, large or interactive datasets. |
+
+**Rule of thumb:** reach for **DzTable** when you control the exact rows and need
+arbitrary cell markup; reach for **DzDataGrid** the moment you need sorting, selection,
+or paging. See [DzDataGrid → Performance: 1,000 Rows](?path=/docs/core-data-dzdatagrid--performance-large-dataset)
+for how pagination keeps the DOM small at scale.
+
+## Parts composition
+
+Several data components are **compound** — a root that provides context (ADR-08) to
+sub-parts you arrange yourself:
+
+- **DzTable** → `DzTableHeader` · `DzTableBody` · `DzTableRow` · `DzTableCell` (add `header` to render `<th scope="col">`).
+- **DzDataGrid** → `DzDataGridHeader` · `DzDataGridBody` · `DzDataGridPagination` (rendered internally; you pass `columns`/`data`, not markup).
+- **DzAccordion** → `DzAccordionItem` · `DzAccordionTrigger` · `DzAccordionContent` (built on Reka UI, ADR-07).
+- **DzTree** → `DzTreeItem` (recursive; driven by an `items` array of `TreeNode`s).
+
+## Tag vs Chip
+
+- **DzTag** is a *label*: it categorizes or annotates content and may be removable.
+- **DzChip** is *interactive*: it represents a selectable/filterable choice and reflects a selected state.
+
+## Accessibility
+
+- **DzTable** renders native `table` / `thead` / `tbody` / `tr` / `th` / `td`. The `header`
+  prop emits `<th scope="col">`; the `#caption` slot is `sr-only` and named via `aria-label`.
+- **DzDataGrid** uses `role="grid"`; sortable headers are focusable `columnheader`s that
+  expose `aria-sort` (`none` → `ascending` → `descending`) and respond to Enter/Space.
+- **DzAccordion** triggers are buttons with `aria-expanded`; Arrow Up/Down move between
+  triggers, Home/End jump to first/last (Reka UI).
+- **DzTree** implements the WAI-ARIA TreeView roles (`tree` / `treeitem` / `group`), with
+  `aria-expanded` on branches and `aria-selected` when `selectable`. Arrow Right/Left
+  expand/collapse a focused branch; Enter/Space select.
+- **DzCodeBlock** is a labelled `role="region"`; line numbers are `aria-hidden` and the
+  copy button announces "Copied".
+
+These behaviours are guarded by the `play()` tests on each component’s **Interactive**,
+**With Sorting / Pagination / Row Selection**, and **Accessibility** stories.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Use `DzDataGrid` when you need sorting, selection, or pagination — it wires the ARIA and keyboard model for you.</Do>
+  <Dont>Hand-build sorting/paging on top of `DzTable`; you’ll re-implement (and likely drop) the accessibility the grid already provides.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Mark column cells with `header` so they render `<th scope="col">`.</Do>
+  <Dont>Use plain `DzTableCell` for headers — the column association is lost for screen readers.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Set `type="multiple"` on `DzAccordion` only when several panels should stay open at once.</Do>
+  <Dont>Default to `multiple` for FAQs — single (collapsible) mode keeps focus on one answer.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Pair `DzCodeBlock` with a `language` and `filename` so the header is informative and copy is one click away.</Do>
+  <Dont>Drop large code samples in without `max-height` — give long content a scroll bound.</Dont>
+</DoDont>

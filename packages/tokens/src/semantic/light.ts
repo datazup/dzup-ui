@@ -51,9 +51,15 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-success-muted': 'var(--dz-colors-success-100)',
   '--dz-success-muted-foreground': 'var(--dz-colors-success-700)',
 
-  /* ── Status: Warning ── */
+  /* ── Status: Warning ──
+   * `--dz-warning` stays at shade 500 so it remains legible as a text/border
+   * color on light surfaces. Solid fills (e.g. warning buttons) need a bright,
+   * clearly-yellow surface with dark text instead of a dark fill, so they use
+   * the dedicated `--dz-warning-solid` pair. */
   '--dz-warning': 'var(--dz-colors-warning-500)',
   '--dz-warning-foreground': 'var(--dz-colors-neutral-900)',
+  '--dz-warning-solid': 'var(--dz-colors-warning-300)',
+  '--dz-warning-solid-hover': 'var(--dz-colors-warning-400)',
   '--dz-warning-muted': 'var(--dz-colors-warning-100)',
   '--dz-warning-muted-foreground': 'var(--dz-colors-warning-700)',
 

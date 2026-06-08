@@ -1,6 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, waitFor, within } from 'storybook/test'
 import { User } from 'lucide-vue-next'
 import { DzAvatar } from '../../src/components/media'
+
+// A deterministic, offline-safe broken image (invalid base64) used by the
+// fallback play() test so it never depends on the network.
+const BROKEN_IMG = 'data:image/png;base64,not-a-real-image'
 
 /**
  * DzAvatar displays a user avatar with image support, fallback initials,
@@ -13,7 +19,7 @@ import { DzAvatar } from '../../src/components/media'
 const meta = {
   title: 'Core/Media/DzAvatar',
   component: DzAvatar,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     src: {
@@ -192,7 +198,7 @@ export const WithSlots: Story = {
 export const ImageError: Story = {
   name: 'Image Error (Fallback)',
   args: {
-    src: 'https://invalid-url.test/broken.jpg',
+    src: BROKEN_IMG,
     fallback: 'ER',
     alt: 'Broken image avatar',
   },
@@ -203,6 +209,15 @@ export const ImageError: Story = {
     },
     template: '<DzAvatar v-bind="args" />',
   }),
+  play: async ({ canvasElement }) => {
+    // Only the avatar root carries data-state; the <img> child does not, so this
+    // selector targets the wrapper unambiguously.
+    const avatar = canvasElement.querySelector('[role="img"][data-state]') as HTMLElement
+
+    // The broken image errors and the component falls back to the initials.
+    await waitFor(() => expect(avatar).toHaveAttribute('data-state', 'fallback'))
+    await expect(within(canvasElement).getByText('ER')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -212,9 +227,7 @@ export const ImageError: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzAvatar },

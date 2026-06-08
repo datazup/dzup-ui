@@ -54,9 +54,14 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-success-muted': 'var(--dz-colors-success-900)',
   '--dz-success-muted-foreground': 'var(--dz-colors-success-300)',
 
-  /* ── Status: Warning ── */
+  /* ── Status: Warning ──
+   * Solid fills stay a bright yellow with dark text in dark mode too — a yellow
+   * warning button reads the same regardless of theme. `--dz-warning` (shade
+   * 400) remains the legible accent/text color on dark surfaces. */
   '--dz-warning': 'var(--dz-colors-warning-400)',
   '--dz-warning-foreground': 'var(--dz-colors-neutral-900)',
+  '--dz-warning-solid': 'var(--dz-colors-warning-300)',
+  '--dz-warning-solid-hover': 'var(--dz-colors-warning-400)',
   '--dz-warning-muted': 'var(--dz-colors-warning-900)',
   '--dz-warning-muted-foreground': 'var(--dz-colors-warning-300)',
 

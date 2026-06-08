@@ -66,6 +66,44 @@ describe('dzCopyButton', () => {
     }
   })
 
+  it('defaults to outline variant with neutral tone', () => {
+    const wrapper = mount(DzCopyButton, { props: { value: 'test' } })
+    expect(wrapper.attributes('data-variant')).toBe('outline')
+    expect(wrapper.attributes('data-tone')).toBe('neutral')
+  })
+
+  it('applies a border for the default (outline) variant', () => {
+    const wrapper = mount(DzCopyButton, { props: { value: 'test' } })
+    expect(wrapper.classes()).toContain('border')
+  })
+
+  it('accepts all button variants', () => {
+    const variants = ['solid', 'outline', 'ghost', 'text', 'link'] as const
+    for (const variant of variants) {
+      const wrapper = mount(DzCopyButton, { props: { value: 'test', variant } })
+      expect(wrapper.attributes('data-variant')).toBe(variant)
+    }
+  })
+
+  it('accepts all canonical tones', () => {
+    const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'info'] as const
+    for (const tone of tones) {
+      const wrapper = mount(DzCopyButton, { props: { value: 'test', tone } })
+      expect(wrapper.attributes('data-tone')).toBe(tone)
+    }
+  })
+
+  it('flips tone to success while showing copied feedback', async () => {
+    writeTextMock.mockClear()
+    const wrapper = mount(DzCopyButton, { props: { value: 'test', tone: 'primary' } })
+    expect(wrapper.attributes('data-tone')).toBe('primary')
+    await wrapper.trigger('click')
+    await vi.dynamicImportSettled()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.attributes('data-state')).toBe('copied')
+    expect(wrapper.attributes('data-tone')).toBe('success')
+  })
+
   it('sets data-disabled when disabled', () => {
     const wrapper = mount(DzCopyButton, {
       props: { value: 'test', disabled: true },

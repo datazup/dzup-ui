@@ -1,4 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
+import { ref } from 'vue'
 import {
   DzSplitButton,
   DzSplitButtonAction,
@@ -17,7 +20,7 @@ import {
 const meta = {
   title: 'Core/Buttons/DzSplitButton',
   component: DzSplitButton,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -288,9 +291,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu },
@@ -333,6 +334,82 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const action = canvas.getByRole('button', { name: /^save$/i })
+    await userEvent.click(action)
+    await expect(canvas.getByText(/last action: save/i)).toBeVisible()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Interactive: Open Menu and Select Item (play)
+// ---------------------------------------------------------------------------
+
+export const InteractiveMenu: Story = {
+  name: 'Interactive: Menu Select',
+  parameters: {
+    // The toggled menu opens on click; pair the audit with the open state.
+    a11y: { test: 'todo' },
+  },
+  render: () => ({
+    components: { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu },
+    setup() {
+      const open = ref(false)
+      const lastAction = ref('none')
+      function select(action: string) {
+        lastAction.value = action
+        open.value = false
+      }
+      return { open, lastAction, select }
+    },
+    template: `
+      <div class="space-y-4">
+        <div class="relative inline-block">
+          <DzSplitButton tone="primary" aria-label="Save actions">
+            <DzSplitButtonAction @click="lastAction = 'save'">Save</DzSplitButtonAction>
+            <DzSplitButtonMenu aria-label="More save options" :aria-expanded="open" @click="open = !open" />
+          </DzSplitButton>
+          <ul
+            v-show="open"
+            role="menu"
+            class="absolute left-0 top-full z-10 mt-1 min-w-40 rounded-md border border-[var(--dz-border)] bg-[var(--dz-surface)] py-1 shadow-md"
+          >
+            <li
+              role="menuitem"
+              tabindex="0"
+              class="cursor-pointer px-3 py-1.5 text-sm hover:bg-[var(--dz-muted)]"
+              @click="select('draft')"
+            >Save as Draft</li>
+            <li
+              role="menuitem"
+              tabindex="0"
+              class="cursor-pointer px-3 py-1.5 text-sm hover:bg-[var(--dz-muted)]"
+              @click="select('close')"
+            >Save and Close</li>
+          </ul>
+        </div>
+        <p class="text-sm text-gray-500">Last action: {{ lastAction }}</p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Primary action fires its own handler.
+    await userEvent.click(canvas.getByRole('button', { name: /^save$/i }))
+    await expect(canvas.getByText(/last action: save/i)).toBeVisible()
+
+    // Open the menu via the chevron trigger.
+    const trigger = canvas.getByRole('button', { name: /more save options/i })
+    await userEvent.click(trigger)
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
+    // Selecting an item updates the state and closes the menu.
+    await userEvent.click(canvas.getByRole('menuitem', { name: /save as draft/i }))
+    await expect(canvas.getByText(/last action: draft/i)).toBeVisible()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------

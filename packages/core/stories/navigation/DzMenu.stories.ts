@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { BarChart3, Bell, FileText, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
 import {
   DzMenu,
@@ -17,7 +19,7 @@ import {
 const meta = {
   title: 'Core/Navigation/DzMenu',
   component: DzMenu,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -238,9 +240,7 @@ export const WithoutIcons: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Settings, Users, Bell, Shield },
@@ -321,6 +321,19 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const dashboard = canvas.getByRole('button', { name: 'Dashboard' })
+    const users = canvas.getByRole('button', { name: 'Users' })
+
+    // Active item advertises aria-current="page".
+    await expect(dashboard).toHaveAttribute('aria-current', 'page')
+
+    // Clicking another item moves the active marker.
+    await userEvent.click(users)
+    await waitFor(() => expect(users).toHaveAttribute('aria-current', 'page'))
+    await expect(dashboard).not.toHaveAttribute('aria-current')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -354,6 +367,20 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const activeItem = canvas.getByRole('button', { name: /Active/ })
+    const focusable = canvas.getByRole('button', { name: /Focusable/ })
+
+    // Tab order walks the focusable items in sequence.
+    await userEvent.tab()
+    await expect(activeItem).toHaveFocus()
+    await userEvent.tab()
+    await expect(focusable).toHaveFocus()
+
+    // The disabled item is removed from the tab sequence.
+    await expect(canvas.getByRole('button', { name: /Disabled/ })).toBeDisabled()
+  },
 }
 
 // ---------------------------------------------------------------------------

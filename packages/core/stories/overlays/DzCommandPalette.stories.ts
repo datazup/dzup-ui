@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import type { CommandGroup, CommandItem } from '../../src/components/overlays'
 import { DzButton } from '../../src/components/buttons'
 import { DzCommandPalette } from '../../src/components/overlays'
@@ -33,7 +35,7 @@ const sampleGroups: CommandGroup[] = [
 const meta = {
   title: 'Core/Overlays/DzCommandPalette',
   component: DzCommandPalette,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     placeholder: {
@@ -300,6 +302,22 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the palette — the search input + items are portalled to document.body.
+    await userEvent.click(canvas.getByRole('button', { name: /open palette/i }))
+    const search = await screen.findByRole('combobox')
+
+    // Typing filters the list down to the matching command.
+    await userEvent.type(search, 'Toggle Dark')
+    const option = await screen.findByRole('option', { name: /toggle dark mode/i })
+    await userEvent.click(option)
+
+    // Selecting emits @select (reflected in the canvas) and closes the palette.
+    await expect(canvas.getByText(/selected:/i)).toHaveTextContent(/toggle dark mode/i)
+    await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -309,9 +327,7 @@ export const Interactive: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCommandPalette, DzButton },

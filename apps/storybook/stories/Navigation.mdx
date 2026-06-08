@@ -1,0 +1,98 @@
+{/* Navigation.mdx — Sprint 8 family overview (TASK-8.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Navigation/Overview" />
+
+# Navigation <StatusBadge status="stable" />
+
+The Navigation family moves users between views and communicates where they are: in-page
+switching, hierarchical wayfinding, paged data, vertical menus, multi-step flows, and
+single-choice toggles.
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzTabs** (`DzTabList` / `DzTabTrigger` / `DzTabContent`) | Switching between peer panels in the **same** view without navigating away. | [DzTabs](?path=/docs/core-navigation-dztabs--docs) |
+| **DzBreadcrumb** (`DzBreadcrumbItem` / `DzBreadcrumbSeparator`) | Showing the user's position in a hierarchy and offering a path back up. | [DzBreadcrumb](?path=/docs/core-navigation-dzbreadcrumb--docs) |
+| **DzPagination** | Splitting a large result set across pages. | [DzPagination](?path=/docs/core-navigation-dzpagination--docs) |
+| **DzMenu** (`DzMenuItem` / `DzMenuSeparator`) | A persistent vertical navigation list (often inside a sidebar). | [DzMenu](?path=/docs/core-navigation-dzmenu--docs) |
+| **DzSidebar** (`DzSidebarHeader` / `DzSidebarSection` / `DzSidebarItem` / `DzSidebarFooter`) | A collapsible app-shell navigation rail with sections and a mobile drawer. | [DzSidebar](?path=/docs/core-navigation-dzsidebar--docs) |
+| **DzStepper** (`DzStepperItem`) | Communicating progress through an ordered, multi-step flow. | [DzStepper](?path=/docs/core-navigation-dzstepper--docs) |
+| **DzSegmented** | A compact single-choice toggle between a few mutually exclusive options. | [DzSegmented](?path=/docs/core-navigation-dzsegmented--docs) |
+
+## Tabs vs Segmented vs Stepper
+
+These three look similar (a row of choices) but answer different questions:
+
+| | **DzTabs** | **DzSegmented** | **DzStepper** |
+|---|---|---|---|
+| Question it answers | "Which **panel** am I viewing?" | "Which **mode/filter** is applied?" | "Where am I in this **flow**?" |
+| Switches content | ✓ owns `DzTabContent` panels | ✗ you react to the value | ✓ (optionally, per active step) |
+| Order matters | No — peers | No — peers | **Yes** — sequential, with completed/upcoming states |
+| ARIA model | `role="tablist"` / `role="tab"` + `aria-selected`, roving tabindex | Reka ToggleGroup (`role="group"`), arrow-key navigation | `role="group"` + `aria-current="step"` |
+| Reach for it when | A view has 2–6 sibling sections of content. | Toggling a view mode, date range, or alignment. | Checkout, onboarding, or any wizard with discrete steps. |
+
+**Rule of thumb:** if the choice *swaps a content panel*, use **DzTabs**; if it *sets a value
+your own code reacts to*, use **DzSegmented**; if the choices are *ordered stages*, use
+**DzStepper**.
+
+## Sidebar composition
+
+`DzSidebar` is the app-shell navigation rail and is **compound** (ADR-08): the root provides
+`collapsed` / `activeStyle` context to the parts you arrange.
+
+```
+DzSidebar (v-model:collapsed, activeStyle, position)
+├─ DzSidebarHeader      ← brand / logo (collapses to a glyph)
+├─ DzSidebarSection     ← titled group (title becomes sr-only when collapsed)
+│  └─ DzSidebarItem     ← active → aria-current="page"; #icon + #badge slots
+└─ DzSidebarFooter      ← version, collapse toggle, account
+```
+
+- Drop a **DzMenu** inside a sidebar slot when you want a flat list without section chrome —
+  `DzSidebar` adds the rail, sections, collapse/expand, and the mobile drawer on top.
+- Use `DzSidebar` as the `sidebar` slot of `DzAppShell` with `position="static"`; reserve
+  `position="fixed"` for legacy layouts that manage their own content offset.
+
+## Accessibility
+
+- **DzTabs** renders Reka `role="tablist"` / `role="tab"` with `aria-selected`; Arrow
+  Left/Right move a roving tabindex (disabled triggers are skipped), and the active panel is
+  `role="tabpanel"`.
+- **DzBreadcrumb** is a `<nav aria-label="Breadcrumb">` wrapping an ordered list; the current
+  page carries `aria-current="page"` and separators are `aria-hidden`.
+- **DzPagination** is a `<nav aria-label="Pagination">`; the active page button has
+  `aria-current="page"` and prev/next/first/last expose descriptive `aria-label`s.
+- **DzMenu** / **DzSidebarItem** mark the active row with `aria-current="page"`, set
+  `aria-disabled` on disabled rows (removed from the tab order), and keep an `aria-label` on
+  icon-only collapsed items.
+- **DzStepper** is a `role="group"`; the active step exposes `aria-current="step"` and each
+  item carries a `data-state` of `completed` / `active` / `upcoming`.
+- **DzSegmented** uses Reka ToggleGroup `role="group"` semantics with arrow-key navigation
+  between items.
+
+These behaviours are guarded by the `play()` tests on each component's **Interactive** and
+**Accessibility** stories (click + keyboard, `aria-selected` / `aria-current` assertions).
+
+## Do / Don't
+
+<DoDont>
+  <Do>Use `DzTabs` when each choice reveals a sibling content panel within the same screen.</Do>
+  <Dont>Use tabs as primary site navigation between routes — that's `DzMenu` / `DzSidebar` (or breadcrumbs for hierarchy).</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Mark the current breadcrumb and the active menu/page item so `aria-current` is set for screen readers.</Do>
+  <Dont>Render the trailing breadcrumb as a link — the current page should be plain text (`current`).</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Reach for `DzSegmented` for a compact 2–6 option toggle that sets a value (view mode, range).</Do>
+  <Dont>Use a segmented control for ordered, multi-stage flows — that's `DzStepper`.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Keep an `aria-label` on collapsed, icon-only `DzMenuItem` / `DzSidebarItem` rows so they stay nameable.</Do>
+  <Dont>Collapse a sidebar to icons only without labels or tooltips — the destination becomes unguessable.</Dont>
+</DoDont>

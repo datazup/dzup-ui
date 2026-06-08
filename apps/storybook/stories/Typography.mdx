@@ -1,0 +1,112 @@
+{/* Typography.mdx — Sprint 11 family overview (TASK-11.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Typography/Overview" />
+
+# Typography <StatusBadge status="stable" />
+
+The Typography family renders text content with consistent scale, weight, tone, and
+semantics. Every component is token-driven (`@dzup-ui/tokens`) so the type scale,
+weights, and colours stay in sync with the rest of the system and respond to dark mode.
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzHeading** | Section titles (`h1`–`h6`) with visual size decoupled from semantic level. | [DzHeading](?path=/docs/core-typography-dzheading--docs) |
+| **DzText** | General body copy and inline text in any element (`p`/`span`/`label`/`strong`/`em`/…). | [DzText](?path=/docs/core-typography-dztext--docs) |
+| **DzBlockquote** | Quoted content with a `cite` source and `#footer` attribution. | [DzBlockquote](?path=/docs/core-typography-dzblockquote--docs) |
+| **DzCaption** | Small annotations: helper text, metadata, validation messages (`<small>`). | [DzCaption](?path=/docs/core-typography-dzcaption--docs) |
+| **DzCode** | Inline or short-block code (`<code>` / `<pre><code>`). | [DzCode](?path=/docs/core-typography-dzcode--docs) |
+
+## When to use which
+
+- **DzHeading** — anything that titles a region. Pick `level` for document structure, then
+  override `size` only if the visual hierarchy needs to differ from the semantic one.
+- **DzText** — the default for paragraphs, labels, and inline runs. Use `as` to choose the
+  right element and `tone`/`size`/`weight` for emphasis.
+- **DzCaption** — supporting microcopy beneath a control or media element. It defaults to a
+  `muted` tone and a `<small>` element.
+- **DzBlockquote** — pull quotes and testimonials where the `<blockquote>` semantic matters.
+- **DzCode** — code *inside prose* or a couple of plain lines. The moment you need a header,
+  filename, language label, line numbers, scroll bounds, or copy-to-clipboard, switch to
+  [**DzCodeBlock**](?path=/docs/core-data-dzcodeblock--docs) (Core/Data).
+
+## Type scale & token mapping
+
+Visual sizes map onto the shared `--dz-text-*` scale from `@dzup-ui/tokens`. **DzHeading**
+shifts the scale up by one step versus **DzText** (e.g. heading `md` uses `--dz-text-lg`),
+which keeps headings visually distinct from body copy at the same size name.
+
+| Token | rem | px @16 | DzText size | DzHeading size |
+|-------|-----|--------|-------------|----------------|
+| `--dz-text-xs` | 0.75 | 12 | `xs` | — |
+| `--dz-text-sm` | 0.875 | 14 | `sm` | `xs` |
+| `--dz-text-base` | 1 | 16 | `md` | `sm` |
+| `--dz-text-lg` | 1.125 | 18 | `lg` | `md` |
+| `--dz-text-xl` | 1.25 | 20 | `xl` | `lg` |
+| `--dz-text-2xl` | 1.5 | 24 | — | `xl` |
+| `--dz-text-3xl` | 1.875 | 30 | — | `2xl` |
+| `--dz-text-4xl` | 2.25 | 36 | — | `3xl` |
+| `--dz-text-5xl` | 3 | 48 | — | `4xl` |
+
+Other typographic tokens in play:
+
+- **Weight** — `--dz-font-light/normal/medium/semibold/bold` (the `weight` prop).
+- **Line height** — `--dz-leading-none/tight/snug/normal/relaxed` (size-dependent).
+- **Tracking** — `--dz-tracking-tight/tighter` (headings tighten as they scale up).
+- **Family** — `--dz-font-sans` for headings/text; `DzCode` uses the monospace family.
+- **Tone colour** — `--dz-foreground` (default), `--dz-muted-foreground` (muted),
+  `--dz-success` / `--dz-warning` / `--dz-danger`. These are theme tokens, so every tone has
+  a dark-mode value — see each component's **Dark Mode Preview** story.
+
+See [Design Tokens](?path=/docs/getting-started-design-tokens--docs) for the full scale.
+
+## Semantic vs visual hierarchy
+
+`DzHeading` deliberately splits **what an element *is*** from **what it *looks like***:
+
+- `level` controls the rendered element (`<h1>`…`<h6>`) — this is what screen readers and
+  the document outline use.
+- `size` controls the visual scale and is **independent** of `level`. An `h2` can render at
+  `4xl` for a hero, or an `h1` at `xs` in a compact card — without breaking the outline.
+
+Always choose `level` from the document structure first (no skipped levels), then reach for
+`size` purely for appearance. See
+[DzHeading → Size vs Level Independence](?path=/docs/core-typography-dzheading--size-vs-level-independence).
+
+## Accessibility
+
+- **Heading hierarchy** — use consecutive `level`s (h1 → h2 → h3); never skip a level to get
+  a smaller look (use `size` for that). Exactly one `h1` per page/region.
+- **Semantic elements** — `DzText`'s `as` picks the meaningful element: `label` for form
+  labels, `strong` for importance, `em` for emphasis. Don't reach for `strong`/`em` purely
+  for visual weight/italics — use `weight`/styling instead.
+- **Captions & `aria-describedby`** — give `DzCaption` an `id` and reference it from the
+  field's `aria-describedby` so the helper/validation text is announced on focus.
+- **Code semantics** — `DzCode` renders native `<code>` / `<pre><code>`, recognised by
+  assistive tech as code content.
+- **Contrast** — all tones reference theme tokens that meet WCAG AA against their background
+  in both light and dark mode; `muted` is for supporting text, not primary reading content.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Pick `DzHeading`'s `level` from document structure, then adjust `size` for looks.</Do>
+  <Dont>Jump from `h1` to `h4` just to get smaller text — it breaks the outline for screen readers.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzText as="label"` / `as="strong"` / `as="em"` when the element carries meaning.</Do>
+  <Dont>Use `strong`/`em` only to make text bold or italic — set `weight` or styling instead.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Reach for `DzCode` for inline snippets and a few plain lines.</Do>
+  <Dont>Hand-roll a header, line numbers, or a copy button on top of `DzCode` — use `DzCodeBlock`.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Link a `DzCaption` to its field via `id` + `aria-describedby` so it's announced.</Do>
+  <Dont>Rely on tone colour alone to signal an error — pair it with text and field state.</Dont>
+</DoDont>

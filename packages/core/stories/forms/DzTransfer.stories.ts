@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import type { TransferItem } from '../../src/components/forms'
 import { DzTransfer } from '../../src/components/forms'
 
@@ -22,7 +24,7 @@ const sampleSource: TransferItem[] = [
 const meta = {
   title: 'Core/Forms/DzTransfer',
   component: DzTransfer,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -240,9 +242,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzTransfer },
@@ -325,4 +325,50 @@ export const RealWorldPermissions: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Move items both directions (play)
+// ---------------------------------------------------------------------------
+
+export const MoveBothDirections: Story = {
+  name: 'Move Both Directions',
+  render: () => ({
+    components: { DzTransfer },
+    setup() {
+      return { source: sampleSource }
+    },
+    data() {
+      return { selected: [] as string[] }
+    },
+    template: `
+      <div class="space-y-4">
+        <DzTransfer :source="source" v-model="selected" aria-label="Languages" />
+        <p class="text-sm text-gray-500">Target keys: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const toTarget = canvas.getByRole('button', { name: /move selected to target/i })
+    const toSource = canvas.getByRole('button', { name: /move selected to source/i })
+
+    // Both action buttons are disabled until something is selected.
+    await expect(toTarget).toBeDisabled()
+
+    // Select an item in the source list and move it right.
+    await userEvent.click(canvas.getByText('JavaScript'))
+    await expect(toTarget).toBeEnabled()
+    await userEvent.click(toTarget)
+    // Moving clears the source selection, re-disabling the button.
+    await expect(toTarget).toBeDisabled()
+    await expect(canvas.getByText(/target keys:/i)).toHaveTextContent(/1/)
+
+    // Now move it back to the source list.
+    await userEvent.click(canvas.getByText('JavaScript'))
+    await expect(toSource).toBeEnabled()
+    await userEvent.click(toSource)
+    await expect(toSource).toBeDisabled()
+    await expect(canvas.getByText(/target keys:/i)).toHaveTextContent(/none/i)
+  },
 }

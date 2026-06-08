@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import {
   DzResizable,
   DzResizableHandle,
@@ -20,7 +20,7 @@ const meta = {
   title: 'Core/Layout/DzResizableParts',
   component: DzResizablePanel,
   subcomponents: { DzResizableHandle },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     defaultSize: {
       control: 'number',

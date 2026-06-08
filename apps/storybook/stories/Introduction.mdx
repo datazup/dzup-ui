@@ -1,54 +1,74 @@
 {/* Introduction.mdx */}
 import { Meta } from '@storybook/addon-docs/blocks'
+import { DocTable } from './_blocks/DocTable.ts'
 
 <Meta title="Introduction" />
 
 # dzup-ui Component Library
 
-Welcome to the **dzup-ui** component library documentation — 147 foundational Vue 3 components built with TypeScript, Tailwind CSS 4, and design tokens.
+Welcome to the **dzup-ui** component library — **163 Vue 3 component files** across
+**11 families**, built with TypeScript, Tailwind CSS 4, and a three-tier design-token
+system.
 
-> **Enterprise components** (Kanban, Gantt, FormBuilder, WorkflowDesigner, etc.) are available in [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro) under a commercial license.
+> **Enterprise components** (Kanban, Gantt, FormBuilder, WorkflowDesigner, etc.) are
+> available in [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro) under a
+> commercial license.
+
+## Start here
+
+- **[Getting Started](?path=/docs/getting-started--docs)** — install, wire tokens, first component.
+- **[Guides/Theming](?path=/docs/guides-theming--docs)** — light/dark, OKLCH, the `data-theme` switch.
+- **[Guides/Design Tokens](?path=/docs/guides-design-tokens--docs)** — the three-tier system, live swatches.
+- **[Guides/Accessibility](?path=/docs/guides-accessibility--docs)** — WCAG AA, contract a11y props.
+- **[Contributing](?path=/docs/contributing--docs)** — story authoring conventions + status taxonomy.
 
 ## Architecture
 
 - **Vue 3.5+** with Composition API and `<script setup lang="ts">`
-- **TypeScript** with strict mode and full type coverage
+- **TypeScript** strict mode, full type coverage
 - **Tailwind CSS 4** with CSS-first design tokens
-- **tailwind-variants (tv)** for type-safe variant styling
-- **Reka UI** for headless interaction primitives
-- **OKLCH color system** for perceptually uniform colors
+- **tailwind-variants (tv)** for type-safe variant styling (ADR-04)
+- **Reka UI** for headless interaction primitives (ADR-07)
+- **OKLCH color system** for perceptually-uniform colors
 
 ## Component Families
 
-| Family | Components |
-|--------|-----------|
-| **Buttons** | DzButton, DzIconButton, DzButtonGroup |
-| **Cards** | DzCard, DzStatCard |
-| **Forms** | DzSelect, DzCheckbox, DzRadio, DzSwitch, DzFormField |
-| **Inputs** | DzInput, DzTextarea, DzNumberInput |
-| **Layout** | DzContainer, DzGrid, DzFlex, DzStack |
-| **Navigation** | DzTabs, DzBreadcrumb, DzPagination, DzMenu |
-| **Overlays** | DzDialog, DzSheet, DzTooltip, DzPopover |
-| **Feedback** | DzAlert, DzBadge, DzProgress, DzToast |
-| **Data** | DzDataGrid, DzTable, DzAccordion |
-| **Media** | DzAvatar, DzImage, DzIcon |
-| **Typography** | DzHeading, DzText |
+<DocTable
+  head={['Family', '.vue files', 'Examples']}
+  align={['left', 'center', 'left']}
+  rows={[
+    ['**Buttons**', '8', 'DzButton, DzIconButton, DzButtonGroup, DzSplitButton, DzToggleButton'],
+    ['**Cards**', '6', 'DzCard (+parts), DzImageCard, DzStatCard'],
+    ['**Data**', '22', 'DzTable, DzDataGrid, DzAccordion, DzList, DzTree, DzTimeline, DzTag, DzChip'],
+    ['**Feedback**', '17', 'DzAlert, DzBadge, DzProgress, DzSpinner, DzSkeleton, DzToast, DzNotification'],
+    ['**Forms**', '22', 'DzSelect, DzCheckbox, DzRadio, DzSwitch, DzSlider, DzDatePicker, DzFormField'],
+    ['**Inputs**', '7', 'DzInput, DzTextarea, DzNumberInput, DzOtpInput, DzPasswordInput, DzSearchInput'],
+    ['**Layout**', '16', 'DzContainer, DzGrid, DzFlex, DzStack, DzAppShell, DzResizable, DzSplitter'],
+    ['**Media**', '10', 'DzAvatar, DzImage, DzIcon, DzCarousel, DzLightbox'],
+    ['**Navigation**', '19', 'DzTabs, DzBreadcrumb, DzPagination, DzMenu, DzSidebar, DzStepper, DzSegmented'],
+    ['**Overlays**', '31', 'DzDialog, DzSheet, DzPopover, DzTooltip, DzDropdownMenu, DzCommandPalette'],
+    ['**Typography**', '5', 'DzHeading, DzText, DzBlockquote, DzCaption, DzCode'],
+  ]}
+/>
+
+_Counts include sub-part components (e.g. `DzCardBody`, `DzTabTrigger`), which are
+documented inside their parent's `*Parts` story rather than as standalone entries._
 
 ## Design Tokens
 
-All components use a three-tier token system:
-
-1. **Primitive** — raw palette and scale values (OKLCH colors)
-2. **Semantic** — intent-based mappings that adapt to light/dark themes
-3. **Component** — per-component overrides
-
-Use the **Theme** toolbar toggle above to switch between light and dark modes.
+All components consume a **three-tier** token system — **primitive → semantic →
+component** — exposed as `var(--dz-*)` CSS variables. See
+**[Design Tokens](?path=/docs/guides-design-tokens--docs)**. Use the **Theme**
+toolbar toggle above to switch between light and dark.
 
 ## Contract Spec
 
-Every component follows the Contract Spec v1 with canonical prop groups:
+Every component follows Contract Spec v1 with canonical prop groups:
 
 - **Appearance**: `size` (xs/sm/md/lg/xl), `variant`, `tone`
 - **Behavior**: `disabled`, `loading`, `readonly`
 - **State**: `invalid`, `error`, `required`
 - **Accessibility**: `id`, `ariaLabel`, `ariaLabelledby`
+
+Components carry a **status badge** (experimental / beta / stable / deprecated) in
+the sidebar and docs header — see [Contributing](?path=/docs/contributing--docs#component-status).

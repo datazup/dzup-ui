@@ -1,0 +1,112 @@
+{/* Layout.mdx — Sprint 7 family overview (TASK-7.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Layout/Overview" />
+
+# Layout <StatusBadge status="stable" />
+
+Layout components are the **structural primitives** that arrange everything else
+on the page. They carry no visual styling of their own beyond spacing and
+alignment — every value is token-driven (ADR-04), so layouts stay consistent
+across themes and brands. Reach for the smallest primitive that expresses the
+intent: a one-dimensional row/column is a `DzFlex` or `DzStack`; a
+two-dimensional layout is a `DzGrid`; page width is a `DzContainer`.
+
+## Components
+
+| Component | Use it for | Docs |
+|-----------|------------|------|
+| **DzContainer** | Center page content and cap its max-width with responsive gutters. | [DzContainer](?path=/docs/core-layout-dzcontainer--docs) |
+| **DzGrid** | Two-dimensional layouts; fixed or responsive column counts. | [DzGrid](?path=/docs/core-layout-dzgrid--docs) |
+| **DzFlex** | One-dimensional layouts with full control of align/justify/wrap. | [DzFlex](?path=/docs/core-layout-dzflex--docs) |
+| **DzStack** | Vertical/horizontal stacking — the ergonomic flex shorthand. | [DzStack](?path=/docs/core-layout-dzstack--docs) |
+| **DzSpacer** | Flexible/fixed gap filler; `auto` pushes siblings apart. | [DzSpacer](?path=/docs/core-layout-dzspacer--docs) |
+| **DzDivider** | Visual or semantic separator (horizontal / vertical). | [DzDivider](?path=/docs/core-layout-dzdivider--docs) |
+| **DzAspectRatio** | Constrain content to a fixed width/height ratio (media, maps). | [DzAspectRatio](?path=/docs/core-layout-dzaspectratio--docs) |
+| **DzScrollArea** | Custom styled scrollbars for an overflowing region. | [DzScrollArea](?path=/docs/core-layout-dzscrollarea--docs) |
+| **DzCollapse** | Animated expand/collapse of a content region (`v-model`). | [DzCollapse](?path=/docs/core-layout-dzcollapse--docs) |
+| **DzAppShell** | Application frame: sidebar + header chrome + scrollable main. | [DzAppShell](?path=/docs/core-layout-dzappshell--docs) |
+| **DzResizable** | Drag-resizable panel groups (Reka Splitter). | [DzResizable](?path=/docs/core-layout-dzresizable--docs) |
+| **DzSplitter** | Naming alias for `DzResizable` (identical API). | [DzSplitter](?path=/docs/core-layout-dzsplitter--docs) |
+
+## Primitive selection guide
+
+Pick by **dimensionality** first, then by how much control you need:
+
+| Need | Use | Why |
+|------|-----|-----|
+| Items on **one axis** (row or column) | `DzStack` | Simplest API — `direction` + `gap` + `align`. |
+| One axis with **justify / wrap / inline** | `DzFlex` | Full flexbox surface (`justify`, `wrap`, `inline`). |
+| Items on **two axes** (rows *and* columns) | `DzGrid` | Column counts, gaps, responsive `{ sm, md, lg }`. |
+| **Page width** constraint + centering | `DzContainer` | Max-width breakpoints with responsive padding. |
+| **Push** siblings apart / fill a gap | `DzSpacer` | `size="auto"` consumes free space (`flex: 1`). |
+
+- **`DzStack` vs `DzFlex`** — `DzStack` is `DzFlex` with a friendlier surface for
+  the 90% case (stack things with a gap). Drop to `DzFlex` the moment you need
+  `justify`, `wrap`, `inline`, or reversed directions.
+- **`DzFlex` vs `DzGrid`** — if you're fighting flex-wrap to line items into a
+  grid, you want `DzGrid`. Use flex for content-sized, single-axis flows
+  (toolbars, header bars); use grid for uniform cells across two axes (card
+  galleries, dashboards).
+- **`DzGrid` responsiveness** — pass an object (`:cols="{ sm: 2, md: 3, lg: 4 }"`)
+  rather than hardcoding a column count; see the **Responsive** stories on
+  `DzGrid`, `DzContainer`, and `DzAppShell`.
+
+## Spacing scale
+
+`gap` (on `DzGrid`/`DzFlex`/`DzStack`) and `DzSpacer` `size` map to the shared
+`--dz-spacing-*` token scale — never to hardcoded pixels:
+
+| Token name | `--dz-spacing-*` | Value |
+|------------|------------------|-------|
+| `none` | `--dz-spacing-0` | `0` |
+| `xs` | `--dz-spacing-1` | `0.25rem` (4px) |
+| `sm` | `--dz-spacing-2` | `0.5rem` (8px) |
+| `md` *(default)* | `--dz-spacing-4` | `1rem` (16px) |
+| `lg` | `--dz-spacing-6` | `1.5rem` (24px) |
+| `xl` | `--dz-spacing-8` | `2rem` (32px) |
+
+Because spacing comes from tokens, a theme can rescale every layout's rhythm by
+overriding the `--dz-spacing-*` family at `:root` — no component changes needed.
+
+## Accessibility
+
+- **Polymorphic semantics** — `DzContainer`, `DzGrid`, `DzFlex`, and `DzStack`
+  accept an `as` prop. Render real landmarks/lists (`main`, `section`, `nav`,
+  `ul`/`ol`) instead of generic `div`s so the structure is meaningful to
+  assistive tech.
+- **Visual order = DOM order** — flex `row-reverse` / `column-reverse` change the
+  *visual* order only. Keep the source order matching the logical reading/Tab
+  order; don't use reversal to fix tab sequencing.
+- **Dividers** — `DzDivider` is `role="separator"` by default (announced); pass
+  `decorative` for purely visual rules so they're `role="none"` and skipped.
+- **Spacer** is `aria-hidden` — it carries no meaning, so never put content in it.
+- **Collapse** — the region is `role="region"` with `data-state` + `aria-hidden`;
+  wire the trigger button with `aria-expanded` + `aria-controls`.
+- **Resizable / Splitter** — the drag handle is a focusable `role="separator"`
+  that resizes with Arrow keys (`keyboardResizeBy`, default 10%), so resizing is
+  not mouse-only.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Use `DzGrid` with a responsive `:cols="{ sm, md, lg }"` object for card/stat galleries.</Do>
+  <Dont>Hand-roll flex-wrap with fixed widths to fake a grid — it breaks alignment as content varies.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Set layout `gap`/`DzSpacer` `size` from the token scale (`xs`…`xl`).</Do>
+  <Dont>Add ad-hoc margins or hardcoded pixel gaps that drift from the spacing rhythm.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Render layout primitives as real landmarks/lists via `as` (`main`, `nav`, `ul`).</Do>
+  <Dont>Wrap everything in nested `div`s and rely on visual layout alone for structure.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Cap reading width with `DzContainer max-width` so long-form content stays legible.</Do>
+  <Dont>Let text run edge-to-edge on wide desktops — line lengths become hard to scan.</Dont>
+</DoDont>

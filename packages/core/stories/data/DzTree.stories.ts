@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { TreeNode } from '../../src/components/data'
 import { DzTree } from '../../src/components/data'
 
@@ -90,7 +92,7 @@ const orgTree: TreeNode[] = [
 const meta = {
   title: 'Core/Data/DzTree',
   component: DzTree,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -157,6 +159,20 @@ export const Default: Story = {
     },
     template: '<DzTree v-bind="args" aria-label="File tree" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The "src" branch starts collapsed (no expanded-keys), so its children
+    // are not yet in the DOM.
+    const srcItem = canvas.getByRole('treeitem', { name: 'src' })
+    await expect(srcItem).toHaveAttribute('aria-expanded', 'false')
+    await expect(canvas.queryByText('components')).not.toBeInTheDocument()
+
+    // Clicking the branch node expands it and renders its children.
+    await userEvent.click(canvas.getByText('src'))
+    await waitFor(() => expect(srcItem).toHaveAttribute('aria-expanded', 'true'))
+    await expect(canvas.getByText('components')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -387,9 +403,7 @@ export const WithSlots: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzTree },
@@ -435,6 +449,21 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // "src" is expanded, so its child branch "components" is visible but closed.
+    const clickable = canvas.getByText('components').closest('[tabindex="0"]') as HTMLElement
+    const item = clickable.closest('[role="treeitem"]') as HTMLElement
+    await expect(item).toHaveAttribute('aria-expanded', 'false')
+
+    // ArrowRight expands a focused, collapsed branch; ArrowLeft collapses it.
+    clickable.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(item).toHaveAttribute('aria-expanded', 'true'))
+    await userEvent.keyboard('{ArrowLeft}')
+    await waitFor(() => expect(item).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------

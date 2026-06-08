@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { Activity, DollarSign, Package, TrendingUp, Users } from 'lucide-vue-next'
 import { DzCard, DzCardBody, DzCardHeader, DzStatCard } from '../../src/components/cards'
 import { DzGrid } from '../../src/components/layout'
@@ -43,45 +45,49 @@ export const Default: Story = {
         <h2 class="text-lg font-semibold">Overview</h2>
         <DzGrid cols="4" gap="md">
           <DzStatCard
-            label="Total Revenue"
+            title="Total Revenue"
             value="$48,295"
             :icon="DollarSign"
             trend="up"
             trend-value="+12.5%"
-            trend-label="vs last month"
-            tone="primary"
+            description="vs last month"
           />
           <DzStatCard
-            label="Active Users"
+            title="Active Users"
             value="3,842"
             :icon="Users"
             trend="up"
             trend-value="+8.1%"
-            trend-label="vs last month"
-            tone="success"
+            description="vs last month"
           />
           <DzStatCard
-            label="Orders"
+            title="Orders"
             value="1,203"
             :icon="Package"
             trend="down"
             trend-value="-3.2%"
-            trend-label="vs last month"
-            tone="warning"
+            description="vs last month"
           />
           <DzStatCard
-            label="Growth Rate"
+            title="Growth Rate"
             value="24.3%"
             :icon="TrendingUp"
             trend="up"
             trend-value="+5.0%"
-            trend-label="vs last month"
-            tone="info"
+            description="vs last month"
           />
         </DzGrid>
       </div>
     `,
   }),
+  // Regression guard: DzStatCard takes `title`/`description`, not `label`/`trend-label`.
+  // A wrong prop name renders an empty title, so assert the labels actually paint.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByText('Total Revenue')).toBeInTheDocument()
+    await expect(canvas.getByText('$48,295')).toBeInTheDocument()
+    await expect(canvas.getByText('Growth Rate')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -99,28 +105,25 @@ export const WithActivityCard: Story = {
       <div class="w-full max-w-5xl space-y-6">
         <DzGrid cols="3" gap="md">
           <DzStatCard
-            label="Total Revenue"
+            title="Total Revenue"
             value="$48,295"
             :icon="DollarSign"
             trend="up"
             trend-value="+12.5%"
-            tone="primary"
           />
           <DzStatCard
-            label="Active Users"
+            title="Active Users"
             value="3,842"
             :icon="Users"
             trend="up"
             trend-value="+8.1%"
-            tone="success"
           />
           <DzStatCard
-            label="Orders"
+            title="Orders"
             value="1,203"
             :icon="Package"
             trend="down"
             trend-value="-3.2%"
-            tone="warning"
           />
         </DzGrid>
 
@@ -161,9 +164,7 @@ export const WithActivityCard: Story = {
 export const DarkMode: Story = {
   name: 'Dashboard Stats – Dark Mode',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzGrid, DzStatCard },
@@ -175,36 +176,32 @@ export const DarkMode: Story = {
         <h2 class="text-lg font-semibold">Overview</h2>
         <DzGrid cols="4" gap="md">
           <DzStatCard
-            label="Total Revenue"
+            title="Total Revenue"
             value="$48,295"
             :icon="DollarSign"
             trend="up"
             trend-value="+12.5%"
-            tone="primary"
           />
           <DzStatCard
-            label="Active Users"
+            title="Active Users"
             value="3,842"
             :icon="Users"
             trend="up"
             trend-value="+8.1%"
-            tone="success"
           />
           <DzStatCard
-            label="Orders"
+            title="Orders"
             value="1,203"
             :icon="Package"
             trend="down"
             trend-value="-3.2%"
-            tone="warning"
           />
           <DzStatCard
-            label="Growth Rate"
+            title="Growth Rate"
             value="24.3%"
             :icon="TrendingUp"
             trend="up"
             trend-value="+5.0%"
-            tone="info"
           />
         </DzGrid>
       </div>

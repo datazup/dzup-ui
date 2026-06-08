@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import {
   Bell,
   Calendar,
@@ -25,7 +27,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Media/DzIcon',
   component: DzIcon,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     icon: {
@@ -209,6 +211,18 @@ export const AccessibleIcon: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Meaningful icon: exposed to the a11y tree as role="img" with its label.
+    const meaningful = canvas.getByRole('img', { name: '3 new notifications' })
+    await expect(meaningful).toHaveAttribute('aria-label', '3 new notifications')
+
+    // Decorative icons are hidden from assistive tech (aria-hidden, no role).
+    const decorative = canvasElement.querySelector('svg[aria-hidden="true"]')
+    await expect(decorative).toBeInTheDocument()
+    await expect(decorative).not.toHaveAttribute('role')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -218,9 +232,7 @@ export const AccessibleIcon: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzIcon },

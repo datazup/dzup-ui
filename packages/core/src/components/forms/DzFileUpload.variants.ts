@@ -25,7 +25,7 @@ export const fileUploadVariants = tv({
       'transition-colors',
       'hover:border-[var(--dz-primary)] hover:bg-[var(--dz-muted)]',
       'dz-focus-ring-input',
-      '@media(prefers-reduced-motion:reduce){transition:none}',
+      'motion-reduce:transition-none',
     ].join(' '),
     dropzoneDragOver: [
       'border-[var(--dz-primary)]',

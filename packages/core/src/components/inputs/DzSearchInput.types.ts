@@ -22,6 +22,8 @@ export interface DzSearchInputProps extends BaseFormControlProps<InputVariant> {
   clearable?: boolean
   /** Debounce delay in ms for the search emit. 0 = no debounce. */
   debounce?: number
+  /** Accessible label for the loading spinner shown when `loading` is true */
+  loadingLabel?: string
 }
 
 // ---------------------------------------------------------------------------

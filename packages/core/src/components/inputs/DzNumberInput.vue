@@ -13,6 +13,7 @@ import type { DzNumberInputEmits, DzNumberInputProps, DzNumberInputSlots } from 
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 
@@ -37,14 +38,25 @@ const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
 const autoId = useId()
 
-/** Resolved element ID */
-const resolvedId = computed(() => props.id ?? autoId)
+/** Optional DzFormField context (ADR-08) — present only when inside a field */
+const fieldContext = useFormFieldContext()
+
+/** Resolved element ID — explicit prop wins, then the field context's control ID */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+
+/** Resolved disabled: own prop OR form-field-level disabled */
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
+
+/** Resolved required: own prop OR form-field-level required */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
 /** Whether the invalid state should show */
-const isInvalid = computed(() => props.invalid || !!props.error)
+const isInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
 
 /** Whether interaction is blocked */
-const isInert = computed(() => props.disabled || props.readonly)
+const isInert = computed(() => resolvedDisabled.value || props.readonly)
 
 /** Whether increment is allowed */
 const canIncrement = computed(() => {
@@ -91,6 +103,8 @@ const resolvedAriaDescribedby = computed(() => {
     parts.push(props.ariaDescribedby)
   if (errorId.value)
     parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -176,10 +190,10 @@ export default {
 
 <template>
   <div
-    :data-state="disabled ? 'disabled' : readonly ? 'readonly' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
-    :data-disabled="disabled ? '' : undefined"
+    :data-disabled="resolvedDisabled ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -227,14 +241,14 @@ export default {
         :class="inputClasses"
         :name="name"
         :placeholder="placeholder"
-        :disabled="disabled"
+        :disabled="resolvedDisabled"
         :readonly="readonly"
-        :required="required"
+        :required="resolvedRequired"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="isInvalid || undefined"
-        :aria-required="required || undefined"
+        :aria-required="resolvedRequired || undefined"
         :aria-valuemin="min"
         :aria-valuemax="max"
         :aria-valuenow="model"

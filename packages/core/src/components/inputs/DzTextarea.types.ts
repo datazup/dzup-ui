@@ -28,6 +28,8 @@ export interface DzTextareaProps extends BaseFormControlProps<InputVariant> {
   autoResize?: boolean
   /** Maximum number of rows when auto-resizing */
   maxRows?: number
+  /** Accessible label for the loading spinner shown when `loading` is true */
+  loadingLabel?: string
 }
 
 // ---------------------------------------------------------------------------

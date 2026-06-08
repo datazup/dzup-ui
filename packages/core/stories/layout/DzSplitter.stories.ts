@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import {
   DzSplitter,
   DzSplitterHandle,
@@ -19,7 +21,7 @@ import {
 const meta = {
   title: 'Core/Layout/DzSplitter',
   component: DzSplitter,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     direction: {
@@ -162,9 +164,7 @@ export const Disabled: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
@@ -230,6 +230,56 @@ export const RealWorldEmailClient: Story = {
       </DzSplitter>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Interactive: Keyboard Resize (TASK-7.C)
+// ---------------------------------------------------------------------------
+
+export const Interactive: Story = {
+  name: 'Interactive: Keyboard Resize',
+  render: () => ({
+    components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
+    data() {
+      return { sizes: [50, 50] }
+    },
+    template: `
+      <div class="space-y-4">
+        <p class="text-sm text-gray-500">
+          Sizes: {{ sizes.map(s => Math.round(s) + '%').join(' | ') }}
+        </p>
+        <DzSplitter direction="horizontal" class="h-40 border rounded-lg" @layout-change="sizes = $event">
+          <DzSplitterPanel :default-size="50">
+            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2" data-testid="panel-a">
+              {{ Math.round(sizes[0]) }}%
+            </div>
+          </DzSplitterPanel>
+          <DzSplitterHandle with-handle />
+          <DzSplitterPanel :default-size="50">
+            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2" data-testid="panel-b">
+              {{ Math.round(sizes[1]) }}%
+            </div>
+          </DzSplitterPanel>
+        </DzSplitter>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // DzSplitter is the DzResizable alias; the handle is role="separator".
+    const handle = canvas.getByRole('separator')
+    await expect(handle).toHaveAttribute('tabindex', '0')
+    await expect(canvas.getByTestId('panel-a')).toHaveTextContent('50%')
+
+    // Keyboard-resize from the focused handle and assert the layout repaints.
+    handle.focus()
+    await expect(handle).toHaveFocus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => {
+      expect(canvas.getByTestId('panel-a')).not.toHaveTextContent('50%')
+    })
+  },
 }
 
 // ---------------------------------------------------------------------------

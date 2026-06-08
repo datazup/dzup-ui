@@ -1,5 +1,6 @@
 // token-check-disable-file — color picker stories legitimately use raw color values as test data
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import { DzColorPicker } from '../../src/components/forms'
 
 const brandPresets = [
@@ -22,7 +23,7 @@ const brandPresets = [
 const meta = {
   title: 'Core/Forms/DzColorPicker',
   component: DzColorPicker,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -220,9 +221,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzColorPicker },

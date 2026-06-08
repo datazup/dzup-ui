@@ -1,22 +1,26 @@
 <script setup lang="ts">
-import type { DzInputGroupProps, DzInputGroupSlots } from './DzInputGroup.types.ts'
+import type { DzInputGroupContext, DzInputGroupProps, DzInputGroupSlots } from './DzInputGroup.types.ts'
 /**
  * DzInputGroup — Compound wrapper for input + addons.
  *
  * Groups an input element with prefix and/or suffix addon content
- * (text, icons, buttons) in a visually connected layout.
+ * (text, icons, buttons) in a visually connected layout. The group is the
+ * single visual shell (border, radius, focus ring, disabled state) and
+ * provides `size` + `disabled` to the child field via inject (ADR-08), so a
+ * grouped DzInput renders seamlessly inside it.
  *
  * @example
  * ```vue
- * <DzInputGroup>
+ * <DzInputGroup size="lg" disabled>
  *   <template #prefix>https://</template>
  *   <DzInput v-model="url" placeholder="example.com" />
  *   <template #suffix>.com</template>
  * </DzInputGroup>
  * ```
  */
-import { computed, useAttrs, useId } from 'vue'
+import { computed, provide, toRef, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
 import { inputGroupVariants } from './DzInputGroup.variants.ts'
 
 const props = withDefaults(defineProps<DzInputGroupProps>(), {
@@ -31,6 +35,13 @@ const autoId = useId()
 
 /** Resolved element ID — prop overrides auto-generated */
 const resolvedId = computed(() => props.id ?? autoId)
+
+/** Cascade size + disabled to the grouped field (ADR-08) */
+const context: DzInputGroupContext = {
+  size: toRef(() => props.size),
+  disabled: toRef(() => props.disabled),
+}
+provide(DZ_INPUT_GROUP_KEY, context)
 
 const styles = computed(() => inputGroupVariants({ size: props.size }))
 
@@ -49,9 +60,10 @@ export default {
   <div
     :id="resolvedId"
     :class="rootClasses"
+    role="group"
     :aria-label="ariaLabel"
     :data-disabled="disabled ? '' : undefined"
-    style="contain: layout style"
+    :data-state="disabled ? 'disabled' : undefined"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Prefix addon -->
@@ -62,8 +74,8 @@ export default {
       <slot name="prefix" />
     </span>
 
-    <!-- Input element(s) -->
-    <div class="flex-1 [&>*]:rounded-none [&>*:first-child]:rounded-l-[var(--dz-input-radius)] [&>*:last-child]:rounded-r-[var(--dz-input-radius)]">
+    <!-- Field (default slot) — fills the row; grouped fields render seamless -->
+    <div :class="styles.field()">
       <slot />
     </div>
 

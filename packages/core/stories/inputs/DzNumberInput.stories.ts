@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { DollarSign, Hash } from 'lucide-vue-next'
 import { DzNumberInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
@@ -13,7 +15,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Inputs/DzNumberInput',
   component: DzNumberInput,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -289,9 +291,7 @@ export const Invalid: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzNumberInput },
@@ -324,6 +324,24 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  // TASK-2.C — verify min clamp (decrement disabled at the lower bound) and
+  // stepwise increment reflected on aria-valuenow.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const spin = canvas.getByRole('spinbutton')
+    const increase = canvas.getByRole('button', { name: 'Increase value' })
+    const decrease = canvas.getByRole('button', { name: 'Decrease value' })
+    // Starts at the min (0) -> decrement is clamped/disabled.
+    await expect(spin).toHaveAttribute('aria-valuenow', '0')
+    await expect(decrease).toBeDisabled()
+    // Step up twice.
+    await userEvent.click(increase)
+    await expect(spin).toHaveAttribute('aria-valuenow', '1')
+    await userEvent.click(increase)
+    await expect(spin).toHaveAttribute('aria-valuenow', '2')
+    // Off the lower bound, decrement re-enables.
+    await expect(decrease).toBeEnabled()
+  },
 }
 
 // ---------------------------------------------------------------------------

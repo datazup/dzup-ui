@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,7 +23,7 @@ import { DzIconButton } from '../../src/components/buttons'
 const meta = {
   title: 'Core/Buttons/DzIconButton',
   component: DzIconButton,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     icon: {
@@ -264,9 +265,7 @@ export const Disabled: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzIconButton },
@@ -369,6 +368,31 @@ export const RealWorldClose: Story = {
         />
         <p class="text-sm font-medium">Notification title</p>
         <p class="text-sm text-gray-500 mt-1">This is a notification with a close button.</p>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility: Required Label + Focus States
+// ---------------------------------------------------------------------------
+
+export const Accessibility: Story = {
+  name: 'Accessibility: Focus States',
+  render: () => ({
+    components: { DzIconButton },
+    setup() { return { Settings, Pencil, Trash2 } },
+    template: `
+      <div class="space-y-4">
+        <p class="text-sm text-gray-500">
+          Icon buttons have no visible text, so <code>ariaLabel</code> is required.
+          Tab through to see focus rings; each control exposes an accessible name.
+        </p>
+        <div class="flex gap-4">
+          <DzIconButton :icon="Settings" aria-label="Open settings" variant="outline" />
+          <DzIconButton :icon="Pencil" aria-label="Edit item" variant="outline" />
+          <DzIconButton :icon="Trash2" aria-label="Delete item" variant="outline" tone="danger" />
+        </div>
       </div>
     `,
   }),

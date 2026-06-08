@@ -38,6 +38,7 @@ import {
 import { computed, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzSpinner from '../feedback/DzSpinner.vue'
 import { comboboxVariants } from './DzCombobox.variants.ts'
 
 const model = defineModel<string>({ default: '' })
@@ -291,7 +292,14 @@ export default {
           aria-label="Toggle options"
           :disabled="resolvedDisabled"
         >
-          <ChevronDown class="h-full w-full" aria-hidden="true" />
+          <DzSpinner
+            v-if="loading"
+            size="xs"
+            tone="neutral"
+            :label="loadingText"
+            class="h-full w-full"
+          />
+          <ChevronDown v-else class="h-full w-full" aria-hidden="true" />
         </button>
       </ComboboxTrigger>
     </ComboboxAnchor>

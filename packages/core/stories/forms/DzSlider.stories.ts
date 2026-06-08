@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzSlider } from '../../src/components/forms'
 
 /**
@@ -10,7 +12,7 @@ import { DzSlider } from '../../src/components/forms'
 const meta = {
   title: 'Core/Forms/DzSlider',
   component: DzSlider,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     size: {
@@ -226,9 +228,7 @@ export const States: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzSlider },
@@ -259,6 +259,16 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const thumb = canvas.getByRole('slider')
+    await expect(thumb).toHaveAttribute('aria-valuenow', '50')
+
+    // Keyboard step: ArrowRight advances by one step (default 1).
+    thumb.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(thumb).toHaveAttribute('aria-valuenow', '51')
+  },
 }
 
 // ---------------------------------------------------------------------------

@@ -14,9 +14,22 @@ export interface DzFieldArraySlotProps<T = unknown> {
   index: number
   remove: () => void
   move: (to: number) => void
+  /** Whether removing a row is allowed (false once `min` is reached) */
+  canRemove: boolean
+  /** Whether appending a row is allowed (false once `max` is reached) */
+  canAppend: boolean
+  /** Current number of items in the array */
+  count: number
+}
+
+export interface DzFieldArrayAppendSlotProps {
+  /** Current number of items in the array */
+  count: number
+  /** Whether appending a row is allowed (always true while this slot renders) */
+  canAppend: boolean
 }
 
 export interface DzFieldArraySlots<T = unknown> {
   default?: (props: DzFieldArraySlotProps<T>) => unknown
-  append?: () => unknown
+  append?: (props: DzFieldArrayAppendSlotProps) => unknown
 }

@@ -1,0 +1,109 @@
+{/* Forms.mdx — Forms family overview (TASK-3.E) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Core/Forms/Overview" />
+
+# Forms
+
+The Forms family covers every interactive data-entry control — selection
+(`DzSelect`, `DzMultiSelect`, `DzCombobox`, `DzPersonaSelector`), boolean and
+choice (`DzCheckbox(+Group)`, `DzRadio(+Group)`, `DzSwitch`), numeric
+(`DzSlider`, `DzRangeSlider`), temporal (`DzDatePicker`, `DzDateRangePicker`,
+`DzTimePicker`), `DzColorPicker`, `DzFileUpload`, `DzTransfer`, the dynamic-list
+helper `DzFieldArray`, and the field-wiring primitives
+(`DzFormField` / `DzFormLabel` / `DzFormDescription` / `DzFormMessage`).
+
+See the flagship [**WorkspaceForm**](/docs/core-compositions-workspaceform--docs)
+composition for these controls working together with a live state preview, and the
+[**Control Gallery**](/docs/core-forms-control-gallery--docs) for an
+appearance-prop comparison.
+
+## When to use which control
+
+| Need | Reach for |
+|------|-----------|
+| Pick one from a short, fixed list | `DzSelect` or `DzRadioGroup` |
+| Pick one from a long / searchable list | `DzCombobox` |
+| Pick many | `DzMultiSelect`, `DzCheckboxGroup`, or `DzTransfer` (large two-list sets) |
+| Pick a person | `DzPersonaSelector` |
+| Toggle a single setting | `DzSwitch` (instant effect) vs `DzCheckbox` (pending submit) |
+| A single number / a numeric range | `DzSlider` / `DzRangeSlider` |
+| A repeating set of fields (tags, invitees) | `DzFieldArray` |
+
+## Composition pattern
+
+Wrap each control in a `DzFormField` and let the field own labelling, description,
+and validation messaging. `DzFormField` provides context (id, `aria-describedby`,
+disabled/invalid state) that the controls consume automatically — you don't wire
+`for`/`id` by hand.
+
+```vue
+<DzFormField required :invalid="!!errors.email" :error="errors.email">
+  <DzFormLabel>Email</DzFormLabel>
+  <DzInput v-model="email" type="email" />
+  <DzFormDescription>We'll send an invite here.</DzFormDescription>
+  <DzFormMessage />
+</DzFormField>
+```
+
+- `DzFormLabel` is associated with the control via the field id (no manual `for`).
+- `DzFormDescription` is linked through `aria-describedby`.
+- `DzFormMessage` renders the active error in an `aria-live` region so screen
+  readers announce validation changes.
+
+See [`DzFormField`](/docs/core-forms-dzformfield--docs) and the
+[`DzFormParts`](/docs/core-forms-dzformparts--docs) story for the full anatomy.
+
+## Validation model
+
+Validation is **prop-driven**, not enforced by the components — you own the
+truth and pass it down:
+
+- Set `invalid` (and optionally `error`) on the `DzFormField` *or* the control.
+- The control reflects it via `aria-invalid` and invalid styling.
+- `DzFormMessage` surfaces the `error` text.
+
+This keeps controls compatible with any validation library (vee-validate, zod,
+hand-rolled) — they render state, they don't compute it.
+
+## v-model (ADR-16)
+
+Every control is two-way bound with `defineModel`, so `v-model` works directly and
+custom events stay typed:
+
+```vue
+<DzSelect v-model="country" :items="countries" />
+<DzMultiSelect v-model="frameworks" :items="items" :max-selections="3" />
+<DzRangeSlider v-model="priceRange" :min="0" :max="1000" :step="50" />
+```
+
+Model value shapes: single-select controls use the item `value`;
+`DzMultiSelect`/`DzCheckboxGroup`/`DzTransfer` use arrays; `DzRangeSlider` uses a
+`[number, number]` tuple; `DzFieldArray` binds the whole array and exposes
+`remove` / `move` per row.
+
+## Do / Don't
+
+<DoDont>
+  <Do>Wrap controls in `DzFormField` so labels, descriptions, and errors are wired and announced automatically.</Do>
+  <Dont>Place a bare control with only a sibling `<label>` — you lose the `aria-describedby` and live-region plumbing.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzSwitch` for settings that apply immediately; use `DzCheckbox` for choices confirmed on submit.</Do>
+  <Dont>Mix the two metaphors — a `DzSwitch` inside a form that only takes effect after "Save" misleads users.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Pair every numeric `DzSlider` with a visible value readout (see WorkspaceForm's budget field).</Do>
+  <Dont>Rely on the thumb position alone — fine values are hard to read and inaccessible.</Dont>
+</DoDont>
+
+## Accessibility
+
+- All controls expose the contract a11y props (`id`, `ariaLabel`, `ariaLabelledby`,
+  `ariaDescribedby`) and manage `aria-invalid` / `aria-disabled` for you.
+- Portalled overlays (Select/Combobox/MultiSelect listboxes) are reached by the
+  A11y audit only once opened — the enriched stories use a `play()` to open them.
+- Verify both themes with each component's **Dark Mode** story.

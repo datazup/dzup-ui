@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import { DzBlockquote } from '../../src/components/typography'
 
 /**
@@ -9,7 +10,7 @@ import { DzBlockquote } from '../../src/components/typography'
 const meta = {
   title: 'Core/Typography/DzBlockquote',
   component: DzBlockquote,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     cite: {
@@ -164,9 +165,7 @@ export const WithCiteAttribute: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzBlockquote },

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import {
   DzSplitter,
   DzSplitterHandle,
@@ -19,7 +19,7 @@ const meta = {
   title: 'Core/Layout/DzSplitterParts',
   component: DzSplitterPanel,
   subcomponents: { DzSplitterHandle },
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     defaultSize: {
       control: 'number',

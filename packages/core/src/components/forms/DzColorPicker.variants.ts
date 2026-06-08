@@ -24,7 +24,7 @@ export const colorPickerVariants = tv({
       'transition-colors',
       'hover:border-[var(--dz-primary)]',
       'dz-focus-ring-input dz-disabled-input-shell',
-      '@media(prefers-reduced-motion:reduce){transition:none}',
+      'motion-reduce:transition-none',
     ].join(' '),
     swatch: [
       'shrink-0 rounded-[var(--dz-radius-sm)]',
@@ -62,7 +62,7 @@ export const colorPickerVariants = tv({
       'transition-transform',
       'hover:scale-110',
       'dz-focus-ring-control',
-      '@media(prefers-reduced-motion:reduce){transition:none}',
+      'motion-reduce:transition-none',
     ].join(' '),
     input: [
       'dz-field-input-reset',

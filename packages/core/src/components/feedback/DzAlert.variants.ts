@@ -41,7 +41,7 @@ export const alertVariants = tv({
     { variant: 'filled', tone: 'primary', class: 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]' },
     { variant: 'filled', tone: 'neutral', class: 'bg-[var(--dz-foreground)] text-[var(--dz-background)]' },
     { variant: 'filled', tone: 'success', class: 'bg-[var(--dz-success)] text-[var(--dz-success-foreground)]' },
-    { variant: 'filled', tone: 'warning', class: 'bg-[var(--dz-warning)] text-[var(--dz-warning-foreground)]' },
+    { variant: 'filled', tone: 'warning', class: 'bg-[var(--dz-warning-solid)] text-[var(--dz-warning-foreground)]' },
     { variant: 'filled', tone: 'danger', class: 'bg-[var(--dz-danger)] text-[var(--dz-danger-foreground)]' },
     { variant: 'filled', tone: 'info', class: 'bg-[var(--dz-info)] text-[var(--dz-info-foreground)]' },
 

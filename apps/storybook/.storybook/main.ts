@@ -6,7 +6,11 @@ import { defineMain } from '@storybook/vue3-vite/node'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 export default defineMain({
-  addons: ['@storybook/addon-docs'],
+  // Keep this list in sync with the `addons` registered in preview.ts (TASK-0.1).
+  // Docs is the only addon that must be listed here for its manager UI; a11y and
+  // themes register their preview behavior in preview.ts, but listing them here
+  // guarantees the A11y panel and Theme toolbar mount on a fresh `storybook dev`.
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-themes'],
   stories: [
     // Standalone stories directories
     '../../../packages/core/stories/**/*.stories.ts',

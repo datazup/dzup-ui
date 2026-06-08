@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import { userEvent, within } from '@storybook/test'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { userEvent, within } from 'storybook/test'
 import { Lock, Mail, Search, User } from 'lucide-vue-next'
 import { DzInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
@@ -15,7 +16,7 @@ import { DzIcon } from '../../src/components/media'
 const meta = {
   title: 'Core/Inputs/DzInput',
   component: DzInput,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -221,6 +222,34 @@ export const States: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Tones (focus to see the tone-colored border + ring)
+// ---------------------------------------------------------------------------
+
+export const Tones: Story = {
+  name: 'Tone Gallery',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Click into each field — the focus border and ring adopt the semantic tone color.',
+      },
+    },
+  },
+  render: () => ({
+    components: { DzInput },
+    template: `
+      <div class="flex flex-col gap-4 max-w-xs">
+        <DzInput tone="neutral" placeholder="Neutral (focus me)" />
+        <DzInput tone="primary" placeholder="Primary (focus me)" />
+        <DzInput tone="success" placeholder="Success (focus me)" />
+        <DzInput tone="warning" placeholder="Warning (focus me)" />
+        <DzInput tone="danger" placeholder="Danger (focus me)" />
+        <DzInput tone="info" placeholder="Info (focus me)" />
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // Disabled
 // ---------------------------------------------------------------------------
 
@@ -345,9 +374,7 @@ export const VariantSizeMatrix: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzInput },

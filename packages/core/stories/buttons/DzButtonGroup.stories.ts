@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Underline } from 'lucide-vue-next'
 import { DzButton, DzButtonGroup, DzIconButton } from '../../src/components/buttons'
 
@@ -11,7 +13,7 @@ import { DzButton, DzButtonGroup, DzIconButton } from '../../src/components/butt
 const meta = {
   title: 'Core/Buttons/DzButtonGroup',
   component: DzButtonGroup,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     orientation: {
@@ -233,9 +235,7 @@ export const ChildOverrides: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzButtonGroup, DzButton },
@@ -310,4 +310,64 @@ export const RealWorldSegmented: Story = {
       </DzButtonGroup>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility: Group Semantics + Focus
+// ---------------------------------------------------------------------------
+
+export const Accessibility: Story = {
+  name: 'Accessibility: Focus States',
+  render: () => ({
+    components: { DzButtonGroup, DzButton },
+    template: `
+      <div class="space-y-4">
+        <p class="text-sm text-gray-500">
+          The group renders role="group" with an accessible label. Each child
+          button is independently focusable; Tab moves through them in order.
+        </p>
+        <DzButtonGroup variant="outline" aria-label="Document actions">
+          <DzButton>Cut</DzButton>
+          <DzButton>Copy</DzButton>
+          <DzButton>Paste</DzButton>
+        </DzButtonGroup>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Interactive: Keyboard Navigation (play)
+// ---------------------------------------------------------------------------
+
+export const Interactive: Story = {
+  name: 'Interactive: Keyboard Navigation',
+  render: () => ({
+    components: { DzButtonGroup, DzButton },
+    template: `
+      <DzButtonGroup variant="outline" aria-label="Document actions">
+        <DzButton>Cut</DzButton>
+        <DzButton>Copy</DzButton>
+        <DzButton>Paste</DzButton>
+      </DzButtonGroup>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The group exposes role="group" with its accessible label.
+    await expect(canvas.getByRole('group', { name: /document actions/i })).toBeVisible()
+
+    // Each button is reachable via sequential Tab focus.
+    const cut = canvas.getByRole('button', { name: /cut/i })
+    const copy = canvas.getByRole('button', { name: /copy/i })
+    const paste = canvas.getByRole('button', { name: /paste/i })
+
+    cut.focus()
+    await expect(cut).toHaveFocus()
+    await userEvent.tab()
+    await expect(copy).toHaveFocus()
+    await userEvent.tab()
+    await expect(paste).toHaveFocus()
+  },
 }

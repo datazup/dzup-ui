@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzTextarea } from '../../src/components/inputs'
 
 /**
@@ -11,7 +13,7 @@ import { DzTextarea } from '../../src/components/inputs'
 const meta = {
   title: 'Core/Inputs/DzTextarea',
   component: DzTextarea,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     variant: {
@@ -70,8 +72,13 @@ const meta = {
     },
     loading: {
       control: 'boolean',
-      description: 'Loading state',
+      description: 'Loading state -- shows a spinner and makes the field read-only',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    loadingLabel: {
+      control: 'text',
+      description: 'Accessible label for the loading spinner',
+      table: { category: 'Behavior', defaultValue: { summary: 'Loading' } },
     },
     name: {
       control: 'text',
@@ -240,6 +247,24 @@ export const States: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Loading
+// ---------------------------------------------------------------------------
+
+export const Loading: Story = {
+  name: 'Loading',
+  render: () => ({
+    components: { DzTextarea },
+    template: `
+      <div class="flex flex-col gap-4 max-w-sm">
+        <p class="text-sm text-gray-500">A spinner appears and the field becomes read-only while loading.</p>
+        <DzTextarea loading model-value="Fetching saved draft..." />
+        <DzTextarea loading loadingLabel="Saving" placeholder="Saving your changes..." />
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // Disabled
 // ---------------------------------------------------------------------------
 
@@ -302,9 +327,7 @@ export const WithMaxLength: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzTextarea },
@@ -339,6 +362,14 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  // TASK-2.C — type multi-line content (autosize textarea) and assert the
+  // model preserves the newline.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const textarea = canvas.getByRole('textbox')
+    await userEvent.type(textarea, 'First line{enter}Second line')
+    await expect(textarea).toHaveValue('First line\nSecond line')
+  },
 }
 
 // ---------------------------------------------------------------------------

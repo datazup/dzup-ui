@@ -1,4 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { darkModeDecorator } from '../_shared'
 import { DzCollapse, DzStack } from '../../src/components/layout'
 
 /**
@@ -11,7 +13,7 @@ import { DzCollapse, DzStack } from '../../src/components/layout'
 const meta = {
   title: 'Core/Layout/DzCollapse',
   component: DzCollapse,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Behavior
     modelValue: {
@@ -195,9 +197,7 @@ export const MultipleSections: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCollapse },
@@ -250,7 +250,7 @@ export const Interactive: Story = {
           </button>
           <span class="text-sm text-gray-500">Toggled {{ toggleCount }} times</span>
         </div>
-        <DzCollapse v-model="open">
+        <DzCollapse v-model="open" data-testid="collapse-region">
           <div class="bg-green-50 text-green-800 text-sm p-4 rounded-lg">
             The collapse state is tracked by the parent via v-model.
           </div>
@@ -258,6 +258,26 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const region = canvas.getByTestId('collapse-region')
+
+    // Starts collapsed: data-state="closed", aria-hidden, counter at zero.
+    await expect(region).toHaveAttribute('data-state', 'closed')
+    await expect(canvas.getByText('Toggled 0 times')).toBeInTheDocument()
+
+    const toggle = canvas.getByRole('button', { name: 'Toggle' })
+
+    // Expand → counter increments and the region animates open.
+    await userEvent.click(toggle)
+    await expect(canvas.getByText('Toggled 1 times')).toBeInTheDocument()
+    await waitFor(() => expect(region).toHaveAttribute('data-state', 'open'))
+
+    // Collapse again → counter increments and the region closes.
+    await userEvent.click(toggle)
+    await expect(canvas.getByText('Toggled 2 times')).toBeInTheDocument()
+    await waitFor(() => expect(region).toHaveAttribute('data-state', 'closed'))
+  },
 }
 
 // ---------------------------------------------------------------------------

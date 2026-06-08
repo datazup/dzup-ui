@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { darkModeDecorator } from '../_shared'
 import { DzCaption } from '../../src/components/typography'
 
 /**
@@ -11,7 +12,7 @@ import { DzCaption } from '../../src/components/typography'
 const meta = {
   title: 'Core/Typography/DzCaption',
   component: DzCaption,
-  tags: ['autodocs'],
+  tags: ['autodocs', 'status:stable'],
   argTypes: {
     // Appearance
     tone: {
@@ -151,9 +152,7 @@ export const AsMetadata: Story = {
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [
-    () => ({
-      template: '<div data-theme="dark" class="bg-[var(--dz-colors-background)] p-8 rounded-lg"><story /></div>',
-    }),
+    darkModeDecorator,
   ],
   render: () => ({
     components: { DzCaption },
