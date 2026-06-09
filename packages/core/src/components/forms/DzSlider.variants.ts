@@ -31,6 +31,9 @@ export const sliderVariants = tv({
       'dz-focus-ring-control dz-disabled-control',
       'hover:border-[var(--dz-primary-hover)]',
     ].join(' '),
+    label: [
+      'shrink-0 text-sm font-medium text-[var(--dz-foreground)]',
+    ].join(' '),
   },
   variants: {
     size: {
@@ -73,11 +76,13 @@ export const sliderVariants = tv({
       horizontal: {
         root: 'w-full',
         track: 'w-full',
+        label: 'mr-3',
       },
       vertical: {
         root: 'h-full flex-col',
         track: 'h-full w-2',
         range: 'w-full',
+        label: 'mb-2',
       },
     },
     disabled: {

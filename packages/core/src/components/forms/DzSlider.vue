@@ -131,6 +131,9 @@ defineExpose({
     v-bind="{ ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >
+    <span v-if="$slots.default" :class="styles.label()">
+      <slot />
+    </span>
     <SliderTrack :class="styles.track()">
       <SliderRange :class="styles.range()" />
     </SliderTrack>

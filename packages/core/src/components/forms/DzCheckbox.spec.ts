@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzCheckbox from './DzCheckbox.vue'
 import DzCheckboxGroup from './DzCheckboxGroup.vue'
+import DzFormField from './DzFormField.vue'
 
 describe('dzCheckbox — Unit Tests', () => {
   it('renders a label element as root', () => {
@@ -116,6 +117,28 @@ describe('dzCheckboxGroup — Unit Tests', () => {
       },
     })
 
+    const checkbox = wrapper.findComponent(DzCheckbox)
+    expect(checkbox.attributes('data-disabled')).toBe('')
+  })
+
+  it('inherits required from an enclosing DzFormField', () => {
+    const wrapper = mount(DzFormField, {
+      props: { required: true },
+      slots: {
+        default: () => h(DzCheckbox, null, { default: () => 'Accept terms' }),
+      },
+    })
+    // Reka renders aria-required on the role="checkbox" element
+    expect(wrapper.find('[role="checkbox"]').attributes('aria-required')).toBe('true')
+  })
+
+  it('inherits disabled from an enclosing DzFormField', () => {
+    const wrapper = mount(DzFormField, {
+      props: { disabled: true },
+      slots: {
+        default: () => h(DzCheckbox, null, { default: () => 'Accept terms' }),
+      },
+    })
     const checkbox = wrapper.findComponent(DzCheckbox)
     expect(checkbox.attributes('data-disabled')).toBe('')
   })

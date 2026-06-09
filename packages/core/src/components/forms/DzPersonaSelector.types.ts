@@ -26,12 +26,15 @@ export interface Persona {
 // Props
 // ---------------------------------------------------------------------------
 
-/** Props for the DzPersonaSelector component */
+/**
+ * Props for the DzPersonaSelector component.
+ *
+ * Note: the selected persona id is exposed as `v-model` via `defineModel`
+ * (ADR-16) and is intentionally not declared here.
+ */
 export interface DzPersonaSelectorProps {
   /** Available personas */
   personas: Persona[]
-  /** v-model — selected persona id */
-  modelValue?: string
   /** Placeholder text for the search input */
   placeholder?: string
   /** Disabled state */
@@ -42,10 +45,13 @@ export interface DzPersonaSelectorProps {
 // Emits
 // ---------------------------------------------------------------------------
 
-/** Events emitted by DzPersonaSelector */
+/**
+ * Events emitted by DzPersonaSelector.
+ *
+ * Note: `update:modelValue` is provided by `defineModel` (ADR-16) and is not
+ * declared here.
+ */
 export interface DzPersonaSelectorEmits {
-  /** v-model update: emits new persona id */
-  'update:modelValue': [value: string]
   /** Fires with the full persona object when one is selected */
   'change': [persona: Persona | undefined]
 }

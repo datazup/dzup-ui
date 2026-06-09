@@ -47,32 +47,41 @@ describe('dzNumberInput — Unit Tests', () => {
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([0])
   })
 
-  it('does not increment past max', () => {
+  it('does not increment past max (only the + button is disabled, not the input)', () => {
     const wrapper = mount(DzNumberInput, { props: { modelValue: 10, max: 10 } })
-    const btn = wrapper.find('button[aria-label="Increase value"]')
-    expect((btn.element as HTMLButtonElement).disabled).toBe(true)
+    const incBtn = wrapper.find('button[aria-label="Increase value"]')
+    const decBtn = wrapper.find('button[aria-label="Decrease value"]')
+    // The + button is disabled via aria-disabled (not native disabled, which
+    // would grey the whole input via the shell's :has(:disabled) rule)…
+    expect(incBtn.attributes('aria-disabled')).toBe('true')
+    // …while the - button and the input remain usable.
+    expect(decBtn.attributes('aria-disabled')).toBeUndefined()
+    expect(wrapper.find('input').attributes('disabled')).toBeUndefined()
   })
 
-  it('does not decrement past min', () => {
+  it('does not decrement past min (only the - button is disabled, not the input)', () => {
     const wrapper = mount(DzNumberInput, { props: { modelValue: 0, min: 0 } })
-    const btn = wrapper.find('button[aria-label="Decrease value"]')
-    expect((btn.element as HTMLButtonElement).disabled).toBe(true)
+    const incBtn = wrapper.find('button[aria-label="Increase value"]')
+    const decBtn = wrapper.find('button[aria-label="Decrease value"]')
+    expect(decBtn.attributes('aria-disabled')).toBe('true')
+    expect(incBtn.attributes('aria-disabled')).toBeUndefined()
+    expect(wrapper.find('input').attributes('disabled')).toBeUndefined()
   })
 
   it('disables both buttons when disabled', () => {
     const wrapper = mount(DzNumberInput, { props: { disabled: true } })
     const incBtn = wrapper.find('button[aria-label="Increase value"]')
     const decBtn = wrapper.find('button[aria-label="Decrease value"]')
-    expect((incBtn.element as HTMLButtonElement).disabled).toBe(true)
-    expect((decBtn.element as HTMLButtonElement).disabled).toBe(true)
+    expect(incBtn.attributes('aria-disabled')).toBe('true')
+    expect(decBtn.attributes('aria-disabled')).toBe('true')
   })
 
   it('disables both buttons when readonly', () => {
     const wrapper = mount(DzNumberInput, { props: { readonly: true } })
     const incBtn = wrapper.find('button[aria-label="Increase value"]')
     const decBtn = wrapper.find('button[aria-label="Decrease value"]')
-    expect((incBtn.element as HTMLButtonElement).disabled).toBe(true)
-    expect((decBtn.element as HTMLButtonElement).disabled).toBe(true)
+    expect(incBtn.attributes('aria-disabled')).toBe('true')
+    expect(decBtn.attributes('aria-disabled')).toBe('true')
   })
 
   it('increments on ArrowUp keydown', async () => {

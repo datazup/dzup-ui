@@ -69,4 +69,26 @@ describe('dzPasswordInput — Unit Tests', () => {
     expect(wrapper.emitted('focus')).toHaveLength(1)
     expect(wrapper.emitted('blur')).toHaveLength(1)
   })
+
+  it('renders a loading spinner when loading=true', () => {
+    const wrapper = mount(DzPasswordInput, { props: { loading: true } })
+    expect(wrapper.find('[role="status"]').exists()).toBe(true)
+  })
+
+  it('marks the input as busy and read-only while loading', () => {
+    const wrapper = mount(DzPasswordInput, { props: { loading: true } })
+    const input = wrapper.find('input')
+    expect(input.attributes('aria-busy')).toBe('true')
+    expect((input.element as HTMLInputElement).readOnly).toBe(true)
+  })
+
+  it('disables the visibility toggle while loading', () => {
+    const wrapper = mount(DzPasswordInput, { props: { loading: true } })
+    expect(wrapper.find('button').attributes('disabled')).toBeDefined()
+  })
+
+  it('does not render a spinner when loading=false', () => {
+    const wrapper = mount(DzPasswordInput, { props: { loading: false } })
+    expect(wrapper.find('[role="status"]').exists()).toBe(false)
+  })
 })

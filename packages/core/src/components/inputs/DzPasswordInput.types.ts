@@ -20,6 +20,8 @@ export interface DzPasswordInputProps extends BaseFormControlProps<InputVariant>
   placeholder?: string
   /** Maximum character length */
   maxlength?: number
+  /** Accessible label for the loading spinner shown when `loading` is true */
+  loadingLabel?: string
 }
 
 // ---------------------------------------------------------------------------

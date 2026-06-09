@@ -54,6 +54,14 @@ describe('dzOtpInput — Unit Tests', () => {
     expect(wrapper.find('[role="alert"]').text()).toBe('Invalid code')
   })
 
+  it('connects aria-describedby to the error element', () => {
+    const wrapper = mount(DzOtpInput, {
+      props: { id: 'pin', error: 'Invalid code' },
+    })
+    expect(wrapper.find('[aria-describedby]').attributes('aria-describedby')).toContain('pin-error')
+    expect(wrapper.find('#pin-error').text()).toBe('Invalid code')
+  })
+
   it('has contain: layout style on root', () => {
     const wrapper = mount(DzOtpInput)
     expect(wrapper.find('[style*="contain: layout style"]').exists()).toBe(true)

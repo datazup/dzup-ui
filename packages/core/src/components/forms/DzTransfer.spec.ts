@@ -128,4 +128,15 @@ describe('dzTransfer — Unit Tests', () => {
       expect(checkbox.element as HTMLInputElement).toBeTruthy()
     }
   })
+
+  it('links the error message to the group via aria-describedby', () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems, error: 'Selection required' },
+    })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find('[role="group"]').attributes('aria-describedby')).toContain(errorId)
+  })
 })

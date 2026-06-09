@@ -230,3 +230,34 @@ export const RealWorldTeamMembers: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Data-Driven: render the stack from an array via v-for
+// ---------------------------------------------------------------------------
+
+export const DataDriven: Story = {
+  name: 'Data-Driven (v-for)',
+  render: () => ({
+    components: { DzAvatarGroup, DzAvatar },
+    data() {
+      return {
+        max: 3,
+        team: [
+          { id: 'ada', name: 'Ada Lovelace' },
+          { id: 'grace', name: 'Grace Hopper' },
+          { id: 'alan', name: 'Alan Turing' },
+          { id: 'tim', name: 'Tim Berners-Lee' },
+          { id: 'don', name: 'Donald Knuth' },
+        ],
+      }
+    },
+    template: `
+      <div class="flex items-center gap-3">
+        <DzAvatarGroup :max="max" size="sm" aria-label="Team">
+          <DzAvatar v-for="member in team" :key="member.id" :alt="member.name" />
+        </DzAvatarGroup>
+        <span class="text-sm text-gray-500">{{ team.length }} members · +{{ Math.max(0, team.length - max) }} overflow</span>
+      </div>
+    `,
+  }),
+}

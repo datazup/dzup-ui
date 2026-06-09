@@ -329,3 +329,32 @@ export const RealWorldAdminDashboard: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Data-Driven: render the trail from an array via v-for
+// ---------------------------------------------------------------------------
+
+export const DataDriven: Story = {
+  name: 'Data-Driven (v-for)',
+  render: () => ({
+    components: { DzBreadcrumb, DzBreadcrumbItem, DzBreadcrumbSeparator },
+    data() {
+      return {
+        crumbs: [
+          { label: 'Home', href: '/' },
+          { label: 'Library', href: '/library' },
+          { label: 'Components', href: '/library/components' },
+          { label: 'Breadcrumb', href: '/library/components/breadcrumb' },
+        ],
+      }
+    },
+    template: `
+      <DzBreadcrumb aria-label="Breadcrumb">
+        <template v-for="(crumb, i) in crumbs" :key="crumb.href">
+          <DzBreadcrumbItem :href="crumb.href" :current="i === crumbs.length - 1">{{ crumb.label }}</DzBreadcrumbItem>
+          <DzBreadcrumbSeparator v-if="i < crumbs.length - 1" />
+        </template>
+      </DzBreadcrumb>
+    `,
+  }),
+}

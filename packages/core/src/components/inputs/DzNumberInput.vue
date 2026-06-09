@@ -207,10 +207,16 @@ defineExpose({ inputRef })
       </span>
 
       <!-- Decrement button -->
+      <!--
+        Uses aria-disabled (not the native disabled attribute) so the bound
+        state greys out only this button. The native disabled attribute would
+        trigger the wrapper's `dz-disabled-input-shell:has(:disabled)` rule and
+        disable the entire input when min is reached.
+      -->
       <button
         type="button"
         class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
-        :disabled="!canDecrement"
+        :aria-disabled="!canDecrement || undefined"
         aria-label="Decrease value"
         tabindex="-1"
         @click="handleDecrement"
@@ -259,10 +265,11 @@ defineExpose({ inputRef })
       >
 
       <!-- Increment button -->
+      <!-- aria-disabled (not native disabled) — see decrement button above. -->
       <button
         type="button"
         class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
-        :disabled="!canIncrement"
+        :aria-disabled="!canIncrement || undefined"
         aria-label="Increase value"
         tabindex="-1"
         @click="handleIncrement"

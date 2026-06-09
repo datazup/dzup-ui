@@ -83,6 +83,16 @@ describe('dzCheckboxGroup — Unit Tests', () => {
     expect(wrapper.attributes('aria-describedby')).toBe('group-desc')
   })
 
+  it('forwards aria-invalid to root element', () => {
+    const wrapper = mountGroup({ ariaInvalid: true })
+    expect(wrapper.attributes('aria-invalid')).toBe('true')
+  })
+
+  it('omits aria-invalid when not invalid', () => {
+    const wrapper = mountGroup()
+    expect(wrapper.attributes('aria-invalid')).toBeUndefined()
+  })
+
   it('forwards id to root element', () => {
     const wrapper = mountGroup({ id: 'my-group' })
     expect(wrapper.attributes('id')).toBe('my-group')

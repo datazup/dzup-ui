@@ -113,4 +113,22 @@ describe('dzFileUpload — Unit Tests', () => {
     const dropzone = wrapper.find('[role="button"]')
     expect(dropzone.attributes('tabindex')).toBe('-1')
   })
+
+  it('links the error message to the dropzone via aria-describedby', () => {
+    const wrapper = mount(DzFileUpload, {
+      props: { error: 'A file is required' },
+    })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find('[role="button"]').attributes('aria-describedby')).toContain(errorId)
+  })
+
+  it('reflects the required prop via aria-required on the dropzone', () => {
+    const wrapper = mount(DzFileUpload, {
+      props: { required: true },
+    })
+    expect(wrapper.find('[role="button"]').attributes('aria-required')).toBe('true')
+  })
 })

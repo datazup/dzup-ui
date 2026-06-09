@@ -58,11 +58,16 @@ const isInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
-/** Combined aria-describedby from prop + field context */
+/** ID for the error message element (for aria-describedby) */
+const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
+
+/** Combined aria-describedby from prop + own error element + field context */
 const resolvedAriaDescribedby = computed(() => {
   const parts: string[] = []
   if (props.ariaDescribedby)
     parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
   if (fieldContext?.ariaDescribedby.value)
     parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
@@ -244,6 +249,7 @@ defineExpose({ inputRef })
     <!-- Error message -->
     <p
       v-if="error"
+      :id="errorId"
       class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
       role="alert"
     >

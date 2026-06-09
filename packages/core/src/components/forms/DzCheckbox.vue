@@ -118,7 +118,7 @@ const iconSizeClass = computed(() => {
       :model-value="checkedState"
       :disabled="resolvedDisabled"
       :name="name"
-      :required="required"
+      :required="required || fieldContext?.isRequired.value"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"

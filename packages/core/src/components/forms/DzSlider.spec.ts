@@ -96,4 +96,28 @@ describe('dzSlider — Unit Tests', () => {
       expect(wrapper.emitted('blur')).toBeTruthy()
     }
   })
+
+  it('renders the default slot as a label', () => {
+    const wrapper = mount(DzSlider, {
+      slots: { default: 'Volume' },
+    })
+    expect(wrapper.text()).toContain('Volume')
+  })
+
+  it('does not render a label element when no default slot is provided', () => {
+    const wrapper = mount(DzSlider)
+    expect(wrapper.text()).toBe('')
+  })
+
+  it('exposes a focus() method', () => {
+    const wrapper = mount(DzSlider, { attachTo: document.body })
+    expect(typeof (wrapper.vm as unknown as { focus: () => void }).focus).toBe('function')
+    expect(() => (wrapper.vm as unknown as { focus: () => void }).focus()).not.toThrow()
+  })
+
+  it('reflects the invalid prop via data-invalid + aria-invalid on thumb', () => {
+    const wrapper = mount(DzSlider, { props: { invalid: true } })
+    expect(wrapper.find('[data-invalid]').exists()).toBe(true)
+    expect(wrapper.find('[role="slider"]').attributes('aria-invalid')).toBe('true')
+  })
 })

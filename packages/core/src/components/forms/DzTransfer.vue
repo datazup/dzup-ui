@@ -61,6 +61,21 @@ const resolvedRequired = computed(
   () => props.required || (fieldContext?.isRequired.value ?? false),
 )
 
+/** ID for the error message element (for aria-describedby) */
+const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
+
+/** Combined aria-describedby from prop + own error element + field context */
+const resolvedAriaDescribedby = computed(() => {
+  const parts: string[] = []
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
+  return parts.length > 0 ? parts.join(' ') : undefined
+})
+
 const styles = computed(() =>
   transferVariants({
     size: props.size,
@@ -136,7 +151,7 @@ function handleBlur(event: FocusEvent): void {
       :data-invalid="resolvedInvalid ? '' : undefined"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
-      :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+      :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
       :aria-required="resolvedRequired || undefined"
       role="group"
@@ -290,7 +305,7 @@ function handleBlur(event: FocusEvent): void {
     <!-- Error message -->
     <p
       v-if="error"
-      :id="`${resolvedId}-error`"
+      :id="errorId"
       class="text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
       role="alert"
     >

@@ -22,6 +22,7 @@ import type {
 import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 
 const model = defineModel<string>({ default: '' })
@@ -35,6 +36,7 @@ const props = withDefaults(defineProps<DzPasswordInputProps>(), {
   loading: false,
   invalid: false,
   required: false,
+  loadingLabel: 'Loading',
 })
 
 const emit = defineEmits<DzPasswordInputEmits>()
@@ -67,6 +69,22 @@ const wrapperClasses = computed(() =>
 )
 
 const inputClasses = computed(() => inputElementVariants())
+
+/**
+ * Spinner size mapped down from the field size so the indicator stays
+ * proportionate to the field height (mirrors DzInput).
+ */
+const spinnerSize = computed(() => {
+  switch (props.size) {
+    case 'xs':
+    case 'sm':
+      return 'xs' as const
+    case 'xl':
+      return 'md' as const
+    default:
+      return 'sm' as const
+  }
+})
 
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 const resolvedAriaDescribedby = computed(() => {
@@ -101,7 +119,7 @@ defineExpose({ inputRef })
 
 <template>
   <div
-    :data-state="resolvedDisabled ? 'disabled' : readonly ? 'readonly' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
@@ -127,7 +145,7 @@ defineExpose({ inputRef })
         :name="name"
         :placeholder="placeholder"
         :disabled="resolvedDisabled"
-        :readonly="readonly"
+        :readonly="readonly || loading"
         :required="resolvedRequired"
         :maxlength="maxlength"
         :aria-label="ariaLabel"
@@ -135,10 +153,20 @@ defineExpose({ inputRef })
         :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="isInvalid || undefined"
         :aria-required="resolvedRequired || undefined"
+        :aria-busy="loading || undefined"
         autocomplete="current-password"
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
+      />
+
+      <!-- Loading spinner -->
+      <DzSpinner
+        v-if="loading"
+        class="shrink-0"
+        :size="spinnerSize"
+        :tone="tone ?? 'neutral'"
+        :label="loadingLabel"
       />
 
       <!-- Toggle visibility button -->
@@ -146,7 +174,7 @@ defineExpose({ inputRef })
         type="button"
         class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
-        :disabled="resolvedDisabled"
+        :disabled="resolvedDisabled || loading"
         tabindex="-1"
         @click="toggleVisibility"
       >

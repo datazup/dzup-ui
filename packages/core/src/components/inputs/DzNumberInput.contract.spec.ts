@@ -105,13 +105,13 @@ describe('dzNumberInput — Contract Spec v1', () => {
   it('disables increment button when value equals max', () => {
     const wrapper = mount(DzNumberInput, { props: { modelValue: 10, max: 10 } })
     const btn = wrapper.find('button[aria-label="Increase value"]')
-    expect((btn.element as HTMLButtonElement).disabled).toBe(true)
+    expect(btn.attributes('aria-disabled')).toBe('true')
   })
 
   it('disables decrement button when value equals min', () => {
     const wrapper = mount(DzNumberInput, { props: { modelValue: 0, min: 0 } })
     const btn = wrapper.find('button[aria-label="Decrease value"]')
-    expect((btn.element as HTMLButtonElement).disabled).toBe(true)
+    expect(btn.attributes('aria-disabled')).toBe('true')
   })
 
   // ── Events ──

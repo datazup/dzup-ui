@@ -1004,8 +1004,10 @@ __metadata:
   dependencies:
     "@dzup-ui/core": "workspace:*"
     "@dzup-ui/tokens": "workspace:*"
+    "@tailwindcss/vite": "npm:^4.0.0"
     "@vitejs/plugin-vue": "npm:^5.2.0"
     lucide-vue-next: "npm:^0.475.0"
+    tailwindcss: "npm:^4.0.0"
     typescript: "npm:^5.7.0"
     vite: "npm:^6.1.0"
     vue: "npm:^3.5.13"

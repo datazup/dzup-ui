@@ -91,4 +91,23 @@ describe('dzColorPicker — Unit Tests', () => {
     // Default model value is '' (empty string), not #000000
     expect(wrapper.exists()).toBe(true)
   })
+
+  it('links the error message to the trigger via aria-describedby', () => {
+    const wrapper = mount(DzColorPicker, {
+      props: { error: 'Pick a color' },
+    })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    const trigger = wrapper.find('button[aria-expanded]')
+    expect(trigger.attributes('aria-describedby')).toContain(errorId)
+  })
+
+  it('reflects the required prop via aria-required on the trigger', () => {
+    const wrapper = mount(DzColorPicker, {
+      props: { required: true },
+    })
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-required')).toBe('true')
+  })
 })

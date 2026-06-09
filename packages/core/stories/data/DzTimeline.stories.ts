@@ -341,3 +341,34 @@ export const RealWorldChangelog: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Data-Driven: render the timeline from an array via v-for
+// ---------------------------------------------------------------------------
+
+export const DataDriven: Story = {
+  name: 'Data-Driven (v-for)',
+  render: () => ({
+    components: { DzTimeline, DzTimelineItem },
+    data() {
+      return {
+        events: [
+          { id: 'created', text: 'Order created', tone: 'neutral' },
+          { id: 'paid', text: 'Payment confirmed', tone: 'success' },
+          { id: 'shipped', text: 'Shipped', tone: 'info' },
+          { id: 'delayed', text: 'Delivery delayed', tone: 'warning' },
+        ],
+      }
+    },
+    template: `
+      <div class="max-w-sm space-y-3">
+        <DzTimeline aria-label="Order events">
+          <DzTimelineItem v-for="event in events" :key="event.id" :tone="event.tone">
+            {{ event.text }}
+          </DzTimelineItem>
+        </DzTimeline>
+        <p class="text-sm text-gray-500">{{ events.length }} events: <code>{{ events.map(e => e.id).join(', ') }}</code></p>
+      </div>
+    `,
+  }),
+}

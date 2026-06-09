@@ -91,4 +91,44 @@ describe('dzRangeSlider — Unit Tests', () => {
       expect(wrapper.emitted('blur')).toBeTruthy()
     }
   })
+
+  it('reflects the invalid prop via data-invalid + aria-invalid on thumbs', () => {
+    const wrapper = mount(DzRangeSlider, {
+      props: { invalid: true },
+    })
+    expect(wrapper.find('[data-invalid]').exists()).toBe(true)
+    const thumbs = wrapper.findAll('[role="slider"]')
+    expect(thumbs[0]!.attributes('aria-invalid')).toBe('true')
+    expect(thumbs[1]!.attributes('aria-invalid')).toBe('true')
+  })
+
+  it('treats a non-empty error prop as invalid', () => {
+    const wrapper = mount(DzRangeSlider, {
+      props: { error: 'Out of range' },
+    })
+    expect(wrapper.find('[data-invalid]').exists()).toBe(true)
+    expect(wrapper.find('[role="slider"]').attributes('aria-invalid')).toBe('true')
+  })
+
+  it('reflects the required prop via aria-required on thumbs', () => {
+    const wrapper = mount(DzRangeSlider, {
+      props: { required: true },
+    })
+    const thumbs = wrapper.findAll('[role="slider"]')
+    expect(thumbs[0]!.attributes('aria-required')).toBe('true')
+    expect(thumbs[1]!.attributes('aria-required')).toBe('true')
+  })
+
+  it('renders the default slot as a label', () => {
+    const wrapper = mount(DzRangeSlider, {
+      slots: { default: 'Price range' },
+    })
+    expect(wrapper.text()).toContain('Price range')
+  })
+
+  it('exposes a focus() method', () => {
+    const wrapper = mount(DzRangeSlider, { attachTo: document.body })
+    expect(typeof (wrapper.vm as unknown as { focus: () => void }).focus).toBe('function')
+    expect(() => (wrapper.vm as unknown as { focus: () => void }).focus()).not.toThrow()
+  })
 })

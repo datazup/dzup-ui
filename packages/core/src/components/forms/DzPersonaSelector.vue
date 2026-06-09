@@ -30,8 +30,9 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import DzCombobox from './DzCombobox.vue'
 
+const model = defineModel<string>({ default: '' })
+
 const props = withDefaults(defineProps<DzPersonaSelectorProps>(), {
-  modelValue: '',
   placeholder: 'Select persona',
   disabled: false,
 })
@@ -59,7 +60,7 @@ const personaById = computed<Map<string, Persona>>(() => {
 })
 
 function handleUpdate(value: string): void {
-  emit('update:modelValue', value)
+  model.value = value
   emit('change', personaById.value.get(value))
 }
 
@@ -69,7 +70,7 @@ const rootClass = computed(() => cn(attrs.class as string | undefined))
 
 <template>
   <DzCombobox
-    :model-value="modelValue"
+    :model-value="model"
     :items="items"
     :placeholder="placeholder"
     :disabled="disabled"

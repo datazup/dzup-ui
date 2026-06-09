@@ -443,3 +443,35 @@ export const RealWorldSettings: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Bindable: list passed via v-for + open item reflected through v-model
+// ---------------------------------------------------------------------------
+
+export const BindableModel: Story = {
+  name: 'Bindable: v-for items + v-model',
+  render: () => ({
+    components: { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent },
+    data() {
+      return {
+        open: 'shipping',
+        faqs: [
+          { value: 'shipping', title: 'Shipping', body: 'Orders ship within 2 business days.' },
+          { value: 'returns', title: 'Returns', body: 'Returns accepted within 30 days.' },
+          { value: 'support', title: 'Support', body: 'Reach us 24/7 via the help center.' },
+        ],
+      }
+    },
+    template: `
+      <div class="max-w-lg space-y-3">
+        <DzAccordion v-model="open" type="single" collapsible>
+          <DzAccordionItem v-for="faq in faqs" :key="faq.value" :value="faq.value">
+            <DzAccordionTrigger>{{ faq.title }}</DzAccordionTrigger>
+            <DzAccordionContent>{{ faq.body }}</DzAccordionContent>
+          </DzAccordionItem>
+        </DzAccordion>
+        <p class="text-sm text-gray-500">Open item (v-model): <code>{{ open || 'none' }}</code></p>
+      </div>
+    `,
+  }),
+}

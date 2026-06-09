@@ -77,6 +77,14 @@ describe('dzSearchInput — Unit Tests', () => {
     expect(wrapper.find('input').attributes('disabled')).toBeDefined()
   })
 
+  it('connects aria-describedby to the error element', () => {
+    const wrapper = mount(DzSearchInput, {
+      props: { id: 'q', error: 'Query is required' },
+    })
+    expect(wrapper.find('input').attributes('aria-describedby')).toContain('q-error')
+    expect(wrapper.find('#q-error').text()).toBe('Query is required')
+  })
+
   it('shows a loading spinner when loading', () => {
     const wrapper = mount(DzSearchInput, { props: { loading: true } })
     expect(wrapper.findComponent(DzSpinner).exists()).toBe(true)

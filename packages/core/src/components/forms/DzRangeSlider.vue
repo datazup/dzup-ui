@@ -16,7 +16,7 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
  * <DzRangeSlider v-model="range" tone="success" size="lg" />
  * ```
  */
-import { computed, useAttrs, useId } from 'vue'
+import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { rangeSliderVariants } from './DzRangeSlider.variants.ts'
@@ -49,11 +49,22 @@ const attrs = useAttrs()
 const autoId = useId()
 const fieldContext = useFormFieldContext()
 
+/** Template ref for the lower (minimum) thumb — exposed for programmatic focus. */
+const thumbRef = ref<{ $el?: HTMLElement } | HTMLElement | null>(null)
+
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
+)
+
+const resolvedInvalid = computed(
+  () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
+)
+
+const resolvedRequired = computed(
+  () => props.required || (fieldContext?.isRequired.value ?? false),
 )
 
 const styles = computed(() =>
@@ -86,6 +97,16 @@ function handleBlur(event: FocusEvent): void {
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+/** Expose programmatic focus (focuses the lower thumb) for parity with DzSlider. */
+defineExpose({
+  focus: (): void => {
+    const ref = thumbRef.value
+    if (!ref) return
+    const el = (ref as { $el?: HTMLElement }).$el ?? (ref as HTMLElement)
+    el?.focus?.()
+  },
+})
 </script>
 
 
@@ -103,26 +124,34 @@ const rootClasses = computed(() =>
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
-    :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-invalid="resolvedInvalid ? '' : undefined"
     :data-tone="tone"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
     @update:model-value="handleValueChange"
   >
+    <span v-if="$slots.default" :class="styles.label()">
+      <slot />
+    </span>
     <SliderTrack :class="styles.track()">
       <SliderRange :class="styles.range()" />
     </SliderTrack>
     <SliderThumb
-      :class="styles.thumb()"
+      ref="thumbRef"
+      :class="cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]')"
       :aria-label="ariaLabel ? `${ariaLabel} minimum` : 'Range minimum'"
+      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+      :aria-required="resolvedRequired || undefined"
       @focus="handleFocus"
       @blur="handleBlur"
     />
     <SliderThumb
-      :class="styles.thumb()"
+      :class="cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]')"
       :aria-label="ariaLabel ? `${ariaLabel} maximum` : 'Range maximum'"
+      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+      :aria-required="resolvedRequired || undefined"
       @focus="handleFocus"
       @blur="handleBlur"
     />

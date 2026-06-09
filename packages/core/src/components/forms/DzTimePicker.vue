@@ -65,6 +65,10 @@ const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
+const resolvedRequired = computed(
+  () => props.required || (fieldContext?.isRequired.value ?? false),
+)
+
 const styles = computed(() =>
   timePickerVariants({
     variant: props.variant,
@@ -92,6 +96,15 @@ function formatTime(time: TimeValue | undefined): string {
 
 const timeValue = computed(() => parseTimeString(model.value))
 
+/** Parsed min/max bounds passed to Reka's TimeFieldRoot */
+const minTimeValue = computed(() => parseTimeString(props.min ?? ''))
+const maxTimeValue = computed(() => parseTimeString(props.max ?? ''))
+
+/** Reka expects the step interval as a DateStep object keyed by segment */
+const resolvedStep = computed(() =>
+  props.step !== undefined ? { minute: props.step } : undefined,
+)
+
 function handleTimeChange(value: TimeValue | undefined): void {
   const formatted = formatTime(value)
   model.value = formatted
@@ -118,13 +131,18 @@ const rootClasses = computed(() =>
     :model-value="timeValue"
     :locale="locale ?? 'en-US'"
     :hour-cycle="hour12 === true ? 12 : hour12 === false ? 24 : undefined"
+    :min-value="minTimeValue"
+    :max-value="maxTimeValue"
+    :step="resolvedStep"
     :disabled="resolvedDisabled"
+    :required="resolvedRequired"
     :name="name"
     :class="rootClasses"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
     :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+    :aria-required="resolvedRequired || undefined"
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"

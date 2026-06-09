@@ -85,4 +85,17 @@ describe('dzTimePicker — Unit Tests', () => {
     await root.trigger('blur')
     expect(wrapper.emitted('blur')).toBeTruthy()
   })
+
+  it('reflects the required prop via aria-required', () => {
+    const wrapper = mount(DzTimePicker, { props: { required: true } })
+    expect(wrapper.find('[style*="contain"]').attributes('aria-required')).toBe('true')
+  })
+
+  it('renders with min/max/step bounds without error', () => {
+    const wrapper = mount(DzTimePicker, {
+      props: { modelValue: '14:30', min: '09:00', max: '17:00', step: 15 },
+    })
+    // Bounds/step are forwarded to Reka's TimeFieldRoot; component mounts cleanly.
+    expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+  })
 })

@@ -19,7 +19,8 @@ import type { DzCheckboxGroupContext, DzCheckboxGroupEmits, DzCheckboxGroupProps
  * </DzCheckboxGroup>
  * ```
  */
-import { computed, provide, toRef, useAttrs, useId } from 'vue'
+import { computed, provide, useAttrs, useId } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
   DZ_CHECKBOX_GROUP_KEY,
@@ -44,9 +45,25 @@ defineSlots<DzCheckboxGroupSlots>()
 
 const attrs = useAttrs()
 const autoId = useId()
+const fieldContext = useFormFieldContext()
 
-/** Resolved element ID — prop overrides auto-generated */
-const resolvedId = computed(() => props.id ?? autoId)
+/** Resolved element ID — prop overrides field context, falls back to auto-generated */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+
+/** Disabled resolved from prop or an enclosing DzFormField */
+const resolvedDisabled = computed(
+  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
+)
+
+/** aria-describedby resolved from prop or an enclosing DzFormField */
+const resolvedAriaDescribedby = computed(
+  () => props.ariaDescribedby ?? fieldContext?.ariaDescribedby.value,
+)
+
+/** aria-invalid resolved from prop or an enclosing DzFormField */
+const resolvedAriaInvalid = computed(
+  () => props.ariaInvalid ?? (fieldContext?.isInvalid.value || undefined),
+)
 
 function toggle(value: string): void {
   const current = [...model.value]
@@ -63,8 +80,8 @@ function toggle(value: string): void {
 
 const context: DzCheckboxGroupContext = {
   modelValue: model,
-  disabled: toRef(() => props.disabled),
-  size: toRef(() => props.size ?? 'md'),
+  disabled: resolvedDisabled,
+  size: computed(() => props.size ?? 'md'),
   toggle,
 }
 
@@ -86,9 +103,10 @@ const classes = computed(() =>
     :class="classes"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
-    :aria-describedby="ariaDescribedby"
-    :data-state="disabled ? 'disabled' : 'ready'"
-    :data-disabled="disabled ? '' : undefined"
+    :aria-describedby="resolvedAriaDescribedby"
+    :aria-invalid="resolvedAriaInvalid"
+    :data-state="resolvedDisabled ? 'disabled' : 'ready'"
+    :data-disabled="resolvedDisabled ? '' : undefined"
     :data-orientation="orientation"
     role="group"
     style="contain: layout style"

@@ -31,6 +31,10 @@ const meta = {
       table: { category: 'Behavior', defaultValue: { summary: 'undefined' } },
     },
   },
+  args: {
+    min: undefined,
+    max: undefined,
+  },
 } satisfies Meta<typeof DzFieldArray>
 
 export default meta
@@ -42,16 +46,16 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   name: 'Add / Remove / Reorder',
-  render: () => ({
+  render: args => ({
     components: { DzFieldArray, DzInput, DzButton },
     setup() {
       const members = ref<string[]>(['Ada Lovelace', 'Linus Torvalds'])
-      return { members }
+      return { args, members }
     },
     template: `
       <div class="w-96 space-y-2">
-        <DzFieldArray v-model="members">
-          <template #default="{ field, index, remove, move }">
+        <DzFieldArray v-model="members" :min="args.min" :max="args.max">
+          <template #default="{ field, index, remove, move, canRemove }">
             <div class="flex items-center gap-2">
               <DzInput
                 :model-value="field"
@@ -60,11 +64,11 @@ export const Default: Story = {
               />
               <DzButton size="sm" variant="ghost" aria-label="Move up" :disabled="index === 0" @click="move(index - 1)">↑</DzButton>
               <DzButton size="sm" variant="ghost" aria-label="Move down" :disabled="index === members.length - 1" @click="move(index + 1)">↓</DzButton>
-              <DzButton size="sm" variant="ghost" tone="danger" @click="remove()">Remove</DzButton>
+              <DzButton size="sm" variant="ghost" tone="danger" :disabled="!canRemove" @click="remove()">Remove</DzButton>
             </div>
           </template>
-          <template #append>
-            <DzButton size="sm" variant="outline" @click="members.push('')">+ Add member</DzButton>
+          <template #append="{ append }">
+            <DzButton size="sm" variant="outline" @click="append('')">+ Add member</DzButton>
           </template>
         </DzFieldArray>
       </div>
@@ -90,16 +94,22 @@ export const Default: Story = {
 
 export const MinMaxItems: Story = {
   name: 'Min / Max Items',
-  render: () => ({
+  args: {
+    min: 1,
+    max: 4,
+  },
+  render: args => ({
     components: { DzFieldArray, DzInput, DzButton },
     setup() {
       const tags = ref<string[]>(['frontend'])
-      return { tags }
+      return { args, tags }
     },
     template: `
       <div class="w-96 space-y-2">
-        <p class="text-sm text-[var(--dz-muted-foreground)]">At least 1, at most 4 tags. Add is hidden at the max.</p>
-        <DzFieldArray v-model="tags" :min="1" :max="4">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          At least {{ args.min }}, at most {{ args.max }} tags. Add is hidden at the max; Remove is disabled at the min.
+        </p>
+        <DzFieldArray v-model="tags" :min="args.min" :max="args.max">
           <template #default="{ field, index, remove, canRemove }">
             <div class="flex items-center gap-2">
               <DzInput
@@ -110,13 +120,29 @@ export const MinMaxItems: Story = {
               <DzButton size="sm" variant="ghost" tone="danger" :disabled="!canRemove" @click="remove()">Remove</DzButton>
             </div>
           </template>
-          <template #append>
-            <DzButton size="sm" variant="outline" @click="tags.push('')">+ Add tag</DzButton>
+          <template #append="{ append }">
+            <DzButton size="sm" variant="outline" @click="append('')">+ Add tag</DzButton>
           </template>
         </DzFieldArray>
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const rowCount = () => canvas.getAllByRole('textbox').length
+
+    // Starts at 1 item (the min) — Remove must be disabled.
+    await expect(rowCount()).toBe(1)
+    await expect(canvas.getByRole('button', { name: /^remove$/i })).toBeDisabled()
+
+    // Append up to the max (4), then the add affordance disappears.
+    const add = () => canvas.getByRole('button', { name: /add tag/i })
+    await userEvent.click(add())
+    await userEvent.click(add())
+    await userEvent.click(add())
+    await expect(rowCount()).toBe(4)
+    await expect(canvas.queryByRole('button', { name: /add tag/i })).toBeNull()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -150,8 +176,8 @@ export const PerRowValidation: Story = {
               <DzFormMessage />
             </DzFormField>
           </template>
-          <template #append>
-            <DzButton size="sm" variant="outline" @click="emails.push('')">+ Add invitee</DzButton>
+          <template #append="{ append }">
+            <DzButton size="sm" variant="outline" @click="append('')">+ Add invitee</DzButton>
           </template>
         </DzFieldArray>
       </div>
@@ -185,8 +211,8 @@ export const DarkMode: Story = {
               <DzButton size="sm" variant="ghost" tone="danger" @click="remove()">Remove</DzButton>
             </div>
           </template>
-          <template #append>
-            <DzButton size="sm" variant="outline" @click="members.push('')">+ Add member</DzButton>
+          <template #append="{ append }">
+            <DzButton size="sm" variant="outline" @click="append('')">+ Add member</DzButton>
           </template>
         </DzFieldArray>
       </div>

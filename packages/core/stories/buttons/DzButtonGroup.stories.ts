@@ -240,7 +240,7 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzButtonGroup, DzButton },
     template: `
-      <div class="space-y-4">
+      <div class="flex flex-col items-start gap-4">
         <DzButtonGroup variant="solid">
           <DzButton>Left</DzButton>
           <DzButton>Center</DzButton>
