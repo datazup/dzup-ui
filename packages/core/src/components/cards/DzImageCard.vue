@@ -28,6 +28,7 @@ import { imageCardVariants } from './DzImageCard.variants.ts'
 const props = withDefaults(defineProps<DzImageCardProps>(), {
   variant: 'elevated',
   aspectRatio: '16/9',
+  loading: 'lazy',
 })
 
 defineSlots<DzImageCardSlots>()
@@ -58,6 +59,8 @@ const imageStyle = computed(() => ({
       <img
         :src="src"
         :alt="alt"
+        :loading="loading"
+        decoding="async"
         :class="styles.image()"
       >
       <div v-if="$slots.overlay" :class="styles.overlay()">

@@ -88,4 +88,14 @@ describe('dzDateRangePicker — Unit Tests', () => {
     })
     expect(wrapper.text()).toContain('-')
   })
+
+  it('renders an inline error message linked via aria-describedby', () => {
+    const wrapper = mount(DzDateRangePicker, { props: { error: 'Range required' } })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    expect(errorEl.text()).toContain('Range required')
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
 })

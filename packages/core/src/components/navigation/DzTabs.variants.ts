@@ -122,7 +122,7 @@ export const tabsVariants = tv({
     { variant: 'pills', tone: 'primary', class: { trigger: 'data-[state=active]:bg-[var(--dz-primary)] data-[state=active]:text-[var(--dz-primary-foreground)] data-[state=active]:hover:bg-[var(--dz-primary-hover)]' } },
     { variant: 'pills', tone: 'neutral', class: { trigger: 'data-[state=active]:bg-[var(--dz-foreground)] data-[state=active]:text-[var(--dz-background)]' } },
     { variant: 'pills', tone: 'success', class: { trigger: 'data-[state=active]:bg-[var(--dz-success)] data-[state=active]:text-[var(--dz-success-foreground)]' } },
-    { variant: 'pills', tone: 'warning', class: { trigger: 'data-[state=active]:bg-[var(--dz-warning)] data-[state=active]:text-[var(--dz-warning-foreground)]' } },
+    { variant: 'pills', tone: 'warning', class: { trigger: 'data-[state=active]:bg-[var(--dz-warning-solid)] data-[state=active]:text-[var(--dz-warning-foreground)] data-[state=active]:hover:bg-[var(--dz-warning-solid-hover)]' } },
     { variant: 'pills', tone: 'danger', class: { trigger: 'data-[state=active]:bg-[var(--dz-danger)] data-[state=active]:text-[var(--dz-danger-foreground)]' } },
     { variant: 'pills', tone: 'info', class: { trigger: 'data-[state=active]:bg-[var(--dz-info)] data-[state=active]:text-[var(--dz-info-foreground)]' } },
 

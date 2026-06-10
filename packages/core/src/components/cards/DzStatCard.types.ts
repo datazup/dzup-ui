@@ -4,13 +4,17 @@
  * @module @dzup-ui/core/components/cards/DzStatCard
  */
 
+import type { CardVariant } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 /** Trend direction */
 export type StatTrend = 'up' | 'down' | 'neutral'
 
-/** Card variant */
-export type StatCardVariant = 'elevated' | 'outlined'
+/**
+ * Card variant — subset of the canonical {@link CardVariant} contract.
+ * Stat cards don't support the `flat` surface.
+ */
+export type StatCardVariant = Extract<CardVariant, 'elevated' | 'outlined'>
 
 // ---------------------------------------------------------------------------
 // Props

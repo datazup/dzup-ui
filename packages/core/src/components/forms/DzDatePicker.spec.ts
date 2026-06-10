@@ -101,4 +101,14 @@ describe('dzDatePicker — Unit Tests', () => {
     const field = wrapper.find('[style*="contain: layout style"]')
     expect(field.exists()).toBe(true)
   })
+
+  it('renders an inline error message linked via aria-describedby', () => {
+    const wrapper = mount(DzDatePicker, { props: { error: 'Date required' } })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    expect(errorEl.text()).toContain('Date required')
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
 })

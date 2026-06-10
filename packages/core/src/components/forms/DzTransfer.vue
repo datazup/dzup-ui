@@ -160,7 +160,7 @@ function handleBlur(event: FocusEvent): void {
       @blur.capture="handleBlur"
     >
     <!-- Source list -->
-    <div :class="styles.list()">
+    <div :class="styles.list()" data-dz-transfer-list>
       <div :class="styles.listHeader()">
         <slot name="source-header">
           <span>Source</span>
@@ -254,7 +254,7 @@ function handleBlur(event: FocusEvent): void {
     </div>
 
     <!-- Target list -->
-    <div :class="styles.list()">
+    <div :class="styles.list()" data-dz-transfer-list>
       <div :class="styles.listHeader()">
         <slot name="target-header">
           <span>Target</span>

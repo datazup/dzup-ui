@@ -66,6 +66,36 @@ describe('dzTimePicker — Unit Tests', () => {
     expect(wrapper.text()).toContain(':')
   })
 
+  it('renders editable segment inputs (hour + minute spinbuttons)', () => {
+    const wrapper = mount(DzTimePicker)
+    // Reka renders each editable segment with role="spinbutton".
+    const segments = wrapper.findAll('[role="spinbutton"]')
+    expect(segments.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it('displays the bound model value in the segments', () => {
+    const wrapper = mount(DzTimePicker, {
+      props: { modelValue: '14:30', hour12: false },
+    })
+    // 24-hour cycle: hour "14" and minute "30" must be visible.
+    expect(wrapper.text()).toContain('14')
+    expect(wrapper.text()).toContain('30')
+  })
+
+  it('renders a dayPeriod (AM/PM) segment when hour12 is enabled', () => {
+    const wrapper = mount(DzTimePicker, {
+      props: { modelValue: '14:30', hour12: true },
+    })
+    expect(wrapper.text()).toContain('PM')
+  })
+
+  it('shows placeholder text while empty', () => {
+    const wrapper = mount(DzTimePicker, {
+      props: { placeholder: 'Select time' },
+    })
+    expect(wrapper.text()).toContain('Select time')
+  })
+
   it('has contain: layout style on root', () => {
     const wrapper = mount(DzTimePicker)
     const root = wrapper.find('[style*="contain: layout style"]')
@@ -97,5 +127,15 @@ describe('dzTimePicker — Unit Tests', () => {
     })
     // Bounds/step are forwarded to Reka's TimeFieldRoot; component mounts cleanly.
     expect(wrapper.find('[style*="contain"]').exists()).toBe(true)
+  })
+
+  it('renders an inline error message linked via aria-describedby', () => {
+    const wrapper = mount(DzTimePicker, { props: { error: 'Time required' } })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    expect(errorEl.text()).toContain('Time required')
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
   })
 })

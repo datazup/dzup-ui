@@ -129,6 +129,23 @@ describe('dzTransfer — Unit Tests', () => {
     }
   })
 
+  it('marks both lists with data-dz-transfer-list (invalid border hook)', () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems },
+    })
+    expect(wrapper.findAll('[data-dz-transfer-list]').length).toBe(2)
+  })
+
+  it('applies the danger border target selector when invalid', () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems, invalid: true },
+    })
+    // data-invalid flag + the descendant selector that colors the list borders.
+    const group = wrapper.find('[data-invalid]')
+    expect(group.exists()).toBe(true)
+    expect(group.attributes('class')).toContain('[&_[data-dz-transfer-list]]:border-[var(--dz-danger)]')
+  })
+
   it('links the error message to the group via aria-describedby', () => {
     const wrapper = mount(DzTransfer, {
       props: { source: sourceItems, error: 'Selection required' },

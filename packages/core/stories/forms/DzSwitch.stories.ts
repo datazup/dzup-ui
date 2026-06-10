@@ -80,7 +80,7 @@ export const AllSizes: Story = {
   render: () => ({
     components: { DzSwitch },
     template: `
-      <div class="space-y-4">
+      <div class="flex flex-col items-start gap-4">
         <DzSwitch size="xs">Extra Small</DzSwitch>
         <DzSwitch size="sm">Small</DzSwitch>
         <DzSwitch size="md">Medium</DzSwitch>
@@ -114,7 +114,7 @@ export const States: Story = {
   render: () => ({
     components: { DzSwitch },
     template: `
-      <div class="space-y-4">
+      <div class="flex flex-col items-start gap-4">
         <DzSwitch>Off</DzSwitch>
         <DzSwitch :model-value="true">On</DzSwitch>
         <DzSwitch disabled>Disabled off</DzSwitch>
@@ -136,7 +136,7 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzSwitch },
     template: `
-      <div class="space-y-4">
+      <div class="flex flex-col items-start gap-4">
         <DzSwitch>Off</DzSwitch>
         <DzSwitch :model-value="true">On</DzSwitch>
         <DzSwitch disabled>Disabled</DzSwitch>
@@ -156,7 +156,7 @@ export const Interactive: Story = {
       return { enabled: false }
     },
     template: `
-      <div class="space-y-4">
+      <div class="flex flex-col items-start gap-4">
         <DzSwitch v-model="enabled">Dark mode</DzSwitch>
         <p class="text-sm text-gray-500">State: <strong>{{ enabled ? 'ON' : 'OFF' }}</strong></p>
       </div>
@@ -173,7 +173,7 @@ export const Accessibility: Story = {
   render: () => ({
     components: { DzSwitch },
     template: `
-      <div class="space-y-4">
+      <div class="flex flex-col items-start gap-4">
         <p class="text-sm text-gray-500">Tab to focus, Space or Enter to toggle.</p>
         <DzSwitch aria-label="Wi-Fi toggle">Wi-Fi</DzSwitch>
         <DzSwitch aria-label="Bluetooth toggle">Bluetooth</DzSwitch>

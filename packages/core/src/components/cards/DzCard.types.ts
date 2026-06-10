@@ -1,10 +1,15 @@
+import type { BaseAccessibilityProps, CardVariant } from '@dzup-ui/contracts'
 import type { VNode } from 'vue'
 
 /**
  * Card variant — visual style of the card surface.
- * Follows the Surface-like canonical variant taxonomy.
+ *
+ * Re-exported alias of the canonical {@link CardVariant} contract
+ * (`elevated | outlined | flat`) per ADR-02. Kept as a named alias so the
+ * Cards family public API stays stable while the source of truth lives in
+ * `@dzup-ui/contracts`.
  */
-export type DzCardVariant = 'elevated' | 'outlined' | 'flat'
+export type DzCardVariant = CardVariant
 
 /**
  * Card padding — controls internal spacing.
@@ -13,18 +18,19 @@ export type DzCardPadding = 'none' | 'sm' | 'md' | 'lg'
 
 /**
  * Props for the DzCard component.
+ *
+ * Extends {@link BaseAccessibilityProps} so `id` and ARIA attributes are
+ * uniform across the Cards family (matching DzImageCard / DzStatCard).
  */
-export interface DzCardProps {
+export interface DzCardProps extends BaseAccessibilityProps {
   /** Visual style variant */
   variant?: DzCardVariant
   /** Internal padding */
   padding?: DzCardPadding
-  /** Adds hover shadow effect */
+  /** Adds hover shadow effect (visual only — does not imply interactivity) */
   hoverable?: boolean
   /** Makes the card interactive (adds button role and keyboard support) */
   clickable?: boolean
-  /** Render as child element instead of wrapping div */
-  asChild?: boolean
 }
 
 /**

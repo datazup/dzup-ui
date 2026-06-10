@@ -125,4 +125,44 @@ describe('dzMultiSelect — Unit Tests', () => {
     const clearBtn = wrapper.find('[aria-label="Clear all"]')
     expect(clearBtn.exists()).toBe(true)
   })
+
+  it('removes the last tag on Backspace when the input is empty', async () => {
+    const wrapper = mount(DzMultiSelect, {
+      props: {
+        items,
+        'modelValue': ['apple', 'banana'],
+        'onUpdate:modelValue': (v: string[]) => wrapper.setProps({ modelValue: v }),
+      },
+    })
+    const input = wrapper.find('input')
+    await input.trigger('keydown', { key: 'Backspace' })
+    expect(wrapper.props('modelValue')).toEqual(['apple'])
+    expect(wrapper.emitted('change')).toBeTruthy()
+  })
+
+  it('does not remove a tag on Backspace while the input has text', async () => {
+    const wrapper = mount(DzMultiSelect, {
+      props: {
+        items,
+        'modelValue': ['apple', 'banana'],
+        'onUpdate:modelValue': (v: string[]) => wrapper.setProps({ modelValue: v }),
+      },
+    })
+    const input = wrapper.find('input')
+    await input.setValue('che')
+    await input.trigger('keydown', { key: 'Backspace' })
+    expect(wrapper.props('modelValue')).toEqual(['apple', 'banana'])
+  })
+
+  it('renders an inline error message linked via aria-describedby', () => {
+    const wrapper = mount(DzMultiSelect, {
+      props: { items, 'modelValue': [], 'onUpdate:modelValue': () => {}, 'error': 'Pick at least one' },
+    })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    expect(errorEl.text()).toContain('Pick at least one')
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
 })

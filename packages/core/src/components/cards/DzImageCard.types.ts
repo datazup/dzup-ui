@@ -4,8 +4,13 @@
  * @module @dzup-ui/core/components/cards/DzImageCard
  */
 
-/** Card variant */
-export type ImageCardVariant = 'elevated' | 'outlined'
+import type { CardVariant } from '@dzup-ui/contracts'
+
+/**
+ * Card variant — subset of the canonical {@link CardVariant} contract.
+ * Image cards don't support the `flat` surface.
+ */
+export type ImageCardVariant = Extract<CardVariant, 'elevated' | 'outlined'>
 
 // ---------------------------------------------------------------------------
 // Props
@@ -21,6 +26,11 @@ export interface DzImageCardProps {
   variant?: ImageCardVariant
   /** Aspect ratio for the image area (e.g., '16/9') */
   aspectRatio?: string
+  /**
+   * Native image loading strategy. Defaults to `'lazy'`; set to `'eager'`
+   * for above-the-fold / LCP images.
+   */
+  loading?: 'lazy' | 'eager'
   /** Unique element ID */
   id?: string
 }

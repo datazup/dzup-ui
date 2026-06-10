@@ -260,4 +260,16 @@ describe('dzCombobox — Unit Tests', () => {
     expect(document.body.textContent).toContain('Loading roles…')
     wrapper.unmount()
   })
+
+  it('renders an inline error message linked via aria-describedby', () => {
+    const wrapper = mount(DzCombobox, {
+      props: { items, error: 'Selection required' },
+    })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    expect(errorEl.text()).toContain('Selection required')
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
 })

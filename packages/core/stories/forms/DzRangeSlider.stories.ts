@@ -101,7 +101,7 @@ export const Default: Story = {
     setup() {
       return { args }
     },
-    template: '<DzRangeSlider v-bind="args" :model-value="[25, 75]" class="max-w-md" />',
+    template: '<DzRangeSlider v-bind="args" :model-value="[25, 75]" class="w-[480px]" />',
   }),
 }
 
@@ -114,7 +114,7 @@ export const AllSizes: Story = {
   render: () => ({
     components: { DzRangeSlider },
     template: `
-      <div class="space-y-6 max-w-md">
+      <div class="space-y-6 w-[480px]">
         <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size">
           <p class="text-sm font-medium mb-2 capitalize">{{ size }}</p>
           <DzRangeSlider :size="size" :model-value="[20, 80]" />
@@ -133,7 +133,7 @@ export const AllTones: Story = {
   render: () => ({
     components: { DzRangeSlider },
     template: `
-      <div class="space-y-6 max-w-md">
+      <div class="space-y-6 w-[480px]">
         <div v-for="tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']" :key="tone">
           <p class="text-sm font-medium mb-2 capitalize">{{ tone }}</p>
           <DzRangeSlider :tone="tone" :model-value="[30, 70]" />
@@ -155,7 +155,7 @@ export const WithSteps: Story = {
       return { range: [20, 80] as [number, number] }
     },
     template: `
-      <div class="space-y-4 max-w-md">
+      <div class="space-y-4 w-[480px]">
         <DzRangeSlider v-model="range" :min="0" :max="100" :step="10" />
         <p class="text-sm text-gray-500">Range: <strong>{{ range[0] }} - {{ range[1] }}</strong> (step: 10)</p>
       </div>
@@ -171,7 +171,7 @@ export const Vertical: Story = {
   render: () => ({
     components: { DzRangeSlider },
     template: `
-      <div class="flex gap-8 h-64">
+      <div class="flex gap-8 h-72">
         <DzRangeSlider orientation="vertical" :model-value="[20, 60]" tone="primary" />
         <DzRangeSlider orientation="vertical" :model-value="[30, 80]" tone="success" />
       </div>
@@ -190,7 +190,7 @@ export const Disabled: Story = {
     setup() {
       return { args }
     },
-    template: '<DzRangeSlider v-bind="args" :model-value="[25, 75]" class="max-w-md" />',
+    template: '<DzRangeSlider v-bind="args" :model-value="[25, 75]" class="w-[480px]" />',
   }),
 }
 
@@ -202,7 +202,7 @@ export const States: Story = {
   render: () => ({
     components: { DzRangeSlider },
     template: `
-      <div class="space-y-6 max-w-md">
+      <div class="space-y-6 w-[480px]">
         <div>
           <p class="text-sm mb-1">Default</p>
           <DzRangeSlider :model-value="[25, 75]" />
@@ -232,7 +232,7 @@ export const WithLabel: Story = {
       return { range: [25, 75] as [number, number] }
     },
     template: `
-      <div class="space-y-4 max-w-md">
+      <div class="space-y-4 w-[480px]">
         <DzRangeSlider v-model="range" tone="primary">Range</DzRangeSlider>
         <p class="text-sm text-gray-500">{{ range[0] }} – {{ range[1] }}</p>
       </div>
@@ -252,7 +252,7 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzRangeSlider },
     template: `
-      <div class="space-y-6 max-w-md">
+      <div class="space-y-6 w-[480px]">
         <DzRangeSlider :model-value="[20, 60]" tone="primary" />
         <DzRangeSlider :model-value="[30, 80]" tone="success" />
       </div>
@@ -271,7 +271,7 @@ export const Interactive: Story = {
       return { range: [200, 800] as [number, number] }
     },
     template: `
-      <div class="space-y-4 max-w-md">
+      <div class="space-y-4 w-[480px]">
         <DzRangeSlider v-model="range" :min="0" :max="1000" :step="50" aria-label="Price range" />
         <p class="text-sm text-gray-500">Price: <strong>\${{ range[0] }} - \${{ range[1] }}</strong></p>
       </div>
@@ -299,7 +299,7 @@ export const Accessibility: Story = {
   render: () => ({
     components: { DzRangeSlider },
     template: `
-      <div class="space-y-4 max-w-md">
+      <div class="space-y-4 w-[480px]">
         <p class="text-sm text-gray-500">Tab to focus each thumb, arrow keys to adjust. Both thumbs are independently focusable.</p>
         <DzRangeSlider :model-value="[30, 70]" aria-label="Range selection" />
       </div>
@@ -319,7 +319,7 @@ export const RealWorldPriceFilter: Story = {
       return { price: [50, 500] as [number, number] }
     },
     template: `
-      <div class="max-w-md">
+      <div class="w-[480px]">
         <label class="block text-sm font-medium mb-2">Price Range</label>
         <DzRangeSlider v-model="price" :min="0" :max="1000" :step="10" tone="primary" aria-label="Price filter" />
         <div class="flex justify-between text-xs text-gray-400 mt-1">

@@ -68,7 +68,7 @@ export const sliderVariants = tv({
       neutral: { range: 'bg-[var(--dz-foreground)]' },
       primary: { range: 'bg-[var(--dz-primary)]' },
       success: { range: 'bg-[var(--dz-success)]' },
-      warning: { range: 'bg-[var(--dz-warning)]' },
+      warning: { range: 'bg-[var(--dz-warning-solid)]' },
       danger: { range: 'bg-[var(--dz-danger)]' },
       info: { range: 'bg-[var(--dz-info)]' },
     },

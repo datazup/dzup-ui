@@ -97,6 +97,21 @@ const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
+/** ID for the error message element (for aria-describedby) */
+const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
+
+/** Combined aria-describedby from prop + own error element + field context */
+const resolvedAriaDescribedby = computed(() => {
+  const parts: string[] = []
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
+  return parts.length > 0 ? parts.join(' ') : undefined
+})
+
 const styles = computed(() =>
   comboboxVariants({
     variant: props.variant,
@@ -242,7 +257,8 @@ watch(
 
 
 <template>
-  <ComboboxRoot
+  <div>
+    <ComboboxRoot
     :model-value="model"
     :disabled="resolvedDisabled"
     :name="name"
@@ -270,7 +286,7 @@ watch(
         :disabled="resolvedDisabled"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
-        :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+        :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
         @input="handleInput"
         @focus="handleFocus"
@@ -357,5 +373,16 @@ watch(
         </ComboboxViewport>
       </ComboboxContent>
     </ComboboxPortal>
-  </ComboboxRoot>
+    </ComboboxRoot>
+
+    <!-- Error message -->
+    <p
+      v-if="error"
+      :id="errorId"
+      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      role="alert"
+    >
+      {{ error }}
+    </p>
+  </div>
 </template>

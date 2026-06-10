@@ -67,6 +67,21 @@ const resolvedRequired = computed(
   () => props.required || (fieldContext?.isRequired.value ?? false),
 )
 
+/** ID for the error message element (for aria-describedby) */
+const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
+
+/** Combined aria-describedby from prop + own error element + field context */
+const resolvedAriaDescribedby = computed(() => {
+  const parts: string[] = []
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
+  return parts.length > 0 ? parts.join(' ') : undefined
+})
+
 const styles = computed(() =>
   sliderVariants({
     size: props.size,
@@ -111,7 +126,8 @@ defineExpose({
 
 
 <template>
-  <SliderRoot
+  <div>
+    <SliderRoot
     :id="resolvedId"
     :model-value="sliderValue"
     :min="min"
@@ -122,7 +138,7 @@ defineExpose({
     :name="name"
     :class="rootClasses"
     :aria-labelledby="ariaLabelledby"
-    :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+    :aria-describedby="resolvedAriaDescribedby"
     :data-state="resolvedDisabled ? 'disabled' : 'idle'"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
@@ -146,5 +162,16 @@ defineExpose({
       @focus="handleFocus"
       @blur="handleBlur"
     />
-  </SliderRoot>
+    </SliderRoot>
+
+    <!-- Error message -->
+    <p
+      v-if="error"
+      :id="errorId"
+      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      role="alert"
+    >
+      {{ error }}
+    </p>
+  </div>
 </template>

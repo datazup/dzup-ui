@@ -120,4 +120,14 @@ describe('dzSlider — Unit Tests', () => {
     expect(wrapper.find('[data-invalid]').exists()).toBe(true)
     expect(wrapper.find('[role="slider"]').attributes('aria-invalid')).toBe('true')
   })
+
+  it('renders an inline error message linked via aria-describedby', () => {
+    const wrapper = mount(DzSlider, { props: { error: 'Out of range' } })
+    const errorEl = wrapper.find('[role="alert"]')
+    expect(errorEl.exists()).toBe(true)
+    expect(errorEl.text()).toContain('Out of range')
+    const errorId = errorEl.attributes('id')!
+    expect(errorId).toBeTruthy()
+    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
 })

@@ -25,6 +25,12 @@ const meta = {
       description: 'Aspect ratio for the image area (e.g., "16/9", "4/3", "1/1")',
       table: { category: 'Appearance', defaultValue: { summary: '16/9' } },
     },
+    loading: {
+      control: 'inline-radio',
+      options: ['lazy', 'eager'],
+      description: 'Native image loading strategy (use "eager" for above-the-fold / LCP images)',
+      table: { category: 'Behavior', defaultValue: { summary: 'lazy' } },
+    },
     // Behavior
     src: {
       control: 'text',

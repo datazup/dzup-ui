@@ -42,11 +42,6 @@ const meta = {
       description: 'Makes the card interactive (adds button role and keyboard support)',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
-    asChild: {
-      control: 'boolean',
-      description: 'Render as child element instead of wrapping div',
-      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
-    },
   },
   args: {
     variant: 'elevated',
@@ -477,6 +472,66 @@ export const RealWorldDashboardStats: Story = {
             <DzText size="xs" tone="warning" class="mt-1">3 require attention</DzText>
           </DzCardBody>
         </DzCard>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Sub-part Composition (padding guidance)
+// ---------------------------------------------------------------------------
+
+/**
+ * **Sub-part composition & padding.**
+ *
+ * `DzCard` applies its own `padding` to the root surface, while
+ * `DzCardHeader`, `DzCardBody`, and `DzCardFooter` each carry their *own*
+ * internal padding. Composing them inside a padded root therefore
+ * **double-pads** the content.
+ *
+ * **Rule of thumb:** when you build a card from the structural sub-parts, set
+ * `padding="none"` on the root and let the sub-parts own the spacing. Use the
+ * root `padding` prop only for free-form content placed directly in the
+ * default slot (without sub-parts).
+ *
+ * The example below renders the same card both ways so the difference is
+ * visible — note the tighter, correct gutter on the right.
+ */
+export const SubPartComposition: Story = {
+  name: 'Sub-part Composition (padding)',
+  render: () => ({
+    components: { DzCard, DzCardHeader, DzCardBody, DzCardFooter, DzButton, DzHeading, DzText },
+    template: `
+      <div class="flex flex-wrap gap-6 items-start">
+        <div class="space-y-2">
+          <DzText size="xs" tone="danger">✗ Root padding + sub-parts → double padding</DzText>
+          <DzCard variant="outlined" padding="md" class="w-72">
+            <template #header>
+              <DzCardHeader><DzHeading :level="4" size="md">Title</DzHeading></DzCardHeader>
+            </template>
+            <DzCardBody>
+              <DzText tone="muted" size="sm">Body content sits too far from the edges.</DzText>
+            </DzCardBody>
+            <template #footer>
+              <DzCardFooter><DzButton size="sm">Action</DzButton></DzCardFooter>
+            </template>
+          </DzCard>
+        </div>
+
+        <div class="space-y-2">
+          <DzText size="xs" tone="success">✓ padding="none" on root — sub-parts own the spacing</DzText>
+          <DzCard variant="outlined" padding="none" class="w-72">
+            <template #header>
+              <DzCardHeader><DzHeading :level="4" size="md">Title</DzHeading></DzCardHeader>
+            </template>
+            <DzCardBody>
+              <DzText tone="muted" size="sm">Body content has the intended gutter.</DzText>
+            </DzCardBody>
+            <template #footer>
+              <DzCardFooter><DzButton size="sm">Action</DzButton></DzCardFooter>
+            </template>
+          </DzCard>
+        </div>
       </div>
     `,
   }),

@@ -34,9 +34,12 @@ describe('dzCard contract', () => {
       }
     })
 
-    it('accepts hoverable prop', () => {
+    it('accepts hoverable prop (visual hover shadow, no pointer cursor)', () => {
       const wrapper = mount(DzCard, { props: { hoverable: true } })
-      expect(wrapper.classes().join(' ')).toContain('cursor-pointer')
+      const classes = wrapper.classes().join(' ')
+      expect(classes).toContain('hover:shadow-[var(--dz-shadow-lg)]')
+      // hoverable is visual-only — pointer cursor is reserved for clickable.
+      expect(classes).not.toContain('cursor-pointer')
     })
 
     it('accepts clickable prop', () => {

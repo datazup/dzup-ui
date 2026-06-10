@@ -18,6 +18,11 @@ export const transferVariants = tv({
     list: [
       'flex flex-col',
       'flex-1',
+      // Stable minimum column width so the lists don't collapse to their
+      // content. Without this, a list sizes to its widest label and the whole
+      // component renders narrower when search is hidden or labels are short —
+      // making the search-enabled view appear wider than the others.
+      'min-w-[180px]',
       'rounded-[var(--dz-radius-lg)]',
       'border border-[var(--dz-border)]',
       'bg-[var(--dz-background)]',

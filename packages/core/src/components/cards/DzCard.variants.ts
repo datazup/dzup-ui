@@ -35,7 +35,9 @@ export const cardVariants = tv({
       lg: 'p-[var(--dz-spacing-8)]',
     },
     hoverable: {
-      true: 'hover:shadow-[var(--dz-shadow-lg)] cursor-pointer',
+      // Visual affordance only — `cursor-pointer` is reserved for `clickable`
+      // so non-interactive cards don't advertise a false action (a11y).
+      true: 'hover:shadow-[var(--dz-shadow-lg)]',
     },
     clickable: {
       true: ['cursor-pointer', 'dz-focus-ring-control'].join(' '),

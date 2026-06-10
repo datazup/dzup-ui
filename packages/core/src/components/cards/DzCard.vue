@@ -31,7 +31,6 @@ const props = withDefaults(defineProps<DzCardProps>(), {
   padding: 'md',
   hoverable: false,
   clickable: false,
-  asChild: false,
 })
 
 const emit = defineEmits<DzCardEmits>()
@@ -67,6 +66,14 @@ const a11yAttrs = computed(() => {
   }
 })
 
+/** ARIA attributes forwarded from BaseAccessibilityProps (undefined values are dropped by Vue). */
+const ariaAttrs = computed(() => ({
+  'aria-label': props.ariaLabel,
+  'aria-labelledby': props.ariaLabelledby,
+  'aria-describedby': props.ariaDescribedby,
+  'aria-invalid': props.ariaInvalid,
+}))
+
 /**
  * Handle click events — only emits when card is clickable.
  */
@@ -92,9 +99,9 @@ function handleKeydown(event: KeyboardEvent): void {
 
 <template>
   <div
+    :id="id"
     :class="classes"
-    v-bind="{ ...dataAttrs, ...a11yAttrs }"
-    style="contain: layout style"
+    v-bind="{ ...dataAttrs, ...a11yAttrs, ...ariaAttrs }"
     @click="handleClick"
     @keydown="handleKeydown"
   >

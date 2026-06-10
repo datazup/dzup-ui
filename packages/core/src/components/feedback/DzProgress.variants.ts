@@ -43,7 +43,7 @@ export const progressBarVariants = tv({
       neutral: 'bg-[var(--dz-foreground)]',
       primary: 'bg-[var(--dz-primary)]',
       success: 'bg-[var(--dz-success)]',
-      warning: 'bg-[var(--dz-warning)]',
+      warning: 'bg-[var(--dz-warning-solid)]',
       danger: 'bg-[var(--dz-danger)]',
       info: 'bg-[var(--dz-info)]',
     },

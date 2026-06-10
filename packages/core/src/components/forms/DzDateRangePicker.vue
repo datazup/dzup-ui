@@ -115,6 +115,21 @@ const resolvedRequired = computed(
   () => props.required || (fieldContext?.isRequired.value ?? false),
 )
 
+/** ID for the error message element (for aria-describedby) */
+const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
+
+/** Combined aria-describedby from prop + own error element + field context */
+const resolvedAriaDescribedby = computed(() => {
+  const parts: string[] = []
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
+  return parts.length > 0 ? parts.join(' ') : undefined
+})
+
 const styles = computed(() =>
   dateRangePickerVariants({
     variant: props.variant,
@@ -160,7 +175,8 @@ const triggerClasses = computed(() =>
 
 
 <template>
-  <DateRangePickerRoot
+  <div>
+    <DateRangePickerRoot
     :model-value="rangeValue"
     :min-value="startPicker.minValue.value"
     :max-value="startPicker.maxValue.value"
@@ -179,7 +195,7 @@ const triggerClasses = computed(() =>
         :class="triggerClasses"
         :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
-        :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
+        :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
         :aria-required="resolvedRequired || undefined"
         :data-state="resolvedDisabled ? 'disabled' : 'idle'"
@@ -288,5 +304,16 @@ const triggerClasses = computed(() =>
         </DateRangePickerGrid>
       </DateRangePickerCalendar>
     </DateRangePickerContent>
-  </DateRangePickerRoot>
+    </DateRangePickerRoot>
+
+    <!-- Error message -->
+    <p
+      v-if="error"
+      :id="errorId"
+      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      role="alert"
+    >
+      {{ error }}
+    </p>
+  </div>
 </template>
