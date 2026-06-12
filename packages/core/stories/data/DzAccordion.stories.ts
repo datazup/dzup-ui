@@ -10,8 +10,8 @@ import {
 
 /**
  * DzAccordion is a disclosure component built on Reka UI primitives (ADR-07).
- * It supports single or multiple open items, three visual variants
- * (`default`, `bordered`, `separated`), and collapsible behavior.
+ * It supports single or multiple open items, four visual variants
+ * (`default`, `bordered`, `separated`, `filled`), and collapsible behavior.
  *
  * Compound sub-parts: DzAccordionItem, DzAccordionTrigger, DzAccordionContent.
  * Context is provided via inject (ADR-08).
@@ -25,7 +25,7 @@ const meta = {
     // Appearance
     variant: {
       control: 'select',
-      options: ['default', 'bordered', 'separated'],
+      options: ['default', 'bordered', 'separated', 'filled'],
       description: 'Visual style variant',
       table: { category: 'Appearance', defaultValue: { summary: 'default' } },
     },
@@ -44,8 +44,9 @@ const meta = {
     },
     collapsible: {
       control: 'boolean',
-      description: 'Whether all items can be collapsed (single mode only)',
-      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+      description:
+        'Single mode only: allow the open item to be closed by clicking it again (zero items open). When false, one item always stays open.',
+      table: { category: 'Behavior', defaultValue: { summary: 'true' } },
     },
     disabled: {
       control: 'boolean',
@@ -68,7 +69,7 @@ const meta = {
     variant: 'default',
     size: 'md',
     type: 'single',
-    collapsible: false,
+    collapsible: true,
     disabled: false,
   },
 } satisfies Meta<typeof DzAccordion>
@@ -132,7 +133,7 @@ export const AllVariants: Story = {
     components: { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent },
     template: `
       <div class="space-y-8 max-w-lg">
-        <div v-for="v in ['default', 'bordered', 'separated']" :key="v">
+        <div v-for="v in ['default', 'bordered', 'separated', 'filled']" :key="v">
           <p class="text-sm font-medium mb-2 capitalize">variant: {{ v }}</p>
           <DzAccordion :variant="v" collapsible :aria-label="v + ' accordion'">
             <DzAccordionItem value="a">

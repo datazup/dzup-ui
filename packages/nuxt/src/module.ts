@@ -63,6 +63,7 @@ const CORE_COMPONENTS = [
   'DzToast',
   'DzToastContainer',
   // forms
+  'DzCascader',
   'DzCheckbox',
   'DzCheckboxGroup',
   'DzColorPicker',
@@ -75,6 +76,7 @@ const CORE_COMPONENTS = [
   'DzMultiSelect',
   'DzRadio',
   'DzRadioGroup',
+  'DzKnob',
   'DzRating',
   'DzSelect',
   'DzSelectOption',
@@ -82,7 +84,7 @@ const CORE_COMPONENTS = [
   'DzSelectContent',
   'DzSlider',
   'DzSwitch',
-  'DzTagInput',
+  'DzTagsInput',
   // inputs
   'DzInput',
   'DzNumberInput',
@@ -130,6 +132,7 @@ const CORE_COMPONENTS = [
   'DzDropdownMenuContent',
   'DzDropdownMenuItem',
   'DzDropdownMenuSeparator',
+  'DzMegaMenu',
   'DzMenu',
   'DzMenuItem',
   'DzMenubar',

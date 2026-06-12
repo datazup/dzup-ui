@@ -41,6 +41,8 @@ export * from './components/typography/index.ts'
 
 // ── Composables ──
 
+export * from './composables/useAffix/index.ts'
+export * from './composables/useCalendar/index.ts'
 export * from './composables/useClickOutside/index.ts'
 export * from './composables/useCollapse/index.ts'
 export * from './composables/useDataGrid/index.ts'
@@ -51,6 +53,8 @@ export * from './composables/useEscapeKey/index.ts'
 export * from './composables/useFloating/index.ts'
 export * from './composables/useFocusTrap/index.ts'
 export * from './composables/useFormField/index.ts'
+export * from './composables/useScrollSpy/index.ts'
+export * from './composables/useScrollToTop/index.ts'
 export * from './composables/useSelect/index.ts'
 export * from './composables/useSidebar/index.ts'
 export * from './composables/useTabs/index.ts'

@@ -40,7 +40,7 @@ describe('dzAccordion — Contract Spec v1', () => {
   })
 
   it('accepts variant values', () => {
-    const variants = ['default', 'bordered', 'separated'] as const
+    const variants = ['default', 'bordered', 'separated', 'filled'] as const
     for (const variant of variants) {
       const wrapper = mount(DzAccordion, {
         props: { variant },

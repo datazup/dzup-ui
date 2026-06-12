@@ -91,6 +91,7 @@
     "@dzup-ui/contracts": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
     "clsx": "^2.1.1",
+    "qrcode-generator": "^2.0.4",
     "tailwind-merge": "^3.5.0",
     "tailwind-variants": "0.3.1"
   },

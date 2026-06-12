@@ -4,6 +4,28 @@
  * @module @dzup-ui/core/components/navigation
  */
 
+// ── Anchor (scrollspy section navigation) ──
+
+export type {
+  DzAnchorEmits,
+  DzAnchorItem,
+  DzAnchorItemSlotProps,
+  DzAnchorProps,
+  DzAnchorSlots,
+} from './DzAnchor.types.ts'
+export { type AnchorVariantProps, anchorVariants } from './DzAnchor.variants.ts'
+export { default as DzAnchor } from './DzAnchor.vue'
+
+// ── BackTop (scroll-to-top affordance) ──
+
+export type {
+  DzBackTopEmits,
+  DzBackTopProps,
+  DzBackTopSlots,
+} from './DzBackTop.types.ts'
+export { type BackTopVariantProps, backTopVariants } from './DzBackTop.variants.ts'
+export { default as DzBackTop } from './DzBackTop.vue'
+
 // ── Tabs (Compound) ──
 
 export type {
@@ -22,6 +44,23 @@ export { default as DzBreadcrumb } from './DzBreadcrumb.vue'
 export { default as DzBreadcrumbItem } from './DzBreadcrumbItem.vue'
 
 export { default as DzBreadcrumbSeparator } from './DzBreadcrumbSeparator.vue'
+
+// ── MegaMenu (multi-column navigation) ──
+
+export type {
+  DzMegaMenuEmits,
+  DzMegaMenuGroup,
+  DzMegaMenuGroupSlotProps,
+  DzMegaMenuItem,
+  DzMegaMenuItemSlotProps,
+  DzMegaMenuLink,
+  DzMegaMenuLinkSlotProps,
+  DzMegaMenuOrientation,
+  DzMegaMenuProps,
+  DzMegaMenuSlots,
+} from './DzMegaMenu.types.ts'
+export { type MegaMenuVariantProps, megaMenuVariants } from './DzMegaMenu.variants.ts'
+export { default as DzMegaMenu } from './DzMegaMenu.vue'
 
 export type {
   DzMenuContext,

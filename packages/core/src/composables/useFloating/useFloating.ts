@@ -9,7 +9,7 @@
  */
 
 import type { Placement } from '@floating-ui/vue'
-import type { ComputedRef, Ref } from 'vue'
+import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue'
 import {
   flip as flipMiddleware,
   offset as offsetMiddleware,
@@ -35,8 +35,13 @@ export type FloatingPlacement
 
 /** Options for the useFloating composable */
 export interface UseFloatingOptions {
-  /** Where to place the floating element relative to the reference */
-  placement?: FloatingPlacement
+  /**
+   * Where to place the floating element relative to the reference.
+   *
+   * Accepts a plain value, a ref, or a getter so callers can drive placement
+   * reactively (e.g. a multi-step tour where each step anchors differently).
+   */
+  placement?: MaybeRefOrGetter<FloatingPlacement>
   /** Offset distance in pixels from the reference element */
   offset?: number
   /** Whether to flip placement when insufficient space */
@@ -87,7 +92,7 @@ export function useFloating(options?: UseFloatingOptions): UseFloatingReturn {
     referenceRef,
     floatingRef,
     {
-      placement: initialPlacement as Placement,
+      placement: initialPlacement as MaybeRefOrGetter<Placement>,
       middleware,
     },
   )

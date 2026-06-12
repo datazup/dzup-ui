@@ -3,11 +3,15 @@ import { darkModeDecorator } from '../_shared'
 import { DzTimePicker } from '../../src/components/forms'
 
 /**
- * DzTimePicker allows users to select a time value.
+ * DzTimePicker is a dropdown time picker (CoreUI-style).
  *
- * Built on Reka UI TimeFieldRoot. Supports min/max time constraints,
- * step intervals, 12/24-hour format, locale-aware formatting,
- * and all standard input variants and sizes.
+ * Clicking the trigger opens a popover with selectable hour / minute /
+ * (optional) second and AM/PM columns. Two layouts are supported: a scrollable
+ * `roll` wheel (default) and native `select` dropdowns. Supports min/max
+ * constraints, step intervals, 12/24-hour format, locale-aware display, a
+ * clear button, a clock indicator, and a Cancel/Confirm footer.
+ *
+ * `v-model` is the canonical 24-hour `HH:mm` (or `HH:mm:ss` when `seconds`).
  */
 const meta = {
   title: 'Core/Forms/DzTimePicker',
@@ -18,7 +22,7 @@ const meta = {
     variant: {
       control: 'select',
       options: ['outline', 'filled', 'underlined'],
-      description: 'Visual style variant',
+      description: 'Visual style of the trigger',
       table: { category: 'Appearance', defaultValue: { summary: 'outline' } },
     },
     size: {
@@ -27,10 +31,26 @@ const meta = {
       description: 'Component size',
       table: { category: 'Appearance', defaultValue: { summary: 'md' } },
     },
+    selection: {
+      control: 'inline-radio',
+      options: ['roll', 'select'],
+      description: 'Popover selection layout',
+      table: { category: 'Appearance', defaultValue: { summary: 'roll' } },
+    },
     // Behavior
     placeholder: {
       control: 'text',
-      description: 'Placeholder text when no time is selected',
+      description: 'Trigger placeholder when no time is selected',
+      table: { category: 'Behavior', defaultValue: { summary: 'Select time' } },
+    },
+    seconds: {
+      control: 'boolean',
+      description: 'Show a seconds column (value becomes HH:mm:ss)',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    hour12: {
+      control: 'boolean',
+      description: 'Use 12-hour format with AM/PM (default: follows locale)',
       table: { category: 'Behavior' },
     },
     min: {
@@ -45,22 +65,47 @@ const meta = {
     },
     step: {
       control: 'number',
-      description: 'Step interval in minutes',
-      table: { category: 'Behavior' },
+      description: 'Minute step interval',
+      table: { category: 'Behavior', defaultValue: { summary: '1' } },
+    },
+    secondStep: {
+      control: 'number',
+      description: 'Second step interval (when seconds enabled)',
+      table: { category: 'Behavior', defaultValue: { summary: '1' } },
     },
     locale: {
       control: 'text',
-      description: 'Locale for time formatting (BCP 47 tag)',
+      description: 'Locale for time display (BCP 47 tag)',
       table: { category: 'Behavior' },
     },
-    hour12: {
+    footer: {
       control: 'boolean',
-      description: 'Use 12-hour format (default: follows locale)',
-      table: { category: 'Behavior' },
+      description: 'Show Cancel/Confirm footer. When false, picks apply immediately',
+      table: { category: 'Behavior', defaultValue: { summary: 'true' } },
+    },
+    cleaner: {
+      control: 'boolean',
+      description: 'Show the clear button when a value is set',
+      table: { category: 'Behavior', defaultValue: { summary: 'true' } },
+    },
+    indicator: {
+      control: 'boolean',
+      description: 'Show the clock indicator icon',
+      table: { category: 'Behavior', defaultValue: { summary: 'true' } },
+    },
+    confirmText: {
+      control: 'text',
+      description: 'Confirm button label',
+      table: { category: 'Behavior', defaultValue: { summary: 'OK' } },
+    },
+    cancelText: {
+      control: 'text',
+      description: 'Cancel button label',
+      table: { category: 'Behavior', defaultValue: { summary: 'Cancel' } },
     },
     disabled: {
       control: 'boolean',
-      description: 'Disabled state -- prevents interaction',
+      description: 'Disabled state — prevents interaction',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
     name: {
@@ -92,9 +137,10 @@ const meta = {
     },
   },
   args: {
-    placeholder: 'Select time...',
+    placeholder: 'Select time',
     variant: 'outline',
     size: 'md',
+    selection: 'roll',
     disabled: false,
   },
 } satisfies Meta<typeof DzTimePicker>
@@ -113,6 +159,29 @@ export const Default: Story = {
       return { args }
     },
     template: '<DzTimePicker v-bind="args" class="max-w-xs" />',
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Roll vs Select layout
+// ---------------------------------------------------------------------------
+
+export const SelectionLayouts: Story = {
+  name: 'Roll vs Select Layout',
+  render: () => ({
+    components: { DzTimePicker },
+    template: `
+      <div class="flex gap-8 max-w-md">
+        <div class="flex-1 space-y-2">
+          <p class="text-sm font-medium">Roll (wheel)</p>
+          <DzTimePicker selection="roll" placeholder="Roll" />
+        </div>
+        <div class="flex-1 space-y-2">
+          <p class="text-sm font-medium">Select (dropdowns)</p>
+          <DzTimePicker selection="select" placeholder="Select" />
+        </div>
+      </div>
+    `,
   }),
 }
 
@@ -159,27 +228,43 @@ export const AllSizes: Story = {
 // ---------------------------------------------------------------------------
 
 export const TwelveHourFormat: Story = {
-  name: '12-Hour Format',
+  name: '12-Hour Format (AM/PM)',
   render: () => ({
     components: { DzTimePicker },
-    template: '<DzTimePicker :hour12="true" placeholder="12-hour format" class="max-w-xs" />',
+    data() {
+      return { time: '13:45' }
+    },
+    template: `
+      <div class="space-y-2 max-w-xs">
+        <DzTimePicker v-model="time" :hour12="true" placeholder="12-hour" />
+        <p class="text-sm text-gray-500">Value (24h): <strong>{{ time || 'none' }}</strong></p>
+      </div>
+    `,
   }),
 }
 
 // ---------------------------------------------------------------------------
-// 24-Hour Format
+// With Seconds
 // ---------------------------------------------------------------------------
 
-export const TwentyFourHourFormat: Story = {
-  name: '24-Hour Format',
+export const WithSeconds: Story = {
+  name: 'With Seconds',
   render: () => ({
     components: { DzTimePicker },
-    template: '<DzTimePicker :hour12="false" placeholder="24-hour format" class="max-w-xs" />',
+    data() {
+      return { time: '' }
+    },
+    template: `
+      <div class="space-y-2 max-w-xs">
+        <DzTimePicker v-model="time" seconds placeholder="HH:mm:ss" />
+        <p class="text-sm text-gray-500">Value: <strong>{{ time || 'none' }}</strong></p>
+      </div>
+    `,
   }),
 }
 
 // ---------------------------------------------------------------------------
-// With Time Constraints
+// Constraints
 // ---------------------------------------------------------------------------
 
 export const WithConstraints: Story = {
@@ -188,8 +273,46 @@ export const WithConstraints: Story = {
     components: { DzTimePicker },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Only business hours (09:00 - 17:00) with 30-min intervals.</p>
+        <p class="text-sm text-gray-500">Only business hours (09:00 - 17:00) with 30-min steps. Out-of-range options are disabled.</p>
         <DzTimePicker min="09:00" max="17:00" :step="30" placeholder="Business hours" />
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Immediate (no footer)
+// ---------------------------------------------------------------------------
+
+export const NoFooter: Story = {
+  name: 'Immediate (no footer)',
+  render: () => ({
+    components: { DzTimePicker },
+    data() {
+      return { time: '' }
+    },
+    template: `
+      <div class="space-y-2 max-w-xs">
+        <p class="text-sm text-gray-500">Selections apply immediately, without Cancel/OK.</p>
+        <DzTimePicker v-model="time" :footer="false" :step="15" placeholder="Pick a time" />
+        <p class="text-sm text-gray-500">Value: <strong>{{ time || 'none' }}</strong></p>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Minimal trigger (no indicator / no cleaner)
+// ---------------------------------------------------------------------------
+
+export const MinimalTrigger: Story = {
+  name: 'No Indicator / No Cleaner',
+  render: () => ({
+    components: { DzTimePicker },
+    template: `
+      <div class="space-y-4 max-w-xs">
+        <DzTimePicker :indicator="false" placeholder="No indicator" />
+        <DzTimePicker :cleaner="false" model-value="12:00" />
       </div>
     `,
   }),
@@ -206,7 +329,7 @@ export const Disabled: Story = {
     setup() {
       return { args }
     },
-    template: '<DzTimePicker v-bind="args" class="max-w-xs" />',
+    template: '<DzTimePicker v-bind="args" model-value="10:30" class="max-w-xs" />',
   }),
 }
 
@@ -230,37 +353,18 @@ export const InvalidState: Story = {
 }
 
 // ---------------------------------------------------------------------------
-// States
-// ---------------------------------------------------------------------------
-
-export const States: Story = {
-  render: () => ({
-    components: { DzTimePicker },
-    template: `
-      <div class="space-y-4 max-w-xs">
-        <DzTimePicker placeholder="Default" />
-        <DzTimePicker placeholder="Disabled" disabled />
-        <DzTimePicker placeholder="Invalid" invalid error="Required" />
-      </div>
-    `,
-  }),
-}
-
-// ---------------------------------------------------------------------------
 // Dark Mode
 // ---------------------------------------------------------------------------
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTimePicker },
     template: `
       <div class="space-y-4 max-w-xs">
         <DzTimePicker variant="outline" placeholder="Outline" />
-        <DzTimePicker variant="filled" placeholder="Filled" />
+        <DzTimePicker variant="filled" model-value="14:30" :hour12="true" />
       </div>
     `,
   }),
@@ -280,23 +384,6 @@ export const Interactive: Story = {
       <div class="space-y-4 max-w-xs">
         <DzTimePicker v-model="time" placeholder="Pick a time" />
         <p class="text-sm text-gray-500">Selected: <strong>{{ time || 'none' }}</strong></p>
-      </div>
-    `,
-  }),
-}
-
-// ---------------------------------------------------------------------------
-// Accessibility
-// ---------------------------------------------------------------------------
-
-export const Accessibility: Story = {
-  name: 'Accessibility: Focus States',
-  render: () => ({
-    components: { DzTimePicker },
-    template: `
-      <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Tab to focus, type digits to enter time, arrow keys to increment/decrement fields.</p>
-        <DzTimePicker placeholder="Keyboard navigable" aria-label="Meeting time" />
       </div>
     `,
   }),

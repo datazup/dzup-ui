@@ -32,8 +32,15 @@ export const DZ_ACCORDION_KEY: InjectionKey<DzAccordionContext> = Symbol('dz-acc
 // Variant type
 // ---------------------------------------------------------------------------
 
-/** Visual variants for the DzAccordion component */
-export type AccordionVariant = 'default' | 'bordered' | 'separated'
+/**
+ * Visual variants for the DzAccordion component.
+ *
+ * - `default`   — flush list, a divider under each item (no chrome).
+ * - `bordered`  — single rounded container with internal dividers.
+ * - `separated` — each item is its own outlined card with a gap between them.
+ * - `filled`    — each item is a soft, filled card (no borders) with a gap.
+ */
+export type AccordionVariant = 'default' | 'bordered' | 'separated' | 'filled'
 
 // ---------------------------------------------------------------------------
 // DzAccordion (Root) Props

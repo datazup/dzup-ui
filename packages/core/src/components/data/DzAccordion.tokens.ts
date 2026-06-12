@@ -23,6 +23,16 @@ export const accordionTokens = {
     radius: 'var(--dz-radius-md)',
     gap: 'var(--dz-spacing-2)',
   },
+  /** Filled variant item (borderless, soft background) */
+  filled: {
+    background: 'var(--dz-muted)',
+    radius: 'var(--dz-radius-md)',
+    gap: 'var(--dz-spacing-2)',
+  },
+  /** Horizontal inset for chrome'd variants (bordered/separated/filled) */
+  inset: {
+    paddingX: 'var(--dz-spacing-4)',
+  },
   /** Trigger button */
   trigger: {
     transition: 'var(--dz-transition-fast)',

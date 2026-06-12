@@ -62,6 +62,35 @@ export {
 } from './DzProgress.variants.ts'
 export { default as DzProgress } from './DzProgress.vue'
 
+// Types — DzMeterGroup
+export type {
+  DzMeterGroupComputedSegment,
+  DzMeterGroupOrientation,
+  DzMeterGroupProps,
+  DzMeterGroupSegment,
+  DzMeterGroupSlotProps,
+  DzMeterGroupSlots,
+} from './DzMeterGroup.types.ts'
+
+export {
+  meterGroupPalette,
+  meterGroupToneColors,
+  meterGroupTokens,
+} from './DzMeterGroup.tokens.ts'
+
+export {
+  meterGroupLegendItemVariants,
+  meterGroupLegendSwatchVariants,
+  meterGroupLegendVariants,
+  meterGroupRootVariants,
+  meterGroupSegmentVariants,
+  type MeterGroupSegmentVariantProps,
+  type MeterGroupTrackVariantProps,
+  meterGroupTrackVariants,
+} from './DzMeterGroup.variants.ts'
+
+export { default as DzMeterGroup } from './DzMeterGroup.vue'
+
 export type {
   DzResultProps,
   DzResultSlots,
@@ -125,6 +154,17 @@ export { default as DzErrorBoundary } from './DzErrorBoundary.vue'
 // Types — DzAsyncBoundary
 export type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots } from './DzAsyncBoundary.types.ts'
 export { default as DzAsyncBoundary } from './DzAsyncBoundary.vue'
+
+// Types — DzBlockUI
+export type {
+  DzBlockUIEmits,
+  DzBlockUIProps,
+  DzBlockUISlotProps,
+  DzBlockUISlots,
+} from './DzBlockUI.types.ts'
+export { blockUiTokens } from './DzBlockUI.tokens.ts'
+export { type BlockUiVariantProps, blockUiVariants } from './DzBlockUI.variants.ts'
+export { default as DzBlockUI } from './DzBlockUI.vue'
 
 // Types — DzTokenProgressBar
 export type {
