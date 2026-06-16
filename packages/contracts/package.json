@@ -18,7 +18,7 @@
     "access": "public"
   },
   "scripts": {
-    "typecheck": "vue-tsc --noEmit",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src/",
     "test": "echo 'No unit tests in contracts — run yarn typecheck'",
     "build": "tsc --project tsconfig.json"
