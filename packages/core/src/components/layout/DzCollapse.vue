@@ -18,7 +18,6 @@ import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
  * </DzCollapse>
  * ```
  */
-import type { ComponentPublicInstance } from 'vue'
 import { computed, useAttrs } from 'vue'
 import { useCollapse } from '../../composables/useCollapse/useCollapse.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -39,7 +38,7 @@ const { contentRef, contentStyle } = useCollapse({
 })
 
 /** Bind the composable's content ref via a function ref (type-safe template ref). */
-function setContentRef(el: Element | ComponentPublicInstance | null): void {
+function setContentRef(el: unknown): void {
   contentRef.value = (el as HTMLElement | null)
 }
 
