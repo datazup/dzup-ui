@@ -39,6 +39,11 @@ const { affixed, setRootRef, rootStyle, contentStyle } = useAffix({
   onChange: value => emit('change', value),
 })
 
+/** Bind through an app-local function ref to avoid cross-workspace Vue type skew. */
+function setAffixRootRef(el: unknown): void {
+  setRootRef(el as Element | null)
+}
+
 const classes = computed(() =>
   cn(attrs.class as string | undefined),
 )
@@ -47,7 +52,7 @@ const classes = computed(() =>
 <template>
   <div
     :id="id"
-    :ref="setRootRef"
+    :ref="setAffixRootRef"
     :class="classes"
     :style="rootStyle"
     :data-affixed="affixed ? '' : undefined"
