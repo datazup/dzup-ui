@@ -96,7 +96,11 @@ function resolveColor(value: string, el: HTMLElement | null): string {
   const match = /var\(\s*(--[\w-]+)\s*(?:,\s*([^)]+))?\)/.exec(value)
   if (!match)
     return value
-  const [, name, fallback] = match
+  const name = match[1]
+  if (!name)
+    return value
+
+  const fallback = match[2]
   const resolved = el
     ? getComputedStyle(el).getPropertyValue(name).trim()
     : ''

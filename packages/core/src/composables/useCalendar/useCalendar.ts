@@ -12,8 +12,8 @@
  */
 
 import type { Ref } from 'vue'
+import type { CalendarDate } from '@internationalized/date'
 import {
-  CalendarDate,
   DateFormatter,
   getLocalTimeZone,
   isToday as isTodayInTz,
