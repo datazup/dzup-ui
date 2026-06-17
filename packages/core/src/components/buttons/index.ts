@@ -34,11 +34,33 @@ export type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './
 export { type CopyButtonVariantProps, copyButtonVariants } from './DzCopyButton.variants.ts'
 
 export { default as DzCopyButton } from './DzCopyButton.vue'
+// ── DzFab ──
+export type {
+  DzFabEmits,
+  DzFabPosition,
+  DzFabProps,
+  DzFabSlots,
+  DzFabVariant,
+} from './DzFab.types.ts'
+export { type FabVariantProps, fabVariants } from './DzFab.variants.ts'
+export { default as DzFab } from './DzFab.vue'
+
 export type {
   DzIconButtonEmits,
   DzIconButtonProps,
 } from './DzIconButton.types.ts'
 export { default as DzIconButton } from './DzIconButton.vue'
+
+// ── DzSpeedDial ──
+export type {
+  DzSpeedDialDirection,
+  DzSpeedDialEmits,
+  DzSpeedDialItem,
+  DzSpeedDialProps,
+  DzSpeedDialType,
+} from './DzSpeedDial.types.ts'
+export { type SpeedDialVariantProps, speedDialVariants } from './DzSpeedDial.variants.ts'
+export { default as DzSpeedDial } from './DzSpeedDial.vue'
 
 export type {
   DzSplitButtonActionEmits,

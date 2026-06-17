@@ -33,15 +33,33 @@ export const accordionVariants = tv({
 
   variants: {
     variant: {
+      // Flush list: a divider under every item except the last. No horizontal
+      // inset so triggers align with surrounding content.
       default: {
-        item: 'border-b border-[var(--dz-border)]',
-      },
-      bordered: {
-        root: 'border border-[var(--dz-border)] rounded-[var(--dz-radius-md)]',
         item: 'border-b border-[var(--dz-border)] last:border-b-0',
       },
+      // One rounded container; items share internal dividers. Content is inset
+      // from the container edge so text never touches the border.
+      bordered: {
+        root: 'border border-[var(--dz-border)] rounded-[var(--dz-radius-md)] overflow-hidden',
+        item: 'border-b border-[var(--dz-border)] last:border-b-0',
+        trigger: 'px-[var(--dz-spacing-4)]',
+        content: 'px-[var(--dz-spacing-4)]',
+      },
+      // Each item is its own outlined, rounded card with a gap between cards.
       separated: {
-        item: 'border border-[var(--dz-border)] rounded-[var(--dz-radius-md)] mb-[var(--dz-spacing-2)] last:mb-0',
+        root: 'flex flex-col gap-[var(--dz-spacing-2)]',
+        item: 'border border-[var(--dz-border)] rounded-[var(--dz-radius-md)] overflow-hidden',
+        trigger: 'px-[var(--dz-spacing-4)]',
+        content: 'px-[var(--dz-spacing-4)]',
+      },
+      // Soft, borderless filled cards with a gap. Good for dense settings panels
+      // where outlines add too much visual noise.
+      filled: {
+        root: 'flex flex-col gap-[var(--dz-spacing-2)]',
+        item: 'rounded-[var(--dz-radius-md)] bg-[var(--dz-muted)] overflow-hidden',
+        trigger: 'px-[var(--dz-spacing-4)] hover:no-underline text-[var(--dz-foreground)]',
+        content: 'px-[var(--dz-spacing-4)]',
       },
     },
 

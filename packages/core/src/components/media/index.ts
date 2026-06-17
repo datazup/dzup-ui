@@ -94,3 +94,30 @@ export { type LightboxVariantProps, lightboxVariants } from './DzLightbox.varian
 
 // ── DzLightbox ──
 export { default as DzLightbox } from './DzLightbox.vue'
+
+export { qrCodeTokens } from './DzQRCode.tokens.ts'
+
+export type {
+  DzQRCodeEmits,
+  DzQRCodeProps,
+  DzQRCodeSlots,
+  DzQRErrorLevel,
+  DzQRStatus,
+} from './DzQRCode.types.ts'
+
+export { type QRCodeVariantProps, qrCodeVariants } from './DzQRCode.variants.ts'
+
+// ── DzQRCode ──
+export { default as DzQRCode } from './DzQRCode.vue'
+
+export { watermarkTokens } from './DzWatermark.tokens.ts'
+
+export type {
+  DzWatermarkProps,
+  DzWatermarkSlots,
+} from './DzWatermark.types.ts'
+
+export { type WatermarkVariantProps, watermarkVariants } from './DzWatermark.variants.ts'
+
+// ── DzWatermark ──
+export { default as DzWatermark } from './DzWatermark.vue'

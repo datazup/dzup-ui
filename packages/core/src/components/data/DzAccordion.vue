@@ -46,9 +46,13 @@ const emit = defineEmits<DzAccordionEmits>()
 
 defineSlots<DzAccordionSlots>()
 
-/** Collapsible is only valid for single mode */
+/**
+ * Collapsible is only valid for single mode. Defaults to `true` so that
+ * clicking the already-open item closes it (zero items open) — without it,
+ * Reka keeps one item open at all times, which surprises most users.
+ */
 const resolvedCollapsible = computed(() =>
-  props.type === 'single' ? (props as DzAccordionSingleProps).collapsible : undefined,
+  props.type === 'single' ? ((props as DzAccordionSingleProps).collapsible ?? true) : undefined,
 )
 
 const attrs = useAttrs()
@@ -72,9 +76,12 @@ const rootClasses = computed(() =>
 )
 
 function handleValueChange(value: string | string[] | undefined): void {
-  if (value === undefined) return
-  model.value = value
-  emit('change', value)
+  // Reka emits `undefined` when a collapsible single accordion closes its open
+  // item (see useSingleOrMultipleValue). Normalize that to the empty value for
+  // the current mode so the item actually collapses instead of staying open.
+  const next = value ?? (props.type === 'multiple' ? [] : '')
+  model.value = next
+  emit('change', next)
 }
 </script>
 

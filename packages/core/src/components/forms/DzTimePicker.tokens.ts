@@ -2,8 +2,8 @@
  * DzTimePicker -- Component-specific token mappings.
  * Maps semantic design tokens to component styling (ADR-04).
  *
- * Wraps Reka UI TimeFieldRoot with hour/minute segment inputs,
- * separator, and clock icon.
+ * Dropdown time picker (Reka UI Popover) with a value trigger, clock
+ * indicator, clear button, and hour/minute/second/AM-PM selection columns.
  */
 export const timePickerTokens = {
   /** Root container */

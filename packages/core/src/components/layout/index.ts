@@ -4,6 +4,15 @@
  * @module @dzup-ui/core/components/layout
  */
 
+// ── DzAffix ──
+export type {
+  DzAffixEmits,
+  DzAffixProps,
+  DzAffixSlots,
+} from './DzAffix.types.ts'
+
+export { default as DzAffix } from './DzAffix.vue'
+
 // ── DzAppShell ──
 export type {
   DzAppShellProps,
@@ -25,6 +34,18 @@ export type {
 } from './DzCollapse.types.ts'
 // ── DzCollapse ──
 export { default as DzCollapse } from './DzCollapse.vue'
+
+export type {
+  DzPanelEmits,
+  DzPanelProps,
+  DzPanelSlots,
+  PanelVariant,
+} from './DzPanel.types.ts'
+
+export { type PanelVariantProps, panelVariants } from './DzPanel.variants.ts'
+
+// ── DzPanel ──
+export { default as DzPanel } from './DzPanel.vue'
 // Types
 export type {
   ContainerMaxWidth,
@@ -134,3 +155,14 @@ export type {
 } from './DzStack.types.ts'
 
 export { default as DzStack } from './DzStack.vue'
+
+export type {
+  DzToolbarProps,
+  DzToolbarSlots,
+  ToolbarOrientation,
+  ToolbarVariant,
+} from './DzToolbar.types.ts'
+
+export { type ToolbarVariantProps, toolbarRegionVariants, toolbarVariants } from './DzToolbar.variants.ts'
+
+export { default as DzToolbar } from './DzToolbar.vue'

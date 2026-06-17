@@ -153,6 +153,22 @@ export { default as DzSheetTitle } from './DzSheetTitle.vue'
 
 export { default as DzSheetTrigger } from './DzSheetTrigger.vue'
 
+// ── Types — DzTour ──
+export type {
+  DzTourEmits,
+  DzTourProps,
+  DzTourSlotProps,
+  DzTourSlots,
+  DzTourStep,
+  TourPlacement,
+  TourTarget,
+} from './DzTour.types.ts'
+
+export { type TourVariantProps, tourVariants } from './DzTour.variants.ts'
+
+// ── DzTour ──
+export { default as DzTour } from './DzTour.vue'
+
 // ── Types — DzTooltip ──
 export type {
   DzTooltipContentProps,

@@ -102,3 +102,58 @@ describe('dzAccordionContent', () => {
     expect(contents).toHaveLength(2)
   })
 })
+
+describe('dzAccordion — open/close behavior', () => {
+  /** Reads the data-state of each trigger button (open | closed). */
+  function triggerStates(wrapper: ReturnType<typeof mountAccordion>): string[] {
+    return wrapper.findAll('button[data-state]').map(btn => btn.attributes('data-state') ?? '')
+  }
+
+  it('single mode: opening a second item closes the first', async () => {
+    const wrapper = mountAccordion({ type: 'single', collapsible: true })
+    const triggers = wrapper.findAll('button[data-state]')
+
+    await triggers[0]!.trigger('click')
+    expect(triggerStates(wrapper)).toEqual(['open', 'closed'])
+
+    await triggers[1]!.trigger('click')
+    expect(triggerStates(wrapper)).toEqual(['closed', 'open'])
+  })
+
+  it('single + collapsible: clicking the open item closes it', async () => {
+    const wrapper = mountAccordion({ type: 'single', collapsible: true })
+    const trigger = wrapper.find('button[data-state]')
+
+    await trigger.trigger('click')
+    expect(trigger.attributes('data-state')).toBe('open')
+
+    await trigger.trigger('click')
+    expect(trigger.attributes('data-state')).toBe('closed')
+  })
+
+  it('single (collapsible defaults on): clicking the open item closes it without an explicit prop', async () => {
+    const wrapper = mountAccordion({ type: 'single' })
+    const trigger = wrapper.find('button[data-state]')
+
+    await trigger.trigger('click')
+    expect(trigger.attributes('data-state')).toBe('open')
+
+    await trigger.trigger('click')
+    expect(trigger.attributes('data-state')).toBe('closed')
+  })
+
+  it('multiple mode: opening a second item keeps the first open', async () => {
+    const wrapper = mountAccordion({ type: 'multiple' })
+    const triggers = wrapper.findAll('button[data-state]')
+
+    await triggers[0]!.trigger('click')
+    await triggers[1]!.trigger('click')
+    expect(triggerStates(wrapper)).toEqual(['open', 'open'])
+  })
+
+  it('emits change with the active value', async () => {
+    const wrapper = mountAccordion({ type: 'single', collapsible: true })
+    await wrapper.find('button[data-state]').trigger('click')
+    expect(wrapper.emitted('change')?.[0]).toEqual(['item-1'])
+  })
+})

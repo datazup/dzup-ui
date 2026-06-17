@@ -213,6 +213,354 @@
       scroll-behavior: auto;
     }
   }
+
+  /* ==========================================================================
+     5b. Component Keyframes
+     Shared animation keyframes referenced by component variants. The accordion
+     height transition relies on the `--reka-accordion-content-height` custom
+     property that Reka UI sets on the AccordionContent element at runtime
+     (see DzAccordion.variants.ts → content slot).
+     ========================================================================== */
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--reka-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--reka-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/* ==========================================================================
+   5c. Component Tokens (layered)
+   Component-local custom properties mapped to semantic tokens (ADR-04/ADR-17).
+   Declared in the dz-components layer so consumer utilities still win.
+   ========================================================================== */
+
+@layer dz-components {
+  /* DzCalendar — cell sizing, today ring, selected/range fills, muting */
+  .dz-calendar {
+    --dz-calendar-cell-size: 2.25rem;
+    --dz-calendar-cell-radius: var(--dz-radius-sm);
+    --dz-calendar-cell-foreground: var(--dz-foreground);
+    --dz-calendar-cell-hover-bg: var(--dz-muted);
+    --dz-calendar-today-ring: var(--dz-primary);
+    --dz-calendar-selected-bg: var(--dz-primary);
+    --dz-calendar-selected-foreground: var(--dz-primary-foreground);
+    --dz-calendar-range-bg: var(--dz-primary-muted);
+    --dz-calendar-outside-foreground: var(--dz-muted-foreground);
+    --dz-calendar-outside-opacity: 0.5;
+    --dz-calendar-disabled-opacity: var(--dz-control-disabled-opacity);
+    --dz-calendar-header-foreground: var(--dz-foreground);
+    --dz-calendar-weekday-foreground: var(--dz-muted-foreground);
+  }
+
+  .dz-calendar[data-size='xs'] {
+    --dz-calendar-cell-size: 1.75rem;
+  }
+
+  .dz-calendar[data-size='sm'] {
+    --dz-calendar-cell-size: 2rem;
+  }
+
+  .dz-calendar[data-size='md'] {
+    --dz-calendar-cell-size: 2.25rem;
+  }
+
+  .dz-calendar[data-size='lg'] {
+    --dz-calendar-cell-size: 2.5rem;
+  }
+
+  .dz-calendar[data-size='xl'] {
+    --dz-calendar-cell-size: 2.75rem;
+  }
+
+  /* DzDataView — container gap, list dividers, list-row padding */
+  .dz-data-view {
+    --dz-data-view-gap: var(--dz-spacing-4);
+    --dz-data-view-toolbar-gap: var(--dz-spacing-3);
+    --dz-data-view-list-divider: var(--dz-border);
+    --dz-data-view-list-item-padding-x: var(--dz-spacing-4);
+    --dz-data-view-list-item-padding-y: var(--dz-spacing-3);
+  }
+
+  .dz-data-view[data-size='xs'],
+  .dz-data-view[data-size='sm'] {
+    --dz-data-view-gap: var(--dz-spacing-3);
+    --dz-data-view-list-item-padding-x: var(--dz-spacing-3);
+    --dz-data-view-list-item-padding-y: var(--dz-spacing-2);
+  }
+
+  .dz-data-view[data-size='lg'],
+  .dz-data-view[data-size='xl'] {
+    --dz-data-view-gap: var(--dz-spacing-5);
+    --dz-data-view-list-item-padding-x: var(--dz-spacing-5);
+    --dz-data-view-list-item-padding-y: var(--dz-spacing-4);
+  }
+
+  /* DzMegaMenu — menubar gap + dropdown panel/column spacing */
+  .dz-mega-menu {
+    --dz-menu-bar-gap: var(--dz-spacing-1);
+    --dz-menu-panel-offset: var(--dz-spacing-1);
+    --dz-menu-panel-padding: var(--dz-spacing-4);
+    --dz-menu-column-gap: var(--dz-spacing-6);
+    --dz-menu-column-min-width: 12rem;
+  }
+
+  /* DzAnchor — scrollspy TOC: indentation, link spacing, rail + active colors */
+  .dz-anchor {
+    --dz-anchor-font-size: var(--dz-text-sm);
+    --dz-anchor-item-gap: var(--dz-spacing-1_5);
+    --dz-anchor-indent: var(--dz-spacing-4);
+    --dz-anchor-color: var(--dz-muted-foreground);
+    --dz-anchor-hover-color: var(--dz-foreground);
+    --dz-anchor-active-color: var(--dz-primary);
+    --dz-anchor-rail-color: var(--dz-border);
+  }
+
+  /* DzFab — circular dimension, glyph size, and elevation (size-scaled) */
+  .dz-fab {
+    --dz-fab-size: var(--dz-spacing-14);
+    --dz-fab-icon-size: var(--dz-spacing-6);
+    --dz-fab-shadow: var(--dz-shadow-lg);
+    --dz-fab-shadow-hover: var(--dz-shadow-xl);
+    --dz-fab-offset: var(--dz-spacing-6);
+    --dz-fab-z: 40;
+  }
+
+  .dz-fab[data-size='xs'] {
+    --dz-fab-size: var(--dz-spacing-9);
+    --dz-fab-icon-size: var(--dz-spacing-4);
+  }
+
+  .dz-fab[data-size='sm'] {
+    --dz-fab-size: var(--dz-spacing-10);
+    --dz-fab-icon-size: var(--dz-spacing-5);
+  }
+
+  .dz-fab[data-size='md'] {
+    --dz-fab-size: var(--dz-spacing-12);
+    --dz-fab-icon-size: var(--dz-spacing-6);
+  }
+
+  .dz-fab[data-size='lg'] {
+    --dz-fab-size: var(--dz-spacing-14);
+    --dz-fab-icon-size: var(--dz-spacing-7);
+  }
+
+  .dz-fab[data-size='xl'] {
+    --dz-fab-size: var(--dz-spacing-16);
+    --dz-fab-icon-size: var(--dz-spacing-8);
+  }
+
+  /* DzBackTop — fixed-corner placement and fade/slide entrance */
+  .dz-back-top {
+    --dz-back-top-offset: var(--dz-spacing-6);
+    --dz-back-top-z: 40;
+    --dz-back-top-transition: 200ms;
+  }
+
+  /* DzBlockUI — content mask scrim, blur, message, and stacking order */
+  .dz-block-ui {
+    --dz-blockui-mask: var(--dz-overlay-bg);
+    --dz-blockui-blur: 0px;
+    --dz-blockui-radius: var(--dz-radius-md);
+    --dz-blockui-gap: var(--dz-spacing-3);
+    --dz-blockui-message-color: var(--dz-foreground);
+    --dz-blockui-z: 30;
+    --dz-blockui-fullscreen-z: var(--dz-z-modal-backdrop, 1040);
+  }
+
+  /* DzWatermark — tiled mark color, subtlety (opacity), and stacking order */
+  .dz-watermark {
+    --dz-watermark-color: var(--dz-muted-foreground);
+    --dz-watermark-opacity: 0.15;
+    --dz-watermark-z: 9;
+  }
+
+  /* DzInplace — display affordance (hover hint) and editor wrapper */
+  .dz-inplace {
+    --dz-inplace-gap: var(--dz-spacing-2);
+    --dz-inplace-padding-x: var(--dz-spacing-2);
+    --dz-inplace-padding-y: var(--dz-spacing-1);
+    --dz-inplace-radius: var(--dz-radius-md);
+    --dz-inplace-hover-bg: var(--dz-muted);
+    --dz-inplace-ring: var(--dz-ring);
+    --dz-inplace-hint-color: var(--dz-muted-foreground);
+    --dz-inplace-disabled-opacity: 0.5;
+  }
+
+  /* DzFloatLabel — floating-label rest/float typography and color */
+  .dz-float-label {
+    --dz-float-label-color: var(--dz-muted-foreground);
+    --dz-float-label-active-color: var(--dz-primary);
+    --dz-float-label-rest-font-size: var(--dz-text-base);
+    --dz-float-label-float-font-size: var(--dz-text-xs);
+    --dz-float-label-padding-x: var(--dz-spacing-3);
+    --dz-float-label-gap: var(--dz-spacing-1);
+    --dz-float-label-bg: var(--dz-background);
+    --dz-float-label-duration: 150ms;
+  }
+
+  /* DzOrderList — reorderable list surface, handle, and drop indicator */
+  .dz-order-list {
+    --dz-order-list-gap: var(--dz-spacing-2);
+    --dz-order-list-control-gap: var(--dz-spacing-1);
+    --dz-order-list-radius: var(--dz-radius-md);
+    --dz-order-list-item-gap: var(--dz-spacing-3);
+    --dz-order-list-item-bg: var(--dz-surface);
+    --dz-order-list-item-hover-bg: var(--dz-muted);
+    --dz-order-list-item-selected-bg: var(--dz-primary-muted);
+    --dz-order-list-item-selected-fg: var(--dz-primary);
+    --dz-order-list-item-grab-bg: var(--dz-surface);
+    --dz-order-list-grab-shadow: var(--dz-shadow-lg);
+    --dz-order-list-handle-color: var(--dz-muted-foreground);
+    --dz-order-list-handle-hover: var(--dz-foreground);
+    --dz-order-list-border: var(--dz-border);
+    --dz-order-list-drop-indicator-color: var(--dz-primary);
+    --dz-order-list-drop-indicator-size: 2px;
+    --dz-order-list-disabled-opacity: 0.5;
+    --dz-order-list-item-padding-x: var(--dz-spacing-4);
+    --dz-order-list-item-padding-y: var(--dz-spacing-2);
+  }
+
+  /* DzToolbar — gap/padding density (size) and surface treatment (variant) */
+  .dz-toolbar {
+    --dz-toolbar-gap: var(--dz-spacing-2);
+    --dz-toolbar-padding-x: var(--dz-spacing-4);
+    --dz-toolbar-padding-y: var(--dz-spacing-2);
+    --dz-toolbar-radius: var(--dz-radius-sm);
+    --dz-toolbar-bg: var(--dz-surface);
+    --dz-toolbar-border: var(--dz-border);
+    --dz-toolbar-shadow: var(--dz-shadow-sm);
+    --dz-toolbar-sticky-z: 10;
+  }
+
+  .dz-toolbar[data-size='xs'] {
+    --dz-toolbar-gap: var(--dz-spacing-1);
+    --dz-toolbar-padding-x: var(--dz-spacing-2);
+    --dz-toolbar-padding-y: var(--dz-spacing-1);
+  }
+
+  .dz-toolbar[data-size='sm'] {
+    --dz-toolbar-gap: var(--dz-spacing-1);
+    --dz-toolbar-padding-x: var(--dz-spacing-3);
+    --dz-toolbar-padding-y: var(--dz-spacing-1);
+  }
+
+  .dz-toolbar[data-size='md'] {
+    --dz-toolbar-gap: var(--dz-spacing-2);
+    --dz-toolbar-padding-x: var(--dz-spacing-4);
+    --dz-toolbar-padding-y: var(--dz-spacing-2);
+  }
+
+  .dz-toolbar[data-size='lg'] {
+    --dz-toolbar-gap: var(--dz-spacing-3);
+    --dz-toolbar-padding-x: var(--dz-spacing-6);
+    --dz-toolbar-padding-y: var(--dz-spacing-3);
+  }
+
+  .dz-toolbar[data-size='xl'] {
+    --dz-toolbar-gap: var(--dz-spacing-4);
+    --dz-toolbar-padding-x: var(--dz-spacing-8);
+    --dz-toolbar-padding-y: var(--dz-spacing-4);
+  }
+
+  /* Elevated raises the surface above flat/outlined */
+  .dz-toolbar[data-variant='elevated'] {
+    --dz-toolbar-bg: var(--dz-surface-raised);
+  }
+
+  /* DzPanel — titled container density (size), surface (variant), accent (tone) */
+  .dz-panel {
+    --dz-panel-radius: var(--dz-radius-md);
+    --dz-panel-bg: var(--dz-surface);
+    --dz-panel-foreground: var(--dz-foreground);
+    --dz-panel-border: var(--dz-border);
+    --dz-panel-shadow: var(--dz-shadow-md);
+    --dz-panel-accent: var(--dz-foreground);
+    --dz-panel-gap: var(--dz-spacing-3);
+    --dz-panel-padding-x: var(--dz-spacing-4);
+    --dz-panel-padding-y: var(--dz-spacing-4);
+    --dz-panel-header-padding-y: var(--dz-spacing-3);
+    --dz-panel-title-size: var(--dz-text-base);
+  }
+
+  .dz-panel[data-size='xs'] {
+    --dz-panel-gap: var(--dz-spacing-1);
+    --dz-panel-padding-x: var(--dz-spacing-3);
+    --dz-panel-padding-y: var(--dz-spacing-2);
+    --dz-panel-header-padding-y: var(--dz-spacing-2);
+    --dz-panel-title-size: var(--dz-text-xs);
+  }
+
+  .dz-panel[data-size='sm'] {
+    --dz-panel-gap: var(--dz-spacing-2);
+    --dz-panel-padding-x: var(--dz-spacing-3);
+    --dz-panel-padding-y: var(--dz-spacing-3);
+    --dz-panel-header-padding-y: var(--dz-spacing-2);
+    --dz-panel-title-size: var(--dz-text-sm);
+  }
+
+  .dz-panel[data-size='md'] {
+    --dz-panel-gap: var(--dz-spacing-3);
+    --dz-panel-padding-x: var(--dz-spacing-4);
+    --dz-panel-padding-y: var(--dz-spacing-4);
+    --dz-panel-header-padding-y: var(--dz-spacing-3);
+    --dz-panel-title-size: var(--dz-text-base);
+  }
+
+  .dz-panel[data-size='lg'] {
+    --dz-panel-gap: var(--dz-spacing-4);
+    --dz-panel-padding-x: var(--dz-spacing-6);
+    --dz-panel-padding-y: var(--dz-spacing-6);
+    --dz-panel-header-padding-y: var(--dz-spacing-4);
+    --dz-panel-title-size: var(--dz-text-lg);
+  }
+
+  .dz-panel[data-size='xl'] {
+    --dz-panel-gap: var(--dz-spacing-4);
+    --dz-panel-padding-x: var(--dz-spacing-8);
+    --dz-panel-padding-y: var(--dz-spacing-8);
+    --dz-panel-header-padding-y: var(--dz-spacing-5);
+    --dz-panel-title-size: var(--dz-text-xl);
+  }
+
+  /* Elevated raises the surface above outlined/legend */
+  .dz-panel[data-variant='elevated'] {
+    --dz-panel-bg: var(--dz-surface-raised);
+  }
+
+  /* Tone drives the title accent color */
+  .dz-panel[data-tone='primary'] {
+    --dz-panel-accent: var(--dz-primary);
+  }
+
+  .dz-panel[data-tone='success'] {
+    --dz-panel-accent: var(--dz-success);
+  }
+
+  .dz-panel[data-tone='warning'] {
+    --dz-panel-accent: var(--dz-warning);
+  }
+
+  .dz-panel[data-tone='danger'] {
+    --dz-panel-accent: var(--dz-danger);
+  }
+
+  .dz-panel[data-tone='info'] {
+    --dz-panel-accent: var(--dz-info);
+  }
 }
 
 /* ==========================================================================
