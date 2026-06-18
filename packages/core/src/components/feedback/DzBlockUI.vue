@@ -68,6 +68,10 @@ const rootClasses = computed(() =>
   cn(styles.root(), attrs.class as string | undefined),
 )
 
+function setContentRef(el: unknown): void {
+  contentRef.value = el as HTMLElement | null
+}
+
 /** Label announced by the default spinner (falls back to a generic string). */
 const spinnerLabel = computed(() => props.message ?? 'Loading')
 
@@ -114,7 +118,7 @@ onBeforeUnmount(() => {
     v-bind="{ ...$attrs, class: undefined }"
   >
     <div
-      ref="contentRef"
+      :ref="setContentRef"
       :class="styles.content()"
       :inert="contentInert || undefined"
       data-testid="dz-block-ui-content"

@@ -61,7 +61,7 @@ function handleClick(event: MouseEvent): void {
 
 <template>
   <DzFab
-    :aria-label="ariaLabel"
+    :ariaLabel="ariaLabel"
     :variant="variant"
     :size="size"
     :tone="tone"
