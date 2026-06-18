@@ -36,6 +36,17 @@ export type {
 export { default as DzCollapse } from './DzCollapse.vue'
 
 export type {
+  DzDeferredContentEmits,
+  DzDeferredContentExpose,
+  DzDeferredContentPlaceholderSlotProps,
+  DzDeferredContentProps,
+  DzDeferredContentSlots,
+} from './DzDeferredContent.types.ts'
+export { type DeferredContentVariantProps, deferredContentVariants } from './DzDeferredContent.variants.ts'
+// ── DzDeferredContent ──
+export { default as DzDeferredContent } from './DzDeferredContent.vue'
+
+export type {
   DzPanelEmits,
   DzPanelProps,
   DzPanelSlots,
@@ -88,6 +99,17 @@ export type {
 } from './DzGrid.types.ts'
 export { type GridVariantProps, gridVariants, responsiveColsMap } from './DzGrid.variants.ts'
 export { default as DzGrid } from './DzGrid.vue'
+
+export type {
+  DzMasonryProps,
+  DzMasonrySlots,
+  MasonryColumns,
+  MasonryGap,
+  ResponsiveColumns,
+} from './DzMasonry.types.ts'
+export { type MasonryVariantProps, masonryColumn, masonryColumnContainer, masonryVariants, responsiveColumnsMap } from './DzMasonry.variants.ts'
+// ── DzMasonry ──
+export { default as DzMasonry } from './DzMasonry.vue'
 
 export type {
   DzResizableContext,

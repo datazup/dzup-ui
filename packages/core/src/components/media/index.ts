@@ -83,6 +83,23 @@ export { type ImageVariantProps, imageVariants } from './DzImage.variants.ts'
 // ── DzImage ──
 export { default as DzImage } from './DzImage.vue'
 
+export { imageComparisonTokens } from './DzImageComparison.tokens.ts'
+
+export type {
+  DzImageComparisonEmits,
+  DzImageComparisonProps,
+  DzImageComparisonSlots,
+  ImageComparisonOrientation,
+} from './DzImageComparison.types.ts'
+
+export {
+  type ImageComparisonVariantProps,
+  imageComparisonVariants,
+} from './DzImageComparison.variants.ts'
+
+// ── DzImageComparison ──
+export { default as DzImageComparison } from './DzImageComparison.vue'
+
 export type {
   DzLightboxEmits,
   DzLightboxProps,

@@ -55,6 +55,43 @@ export type {
 export { type DataViewVariantProps, dataViewVariants } from './DzDataView.variants.ts'
 // ── DzDataView ──
 export { default as DzDataView } from './DzDataView.vue'
+export type {
+  DzInfiniteScrollEmits,
+  DzInfiniteScrollErrorSlotProps,
+  DzInfiniteScrollExpose,
+  DzInfiniteScrollProps,
+  DzInfiniteScrollSlots,
+  InfiniteScrollDirection,
+} from './DzInfiniteScroll.types.ts'
+export { type InfiniteScrollVariantProps, infiniteScrollVariants } from './DzInfiniteScroll.variants.ts'
+// ── DzInfiniteScroll ──
+export { default as DzInfiniteScroll } from './DzInfiniteScroll.vue'
+export type {
+  AnimatedNumberEasing,
+  DzAnimatedNumberAffixSlotProps,
+  DzAnimatedNumberEmits,
+  DzAnimatedNumberExpose,
+  DzAnimatedNumberProps,
+  DzAnimatedNumberSlots,
+} from './DzAnimatedNumber.types.ts'
+export {
+  type AnimatedNumberVariantProps,
+  animatedNumberVariants,
+} from './DzAnimatedNumber.variants.ts'
+// ── DzAnimatedNumber ──
+export { default as DzAnimatedNumber } from './DzAnimatedNumber.vue'
+export type {
+  CountdownMode,
+  CountdownRemaining,
+  DzCountdownEmits,
+  DzCountdownExpose,
+  DzCountdownProps,
+  DzCountdownSlotProps,
+  DzCountdownSlots,
+} from './DzCountdown.types.ts'
+export { type CountdownVariantProps, countdownVariants } from './DzCountdown.variants.ts'
+// ── DzCountdown ──
+export { default as DzCountdown } from './DzCountdown.vue'
 export type { DzChipEmits, DzChipProps, DzChipSlots } from './DzChip.types.ts'
 export { type ChipVariantProps, chipVariants } from './DzChip.variants.ts'
 // ── DzChip ──

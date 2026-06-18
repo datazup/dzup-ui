@@ -53,6 +53,7 @@ const CORE_COMPONENTS = [
   'DzTree',
   'DzTreeItem',
   'DzChartDataTable',
+  'DzCountdown',
   // feedback
   'DzAlert',
   'DzBadge',
@@ -73,6 +74,7 @@ const CORE_COMPONENTS = [
   'DzFormField',
   'DzFormDescription',
   'DzFormLabel',
+  'DzListbox',
   'DzMultiSelect',
   'DzRadio',
   'DzRadioGroup',
@@ -165,6 +167,7 @@ const CORE_COMPONENTS = [
   'DzCode',
   'DzHeading',
   'DzText',
+  'DzRelativeTime',
   // providers
   'DzThemeProvider',
 ] as const

@@ -128,6 +128,18 @@ export { default as DzPopoverContent } from './DzPopoverContent.vue'
 
 export { default as DzPopoverTrigger } from './DzPopoverTrigger.vue'
 
+// ── Types — DzPopconfirm ──
+export type {
+  DzPopconfirmEmits,
+  DzPopconfirmProps,
+  DzPopconfirmSlots,
+  PopconfirmPlacement,
+} from './DzPopconfirm.types.ts'
+export { popconfirmTokens } from './DzPopconfirm.tokens.ts'
+export { type PopconfirmVariantProps, popconfirmVariants } from './DzPopconfirm.variants.ts'
+// ── DzPopconfirm ──
+export { default as DzPopconfirm } from './DzPopconfirm.vue'
+
 export type {
   DzSheetCloseSlots,
   DzSheetContentEmits,

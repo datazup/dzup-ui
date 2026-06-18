@@ -31,6 +31,22 @@ export { type InputGroupVariantProps, inputGroupVariants } from './DzInputGroup.
 export { default as DzInputGroup } from './DzInputGroup.vue'
 
 export type {
+  DzInputMaskEmits,
+  DzInputMaskProps,
+  DzInputMaskSlots,
+} from './DzInputMask.types.ts'
+
+export {
+  type MaskElementVariantProps,
+  maskElementVariants,
+  type MaskWrapperVariantProps,
+  maskWrapperVariants,
+} from './DzInputMask.variants.ts'
+
+// ── DzInputMask ──
+export { default as DzInputMask } from './DzInputMask.vue'
+
+export type {
   DzNumberInputEmits,
   DzNumberInputProps,
   DzNumberInputSlots,

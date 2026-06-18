@@ -62,6 +62,26 @@ export {
 } from './DzProgress.variants.ts'
 export { default as DzProgress } from './DzProgress.vue'
 
+// Types — DzScrollProgress
+export type {
+  DzScrollProgressEmits,
+  DzScrollProgressProps,
+  DzScrollProgressSlots,
+} from './DzScrollProgress.types.ts'
+
+export { scrollProgressTokens } from './DzScrollProgress.tokens.ts'
+
+export {
+  type ScrollProgressBarVariantProps,
+  scrollProgressBarVariants,
+  scrollProgressCircularSize,
+  type ScrollProgressRootVariantProps,
+  scrollProgressRootVariants,
+  scrollProgressToneVar,
+} from './DzScrollProgress.variants.ts'
+
+export { default as DzScrollProgress } from './DzScrollProgress.vue'
+
 // Types — DzMeterGroup
 export type {
   DzMeterGroupComputedSegment,

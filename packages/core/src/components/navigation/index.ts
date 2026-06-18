@@ -26,6 +26,21 @@ export type {
 export { type BackTopVariantProps, backTopVariants } from './DzBackTop.variants.ts'
 export { default as DzBackTop } from './DzBackTop.vue'
 
+// ── ColorModeToggle (theme switch control) ──
+
+export type {
+  DzColorModeToggleEmits,
+  DzColorModeToggleLabels,
+  DzColorModeToggleProps,
+  DzColorModeToggleSlots,
+  DzColorModeToggleVariant,
+} from './DzColorModeToggle.types.ts'
+export {
+  type ColorModeToggleVariantProps,
+  colorModeToggleVariants,
+} from './DzColorModeToggle.variants.ts'
+export { default as DzColorModeToggle } from './DzColorModeToggle.vue'
+
 // ── Tabs (Compound) ──
 
 export type {

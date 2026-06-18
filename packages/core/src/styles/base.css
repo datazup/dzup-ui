@@ -308,6 +308,87 @@
     --dz-data-view-list-item-padding-y: var(--dz-spacing-4);
   }
 
+  /* DzInfiniteScroll — sentinel height + status-row spacing */
+  .dz-infinite-scroll {
+    --dz-infinite-scroll-sentinel-size: var(--dz-spacing-1);
+    --dz-infinite-scroll-status-gap: var(--dz-spacing-2);
+    --dz-infinite-scroll-status-padding-y: var(--dz-spacing-4);
+  }
+
+  .dz-infinite-scroll[data-size='xs'],
+  .dz-infinite-scroll[data-size='sm'] {
+    --dz-infinite-scroll-status-padding-y: var(--dz-spacing-3);
+  }
+
+  .dz-infinite-scroll[data-size='lg'],
+  .dz-infinite-scroll[data-size='xl'] {
+    --dz-infinite-scroll-status-padding-y: var(--dz-spacing-5);
+  }
+
+  /* DzAnimatedNumber — affix gap, figure weight + tracking */
+  .dz-animated-number {
+    --dz-animated-number-gap: var(--dz-spacing-1);
+    --dz-animated-number-font-weight: var(--dz-font-semibold);
+    --dz-animated-number-tracking: var(--dz-tracking-tight);
+  }
+
+  /* DzRelativeTime — font size (inherits the shared small text scale) */
+  .dz-relative-time {
+    --dz-relative-time-font-size: var(--dz-text-sm);
+  }
+
+  /* DzDeferredContent — reserved height before content mounts */
+  .dz-deferred-content {
+    --dz-deferred-content-min-height: var(--dz-spacing-32);
+  }
+
+  /* DzCountdown — figure spacing, weight, and tracking (size/tone via tv()) */
+  .dz-countdown {
+    --dz-countdown-gap: var(--dz-spacing-2);
+    --dz-countdown-font-weight: var(--dz-font-bold);
+    --dz-countdown-tracking: var(--dz-tracking-tight);
+  }
+
+  /* DzKbd — keyboard-key chip: surface, gap, per-size geometry */
+  .dz-kbd {
+    --dz-kbd-bg: var(--dz-muted);
+    --dz-kbd-fg: var(--dz-foreground);
+    --dz-kbd-border: var(--dz-border);
+    --dz-kbd-radius: var(--dz-radius-sm);
+    --dz-kbd-shadow: var(--dz-shadow-xs);
+    --dz-kbd-gap: var(--dz-spacing-1);
+    --dz-kbd-min-size: 1.5rem;
+    --dz-kbd-padding-x: var(--dz-spacing-1_5);
+    --dz-kbd-font-size: var(--dz-text-xs);
+  }
+
+  .dz-kbd[data-size='xs'] {
+    --dz-kbd-gap: var(--dz-spacing-0_5);
+    --dz-kbd-min-size: 1.125rem;
+    --dz-kbd-padding-x: var(--dz-spacing-1);
+    --dz-kbd-font-size: var(--dz-text-xs);
+  }
+
+  .dz-kbd[data-size='sm'] {
+    --dz-kbd-gap: var(--dz-spacing-0_5);
+    --dz-kbd-min-size: 1.25rem;
+    --dz-kbd-padding-x: var(--dz-spacing-1);
+    --dz-kbd-font-size: var(--dz-text-xs);
+  }
+
+  .dz-kbd[data-size='lg'] {
+    --dz-kbd-min-size: 1.75rem;
+    --dz-kbd-padding-x: var(--dz-spacing-2);
+    --dz-kbd-font-size: var(--dz-text-sm);
+  }
+
+  .dz-kbd[data-size='xl'] {
+    --dz-kbd-gap: var(--dz-spacing-1_5);
+    --dz-kbd-min-size: 2rem;
+    --dz-kbd-padding-x: var(--dz-spacing-2_5);
+    --dz-kbd-font-size: var(--dz-text-base);
+  }
+
   /* DzMegaMenu — menubar gap + dropdown panel/column spacing */
   .dz-mega-menu {
     --dz-menu-bar-gap: var(--dz-spacing-1);
@@ -368,6 +449,21 @@
     --dz-back-top-offset: var(--dz-spacing-6);
     --dz-back-top-z: 40;
     --dz-back-top-transition: 200ms;
+  }
+
+  /* DzScrollProgress — edge-pinned reading-progress bar / corner ring */
+  .dz-scroll-progress {
+    --dz-scroll-progress-height: var(--dz-spacing-1);
+    --dz-scroll-progress-track: transparent;
+    --dz-scroll-progress-z: 50;
+    --dz-scroll-progress-size: var(--dz-spacing-12);
+    --dz-scroll-progress-inset: var(--dz-spacing-4);
+  }
+
+  /* DzColorModeToggle — inline glyph sizing and icon-swap transition */
+  .dz-color-mode-toggle {
+    --dz-color-mode-toggle-icon-size: var(--dz-spacing-5);
+    --dz-color-mode-toggle-transition: 200ms;
   }
 
   /* DzBlockUI — content mask scrim, blur, message, and stacking order */

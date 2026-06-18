@@ -56,6 +56,7 @@
           "DzDatePicker",
           "DzDateRangePicker",
           "DzTimePicker",
+          "DzListbox",
           "DzMultiSelect",
           "DzCombobox",
           "DzPersonaSelector",
@@ -77,6 +78,7 @@
           "DzSpacer",
           "DzAspectRatio",
           "DzCollapse",
+          "DzDeferredContent",
           "DzScrollArea",
           "DzResizable",
           "DzResizablePanel",
@@ -102,7 +104,8 @@
           "DzMenuSeparator",
           "DzStepper",
           "DzStepperItem",
-          "DzSegmented"
+          "DzSegmented",
+          "DzColorModeToggle"
         ]
       },
       "overlays": {
@@ -146,6 +149,7 @@
           "DzAlert",
           "DzBadge",
           "DzProgress",
+          "DzScrollProgress",
           "DzRunStatusBadge",
           "DzTokenProgressBar",
           "DzSpinner",
@@ -181,7 +185,9 @@
           "DzDataGridBody",
           "DzDataGridPagination",
           "DzTree",
-          "DzTreeItem"
+          "DzTreeItem",
+          "DzCountdown",
+          "DzAnimatedNumber"
         ]
       },
       "media": {
@@ -205,83 +211,145 @@
           "DzHeading",
           "DzText",
           "DzCode",
+          "DzKbd",
           "DzBlockquote",
-          "DzCaption"
+          "DzCaption",
+          "DzVisuallyHidden",
+          "DzRelativeTime"
         ]
       }
     },
     "composables": {
       "useClickOutside": {
         "path": "./src/composables/useClickOutside/index.ts",
-        "exports": ["useClickOutside"]
+        "exports": [
+          "useClickOutside"
+        ]
       },
       "useCollapse": {
         "path": "./src/composables/useCollapse/index.ts",
-        "exports": ["useCollapse"]
+        "exports": [
+          "useCollapse"
+        ]
+      },
+      "useCountdown": {
+        "path": "./src/composables/useCountdown/index.ts",
+        "exports": [
+          "useCountdown",
+          "formatRemaining",
+          "toRemainingParts"
+        ]
       },
       "useDataGrid": {
         "path": "./src/composables/useDataGrid/index.ts",
-        "exports": ["useDataGrid"]
+        "exports": [
+          "useDataGrid"
+        ]
       },
       "useDataGridHeader": {
         "path": "./src/composables/useDataGridHeader/index.ts",
-        "exports": ["useDataGridHeader"]
+        "exports": [
+          "useDataGridHeader"
+        ]
       },
       "useDatePicker": {
         "path": "./src/composables/useDatePicker/index.ts",
-        "exports": ["useDatePicker"]
+        "exports": [
+          "useDatePicker"
+        ]
       },
       "useDialog": {
         "path": "./src/composables/useDialog/index.ts",
-        "exports": ["useDialog"]
+        "exports": [
+          "useDialog"
+        ]
       },
       "useEscapeKey": {
         "path": "./src/composables/useEscapeKey/index.ts",
-        "exports": ["useEscapeKey"]
+        "exports": [
+          "useEscapeKey"
+        ]
       },
       "useFloating": {
         "path": "./src/composables/useFloating/index.ts",
-        "exports": ["useFloating"]
+        "exports": [
+          "useFloating"
+        ]
       },
       "useFocusTrap": {
         "path": "./src/composables/useFocusTrap/index.ts",
-        "exports": ["useFocusTrap"]
+        "exports": [
+          "useFocusTrap"
+        ]
       },
       "useFormField": {
         "path": "./src/composables/useFormField/index.ts",
-        "exports": ["useFormField", "useFormFieldContext", "DZ_FORM_FIELD_KEY"]
+        "exports": [
+          "useFormField",
+          "useFormFieldContext",
+          "DZ_FORM_FIELD_KEY"
+        ]
+      },
+      "useIntersection": {
+        "path": "./src/composables/useIntersection/index.ts",
+        "exports": [
+          "useIntersection",
+          "UseIntersectionOptions",
+          "UseIntersectionReturn"
+        ]
       },
       "useSelect": {
         "path": "./src/composables/useSelect/index.ts",
-        "exports": ["useSelect", "useSelectKeyboard"]
+        "exports": [
+          "useSelect",
+          "useSelectKeyboard"
+        ]
       },
       "useSidebar": {
         "path": "./src/composables/useSidebar/index.ts",
-        "exports": ["useSidebar", "UseSidebarOptions", "UseSidebarReturn"]
+        "exports": [
+          "useSidebar",
+          "UseSidebarOptions",
+          "UseSidebarReturn"
+        ]
       },
       "useTabs": {
         "path": "./src/composables/useTabs/index.ts",
-        "exports": ["useTabs"]
+        "exports": [
+          "useTabs"
+        ]
       },
       "useToast": {
         "path": "./src/composables/useToast/index.ts",
-        "exports": ["useToast"]
+        "exports": [
+          "useToast"
+        ]
       },
       "useTransfer": {
         "path": "./src/composables/useTransfer/index.ts",
-        "exports": ["useTransfer"]
+        "exports": [
+          "useTransfer"
+        ]
       }
     },
     "providers": {
       "themeProvider": {
         "path": "./src/providers/index.ts",
-        "exports": ["DzThemeProvider", "DZ_THEME_KEY", "useTheme", "themeScript", "getThemeScript"]
+        "exports": [
+          "DzThemeProvider",
+          "DZ_THEME_KEY",
+          "useTheme",
+          "themeScript",
+          "getThemeScript"
+        ]
       }
     },
     "utilities": {
       "cn": {
         "path": "./src/utilities/cn.ts",
-        "exports": ["cn"]
+        "exports": [
+          "cn"
+        ]
       }
     },
     "injectionKeys": [
@@ -494,6 +562,13 @@
       "DzTimePickerEmits",
       "DzTimePickerSlots",
       "TimePickerVariantProps",
+      "DzListboxProps",
+      "DzListboxEmits",
+      "DzListboxSlots",
+      "DzListboxOption",
+      "DzListboxValue",
+      "DzListboxModelValue",
+      "ListboxVariantProps",
       "DzMultiSelectProps",
       "DzMultiSelectEmits",
       "DzMultiSelectSlots",
@@ -556,6 +631,12 @@
       "DzAspectRatioSlots",
       "DzCollapseProps",
       "DzCollapseSlots",
+      "DzDeferredContentProps",
+      "DzDeferredContentEmits",
+      "DzDeferredContentSlots",
+      "DzDeferredContentPlaceholderSlotProps",
+      "DzDeferredContentExpose",
+      "DeferredContentVariantProps",
       "DzScrollAreaProps",
       "DzScrollAreaSlots",
       "ScrollOrientation",
@@ -823,6 +904,14 @@
       "DzTreeContext",
       "TreeNode",
       "TreeVariantProps",
+      "DzCountdownProps",
+      "DzCountdownEmits",
+      "DzCountdownSlots",
+      "DzCountdownSlotProps",
+      "DzCountdownExpose",
+      "CountdownMode",
+      "CountdownRemaining",
+      "CountdownVariantProps",
       "DzIconProps",
       "DzIconSlots",
       "IconSize",
@@ -874,6 +963,9 @@
       "DzCodeSlots",
       "CodeVariant",
       "CodeVariantProps",
+      "DzKbdProps",
+      "DzKbdSlots",
+      "KbdVariantProps",
       "DzBlockquoteProps",
       "DzBlockquoteSlots",
       "BlockquoteVariantProps",
@@ -881,6 +973,18 @@
       "DzCaptionSlots",
       "CaptionTone",
       "CaptionVariantProps",
+      "DzVisuallyHiddenProps",
+      "DzVisuallyHiddenSlots",
+      "VisuallyHiddenElement",
+      "VisuallyHiddenVariantProps",
+      "DzRelativeTimeProps",
+      "DzRelativeTimeSlots",
+      "DzRelativeTimeSlotProps",
+      "RelativeTimeTone",
+      "RelativeTimeMode",
+      "RelativeTimeValue",
+      "RelativeTimeLocale",
+      "RelativeTimeVariantProps",
       "DzFormFieldContext",
       "UseFormFieldOptions",
       "UseDatePickerOptions",
@@ -892,7 +996,14 @@
       "UseDataGridOptions",
       "UseDataGridReturn",
       "UseSidebarOptions",
-      "UseSidebarReturn"
+      "UseSidebarReturn",
+      "AnimatedNumberEasing",
+      "DzAnimatedNumberProps",
+      "DzAnimatedNumberEmits",
+      "DzAnimatedNumberSlots",
+      "DzAnimatedNumberAffixSlotProps",
+      "DzAnimatedNumberExpose",
+      "AnimatedNumberVariantProps"
     ]
   }
 }

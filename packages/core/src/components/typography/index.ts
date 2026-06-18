@@ -31,6 +31,18 @@ export { type CodeVariantProps, codeVariants } from './DzCode.variants.ts'
 // ── DzCode ──
 export { default as DzCode } from './DzCode.vue'
 
+export { kbdTokens } from './DzKbd.tokens.ts'
+
+export type {
+  DzKbdProps,
+  DzKbdSlots,
+} from './DzKbd.types.ts'
+
+export { type KbdVariantProps, kbdVariants } from './DzKbd.variants.ts'
+
+// ── DzKbd ──
+export { default as DzKbd } from './DzKbd.vue'
+
 // Tokens
 export { headingTokens } from './DzHeading.tokens.ts'
 
@@ -65,3 +77,33 @@ export type {
 export { textVariants } from './DzText.variants.ts'
 
 export { default as DzText } from './DzText.vue'
+
+// ── DzVisuallyHidden ──
+export { visuallyHiddenTokens } from './DzVisuallyHidden.tokens.ts'
+
+export type {
+  DzVisuallyHiddenProps,
+  DzVisuallyHiddenSlots,
+  VisuallyHiddenElement,
+} from './DzVisuallyHidden.types.ts'
+
+export { type VisuallyHiddenVariantProps, visuallyHiddenVariants } from './DzVisuallyHidden.variants.ts'
+
+export { default as DzVisuallyHidden } from './DzVisuallyHidden.vue'
+
+// ── DzRelativeTime ──
+export { relativeTimeTokens } from './DzRelativeTime.tokens.ts'
+
+export type {
+  DzRelativeTimeProps,
+  DzRelativeTimeSlotProps,
+  DzRelativeTimeSlots,
+  RelativeTimeLocale,
+  RelativeTimeMode,
+  RelativeTimeTone,
+  RelativeTimeValue,
+} from './DzRelativeTime.types.ts'
+
+export { type RelativeTimeVariantProps, relativeTimeVariants } from './DzRelativeTime.variants.ts'
+
+export { default as DzRelativeTime } from './DzRelativeTime.vue'

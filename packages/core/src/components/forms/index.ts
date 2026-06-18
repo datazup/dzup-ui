@@ -123,6 +123,18 @@ export type {
 export { type KnobVariantProps, knobVariants } from './DzKnob.variants.ts'
 export { default as DzKnob } from './DzKnob.vue'
 
+// Types — DzListbox
+export type {
+  DzListboxEmits,
+  DzListboxModelValue,
+  DzListboxOption,
+  DzListboxProps,
+  DzListboxSlots,
+  DzListboxValue,
+} from './DzListbox.types.ts'
+export { type ListboxVariantProps, listboxVariants } from './DzListbox.variants.ts'
+export { default as DzListbox } from './DzListbox.vue'
+
 // Types — DzMultiSelect
 export type {
   DzMultiSelectEmits,
