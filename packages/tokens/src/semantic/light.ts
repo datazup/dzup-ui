@@ -16,7 +16,11 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-surface': 'oklch(1 0 0)',
   '--dz-surface-raised': 'oklch(1 0 0)',
   '--dz-muted': 'var(--dz-colors-neutral-200)',
-  '--dz-muted-foreground': 'var(--dz-colors-neutral-500)',
+  // neutral-600 (not -500) so muted text clears WCAG AA 4.5:1 on both the page
+  // surface (neutral-100 → 5.55:1) and muted surfaces (neutral-200 → 4.61:1).
+  // neutral-500 sat at ~3.95:1 / ~3.27:1 and failed axe color-contrast across
+  // components. Dark mode (neutral-400) already passes and is unchanged.
+  '--dz-muted-foreground': 'var(--dz-colors-neutral-600)',
 
   /* ── Borders ── */
   '--dz-border': 'var(--dz-colors-neutral-300)',
