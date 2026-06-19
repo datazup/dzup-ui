@@ -8,6 +8,7 @@
  */
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { VNode } from 'vue'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -58,5 +59,5 @@ export interface DzMasonryProps extends BaseAccessibilityProps {
 /** Slot definitions for DzMasonry. */
 export interface DzMasonrySlots {
   /** Masonry items; distributed across columns by the component. */
-  default?: () => unknown
+  default?: () => VNode[]
 }
