@@ -141,7 +141,7 @@ function setContainerRef(el: Element | ComponentPublicInstance | null): void {
   containerRef.value = (el as HTMLElement | null) ?? null
 }
 
-function setItemRef(index: number, el: Element | ComponentPublicInstance | null): void {
+function setItemRef(index: number, el: unknown): void {
   const node = el as HTMLElement | null
   if (node) {
     itemEls.set(index, node)
@@ -321,7 +321,7 @@ const containerStyle = computed(() => ({
         <div
           v-for="entry in column"
           :key="entry.index"
-          :ref="(el: Element | ComponentPublicInstance | null) => setItemRef(entry.index, el)"
+          :ref="(el) => setItemRef(entry.index, el)"
           class="dz-masonry__item"
         >
           <VNodeRenderer :node="entry.node" />
