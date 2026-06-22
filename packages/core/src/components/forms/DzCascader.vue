@@ -74,12 +74,21 @@ const fieldContext = useFormFieldContext()
 const open = ref(false)
 /** Element scoping the popover panel — used to focus option cells by data attrs */
 const panelEl = ref<HTMLElement>()
+/**
+ * When the panel is opened from the trigger via ArrowDown/ArrowUp, this records
+ * which edge of the root column should receive focus once the panel mounts.
+ * Cleared after the open-watcher consumes it (Enter/Space leave it null and so
+ * keep the selection-aware {@link initActive} behavior).
+ */
+const pendingTriggerNav = ref<'first' | 'last' | null>(null)
 
 // ---------------------------------------------------------------------------
 // Resolved field-context state
 // ---------------------------------------------------------------------------
 
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+/** DOM id of the popover panel, wired to the trigger via aria-controls. */
+const panelId = computed(() => `${resolvedId.value}-panel`)
 const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 const resolvedReadonly = computed(() => props.readonly ?? false)
 const resolvedInvalid = computed(() => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false))
@@ -261,6 +270,15 @@ function firstEnabledIndex(col: number): number {
   return i === -1 ? 0 : i
 }
 
+function lastEnabledIndex(col: number): number {
+  const opts = columns.value[col] ?? []
+  for (let i = opts.length - 1; i >= 0; i--) {
+    if (!opts[i]!.disabled)
+      return i
+  }
+  return 0
+}
+
 /** Step to the next enabled index within a column, wrapping around. */
 function stepIndex(opts: DzCascaderOption[], from: number, dir: 1 | -1): number {
   if (opts.length === 0)
@@ -359,14 +377,42 @@ watch(open, (isOpen) => {
   if (isOpen) {
     activePath.value = resolvePath(model.value)
     searchQuery.value = ''
-    initActive()
+    if (pendingTriggerNav.value) {
+      // Opened via ArrowDown/ArrowUp on the trigger: anchor on the requested
+      // edge of the root column rather than the current selection.
+      const index = pendingTriggerNav.value === 'last'
+        ? lastEnabledIndex(0)
+        : firstEnabledIndex(0)
+      active.value = { col: 0, index }
+      pendingTriggerNav.value = null
+    }
+    else {
+      initActive()
+    }
     emit('open')
     focusActive()
   }
   else {
+    pendingTriggerNav.value = null
     emit('close')
   }
 })
+
+/**
+ * Combobox trigger keys. ArrowDown/ArrowUp open the panel and move focus onto
+ * the first/last root option, mirroring the Enter/Space open path (handled
+ * natively by PopoverTrigger). When the panel is already open, focus lives on a
+ * column option, so {@link onColumnsKeydown} owns arrow handling instead.
+ */
+function handleTriggerKeydown(event: KeyboardEvent): void {
+  if (resolvedDisabled.value || resolvedReadonly.value || open.value)
+    return
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    event.preventDefault()
+    pendingTriggerNav.value = event.key === 'ArrowUp' ? 'last' : 'first'
+    open.value = true
+  }
+}
 
 function handleFocus(event: FocusEvent): void {
   emit('focus', event)
@@ -413,6 +459,7 @@ const showCleaner = computed(
         <button
           :id="resolvedId"
           type="button"
+          role="combobox"
           :class="styles.trigger()"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
@@ -420,8 +467,10 @@ const showCleaner = computed(
           :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
           :aria-required="resolvedRequired || undefined"
           :aria-expanded="open"
+          :aria-controls="open ? panelId : undefined"
           aria-haspopup="listbox"
           :disabled="resolvedDisabled || undefined"
+          @keydown="handleTriggerKeydown"
           @focus="handleFocus"
           @blur="handleBlur"
         >
@@ -458,7 +507,7 @@ const showCleaner = computed(
           align="start"
           class="z-50"
         >
-          <div ref="panelEl" :class="styles.panel()">
+          <div :id="panelId" ref="panelEl" :class="styles.panel()">
             <!-- Filter (search) input -->
             <div v-if="filter" :class="styles.search()">
               <input

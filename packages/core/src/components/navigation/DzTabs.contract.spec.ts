@@ -122,6 +122,98 @@ describe('dzTabs — Contract Spec v1', () => {
     expect(activeTab?.attributes('aria-selected')).toBe('true')
   })
 
+  // ── Roving tabindex (APG Tabs pattern, WCAG AA) ──
+
+  it('assigns tabindex="0" to exactly one tab (the active tab)', async () => {
+    const wrapper = mountTabs()
+    await wrapper.vm.$nextTick()
+    const tabs = wrapper.findAll('[role="tab"]')
+    const tabStops = tabs.filter(t => t.attributes('tabindex') === '0')
+    expect(tabStops.length).toBe(1)
+    expect(tabStops[0]!.attributes('data-state')).toBe('active')
+    expect(tabStops[0]!.text()).toContain('Tab 1')
+  })
+
+  it('assigns tabindex="-1" to all non-active tabs', async () => {
+    const wrapper = mountTabs()
+    await wrapper.vm.$nextTick()
+    const tabs = wrapper.findAll('[role="tab"]')
+    const inactive = tabs.filter(t => t.attributes('data-state') !== 'active')
+    expect(inactive.length).toBe(2)
+    for (const tab of inactive) {
+      expect(tab.attributes('tabindex')).toBe('-1')
+    }
+  })
+
+  it('never makes a disabled tab the roving tab stop', async () => {
+    const wrapper = mount(DzTabs, {
+      props: { modelValue: 'tab1' },
+      slots: {
+        default: () => [
+          h(DzTabList, {}, () => [
+            h(DzTabTrigger, { value: 'tab1' }, () => 'Tab 1'),
+            h(DzTabTrigger, { value: 'tab2', disabled: true }, () => 'Tab 2'),
+          ]),
+        ],
+      },
+    })
+    await wrapper.vm.$nextTick()
+    const tabs = wrapper.findAll('[role="tab"]')
+    const disabled = tabs.find(t => t.attributes('data-disabled') === '')!
+    expect(disabled.attributes('tabindex')).toBe('-1')
+  })
+
+  it('moves the tab stop to the active tab when modelValue changes', async () => {
+    const wrapper = mountTabs({ modelValue: 'tab1' })
+    await wrapper.vm.$nextTick()
+    await wrapper.setProps({ modelValue: 'tab2' })
+    await wrapper.vm.$nextTick()
+    const tabs = wrapper.findAll('[role="tab"]')
+    const tabStops = tabs.filter(t => t.attributes('tabindex') === '0')
+    expect(tabStops.length).toBe(1)
+    expect(tabStops[0]!.attributes('data-state')).toBe('active')
+    expect(tabStops[0]!.text()).toContain('Tab 2')
+  })
+
+  it('keeps exactly one tab stop on the focused tab during interaction (manual mode)', async () => {
+    const wrapper = mount(DzTabs, {
+      attachTo: document.body,
+      props: { modelValue: 'tab1', activationMode: 'manual' },
+      slots: {
+        default: () => [
+          h(DzTabList, {}, () => [
+            h(DzTabTrigger, { value: 'tab1' }, () => 'Tab 1'),
+            h(DzTabTrigger, { value: 'tab2' }, () => 'Tab 2'),
+            h(DzTabTrigger, { value: 'tab3', disabled: true }, () => 'Tab 3'),
+          ]),
+        ],
+      },
+    })
+    await wrapper.vm.$nextTick()
+    const tabs = wrapper.findAll('[role="tab"]')
+
+    // Entry point is the active tab before any interaction.
+    expect(tabs.filter(t => t.attributes('tabindex') === '0').map(t => t.text())).toEqual(['Tab 1'])
+
+    // Focusing a non-active tab (manual mode) moves the single tab stop to it.
+    ;(tabs[1]!.element as HTMLElement).focus()
+    await tabs[1]!.trigger('focusin')
+    await wrapper.vm.$nextTick()
+    const focusedStops = tabs.filter(t => t.attributes('tabindex') === '0')
+    expect(focusedStops.length).toBe(1)
+    expect(focusedStops[0]!.text()).toContain('Tab 2')
+
+    // Leaving the tablist restores the tab stop to the active tab.
+    ;(tabs[1]!.element as HTMLElement).blur()
+    await tabs[1]!.trigger('focusout', { relatedTarget: null })
+    await wrapper.vm.$nextTick()
+    const restoredStops = tabs.filter(t => t.attributes('tabindex') === '0')
+    expect(restoredStops.length).toBe(1)
+    expect(restoredStops[0]!.attributes('data-state')).toBe('active')
+
+    wrapper.unmount()
+  })
+
   it('sets aria-controls linking trigger to content', async () => {
     const wrapper = mountTabs()
     await wrapper.vm.$nextTick()

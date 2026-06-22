@@ -87,7 +87,7 @@ export const responsiveColumnsMap: Record<string, Record<number, string>> = {
 
 /** Flex row wrapping the measured-JS path columns. */
 export const masonryColumnContainer = tv({
-  base: 'flex [gap:var(--dz-masonry-gap)]',
+  base: 'flex w-full [gap:var(--dz-masonry-gap)]',
 })
 
 /** A single equal-width column in the measured-JS path. */

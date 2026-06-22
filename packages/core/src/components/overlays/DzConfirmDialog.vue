@@ -56,6 +56,29 @@ const dialogSize = computed(() => {
 
 const styles = computed(() => confirmDialogVariants({ variant: props.variant }))
 
+/**
+ * Fallthrough attributes forwarded to DzDialogContent.
+ *
+ * `confirm`/`cancel` are emits, not props -- but a consumer (or Storybook's
+ * `action` argTypes via `v-bind="args"`) can bind them as plain attributes.
+ * Those function values would otherwise fall through `$attrs`, be spread onto
+ * Reka's DialogContent, and get serialized as raw function-source attributes on
+ * the `role="dialog"` DOM node (invalid HTML + info leak). We drop `class`
+ * (merged separately) and any non-listener function value, while keeping
+ * legitimate pass-through attrs (id, data-*, aria-*) and real `on*` listeners.
+ */
+const forwardAttrs = computed<Record<string, unknown>>(() => {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(attrs)) {
+    if (key === 'class')
+      continue
+    if (typeof value === 'function' && !/^on[A-Z]/.test(key))
+      continue
+    result[key] = value
+  }
+  return result
+})
+
 const iconClasses = computed(() =>
   cn(styles.value.icon(), attrs.class as string | undefined),
 )
@@ -99,7 +122,7 @@ function handleInteractOutside(): void {
     <DzDialogContent
       :id="id"
       :size="dialogSize"
-      v-bind="{ ...$attrs, class: undefined }"
+      v-bind="forwardAttrs"
       @escape-key-down="handleEscapeKeyDown"
       @interact-outside="handleInteractOutside"
     >

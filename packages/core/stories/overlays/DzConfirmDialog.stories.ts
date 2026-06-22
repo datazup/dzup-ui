@@ -74,13 +74,19 @@ const meta = {
       table: { category: 'Accessibility' },
     },
     // Events
+    //
+    // Documented for autodocs only -- NOT wired via `action` argTypes. An
+    // `action` would inject a function-valued arg that `v-bind="args"` spreads
+    // as a `confirm`/`cancel` attribute, which then serializes the function
+    // source onto the dialog DOM node. Every story listens via `@confirm` /
+    // `@cancel` instead.
     confirm: {
-      action: 'confirm',
+      control: false,
       description: 'Emitted when the user activates the confirm button',
       table: { category: 'Events' },
     },
     cancel: {
-      action: 'cancel',
+      control: false,
       description: 'Emitted when the user cancels (cancel button, Escape, or outside click)',
       table: { category: 'Events' },
     },

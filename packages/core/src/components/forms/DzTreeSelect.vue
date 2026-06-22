@@ -38,6 +38,7 @@ import { computed, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzTree from '../data/DzTree.vue'
+import { flattenVisibleNodes, getAdjacentKey } from '../data/treeNavigation.ts'
 import DzPopover from '../overlays/DzPopover.vue'
 import DzPopoverContent from '../overlays/DzPopoverContent.vue'
 import DzPopoverTrigger from '../overlays/DzPopoverTrigger.vue'
@@ -80,6 +81,11 @@ const fieldContext = useFormFieldContext()
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 const panelId = computed(() => `${resolvedId.value}-panel`)
 
+/** DOM id of a treeitem inside the panel — mirrors DzTree's id scheme. */
+function treeItemId(key: string): string {
+  return `${panelId.value}-ti-${key}`
+}
+
 const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
 )
@@ -114,12 +120,23 @@ const styles = computed(() =>
 const isOpen = ref(props.defaultOpen)
 const query = ref('')
 
+/**
+ * Key of the active treeitem — the node referenced by the combobox's
+ * `aria-activedescendant` and carrying the panel's roving `tabindex="0"`
+ * (APG combobox-with-tree pattern). Driven from the trigger's keyboard while
+ * focus stays on the combobox button.
+ */
+const activeKey = ref<string | undefined>(undefined)
+
 watch(isOpen, (open) => {
   if (open) {
+    // Seed the active node so ArrowDown/Up and screen readers have an anchor.
+    activeKey.value = resolveInitialActiveKey()
     emit('open')
   }
   else {
     query.value = ''
+    activeKey.value = undefined
     emit('close')
   }
 })
@@ -128,13 +145,6 @@ function openPanel(): void {
   if (resolvedDisabled.value)
     return
   isOpen.value = true
-}
-
-function handleTriggerKeydown(event: KeyboardEvent): void {
-  if (event.key === 'ArrowDown' && !isOpen.value) {
-    event.preventDefault()
-    openPanel()
-  }
 }
 
 // ── Node index (parent/child/ancestor lookup for propagation) ───────────────
@@ -240,14 +250,51 @@ function applyCheckboxPropagation(toggledKey: string): string[] {
 }
 
 /**
- * DzTree (controlled) proposes a new selectedKeys array on each toggle. We
- * diff it against the current selection to recover the single toggled key,
- * then apply the active mode's rules.
+ * Apply the active selection mode's rules to a single toggled node key. Shared
+ * by the pointer path (DzTree's controlled selectedKeys diff) and the keyboard
+ * path (Enter/Space on the active node) so both reach identical state.
  */
-function onTreeSelectedKeysChange(proposedRaw: unknown): void {
+function commitNode(key: string): void {
   if (resolvedDisabled.value || props.readonly)
     return
 
+  const node = findNode(key)
+  if (!node || node.disabled)
+    return
+
+  if (props.selectionMode === 'single') {
+    model.value = key
+    emit('select', node)
+    emit('change', key)
+    isOpen.value = false
+    return
+  }
+
+  if (props.selectionMode === 'multiple') {
+    const set = new Set(treeSelectedKeys.value)
+    if (set.has(key))
+      set.delete(key)
+    else set.add(key)
+    const next = Array.from(set)
+    model.value = next
+    emit('select', node)
+    emit('change', next)
+    return
+  }
+
+  // checkbox
+  const next = applyCheckboxPropagation(key)
+  model.value = next
+  emit('select', node)
+  emit('change', next)
+}
+
+/**
+ * DzTree (controlled) proposes a new selectedKeys array on each toggle. We
+ * diff it against the current selection to recover the single toggled key,
+ * then hand it to {@link commitNode}.
+ */
+function onTreeSelectedKeysChange(proposedRaw: unknown): void {
   const proposed = proposedRaw as string[]
   const current = treeSelectedKeys.value
   const added = proposed.filter(k => !current.includes(k))
@@ -255,31 +302,7 @@ function onTreeSelectedKeysChange(proposedRaw: unknown): void {
   const clickedKey = added[0] ?? removed[0]
   if (clickedKey === undefined)
     return
-
-  const node = findNode(clickedKey)
-  if (!node || node.disabled)
-    return
-
-  if (props.selectionMode === 'single') {
-    model.value = clickedKey
-    emit('select', node)
-    emit('change', clickedKey)
-    isOpen.value = false
-    return
-  }
-
-  if (props.selectionMode === 'multiple') {
-    model.value = proposed
-    emit('select', node)
-    emit('change', proposed)
-    return
-  }
-
-  // checkbox
-  const next = applyCheckboxPropagation(clickedKey)
-  model.value = next
-  emit('select', node)
-  emit('change', next)
+  commitNode(clickedKey)
 }
 
 // ── Filter / pruning ─────────────────────────────────────────────────────────
@@ -332,6 +355,149 @@ function onExpandedKeysChange(keysRaw: unknown): void {
   expandedKeysModel.value = keys
   emit('update:expandedKeys', keys)
 }
+
+// ── Combobox keyboard navigation (APG combobox-with-tree) ────────────────────
+
+/** Currently visible tree nodes, in DOM order, for activedescendant movement. */
+const visibleNodes = computed(() =>
+  flattenVisibleNodes(displayNodes.value, new Set(effectiveExpandedKeys.value)),
+)
+
+/** DOM id referenced by the trigger's aria-activedescendant while open. */
+const activeDescendantId = computed(() =>
+  isOpen.value && activeKey.value !== undefined
+    ? treeItemId(activeKey.value)
+    : undefined,
+)
+
+/** First focusable node, preferring the current selection when visible. */
+function resolveInitialActiveKey(): string | undefined {
+  const selected = treeSelectedKeys.value.find(key =>
+    visibleNodes.value.some(n => n.key === key && !n.disabled),
+  )
+  if (selected !== undefined)
+    return selected
+  return getAdjacentKey(visibleNodes.value, undefined, 'down')
+}
+
+function moveActive(direction: 'up' | 'down' | 'first' | 'last'): void {
+  const next = getAdjacentKey(visibleNodes.value, activeKey.value, direction)
+  if (next !== undefined)
+    activeKey.value = next
+}
+
+function setExpanded(key: string, expanded: boolean): void {
+  // While filtering, expansion is derived (every branch auto-expanded), so the
+  // model is intentionally untouched.
+  if (filterActive.value)
+    return
+  const has = expandedKeysModel.value.includes(key)
+  if (expanded === has)
+    return
+  const next = expanded
+    ? [...expandedKeysModel.value, key]
+    : expandedKeysModel.value.filter(k => k !== key)
+  expandedKeysModel.value = next
+  emit('update:expandedKeys', next)
+}
+
+/** ArrowRight: expand the active branch, else step into its first child. */
+function expandOrEnter(): void {
+  const entry = visibleNodes.value.find(n => n.key === activeKey.value)
+  if (!entry || !entry.hasChildren)
+    return
+  if (!entry.expanded) {
+    setExpanded(entry.key, true)
+    return
+  }
+  // Already expanded → move to first child (the next visible row).
+  moveActive('down')
+}
+
+/** ArrowLeft: collapse the active branch, else step out to its parent. */
+function collapseOrExit(): void {
+  const entry = visibleNodes.value.find(n => n.key === activeKey.value)
+  if (!entry)
+    return
+  if (entry.hasChildren && entry.expanded) {
+    setExpanded(entry.key, false)
+    return
+  }
+  const parentKey = activeKey.value
+    ? nodeIndex.value.get(activeKey.value)?.parentKey
+    : undefined
+  if (parentKey !== undefined)
+    activeKey.value = parentKey
+}
+
+/**
+ * Combobox trigger key handling. While closed, ArrowDown/ArrowUp open the
+ * panel; while open they drive the active treeitem (exposed via
+ * aria-activedescendant) without moving DOM focus off the trigger.
+ */
+function handleTriggerKeydown(event: KeyboardEvent): void {
+  if (resolvedDisabled.value)
+    return
+
+  switch (event.key) {
+    case 'ArrowDown':
+      event.preventDefault()
+      if (!isOpen.value)
+        openPanel()
+      else moveActive('down')
+      break
+    case 'ArrowUp':
+      event.preventDefault()
+      if (!isOpen.value)
+        openPanel()
+      else moveActive('up')
+      break
+    case 'Home':
+      if (isOpen.value) {
+        event.preventDefault()
+        moveActive('first')
+      }
+      break
+    case 'End':
+      if (isOpen.value) {
+        event.preventDefault()
+        moveActive('last')
+      }
+      break
+    case 'ArrowRight':
+      if (isOpen.value) {
+        event.preventDefault()
+        expandOrEnter()
+      }
+      break
+    case 'ArrowLeft':
+      if (isOpen.value) {
+        event.preventDefault()
+        collapseOrExit()
+      }
+      break
+    case 'Enter':
+    case ' ':
+      if (isOpen.value && activeKey.value !== undefined) {
+        event.preventDefault()
+        commitNode(activeKey.value)
+      }
+      break
+  }
+}
+
+// Keep the active node valid as the visible set changes (e.g. while filtering)
+// and seed it on first render when the panel starts open (`defaultOpen`).
+watch(visibleNodes, (nodes) => {
+  if (!isOpen.value)
+    return
+  if (
+    activeKey.value === undefined
+    || !nodes.some(n => n.key === activeKey.value && !n.disabled)
+  ) {
+    activeKey.value = resolveInitialActiveKey()
+  }
+}, { immediate: true })
 
 // ── Trigger display ──────────────────────────────────────────────────────────
 
@@ -394,6 +560,7 @@ const triggerClasses = computed(() =>
           aria-haspopup="tree"
           :aria-expanded="isOpen"
           :aria-controls="panelId"
+          :aria-activedescendant="activeDescendantId"
           :aria-label="ariaLabel"
           :aria-labelledby="ariaLabelledby"
           :aria-describedby="resolvedAriaDescribedby"
@@ -473,9 +640,11 @@ const triggerClasses = computed(() =>
           selectable
           :selected-keys="treeSelectedKeys"
           :expanded-keys="effectiveExpandedKeys"
+          :active-key="activeKey"
           :aria-label="ariaLabel"
           @update:selected-keys="onTreeSelectedKeysChange"
           @update:expanded-keys="onExpandedKeysChange"
+          @update:active-key="(key: unknown) => (activeKey = key as string | undefined)"
         >
           <template v-if="needsItemSlot" #item="{ node, level, expanded, selected }">
             <span

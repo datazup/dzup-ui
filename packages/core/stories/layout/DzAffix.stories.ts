@@ -10,7 +10,8 @@ import { DzAffix } from '../../src/components/layout'
  * - `offsetTop` pins the content that distance below the top of the scroll
  *   container (the default behaviour).
  * - `offsetBottom` pins it that distance above the bottom instead.
- * - `target` selects a custom scroll container (defaults to `window`).
+ * - `target` selects a custom scroll container. When omitted, the nearest
+ *   scrollable ancestor is used, falling back to `window`.
  *
  * It applies no visual styling beyond the fixed positioning — content
  * semantics, focus, and tab order are unchanged. The `change` event fires
@@ -59,16 +60,20 @@ export const AffixTop: Story = {
   render: args => ({
     components: { DzAffix },
     setup() {
+      const container = ref<HTMLElement | null>(null)
       const affixed = ref(false)
-      return { args, affixed }
+      // The window never scrolls inside the story iframe — pin against the
+      // surrounding scrollable panel instead.
+      const getTarget = () => container.value
+      return { args, container, affixed, getTarget }
     },
     template: `
-      <div class="h-64 overflow-auto border rounded-lg p-4">
+      <div ref="container" class="h-64 overflow-auto border rounded-lg p-4">
         <p class="text-sm text-gray-500 mb-3">Scroll this panel down ↓</p>
         <div style="height: 120px" class="bg-gray-50 rounded mb-4 flex items-center justify-center text-xs text-gray-400">
           spacer
         </div>
-        <DzAffix v-bind="args" @change="affixed = $event">
+        <DzAffix v-bind="args" :target="getTarget" @change="affixed = $event">
           <div
             class="px-4 py-2 rounded-lg shadow-md text-sm font-medium"
             :class="affixed ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-800'"
@@ -94,13 +99,19 @@ export const AffixBottom: Story = {
   render: args => ({
     components: { DzAffix },
     setup() {
+      const container = ref<HTMLElement | null>(null)
       const affixed = ref(false)
-      return { args, affixed }
+      // Measure against the scrollable panel, not the (non-scrolling) window.
+      const getTarget = () => container.value
+      return { args, container, affixed, getTarget }
     },
     template: `
-      <div class="h-64 overflow-auto border rounded-lg p-4">
+      <div ref="container" class="h-64 overflow-auto border rounded-lg p-4">
         <p class="text-sm text-gray-500 mb-3">A bottom-pinned CTA stays in view ↓</p>
-        <DzAffix v-bind="args" @change="affixed = $event">
+        <div style="height: 600px" class="bg-gray-50 rounded mb-4 flex items-center justify-center text-xs text-gray-400">
+          long content
+        </div>
+        <DzAffix v-bind="args" :target="getTarget" @change="affixed = $event">
           <div
             class="px-4 py-2 rounded-lg shadow-md text-sm font-medium"
             :class="affixed ? 'bg-green-600 text-white' : 'bg-green-50 text-green-800'"
@@ -108,9 +119,6 @@ export const AffixBottom: Story = {
             {{ affixed ? 'Pinned to bottom' : 'Keep scrolling' }}
           </div>
         </DzAffix>
-        <div style="height: 600px" class="bg-gray-50 rounded mt-4 flex items-center justify-center text-xs text-gray-400">
-          long content
-        </div>
       </div>
     `,
   }),

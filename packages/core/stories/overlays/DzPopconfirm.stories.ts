@@ -39,6 +39,10 @@ const meta = {
     },
     loading: { control: 'boolean', description: 'Keeps the popover open with a confirm spinner during async work', table: { category: 'Behavior', defaultValue: { summary: 'false' } } },
     open: { control: 'boolean', description: 'Controlled open state via v-model:open', table: { category: 'Behavior' } },
+    // The icon is a functional Vue component. Storybook's vue3 source generator
+    // cannot serialise a raw component placed in `args`, so it is supplied via
+    // the render closure (`:icon="..."`) instead and excluded from controls/source.
+    icon: { control: false, table: { disable: true } },
     confirm: { action: 'confirm', description: 'User confirmed the action', table: { category: 'Events' } },
     cancel: { action: 'cancel', description: 'User dismissed the popover', table: { category: 'Events' } },
   },
@@ -81,7 +85,6 @@ export const DestructiveDelete: Story = {
     title: 'Delete this run?',
     description: 'This permanently removes the run and its artifacts. This cannot be undone.',
     confirmText: 'Delete',
-    icon: Trash2,
   },
   render: args => ({
     components: { DzPopconfirm, DzIconButton },
@@ -90,7 +93,7 @@ export const DestructiveDelete: Story = {
     },
     template: `
       <div class="p-24 flex justify-center">
-        <DzPopconfirm v-bind="args" @confirm="args.confirm" @cancel="args.cancel">
+        <DzPopconfirm v-bind="args" :icon="Trash2" @confirm="args.confirm" @cancel="args.cancel">
           <DzIconButton :icon="Trash2" aria-label="Delete run" variant="ghost" tone="danger" />
         </DzPopconfirm>
       </div>
@@ -107,12 +110,11 @@ export const AsyncConfirm: Story = {
     title: 'Delete this run?',
     description: 'The confirm button stays in a loading state until the request settles.',
     confirmText: 'Delete',
-    icon: AlertTriangle,
   },
   render: args => ({
     components: { DzPopconfirm, DzButton },
     setup() {
-      return { args }
+      return { args, AlertTriangle }
     },
     data() {
       return { loading: false, deleted: false }
@@ -128,7 +130,7 @@ export const AsyncConfirm: Story = {
     },
     template: `
       <div class="p-24 flex flex-col items-center gap-3">
-        <DzPopconfirm v-bind="args" :loading="loading" @confirm="onConfirm" @cancel="args.cancel">
+        <DzPopconfirm v-bind="args" :icon="AlertTriangle" :loading="loading" @confirm="onConfirm" @cancel="args.cancel">
           <DzButton variant="outline" tone="danger">Delete run</DzButton>
         </DzPopconfirm>
         <span v-if="deleted" class="text-sm text-[var(--dz-muted-foreground)]">Run deleted ✓</span>

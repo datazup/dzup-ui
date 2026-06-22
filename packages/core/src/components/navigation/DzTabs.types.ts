@@ -22,6 +22,8 @@ import type { InjectionKey, Ref } from 'vue'
 
 /** Context provided to child tab components via inject */
 export interface DzTabsContext {
+  /** Currently active tab value (mirrors the root v-model). */
+  modelValue: Ref<string>
   /** Visual style variant */
   variant: Ref<TabsVariant>
   /** Component size */

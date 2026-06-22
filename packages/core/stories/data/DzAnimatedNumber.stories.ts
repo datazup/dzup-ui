@@ -190,7 +190,7 @@ export const OnScroll: Story = {
     setup: () => ({ args }),
     template: `
       <div class="h-[320px] overflow-auto rounded-[var(--dz-radius-lg)] border border-[var(--dz-border)]">
-        <div class="flex h-[280px] items-center justify-center text-[var(--dz-muted-foreground)]">
+        <div class="flex h-[400px] items-center justify-center text-[var(--dz-muted-foreground)]">
           ↓ Scroll down to trigger the count-up
         </div>
         <div class="flex flex-col items-center gap-2 p-8">

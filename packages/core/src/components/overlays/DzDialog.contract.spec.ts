@@ -267,4 +267,76 @@ describe('dzDialog -- Contract Spec v1', () => {
     expect(wrapper.find('button').attributes('aria-label')).toBe('Close')
     wrapper.unmount()
   })
+
+  // ── Modal semantics & ARIA wiring (regression: aria-modal + auto labelledby) ──
+
+  it('open modal content exposes aria-modal="true"', () => {
+    const wrapper = mountDialog()
+    const content = document.querySelector('[role="dialog"]')
+    expect(content).not.toBeNull()
+    expect(content?.getAttribute('aria-modal')).toBe('true')
+    wrapper.unmount()
+  })
+
+  it('non-modal content does not set aria-modal="true"', () => {
+    const wrapper = mountDialog({ modal: false })
+    const content = document.querySelector('[role="dialog"]')
+    expect(content).not.toBeNull()
+    expect(content?.getAttribute('aria-modal')).not.toBe('true')
+    wrapper.unmount()
+  })
+
+  it('resolves accessible name via Reka auto aria-labelledby pointing at the title', () => {
+    const wrapper = mountDialog()
+    const content = document.querySelector('[role="dialog"]')
+    const labelledby = content?.getAttribute('aria-labelledby')
+    expect(labelledby).toBeTruthy()
+    const titleEl = document.getElementById(labelledby as string)
+    expect(titleEl).not.toBeNull()
+    expect(titleEl?.textContent).toContain('Test Title')
+    wrapper.unmount()
+  })
+
+  it('resolves aria-describedby to the description element', () => {
+    const wrapper = mountDialog()
+    const content = document.querySelector('[role="dialog"]')
+    const describedby = content?.getAttribute('aria-describedby')
+    expect(describedby).toBeTruthy()
+    const descEl = document.getElementById(describedby as string)
+    expect(descEl).not.toBeNull()
+    expect(descEl?.textContent).toContain('Test Description')
+    wrapper.unmount()
+  })
+
+  it('does not clobber Reka auto aria-labelledby when consumer omits it', () => {
+    // ariaLabelledby defaults to undefined -- must NOT remove Reka's generated id.
+    const wrapper = mount(DzDialog, {
+      props: { open: true },
+      slots: {
+        default: () => h(DzDialogContent, {}, () => [
+          h(DzDialogTitle, {}, () => 'Only Title'),
+        ]),
+      },
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+    const content = document.querySelector('[role="dialog"]')
+    expect(content?.getAttribute('aria-labelledby')).toBeTruthy()
+    wrapper.unmount()
+  })
+
+  it('forwards a consumer-provided ariaLabelledby override', () => {
+    const wrapper = mount(DzDialog, {
+      props: { open: true },
+      slots: {
+        default: () => h(DzDialogContent, { ariaLabelledby: 'external-heading' }, () =>
+          h(DzDialogTitle, {}, () => 'Title')),
+      },
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+    const content = document.querySelector('[role="dialog"]')
+    expect(content?.getAttribute('aria-labelledby')).toBe('external-heading')
+    wrapper.unmount()
+  })
 })

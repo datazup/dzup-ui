@@ -16,7 +16,7 @@ import { PinInputInput, PinInputRoot } from 'reka-ui'
  * <DzOtpInput v-model="pin" :length="4" type="number" mask />
  * ```
  */
-import { computed, useAttrs, useId } from 'vue'
+import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { otpInputVariants } from './DzOtpInput.variants.ts'
@@ -109,11 +109,36 @@ function handleBlur(event: FocusEvent): void {
 const inputIndices = computed(() =>
   Array.from({ length: props.length }, (_, i) => i),
 )
+
+/** Root wrapper — used to normalise Reka's aggregate input */
+const rootRef = ref<HTMLElement | null>(null)
+
+/**
+ * Reka's PinInputRoot always appends a visually-hidden aggregate `<input>` for
+ * native form submission. Out of the box it renders as a ~1px-wide text input,
+ * which leaks an extra `<input>` into the DOM and breaks cell-count semantics.
+ *
+ * We coerce it to `type="hidden"`: that keeps its `name`/`value` for form
+ * submission while guaranteeing it is never focusable (no stray Tab stop) and
+ * is excluded by the canonical `type !== 'hidden'` cell filter, so it is never
+ * counted as an OTP cell. It is already `aria-hidden` + `tabindex="-1"` upstream.
+ */
+function normalizeAggregateInput(): void {
+  const aggregate = rootRef.value?.querySelector<HTMLInputElement>(
+    'input[aria-hidden="true"]',
+  )
+  if (aggregate && aggregate.type !== 'hidden')
+    aggregate.type = 'hidden'
+}
+
+onMounted(normalizeAggregateInput)
+watch(() => props.length, () => void nextTick(normalizeAggregateInput))
 </script>
 
 
 <template>
   <div
+    ref="rootRef"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     style="contain: layout style"

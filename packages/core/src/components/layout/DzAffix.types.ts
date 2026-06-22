@@ -23,8 +23,9 @@ export interface DzAffixProps extends BaseAccessibilityProps {
    */
   offsetBottom?: number
   /**
-   * Returns the scroll container the affix is measured against. Defaults to
-   * `window` when omitted.
+   * Returns the scroll container the affix is measured against. When omitted,
+   * the nearest scrollable ancestor of the content is used, falling back to
+   * `window` when the content scrolls with the page.
    */
   target?: () => HTMLElement | Window | null
 }

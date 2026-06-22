@@ -41,6 +41,7 @@ import {
  * ```
  */
 import { computed, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
+import { useEscapeKey } from '../../composables/useEscapeKey/useEscapeKey.ts'
 import { cn } from '../../utilities/cn.ts'
 import { commandPaletteVariants } from './DzCommandPalette.variants.ts'
 
@@ -119,6 +120,22 @@ function handleKeydown(event: KeyboardEvent): void {
     open.value = !open.value
   }
 }
+
+/**
+ * Escape dismissal.
+ *
+ * The nested Reka Combobox owns the Escape key while it is open (it resets the
+ * search term and stops the event from propagating to the Dialog's own escape
+ * handler). As a result the Dialog never closes on Escape on its own. We adopt
+ * the simple, predictable contract: **Escape always closes the palette**,
+ * regardless of whether the search query is empty or not. Closing flips the
+ * `open` model to `false`, which lets Reka's Dialog FocusScope return focus to
+ * the trigger that opened it. The `open` guard ensures we only react while the
+ * palette is actually visible.
+ */
+useEscapeKey(() => {
+  open.value = false
+}, open)
 
 onMounted(() => {
   if (props.enableGlobalShortcut) {

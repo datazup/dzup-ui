@@ -173,6 +173,48 @@ describe('dzConfirmDialog -- Unit Tests', () => {
     wrapper.unmount()
   })
 
+  // Regression guard: handler functions bound as attributes (e.g. Storybook's
+  // `action` argTypes via `v-bind="args"`) must never be serialized onto the
+  // role="dialog" element. Filtered out of the $attrs spread in the component.
+  it('does not serialize function-valued attrs onto the dialog content node', () => {
+    const wrapper = mountConfirmDialog({
+      confirm: () => {},
+      cancel: () => {},
+    } as Record<string, unknown>)
+    const dialog = document.querySelector('[role="dialog"]') as HTMLElement
+    expect(dialog).toBeTruthy()
+    expect(dialog.hasAttribute('confirm')).toBe(false)
+    expect(dialog.hasAttribute('cancel')).toBe(false)
+    wrapper.unmount()
+  })
+
+  // Legitimate pass-through attrs (id, data-*, aria-*) survive the filter.
+  it('forwards non-function fallthrough attrs to the dialog content node', () => {
+    const wrapper = mountConfirmDialog({
+      'data-custom': 'kept',
+      'aria-keyshortcuts': 'Enter',
+    } as Record<string, unknown>)
+    const dialog = document.querySelector('[role="dialog"]') as HTMLElement
+    expect(dialog).toBeTruthy()
+    expect(dialog.getAttribute('data-custom')).toBe('kept')
+    expect(dialog.getAttribute('aria-keyshortcuts')).toBe('Enter')
+    wrapper.unmount()
+  })
+
+  // B0: open content must expose modal semantics + an accessible name.
+  it('marks the open dialog as modal with an accessible name', () => {
+    const wrapper = mountConfirmDialog({ title: 'Delete item?' })
+    const dialog = document.querySelector('[role="dialog"]') as HTMLElement
+    expect(dialog).toBeTruthy()
+    expect(dialog.getAttribute('aria-modal')).toBe('true')
+    // Reka wires aria-labelledby from DzDialogTitle.
+    const labelledby = dialog.getAttribute('aria-labelledby')
+    expect(labelledby).toBeTruthy()
+    const label = document.getElementById(labelledby as string)
+    expect(label?.textContent).toContain('Delete item?')
+    wrapper.unmount()
+  })
+
   it('applies primary tone to confirm button in default variant', () => {
     const wrapper = mountConfirmDialog({ variant: 'default' })
     const confirmBtn = document.querySelector(

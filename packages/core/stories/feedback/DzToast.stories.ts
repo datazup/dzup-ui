@@ -250,33 +250,71 @@ export const Interactive: Story = {
 export const InteractiveDismiss: Story = {
   name: 'Interactive: Dismiss',
   render: () => ({
-    components: { DzToastProvider, DzToast },
-    setup() {
-      const visible = ref(true)
-      const toast: ToastItem = {
-        id: 'dismiss-1',
-        title: 'Changes saved',
-        description: 'Your profile has been updated.',
-        tone: 'success',
-      }
-      return { visible, toast }
+    components: {
+      DzToastProvider,
+      DzToastViewport,
+      // A real trigger that uses the imperative context API to mount a toast
+      // into the live viewport (Reka UI teleports ToastRoot content into the
+      // ToastViewport, so the viewport is required for the toast to render).
+      ToastTrigger: {
+        setup() {
+          const ctx = inject(DZ_TOAST_KEY)
+          function show() {
+            ctx?.add({
+              title: 'Changes saved',
+              description: 'Your profile has been updated.',
+              tone: 'success',
+              duration: 5000,
+            })
+          }
+          return { show }
+        },
+        template: `
+          <button
+            type="button"
+            class="px-3 py-1.5 text-sm border rounded"
+            @click="show"
+          >
+            Show toast
+          </button>
+        `,
+      },
     },
     template: `
-      <DzToastProvider>
-        <div class="max-w-sm min-h-[80px]">
-          <DzToast v-if="visible" :toast="toast" @close="visible = false" />
-          <p v-else class="text-sm text-gray-500">Toast dismissed.</p>
+      <DzToastProvider :duration="5000">
+        <div class="space-y-4 min-h-[120px]">
+          <p class="text-sm text-gray-500">
+            Click "Show toast" to display a success toast, then dismiss it with the
+            close control (it also auto-dismisses after 5s).
+          </p>
+          <ToastTrigger />
         </div>
+        <DzToastViewport position="bottom-right" />
       </DzToastProvider>
     `,
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    // The toast is visible on mount.
-    await expect(canvas.getByText('Changes saved')).toBeInTheDocument()
-    // Clicking the close button emits `close` → the parent hides the toast.
+    const trigger = canvas.getByRole('button', { name: /show toast/i })
+
+    // Clicking the trigger mounts the toast (Reka teleports its content into
+    // the viewport, so findByText waits for it to appear).
+    await userEvent.click(trigger)
+    await expect(await canvas.findByText('Changes saved')).toBeInTheDocument()
+
+    // Showing a toast must not steal focus — it stays on the trigger.
+    await expect(trigger).toHaveFocus()
+
+    // The toast exposes an aria-live region for screen reader announcements.
+    await waitFor(() =>
+      expect(canvasElement.querySelector('[aria-live]')).not.toBeNull(),
+    )
+
+    // The toast is dismissable via the close control.
     await userEvent.click(canvas.getByRole('button', { name: /close notification/i }))
-    await waitFor(() => expect(canvas.getByText(/toast dismissed/i)).toBeInTheDocument())
+    await waitFor(() =>
+      expect(canvas.queryByText('Changes saved')).not.toBeInTheDocument(),
+    )
   },
 }
 

@@ -208,10 +208,15 @@ defineExpose({ inputRef })
 
       <!-- Decrement button -->
       <!--
-        Uses aria-disabled (not the native disabled attribute) so the bound
-        state greys out only this button. The native disabled attribute would
-        trigger the wrapper's `dz-disabled-input-shell:has(:disabled)` rule and
-        disable the entire input when min is reached.
+        Bound-state disabling uses aria-disabled, NOT the native disabled
+        attribute. The native attribute would trip the wrapper's
+        `dz-disabled-input-shell:has(:disabled)` rule and disable the ENTIRE
+        input when min is reached. With aria-disabled the three facets stay in
+        agreement on one model: the `dz-disabled-button[aria-disabled]` rule
+        greys it out AND sets `pointer-events: none` (visual + inert pointer),
+        `tabindex="-1"` keeps it out of the tab order, and the `canDecrement`
+        guard makes any residual activation a no-op. Tests/stories therefore
+        assert aria-disabled, never the native `disabled` attribute.
       -->
       <button
         type="button"
@@ -265,7 +270,7 @@ defineExpose({ inputRef })
       >
 
       <!-- Increment button -->
-      <!-- aria-disabled (not native disabled) — see decrement button above. -->
+      <!-- aria-disabled (not native disabled) — same single model as the decrement button above. -->
       <button
         type="button"
         class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"

@@ -112,6 +112,32 @@ const resolvedAriaDescribedby = computed(() => {
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
+/**
+ * Accessible name wiring for the `role="combobox"` input.
+ *
+ * An input's value is announced natively, but it still needs an author-supplied
+ * name (axe `aria-input-field-name`). We prefer an explicit `ariaLabelledby`, then
+ * the surrounding DzFormField label, so the input reads its associated label.
+ */
+const resolvedAriaLabelledby = computed(() => {
+  if (props.ariaLabelledby)
+    return props.ariaLabelledby
+  if (!props.ariaLabel && fieldContext?.labelId)
+    return fieldContext.labelId
+  return undefined
+})
+
+/**
+ * Falls back to the placeholder so the input always has a non-empty accessible
+ * name. Suppressed when aria-labelledby already supplies the name, to avoid a
+ * redundant (and lower-precedence) aria-label.
+ */
+const resolvedAriaLabel = computed(() => {
+  if (resolvedAriaLabelledby.value)
+    return undefined
+  return props.ariaLabel ?? props.placeholder
+})
+
 const styles = computed(() =>
   comboboxVariants({
     variant: props.variant,
@@ -284,8 +310,8 @@ watch(
         :placeholder="placeholder"
         :class="styles.input()"
         :disabled="resolvedDisabled"
-        :aria-label="ariaLabel"
-        :aria-labelledby="ariaLabelledby"
+        :aria-label="resolvedAriaLabel"
+        :aria-labelledby="resolvedAriaLabelledby"
         :aria-describedby="resolvedAriaDescribedby"
         :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
         @input="handleInput"

@@ -22,7 +22,12 @@ export interface UseAffixOptions {
   offsetTop?: MaybeRefOrGetter<number | undefined>
   /** Pin distance from the bottom of the scroll container (px). */
   offsetBottom?: MaybeRefOrGetter<number | undefined>
-  /** Returns the scroll container. Defaults to `window` when omitted/null. */
+  /**
+   * Returns the scroll container the affix is measured against. When omitted
+   * (or it returns null), the nearest scrollable ancestor of the placeholder
+   * root is used, falling back to `window` when the content scrolls with the
+   * page.
+   */
   target?: () => HTMLElement | Window | null | undefined
   /** Invoked whenever the affixed state flips. */
   onChange?: (affixed: boolean) => void
@@ -71,8 +76,34 @@ export function useAffix(options: UseAffixOptions = {}): UseAffixReturn {
     rootEl.value = el as HTMLElement | null
   }
 
+  /** Whether `el` scrolls its own overflow on the vertical axis. */
+  function isScrollableY(el: HTMLElement): boolean {
+    const overflowY = getComputedStyle(el).overflowY
+    return (
+      (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay')
+      && el.scrollHeight > el.clientHeight
+    )
+  }
+
+  /** Nearest ancestor that scrolls vertically, or `null` if none before root. */
+  function findScrollableAncestor(el: HTMLElement): HTMLElement | null {
+    let node = el.parentElement
+    while (node) {
+      if (isScrollableY(node))
+        return node
+      node = node.parentElement
+    }
+    return null
+  }
+
   function getTarget(): HTMLElement | Window {
-    return options.target?.() ?? window
+    const explicit = options.target?.()
+    if (explicit)
+      return explicit
+    // No explicit container: pin against the nearest scrollable ancestor so the
+    // "defaults to window" path still activates when nested in a scroller.
+    const el = rootEl.value
+    return (el && findScrollableAncestor(el)) ?? window
   }
 
   function viewportHeight(): number {
