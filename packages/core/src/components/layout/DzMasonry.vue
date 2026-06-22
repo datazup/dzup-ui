@@ -28,7 +28,7 @@ import type { DzMasonryProps, DzMasonrySlots, MasonryColumns, ResponsiveColumns 
  * </DzMasonry>
  * ```
  */
-import { computed, defineComponent, Comment, Fragment, nextTick, onBeforeUnmount, onMounted, onUpdated, ref, Text, useAttrs, useSlots } from 'vue'
+import { computed, defineComponent, Comment, Fragment, nextTick, onBeforeUnmount, onMounted, onUpdated, ref, Text, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { masonryTokens } from './DzMasonry.tokens.ts'
 import { masonryColumn, masonryColumnContainer, masonryVariants, responsiveColumnsMap } from './DzMasonry.variants.ts'
@@ -41,10 +41,9 @@ const props = withDefaults(defineProps<DzMasonryProps>(), {
   as: 'div',
 })
 
-defineSlots<DzMasonrySlots>()
+const slots = defineSlots<DzMasonrySlots>()
 
 const attrs = useAttrs()
-const slots = useSlots()
 
 // ---------------------------------------------------------------------------
 // Breakpoints (mirror Tailwind defaults, mobile-first)
