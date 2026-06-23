@@ -41,6 +41,22 @@ function clickRow(label: string): boolean {
   return false
 }
 
+/** Click the expand/collapse chevron of a parent node identified by its label. */
+function clickChevron(label: string): boolean {
+  const items = Array.from(document.querySelectorAll('[role="treeitem"]'))
+  for (const li of items) {
+    const row = li.querySelector(':scope > div')
+    if (row && row.textContent?.trim() === label) {
+      const toggle = row.querySelector(':scope > [data-dz-tree-toggle]')
+      if (toggle) {
+        toggle.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+        return true
+      }
+    }
+  }
+  return false
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
 })
@@ -142,6 +158,199 @@ describe('dzTreeSelect — Single selection', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.emitted('change')).toBeFalsy()
+    wrapper.unmount()
+  })
+})
+
+describe('dzTreeSelect — Pointer-driven expansion', () => {
+  it('expands a collapsed parent when its chevron is clicked, keeping the panel open', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    // Collapsed parent: children are not in the DOM yet.
+    expect(document.querySelector('[role="tree"]')?.textContent).not.toContain('Apple')
+
+    expect(clickChevron('Fruit')).toBe(true)
+    await wrapper.vm.$nextTick()
+
+    // Children revealed, no selection committed, panel still open.
+    const tree = document.querySelector('[role="tree"]')
+    expect(tree?.textContent).toContain('Apple')
+    expect(tree?.textContent).toContain('Banana')
+    expect(wrapper.emitted('change')).toBeFalsy()
+    expect(wrapper.emitted('select')).toBeFalsy()
+    expect(wrapper.emitted('close')).toBeFalsy()
+    expect(wrapper.find('[role="combobox"]').attributes('aria-expanded')).toBe('true')
+
+    // aria-expanded flipped to true on the treeitem.
+    const fruitItem = Array.from(document.querySelectorAll('[role="treeitem"]'))
+      .find(li => li.querySelector(':scope > div')?.textContent?.trim() === 'Fruit')
+    expect(fruitItem?.getAttribute('aria-expanded')).toBe('true')
+    expect(wrapper.emitted('update:expandedKeys')?.at(-1)).toEqual([['fruit']])
+
+    wrapper.unmount()
+  })
+
+  it('reaches the same expanded end state via pointer (chevron) and keyboard (ArrowRight)', async () => {
+    // Pointer path.
+    const pointer = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+    clickChevron('Fruit')
+    await pointer.vm.$nextTick()
+    const pointerKeys = pointer.emitted('update:expandedKeys')?.at(-1)
+    pointer.unmount()
+    document.body.innerHTML = ''
+
+    // Keyboard path.
+    const keyboard = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+    const fruitRow = Array.from(document.querySelectorAll('[role="treeitem"]'))
+      .find(li => li.querySelector(':scope > div')?.textContent?.trim() === 'Fruit')
+      ?.querySelector(':scope > div')
+    fruitRow?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+    await keyboard.vm.$nextTick()
+    const keyboardKeys = keyboard.emitted('update:expandedKeys')?.at(-1)
+
+    expect(pointerKeys).toEqual([['fruit']])
+    expect(keyboardKeys).toEqual(pointerKeys)
+    expect(document.querySelector('[role="tree"]')?.textContent).toContain('Apple')
+    keyboard.unmount()
+  })
+})
+
+describe('dzTreeSelect — ARIA combobox-with-tree semantics', () => {
+  it('renders exactly one tabindex="0" treeitem in the open panel', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    const rows = Array.from(
+      document.querySelectorAll('[role="tree"] [data-dz-tree-row]'),
+    )
+    const tabbable = rows.filter(r => r.getAttribute('tabindex') === '0')
+    expect(tabbable).toHaveLength(1)
+    expect(rows.filter(r => r.getAttribute('tabindex') === '-1').length).toBeGreaterThan(0)
+    wrapper.unmount()
+  })
+
+  it('exposes aria-level on every treeitem', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, expandedKeys: ['fruit'], defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    const items = Array.from(document.querySelectorAll('[role="treeitem"]'))
+    expect(items.length).toBeGreaterThan(0)
+    expect(items.every(li => !!li.getAttribute('aria-level'))).toBe(true)
+
+    const levelOf = (label: string) =>
+      items
+        .find(li => li.querySelector(':scope > [data-dz-tree-row]')?.textContent?.trim() === label)
+        ?.getAttribute('aria-level')
+    expect(levelOf('Fruit')).toBe('1')
+    expect(levelOf('Apple')).toBe('2')
+    wrapper.unmount()
+  })
+
+  it('points aria-activedescendant at a real treeitem when opened', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    const combobox = wrapper.find('[role="combobox"]')
+    const active = combobox.attributes('aria-activedescendant')
+    expect(active).toBeTruthy()
+    const activeEl = document.getElementById(active!)
+    expect(activeEl?.getAttribute('role')).toBe('treeitem')
+    wrapper.unmount()
+  })
+
+  it('moves aria-activedescendant down/up from the focused trigger', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    const combobox = wrapper.find('[role="combobox"]')
+    const first = combobox.attributes('aria-activedescendant')
+
+    await combobox.trigger('keydown', { key: 'ArrowDown' })
+    const second = combobox.attributes('aria-activedescendant')
+    expect(second).toBeTruthy()
+    expect(second).not.toBe(first)
+    // The newly active node carries the panel's single tabindex="0".
+    const activeRow = document.getElementById(second!)?.querySelector(':scope > [data-dz-tree-row]')
+    expect(activeRow?.getAttribute('tabindex')).toBe('0')
+
+    await combobox.trigger('keydown', { key: 'ArrowUp' })
+    expect(combobox.attributes('aria-activedescendant')).toBe(first)
+    wrapper.unmount()
+  })
+
+  it('ArrowDown on a closed trigger opens the panel and seeds an active node', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes },
+      attachTo: document.body,
+    })
+    const combobox = wrapper.find('[role="combobox"]')
+    await combobox.trigger('keydown', { key: 'ArrowDown' })
+    await flush()
+
+    expect(combobox.attributes('aria-expanded')).toBe('true')
+    expect(combobox.attributes('aria-activedescendant')).toBeTruthy()
+    wrapper.unmount()
+  })
+
+  it('ArrowRight expands the active branch and ArrowLeft collapses it (from the trigger)', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    const combobox = wrapper.find('[role="combobox"]')
+    // Active node starts on the first row, "Fruit" (a collapsed parent).
+    expect(document.querySelector('[role="tree"]')?.textContent).not.toContain('Apple')
+
+    await combobox.trigger('keydown', { key: 'ArrowRight' })
+    expect(document.querySelector('[role="tree"]')?.textContent).toContain('Apple')
+    expect(wrapper.emitted('update:expandedKeys')?.at(-1)).toEqual([['fruit']])
+
+    await combobox.trigger('keydown', { key: 'ArrowLeft' })
+    expect(document.querySelector('[role="tree"]')?.textContent).not.toContain('Apple')
+    expect(wrapper.emitted('change')).toBeFalsy()
+    wrapper.unmount()
+  })
+
+  it('Enter on the active node commits the selection (single mode)', async () => {
+    const wrapper = mount(DzTreeSelect, {
+      props: { nodes, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await flush()
+
+    const combobox = wrapper.find('[role="combobox"]')
+    // Move to "Cherry" (a leaf) and commit.
+    await combobox.trigger('keydown', { key: 'ArrowDown' }) // Fruit → Cherry
+    await combobox.trigger('keydown', { key: 'Enter' })
+
+    expect(wrapper.emitted('change')?.at(-1)).toEqual(['cherry'])
+    expect(combobox.attributes('aria-expanded')).toBe('false')
     wrapper.unmount()
   })
 })

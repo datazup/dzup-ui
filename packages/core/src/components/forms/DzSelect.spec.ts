@@ -6,7 +6,27 @@ import { mount } from '@vue/test-utils'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzFormField from './DzFormField.vue'
+import DzFormLabel from './DzFormLabel.vue'
 import DzSelect from './DzSelect.vue'
+
+/**
+ * Resolves the accessible name of a combobox-style trigger the way the ARIA
+ * name computation does: aria-labelledby (joined text of referenced elements)
+ * wins over aria-label. Content text is intentionally ignored because
+ * `role="combobox"` takes its name from the author only.
+ */
+function accessibleName(el: Element, root: ParentNode = document): string {
+  const labelledby = el.getAttribute('aria-labelledby')
+  if (labelledby) {
+    return labelledby
+      .split(/\s+/)
+      .map(id => root.querySelector(`#${CSS.escape(id)}`)?.textContent?.trim() ?? '')
+      .filter(Boolean)
+      .join(' ')
+      .trim()
+  }
+  return el.getAttribute('aria-label')?.trim() ?? ''
+}
 
 // Polyfill pointer capture APIs missing in jsdom (needed by Reka UI SelectTrigger)
 const origHasPointerCapture = HTMLElement.prototype.hasPointerCapture
@@ -252,5 +272,69 @@ describe('dzSelect — Searchable Mode', () => {
     const errorId = errorEl.attributes('id')!
     expect(errorId).toBeTruthy()
     expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
+})
+
+describe('dzSelect — Accessible Name (axe button-name)', () => {
+  it('gives the combobox trigger a non-empty name from the placeholder when no value is selected', () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, placeholder: 'Select a fruit' },
+      attachTo: document.body,
+    })
+    const trigger = wrapper.get('[role="combobox"]').element
+    // role="combobox" names from the author: aria-labelledby must be wired,
+    // pointing at the value element that holds the placeholder text.
+    expect(trigger.getAttribute('aria-labelledby')).toBeTruthy()
+    expect(accessibleName(trigger, wrapper.element.ownerDocument)).toBe('Select a fruit')
+    wrapper.unmount()
+  })
+
+  it('reflects the selected item label in the accessible name', async () => {
+    const wrapper = mount(DzSelect, {
+      props: {
+        items: mockItems,
+        placeholder: 'Select a fruit',
+        modelValue: 'banana',
+        // open so Reka registers options and SelectValue resolves the label
+        defaultOpen: true,
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    const trigger = wrapper.get('[role="combobox"]').element
+    expect(accessibleName(trigger, document)).toBe('Banana')
+    wrapper.unmount()
+  })
+
+  it('uses an explicit ariaLabel verbatim and does not override it with aria-labelledby', () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, placeholder: 'Select a fruit', ariaLabel: 'Fruit selection' },
+      attachTo: document.body,
+    })
+    const trigger = wrapper.get('[role="combobox"]').element
+    expect(trigger.getAttribute('aria-labelledby')).toBeNull()
+    expect(accessibleName(trigger, wrapper.element.ownerDocument)).toBe('Fruit selection')
+    wrapper.unmount()
+  })
+
+  it('prepends the DzFormField label so the name reads "<label> <value>"', () => {
+    const wrapper = mount(DzFormField, {
+      attachTo: document.body,
+      slots: {
+        default: () => [
+          h(DzFormLabel, () => 'Favourite fruit'),
+          h(DzSelect, { items: mockItems, placeholder: 'Select a fruit' }),
+        ],
+      },
+    })
+    const trigger = wrapper.get('[role="combobox"]').element
+    const labelledby = trigger.getAttribute('aria-labelledby')!
+    expect(labelledby).toBeTruthy()
+    // The label id (from DzFormField context) is referenced before the value id.
+    expect(labelledby.split(/\s+/).length).toBeGreaterThanOrEqual(2)
+    expect(accessibleName(trigger, wrapper.element.ownerDocument)).toBe('Favourite fruit Select a fruit')
+    wrapper.unmount()
   })
 })

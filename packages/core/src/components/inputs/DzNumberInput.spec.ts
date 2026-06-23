@@ -139,3 +139,47 @@ describe('dzNumberInput — Unit Tests', () => {
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([1])
   })
 })
+
+describe('dzNumberInput — bound stepper disabled semantics are internally consistent', () => {
+  // At a bound the stepper must present ONE coherent model: aria-disabled +
+  // the disabled style class, NO native `disabled` attribute (which would grey
+  // the whole input shell via :has(:disabled)), and an inert handler. Visual,
+  // ARIA, and interactivity must all agree.
+
+  it('at min: decrement is aria-disabled + styled disabled, not natively disabled, and inert', async () => {
+    const wrapper = mount(DzNumberInput, { props: { modelValue: 0, min: 0, step: 1 } })
+    const decBtn = wrapper.find('button[aria-label="Decrease value"]')
+    // ARIA + visual style agree …
+    expect(decBtn.attributes('aria-disabled')).toBe('true')
+    expect(decBtn.classes()).toContain('dz-disabled-button')
+    // … and the native attribute is intentionally absent (keeps the input shell usable) …
+    expect(decBtn.attributes('disabled')).toBeUndefined()
+    // … and interactivity agrees: activation at the bound is a no-op.
+    await decBtn.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('decrement')).toBeUndefined()
+  })
+
+  it('at max: increment is aria-disabled + styled disabled, not natively disabled, and inert', async () => {
+    const wrapper = mount(DzNumberInput, { props: { modelValue: 10, max: 10, step: 1 } })
+    const incBtn = wrapper.find('button[aria-label="Increase value"]')
+    expect(incBtn.attributes('aria-disabled')).toBe('true')
+    expect(incBtn.classes()).toContain('dz-disabled-button')
+    expect(incBtn.attributes('disabled')).toBeUndefined()
+    await incBtn.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('increment')).toBeUndefined()
+  })
+
+  it('keeps the opposite stepper and the input fully usable while one bound is reached', async () => {
+    const wrapper = mount(DzNumberInput, { props: { modelValue: 0, min: 0, max: 10, step: 1 } })
+    // The non-bound (increment) stepper carries no aria-disabled / native disabled …
+    const incBtn = wrapper.find('button[aria-label="Increase value"]')
+    expect(incBtn.attributes('aria-disabled')).toBeUndefined()
+    // … and the input never inherits a disabled attribute from a bound.
+    expect(wrapper.find('input').attributes('disabled')).toBeUndefined()
+    // Stepping off the bound re-enables the previously-bounded decrement stepper.
+    await incBtn.trigger('click')
+    expect(wrapper.find('button[aria-label="Decrease value"]').attributes('aria-disabled')).toBeUndefined()
+  })
+})

@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils'
  * DzToast compound — Unit / behavior tests.
  */
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, inject, ref } from 'vue'
+import { defineComponent, h, inject, nextTick, ref } from 'vue'
 import { DZ_TOAST_KEY } from './DzToast.types.ts'
 import DzToastProvider from './DzToastProvider.vue'
 import DzToastViewport from './DzToastViewport.vue'
@@ -162,6 +162,47 @@ describe('dzToastContext — context operations', () => {
 
     context.clear()
     expect(toasts.value).toHaveLength(0)
+  })
+
+  it('mounts a toast into the viewport on add and removes it on dismiss', async () => {
+    let ctx: DzToastContext | null = null
+
+    const ContextReader = defineComponent({
+      setup() {
+        ctx = inject(DZ_TOAST_KEY, null)
+        return () => null
+      },
+    })
+
+    const wrapper = mount(DzToastProvider, {
+      attachTo: document.body,
+      slots: {
+        default: () => [h(ContextReader), h(DzToastViewport)],
+      },
+    })
+
+    // Show: the toast content is teleported into the viewport.
+    const id = ctx!.add({
+      title: 'Changes saved',
+      description: 'Your profile has been updated.',
+      tone: 'success',
+    })
+    await nextTick()
+    await nextTick()
+
+    expect(document.body.textContent).toContain('Changes saved')
+
+    // Rendering the toast must not steal focus from the page. (Reka's
+    // aria-live announce region is RAF/timeout-gated and is asserted in the
+    // Storybook play test where requestAnimationFrame actually runs.)
+    expect(document.activeElement).toBe(document.body)
+
+    // Dismiss: removing the toast unmounts its content.
+    ctx!.remove(id)
+    await nextTick()
+    expect(document.body.textContent).not.toContain('Changes saved')
+
+    wrapper.unmount()
   })
 
   it('respects maxToasts limit in provider', () => {

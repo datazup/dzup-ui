@@ -8,7 +8,7 @@ import type {
   DzDialogContentProps,
   DzDialogContentSlots,
 } from './DzDialog.types.ts'
-import { DialogContent, DialogOverlay, DialogPortal } from 'reka-ui'
+import { DialogContent, DialogOverlay, DialogPortal, injectDialogRootContext } from 'reka-ui'
 /**
  * DzDialogContent -- Content panel for DzDialog compound.
  *
@@ -44,6 +44,29 @@ const emit = defineEmits<DzDialogContentEmits>()
 const slots = defineSlots<DzDialogContentSlots>()
 
 const attrs = useAttrs()
+
+const rootContext = injectDialogRootContext()
+
+/**
+ * Accessibility attributes forwarded to Reka's DialogContent.
+ *
+ * Reka UI auto-wires `aria-labelledby` (from DzDialogTitle) and
+ * `aria-describedby` (from DzDialogDescription) onto the content element via the
+ * dialog root context. Binding those attributes to `undefined` would strip
+ * Reka's generated ids and leave the dialog with no accessible name, so each
+ * consumer-supplied override is forwarded ONLY when explicitly provided.
+ *
+ * Reka 2.9.x does not emit `aria-modal` itself, so we surface it here whenever
+ * the dialog is modal (DzDialog `modal` defaults to true).
+ */
+const contentAria = computed<Record<string, unknown>>(() => {
+  const aria: Record<string, unknown> = {}
+  if (props.ariaLabel !== undefined) aria['aria-label'] = props.ariaLabel
+  if (props.ariaLabelledby !== undefined) aria['aria-labelledby'] = props.ariaLabelledby
+  if (props.ariaDescribedby !== undefined) aria['aria-describedby'] = props.ariaDescribedby
+  if (rootContext.modal.value) aria['aria-modal'] = 'true'
+  return aria
+})
 
 const dialogCtx = inject(DZ_DIALOG_KEY, undefined)
 const overlayTransitionName = computed(() => dialogCtx?.overlayTransition.value ?? 'dz-dialog-overlay')
@@ -92,11 +115,8 @@ function handleCloseAutoFocus(event: Event): void {
       <DialogContent
         :id="id"
         :class="contentClasses"
-        :aria-label="ariaLabel"
-        :aria-labelledby="ariaLabelledby"
-        :aria-describedby="ariaDescribedby"
         style="contain: layout style"
-        v-bind="{ ...$attrs, class: undefined }"
+        v-bind="{ ...contentAria, ...$attrs, class: undefined }"
         @escape-key-down="handleEscapeKeyDown"
         @pointer-down-outside="handlePointerDownOutside"
         @interact-outside="handleInteractOutside"

@@ -46,6 +46,12 @@ export interface DzDeferredContentProps extends BaseAccessibilityProps {
 export interface DzDeferredContentEmits {
   /** Fired once, when the deferred content is first rendered. */
   load: []
+  /**
+   * Fired on every mount transition — including the first reveal and each
+   * subsequent re-mount under `once: false`. Use this (not `load`) to count
+   * reveals or react to re-entry.
+   */
+  reveal: []
 }
 
 // ---------------------------------------------------------------------------

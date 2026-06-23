@@ -3,8 +3,10 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 /**
  * DzCombobox — Unit / behavior tests.
  */
-import { defineComponent, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import DzCombobox from './DzCombobox.vue'
+import DzFormField from './DzFormField.vue'
+import DzFormLabel from './DzFormLabel.vue'
 
 const items = [
   { label: 'Apple', value: 'apple' },
@@ -271,5 +273,42 @@ describe('dzCombobox — Unit Tests', () => {
     const errorId = errorEl.attributes('id')!
     expect(errorId).toBeTruthy()
     expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
+})
+
+describe('dzCombobox — Accessible Name (axe aria-input-field-name)', () => {
+  it('falls back to the placeholder so the input always has an accessible name', () => {
+    const wrapper = mount(DzCombobox, {
+      props: { items, placeholder: 'Search cities...' },
+    })
+    const input = wrapper.find('input')
+    expect(input.attributes('aria-labelledby')).toBeUndefined()
+    expect(input.attributes('aria-label')).toBe('Search cities...')
+  })
+
+  it('uses an explicit ariaLabel over the placeholder', () => {
+    const wrapper = mount(DzCombobox, {
+      props: { items, placeholder: 'Search cities...', ariaLabel: 'City search' },
+    })
+    expect(wrapper.find('input').attributes('aria-label')).toBe('City search')
+  })
+
+  it('associates with the DzFormField label and drops the redundant aria-label', () => {
+    const wrapper = mount(DzFormField, {
+      slots: {
+        default: () => [
+          h(DzFormLabel, () => 'Assignee'),
+          h(DzCombobox, { items, placeholder: 'Search team members...' }),
+        ],
+      },
+    })
+    const input = wrapper.find('input')
+    const labelledby = input.attributes('aria-labelledby')!
+    expect(labelledby).toBeTruthy()
+    const label = wrapper.find(`#${labelledby}`)
+    expect(label.exists()).toBe(true)
+    expect(label.text()).toContain('Assignee')
+    // aria-labelledby supplies the name, so no competing aria-label.
+    expect(input.attributes('aria-label')).toBeUndefined()
   })
 })

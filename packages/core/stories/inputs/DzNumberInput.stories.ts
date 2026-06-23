@@ -331,16 +331,23 @@ export const Interactive: Story = {
     const spin = canvas.getByRole('spinbutton')
     const increase = canvas.getByRole('button', { name: 'Increase value' })
     const decrease = canvas.getByRole('button', { name: 'Decrease value' })
-    // Starts at the min (0) -> decrement is clamped/disabled.
+    // At the lower bound (0) the decrement stepper is marked disabled via
+    // aria-disabled (APG) — NOT the native `disabled` attribute, which would
+    // grey the entire input shell via its `:has(:disabled)` rule. The greyed
+    // style (`dz-disabled-button[aria-disabled]`), the ARIA state, and the
+    // inert interactivity (`pointer-events: none` + guarded handler) all agree
+    // on this single model, so the assertion checks aria-disabled, not the
+    // native disabled attribute.
     await expect(spin).toHaveAttribute('aria-valuenow', '0')
-    await expect(decrease).toBeDisabled()
+    await expect(decrease).toHaveAttribute('aria-disabled', 'true')
+    await expect(decrease).not.toBeDisabled() // intentionally not natively disabled
     // Step up twice.
     await userEvent.click(increase)
     await expect(spin).toHaveAttribute('aria-valuenow', '1')
     await userEvent.click(increase)
     await expect(spin).toHaveAttribute('aria-valuenow', '2')
-    // Off the lower bound, decrement re-enables.
-    await expect(decrease).toBeEnabled()
+    // Off the lower bound, decrement re-enables (aria-disabled removed).
+    await expect(decrease).not.toHaveAttribute('aria-disabled')
   },
 }
 

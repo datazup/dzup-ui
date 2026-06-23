@@ -110,6 +110,35 @@ const resolvedAriaDescribedby = computed(() => {
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
+/** ID of the SelectValue element holding the placeholder / selected label text */
+const valueId = computed(() => `${resolvedId.value}-value`)
+
+/**
+ * Accessible name wiring for the `role="combobox"` trigger.
+ *
+ * A combobox derives its name from the author (aria-label / aria-labelledby), NOT
+ * from its text content, so the placeholder rendered inside the button does not
+ * contribute on its own (axe `button-name`). We therefore reference the value
+ * element explicitly: the name stays non-empty (placeholder) when nothing is
+ * selected and reflects the chosen item's label once a value is set. When the
+ * select sits inside a DzFormField, the field's label is prepended so the name
+ * reads "<label> <value>".
+ *
+ * Returns `undefined` when an explicit `ariaLabel` is supplied so that author
+ * intent (aria-label) is not silently overridden by aria-labelledby precedence.
+ */
+const resolvedAriaLabelledby = computed(() => {
+  if (props.ariaLabel)
+    return undefined
+  const parts: string[] = []
+  if (props.ariaLabelledby)
+    parts.push(props.ariaLabelledby)
+  else if (fieldContext?.labelId)
+    parts.push(fieldContext.labelId)
+  parts.push(valueId.value)
+  return parts.join(' ')
+})
+
 const styles = computed(() =>
   selectVariants({
     variant: props.variant,
@@ -191,7 +220,7 @@ const triggerClasses = computed(() =>
     <SelectTrigger
       :id="resolvedId"
       :aria-label="ariaLabel"
-      :aria-labelledby="ariaLabelledby"
+      :aria-labelledby="resolvedAriaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
       :class="triggerClasses"
@@ -204,7 +233,7 @@ const triggerClasses = computed(() =>
       @focus="handleFocus"
       @blur="handleBlur"
     >
-      <SelectValue :placeholder="placeholder" />
+      <SelectValue :id="valueId" :placeholder="placeholder" />
       <SelectIcon as-child>
         <ChevronDown :class="styles.icon()" aria-hidden="true" />
       </SelectIcon>

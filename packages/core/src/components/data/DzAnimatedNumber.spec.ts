@@ -132,6 +132,33 @@ describe('dzAnimatedNumber', () => {
     expect(wrapper.emitted('complete')).toHaveLength(1)
   })
 
+  it('rounds mid-tween frames to whole numbers when no format is given', async () => {
+    const wrapper = mountNumber({ value: 10, from: 0, duration: 100, easing: 'linear' })
+    frame(START) // elapsed 0 → 0
+    frame(START + 33) // elapsed 33 → interpolate(0, 10, 0.33) = 3.3 → rounded to 3
+    await nextTick()
+    // Without rounding the default Intl formatter would render "3.3".
+    expect(figureText(wrapper)).toBe('3')
+
+    frame(START + 100) // settles exactly on the integer target
+    await nextTick()
+    expect(figureText(wrapper)).toBe('10')
+  })
+
+  it('keeps fractional frames when the format requests fraction digits', async () => {
+    const wrapper = mountNumber({
+      value: 10,
+      from: 0,
+      duration: 100,
+      easing: 'linear',
+      format: { minimumFractionDigits: 1, maximumFractionDigits: 1 },
+    })
+    frame(START) // 0.0
+    frame(START + 33) // 3.3 — fractional formatting preserved (not rounded to "3.0")
+    await nextTick()
+    expect(figureText(wrapper)).toBe('3.3')
+  })
+
   it('formats every frame with the given Intl options', async () => {
     const wrapper = mountNumber({
       value: 1234,

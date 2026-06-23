@@ -76,6 +76,30 @@ describe('dzMasonry -- Unit Tests', () => {
     expect(columns[1]!.text()).toBe('Item 2Item 4Item 6')
   })
 
+  it('makes the measured-path container fill its parent width (not shrink-to-fit)', () => {
+    const wrapper = mount(DzMasonry, {
+      props: { columns: 4, sequential: false },
+      slots: items,
+    })
+    // The flex row must carry an explicit full width so it does not collapse
+    // under a shrink-to-fit ancestor; every column is flex-1 min-w-0 and
+    // contributes no intrinsic width of its own.
+    expect(wrapper.classes()).toContain('w-full')
+    expect(wrapper.classes()).toContain('flex')
+  })
+
+  it('distributes items across every column in the measured path', () => {
+    const wrapper = mount(DzMasonry, {
+      props: { columns: 4, sequential: false },
+      slots: items,
+    })
+    const columns = wrapper.findAll('.dz-masonry__column')
+    expect(columns).toHaveLength(4)
+    // 6 items / 4 columns -> no column may be left empty.
+    for (const column of columns)
+      expect(column.findAll('.dz-masonry__item').length).toBeGreaterThan(0)
+  })
+
   it('forwards aria-describedby', () => {
     const wrapper = mount(DzMasonry, {
       props: { ariaDescribedby: 'desc-1' },

@@ -110,6 +110,25 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open command palette/i })
+
+    // Escape closes immediately with an empty query and returns focus to the trigger.
+    await userEvent.click(trigger)
+    await screen.findByRole('combobox')
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+
+    // Escape also closes when a query has been typed (no "clear-first" dead-end).
+    await userEvent.click(trigger)
+    const search = await screen.findByRole('combobox')
+    await userEvent.type(search, 'xyz')
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -215,6 +234,16 @@ export const WithShortcuts: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open shortcuts palette/i })
+
+    await userEvent.click(trigger)
+    await screen.findByRole('combobox')
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -436,4 +465,15 @@ export const RealWorldIDE: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open command palette/i })
+
+    await userEvent.click(trigger)
+    const search = await screen.findByRole('combobox')
+    await userEvent.type(search, 'git')
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+  },
 }

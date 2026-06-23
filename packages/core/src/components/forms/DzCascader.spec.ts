@@ -217,6 +217,61 @@ describe('dzCascader — keyboard column nav', () => {
   })
 })
 
+describe('dzCascader — trigger combobox semantics', () => {
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  it('exposes role="combobox" on the trigger', () => {
+    const wrapper = mountCascader()
+    const trigger = wrapper.find('button')
+    expect(trigger.attributes('role')).toBe('combobox')
+    expect(trigger.attributes('aria-haspopup')).toBe('listbox')
+  })
+
+  it('wires aria-controls to the panel once open', async () => {
+    const wrapper = mountCascader()
+    const trigger = wrapper.find('button')
+    expect(trigger.attributes('aria-controls')).toBeUndefined()
+
+    await openPanel(wrapper)
+    const controls = trigger.attributes('aria-controls')
+    expect(controls).toBeTruthy()
+    expect(wrapper.find(`#${controls}`).exists()).toBe(true)
+  })
+
+  it('ArrowDown on the trigger opens the panel and focuses the first option', async () => {
+    const wrapper = mountCascader()
+    await wrapper.find('button').trigger('keydown', { key: 'ArrowDown' })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+    const activeBtn = wrapper.find('[data-cascader-column] button[data-active="true"]')
+    expect(activeBtn.attributes('data-col')).toBe('0')
+    expect(activeBtn.attributes('data-index')).toBe('0')
+    expect(activeBtn.text()).toContain('China')
+  })
+
+  it('ArrowUp on the trigger opens the panel and focuses the last option', async () => {
+    const wrapper = mountCascader()
+    await wrapper.find('button').trigger('keydown', { key: 'ArrowUp' })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+    const activeBtn = wrapper.find('[data-cascader-column] button[data-active="true"]')
+    expect(activeBtn.attributes('data-col')).toBe('0')
+    expect(activeBtn.text()).toContain('USA')
+  })
+
+  it('does not open from the trigger when disabled', async () => {
+    const wrapper = mountCascader({ disabled: true })
+    await wrapper.find('button').trigger('keydown', { key: 'ArrowDown' })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('open')).toBeUndefined()
+    expect(wrapper.findAll('[data-cascader-column]')).toHaveLength(0)
+  })
+})
+
 describe('dzCascader — clear', () => {
   afterEach(() => {
     document.body.innerHTML = ''

@@ -88,3 +88,57 @@ describe('dzSplitButton — Unit Tests', () => {
     expect(wrapper.attributes('data-loading')).toBe('')
   })
 })
+
+describe('dzSplitButton — Accessibility (button-name)', () => {
+  /** Resolved accessible name: aria-label wins, otherwise visible/sr-only text. */
+  function accessibleName(button: Element): string {
+    return (button.getAttribute('aria-label') ?? button.textContent ?? '').trim()
+  }
+
+  it('action keeps a non-empty accessible name while loading', () => {
+    const wrapper = mount(DzSplitButton, {
+      props: { loading: true },
+      slots: {
+        default: () => [
+          h(DzSplitButtonAction, null, { default: () => 'Save' }),
+          h(DzSplitButtonMenu),
+        ],
+      },
+    })
+    const action = wrapper.findComponent(DzSplitButtonAction).find('button')
+    // Spinner replaces the visible label, but the label survives for AT.
+    expect(action.attributes('aria-busy')).toBe('true')
+    expect(accessibleName(action.element)).toBe('Save')
+  })
+
+  it('action keeps a non-empty accessible name while disabled', () => {
+    const wrapper = mount(DzSplitButton, {
+      props: { disabled: true },
+      slots: {
+        default: () => h(DzSplitButtonAction, null, { default: () => 'Save' }),
+      },
+    })
+    const action = wrapper.findComponent(DzSplitButtonAction).find('button')
+    expect(accessibleName(action.element)).toBe('Save')
+  })
+
+  it('menu trigger keeps a non-empty accessible name while loading and disabled', () => {
+    const states: Array<{ loading?: boolean, disabled?: boolean }> = [
+      { loading: true },
+      { disabled: true },
+    ]
+    for (const state of states) {
+      const wrapper = mount(DzSplitButton, {
+        props: state,
+        slots: {
+          default: () => [
+            h(DzSplitButtonAction, null, { default: () => 'Save' }),
+            h(DzSplitButtonMenu),
+          ],
+        },
+      })
+      const trigger = wrapper.findComponent(DzSplitButtonMenu).find('button')
+      expect(accessibleName(trigger.element)).not.toBe('')
+    }
+  })
+})

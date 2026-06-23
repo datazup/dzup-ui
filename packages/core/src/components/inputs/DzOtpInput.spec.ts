@@ -11,19 +11,39 @@ describe('dzOtpInput — Unit Tests', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('renders the correct number of input fields (default 6)', () => {
+  it('renders exactly `length` focusable OTP cells (default 6)', () => {
     const wrapper = mount(DzOtpInput)
-    // Reka UI PinInputRoot renders an internal input alongside our 6 pin inputs
-    const allInputs = wrapper.findAll('input')
-    expect(allInputs.length).toBe(7) // 6 pin inputs + 1 Reka internal
+    // Cells are the visible, non-hidden inputs. Reka's aggregate form input is
+    // coerced to type="hidden" so it never counts as a cell.
+    const cells = wrapper.findAll('input').filter(i => i.element.type !== 'hidden')
+    expect(cells.length).toBe(6)
   })
 
-  it('renders custom length', () => {
-    const wrapper = mount(DzOtpInput, {
-      props: { length: 4 },
+  it('renders exactly `length` cells for custom lengths', () => {
+    for (const length of [4, 6, 8]) {
+      const wrapper = mount(DzOtpInput, { props: { length } })
+      const cells = wrapper.findAll('input').filter(i => i.element.type !== 'hidden')
+      expect(cells.length).toBe(length)
+    }
+  })
+
+  it('does not expose a stray focusable input after the cells', () => {
+    const wrapper = mount(DzOtpInput, { props: { length: 6 } })
+    // The only extra input (Reka's aggregate) must be hidden: not focusable
+    // (tabindex="-1") and excluded from assistive tech (aria-hidden="true").
+    const nonCells = wrapper
+      .findAll('input')
+      .filter(i => i.element.type === 'hidden')
+    expect(nonCells.length).toBe(1)
+    const aggregate = nonCells[0]!.element
+    expect(aggregate.getAttribute('tabindex')).toBe('-1')
+    expect(aggregate.getAttribute('aria-hidden')).toBe('true')
+    // No focusable input may sit in the tab order beyond the cells.
+    const focusable = wrapper.findAll('input').filter((i) => {
+      const tabindex = i.element.getAttribute('tabindex')
+      return i.element.type !== 'hidden' && tabindex !== '-1'
     })
-    const allInputs = wrapper.findAll('input')
-    expect(allInputs.length).toBe(5) // 4 pin inputs + 1 Reka internal
+    expect(focusable.length).toBe(6)
   })
 
   it('applies size variant classes', () => {

@@ -61,6 +61,66 @@ test.describe('DzTabs', () => {
     await expect(accountTab).toHaveAttribute('aria-selected', 'false')
   })
 
+  test('Tab key reaches the active tab (roving tabindex entry point)', async ({ page }) => {
+    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
+
+    const frame = page.frameLocator('#storybook-preview-iframe')
+
+    // The active "Account" tab must be the single roving tab stop.
+    const accountTab = frame.getByRole('tab', { name: /account/i })
+    await expect(accountTab).toHaveAttribute('aria-selected', 'true')
+    await expect(accountTab).toHaveAttribute('tabindex', '0')
+
+    // Inactive tabs must be removed from the Tab sequence.
+    await expect(frame.getByRole('tab', { name: /password/i })).toHaveAttribute('tabindex', '-1')
+    await expect(frame.getByRole('tab', { name: /notifications/i })).toHaveAttribute('tabindex', '-1')
+
+    // Pressing Tab from a focusable element before the tablist must land on the
+    // active tab — the bug this guards against was that every tab had
+    // tabindex="-1", so keyboard focus skipped the whole tablist. We inject a
+    // real preceding input to establish an in-canvas focus origin (a reliable
+    // alternative to tabbing across the Storybook iframe boundary).
+    await frame.locator('body').evaluate(() => {
+      const input = document.createElement('input')
+      input.setAttribute('data-test-pre', '')
+      document.body.insertBefore(input, document.body.firstChild)
+    })
+    await frame.locator('input[data-test-pre]').click()
+    await page.keyboard.press('Tab')
+    await expect(accountTab).toBeFocused()
+  })
+
+  test('exactly one tab is a tab stop after arrow navigation', async ({ page }) => {
+    await page.goto(`/?path=/story/${STORY_ROOT}--accessibility`)
+
+    const frame = page.frameLocator('#storybook-preview-iframe')
+
+    const firstTab = frame.getByRole('tab', { name: /first/i })
+    await firstTab.focus()
+    await page.keyboard.press('ArrowRight')
+
+    const secondTab = frame.getByRole('tab', { name: /second/i })
+    await expect(secondTab).toBeFocused()
+
+    // After moving, the focused tab owns the only tabindex="0".
+    const zeroTabs = frame.locator('[role="tab"][tabindex="0"]')
+    await expect(zeroTabs).toHaveCount(1)
+    await expect(secondTab).toHaveAttribute('tabindex', '0')
+  })
+
+  test('disabled tab is never the roving tab stop', async ({ page }) => {
+    await page.goto(`/?path=/story/${STORY_ROOT}--disabled-tab`)
+
+    const frame = page.frameLocator('#storybook-preview-iframe')
+
+    const disabledTab = frame.getByRole('tab', { name: /disabled/i })
+    await expect(disabledTab).toHaveAttribute('tabindex', '-1')
+
+    // The active tab is the entry point instead.
+    const activeTab = frame.getByRole('tab', { name: /active/i })
+    await expect(activeTab).toHaveAttribute('tabindex', '0')
+  })
+
   test('ArrowRight moves focus to the next tab trigger', async ({ page }) => {
     await page.goto(`/?path=/story/${STORY_ROOT}--accessibility`)
 

@@ -10,6 +10,9 @@ import { axe } from 'vitest-axe'
 import { defineComponent, h } from 'vue'
 import DzButton from '../../src/components/buttons/DzButton.vue'
 import DzIconButton from '../../src/components/buttons/DzIconButton.vue'
+import DzSplitButton from '../../src/components/buttons/DzSplitButton.vue'
+import DzSplitButtonAction from '../../src/components/buttons/DzSplitButtonAction.vue'
+import DzSplitButtonMenu from '../../src/components/buttons/DzSplitButtonMenu.vue'
 
 // Minimal icon component stub for DzIconButton tests
 const StubIcon = defineComponent({
@@ -150,6 +153,48 @@ describe('buttons family — Accessibility', () => {
       })
       const results = await axe(container)
       expect(results).toHaveNoViolations()
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // DzSplitButton — both parts must keep an accessible name in every state.
+  // Regression: loading swapped the action label for an aria-hidden spinner,
+  // leaving an unnamed button (axe `button-name`, impact: serious).
+  // ---------------------------------------------------------------------------
+
+  describe('dzSplitButton', () => {
+    const splitButton = (props: Record<string, unknown>) => ({
+      props,
+      slots: {
+        default: () => [
+          h(DzSplitButtonAction, null, { default: () => 'Save' }),
+          h(DzSplitButtonMenu),
+        ],
+      },
+    })
+
+    const states: Array<[string, Record<string, unknown>]> = [
+      ['idle', {}],
+      ['loading', { loading: true }],
+      ['disabled', { disabled: true }],
+    ]
+
+    for (const [name, stateProps] of states) {
+      it(`has no a11y violations when ${name}`, async () => {
+        const { container } = render(
+          DzSplitButton,
+          splitButton({ ariaLabel: 'Save actions', ...stateProps }),
+        )
+        const results = await axe(container)
+        expect(results).toHaveNoViolations()
+      })
+    }
+
+    it('keeps both parts named while loading (button-name)', () => {
+      const { getByRole } = render(DzSplitButton, splitButton({ ariaLabel: 'Save actions', loading: true }))
+      // Visible label is replaced by a spinner, but the name survives for AT.
+      expect(getByRole('button', { name: /save/i })).toBeTruthy()
+      expect(getByRole('button', { name: /more options/i })).toBeTruthy()
     })
   })
 })

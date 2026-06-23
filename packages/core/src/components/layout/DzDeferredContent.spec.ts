@@ -76,6 +76,27 @@ describe('dzDeferredContent', () => {
     expect(wrapper.emitted('load')).toHaveLength(1)
   })
 
+  it('emits reveal on every re-mount under once=false', async () => {
+    const wrapper = mountDeferred({ once: false })
+    intersect(true)
+    intersect(false)
+    intersect(true)
+    intersect(false)
+    intersect(true)
+    await nextTick()
+    // Three entries → three reveals, but load still fires exactly once.
+    expect(wrapper.emitted('reveal')).toHaveLength(3)
+    expect(wrapper.emitted('load')).toHaveLength(1)
+  })
+
+  it('does not emit a spurious reveal on a repeated intersecting tick', async () => {
+    const wrapper = mountDeferred({ once: false })
+    intersect(true)
+    intersect(true)
+    await nextTick()
+    expect(wrapper.emitted('reveal')).toHaveLength(1)
+  })
+
   it('keeps the content mounted and stops observing when once=true', async () => {
     const wrapper = mountDeferred({ once: true })
     intersect(true)
@@ -123,12 +144,13 @@ describe('dzDeferredContent', () => {
       vi.stubGlobal('IntersectionObserver', undefined)
     })
 
-    it('renders the content immediately and emits load', async () => {
+    it('renders the content immediately and emits load and reveal', async () => {
       const wrapper = mountDeferred()
       await nextTick()
       expect(wrapper.find('.content').exists()).toBe(true)
       expect(wrapper.find('.dz-deferred-content-placeholder').exists()).toBe(false)
       expect(wrapper.emitted('load')).toHaveLength(1)
+      expect(wrapper.emitted('reveal')).toHaveLength(1)
     })
   })
 })

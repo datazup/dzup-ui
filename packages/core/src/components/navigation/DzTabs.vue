@@ -54,6 +54,7 @@ function handleClose(value: string): void {
 }
 
 const context: DzTabsContext = {
+  modelValue: toRef(() => model.value),
   variant: toRef(() => props.variant),
   size: toRef(() => props.size),
   tone: toRef(() => props.tone),

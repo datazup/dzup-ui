@@ -163,7 +163,7 @@ export const RepeatObserve: Story = {
       <div class="h-[420px] overflow-auto p-4">
         <p class="mb-2 text-[var(--dz-muted-foreground)]">Mounted {{ reveals }} time(s)</p>
         <div :class="spacerClass" class="h-[500px] mb-4">Scroll down ↓</div>
-        <DzDeferredContent v-bind="args" aria-label="Repeatedly deferred block" @load="reveals++">
+        <DzDeferredContent v-bind="args" aria-label="Repeatedly deferred block" @reveal="reveals++">
           <div :class="cardClass" class="h-[320px] flex items-center justify-center">
             Re-mounted on every entry (scroll away and back)
           </div>

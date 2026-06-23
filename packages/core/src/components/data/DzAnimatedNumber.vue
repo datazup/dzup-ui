@@ -78,8 +78,30 @@ function format(value: number): string {
   return f ? f.format(value) : String(value)
 }
 
+/**
+ * Effective max fraction digits for the live figure. With no `format` the
+ * consumer wants a plain integer counter, so default to `0` rather than inherit
+ * `Intl.NumberFormat`'s default of `3` (which makes the tween flicker through
+ * `.13` / `.985` decimals). When a `format` is given, honour its resolved
+ * precision (currency → 2, percent → as requested, etc.).
+ */
+const fractionDigits = computed<number>(() => {
+  if (!props.format)
+    return 0
+  return formatter.value?.resolvedOptions().maximumFractionDigits ?? 0
+})
+
+/**
+ * Format a mid-tween frame. When no fractional precision is requested, round
+ * the interpolated value to a whole number first so the count-up steps through
+ * integers only; otherwise keep the per-frame fractional formatting.
+ */
+function formatFrame(value: number): string {
+  return format(fractionDigits.value === 0 ? Math.round(value) : value)
+}
+
 /** The live, mid-tween figure shown to sighted users. */
-const displayText = computed(() => format(displayValue.value))
+const displayText = computed(() => formatFrame(displayValue.value))
 /** The settled target, formatted — announced to screen readers. */
 const finalText = computed(() => format(props.value))
 

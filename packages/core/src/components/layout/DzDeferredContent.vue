@@ -23,6 +23,10 @@ import { deferredContentVariants } from './DzDeferredContent.variants.ts'
  * Where `IntersectionObserver` is unavailable (SSR / old engines) the content
  * renders immediately, so it always reaches the user.
  *
+ * Emits `load` exactly once (on the first reveal) and `reveal` on *every* mount
+ * transition — so under `once: false`, `reveal` fires each time the content
+ * re-mounts on re-entry, while `load` stays a once-only signal.
+ *
  * @example
  * ```vue
  * <DzDeferredContent>
@@ -70,9 +74,13 @@ const loaded = ref(!isSupported)
 /** `load` is emitted exactly once, on the first reveal. */
 let hasLoaded = false
 
-/** Reveal the content, emitting `load` on the first transition only. */
+/**
+ * Mount the content, emitting `reveal` on every mount transition and `load`
+ * only on the first one.
+ */
 function reveal(): void {
   loaded.value = true
+  emit('reveal')
   if (!hasLoaded) {
     hasLoaded = true
     emit('load')
@@ -81,11 +89,16 @@ function reveal(): void {
 
 /** React to the wrapper entering / leaving the viewport. */
 function handleChange(isIntersecting: boolean): void {
-  if (isIntersecting)
-    reveal()
-  else if (!props.once)
+  if (isIntersecting) {
+    // Only react to a real mount transition so a repeated `isIntersecting`
+    // tick can't emit a spurious `reveal`.
+    if (!loaded.value)
+      reveal()
+  }
+  else if (!props.once) {
     // Re-defer: unmount until the next entry (observer stays connected).
     loaded.value = false
+  }
 }
 
 onMounted(() => {
