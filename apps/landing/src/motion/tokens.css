@@ -1,0 +1,774 @@
+/* =========================================================================
+ * Motion tokens — the single source of motion truth for the animations gallery
+ * (docs/animations.md §2.3, §5.3).
+ *
+ * Durations/easings should reference the canonical --dz-duration-* / --dz-ease-*
+ * scale from @dzup-ui/tokens. Net-new, animation-local values that fall outside
+ * that scale (e.g. a multi-second ambient loop) are defined ONCE here as
+ * --dz-anim-* constants — never sprinkled as raw magic numbers in effects.
+ *
+ * Effects opt into central reduced-motion handling by carrying the `dz-anim`
+ * marker class; the @media block at the bottom neutralises their motion.
+ * Individual effects (Tasks 3–9) add their own @keyframes; the set below is the
+ * shared foundation.
+ * ========================================================================= */
+
+:root {
+  /* Ambient loop durations (outside the --dz-duration-* scale). */
+  --dz-anim-aurora-duration: 18s;
+  --dz-anim-marquee-duration: 30s;
+  --dz-anim-shimmer-duration: 1.4s;
+  --dz-anim-beam-duration: 4s;
+  --dz-anim-gradient-duration: 6s;
+  --dz-anim-pulse-duration: 1.6s;
+
+  /* Travel / extent constants. */
+  --dz-anim-reveal-distance: 14px;
+  --dz-anim-slide-distance: 28px;
+  --dz-anim-scale-from: 0.96;
+  --dz-anim-blur-from: 8px;
+  --dz-anim-tilt-max: 10deg;
+
+  /* Per-child stagger step for cascaded entrances. */
+  --dz-anim-stagger-step: 80ms;
+
+  /* Text effects (docs/animations.md §6.2). */
+  --dz-anim-caret-duration: 1s; /* typewriter caret blink */
+  --dz-anim-highlight-height: 0.42em; /* highlight-sweep marker thickness */
+
+  /* Backgrounds & hero (docs/animations.md §6.4, effects 15–18). */
+  --dz-anim-aurora-1-duration: 16s; /* aurora blob A drift loop */
+  --dz-anim-aurora-2-duration: 20s; /* aurora blob B drift loop (offset for organic motion) */
+  --dz-anim-grid-duration: 24s; /* animated grid/dots pan */
+  --dz-anim-grid-cell: 32px; /* grid line spacing + pan distance (seamless loop) */
+  --dz-anim-dots-cell: 22px; /* dot spacing + pan distance (seamless loop) */
+  --dz-anim-spotlight-size: 320px; /* cursor-follow spotlight diameter */
+  --dz-anim-glow-duration: 6s; /* gradient border ring rotation */
+  --dz-anim-glow-width: 1.5px; /* gradient border ring thickness */
+
+  /* Hover micro-interactions (docs/animations.md §6.5, effects 19–23). */
+  --dz-anim-lift-distance: 4px; /* card lift translateY on hover */
+  --dz-anim-sheen-duration: 0.7s; /* light streak sweep across a surface */
+  --dz-anim-sheen-width: 42%; /* width of the sheen streak relative to host */
+  --dz-anim-tilt-perspective: 600px; /* default v-tilt perspective depth */
+  --dz-anim-beam-width: 1.5px; /* border-beam ring thickness */
+
+  /* Lists, collections & attention (docs/animations.md §6.6–6.7, effects 24–29). */
+  --dz-anim-marquee-gap: 2rem; /* spacing between marquee items + the two copies */
+  --dz-anim-shimmer-width: 38%; /* width of the shimmer sweep relative to host */
+  --dz-anim-ping-scale: 2.4; /* how far the ping ring expands before fading */
+  --dz-anim-flip-duration: 0.42s; /* flip-on-change half-turn duration */
+}
+
+/* Foundational keyframes (effects extend this set in later tasks). */
+@keyframes dz-anim-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--dz-anim-reveal-distance));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dz-anim-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================================================================
+ * Scroll-reveal family (docs/animations.md §6.1, effects 1, 3–5) — the shared
+ * class system that BOTH the `v-reveal` directive and the DzReveal / DzStagger
+ * components drive. Elements start hidden (`.dz-reveal`) and settle when
+ * `.dz-reveal--in` is added on view. Transform/opacity/filter only; directional,
+ * scale and blur are opt-in modifiers that compose on the same base.
+ * ========================================================================= */
+.dz-reveal {
+  opacity: 0;
+  transition:
+    opacity var(--dz-duration-slow, 300ms) var(--dz-ease-out, ease-out),
+    transform var(--dz-duration-slow, 300ms) var(--dz-ease-out, ease-out),
+    filter var(--dz-duration-slow, 300ms) var(--dz-ease-out, ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Default (no modifier): fade & rise — effect 1. */
+.dz-reveal:not(.dz-reveal--in) {
+  transform: translateY(var(--dz-anim-reveal-distance, 14px));
+}
+
+/* Directional slide-in — effect 3 (longer travel than the default rise).
+ * Declared after the default so equal-specificity rules win by source order. */
+.dz-reveal--up:not(.dz-reveal--in) {
+  transform: translateY(var(--dz-anim-slide-distance, 28px));
+}
+.dz-reveal--down:not(.dz-reveal--in) {
+  transform: translateY(calc(-1 * var(--dz-anim-slide-distance, 28px)));
+}
+.dz-reveal--left:not(.dz-reveal--in) {
+  transform: translateX(var(--dz-anim-slide-distance, 28px));
+}
+.dz-reveal--right:not(.dz-reveal--in) {
+  transform: translateX(calc(-1 * var(--dz-anim-slide-distance, 28px)));
+}
+
+/* Scale-in — effect 5. */
+.dz-reveal--scale:not(.dz-reveal--in) {
+  transform: scale(var(--dz-anim-scale-from, 0.96));
+}
+
+/* Blur-in — effect 4 (filter only, so it composes with any transform above). */
+.dz-reveal--blur:not(.dz-reveal--in) {
+  filter: blur(var(--dz-anim-blur-from, 8px));
+}
+
+/* Settled end-state — shared by every variant. */
+.dz-reveal--in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Page-level "Reduce motion" toggle (JS-driven, mirrors the @media block below
+ * so the gallery can demo the fallback live without changing the OS setting). */
+.dz-reveal--reduced {
+  transition: opacity var(--dz-duration-fast, 150ms) linear !important;
+}
+.dz-reveal--reduced:not(.dz-reveal--in) {
+  transform: none !important;
+  filter: none !important;
+}
+
+/* =========================================================================
+ * Shared accessibility helper — visually hidden but exposed to assistive tech.
+ * Text effects that split/scramble their visible glyphs keep the real, readable
+ * string in the DOM via this class so screen readers announce one clean string
+ * while the decorative animated copy is marked `aria-hidden` (§6.2, §7).
+ * ========================================================================= */
+.dz-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================================
+ * Text effects (docs/animations.md §6.2, effects 7, 8, 11).
+ *
+ * - Gradient sweep (7): pans an animated brand gradient clipped to the text.
+ * - Typewriter caret (8): the blinking insertion caret (JS types the glyphs).
+ * - Highlight sweep (11): a marker grows behind the text via transform:scaleX
+ *   (transform-only, GPU-cheap) when `.dz-highlight-sweep--in` is added on view.
+ *
+ * Each carries a `--reduced` modifier mirroring the @media block so the gallery
+ * can demo the reduced fallback live via the page-level toggle.
+ * ========================================================================= */
+
+/* Gradient sweep — effect 7 (the animated variant of .lp-gradient-text). */
+@keyframes dz-anim-gradient-pan {
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/* Typewriter caret blink — effect 8. */
+@keyframes dz-anim-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Highlight sweep — effect 11. A marker drawn behind the text grows from the
+ * left via transform (no layout thrash); reveal by adding `--in` on view. */
+.dz-highlight-sweep {
+  position: relative;
+  isolation: isolate;
+}
+.dz-highlight-sweep::before {
+  content: "";
+  position: absolute;
+  inset-inline: -0.12em;
+  bottom: 0.02em;
+  height: var(--dz-anim-highlight-height, 0.42em);
+  z-index: -1;
+  border-radius: var(--dz-radius-sm, 0.25rem);
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 38%, transparent),
+    color-mix(in oklch, var(--dz-colors-secondary-500, #a855f7) 38%, transparent)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dz-duration-slow, 300ms) var(--dz-ease-out, ease-out);
+}
+.dz-highlight-sweep--in::before {
+  transform: scaleX(1);
+}
+/* Page-level "Reduce motion" toggle (JS) → static, fully-shown highlight. */
+.dz-highlight-sweep--reduced::before {
+  transition: none !important;
+  transform: scaleX(1) !important;
+}
+
+/* =========================================================================
+ * Backgrounds & hero (docs/animations.md §6.4, effects 15–18).
+ *
+ * - Aurora drift (15): keyframes the `DzAurora` blobs translate/scale slowly
+ *   (the component owns the blob geometry; these are the shared loops).
+ * - Animated grid/dots (16): `.dz-anim-grid` / `.dz-anim-dots` CSS utilities pan
+ *   a tiled pattern via `background-position` (paint-only, GPU-cheap), one cell
+ *   per cycle so the loop is seamless.
+ * - Gradient border glow (18): `.dz-anim-border-glow` rotates a conic-gradient
+ *   ring (masked to a hairline band) by animating a registered `<angle>` custom
+ *   property — no transform on the box, so the rounded ring never skews.
+ *
+ * Spotlight follow (17) is fully owned by `DzSpotlight.vue` (pointer-driven,
+ * rAF-throttled transform) and needs no shared keyframes.
+ * ========================================================================= */
+
+/* Aurora drift — effect 15. Transform only (translate/scale); the two blobs run
+ * at different durations so the wash never reads as a single rigid loop. */
+@keyframes dz-anim-aurora-1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 5%, 0) scale(1.12);
+  }
+}
+@keyframes dz-anim-aurora-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-5%, 7%, 0) scale(0.9);
+  }
+}
+
+/* Animated grid/dots — effect 16. Pan exactly one cell so the tile loops with no
+ * visible seam; pattern + spacing are token-driven. */
+@keyframes dz-anim-grid-pan {
+  to {
+    background-position: var(--dz-anim-grid-cell, 32px) var(--dz-anim-grid-cell, 32px);
+  }
+}
+
+.dz-anim-grid,
+.dz-anim-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Fade the pattern toward the edges so it reads as an ambient backdrop. */
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 50%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, #000 50%, transparent 100%);
+  animation: dz-anim-grid-pan var(--dz-anim-grid-duration, 24s) linear infinite;
+}
+
+.dz-anim-grid {
+  --dz-anim-grid-cell: 32px;
+  background-size: var(--dz-anim-grid-cell) var(--dz-anim-grid-cell);
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 14%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 14%, transparent) 1px,
+      transparent 1px
+    );
+}
+
+.dz-anim-dots {
+  --dz-anim-grid-cell: var(--dz-anim-dots-cell, 22px);
+  background-size: var(--dz-anim-grid-cell) var(--dz-anim-grid-cell);
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in oklch, var(--dz-colors-secondary-500, #a855f7) 26%, transparent) 1.5px,
+    transparent 1.7px
+  );
+}
+
+/* Page-level "Reduce motion" toggle (JS) → static pattern, no pan. */
+.dz-anim-grid--reduced,
+.dz-anim-dots--reduced {
+  animation: none;
+}
+
+/* Gradient border glow — effect 18. A rotating conic ring masked to a hairline
+ * band. The angle is a registered custom property so only the gradient repaints
+ * (no box transform → the rounded ring stays square to its corners). */
+@property --dz-anim-glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes dz-anim-glow-spin {
+  to {
+    --dz-anim-glow-angle: 360deg;
+  }
+}
+
+.dz-anim-border-glow {
+  position: relative;
+  border-radius: var(--dz-radius-xl, 0.875rem);
+  isolation: isolate;
+}
+.dz-anim-border-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: var(--dz-anim-glow-width, 1.5px);
+  background: conic-gradient(
+    from var(--dz-anim-glow-angle, 0deg),
+    transparent 0%,
+    var(--dz-colors-primary-500, #6366f1) 20%,
+    var(--dz-colors-secondary-500, #a855f7) 50%,
+    var(--dz-colors-primary-500, #6366f1) 80%,
+    transparent 100%
+  );
+  /* Punch out the interior so only the padding band (the ring) paints. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: dz-anim-glow-spin var(--dz-anim-glow-duration, 6s) linear infinite;
+}
+/* Page-level "Reduce motion" toggle (JS) → static brand ring, no spin. */
+.dz-anim-border-glow--reduced::before {
+  animation: none;
+}
+
+/* =========================================================================
+ * Hover micro-interactions (docs/animations.md §6.5, effects 19–23).
+ *
+ * - Card lift + glow (19): `.dz-card-lift` — the formalised, token-only
+ *   counterpart to `.lp-card--hover`. translateY + shadow + brand border on
+ *   hover; pointer-only (`:hover`), so keyboard/touch get the resting state.
+ * - Sheen sweep (21): `.dz-sheen` — a diagonal light streak crosses the host
+ *   on hover via a translated ::after (transform only, clipped by the host).
+ * - 3D tilt glare (20): `.dz-tilt__glare` — the optional highlight overlay the
+ *   `v-tilt` directive appends; JS sets only the position vars + active class.
+ * - Border beam (23): `.dz-border-beam` — a bright arc travels a card's border
+ *   on a loop by rotating a registered `<angle>` (only the gradient repaints;
+ *   the box never transforms, so the rounded ring stays square to its corners).
+ *
+ * The tilt (20) and magnetic (22) transforms are owned by their directives
+ * (pointer-driven, rAF-throttled); these classes are the static/CSS pieces.
+ * Each carries a `--reduced` modifier mirroring the @media block so the gallery
+ * can demo the reduced fallback live via the page-level toggle.
+ * ========================================================================= */
+
+/* Card lift + glow — effect 19 (token-only `.lp-card--hover`). */
+.dz-card-lift {
+  transition:
+    transform var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out),
+    box-shadow var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out),
+    border-color var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
+}
+@media (hover: hover) {
+  .dz-card-lift:hover {
+    transform: translateY(calc(-1 * var(--dz-anim-lift-distance, 4px)));
+    box-shadow: var(--dz-shadow-lg, 0 12px 32px rgb(15 23 42 / 0.12));
+    border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 32%, var(--dz-border, #e2e8f0));
+  }
+}
+/* Page-level "Reduce motion" toggle (JS) → border/shadow only, no lift. */
+.dz-card-lift--reduced {
+  transition: none;
+}
+.dz-card-lift--reduced:hover {
+  transform: none;
+}
+
+/* Sheen sweep — effect 21. A light streak rides a translated ::after across the
+ * host on hover; the host clips it (overflow: hidden) so it reads as a sweep. */
+.dz-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.dz-sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  width: var(--dz-anim-sheen-width, 42%);
+  pointer-events: none;
+  /* Diagonal white streak; transform only (translateX), so it stays GPU-cheap. */
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in oklch, var(--dz-colors-base-white, #fff) 38%, transparent) 50%,
+    transparent 100%
+  );
+  transform: translateX(-180%) skewX(-18deg);
+  transition: transform var(--dz-anim-sheen-duration, 0.7s) var(--dz-ease-out, ease-out);
+}
+@media (hover: hover) {
+  .dz-sheen:hover::after {
+    transform: translateX(320%) skewX(-18deg);
+  }
+}
+/* Page-level "Reduce motion" toggle (JS) → no sheen sweep. */
+.dz-sheen--reduced::after {
+  transition: none;
+}
+.dz-sheen--reduced:hover::after {
+  transform: translateX(-180%) skewX(-18deg);
+}
+
+/* 3D tilt glare — effect 20. Overlay the `v-tilt` directive appends when its
+ * `glare` option is on; JS sets only `--dz-tilt-glare-x/y` + the active class. */
+.dz-tilt__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
+  background: radial-gradient(
+    circle at var(--dz-tilt-glare-x, 50%) var(--dz-tilt-glare-y, 50%),
+    color-mix(in oklch, var(--dz-colors-base-white, #fff) 42%, transparent),
+    transparent 60%
+  );
+  mix-blend-mode: soft-light;
+}
+.dz-tilt__glare--active {
+  opacity: 1;
+}
+
+/* Border beam — effect 23. A bright arc rides a conic gradient around the card's
+ * border band on a loop; the angle is a registered custom property so only the
+ * gradient repaints (no box transform → the rounded ring stays true). */
+@property --dz-anim-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes dz-anim-beam-spin {
+  to {
+    --dz-anim-beam-angle: 360deg;
+  }
+}
+
+.dz-border-beam {
+  position: relative;
+  border-radius: var(--dz-radius-xl, 0.875rem);
+  isolation: isolate;
+}
+.dz-border-beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: var(--dz-anim-beam-width, 1.5px);
+  /* Mostly-transparent conic with one bright arc reads as a dot travelling. */
+  background: conic-gradient(
+    from var(--dz-anim-beam-angle, 0deg),
+    transparent 0%,
+    transparent 82%,
+    color-mix(in oklch, var(--dz-colors-primary-400, #818cf8) 92%, transparent) 92%,
+    var(--dz-colors-secondary-300, #d8b4fe) 96%,
+    transparent 100%
+  );
+  /* Punch out the interior so only the padding band (the border) paints. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: dz-anim-beam-spin var(--dz-anim-beam-duration, 4s) linear infinite;
+}
+/* Page-level "Reduce motion" toggle (JS) → static, faint full brand ring. */
+.dz-border-beam--reduced::before {
+  animation: none;
+  background: color-mix(in oklch, var(--dz-colors-primary-400, #818cf8) 36%, transparent);
+}
+
+/* =========================================================================
+ * Lists, collections & attention (docs/animations.md §6.6–6.7, effects 24–29).
+ *
+ * - Marquee strip (25): `.dz-marquee` clips the row; `.dz-marquee__track`
+ *   translates a duplicated content run by exactly -50% so the loop is seamless.
+ *   Pauses on hover; transform translate only. The reduced fallback is a static
+ *   wrapped row rendered by `DzMarquee.vue` (no track, no animation), so there is
+ *   no `--reduced` class here.
+ * - Flip on change (26): `.dz-flip__face` half-turns on the X axis when its value
+ *   updates (`DzFlip.vue` toggles the keyframe via a key); transform/opacity only.
+ * - Pulse / ping (27): `.dz-ping` positions a static dot with an expanding ring
+ *   (`.dz-ping__ring`) that scales + fades on a loop behind it.
+ * - Shimmer skeleton (28): `.dz-shimmer` sweeps a soft highlight band across its
+ *   masked area via a translated ::after (transform only), over DzSkeleton.
+ *
+ * Toast slide-in (29) is owned by Reka's Toast primitive inside DzToast (core);
+ * its entrance lives there, so it needs no shared keyframes here.
+ *
+ * Each carries a `--reduced` modifier mirroring the @media block so the gallery
+ * can demo the reduced fallback live via the page-level toggle.
+ * ========================================================================= */
+
+/* Marquee strip — effect 25. The track holds two identical content runs side by
+ * side; translating it -50% scrolls one full run, then snaps back invisibly. */
+@keyframes dz-anim-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.dz-marquee {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  /* Fade the strip toward both ends so items enter/exit gracefully. */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.dz-marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 100%;
+  will-change: transform;
+  animation: dz-anim-marquee var(--dz-anim-marquee-duration, 30s) linear infinite;
+}
+/* Each run carries its own trailing gap so the two copies tile identically and
+ * translateX(-50%) lands exactly one run over — a seamless, jump-free loop. */
+.dz-marquee__run {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--dz-anim-marquee-gap, 2rem);
+  padding-inline-end: var(--dz-anim-marquee-gap, 2rem);
+}
+/* Pause on hover so visitors can read a logo/badge (no above-the-fold runaway). */
+.dz-marquee:hover .dz-marquee__track,
+.dz-marquee:focus-within .dz-marquee__track {
+  animation-play-state: paused;
+}
+/* Page-level "Reduce motion" toggle (JS) → freeze the track in place. */
+.dz-marquee--reduced .dz-marquee__track {
+  animation: none;
+}
+
+/* Flip on change — effect 26. Half-turn on X with a fade; transform/opacity only.
+ * DzFlip remounts the face (key bump) so the animation re-runs on each update. */
+@keyframes dz-anim-flip {
+  from {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+.dz-flip {
+  display: inline-flex;
+  perspective: 320px;
+}
+.dz-flip__face {
+  display: inline-flex;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  animation: dz-anim-flip var(--dz-anim-flip-duration, 0.42s) var(--dz-ease-out, ease-out);
+}
+/* Page-level "Reduce motion" toggle (JS) → instant swap, no turn. */
+.dz-flip--reduced .dz-flip__face {
+  animation: none;
+}
+
+/* Pulse / ping — effect 27. A static dot with an expanding ring that scales out
+ * and fades on a loop (transform/opacity only); pair with a notification badge. */
+@keyframes dz-anim-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(var(--dz-anim-ping-scale, 2.4));
+    opacity: 0;
+  }
+}
+.dz-ping {
+  position: relative;
+  display: inline-flex;
+}
+.dz-ping__ring {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: currentColor;
+  animation: dz-anim-ping var(--dz-anim-pulse-duration, 1.6s) var(--dz-ease-out, ease-out) infinite;
+}
+.dz-ping__dot {
+  position: relative;
+  z-index: 1;
+}
+/* Page-level "Reduce motion" toggle (JS) → static dot, no ring. */
+.dz-ping--reduced .dz-ping__ring {
+  animation: none;
+  opacity: 0;
+}
+
+/* Shimmer skeleton — effect 28. A soft highlight band sweeps across the host via
+ * a translated ::after; the host clips it so it reads as a sweep over skeletons. */
+@keyframes dz-anim-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(280%);
+  }
+}
+.dz-shimmer {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.dz-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: var(--dz-anim-shimmer-width, 38%);
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in oklch, var(--dz-colors-base-white, #fff) 48%, transparent) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: dz-anim-shimmer var(--dz-anim-shimmer-duration, 1.4s) var(--dz-ease-in-out, ease-in-out) infinite;
+}
+/* Page-level "Reduce motion" toggle (JS) → static placeholder, no sweep. */
+.dz-shimmer--reduced::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* =========================================================================
+ * Off-screen loop cap (docs/animations.md §7 — "lazy-init below-the-fold demos,
+ * cap concurrent looping animations"). The gallery harness (AnimationCard) tags a
+ * demo's preview stage `.dz-stage-idle` while it is scrolled out of view. Pausing
+ * its animations there caps the number of concurrent compositor loops to the
+ * cards actually on screen, and dropping the always-on compositor hints on the
+ * two continuous transform layers means off-screen cards retain no GPU layers
+ * (will-change discipline, §5.3 rule 6). Effect-agnostic: the universal selector
+ * covers every element/pseudo-element loop, so new effects are capped for free.
+ * Entrance reveals are unaffected — they only fire once a card is in view.
+ * ========================================================================= */
+.dz-stage-idle *,
+.dz-stage-idle *::before,
+.dz-stage-idle *::after {
+  animation-play-state: paused !important;
+}
+.dz-stage-idle .dz-marquee__track,
+.dz-stage-idle .dz-aurora__blob {
+  will-change: auto !important;
+}
+
+/* =========================================================================
+ * Reduced-motion reset — mirrors the .reveal degrade in tailwind.css.
+ * Any element carrying `dz-anim` gets its looping/entrance motion neutralised
+ * to a quick opacity change or its static end-state; `dz-reveal` elements
+ * degrade to an opacity-only fade with no transform/blur.
+ * ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .dz-anim,
+  [class*="dz-anim-"] {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+
+  .dz-reveal {
+    transition: opacity var(--dz-duration-fast, 150ms) linear !important;
+  }
+  .dz-reveal:not(.dz-reveal--in) {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Highlight sweep degrades to a static, fully-shown marker (no grow). */
+  .dz-highlight-sweep::before {
+    transition: none !important;
+    transform: scaleX(1) !important;
+  }
+
+  /* Gradient border glow → static brand ring (the ring lives on ::before, which
+   * the [class*="dz-anim-"] rule above can't reach). */
+  .dz-anim-border-glow::before {
+    animation: none !important;
+  }
+
+  /* Hover micro-interactions (§6.5) whose motion lives on pseudo-elements or
+   * non-`dz-anim-`-prefixed classes — neutralise them here. */
+  .dz-card-lift {
+    transition: none !important;
+  }
+  .dz-card-lift:hover {
+    transform: none !important;
+  }
+  .dz-sheen::after,
+  .dz-sheen:hover::after {
+    transition: none !important;
+    transform: translateX(-180%) skewX(-18deg) !important;
+  }
+  .dz-border-beam::before {
+    animation: none !important;
+  }
+
+  /* Lists & attention (§6.6–6.7) — loops/sweeps on pseudo-elements or
+   * non-`dz-anim-`-prefixed classes; neutralise them to their static state. */
+  .dz-marquee__track {
+    animation: none !important;
+  }
+  .dz-flip__face {
+    animation: none !important;
+  }
+  .dz-ping__ring {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .dz-shimmer::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
