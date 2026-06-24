@@ -89,12 +89,9 @@ const spinnerSize = computed(() => {
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 const resolvedAriaDescribedby = computed(() => {
   const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
+  if (props.ariaDescribedby) parts.push(props.ariaDescribedby)
+  if (errorId.value) parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value) parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -119,7 +116,9 @@ defineExpose({ inputRef })
 
 <template>
   <div
-    :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
+    :data-state="
+      resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined
+    "
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
@@ -174,6 +173,7 @@ defineExpose({ inputRef })
         type="button"
         class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
+        :aria-pressed="showPassword"
         :disabled="resolvedDisabled || loading"
         tabindex="-1"
         @click="toggleVisibility"
