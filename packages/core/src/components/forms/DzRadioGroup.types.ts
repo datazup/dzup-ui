@@ -7,7 +7,12 @@
  * @module @dzup-ui/core/components/forms/DzRadioGroup
  */
 
-import type { BaseAccessibilityProps, BaseEvents, CanonicalSize } from '@dzup-ui/contracts'
+import type {
+  BaseAccessibilityProps,
+  BaseEvents,
+  CanonicalSize,
+  Orientation,
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -16,7 +21,7 @@ import type { BaseAccessibilityProps, BaseEvents, CanonicalSize } from '@dzup-ui
 /** Props for the DzRadioGroup component */
 export interface DzRadioGroupProps extends BaseAccessibilityProps {
   /** Layout orientation */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
   /** Disabled state propagated to all child radios */
   disabled?: boolean
   /** Size propagated to all child radios */

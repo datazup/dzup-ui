@@ -7,11 +7,7 @@
  * @module @dzup-ui/core/components/buttons/DzButtonGroup
  */
 
-import type {
-  ButtonVariant,
-  CanonicalSize,
-  CanonicalTone,
-} from '@dzup-ui/contracts'
+import type { ButtonVariant, CanonicalSize, CanonicalTone, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -27,14 +23,13 @@ export interface DzButtonGroupContext {
   /** Tone propagated to all children */
   tone: Ref<CanonicalTone | undefined>
   /** Orientation of the button group */
-  orientation: Ref<'horizontal' | 'vertical'>
+  orientation: Ref<Orientation>
   /** Whether the entire group is disabled */
   disabled: Ref<boolean>
 }
 
 /** Typed injection key for DzButtonGroup context (ADR-08, SCREAMING_SNAKE) */
-export const DZ_BUTTON_GROUP_KEY: InjectionKey<DzButtonGroupContext>
-  = Symbol('dz-button-group')
+export const DZ_BUTTON_GROUP_KEY: InjectionKey<DzButtonGroupContext> = Symbol('dz-button-group')
 
 // ---------------------------------------------------------------------------
 // Props
@@ -43,7 +38,7 @@ export const DZ_BUTTON_GROUP_KEY: InjectionKey<DzButtonGroupContext>
 /** Props for the DzButtonGroup component */
 export interface DzButtonGroupProps {
   /** Layout orientation */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
   /** Size propagated to all child buttons */
   size?: CanonicalSize
   /** Variant propagated to all child buttons */
