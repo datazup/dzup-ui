@@ -243,7 +243,7 @@ choices (country → state → city) shown as sliding columns. No `dzup-ui` equi
 
 ---
 
-### [ ] TASK-NF-06 — `DzTagsInput` (free-text token / chips input)
+### [x] TASK-NF-06 — `DzTagsInput` (free-text token / chips input)
 
 _Gap: PrimeVue `AutoComplete` (multiple) / `Chips`, Ant Design `Select tags mode`,
 MUI `Autocomplete freeSolo`. `dzup-ui` has `DzMultiSelect`/`DzCombobox` (pick from a
@@ -315,7 +315,7 @@ directly relevant to this product's domain._
 
 ## 🟠 P1 — Strong additions that round out the library
 
-### [ ] TASK-NF-08 — `DzKnob` (rotary numeric input)
+### [x] TASK-NF-08 — `DzKnob` (rotary numeric input)
 
 _Gap: PrimeVue `Knob`. A circular dial for bounded numeric values — compact and
 expressive for settings, audio/level controls, and dashboard inputs._
@@ -335,7 +335,7 @@ expressive for settings, audio/level controls, and dashboard inputs._
 
 ---
 
-### [ ] TASK-NF-09 — `DzSpeedDial` + `DzFab` (floating action button)
+### [x] TASK-NF-09 — `DzSpeedDial` + `DzFab` (floating action button)
 
 _Gap: PrimeVue `SpeedDial`, MUI `Fab`/`SpeedDial`. A pinned circular action button
 that fans out secondary actions. No floating action affordance exists today._
@@ -354,7 +354,7 @@ that fans out secondary actions. No floating action affordance exists today._
 
 ---
 
-### [ ] TASK-NF-10 — `DzToolbar` (action bar layout)
+### [x] TASK-NF-10 — `DzToolbar` (action bar layout)
 
 _Gap: PrimeVue `Toolbar`, Bootstrap `Btn toolbar`. A semantic start/center/end action
 bar. `dzup-ui` has `DzButtonGroup` and `DzAppShell` but no general toolbar primitive._
@@ -373,7 +373,7 @@ bar. `dzup-ui` has `DzButtonGroup` and `DzAppShell` but no general toolbar primi
 
 ---
 
-### [ ] TASK-NF-11 — `DzMegaMenu` (multi-column navigation menu)
+### [x] TASK-NF-11 — `DzMegaMenu` (multi-column navigation menu)
 
 _Gap: PrimeVue `MegaMenu`, Bootstrap mega-menu patterns. A horizontal nav bar whose
 items open wide multi-column panels. `dzup-ui` menus are single-column only._
@@ -392,7 +392,7 @@ items open wide multi-column panels. `dzup-ui` menus are single-column only._
 
 ---
 
-### [ ] TASK-NF-12 — `DzDataView` (list/grid switchable data display)
+### [x] TASK-NF-12 — `DzDataView` (list/grid switchable data display)
 
 _Gap: PrimeVue `DataView`. Renders a collection as a list or card grid with built-in
 paging/sorting and a layout toggle. `dzup-ui` has `DzTable`/`DzDataGrid` (tabular) but
@@ -413,7 +413,7 @@ no card/list collection renderer._
 
 ---
 
-### [ ] TASK-NF-13 — `DzDescriptions` (key/value detail list)
+### [x] TASK-NF-13 — `DzDescriptions` (key/value detail list)
 
 _Gap: Ant Design `Descriptions`. A bordered, responsive label/value grid for read-only
 record detail. `dzup-ui` has no structured key/value display primitive._
@@ -493,7 +493,7 @@ single titled, optionally-toggleable panel for grouping form sections._
 
 ## 🟢 P2 — Polish & utility primitives
 
-### [ ] TASK-NF-17 — `DzAnchor` (scrollspy section navigation)
+### [x] TASK-NF-17 — `DzAnchor` (scrollspy section navigation)
 
 _Gap: Ant Design `Anchor`. An in-page table-of-contents nav that highlights the
 section currently in view and smooth-scrolls on click — ideal for docs and long forms._
@@ -668,17 +668,17 @@ but no "freeze this panel while saving" overlay._
 | 11  | DzMegaMenu        | PrimeVue MegaMenu                         | done                    | navigation | 🟠 P1    |
 | 12  | DzDataView        | PrimeVue DataView                         | done                    | data       | 🟠 P1    |
 | 13  | DzDescriptions    | AntD Descriptions                         | done                    | data       | 🟠 P1    |
-| 14  | DzOrderList       | PrimeVue OrderList                        | Transfer only           | data       | 🟠 P1    |
-| 15  | DzMeterGroup      | PrimeVue MeterGroup                       | single Progress         | feedback   | 🟠 P1    |
+| 14  | DzOrderList       | PrimeVue OrderList                        | done                    | data       | 🟠 P1    |
+| 15  | DzMeterGroup      | PrimeVue MeterGroup                       | done                    | feedback   | 🟠 P1    |
 | 16  | DzPanel           | PrimeVue Panel/Fieldset                   | Card/Accordion/Collapse | layout     | 🟠 P1    |
 | 17  | DzAnchor          | AntD Anchor                               | done                    | navigation | 🟢 P2    |
-| 18  | DzAffix           | AntD Affix                                | missing                 | layout     | 🟢 P2    |
-| 19  | DzInplace         | PrimeVue Inplace                          | missing                 | forms      | 🟢 P2    |
-| 20  | DzQRCode          | AntD QRCode                               | missing                 | media      | 🟢 P2    |
-| 21  | DzWatermark       | AntD Watermark                            | missing                 | media      | 🟢 P2    |
-| 22  | DzBackTop         | AntD BackTop · PrimeVue ScrollTop         | missing                 | navigation | 🟢 P2    |
+| 18  | DzAffix           | AntD Affix                                | done                    | layout     | 🟢 P2    |
+| 19  | DzInplace         | PrimeVue Inplace                          | done                    | forms      | 🟢 P2    |
+| 20  | DzQRCode          | AntD QRCode                               | done                    | media      | 🟢 P2    |
+| 21  | DzWatermark       | AntD Watermark                            | done                    | media      | 🟢 P2    |
+| 22  | DzBackTop         | AntD BackTop · PrimeVue ScrollTop         | done                    | navigation | 🟢 P2    |
 | 23  | DzFloatLabel      | PrimeVue FloatLabel · MUI                 | done                    | forms      | 🟢 P2    |
-| 24  | DzBlockUI         | PrimeVue BlockUI                          | AsyncBoundary only      | feedback   | 🟢 P2    |
+| 24  | DzBlockUI         | PrimeVue BlockUI                          | done                    | feedback   | 🟢 P2    |
 
 > **Deliberately excluded (Pro / enterprise tier):** Kanban, Gantt, FormBuilder,
 > WorkflowDesigner, OrganizationChart, Terminal, Dock, Editor/rich-text (heavy
