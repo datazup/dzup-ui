@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { DzFloatLabel } from '../../src/components/forms'
-import { DzSelect } from '../../src/components/forms'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { DzFloatLabel, DzSelect } from '../../src/components/forms'
 import { DzInput, DzTextarea } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFloatLabel wraps a single dzup form control (DzInput, DzSelect, DzTextarea,
@@ -70,6 +70,30 @@ export const OverInput: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The label is wired to the control via <label for> — find the input by it.
+    const input = canvas.getByLabelText(/email/i)
+    const root = input.closest('[data-variant]')
+    await expect(root).toBeTruthy()
+
+    // Empty + unfocused → label rests (not floated).
+    await expect(root).not.toHaveAttribute('data-floated')
+
+    // Focusing the empty control floats the label.
+    await userEvent.click(input)
+    await waitFor(() => expect(root).toHaveAttribute('data-floated'))
+
+    // Blurring an empty control resets the label to its resting position.
+    await userEvent.tab()
+    await waitFor(() => expect(root).not.toHaveAttribute('data-floated'))
+
+    // Typing a value keeps the label floated after blur.
+    await userEvent.type(input, 'me@example.com')
+    await userEvent.tab()
+    await waitFor(() => expect(root).toHaveAttribute('data-floated'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -153,6 +177,20 @@ export const PreFilled: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // A pre-filled control renders with the label already floated.
+    const input = canvas.getByLabelText(/email/i)
+    await expect(input).toHaveValue('hello@example.com')
+    const root = input.closest('[data-variant]')
+    await expect(root).toHaveAttribute('data-floated')
+
+    // Clearing the value while focused, then blurring, drops the float.
+    await userEvent.clear(input)
+    await userEvent.tab()
+    await waitFor(() => expect(root).not.toHaveAttribute('data-floated'))
+  },
 }
 
 // ---------------------------------------------------------------------------

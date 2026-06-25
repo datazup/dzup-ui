@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzRadio, DzRadioGroup } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRadio is a single radio option built on Reka UI RadioGroupItem.
@@ -125,6 +126,32 @@ export const States: Story = {
       </DzRadioGroup>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Reka RadioGroupRoot renders role="radiogroup"; items render role="radio".
+    const group = canvas.getByRole('radiogroup', { name: /states demo/i })
+    await expect(group).toBeVisible()
+
+    // "Selected" is pre-checked via model-value.
+    const selected = canvas.getByRole('radio', { name: /^selected$/i })
+    await expect(selected).toHaveAttribute('aria-checked', 'true')
+
+    const unselected = canvas.getByRole('radio', { name: /unselected/i })
+    await expect(unselected).toHaveAttribute('aria-checked', 'false')
+
+    // Clicking "Unselected" moves the selection.
+    await userEvent.click(unselected)
+    await waitFor(() => expect(unselected).toHaveAttribute('aria-checked', 'true'))
+    await expect(selected).toHaveAttribute('aria-checked', 'false')
+
+    // The disabled option cannot be selected by click.
+    const disabled = canvas.getByRole('radio', { name: /disabled/i })
+    await expect(disabled).toBeDisabled()
+    await userEvent.click(disabled)
+    await expect(disabled).toHaveAttribute('aria-checked', 'false')
+    await expect(unselected).toHaveAttribute('aria-checked', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -133,9 +160,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzRadio, DzRadioGroup },
     template: `
