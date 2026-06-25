@@ -35,8 +35,9 @@ describe('dzTokenProgressBar — Contract Spec v1', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('has contain: layout style on root element', () => {
+  it('renders as a progressbar with aria-valuenow', () => {
     const wrapper = mount(DzTokenProgressBar, { props: { used: 50, total: 100 } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.attributes('role')).toBe('progressbar')
+    expect(wrapper.attributes('aria-valuenow')).toBe('50')
   })
 })

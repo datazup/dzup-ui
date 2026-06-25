@@ -32,8 +32,8 @@ describe('dzRunStatusBadge — Contract Spec v1', () => {
     expect(wrapper.text().length).toBeGreaterThan(0)
   })
 
-  it('has contain: layout style on root element', () => {
+  it('applies status-specific inline style to root element', () => {
     const wrapper = mount(DzRunStatusBadge, { props: { status: 'RUNNING' } })
-    expect(wrapper.attributes('style')).toContain('contain: layout style')
+    expect(wrapper.attributes('style')).toContain('var(--dz-status-running)')
   })
 })
