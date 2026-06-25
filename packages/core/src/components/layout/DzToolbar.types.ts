@@ -19,8 +19,6 @@ import type {
 // Props
 // ---------------------------------------------------------------------------
 
-export type { ToolbarVariant }
-
 /** Logical orientation reported via `aria-orientation` */
 export type ToolbarOrientation = Orientation
 

@@ -20,8 +20,6 @@ import type {
 // Props
 // ---------------------------------------------------------------------------
 
-export type { PanelVariant }
-
 /**
  * Props for the DzPanel component.
  *
