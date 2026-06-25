@@ -15,7 +15,7 @@
 Each task is a **ready-to-run prompt** for a coding agent, authored per Anthropic's
 [prompt-engineering guidance](https://platform.claude.com/docs/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct):
 a clear role, the motivation/context behind the work, sequential numbered steps,
-`<example>` snippets, XML-tagged structure, and instructions phrased as *what to do*
+`<example>` snippets, XML-tagged structure, and instructions phrased as _what to do_
 rather than what to avoid. Copy a prompt block verbatim into an agent to execute it.
 
 Every prompt assumes the shared conventions below. Re-read these before starting any task.
@@ -62,8 +62,8 @@ Every prompt assumes the shared conventions below. Re-read these before starting
 
 ### [x] TASK-NF-01 — `DzRating` (star/icon rating input)
 
-*Gap: PrimeVue `Rating`, Ant Design `Rate`, MUI `Rating`. `dzup-ui` has no rating
-control at all — a baseline form primitive for reviews, feedback, and quality scores.*
+_Gap: PrimeVue `Rating`, Ant Design `Rate`, MUI `Rating`. `dzup-ui` has no rating
+control at all — a baseline form primitive for reviews, feedback, and quality scores._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer working in the dzup-ui design system. Follow <repo_conventions> from docs/new-features.md exactly.</role>
@@ -105,9 +105,9 @@ control at all — a baseline form primitive for reviews, feedback, and quality 
 
 ### [x] TASK-NF-02 — `DzCalendar` (full month/week calendar surface)
 
-*Gap: PrimeVue `Calendar` (inline), Ant Design `Calendar`, CoreUI `Calendar`.
+_Gap: PrimeVue `Calendar` (inline), Ant Design `Calendar`, CoreUI `Calendar`.
 `dzup-ui` has `DzDatePicker` (a popover input) but no full-surface calendar for
-displaying/selecting against a month or week grid with event cells.*
+displaying/selecting against a month or week grid with event cells._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -142,8 +142,8 @@ displaying/selecting against a month or week grid with event cells.*
 
 ### [x] TASK-NF-03 — `DzTour` (guided product onboarding tour)
 
-*Gap: Ant Design `Tour`, plus widespread third-party demand. A spotlight/coachmark
-walkthrough that highlights elements in sequence. Nothing comparable exists in `dzup-ui`.*
+_Gap: Ant Design `Tour`, plus widespread third-party demand. A spotlight/coachmark
+walkthrough that highlights elements in sequence. Nothing comparable exists in `dzup-ui`._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -177,8 +177,8 @@ walkthrough that highlights elements in sequence. Nothing comparable exists in `
 
 ### [x] TASK-NF-04 — `DzTreeSelect` (hierarchical dropdown select)
 
-*Gap: PrimeVue `TreeSelect`, Ant Design `TreeSelect`. `dzup-ui` has `DzTree` and
-`DzSelect` separately but no select whose options are a collapsible tree.*
+_Gap: PrimeVue `TreeSelect`, Ant Design `TreeSelect`. `dzup-ui` has `DzTree` and
+`DzSelect` separately but no select whose options are a collapsible tree._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -211,8 +211,8 @@ walkthrough that highlights elements in sequence. Nothing comparable exists in `
 
 ### [x] TASK-NF-05 — `DzCascader` (cascading multi-level select)
 
-*Gap: Ant Design `Cascader`, PrimeVue `CascadeSelect`. For ordered hierarchical
-choices (country → state → city) shown as sliding columns. No `dzup-ui` equivalent.*
+_Gap: Ant Design `Cascader`, PrimeVue `CascadeSelect`. For ordered hierarchical
+choices (country → state → city) shown as sliding columns. No `dzup-ui` equivalent._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -245,9 +245,9 @@ choices (country → state → city) shown as sliding columns. No `dzup-ui` equi
 
 ### [ ] TASK-NF-06 — `DzTagsInput` (free-text token / chips input)
 
-*Gap: PrimeVue `AutoComplete` (multiple) / `Chips`, Ant Design `Select tags mode`,
+_Gap: PrimeVue `AutoComplete` (multiple) / `Chips`, Ant Design `Select tags mode`,
 MUI `Autocomplete freeSolo`. `dzup-ui` has `DzMultiSelect`/`DzCombobox` (pick from a
-fixed list) but no input where users type arbitrary tokens (tags, emails, keywords).*
+fixed list) but no input where users type arbitrary tokens (tags, emails, keywords)._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -280,9 +280,9 @@ fixed list) but no input where users type arbitrary tokens (tags, emails, keywor
 
 ### [x] TASK-NF-07 — `DzMention` (@mention textarea)
 
-*Gap: Ant Design `Mentions`. An input that opens a suggestion menu when a trigger
+_Gap: Ant Design `Mentions`. An input that opens a suggestion menu when a trigger
 character (`@`, `#`) is typed. Common in comments, chat, and AI prompt boxes — and
-directly relevant to this product's domain.*
+directly relevant to this product's domain._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -317,8 +317,8 @@ directly relevant to this product's domain.*
 
 ### [ ] TASK-NF-08 — `DzKnob` (rotary numeric input)
 
-*Gap: PrimeVue `Knob`. A circular dial for bounded numeric values — compact and
-expressive for settings, audio/level controls, and dashboard inputs.*
+_Gap: PrimeVue `Knob`. A circular dial for bounded numeric values — compact and
+expressive for settings, audio/level controls, and dashboard inputs._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -337,8 +337,8 @@ expressive for settings, audio/level controls, and dashboard inputs.*
 
 ### [ ] TASK-NF-09 — `DzSpeedDial` + `DzFab` (floating action button)
 
-*Gap: PrimeVue `SpeedDial`, MUI `Fab`/`SpeedDial`. A pinned circular action button
-that fans out secondary actions. No floating action affordance exists today.*
+_Gap: PrimeVue `SpeedDial`, MUI `Fab`/`SpeedDial`. A pinned circular action button
+that fans out secondary actions. No floating action affordance exists today._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -356,8 +356,8 @@ that fans out secondary actions. No floating action affordance exists today.*
 
 ### [ ] TASK-NF-10 — `DzToolbar` (action bar layout)
 
-*Gap: PrimeVue `Toolbar`, Bootstrap `Btn toolbar`. A semantic start/center/end action
-bar. `dzup-ui` has `DzButtonGroup` and `DzAppShell` but no general toolbar primitive.*
+_Gap: PrimeVue `Toolbar`, Bootstrap `Btn toolbar`. A semantic start/center/end action
+bar. `dzup-ui` has `DzButtonGroup` and `DzAppShell` but no general toolbar primitive._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -375,8 +375,8 @@ bar. `dzup-ui` has `DzButtonGroup` and `DzAppShell` but no general toolbar primi
 
 ### [ ] TASK-NF-11 — `DzMegaMenu` (multi-column navigation menu)
 
-*Gap: PrimeVue `MegaMenu`, Bootstrap mega-menu patterns. A horizontal nav bar whose
-items open wide multi-column panels. `dzup-ui` menus are single-column only.*
+_Gap: PrimeVue `MegaMenu`, Bootstrap mega-menu patterns. A horizontal nav bar whose
+items open wide multi-column panels. `dzup-ui` menus are single-column only._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -394,9 +394,9 @@ items open wide multi-column panels. `dzup-ui` menus are single-column only.*
 
 ### [ ] TASK-NF-12 — `DzDataView` (list/grid switchable data display)
 
-*Gap: PrimeVue `DataView`. Renders a collection as a list or card grid with built-in
+_Gap: PrimeVue `DataView`. Renders a collection as a list or card grid with built-in
 paging/sorting and a layout toggle. `dzup-ui` has `DzTable`/`DzDataGrid` (tabular) but
-no card/list collection renderer.*
+no card/list collection renderer._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -415,8 +415,8 @@ no card/list collection renderer.*
 
 ### [ ] TASK-NF-13 — `DzDescriptions` (key/value detail list)
 
-*Gap: Ant Design `Descriptions`. A bordered, responsive label/value grid for read-only
-record detail. `dzup-ui` has no structured key/value display primitive.*
+_Gap: Ant Design `Descriptions`. A bordered, responsive label/value grid for read-only
+record detail. `dzup-ui` has no structured key/value display primitive._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -434,8 +434,8 @@ record detail. `dzup-ui` has no structured key/value display primitive.*
 
 ### [x] TASK-NF-14 — `DzOrderList` (reorderable list)
 
-*Gap: PrimeVue `OrderList`. A single list whose items can be reordered by drag and by
-up/down controls. `dzup-ui` has `DzTransfer` (two-list move) but no in-place reorder.*
+_Gap: PrimeVue `OrderList`. A single list whose items can be reordered by drag and by
+up/down controls. `dzup-ui` has `DzTransfer` (two-list move) but no in-place reorder._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -453,9 +453,9 @@ up/down controls. `dzup-ui` has `DzTransfer` (two-list move) but no in-place reo
 
 ### [x] TASK-NF-15 — `DzMeterGroup` (multi-segment meter)
 
-*Gap: PrimeVue `MeterGroup`. Displays multiple proportional values in one bar with a
+_Gap: PrimeVue `MeterGroup`. Displays multiple proportional values in one bar with a
 legend (storage used by type, budget allocation, token usage by model). `dzup-ui`'s
-`DzProgress` shows a single value only.*
+`DzProgress` shows a single value only._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -471,11 +471,11 @@ legend (storage used by type, budget allocation, token usage by model). `dzup-ui
 
 ---
 
-### [x] TASK-NF-16 — `DzFieldset` / `DzPanel` (collapsible titled container)
+### [x] TASK-NF-16 — `DzPanel` (collapsible titled container)
 
-*Gap: PrimeVue `Fieldset` + `Panel`. A bordered container with a header/legend and
+_Gap: PrimeVue `Fieldset` + `Panel`. A bordered container with a header/legend and
 optional collapse. `dzup-ui` has `DzCard`, `DzAccordion`, and `DzCollapse` but no
-single titled, optionally-toggleable panel for grouping form sections.*
+single titled, optionally-toggleable panel for grouping form sections._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -495,8 +495,8 @@ single titled, optionally-toggleable panel for grouping form sections.*
 
 ### [ ] TASK-NF-17 — `DzAnchor` (scrollspy section navigation)
 
-*Gap: Ant Design `Anchor`. An in-page table-of-contents nav that highlights the
-section currently in view and smooth-scrolls on click — ideal for docs and long forms.*
+_Gap: Ant Design `Anchor`. An in-page table-of-contents nav that highlights the
+section currently in view and smooth-scrolls on click — ideal for docs and long forms._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -513,8 +513,8 @@ section currently in view and smooth-scrolls on click — ideal for docs and lon
 
 ### [x] TASK-NF-18 — `DzAffix` (sticky-on-scroll wrapper)
 
-*Gap: Ant Design `Affix`. Pins its content to the viewport once it would scroll past a
-threshold. A small primitive that many sticky-toolbar/CTA patterns depend on.*
+_Gap: Ant Design `Affix`. Pins its content to the viewport once it would scroll past a
+threshold. A small primitive that many sticky-toolbar/CTA patterns depend on._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -532,8 +532,8 @@ threshold. A small primitive that many sticky-toolbar/CTA patterns depend on.*
 
 ### [x] TASK-NF-19 — `DzInplace` (inline edit)
 
-*Gap: PrimeVue `Inplace`. Renders read-only display text that swaps to an editable
-field on activation — lightweight inline editing for tables, profiles, and settings.*
+_Gap: PrimeVue `Inplace`. Renders read-only display text that swaps to an editable
+field on activation — lightweight inline editing for tables, profiles, and settings._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -551,11 +551,11 @@ field on activation — lightweight inline editing for tables, profiles, and set
 
 ### [x] TASK-NF-20 — `DzQRCode` (QR code renderer)
 
-*Gap: Ant Design `QRCode`. Renders a QR for a value with size/error-correction/logo
-options — useful for share links, 2FA enrolment, and mobile handoff.*
+_Gap: Ant Design `QRCode`. Renders a QR for a value with size/error-correction/logo
+options — useful for share links, 2FA enrolment, and mobile handoff._
 
 > **Done.** Dependency chosen: [`qrcode-generator`](https://www.npmjs.com/package/qrcode-generator)
-> `^2.0.4` (MIT, ~5 KB, zero deps). It only produces the QR module *matrix*
+> `^2.0.4` (MIT, ~5 KB, zero deps). It only produces the QR module _matrix_
 > (`isDark(row, col)`); DzQRCode renders the SVG itself so the module/background
 > colors map to `var(--dz-foreground)` / `var(--dz-background)` tokens (ADR-04)
 > instead of baked-in hex — which `node-qrcode`'s SVG output cannot do. Status:
@@ -578,8 +578,8 @@ options — useful for share links, 2FA enrolment, and mobile handoff.*
 
 ### [x] TASK-NF-21 — `DzWatermark` (content watermark overlay)
 
-*Gap: Ant Design `Watermark`. Tiles repeating text/image over its content for
-ownership/confidentiality marking — relevant for previews and shared documents.*
+_Gap: Ant Design `Watermark`. Tiles repeating text/image over its content for
+ownership/confidentiality marking — relevant for previews and shared documents._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -597,8 +597,8 @@ ownership/confidentiality marking — relevant for previews and shared documents
 
 ### [x] TASK-NF-22 — `DzBackTop` (scroll-to-top button)
 
-*Gap: Ant Design `BackTop`, PrimeVue `ScrollTop`. A button that appears after
-scrolling and returns to the top. Tiny, ubiquitous, and currently missing.*
+_Gap: Ant Design `BackTop`, PrimeVue `ScrollTop`. A button that appears after
+scrolling and returns to the top. Tiny, ubiquitous, and currently missing._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -615,8 +615,8 @@ scrolling and returns to the top. Tiny, ubiquitous, and currently missing.*
 
 ### [x] TASK-NF-23 — `DzFloatLabel` (floating-label field wrapper)
 
-*Gap: PrimeVue `FloatLabel`, MUI floating labels. A wrapper whose label animates from
-placeholder position to a floated caption when the field is focused/filled.*
+_Gap: PrimeVue `FloatLabel`, MUI floating labels. A wrapper whose label animates from
+placeholder position to a floated caption when the field is focused/filled._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -633,9 +633,9 @@ placeholder position to a floated caption when the field is focused/filled.*
 
 ### [x] TASK-NF-24 — `DzBlockUI` (content loading mask)
 
-*Gap: PrimeVue `BlockUI`. Masks and disables an arbitrary region during async work
+_Gap: PrimeVue `BlockUI`. Masks and disables an arbitrary region during async work
 with an optional spinner/message. `dzup-ui` has `DzSkeleton`/`DzSpinner`/`DzAsyncBoundary`
-but no "freeze this panel while saving" overlay.*
+but no "freeze this panel while saving" overlay._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -653,32 +653,32 @@ but no "freeze this panel while saving" overlay.*
 
 ## Summary — gap map
 
-| # | Component | Closest peer(s) | dzup-ui status | Family | Priority |
-|---|-----------|-----------------|----------------|--------|----------|
-| 01 | DzRating | PrimeVue Rating · AntD Rate · MUI Rating | missing | forms | 🔴 P0 |
-| 02 | DzCalendar | PrimeVue/AntD/CoreUI Calendar | only DatePicker | data | 🔴 P0 |
-| 03 | DzTour | AntD Tour | missing | overlays | 🔴 P0 |
-| 04 | DzTreeSelect | PrimeVue/AntD TreeSelect | Tree+Select separate | forms | 🔴 P0 |
-| 05 | DzCascader | AntD Cascader · PrimeVue CascadeSelect | missing | forms | 🔴 P0 |
-| 06 | DzTagsInput | PrimeVue Chips · AntD tags · MUI freeSolo | MultiSelect only | forms | 🔴 P0 |
-| 07 | DzMention | AntD Mentions | missing | forms | 🔴 P0 |
-| 08 | DzKnob | PrimeVue Knob | missing | forms | 🟠 P1 |
-| 09 | DzSpeedDial/DzFab | PrimeVue SpeedDial · MUI Fab | missing | buttons | 🟠 P1 |
-| 10 | DzToolbar | PrimeVue Toolbar | ButtonGroup only | layout | 🟠 P1 |
-| 11 | DzMegaMenu | PrimeVue MegaMenu | single-column menus | navigation | 🟠 P1 |
-| 12 | DzDataView | PrimeVue DataView | Table/DataGrid only | data | 🟠 P1 |
-| 13 | DzDescriptions | AntD Descriptions | missing | data | 🟠 P1 |
-| 14 | DzOrderList | PrimeVue OrderList | Transfer only | data | 🟠 P1 |
-| 15 | DzMeterGroup | PrimeVue MeterGroup | single Progress | feedback | 🟠 P1 |
-| 16 | DzPanel/Fieldset | PrimeVue Panel/Fieldset | Card/Accordion/Collapse | layout | 🟠 P1 |
-| 17 | DzAnchor | AntD Anchor | missing | navigation | 🟢 P2 |
-| 18 | DzAffix | AntD Affix | missing | layout | 🟢 P2 |
-| 19 | DzInplace | PrimeVue Inplace | missing | forms | 🟢 P2 |
-| 20 | DzQRCode | AntD QRCode | missing | media | 🟢 P2 |
-| 21 | DzWatermark | AntD Watermark | missing | media | 🟢 P2 |
-| 22 | DzBackTop | AntD BackTop · PrimeVue ScrollTop | missing | navigation | 🟢 P2 |
-| 23 | DzFloatLabel | PrimeVue FloatLabel · MUI | done | forms | 🟢 P2 |
-| 24 | DzBlockUI | PrimeVue BlockUI | AsyncBoundary only | feedback | 🟢 P2 |
+| #   | Component         | Closest peer(s)                           | dzup-ui status          | Family     | Priority |
+| --- | ----------------- | ----------------------------------------- | ----------------------- | ---------- | -------- |
+| 01  | DzRating          | PrimeVue Rating · AntD Rate · MUI Rating  | missing                 | forms      | 🔴 P0    |
+| 02  | DzCalendar        | PrimeVue/AntD/CoreUI Calendar             | only DatePicker         | data       | 🔴 P0    |
+| 03  | DzTour            | AntD Tour                                 | missing                 | overlays   | 🔴 P0    |
+| 04  | DzTreeSelect      | PrimeVue/AntD TreeSelect                  | Tree+Select separate    | forms      | 🔴 P0    |
+| 05  | DzCascader        | AntD Cascader · PrimeVue CascadeSelect    | missing                 | forms      | 🔴 P0    |
+| 06  | DzTagsInput       | PrimeVue Chips · AntD tags · MUI freeSolo | MultiSelect only        | forms      | 🔴 P0    |
+| 07  | DzMention         | AntD Mentions                             | missing                 | forms      | 🔴 P0    |
+| 08  | DzKnob            | PrimeVue Knob                             | missing                 | forms      | 🟠 P1    |
+| 09  | DzSpeedDial/DzFab | PrimeVue SpeedDial · MUI Fab              | missing                 | buttons    | 🟠 P1    |
+| 10  | DzToolbar         | PrimeVue Toolbar                          | ButtonGroup only        | layout     | 🟠 P1    |
+| 11  | DzMegaMenu        | PrimeVue MegaMenu                         | single-column menus     | navigation | 🟠 P1    |
+| 12  | DzDataView        | PrimeVue DataView                         | Table/DataGrid only     | data       | 🟠 P1    |
+| 13  | DzDescriptions    | AntD Descriptions                         | missing                 | data       | 🟠 P1    |
+| 14  | DzOrderList       | PrimeVue OrderList                        | Transfer only           | data       | 🟠 P1    |
+| 15  | DzMeterGroup      | PrimeVue MeterGroup                       | single Progress         | feedback   | 🟠 P1    |
+| 16  | DzPanel           | PrimeVue Panel/Fieldset                   | Card/Accordion/Collapse | layout     | 🟠 P1    |
+| 17  | DzAnchor          | AntD Anchor                               | missing                 | navigation | 🟢 P2    |
+| 18  | DzAffix           | AntD Affix                                | missing                 | layout     | 🟢 P2    |
+| 19  | DzInplace         | PrimeVue Inplace                          | missing                 | forms      | 🟢 P2    |
+| 20  | DzQRCode          | AntD QRCode                               | missing                 | media      | 🟢 P2    |
+| 21  | DzWatermark       | AntD Watermark                            | missing                 | media      | 🟢 P2    |
+| 22  | DzBackTop         | AntD BackTop · PrimeVue ScrollTop         | missing                 | navigation | 🟢 P2    |
+| 23  | DzFloatLabel      | PrimeVue FloatLabel · MUI                 | done                    | forms      | 🟢 P2    |
+| 24  | DzBlockUI         | PrimeVue BlockUI                          | AsyncBoundary only      | feedback   | 🟢 P2    |
 
 > **Deliberately excluded (Pro / enterprise tier):** Kanban, Gantt, FormBuilder,
 > WorkflowDesigner, OrganizationChart, Terminal, Dock, Editor/rich-text (heavy
