@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzChip } from '../../src/components/data'
 
@@ -72,7 +73,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzChip },
     setup() {
       return { args }
@@ -172,6 +173,25 @@ export const Closable: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // All 5 chips should be present initially.
+    await expect(canvas.getByText('Vue')).toBeVisible()
+    await expect(canvas.getByText('TypeScript')).toBeVisible()
+    await expect(canvas.getByText(/5 chips remaining/i)).toBeInTheDocument()
+
+    // Click the close button on the Vue chip — it disappears.
+    const closeBtns = canvas.getAllByRole('button')
+    await userEvent.click(closeBtns[0])
+    await waitFor(() => expect(canvas.queryByText('Vue')).not.toBeInTheDocument())
+    await expect(canvas.getByText(/4 chips remaining/i)).toBeInTheDocument()
+
+    // Click again — TypeScript is removed.
+    const remainingBtns = canvas.getAllByRole('button')
+    await userEvent.click(remainingBtns[0])
+    await waitFor(() => expect(canvas.getByText(/3 chips remaining/i)).toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -183,7 +203,7 @@ export const Disabled: Story = {
     disabled: true,
     closable: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzChip },
     setup() {
       return { args }
@@ -237,9 +257,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzChip },
     template: `
@@ -345,9 +363,9 @@ export const RealWorldInputTags: Story = {
       addTag() {
         const tag = (this as unknown as { newTag: string }).newTag.trim()
         if (tag && !(this as unknown as { tags: string[] }).tags.includes(tag)) {
-          (this as unknown as { tags: string[] }).tags.push(tag)
+          ;(this as unknown as { tags: string[] }).tags.push(tag)
         }
-        (this as unknown as { newTag: string }).newTag = ''
+        ;(this as unknown as { newTag: string }).newTag = ''
       },
     },
     template: `

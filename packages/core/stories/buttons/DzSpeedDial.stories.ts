@@ -1,14 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import {
-  Copy,
-  Image,
-  Link,
-  Pencil,
-  Plus,
-  Share2,
-  Sparkles,
-  Trash2,
-} from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from 'lucide-vue-next'
 import { ref } from 'vue'
 import { darkModeDecorator } from '../_shared'
 import { DzFab, DzSpeedDial } from '../../src/components/buttons'
@@ -147,7 +139,7 @@ export const Fab: Story = {
 
 export const LinearUp: Story = {
   name: 'Linear (up)',
-  render: args => ({
+  render: (args) => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(false)
@@ -164,6 +156,22 @@ export const LinearUp: Story = {
     direction: 'up',
     type: 'linear',
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The trigger FAB should be present and labelled.
+    const trigger = canvas.getByRole('button', { name: /quick actions/i })
+    await expect(trigger).toBeVisible()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click to open — action items fan out.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // Click again to close.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -172,7 +180,7 @@ export const LinearUp: Story = {
 
 export const Radial: Story = {
   name: 'Radial',
-  render: args => ({
+  render: (args) => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(true)
@@ -197,7 +205,7 @@ export const Radial: Story = {
 
 export const WithLabels: Story = {
   name: 'With Labels (tooltips)',
-  render: args => ({
+  render: (args) => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(true)
@@ -255,7 +263,7 @@ export const Directions: Story = {
 
 export const Pinned: Story = {
   name: 'Pinned (bottom-right)',
-  render: args => ({
+  render: (args) => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(false)

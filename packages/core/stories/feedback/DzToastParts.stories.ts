@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { DzToastContext } from '../../src/components/feedback'
+import { expect, screen, userEvent, waitFor } from 'storybook/test'
 import { inject } from 'vue'
 import { DzButton } from '../../src/components/buttons'
 import {
@@ -90,6 +91,19 @@ export const Default: Story = {
       </DzToastProvider>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    // Toast viewport is portalled to document.body — use screen, not canvas.
+    const { within: localWithin } = await import('storybook/test')
+    const canvas = localWithin(canvasElement)
+
+    // Click the "success" tone trigger button.
+    const successBtn = canvas.getByRole('button', { name: /success/i })
+    await userEvent.click(successBtn)
+
+    // Toast appears in the portal — query from document body.
+    const toast = await screen.findByText(/success toast/i)
+    await expect(toast).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -101,7 +115,14 @@ export const ViewportPositions: Story = {
   render: () => ({
     components: { DzToastProvider, DzToastViewport, DzButton },
     setup() {
-      const positions = ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center'] as const
+      const positions = [
+        'top-right',
+        'top-left',
+        'bottom-right',
+        'bottom-left',
+        'top-center',
+        'bottom-center',
+      ] as const
       return { positions }
     },
     template: `
@@ -202,4 +223,18 @@ export const Accessibility: Story = {
       </DzToastProvider>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const { within: localWithin } = await import('storybook/test')
+    const canvas = localWithin(canvasElement)
+
+    // Trigger a neutral toast.
+    await userEvent.click(canvas.getByRole('button', { name: /neutral/i }))
+
+    // Toast appears in portal; verify it has accessible text.
+    const toast = await screen.findByText(/neutral toast/i)
+    await expect(toast).toBeVisible()
+
+    // The viewport region is present in the document.
+    await waitFor(() => expect(screen.getByRole('region')).toBeInTheDocument())
+  },
 }

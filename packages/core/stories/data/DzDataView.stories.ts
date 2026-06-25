@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzDataView } from '../../src/components/data'
 
@@ -68,7 +69,12 @@ type Story = StoryObj<typeof meta>
 // Sample data
 // ---------------------------------------------------------------------------
 
-interface Product { id: number, name: string, category: string, price: number }
+interface Product {
+  id: number
+  name: string
+  category: string
+  price: number
+}
 
 const products: Product[] = [
   { id: 1, name: 'Aurora Headphones', category: 'Audio', price: 199 },
@@ -113,7 +119,7 @@ const sortOptions = [
 
 export const ListLayout: Story = {
   args: { layout: 'list' },
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     template: `
@@ -130,7 +136,7 @@ export const ListLayout: Story = {
 
 export const GridLayout: Story = {
   args: { layout: 'grid' },
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     template: `
@@ -148,7 +154,7 @@ export const GridLayout: Story = {
 export const WithLayoutToggle: Story = {
   name: 'With Layout Toggle',
   args: { layoutToggle: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     data: () => ({ layout: 'grid' }),
@@ -168,6 +174,27 @@ export const WithLayoutToggle: Story = {
       </DzDataView>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Layout toggle buttons should be present (grid / list).
+    const listBtn = canvas.getByRole('radio', { name: /list/i })
+    const gridBtn = canvas.getByRole('radio', { name: /grid/i })
+    await expect(listBtn).toBeInTheDocument()
+    await expect(gridBtn).toBeInTheDocument()
+
+    // Initial layout is grid — grid button is checked.
+    await expect(gridBtn).toHaveAttribute('aria-checked', 'true')
+
+    // Click list toggle — layout switches.
+    await userEvent.click(listBtn)
+    await waitFor(() => expect(listBtn).toHaveAttribute('aria-checked', 'true'))
+    await expect(gridBtn).toHaveAttribute('aria-checked', 'false')
+
+    // Switch back to grid.
+    await userEvent.click(gridBtn)
+    await waitFor(() => expect(gridBtn).toHaveAttribute('aria-checked', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -176,7 +203,7 @@ export const WithLayoutToggle: Story = {
 
 export const Paginated: Story = {
   args: { layout: 'grid', paginator: true, rows: 4 },
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     data: () => ({ first: 0 }),
@@ -200,7 +227,7 @@ export const Paginated: Story = {
 
 export const Sortable: Story = {
   args: { layout: 'grid' },
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args, products, sortOptions }),
     template: `
@@ -224,7 +251,7 @@ export const Sortable: Story = {
 
 export const Loading: Story = {
   args: { layout: 'grid', loading: true, loadingRows: 8 },
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args }),
     template: `
@@ -240,7 +267,7 @@ export const Loading: Story = {
 // ---------------------------------------------------------------------------
 
 export const Empty: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzDataView },
     setup: () => ({ args }),
     template: `

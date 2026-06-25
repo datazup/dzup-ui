@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzTag } from '../../src/components/data'
 
@@ -74,7 +75,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTag },
     setup() {
       return { args }
@@ -174,6 +175,19 @@ export const Closable: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // All 5 tags present initially.
+    await expect(canvas.getByText('Frontend')).toBeVisible()
+    await expect(canvas.getByText(/5 tags remaining/i)).toBeInTheDocument()
+
+    // Click close on the first tag — Frontend disappears.
+    const closeBtns = canvas.getAllByRole('button')
+    await userEvent.click(closeBtns[0])
+    await waitFor(() => expect(canvas.queryByText('Frontend')).not.toBeInTheDocument())
+    await expect(canvas.getByText(/4 tags remaining/i)).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -185,7 +199,7 @@ export const Disabled: Story = {
     disabled: true,
     closable: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzTag },
     setup() {
       return { args }
@@ -239,9 +253,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTag },
     template: `
