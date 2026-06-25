@@ -9,20 +9,18 @@
  * @module @dzup-ui/core/components/layout/DzPanel
  */
 
-import type { BaseAccessibilityProps, BaseAppearanceProps, CanonicalSize } from '@dzup-ui/contracts'
+import type {
+  BaseAccessibilityProps,
+  BaseAppearanceProps,
+  CanonicalSize,
+  PanelVariant,
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
-/**
- * Surface-style variants.
- *
- * - `outlined` — bordered surface (default)
- * - `elevated` — raised surface with shadow
- * - `legend` — fieldset-style inset title
- */
-export type PanelVariant = 'outlined' | 'elevated' | 'legend'
+export type { PanelVariant }
 
 /**
  * Props for the DzPanel component.
@@ -32,8 +30,7 @@ export type PanelVariant = 'outlined' | 'elevated' | 'legend'
  * (defineModel, ADR-16) rather than a prop.
  */
 export interface DzPanelProps
-  extends BaseAppearanceProps<CanonicalSize, PanelVariant>,
-  BaseAccessibilityProps {
+  extends BaseAppearanceProps<CanonicalSize, PanelVariant>, BaseAccessibilityProps {
   /** Header title text (alternative to the `#header` slot) */
   header?: string
   /** Whether the panel can be collapsed via its header toggle */
