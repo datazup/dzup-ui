@@ -10,10 +10,7 @@
  * @module @dzup-ui/core/components/forms/DzRating
  */
 
-import type {
-  BaseFormControlProps,
-  ChangeEvents,
-} from '@dzup-ui/contracts'
+import type { BaseFormControlProps, ChangeEvents } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -21,7 +18,7 @@ import type { Component } from 'vue'
 // ---------------------------------------------------------------------------
 
 /** Props for the DzRating component */
-export interface DzRatingProps extends BaseFormControlProps {
+export interface DzRatingProps extends BaseFormControlProps<never> {
   /** Number of rating items (default 5) */
   count?: number
   /** Allow half-step (0.5) selection */
