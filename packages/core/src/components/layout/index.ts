@@ -5,33 +5,20 @@
  */
 
 // ── DzAffix ──
-export type {
-  DzAffixEmits,
-  DzAffixProps,
-  DzAffixSlots,
-} from './DzAffix.types.ts'
+export type { DzAffixEmits, DzAffixProps, DzAffixSlots } from './DzAffix.types.ts'
 
 export { default as DzAffix } from './DzAffix.vue'
 
 // ── DzAppShell ──
-export type {
-  DzAppShellProps,
-  DzAppShellSlots,
-} from './DzAppShell.types.ts'
+export type { DzAppShellProps, DzAppShellSlots } from './DzAppShell.types.ts'
 
 export { type AppShellVariantProps, appShellVariants } from './DzAppShell.variants.ts'
 export { default as DzAppShell } from './DzAppShell.vue'
 
-export type {
-  DzAspectRatioProps,
-  DzAspectRatioSlots,
-} from './DzAspectRatio.types.ts'
+export type { DzAspectRatioProps, DzAspectRatioSlots } from './DzAspectRatio.types.ts'
 // ── DzAspectRatio ──
 export { default as DzAspectRatio } from './DzAspectRatio.vue'
-export type {
-  DzCollapseProps,
-  DzCollapseSlots,
-} from './DzCollapse.types.ts'
+export type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
 // ── DzCollapse ──
 export { default as DzCollapse } from './DzCollapse.vue'
 
@@ -42,38 +29,30 @@ export type {
   DzDeferredContentProps,
   DzDeferredContentSlots,
 } from './DzDeferredContent.types.ts'
-export { type DeferredContentVariantProps, deferredContentVariants } from './DzDeferredContent.variants.ts'
+export {
+  type DeferredContentVariantProps,
+  deferredContentVariants,
+} from './DzDeferredContent.variants.ts'
 // ── DzDeferredContent ──
 export { default as DzDeferredContent } from './DzDeferredContent.vue'
 
-export type {
-  DzPanelEmits,
-  DzPanelProps,
-  DzPanelSlots,
-  PanelVariant,
-} from './DzPanel.types.ts'
+export type { DzPanelEmits, DzPanelProps, DzPanelSlots } from './DzPanel.types.ts'
+
+export type { PanelVariant } from '@dzup-ui/contracts'
 
 export { type PanelVariantProps, panelVariants } from './DzPanel.variants.ts'
 
 // ── DzPanel ──
 export { default as DzPanel } from './DzPanel.vue'
 // Types
-export type {
-  ContainerMaxWidth,
-  DzContainerProps,
-  DzContainerSlots,
-} from './DzContainer.types.ts'
+export type { ContainerMaxWidth, DzContainerProps, DzContainerSlots } from './DzContainer.types.ts'
 // Variants (for consumer customization)
 export { type ContainerVariantProps, containerVariants } from './DzContainer.variants.ts'
 
 // Components
 export { default as DzContainer } from './DzContainer.vue'
 
-export type {
-  DividerOrientation,
-  DzDividerProps,
-  DzDividerSlots,
-} from './DzDivider.types.ts'
+export type { DividerOrientation, DzDividerProps, DzDividerSlots } from './DzDivider.types.ts'
 
 export { type DividerVariantProps, dividerVariants } from './DzDivider.variants.ts'
 
@@ -107,7 +86,13 @@ export type {
   MasonryGap,
   ResponsiveColumns,
 } from './DzMasonry.types.ts'
-export { type MasonryVariantProps, masonryColumn, masonryColumnContainer, masonryVariants, responsiveColumnsMap } from './DzMasonry.variants.ts'
+export {
+  type MasonryVariantProps,
+  masonryColumn,
+  masonryColumnContainer,
+  masonryVariants,
+  responsiveColumnsMap,
+} from './DzMasonry.variants.ts'
 // ── DzMasonry ──
 export { default as DzMasonry } from './DzMasonry.vue'
 
@@ -143,11 +128,7 @@ export type {
 export { type ScrollAreaVariantProps, scrollAreaVariants } from './DzScrollArea.variants.ts'
 // ── DzScrollArea ──
 export { default as DzScrollArea } from './DzScrollArea.vue'
-export type {
-  DzSpacerProps,
-  DzSpacerSlots,
-  SpacerSize,
-} from './DzSpacer.types.ts'
+export type { DzSpacerProps, DzSpacerSlots, SpacerSize } from './DzSpacer.types.ts'
 
 export { default as DzSpacer } from './DzSpacer.vue'
 
@@ -169,22 +150,18 @@ export { default as DzSplitter } from './DzSplitter.vue'
 export { default as DzSplitterHandle } from './DzSplitterHandle.vue'
 export { default as DzSplitterPanel } from './DzSplitterPanel.vue'
 
-export type {
-  DzStackProps,
-  DzStackSlots,
-  StackAlign,
-  StackDirection,
-} from './DzStack.types.ts'
+export type { DzStackProps, DzStackSlots, StackAlign, StackDirection } from './DzStack.types.ts'
 
 export { default as DzStack } from './DzStack.vue'
 
-export type {
-  DzToolbarProps,
-  DzToolbarSlots,
-  ToolbarOrientation,
-  ToolbarVariant,
-} from './DzToolbar.types.ts'
+export type { DzToolbarProps, DzToolbarSlots, ToolbarOrientation } from './DzToolbar.types.ts'
 
-export { type ToolbarVariantProps, toolbarRegionVariants, toolbarVariants } from './DzToolbar.variants.ts'
+export type { ToolbarVariant } from '@dzup-ui/contracts'
+
+export {
+  type ToolbarVariantProps,
+  toolbarRegionVariants,
+  toolbarVariants,
+} from './DzToolbar.variants.ts'
 
 export { default as DzToolbar } from './DzToolbar.vue'

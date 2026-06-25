@@ -72,17 +72,13 @@ const dragging = ref(false)
 
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 
 const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
 /** Interactive = neither disabled nor readonly (readonly is display-only). */
 const isInteractive = computed(() => !resolvedDisabled.value && !props.readonly)
@@ -92,12 +88,9 @@ const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : unde
 /** Combined aria-describedby from prop + own error element + field context. */
 const resolvedAriaDescribedby = computed(() => {
   const parts: string[] = []
-  if (props.ariaDescribedby)
-    parts.push(props.ariaDescribedby)
-  if (errorId.value)
-    parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value)
-    parts.push(fieldContext.ariaDescribedby.value)
+  if (props.ariaDescribedby) parts.push(props.ariaDescribedby)
+  if (errorId.value) parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value) parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -134,8 +127,7 @@ const normalizedValue = computed(() => clamp(model.value))
 /** Fill fraction (0–1) of the value arc. */
 const fraction = computed(() => {
   const span = props.max - props.min
-  if (span <= 0)
-    return 0
+  if (span <= 0) return 0
   return (normalizedValue.value - props.min) / span
 })
 
@@ -154,12 +146,10 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
-)
+const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 
 /** Cartesian point on the gauge circle for an SVG-convention angle (deg). */
-function polar(angleDeg: number, r: number): { x: number, y: number } {
+function polar(angleDeg: number, r: number): { x: number; y: number } {
   const a = (angleDeg * Math.PI) / 180
   return { x: CENTER + r * Math.cos(a), y: CENTER + r * Math.sin(a) }
 }
@@ -180,8 +170,7 @@ const valuePath = computed(() =>
 
 function commit(value: number): void {
   const next = snap(clamp(value))
-  if (next === model.value)
-    return
+  if (next === model.value) return
   model.value = next
   emit('change', next, { source: 'user' })
 }
@@ -189,33 +178,27 @@ function commit(value: number): void {
 /** Map a pointer position to a value via its angle from the dial center. */
 function valueFromPointer(event: PointerEvent): number | null {
   const svg = svgRef.value
-  if (!svg)
-    return null
+  if (!svg) return null
   const rect = svg.getBoundingClientRect()
   const cx = rect.left + rect.width / 2
   const cy = rect.top + rect.height / 2
   let deg = (Math.atan2(event.clientY - cy, event.clientX - cx) * 180) / Math.PI
-  if (deg < 0)
-    deg += 360
+  if (deg < 0) deg += 360
   // Angle measured clockwise from the gauge start (0..360).
   let rel = deg - START_ANGLE
-  if (rel < 0)
-    rel += 360
+  if (rel < 0) rel += 360
   // Pointer fell in the bottom gap -> snap to whichever end is nearer.
-  if (rel > SWEEP)
-    rel = rel > (SWEEP + 360) / 2 ? 0 : SWEEP
+  if (rel > SWEEP) rel = rel > (SWEEP + 360) / 2 ? 0 : SWEEP
   return props.min + (rel / SWEEP) * (props.max - props.min)
 }
 
 function updateFromPointer(event: PointerEvent): void {
   const value = valueFromPointer(event)
-  if (value !== null)
-    commit(value)
+  if (value !== null) commit(value)
 }
 
 function handlePointerDown(event: PointerEvent): void {
-  if (!isInteractive.value)
-    return
+  if (!isInteractive.value) return
   event.preventDefault()
   dragging.value = true
   ;(event.currentTarget as Element).setPointerCapture?.(event.pointerId)
@@ -223,21 +206,18 @@ function handlePointerDown(event: PointerEvent): void {
 }
 
 function handlePointerMove(event: PointerEvent): void {
-  if (!dragging.value)
-    return
+  if (!dragging.value) return
   updateFromPointer(event)
 }
 
 function handlePointerUp(event: PointerEvent): void {
-  if (!dragging.value)
-    return
+  if (!dragging.value) return
   dragging.value = false
   ;(event.currentTarget as Element).releasePointerCapture?.(event.pointerId)
 }
 
 function handleKeydown(event: KeyboardEvent): void {
-  if (!isInteractive.value)
-    return
+  if (!isInteractive.value) return
 
   let next: number | null = null
   switch (event.key) {
@@ -265,8 +245,7 @@ function handleKeydown(event: KeyboardEvent): void {
       break
   }
 
-  if (next === null)
-    return
+  if (next === null) return
   event.preventDefault()
   commit(next)
 }
@@ -285,82 +264,73 @@ defineExpose({
 })
 </script>
 
-
 <template>
-  <div>
-    <div
-      :id="resolvedId"
-      ref="rootRef"
-      role="slider"
-      :class="rootClasses"
-      :style="{ width: `${diameter}px`, height: `${diameter}px` }"
-      :tabindex="resolvedDisabled ? -1 : 0"
-      :aria-valuemin="min"
-      :aria-valuemax="max"
-      :aria-valuenow="normalizedValue"
-      :aria-valuetext="valueText"
-      :aria-label="ariaLabel ?? 'Knob'"
-      :aria-labelledby="ariaLabelledby"
-      :aria-describedby="resolvedAriaDescribedby"
-      aria-orientation="horizontal"
-      :aria-disabled="resolvedDisabled || undefined"
-      :aria-readonly="readonly || undefined"
-      :aria-required="resolvedRequired || undefined"
-      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-      :data-disabled="resolvedDisabled ? '' : undefined"
-      :data-readonly="readonly ? '' : undefined"
-      :data-invalid="resolvedInvalid ? '' : undefined"
-      :data-tone="tone"
-      @keydown="handleKeydown"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      v-bind="{ ...$attrs, class: undefined }"
+  <div
+    :id="resolvedId"
+    ref="rootRef"
+    role="slider"
+    :class="rootClasses"
+    :style="{ width: `${diameter}px`, height: `${diameter}px` }"
+    :tabindex="resolvedDisabled ? -1 : 0"
+    :aria-valuemin="min"
+    :aria-valuemax="max"
+    :aria-valuenow="normalizedValue"
+    :aria-valuetext="valueText"
+    :aria-label="ariaLabel ?? 'Knob'"
+    :aria-labelledby="ariaLabelledby"
+    :aria-describedby="resolvedAriaDescribedby"
+    :aria-disabled="resolvedDisabled || undefined"
+    :aria-readonly="readonly || undefined"
+    :aria-required="resolvedRequired || undefined"
+    :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+    :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-invalid="resolvedInvalid ? '' : undefined"
+    :data-tone="tone"
+    @keydown="handleKeydown"
+    @focus="handleFocus"
+    @blur="handleBlur"
+    v-bind="{ ...$attrs, class: undefined }"
+  >
+    <svg
+      ref="svgRef"
+      :class="styles.svg()"
+      :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
+      :width="diameter"
+      :height="diameter"
+      aria-hidden="true"
+      @pointerdown="handlePointerDown"
+      @pointermove="handlePointerMove"
+      @pointerup="handlePointerUp"
+      @pointercancel="handlePointerUp"
     >
-      <svg
-        ref="svgRef"
-        :class="styles.svg()"
-        :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
-        :width="diameter"
-        :height="diameter"
-        aria-hidden="true"
-        @pointerdown="handlePointerDown"
-        @pointermove="handlePointerMove"
-        @pointerup="handlePointerUp"
-        @pointercancel="handlePointerUp"
-      >
-        <path
-          :class="styles.rangeArc()"
-          :d="rangePath"
-          :stroke-width="strokeWidth"
-          stroke-linecap="round"
-        />
-        <path
-          v-if="fraction > 0"
-          :class="styles.valueArc()"
-          :d="valuePath"
-          :stroke-width="strokeWidth"
-          stroke-linecap="round"
-        />
-      </svg>
+      <path
+        :class="styles.rangeArc()"
+        :d="rangePath"
+        :stroke-width="strokeWidth"
+        stroke-linecap="round"
+      />
+      <path
+        v-if="fraction > 0"
+        :class="styles.valueArc()"
+        :d="valuePath"
+        :stroke-width="strokeWidth"
+        stroke-linecap="round"
+      />
+    </svg>
 
-      <span v-if="showValue" :class="styles.label()">
-        <slot name="value" :value="normalizedValue" :text="valueText">
-          {{ valueText }}
-        </slot>
-      </span>
+    <span v-if="showValue" :class="styles.label()">
+      <slot name="value" :value="normalizedValue" :text="valueText">
+        {{ valueText }}
+      </slot>
+    </span>
 
-      <!-- Hidden input for native form participation -->
-      <input v-if="name" type="hidden" :name="name" :value="normalizedValue">
-    </div>
-
-    <!-- Error message -->
-    <p
-      v-if="error"
-      :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
-      role="alert"
-    >
-      {{ error }}
-    </p>
+    <!-- Hidden input for native form participation -->
+    <input v-if="name" type="hidden" :name="name" :value="normalizedValue" />
   </div>
+
+  <!-- Error message -->
+  <p v-if="error" :id="errorId" :class="styles.error()" role="alert">
+    {{ error }}
+  </p>
 </template>

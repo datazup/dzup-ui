@@ -8,6 +8,7 @@ import type {
   BaseAccessibilityProps,
   CanonicalSize,
   CanonicalTone,
+  Orientation,
 } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
@@ -32,7 +33,7 @@ export interface DzMeterGroupSegment {
 }
 
 /** Orientation of the meter track */
-export type DzMeterGroupOrientation = 'horizontal' | 'vertical'
+export type DzMeterGroupOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Props

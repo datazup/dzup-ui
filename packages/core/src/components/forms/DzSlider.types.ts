@@ -13,6 +13,7 @@ import type {
   CanonicalSize,
   CanonicalTone,
   ChangeEvents,
+  Orientation,
 } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
@@ -34,7 +35,7 @@ export interface DzSliderProps extends BaseAccessibilityProps, BaseValidationPro
   /** Semantic color tone */
   tone?: CanonicalTone
   /** Slider orientation */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
   /** Form field name */
   name?: string
 }

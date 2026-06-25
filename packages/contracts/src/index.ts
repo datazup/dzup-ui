@@ -22,21 +22,18 @@ export type {
   CardVariant,
   ChipVariant,
   InputVariant,
+  Orientation,
+  PanelVariant,
   ProgressVariant,
   TabsVariant,
+  ToolbarVariant,
 } from './canonical.types'
 
 // Compound component context types
-export type {
-  CompoundContext,
-  CompoundRegistration,
-} from './compound.types'
+export type { CompoundContext, CompoundRegistration } from './compound.types'
 
 // Data attribute types
-export type {
-  DataAttributes,
-  DataState,
-} from './data-attributes.types'
+export type { DataAttributes, DataState } from './data-attributes.types'
 
 // Event interfaces
 export type {
@@ -74,13 +71,7 @@ export type {
 } from './slots.types'
 
 // Utility types
-export type {
-  Branded,
-  EmitPayload,
-  OptionalProps,
-  Prettify,
-  RequireProps,
-} from './utility.types'
+export type { Branded, EmitPayload, OptionalProps, Prettify, RequireProps } from './utility.types'
 
 // Runtime exports
 export { assertNever } from './utility.types'

@@ -7,10 +7,7 @@
  * @module @dzup-ui/core/components/forms/DzListbox
  */
 
-import type {
-  BaseFormControlProps,
-  SelectEvents,
-} from '@dzup-ui/contracts'
+import type { BaseFormControlProps, SelectEvents } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -48,7 +45,7 @@ export interface DzListboxOption {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzListbox component */
-export interface DzListboxProps extends BaseFormControlProps {
+export interface DzListboxProps extends BaseFormControlProps<never> {
   /**
    * Available options. Either canonical {@link DzListboxOption}s or arbitrary
    * objects resolved through `optionLabel`/`optionValue`/`optionGroup`.
@@ -91,11 +88,7 @@ export interface DzListboxEmits extends SelectEvents<DzListboxModelValue> {
 /** Slot definitions for DzListbox */
 export interface DzListboxSlots {
   /** Custom option rendering */
-  option?: (props: {
-    option: DzListboxOption
-    index: number
-    selected: boolean
-  }) => unknown
+  option?: (props: { option: DzListboxOption; index: number; selected: boolean }) => unknown
   /** Custom group label rendering */
   groupLabel?: (props: { group: string }) => unknown
   /** Content shown when there are no (matching) options */

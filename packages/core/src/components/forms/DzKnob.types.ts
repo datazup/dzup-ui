@@ -11,17 +11,14 @@
  * @module @dzup-ui/core/components/forms/DzKnob
  */
 
-import type {
-  BaseFormControlProps,
-  ChangeEvents,
-} from '@dzup-ui/contracts'
+import type { BaseFormControlProps, ChangeEvents } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
 /** Props for the DzKnob component */
-export interface DzKnobProps extends BaseFormControlProps {
+export interface DzKnobProps extends BaseFormControlProps<never> {
   /** Minimum value (default 0) */
   min?: number
   /** Maximum value (default 100) */
@@ -53,5 +50,5 @@ export interface DzKnobEmits extends ChangeEvents<number> {}
 /** Slot definitions for DzKnob */
 export interface DzKnobSlots {
   /** Custom center content. Receives the numeric value and formatted text. */
-  value?: (props: { value: number, text: string }) => unknown
+  value?: (props: { value: number; text: string }) => unknown
 }

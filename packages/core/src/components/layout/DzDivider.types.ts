@@ -7,14 +7,14 @@
  * @module @dzup-ui/core/components/layout/DzDivider
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, Orientation } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
 /** Divider orientation options */
-export type DividerOrientation = 'horizontal' | 'vertical'
+export type DividerOrientation = Orientation
 
 /** Props for the DzDivider component */
 export interface DzDividerProps extends BaseAccessibilityProps {
