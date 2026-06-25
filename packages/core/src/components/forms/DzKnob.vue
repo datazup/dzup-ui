@@ -265,74 +265,72 @@ defineExpose({
 </script>
 
 <template>
-  <div>
-    <div
-      :id="resolvedId"
-      ref="rootRef"
-      role="slider"
-      :class="rootClasses"
-      :style="{ width: `${diameter}px`, height: `${diameter}px` }"
-      :tabindex="resolvedDisabled ? -1 : 0"
-      :aria-valuemin="min"
-      :aria-valuemax="max"
-      :aria-valuenow="normalizedValue"
-      :aria-valuetext="valueText"
-      :aria-label="ariaLabel ?? 'Knob'"
-      :aria-labelledby="ariaLabelledby"
-      :aria-describedby="resolvedAriaDescribedby"
-      :aria-disabled="resolvedDisabled || undefined"
-      :aria-readonly="readonly || undefined"
-      :aria-required="resolvedRequired || undefined"
-      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-      :data-disabled="resolvedDisabled ? '' : undefined"
-      :data-readonly="readonly ? '' : undefined"
-      :data-invalid="resolvedInvalid ? '' : undefined"
-      :data-tone="tone"
-      @keydown="handleKeydown"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      v-bind="{ ...$attrs, class: undefined }"
+  <div
+    :id="resolvedId"
+    ref="rootRef"
+    role="slider"
+    :class="rootClasses"
+    :style="{ width: `${diameter}px`, height: `${diameter}px` }"
+    :tabindex="resolvedDisabled ? -1 : 0"
+    :aria-valuemin="min"
+    :aria-valuemax="max"
+    :aria-valuenow="normalizedValue"
+    :aria-valuetext="valueText"
+    :aria-label="ariaLabel ?? 'Knob'"
+    :aria-labelledby="ariaLabelledby"
+    :aria-describedby="resolvedAriaDescribedby"
+    :aria-disabled="resolvedDisabled || undefined"
+    :aria-readonly="readonly || undefined"
+    :aria-required="resolvedRequired || undefined"
+    :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+    :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-invalid="resolvedInvalid ? '' : undefined"
+    :data-tone="tone"
+    @keydown="handleKeydown"
+    @focus="handleFocus"
+    @blur="handleBlur"
+    v-bind="{ ...$attrs, class: undefined }"
+  >
+    <svg
+      ref="svgRef"
+      :class="styles.svg()"
+      :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
+      :width="diameter"
+      :height="diameter"
+      aria-hidden="true"
+      @pointerdown="handlePointerDown"
+      @pointermove="handlePointerMove"
+      @pointerup="handlePointerUp"
+      @pointercancel="handlePointerUp"
     >
-      <svg
-        ref="svgRef"
-        :class="styles.svg()"
-        :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
-        :width="diameter"
-        :height="diameter"
-        aria-hidden="true"
-        @pointerdown="handlePointerDown"
-        @pointermove="handlePointerMove"
-        @pointerup="handlePointerUp"
-        @pointercancel="handlePointerUp"
-      >
-        <path
-          :class="styles.rangeArc()"
-          :d="rangePath"
-          :stroke-width="strokeWidth"
-          stroke-linecap="round"
-        />
-        <path
-          v-if="fraction > 0"
-          :class="styles.valueArc()"
-          :d="valuePath"
-          :stroke-width="strokeWidth"
-          stroke-linecap="round"
-        />
-      </svg>
+      <path
+        :class="styles.rangeArc()"
+        :d="rangePath"
+        :stroke-width="strokeWidth"
+        stroke-linecap="round"
+      />
+      <path
+        v-if="fraction > 0"
+        :class="styles.valueArc()"
+        :d="valuePath"
+        :stroke-width="strokeWidth"
+        stroke-linecap="round"
+      />
+    </svg>
 
-      <span v-if="showValue" :class="styles.label()">
-        <slot name="value" :value="normalizedValue" :text="valueText">
-          {{ valueText }}
-        </slot>
-      </span>
+    <span v-if="showValue" :class="styles.label()">
+      <slot name="value" :value="normalizedValue" :text="valueText">
+        {{ valueText }}
+      </slot>
+    </span>
 
-      <!-- Hidden input for native form participation -->
-      <input v-if="name" type="hidden" :name="name" :value="normalizedValue" />
-    </div>
-
-    <!-- Error message -->
-    <p v-if="error" :id="errorId" :class="styles.error()" role="alert">
-      {{ error }}
-    </p>
+    <!-- Hidden input for native form participation -->
+    <input v-if="name" type="hidden" :name="name" :value="normalizedValue" />
   </div>
+
+  <!-- Error message -->
+  <p v-if="error" :id="errorId" :class="styles.error()" role="alert">
+    {{ error }}
+  </p>
 </template>
