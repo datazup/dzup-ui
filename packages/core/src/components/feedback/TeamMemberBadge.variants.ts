@@ -19,6 +19,7 @@ export const teamMemberBadgeVariants = tv({
 
   variants: {
     size: {
+      icon: 'text-[length:var(--dz-text-xs)]',
       xs: 'text-[length:var(--dz-text-xs)]',
       sm: 'text-[length:var(--dz-text-xs)]',
       md: 'text-[length:var(--dz-text-xs)]',
