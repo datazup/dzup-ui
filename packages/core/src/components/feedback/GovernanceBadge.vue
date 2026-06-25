@@ -1,32 +1,78 @@
 <script setup lang="ts">
-// TODO: implement GovernanceBadge — displays the coordinator pattern
-// governing a team run (supervisor / contract_net / blackboard /
-// peer_to_peer / council) with an icon and accessible tooltip.
-//
-// TODO (Contract Spec v1): add GovernanceBadge.types.ts,
-// GovernanceBadge.tokens.ts, GovernanceBadge.variants.ts,
-// GovernanceBadge.contract.spec.ts, GovernanceBadge.spec.ts and a
-// corresponding contracts entry before graduating this from a stub.
-//
-// NOTE: the prop type mirrors a team-run coordinator pattern vocabulary.
-// Kept as a local string union here to avoid pulling product-specific
-// runtime dependencies into @dzup-ui/core.
+defineOptions({
+  inheritAttrs: false,
+})
 
-type CoordinatorPattern
-  = | 'supervisor'
-    | 'contract_net'
-    | 'blackboard'
-    | 'peer_to_peer'
-    | 'council'
+import type {
+  CoordinatorPattern,
+  GovernanceBadgeProps,
+  GovernanceBadgeSlots,
+} from './GovernanceBadge.types.ts'
+/**
+ * GovernanceBadge — Coordinator pattern pill for team runs.
+ *
+ * Displays the coordinator pattern governing a team run
+ * (supervisor / contract_net / blackboard / peer_to_peer / council)
+ * with a pattern-specific color token and accessible label.
+ *
+ * @example
+ * ```vue
+ * <GovernanceBadge pattern="supervisor" />
+ * <GovernanceBadge pattern="contract_net" size="sm" variant="outline" />
+ * ```
+ */
+import { computed, useAttrs } from 'vue'
+import { cn } from '../../utilities/cn.ts'
+import { GOVERNANCE_PATTERN_TOKENS } from './GovernanceBadge.tokens.ts'
+import { governanceBadgeVariants } from './GovernanceBadge.variants.ts'
 
-defineProps<{
-  /** Coordinator pattern governing the team run. */
-  pattern: CoordinatorPattern
-}>()
+const props = withDefaults(defineProps<GovernanceBadgeProps>(), {
+  size: 'md',
+  variant: 'solid',
+})
+
+defineSlots<GovernanceBadgeSlots>()
+
+const attrs = useAttrs()
+
+/** Human-readable labels (Title Case) */
+const PATTERN_LABEL_MAP: Readonly<Record<CoordinatorPattern, string>> = Object.freeze({
+  supervisor: 'Supervisor',
+  contract_net: 'Contract Net',
+  blackboard: 'Blackboard',
+  peer_to_peer: 'Peer to Peer',
+  council: 'Council',
+})
+
+const patternLabel = computed(() => PATTERN_LABEL_MAP[props.pattern])
+const patternToken = computed(() => GOVERNANCE_PATTERN_TOKENS[props.pattern])
+
+/** Inline style applies the pattern CSS var as background/border color */
+const patternStyle = computed(() => ({
+  backgroundColor: patternToken.value,
+  color: 'var(--dz-primary-foreground)',
+  borderColor: patternToken.value,
+}))
+
+const classes = computed(() =>
+  cn(
+    governanceBadgeVariants({ variant: props.variant, size: props.size }),
+    attrs.class as string | undefined,
+  ),
+)
 </script>
 
 <template>
-  <span class="governance-badge" data-stub="GovernanceBadge">
-    <slot />
+  <span
+    :class="classes"
+    :style="patternStyle"
+    :data-pattern="pattern"
+    role="img"
+    :aria-label="`Coordinator pattern: ${patternLabel}`"
+    v-bind="{ ...$attrs, class: undefined }"
+  >
+    <slot :pattern="pattern" :label="patternLabel">
+      {{ patternLabel }}
+    </slot>
   </span>
 </template>
