@@ -58,6 +58,16 @@
   --dz-anim-shimmer-width: 38%; /* width of the shimmer sweep relative to host */
   --dz-anim-ping-scale: 2.4; /* how far the ping ring expands before fading */
   --dz-anim-flip-duration: 0.42s; /* flip-on-change half-turn duration */
+
+  /* Feedback & confirmation (docs/animations.md §6.9, effects 33–36). */
+  --dz-anim-check-draw-duration: 0.5s; /* success ring stroke draw */
+  --dz-anim-check-tick-duration: 0.32s; /* success tick stroke draw */
+  --dz-anim-check-pop-scale: 1.08; /* success pop overshoot on completion */
+  --dz-anim-confetti-duration: 0.9s; /* confetti piece flight + fade */
+  --dz-anim-shake-duration: 0.42s; /* error-shake horizontal oscillation */
+  --dz-anim-shake-distance: 7px; /* error-shake peak displacement */
+  --dz-anim-burst-duration: 0.52s; /* like-pop spark flight + fade */
+  --dz-anim-burst-pop-scale: 1.2; /* like-pop core overshoot */
 }
 
 /* Foundational keyframes (effects extend this set in later tasks). */
@@ -684,6 +694,219 @@
 }
 
 /* =========================================================================
+ * Feedback & confirmation (docs/animations.md §6.9, effects 33–36).
+ *
+ * Micro-confirmations that close the loop on a discrete user action — distinct
+ * from the ambient/system-driven Attention family (§6.7). All are triggered by
+ * a user gesture (submit, tap, like) and resolve once; transform/opacity/stroke
+ * only, so they stay GPU-cheap.
+ *
+ * - Success check (33): `.dz-check` draws an SVG ring then a tick via
+ *   stroke-dashoffset, with a small scale pop, when `--in` is added on success.
+ * - Confetti burst (34): `.dz-confetti__piece` flies outward to a per-piece
+ *   (--tx,--ty) vector while spinning (--r) and fading; `DzConfetti.vue` spawns
+ *   the pieces with randomised vectors/colours on `burst()`.
+ * - Error shake (35): `.dz-shake` runs a damped horizontal oscillation once to
+ *   reject invalid input; pair with a `tone="danger"`/`invalid` field.
+ * - Like pop (36): `.dz-burst__core` overshoots in scale while
+ *   `.dz-burst__spark` spokes radiate outward; `DzBurst.vue` drives it on the
+ *   rising edge of its `active` prop.
+ *
+ * Each carries a `--reduced` modifier mirroring the @media block so the gallery
+ * can demo the reduced fallback live via the page-level toggle.
+ * ========================================================================= */
+
+/* Success check — effect 33. Ring + tick draw via stroke-dashoffset (dasharray
+ * set on the elements below); the whole mark pops once when the tick lands. */
+@keyframes dz-anim-check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dz-anim-check-pop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(var(--dz-anim-check-pop-scale, 1.08));
+  }
+}
+
+.dz-check__ring {
+  transform-origin: center;
+}
+.dz-check__circle,
+.dz-check__tick {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dz-check__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+}
+.dz-check__tick {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+}
+/* Drawn state: ring sweeps in, then the tick, then a brief overshoot. */
+.dz-check--in .dz-check__circle {
+  animation: dz-anim-check-draw var(--dz-anim-check-draw-duration, 0.5s)
+    var(--dz-ease-out, ease-out) forwards;
+}
+.dz-check--in .dz-check__tick {
+  animation: dz-anim-check-draw var(--dz-anim-check-tick-duration, 0.32s)
+    var(--dz-ease-out, ease-out) var(--dz-anim-check-draw-duration, 0.5s) forwards;
+}
+.dz-check--in .dz-check__ring {
+  animation: dz-anim-check-pop var(--dz-duration-normal, 0.24s)
+    var(--dz-ease-out, ease-out) var(--dz-anim-check-draw-duration, 0.5s);
+}
+/* Page-level "Reduce motion" toggle (JS) → drawn instantly, no sweep/pop. */
+.dz-check--reduced.dz-check--in .dz-check__circle,
+.dz-check--reduced.dz-check--in .dz-check__tick {
+  animation: none;
+  stroke-dashoffset: 0;
+}
+.dz-check--reduced .dz-check__ring {
+  animation: none;
+}
+
+/* Confetti burst — effect 34. Each piece flies to its own (--tx,--ty) vector
+ * while spinning (--r) and fading; the host positions pieces at its centre. */
+@keyframes dz-anim-confetti-fly {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(var(--tx, 0), var(--ty, 0), 0) rotate(var(--r, 360deg));
+    opacity: 0;
+  }
+}
+.dz-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: visible;
+}
+.dz-confetti__piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--dz-radius-xs, 2px);
+  background: var(--c, var(--dz-primary, #6366f1));
+  will-change: transform, opacity;
+  animation: dz-anim-confetti-fly var(--dz-anim-confetti-duration, 0.9s)
+    var(--dz-ease-out, ease-out) forwards;
+}
+/* Page-level "Reduce motion" toggle (JS): DzConfetti spawns no pieces, so this
+ * exists only to neutralise any in-flight piece if the toggle is flipped mid-air. */
+.dz-confetti--reduced .dz-confetti__piece {
+  animation: none;
+  opacity: 0;
+}
+
+/* Error shake — effect 35. A damped left/right oscillation that runs once to
+ * reject invalid input; applied by toggling `.dz-shake` on (and off on end). */
+@keyframes dz-anim-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(calc(-1 * var(--dz-anim-shake-distance, 7px)));
+  }
+  30% {
+    transform: translateX(var(--dz-anim-shake-distance, 7px));
+  }
+  45% {
+    transform: translateX(calc(-0.7 * var(--dz-anim-shake-distance, 7px)));
+  }
+  60% {
+    transform: translateX(calc(0.55 * var(--dz-anim-shake-distance, 7px)));
+  }
+  75% {
+    transform: translateX(calc(-0.3 * var(--dz-anim-shake-distance, 7px)));
+  }
+}
+.dz-shake {
+  animation: dz-anim-shake var(--dz-anim-shake-duration, 0.42s)
+    var(--dz-ease-in-out, ease-in-out) both;
+}
+/* Page-level "Reduce motion" toggle (JS) → no shake (the red/invalid state
+ * still communicates the rejection). */
+.dz-shake--reduced {
+  animation: none;
+}
+
+/* Like pop — effect 36. The core overshoots in scale while a ring of spark
+ * spokes (each with its own --tx,--ty,--c) radiates outward and fades. */
+@keyframes dz-anim-burst-pop {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(var(--dz-anim-burst-pop-scale, 1.2));
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes dz-anim-spark-fly {
+  from {
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 1;
+  }
+  to {
+    transform: translate(calc(-50% + var(--tx, 0)), calc(-50% + var(--ty, 0))) scale(1);
+    opacity: 0;
+  }
+}
+.dz-burst {
+  position: relative;
+  display: inline-flex;
+}
+.dz-burst__core {
+  display: inline-flex;
+  transform-origin: center;
+}
+.dz-burst--pop .dz-burst__core {
+  animation: dz-anim-burst-pop var(--dz-anim-burst-duration, 0.52s)
+    var(--dz-ease-out, ease-out);
+}
+.dz-burst__spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--dz-radius-full, 9999px);
+  background: var(--c, var(--dz-primary, #6366f1));
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: dz-anim-spark-fly var(--dz-anim-burst-duration, 0.52s)
+    var(--dz-ease-out, ease-out) forwards;
+}
+/* Page-level "Reduce motion" toggle (JS): DzBurst spawns no sparks and skips the
+ * pop; this neutralises any in-flight spark/pop if the toggle is flipped mid-burst. */
+.dz-burst--reduced .dz-burst__core,
+.dz-burst--reduced .dz-burst__spark {
+  animation: none;
+}
+.dz-burst--reduced .dz-burst__spark {
+  opacity: 0;
+}
+
+/* =========================================================================
  * Off-screen loop cap (docs/animations.md §7 — "lazy-init below-the-fold demos,
  * cap concurrent looping animations"). The gallery harness (AnimationCard) tags a
  * demo's preview stage `.dz-stage-idle` while it is scrolled out of view. Pausing
@@ -768,6 +991,32 @@
     opacity: 0 !important;
   }
   .dz-shimmer::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Feedback & confirmation (§6.9) — draws/sweeps/spokes on `dz-check`/`dz-shake`
+   * /`dz-burst` classes the `[class*="dz-anim-"]` rule above can't reach. Resolve
+   * each to its static, fully-resolved end-state. */
+  .dz-check--in .dz-check__circle,
+  .dz-check--in .dz-check__tick {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .dz-check__ring {
+    animation: none !important;
+  }
+  .dz-confetti__piece {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .dz-shake {
+    animation: none !important;
+  }
+  .dz-burst__core {
+    animation: none !important;
+  }
+  .dz-burst__spark {
     animation: none !important;
     opacity: 0 !important;
   }

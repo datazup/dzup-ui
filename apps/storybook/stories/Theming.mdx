@@ -1,5 +1,6 @@
 {/* Theming.mdx */}
-import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks'
+import { Meta } from '@storybook/addon-docs/blocks'
+import { SemanticGrid } from './_blocks/ColorScale.ts'
 
 <Meta title="Guides/Theming" />
 
@@ -43,23 +44,60 @@ Palette values are authored in **OKLCH** for perceptually-uniform lightness, so 
 stay legible. Raw palette steps are **primitive** tokens
 (`--dz-colors-primary-500`); you rarely consume these directly.
 
+## Surface elevation
+
+dzup-ui models depth as a ladder of surface tokens — not ad-hoc shadows. Each tier
+pairs with `--dz-surface-foreground` for legible content. In light mode raised
+surfaces get brighter; in dark mode they pick up more tint.
+
+<SemanticGrid
+  groups={[
+    { title: 'Elevation ladder', tokens: [
+      { token: '--dz-background', note: 'the page' },
+      { token: '--dz-surface-sunken', note: 'recessed wells / tracks' },
+      { token: '--dz-surface', note: 'resting cards' },
+      { token: '--dz-surface-raised', note: 'lifted / dragged' },
+      { token: '--dz-surface-overlay', note: 'menus, popovers, tooltips' },
+    ] },
+  ]}
+/>
+
 ## Semantic color tokens
 
 Components reference **semantic** tokens that automatically remap between light and
-dark. These are the ones to use in app code:
+dark. These are the ones to use in app code. Each intent ships a full state set
+(`hover` / `active` / `muted` / `border` …) — see the
+**[Color Palette](?path=/docs/guides-color-palette--docs)** page for the complete
+reference.
 
-<ColorPalette>
-  <ColorItem title="--dz-primary" subtitle="Primary action" colors={{ base: 'var(--dz-primary)', foreground: 'var(--dz-primary-foreground)', hover: 'var(--dz-primary-hover)', muted: 'var(--dz-primary-muted)' }} />
-  <ColorItem title="--dz-success" subtitle="Positive / confirm" colors={{ base: 'var(--dz-success)', foreground: 'var(--dz-success-foreground)', muted: 'var(--dz-success-muted)' }} />
-  <ColorItem title="--dz-warning" subtitle="Caution" colors={{ base: 'var(--dz-warning)', foreground: 'var(--dz-warning-foreground)', muted: 'var(--dz-warning-muted)' }} />
-  <ColorItem title="--dz-danger" subtitle="Destructive / error" colors={{ base: 'var(--dz-danger)', foreground: 'var(--dz-danger-foreground)', muted: 'var(--dz-danger-muted)' }} />
-  <ColorItem title="--dz-info" subtitle="Informational" colors={{ base: 'var(--dz-info)', foreground: 'var(--dz-info-foreground)', muted: 'var(--dz-info-muted)' }} />
-  <ColorItem title="--dz-background / --dz-foreground" subtitle="Surface + text" colors={{ background: 'var(--dz-background)', foreground: 'var(--dz-foreground)', muted: 'var(--dz-muted)', mutedForeground: 'var(--dz-muted-foreground)' }} />
-</ColorPalette>
+<SemanticGrid
+  groups={[
+    { title: 'Primary action', tokens: [
+      { token: '--dz-primary', note: 'solid fill' },
+      { token: '--dz-primary-hover', note: 'hovered' },
+      { token: '--dz-primary-active', note: 'pressed' },
+      { token: '--dz-primary-muted', note: 'subtle bg' },
+    ] },
+    { title: 'Status', tokens: [
+      { token: '--dz-success', note: 'positive / confirm' },
+      { token: '--dz-warning', note: 'caution' },
+      { token: '--dz-danger', note: 'destructive / error' },
+      { token: '--dz-info', note: 'informational' },
+    ] },
+    { title: 'Neutrals & state', tokens: [
+      { token: '--dz-foreground', note: 'primary text' },
+      { token: '--dz-muted-foreground', note: 'secondary text' },
+      { token: '--dz-border', note: 'borders' },
+      { token: '--dz-ring', note: 'focus ring' },
+      { token: '--dz-link', note: 'hyperlinks' },
+    ] },
+  ]}
+/>
 
 > These swatches read live from `@dzup-ui/tokens` via `var(--dz-*)`, so this page
 > can never drift from the shipped tokens. Toggle the **Theme** toolbar to see them
-> remap. (Full primitive scales live in **[Design Tokens](?path=/docs/guides-design-tokens--docs)**.)
+> remap. (Full primitive scales live in **[Design Tokens](?path=/docs/guides-design-tokens--docs)**;
+> the complete role reference is on **[Color Palette](?path=/docs/guides-color-palette--docs)**.)
 
 ## Do / Don't
 

@@ -217,8 +217,10 @@ const dialogTitleId = computed(() => `block-${props.block.id}-fs-title`)
   font-weight: 600;
   padding: 2px 9px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-primary-muted, #eef2ff);
-  color: var(--dz-primary, #4f46e5);
+  /* Same category-accent tint as BlockCard's chips (`--lp-cat-500` inherited
+     from the panel), legible in light and dark; primary is the fallback. */
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%, var(--dz-surface, #fff));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
 }
 
 .bp-head-controls {
@@ -245,8 +247,10 @@ const dialogTitleId = computed(() => `block-${props.block.id}-fs-title`)
 .bp-stage {
   padding: 24px;
   overflow: auto;
+  /* A faint corner wash in the category accent so each preview's stage hints at
+     its group's colour without competing with the live block on top. */
   background:
-    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 4%, transparent), transparent 38%),
+    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #6366f1)) 6%, transparent), transparent 42%),
     var(--dz-background, #fff);
 }
 

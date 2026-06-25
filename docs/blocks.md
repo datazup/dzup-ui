@@ -337,6 +337,71 @@ A deliberately generous, **48-block** catalog across five categories, every bloc
 (a complete, demo-able set spanning marketing + application + auth); the rest are fast-follows. Component
 names below are verified against `packages/core/src/components/`.
 
+> **Shipped delta — "Forms & Inputs" focus (2026-06-24).** The registry now has a **sixth** category,
+> `forms` ("Forms & Inputs"), added to exhaustively exercise the **Inputs** (8/8) and **Forms** (31/31)
+> component families. It ships the planned `contact-form`, `forgot-password`, `otp-verify`, plus
+> `billing-form` (shipped id `payment-form`) and `filters-sidebar` (shipped id `filter-panel`); the
+> planned `newsletter` (§4.1) and `profile-form` (§4.2) also shipped here. It adds **seven blocks not in
+> the original catalog**, each retiring otherwise-uncovered controls: `booking-form` (DatePicker /
+> TimePicker / NumberInput), `record-form` (Combobox / MultiSelect / Listbox), `category-picker`
+> (TreeSelect / Cascader / DateRangePicker), `appearance-editor` (ColorPicker / Knob), `invoice-builder`
+> (FieldArray / Inplace), `access-transfer` (Transfer / PersonaSelector / Mention), and `float-label-form`
+> (FloatLabel). The `Done` checkboxes below are ticked for these; ids that differ from the plan are noted
+> inline.
+
+> **Shipped delta — "Data display" focus (2026-06-24).** The registry now has a **seventh** category,
+> `data` ("Data display"), added to showcase the **Data** component family. It ships seven self-contained
+> blocks, each composed primarily from Data-family components (with free chrome): `data-grid` (DzDataGrid —
+> sortable / multi-select / paginated, with a `#cell` slot for avatars + status badges), `activity-timeline`
+> (DzTimeline / DzTimelineItem), `detail-descriptions` (DzDescriptions / DzDescriptionsItem),
+> `file-tree` (DzTree with per-node icons + selection), `collection-gallery` (DzDataView — list/grid toggle,
+> sort, paginate), `leaderboard` (DzList / DzListItem + DzAnimatedNumber count-up), and `release-countdown`
+> (DzCountdown + DzAnimatedNumber). Verified with the registry guard (Vitest), the landing `vue-tsc`
+> typecheck (0 errors in the new files), and `vite build` (success); ESLint stays out of the loop (§3.6).
+
+> **Shipped delta — "Layout" focus (2026-06-24).** The registry now has an eighth category, `layout`
+> ("Layout"), added to exercise the **Layout** component family end-to-end. It ships seven self-contained
+> blocks, each centered on a different Layout primitive (with free chrome): `bento-grid` (DzGrid spanning
+> tiles + DzPanel + DzAspectRatio), `resizable-workspace` (DzResizable / DzResizablePanel /
+> DzResizableHandle + DzScrollArea + DzToolbar — a draggable IDE shell), `masonry-gallery` (DzMasonry +
+> DzAspectRatio), `sticky-aside` (DzAffix pinned table-of-contents + DzContainer + DzFlex + DzScrollArea),
+> `toolbar-canvas` (DzToolbar start/center/end + DzFlex rail + DzSpacer + DzScrollArea + DzPanel inspector),
+> `page-scaffold` (a whole page from DzContainer / DzGrid / DzFlex / DzStack / DzSpacer / DzDivider), and
+> `collapsible-sections` (collapsible DzPanels + standalone DzCollapse). Across the set every Layout export
+> is used: Grid, Flex, Stack, Container, Spacer, Divider, Panel, Toolbar, Resizable, ScrollArea, Masonry,
+> AspectRatio, Affix and Collapse. Verified with the registry guard (Vitest, 244 passing), the landing
+> `vue-tsc` typecheck (0 errors in the new files), and `vite build` (success); ESLint stays out of the loop
+> (§3.6).
+
+> **Shipped delta — "Overlays" focus (2026-06-25).** The registry now has a ninth category, `overlays`
+> ("Overlays"), added to exercise the **Overlays** component family end-to-end. It ships nine self-contained
+> blocks, each centered on a different overlay primitive (with free chrome): `command-menu` (DzCommandPalette
+> — grouped, searchable, ⌘K), `account-menu` (DzDropdownMenu with header, icon/shortcut items, separators),
+> `context-menu-board` (DzContextMenu right-click actions with a disabled item + destructive delete),
+> `info-popovers` (DzPopover — a profile hover card + a non-modal filter panel with DzSwitch rows),
+> `tooltip-toolbar` (per-side DzTooltips with DzKbd shortcuts over a DzIconButton toolbar), `create-dialog`
+> (focus-trapped DzDialog modal form with DzDialogClose), `confirm-actions` (modal DzConfirmDialog incl. an
+> async/loading confirm + inline DzPopconfirm row deletes), `detail-sheet` (a slide-out DzSheet record
+> panel), and `product-tour` (DzTour spotlight onboarding over a mini dashboard). Across the set every
+> Overlays export is exercised: CommandPalette, DropdownMenu, ContextMenu, Popover, Tooltip, Dialog,
+> ConfirmDialog, Popconfirm, Sheet and Tour. Verified with the registry guard (Vitest, 280 passing), the
+> landing `vue-tsc` typecheck (0 errors in the new files), and `vite build` (success); ESLint stays out of
+> the loop (§3.6).
+
+> **Shipped delta — "Media" focus (2026-06-25).** The registry now has a tenth category, `media` ("Media"),
+> added to exercise the **Media** component family end-to-end. It ships six self-contained blocks, each
+> centered on a different Media primitive (with free chrome): `media-gallery` (an asymmetric DzImage /
+> DzAspectRatio grid opening a focus-trapped DzLightbox), `media-carousel` (a looping, autoplaying
+> DzCarousel of DzImage slides with DzCarouselPrevious / DzCarouselNext / DzCarouselDots and gradient
+> captions), `media-comparison` (a draggable, keyboard-operable DzImageComparison with before/after label
+> chips, wired to `v-model:position`), `media-team` (a stacked DzAvatarGroup "+N" overflow over a DzAvatar
+> roster with presence dots), `media-qr` (a DzQRCode handoff card with a centered `#logo` brand mark,
+> error-level H, and an expire/refresh status flow), and `media-watermark` (a confidential DzImage draped in
+> a tiled, rotated DzWatermark). Across the set every Media export is exercised: Image, AspectRatio (Layout),
+> Lightbox, Carousel (+ Slide / Previous / Next / Dots), ImageComparison, Avatar, AvatarGroup, QRCode and
+> Watermark. Verified with the registry guard (Vitest, 304 passing), the landing `vue-tsc` typecheck (0
+> errors in the new files), and `vite build` (success); ESLint stays out of the loop (§3.6).
+
 ### 4.1 Marketing (14 blocks)
 
 | Done | ★ | id | Block | Built from (real Dz* components) |
@@ -354,7 +419,7 @@ names below are verified against `packages/core/src/components/`.
 | [ ] |   | `testimonial-quote` | **Single pull-quote** — big blockquote | `DzBlockquote`, `DzAvatar`, `DzText` |
 | [ ] | ★ | `faq` | **FAQ accordion** | `DzAccordion`, `DzAccordionItem`, `DzAccordionTrigger`, `DzAccordionContent` |
 | [ ] | ★ | `cta-band` | **CTA band** — headline + buttons on gradient | `DzHeading`, `DzText`, `DzButton` |
-| [ ] |   | `newsletter` | **Newsletter signup** — inline email capture | `DzInput`, `DzButton`, `DzText` |
+| [x] |   | `newsletter` | **Newsletter signup** — inline email capture (shipped id `newsletter-form`, `forms`) | `DzInput`, `DzButton`, `DzText` |
 | [ ] | ★ | `footer` | **Multi-column footer** — link columns, social, theme toggle | `DzText`, `DzDivider`, `DzIconButton`, `DzColorModeToggle` |
 | [ ] |   | `team-grid` | **Team grid** — member cards with socials | `DzCard`, `DzAvatar`, `DzText`, `DzIconButton` |
 | [ ] |   | `banner` | **Announcement banner** — dismissible top bar | `DzAlert`/`DzBadge`, `DzIconButton` |
@@ -374,7 +439,7 @@ names below are verified against `packages/core/src/components/`.
 | [ ] |   | `activity-feed` | **Activity feed** — timeline of events | `DzTimeline`, `DzTimelineItem`, `DzAvatar`, `DzText`, `DzBadge` |
 | [ ] |   | `notifications-panel` | **Notifications panel** — tabbed list with unread | `DzTabs`, `DzNotification`, `DzBadge`, `DzAvatar`, `DzButton` |
 | [ ] | ★ | `settings-layout` | **Settings layout** — section nav + form panels | `DzTabs`/`DzSidebar`, `DzFormField`, `DzSwitch`, `DzSelect`, `DzButton`, `DzDivider` |
-| [ ] |   | `profile-form` | **Profile settings form** — avatar upload + fields | `DzFormField`, `DzInput`, `DzTextarea`, `DzFileUpload`, `DzButton` |
+| [x] |   | `profile-form` | **Profile settings form** — avatar upload + fields (shipped in `forms`) | `DzFormField`, `DzInput`, `DzTextarea`, `DzFileUpload`, `DzButton` |
 | [ ] |   | `kanban-column` | **Kanban column (static)** — board column of task cards | `DzCard`, `DzBadge`, `DzAvatar`, `DzTag` |
 | [ ] |   | `command-launcher` | **Command palette launcher** — ⌘K trigger + palette | `DzCommandPalette`, `DzKbd`, `DzButton` |
 | [ ] |   | `descriptions-panel` | **Detail / descriptions panel** — key/value record view | `DzDescriptions`, `DzDescriptionsItem`, `DzBadge` |
@@ -386,12 +451,12 @@ names below are verified against `packages/core/src/components/`.
 | [ ] | ★ | `sign-in` | **Sign-in card** — email/password, remember, social, links | `DzCard`, `DzFormField`, `DzInput`, `DzPasswordInput`, `DzCheckbox`, `DzButton`, `DzDivider` |
 | [ ] | ★ | `sign-up` | **Sign-up card** — name/email/password + strength meter | `DzFormField`, `DzInput`, `DzPasswordInput`, `DzProgress`, `DzCheckbox`, `DzButton` |
 | [ ] | ★ | `auth-split` | **Two-column auth** — form left, brand panel right | layout + `DzImage`, `DzHeading`, `DzText`, the `sign-in` form |
-| [ ] |   | `forgot-password` | **Forgot password** — email + confirmation state | `DzFormField`, `DzInput`, `DzButton`, `DzResult` |
-| [ ] |   | `otp-verify` | **OTP verification** — code entry + resend countdown | `DzOtpInput`, `DzButton`, `DzCountdown`, `DzText` |
+| [x] |   | `forgot-password` | **Forgot password** — email + confirmation state | `DzFormField`, `DzInput`, `DzFormMessage`, `DzButton`, `DzCard` |
+| [x] |   | `otp-verify` | **OTP verification** — code entry + resend countdown | `DzOtpInput`, `DzButton`, `DzText` |
 | [ ] | ★ | `wizard` | **Multi-step form wizard** — stepper + step bodies + nav | `DzStepper`, `DzStepperItem`, `DzFormField`, `DzInput`, `DzButton` |
-| [ ] |   | `contact-form` | **Contact form** — name/email/message + validation | `DzFormField`, `DzInput`, `DzTextarea`, `DzSelect`, `DzButton` |
-| [ ] |   | `billing-form` | **Billing / payment form** — card fields with masks | `DzFormField`, `DzInput`, `DzInputMask`, `DzSelect`, `DzButton` |
-| [ ] |   | `filters-sidebar` | **Search filters sidebar** — facets for a results page | `DzCheckboxGroup`, `DzRangeSlider`, `DzRating`, `DzAccordion`, `DzButton` |
+| [x] |   | `contact-form` | **Contact form** — name/email/message + validation (shipped in `forms`) | `DzFormField`, `DzInput`, `DzTextarea`, `DzSelect`, `DzButton` |
+| [x] |   | `billing-form` | **Billing / payment form** — card fields with masks (shipped id `payment-form`, `forms`) | `DzFormField`, `DzInput`, `DzInputMask`, `DzInputGroup`, `DzSelect`, `DzButton` |
+| [x] |   | `filters-sidebar` | **Search filters sidebar** — facets for a results page (shipped id `filter-panel`, `forms`) | `DzSearchInput`, `DzCheckboxGroup`, `DzRangeSlider`, `DzRadioGroup`, `DzSwitch`, `DzButton` |
 
 ### 4.4 Commerce (6 blocks — fast-follow)
 

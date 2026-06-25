@@ -299,7 +299,7 @@ gallery/                    # the showcase UI (consumes src/motion/*)
 
 ## 6. The Animation Catalog (ready-made effects on free components)
 
-Eight categories, **~32 ready-made effects**. Each is built from `@dzup-ui/core`
+Nine categories, **36 ready-made effects**. Each is built from `@dzup-ui/core`
 components and `--dz-*` tokens, has a reduced-motion fallback, and is exposed as a
 reusable primitive (`type`: **D**irective / **C**omposable / **Cmp**onent / **CSS**
 utility).
@@ -368,7 +368,20 @@ utility).
 | 31 | **Tabs indicator slide** | Active-tab underline glides between tabs | Comp + `DzTabs` | `DzTabs` | instant move |
 | 32 | **Accordion height** | Smooth expand/collapse (grid-rows/`height` via FLIP) | Comp + `DzAccordion` | `DzAccordion` | instant open/close |
 
-> **Counts to surface on the Ecosystem tile once live:** "32 effects · 8
+### 6.9 Feedback & confirmation — `#feedback`
+Micro-confirmations that close the loop on a **discrete user action** (submit, tap,
+like) — distinct from the ambient/system-driven Attention family (§6.7). Each is
+triggered by a gesture, resolves once, and uses transform/opacity/stroke only.
+Displayed on the gallery between Attention and Transitions.
+
+| # | Name | What it does | Type | Pairs with | Reduced-motion fallback |
+|---|---|---|---|---|---|
+| 33 | **Success check** | SVG ring + tick draw in (stroke-dashoffset) with a small pop on completion | Cmp `DzSuccessCheck` | `DzButton`, forms/checkout | mark shown fully drawn instantly |
+| 34 | **Confetti burst** | Celebratory multi-colour particle pop on a milestone action | Cmp `DzConfetti` (exposes `burst()`) | `DzButton` (CTA) | `burst()` is a no-op (no particles) |
+| 35 | **Error shake** | Damped horizontal shake + red invalid state rejects bad input | CSS util `.dz-shake` | `DzInput`, `DzButton` | no shake; invalid/red state only |
+| 36 | **Like pop** | Toggle pops in scale and radiates colour sparks on the rising edge | Cmp `DzBurst` | `DzToggleButton`, `DzIconButton` | pressed/colour state only |
+
+> **Counts to surface on the Ecosystem tile once live:** "36 effects · 9
 > categories" (replacing the `Motion · Effects` meta), mirroring the count-contrast
 > framing used elsewhere on the page.
 

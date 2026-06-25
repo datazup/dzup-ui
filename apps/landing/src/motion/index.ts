@@ -63,3 +63,12 @@ export { default as DzBorderBeam } from './components/DzBorderBeam.vue'
 export { default as DzMarquee } from './components/DzMarquee.vue'
 export { default as DzFlip } from './components/DzFlip.vue'
 export { default as DzShimmer } from './components/DzShimmer.vue'
+
+// Feedback & confirmation family (docs/animations.md §6.9, effects 33–36) —
+// micro-confirmations of a discrete user action: the success-check draw (33),
+// the celebratory confetti burst (34) and the like-pop spark (36) are components;
+// error shake (35) is the `.dz-shake` CSS utility in tokens.css, so it needs no
+// dedicated wrapper export.
+export { default as DzSuccessCheck } from './components/DzSuccessCheck.vue'
+export { default as DzConfetti } from './components/DzConfetti.vue'
+export { default as DzBurst } from './components/DzBurst.vue'

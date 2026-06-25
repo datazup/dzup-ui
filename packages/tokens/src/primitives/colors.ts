@@ -54,8 +54,22 @@ interface PaletteConfig {
   readonly hue: number
 }
 
-/** All required color palettes with their OKLCH base values */
+/**
+ * All color palettes with their OKLCH base values (the `chroma` is the chroma of
+ * the `500` step; every other step scales it via `CHROMA_MULTIPLIER`).
+ *
+ * Two groups:
+ *
+ *  1. Intent palettes — wired to semantic roles (`--dz-primary`, `--dz-danger`,
+ *     …). Their hues are load-bearing; do not retune without auditing contrast.
+ *  2. Decorative palettes — a Tailwind-aligned spectrum for data-viz, tags,
+ *     illustrations, charts, and richer block/template design. They have no
+ *     semantic meaning on their own; reach for them only when no intent token
+ *     expresses your purpose. Hues are spaced ~15–20° apart around the OKLCH
+ *     wheel so adjacent categorical series stay visually distinct.
+ */
 export const PALETTE_CONFIGS = {
+  /* ── Intent palettes ── */
   primary: { chroma: 0.22, hue: 260 },
   secondary: { chroma: 0.14, hue: 290 },
   neutral: { chroma: 0.01, hue: 260 },
@@ -66,6 +80,32 @@ export const PALETTE_CONFIGS = {
   warning: { chroma: 0.19, hue: 92 },
   danger: { chroma: 0.20, hue: 25 },
   info: { chroma: 0.14, hue: 230 },
+
+  /* ── Decorative spectrum (chromatic) ── */
+  rose: { chroma: 0.20, hue: 12 },
+  red: { chroma: 0.21, hue: 27 },
+  orange: { chroma: 0.19, hue: 55 },
+  amber: { chroma: 0.18, hue: 75 },
+  yellow: { chroma: 0.18, hue: 100 },
+  lime: { chroma: 0.19, hue: 128 },
+  green: { chroma: 0.18, hue: 150 },
+  emerald: { chroma: 0.17, hue: 165 },
+  teal: { chroma: 0.14, hue: 185 },
+  cyan: { chroma: 0.14, hue: 210 },
+  sky: { chroma: 0.15, hue: 235 },
+  blue: { chroma: 0.20, hue: 258 },
+  indigo: { chroma: 0.19, hue: 275 },
+  violet: { chroma: 0.20, hue: 292 },
+  purple: { chroma: 0.20, hue: 310 },
+  fuchsia: { chroma: 0.22, hue: 328 },
+  pink: { chroma: 0.20, hue: 350 },
+
+  /* ── Decorative neutrals (undertones) ──
+   * `neutral` (above) is the canonical gray. These add a cool (slate), a near-
+   * pure (zinc), and a warm (stone) ramp so brand surfaces can pick a tint. */
+  slate: { chroma: 0.018, hue: 255 },
+  zinc: { chroma: 0.006, hue: 286 },
+  stone: { chroma: 0.012, hue: 70 },
 } as const satisfies Record<string, PaletteConfig>
 
 export type PaletteName = keyof typeof PALETTE_CONFIGS
@@ -106,16 +146,12 @@ export function formatOklch(color: OklchColor): string {
   return `oklch(${l} ${c} ${h})`
 }
 
-/** All generated palettes */
-export const palettes: Record<PaletteName, ColorPalette> = {
-  primary: generatePalette(PALETTE_CONFIGS.primary),
-  secondary: generatePalette(PALETTE_CONFIGS.secondary),
-  neutral: generatePalette(PALETTE_CONFIGS.neutral),
-  success: generatePalette(PALETTE_CONFIGS.success),
-  warning: generatePalette(PALETTE_CONFIGS.warning),
-  danger: generatePalette(PALETTE_CONFIGS.danger),
-  info: generatePalette(PALETTE_CONFIGS.info),
-}
+/** All generated palettes, derived from every entry in PALETTE_CONFIGS */
+export const palettes = Object.fromEntries(
+  (Object.entries(PALETTE_CONFIGS) as [PaletteName, PaletteConfig][]).map(
+    ([name, config]) => [name, generatePalette(config)],
+  ),
+) as Record<PaletteName, ColorPalette>
 
 /**
  * Generate CSS custom properties for all color palettes.

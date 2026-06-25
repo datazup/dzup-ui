@@ -1,91 +1,178 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { CategoryMeta } from '../../blocks/registry.ts'
 
 /**
- * BlockCategoryNav — sticky in-page category nav for /blocks (docs/blocks.md §3.1).
+ * BlockCategoryNav — sticky tab switcher for /blocks (docs/blocks.md §3.1).
  *
- * Lists the catalog categories as hash anchors (`#<category>`) and highlights the
- * one currently in view via a single IntersectionObserver over the section
- * elements (matched by `category.id`). Smooth vs. instant scrolling is handled by
- * the global `html { scroll-behavior }` rule in index.html, which already degrades
- * to `auto` under `prefers-reduced-motion` — so anchor clicks honor it for free.
+ * Previously a set of hash anchors that scrolled down one long page; now a real
+ * tab control. The page shows ONE category at a time, so this owns the active
+ * category (`v-model`) rather than tracking scroll position. An animated pill
+ * indicator glides behind the active tab on change.
  *
- * Only the categories passed in are rendered (the page filters out empty ones),
- * so the nav never advertises a section that isn't on the page.
+ * Accessibility follows the APG tabs pattern with **manual activation** — each
+ * category panel mounts a stack of heavy live previews, so arrow keys only move
+ * focus (roving tabindex); selection happens on Enter / Space / click. Keyboard:
+ * Left/Right move focus, Home/End jump to the ends, Enter/Space activate.
  */
 const props = defineProps<{
   /** Non-empty categories to list, in browse order. */
   categories: CategoryMeta[]
+  /** id prefix for the tabpanels this nav controls (for aria-controls). */
+  panelIdPrefix?: string
 }>()
 
-const activeId = ref<string>(props.categories[0]?.id ?? '')
+/** Selected category — drives which panel the page renders. */
+const active = defineModel<string>({ required: true })
 
-let observer: IntersectionObserver | null = null
-/** id → distance of the section top from the viewport top (for nearest-to-top pick). */
-const visible = new Map<string, number>()
+/** Which tab currently holds the roving tabindex (follows focus, not selection). */
+const focusId = ref<string>(active.value)
 
-function recomputeActive() {
-  if (visible.size === 0) return
-  let bestId = ''
-  let bestTop = Number.POSITIVE_INFINITY
-  for (const [id, top] of visible) {
-    // The section nearest the top of the viewport (but still on screen) wins.
-    const distance = Math.abs(top)
-    if (distance < bestTop) {
-      bestTop = distance
-      bestId = id
-    }
-  }
-  if (bestId) activeId.value = bestId
+/** CSS var reference to a category's decorative accent shade. */
+function accentVar(category: CategoryMeta): string {
+  return `var(--dz-colors-${category.accent}-500)`
 }
 
-onMounted(() => {
-  if (typeof IntersectionObserver === 'undefined') return
+/**
+ * The active category's accent, exposed on the track as `--pill-accent` so the
+ * sliding pill and the active tab's label both tint to the current group.
+ */
+const pillAccent = computed(() => {
+  const current = props.categories.find((c) => c.id === active.value)
+  return current ? accentVar(current) : 'var(--dz-primary)'
+})
 
-  observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        const id = entry.target.id
-        if (entry.isIntersecting) {
-          visible.set(id, entry.boundingClientRect.top)
-        } else {
-          visible.delete(id)
-        }
-      }
-      recomputeActive()
-    },
-    // Bias the "active" band toward the top of the viewport so the highlight
-    // tracks the section the reader is actually on, not one scrolling in.
-    { rootMargin: '-20% 0px -70% 0px', threshold: 0 },
-  )
+/** The scrolling track + per-tab button elements (for the indicator + focus). */
+const trackEl = ref<HTMLElement | null>(null)
+const tabEls = new Map<string, HTMLButtonElement>()
 
-  for (const category of props.categories) {
-    const el = document.getElementById(category.id)
-    if (el) observer.observe(el)
+/** Indicator geometry, in px relative to the track. */
+const indicatorX = ref(0)
+const indicatorW = ref(0)
+const indicatorReady = ref(false)
+
+function setTabEl(id: string, el: Element | null) {
+  if (el) tabEls.set(id, el as HTMLButtonElement)
+  else tabEls.delete(id)
+}
+
+/** Move the pill behind the active tab and keep that tab in view. */
+function syncIndicator() {
+  const el = tabEls.get(active.value)
+  if (!el) return
+  indicatorX.value = el.offsetLeft
+  indicatorW.value = el.offsetWidth
+  indicatorReady.value = true
+  el.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+}
+
+function tabId(id: string): string {
+  return `blocks-tab-${id}`
+}
+
+function panelId(id: string): string {
+  return `${props.panelIdPrefix ?? 'blocks-panel'}-${id}`
+}
+
+function onKeydown(event: KeyboardEvent) {
+  const ids: string[] = props.categories.map((c) => c.id)
+  const current = ids.indexOf(focusId.value)
+  if (current === -1) return
+
+  let next = current
+  switch (event.key) {
+    case 'ArrowRight':
+    case 'ArrowDown':
+      next = (current + 1) % ids.length
+      break
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      next = (current - 1 + ids.length) % ids.length
+      break
+    case 'Home':
+      next = 0
+      break
+    case 'End':
+      next = ids.length - 1
+      break
+    default:
+      return
+  }
+  const target = ids[next]
+  if (target === undefined) return
+  event.preventDefault()
+  focusId.value = target
+  tabEls.get(target)?.focus()
+}
+
+function select(id: string) {
+  focusId.value = id
+  active.value = id
+}
+
+// External changes to the selection (pager / deep link) move the roving focus
+// and the indicator with it.
+watch(active, async (id) => {
+  focusId.value = id
+  await nextTick()
+  syncIndicator()
+})
+
+let resizeObserver: ResizeObserver | null = null
+
+onMounted(async () => {
+  await nextTick()
+  syncIndicator()
+
+  if (typeof ResizeObserver !== 'undefined' && trackEl.value) {
+    // Reposition when the track reflows (font load, viewport / wrap changes).
+    resizeObserver = new ResizeObserver(() => syncIndicator())
+    resizeObserver.observe(trackEl.value)
   }
 })
 
 onBeforeUnmount(() => {
-  observer?.disconnect()
-  observer = null
+  resizeObserver?.disconnect()
+  resizeObserver = null
 })
 </script>
 
 <template>
   <nav class="cat-nav" aria-label="Block categories">
-    <ul class="cat-nav-list">
-      <li v-for="category in categories" :key="category.id">
-        <a
-          class="cat-nav-link"
-          :class="{ 'is-active': activeId === category.id }"
-          :href="`#${category.id}`"
-          :aria-current="activeId === category.id ? 'true' : undefined"
-        >
-          {{ category.label }}
-        </a>
-      </li>
-    </ul>
+    <div
+      ref="trackEl"
+      class="cat-nav-track"
+      role="tablist"
+      aria-label="Block categories"
+      :style="{ '--pill-accent': pillAccent }"
+      @keydown="onKeydown"
+    >
+      <!-- Sliding active-tab indicator (decorative; the buttons carry state). -->
+      <span
+        class="cat-nav-indicator"
+        :class="{ 'is-ready': indicatorReady }"
+        :style="{ transform: `translateX(${indicatorX}px)`, width: `${indicatorW}px` }"
+        aria-hidden="true"
+      />
+
+      <button
+        v-for="category in categories"
+        :key="category.id"
+        :ref="(el) => setTabEl(category.id, el as Element | null)"
+        type="button"
+        role="tab"
+        class="cat-nav-tab"
+        :class="{ 'is-active': active === category.id }"
+        :style="{ '--tab-accent': accentVar(category) }"
+        :id="tabId(category.id)"
+        :aria-selected="active === category.id"
+        :aria-controls="panelId(category.id)"
+        :tabindex="focusId === category.id ? 0 : -1"
+        @click="select(category.id)"
+      >
+        {{ category.label }}
+      </button>
+    </div>
   </nav>
 </template>
 
@@ -100,52 +187,87 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid var(--lp-hairline);
 }
 
-.cat-nav-list {
-  list-style: none;
+.cat-nav-track {
+  position: relative;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 8px 24px;
   max-width: var(--lp-container, 1120px);
   display: flex;
-  flex-wrap: wrap;
   gap: 4px;
   min-height: 52px;
   align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.cat-nav-link {
+.cat-nav-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* The gliding pill behind the active tab. */
+.cat-nav-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 34px;
+  border-radius: var(--dz-radius-full, 9999px);
+  /* Soft tint of the active group's accent — adapts to light/dark by mixing
+     against the surface, so the active tab's label stays readable on top. */
+  background: color-mix(in oklch, var(--pill-accent, var(--dz-primary, #4f46e5)) 15%, var(--dz-surface, #fff));
+  /* Hidden until measured so it never flashes at 0,0 on first paint. */
+  opacity: 0;
+  transform: translateX(0);
+  margin-top: -17px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cat-nav-indicator.is-ready {
+  opacity: 1;
+  transition:
+    transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    width var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    background-color var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.cat-nav-tab {
+  position: relative;
+  z-index: 1;
+  flex: none;
   display: inline-flex;
   align-items: center;
   padding: 7px 14px;
+  border: 0;
+  background: transparent;
   border-radius: var(--dz-radius-full, 9999px);
+  font-family: inherit;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
   color: var(--dz-muted-foreground, #64748b);
-  text-decoration: none;
-  transition:
-    color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out),
-    background var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
-.cat-nav-link:hover {
-  color: var(--dz-foreground, #1a202c);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 7%, transparent);
+.cat-nav-tab:hover {
+  /* Preview the tab's own hue on hover (mixed toward the foreground for
+     legibility against the bar). */
+  color: color-mix(in oklch, var(--tab-accent, var(--dz-primary, #4f46e5)) 55%, var(--dz-foreground, #1a202c));
 }
 
-.cat-nav-link.is-active {
-  color: var(--dz-primary, #4f46e5);
-  background: var(--dz-primary-muted, #eef2ff);
+.cat-nav-tab.is-active {
+  /* Active label tints to the group accent that the pill behind it carries. */
+  color: color-mix(in oklch, var(--pill-accent, var(--dz-primary, #4f46e5)) 70%, var(--dz-foreground, #1a202c));
 }
 
-.cat-nav-link:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+.cat-nav-tab:focus-visible {
+  outline: 2px solid var(--tab-accent, var(--dz-ring, #4f46e5));
   outline-offset: 2px;
 }
 
-@media (max-width: 560px) {
-  .cat-nav-list {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+@media (prefers-reduced-motion: reduce) {
+  .cat-nav-indicator.is-ready {
+    transition: none;
   }
 }
 </style>

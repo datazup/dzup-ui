@@ -10,11 +10,21 @@
  * Values reference primitive CSS custom properties via var().
  */
 export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
-  /* ── Surfaces ── */
+  /* ── Surfaces ──
+   * Elevation ladder, lowest → highest:
+   *   background  → the page itself
+   *   surface-sunken → recessed wells, table stripes, inset tracks
+   *   surface     → resting cards / panels
+   *   surface-raised → cards lifted on hover / dragged items
+   *   surface-overlay → floating layers (menus, popovers, tooltips)
+   * Each tier pairs with `--dz-surface-foreground` for text/icons. */
   '--dz-background': 'var(--dz-colors-neutral-100)',
   '--dz-foreground': 'var(--dz-colors-neutral-900)',
+  '--dz-surface-sunken': 'var(--dz-colors-neutral-200)',
   '--dz-surface': 'oklch(1 0 0)',
   '--dz-surface-raised': 'oklch(1 0 0)',
+  '--dz-surface-overlay': 'oklch(1 0 0)',
+  '--dz-surface-foreground': 'var(--dz-colors-neutral-900)',
   '--dz-muted': 'var(--dz-colors-neutral-200)',
   // neutral-600 (not -500) so muted text clears WCAG AA 4.5:1 on both the page
   // surface (neutral-100 → 5.55:1) and muted surfaces (neutral-200 → 4.61:1).
@@ -25,21 +35,51 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Borders ── */
   '--dz-border': 'var(--dz-colors-neutral-300)',
   '--dz-border-hover': 'var(--dz-colors-neutral-300)',
+  // A lighter line for non-interactive separators inside content (dividers,
+  // table rows) where the standard `--dz-border` would feel too heavy.
+  '--dz-divider': 'var(--dz-colors-neutral-200)',
   '--dz-ring': 'var(--dz-colors-primary-500)',
+  // Ring offset = the surface the focused element sits on, so a 2px offset ring
+  // reads as a gap rather than a second colored band.
+  '--dz-ring-offset': 'var(--dz-background)',
 
-  /* ── Primary ── */
+  /* ── Links ── */
+  '--dz-link': 'var(--dz-colors-primary-600)',
+  '--dz-link-hover': 'var(--dz-colors-primary-700)',
+
+  /* ── Disabled (applies to any control) ── */
+  '--dz-disabled': 'var(--dz-colors-neutral-100)',
+  '--dz-disabled-foreground': 'var(--dz-colors-neutral-400)',
+
+  /* ── Highlight (selected list / menu / option rows) ── */
+  '--dz-highlight': 'var(--dz-colors-primary-100)',
+  '--dz-highlight-foreground': 'var(--dz-colors-primary-700)',
+
+  /* ── Primary ──
+   * Per-intent state set (shared across every intent below):
+   *   {intent}            solid fill            (shade 500)
+   *   {intent}-foreground guaranteed-legible text on the solid fill
+   *   {intent}-hover      solid fill, hovered   (shade 600)
+   *   {intent}-active     solid fill, pressed   (shade 700)
+   *   {intent}-muted      subtle tinted bg      (shade 100) — badges, alerts
+   *   {intent}-muted-foreground emphasis text on the subtle bg (shade 700)
+   *   {intent}-border     intent-tinted border for subtle/outline containers */
   '--dz-primary': 'var(--dz-colors-primary-500)',
   '--dz-primary-foreground': 'oklch(1 0 0)',
   '--dz-primary-hover': 'var(--dz-colors-primary-600)',
+  '--dz-primary-active': 'var(--dz-colors-primary-700)',
   '--dz-primary-muted': 'var(--dz-colors-primary-100)',
   '--dz-primary-muted-foreground': 'var(--dz-colors-primary-700)',
+  '--dz-primary-border': 'var(--dz-colors-primary-200)',
 
   /* ── Secondary ── */
   '--dz-secondary': 'var(--dz-colors-secondary-500)',
   '--dz-secondary-foreground': 'oklch(1 0 0)',
   '--dz-secondary-hover': 'var(--dz-colors-secondary-600)',
+  '--dz-secondary-active': 'var(--dz-colors-secondary-700)',
   '--dz-secondary-muted': 'var(--dz-colors-secondary-100)',
   '--dz-secondary-muted-foreground': 'var(--dz-colors-secondary-700)',
+  '--dz-secondary-border': 'var(--dz-colors-secondary-200)',
 
   /* ── Accent ── */
   '--dz-accent': 'var(--dz-colors-neutral-100)',
@@ -52,8 +92,11 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   /* ── Status: Success ── */
   '--dz-success': 'var(--dz-colors-success-500)',
   '--dz-success-foreground': 'oklch(1 0 0)',
+  '--dz-success-hover': 'var(--dz-colors-success-600)',
+  '--dz-success-active': 'var(--dz-colors-success-700)',
   '--dz-success-muted': 'var(--dz-colors-success-100)',
   '--dz-success-muted-foreground': 'var(--dz-colors-success-700)',
+  '--dz-success-border': 'var(--dz-colors-success-200)',
 
   /* ── Status: Warning ──
    * `--dz-warning` stays at shade 500 so it remains legible as a text/border
@@ -64,20 +107,28 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-warning-foreground': 'var(--dz-colors-neutral-900)',
   '--dz-warning-solid': 'var(--dz-colors-warning-300)',
   '--dz-warning-solid-hover': 'var(--dz-colors-warning-400)',
+  '--dz-warning-active': 'var(--dz-colors-warning-500)',
   '--dz-warning-muted': 'var(--dz-colors-warning-100)',
   '--dz-warning-muted-foreground': 'var(--dz-colors-warning-700)',
+  '--dz-warning-border': 'var(--dz-colors-warning-300)',
 
   /* ── Status: Danger ── */
   '--dz-danger': 'var(--dz-colors-danger-500)',
   '--dz-danger-foreground': 'oklch(1 0 0)',
+  '--dz-danger-hover': 'var(--dz-colors-danger-600)',
+  '--dz-danger-active': 'var(--dz-colors-danger-700)',
   '--dz-danger-muted': 'var(--dz-colors-danger-100)',
   '--dz-danger-muted-foreground': 'var(--dz-colors-danger-700)',
+  '--dz-danger-border': 'var(--dz-colors-danger-200)',
 
   /* ── Status: Info ── */
   '--dz-info': 'var(--dz-colors-info-500)',
   '--dz-info-foreground': 'oklch(1 0 0)',
+  '--dz-info-hover': 'var(--dz-colors-info-600)',
+  '--dz-info-active': 'var(--dz-colors-info-700)',
   '--dz-info-muted': 'var(--dz-colors-info-100)',
   '--dz-info-muted-foreground': 'var(--dz-colors-info-700)',
+  '--dz-info-border': 'var(--dz-colors-info-200)',
 
   /* ── Input ── */
   '--dz-input-bg': 'oklch(1 0 0)',
@@ -93,8 +144,11 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-popover': 'oklch(1 0 0)',
   '--dz-popover-foreground': 'var(--dz-colors-neutral-900)',
 
-  /* ── Overlay ── */
+  /* ── Overlay / Scrim ── */
   '--dz-overlay-bg': 'oklch(0 0 0 / 0.6)',
+  // `--dz-scrim` is the canonical name for the dimming layer behind modals,
+  // drawers and sheets; `--dz-overlay-bg` is kept as the legacy alias.
+  '--dz-scrim': 'oklch(0 0 0 / 0.6)',
 
   /* ── Sidebar ──
    * Sidebar token values are NOT written at the semantic tier. Tier 3 component
@@ -124,12 +178,20 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-codeblock-header-text': 'var(--dz-colors-neutral-400)',
   '--dz-codeblock-line-number': 'var(--dz-colors-neutral-600)',
 
-  /* ── Chart Colors ── */
+  /* ── Chart / categorical palette ──
+   * A 10-way qualitative scale for data viz. Hues are spread around the wheel so
+   * adjacent series stay distinct; pull from the decorative spectrum rather than
+   * the intent palettes so charts don't read as success/danger by accident. */
   '--dz-chart-1': 'var(--dz-colors-primary-500)',
   '--dz-chart-2': 'var(--dz-colors-secondary-500)',
   '--dz-chart-3': 'var(--dz-colors-success-500)',
   '--dz-chart-4': 'var(--dz-colors-warning-500)',
   '--dz-chart-5': 'var(--dz-colors-danger-500)',
+  '--dz-chart-6': 'var(--dz-colors-cyan-500)',
+  '--dz-chart-7': 'var(--dz-colors-violet-500)',
+  '--dz-chart-8': 'var(--dz-colors-pink-500)',
+  '--dz-chart-9': 'var(--dz-colors-amber-500)',
+  '--dz-chart-10': 'var(--dz-colors-teal-500)',
 
   /* ── Orchestration run status ── */
   '--dz-status-pending': 'var(--dz-muted-foreground)',

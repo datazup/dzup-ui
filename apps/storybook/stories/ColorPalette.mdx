@@ -1,0 +1,157 @@
+{/* ColorPalette.mdx */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { PaletteGrid, SemanticGrid } from './_blocks/ColorScale.ts'
+import { DocTable } from './_blocks/DocTable.ts'
+
+<Meta title="Guides/Color Palette" />
+
+# Color Palette
+
+The dzup-ui palette is authored in **OKLCH** for perceptually-uniform lightness:
+a `-500` step reads as the same visual weight across every hue, and dark-mode
+inversions stay legible. Every swatch below reads **live** from a `var(--dz-*)`
+custom property, so this page can never drift from the shipped tokens — flip the
+**Theme** toolbar to watch the semantic blocks remap.
+
+Two layers make up the system:
+
+1. **Primitive hues** — raw `50 → 950` ramps. Split into _intent_ palettes
+   (wired to semantic roles) and a _decorative_ spectrum (for charts, tags,
+   illustrations, and richer block/template design).
+2. **Semantic roles** — intent-based aliases (`--dz-primary`, `--dz-danger`, …)
+   that remap per theme. **These are what you use in app and component code.**
+
+> Rule of thumb: reach for a **semantic** token first. Drop to a **primitive**
+> step only when no semantic role expresses your intent (e.g. a categorical
+> chart series or a decorative gradient). Never hardcode hex / Tailwind colors
+> (ADR-04).
+
+---
+
+## Intent palettes
+
+These seven ramps back the semantic roles. `primary`/`secondary` carry the brand;
+`success`/`warning`/`danger`/`info` are the status family; `neutral` is the
+canonical gray used for surfaces, borders and text.
+
+<PaletteGrid names={['primary', 'secondary', 'neutral', 'success', 'warning', 'danger', 'info']} />
+
+## Decorative spectrum
+
+A Tailwind-aligned spectrum for data visualization, tags, avatars, illustrations
+and marketing blocks. Hues are spaced ~15–20° apart around the OKLCH wheel so
+adjacent categorical series stay visually distinct. They carry **no** semantic
+meaning — `--dz-colors-rose-500` is just a color, not "danger".
+
+<PaletteGrid names={['rose', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink']} />
+
+### Neutral undertones
+
+`neutral` is the default gray. These add a **cool** (`slate`), a **near-pure**
+(`zinc`) and a **warm** (`stone`) ramp so a brand can give its surfaces a subtle
+temperature without leaving the token system.
+
+<PaletteGrid names={['neutral', 'slate', 'zinc', 'stone']} />
+
+---
+
+## Semantic roles
+
+The tokens you should reach for in code. Each remaps between light and dark — the
+chips below read live, so toggle the **Theme** toolbar to preview both.
+
+### Surfaces & text
+
+An elevation ladder from the page up to floating layers. Each tier pairs with a
+foreground token for legible text/icons.
+
+<SemanticGrid
+  groups={[
+    { title: 'Page & surfaces', tokens: [
+      { token: '--dz-background', note: 'the page itself' },
+      { token: '--dz-surface-sunken', note: 'recessed wells / tracks' },
+      { token: '--dz-surface', note: 'resting cards' },
+      { token: '--dz-surface-raised', note: 'lifted / dragged' },
+      { token: '--dz-surface-overlay', note: 'menus, popovers, tooltips' },
+    ] },
+    { title: 'Text & lines', tokens: [
+      { token: '--dz-foreground', note: 'primary text' },
+      { token: '--dz-muted-foreground', note: 'secondary text' },
+      { token: '--dz-border', note: 'default border' },
+      { token: '--dz-divider', note: 'subtle separators' },
+      { token: '--dz-ring', note: 'focus ring' },
+    ] },
+    { title: 'States', tokens: [
+      { token: '--dz-muted', note: 'subtle fill' },
+      { token: '--dz-disabled', note: 'disabled fill' },
+      { token: '--dz-disabled-foreground', note: 'disabled text' },
+      { token: '--dz-highlight', note: 'selected row bg' },
+      { token: '--dz-link', note: 'hyperlink text' },
+    ] },
+  ]}
+/>
+
+### Intent roles
+
+Every intent ships the same state set: a solid fill plus `hover` / `active`,
+a guaranteed-legible `foreground`, a subtle `muted` bg with its
+`muted-foreground` emphasis text, and an intent-tinted `border`.
+
+<SemanticGrid
+  groups={[
+    { title: 'Primary', tokens: ['--dz-primary', '--dz-primary-hover', '--dz-primary-active', '--dz-primary-muted', '--dz-primary-border'] },
+    { title: 'Secondary', tokens: ['--dz-secondary', '--dz-secondary-hover', '--dz-secondary-active', '--dz-secondary-muted', '--dz-secondary-border'] },
+    { title: 'Success', tokens: ['--dz-success', '--dz-success-hover', '--dz-success-active', '--dz-success-muted', '--dz-success-border'] },
+    { title: 'Warning', tokens: ['--dz-warning', '--dz-warning-solid', '--dz-warning-solid-hover', '--dz-warning-muted', '--dz-warning-border'] },
+    { title: 'Danger', tokens: ['--dz-danger', '--dz-danger-hover', '--dz-danger-active', '--dz-danger-muted', '--dz-danger-border'] },
+    { title: 'Info', tokens: ['--dz-info', '--dz-info-hover', '--dz-info-active', '--dz-info-muted', '--dz-info-border'] },
+  ]}
+/>
+
+### Chart / categorical
+
+A 10-way qualitative scale for data viz. It pulls from the decorative spectrum so
+charts never read as "success" or "danger" by accident.
+
+<SemanticGrid
+  groups={[
+    { title: 'Chart series', tokens: ['--dz-chart-1', '--dz-chart-2', '--dz-chart-3', '--dz-chart-4', '--dz-chart-5', '--dz-chart-6', '--dz-chart-7', '--dz-chart-8', '--dz-chart-9', '--dz-chart-10'] },
+  ]}
+/>
+
+---
+
+## Per-intent token reference
+
+Every intent below exposes this consistent set of roles.
+
+<DocTable
+  head={['Token', 'Role', 'Light', 'Dark']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`--dz-{intent}`', 'Solid fill', 'shade 500', 'shade 400'],
+    ['`--dz-{intent}-foreground`', 'Text on the solid fill', 'white', 'shade 950'],
+    ['`--dz-{intent}-hover`', 'Solid fill, hovered', 'shade 600', 'shade 300'],
+    ['`--dz-{intent}-active`', 'Solid fill, pressed', 'shade 700', 'shade 200'],
+    ['`--dz-{intent}-muted`', 'Subtle tinted bg (badges, alerts)', 'shade 100', 'shade 900'],
+    ['`--dz-{intent}-muted-foreground`', 'Emphasis text on the subtle bg', 'shade 700', 'shade 300'],
+    ['`--dz-{intent}-border`', 'Intent-tinted border', 'shade 200', 'shade 800'],
+  ]}
+/>
+
+> `warning` is the exception: solid fills use the dedicated `--dz-warning-solid`
+> pair (a bright yellow with dark text) instead of a dark fill, in both themes.
+
+## Naming reference
+
+<DocTable
+  head={['Pattern', 'Tier', 'Example']}
+  align={['left', 'left', 'left']}
+  rows={[
+    ['`--dz-colors-{hue}-{step}`', 'primitive', '`--dz-colors-blue-500`'],
+    ['`--dz-{intent}`', 'semantic', '`--dz-primary`, `--dz-danger`'],
+    ['`--dz-{intent}-{state}`', 'semantic', '`--dz-primary-hover`, `--dz-danger-muted`'],
+    ['`--dz-surface{-tier}`', 'semantic', '`--dz-surface-overlay`'],
+    ['`--dz-chart-{n}`', 'semantic', '`--dz-chart-7`'],
+  ]}
+/>

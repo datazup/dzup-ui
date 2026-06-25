@@ -88,8 +88,11 @@ defineProps<{
   font-weight: 600;
   padding: 2px 9px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-primary-muted, #eef2ff);
-  color: var(--dz-primary, #4f46e5);
+  /* Tinted with the active category's decorative accent (`--lp-cat-500`, set on
+     the panel), mixed against surface/foreground so it stays legible in both
+     light and dark; falls back to the brand primary when no accent is in scope. */
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%, var(--dz-surface, #fff));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
 }
 
 .block-card-link {
@@ -99,7 +102,7 @@ defineProps<{
   margin-top: 16px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-primary, #4f46e5);
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
   text-decoration: none;
 }
 
@@ -111,7 +114,7 @@ defineProps<{
 }
 
 .block-card-link:focus-visible .block-card-cover {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
   outline-offset: -2px;
   border-radius: var(--dz-radius-xl, 0.875rem);
 }

@@ -89,12 +89,12 @@ export const LINKS = {
   /** Primary "Browse components" CTA → free Storybook. */
   components: STORYBOOK_BASE,
   /** "Get started" → Storybook Getting Started guide. */
-  gettingStarted: storybookDocs('guides-getting-started'),
+  gettingStarted: storybookDocs('getting-started'),
   /** "Themes" → Storybook Theming guide. */
   theming: storybookDocs('guides-theming'),
   designTokens: storybookDocs('guides-design-tokens'),
   accessibility: storybookDocs('guides-accessibility'),
-  contributing: storybookDocs('guides-contributing'),
+  contributing: storybookDocs('contributing'),
   /** Pro path. Phase 1: the /pro coming-soon route. Phase 2: '/pro/'. */
   pro: '/pro',
   /** External community / source links. */

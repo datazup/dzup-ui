@@ -32,6 +32,29 @@ const categoryLabels = new Map<TemplateCategory, string>(
   TEMPLATE_CATEGORIES.map((c) => [c.key, c.label]),
 )
 
+/** Category key → decorative palette name, for the per-card accent tint. */
+const categoryAccents = new Map<TemplateCategory, string>(
+  TEMPLATE_CATEGORIES.map((c) => [c.key, c.accent]),
+)
+
+/**
+ * Per-card CSS custom properties that paint a template's gallery card in its
+ * accent hue. A template's own `accent` wins over its category default. We emit
+ * a light/dark shade *pair* (600 reads on a light surface, 400 on a dark one)
+ * plus a vivid 500 for the decorative preview wash, then let the stylesheet pick
+ * the right foreground per theme — see the `--tile-accent` rules below. The
+ * `--reveal-delay` keeps the existing staggered entrance.
+ */
+function tileStyle(template: TemplateMeta, index: number): Record<string, string> {
+  const palette = template.accent ?? categoryAccents.get(template.category) ?? 'primary'
+  return {
+    '--reveal-delay': `${index * 45}ms`,
+    '--tile-accent-light': `var(--dz-colors-${palette}-600)`,
+    '--tile-accent-dark': `var(--dz-colors-${palette}-400)`,
+    '--tile-accent-wash': `var(--dz-colors-${palette}-500)`,
+  }
+}
+
 /** Active filter; 'all' shows the full catalogue. */
 const activeCategory = ref<string>('all')
 
@@ -79,7 +102,7 @@ function iconFor(key: string): Component {
         v-for="(template, i) in visibleTemplates"
         :key="template.slug"
         class="lp-card lp-card--hover tile"
-        :style="{ '--reveal-delay': `${i * 45}ms` }"
+        :style="tileStyle(template, i)"
       >
         <div class="tile-head">
           <DzText weight="semibold" as="span">{{ template.name }}</DzText>
@@ -159,7 +182,7 @@ function iconFor(key: string): Component {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -167,7 +190,26 @@ function iconFor(key: string): Component {
   position: relative;
   display: flex;
   flex-direction: column;
+  /* Allow the track to shrink below its content's max-content size so the
+     nowrap/truncate stack text can't force the grid wider than its container. */
+  min-width: 0;
   padding: 20px;
+  /* The card's accent foreground, resolved per theme from the shade pair
+     `tileStyle()` sets inline. The 600 shade carries enough contrast on the
+     light surface; the fallback keeps the brand tint if no accent was emitted.
+     (Inline props only set the *sources*, so the dark rule below can win.) */
+  --tile-accent: var(--tile-accent-light, var(--dz-primary, #4f46e5));
+}
+
+/* Dark surfaces want the lighter 400 shade so the accent stays legible. */
+[data-theme="dark"] .tile {
+  --tile-accent: var(--tile-accent-dark, var(--dz-primary, #818cf8));
+}
+
+/* Tint the card's hover border with its own accent (overrides the global
+   brand-tinted `.lp-card--hover:hover` border for these gallery tiles). */
+.tile.lp-card--hover:hover {
+  border-color: color-mix(in oklch, var(--tile-accent) 36%, var(--lp-hairline));
 }
 
 .tile-head {
@@ -183,7 +225,7 @@ function iconFor(key: string): Component {
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--tile-accent);
   margin-bottom: 16px;
 }
 
@@ -194,8 +236,11 @@ function iconFor(key: string): Component {
   margin-bottom: 16px;
   border-radius: var(--dz-radius-lg, 0.625rem);
   border: 1px solid var(--lp-hairline);
+  /* Decorative accent wash — a soft diagonal tint in the card's hue so the
+     preview reads as colour-coded to its category, not a flat panel. */
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 4%, transparent), transparent 60%),
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--tile-accent-wash, var(--dz-primary, #6366f1)) 12%, transparent), transparent 62%),
+    radial-gradient(circle at 0% 100%, color-mix(in oklch, var(--tile-accent-wash, var(--dz-primary, #6366f1)) 7%, transparent), transparent 55%),
     var(--dz-background, #fff);
   /* Decorative only — the card cover link owns the interaction. */
   pointer-events: none;
@@ -205,7 +250,7 @@ function iconFor(key: string): Component {
 }
 
 .tile-icon {
-  color: var(--dz-primary, #4f46e5);
+  color: var(--tile-accent);
 }
 
 .tile-thumb {
@@ -226,7 +271,7 @@ function iconFor(key: string): Component {
   gap: 5px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--tile-accent);
   text-decoration: none;
 }
 
@@ -238,7 +283,7 @@ function iconFor(key: string): Component {
 }
 
 .tile-link:focus-visible .tile-link-cover {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--tile-accent);
   outline-offset: -2px;
   border-radius: var(--dz-radius-xl, 0.875rem);
 }
@@ -249,13 +294,13 @@ function iconFor(key: string): Component {
 
 @media (max-width: 900px) {
   .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 560px) {
   .gallery-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .templates-toolbar {
     margin-top: 0;

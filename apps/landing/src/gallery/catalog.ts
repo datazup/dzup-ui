@@ -46,7 +46,7 @@ export interface CatalogEntry {
 }
 
 /**
- * The eight gallery categories, in display order (docs/animations.md §6).
+ * The nine gallery categories, in display order (docs/animations.md §6).
  * The page renders a section per category that has at least one entry.
  */
 export const CATEGORIES: CatalogCategory[] = [
@@ -57,8 +57,50 @@ export const CATEGORIES: CatalogCategory[] = [
   { id: 'hover', label: 'Hover' },
   { id: 'lists', label: 'Lists' },
   { id: 'attention', label: 'Attention' },
+  { id: 'feedback', label: 'Feedback' },
   { id: 'transitions', label: 'Transitions' },
 ]
+
+/**
+ * Per-category accent hues, drawn from the decorative spectrum in
+ * `@dzup-ui/tokens` (`--dz-colors-{name}-{shade}`, exposed by the recent palette
+ * work). These give each category a recognisable colour signature across the
+ * gallery — the card preview-stage tint + hover glow, and the active filter chip
+ * — instead of every tile reading in the same brand indigo.
+ *
+ * Purely decorative: each entry is a `[primary, secondary]` palette pair whose
+ * hues sit a short hop apart on the OKLCH wheel so the two-tone stage wash stays
+ * harmonious. The primaries are chosen to span the wheel (warm → cool) and to
+ * keep enough lightness contrast at shade 600 for white chip text. Categories
+ * not listed fall back to the brand `primary`/`secondary` pair.
+ */
+export const CATEGORY_ACCENTS: Record<string, readonly [string, string]> = {
+  scroll: ['indigo', 'violet'],
+  text: ['violet', 'fuchsia'],
+  numbers: ['emerald', 'teal'],
+  backgrounds: ['fuchsia', 'purple'],
+  hover: ['cyan', 'sky'],
+  lists: ['orange', 'amber'],
+  attention: ['rose', 'pink'],
+  feedback: ['teal', 'emerald'],
+  transitions: ['blue', 'sky'],
+}
+
+/**
+ * CSS custom properties for a category's accent, ready to spread onto a host's
+ * inline `style`. Cards and chips reference `var(--accent*)` (each falling back
+ * to the brand primary) so the colour signature threads through without any hue
+ * being hard-coded per card.
+ */
+export function categoryAccentStyle(category: string): Record<string, string> {
+  const [primary, secondary] = CATEGORY_ACCENTS[category] ?? ['primary', 'secondary']
+  return {
+    '--accent': `var(--dz-colors-${primary}-500)`,
+    '--accent-strong': `var(--dz-colors-${primary}-600)`,
+    '--accent-soft': `var(--dz-colors-${primary}-400)`,
+    '--accent-2': `var(--dz-colors-${secondary}-500)`,
+  }
+}
 
 /**
  * The catalog. Demos are async-imported so each effect is its own chunk
@@ -767,6 +809,122 @@ function notify() {
   </DzToastProvider>
 </template>`,
     demo: defineAsyncComponent(() => import('./demos/ToastSlideInDemo.vue')),
+  },
+  {
+    id: 'success-check',
+    title: 'Success check',
+    category: 'feedback',
+    type: 'component',
+    blurb: 'An SVG ring and tick draw themselves in with a small pop to confirm a completed action.',
+    components: ['DzButton'],
+    code: `<script setup lang="ts">
+import { ref } from 'vue'
+import { DzButton } from '@dzup-ui/core'
+import { DzSuccessCheck } from '../motion'
+
+// Flip \`active\` once the action resolves; the ring + tick draw via stroke-dashoffset.
+const done = ref(false)
+</script>
+
+<template>
+  <DzSuccessCheck v-if="done" :active="true" tone="success" label="Payment confirmed" />
+  <DzButton v-else variant="solid" tone="primary" @click="done = true">
+    Confirm payment
+  </DzButton>
+</template>`,
+    demo: defineAsyncComponent(() => import('./demos/SuccessCheckDemo.vue')),
+  },
+  {
+    id: 'confetti-burst',
+    title: 'Confetti burst',
+    category: 'feedback',
+    type: 'component',
+    blurb: 'A celebratory multi-colour particle pop fires on a milestone action; a no-op when reduced.',
+    components: ['DzButton'],
+    code: `<script setup lang="ts">
+import { ref } from 'vue'
+import { DzButton } from '@dzup-ui/core'
+import { DzConfetti } from '../motion'
+
+// Call the exposed burst() on a key action; the overlay fills the positioned host.
+const confetti = ref<InstanceType<typeof DzConfetti> | null>(null)
+</script>
+
+<template>
+  <div style="position: relative">
+    <DzConfetti ref="confetti" />
+    <DzButton variant="solid" tone="primary" @click="confetti?.burst()">
+      Ship it
+    </DzButton>
+  </div>
+</template>`,
+    demo: defineAsyncComponent(() => import('./demos/ConfettiBurstDemo.vue')),
+  },
+  {
+    id: 'error-shake',
+    title: 'Error shake',
+    category: 'feedback',
+    type: 'css',
+    blurb: 'A field rejects invalid input with a damped horizontal shake plus the red invalid state.',
+    components: ['DzInput', 'DzButton'],
+    code: `<script setup lang="ts">
+import { nextTick, ref } from 'vue'
+import { DzInput } from '@dzup-ui/core'
+import { useReducedMotion } from '../motion'
+
+const value = ref('')
+const invalid = ref(false)
+const shaking = ref(false)
+const reduced = useReducedMotion()
+
+function submit() {
+  if (value.value.trim()) { invalid.value = false; return }
+  invalid.value = true
+  if (reduced.value) return
+  // Restart the one-shot .dz-shake: drop the class, re-add next frame.
+  shaking.value = false
+  nextTick(() => (shaking.value = true))
+}
+</script>
+
+<template>
+  <div
+    :class="{ 'dz-shake': shaking, 'dz-shake--reduced': reduced }"
+    @animationend="shaking = false"
+  >
+    <DzInput v-model="value" type="email" :invalid="invalid" placeholder="you@company.com" />
+  </div>
+</template>`,
+    demo: defineAsyncComponent(() => import('./demos/ErrorShakeDemo.vue')),
+  },
+  {
+    id: 'like-pop',
+    title: 'Like pop',
+    category: 'feedback',
+    type: 'component',
+    blurb: 'A like toggle pops in scale and radiates a ring of colour sparks on the rising edge.',
+    components: ['DzToggleButton'],
+    code: `<script setup lang="ts">
+import { ref } from 'vue'
+import { DzToggleButton } from '@dzup-ui/core'
+import { Heart } from 'lucide-vue-next'
+import { DzBurst } from '../motion'
+
+const liked = ref(false)
+</script>
+
+<template>
+  <!-- Burst fires when active goes false → true; the wrapped toggle owns the press state. -->
+  <DzBurst :active="liked">
+    <DzToggleButton v-model="liked" variant="outline" :tone="liked ? 'danger' : 'neutral'">
+      <template #prefix>
+        <Heart :size="18" :fill="liked ? 'currentColor' : 'none'" />
+      </template>
+      Like
+    </DzToggleButton>
+  </DzBurst>
+</template>`,
+    demo: defineAsyncComponent(() => import('./demos/LikePopDemo.vue')),
   },
   {
     id: 'route-transition',

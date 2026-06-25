@@ -238,27 +238,40 @@ The detail page (`/templates/:slug`) is the conversion surface — it must *show
 | [ ] | `feature-product` | Feature / Product | DzCard, DzTabs, DzImage, DzImageComparison, DzBadge |
 | [ ] | `changelog-roadmap` | Changelog / Roadmap | DzTimeline(+Item), DzBadge, DzCard, DzTag, DzText |
 
-### 6.4 Commerce (3)
+### 6.4 Commerce (4)
 
 | Done | slug | Name | Built with |
 |---|---|---|---|
-| [ ] | `product-listing` | Product Listing | DzImageCard, DzBadge, DzRating, DzSelect, DzCheckboxGroup, DzRangeSlider, DzPagination |
-| [ ] | `product-detail` | Product Detail | DzCarousel, DzLightbox, DzRating, DzBadge, DzNumberInput, DzButton, DzTabs, DzAccordion |
-| [ ] | `checkout` | Checkout | DzStepper, DzFormField, DzInput, DzInputMask, DzRadioGroup, DzCard, DzButton |
+| [x] | `product-listing` | Product Listing | DzImageCard, DzBadge, DzRating, DzSelect, DzCheckboxGroup, DzRangeSlider, DzPagination |
+| [x] | `product-detail` | Product Detail ⭐ | DzBreadcrumb, DzImage, DzRating, DzBadge, DzNumberInput, DzButton, DzTag, DzTabs, DzAccordion, DzCard, DzAvatar |
+| [x] | `checkout` | Checkout | DzStepper, DzFormField, DzInput, DzSelect, DzRadioGroup, DzNumberInput, DzCheckbox, DzAlert, DzCard, DzBadge, DzButton |
+| [x] | `order-tracking` | Order Tracking | DzResult, DzStepper, DzTimeline, DzDescriptions, DzCard, DzBadge, DzDivider, DzButton |
 
-### 6.5 Content (3)
+> Note: `checkout` and `order-tracking` are deliberately re-skinned away from the
+> headphone storefront's indigo — emerald and teal respectively — by remapping
+> `--dz-primary` to another semantic token at the template root (token-only, no
+> raw hex, correct in light + dark). They form a browse → view → buy → track
+> journey with the two product pages.
+
+### 6.5 Content (6)
 
 | Done | slug | Name | Built with |
 |---|---|---|---|
-| [ ] | `blog-index` | Blog Index | DzImageCard, DzBadge, DzPagination, DzAvatar, DzSearchInput |
-| [ ] | `blog-post` | Blog Post / Article | DzHeading, DzText, DzBlockquote, DzCodeBlock, DzAnchor, DzAvatar, DzDivider |
-| [ ] | `docs-page` | Docs Page | DzAppShell, DzSidebar, DzAnchor, DzCodeBlock, DzAlert, DzTabs, DzCommandPalette |
+| [x] | `blog-index` | Blog Index | DzImageCard, DzTag, DzPagination, DzAvatar, DzSearchInput |
+| [x] | `blog-post` | Blog Post / Article ⭐ | DzHeading, DzText, DzBlockquote, DzCodeBlock, DzAnchor, DzImage, DzImageCard, DzAvatar, DzTag, DzDivider, DzCard |
+| [x] | `help-center` | Help Center / FAQ | DzSearchInput, DzCard, DzAccordion(+Item/Trigger/Content), DzAlert, DzTag, DzBadge, DzAvatar, DzButton |
+| [x] | `changelog` | Changelog / Releases | DzTimeline(+Item), DzCard, DzBadge, DzTag, DzCodeBlock, DzDivider, DzButton |
+| [x] | `docs-guide` | Docs / Guide | DzBreadcrumb(+Item), DzAnchor, DzAlert, DzCodeBlock, DzSearchInput, DzBadge, DzDivider, DzButton |
+| [x] | `newsroom` | Newsroom / Press | DzCard, DzList(+Item), DzBadge, DzAvatar, DzDivider, DzButton, DzHeading, DzText |
 
-### 6.6 Utility (1)
+### 6.6 Utility (4)
 
 | Done | slug | Name | Built with |
 |---|---|---|---|
-| [ ] | `states-pack` | Empty & Error States | DzEmpty, DzResult, DzButton, DzCard |
+| [x] | `states-pack` | Empty & Error States | DzEmpty, DzResult, DzCard, DzButton, DzHeading, DzText |
+| [x] | `not-found` | 404 — Page Not Found | DzResult, DzCard, DzButton, DzDivider, DzText |
+| [x] | `system-status` | System Status | DzAlert, DzCard, DzBadge, DzProgress, DzTimeline, DzDivider, DzHeading, DzText, DzButton |
+| [x] | `maintenance` | Scheduled Maintenance | DzCard, DzProgress, DzInput, DzButton, DzBadge, DzDivider, DzHeading, DzText |
 
 > ⭐ = **featured** (`featured: true`) — the strongest first impression for the gallery's lead row. Build these first as the canonical references (T2 below).
 
