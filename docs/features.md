@@ -660,18 +660,18 @@ but no "freeze this panel while saving" overlay._
 | 03  | DzTour            | AntD Tour                                 | missing                 | overlays   | 🔴 P0    |
 | 04  | DzTreeSelect      | PrimeVue/AntD TreeSelect                  | Tree+Select separate    | forms      | 🔴 P0    |
 | 05  | DzCascader        | AntD Cascader · PrimeVue CascadeSelect    | missing                 | forms      | 🔴 P0    |
-| 06  | DzTagsInput       | PrimeVue Chips · AntD tags · MUI freeSolo | MultiSelect only        | forms      | 🔴 P0    |
+| 06  | DzTagsInput       | PrimeVue Chips · AntD tags · MUI freeSolo | done                    | forms      | 🔴 P0    |
 | 07  | DzMention         | AntD Mentions                             | missing                 | forms      | 🔴 P0    |
-| 08  | DzKnob            | PrimeVue Knob                             | missing                 | forms      | 🟠 P1    |
-| 09  | DzSpeedDial/DzFab | PrimeVue SpeedDial · MUI Fab              | missing                 | buttons    | 🟠 P1    |
-| 10  | DzToolbar         | PrimeVue Toolbar                          | ButtonGroup only        | layout     | 🟠 P1    |
-| 11  | DzMegaMenu        | PrimeVue MegaMenu                         | single-column menus     | navigation | 🟠 P1    |
-| 12  | DzDataView        | PrimeVue DataView                         | Table/DataGrid only     | data       | 🟠 P1    |
-| 13  | DzDescriptions    | AntD Descriptions                         | missing                 | data       | 🟠 P1    |
+| 08  | DzKnob            | PrimeVue Knob                             | done                    | forms      | 🟠 P1    |
+| 09  | DzSpeedDial/DzFab | PrimeVue SpeedDial · MUI Fab              | done                    | buttons    | 🟠 P1    |
+| 10  | DzToolbar         | PrimeVue Toolbar                          | done                    | layout     | 🟠 P1    |
+| 11  | DzMegaMenu        | PrimeVue MegaMenu                         | done                    | navigation | 🟠 P1    |
+| 12  | DzDataView        | PrimeVue DataView                         | done                    | data       | 🟠 P1    |
+| 13  | DzDescriptions    | AntD Descriptions                         | done                    | data       | 🟠 P1    |
 | 14  | DzOrderList       | PrimeVue OrderList                        | Transfer only           | data       | 🟠 P1    |
 | 15  | DzMeterGroup      | PrimeVue MeterGroup                       | single Progress         | feedback   | 🟠 P1    |
 | 16  | DzPanel           | PrimeVue Panel/Fieldset                   | Card/Accordion/Collapse | layout     | 🟠 P1    |
-| 17  | DzAnchor          | AntD Anchor                               | missing                 | navigation | 🟢 P2    |
+| 17  | DzAnchor          | AntD Anchor                               | done                    | navigation | 🟢 P2    |
 | 18  | DzAffix           | AntD Affix                                | missing                 | layout     | 🟢 P2    |
 | 19  | DzInplace         | PrimeVue Inplace                          | missing                 | forms      | 🟢 P2    |
 | 20  | DzQRCode          | AntD QRCode                               | missing                 | media      | 🟢 P2    |

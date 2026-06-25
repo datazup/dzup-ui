@@ -20,7 +20,7 @@
 Each task is a **ready-to-run prompt** for a coding agent, authored per Anthropic's
 [prompt-engineering guidance](https://platform.claude.com/docs/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct):
 a clear role, the motivation/context behind the work, sequential numbered steps,
-`<example>` snippets, XML-tagged structure, and instructions phrased as *what to do*
+`<example>` snippets, XML-tagged structure, and instructions phrased as _what to do_
 rather than what to avoid. Copy a prompt block verbatim into an agent to execute it.
 
 Every prompt assumes the shared conventions below. Re-read these before starting any task.
@@ -68,9 +68,9 @@ Every prompt assumes the shared conventions below. Re-read these before starting
 
 ### [x] TASK-NF-25 — `DzInputMask` (format-masked text input)
 
-*Gap: PrimeVue `InputMask`, Vuetify mask, Cleave-style inputs. `dzup-ui` has
+_Gap: PrimeVue `InputMask`, Vuetify mask, Cleave-style inputs. `dzup-ui` has
 `DzInput`, `DzNumberInput`, and `DzOtpInput` but no general masked input for phone
-numbers, dates, SSNs, postcodes, or license keys — a baseline data-entry primitive.*
+numbers, dates, SSNs, postcodes, or license keys — a baseline data-entry primitive._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in the dzup-ui design system. Follow <repo_conventions> from docs/new-features.md exactly.</role>
@@ -111,12 +111,12 @@ numbers, dates, SSNs, postcodes, or license keys — a baseline data-entry primi
 
 ---
 
-### [ ] TASK-NF-26 — `DzListbox` (always-visible selectable list)
+### [x] TASK-NF-26 — `DzListbox` (always-visible selectable list)
 
-*Gap: PrimeVue `Listbox`, MUI selectable List, Headless UI `Listbox`, Ant `List` with
+_Gap: PrimeVue `Listbox`, MUI selectable List, Headless UI `Listbox`, Ant `List` with
 selection. `dzup-ui` has `DzSelect`/`DzMultiSelect` (collapsed dropdowns) and `DzList`
 (display only) but no inline, keyboard-navigable selection list for filter panels,
-settings, and side-by-side pickers.*
+settings, and side-by-side pickers._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -157,10 +157,10 @@ settings, and side-by-side pickers.*
 
 ### [x] TASK-NF-27 — `DzPopconfirm` (inline confirm popover)
 
-*Gap: Ant Design `Popconfirm`, Element Plus `Popconfirm`, PrimeVue `ConfirmPopup`.
+_Gap: Ant Design `Popconfirm`, Element Plus `Popconfirm`, PrimeVue `ConfirmPopup`.
 `dzup-ui` has `DzConfirmDialog` (a blocking modal) and `DzPopover` (free-form), but no
 lightweight "are you sure?" bubble anchored to the trigger — the standard pattern for
-delete/destructive actions in tables and toolbars.*
+delete/destructive actions in tables and toolbars._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -203,11 +203,11 @@ delete/destructive actions in tables and toolbars.*
 
 ## 🟠 P1 — Strong additions that round out the library
 
-### [ ] TASK-NF-28 — `DzMasonry` (cascading column layout)
+### [x] TASK-NF-28 — `DzMasonry` (cascading column layout)
 
-*Gap: MUI `Masonry`, Ant cascading galleries. `dzup-ui` has `DzGrid` and `DzFlex` but
+_Gap: MUI `Masonry`, Ant cascading galleries. `dzup-ui` has `DzGrid` and `DzFlex` but
 no masonry layout that packs variable-height items into balanced columns — wanted for
-image walls, card feeds, and dashboards.*
+image walls, card feeds, and dashboards._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -247,12 +247,12 @@ image walls, card feeds, and dashboards.*
 
 ---
 
-### [ ] TASK-NF-29 — `DzImageComparison` (before/after slider)
+### [x] TASK-NF-29 — `DzImageComparison` (before/after slider)
 
-*Gap: img-comparison-slider (React/Vue/Angular), Nuxt UI / Magic UI compare widgets.
+_Gap: img-comparison-slider (React/Vue/Angular), Nuxt UI / Magic UI compare widgets.
 No peer in this list ships it natively, so it is both a real demand and a
 differentiator. `dzup-ui` has `DzImage`, `DzLightbox`, and `DzCarousel` but nothing for
-side-by-side before/after reveal.*
+side-by-side before/after reveal._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -291,11 +291,11 @@ side-by-side before/after reveal.*
 
 ---
 
-### [ ] TASK-NF-30 — `DzInfiniteScroll` (viewport-sentinel loader)
+### [x] TASK-NF-30 — `DzInfiniteScroll` (viewport-sentinel loader)
 
-*Gap: Element Plus `InfiniteScroll`, Vuetify infinite scroll, Ant `List` infinite
+_Gap: Element Plus `InfiniteScroll`, Vuetify infinite scroll, Ant `List` infinite
 loading. `dzup-ui` has `DzPagination` and `DzDataGridPagination` but no scroll-driven
-"load more" primitive for feeds and long lists.*
+"load more" primitive for feeds and long lists._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -336,11 +336,11 @@ loading. `dzup-ui` has `DzPagination` and `DzDataGridPagination` but no scroll-d
 
 ---
 
-### [ ] TASK-NF-31 — `DzCountdown` (live countdown timer)
+### [x] TASK-NF-31 — `DzCountdown` (live countdown timer)
 
-*Gap: Ant Design `Statistic.Countdown`, Element Plus `Countdown`. `dzup-ui` has
+_Gap: Ant Design `Statistic.Countdown`, Element Plus `Countdown`. `dzup-ui` has
 `DzStatCard` for static figures but nothing that ticks down to a deadline — needed for
-sales timers, token-expiry warnings, scheduled-run ETAs, and OTP resend windows.*
+sales timers, token-expiry warnings, scheduled-run ETAs, and OTP resend windows._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -381,9 +381,9 @@ sales timers, token-expiry warnings, scheduled-run ETAs, and OTP resend windows.
 
 ### [x] TASK-NF-32 — `DzColorModeToggle` (theme switch control)
 
-*Gap: Nuxt UI `ColorModeButton`, Mantine color-scheme toggle. `dzup-ui` already ships
+_Gap: Nuxt UI `ColorModeButton`, Mantine color-scheme toggle. `dzup-ui` already ships
 `useTheme` and `DzThemeProvider` but exposes no ready-made control — every consumer
-builds their own light/dark/system switch.*
+builds their own light/dark/system switch._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -424,11 +424,11 @@ builds their own light/dark/system switch.*
 
 ## 🟢 P2 — Polish & utility primitives
 
-### [ ] TASK-NF-33 — `DzKbd` (keyboard key hint)
+### [x] TASK-NF-33 — `DzKbd` (keyboard key hint)
 
-*Gap: shadcn `Kbd`, Mantine `Kbd`, Nuxt UI `Kbd`. `dzup-ui` has `DzCode` and `DzCode`
+_Gap: shadcn `Kbd`, Mantine `Kbd`, Nuxt UI `Kbd`. `dzup-ui` has `DzCode` and `DzCode`
 inline type but no styled keyboard-key element — used in docs, tooltips, menus, and
-next to the existing DzCommandPalette to show shortcuts.*
+next to the existing DzCommandPalette to show shortcuts._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -465,9 +465,9 @@ next to the existing DzCommandPalette to show shortcuts.*
 
 ### [x] TASK-NF-34 — `DzRelativeTime` (auto-updating timestamp)
 
-*Gap: Element Plus `Time`, Ant relative time helpers, `<relative-time>` web component.
+_Gap: Element Plus `Time`, Ant relative time helpers, `<relative-time>` web component.
 `dzup-ui` has no component that renders "3 minutes ago" and keeps it fresh — useful in
-activity feeds, run histories, and comment threads.*
+activity feeds, run histories, and comment threads._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -502,11 +502,11 @@ activity feeds, run histories, and comment threads.*
 
 ---
 
-### [ ] TASK-NF-35 — `DzAnimatedNumber` (count-up value)
+### [x] TASK-NF-35 — `DzAnimatedNumber` (count-up value)
 
-*Gap: Ant `Statistic` animated value, Mantine `NumberFormatter`, count-up widgets.
+_Gap: Ant `Statistic` animated value, Mantine `NumberFormatter`, count-up widgets.
 `dzup-ui` `DzStatCard` shows static numbers; an animated, formatted figure adds polish
-to dashboards and KPIs.*
+to dashboards and KPIs._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -541,11 +541,11 @@ to dashboards and KPIs.*
 
 ---
 
-### [ ] TASK-NF-36 — `DzScrollProgress` (page reading-progress bar)
+### [x] TASK-NF-36 — `DzScrollProgress` (page reading-progress bar)
 
-*Gap: Mantine reading progress, common docs-site progress bars. `dzup-ui` has
+_Gap: Mantine reading progress, common docs-site progress bars. `dzup-ui` has
 `DzProgress` (value-bound) and `DzBackTop` but no scroll-position indicator for long
-articles, docs, and onboarding pages.*
+articles, docs, and onboarding pages._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -580,11 +580,11 @@ articles, docs, and onboarding pages.*
 
 ---
 
-### [ ] TASK-NF-37 — `DzVisuallyHidden` (screen-reader-only wrapper)
+### [x] TASK-NF-37 — `DzVisuallyHidden` (screen-reader-only wrapper)
 
-*Gap: Reka/Radix `VisuallyHidden`, Chakra `VisuallyHidden`. A foundational a11y
+_Gap: Reka/Radix `VisuallyHidden`, Chakra `VisuallyHidden`. A foundational a11y
 utility for labels that must exist for assistive tech but stay invisible — currently
-teams copy ad-hoc `sr-only` markup.*
+teams copy ad-hoc `sr-only` markup._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -621,8 +621,8 @@ teams copy ad-hoc `sr-only` markup.*
 
 ### [x] TASK-NF-38 — `DzDeferredContent` (lazy render on viewport)
 
-*Gap: PrimeVue `DeferredContent`. Renders heavy content only when it scrolls into view —
-a performance primitive for long pages with charts, images, or expensive lists.*
+_Gap: PrimeVue `DeferredContent`. Renders heavy content only when it scrolls into view —
+a performance primitive for long pages with charts, images, or expensive lists._
 
 ```xml
 <role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
@@ -662,22 +662,22 @@ a performance primitive for long pages with charts, images, or expensive lists.*
 
 ## Summary — gap map
 
-| # | Component | Closest peer(s) | dzup-ui status | Family | Priority |
-|---|-----------|-----------------|----------------|--------|----------|
-| 25 | DzInputMask | PrimeVue InputMask · Vuetify mask | Input/NumberInput/OtpInput only | inputs | 🔴 P0 |
-| 26 | DzListbox | PrimeVue Listbox · Headless UI · MUI | Select/MultiSelect/List separate | forms | 🔴 P0 |
-| 27 | DzPopconfirm | AntD Popconfirm · Element · PrimeVue ConfirmPopup | ConfirmDialog (modal) only | overlays | 🔴 P0 |
-| 28 | DzMasonry | MUI Masonry | Grid/Flex only | layout | 🟠 P1 |
-| 29 | DzImageComparison | img-comparison-slider · Nuxt UI | missing (unique) | media | 🟠 P1 |
-| 30 | DzInfiniteScroll | Element Plus · Vuetify · AntD List | Pagination only | data | 🟠 P1 |
-| 31 | DzCountdown | AntD Statistic.Countdown · Element | StatCard (static) only | data | 🟠 P1 |
-| 32 | DzColorModeToggle | Nuxt UI ColorModeButton · Mantine | useTheme exists, no control | navigation | 🟠 P1 |
-| 33 | DzKbd | shadcn · Mantine · Nuxt UI Kbd | missing | typography | 🟢 P2 |
-| 34 | DzRelativeTime | Element Plus Time · `<relative-time>` | missing | typography | 🟢 P2 |
-| 35 | DzAnimatedNumber | AntD Statistic · Mantine NumberFormatter | StatCard (static) only | data | 🟢 P2 |
-| 36 | DzScrollProgress | Mantine reading progress | Progress/BackTop only | feedback | 🟢 P2 |
-| 37 | DzVisuallyHidden | Reka/Radix · Chakra | ad-hoc sr-only only | typography | 🟢 P2 |
-| 38 | DzDeferredContent | PrimeVue DeferredContent | missing | layout | 🟢 P2 |
+| #   | Component         | Closest peer(s)                                   | dzup-ui status                  | Family     | Priority |
+| --- | ----------------- | ------------------------------------------------- | ------------------------------- | ---------- | -------- |
+| 25  | DzInputMask       | PrimeVue InputMask · Vuetify mask                 | Input/NumberInput/OtpInput only | inputs     | 🔴 P0    |
+| 26  | DzListbox         | PrimeVue Listbox · Headless UI · MUI              | done                            | forms      | 🔴 P0    |
+| 27  | DzPopconfirm      | AntD Popconfirm · Element · PrimeVue ConfirmPopup | ConfirmDialog (modal) only      | overlays   | 🔴 P0    |
+| 28  | DzMasonry         | MUI Masonry                                       | done                            | layout     | 🟠 P1    |
+| 29  | DzImageComparison | img-comparison-slider · Nuxt UI                   | done                            | media      | 🟠 P1    |
+| 30  | DzInfiniteScroll  | Element Plus · Vuetify · AntD List                | done                            | data       | 🟠 P1    |
+| 31  | DzCountdown       | AntD Statistic.Countdown · Element                | done                            | data       | 🟠 P1    |
+| 32  | DzColorModeToggle | Nuxt UI ColorModeButton · Mantine                 | useTheme exists, no control     | navigation | 🟠 P1    |
+| 33  | DzKbd             | shadcn · Mantine · Nuxt UI Kbd                    | done                            | typography | 🟢 P2    |
+| 34  | DzRelativeTime    | Element Plus Time · `<relative-time>`             | missing                         | typography | 🟢 P2    |
+| 35  | DzAnimatedNumber  | AntD Statistic · Mantine NumberFormatter          | done                            | data       | 🟢 P2    |
+| 36  | DzScrollProgress  | Mantine reading progress                          | done                            | feedback   | 🟢 P2    |
+| 37  | DzVisuallyHidden  | Reka/Radix · Chakra                               | done                            | typography | 🟢 P2    |
+| 38  | DzDeferredContent | PrimeVue DeferredContent                          | missing                         | layout     | 🟢 P2    |
 
 > **Deliberately excluded (Pro / enterprise tier — already in `@dzup-ui/pro` or belongs there):**
 > virtualized tables/scrollers (DzVirtualTable), charts/gauges/sparklines, rich-text and
