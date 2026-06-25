@@ -661,7 +661,7 @@ but no "freeze this panel while saving" overlay._
 | 04  | DzTreeSelect      | PrimeVue/AntD TreeSelect                  | Tree+Select separate    | forms      | 🔴 P0    |
 | 05  | DzCascader        | AntD Cascader · PrimeVue CascadeSelect    | missing                 | forms      | 🔴 P0    |
 | 06  | DzTagsInput       | PrimeVue Chips · AntD tags · MUI freeSolo | done                    | forms      | 🔴 P0    |
-| 07  | DzMention         | AntD Mentions                             | missing                 | forms      | 🔴 P0    |
+| 07  | DzMention         | AntD Mentions                             | done                    | forms      | 🔴 P0    |
 | 08  | DzKnob            | PrimeVue Knob                             | done                    | forms      | 🟠 P1    |
 | 09  | DzSpeedDial/DzFab | PrimeVue SpeedDial · MUI Fab              | done                    | buttons    | 🟠 P1    |
 | 10  | DzToolbar         | PrimeVue Toolbar                          | done                    | layout     | 🟠 P1    |

@@ -662,22 +662,22 @@ a performance primitive for long pages with charts, images, or expensive lists._
 
 ## Summary — gap map
 
-| #   | Component         | Closest peer(s)                                   | dzup-ui status                  | Family     | Priority |
-| --- | ----------------- | ------------------------------------------------- | ------------------------------- | ---------- | -------- |
-| 25  | DzInputMask       | PrimeVue InputMask · Vuetify mask                 | Input/NumberInput/OtpInput only | inputs     | 🔴 P0    |
-| 26  | DzListbox         | PrimeVue Listbox · Headless UI · MUI              | done                            | forms      | 🔴 P0    |
-| 27  | DzPopconfirm      | AntD Popconfirm · Element · PrimeVue ConfirmPopup | ConfirmDialog (modal) only      | overlays   | 🔴 P0    |
-| 28  | DzMasonry         | MUI Masonry                                       | done                            | layout     | 🟠 P1    |
-| 29  | DzImageComparison | img-comparison-slider · Nuxt UI                   | done                            | media      | 🟠 P1    |
-| 30  | DzInfiniteScroll  | Element Plus · Vuetify · AntD List                | done                            | data       | 🟠 P1    |
-| 31  | DzCountdown       | AntD Statistic.Countdown · Element                | done                            | data       | 🟠 P1    |
-| 32  | DzColorModeToggle | Nuxt UI ColorModeButton · Mantine                 | useTheme exists, no control     | navigation | 🟠 P1    |
-| 33  | DzKbd             | shadcn · Mantine · Nuxt UI Kbd                    | done                            | typography | 🟢 P2    |
-| 34  | DzRelativeTime    | Element Plus Time · `<relative-time>`             | missing                         | typography | 🟢 P2    |
-| 35  | DzAnimatedNumber  | AntD Statistic · Mantine NumberFormatter          | done                            | data       | 🟢 P2    |
-| 36  | DzScrollProgress  | Mantine reading progress                          | done                            | feedback   | 🟢 P2    |
-| 37  | DzVisuallyHidden  | Reka/Radix · Chakra                               | done                            | typography | 🟢 P2    |
-| 38  | DzDeferredContent | PrimeVue DeferredContent                          | missing                         | layout     | 🟢 P2    |
+| #   | Component         | Closest peer(s)                                   | dzup-ui status | Family     | Priority |
+| --- | ----------------- | ------------------------------------------------- | -------------- | ---------- | -------- |
+| 25  | DzInputMask       | PrimeVue InputMask · Vuetify mask                 | done           | inputs     | 🔴 P0    |
+| 26  | DzListbox         | PrimeVue Listbox · Headless UI · MUI              | done           | forms      | 🔴 P0    |
+| 27  | DzPopconfirm      | AntD Popconfirm · Element · PrimeVue ConfirmPopup | done           | overlays   | 🔴 P0    |
+| 28  | DzMasonry         | MUI Masonry                                       | done           | layout     | 🟠 P1    |
+| 29  | DzImageComparison | img-comparison-slider · Nuxt UI                   | done           | media      | 🟠 P1    |
+| 30  | DzInfiniteScroll  | Element Plus · Vuetify · AntD List                | done           | data       | 🟠 P1    |
+| 31  | DzCountdown       | AntD Statistic.Countdown · Element                | done           | data       | 🟠 P1    |
+| 32  | DzColorModeToggle | Nuxt UI ColorModeButton · Mantine                 | done           | navigation | 🟠 P1    |
+| 33  | DzKbd             | shadcn · Mantine · Nuxt UI Kbd                    | done           | typography | 🟢 P2    |
+| 34  | DzRelativeTime    | Element Plus Time · `<relative-time>`             | done           | typography | 🟢 P2    |
+| 35  | DzAnimatedNumber  | AntD Statistic · Mantine NumberFormatter          | done           | data       | 🟢 P2    |
+| 36  | DzScrollProgress  | Mantine reading progress                          | done           | feedback   | 🟢 P2    |
+| 37  | DzVisuallyHidden  | Reka/Radix · Chakra                               | done           | typography | 🟢 P2    |
+| 38  | DzDeferredContent | PrimeVue DeferredContent                          | done           | layout     | 🟢 P2    |
 
 > **Deliberately excluded (Pro / enterprise tier — already in `@dzup-ui/pro` or belongs there):**
 > virtualized tables/scrollers (DzVirtualTable), charts/gauges/sparklines, rich-text and
