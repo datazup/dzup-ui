@@ -109,15 +109,14 @@ export const Required: Story = {
     `,
   }),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-
     // The label carries data-required and renders a visual "*" indicator.
-    const label = canvas.getByText('Country')
-    await expect(label).toHaveAttribute('data-required')
-    await expect(label.textContent).toContain('*')
+    const label = canvasElement.querySelector('label[data-required]')
+    await expect(label).toBeTruthy()
+    await expect(label).toHaveTextContent('Country')
+    await expect(label!.textContent).toContain('*')
 
     // The "*" is decorative — hidden from assistive tech.
-    const star = label.querySelector('[aria-hidden="true"]')
+    const star = label!.querySelector('[aria-hidden="true"]')
     await expect(star).toHaveTextContent('*')
   },
 }
@@ -177,8 +176,9 @@ export const InvalidWithError: Story = {
     await expect(alert).toHaveAttribute('aria-live', 'polite')
 
     // The label reflects the invalid state for styling/AT hooks.
-    const label = canvas.getByText('Country')
-    await expect(label).toHaveAttribute('data-invalid')
+    const label = canvasElement.querySelector('label[data-invalid]')
+    await expect(label).toBeTruthy()
+    await expect(label).toHaveTextContent('Country')
   },
 }
 

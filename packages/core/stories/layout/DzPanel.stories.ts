@@ -124,8 +124,8 @@ export const Collapsible: Story = {
     // aria-controls points at the collapsible region, which is visible.
     const regionId = trigger.getAttribute('aria-controls')
     await expect(regionId).toBeTruthy()
-    const body = canvasElement.querySelector(`#${regionId}`)
-    await expect(body).toBeVisible()
+    const region = canvasElement.ownerDocument.getElementById(regionId!)
+    await expect(region).toBeVisible()
 
     // Click the header — the panel collapses and aria-expanded flips to false.
     await userEvent.click(trigger)
