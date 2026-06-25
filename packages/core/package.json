@@ -1,7 +1,7 @@
 {
   "name": "@dzup-ui/core",
   "type": "module",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Core foundational components for dzup-ui",
   "license": "MIT",
   "sideEffects": [
