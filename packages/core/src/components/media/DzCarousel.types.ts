@@ -6,10 +6,7 @@
  * @module @dzup-ui/core/components/media/DzCarousel
  */
 
-import type {
-  BaseAccessibilityProps,
-  CanonicalSize,
-} from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -17,7 +14,7 @@ import type { InjectionKey, Ref } from 'vue'
 // ---------------------------------------------------------------------------
 
 /** Carousel scroll orientation */
-export type CarouselOrientation = 'horizontal' | 'vertical'
+export type CarouselOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -81,7 +78,7 @@ export interface DzCarouselEmits {
   /** Emitted when the active slide changes */
   'update:modelValue': [index: number]
   /** Emitted when the slide changes (alias for semantic clarity) */
-  'slideChange': [index: number]
+  slideChange: [index: number]
 }
 
 // ---------------------------------------------------------------------------
@@ -139,5 +136,5 @@ export interface DzCarouselDotsProps {
 /** Slot definitions for DzCarouselDots */
 export interface DzCarouselDotsSlots {
   /** Custom dot renderer */
-  default?: (props: { index: number, active: boolean }) => unknown
+  default?: (props: { index: number; active: boolean }) => unknown
 }

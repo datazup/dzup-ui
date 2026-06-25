@@ -7,11 +7,11 @@
  * @module @dzup-ui/core/components/navigation/DzStepper
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 /** Stepper orientation */
-export type StepperOrientation = 'horizontal' | 'vertical'
+export type StepperOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Compound context (ADR-08)
@@ -99,5 +99,5 @@ export interface DzStepperItemSlots {
   /** Step content (displayed when active) */
   default?: () => unknown
   /** Custom step indicator */
-  indicator?: (props: { step: number, status: 'completed' | 'active' | 'upcoming' }) => unknown
+  indicator?: (props: { step: number; status: 'completed' | 'active' | 'upcoming' }) => unknown
 }

@@ -11,7 +11,7 @@
  * @module @dzup-ui/core/components/navigation/DzMegaMenu
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize, Orientation } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Model
@@ -58,7 +58,7 @@ export interface DzMegaMenuItem {
 }
 
 /** Menubar orientation */
-export type DzMegaMenuOrientation = 'horizontal' | 'vertical'
+export type DzMegaMenuOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Props

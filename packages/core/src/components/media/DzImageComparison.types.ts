@@ -8,14 +8,14 @@
  * @module @dzup-ui/core/components/media/DzImageComparison
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, Orientation } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Orientation
 // ---------------------------------------------------------------------------
 
 /** Axis the divider travels along. */
-export type ImageComparisonOrientation = 'horizontal' | 'vertical'
+export type ImageComparisonOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Props
@@ -64,5 +64,5 @@ export interface DzImageComparisonSlots {
   /** Revealed layer, clipped to the divider position. Typically a DzImage. */
   after?: () => unknown
   /** Custom divider grip. Receives the current position and orientation. */
-  handle?: (props: { position: number, orientation: ImageComparisonOrientation }) => unknown
+  handle?: (props: { position: number; orientation: ImageComparisonOrientation }) => unknown
 }
