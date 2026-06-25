@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzTabContent, DzTabList, DzTabs, DzTabTrigger } from '../../src/components/navigation'
 
@@ -81,6 +82,20 @@ export const Default: Story = {
       </DzTabs>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const overview = canvas.getByRole('tab', { name: 'Overview' })
+    const features = canvas.getByRole('tab', { name: 'Features' })
+
+    // Overview is active by default.
+    await expect(overview).toHaveAttribute('aria-selected', 'true')
+    await expect(canvas.getByRole('tabpanel')).toHaveTextContent(/overview/i)
+
+    // Clicking Features activates it and swaps the panel.
+    await userEvent.click(features)
+    await waitFor(() => expect(features).toHaveAttribute('aria-selected', 'true'))
+    await expect(canvas.getByRole('tabpanel')).toHaveTextContent(/unlimited projects/i)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -256,4 +271,28 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const profileTab = canvas.getByRole('tab', { name: 'Profile' })
+    const securityTab = canvas.getByRole('tab', { name: 'Security' })
+    const billingTab = canvas.getByRole('tab', { name: /billing/i })
+
+    // Profile is the initial active tab.
+    await expect(profileTab).toHaveAttribute('aria-selected', 'true')
+
+    // tablist element exists and has the correct role.
+    const tablist = canvas.getByRole('tablist')
+    await expect(tablist).toBeInTheDocument()
+
+    // Disabled trigger is aria-disabled and cannot be selected.
+    await expect(billingTab).toHaveAttribute('aria-disabled', 'true')
+
+    // Arrow key moves focus: click Profile, then ArrowRight lands on Security.
+    await userEvent.click(profileTab)
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(securityTab).toHaveAttribute('aria-selected', 'true'))
+
+    // Shift+Tab exits the tablist without selecting another tab.
+    await expect(canvas.getByRole('tabpanel')).toHaveTextContent(/security/i)
+  },
 }

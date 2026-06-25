@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzSwitch } from '../../src/components/forms'
 
@@ -62,7 +63,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzSwitch },
     setup() {
       return { args }
@@ -97,7 +98,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzSwitch },
     setup() {
       return { args }
@@ -130,9 +131,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSwitch },
     template: `
@@ -162,6 +161,23 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const sw = canvas.getByRole('switch', { name: /dark mode/i })
+
+    // Initially unchecked.
+    await expect(sw).toHaveAttribute('aria-checked', 'false')
+    await expect(canvas.getByText(/OFF/)).toBeInTheDocument()
+
+    // Click toggles to ON.
+    await userEvent.click(sw)
+    await expect(sw).toHaveAttribute('aria-checked', 'true')
+    await expect(canvas.getByText(/ON/)).toBeInTheDocument()
+
+    // Click again toggles back to OFF.
+    await userEvent.click(sw)
+    await expect(sw).toHaveAttribute('aria-checked', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -181,6 +197,23 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const wifi = canvas.getByRole('switch', { name: /wi-fi toggle/i })
+    const bt = canvas.getByRole('switch', { name: /bluetooth toggle/i })
+
+    // Space key toggles a focused switch.
+    wifi.focus()
+    await userEvent.keyboard(' ')
+    await expect(wifi).toHaveAttribute('aria-checked', 'true')
+
+    // Tab moves to next switch; Space toggles it independently.
+    await userEvent.tab()
+    await expect(bt).toHaveFocus()
+    await userEvent.keyboard(' ')
+    await expect(bt).toHaveAttribute('aria-checked', 'true')
+    await expect(wifi).toHaveAttribute('aria-checked', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------

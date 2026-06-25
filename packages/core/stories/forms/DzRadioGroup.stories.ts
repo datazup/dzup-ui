@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzRadio, DzRadioGroup } from '../../src/components/forms'
 
@@ -69,7 +70,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzRadioGroup, DzRadio },
     setup() {
       return { args }
@@ -90,7 +91,7 @@ export const Default: Story = {
 
 export const Horizontal: Story = {
   args: { orientation: 'horizontal' },
-  render: args => ({
+  render: (args) => ({
     components: { DzRadioGroup, DzRadio },
     setup() {
       return { args }
@@ -134,7 +135,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzRadioGroup, DzRadio },
     setup() {
       return { args }
@@ -155,9 +156,7 @@ export const Disabled: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzRadioGroup, DzRadio },
     template: `
@@ -191,6 +190,25 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const standard = canvas.getByRole('radio', { name: /standard/i })
+    const express = canvas.getByRole('radio', { name: /express/i })
+
+    // Nothing selected initially.
+    await expect(standard).toHaveAttribute('aria-checked', 'false')
+    await expect(canvas.getByText(/none/i)).toBeInTheDocument()
+
+    // Click Standard selects it exclusively.
+    await userEvent.click(standard)
+    await expect(standard).toHaveAttribute('aria-checked', 'true')
+    await expect(canvas.getByText(/standard/i)).toBeInTheDocument()
+
+    // Click Express — radio group allows only one selection.
+    await userEvent.click(express)
+    await expect(express).toHaveAttribute('aria-checked', 'true')
+    await expect(standard).toHaveAttribute('aria-checked', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -212,6 +230,21 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const first = canvas.getByRole('radio', { name: /first option/i })
+    const second = canvas.getByRole('radio', { name: /second option/i })
+
+    // Focus the first radio and select it with Space.
+    first.focus()
+    await userEvent.keyboard(' ')
+    await expect(first).toHaveAttribute('aria-checked', 'true')
+
+    // ArrowDown moves focus+selection to second (roving tabindex).
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'))
+    await expect(first).toHaveAttribute('aria-checked', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------

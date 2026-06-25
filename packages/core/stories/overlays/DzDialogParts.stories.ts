@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
@@ -85,6 +86,22 @@ export const Default: Story = {
       </DzDialog>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the dialog via the trigger.
+    await userEvent.click(canvas.getByRole('button', { name: /open dialog/i }))
+
+    // Dialog is portalled to document.body — role="dialog" with aria-modal.
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(dialog).toHaveAccessibleName()
+    await expect(within(dialog).getByText(/dialog body content/i)).toBeVisible()
+
+    // DzDialogClose via Cancel closes the dialog.
+    await userEvent.click(within(dialog).getByRole('button', { name: /cancel/i }))
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -247,4 +264,23 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open accessible dialog/i })
+
+    await userEvent.click(trigger)
+
+    // aria-labelledby is auto-wired — dialog must have an accessible name.
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(dialog).toHaveAccessibleName('Accessible Dialog')
+
+    // aria-describedby is also wired to DzDialogDescription.
+    await expect(dialog).toHaveAccessibleDescription()
+
+    // Escape closes the dialog and focus returns to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await expect(trigger).toHaveFocus()
+  },
 }
