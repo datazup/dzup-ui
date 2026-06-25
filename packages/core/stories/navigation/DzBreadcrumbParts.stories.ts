@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import {
   DzBreadcrumb,
@@ -68,6 +69,21 @@ export const Default: Story = {
       </DzBreadcrumb>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Link items are real anchors.
+    await expect(canvas.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/')
+    await expect(canvas.getByRole('link', { name: 'Products' })).toHaveAttribute(
+      'href',
+      '/products',
+    )
+
+    // Current item carries aria-current="page" and is NOT a link.
+    const current = canvas.getByText('Details')
+    await expect(current.closest('[aria-current]')).toHaveAttribute('aria-current', 'page')
+    await expect(current.closest('a')).toBeNull()
+  },
 }
 
 // ---------------------------------------------------------------------------

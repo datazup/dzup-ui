@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { ChevronRight } from 'lucide-vue-next'
 import {
@@ -61,7 +62,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzBreadcrumb, DzBreadcrumbItem, DzBreadcrumbSeparator },
     setup() {
       return { args }
@@ -76,6 +77,21 @@ export const Default: Story = {
       </DzBreadcrumb>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Nav landmark is present with the default aria-label.
+    const nav = canvas.getByRole('navigation')
+    await expect(nav).toBeInTheDocument()
+
+    // All link items are discoverable as links.
+    await expect(canvas.getByRole('link', { name: 'Home' })).toBeInTheDocument()
+    await expect(canvas.getByRole('link', { name: 'Products' })).toBeInTheDocument()
+
+    // The current (last) item carries aria-current="page".
+    const current = canvas.getByText('Widget Pro')
+    await expect(current.closest('[aria-current]')).toHaveAttribute('aria-current', 'page')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -221,9 +237,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzBreadcrumb, DzBreadcrumbItem, DzBreadcrumbSeparator, ChevronRight },
     template: `
@@ -278,6 +292,23 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Nav landmark carries the custom aria-label.
+    const nav = canvas.getByRole('navigation', { name: 'File navigation' })
+    await expect(nav).toBeInTheDocument()
+
+    // Ancestor links are real anchors.
+    await expect(canvas.getByRole('link', { name: 'Root' })).toBeInTheDocument()
+    await expect(canvas.getByRole('link', { name: 'Documents' })).toBeInTheDocument()
+    await expect(canvas.getByRole('link', { name: 'Reports' })).toBeInTheDocument()
+
+    // Terminal item has aria-current="page" and is not a link.
+    const current = canvas.getByText('Q4 Summary')
+    await expect(current.closest('[aria-current]')).toHaveAttribute('aria-current', 'page')
+    await expect(current.closest('a')).toBeNull()
+  },
 }
 
 // ---------------------------------------------------------------------------

@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { BarChart3, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
-import {
-  DzMenu,
-  DzMenuItem,
-  DzMenuSeparator,
-} from '../../src/components/navigation'
+import { DzMenu, DzMenuItem, DzMenuSeparator } from '../../src/components/navigation'
 
 /**
  * DzMenu compound sub-parts: DzMenuItem and DzMenuSeparator.
@@ -55,7 +52,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => ({
     components: { DzMenu, DzMenuItem, DzMenuSeparator },
-    setup() { return { Home, Settings, Users } },
+    setup() {
+      return { Home, Settings, Users }
+    },
     template: `
       <DzMenu class="w-56" aria-label="Main navigation">
         <DzMenuItem active>
@@ -67,13 +66,20 @@ export const Default: Story = {
           Team
         </DzMenuItem>
         <DzMenuSeparator />
-        <DzMenuItem>
+        <DzMenuItem disabled>
           <template #icon><Settings class="w-4 h-4" /></template>
           Settings
         </DzMenuItem>
       </DzMenu>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const dashboard = canvas.getByRole('button', { name: /Dashboard/i })
+    await expect(dashboard).toHaveAttribute('aria-current', 'page')
+    const settings = canvas.getByRole('button', { name: /Settings/i })
+    await expect(settings).toHaveAttribute('aria-disabled', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -84,7 +90,9 @@ export const Interactive: Story = {
   name: 'Interactive Selection',
   render: () => ({
     components: { DzMenu, DzMenuItem, DzMenuSeparator },
-    setup() { return { Home, Users, BarChart3, Settings, Shield, LogOut } },
+    setup() {
+      return { Home, Users, BarChart3, Settings, Shield, LogOut }
+    },
     data() {
       return { active: 'dashboard' }
     },
@@ -122,6 +130,15 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const dashboard = canvas.getByRole('button', { name: /Dashboard/i })
+    await expect(dashboard).toHaveAttribute('aria-current', 'page')
+    const team = canvas.getByRole('button', { name: /Team/i })
+    await userEvent.click(team)
+    await waitFor(() => expect(team).toHaveAttribute('aria-current', 'page'))
+    await expect(dashboard).not.toHaveAttribute('aria-current', 'page')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -132,7 +149,9 @@ export const DisabledItems: Story = {
   name: 'Disabled Items',
   render: () => ({
     components: { DzMenu, DzMenuItem, DzMenuSeparator },
-    setup() { return { Home, Settings, Shield } },
+    setup() {
+      return { Home, Settings, Shield }
+    },
     template: `
       <DzMenu class="w-56" aria-label="Menu with disabled items">
         <DzMenuItem active>
@@ -161,7 +180,9 @@ export const CollapsedMode: Story = {
   name: 'Collapsed Mode (Icon Only)',
   render: () => ({
     components: { DzMenu, DzMenuItem, DzMenuSeparator },
-    setup() { return { Home, Users, Settings } },
+    setup() {
+      return { Home, Users, Settings }
+    },
     template: `
       <DzMenu collapsed class="w-12" aria-label="Collapsed navigation">
         <DzMenuItem active>

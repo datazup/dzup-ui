@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 
@@ -53,6 +54,18 @@ export const Default: Story = {
       </DzStepper>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The stepper renders as role="group" with an aria-label
+    const stepper = canvas.getByRole('group', { name: 'Registration steps' })
+    expect(stepper).toBeInTheDocument()
+
+    // Step 2 ("Profile") is the active step — it carries aria-current="step"
+    const profileStep = canvas.getByText('Profile').closest('[aria-current="step"]')
+    expect(profileStep).not.toBeNull()
+    expect(profileStep).toHaveAttribute('aria-current', 'step')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -154,6 +167,21 @@ export const WithContent: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Click the "Next" button in step 1 content
+    const nextBtn = canvas.getByRole('button', { name: 'Next' })
+    await userEvent.click(nextBtn)
+
+    // Step 2 content should now be visible
+    await waitFor(() =>
+      expect(canvas.getByText('Step 2: Choose your notification preferences.')).toBeVisible(),
+    )
+
+    // Step 1 content should no longer be visible
+    expect(canvas.queryByText('Step 1: Enter your name and email address.')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

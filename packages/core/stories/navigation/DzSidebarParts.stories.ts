@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzSidebar,
   DzSidebarFooter,
@@ -142,6 +143,21 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Active item advertises aria-current="page".
+    const homeItem = canvas.getByRole('button', { name: /Home/ })
+    await expect(homeItem).toHaveAttribute('aria-current', 'page')
+
+    // Inactive items do not carry aria-current.
+    const usersItem = canvas.getByRole('button', { name: /Users/ })
+    await expect(usersItem).not.toHaveAttribute('aria-current')
+
+    // Disabled item carries aria-disabled.
+    const adminItem = canvas.getByRole('button', { name: /Admin/ })
+    await expect(adminItem).toHaveAttribute('aria-disabled', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -320,4 +336,18 @@ export const RealWorld: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const dashboard = canvas.getByRole('button', { name: /Dashboard/ })
+    const projects = canvas.getByRole('button', { name: /Projects/ })
+
+    // Dashboard starts active.
+    await expect(dashboard).toHaveAttribute('aria-current', 'page')
+    await expect(projects).not.toHaveAttribute('aria-current')
+
+    // Clicking Projects moves the active marker.
+    await userEvent.click(projects)
+    await waitFor(() => expect(projects).toHaveAttribute('aria-current', 'page'))
+    await expect(dashboard).not.toHaveAttribute('aria-current')
+  },
 }
