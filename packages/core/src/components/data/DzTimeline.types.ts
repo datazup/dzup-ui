@@ -10,6 +10,7 @@ import type {
   BaseAccessibilityProps,
   CanonicalSize,
   CanonicalTone,
+  Orientation,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
@@ -22,7 +23,7 @@ export interface DzTimelineContext {
   /** Component size */
   size: Ref<CanonicalSize>
   /** Layout orientation */
-  orientation: Ref<'vertical' | 'horizontal'>
+  orientation: Ref<Orientation>
 }
 
 /** Typed injection key for DzTimeline context (ADR-08, SCREAMING_SNAKE) */
@@ -39,7 +40,7 @@ export interface DzTimelineProps extends BaseAccessibilityProps {
   /** Semantic color tone */
   tone?: CanonicalTone
   /** Layout orientation */
-  orientation?: 'vertical' | 'horizontal'
+  orientation?: Orientation
 }
 
 // ---------------------------------------------------------------------------

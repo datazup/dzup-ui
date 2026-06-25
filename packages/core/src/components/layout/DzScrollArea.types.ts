@@ -8,7 +8,7 @@
 
 import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 
-/** Scrollbar orientation */
+/** Scrollbar orientation — includes 'both', so cannot alias to the Orientation type from contracts */
 export type ScrollOrientation = 'vertical' | 'horizontal' | 'both'
 
 // ---------------------------------------------------------------------------
