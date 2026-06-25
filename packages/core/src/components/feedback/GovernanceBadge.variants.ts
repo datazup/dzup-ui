@@ -28,6 +28,7 @@ export const governanceBadgeVariants = tv({
     },
 
     size: {
+      icon: 'p-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
       xs: 'px-[var(--dz-spacing-1_5)] py-0.5 text-[length:var(--dz-text-xs)]',
       sm: 'px-[var(--dz-spacing-2)] py-0.5 text-[length:var(--dz-text-xs)]',
       md: 'px-[var(--dz-spacing-2)] py-0.5 text-[length:var(--dz-text-xs)]',
