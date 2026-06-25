@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { darkModeDecorator } from '../_shared'
 import { DzInplace } from '../../src/components/forms'
@@ -69,7 +70,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const TextField: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzInplace },
     setup() {
       const value = ref('Jane Doe')
@@ -83,6 +84,43 @@ export const TextField: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Display mode: the trigger button should show the initial value.
+    const trigger = canvas.getByRole('button', { name: /edit value/i })
+    await expect(trigger).toBeVisible()
+    await expect(trigger).toHaveTextContent(/jane doe/i)
+
+    // Click to activate the editor.
+    await userEvent.click(trigger)
+
+    // The editor input should now be visible and focused.
+    const input = await canvas.findByRole('textbox')
+    await expect(input).toBeVisible()
+    await expect(input).toHaveFocus()
+
+    // Clear and type a new value.
+    await userEvent.clear(input)
+    await userEvent.keyboard('Alice Smith')
+
+    // Commit with Enter — editor closes, display shows the new value.
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(canvas.queryByRole('textbox')).not.toBeInTheDocument())
+    await expect(canvas.getByRole('button', { name: /edit value/i })).toHaveTextContent(
+      /alice smith/i,
+    )
+
+    // Re-open, type something, then Escape — value reverts.
+    await userEvent.click(canvas.getByRole('button', { name: /edit value/i }))
+    const input2 = await canvas.findByRole('textbox')
+    await userEvent.clear(input2)
+    await userEvent.keyboard('Temporary{Escape}')
+    await waitFor(() => expect(canvas.queryByRole('textbox')).not.toBeInTheDocument())
+    await expect(canvas.getByRole('button', { name: /edit value/i })).toHaveTextContent(
+      /alice smith/i,
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -90,7 +128,7 @@ export const TextField: Story = {
 // ---------------------------------------------------------------------------
 
 export const InTableCell: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzInplace },
     setup() {
       const rows = ref([
@@ -131,7 +169,7 @@ export const InTableCell: Story = {
 
 export const CustomEditor: Story = {
   args: { saveOn: 'enter' },
-  render: args => ({
+  render: (args) => ({
     components: { DzInplace, DzInput },
     setup() {
       const value = ref('Confidential')

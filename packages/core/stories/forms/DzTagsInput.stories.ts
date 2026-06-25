@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzFormField, DzTagsInput } from '../../src/components/forms'
 
@@ -109,7 +110,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTagsInput },
     setup() {
       return { args }
@@ -119,6 +120,25 @@ export const Default: Story = {
     },
     template: '<DzTagsInput v-bind="args" v-model:value="value" class="max-w-sm" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('textbox')
+
+    // Pre-existing tags should be present.
+    await expect(canvas.getByText('vue')).toBeInTheDocument()
+    await expect(canvas.getByText('typescript')).toBeInTheDocument()
+
+    // Type a new tag and commit it with Enter.
+    await userEvent.click(input)
+    await userEvent.keyboard('design{Enter}')
+
+    // The new chip should appear.
+    await waitFor(() => expect(canvas.getByText('design')).toBeInTheDocument())
+
+    // Backspace on an empty field removes the last tag.
+    await userEvent.keyboard('{Backspace}')
+    await waitFor(() => expect(canvas.queryByText('design')).not.toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -252,7 +272,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Add at least one tag',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzTagsInput },
     setup() {
       return { args }
@@ -270,7 +290,7 @@ export const InvalidState: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzTagsInput },
     setup() {
       return { args }

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { AlignCenter, AlignLeft, AlignRight, LayoutGrid, List, Table2 } from 'lucide-vue-next'
 import { DzSegmented } from '../../src/components/navigation'
@@ -78,7 +79,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzSegmented },
     setup() {
       return { args }
@@ -88,6 +89,27 @@ export const Default: Story = {
     },
     template: '<DzSegmented v-bind="args" v-model="value" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The toggle group should be present.
+    const group = canvas.getByRole('group')
+    await expect(group).toBeInTheDocument()
+
+    // Click Grid — it becomes the active segment.
+    const grid = canvas.getByRole('radio', { name: /grid/i })
+    await userEvent.click(grid)
+    await waitFor(() => expect(grid).toHaveAttribute('aria-checked', 'true'))
+
+    // The previously active List button is no longer checked.
+    const list = canvas.getByRole('radio', { name: /list/i })
+    await expect(list).toHaveAttribute('aria-checked', 'false')
+
+    // ArrowRight moves selection to Table.
+    await userEvent.keyboard('{ArrowRight}')
+    const table = canvas.getByRole('radio', { name: /table/i })
+    await waitFor(() => expect(table).toHaveAttribute('aria-checked', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -240,9 +262,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSegmented },
     setup() {
