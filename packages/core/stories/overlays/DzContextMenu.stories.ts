@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import {
   DzContextMenu,
@@ -46,8 +47,14 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+  render: (args) => ({
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     setup() {
       return { args }
     },
@@ -77,7 +84,13 @@ export const Default: Story = {
 export const WithDisabledItems: Story = {
   name: 'With Disabled Items',
   render: () => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     template: `
       <DzContextMenu>
         <DzContextMenuTrigger>
@@ -105,7 +118,13 @@ export const WithDisabledItems: Story = {
 export const WithSeparatorGroups: Story = {
   name: 'With Separator Groups',
   render: () => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     template: `
       <DzContextMenu>
         <DzContextMenuTrigger>
@@ -136,7 +155,13 @@ export const WithSeparatorGroups: Story = {
 
 export const Interactive: Story = {
   render: () => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     data() {
       return { lastAction: 'None', actionCount: 0 }
     },
@@ -168,11 +193,15 @@ export const Interactive: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     template: `
       <DzContextMenu>
         <DzContextMenuTrigger>
@@ -198,7 +227,13 @@ export const DarkMode: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: Keyboard Navigation',
   render: () => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -222,6 +257,23 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const triggerArea = canvas.getByText(/right-click for accessible menu/i)
+
+    // Right-click to open the context menu (portalled to document.body).
+    await userEvent.pointer({ target: triggerArea, keys: '[MouseRight]' })
+    const menu = await screen.findByRole('menu')
+    await expect(menu).toBeVisible()
+
+    // Disabled item carries aria-disabled.
+    const disabledItem = within(menu).getByRole('menuitem', { name: /paste \(disabled\)/i })
+    await expect(disabledItem).toHaveAttribute('aria-disabled', 'true')
+
+    // Escape dismisses the menu.
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -231,7 +283,13 @@ export const Accessibility: Story = {
 export const RealWorldFileExplorer: Story = {
   name: 'Real World: File Explorer',
   render: () => ({
-    components: { DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator },
+    components: {
+      DzContextMenu,
+      DzContextMenuTrigger,
+      DzContextMenuContent,
+      DzContextMenuItem,
+      DzContextMenuSeparator,
+    },
     data() {
       return {
         files: [

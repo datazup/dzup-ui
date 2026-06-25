@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
@@ -57,8 +58,15 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+  render: (args) => ({
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     setup() {
       return { args }
     },
@@ -88,7 +96,13 @@ export const Default: Story = {
 export const AllSides: Story = {
   name: 'Side Gallery',
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzButton,
+    },
     template: `
       <div class="flex flex-wrap gap-8 items-center justify-center py-24">
         <DzDropdownMenu v-for="side in ['top', 'right', 'bottom', 'left']" :key="side">
@@ -113,7 +127,14 @@ export const AllSides: Story = {
 export const WithDisabledItems: Story = {
   name: 'With Disabled Items',
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     template: `
       <div class="flex justify-center py-8">
         <DzDropdownMenu>
@@ -140,7 +161,14 @@ export const WithDisabledItems: Story = {
 export const WithSeparatorGroups: Story = {
   name: 'With Separator Groups',
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     template: `
       <div class="flex justify-center py-8">
         <DzDropdownMenu>
@@ -169,7 +197,14 @@ export const WithSeparatorGroups: Story = {
 
 export const Interactive: Story = {
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     data() {
       return { lastAction: 'None' }
     },
@@ -193,6 +228,23 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the menu by clicking the trigger.
+    await userEvent.click(canvas.getByRole('button', { name: /^actions$/i }))
+
+    // Menu is portalled to body — find by role="menu".
+    const menu = await screen.findByRole('menu')
+    await expect(menu).toBeVisible()
+
+    // Click "Edit" and assert the lastAction text updates.
+    await userEvent.click(within(menu).getByRole('menuitem', { name: /^edit$/i }))
+    await expect(canvas.getByText(/edit/i)).toBeInTheDocument()
+
+    // Menu closes after selection.
+    await expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -201,11 +253,16 @@ export const Interactive: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     template: `
       <div class="flex justify-center py-8">
         <DzDropdownMenu>
@@ -231,7 +288,14 @@ export const DarkMode: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: Keyboard Navigation',
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -255,6 +319,23 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open via click; Reka portals the menu to document.body.
+    await userEvent.click(canvas.getByRole('button', { name: /open actions menu/i }))
+    const menu = await screen.findByRole('menu')
+    await expect(menu).toBeVisible()
+
+    // Disabled item is present but aria-disabled.
+    const disabledItem = within(menu).getByRole('menuitem', { name: /move \(disabled\)/i })
+    await expect(disabledItem).toHaveAttribute('aria-disabled', 'true')
+
+    // Escape dismisses the menu and returns focus to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    await expect(canvas.getByRole('button', { name: /open actions menu/i })).toHaveFocus()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -264,7 +345,14 @@ export const Accessibility: Story = {
 export const RealWorldAccountMenu: Story = {
   name: 'Real World: User Account Menu',
   render: () => ({
-    components: { DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzButton },
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
     template: `
       <div class="flex justify-end py-4 px-4">
         <DzDropdownMenu>
