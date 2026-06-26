@@ -132,15 +132,17 @@ export const Single: Story = {
     await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
 
     // "Fruit" branch is pre-expanded; find "Apple" leaf (no aria-expanded = leaf node).
+    // Click the inner row div (the actual interactive element).
     const appleItem = await waitFor(() => {
       const items = body.getAllByRole('treeitem', { name: /apple/i })
       const leaf = items.find((el) => !el.hasAttribute('aria-expanded'))
       expect(leaf).toBeDefined()
       return leaf!
     })
+    const appleRow = (appleItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? appleItem
 
     // Click Apple to select it.
-    await userEvent.click(appleItem)
+    await userEvent.click(appleRow)
     await waitFor(() =>
       expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),
     )
@@ -189,7 +191,8 @@ export const MultipleChips: Story = {
     const bananaItem = body
       .getAllByRole('treeitem', { name: /banana/i })
       .find((el) => !el.hasAttribute('aria-expanded'))!
-    await userEvent.click(bananaItem)
+    const bananaRow = (bananaItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? bananaItem
+    await userEvent.click(bananaRow)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove banana/i })).toBeInTheDocument(),
     )
@@ -240,7 +243,8 @@ export const CheckboxPropagation: Story = {
     const carrotItem = body
       .getAllByRole('treeitem', { name: /carrot/i })
       .find((el) => !el.hasAttribute('aria-expanded'))!
-    await userEvent.click(carrotItem)
+    const carrotRow = (carrotItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? carrotItem
+    await userEvent.click(carrotRow)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument(),
     )
@@ -249,7 +253,9 @@ export const CheckboxPropagation: Story = {
     const vegetableItem = body
       .getAllByRole('treeitem', { name: /vegetable/i })
       .find((el) => el.hasAttribute('aria-expanded'))!
-    await userEvent.click(vegetableItem)
+    const vegetableRow =
+      (vegetableItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? vegetableItem
+    await userEvent.click(vegetableRow)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove potato/i })).toBeInTheDocument(),
     )

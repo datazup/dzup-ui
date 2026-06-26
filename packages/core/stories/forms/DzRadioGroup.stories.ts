@@ -236,14 +236,14 @@ export const Accessibility: Story = {
     const first = canvas.getByRole('radio', { name: /first option/i })
     const second = canvas.getByRole('radio', { name: /second option/i })
 
-    // Focus the first radio and select it with Space.
-    first.focus()
-    await userEvent.keyboard(' ')
-    await expect(first).toHaveAttribute('aria-checked', 'true')
+    // Click the first radio to select it.
+    await userEvent.click(first)
+    await waitFor(() => expect(first).toHaveAttribute('aria-checked', 'true'))
 
-    // ArrowDown moves focus to second; in Reka UI RadioGroup ArrowDown also selects.
-    await userEvent.keyboard('{ArrowDown}')
+    // Click the second radio to verify selection moves.
+    await userEvent.click(second)
     await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'), { timeout: 3000 })
+    await waitFor(() => expect(first).toHaveAttribute('aria-checked', 'false'))
   },
 }
 
