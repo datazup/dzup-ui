@@ -47,6 +47,8 @@
     "test:e2e:update": "playwright test --update-snapshots",
     "storybook": "yarn workspace @dzup-ui/storybook dev",
     "storybook:build": "yarn workspace @dzup-ui/storybook build",
+    "storybook:test": "yarn workspace @dzup-ui/storybook test-storybook",
+    "storybook:install": "yarn install && yarn workspace @dzup-ui/storybook exec playwright install chromium",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "yarn build && changeset publish",
