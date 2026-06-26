@@ -30,17 +30,13 @@ const styles = computed(() =>
   }),
 )
 
-const classes = computed(() =>
-  cn(styles.value.item(), attrs.class as string | undefined),
-)
+const classes = computed(() => cn(styles.value.item(), attrs.class as string | undefined))
 
 function handleClick(event: MouseEvent): void {
-  if (props.disabled)
-    return
+  if (props.disabled) return
   emit('click', event)
 }
 </script>
-
 
 <template>
   <a
@@ -67,6 +63,7 @@ function handleClick(event: MouseEvent): void {
     :class="classes"
     :aria-label="ariaLabel"
     :aria-current="active ? 'page' : undefined"
+    :aria-disabled="disabled ? 'true' : undefined"
     :disabled="disabled || undefined"
     :data-state="active ? 'active' : undefined"
     :data-disabled="disabled ? '' : undefined"

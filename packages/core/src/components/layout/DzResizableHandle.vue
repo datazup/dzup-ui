@@ -28,6 +28,16 @@ const resizableContext = inject(DZ_RESIZABLE_KEY, null)
 
 const direction = computed(() => resizableContext?.direction.value ?? 'horizontal')
 
+/**
+ * ARIA orientation for the separator handle.
+ * A horizontal splitter group (panels side-by-side) has a vertical handle bar,
+ * and a vertical splitter group (panels stacked top/bottom) has a horizontal handle bar.
+ * Reka UI sets data-orientation but not aria-orientation, so we bind it explicitly.
+ */
+const ariaOrientation = computed<'horizontal' | 'vertical'>(() =>
+  direction.value === 'vertical' ? 'horizontal' : 'vertical',
+)
+
 const styles = computed(() =>
   resizableVariants({
     direction: direction.value,
@@ -35,16 +45,14 @@ const styles = computed(() =>
   }),
 )
 
-const classes = computed(() =>
-  cn(styles.value.handle(), attrs.class as string | undefined),
-)
+const classes = computed(() => cn(styles.value.handle(), attrs.class as string | undefined))
 </script>
-
 
 <template>
   <SplitterResizeHandle
     :disabled="props.disabled"
     :class="classes"
+    :aria-orientation="ariaOrientation"
     :data-direction="direction"
     :data-disabled="props.disabled ? '' : undefined"
     v-bind="{ ...$attrs, class: undefined }"
