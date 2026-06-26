@@ -1,5 +1,6 @@
 // token-check-disable-file — color picker stories legitimately use raw color values as test data
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzColorPicker } from '../../src/components/forms'
 
@@ -92,13 +93,31 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzColorPicker },
     setup() {
       return { args }
     },
     template: '<DzColorPicker v-bind="args" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Trigger is the color swatch button; aria-expanded starts false.
+    const trigger = canvas.getByRole('button', { name: /choose a color/i })
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click to open; PopoverContent is portalled to document.body.
+    await userEvent.click(trigger)
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
+    // The hex text input is now visible inside the panel.
+    await waitFor(() => expect(screen.getByLabelText(/hex color value/i)).toBeVisible())
+
+    // Escape closes the popover.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -157,7 +176,7 @@ export const WithoutInput: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzColorPicker },
     setup() {
       return { args }
@@ -176,7 +195,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please select a valid color',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzColorPicker },
     setup() {
       return { args }
@@ -220,9 +239,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzColorPicker },
     setup() {
@@ -255,6 +272,19 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open color picker
+    await userEvent.click(canvas.getByRole('button', { name: /choose a color/i }))
+
+    // Click the red preset swatch (#ef4444) — portalled, query from screen
+    const redSwatch = await screen.findByRole('button', { name: /select color #ef4444/i })
+    await userEvent.click(redSwatch)
+
+    // After selecting, the displayed color text should update
+    await waitFor(() => expect(canvas.getByText('#ef4444')).toBeVisible())
+  },
 }
 
 // ---------------------------------------------------------------------------

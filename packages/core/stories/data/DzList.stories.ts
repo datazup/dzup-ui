@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzList, DzListItem } from '../../src/components/data'
 
@@ -80,7 +81,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzList, DzListItem },
     setup() {
       return { args }
@@ -208,6 +209,29 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // All four items should be visible.
+    const dashboard = canvas.getByText('Dashboard')
+    const settings = canvas.getByText('Settings')
+    await expect(dashboard).toBeVisible()
+    await expect(settings).toBeVisible()
+
+    // Click Dashboard — it becomes active.
+    await userEvent.click(dashboard)
+    await waitFor(() => expect(canvas.getByText(/selected: dashboard/i)).toBeInTheDocument())
+
+    // The Dashboard listitem should now have data-state="active".
+    // Use closest('[role="listitem"]') since listitem has no accessible name.
+    const dashItem = dashboard.closest('[role="listitem"]') as HTMLElement
+    await expect(dashItem).toHaveAttribute('data-state', 'active')
+
+    // Click Settings — selection moves.
+    await userEvent.click(settings)
+    await waitFor(() => expect(canvas.getByText(/selected: settings/i)).toBeInTheDocument())
+    await expect(dashItem).not.toHaveAttribute('data-state', 'active')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -299,7 +323,7 @@ export const Loading: Story = {
   args: {
     loading: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzList, DzListItem },
     setup() {
       return { args }
@@ -340,9 +364,7 @@ export const Empty: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzList, DzListItem },
     template: `

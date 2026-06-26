@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 
@@ -154,6 +155,21 @@ export const WithContent: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Click the "Next" button in step 1 content
+    const nextBtn = canvas.getByRole('button', { name: 'Next' })
+    await userEvent.click(nextBtn)
+
+    // Step 2 content should now be visible
+    await waitFor(() =>
+      expect(canvas.getByText('Step 2: Choose your notification preferences.')).toBeVisible(),
+    )
+
+    // Step 1 content should no longer be visible
+    expect(canvas.queryByText('Step 1: Enter your name and email address.')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

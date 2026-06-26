@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { TreeNode } from '../../src/components/data'
-import {
-  DzFormField,
-  DzFormLabel,
-  DzTreeSelect,
-} from '../../src/components/forms'
+import { DzFormField, DzFormLabel, DzTreeSelect } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
 
 const categories: TreeNode[] = [
@@ -14,10 +11,14 @@ const categories: TreeNode[] = [
     children: [
       { key: 'apple', label: 'Apple' },
       { key: 'banana', label: 'Banana' },
-      { key: 'citrus', label: 'Citrus', children: [
-        { key: 'orange', label: 'Orange' },
-        { key: 'lemon', label: 'Lemon' },
-      ] },
+      {
+        key: 'citrus',
+        label: 'Citrus',
+        children: [
+          { key: 'orange', label: 'Orange' },
+          { key: 'lemon', label: 'Lemon' },
+        ],
+      },
     ],
   },
   {
@@ -104,7 +105,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Single: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTreeSelect },
     setup() {
       return { args }
@@ -119,6 +120,26 @@ export const Single: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(document.body)
+
+    // Open the dropdown via the combobox trigger.
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+
+    // Tree panel is portalled to document.body.
+    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
+
+    // "Fruit" branch is pre-expanded; "Apple" leaf should be visible.
+    await waitFor(() => expect(body.getByRole('treeitem', { name: /apple/i })).toBeVisible())
+
+    // Click Apple to select it.
+    await userEvent.click(body.getByRole('treeitem', { name: /apple/i }))
+    await waitFor(() =>
+      expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -148,6 +169,27 @@ export const MultipleChips: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(document.body)
+
+    // Initial chips for pre-selected values.
+    expect(canvas.getByRole('button', { name: /remove apple/i })).toBeInTheDocument()
+    expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument()
+
+    // Open and select Banana.
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
+    await userEvent.click(body.getByRole('treeitem', { name: /banana/i }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: /remove banana/i })).toBeInTheDocument(),
+    )
+
+    // Remove Apple chip.
+    await userEvent.click(canvas.getByRole('button', { name: /remove apple/i }))
+    await waitFor(() => expect(canvas.queryByRole('button', { name: /remove apple/i })).toBeNull())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -177,6 +219,27 @@ export const CheckboxPropagation: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(document.body)
+
+    // Open the dropdown.
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
+
+    // Click Carrot to check it.
+    await userEvent.click(body.getByRole('treeitem', { name: /carrot/i }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument(),
+    )
+
+    // Click Vegetable parent — propagates to Potato as well.
+    await userEvent.click(body.getByRole('treeitem', { name: /vegetable/i }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: /remove potato/i })).toBeInTheDocument(),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------

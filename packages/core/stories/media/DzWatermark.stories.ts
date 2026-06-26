@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { DzWatermark } from '../../src/components/media'
 
 /**
@@ -94,13 +95,25 @@ const SAMPLE = `
 
 export const TextMark: Story = {
   name: 'Text Mark',
-  render: args => ({
+  render: (args) => ({
     components: { DzWatermark },
     setup() {
       return { args, SAMPLE }
     },
     template: `<DzWatermark v-bind="args"><div v-html="SAMPLE" /></DzWatermark>`,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Wrapper div (root) must be in the DOM
+    const wrapper = canvasElement.firstElementChild
+    expect(wrapper).toBeTruthy()
+    // The overlay div must be aria-hidden since watermarks are purely decorative
+    const overlay = canvasElement.querySelector('[aria-hidden="true"]')
+    expect(overlay).toBeTruthy()
+    // Slotted content must be rendered inside the watermark wrapper
+    const heading = canvas.getByText(/Revenue|Forecast/i)
+    expect(heading).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -114,7 +127,7 @@ export const MultiLine: Story = {
     rotate: -30,
     gap: [60, 60],
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzWatermark },
     setup() {
       return { args, SAMPLE }
@@ -134,7 +147,7 @@ export const OverImage: Story = {
     rotate: -22,
     fontSize: 20,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzWatermark },
     setup() {
       return { args }

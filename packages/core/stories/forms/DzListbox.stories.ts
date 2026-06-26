@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { darkModeDecorator } from '../_shared'
 import type { DzListboxOption } from '../../src/components/forms'
@@ -103,7 +104,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Single: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox },
     setup() {
       const value = ref<string | null>('ber')
@@ -116,6 +117,28 @@ export const Single: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The listbox is always-visible — Berlin is pre-selected.
+    const listbox = canvas.getByRole('listbox', { name: /city/i })
+    await expect(listbox).toBeVisible()
+
+    // Click Amsterdam — it should become selected.
+    const amsterdam = canvas.getByRole('option', { name: /amsterdam/i })
+    await userEvent.click(amsterdam)
+    await waitFor(() => expect(amsterdam).toHaveAttribute('aria-selected', 'true'))
+
+    // ArrowDown moves keyboard focus to Berlin; press Enter/Space to select.
+    await userEvent.keyboard('{ArrowDown}')
+    const berlin = canvas.getByRole('option', { name: /^berlin$/i })
+    await expect(berlin).toBeInTheDocument()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(berlin).toHaveAttribute('aria-selected', 'true'))
+
+    // Disabled option (none in Single story) — verify Copenhagen is present.
+    await expect(canvas.getByRole('option', { name: /copenhagen/i })).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -124,7 +147,7 @@ export const Single: Story = {
 
 export const Multiple: Story = {
   args: { multiple: true, checkmark: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>(['ams', 'cph'])
@@ -146,7 +169,7 @@ export const Multiple: Story = {
 
 export const WithFilter: Story = {
   args: { filter: true, multiple: true, checkmark: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>([])
@@ -166,7 +189,7 @@ export const WithFilter: Story = {
 
 export const Grouped: Story = {
   args: { options: grouped, multiple: true, checkmark: true, filter: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>(['banana'])
@@ -185,7 +208,7 @@ export const Grouped: Story = {
 // ---------------------------------------------------------------------------
 
 export const Disabled: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox },
     setup() {
       const value = ref<string | null>('ber')
@@ -218,7 +241,7 @@ export const Disabled: Story = {
 
 export const InsideFormField: Story = {
   args: { multiple: true, checkmark: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox, DzFormField, DzFormLabel, DzFormDescription },
     setup() {
       const value = ref<string[]>([])
@@ -238,7 +261,7 @@ export const InsideFormField: Story = {
 
 export const DarkMode: Story = {
   decorators: [darkModeDecorator],
-  render: args => ({
+  render: (args) => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>(['ams'])

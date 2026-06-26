@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzFileUpload } from '../../src/components/forms'
 
@@ -89,7 +90,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -127,7 +128,7 @@ export const MultipleFiles: Story = {
     multiple: true,
     maxFiles: 5,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -146,7 +147,7 @@ export const AcceptFilter: Story = {
     accept: 'image/*',
     multiple: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -165,7 +166,7 @@ export const MaxFileSize: Story = {
     maxSize: 5 * 1024 * 1024,
     multiple: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -185,7 +186,7 @@ export const MaxFileSize: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -204,7 +205,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please upload at least one file',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -245,9 +246,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzFileUpload },
     template: '<DzFileUpload multiple class="max-w-md" />',
@@ -273,6 +272,25 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Initially no files selected
+    await expect(canvas.getByText(/none/i)).toBeVisible()
+
+    // Upload a mock file via the hidden input
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
+    const file = new File(['hello world'], 'test-document.txt', { type: 'text/plain' })
+    await userEvent.upload(input, file)
+
+    // File name appears in the file list and in the summary paragraph
+    await waitFor(() => expect(canvas.getByText('test-document.txt')).toBeVisible())
+
+    // Remove button is present for the uploaded file
+    await expect(
+      canvas.getByRole('button', { name: /remove test-document\.txt/i }),
+    ).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

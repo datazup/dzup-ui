@@ -77,9 +77,7 @@ const orgTree: TreeNode[] = [
       {
         key: 'cfo',
         label: 'CFO - James Park',
-        children: [
-          { key: 'finance', label: 'Finance - Ethan' },
-        ],
+        children: [{ key: 'finance', label: 'Finance - Ethan' }],
       },
     ],
   },
@@ -152,7 +150,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTree },
     setup() {
       return { args }
@@ -194,9 +192,7 @@ export const AllSizes: Story = {
             {
               key: 'child-3',
               label: 'Child 3',
-              children: [
-                { key: 'grandchild', label: 'Grandchild' },
-              ],
+              children: [{ key: 'grandchild', label: 'Grandchild' }],
             },
           ],
         },
@@ -283,7 +279,7 @@ export const Disabled: Story = {
     disabled: true,
     items: fileTree,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzTree },
     setup() {
       return { args }
@@ -315,9 +311,7 @@ export const DisabledNodes: Story = {
           key: 'locked',
           label: 'Locked Folder',
           disabled: true,
-          children: [
-            { key: 'file-4', label: 'secrets.ts' },
-          ],
+          children: [{ key: 'file-4', label: 'secrets.ts' }],
         },
       ]
       return { items }
@@ -342,7 +336,7 @@ export const Loading: Story = {
     loading: true,
     items: fileTree,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzTree },
     setup() {
       return { args }
@@ -402,9 +396,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTree },
     setup() {
@@ -453,12 +445,11 @@ export const Accessibility: Story = {
     const canvas = within(canvasElement)
 
     // "src" is expanded, so its child branch "components" is visible but closed.
-    const clickable = canvas.getByText('components').closest('[tabindex="0"]') as HTMLElement
-    const item = clickable.closest('[role="treeitem"]') as HTMLElement
+    const item = canvas.getByText('components').closest('[role="treeitem"]') as HTMLElement
     await expect(item).toHaveAttribute('aria-expanded', 'false')
 
     // ArrowRight expands a focused, collapsed branch; ArrowLeft collapses it.
-    clickable.focus()
+    item.focus()
     await userEvent.keyboard('{ArrowRight}')
     await waitFor(() => expect(item).toHaveAttribute('aria-expanded', 'true'))
     await userEvent.keyboard('{ArrowLeft}')
