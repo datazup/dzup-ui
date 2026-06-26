@@ -87,7 +87,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     setup() {
       return { args }
@@ -128,7 +128,12 @@ export const Default: Story = {
 // ---------------------------------------------------------------------------
 
 export const AllVariants: Story = {
+  args: {
+    hoverable: true,
+  },
+
   name: 'Variant Gallery',
+
   render: () => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     template: `
@@ -325,7 +330,7 @@ export const Loading: Story = {
   args: {
     loading: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     setup() {
       return { args }
@@ -436,9 +441,7 @@ export const WithSpans: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     template: `
@@ -546,9 +549,9 @@ export const StickyHeader: Story = {
     docs: {
       description: {
         story:
-          'DzTable’s root is a scroll container. Give the header cells '
-          + '`sticky top-0` (plus a background) and constrain the table height to '
-          + 'keep column headers visible while the body scrolls.',
+          'DzTable’s root is a scroll container. Give the header cells ' +
+          '`sticky top-0` (plus a background) and constrain the table height to ' +
+          'keep column headers visible while the body scrolls.',
       },
     },
   },
