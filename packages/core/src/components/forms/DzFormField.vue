@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzFormFieldProps, DzFormFieldSlots } from './DzFormField.types.ts'
 /**
  * DzFormField -- Compound wrapper that provides form field context.
@@ -24,6 +20,10 @@ import type { DzFormFieldProps, DzFormFieldSlots } from './DzFormField.types.ts'
 import { computed, useAttrs } from 'vue'
 import { useFormField } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzFormFieldProps>(), {
   disabled: false,

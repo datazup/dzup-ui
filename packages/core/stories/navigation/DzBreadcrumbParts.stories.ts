@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzBreadcrumb,
   DzBreadcrumbItem,
   DzBreadcrumbSeparator,
 } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzBreadcrumb compound sub-parts: DzBreadcrumbItem and DzBreadcrumbSeparator.

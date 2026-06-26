@@ -102,7 +102,9 @@ const months: string[] = [
           >
             Workspace
           </p>
-          <h1 class="text-3xl font-semibold tracking-tight">Overview</h1>
+          <h1 class="text-3xl font-semibold tracking-tight">
+            Overview
+          </h1>
         </div>
         <button
           type="button"
@@ -110,8 +112,7 @@ const months: string[] = [
         >
           <span
             class="grid h-4 w-4 place-items-center text-base leading-none transition-transform group-hover:rotate-90"
-            >+</span
-          >
+          >+</span>
           New Project
         </button>
       </header>
@@ -143,7 +144,9 @@ const months: string[] = [
               {{ kpi.delta >= 0 ? '+' : '' }}{{ kpi.delta }}%
             </span>
           </div>
-          <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">{{ kpi.hint }}</p>
+          <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
+            {{ kpi.hint }}
+          </p>
         </article>
       </section>
 
@@ -155,8 +158,12 @@ const months: string[] = [
           class="flex items-center justify-between border-b border-slate-100 px-6 py-4 dark:border-white/5"
         >
           <div>
-            <h2 class="text-base font-semibold">Revenue trend</h2>
-            <p class="text-xs text-slate-400 dark:text-slate-500">Last 12 months</p>
+            <h2 class="text-base font-semibold">
+              Revenue trend
+            </h2>
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+              Last 12 months
+            </p>
           </div>
           <div
             class="flex items-center gap-1 rounded-lg bg-slate-100 p-1 text-xs font-medium dark:bg-slate-800"
@@ -196,7 +203,7 @@ const months: string[] = [
             >
               <div
                 class="w-full rounded-t-md bg-gradient-to-t from-indigo-500 to-violet-400 opacity-80 transition-all duration-300 hover:opacity-100 dark:from-indigo-500 dark:to-violet-400"
-                :style="{ height: h + '%' }"
+                :style="{ height: `${h}%` }"
               />
             </div>
           </div>
@@ -216,22 +223,31 @@ const months: string[] = [
         <div
           class="flex items-center justify-between border-b border-slate-100 px-6 py-4 dark:border-white/5"
         >
-          <h2 class="text-base font-semibold">Recent Activity</h2>
+          <h2 class="text-base font-semibold">
+            Recent Activity
+          </h2>
           <a
             href="#"
             class="text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-            >View all</a
-          >
+          >View all</a>
         </div>
         <table class="w-full text-left text-sm">
           <thead>
             <tr
               class="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500"
             >
-              <th class="px-6 py-3 font-semibold">Name</th>
-              <th class="px-6 py-3 font-semibold">Status</th>
-              <th class="px-6 py-3 font-semibold">Owner</th>
-              <th class="px-6 py-3 font-semibold">Updated</th>
+              <th class="px-6 py-3 font-semibold">
+                Name
+              </th>
+              <th class="px-6 py-3 font-semibold">
+                Status
+              </th>
+              <th class="px-6 py-3 font-semibold">
+                Owner
+              </th>
+              <th class="px-6 py-3 font-semibold">
+                Updated
+              </th>
               <th class="px-6 py-3" />
             </tr>
           </thead>
@@ -241,7 +257,9 @@ const months: string[] = [
               :key="row.name"
               class="group transition-colors hover:bg-slate-50/80 dark:hover:bg-white/[0.03]"
             >
-              <td class="px-6 py-4 font-medium">{{ row.name }}</td>
+              <td class="px-6 py-4 font-medium">
+                {{ row.name }}
+              </td>
               <td class="px-6 py-4">
                 <span
                   class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset"
@@ -255,12 +273,13 @@ const months: string[] = [
                 <div class="flex items-center gap-2.5">
                   <span
                     class="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-[11px] font-semibold text-slate-700 dark:from-slate-700 dark:to-slate-800 dark:text-slate-200"
-                    >{{ row.initials }}</span
-                  >
+                  >{{ row.initials }}</span>
                   <span class="text-slate-600 dark:text-slate-300">{{ row.owner }}</span>
                 </div>
               </td>
-              <td class="px-6 py-4 text-slate-500 dark:text-slate-400">{{ row.updated }}</td>
+              <td class="px-6 py-4 text-slate-500 dark:text-slate-400">
+                {{ row.updated }}
+              </td>
               <td class="px-6 py-4 text-right">
                 <button
                   type="button"

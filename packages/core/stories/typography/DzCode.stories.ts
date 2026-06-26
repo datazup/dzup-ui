@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzCode } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCode renders code content in monospace font with appropriate styling.
@@ -49,7 +49,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzCode },
     setup() {
       return { args }

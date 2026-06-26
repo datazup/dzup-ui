@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
-import { TeamMemberBadge } from '../../src/components/feedback'
 import type { TeamMemberStatus } from '../../src/components/feedback/TeamMemberBadge.types.ts'
+import { expect, within } from 'storybook/test'
+import { TeamMemberBadge } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * TeamMemberBadge renders a colored status dot + role label for a team
@@ -63,7 +63,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { TeamMemberBadge },
     setup() {
       return { args }

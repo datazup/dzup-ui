@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzHeading } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzHeading renders semantic heading elements (`h1` through `h6`) with independent visual sizing.
@@ -64,7 +64,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzHeading },
     setup() {
       return { args }

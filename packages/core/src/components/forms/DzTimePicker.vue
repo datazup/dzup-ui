@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTimePickerEmits, DzTimePickerProps, DzTimePickerSlots } from './DzTimePicker.types.ts'
 import { Clock, X } from 'lucide-vue-next'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
@@ -26,6 +22,10 @@ import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { timePickerVariants } from './DzTimePicker.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -573,7 +573,9 @@ const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDi
                 :value="selectedHourDisplay ?? ''"
                 @change="onSelectHour"
               >
-                <option value="" disabled>--</option>
+                <option value="" disabled>
+                  --
+                </option>
                 <option
                   v-for="h in hourValues"
                   :key="`h-${h}`"
@@ -590,7 +592,9 @@ const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDi
                 :value="draftMinute ?? ''"
                 @change="onSelectMinute"
               >
-                <option value="" disabled>--</option>
+                <option value="" disabled>
+                  --
+                </option>
                 <option
                   v-for="m in minuteValues"
                   :key="`m-${m}`"
@@ -608,7 +612,9 @@ const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDi
                   :value="draftSecond ?? ''"
                   @change="onSelectSecond"
                 >
-                  <option value="" disabled>--</option>
+                  <option value="" disabled>
+                    --
+                  </option>
                   <option
                     v-for="s in secondValues"
                     :key="`s-${s}`"
@@ -626,7 +632,9 @@ const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDi
                 :value="draftHour !== null ? draftMeridiem : ''"
                 @change="onSelectMeridiem"
               >
-                <option value="" disabled>--</option>
+                <option value="" disabled>
+                  --
+                </option>
                 <option
                   v-for="mer in (['AM', 'PM'] as const)"
                   :key="mer"

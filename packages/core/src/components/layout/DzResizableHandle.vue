@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzResizableHandleProps, DzResizableHandleSlots } from './DzResizable.types.ts'
 import { SplitterResizeHandle } from 'reka-ui'
 /**
@@ -15,6 +11,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_RESIZABLE_KEY } from './DzResizable.types.ts'
 import { resizableVariants } from './DzResizable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzResizableHandleProps>(), {
   withHandle: false,

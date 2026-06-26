@@ -69,7 +69,7 @@ export const IconCycle: Story = {
   name: 'Icon (cycle)',
   decorators: [withThemeProvider],
   args: { variant: 'icon', showSystem: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzColorModeToggle },
     setup: () => ({ args }),
     template: `
@@ -105,7 +105,7 @@ export const SwitchStyle: Story = {
   name: 'Switch',
   decorators: [withThemeProvider],
   args: { variant: 'switch' },
-  render: (args) => ({
+  render: args => ({
     components: { DzColorModeToggle },
     setup: () => ({ args }),
     template: '<DzColorModeToggle v-bind="args" />',
@@ -119,7 +119,7 @@ export const SwitchStyle: Story = {
 export const Segmented: Story = {
   decorators: [withThemeProvider],
   args: { variant: 'segmented', showSystem: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzColorModeToggle },
     setup: () => ({ args }),
     template: '<DzColorModeToggle v-bind="args" />',
@@ -134,7 +134,7 @@ export const WithoutSystem: Story = {
   name: 'Without system',
   decorators: [withThemeProvider],
   args: { variant: 'segmented', showSystem: false },
-  render: (args) => ({
+  render: args => ({
     components: { DzColorModeToggle },
     setup: () => ({ args }),
     template: `

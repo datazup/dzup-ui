@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAvatarEmits, DzAvatarProps, DzAvatarSlots } from './DzAvatar.types.ts'
 /**
  * DzAvatar — User avatar component with image and fallback support.
@@ -23,6 +19,10 @@ import { computed, inject, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_AVATAR_GROUP_KEY } from './DzAvatar.types.ts'
 import { avatarVariants } from './DzAvatar.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzAvatarProps>(), {
   size: undefined,
@@ -56,7 +56,6 @@ function handleImageError(event: Event): void {
   emit('error', event)
 }
 </script>
-
 
 <template>
   <span

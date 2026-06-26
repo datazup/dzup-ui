@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, within } from 'storybook/test'
 import { DzTokenProgressBar } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTokenProgressBar is an **app-specific** usage bar for LLM token budgets. It

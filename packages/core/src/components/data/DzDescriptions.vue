@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { CSSProperties } from 'vue'
 import type {
   DescriptionsColumns,
@@ -38,6 +34,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DESCRIPTIONS_KEY } from './DzDescriptions.types.ts'
 import { descriptionsVariants } from './DzDescriptions.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzDescriptionsProps>(), {
   items: undefined,

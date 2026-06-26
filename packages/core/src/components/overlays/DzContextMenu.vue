@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzContextMenuProps, DzContextMenuSlots } from './DzContextMenu.types.ts'
 /**
  * DzContextMenu — Root context menu using Reka UI (ADR-07).
@@ -23,6 +19,10 @@ import type { DzContextMenuProps, DzContextMenuSlots } from './DzContextMenu.typ
  */
 import { ContextMenuRoot } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const open = defineModel<boolean>('open', { default: undefined })
 
 withDefaults(defineProps<DzContextMenuProps>(), {
@@ -31,7 +31,6 @@ withDefaults(defineProps<DzContextMenuProps>(), {
 
 defineSlots<DzContextMenuSlots>()
 </script>
-
 
 <template>
   <ContextMenuRoot v-model:open="open" :modal="modal">

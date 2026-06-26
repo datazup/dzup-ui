@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzKbd } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzKbd renders keyboard-shortcut hints as semantic `<kbd>` chips.
@@ -22,7 +22,7 @@ const meta = {
   argTypes: {
     keys: {
       control: 'object',
-      description: "Ordered keys to render as a combo (e.g. ['mod', 'k'])",
+      description: 'Ordered keys to render as a combo (e.g. [\'mod\', \'k\'])',
       table: { category: 'Content' },
     },
     platformAware: {
@@ -64,7 +64,7 @@ type Story = StoryObj<typeof meta>
 
 export const SingleKey: Story = {
   args: { keys: undefined },
-  render: (args) => ({
+  render: args => ({
     components: { DzKbd },
     setup() {
       return { args }
@@ -87,7 +87,7 @@ export const SingleKey: Story = {
 
 export const Combo: Story = {
   name: 'Combo (keys prop)',
-  render: (args) => ({
+  render: args => ({
     components: { DzKbd },
     setup() {
       return { args }

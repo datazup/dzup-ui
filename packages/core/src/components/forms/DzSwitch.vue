@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSwitchEmits, DzSwitchProps, DzSwitchSlots } from './DzSwitch.types.ts'
 import { SwitchRoot, SwitchThumb } from 'reka-ui'
 /**
@@ -20,6 +16,10 @@ import { computed, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { switchVariants } from './DzSwitch.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<boolean>({ default: false })
 
@@ -66,7 +66,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <label

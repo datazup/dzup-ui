@@ -10,8 +10,7 @@
  */
 
 import type { DzThemeContext, ThemePreference } from './DzThemeProvider.types'
-import { computed, ref } from 'vue'
-import { inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { DZ_THEME_KEY } from './DzThemeProvider.types'
 
 export interface UseThemeOptions {

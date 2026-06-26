@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest'
 import { TEAM_MEMBER_STATUS_TOKENS } from './TeamMemberBadge.tokens.ts'
 import TeamMemberBadge from './TeamMemberBadge.vue'
 
-describe('TeamMemberBadge — behavior', () => {
+describe('teamMemberBadge — behavior', () => {
   it('maps idle status to the muted-foreground token in the dot style', () => {
     const wrapper = mount(TeamMemberBadge, {
       props: {
@@ -57,7 +57,7 @@ describe('TeamMemberBadge — behavior', () => {
         status: 'active',
       },
       slots: {
-        default: ({ role, status }: { role: string; status: string }) => {
+        default: ({ role, status }: { role: string, status: string }) => {
           capturedRole = role
           capturedStatus = status
           return role

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzButtonEmits, DzButtonProps, DzButtonSlots } from './DzButton.types.ts'
 /**
  * DzButton — Primary button component.
@@ -21,6 +17,10 @@ import { computed, getCurrentInstance, inject, isProxy, markRaw, toRaw, useAttrs
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_BUTTON_GROUP_KEY } from './DzButtonGroup.types.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzButtonProps>(), {
   variant: undefined,
@@ -113,7 +113,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <component

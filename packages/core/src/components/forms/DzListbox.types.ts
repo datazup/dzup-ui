@@ -88,7 +88,7 @@ export interface DzListboxEmits extends SelectEvents<DzListboxModelValue> {
 /** Slot definitions for DzListbox */
 export interface DzListboxSlots {
   /** Custom option rendering */
-  option?: (props: { option: DzListboxOption; index: number; selected: boolean }) => unknown
+  option?: (props: { option: DzListboxOption, index: number, selected: boolean }) => unknown
   /** Custom group label rendering */
   groupLabel?: (props: { group: string }) => unknown
   /** Content shown when there are no (matching) options */

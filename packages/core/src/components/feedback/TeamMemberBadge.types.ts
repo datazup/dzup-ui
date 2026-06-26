@@ -37,5 +37,5 @@ export interface TeamMemberBadgeProps {
 /** Slot definitions for TeamMemberBadge */
 export interface TeamMemberBadgeSlots {
   /** Override the default label (defaults to role text). Receives role + status as slot props. */
-  default?: (props: { role: string; status: TeamMemberStatus }) => unknown
+  default?: (props: { role: string, status: TeamMemberStatus }) => unknown
 }

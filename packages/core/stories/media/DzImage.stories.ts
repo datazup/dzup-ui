@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, waitFor } from 'storybook/test'
 import { DzImage } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 // Offline-safe fixtures for the fallback play() test: an invalid base64 data
 // URI that always errors, and a valid 1x1 transparent PNG that always loads.

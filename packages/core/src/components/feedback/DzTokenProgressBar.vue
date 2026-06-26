@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTokenProgressBarProps, DzTokenProgressBarSlots } from './DzTokenProgressBar.types.ts'
 /**
  * DzTokenProgressBar — Token-usage progress bar with threshold colors.
@@ -21,6 +17,10 @@ import type { DzTokenProgressBarProps, DzTokenProgressBarSlots } from './DzToken
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTokenProgressBarProps>(), {
   showWarning: true,
@@ -75,7 +75,6 @@ const labelBindings = computed(() => ({
   state: state.value,
 }))
 </script>
-
 
 <template>
   <div

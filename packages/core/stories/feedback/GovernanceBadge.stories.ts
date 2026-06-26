@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
-import { GovernanceBadge } from '../../src/components/feedback'
 import type { CoordinatorPattern } from '../../src/components/feedback/GovernanceBadge.types.ts'
+import { expect, within } from 'storybook/test'
+import { GovernanceBadge } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * GovernanceBadge renders the coordinator pattern governing a team run
@@ -64,7 +64,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { GovernanceBadge },
     setup() {
       return { args }

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzBadge } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzBadge is a compact label for status indicators, counts, or categories.
@@ -49,7 +49,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzBadge },
     setup() {
       return { args }

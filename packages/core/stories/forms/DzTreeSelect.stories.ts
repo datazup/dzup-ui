@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { TreeNode } from '../../src/components/data'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzFormField, DzFormLabel, DzTreeSelect } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
 
@@ -105,7 +105,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Single: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTreeSelect },
     setup() {
       return { args }
@@ -135,7 +135,7 @@ export const Single: Story = {
     // Click the inner row div (the actual interactive element).
     const appleItem = await waitFor(() => {
       const items = body.getAllByRole('treeitem', { name: /apple/i })
-      const leaf = items.find((el) => !el.hasAttribute('aria-expanded'))
+      const leaf = items.find(el => !el.hasAttribute('aria-expanded'))
       expect(leaf).toBeDefined()
       return leaf!
     })
@@ -190,7 +190,7 @@ export const MultipleChips: Story = {
     await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
     const bananaItem = body
       .getAllByRole('treeitem', { name: /banana/i })
-      .find((el) => !el.hasAttribute('aria-expanded'))!
+      .find(el => !el.hasAttribute('aria-expanded'))!
     const bananaRow = (bananaItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? bananaItem
     await userEvent.click(bananaRow)
     await waitFor(() =>
@@ -242,7 +242,7 @@ export const CheckboxPropagation: Story = {
     // Click Carrot to check it (leaf node — no aria-expanded).
     const carrotItem = body
       .getAllByRole('treeitem', { name: /carrot/i })
-      .find((el) => !el.hasAttribute('aria-expanded'))!
+      .find(el => !el.hasAttribute('aria-expanded'))!
     const carrotRow = (carrotItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? carrotItem
     await userEvent.click(carrotRow)
     await waitFor(() =>
@@ -252,9 +252,9 @@ export const CheckboxPropagation: Story = {
     // Click Vegetable parent — propagates to Potato as well.
     const vegetableItem = body
       .getAllByRole('treeitem', { name: /vegetable/i })
-      .find((el) => el.hasAttribute('aria-expanded'))!
-    const vegetableRow =
-      (vegetableItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? vegetableItem
+      .find(el => el.hasAttribute('aria-expanded'))!
+    const vegetableRow
+      = (vegetableItem.querySelector('[data-dz-tree-row]') as HTMLElement) ?? vegetableItem
     await userEvent.click(vegetableRow)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove potato/i })).toBeInTheDocument(),

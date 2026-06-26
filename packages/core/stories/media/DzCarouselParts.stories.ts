@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzCarousel,
   DzCarouselDots,
@@ -8,6 +7,7 @@ import {
   DzCarouselPrevious,
   DzCarouselSlide,
 } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCarousel compound sub-parts: DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots.

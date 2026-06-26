@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzDivider, DzFlex, DzStack } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDivider is a visual separator with horizontal or vertical orientation.
@@ -63,7 +63,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzDivider },
     setup() {
       return { args }

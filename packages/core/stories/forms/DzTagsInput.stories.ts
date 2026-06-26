@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzFormField, DzTagsInput } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTagsInput is a free-text token / chips input: users type arbitrary values
@@ -110,7 +110,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTagsInput },
     setup() {
       return { args }
@@ -154,7 +154,7 @@ export const EmailValidation: Story = {
     },
     methods: {
       isEmail(token: string) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(token)
+        return /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(token)
       },
     },
     template: `
@@ -272,7 +272,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Add at least one tag',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzTagsInput },
     setup() {
       return { args }
@@ -290,7 +290,7 @@ export const InvalidState: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzTagsInput },
     setup() {
       return { args }

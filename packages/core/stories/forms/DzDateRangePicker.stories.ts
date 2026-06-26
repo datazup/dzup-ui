@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import type { DateRangeValue } from '../../src/components/forms'
+import { expect, within } from 'storybook/test'
 import { DzDateRangePicker } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDateRangePicker allows users to select a start and end date range.
@@ -98,7 +98,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzDateRangePicker },
     setup() {
       return { args }
@@ -163,7 +163,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzDateRangePicker },
     setup() {
       return { args }
@@ -199,7 +199,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'A valid date range is required',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzDateRangePicker },
     setup() {
       return { args }

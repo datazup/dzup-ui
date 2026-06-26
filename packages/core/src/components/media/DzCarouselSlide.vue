@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCarouselSlideProps, DzCarouselSlideSlots } from './DzCarousel.types.ts'
 /**
  * DzCarouselSlide — Single slide within a DzCarousel.
@@ -13,6 +9,10 @@ import { computed, inject, onBeforeUnmount, onMounted, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineProps<DzCarouselSlideProps>()
 defineSlots<DzCarouselSlideSlots>()
@@ -43,7 +43,6 @@ const classes = computed(() =>
   cn(styles.value.slide(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

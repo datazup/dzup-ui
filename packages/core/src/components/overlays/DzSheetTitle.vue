@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSheetTitleSlots } from './DzSheet.types.ts'
 import { DialogTitle } from 'reka-ui'
 /**
@@ -12,6 +8,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { sheetVariants } from './DzSheet.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<DzSheetTitleSlots>()
 
 const attrs = useAttrs()
@@ -20,7 +20,6 @@ const classes = computed(() =>
   cn(styles.value.title(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <DialogTitle :class="classes" v-bind="{ ...$attrs, class: undefined }">

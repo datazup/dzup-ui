@@ -105,8 +105,10 @@ export function useInfiniteScroll(options: UseInfiniteScrollOptions): UseInfinit
     onLoadMore()
   }
 
-  /** Tear down the observer. Intersection/pending state is preserved so a
-   * benign reconnect (e.g. a parent re-render) does not drop a pending load. */
+  /**
+   * Tear down the observer. Intersection/pending state is preserved so a
+   * benign reconnect (e.g. a parent re-render) does not drop a pending load.
+   */
   function disconnect(): void {
     observer?.disconnect()
     observer = null

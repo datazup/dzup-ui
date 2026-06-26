@@ -20,7 +20,9 @@ const skeletonRows = [0, 1, 2, 3, 4]
         >
           Async UI
         </p>
-        <h1 class="text-2xl font-semibold tracking-tight">States</h1>
+        <h1 class="text-2xl font-semibold tracking-tight">
+          States
+        </h1>
         <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
           Loading, empty, and error states
         </p>
@@ -78,7 +80,9 @@ const skeletonRows = [0, 1, 2, 3, 4]
               >
                 <Inbox class="h-7 w-7 text-slate-400 dark:text-slate-500" aria-hidden="true" />
               </div>
-              <h2 class="mt-4 text-base font-semibold tracking-tight">No deployments yet</h2>
+              <h2 class="mt-4 text-base font-semibold tracking-tight">
+                No deployments yet
+              </h2>
               <p class="mt-1.5 max-w-xs text-sm text-slate-500 dark:text-slate-400">
                 Once you ship your first build, it'll show up here with status and history.
               </p>

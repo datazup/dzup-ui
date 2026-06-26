@@ -1,9 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  name: 'DzTreeItem',
-  inheritAttrs: false,
-})
-
 import type { DzTreeItemProps, DzTreeItemSlots, TreeNode } from './DzTree.types.ts'
 /**
  * DzTreeItem — Single node in a DzTree hierarchy.
@@ -15,6 +10,11 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TREE_KEY } from './DzTree.types.ts'
 import { treeVariants } from './DzTree.variants.ts'
+
+defineOptions({
+  name: 'DzTreeItem',
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTreeItemProps>(), {
   level: 0,

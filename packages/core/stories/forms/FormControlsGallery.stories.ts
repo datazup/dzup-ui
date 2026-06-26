@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { DemoSection, darkModeDecorator, galleryDecorator } from '../_shared'
 import type { DzSelectItem } from '../../src/components/forms'
+import { expect, within } from 'storybook/test'
 import { DzSelect, DzSlider, DzSwitch } from '../../src/components/forms'
+import { darkModeDecorator, DemoSection, galleryDecorator } from '../_shared'
 
 /**
  * Control Variants & Sizes — a cross-component gallery ported from the sandbox

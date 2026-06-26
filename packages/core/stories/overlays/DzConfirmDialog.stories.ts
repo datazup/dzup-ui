@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzConfirmDialog } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzConfirmDialog is a pre-composed confirmation dialog built on top of the
@@ -111,7 +111,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzConfirmDialog, DzButton },
     setup() {
       return { args }
@@ -187,7 +187,7 @@ export const DangerConfirm: Story = {
     confirmLabel: 'Delete',
     cancelLabel: 'Keep',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzConfirmDialog, DzButton },
     setup() {
       return { args }
@@ -227,7 +227,7 @@ export const AsyncLoading: Story = {
       async handleConfirm() {
         this.loading = true
         // Simulate an async request — dialog stays open with a busy button.
-        await new Promise((resolve) => setTimeout(resolve, 1200))
+        await new Promise(resolve => setTimeout(resolve, 1200))
         this.loading = false
         this.saved = true
         this.isOpen = false

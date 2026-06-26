@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
-import { DzInputMask } from '../../src/components/inputs'
 import {
   DzFormDescription,
   DzFormField,
   DzFormLabel,
   DzFormMessage,
 } from '../../src/components/forms'
+import { DzInputMask } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzInputMask is a format-masked text input for structured fields such as phone
@@ -121,7 +121,7 @@ type Story = StoryObj<typeof meta>
 
 export const Phone: Story = {
   name: 'Phone Number',
-  render: (args) => ({
+  render: args => ({
     components: { DzInputMask },
     setup() {
       return { args }
@@ -172,7 +172,7 @@ export const Date: Story = {
     mask: '99/99/9999',
     placeholder: 'MM/DD/YYYY',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzInputMask },
     setup() {
       return { args }
@@ -191,7 +191,7 @@ export const CreditCard: Story = {
     mask: '9999 9999 9999 9999',
     placeholder: '0000 0000 0000 0000',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzInputMask },
     setup() {
       return { args }
@@ -210,7 +210,7 @@ export const CustomKey: Story = {
     mask: '****-****-****',
     placeholder: 'XXXX-XXXX-XXXX',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzInputMask },
     setup() {
       return { args }
@@ -256,7 +256,7 @@ export const AutoClear: Story = {
       },
     },
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzInputMask },
     setup() {
       return { args }

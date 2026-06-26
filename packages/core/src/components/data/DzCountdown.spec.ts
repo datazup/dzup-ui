@@ -1,8 +1,8 @@
+import { mount } from '@vue/test-utils'
 /**
  * DzCountdown — Unit / behavior tests (fake timers).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
 import DzCountdown from './DzCountdown.vue'
 
 /** Fixed reference instant: 2026-06-14T15:00:00.000Z. */

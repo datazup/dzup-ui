@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { AlignCenter, AlignLeft, AlignRight, LayoutGrid, List, Table2 } from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzSegmented } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSegmented is a toggle-style segmented control built on Reka UI ToggleGroup.
@@ -79,7 +79,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzSegmented },
     setup() {
       return { args }

@@ -2,6 +2,7 @@
 // dzup-ui Sidebar showcase — expanded grouped sidebar vs. collapsed icon-rail.
 // ONLY @dzup-ui/core components + --dz-* tokens. No raw hex, no non-token colors.
 
+import type { Component } from 'vue'
 import {
   BarChart3,
   FolderKanban,
@@ -22,7 +23,6 @@ import {
   DzSidebarSection,
 } from '../../../src/components/navigation'
 import { DzHeading, DzText } from '../../../src/components/typography'
-import type { Component } from 'vue'
 
 interface NavItem {
   label: string

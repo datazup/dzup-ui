@@ -5,15 +5,15 @@
  * accessibility requirements.
  */
 
+import type { TeamMemberStatus } from './TeamMemberBadge.types.ts'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import TeamMemberBadge from './TeamMemberBadge.vue'
-import type { TeamMemberStatus } from './TeamMemberBadge.types.ts'
 
 const ALL_STATUSES: TeamMemberStatus[] = ['idle', 'active', 'completed', 'failed']
 const ALL_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 
-describe('TeamMemberBadge — Contract Spec v1', () => {
+describe('teamMemberBadge — Contract Spec v1', () => {
   it('renders without errors with required props', () => {
     const wrapper = mount(TeamMemberBadge, {
       props: {

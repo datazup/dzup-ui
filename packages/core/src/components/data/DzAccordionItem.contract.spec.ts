@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
 /**
  * DzAccordionItem — Contract Spec v1 conformance tests.
  *
@@ -6,16 +7,16 @@ import { mount } from '@vue/test-utils'
  * All tests mount via DzAccordion to satisfy the inject contract.
  */
 import { defineComponent } from 'vue'
-import { describe, expect, it } from 'vitest'
 import DzAccordion from './DzAccordion.vue'
 import DzAccordionItem from './DzAccordionItem.vue'
 
-const makeSlot = (attrs: Record<string, unknown> = {}, content = 'Content') =>
-  defineComponent({
+function makeSlot(attrs: Record<string, unknown> = {}, content = 'Content') {
+  return defineComponent({
     components: { DzAccordionItem },
     setup: () => ({ attrs, content }),
     template: `<DzAccordionItem value="item-1" v-bind="attrs">{{ content }}</DzAccordionItem>`,
   })
+}
 
 describe('dzAccordionItem — Contract Spec v1', () => {
   it('renders without errors inside DzAccordion', () => {

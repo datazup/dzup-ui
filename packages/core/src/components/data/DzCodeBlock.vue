@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCodeBlockProps, DzCodeBlockSlots } from './DzCodeBlock.types.ts'
 /**
  * DzCodeBlock — Code display component with line numbers and copy support.
@@ -20,6 +16,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import DzCopyButton from '../buttons/DzCopyButton.vue'
 import { codeBlockVariants } from './DzCodeBlock.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzCodeBlockProps>(), {
   id: undefined,
@@ -66,7 +66,6 @@ const contentStyles = computed(() => {
   return result
 })
 </script>
-
 
 <template>
   <div

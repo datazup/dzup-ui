@@ -31,7 +31,9 @@ const skeletonRows = [0, 1, 2, 3, 4]
           States
         </DzHeading>
         <div style="margin-top: 0.5rem">
-          <DzText as="p" size="sm" tone="muted"> Loading, empty, and error states </DzText>
+          <DzText as="p" size="sm" tone="muted">
+            Loading, empty, and error states
+          </DzText>
         </div>
       </header>
 
@@ -148,7 +150,9 @@ const skeletonRows = [0, 1, 2, 3, 4]
                 class="mt-auto flex items-center gap-2.5 rounded-[var(--dz-radius-md)] bg-[var(--dz-muted)] px-3 py-2.5"
               >
                 <DzSpinner size="sm" tone="danger" label="Retrying" />
-                <DzText as="span" size="xs" tone="muted">Retrying automatically…</DzText>
+                <DzText as="span" size="xs" tone="muted">
+                  Retrying automatically…
+                </DzText>
               </div>
             </div>
           </DzCard>

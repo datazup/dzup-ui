@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzMention } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMention is a textarea/input that surfaces a suggestion dropdown when a
@@ -271,10 +271,10 @@ export const AsyncSearch: Story = {
     components: { DzMention },
     setup() {
       const search = (query: string) =>
-        new Promise<{ label: string; value: string }[]>((resolve) => {
+        new Promise<{ label: string, value: string }[]>((resolve) => {
           setTimeout(() => {
             const q = query.toLowerCase()
-            resolve(users.filter((u) => u.label.toLowerCase().includes(q)))
+            resolve(users.filter(u => u.label.toLowerCase().includes(q)))
           }, 600)
         })
       const triggers = [{ char: '@', options: search }]

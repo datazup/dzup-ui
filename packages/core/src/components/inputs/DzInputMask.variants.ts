@@ -9,10 +9,11 @@
  * @module @dzup-ui/core/components/inputs/DzInputMask.variants
  */
 
+import type { InputElementVariantProps, InputWrapperVariantProps } from './DzInput.variants.ts'
 import {
-  type InputElementVariantProps,
+
   inputElementVariants,
-  type InputWrapperVariantProps,
+
   inputWrapperVariants,
 } from './DzInput.variants.ts'
 

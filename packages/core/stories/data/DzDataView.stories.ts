@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzDataView } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDataView renders a collection of records as either a vertical list or a
@@ -119,7 +119,7 @@ const sortOptions = [
 
 export const ListLayout: Story = {
   args: { layout: 'list' },
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     template: `
@@ -136,7 +136,7 @@ export const ListLayout: Story = {
 
 export const GridLayout: Story = {
   args: { layout: 'grid' },
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     template: `
@@ -154,7 +154,7 @@ export const GridLayout: Story = {
 export const WithLayoutToggle: Story = {
   name: 'With Layout Toggle',
   args: { layoutToggle: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     data: () => ({ layout: 'grid' }),
@@ -200,7 +200,7 @@ export const WithLayoutToggle: Story = {
 
 export const Paginated: Story = {
   args: { layout: 'grid', paginator: true, rows: 4 },
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args, products }),
     data: () => ({ first: 0 }),
@@ -224,7 +224,7 @@ export const Paginated: Story = {
 
 export const Sortable: Story = {
   args: { layout: 'grid' },
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args, products, sortOptions }),
     template: `
@@ -248,7 +248,7 @@ export const Sortable: Story = {
 
 export const Loading: Story = {
   args: { layout: 'grid', loading: true, loadingRows: 8 },
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args }),
     template: `
@@ -264,7 +264,7 @@ export const Loading: Story = {
 // ---------------------------------------------------------------------------
 
 export const Empty: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzDataView },
     setup: () => ({ args }),
     template: `

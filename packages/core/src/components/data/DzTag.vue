@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTagEmits, DzTagProps, DzTagSlots } from './DzTag.types.ts'
 /**
  * DzTag — Categorization tag component with tone/variant styling.
@@ -19,6 +15,10 @@ import type { DzTagEmits, DzTagProps, DzTagSlots } from './DzTag.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { tagVariants } from './DzTag.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTagProps>(), {
   variant: 'subtle',
@@ -64,7 +64,6 @@ function handleKeyDown(event: KeyboardEvent): void {
   }
 }
 </script>
-
 
 <template>
   <span

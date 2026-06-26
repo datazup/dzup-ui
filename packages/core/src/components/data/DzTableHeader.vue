@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTableHeaderSlots } from './DzTable.types.ts'
 /**
  * DzTableHeader — Table header section (<thead>).
@@ -13,6 +9,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineSlots<DzTableHeaderSlots>()
 
@@ -31,7 +31,6 @@ const classes = computed(() =>
   cn(styles.value.header(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <thead :class="classes" v-bind="{ ...$attrs, class: undefined }">

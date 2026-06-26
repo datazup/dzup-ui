@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
+import { expect } from 'storybook/test'
 import { DzRelativeTime } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRelativeTime renders a timestamp as a live, localised phrase ("2 minutes
@@ -113,7 +113,7 @@ export const Localized: Story = {
 // ---------------------------------------------------------------------------
 
 export const InFeed: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzRelativeTime },
     setup() {
       const now = Date.now()

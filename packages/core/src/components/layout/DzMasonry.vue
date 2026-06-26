@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { ComponentPublicInstance, PropType, VNode } from 'vue'
 import type {
   DzMasonryProps,
@@ -34,9 +30,9 @@ import type {
  * ```
  */
 import {
+  Comment,
   computed,
   defineComponent,
-  Comment,
   Fragment,
   nextTick,
   onBeforeUnmount,
@@ -54,6 +50,10 @@ import {
   masonryVariants,
   responsiveColumnsMap,
 } from './DzMasonry.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzMasonryProps>(), {
   columns: 3,
@@ -93,16 +93,20 @@ function flattenVNodes(nodes: VNode[]): VNode[] {
   const out: VNode[] = []
   for (const node of nodes) {
     if (node.type === Fragment) {
-      if (Array.isArray(node.children)) out.push(...flattenVNodes(node.children as VNode[]))
-    } else if (node.type === Comment) {
+      if (Array.isArray(node.children))
+        out.push(...flattenVNodes(node.children as VNode[]))
+    }
+    else if (node.type === Comment) {
       continue
-    } else if (
-      node.type === Text &&
-      typeof node.children === 'string' &&
-      node.children.trim() === ''
+    }
+    else if (
+      node.type === Text
+      && typeof node.children === 'string'
+      && node.children.trim() === ''
     ) {
       continue
-    } else {
+    }
+    else {
       out.push(node)
     }
   }
@@ -121,7 +125,7 @@ function getItems(): VNode[] {
 const VNodeRenderer = defineComponent({
   name: 'DzMasonryItem',
   props: { node: { type: Object as PropType<VNode>, required: true } },
-  setup: (itemProps) => () => itemProps.node,
+  setup: itemProps => () => itemProps.node,
 })
 
 // ---------------------------------------------------------------------------
@@ -146,18 +150,22 @@ function setItemRef(index: number, el: unknown): void {
   if (node) {
     itemEls.set(index, node)
     observer?.observe(node)
-  } else {
+  }
+  else {
     const prev = itemEls.get(index)
-    if (prev) observer?.unobserve(prev)
+    if (prev)
+      observer?.unobserve(prev)
     itemEls.delete(index)
   }
 }
 
 /** Shallow equality for the measured-height arrays. */
 function sameHeights(a: number[], b: number[]): boolean {
-  if (a.length !== b.length) return false
+  if (a.length !== b.length)
+    return false
   for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return false
+    if (a[i] !== b[i])
+      return false
   }
   return true
 }
@@ -167,18 +175,22 @@ function sameHeights(a: number[], b: number[]): boolean {
  * change so the `onUpdated` re-measure can never spin into a render loop.
  */
 function measure(): void {
-  if (containerRef.value) containerWidth.value = containerRef.value.offsetWidth
+  if (containerRef.value)
+    containerWidth.value = containerRef.value.offsetWidth
   const heights: number[] = []
   itemEls.forEach((el, index) => {
     heights[index] = el.offsetHeight
   })
-  if (!sameHeights(heights, itemHeights.value)) itemHeights.value = heights
-  if (!measured.value) measured.value = true
+  if (!sameHeights(heights, itemHeights.value))
+    itemHeights.value = heights
+  if (!measured.value)
+    measured.value = true
 }
 
 /** Debounced re-measure to coalesce resize / mutation bursts. */
 function scheduleMeasure(): void {
-  if (debounceId) clearTimeout(debounceId)
+  if (debounceId)
+    clearTimeout(debounceId)
   debounceId = setTimeout(() => {
     debounceId = null
     measure()
@@ -188,14 +200,16 @@ function scheduleMeasure(): void {
 onMounted(() => {
   if (typeof ResizeObserver !== 'undefined') {
     observer = new ResizeObserver(() => scheduleMeasure())
-    if (containerRef.value) observer.observe(containerRef.value)
-    itemEls.forEach((el) => observer!.observe(el))
+    if (containerRef.value)
+      observer.observe(containerRef.value)
+    itemEls.forEach(el => observer!.observe(el))
   }
   nextTick(() => measure())
 })
 
 onBeforeUnmount(() => {
-  if (debounceId) clearTimeout(debounceId)
+  if (debounceId)
+    clearTimeout(debounceId)
   observer?.disconnect()
   observer = null
   itemEls.clear()
@@ -204,7 +218,8 @@ onBeforeUnmount(() => {
 // Re-measure after any re-render (e.g. children added / removed). The change
 // guard inside measure() keeps this from looping.
 onUpdated(() => {
-  if (!useCssPath.value) scheduleMeasure()
+  if (!useCssPath.value)
+    scheduleMeasure()
 })
 
 // ---------------------------------------------------------------------------
@@ -213,14 +228,18 @@ onUpdated(() => {
 
 /** Resolve the active column count from `columns` and the measured width. */
 function resolveColumnCount(columns: MasonryColumns | ResponsiveColumns, width: number): number {
-  if (typeof columns === 'number') return columns
+  if (typeof columns === 'number')
+    return columns
   let count: number | undefined
   for (const bp of BP_ORDER) {
     const value = columns[bp]
-    if (value === undefined) continue
+    if (value === undefined)
+      continue
     // Baseline is the smallest defined breakpoint; larger ones win past their width.
-    if (count === undefined) count = value
-    if (width >= BREAKPOINTS[bp]) count = value
+    if (count === undefined)
+      count = value
+    if (width >= BREAKPOINTS[bp])
+      count = value
   }
   return count ?? 1
 }
@@ -235,26 +254,28 @@ const resolvedColumns = computed(() => {
  * function so it reads the slot inside render; it tracks `resolvedColumns`,
  * `itemHeights`, and `measured` as render dependencies.
  */
-function buildColumns(): { node: VNode; index: number }[][] {
+function buildColumns(): { node: VNode, index: number }[][] {
   const count = resolvedColumns.value
   const list = getItems()
   const heights = itemHeights.value
   // Balance by height only once real measurements exist; before then (SSR /
   // first paint / zero-height test envs) fall back to round-robin so items
   // still spread across every column.
-  const balanced = measured.value && heights.some((h) => h > 0)
+  const balanced = measured.value && heights.some(h => h > 0)
 
-  const columns: { node: VNode; index: number }[][] = Array.from({ length: count }, () => [])
+  const columns: { node: VNode, index: number }[][] = Array.from({ length: count }, () => [])
   const columnHeights = new Array<number>(count).fill(0)
 
   for (let i = 0; i < list.length; i++) {
     const node = list[i]
-    if (node === undefined) continue
+    if (node === undefined)
+      continue
     let target = i % count
     if (balanced) {
       target = 0
       for (let c = 1; c < count; c++) {
-        if ((columnHeights[c] ?? 0) < (columnHeights[target] ?? 0)) target = c
+        if ((columnHeights[c] ?? 0) < (columnHeights[target] ?? 0))
+          target = c
       }
     }
     columns[target]!.push({ node, index: i })
@@ -269,14 +290,16 @@ function buildColumns(): { node: VNode; index: number }[][] {
 
 /** Responsive `columns-N` classes for the CSS path. */
 const cssResponsiveClasses = computed(() => {
-  if (!isResponsive.value) return ''
+  if (!isResponsive.value)
+    return ''
   const obj = props.columns as ResponsiveColumns
   const classes: string[] = []
   for (const bp of BP_ORDER) {
     const value = obj[bp]
     if (value !== undefined) {
       const cls = responsiveColumnsMap[bp]?.[value]
-      if (cls) classes.push(cls)
+      if (cls)
+        classes.push(cls)
     }
   }
   return classes.join(' ')

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSidebarHeaderProps, DzSidebarHeaderSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebarHeader -- Top section of the sidebar.
@@ -25,6 +21,10 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineProps<DzSidebarHeaderProps>()
 defineSlots<DzSidebarHeaderSlots>()
 
@@ -43,7 +43,6 @@ const headerClasses = computed(() =>
   cn(styles.value.header(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

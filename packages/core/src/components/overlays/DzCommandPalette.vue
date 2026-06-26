@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   CommandItem,
   DzCommandPaletteEmits,
@@ -44,6 +40,10 @@ import { computed, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'v
 import { useEscapeKey } from '../../composables/useEscapeKey/useEscapeKey.ts'
 import { cn } from '../../utilities/cn.ts'
 import { commandPaletteVariants } from './DzCommandPalette.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const open = defineModel<boolean>('open', { default: false })
 
@@ -157,7 +157,6 @@ watch(open, (isOpen) => {
   }
 })
 </script>
-
 
 <template>
   <DialogRoot v-model:open="open">

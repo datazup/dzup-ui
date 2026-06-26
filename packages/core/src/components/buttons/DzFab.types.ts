@@ -31,12 +31,12 @@ export type DzFabVariant = 'solid' | 'outline' | 'ghost'
  * default — positioning is left to the consumer / parent SpeedDial); the
  * corner values apply `position: fixed` with a token-driven viewport offset.
  */
-export type DzFabPosition =
-  | 'static'
-  | 'bottom-right'
-  | 'bottom-left'
-  | 'top-right'
-  | 'top-left'
+export type DzFabPosition
+  = | 'static'
+    | 'bottom-right'
+    | 'bottom-left'
+    | 'top-right'
+    | 'top-left'
 
 // ---------------------------------------------------------------------------
 // Props

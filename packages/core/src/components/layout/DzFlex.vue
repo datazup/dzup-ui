@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzFlexProps, DzFlexSlots } from './DzFlex.types.ts'
 /**
  * DzFlex -- Flexbox layout component.
@@ -21,6 +17,10 @@ import type { DzFlexProps, DzFlexSlots } from './DzFlex.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { flexVariants } from './DzFlex.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzFlexProps>(), {
   direction: 'row',
@@ -51,7 +51,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

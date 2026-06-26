@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzProgress } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzProgress is a visual indicator of task completion.
@@ -90,7 +90,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzProgress },
     setup() {
       return { args }

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { FileX, FolderOpen, Inbox, Search } from 'lucide-vue-next'
+import { expect, within } from 'storybook/test'
 import { DzEmpty } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzEmpty displays an empty state placeholder when content is unavailable
@@ -53,7 +53,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzEmpty },
     setup() {
       return { args }

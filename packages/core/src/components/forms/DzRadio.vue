@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzRadioProps, DzRadioSlots } from './DzRadio.types.ts'
 import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
 /**
@@ -22,6 +18,10 @@ import { RadioGroupIndicator, RadioGroupItem } from 'reka-ui'
 import { computed, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { radioVariants } from './DzRadio.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzRadioProps>(), {
   disabled: false,
@@ -44,7 +44,6 @@ const resolvedId = computed(() => props.id ?? autoId)
 const styles = computed(() => radioVariants({ size: props.size }))
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 </script>
-
 
 <template>
   <label

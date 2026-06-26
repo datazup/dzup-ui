@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzPopover, DzPopoverContent, DzPopoverTrigger } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzPopoverContent compound sub-parts: DzPopoverTrigger.

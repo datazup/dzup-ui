@@ -105,7 +105,7 @@ describe('dzMegaMenu — Open / close', () => {
 })
 
 describe('dzMegaMenu — Keyboard menubar navigation', () => {
-  it('ArrowRight moves roving focus to the next trigger', async () => {
+  it('arrowRight moves roving focus to the next trigger', async () => {
     const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
     await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'ArrowRight' })
     await wrapper.vm.$nextTick()
@@ -114,7 +114,7 @@ describe('dzMegaMenu — Keyboard menubar navigation', () => {
     wrapper.unmount()
   })
 
-  it('ArrowLeft wraps from the first trigger to the last', async () => {
+  it('arrowLeft wraps from the first trigger to the last', async () => {
     const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
     await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'ArrowLeft' })
     await wrapper.vm.$nextTick()
@@ -122,7 +122,7 @@ describe('dzMegaMenu — Keyboard menubar navigation', () => {
     wrapper.unmount()
   })
 
-  it('ArrowDown opens the panel and focuses the first link', async () => {
+  it('arrowDown opens the panel and focuses the first link', async () => {
     const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
     await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'ArrowDown' })
     await wrapper.vm.$nextTick()
@@ -132,14 +132,14 @@ describe('dzMegaMenu — Keyboard menubar navigation', () => {
     wrapper.unmount()
   })
 
-  it('Enter toggles the panel open', async () => {
+  it('enter toggles the panel open', async () => {
     const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
     await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'Enter' })
     expect(wrapper.find('[data-mega-panel="0"]').exists()).toBe(true)
     wrapper.unmount()
   })
 
-  it('ArrowDown / ArrowUp move focus between panel links', async () => {
+  it('arrowDown / ArrowUp move focus between panel links', async () => {
     const wrapper = mount(DzMegaMenu, { props: { items, openOnHover: false }, attachTo: document.body })
     await wrapper.get('[data-mega-trigger="0"]').trigger('keydown', { key: 'ArrowDown' })
     await wrapper.vm.$nextTick()

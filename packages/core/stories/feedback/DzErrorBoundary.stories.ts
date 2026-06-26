@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, within } from 'storybook/test'
 import { defineComponent, h, ref } from 'vue'
 import { DzButton } from '../../src/components/buttons'
 import { DzAlert, DzErrorBoundary, DzResult } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzErrorBoundary catches render and lifecycle errors thrown by its descendants

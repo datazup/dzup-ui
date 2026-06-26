@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { DzListboxOption } from '../../src/components/forms'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
-import type { DzListboxOption } from '../../src/components/forms'
 import { DzFormDescription, DzFormField, DzFormLabel, DzListbox } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 const cities: DzListboxOption[] = [
   { label: 'Amsterdam', value: 'ams' },
@@ -104,7 +104,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Single: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox },
     setup() {
       const value = ref<string | null>('ber')
@@ -147,7 +147,7 @@ export const Single: Story = {
 
 export const Multiple: Story = {
   args: { multiple: true, checkmark: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>(['ams', 'cph'])
@@ -169,7 +169,7 @@ export const Multiple: Story = {
 
 export const WithFilter: Story = {
   args: { filter: true, multiple: true, checkmark: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>([])
@@ -189,7 +189,7 @@ export const WithFilter: Story = {
 
 export const Grouped: Story = {
   args: { options: grouped, multiple: true, checkmark: true, filter: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>(['banana'])
@@ -208,7 +208,7 @@ export const Grouped: Story = {
 // ---------------------------------------------------------------------------
 
 export const Disabled: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox },
     setup() {
       const value = ref<string | null>('ber')
@@ -241,7 +241,7 @@ export const Disabled: Story = {
 
 export const InsideFormField: Story = {
   args: { multiple: true, checkmark: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox, DzFormField, DzFormLabel, DzFormDescription },
     setup() {
       const value = ref<string[]>([])
@@ -261,7 +261,7 @@ export const InsideFormField: Story = {
 
 export const DarkMode: Story = {
   decorators: [darkModeDecorator],
-  render: (args) => ({
+  render: args => ({
     components: { DzListbox },
     setup() {
       const value = ref<string[]>(['ams'])

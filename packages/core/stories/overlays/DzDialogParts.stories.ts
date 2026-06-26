@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDialog,
@@ -11,6 +10,7 @@ import {
   DzDialogTitle,
   DzDialogTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDialogContent compound sub-parts: DzDialogTitle, DzDialogDescription,

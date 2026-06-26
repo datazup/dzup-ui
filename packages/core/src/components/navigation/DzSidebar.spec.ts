@@ -206,7 +206,8 @@ describe('dzSidebar -- Unit Tests', () => {
       const wrapper = mountSidebar({ storageKey: key })
       await nextTick()
       expect(wrapper.find('nav').attributes('data-state')).toBe('collapsed')
-    } finally {
+    }
+    finally {
       window.localStorage.removeItem(key)
     }
   })
@@ -222,7 +223,8 @@ describe('dzSidebar -- Unit Tests', () => {
       await wrapper.setProps({ collapsed: false })
       await nextTick()
       expect(window.localStorage.getItem(key)).toBe('0')
-    } finally {
+    }
+    finally {
       window.localStorage.removeItem(key)
     }
   })
@@ -235,7 +237,8 @@ describe('dzSidebar -- Unit Tests', () => {
       await nextTick()
       // No storageKey → mount value (false) wins over any pre-existing entry
       expect(wrapper.find('nav').attributes('data-state')).toBe('expanded')
-    } finally {
+    }
+    finally {
       window.localStorage.removeItem(key)
     }
   })
@@ -277,7 +280,7 @@ describe('dzSidebar -- Unit Tests', () => {
     const wrapper = mountSidebar({ position: 'fixed' })
     const nav = wrapper.find('nav')
     expect(nav.classes()).toContain('fixed')
-    expect(nav.classes().some((c) => c.includes('var(--dz-sidebar-z-index)'))).toBe(true)
+    expect(nav.classes().some(c => c.includes('var(--dz-sidebar-z-index)'))).toBe(true)
   })
 
   it('renders closed mobile drawer as fixed so it does not reserve layout width', () => {
@@ -285,7 +288,7 @@ describe('dzSidebar -- Unit Tests', () => {
     const nav = wrapper.find('nav')
     expect(nav.classes()).toContain('fixed')
     expect(nav.classes()).toContain('-translate-x-full')
-    expect(nav.classes().some((c) => c.includes('var(--dz-sidebar-width)'))).toBe(true)
+    expect(nav.classes().some(c => c.includes('var(--dz-sidebar-width)'))).toBe(true)
   })
 
   it('closed mobile drawer is inert and aria-hidden (out of a11y tree + tab order)', () => {
@@ -338,8 +341,8 @@ describe('dzSidebar -- Unit Tests', () => {
       },
     })
     const item = wrapper.find('[data-state="active"]')
-    expect(item.classes().some((c) => c.includes('var(--dz-sidebar-item-active-bg)'))).toBe(true)
-    expect(item.classes().some((c) => c.includes('var(--dz-sidebar-item-active-text)'))).toBe(true)
+    expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-bg)'))).toBe(true)
+    expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-text)'))).toBe(true)
   })
 
   it('active item with activeStyle=rail uses border-left accent', () => {
@@ -351,9 +354,9 @@ describe('dzSidebar -- Unit Tests', () => {
       },
     })
     const item = wrapper.find('[data-state="active"]')
-    expect(item.classes().some((c) => c.includes('border-l-[3px]'))).toBe(true)
+    expect(item.classes().some(c => c.includes('border-l-[3px]'))).toBe(true)
     expect(
-      item.classes().some((c) => c.includes('border-l-[var(--dz-sidebar-item-active-bg)]')),
+      item.classes().some(c => c.includes('border-l-[var(--dz-sidebar-item-active-bg)]')),
     ).toBe(true)
   })
 })

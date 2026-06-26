@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAffixEmits, DzAffixProps, DzAffixSlots } from './DzAffix.types.ts'
 /**
  * DzAffix — Pins its slotted content to the viewport once it would scroll past
@@ -23,6 +19,10 @@ import type { DzAffixEmits, DzAffixProps, DzAffixSlots } from './DzAffix.types.t
 import { computed, useAttrs } from 'vue'
 import { useAffix } from '../../composables/useAffix/useAffix.ts'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzAffixProps>(), {})
 

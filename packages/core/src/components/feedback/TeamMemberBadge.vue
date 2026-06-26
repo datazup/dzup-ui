@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { TeamMemberBadgeProps, TeamMemberBadgeSlots } from './TeamMemberBadge.types.ts'
 /**
  * TeamMemberBadge — Team participant status pill.
@@ -20,6 +16,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { TEAM_MEMBER_STATUS_TOKENS } from './TeamMemberBadge.tokens.ts'
 import { teamMemberBadgeVariants } from './TeamMemberBadge.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<TeamMemberBadgeProps>(), {
   size: 'md',

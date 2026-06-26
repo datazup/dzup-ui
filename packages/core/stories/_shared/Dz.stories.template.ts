@@ -13,13 +13,13 @@ import { expect, userEvent, within } from 'storybook/test'
 // Replace with your component import:
 // import { DzExample } from '../../src/components/{family}'
 import {
-  SIZES,
-  TONES,
   a11yArgTypes,
   darkModeDecorator,
   DemoRow,
   sizeArgType,
+  SIZES,
   toneArgType,
+  TONES,
 } from '../_shared'
 
 declare const DzExample: unknown // remove — placeholder so the template type-checks standalone

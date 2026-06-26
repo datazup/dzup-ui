@@ -182,7 +182,7 @@ describe('dzCascader — keyboard column nav', () => {
     document.body.innerHTML = ''
   })
 
-  it('ArrowRight enters the child column and Enter selects within it', async () => {
+  it('arrowRight enters the child column and Enter selects within it', async () => {
     const wrapper = mountCascader()
     await openPanel(wrapper)
     const columns = wrapper.find('[role="listbox"]')
@@ -201,7 +201,7 @@ describe('dzCascader — keyboard column nav', () => {
     expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toEqual(['cn', 'js', 'nj'])
   })
 
-  it('ArrowLeft returns focus to the parent column', async () => {
+  it('arrowLeft returns focus to the parent column', async () => {
     const wrapper = mountCascader()
     await openPanel(wrapper)
     const columns = wrapper.find('[role="listbox"]')
@@ -240,7 +240,7 @@ describe('dzCascader — trigger combobox semantics', () => {
     expect(wrapper.find(`#${controls}`).exists()).toBe(true)
   })
 
-  it('ArrowDown on the trigger opens the panel and focuses the first option', async () => {
+  it('arrowDown on the trigger opens the panel and focuses the first option', async () => {
     const wrapper = mountCascader()
     await wrapper.find('button').trigger('keydown', { key: 'ArrowDown' })
     await wrapper.vm.$nextTick()
@@ -252,7 +252,7 @@ describe('dzCascader — trigger combobox semantics', () => {
     expect(activeBtn.text()).toContain('China')
   })
 
-  it('ArrowUp on the trigger opens the panel and focuses the last option', async () => {
+  it('arrowUp on the trigger opens the panel and focuses the last option', async () => {
     const wrapper = mountCascader()
     await wrapper.find('button').trigger('keydown', { key: 'ArrowUp' })
     await wrapper.vm.$nextTick()

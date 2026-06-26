@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTabContentProps, DzTabContentSlots } from './DzTabs.types.ts'
 import { TabsContent } from 'reka-ui'
 /**
@@ -21,6 +17,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 withDefaults(defineProps<DzTabContentProps>(), {
   forceMount: undefined,
@@ -43,7 +43,6 @@ const classes = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <TabsContent

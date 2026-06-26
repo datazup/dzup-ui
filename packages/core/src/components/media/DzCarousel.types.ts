@@ -78,7 +78,7 @@ export interface DzCarouselEmits {
   /** Emitted when the active slide changes */
   'update:modelValue': [index: number]
   /** Emitted when the slide changes (alias for semantic clarity) */
-  slideChange: [index: number]
+  'slideChange': [index: number]
 }
 
 // ---------------------------------------------------------------------------
@@ -136,5 +136,5 @@ export interface DzCarouselDotsProps {
 /** Slot definitions for DzCarouselDots */
 export interface DzCarouselDotsSlots {
   /** Custom dot renderer */
-  default?: (props: { index: number; active: boolean }) => unknown
+  default?: (props: { index: number, active: boolean }) => unknown
 }

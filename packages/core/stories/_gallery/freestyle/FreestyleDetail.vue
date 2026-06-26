@@ -2,7 +2,6 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import { ref } from 'vue'
 import {
   Activity,
   CheckCircle2,
@@ -11,6 +10,7 @@ import {
   Rocket,
   UserPlus,
 } from 'lucide-vue-next'
+import { ref } from 'vue'
 
 const activeTab = ref<'overview' | 'activity' | 'settings'>('overview')
 
@@ -128,7 +128,9 @@ const tabs = [
               Projects
             </a>
           </li>
-          <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">/</li>
+          <li aria-hidden="true" class="text-slate-300 dark:text-slate-600">
+            /
+          </li>
           <li aria-current="page" class="font-medium text-slate-700 dark:text-slate-200">
             Atlas Migration
           </li>
@@ -139,7 +141,9 @@ const tabs = [
       <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div class="flex flex-wrap items-center gap-3">
-            <h1 class="text-xl font-semibold tracking-tight">Atlas Migration</h1>
+            <h1 class="text-xl font-semibold tracking-tight">
+              Atlas Migration
+            </h1>
             <span
               class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-400/20"
             >
@@ -147,7 +151,9 @@ const tabs = [
               Active
             </span>
           </div>
-          <p class="mt-1.5 text-sm text-slate-500 dark:text-slate-400">Created 12 days ago</p>
+          <p class="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
+            Created 12 days ago
+          </p>
         </div>
         <div class="flex shrink-0 items-center gap-2.5">
           <button
@@ -174,9 +180,15 @@ const tabs = [
           :key="stat.label"
           class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 ring-1 ring-black/[0.02] dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40"
         >
-          <p class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ stat.label }}</p>
-          <p class="mt-2 text-2xl font-semibold leading-none tabular-nums">{{ stat.value }}</p>
-          <p class="mt-2 text-xs" :class="hintToneClass[stat.hintTone]">{{ stat.hint }}</p>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+            {{ stat.label }}
+          </p>
+          <p class="mt-2 text-2xl font-semibold leading-none tabular-nums">
+            {{ stat.value }}
+          </p>
+          <p class="mt-2 text-xs" :class="hintToneClass[stat.hintTone]">
+            {{ stat.hint }}
+          </p>
         </div>
       </div>
 
@@ -219,7 +231,9 @@ const tabs = [
                   :key="row.label"
                   class="flex items-center justify-between gap-4 py-3.5"
                 >
-                  <dt class="text-sm text-slate-500 dark:text-slate-400">{{ row.label }}</dt>
+                  <dt class="text-sm text-slate-500 dark:text-slate-400">
+                    {{ row.label }}
+                  </dt>
                   <dd class="text-sm font-medium text-slate-700 dark:text-slate-200">
                     {{ row.value }}
                   </dd>
@@ -271,7 +285,9 @@ const tabs = [
           class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 ring-1 ring-black/[0.02] lg:col-span-1 dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40"
         >
           <div class="flex items-center justify-between">
-            <h2 class="text-sm font-semibold tracking-tight">Team</h2>
+            <h2 class="text-sm font-semibold tracking-tight">
+              Team
+            </h2>
             <button
               type="button"
               class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
@@ -310,7 +326,9 @@ const tabs = [
                 <p class="truncate text-sm font-medium text-slate-700 dark:text-slate-200">
                   {{ member.name }}
                 </p>
-                <p class="text-xs text-slate-500 dark:text-slate-400">{{ member.role }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  {{ member.role }}
+                </p>
               </div>
             </li>
           </ul>

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzRatingEmits, DzRatingProps, DzRatingSlots } from './DzRating.types.ts'
 import { Star } from 'lucide-vue-next'
 /**
@@ -23,6 +19,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIcon from '../media/DzIcon.vue'
 import { ratingVariants } from './DzRating.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<number>('value', { default: 0 })
 
@@ -228,7 +228,6 @@ defineExpose({
 })
 </script>
 
-
 <template>
   <div>
     <div
@@ -253,11 +252,11 @@ defineExpose({
       :data-readonly="readonly ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :data-tone="tone"
+      v-bind="{ ...$attrs, class: undefined }"
       @keydown="handleKeydown"
       @focus="handleFocus"
       @blur="handleBlur"
       @mouseleave="handlePointerLeave"
-      v-bind="{ ...$attrs, class: undefined }"
     >
       <span
         v-for="index in count"

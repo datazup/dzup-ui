@@ -6,5 +6,5 @@ export interface DzErrorBoundaryProps {
 
 export interface DzErrorBoundarySlots {
   default?: () => unknown
-  fallback?: (props: { error: unknown; reset: () => void }) => unknown
+  fallback?: (props: { error: unknown, reset: () => void }) => unknown
 }

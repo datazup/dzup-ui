@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzKnobEmits, DzKnobProps, DzKnobSlots } from './DzKnob.types.ts'
 /**
  * DzKnob -- rotary numeric input rendered as an SVG circular dial (ADR-16 defineModel).
@@ -22,6 +18,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { knobTokens } from './DzKnob.tokens.ts'
 import { knobVariants } from './DzKnob.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<number>('value', { default: 0 })
 
@@ -88,9 +88,12 @@ const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : unde
 /** Combined aria-describedby from prop + own error element + field context. */
 const resolvedAriaDescribedby = computed(() => {
   const parts: string[] = []
-  if (props.ariaDescribedby) parts.push(props.ariaDescribedby)
-  if (errorId.value) parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value) parts.push(fieldContext.ariaDescribedby.value)
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -127,7 +130,8 @@ const normalizedValue = computed(() => clamp(model.value))
 /** Fill fraction (0–1) of the value arc. */
 const fraction = computed(() => {
   const span = props.max - props.min
-  if (span <= 0) return 0
+  if (span <= 0)
+    return 0
   return (normalizedValue.value - props.min) / span
 })
 
@@ -149,7 +153,7 @@ const styles = computed(() =>
 const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 
 /** Cartesian point on the gauge circle for an SVG-convention angle (deg). */
-function polar(angleDeg: number, r: number): { x: number; y: number } {
+function polar(angleDeg: number, r: number): { x: number, y: number } {
   const a = (angleDeg * Math.PI) / 180
   return { x: CENTER + r * Math.cos(a), y: CENTER + r * Math.sin(a) }
 }
@@ -170,7 +174,8 @@ const valuePath = computed(() =>
 
 function commit(value: number): void {
   const next = snap(clamp(value))
-  if (next === model.value) return
+  if (next === model.value)
+    return
   model.value = next
   emit('change', next, { source: 'user' })
 }
@@ -178,27 +183,33 @@ function commit(value: number): void {
 /** Map a pointer position to a value via its angle from the dial center. */
 function valueFromPointer(event: PointerEvent): number | null {
   const svg = svgRef.value
-  if (!svg) return null
+  if (!svg)
+    return null
   const rect = svg.getBoundingClientRect()
   const cx = rect.left + rect.width / 2
   const cy = rect.top + rect.height / 2
   let deg = (Math.atan2(event.clientY - cy, event.clientX - cx) * 180) / Math.PI
-  if (deg < 0) deg += 360
+  if (deg < 0)
+    deg += 360
   // Angle measured clockwise from the gauge start (0..360).
   let rel = deg - START_ANGLE
-  if (rel < 0) rel += 360
+  if (rel < 0)
+    rel += 360
   // Pointer fell in the bottom gap -> snap to whichever end is nearer.
-  if (rel > SWEEP) rel = rel > (SWEEP + 360) / 2 ? 0 : SWEEP
+  if (rel > SWEEP)
+    rel = rel > (SWEEP + 360) / 2 ? 0 : SWEEP
   return props.min + (rel / SWEEP) * (props.max - props.min)
 }
 
 function updateFromPointer(event: PointerEvent): void {
   const value = valueFromPointer(event)
-  if (value !== null) commit(value)
+  if (value !== null)
+    commit(value)
 }
 
 function handlePointerDown(event: PointerEvent): void {
-  if (!isInteractive.value) return
+  if (!isInteractive.value)
+    return
   event.preventDefault()
   dragging.value = true
   ;(event.currentTarget as Element).setPointerCapture?.(event.pointerId)
@@ -206,18 +217,21 @@ function handlePointerDown(event: PointerEvent): void {
 }
 
 function handlePointerMove(event: PointerEvent): void {
-  if (!dragging.value) return
+  if (!dragging.value)
+    return
   updateFromPointer(event)
 }
 
 function handlePointerUp(event: PointerEvent): void {
-  if (!dragging.value) return
+  if (!dragging.value)
+    return
   dragging.value = false
   ;(event.currentTarget as Element).releasePointerCapture?.(event.pointerId)
 }
 
 function handleKeydown(event: KeyboardEvent): void {
-  if (!isInteractive.value) return
+  if (!isInteractive.value)
+    return
 
   let next: number | null = null
   switch (event.key) {
@@ -245,7 +259,8 @@ function handleKeydown(event: KeyboardEvent): void {
       break
   }
 
-  if (next === null) return
+  if (next === null)
+    return
   event.preventDefault()
   commit(next)
 }
@@ -287,10 +302,10 @@ defineExpose({
     :data-readonly="readonly ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     :data-tone="tone"
+    v-bind="{ ...$attrs, class: undefined }"
     @keydown="handleKeydown"
     @focus="handleFocus"
     @blur="handleBlur"
-    v-bind="{ ...$attrs, class: undefined }"
   >
     <svg
       ref="svgRef"
@@ -326,7 +341,7 @@ defineExpose({
     </span>
 
     <!-- Hidden input for native form participation -->
-    <input v-if="name" type="hidden" :name="name" :value="normalizedValue" />
+    <input v-if="name" type="hidden" :name="name" :value="normalizedValue">
   </div>
 
   <!-- Error message -->

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzRangeSlider } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRangeSlider is a dual-thumb slider for selecting a numeric range.

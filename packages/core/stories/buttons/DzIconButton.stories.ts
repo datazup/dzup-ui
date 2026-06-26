@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,7 +11,9 @@ import {
   Trash2,
   X,
 } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzIconButton } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzIconButton renders a single icon with no visible text.

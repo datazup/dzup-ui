@@ -266,7 +266,7 @@ describe('dzDialog -- Unit Tests', () => {
   it('uses default transition names', () => {
     const wrapper = mountDialog()
     const transitions = wrapper.findAllComponents({ name: 'Transition' })
-    const names = transitions.map((t) => t.props('name'))
+    const names = transitions.map(t => t.props('name'))
     expect(names).toContain('dz-dialog-overlay')
     expect(names).toContain('dz-dialog-content')
     wrapper.unmount()
@@ -289,7 +289,7 @@ describe('dzDialog -- Unit Tests', () => {
   it('applies custom overlay transition name', () => {
     const wrapper = mountDialog({ overlayTransition: 'custom-overlay' })
     const transitions = wrapper.findAllComponents({ name: 'Transition' })
-    const names = transitions.map((t) => t.props('name'))
+    const names = transitions.map(t => t.props('name'))
     expect(names).toContain('custom-overlay')
     wrapper.unmount()
   })
@@ -297,7 +297,7 @@ describe('dzDialog -- Unit Tests', () => {
   it('applies custom content transition name', () => {
     const wrapper = mountDialog({ contentTransition: 'custom-content' })
     const transitions = wrapper.findAllComponents({ name: 'Transition' })
-    const names = transitions.map((t) => t.props('name'))
+    const names = transitions.map(t => t.props('name'))
     expect(names).toContain('custom-content')
     wrapper.unmount()
   })

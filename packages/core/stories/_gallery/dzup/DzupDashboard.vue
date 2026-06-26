@@ -2,8 +2,9 @@
 // dzup-ui equivalent of FreestyleDashboard — ONLY @dzup-ui/core components + --dz-* tokens.
 // A/B comparison target against the raw-Tailwind freestyle reference.
 
-import { computed } from 'vue'
+import type { CanonicalTone } from '@dzup-ui/contracts'
 import { MoreHorizontal, Plus, TrendingDown, TrendingUp } from 'lucide-vue-next'
+import { computed } from 'vue'
 import { DzButton, DzIconButton } from '../../../src/components/buttons'
 import { DzCard, DzCardBody } from '../../../src/components/cards'
 import {
@@ -22,7 +23,6 @@ import {
   DzDropdownMenuTrigger,
 } from '../../../src/components/overlays'
 import { DzHeading, DzText } from '../../../src/components/typography'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface Kpi {
   label: string
@@ -136,7 +136,7 @@ function sparkHeights(series: number[]): number[] {
   const min = Math.min(...series)
   const max = Math.max(...series)
   const span = max - min || 1
-  return series.map((v) => 18 + ((v - min) / span) * 82)
+  return series.map(v => 18 + ((v - min) / span) * 82)
 }
 
 // Goal-completion ring fed by a single deterministic figure.
@@ -193,7 +193,9 @@ const ringStats = [
           class="group h-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--dz-shadow-lg)]"
         >
           <DzCardBody class="flex h-full flex-col" style="padding: 1.5rem">
-            <DzText as="p" size="sm" weight="medium" tone="muted">{{ kpi.label }}</DzText>
+            <DzText as="p" size="sm" weight="medium" tone="muted">
+              {{ kpi.label }}
+            </DzText>
 
             <div class="mt-4 flex items-end justify-between gap-3">
               <span class="text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums">
@@ -222,7 +224,9 @@ const ringStats = [
                   <span class="tabular-nums">{{ kpi.delta >= 0 ? '+' : '' }}{{ kpi.delta }}%</span>
                 </span>
               </DzBadge>
-              <DzText as="span" size="xs" tone="muted">{{ kpi.hint }}</DzText>
+              <DzText as="span" size="xs" tone="muted">
+                {{ kpi.hint }}
+              </DzText>
             </div>
           </DzCardBody>
         </DzCard>
@@ -236,7 +240,9 @@ const ringStats = [
             class="flex items-center justify-between border-b border-[var(--dz-border)] px-6 py-4"
           >
             <div>
-              <DzHeading :level="2" size="md" weight="semibold">Revenue trend</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Revenue trend
+              </DzHeading>
               <DzText as="p" size="xs" tone="muted" class="mt-0.5">
                 Monthly recurring revenue, last 12 months
               </DzText>
@@ -244,8 +250,12 @@ const ringStats = [
             <div
               class="flex items-center gap-1 rounded-[var(--dz-radius-lg)] bg-[var(--dz-muted)] p-1"
             >
-              <DzButton size="xs" variant="solid" tone="neutral">Monthly</DzButton>
-              <DzButton size="xs" variant="ghost" tone="neutral">Weekly</DzButton>
+              <DzButton size="xs" variant="solid" tone="neutral">
+                Monthly
+              </DzButton>
+              <DzButton size="xs" variant="ghost" tone="neutral">
+                Weekly
+              </DzButton>
             </div>
           </div>
 
@@ -289,8 +299,12 @@ const ringStats = [
         <!-- Goal-completion donut ring -->
         <DzCard variant="elevated" padding="none">
           <div class="border-b border-[var(--dz-border)] px-6 py-4">
-            <DzHeading :level="2" size="md" weight="semibold">Quarterly goal</DzHeading>
-            <DzText as="p" size="xs" tone="muted" class="mt-0.5">Delivery completion</DzText>
+            <DzHeading :level="2" size="md" weight="semibold">
+              Quarterly goal
+            </DzHeading>
+            <DzText as="p" size="xs" tone="muted" class="mt-0.5">
+              Delivery completion
+            </DzText>
           </div>
           <div class="flex flex-col items-center gap-6 px-6 py-7">
             <div
@@ -307,7 +321,9 @@ const ringStats = [
                   <span class="block text-3xl font-semibold leading-none tabular-nums">
                     {{ goalPercent }}%
                   </span>
-                  <DzText as="span" size="xs" tone="muted" class="mt-1 block">complete</DzText>
+                  <DzText as="span" size="xs" tone="muted" class="mt-1 block">
+                    complete
+                  </DzText>
                 </div>
               </div>
             </div>
@@ -325,7 +341,9 @@ const ringStats = [
                 <span class="text-lg font-semibold leading-none tabular-nums">
                   {{ stat.value }}
                 </span>
-                <DzText as="span" size="xs" tone="muted">{{ stat.label }}</DzText>
+                <DzText as="span" size="xs" tone="muted">
+                  {{ stat.label }}
+                </DzText>
               </div>
             </div>
           </div>
@@ -336,27 +354,43 @@ const ringStats = [
       <DzCard variant="elevated" padding="none" class="mt-6">
         <div class="flex items-center justify-between border-b border-[var(--dz-border)] px-6 py-4">
           <div>
-            <DzHeading :level="2" size="md" weight="semibold">Recent Activity</DzHeading>
+            <DzHeading :level="2" size="md" weight="semibold">
+              Recent Activity
+            </DzHeading>
             <DzText as="p" size="xs" tone="muted" class="mt-0.5">
               Latest changes across your workspace
             </DzText>
           </div>
-          <DzButton variant="link" tone="primary" size="sm">View all</DzButton>
+          <DzButton variant="link" tone="primary" size="sm">
+            View all
+          </DzButton>
         </div>
         <DzTable hoverable density="comfortable">
           <DzTableHeader>
             <DzTableRow>
-              <DzTableCell header>Name</DzTableCell>
-              <DzTableCell header>Status</DzTableCell>
-              <DzTableCell header>Owner</DzTableCell>
-              <DzTableCell header>Updated</DzTableCell>
-              <DzTableCell header align="right"><span class="sr-only">Actions</span></DzTableCell>
+              <DzTableCell header>
+                Name
+              </DzTableCell>
+              <DzTableCell header>
+                Status
+              </DzTableCell>
+              <DzTableCell header>
+                Owner
+              </DzTableCell>
+              <DzTableCell header>
+                Updated
+              </DzTableCell>
+              <DzTableCell header align="right">
+                <span class="sr-only">Actions</span>
+              </DzTableCell>
             </DzTableRow>
           </DzTableHeader>
           <DzTableBody>
             <DzTableRow v-for="row in activity" :key="row.name">
               <DzTableCell>
-                <DzText as="span" size="sm" weight="medium">{{ row.name }}</DzText>
+                <DzText as="span" size="sm" weight="medium">
+                  {{ row.name }}
+                </DzText>
               </DzTableCell>
               <DzTableCell>
                 <DzBadge
@@ -378,9 +412,10 @@ const ringStats = [
                 <div class="flex items-center gap-2.5">
                   <span
                     class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-primary-muted)] text-[11px] font-semibold leading-none tabular-nums text-[var(--dz-primary-muted-foreground)]"
-                    >{{ row.initials }}</span
-                  >
-                  <DzText as="span" size="sm" tone="muted">{{ row.owner }}</DzText>
+                  >{{ row.initials }}</span>
+                  <DzText as="span" size="sm" tone="muted">
+                    {{ row.owner }}
+                  </DzText>
                 </div>
               </DzTableCell>
               <DzTableCell>
@@ -393,7 +428,7 @@ const ringStats = [
                   <DzDropdownMenuTrigger as-child>
                     <DzIconButton
                       :icon="MoreHorizontal"
-                      ariaLabel="Row actions"
+                      aria-label="Row actions"
                       variant="ghost"
                       tone="neutral"
                       size="sm"

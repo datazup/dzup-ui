@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzContextMenu,
   DzContextMenuContent,
@@ -8,6 +7,7 @@ import {
   DzContextMenuSeparator,
   DzContextMenuTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzContextMenu is a compound right-click menu built on Reka UI ContextMenu (ADR-07).
@@ -47,7 +47,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: {
       DzContextMenu,
       DzContextMenuTrigger,

@@ -66,7 +66,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput },
     setup() {
       return { args }

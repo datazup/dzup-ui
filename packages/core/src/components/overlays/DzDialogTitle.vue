@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzDialogTitleSlots } from './DzDialog.types.ts'
 import { DialogTitle } from 'reka-ui'
 /**
@@ -15,6 +11,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { dialogVariants } from './DzDialog.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<DzDialogTitleSlots>()
 
 const attrs = useAttrs()
@@ -23,7 +23,6 @@ const titleClasses = computed(() =>
   cn(styles.value.title(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <DialogTitle

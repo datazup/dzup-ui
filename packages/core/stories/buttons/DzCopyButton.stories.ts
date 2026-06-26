@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzCopyButton } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCopyButton copies a value to the clipboard and shows visual feedback.

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzSplitter,
   DzSplitterHandle,
   DzSplitterPanel,
 } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSplitter is a naming alias for DzResizable, providing the same

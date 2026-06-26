@@ -1,25 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import type { ColumnDef } from '../../src/components/data'
 import {
   DzAccordion,
   DzAccordionContent,
   DzAccordionItem,
   DzAccordionTrigger,
-} from '../../src/components/data'
-import {
   DzDataGrid,
   DzDataGridBody,
   DzDataGridHeader,
   DzDataGridPagination,
-} from '../../src/components/data'
-import {
   DzTable,
   DzTableBody,
   DzTableCell,
   DzTableHeader,
   DzTableRow,
 } from '../../src/components/data'
-import type { ColumnDef } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * Data family compound sub-parts anatomy reference.
@@ -190,7 +186,7 @@ export const DataGridAnatomy: Story = {
   render: () => ({
     components: { DzDataGrid, DzDataGridHeader, DzDataGridBody, DzDataGridPagination },
     setup() {
-      type Row = { id: number; name: string; role: string; status: string }
+      interface Row { id: number, name: string, role: string, status: string }
       const columns: ColumnDef<Row>[] = [
         { key: 'id', label: 'ID', sortable: true },
         { key: 'name', label: 'Name', sortable: true },

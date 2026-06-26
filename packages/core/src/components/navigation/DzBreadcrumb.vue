@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBreadcrumbContext, DzBreadcrumbProps, DzBreadcrumbSlots } from './DzBreadcrumb.types.ts'
 /**
  * DzBreadcrumb — Accessible breadcrumb navigation wrapper.
@@ -26,6 +22,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_BREADCRUMB_KEY } from './DzBreadcrumb.types.ts'
 import { breadcrumbVariants } from './DzBreadcrumb.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzBreadcrumbProps>(), {
   separator: '/',
@@ -51,7 +51,6 @@ const navClasses = computed(() =>
   cn(styles.nav(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <nav

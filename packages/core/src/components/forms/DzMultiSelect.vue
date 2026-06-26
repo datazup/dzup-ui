@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzMultiSelectEmits,
   DzMultiSelectProps,
@@ -41,6 +37,10 @@ import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { multiSelectVariants } from './DzMultiSelect.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string[]>({ default: () => [] })
 
@@ -184,115 +184,114 @@ const rootClasses = computed(() =>
 )
 </script>
 
-
 <template>
   <div>
     <ComboboxRoot
-    :model-value="model"
-    :disabled="resolvedDisabled"
-    :name="name"
-    multiple
-    :open-on-click="true"
-    :open-on-focus="true"
-    :ignore-filter="true"
-    @update:model-value="handleValueChange"
-    @update:open="handleOpenChange"
-  >
-    <ComboboxAnchor
-      :class="rootClasses"
-      :data-state="resolvedDisabled ? 'disabled' : 'idle'"
-      :data-disabled="resolvedDisabled ? '' : undefined"
-      :data-invalid="resolvedInvalid ? '' : undefined"
-      style="contain: layout style"
-      v-bind="{ ...$attrs, class: undefined }"
+      :model-value="model"
+      :disabled="resolvedDisabled"
+      :name="name"
+      multiple
+      :open-on-click="true"
+      :open-on-focus="true"
+      :ignore-filter="true"
+      @update:model-value="handleValueChange"
+      @update:open="handleOpenChange"
     >
-      <!-- Selected tags -->
-      <span
-        v-for="value in model"
-        :key="value"
-        :class="styles.tag()"
+      <ComboboxAnchor
+        :class="rootClasses"
+        :data-state="resolvedDisabled ? 'disabled' : 'idle'"
+        :data-disabled="resolvedDisabled ? '' : undefined"
+        :data-invalid="resolvedInvalid ? '' : undefined"
+        style="contain: layout style"
+        v-bind="{ ...$attrs, class: undefined }"
       >
-        <slot name="tag" :value="value" :label="getLabelForValue(value)" :remove="() => removeValue(value)">
-          {{ getLabelForValue(value) }}
-          <button
-            type="button"
-            :class="styles.tagClose()"
-            :aria-label="`Remove ${getLabelForValue(value)}`"
-            @click.stop="removeValue(value)"
-          >
-            <X class="h-3 w-3" aria-hidden="true" />
-          </button>
-        </slot>
-      </span>
+        <!-- Selected tags -->
+        <span
+          v-for="value in model"
+          :key="value"
+          :class="styles.tag()"
+        >
+          <slot name="tag" :value="value" :label="getLabelForValue(value)" :remove="() => removeValue(value)">
+            {{ getLabelForValue(value) }}
+            <button
+              type="button"
+              :class="styles.tagClose()"
+              :aria-label="`Remove ${getLabelForValue(value)}`"
+              @click.stop="removeValue(value)"
+            >
+              <X class="h-3 w-3" aria-hidden="true" />
+            </button>
+          </slot>
+        </span>
 
-      <ComboboxInput
-        :id="resolvedId"
-        v-model="searchQuery"
-        :placeholder="model.length === 0 ? placeholder : undefined"
-        :class="styles.input()"
-        :disabled="resolvedDisabled || isMaxReached"
-        :aria-label="ariaLabel"
-        :aria-labelledby="ariaLabelledby"
-        :aria-describedby="resolvedAriaDescribedby"
-        :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @keydown="handleInputKeydown"
-      />
+        <ComboboxInput
+          :id="resolvedId"
+          v-model="searchQuery"
+          :placeholder="model.length === 0 ? placeholder : undefined"
+          :class="styles.input()"
+          :disabled="resolvedDisabled || isMaxReached"
+          :aria-label="ariaLabel"
+          :aria-labelledby="ariaLabelledby"
+          :aria-describedby="resolvedAriaDescribedby"
+          :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          @keydown="handleInputKeydown"
+        />
 
-      <button
-        v-if="model.length > 0"
-        type="button"
-        :class="styles.icon()"
-        aria-label="Clear all"
-        @click.stop="handleClear"
-      >
-        <X class="h-3.5 w-3.5" aria-hidden="true" />
-      </button>
-
-      <ComboboxTrigger as-child>
         <button
+          v-if="model.length > 0"
           type="button"
           :class="styles.icon()"
-          aria-label="Toggle options"
-          :disabled="resolvedDisabled"
+          aria-label="Clear all"
+          @click.stop="handleClear"
         >
-          <ChevronDown class="h-full w-full" aria-hidden="true" />
+          <X class="h-3.5 w-3.5" aria-hidden="true" />
         </button>
-      </ComboboxTrigger>
-    </ComboboxAnchor>
 
-    <ComboboxPortal>
-      <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
-        <ComboboxViewport :class="styles.viewport()">
-          <ComboboxItem
-            v-for="(item, index) in filteredItems"
-            :key="item.value"
-            :value="item.value"
-            :disabled="item.disabled || (isMaxReached && !model.includes(item.value))"
-            :class="styles.item()"
+        <ComboboxTrigger as-child>
+          <button
+            type="button"
+            :class="styles.icon()"
+            aria-label="Toggle options"
+            :disabled="resolvedDisabled"
           >
-            <ComboboxItemIndicator class="absolute left-1 flex items-center justify-center">
-              <Check :class="styles.checkIcon()" aria-hidden="true" />
-            </ComboboxItemIndicator>
-            <slot
-              name="item"
-              :item="item"
-              :index="index"
-              :selected="model.includes(item.value)"
-            >
-              <span class="pl-6">{{ item.label }}</span>
-            </slot>
-          </ComboboxItem>
+            <ChevronDown class="h-full w-full" aria-hidden="true" />
+          </button>
+        </ComboboxTrigger>
+      </ComboboxAnchor>
 
-          <ComboboxEmpty :class="styles.empty()">
-            <slot name="empty">
-              No options available
-            </slot>
-          </ComboboxEmpty>
-        </ComboboxViewport>
-      </ComboboxContent>
-    </ComboboxPortal>
+      <ComboboxPortal>
+        <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
+          <ComboboxViewport :class="styles.viewport()">
+            <ComboboxItem
+              v-for="(item, index) in filteredItems"
+              :key="item.value"
+              :value="item.value"
+              :disabled="item.disabled || (isMaxReached && !model.includes(item.value))"
+              :class="styles.item()"
+            >
+              <ComboboxItemIndicator class="absolute left-1 flex items-center justify-center">
+                <Check :class="styles.checkIcon()" aria-hidden="true" />
+              </ComboboxItemIndicator>
+              <slot
+                name="item"
+                :item="item"
+                :index="index"
+                :selected="model.includes(item.value)"
+              >
+                <span class="pl-6">{{ item.label }}</span>
+              </slot>
+            </ComboboxItem>
+
+            <ComboboxEmpty :class="styles.empty()">
+              <slot name="empty">
+                No options available
+              </slot>
+            </ComboboxEmpty>
+          </ComboboxViewport>
+        </ComboboxContent>
+      </ComboboxPortal>
     </ComboboxRoot>
 
     <!-- Error message -->

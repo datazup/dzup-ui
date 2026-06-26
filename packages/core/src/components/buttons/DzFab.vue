@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzFabEmits, DzFabProps, DzFabSlots } from './DzFab.types.ts'
 /**
  * DzFab — Floating action button.
@@ -22,6 +18,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { fabVariants } from './DzFab.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzFabProps>(), {
   icon: undefined,
@@ -72,7 +72,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <button

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzIconProps } from './DzIcon.types.ts'
 /**
  * DzIcon — Icon wrapper component with consistent sizing and accessibility.
@@ -21,6 +17,10 @@ import type { DzIconProps } from './DzIcon.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { defaultStrokeWidth, iconVariants } from './DzIcon.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzIconProps>(), {
   size: 'md',
@@ -41,7 +41,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

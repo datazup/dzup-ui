@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzToolbarProps, DzToolbarSlots } from './DzToolbar.types.ts'
 /**
  * DzToolbar -- horizontal action bar with start/center/end regions.
@@ -23,6 +19,10 @@ import type { DzToolbarProps, DzToolbarSlots } from './DzToolbar.types.ts'
 import { computed, useAttrs, useSlots } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { toolbarRegionVariants, toolbarVariants } from './DzToolbar.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzToolbarProps>(), {
   variant: 'flat',

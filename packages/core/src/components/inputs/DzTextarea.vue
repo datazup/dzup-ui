@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTextareaEmits, DzTextareaProps } from './DzTextarea.types.ts'
 /**
  * DzTextarea — Multiline text input with optional auto-resize.
@@ -21,6 +17,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { textareaVariants } from './DzTextarea.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -180,7 +180,6 @@ function handleBlur(event: FocusEvent): void {
 /** Expose the native textarea ref for programmatic focus */
 defineExpose({ textareaRef })
 </script>
-
 
 <template>
   <div

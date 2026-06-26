@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzComboboxEmits,
   DzComboboxItem,
@@ -44,6 +40,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { comboboxVariants } from './DzCombobox.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -281,124 +281,123 @@ watch(
 )
 </script>
 
-
 <template>
   <div>
     <ComboboxRoot
-    :model-value="model"
-    :disabled="resolvedDisabled"
-    :name="name"
-    :default-open="defaultOpen"
-    :open-on-click="openOnClick"
-    :open-on-focus="openOnFocus"
-    :ignore-filter="true"
-    @update:model-value="handleValueChange"
-    @update:open="handleOpenChange"
-  >
-    <ComboboxAnchor
-      :class="rootClasses"
-      :data-state="resolvedDisabled ? 'disabled' : 'idle'"
-      :data-disabled="resolvedDisabled ? '' : undefined"
-      :data-invalid="resolvedInvalid ? '' : undefined"
-      style="contain: layout style"
-      v-bind="{ ...$attrs, class: undefined }"
+      :model-value="model"
+      :disabled="resolvedDisabled"
+      :name="name"
+      :default-open="defaultOpen"
+      :open-on-click="openOnClick"
+      :open-on-focus="openOnFocus"
+      :ignore-filter="true"
+      @update:model-value="handleValueChange"
+      @update:open="handleOpenChange"
     >
-      <ComboboxInput
-        :id="resolvedId"
-        v-model="searchQuery"
-        :display-value="resolveDisplayValue"
-        :placeholder="placeholder"
-        :class="styles.input()"
-        :disabled="resolvedDisabled"
-        :aria-label="resolvedAriaLabel"
-        :aria-labelledby="resolvedAriaLabelledby"
-        :aria-describedby="resolvedAriaDescribedby"
-        :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-        @input="handleInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-
-      <ComboboxCancel
-        v-if="model"
-        as-child
+      <ComboboxAnchor
+        :class="rootClasses"
+        :data-state="resolvedDisabled ? 'disabled' : 'idle'"
+        :data-disabled="resolvedDisabled ? '' : undefined"
+        :data-invalid="resolvedInvalid ? '' : undefined"
+        style="contain: layout style"
+        v-bind="{ ...$attrs, class: undefined }"
       >
-        <button
-          type="button"
-          :class="styles.clearButton()"
-          aria-label="Clear selection"
-          @click.stop="handleClear"
-        >
-          <X class="h-3.5 w-3.5" aria-hidden="true" />
-        </button>
-      </ComboboxCancel>
-
-      <ComboboxTrigger as-child>
-        <button
-          type="button"
-          :class="styles.icon()"
-          aria-label="Toggle options"
+        <ComboboxInput
+          :id="resolvedId"
+          v-model="searchQuery"
+          :display-value="resolveDisplayValue"
+          :placeholder="placeholder"
+          :class="styles.input()"
           :disabled="resolvedDisabled"
+          :aria-label="resolvedAriaLabel"
+          :aria-labelledby="resolvedAriaLabelledby"
+          :aria-describedby="resolvedAriaDescribedby"
+          :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+          @input="handleInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+
+        <ComboboxCancel
+          v-if="model"
+          as-child
         >
-          <DzSpinner
-            v-if="loading"
-            size="xs"
-            tone="neutral"
-            :label="loadingText"
-            class="h-full w-full"
-          />
-          <ChevronDown v-else class="h-full w-full" aria-hidden="true" />
-        </button>
-      </ComboboxTrigger>
-    </ComboboxAnchor>
+          <button
+            type="button"
+            :class="styles.clearButton()"
+            aria-label="Clear selection"
+            @click.stop="handleClear"
+          >
+            <X class="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+        </ComboboxCancel>
 
-    <ComboboxPortal>
-      <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
-        <ComboboxViewport :class="styles.viewport()">
-          <template v-if="loading">
-            <slot name="loading">
-              <div :class="styles.empty()">
-                {{ loadingText }}
-              </div>
-            </slot>
-          </template>
+        <ComboboxTrigger as-child>
+          <button
+            type="button"
+            :class="styles.icon()"
+            aria-label="Toggle options"
+            :disabled="resolvedDisabled"
+          >
+            <DzSpinner
+              v-if="loading"
+              size="xs"
+              tone="neutral"
+              :label="loadingText"
+              class="h-full w-full"
+            />
+            <ChevronDown v-else class="h-full w-full" aria-hidden="true" />
+          </button>
+        </ComboboxTrigger>
+      </ComboboxAnchor>
 
-          <template v-else-if="filteredItems.length > 0">
-            <ComboboxItem
-              v-for="(item, index) in filteredItems"
-              :key="item.value"
-              :value="item.value"
-              :text-value="item.label"
-              :disabled="item.disabled"
-              :class="styles.item()"
-            >
-              <ComboboxItemIndicator class="absolute left-1 flex items-center justify-center">
-                <Check :class="styles.checkIcon()" aria-hidden="true" />
-              </ComboboxItemIndicator>
-              <slot
-                name="item"
-                :item="item"
-                :index="index"
-                :selected="model === item.value"
-              >
-                <span class="pl-6">{{ item.label }}</span>
+      <ComboboxPortal>
+        <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
+          <ComboboxViewport :class="styles.viewport()">
+            <template v-if="loading">
+              <slot name="loading">
+                <div :class="styles.empty()">
+                  {{ loadingText }}
+                </div>
               </slot>
-            </ComboboxItem>
-          </template>
+            </template>
 
-          <div v-else :class="styles.empty()">
-            <slot
-              name="empty"
-              :query="searchQuery"
-              :loading="loading"
-              :has-items="normalizedItems.length > 0"
-            >
-              {{ normalizedItems.length > 0 ? noResultsText : emptyText }}
-            </slot>
-          </div>
-        </ComboboxViewport>
-      </ComboboxContent>
-    </ComboboxPortal>
+            <template v-else-if="filteredItems.length > 0">
+              <ComboboxItem
+                v-for="(item, index) in filteredItems"
+                :key="item.value"
+                :value="item.value"
+                :text-value="item.label"
+                :disabled="item.disabled"
+                :class="styles.item()"
+              >
+                <ComboboxItemIndicator class="absolute left-1 flex items-center justify-center">
+                  <Check :class="styles.checkIcon()" aria-hidden="true" />
+                </ComboboxItemIndicator>
+                <slot
+                  name="item"
+                  :item="item"
+                  :index="index"
+                  :selected="model === item.value"
+                >
+                  <span class="pl-6">{{ item.label }}</span>
+                </slot>
+              </ComboboxItem>
+            </template>
+
+            <div v-else :class="styles.empty()">
+              <slot
+                name="empty"
+                :query="searchQuery"
+                :loading="loading"
+                :has-items="normalizedItems.length > 0"
+              >
+                {{ normalizedItems.length > 0 ? noResultsText : emptyText }}
+              </slot>
+            </div>
+          </ComboboxViewport>
+        </ComboboxContent>
+      </ComboboxPortal>
     </ComboboxRoot>
 
     <!-- Error message -->

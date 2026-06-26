@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzDatePicker } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDatePicker is a date selection component built on Reka UI DatePicker primitives
@@ -98,7 +98,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzDatePicker },
     setup() {
       return { args }
@@ -180,7 +180,7 @@ export const WithConstraints: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzDatePicker },
     setup() {
       return { args }
@@ -199,7 +199,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'A valid date is required',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzDatePicker },
     setup() {
       return { args }

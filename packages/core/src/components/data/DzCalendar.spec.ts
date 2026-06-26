@@ -89,26 +89,26 @@ describe('dzCalendar — constraints', () => {
 })
 
 describe('dzCalendar — keyboard grid navigation', () => {
-  it('ArrowRight moves focus by one day', async () => {
+  it('arrowRight moves focus by one day', async () => {
     const wrapper = mountCal()
     await wrapper.get('[role="grid"]').trigger('keydown', { key: 'ArrowRight' })
     expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-16'])
   })
 
-  it('ArrowDown moves focus by one week', async () => {
+  it('arrowDown moves focus by one week', async () => {
     const wrapper = mountCal()
     await wrapper.get('[role="grid"]').trigger('keydown', { key: 'ArrowDown' })
     expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-22'])
   })
 
-  it('PageDown moves focus by one month and emits panelChange', async () => {
+  it('pageDown moves focus by one month and emits panelChange', async () => {
     const wrapper = mountCal()
     await wrapper.get('[role="grid"]').trigger('keydown', { key: 'PageDown' })
     expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-07-15'])
     expect(wrapper.emitted('panelChange')?.at(-1)).toEqual([{ focusedDate: '2026-07-15', view: 'month' }])
   })
 
-  it('Home/End jump to week edges', async () => {
+  it('home/End jump to week edges', async () => {
     const wrapper = mountCal({ firstDayOfWeek: 0 }) // Sunday-start
     const grid = wrapper.get('[role="grid"]')
     await grid.trigger('keydown', { key: 'Home' })
@@ -118,7 +118,7 @@ describe('dzCalendar — keyboard grid navigation', () => {
     expect(wrapper.emitted('update:focusedDate')?.at(-1)).toEqual(['2026-06-20'])
   })
 
-  it('Enter selects the focused day', async () => {
+  it('enter selects the focused day', async () => {
     const wrapper = mountCal({ mode: 'single' })
     await wrapper.get('[role="grid"]').trigger('keydown', { key: 'Enter' })
     expect(wrapper.emitted('update:value')?.at(-1)).toEqual([FOCUS])

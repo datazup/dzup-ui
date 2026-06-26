@@ -1,3 +1,4 @@
+import type { TreeNode } from './DzTree.types.ts'
 import { mount } from '@vue/test-utils'
 /**
  * DzTreeItem — Contract Spec v1 conformance tests.
@@ -6,7 +7,6 @@ import { mount } from '@vue/test-utils'
  * full context, plus a few standalone checks that fall back to no-context defaults.
  */
 import { describe, expect, it } from 'vitest'
-import type { TreeNode } from './DzTree.types.ts'
 import DzTree from './DzTree.vue'
 import DzTreeItem from './DzTreeItem.vue'
 

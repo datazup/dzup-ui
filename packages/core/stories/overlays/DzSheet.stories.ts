@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzSheet,
@@ -10,6 +9,7 @@ import {
   DzSheetTitle,
   DzSheetTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSheet is a compound slide-out side panel built on Reka UI Dialog (ADR-07).

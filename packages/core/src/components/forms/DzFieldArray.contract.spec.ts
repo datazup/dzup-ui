@@ -1,10 +1,10 @@
+import type { DzFieldArraySlotProps } from './DzFieldArray.types.ts'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
-import type { DzFieldArraySlotProps } from './DzFieldArray.types.ts'
 import DzFieldArray from './DzFieldArray.vue'
 
-describe('DzFieldArray — Contract Spec v1', () => {
+describe('dzFieldArray — Contract Spec v1', () => {
   it('default slot receives field, index, remove, move', () => {
     let capturedProps: DzFieldArraySlotProps | undefined
     mount(DzFieldArray, {
@@ -48,7 +48,7 @@ describe('DzFieldArray — Contract Spec v1', () => {
     const wrapper = mount(DzFieldArray, {
       props: { modelValue: ['a', 'b'] },
       slots: {
-        default: ({ remove }: { field: unknown; index: number; remove: () => void; move: (to: number) => void }) => {
+        default: ({ remove }: { field: unknown, index: number, remove: () => void, move: (to: number) => void }) => {
           removeFn ??= remove
           return h('span', 'item')
         },
@@ -64,8 +64,9 @@ describe('DzFieldArray — Contract Spec v1', () => {
     const wrapper = mount(DzFieldArray, {
       props: { modelValue: ['a', 'b', 'c'] },
       slots: {
-        default: ({ move, index }: { field: unknown; index: number; remove: () => void; move: (to: number) => void }) => {
-          if (index === 0) moveFn = move
+        default: ({ move, index }: { field: unknown, index: number, remove: () => void, move: (to: number) => void }) => {
+          if (index === 0)
+            moveFn = move
           return h('span', 'item')
         },
       },

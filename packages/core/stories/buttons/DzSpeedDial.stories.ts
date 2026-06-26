@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzFab, DzSpeedDial } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzSpeedDial** is a floating action button (DzFab) that fans out a set of
@@ -139,7 +139,7 @@ export const Fab: Story = {
 
 export const LinearUp: Story = {
   name: 'Linear (up)',
-  render: (args) => ({
+  render: args => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(false)
@@ -180,7 +180,7 @@ export const LinearUp: Story = {
 
 export const Radial: Story = {
   name: 'Radial',
-  render: (args) => ({
+  render: args => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(true)
@@ -205,7 +205,7 @@ export const Radial: Story = {
 
 export const WithLabels: Story = {
   name: 'With Labels (tooltips)',
-  render: (args) => ({
+  render: args => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(true)
@@ -263,7 +263,7 @@ export const Directions: Story = {
 
 export const Pinned: Story = {
   name: 'Pinned (bottom-right)',
-  render: (args) => ({
+  render: args => ({
     components: { DzSpeedDial },
     setup() {
       const open = ref(false)

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzMegaMenuEmits,
   DzMegaMenuGroup,
@@ -36,10 +32,14 @@ import { ChevronDown } from 'lucide-vue-next'
  * ```
  */
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
-import { cn } from '../../utilities/cn.ts'
 import { useClickOutside } from '../../composables/useClickOutside/index.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
+import { cn } from '../../utilities/cn.ts'
 import { megaMenuVariants } from './DzMegaMenu.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzMegaMenuProps>(), {
   orientation: 'horizontal',

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzInputEmits, DzInputProps, DzInputSlots } from './DzInput.types.ts'
 /**
  * DzInput — Text input component with v-model binding.
@@ -24,6 +20,10 @@ import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -146,7 +146,6 @@ function handleClear(): void {
 /** Expose the native input ref for programmatic focus */
 defineExpose({ inputRef })
 </script>
-
 
 <template>
   <div

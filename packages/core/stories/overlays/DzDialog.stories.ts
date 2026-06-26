@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import {
@@ -10,6 +9,7 @@ import {
   DzDialogTitle,
   DzDialogTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDialog is a compound modal overlay component built on Reka UI Dialog (ADR-07).
@@ -57,7 +57,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: {
       DzDialog,
       DzDialogTrigger,

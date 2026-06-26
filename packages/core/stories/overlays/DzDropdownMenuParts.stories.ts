@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDropdownMenu,
@@ -9,6 +8,7 @@ import {
   DzDropdownMenuSeparator,
   DzDropdownMenuTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDropdownMenuContent compound sub-parts: DzDropdownMenuTrigger, DzDropdownMenuItem,

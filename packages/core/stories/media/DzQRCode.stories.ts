@@ -12,7 +12,7 @@ import { DzQRCode } from '../../src/components/media'
  * `--dz-background` design tokens and can be overridden per instance.
  *
  * a11y: the root is `role="img"`; set `aria-label` to describe the code's
- * *purpose* (e.g. "Link to the docs"), never the raw encoded payload.
+ * purpose* (e.g. "Link to the docs"), never the raw encoded payload.
  *
  * @status experimental
  */
@@ -103,11 +103,11 @@ export const Default: Story = {
 // ---------------------------------------------------------------------------
 
 const LOGO_SRC
-  = 'data:image/svg+xml;utf8,'
-    + encodeURIComponent(
+  = `data:image/svg+xml;utf8,${
+    encodeURIComponent(
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4f46e5">'
       + '<circle cx="12" cy="12" r="10"/></svg>',
-    )
+    )}`
 
 export const WithLogo: Story = {
   name: 'With Logo',

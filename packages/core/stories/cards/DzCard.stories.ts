@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
 import { DzSkeleton } from '../../src/components/feedback'
 import { DzHeading, DzText } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCard is a surface container component supporting three visual variants

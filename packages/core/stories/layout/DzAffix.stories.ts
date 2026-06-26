@@ -62,9 +62,9 @@ export const AffixTop: Story = {
     const canvas = within(canvasElement)
 
     // The affix root wrapper must be present in the DOM
-    const affixRoot =
-      canvasElement.querySelector('[data-affixed]') ??
-      canvasElement.querySelector('.dz-affix, [class]')
+    const affixRoot
+      = canvasElement.querySelector('[data-affixed]')
+        ?? canvasElement.querySelector('.dz-affix, [class]')
     const wrapper = canvasElement.firstElementChild
     await expect(wrapper).not.toBeNull()
 
@@ -76,7 +76,7 @@ export const AffixTop: Story = {
     const slotText = canvas.getByText(/Scroll to pin me|Pinned to top/)
     await expect(slotText).toBeInTheDocument()
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzAffix },
     setup() {
       const container = ref<HTMLElement | null>(null)
@@ -115,7 +115,7 @@ export const AffixTop: Story = {
 export const AffixBottom: Story = {
   name: 'Affix Bottom',
   args: { offsetBottom: 16 },
-  render: (args) => ({
+  render: args => ({
     components: { DzAffix },
     setup() {
       const container = ref<HTMLElement | null>(null)

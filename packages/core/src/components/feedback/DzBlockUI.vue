@@ -1,14 +1,16 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBlockUIEmits, DzBlockUIProps, DzBlockUISlots } from './DzBlockUI.types.ts'
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
 import { cn } from '../../utilities/cn.ts'
-import DzSpinner from './DzSpinner.vue'
 import { blockUiVariants } from './DzBlockUI.variants.ts'
+import DzSpinner from './DzSpinner.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
+const blocked = defineModel<boolean>('blocked', { default: false })
+
 /**
  * DzBlockUI — Content-loading mask.
  *
@@ -46,8 +48,6 @@ const props = withDefaults(defineProps<DzBlockUIProps>(), {
 const emit = defineEmits<DzBlockUIEmits>()
 defineSlots<DzBlockUISlots>()
 
-const blocked = defineModel<boolean>('blocked', { default: false })
-
 const attrs = useAttrs()
 const styles = blockUiVariants()
 
@@ -76,7 +76,8 @@ function setContentRef(el: unknown): void {
 const spinnerLabel = computed(() => props.message ?? 'Loading')
 
 watch(blocked, async (isBlocked) => {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
 
   if (isBlocked) {
     previouslyFocused = (document.activeElement as HTMLElement | null) ?? null
@@ -85,7 +86,8 @@ watch(blocked, async (isBlocked) => {
     // Move focus out of the (now inert) content and into the overlay so it is
     // never stranded on a hidden control.
     overlayRef.value?.focus()
-    if (props.fullScreen) activate()
+    if (props.fullScreen)
+      activate()
     emit('block')
   }
   else {

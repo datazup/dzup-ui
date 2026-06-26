@@ -13,16 +13,16 @@
  * or block content (`div`). Common interactive/structural elements are listed
  * for editor autocompletion; any string tag is accepted.
  */
-export type VisuallyHiddenElement =
-  | 'span'
-  | 'div'
-  | 'p'
-  | 'label'
-  | 'a'
-  | 'li'
-  | 'output'
+export type VisuallyHiddenElement
+  = | 'span'
+    | 'div'
+    | 'p'
+    | 'label'
+    | 'a'
+    | 'li'
+    | 'output'
   // eslint-disable-next-line @typescript-eslint/ban-types
-  | (string & {})
+    | (string & {})
 
 export interface DzVisuallyHiddenProps {
   /** HTML element to render. Defaults to 'span'. */

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzPopconfirmEmits, DzPopconfirmProps, DzPopconfirmSlots } from './DzPopconfirm.types.ts'
 import { computed, nextTick, ref, useId, watch } from 'vue'
 import { useClickOutside } from '../../composables/useClickOutside/index.ts'
@@ -14,6 +10,12 @@ import DzButton from '../buttons/DzButton.vue'
 import DzIcon from '../media/DzIcon.vue'
 import { popconfirmTokens } from './DzPopconfirm.tokens.ts'
 import { popconfirmVariants } from './DzPopconfirm.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
+const open = defineModel<boolean>('open', { default: false })
+
 /**
  * DzPopconfirm -- An inline confirmation popover anchored to its trigger.
  *
@@ -54,8 +56,6 @@ const props = withDefaults(defineProps<DzPopconfirmProps>(), {
 const emit = defineEmits<DzPopconfirmEmits>()
 const slots = defineSlots<DzPopconfirmSlots>()
 
-const open = defineModel<boolean>('open', { default: false })
-
 const styles = computed(() => popconfirmVariants({ tone: props.tone }))
 
 const autoId = useId()
@@ -81,14 +81,16 @@ const confirmButtonRef = ref<InstanceType<typeof DzButton> | null>(null)
 // ── Dismissal wiring ──────────────────────────────────────────────────────────
 
 useEscapeKey(() => {
-  if (props.loading) return
+  if (props.loading)
+    return
   cancel()
 }, open)
 
 useClickOutside(
   floatingRef,
   (event) => {
-    if (props.loading) return
+    if (props.loading)
+      return
     // The trigger sits outside the floating panel; ignore clicks on it so the
     // toggle handler owns open/close from the trigger (otherwise a closing
     // mousedown would race the reopening click).
@@ -106,7 +108,8 @@ const { activate, deactivate } = useFocusTrap(floatingRef)
 
 function focusTrigger(): void {
   const el = referenceRef.value
-  if (!el) return
+  if (!el)
+    return
   const focusable = el.querySelector<HTMLElement>(
     'button:not(:disabled), a[href], input:not(:disabled), [tabindex]:not([tabindex="-1"])',
   )
@@ -123,7 +126,8 @@ function close(): void {
 }
 
 function confirm(): void {
-  if (props.loading) return
+  if (props.loading)
+    return
   emit('confirm')
   // Defer the close decision so a synchronous `@confirm` handler can flip
   // `loading` true (async flow). If it does, the watcher below closes once it
@@ -137,7 +141,8 @@ function confirm(): void {
 }
 
 function cancel(): void {
-  if (props.loading) return
+  if (props.loading)
+    return
   emit('cancel')
   close()
 }
@@ -159,7 +164,8 @@ watch(open, async (isOpen, wasOpen) => {
     deactivate()
     // Only restore focus on a real open→closed transition, never on the
     // initial closed mount (which would steal focus from the page).
-    if (wasOpen) focusTrigger()
+    if (wasOpen)
+      focusTrigger()
     return
   }
   awaitingConfirm.value = false

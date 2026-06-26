@@ -20,7 +20,7 @@ const SafeChild = defineComponent({
   },
 })
 
-describe('DzErrorBoundary', () => {
+describe('dzErrorBoundary', () => {
   it('renders default slot normally', () => {
     const wrapper = mount(DzErrorBoundary, {
       slots: { default: () => h(SafeChild) },
@@ -32,7 +32,7 @@ describe('DzErrorBoundary', () => {
     const wrapper = mount(DzErrorBoundary, {
       slots: {
         default: () => h(ThrowingChild),
-        fallback: ({ error }: { error: unknown; reset: () => void }) =>
+        fallback: ({ error }: { error: unknown, reset: () => void }) =>
           h('span', { 'data-testid': 'fallback' }, String(error)),
       },
     })
@@ -57,7 +57,7 @@ describe('DzErrorBoundary', () => {
     const wrapper = mount(DzErrorBoundary, {
       slots: {
         default: () => h(ThrowingChild),
-        fallback: ({ reset }: { error: unknown; reset: () => void }) =>
+        fallback: ({ reset }: { error: unknown, reset: () => void }) =>
           h('button', { onClick: reset }, 'reset'),
       },
     })

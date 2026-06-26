@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzPanelEmits, DzPanelProps, DzPanelSlots } from './DzPanel.types.ts'
 /**
  * DzPanel -- titled container with optional header actions and collapse.
@@ -35,6 +31,13 @@ import {
   panelVariants,
 } from './DzPanel.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
+/** Two-way collapse state (ADR-16). `true` = collapsed/hidden. */
+const collapsed = defineModel<boolean>('collapsed', { default: false })
+
 const props = withDefaults(defineProps<DzPanelProps>(), {
   variant: 'outlined',
   size: 'md',
@@ -46,9 +49,6 @@ const props = withDefaults(defineProps<DzPanelProps>(), {
 const emit = defineEmits<DzPanelEmits>()
 
 defineSlots<DzPanelSlots>()
-
-/** Two-way collapse state (ADR-16). `true` = collapsed/hidden. */
-const collapsed = defineModel<boolean>('collapsed', { default: false })
 
 const attrs = useAttrs()
 const slots = useSlots()

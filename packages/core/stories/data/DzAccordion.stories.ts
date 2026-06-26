@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzAccordion,
@@ -7,6 +6,7 @@ import {
   DzAccordionItem,
   DzAccordionTrigger,
 } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzAccordion is a disclosure component built on Reka UI primitives (ADR-07).

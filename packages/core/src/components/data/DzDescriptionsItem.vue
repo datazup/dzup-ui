@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { CSSProperties } from 'vue'
 import type {
   DzDescriptionsItemProps,
@@ -26,6 +22,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DESCRIPTIONS_KEY } from './DzDescriptions.types.ts'
 import { descriptionsVariants } from './DzDescriptions.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzDescriptionsItemProps>(), {
   label: undefined,
@@ -66,7 +66,9 @@ const groupStyle = computed<CSSProperties | undefined>(() => {
     v-bind="{ ...$attrs, class: undefined }"
   >
     <dt :class="styles.term()">
-      <slot name="label">{{ label }}</slot>
+      <slot name="label">
+        {{ label }}
+      </slot>
     </dt>
     <dd :class="styles.detail()">
       <slot />

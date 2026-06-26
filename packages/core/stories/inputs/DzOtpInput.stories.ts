@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzOtpInput } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzOtpInput is a one-time password / PIN input component built on Reka UI
@@ -107,7 +107,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzOtpInput },
     setup() {
       return { args }
@@ -253,7 +253,7 @@ export const Disabled: Story = {
   args: {
     disabled: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzOtpInput },
     setup() {
       return { args }
@@ -337,7 +337,7 @@ export const Interactive: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const cells = Array.from(canvasElement.querySelectorAll<HTMLInputElement>('input')).filter(
-      (el) => el.type !== 'hidden',
+      el => el.type !== 'hidden',
     )
     await expect(cells.length).toBe(6)
     // Focus the first cell; Reka PinInput advances focus as each digit lands.
@@ -373,7 +373,7 @@ export const Accessibility: Story = {
 
     // All six cells are individually focusable inputs.
     const cells = Array.from(canvasElement.querySelectorAll<HTMLInputElement>('input')).filter(
-      (el) => el.type !== 'hidden',
+      el => el.type !== 'hidden',
     )
     await expect(cells.length).toBe(6)
 

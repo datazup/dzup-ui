@@ -29,6 +29,12 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Open state — `v-model:active` (ADR-16) */
+const active = defineModel<boolean>('active', { default: false })
+
+/** Edited value — `v-model:value` passthrough (ADR-16) */
+const value = defineModel<T>('value')
+
 const props = withDefaults(defineProps<DzInplaceProps>(), {
   saveOn: 'both',
   disabled: false,
@@ -38,11 +44,6 @@ const props = withDefaults(defineProps<DzInplaceProps>(), {
 
 const emit = defineEmits<DzInplaceEmits<T>>()
 const slots = defineSlots<DzInplaceSlots<T>>()
-
-/** Open state — `v-model:active` (ADR-16) */
-const active = defineModel<boolean>('active', { default: false })
-/** Edited value — `v-model:value` passthrough (ADR-16) */
-const value = defineModel<T>('value')
 
 const attrs = useAttrs()
 

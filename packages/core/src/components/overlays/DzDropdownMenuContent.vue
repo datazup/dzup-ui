@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzDropdownMenuContentEmits,
   DzDropdownMenuContentProps,
@@ -15,6 +11,10 @@ import { DropdownMenuContent, DropdownMenuPortal } from 'reka-ui'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { dropdownMenuVariants } from './DzDropdownMenu.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 withDefaults(defineProps<DzDropdownMenuContentProps>(), {
   side: 'bottom',
@@ -40,7 +40,6 @@ function handlePointerDownOutside(event: Event): void {
   emit('pointerDownOutside', event)
 }
 </script>
-
 
 <template>
   <DropdownMenuPortal>

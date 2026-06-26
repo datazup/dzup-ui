@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { CalendarDate } from '@internationalized/date'
 import type { CalendarDay } from '../../composables/useCalendar/index.ts'
 import type {
@@ -40,6 +36,14 @@ import { useCalendar } from '../../composables/useCalendar/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { calendarVariants } from './DzCalendar.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
+const value = defineModel<DzCalendarModelValue>('value', { default: null })
+
+const focusedDate = defineModel<string>('focusedDate', { default: '' })
+
 const props = withDefaults(defineProps<DzCalendarProps>(), {
   mode: 'single',
   view: 'month',
@@ -60,9 +64,6 @@ const props = withDefaults(defineProps<DzCalendarProps>(), {
 
 const emit = defineEmits<DzCalendarEmits>()
 defineSlots<DzCalendarSlots>()
-
-const value = defineModel<DzCalendarModelValue>('value', { default: null })
-const focusedDate = defineModel<string>('focusedDate', { default: '' })
 
 const attrs = useAttrs()
 const gridRef = ref<HTMLElement | null>(null)

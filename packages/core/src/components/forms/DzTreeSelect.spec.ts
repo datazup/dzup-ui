@@ -302,7 +302,7 @@ describe('dzTreeSelect — ARIA combobox-with-tree semantics', () => {
     wrapper.unmount()
   })
 
-  it('ArrowDown on a closed trigger opens the panel and seeds an active node', async () => {
+  it('arrowDown on a closed trigger opens the panel and seeds an active node', async () => {
     const wrapper = mount(DzTreeSelect, {
       props: { nodes },
       attachTo: document.body,
@@ -316,7 +316,7 @@ describe('dzTreeSelect — ARIA combobox-with-tree semantics', () => {
     wrapper.unmount()
   })
 
-  it('ArrowRight expands the active branch and ArrowLeft collapses it (from the trigger)', async () => {
+  it('arrowRight expands the active branch and ArrowLeft collapses it (from the trigger)', async () => {
     const wrapper = mount(DzTreeSelect, {
       props: { nodes, defaultOpen: true },
       attachTo: document.body,
@@ -337,7 +337,7 @@ describe('dzTreeSelect — ARIA combobox-with-tree semantics', () => {
     wrapper.unmount()
   })
 
-  it('Enter on the active node commits the selection (single mode)', async () => {
+  it('enter on the active node commits the selection (single mode)', async () => {
     const wrapper = mount(DzTreeSelect, {
       props: { nodes, defaultOpen: true },
       attachTo: document.body,

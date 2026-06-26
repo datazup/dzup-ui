@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzFileUpload } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFileUpload provides a drag-and-drop file upload zone with file validation.
@@ -90,7 +90,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -128,7 +128,7 @@ export const MultipleFiles: Story = {
     multiple: true,
     maxFiles: 5,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -147,7 +147,7 @@ export const AcceptFilter: Story = {
     accept: 'image/*',
     multiple: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -166,7 +166,7 @@ export const MaxFileSize: Story = {
     maxSize: 5 * 1024 * 1024,
     multiple: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -186,7 +186,7 @@ export const MaxFileSize: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -205,7 +205,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please upload at least one file',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFileUpload },
     setup() {
       return { args }

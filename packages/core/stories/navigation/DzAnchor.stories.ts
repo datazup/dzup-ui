@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzAnchor } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzAnchor** is an in-page table-of-contents navigation. It highlights the
@@ -59,7 +59,7 @@ const sections = [
 function articleTemplate(): string {
   return sections
     .map(
-      (s) => `
+      s => `
         <section id="${s.id}" class="min-h-[60vh] scroll-mt-4">
           <h2 class="text-xl font-semibold mb-2">${s.label}</h2>
           <p class="text-sm text-gray-500 max-w-prose">
@@ -79,7 +79,7 @@ export const Default: Story = {
   render: () => ({
     components: { DzAnchor },
     setup() {
-      const items = sections.map((s) => ({ href: `#${s.id}`, label: s.label }))
+      const items = sections.map(s => ({ href: `#${s.id}`, label: s.label }))
       return { items, article: articleTemplate() }
     },
     template: `
@@ -156,7 +156,7 @@ export const Affixed: Story = {
   render: () => ({
     components: { DzAnchor },
     setup() {
-      const items = sections.map((s) => ({ href: `#${s.id}`, label: s.label }))
+      const items = sections.map(s => ({ href: `#${s.id}`, label: s.label }))
       return { items, article: articleTemplate() }
     },
     template: `
@@ -186,7 +186,7 @@ export const Controlled: Story = {
     },
     computed: {
       items() {
-        return sections.map((s) => ({ href: `#${s.id}`, label: s.label }))
+        return sections.map(s => ({ href: `#${s.id}`, label: s.label }))
       },
       article() {
         return articleTemplate()
@@ -214,7 +214,7 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzAnchor },
     setup() {
-      const items = sections.map((s) => ({ href: `#${s.id}`, label: s.label }))
+      const items = sections.map(s => ({ href: `#${s.id}`, label: s.label }))
       return { items, article: articleTemplate() }
     },
     template: `

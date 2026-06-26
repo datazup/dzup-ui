@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzOtpInputEmits, DzOtpInputProps, DzOtpInputSlots } from './DzOtpInput.types.ts'
 import { PinInputInput, PinInputRoot } from 'reka-ui'
 /**
@@ -20,6 +16,10 @@ import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { otpInputVariants } from './DzOtpInput.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -134,7 +134,6 @@ function normalizeAggregateInput(): void {
 onMounted(normalizeAggregateInput)
 watch(() => props.length, () => void nextTick(normalizeAggregateInput))
 </script>
-
 
 <template>
   <div

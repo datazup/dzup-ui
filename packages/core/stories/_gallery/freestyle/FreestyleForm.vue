@@ -2,7 +2,7 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const name = ref('')
 const visibility = ref<'private' | 'team' | 'public'>('team')
@@ -37,7 +37,9 @@ function submit() {
           >
             Workspace
           </p>
-          <h1 class="text-xl font-semibold tracking-tight">Create Project</h1>
+          <h1 class="text-xl font-semibold tracking-tight">
+            Create Project
+          </h1>
           <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Spin up a new project and invite your team.
           </p>
@@ -65,7 +67,7 @@ function submit() {
                   : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-500/30 dark:border-white/10'
               "
               @blur="touched = true"
-            />
+            >
             <p
               v-if="nameError"
               class="mt-1.5 flex items-center gap-1 text-xs font-medium text-rose-600 dark:text-rose-400"
@@ -89,15 +91,20 @@ function submit() {
                 v-model="visibility"
                 class="w-full appearance-none rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-100"
               >
-                <option value="private">Private — only you</option>
-                <option value="team">Team — everyone in workspace</option>
-                <option value="public">Public — anyone with the link</option>
+                <option value="private">
+                  Private — only you
+                </option>
+                <option value="team">
+                  Team — everyone in workspace
+                </option>
+                <option value="public">
+                  Public — anyone with the link
+                </option>
               </select>
               <span
                 class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400"
                 aria-hidden="true"
-                >▾</span
-              >
+              >▾</span>
             </div>
           </div>
 
@@ -125,26 +132,18 @@ function submit() {
                 v-model="notifications"
                 type="checkbox"
                 class="mt-0.5 h-4 w-4 rounded border-slate-300 text-indigo-600 shadow-sm transition focus:ring-2 focus:ring-indigo-500/40 focus:ring-offset-0 dark:border-white/20 dark:bg-slate-950"
-              />
+              >
               <span>
-                <span class="block text-sm font-medium text-slate-700 dark:text-slate-200"
-                  >Enable notifications</span
-                >
-                <span class="block text-xs text-slate-500 dark:text-slate-400"
-                  >Get an email when activity happens in this project.</span
-                >
+                <span class="block text-sm font-medium text-slate-700 dark:text-slate-200">Enable notifications</span>
+                <span class="block text-xs text-slate-500 dark:text-slate-400">Get an email when activity happens in this project.</span>
               </span>
             </label>
 
             <!-- Toggle switch -->
             <div class="mt-3 flex items-center justify-between py-1">
               <span>
-                <span class="block text-sm font-medium text-slate-700 dark:text-slate-200"
-                  >Make public</span
-                >
-                <span class="block text-xs text-slate-500 dark:text-slate-400"
-                  >Anyone with the link can view this project.</span
-                >
+                <span class="block text-sm font-medium text-slate-700 dark:text-slate-200">Make public</span>
+                <span class="block text-xs text-slate-500 dark:text-slate-400">Anyone with the link can view this project.</span>
               </span>
               <button
                 type="button"

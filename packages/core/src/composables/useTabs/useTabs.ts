@@ -79,7 +79,7 @@ export function useTabs(options: UseTabsOptions = {}): UseTabsReturn {
 
   /** Set the active tab by ID. Ignores disabled or unregistered tabs. */
   function setTab(id: string): void {
-    const tab = tabs.value.find((t) => t.id === id)
+    const tab = tabs.value.find(t => t.id === id)
     if (!tab || tab.disabled) {
       return
     }
@@ -88,16 +88,17 @@ export function useTabs(options: UseTabsOptions = {}): UseTabsReturn {
 
   /** Register a tab item. If a tab with the same ID exists, it is updated. */
   function registerTab(tab: TabItem): void {
-    const index = tabs.value.findIndex((t) => t.id === tab.id)
+    const index = tabs.value.findIndex(t => t.id === tab.id)
     if (index >= 0) {
       tabs.value[index] = tab
-    } else {
+    }
+    else {
       tabs.value = [...tabs.value, tab]
     }
 
     // Auto-activate first enabled tab if no active tab is set
     if (!activeTab.value) {
-      const firstEnabled = tabs.value.find((t) => !t.disabled)
+      const firstEnabled = tabs.value.find(t => !t.disabled)
       if (firstEnabled) {
         activeTab.value = firstEnabled.id
       }
@@ -106,17 +107,17 @@ export function useTabs(options: UseTabsOptions = {}): UseTabsReturn {
 
   /** Remove a tab from the registry by ID */
   function unregisterTab(id: string): void {
-    tabs.value = tabs.value.filter((t) => t.id !== id)
+    tabs.value = tabs.value.filter(t => t.id !== id)
 
     // If the removed tab was active, activate the first enabled tab
     if (activeTab.value === id) {
-      const firstEnabled = tabs.value.find((t) => !t.disabled)
+      const firstEnabled = tabs.value.find(t => !t.disabled)
       activeTab.value = firstEnabled?.id ?? ''
     }
   }
 
   /** Get enabled tabs only */
-  const enabledTabs = computed(() => tabs.value.filter((t) => !t.disabled))
+  const enabledTabs = computed(() => tabs.value.filter(t => !t.disabled))
 
   /**
    * Navigate to the next or previous enabled tab.
@@ -124,11 +125,12 @@ export function useTabs(options: UseTabsOptions = {}): UseTabsReturn {
    */
   function navigateTab(direction: 1 | -1): void {
     const enabled = enabledTabs.value
-    if (enabled.length === 0) return
+    if (enabled.length === 0)
+      return
 
-    const currentIndex = enabled.findIndex((t) => t.id === activeTab.value)
-    const nextIndex =
-      currentIndex === -1 ? 0 : (currentIndex + direction + enabled.length) % enabled.length
+    const currentIndex = enabled.findIndex(t => t.id === activeTab.value)
+    const nextIndex
+      = currentIndex === -1 ? 0 : (currentIndex + direction + enabled.length) % enabled.length
     const target = enabled[nextIndex]
     if (target) {
       activeTab.value = target.id

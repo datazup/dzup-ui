@@ -7,8 +7,8 @@
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import DzAnimatedNumber from './DzAnimatedNumber.vue'
 import { createEasing, formatNumber, interpolate, sampleTween } from './DzAnimatedNumber.tween.ts'
+import DzAnimatedNumber from './DzAnimatedNumber.vue'
 
 // ---------------------------------------------------------------------------
 // rAF / clock harness
@@ -61,10 +61,12 @@ function mountNumber(props: Record<string, unknown> = {}, options: Record<string
   })
 }
 
-const figureText = (w: ReturnType<typeof mountNumber>): string =>
-  w.find('[aria-hidden="true"]').text()
-const srText = (w: ReturnType<typeof mountNumber>): string =>
-  w.find('[aria-live="polite"]').text()
+function figureText(w: ReturnType<typeof mountNumber>): string {
+  return w.find('[aria-hidden="true"]').text()
+}
+function srText(w: ReturnType<typeof mountNumber>): string {
+  return w.find('[aria-live="polite"]').text()
+}
 
 // ---------------------------------------------------------------------------
 // Pure tween helper

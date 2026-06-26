@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzMenuItemEmits, DzMenuItemProps, DzMenuItemSlots } from './DzMenu.types.ts'
 /**
  * DzMenuItem — A single item within DzMenu.
@@ -11,6 +7,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_MENU_KEY } from './DzMenu.types.ts'
 import { menuVariants } from './DzMenu.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzMenuItemProps>(), {
   active: false,
@@ -33,7 +33,8 @@ const styles = computed(() =>
 const classes = computed(() => cn(styles.value.item(), attrs.class as string | undefined))
 
 function handleClick(event: MouseEvent): void {
-  if (props.disabled) return
+  if (props.disabled)
+    return
   emit('click', event)
 }
 </script>

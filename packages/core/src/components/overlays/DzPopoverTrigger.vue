@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzPopoverTriggerSlots } from './DzPopover.types.ts'
 /**
  * DzPopoverTrigger -- Trigger element for DzPopover compound.
@@ -11,9 +7,12 @@ import type { DzPopoverTriggerSlots } from './DzPopover.types.ts'
  */
 import { PopoverTrigger } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<DzPopoverTriggerSlots>()
 </script>
-
 
 <template>
   <PopoverTrigger as-child>

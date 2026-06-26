@@ -67,13 +67,13 @@ describe('dzKnob — Unit Tests', () => {
 
   // -- Keyboard -------------------------------------------------------------
 
-  it('ArrowRight increases by one step', async () => {
+  it('arrowRight increases by one step', async () => {
     const wrapper = mount(DzKnob, { props: { value: 50 } })
     await wrapper.find('[role="slider"]').trigger('keydown', { key: 'ArrowRight' })
     expect(wrapper.emitted('update:value')?.[0]).toEqual([51])
   })
 
-  it('ArrowLeft decreases by one step', async () => {
+  it('arrowLeft decreases by one step', async () => {
     const wrapper = mount(DzKnob, { props: { value: 50 } })
     await wrapper.find('[role="slider"]').trigger('keydown', { key: 'ArrowLeft' })
     expect(wrapper.emitted('update:value')?.[0]).toEqual([49])
@@ -85,13 +85,13 @@ describe('dzKnob — Unit Tests', () => {
     expect(wrapper.emitted('update:value')?.[0]).toEqual([55])
   })
 
-  it('PageUp jumps by a tenth of the range', async () => {
+  it('pageUp jumps by a tenth of the range', async () => {
     const wrapper = mount(DzKnob, { props: { value: 20, min: 0, max: 100 } })
     await wrapper.find('[role="slider"]').trigger('keydown', { key: 'PageUp' })
     expect(wrapper.emitted('update:value')?.[0]).toEqual([30])
   })
 
-  it('Home jumps to min and End jumps to max', async () => {
+  it('home jumps to min and End jumps to max', async () => {
     const wrapper = mount(DzKnob, { props: { value: 40, min: 0, max: 100 } })
     const slider = wrapper.find('[role="slider"]')
     await slider.trigger('keydown', { key: 'End' })

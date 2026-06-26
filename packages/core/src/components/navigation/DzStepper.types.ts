@@ -99,5 +99,5 @@ export interface DzStepperItemSlots {
   /** Step content (displayed when active) */
   default?: () => unknown
   /** Custom step indicator */
-  indicator?: (props: { step: number; status: 'completed' | 'active' | 'upcoming' }) => unknown
+  indicator?: (props: { step: number, status: 'completed' | 'active' | 'upcoming' }) => unknown
 }

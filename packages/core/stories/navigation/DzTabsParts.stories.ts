@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzTabContent, DzTabList, DzTabs, DzTabTrigger } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTabs compound sub-parts: DzTabList, DzTabTrigger, and DzTabContent.

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzTreeSelectEmits,
   DzTreeSelectProps,
@@ -43,6 +39,10 @@ import DzPopover from '../overlays/DzPopover.vue'
 import DzPopoverContent from '../overlays/DzPopoverContent.vue'
 import DzPopoverTrigger from '../overlays/DzPopoverTrigger.vue'
 import { treeSelectVariants } from './DzTreeSelect.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<TreeSelectValue>('value')
 const expandedKeysModel = defineModel<string[]>('expandedKeys', { default: () => [] })

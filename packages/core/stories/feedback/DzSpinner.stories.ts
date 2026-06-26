@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzSpinner } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSpinner is a loading indicator with a rotating animation.
@@ -49,7 +49,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzSpinner },
     setup() {
       return { args }

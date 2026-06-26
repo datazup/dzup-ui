@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzSwitch } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSwitch is a toggle switch component built on Reka UI SwitchRoot.
@@ -63,7 +63,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzSwitch },
     setup() {
       return { args }
@@ -98,7 +98,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzSwitch },
     setup() {
       return { args }

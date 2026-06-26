@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzDialogContentEmits,
   DzDialogContentProps,
@@ -29,6 +25,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DIALOG_KEY } from './DzDialog.types.ts'
 import { dialogVariants } from './DzDialog.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzDialogContentProps>(), {
   size: 'md',
@@ -61,10 +61,14 @@ const rootContext = injectDialogRootContext()
  */
 const contentAria = computed<Record<string, unknown>>(() => {
   const aria: Record<string, unknown> = {}
-  if (props.ariaLabel !== undefined) aria['aria-label'] = props.ariaLabel
-  if (props.ariaLabelledby !== undefined) aria['aria-labelledby'] = props.ariaLabelledby
-  if (props.ariaDescribedby !== undefined) aria['aria-describedby'] = props.ariaDescribedby
-  if (rootContext.modal.value) aria['aria-modal'] = 'true'
+  if (props.ariaLabel !== undefined)
+    aria['aria-label'] = props.ariaLabel
+  if (props.ariaLabelledby !== undefined)
+    aria['aria-labelledby'] = props.ariaLabelledby
+  if (props.ariaDescribedby !== undefined)
+    aria['aria-describedby'] = props.ariaDescribedby
+  if (rootContext.modal.value)
+    aria['aria-modal'] = 'true'
   return aria
 })
 
@@ -104,7 +108,6 @@ function handleCloseAutoFocus(event: Event): void {
   emit('closeAutoFocus', event)
 }
 </script>
-
 
 <template>
   <DialogPortal>

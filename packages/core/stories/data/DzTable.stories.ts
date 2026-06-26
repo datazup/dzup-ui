@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, waitFor, within } from 'storybook/test'
 import {
   DzTable,
@@ -8,6 +7,7 @@ import {
   DzTableHeader,
   DzTableRow,
 } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTable is a simple semantic table wrapper with styling.
@@ -87,7 +87,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     setup() {
       return { args }
@@ -330,7 +330,7 @@ export const Loading: Story = {
   args: {
     loading: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     setup() {
       return { args }
@@ -549,9 +549,9 @@ export const StickyHeader: Story = {
     docs: {
       description: {
         story:
-          'DzTable’s root is a scroll container. Give the header cells ' +
-          '`sticky top-0` (plus a background) and constrain the table height to ' +
-          'keep column headers visible while the body scrolls.',
+          'DzTable’s root is a scroll container. Give the header cells '
+          + '`sticky top-0` (plus a background) and constrain the table height to '
+          + 'keep column headers visible while the body scrolls.',
       },
     },
   },

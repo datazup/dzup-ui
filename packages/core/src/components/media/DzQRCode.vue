@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzQRCodeEmits, DzQRCodeProps, DzQRCodeSlots } from './DzQRCode.types.ts'
 /**
  * DzQRCode — Token-styled QR code renderer.
@@ -28,6 +24,10 @@ import qrcode from 'qrcode-generator'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { qrCodeVariants } from './DzQRCode.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzQRCodeProps>(), {
   size: 160,

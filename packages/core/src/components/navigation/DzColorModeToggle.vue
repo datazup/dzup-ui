@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { FunctionalComponent } from 'vue'
 import type { ThemePreference } from '../../providers/DzThemeProvider.types.ts'
 import type {
@@ -36,6 +32,10 @@ import DzIconButton from '../buttons/DzIconButton.vue'
 import DzSwitch from '../forms/DzSwitch.vue'
 import { colorModeToggleVariants } from './DzColorModeToggle.variants.ts'
 import DzSegmented from './DzSegmented.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzColorModeToggleProps>(), {
   variant: 'icon',
@@ -199,7 +199,7 @@ function handleSegmentChange(value: string): void {
       v-if="variant === 'icon'"
       :id="id"
       :icon="currentIcon"
-      :ariaLabel="iconAriaLabel"
+      :aria-label="iconAriaLabel"
       :size="size"
       variant="ghost"
       tone="neutral"
@@ -213,7 +213,7 @@ function handleSegmentChange(value: string): void {
       :id="id"
       :model-value="isDark"
       :size="size"
-      :ariaLabel="switchAriaLabel"
+      :aria-label="switchAriaLabel"
       :data-mode="resolvedTheme"
       @change="handleSwitchChange"
     >
@@ -229,7 +229,7 @@ function handleSegmentChange(value: string): void {
       :model-value="theme"
       :items="segmentedItems"
       :size="size"
-      :ariaLabel="segmentedAriaLabel"
+      :aria-label="segmentedAriaLabel"
       :data-mode="theme"
       @change="handleSegmentChange"
     />

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzFlex, DzSpacer, DzStack } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSpacer is a flexible space filler component for layout spacing.
@@ -18,7 +18,7 @@ const meta = {
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl', 'auto'],
-      description: "Size of the spacer. 'auto' uses flex: 1 to fill available space",
+      description: 'Size of the spacer. \'auto\' uses flex: 1 to fill available space',
       table: { category: 'Appearance', defaultValue: { summary: 'auto' } },
     },
   },
@@ -35,7 +35,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzSpacer, DzFlex },
     setup() {
       return { args }

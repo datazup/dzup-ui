@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzSpeedDialEmits,
   DzSpeedDialItem,
@@ -47,6 +43,10 @@ import {
   SPEED_DIAL_STAGGER_MS,
 } from './DzSpeedDial.tokens.ts'
 import { speedDialVariants } from './DzSpeedDial.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const open = defineModel<boolean>('open', { default: false })
 
@@ -275,7 +275,6 @@ function onRootKeydown(event: KeyboardEvent): void {
 }
 </script>
 
-
 <template>
   <div
     :class="rootClasses"
@@ -305,7 +304,7 @@ function onRootKeydown(event: KeyboardEvent): void {
           <DzTooltipTrigger>
             <DzIconButton
               :icon="item.icon"
-              :ariaLabel="item.label"
+              :aria-label="item.label"
               :tone="item.tone ?? tone"
               :size="actionButtonSize"
               :disabled="item.disabled"
@@ -327,7 +326,7 @@ function onRootKeydown(event: KeyboardEvent): void {
     <DzFab
       ref="triggerRef"
       :icon="triggerIcon"
-      :ariaLabel="ariaLabel"
+      :aria-label="ariaLabel"
       :tone="tone"
       :size="size"
       :variant="variant"

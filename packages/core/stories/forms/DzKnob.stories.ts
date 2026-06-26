@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzFormDescription,
   DzFormField,
@@ -8,6 +7,7 @@ import {
   DzFormMessage,
   DzKnob,
 } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzKnob is a rotary numeric input rendered as an SVG circular dial, implemented

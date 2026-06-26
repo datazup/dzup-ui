@@ -60,14 +60,14 @@ export type PanelVariant = 'outlined' | 'elevated' | 'legend'
  * Union of every family variant type.
  * Useful for generic utilities that accept any variant string.
  */
-export type AnyVariant =
-  | ButtonVariant
-  | CardVariant
-  | InputVariant
-  | AlertVariant
-  | BadgeVariant
-  | TabsVariant
-  | ProgressVariant
-  | ChipVariant
-  | ToolbarVariant
-  | PanelVariant
+export type AnyVariant
+  = | ButtonVariant
+    | CardVariant
+    | InputVariant
+    | AlertVariant
+    | BadgeVariant
+    | TabsVariant
+    | ProgressVariant
+    | ChipVariant
+    | ToolbarVariant
+    | PanelVariant

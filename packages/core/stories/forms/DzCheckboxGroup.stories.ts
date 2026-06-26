@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzCheckbox, DzCheckboxGroup } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCheckboxGroup manages a set of DzCheckbox components with a shared `string[]` model.
@@ -60,7 +60,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzCheckboxGroup, DzCheckbox },
     setup() {
       return { args }
@@ -81,7 +81,7 @@ export const Default: Story = {
 
 export const Horizontal: Story = {
   args: { orientation: 'horizontal' },
-  render: (args) => ({
+  render: args => ({
     components: { DzCheckboxGroup, DzCheckbox },
     setup() {
       return { args }
@@ -126,7 +126,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzCheckboxGroup, DzCheckbox },
     setup() {
       return { args }

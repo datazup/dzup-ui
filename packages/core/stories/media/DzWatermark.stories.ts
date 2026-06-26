@@ -95,7 +95,7 @@ const SAMPLE = `
 
 export const TextMark: Story = {
   name: 'Text Mark',
-  render: (args) => ({
+  render: args => ({
     components: { DzWatermark },
     setup() {
       return { args, SAMPLE }
@@ -127,7 +127,7 @@ export const MultiLine: Story = {
     rotate: -30,
     gap: [60, 60],
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzWatermark },
     setup() {
       return { args, SAMPLE }
@@ -147,7 +147,7 @@ export const OverImage: Story = {
     rotate: -22,
     fontSize: 20,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzWatermark },
     setup() {
       return { args }

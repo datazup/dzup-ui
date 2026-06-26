@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzAnimatedNumber } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzAnimatedNumber tweens a figure from its previous value to the next whenever
@@ -92,7 +92,7 @@ export const Integer: Story = {
     const hiddenFigure = canvasElement.querySelector('[aria-hidden="true"]')
     expect(hiddenFigure).toBeTruthy()
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzAnimatedNumber },
     setup() {
       const value = ref(args.value)
@@ -122,7 +122,7 @@ export const Integer: Story = {
 
 export const Currency: Story = {
   args: { value: 48_290.75, tone: 'success', size: 'lg' },
-  render: (args) => ({
+  render: args => ({
     components: { DzAnimatedNumber },
     setup() {
       const value = ref(args.value)
@@ -162,7 +162,7 @@ export const Currency: Story = {
 
 export const Percent: Story = {
   args: { value: 0.732, tone: 'primary', from: 0 },
-  render: (args) => ({
+  render: args => ({
     components: { DzAnimatedNumber },
     setup() {
       const value = ref(args.value)
@@ -199,7 +199,7 @@ export const Percent: Story = {
 export const OnScroll: Story = {
   name: 'On Scroll',
   args: { startOnView: true, value: 1_000_000, duration: 2000, size: 'xl' },
-  render: (args) => ({
+  render: args => ({
     components: { DzAnimatedNumber },
     setup: () => ({ args }),
     template: `
@@ -228,7 +228,7 @@ export const OnScroll: Story = {
 export const ReducedMotion: Story = {
   name: 'Reduced Motion',
   args: { value: 9_876, duration: 3000 },
-  render: (args) => ({
+  render: args => ({
     components: { DzAnimatedNumber },
     setup() {
       const value = ref(args.value)

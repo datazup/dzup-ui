@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
 /**
  * DzToastViewport — Contract Spec v1 conformance tests.
  *
@@ -6,16 +7,16 @@ import { mount } from '@vue/test-utils'
  * inject context. All tests mount via DzToastProvider as the wrapper.
  */
 import { defineComponent } from 'vue'
-import { describe, expect, it } from 'vitest'
 import DzToastProvider from './DzToastProvider.vue'
 import DzToastViewport from './DzToastViewport.vue'
 
-const makeViewportSlot = (attrs: Record<string, unknown> = {}) =>
-  defineComponent({
+function makeViewportSlot(attrs: Record<string, unknown> = {}) {
+  return defineComponent({
     components: { DzToastViewport },
     setup: () => ({ attrs }),
     template: `<DzToastViewport v-bind="attrs" />`,
   })
+}
 
 describe('dzToastViewport — Contract Spec v1', () => {
   it('renders without errors inside DzToastProvider', () => {

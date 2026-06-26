@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBlockquoteProps, DzBlockquoteSlots } from './DzBlockquote.types.ts'
 /**
  * DzBlockquote — Styled blockquote component.
@@ -22,6 +18,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { blockquoteVariants } from './DzBlockquote.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineProps<DzBlockquoteProps>()
 defineSlots<DzBlockquoteSlots>()
 
@@ -34,7 +34,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <blockquote

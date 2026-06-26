@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Info } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzNotification } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzNotification displays a persistent notification message.
@@ -88,7 +88,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzNotification },
     setup() {
       return { args }
@@ -151,7 +151,7 @@ export const Closable: Story = {
     description: 'Click the close button to dismiss.',
     tone: 'info',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzNotification },
     setup() {
       return { args }

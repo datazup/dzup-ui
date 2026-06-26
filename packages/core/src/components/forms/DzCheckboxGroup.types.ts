@@ -27,8 +27,8 @@ export interface DzCheckboxGroupContext {
 }
 
 /** Typed injection key for DzCheckboxGroup context (ADR-08, SCREAMING_SNAKE) */
-export const DZ_CHECKBOX_GROUP_KEY: InjectionKey<DzCheckboxGroupContext> =
-  Symbol('dz-checkbox-group')
+export const DZ_CHECKBOX_GROUP_KEY: InjectionKey<DzCheckboxGroupContext>
+  = Symbol('dz-checkbox-group')
 
 // ---------------------------------------------------------------------------
 // Props

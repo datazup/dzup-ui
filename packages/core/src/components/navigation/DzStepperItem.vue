@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzStepperItemEmits, DzStepperItemProps, DzStepperItemSlots } from './DzStepper.types.ts'
 /**
  * DzStepperItem — A single step within DzStepper.
@@ -11,6 +7,10 @@ import { computed, inject, onMounted, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_STEPPER_KEY } from './DzStepper.types.ts'
 import { stepperVariants } from './DzStepper.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzStepperItemProps>(), {
   optional: false,
@@ -46,8 +46,10 @@ const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 const isReachable = computed(() => status.value !== 'upcoming')
 
 const isClickable = computed(() => {
-  if (!ctx) return false
-  if (!isReachable.value) return false
+  if (!ctx)
+    return false
+  if (!isReachable.value)
+    return false
   return props.clickable ?? ctx.clickable.value
 })
 
@@ -64,21 +66,23 @@ const stepClasses = computed(() =>
 )
 
 function activate(): void {
-  if (!isClickable.value || !ctx) return
-  if (stepIndex.value < 0) return
+  if (!isClickable.value || !ctx)
+    return
+  if (stepIndex.value < 0)
+    return
   ctx.setActiveStep(stepIndex.value)
   emit('navigate', stepIndex.value)
 }
 
 function handleKeydown(event: KeyboardEvent): void {
-  if (!isClickable.value) return
+  if (!isClickable.value)
+    return
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault()
     activate()
   }
 }
 </script>
-
 
 <template>
   <div

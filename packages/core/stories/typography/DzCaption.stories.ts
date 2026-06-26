@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzCaption } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCaption renders small text for captions, annotations, helper text,
@@ -42,7 +42,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzCaption },
     setup() {
       return { args }

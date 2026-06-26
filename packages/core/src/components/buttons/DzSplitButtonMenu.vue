@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSplitButtonMenuProps, DzSplitButtonMenuSlots } from './DzSplitButton.types.ts'
 /**
  * DzSplitButtonMenu — Dropdown trigger within DzSplitButton.
@@ -21,6 +17,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_SPLIT_BUTTON_KEY } from './DzSplitButton.types.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineProps<DzSplitButtonMenuProps>()
 defineSlots<DzSplitButtonMenuSlots>()
@@ -41,7 +41,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <div

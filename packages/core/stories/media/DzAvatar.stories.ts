@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, waitFor, within } from 'storybook/test'
 import { User } from 'lucide-vue-next'
+import { expect, waitFor, within } from 'storybook/test'
 import { DzAvatar } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 // A deterministic, offline-safe broken image (invalid base64) used by the
 // fallback play() test so it never depends on the network.

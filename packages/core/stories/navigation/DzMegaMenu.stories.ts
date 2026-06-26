@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { DzMegaMenuItem } from '../../src/components/navigation/DzMegaMenu.types'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMegaMenu } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMegaMenu is a horizontal (or vertical) navigation menubar whose top-level
@@ -121,7 +121,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Horizontal: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzMegaMenu },
     setup() {
       return { args, items }
@@ -166,7 +166,7 @@ const featuredItems: DzMegaMenuItem[] = [
       {
         label: 'Highlight',
         featured: true,
-        items: [{ label: "What's new", href: '#' }],
+        items: [{ label: 'What\'s new', href: '#' }],
       },
       {
         label: 'Analytics',
@@ -189,7 +189,7 @@ const featuredItems: DzMegaMenuItem[] = [
 
 export const WithFeaturedCard: Story = {
   name: 'With Featured Card',
-  render: (args) => ({
+  render: args => ({
     components: { DzMegaMenu },
     setup() {
       return { args, featuredItems }
@@ -236,7 +236,7 @@ export const WithFeaturedCard: Story = {
 export const Responsive: Story = {
   name: 'Responsive (collapsed)',
   args: { collapsed: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzMegaMenu },
     setup() {
       return { args, items }

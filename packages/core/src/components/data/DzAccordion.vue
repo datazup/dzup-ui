@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzAccordionContext,
   DzAccordionEmits,
@@ -32,6 +28,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_ACCORDION_KEY } from './DzAccordion.types.ts'
 import { accordionVariants } from './DzAccordion.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string | string[]>({ default: '' })
 
@@ -84,7 +84,6 @@ function handleValueChange(value: string | string[] | undefined): void {
   emit('change', next)
 }
 </script>
-
 
 <template>
   <AccordionRoot

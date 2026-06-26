@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 import { DzContainer } from '../../src/components/layout'
+import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 
 /**
  * DzContainer is a centered content container with responsive padding and max-width.
@@ -76,7 +76,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzContainer },
     setup() {
       return { args }
@@ -129,7 +129,7 @@ export const NoPadding: Story = {
   args: {
     padding: false,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzContainer },
     setup() {
       return { args }
@@ -154,7 +154,7 @@ export const NotCentered: Story = {
     centered: false,
     maxWidth: 'md',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzContainer },
     setup() {
       return { args }

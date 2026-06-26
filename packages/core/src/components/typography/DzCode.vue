@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCodeProps, DzCodeSlots } from './DzCode.types.ts'
 /**
  * DzCode — Code display component (inline or block).
@@ -24,6 +20,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { codeVariants } from './DzCode.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzCodeProps>(), {
   variant: 'inline',
 })
@@ -39,7 +39,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <pre

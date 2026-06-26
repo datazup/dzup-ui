@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { BarChart3, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMenu, DzMenuItem, DzMenuSeparator } from '../../src/components/navigation'
 
 /**

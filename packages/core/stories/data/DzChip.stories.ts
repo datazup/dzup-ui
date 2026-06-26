@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzChip } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzChip is a compact element representing an input, attribute, or action.
@@ -73,7 +73,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzChip },
     setup() {
       return { args }
@@ -203,7 +203,7 @@ export const Disabled: Story = {
     disabled: true,
     closable: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzChip },
     setup() {
       return { args }

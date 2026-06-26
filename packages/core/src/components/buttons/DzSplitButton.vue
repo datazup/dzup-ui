@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSplitButtonContext, DzSplitButtonProps, DzSplitButtonSlots } from './DzSplitButton.types.ts'
 /**
  * DzSplitButton — Compound split button with primary action + dropdown.
@@ -23,6 +19,10 @@ import type { DzSplitButtonContext, DzSplitButtonProps, DzSplitButtonSlots } fro
 import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SPLIT_BUTTON_KEY } from './DzSplitButton.types.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzSplitButtonProps>(), {
   variant: 'solid',
@@ -53,7 +53,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <div

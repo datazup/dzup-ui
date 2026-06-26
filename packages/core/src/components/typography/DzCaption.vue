@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCaptionProps, DzCaptionSlots } from './DzCaption.types.ts'
 /**
  * DzCaption — Small caption text component.
@@ -19,6 +15,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { captionVariants } from './DzCaption.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzCaptionProps>(), {
   tone: 'muted',
 })
@@ -34,7 +34,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <small

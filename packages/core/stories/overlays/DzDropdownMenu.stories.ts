@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDropdownMenu,
@@ -9,6 +8,7 @@ import {
   DzDropdownMenuSeparator,
   DzDropdownMenuTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDropdownMenu is a compound dropdown menu built on Reka UI DropdownMenu (ADR-07).
@@ -58,7 +58,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: {
       DzDropdownMenu,
       DzDropdownMenuTrigger,

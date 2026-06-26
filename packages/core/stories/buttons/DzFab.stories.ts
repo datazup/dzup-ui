@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, fn, userEvent, within } from 'storybook/test'
 import { DzFab } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFab is a floating action button (FAB): a circular, elevated button that
@@ -83,7 +83,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzFab },
     setup() {
       return { args }
@@ -237,9 +237,9 @@ export const FixedPositions: Story = {
     docs: {
       description: {
         story:
-          'Corner position values apply `position: fixed` with token-driven viewport offsets. ' +
-          'Rendered here in `static` mode so they do not overlap the Storybook canvas. ' +
-          'In real use set `position="bottom-right"` etc. on the FAB and mount it at the layout root.',
+          'Corner position values apply `position: fixed` with token-driven viewport offsets. '
+          + 'Rendered here in `static` mode so they do not overlap the Storybook canvas. '
+          + 'In real use set `position="bottom-right"` etc. on the FAB and mount it at the layout root.',
       },
     },
   },
@@ -316,7 +316,7 @@ export const Interactive: Story = {
   args: {
     onClick: fn(),
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFab },
     setup() {
       return { args }
@@ -348,16 +348,16 @@ export const Accessibility: Story = {
     docs: {
       description: {
         story:
-          '`ariaLabel` is a required prop on DzFab. Without it, screen readers cannot ' +
-          'announce the button purpose. The play step asserts the button is reachable ' +
-          'via its accessible name.',
+          '`ariaLabel` is a required prop on DzFab. Without it, screen readers cannot '
+          + 'announce the button purpose. The play step asserts the button is reachable '
+          + 'via its accessible name.',
       },
     },
   },
   args: {
     ariaLabel: 'Add item',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFab },
     setup() {
       return { args }

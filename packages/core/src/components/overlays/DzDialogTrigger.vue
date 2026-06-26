@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzDialogTriggerSlots } from './DzDialog.types.ts'
 /**
  * DzDialogTrigger -- Trigger element for DzDialog compound.
@@ -11,9 +7,12 @@ import type { DzDialogTriggerSlots } from './DzDialog.types.ts'
  */
 import { DialogTrigger } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<DzDialogTriggerSlots>()
 </script>
-
 
 <template>
   <DialogTrigger as-child>

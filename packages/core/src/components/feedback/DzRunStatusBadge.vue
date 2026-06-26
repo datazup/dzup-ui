@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzRunStatus,
   DzRunStatusBadgeProps,
@@ -24,6 +20,10 @@ import type {
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import DzBadge from './DzBadge.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzRunStatusBadgeProps>(), {
   size: 'md',
@@ -65,7 +65,6 @@ const statusStyle = computed(() => ({
 
 const consumerClass = computed(() => cn(attrs.class as string | undefined))
 </script>
-
 
 <template>
   <DzBadge

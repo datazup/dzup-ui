@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzDescriptions, DzDescriptionsItem } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDescriptions displays read-only record detail as a responsive label/value

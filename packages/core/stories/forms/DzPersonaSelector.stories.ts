@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { Persona } from '../../src/components/forms'
 import { expect, screen, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
-import type { Persona } from '../../src/components/forms'
 import { DzPersonaSelector } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzPersonaSelector is a searchable, single-select persona picker built on top of

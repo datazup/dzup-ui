@@ -79,7 +79,7 @@ function fillerTemplate(): string {
 
 export const Default: Story = {
   args: { visibilityHeight: 400 },
-  render: (args) => ({
+  render: args => ({
     components: { DzBackTop },
     setup() {
       return { args, filler: fillerTemplate() }
@@ -120,7 +120,7 @@ export const Default: Story = {
 export const CustomThreshold: Story = {
   name: 'Custom threshold',
   args: { visibilityHeight: 100, tone: 'primary' },
-  render: (args) => ({
+  render: args => ({
     components: { DzBackTop },
     setup() {
       return { args, filler: fillerTemplate() }
@@ -172,7 +172,7 @@ export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [darkModeDecorator],
   args: { visibilityHeight: 200, tone: 'primary' },
-  render: (args) => ({
+  render: args => ({
     components: { DzBackTop },
     setup() {
       return { args, filler: fillerTemplate() }

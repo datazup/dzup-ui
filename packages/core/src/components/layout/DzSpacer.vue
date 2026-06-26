@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSpacerProps } from './DzSpacer.types.ts'
 /**
  * DzSpacer -- Flexible space filler.
@@ -27,6 +23,10 @@ import type { DzSpacerProps } from './DzSpacer.types.ts'
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzSpacerProps>(), {
   size: 'auto',
@@ -54,7 +54,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <div

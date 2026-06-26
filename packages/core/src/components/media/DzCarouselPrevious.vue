@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCarouselNavProps, DzCarouselNavSlots } from './DzCarousel.types.ts'
 /**
  * DzCarouselPrevious — Previous slide navigation button.
@@ -13,6 +9,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineProps<DzCarouselNavProps>()
 defineSlots<DzCarouselNavSlots>()
@@ -31,7 +31,6 @@ const classes = computed(() =>
   cn(styles.value.navButton(), styles.value.navPrev(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <button

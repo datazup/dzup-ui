@@ -2,13 +2,13 @@
 // dzup-ui application shell gallery scene — ONLY @dzup-ui/core components + --dz-* tokens.
 // Dark icon-rail / light-panel sidebar + top navbar + dashboard content.
 
-import { ref } from 'vue'
+import type { LucideIcon } from 'lucide-vue-next'
 import {
   Bell,
   FolderKanban,
   Home,
   LayoutDashboard,
-  type LucideIcon,
+
   Menu,
   Search,
   Settings,
@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-vue-next'
+import { ref } from 'vue'
 import { DzIconButton } from '../../../src/components/buttons'
 import { DzCard, DzCardBody } from '../../../src/components/cards'
 import { DzBadge } from '../../../src/components/feedback'
@@ -95,7 +96,7 @@ function toggleSidebar(): void {
 
 <template>
   <div class="h-screen bg-[var(--dz-background)] text-[var(--dz-foreground)] antialiased">
-    <DzAppShell aria-label="Workspace application shell" :header-height="'4rem'">
+    <DzAppShell aria-label="Workspace application shell" header-height="4rem">
       <!-- Sidebar -->
       <template #sidebar>
         <DzSidebar :collapsed="collapsed" active-style="filled" class="h-full">
@@ -139,7 +140,9 @@ function toggleSidebar(): void {
             <div class="flex items-center gap-2.5">
               <DzAvatar fallback="JD" size="sm" alt="Jordan Diaz" />
               <div v-if="!collapsed" class="min-w-0">
-                <p class="truncate text-sm font-medium leading-tight">Jordan Diaz</p>
+                <p class="truncate text-sm font-medium leading-tight">
+                  Jordan Diaz
+                </p>
                 <p class="truncate text-xs leading-tight text-[var(--dz-sidebar-text-muted)]">
                   jordan@datazup.io
                 </p>
@@ -164,9 +167,15 @@ function toggleSidebar(): void {
       <!-- Navbar: center breadcrumb -->
       <template #header>
         <DzBreadcrumb separator="/">
-          <DzBreadcrumbItem href="#">Home</DzBreadcrumbItem>
-          <DzBreadcrumbItem href="#">Workspace</DzBreadcrumbItem>
-          <DzBreadcrumbItem current>Overview</DzBreadcrumbItem>
+          <DzBreadcrumbItem href="#">
+            Home
+          </DzBreadcrumbItem>
+          <DzBreadcrumbItem href="#">
+            Workspace
+          </DzBreadcrumbItem>
+          <DzBreadcrumbItem current>
+            Overview
+          </DzBreadcrumbItem>
         </DzBreadcrumb>
       </template>
 
@@ -230,7 +239,9 @@ function toggleSidebar(): void {
             class="group h-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--dz-shadow-lg)]"
           >
             <DzCardBody class="flex h-full flex-col" style="padding: 1.5rem">
-              <DzText as="p" size="sm" weight="medium" tone="muted">{{ kpi.label }}</DzText>
+              <DzText as="p" size="sm" weight="medium" tone="muted">
+                {{ kpi.label }}
+              </DzText>
               <span
                 class="mt-4 text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums"
               >
@@ -244,12 +255,12 @@ function toggleSidebar(): void {
                       class="h-3 w-3"
                       aria-hidden="true"
                     />
-                    <span class="tabular-nums"
-                      >{{ kpi.delta >= 0 ? '+' : '' }}{{ kpi.delta }}%</span
-                    >
+                    <span class="tabular-nums">{{ kpi.delta >= 0 ? '+' : '' }}{{ kpi.delta }}%</span>
                   </span>
                 </DzBadge>
-                <DzText as="span" size="xs" tone="muted">{{ kpi.hint }}</DzText>
+                <DzText as="span" size="xs" tone="muted">
+                  {{ kpi.hint }}
+                </DzText>
               </div>
             </DzCardBody>
           </DzCard>
@@ -261,7 +272,9 @@ function toggleSidebar(): void {
             class="flex items-center justify-between border-b border-[var(--dz-border)] px-6 py-4"
           >
             <div>
-              <DzHeading :level="2" size="md" weight="semibold">Recent Activity</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Recent Activity
+              </DzHeading>
               <DzText as="p" size="xs" tone="muted" class="mt-0.5">
                 Latest changes across your workspace
               </DzText>
@@ -276,8 +289,12 @@ function toggleSidebar(): void {
                 {{ row.initials }}
               </span>
               <div class="min-w-0 flex-1">
-                <DzText as="p" size="sm" weight="medium" class="truncate">{{ row.name }}</DzText>
-                <DzText as="p" size="xs" tone="muted" class="truncate">{{ row.meta }}</DzText>
+                <DzText as="p" size="sm" weight="medium" class="truncate">
+                  {{ row.name }}
+                </DzText>
+                <DzText as="p" size="xs" tone="muted" class="truncate">
+                  {{ row.meta }}
+                </DzText>
               </div>
               <DzBadge variant="subtle" :tone="statusTone[row.status]" size="sm" class="capitalize">
                 {{ row.status }}

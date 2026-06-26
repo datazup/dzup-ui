@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   CoordinatorPattern,
   GovernanceBadgeProps,
@@ -25,6 +21,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { GOVERNANCE_PATTERN_TOKENS } from './GovernanceBadge.tokens.ts'
 import { governanceBadgeVariants } from './GovernanceBadge.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<GovernanceBadgeProps>(), {
   size: 'md',

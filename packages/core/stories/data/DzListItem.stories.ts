@@ -48,7 +48,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzListItem },
     setup() {
       return { args }
@@ -166,7 +166,7 @@ export const WithSlots: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzListItem },
     setup() {
       return { args }

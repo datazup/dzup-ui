@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzNumberInputEmits, DzNumberInputProps, DzNumberInputSlots } from './DzNumberInput.types.ts'
 /**
  * DzNumberInput — Numeric input with increment/decrement buttons.
@@ -20,6 +16,10 @@ import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<number | undefined>({ default: undefined })
 
@@ -185,7 +185,6 @@ function handleBlur(event: FocusEvent): void {
 /** Expose the native input ref for programmatic focus */
 defineExpose({ inputRef })
 </script>
-
 
 <template>
   <div

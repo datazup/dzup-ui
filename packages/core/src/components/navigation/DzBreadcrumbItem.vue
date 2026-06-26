@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBreadcrumbItemProps, DzBreadcrumbItemSlots } from './DzBreadcrumb.types.ts'
 /**
  * DzBreadcrumbItem — Individual breadcrumb entry.
@@ -19,6 +15,10 @@ import type { DzBreadcrumbItemProps, DzBreadcrumbItemSlots } from './DzBreadcrum
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { breadcrumbVariants } from './DzBreadcrumb.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzBreadcrumbItemProps>(), {
   href: undefined,
@@ -39,7 +39,6 @@ const linkClasses = computed(() => {
 
 const isLink = computed(() => !!props.href && !props.current && !props.disabled)
 </script>
-
 
 <template>
   <li :class="styles.item()">

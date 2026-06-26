@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { Activity, DollarSign, Package, ShoppingCart, TrendingUp, Users } from 'lucide-vue-next'
+import { expect, within } from 'storybook/test'
 import { DzStatCard } from '../../src/components/cards'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzStatCard displays a key statistic or metric with an icon, value,
@@ -70,7 +70,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzStatCard },
     setup() {
       return { args }

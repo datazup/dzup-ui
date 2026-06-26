@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzWatermarkProps, DzWatermarkSlots } from './DzWatermark.types.ts'
 /**
  * DzWatermark — tiled content watermark overlay.
@@ -38,6 +34,10 @@ import type { DzWatermarkProps, DzWatermarkSlots } from './DzWatermark.types.ts'
 import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { watermarkVariants } from './DzWatermark.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzWatermarkProps>(), {
   rotate: -22,

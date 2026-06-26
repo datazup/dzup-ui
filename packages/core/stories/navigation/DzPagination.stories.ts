@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzPagination } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzPagination provides page navigation using Reka UI Pagination primitives.
@@ -92,7 +92,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzPagination },
     setup() {
       return { args }
@@ -168,7 +168,7 @@ export const Disabled: Story = {
     disabled: true,
     total: 100,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzPagination },
     setup() {
       return { args }

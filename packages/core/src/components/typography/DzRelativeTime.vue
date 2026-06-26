@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzRelativeTimeProps, DzRelativeTimeSlots } from './DzRelativeTime.types.ts'
 /**
  * DzRelativeTime — self-updating relative timestamp.
@@ -30,6 +26,10 @@ import DzTooltip from '../overlays/DzTooltip.vue'
 import DzTooltipContent from '../overlays/DzTooltipContent.vue'
 import DzTooltipTrigger from '../overlays/DzTooltipTrigger.vue'
 import { relativeTimeVariants } from './DzRelativeTime.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzRelativeTimeProps>(), {
   mode: 'relative',

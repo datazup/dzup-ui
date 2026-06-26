@@ -1,9 +1,10 @@
+import type { WeekdayIndex } from './useCalendar.ts'
 /**
  * useCalendar — unit tests for the month/week grid math.
  */
 import { describe, expect, it } from 'vitest'
 import { ref } from 'vue'
-import { useCalendar, type WeekdayIndex } from './useCalendar.ts'
+import { useCalendar } from './useCalendar.ts'
 
 function setup(opts: {
   focused?: string

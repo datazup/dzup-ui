@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzAvatar, DzAvatarGroup } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzAvatarGroup renders a stacked row of DzAvatar components with
@@ -73,7 +73,7 @@ export const Default: Story = {
     const overflow = canvasElement.querySelector('[aria-hidden="true"]')
     await expect(overflow).toBeNull()
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzAvatarGroup, DzAvatar },
     setup() {
       return { args }
@@ -120,7 +120,7 @@ export const WithOverflow: Story = {
   args: {
     max: 3,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzAvatarGroup, DzAvatar },
     setup() {
       return { args }

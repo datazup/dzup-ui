@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzImageComparison } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 // Two deterministic, contrasting images so the reveal is obvious. picsum's
 // grayscale + blur filters give a clear "before (raw) / after (edited)" story.
@@ -120,7 +120,7 @@ export const Horizontal: Story = {
       expect(now).toBeGreaterThan(50)
     })
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -135,7 +135,7 @@ export const Horizontal: Story = {
 
 export const Vertical: Story = {
   args: { orientation: 'vertical' },
-  render: (args) => ({
+  render: args => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -150,7 +150,7 @@ export const Vertical: Story = {
 
 export const WithLabels: Story = {
   args: { beforeLabel: 'Before', afterLabel: 'After' },
-  render: (args) => ({
+  render: args => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -164,7 +164,7 @@ export const WithLabels: Story = {
 // ---------------------------------------------------------------------------
 
 export const CustomHandle: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -186,7 +186,7 @@ export const CustomHandle: Story = {
 // ---------------------------------------------------------------------------
 
 export const Controlled: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzImageComparison },
     setup() {
       const pos = ref(50)
@@ -217,7 +217,7 @@ export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [darkModeDecorator],
   args: { beforeLabel: 'Raw', afterLabel: 'Edited' },
-  render: (args) => ({
+  render: args => ({
     components: { DzImageComparison },
     setup() {
       return { args }

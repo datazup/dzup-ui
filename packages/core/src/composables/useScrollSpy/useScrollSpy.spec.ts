@@ -1,9 +1,9 @@
+import { mount } from '@vue/test-utils'
 /**
  * useScrollSpy — Unit tests (mocked IntersectionObserver).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
-import { mount } from '@vue/test-utils'
 import { useScrollSpy } from './useScrollSpy.ts'
 
 let ioCallback: ((entries: Array<{ target: Element, isIntersecting: boolean }>) => void) | null = null

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzMasonry } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzMasonry** packs variable-height items into balanced cascading columns --
@@ -103,7 +103,7 @@ function tiles(count: number): string {
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzMasonry },
     setup() {
       return { args }
@@ -142,7 +142,7 @@ export const ImageWall: Story = {
     gap: 'md',
     sequential: false,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzMasonry },
     setup() {
       return { args }
@@ -166,7 +166,7 @@ export const CardFeed: Story = {
     gap: 'lg',
     sequential: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzMasonry },
     setup() {
       const cards = Array.from({ length: 9 }, (_, i) => ({
@@ -247,7 +247,7 @@ export const DarkMode: Story = {
     gap: 'md',
     sequential: false,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzMasonry },
     setup() {
       return { args }

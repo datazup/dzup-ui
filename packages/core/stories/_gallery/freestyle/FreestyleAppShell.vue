@@ -2,13 +2,13 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import { ref } from 'vue'
+import type { LucideIcon } from 'lucide-vue-next'
 import {
   Bell,
   FolderKanban,
   Home,
   LayoutDashboard,
-  type LucideIcon,
+
   Menu,
   Search,
   Settings,
@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-vue-next'
+import { ref } from 'vue'
 
 interface NavItem {
   label: string
@@ -191,8 +192,12 @@ function toggleSidebar(): void {
             JD
           </span>
           <div v-if="!collapsed" class="min-w-0">
-            <p class="truncate text-sm font-medium leading-tight text-white">Jordan Diaz</p>
-            <p class="truncate text-xs leading-tight text-slate-400">jordan@datazup.io</p>
+            <p class="truncate text-sm font-medium leading-tight text-white">
+              Jordan Diaz
+            </p>
+            <p class="truncate text-xs leading-tight text-slate-400">
+              jordan@datazup.io
+            </p>
           </div>
         </div>
       </div>
@@ -221,22 +226,22 @@ function toggleSidebar(): void {
               <a
                 href="#"
                 class="text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                >Home</a
-              >
+              >Home</a>
             </li>
-            <li class="text-slate-300 dark:text-slate-600" aria-hidden="true">/</li>
+            <li class="text-slate-300 dark:text-slate-600" aria-hidden="true">
+              /
+            </li>
             <li>
               <a
                 href="#"
                 class="text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                >Workspace</a
-              >
+              >Workspace</a>
             </li>
-            <li class="text-slate-300 dark:text-slate-600" aria-hidden="true">/</li>
+            <li class="text-slate-300 dark:text-slate-600" aria-hidden="true">
+              /
+            </li>
             <li>
-              <span class="font-medium text-slate-900 dark:text-slate-100" aria-current="page"
-                >Overview</span
-              >
+              <span class="font-medium text-slate-900 dark:text-slate-100" aria-current="page">Overview</span>
             </li>
           </ol>
         </nav>
@@ -255,7 +260,7 @@ function toggleSidebar(): void {
               placeholder="Search…"
               aria-label="Search"
               class="w-full rounded-xl border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-100 dark:placeholder:text-slate-500"
-            />
+            >
           </div>
 
           <!-- Notifications -->
@@ -292,7 +297,9 @@ function toggleSidebar(): void {
               >
                 Workspace
               </p>
-              <h1 class="text-2xl font-semibold tracking-tight">Overview</h1>
+              <h1 class="text-2xl font-semibold tracking-tight">
+                Overview
+              </h1>
               <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 A snapshot of activity across your workspace this month.
               </p>
@@ -306,7 +313,9 @@ function toggleSidebar(): void {
               :key="kpi.label"
               class="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/5 ring-1 ring-black/[0.02] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/10 dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40 dark:ring-white/[0.03]"
             >
-              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ kpi.label }}</p>
+              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
+                {{ kpi.label }}
+              </p>
               <span
                 class="mt-4 text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums"
               >
@@ -341,7 +350,9 @@ function toggleSidebar(): void {
               class="flex items-center justify-between border-b border-slate-100 px-6 py-4 dark:border-white/5"
             >
               <div>
-                <h2 class="text-base font-semibold tracking-tight">Recent Activity</h2>
+                <h2 class="text-base font-semibold tracking-tight">
+                  Recent Activity
+                </h2>
                 <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                   Latest changes across your workspace
                 </p>
@@ -363,7 +374,9 @@ function toggleSidebar(): void {
                   <p class="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
                     {{ row.name }}
                   </p>
-                  <p class="truncate text-xs text-slate-500 dark:text-slate-400">{{ row.meta }}</p>
+                  <p class="truncate text-xs text-slate-500 dark:text-slate-400">
+                    {{ row.meta }}
+                  </p>
                 </div>
                 <span
                   class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ring-1 ring-inset"

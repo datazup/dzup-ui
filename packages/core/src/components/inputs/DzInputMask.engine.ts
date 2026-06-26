@@ -17,8 +17,8 @@
 
 /** Regex matchers for each mask token. */
 const TOKEN_PATTERNS: Record<string, RegExp> = {
-  9: /\d/,
-  a: /[a-z]/i,
+  '9': /\d/,
+  'a': /[a-z]/i,
   '*': /[a-z0-9]/i,
 }
 

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, within } from 'storybook/test'
 import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Pin, Star, Underline } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzToggleButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzToggleButton is a button that toggles between pressed and unpressed states.

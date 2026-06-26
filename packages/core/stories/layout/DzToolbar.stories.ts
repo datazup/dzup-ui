@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzToolbar } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzToolbar is a semantic horizontal action bar with start/center/end regions.
@@ -67,8 +67,9 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const btn = (label: string) =>
-  `<button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">${label}</button>`
+function btn(label: string) {
+  return `<button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">${label}</button>`
+}
 
 // ---------------------------------------------------------------------------
 // Default
@@ -93,7 +94,7 @@ export const Default: Story = {
     await userEvent.tab()
     await expect(backBtn).toHaveFocus()
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -120,7 +121,7 @@ export const Default: Story = {
 export const TitleCentered: Story = {
   name: 'Title Centered',
   args: { variant: 'outlined' },
-  render: (args) => ({
+  render: args => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -144,7 +145,7 @@ export const TitleCentered: Story = {
 export const Sticky: Story = {
   name: 'Sticky',
   args: { sticky: true, variant: 'elevated' },
-  render: (args) => ({
+  render: args => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -172,7 +173,7 @@ export const Sticky: Story = {
 export const ResponsiveWrap: Story = {
   name: 'Responsive Wrap',
   args: { wrap: true, variant: 'outlined' },
-  render: (args) => ({
+  render: args => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -196,7 +197,7 @@ export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [darkModeDecorator],
   args: { variant: 'elevated' },
-  render: (args) => ({
+  render: args => ({
     components: { DzToolbar },
     setup() {
       return { args }

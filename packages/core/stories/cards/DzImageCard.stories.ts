@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzImageCard } from '../../src/components/cards'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzImageCard is a card component with a prominent image area at the top.
@@ -74,7 +74,7 @@ const images = {
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzImageCard },
     setup() {
       return { args }

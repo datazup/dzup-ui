@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCopyButtonEmits, DzCopyButtonProps, DzCopyButtonSlots } from './DzCopyButton.types.ts'
 /**
  * DzCopyButton — Clipboard copy button with visual feedback.
@@ -21,6 +17,10 @@ import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { copyButtonVariants } from './DzCopyButton.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzCopyButtonProps>(), {
   id: undefined,
@@ -130,7 +130,6 @@ function fallbackCopy(text: string): void {
   document.body.removeChild(textarea)
 }
 </script>
-
 
 <template>
   <button

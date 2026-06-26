@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 /**
  * DzFormLabel -- Label sub-part for DzFormField compound.
  *
@@ -21,6 +17,10 @@ import { computed, useAttrs } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const attrs = useAttrs()
 const context = useFormFieldContext()
 
@@ -32,7 +32,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <label

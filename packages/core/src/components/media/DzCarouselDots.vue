@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCarouselDotsProps, DzCarouselDotsSlots } from './DzCarousel.types.ts'
 /**
  * DzCarouselDots — Dot indicators for carousel navigation.
@@ -13,6 +9,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineProps<DzCarouselDotsProps>()
 defineSlots<DzCarouselDotsSlots>()
@@ -35,7 +35,6 @@ const slideIndices = computed(() =>
   Array.from({ length: carouselContext?.slideCount.value ?? 0 }, (_, i) => i),
 )
 </script>
-
 
 <template>
   <div

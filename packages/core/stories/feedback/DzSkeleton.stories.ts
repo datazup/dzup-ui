@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
+import { expect } from 'storybook/test'
 import { DzSkeleton } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSkeleton is a placeholder loading state for content areas.
@@ -58,7 +58,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzSkeleton },
     setup() {
       return { args }

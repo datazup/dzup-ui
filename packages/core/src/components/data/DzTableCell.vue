@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTableCellProps, DzTableCellSlots } from './DzTable.types.ts'
 /**
  * DzTableCell — Table cell (<td> or <th>).
@@ -13,6 +9,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTableCellProps>(), {
   header: false,
@@ -51,7 +51,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

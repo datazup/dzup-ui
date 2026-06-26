@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
 import {
@@ -7,6 +6,7 @@ import {
   DzSplitButtonAction,
   DzSplitButtonMenu,
 } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSplitButton is a compound button component combining a primary action

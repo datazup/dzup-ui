@@ -18,8 +18,8 @@ import type { CoordinatorPattern } from './GovernanceBadge.types.ts'
  * peer_to_peer  → --dz-success       (collaborative, positive green)
  * council       → --dz-foreground    (deliberative, neutral/foreground)
  */
-export const GOVERNANCE_PATTERN_TOKENS: Readonly<Record<CoordinatorPattern, string>> =
-  Object.freeze({
+export const GOVERNANCE_PATTERN_TOKENS: Readonly<Record<CoordinatorPattern, string>>
+  = Object.freeze({
     supervisor: 'var(--dz-primary)',
     contract_net: 'var(--dz-info)',
     blackboard: 'var(--dz-warning-solid)',

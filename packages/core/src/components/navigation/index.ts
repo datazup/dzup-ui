@@ -29,21 +29,6 @@ export { default as DzBackTop } from './DzBackTop.vue'
 // ── ColorModeToggle (theme switch control) ──
 
 export type {
-  DzColorModeToggleEmits,
-  DzColorModeToggleLabels,
-  DzColorModeToggleProps,
-  DzColorModeToggleSlots,
-  DzColorModeToggleVariant,
-} from './DzColorModeToggle.types.ts'
-export {
-  type ColorModeToggleVariantProps,
-  colorModeToggleVariants,
-} from './DzColorModeToggle.variants.ts'
-export { default as DzColorModeToggle } from './DzColorModeToggle.vue'
-
-// ── Tabs (Compound) ──
-
-export type {
   DzBreadcrumbContext,
   DzBreadcrumbItemProps,
   DzBreadcrumbItemSlots,
@@ -54,11 +39,26 @@ export type {
 } from './DzBreadcrumb.types.ts'
 export { DZ_BREADCRUMB_KEY } from './DzBreadcrumb.types.ts'
 export { type BreadcrumbVariantProps, breadcrumbVariants } from './DzBreadcrumb.variants.ts'
+
+// ── Tabs (Compound) ──
+
 export { default as DzBreadcrumb } from './DzBreadcrumb.vue'
-
 export { default as DzBreadcrumbItem } from './DzBreadcrumbItem.vue'
-
 export { default as DzBreadcrumbSeparator } from './DzBreadcrumbSeparator.vue'
+export type {
+  DzColorModeToggleEmits,
+  DzColorModeToggleLabels,
+  DzColorModeToggleProps,
+  DzColorModeToggleSlots,
+  DzColorModeToggleVariant,
+} from './DzColorModeToggle.types.ts'
+
+export {
+  type ColorModeToggleVariantProps,
+  colorModeToggleVariants,
+} from './DzColorModeToggle.variants.ts'
+
+export { default as DzColorModeToggle } from './DzColorModeToggle.vue'
 
 // ── MegaMenu (multi-column navigation) ──
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzMeterGroup } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMeterGroup displays multiple proportional values in a single bar with a
@@ -88,7 +88,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzMeterGroup },
     setup() {
       return { args }

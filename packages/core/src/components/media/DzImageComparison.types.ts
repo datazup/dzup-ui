@@ -64,5 +64,5 @@ export interface DzImageComparisonSlots {
   /** Revealed layer, clipped to the divider position. Typically a DzImage. */
   after?: () => unknown
   /** Custom divider grip. Receives the current position and orientation. */
-  handle?: (props: { position: number; orientation: ImageComparisonOrientation }) => unknown
+  handle?: (props: { position: number, orientation: ImageComparisonOrientation }) => unknown
 }

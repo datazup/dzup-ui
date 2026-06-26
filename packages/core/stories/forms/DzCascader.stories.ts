@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzCascader } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCascader is a cascading multi-level select for ordered, hierarchical
@@ -159,7 +159,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzCascader },
     setup() {
       return { args }
@@ -180,7 +180,7 @@ export const Default: Story = {
 
     // First item in the root column is "China" which has children.
     const options = screen.getAllByRole('option')
-    const chinaOption = options.find((el) => el.textContent?.includes('China'))!
+    const chinaOption = options.find(el => el.textContent?.includes('China'))!
     await userEvent.click(chinaOption)
 
     // Clicking a parent reveals the second-level listbox (two listboxes now visible).
@@ -188,7 +188,7 @@ export const Default: Story = {
 
     // The child column contains Zhejiang as first option.
     await waitFor(() =>
-      expect(screen.getAllByRole('option').some((el) => el.textContent?.includes('Zhejiang'))).toBe(
+      expect(screen.getAllByRole('option').some(el => el.textContent?.includes('Zhejiang'))).toBe(
         true,
       ),
     )
@@ -224,7 +224,7 @@ export const ChangeOnSelect: Story = {
     await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
 
     // Click "USA" (a parent) — with change-on-select it commits immediately.
-    const usaOption = screen.getAllByRole('option').find((el) => el.textContent?.includes('USA'))!
+    const usaOption = screen.getAllByRole('option').find(el => el.textContent?.includes('USA'))!
     await userEvent.click(usaOption)
 
     // Panel stays open (change-on-select keeps it open to drill deeper).
@@ -233,14 +233,14 @@ export const ChangeOnSelect: Story = {
     // Click the leaf "California → Los Angeles" path: click California first.
     const californiaOption = screen
       .getAllByRole('option')
-      .find((el) => el.textContent?.includes('California'))!
+      .find(el => el.textContent?.includes('California'))!
     await userEvent.click(californiaOption)
     await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))
 
     // Select leaf "Los Angeles" — panel closes and trigger shows the full path.
     const laOption = screen
       .getAllByRole('option')
-      .find((el) => el.textContent?.includes('Los Angeles'))!
+      .find(el => el.textContent?.includes('Los Angeles'))!
     await userEvent.click(laOption)
     await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
     await expect(trigger).toHaveTextContent(/Los Angeles/)
@@ -301,7 +301,7 @@ export const Filterable: Story = {
 
     // "Hangzhou" path should appear as a flat option.
     await waitFor(() =>
-      expect(screen.getAllByRole('option').some((el) => el.textContent?.includes('Hangzhou'))).toBe(
+      expect(screen.getAllByRole('option').some(el => el.textContent?.includes('Hangzhou'))).toBe(
         true,
       ),
     )
@@ -309,7 +309,7 @@ export const Filterable: Story = {
     // Click the Hangzhou option — panel closes and trigger shows the selected path.
     const hangzhouOption = screen
       .getAllByRole('option')
-      .find((el) => el.textContent?.includes('Hangzhou'))!
+      .find(el => el.textContent?.includes('Hangzhou'))!
     await userEvent.click(hangzhouOption)
     await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
     await expect(trigger).toHaveTextContent(/Hangzhou/)
@@ -349,7 +349,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please select a region',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzCascader },
     setup() {
       return { args }
@@ -364,7 +364,7 @@ export const InvalidState: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzCascader },
     setup() {
       return { args }

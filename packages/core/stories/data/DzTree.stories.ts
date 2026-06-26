@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { TreeNode } from '../../src/components/data'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzTree } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTree displays hierarchical data in an expandable/collapsible tree structure.
@@ -150,7 +150,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTree },
     setup() {
       return { args }
@@ -279,7 +279,7 @@ export const Disabled: Story = {
     disabled: true,
     items: fileTree,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzTree },
     setup() {
       return { args }
@@ -336,7 +336,7 @@ export const Loading: Story = {
     loading: true,
     items: fileTree,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzTree },
     setup() {
       return { args }

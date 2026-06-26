@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzList, DzListItem } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzList is a compound list component supporting three visual variants
@@ -81,7 +81,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzList, DzListItem },
     setup() {
       return { args }
@@ -323,7 +323,7 @@ export const Loading: Story = {
   args: {
     loading: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzList, DzListItem },
     setup() {
       return { args }

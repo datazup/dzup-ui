@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { Activity, Bell, DollarSign, LayoutDashboard, Package, Settings, TrendingUp, Users } from 'lucide-vue-next'
 import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
-import { Activity, Bell, DollarSign, LayoutDashboard, Package, Settings, TrendingUp, Users } from 'lucide-vue-next'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardHeader, DzStatCard } from '../../src/components/cards'
 import { DzBadge } from '../../src/components/feedback'
 import { DzAppShell, DzGrid } from '../../src/components/layout'
 import { DzSidebar, DzSidebarFooter, DzSidebarHeader, DzSidebarItem, DzSidebarSection } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * AppShellDashboard is the flagship layout composition: it wires the real

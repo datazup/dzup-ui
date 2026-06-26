@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzToggleButtonEmits,
   DzToggleButtonProps,
@@ -25,6 +21,10 @@ import type {
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { toggleButtonVariants } from './DzToggleButton.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<boolean>({ default: false })
 
@@ -66,7 +66,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <button

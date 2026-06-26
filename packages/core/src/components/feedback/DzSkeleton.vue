@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSkeletonProps } from './DzSkeleton.types.ts'
 /**
  * DzSkeleton — Placeholder loading state for content.
@@ -20,6 +16,10 @@ import type { DzSkeletonProps } from './DzSkeleton.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { skeletonVariants } from './DzSkeleton.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzSkeletonProps>(), {
   variant: 'text',
@@ -61,7 +61,6 @@ function lineWidth(index: number): string {
   return '100%'
 }
 </script>
-
 
 <template>
   <div

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
+import type { DzSelectItem } from '../forms/DzSelect.types.ts'
 import type { FilterOperator } from './DzDataGrid.types.ts'
+import { Filter } from 'lucide-vue-next'
 /**
  * DzDataGridHeader — Internal header sub-part for DzDataGrid.
  *
@@ -13,17 +11,19 @@ import type { FilterOperator } from './DzDataGrid.types.ts'
  * Logic extracted to useDataGridHeader composable.
  */
 import { computed, inject } from 'vue'
-import { Filter } from 'lucide-vue-next'
-import type { DzSelectItem } from '../forms/DzSelect.types.ts'
-import DzButton from '../buttons/DzButton.vue'
-import DzCheckbox from '../forms/DzCheckbox.vue'
-import DzIconButton from '../buttons/DzIconButton.vue'
-import DzInput from '../inputs/DzInput.vue'
-import DzSelect from '../forms/DzSelect.vue'
 import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzButton from '../buttons/DzButton.vue'
+import DzIconButton from '../buttons/DzIconButton.vue'
+import DzCheckbox from '../forms/DzCheckbox.vue'
+import DzSelect from '../forms/DzSelect.vue'
+import DzInput from '../inputs/DzInput.vue'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const filterPopoverClasses = [
   'absolute top-full left-0 z-50 mt-1',
@@ -72,7 +72,6 @@ const {
   handleClearFilter,
 } = useDataGridHeader({ ctx: ctx! })
 </script>
-
 
 <template>
   <thead :class="styles.header()" role="rowgroup">
@@ -123,7 +122,7 @@ const {
           <DzIconButton
             v-if="isColumnFilterable(col)"
             :icon="Filter"
-            :ariaLabel="`Filter ${col.header}`"
+            :aria-label="`Filter ${col.header}`"
             variant="ghost"
             size="xs"
             :tone="hasActiveFilter(col.field) ? 'primary' : 'neutral'"

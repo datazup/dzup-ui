@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzResult } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzResult displays the outcome of an operation with a status icon,
@@ -55,7 +55,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzResult },
     setup() {
       return { args }

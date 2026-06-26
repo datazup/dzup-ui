@@ -1,10 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
-import type { DzTabListProps, DzTabListSlots } from './DzTabs.types.ts'
-import { TabsList } from 'reka-ui'
 /**
  * DzTabList — Container for tab triggers using Reka UI TabsList.
  *
@@ -19,10 +13,16 @@ import { TabsList } from 'reka-ui'
  * ```
  */
 import type { Directive } from 'vue'
+import type { DzTabListProps, DzTabListSlots } from './DzTabs.types.ts'
+import { TabsList } from 'reka-ui'
 import { computed, inject, useAttrs, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 withDefaults(defineProps<DzTabListProps>(), {
   loop: true,
@@ -132,7 +132,6 @@ const classes = computed(() =>
   cn(styles.value.list(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <TabsList

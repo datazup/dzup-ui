@@ -8,7 +8,7 @@ const ThrowingChild = defineComponent({
   render() { return h('span', 'unreachable') },
 })
 
-describe('DzErrorBoundary — Contract Spec v1', () => {
+describe('dzErrorBoundary — Contract Spec v1', () => {
   it('renders default slot content', () => {
     const wrapper = mount(DzErrorBoundary, {
       slots: { default: '<p>default content</p>' },
@@ -20,10 +20,10 @@ describe('DzErrorBoundary — Contract Spec v1', () => {
     const wrapper = mount(DzErrorBoundary, {
       slots: {
         default: () => h(ThrowingChild),
-        fallback: ({ error, reset }: { error: unknown; reset: () => void }) =>
+        fallback: ({ error, reset }: { error: unknown, reset: () => void }) =>
           h('div', [
             h('span', { 'data-testid': 'error-msg' }, String(error)),
-            h('button', { 'data-testid': 'reset-btn', onClick: reset }, 'Reset'),
+            h('button', { 'data-testid': 'reset-btn', 'onClick': reset }, 'Reset'),
           ]),
       },
     })

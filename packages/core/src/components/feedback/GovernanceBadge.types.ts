@@ -14,18 +14,18 @@
  * Kept local to @dzup-ui/core to avoid leaking product-specific runtime
  * dependencies into the base design-system package.
  */
-export type CoordinatorPattern =
-  | 'supervisor'
-  | 'contract_net'
-  | 'blackboard'
-  | 'peer_to_peer'
-  | 'council'
-
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
 import type { BadgeVariant, CanonicalSize } from '@dzup-ui/contracts'
+
+export type CoordinatorPattern
+  = | 'supervisor'
+    | 'contract_net'
+    | 'blackboard'
+    | 'peer_to_peer'
+    | 'council'
 
 /** Props for the GovernanceBadge component */
 export interface GovernanceBadgeProps {
@@ -44,5 +44,5 @@ export interface GovernanceBadgeProps {
 /** Slot definitions for GovernanceBadge */
 export interface GovernanceBadgeSlots {
   /** Override the human-readable label (defaults to title-cased pattern name) */
-  default?: (props: { pattern: CoordinatorPattern; label: string }) => unknown
+  default?: (props: { pattern: CoordinatorPattern, label: string }) => unknown
 }

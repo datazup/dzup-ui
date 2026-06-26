@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzCalendar } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCalendar is a full-surface month/week calendar for date selection and
@@ -81,7 +81,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Month: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzCalendar },
     setup() {
       return { args }
@@ -118,7 +118,7 @@ export const Month: Story = {
     // Click a day cell to select it — day 10 is always present in a month grid.
     const dayCells = canvas.getAllByRole('gridcell')
     const clickable = dayCells.find(
-      (cell) => cell.getAttribute('aria-disabled') !== 'true' && cell.textContent?.trim() === '10',
+      cell => cell.getAttribute('aria-disabled') !== 'true' && cell.textContent?.trim() === '10',
     )
     if (clickable) {
       await userEvent.click(clickable)
@@ -133,7 +133,7 @@ export const Month: Story = {
 
 export const Week: Story = {
   args: { view: 'week' },
-  render: (args) => ({
+  render: args => ({
     components: { DzCalendar },
     setup() {
       return { args }
@@ -152,7 +152,7 @@ export const Week: Story = {
 export const RangeSelection: Story = {
   name: 'Range Selection',
   args: { mode: 'range' },
-  render: (args) => ({
+  render: args => ({
     components: { DzCalendar },
     setup() {
       return { args }
@@ -177,7 +177,7 @@ export const RangeSelection: Story = {
 
 export const WithEventDots: Story = {
   name: 'With Event Dots',
-  render: (args) => ({
+  render: args => ({
     components: { DzCalendar },
     setup() {
       const events = new Set(['2026-06-04', '2026-06-12', '2026-06-12', '2026-06-21', '2026-06-25'])
@@ -209,7 +209,7 @@ export const WithEventDots: Story = {
 
 export const DisabledDates: Story = {
   name: 'Disabled Dates (weekends)',
-  render: (args) => ({
+  render: args => ({
     components: { DzCalendar },
     setup() {
       const disabledDate = (d: Date) => d.getDay() === 0 || d.getDay() === 6
@@ -234,7 +234,7 @@ export const DisabledDates: Story = {
 export const MinMax: Story = {
   name: 'Min / Max Constraints',
   args: { minDate: '2026-06-08', maxDate: '2026-06-22' },
-  render: (args) => ({
+  render: args => ({
     components: { DzCalendar },
     setup() {
       return { args }

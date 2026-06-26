@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { VNode, VNodeArrayChildren } from 'vue'
 import type { DzAnchorEmits, DzAnchorItem, DzAnchorProps, DzAnchorSlots } from './DzAnchor.types.ts'
 /**
@@ -36,6 +32,13 @@ import { useScrollSpy } from '../../composables/useScrollSpy/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { anchorVariants } from './DzAnchor.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
+/** Active link href (e.g. `#section`). Controllable via `v-model:active`. */
+const activeHref = defineModel<string>('active', { default: '' })
+
 const props = withDefaults(defineProps<DzAnchorProps>(), {
   offsetTop: 0,
   affix: false,
@@ -48,9 +51,6 @@ const props = withDefaults(defineProps<DzAnchorProps>(), {
 
 const emit = defineEmits<DzAnchorEmits>()
 const slots = defineSlots<DzAnchorSlots>()
-
-/** Active link href (e.g. `#section`). Controllable via `v-model:active`. */
-const activeHref = defineModel<string>('active', { default: '' })
 
 const attrs = useAttrs()
 

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzToastViewportProps, DzToastViewportSlots } from './DzToast.types.ts'
 import { ToastViewport } from 'reka-ui'
 /**
@@ -28,6 +24,10 @@ import {
 import { toastVariants } from './DzToast.variants.ts'
 import DzToast from './DzToast.vue'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzToastViewportProps>(), {
   position: 'bottom-right',
 })
@@ -51,7 +51,6 @@ const viewportClasses = computed(() =>
   cn(styles.value.viewport(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <ToastViewport

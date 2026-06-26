@@ -4,7 +4,7 @@
  * A single list whose items can be reordered in place — by pointer drag (via a
  * grab handle), by Move Up / Down / Top / Bottom controls, and by keyboard
  * (grab → move → drop). It fills the gap left by DzTransfer, which moves items
- * *between* two lists but cannot reorder *within* one.
+ * between* two lists but cannot reorder *within* one.
  *
  * The ordered array is owned by the consumer through `v-model:value`
  * (defineModel, ADR-16); the component never mutates the bound array in place.

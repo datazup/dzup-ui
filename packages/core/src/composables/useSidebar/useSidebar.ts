@@ -220,7 +220,8 @@ export function useSidebar(options: UseSidebarOptions = {}): UseSidebarReturn {
 
   if (closeMobileOn) {
     watch(closeMobileOn, () => {
-      if (mobileOpen.value) closeMobile()
+      if (mobileOpen.value)
+        closeMobile()
     })
   }
 

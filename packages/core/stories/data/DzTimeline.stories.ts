@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzTimeline, DzTimelineItem } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTimeline displays a chronological sequence of events with an
@@ -63,7 +63,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTimeline, DzTimelineItem },
     setup() {
       return { args }

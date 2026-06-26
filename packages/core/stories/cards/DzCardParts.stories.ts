@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
-import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
 import { DzButton } from '../../src/components/buttons'
+import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCard compound sub-parts: DzCardHeader, DzCardBody, DzCardFooter.
@@ -46,7 +46,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzCard, DzCardHeader, DzCardBody, DzCardFooter, DzButton },
     setup() {
       return { args }

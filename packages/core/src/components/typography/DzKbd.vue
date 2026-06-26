@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzKbdProps, DzKbdSlots } from './DzKbd.types.ts'
 /**
  * DzKbd — Keyboard-key hint.
@@ -21,6 +17,10 @@ import type { DzKbdProps, DzKbdSlots } from './DzKbd.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { kbdVariants } from './DzKbd.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzKbdProps>(), {
   platformAware: true,
@@ -45,54 +45,110 @@ interface KeyMap {
 
 const MAC: KeyMap = {
   symbol: {
-    mod: '⌘', cmd: '⌘', command: '⌘', meta: '⌘', super: '⌘',
-    ctrl: '⌃', control: '⌃',
-    alt: '⌥', option: '⌥', opt: '⌥',
+    mod: '⌘',
+    cmd: '⌘',
+    command: '⌘',
+    meta: '⌘',
+    super: '⌘',
+    ctrl: '⌃',
+    control: '⌃',
+    alt: '⌥',
+    option: '⌥',
+    opt: '⌥',
     shift: '⇧',
-    enter: '↵', return: '↵',
-    esc: '⎋', escape: '⎋',
+    enter: '↵',
+    return: '↵',
+    esc: '⎋',
+    escape: '⎋',
     tab: '⇥',
-    backspace: '⌫', delete: '⌦', del: '⌦',
-    up: '↑', down: '↓', left: '←', right: '→',
+    backspace: '⌫',
+    delete: '⌦',
+    del: '⌦',
+    up: '↑',
+    down: '↓',
+    left: '←',
+    right: '→',
     space: '␣',
   },
   word: {
-    mod: 'Command', cmd: 'Command', command: 'Command', meta: 'Command', super: 'Command',
-    ctrl: 'Control', control: 'Control',
-    alt: 'Option', option: 'Option', opt: 'Option',
+    mod: 'Command',
+    cmd: 'Command',
+    command: 'Command',
+    meta: 'Command',
+    super: 'Command',
+    ctrl: 'Control',
+    control: 'Control',
+    alt: 'Option',
+    option: 'Option',
+    opt: 'Option',
     shift: 'Shift',
-    enter: 'Enter', return: 'Return',
-    esc: 'Escape', escape: 'Escape',
+    enter: 'Enter',
+    return: 'Return',
+    esc: 'Escape',
+    escape: 'Escape',
     tab: 'Tab',
-    backspace: 'Backspace', delete: 'Delete', del: 'Delete',
-    up: 'Up', down: 'Down', left: 'Left', right: 'Right',
+    backspace: 'Backspace',
+    delete: 'Delete',
+    del: 'Delete',
+    up: 'Up',
+    down: 'Down',
+    left: 'Left',
+    right: 'Right',
     space: 'Space',
   },
 }
 
 const OTHER: KeyMap = {
   symbol: {
-    mod: 'Ctrl', cmd: 'Ctrl', command: 'Ctrl', meta: 'Win', super: 'Win',
-    ctrl: 'Ctrl', control: 'Ctrl',
-    alt: 'Alt', option: 'Alt', opt: 'Alt',
+    mod: 'Ctrl',
+    cmd: 'Ctrl',
+    command: 'Ctrl',
+    meta: 'Win',
+    super: 'Win',
+    ctrl: 'Ctrl',
+    control: 'Ctrl',
+    alt: 'Alt',
+    option: 'Alt',
+    opt: 'Alt',
     shift: '⇧',
-    enter: '↵', return: '↵',
-    esc: 'Esc', escape: 'Esc',
+    enter: '↵',
+    return: '↵',
+    esc: 'Esc',
+    escape: 'Esc',
     tab: '⇥',
-    backspace: '⌫', delete: 'Del', del: 'Del',
-    up: '↑', down: '↓', left: '←', right: '→',
+    backspace: '⌫',
+    delete: 'Del',
+    del: 'Del',
+    up: '↑',
+    down: '↓',
+    left: '←',
+    right: '→',
     space: 'Space',
   },
   word: {
-    mod: 'Control', cmd: 'Control', command: 'Control', meta: 'Windows', super: 'Windows',
-    ctrl: 'Control', control: 'Control',
-    alt: 'Alt', option: 'Alt', opt: 'Alt',
+    mod: 'Control',
+    cmd: 'Control',
+    command: 'Control',
+    meta: 'Windows',
+    super: 'Windows',
+    ctrl: 'Control',
+    control: 'Control',
+    alt: 'Alt',
+    option: 'Alt',
+    opt: 'Alt',
     shift: 'Shift',
-    enter: 'Enter', return: 'Return',
-    esc: 'Escape', escape: 'Escape',
+    enter: 'Enter',
+    return: 'Return',
+    esc: 'Escape',
+    escape: 'Escape',
     tab: 'Tab',
-    backspace: 'Backspace', delete: 'Delete', del: 'Delete',
-    up: 'Up', down: 'Down', left: 'Left', right: 'Right',
+    backspace: 'Backspace',
+    delete: 'Delete',
+    del: 'Delete',
+    up: 'Up',
+    down: 'Down',
+    left: 'Left',
+    right: 'Right',
     space: 'Space',
   },
 }
@@ -146,7 +202,6 @@ const rootClass = computed(() => cn(slots.root(), attrs.class as string | undefi
 const keyClass = slots.key()
 const separatorClass = slots.separator()
 </script>
-
 
 <template>
   <kbd

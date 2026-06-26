@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzFlex } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFlex is a flexbox layout component with full control over direction,
@@ -96,7 +96,7 @@ function box(label: string, color = 'blue') {
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzFlex },
     setup() {
       return { args }
@@ -223,7 +223,7 @@ export const Wrapping: Story = {
     wrap: true,
     gap: 'md',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzFlex },
     setup() {
       return { args }

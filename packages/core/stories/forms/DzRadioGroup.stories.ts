@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzRadio, DzRadioGroup } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRadioGroup manages a set of DzRadio components with a single `string` model value.
@@ -70,7 +70,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzRadioGroup, DzRadio },
     setup() {
       return { args }
@@ -91,7 +91,7 @@ export const Default: Story = {
 
 export const Horizontal: Story = {
   args: { orientation: 'horizontal' },
-  render: (args) => ({
+  render: args => ({
     components: { DzRadioGroup, DzRadio },
     setup() {
       return { args }
@@ -135,7 +135,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzRadioGroup, DzRadio },
     setup() {
       return { args }

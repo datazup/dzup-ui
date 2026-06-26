@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzNotificationEmits,
   DzNotificationProps,
@@ -32,6 +28,10 @@ import {
   notificationTitleVariants,
   notificationVariants,
 } from './DzNotification.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzNotificationProps>(), {
   tone: 'neutral',
@@ -76,7 +76,6 @@ onBeforeUnmount(() => {
   }
 })
 </script>
-
 
 <template>
   <div

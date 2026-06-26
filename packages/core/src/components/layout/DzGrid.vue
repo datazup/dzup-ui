@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzGridProps, DzGridSlots, ResponsiveCols } from './DzGrid.types.ts'
 /**
  * DzGrid -- CSS Grid layout component.
@@ -26,6 +22,10 @@ import type { DzGridProps, DzGridSlots, ResponsiveCols } from './DzGrid.types.ts
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { gridVariants, responsiveColsMap } from './DzGrid.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzGridProps>(), {
   cols: 1,
@@ -82,7 +82,6 @@ const gridStyle = computed(() => {
   return { gridTemplateRows: `repeat(${props.rows}, minmax(0, 1fr))` }
 })
 </script>
-
 
 <template>
   <component

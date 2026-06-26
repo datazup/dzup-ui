@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzTag } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTag is a categorization label component, semantically for classification
@@ -75,7 +75,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTag },
     setup() {
       return { args }
@@ -199,7 +199,7 @@ export const Disabled: Story = {
     disabled: true,
     closable: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzTag },
     setup() {
       return { args }

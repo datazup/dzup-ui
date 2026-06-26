@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzResizable,
   DzResizableHandle,
   DzResizablePanel,
 } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzResizable is a compound resizable panel layout backed by Reka UI Splitter.

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzDialogDescriptionSlots } from './DzDialog.types.ts'
 import { DialogDescription } from 'reka-ui'
 /**
@@ -15,6 +11,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { dialogVariants } from './DzDialog.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<DzDialogDescriptionSlots>()
 
 const attrs = useAttrs()
@@ -23,7 +23,6 @@ const descriptionClasses = computed(() =>
   cn(styles.value.description(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <DialogDescription

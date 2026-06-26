@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 /**
  * DzMasonry -- Unit / behavior tests.
  */
 import { defineComponent, nextTick } from 'vue'
-import { afterEach, describe, expect, it, vi } from 'vitest'
 import DzMasonry from './DzMasonry.vue'
 
 const items = {

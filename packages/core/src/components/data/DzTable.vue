@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTableContext, DzTableProps, DzTableSlots } from './DzTable.types.ts'
 /**
  * DzTable — Compound semantic table root component.
@@ -35,6 +31,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTableProps>(), {
   size: 'md',
@@ -73,7 +73,6 @@ const rootClasses = computed(() =>
 
 const tableClasses = computed(() => styles.value.root())
 </script>
-
 
 <template>
   <div

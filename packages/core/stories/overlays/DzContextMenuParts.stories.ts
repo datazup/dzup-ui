@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzContextMenu,
   DzContextMenuContent,
@@ -8,6 +7,7 @@ import {
   DzContextMenuSeparator,
   DzContextMenuTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzContextMenuContent compound sub-parts: DzContextMenuTrigger, DzContextMenuItem,

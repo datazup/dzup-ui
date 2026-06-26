@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzBlockquote } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzBlockquote renders a semantically correct `<blockquote>` element
@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzBlockquote },
     setup() {
       return { args }

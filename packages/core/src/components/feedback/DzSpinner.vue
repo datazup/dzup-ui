@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSpinnerProps } from './DzSpinner.types.ts'
 /**
  * DzSpinner — Loading indicator with rotating animation.
@@ -20,6 +16,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { spinnerVariants } from './DzSpinner.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzSpinnerProps>(), {
   size: 'md',
   tone: 'primary',
@@ -36,7 +36,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <span

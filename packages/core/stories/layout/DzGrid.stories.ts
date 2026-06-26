@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 import { DzGrid } from '../../src/components/layout'
+import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 
 /**
  * DzGrid is a CSS Grid layout component with responsive column support.
@@ -84,7 +84,7 @@ function gridItems(count: number) {
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzGrid },
     setup() {
       return { args }
@@ -189,7 +189,7 @@ export const ExplicitRows: Story = {
     rows: 2,
     gap: 'md',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzGrid },
     setup() {
       return { args }

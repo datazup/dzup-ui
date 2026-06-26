@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzText } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzText is a general-purpose text component with semantic element control and visual styling.
@@ -73,7 +73,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzText },
     setup() {
       return { args }

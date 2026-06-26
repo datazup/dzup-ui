@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzListItemEmits, DzListItemProps, DzListItemSlots } from './DzList.types.ts'
 /**
  * DzListItem — Child item within a DzList compound component.
@@ -23,6 +19,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_LIST_KEY } from './DzList.types.ts'
 import { listVariants } from './DzList.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzListItemProps>(), {
   disabled: false,
@@ -61,7 +61,6 @@ function handleClick(event: MouseEvent): void {
   }
 }
 </script>
-
 
 <template>
   <li

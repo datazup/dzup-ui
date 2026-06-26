@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzTimePicker } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTimePicker is a dropdown time picker (CoreUI-style).
@@ -154,7 +154,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzTimePicker },
     setup() {
       return { args }
@@ -356,7 +356,7 @@ export const MinimalTrigger: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzTimePicker },
     setup() {
       return { args }
@@ -375,7 +375,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please select a valid time',
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzTimePicker },
     setup() {
       return { args }

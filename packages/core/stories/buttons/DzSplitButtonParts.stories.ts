@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSplitButtonParts documents the three compound parts that make up a split
@@ -86,10 +86,10 @@ export const CompoundComposition: Story = {
     docs: {
       description: {
         story:
-          'Annotated anatomy of all three compound parts. ' +
-          '`DzSplitButton` (root) injects shared context into both children via ADR-08 typed injection. ' +
-          '`DzSplitButtonAction` owns the primary click handler. ' +
-          '`DzSplitButtonMenu` owns the dropdown trigger.',
+          'Annotated anatomy of all three compound parts. '
+          + '`DzSplitButton` (root) injects shared context into both children via ADR-08 typed injection. '
+          + '`DzSplitButtonAction` owns the primary click handler. '
+          + '`DzSplitButtonMenu` owns the dropdown trigger.',
       },
     },
   },

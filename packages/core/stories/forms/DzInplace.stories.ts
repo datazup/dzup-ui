@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzInplace } from '../../src/components/forms'
 import { DzInput } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzInplace** renders read-only display text that swaps to an editable field
@@ -70,7 +70,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const TextField: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzInplace },
     setup() {
       const value = ref('Jane Doe')
@@ -128,7 +128,7 @@ export const TextField: Story = {
 // ---------------------------------------------------------------------------
 
 export const InTableCell: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzInplace },
     setup() {
       const rows = ref([
@@ -169,7 +169,7 @@ export const InTableCell: Story = {
 
 export const CustomEditor: Story = {
   args: { saveOn: 'enter' },
-  render: (args) => ({
+  render: args => ({
     components: { DzInplace, DzInput },
     setup() {
       const value = ref('Confidential')

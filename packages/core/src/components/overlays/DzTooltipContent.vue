@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzTooltipContentProps,
   DzTooltipContentSlots,
@@ -25,6 +21,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { tooltipVariants } from './DzTooltip.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzTooltipContentProps>(), {
   side: 'top',
   sideOffset: 4,
@@ -40,7 +40,6 @@ const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <TooltipPortal>

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzStackProps, DzStackSlots } from './DzStack.types.ts'
 /**
  * DzStack -- Simplified vertical/horizontal stack layout.
@@ -26,6 +22,10 @@ import type { DzStackProps, DzStackSlots } from './DzStack.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { flexVariants } from './DzFlex.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzStackProps>(), {
   direction: 'vertical',
@@ -56,7 +56,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

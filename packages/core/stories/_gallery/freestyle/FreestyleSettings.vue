@@ -2,8 +2,8 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
-import { ref } from 'vue'
 import { Trash2 } from 'lucide-vue-next'
+import { ref } from 'vue'
 
 const fullName = ref('Jane Doe')
 const email = ref('jane@acme.com')
@@ -21,7 +21,9 @@ const productUpdates = ref(true)
     <div class="mx-auto w-full max-w-3xl">
       <!-- Page header -->
       <header class="mb-8">
-        <h1 class="text-2xl font-semibold tracking-tight">Settings</h1>
+        <h1 class="text-2xl font-semibold tracking-tight">
+          Settings
+        </h1>
         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Manage your account, profile, and notification preferences.
         </p>
@@ -33,7 +35,9 @@ const productUpdates = ref(true)
           class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xl shadow-slate-900/5 ring-1 ring-black/[0.02] dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40"
         >
           <div class="border-b border-slate-100 px-7 py-5 dark:border-white/5">
-            <h2 class="text-base font-semibold tracking-tight">Profile</h2>
+            <h2 class="text-base font-semibold tracking-tight">
+              Profile
+            </h2>
             <p class="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
               This information will be displayed on your public profile.
             </p>
@@ -76,7 +80,7 @@ const productUpdates = ref(true)
                   type="text"
                   placeholder="e.g. Jane Doe"
                   class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-100 dark:placeholder:text-slate-500"
-                />
+                >
               </div>
 
               <div>
@@ -92,7 +96,7 @@ const productUpdates = ref(true)
                   type="text"
                   placeholder="you@example.com"
                   class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-100 dark:placeholder:text-slate-500"
-                />
+                >
               </div>
             </div>
 
@@ -123,7 +127,9 @@ const productUpdates = ref(true)
           class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xl shadow-slate-900/5 ring-1 ring-black/[0.02] dark:border-white/10 dark:bg-slate-900 dark:shadow-black/40"
         >
           <div class="border-b border-slate-100 px-7 py-5 dark:border-white/5">
-            <h2 class="text-base font-semibold tracking-tight">Preferences</h2>
+            <h2 class="text-base font-semibold tracking-tight">
+              Preferences
+            </h2>
             <p class="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
               Choose what you want to hear about.
             </p>

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzDialogCloseProps, DzDialogCloseSlots } from './DzDialog.types.ts'
 import { X } from 'lucide-vue-next'
 import { DialogClose } from 'reka-ui'
@@ -21,6 +17,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { dialogVariants } from './DzDialog.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzDialogCloseProps>(), {
   asChild: false,
 })
@@ -36,7 +36,6 @@ const ariaLabel = computed(() =>
   props.asChild ? (attrs['aria-label'] as string | undefined) : ((attrs['aria-label'] as string) ?? 'Close'),
 )
 </script>
-
 
 <template>
   <DialogClose

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzEmptyProps, DzEmptySlots } from './DzEmpty.types.ts'
 /**
  * DzEmpty — Empty state placeholder component.
@@ -27,6 +23,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { emptyVariants } from './DzEmpty.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineProps<DzEmptyProps>()
 defineSlots<DzEmptySlots>()
 
@@ -37,7 +37,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

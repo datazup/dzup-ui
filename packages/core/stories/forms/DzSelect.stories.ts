@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import type { DzSelectItem } from '../../src/components/forms'
+import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzSelect } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 const sampleItems: DzSelectItem[] = [
   { label: 'Apple', value: 'apple' },

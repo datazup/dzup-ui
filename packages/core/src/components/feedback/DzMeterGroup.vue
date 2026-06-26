@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzMeterGroupComputedSegment,
   DzMeterGroupProps,
@@ -39,6 +35,10 @@ import {
   meterGroupSegmentVariants,
   meterGroupTrackVariants,
 } from './DzMeterGroup.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzMeterGroupProps>(), {
   values: () => [],
