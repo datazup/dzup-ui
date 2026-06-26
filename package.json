@@ -82,6 +82,9 @@
     "vue": "^3.5.13"
   },
   "resolutions": {
-    "@storybook/addon-vitest": "10.3.4"
+    "@storybook/addon-vitest": "10.3.4",
+    "vitest": "3.2.6",
+    "@vitest/browser": "3.2.6",
+    "@vitest/coverage-v8": "3.2.6"
   }
 }
