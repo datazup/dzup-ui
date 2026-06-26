@@ -8,6 +8,7 @@
     "hoistingLimits": "workspaces"
   },
   "scripts": {
+    "postinstall": "playwright install chromium",
     "dev": "storybook dev -p 6006",
     "build": "storybook build",
     "test-storybook": "vitest run --project=storybook",
