@@ -1,5 +1,4 @@
 import type { DzTourStep } from './DzTour.types.ts'
-import { mount } from '@vue/test-utils'
 /**
  * DzTour -- Contract Spec v1 conformance tests.
  *
@@ -7,7 +6,7 @@ import { mount } from '@vue/test-utils'
  * teleported dialog semantics. The overlay teleports to document.body, so
  * assertions query the body rather than the wrapper subtree.
  */
-import { flushPromises } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import DzTour from './DzTour.vue'
 
@@ -63,7 +62,10 @@ describe('dzTour -- Contract Spec v1', () => {
   })
 
   it('accepts mask prop', async () => {
-    mount(DzTour, { props: { steps: makeSteps(), open: true, mask: false }, attachTo: document.body })
+    mount(DzTour, {
+      props: { steps: makeSteps(), open: true, mask: false },
+      attachTo: document.body,
+    })
     await flushPromises()
     expect(document.body.querySelector('[data-testid="dz-tour-mask"]')).toBeNull()
   })
@@ -81,7 +83,10 @@ describe('dzTour -- Contract Spec v1', () => {
   })
 
   it('renders the default Back/Next/Skip controls', () => {
-    mount(DzTour, { props: { steps: makeSteps(), open: true, current: 1 }, attachTo: document.body })
+    mount(DzTour, {
+      props: { steps: makeSteps(), open: true, current: 1 },
+      attachTo: document.body,
+    })
     expect(document.body.querySelector('[data-testid="dz-tour-skip"]')).not.toBeNull()
     expect(document.body.querySelector('[data-testid="dz-tour-back"]')).not.toBeNull()
     expect(document.body.querySelector('[data-testid="dz-tour-next"]')).not.toBeNull()

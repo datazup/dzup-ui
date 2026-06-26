@@ -47,9 +47,9 @@ export interface DzInfiniteScrollProps extends BaseAccessibilityProps {
 /** Events emitted by DzInfiniteScroll */
 export interface DzInfiniteScrollEmits {
   /** The sentinel entered view and all guards passed — load the next page */
-  'load-more': []
+  loadMore: []
   /** The user (or `retry`) asked to re-attempt a failed load */
-  'retry': []
+  retry: []
 }
 
 // ---------------------------------------------------------------------------

@@ -84,7 +84,7 @@ function suppressTransitions(): void {
   style.textContent = '*,*::before,*::after{transition:none!important}'
   document.head.appendChild(style)
   // Force reflow so the style takes effect before attribute change
-  document.body.offsetHeight // eslint-disable-line @typescript-eslint/no-unused-expressions
+  void document.body.offsetHeight
   requestAnimationFrame(() => {
     style.remove()
   })

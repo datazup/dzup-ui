@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<DzInplaceProps>(), {
 })
 
 const emit = defineEmits<DzInplaceEmits<T>>()
-const slots = defineSlots<DzInplaceSlots<T>>()
+const _slots = defineSlots<DzInplaceSlots<T>>()
 
 const attrs = useAttrs()
 
@@ -174,13 +174,7 @@ defineExpose({ activate, save, cancel })
       @keydown="onEditorKeydown"
       @focusout="onEditorFocusout"
     >
-      <slot
-        name="edit"
-        :value="(value as T)"
-        :set-value="setValue"
-        :save="save"
-        :cancel="cancel"
-      >
+      <slot name="edit" :value="value as T" :set-value="setValue" :save="save" :cancel="cancel">
         <!-- Built-in editor when no #edit slot is supplied -->
         <DzInput
           ref="builtinRef"
@@ -204,7 +198,7 @@ defineExpose({ activate, save, cancel })
       :aria-describedby="ariaDescribedby"
       @click="activate"
     >
-      <slot name="display" :value="(value as T)" :activate="activate">
+      <slot name="display" :value="value as T" :activate="activate">
         {{ stringValue }}
       </slot>
       <svg

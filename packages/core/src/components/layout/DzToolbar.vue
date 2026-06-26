@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<DzToolbarProps>(), {
   as: 'div',
 })
 
-const slots = defineSlots<DzToolbarSlots>()
+const _slots = defineSlots<DzToolbarSlots>()
 
 const attrs = useAttrs()
 const slotApi = useSlots()

@@ -80,7 +80,7 @@ type Story = StoryObj<typeof meta>
 
 export const Integer: Story = {
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
+    const _canvas = within(canvasElement)
     // Root span must be in the DOM
     const root = canvasElement.querySelector('[data-size]')
     await waitFor(() => expect(root).toBeTruthy())

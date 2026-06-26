@@ -335,7 +335,7 @@ export const Interactive: Story = {
   // TASK-2.C — type a full 6-digit code across the auto-advancing cells and
   // assert the model + the `complete` event both reflect it.
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
+    const _canvas = within(canvasElement)
     const cells = Array.from(canvasElement.querySelectorAll<HTMLInputElement>('input')).filter(
       el => el.type !== 'hidden',
     )
@@ -369,7 +369,7 @@ export const Accessibility: Story = {
     `,
   }),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
+    const _canvas = within(canvasElement)
 
     // All six cells are individually focusable inputs.
     const cells = Array.from(canvasElement.querySelectorAll<HTMLInputElement>('input')).filter(

@@ -93,7 +93,7 @@ const overlayStyle = computed(() => ({
  * e.g. in non-DOM test environments.
  */
 function resolveColor(value: string, el: HTMLElement | null): string {
-  const match = /var\(\s*(--[\w-]+)\s*(?:,\s*([^)]+))?\)/.exec(value)
+  const match = /var\(\s*(--[\w-]+)(?:,([^)]*))?\)/.exec(value)
   if (!match)
     return value
   const name = match[1]

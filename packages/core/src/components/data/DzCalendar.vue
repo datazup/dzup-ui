@@ -99,9 +99,7 @@ function weekStartOf(date: CalendarDate): CalendarDate {
 
 const styles = computed(() => calendarVariants({ size: props.size }))
 
-const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
-)
+const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 
 // ---------------------------------------------------------------------------
 // Selection state (per mode)
@@ -118,7 +116,12 @@ const selectedSet = computed<Set<string>>(() => {
 })
 
 const range = computed<CalendarRangeValue>(() => {
-  if (props.mode === 'range' && value.value && typeof value.value === 'object' && !Array.isArray(value.value)) {
+  if (
+    props.mode === 'range'
+    && value.value
+    && typeof value.value === 'object'
+    && !Array.isArray(value.value)
+  ) {
     return value.value
   }
   return { start: null, end: null }
@@ -181,9 +184,7 @@ function setFocused(iso: string): void {
 
 function focusCell(iso: string): void {
   nextTick(() => {
-    gridRef.value
-      ?.querySelector<HTMLButtonElement>(`button[data-iso="${iso}"]`)
-      ?.focus()
+    gridRef.value?.querySelector<HTMLButtonElement>(`button[data-iso="${iso}"]`)?.focus()
   })
 }
 
@@ -255,6 +256,17 @@ function goToday(): void {
 // Roving-tabindex keyboard navigation
 // ---------------------------------------------------------------------------
 
+/** The CalendarDay matching the current roving focus (for Enter/Space). */
+const focusedDay = computed<CalendarDay | undefined>(() => {
+  for (const week of weeks.value) {
+    for (const day of week) {
+      if (day.iso === focusedIso.value)
+        return day
+    }
+  }
+  return undefined
+})
+
 function onGridKeydown(event: KeyboardEvent): void {
   if (props.disabled)
     return
@@ -308,17 +320,6 @@ function onGridKeydown(event: KeyboardEvent): void {
     commitFocus(toISO(next))
 }
 
-/** The CalendarDay matching the current roving focus (for Enter/Space). */
-const focusedDay = computed<CalendarDay | undefined>(() => {
-  for (const week of weeks.value) {
-    for (const day of week) {
-      if (day.iso === focusedIso.value)
-        return day
-    }
-  }
-  return undefined
-})
-
 // ---------------------------------------------------------------------------
 // Per-cell slot props
 // ---------------------------------------------------------------------------
@@ -355,12 +356,7 @@ function daySlotProps(day: CalendarDay) {
     <div :class="styles.header()">
       <span :class="styles.heading()" aria-hidden="true">{{ periodLabel }}</span>
       <div :class="styles.nav()">
-        <button
-          type="button"
-          :class="styles.todayButton()"
-          :disabled="disabled"
-          @click="goToday"
-        >
+        <button type="button" :class="styles.todayButton()" :disabled="disabled" @click="goToday">
           Today
         </button>
         <button
@@ -436,10 +432,7 @@ function daySlotProps(day: CalendarDay) {
             :data-disabled="isDayDisabled(day) ? '' : undefined"
             @click="selectDay(day)"
           >
-            <slot
-              name="day"
-              v-bind="daySlotProps(day)"
-            >
+            <slot name="day" v-bind="daySlotProps(day)">
               {{ day.dayNumber }}
             </slot>
           </button>

@@ -43,6 +43,7 @@ beforeEach(() => {
 
     set src(value: string) {
       this.#src = value
+      // eslint-disable-next-line ts/no-this-alias
       lastImage = this
     }
   }

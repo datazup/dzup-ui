@@ -67,7 +67,7 @@ const { retry: retryLoad } = useInfiniteScroll({
   disabled: computed(() => props.disabled || props.error),
   distance: toRef(props, 'distance'),
   direction: toRef(props, 'direction'),
-  onLoadMore: () => emit('load-more'),
+  onLoadMore: () => emit('loadMore'),
 })
 
 /** Re-arm the loader and re-request the failed page. */

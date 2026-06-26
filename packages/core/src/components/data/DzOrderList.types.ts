@@ -91,13 +91,13 @@ export interface OrderListReorderPayload {
  */
 export interface DzOrderListEmits {
   /** A reorder completed (drag, control button, or keyboard drop) */
-  'reorder': [payload: OrderListReorderPayload]
+  reorder: [payload: OrderListReorderPayload]
   /** The selected key set changed (only fired when `selectable`) */
-  'selection-change': [keys: OrderListKey[]]
+  selectionChange: [keys: OrderListKey[]]
   /** Focus entered the list */
-  'focus': [event: FocusEvent]
+  focus: [event: FocusEvent]
   /** Focus left the list */
-  'blur': [event: FocusEvent]
+  blur: [event: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

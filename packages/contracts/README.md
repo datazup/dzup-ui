@@ -21,7 +21,7 @@ Peer dependency: `vue >= 3.5`
 ## Usage
 
 ```ts
-import type { CanonicalSize, ButtonVariant, BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, ButtonVariant, CanonicalSize } from '@dzup-ui/contracts'
 
 export interface MyButtonProps extends BaseAccessibilityProps {
   size?: CanonicalSize

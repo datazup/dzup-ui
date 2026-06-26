@@ -21,7 +21,6 @@ export type VisuallyHiddenElement
     | 'a'
     | 'li'
     | 'output'
-  // eslint-disable-next-line @typescript-eslint/ban-types
     | (string & {})
 
 export interface DzVisuallyHiddenProps {

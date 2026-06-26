@@ -54,7 +54,7 @@ const emit = defineEmits<{
   change: [index: number]
 }>()
 
-const slots = defineSlots<DzTourSlots>()
+const _slots = defineSlots<DzTourSlots>()
 
 const styles = tourVariants()
 

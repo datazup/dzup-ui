@@ -278,7 +278,7 @@ function toggleSelection(item: T, index: number): void {
     next.delete(key)
   else next.add(key)
   selectedKeys.value = next
-  emit('selection-change', [...next])
+  emit('selectionChange', [...next])
 }
 
 function handleItemClick(item: T, index: number): void {
@@ -531,7 +531,7 @@ function handleBlur(event: FocusEvent): void {
         :class="styles.list()"
         :role="selectable ? 'listbox' : 'list'"
         :aria-multiselectable="selectable || undefined"
-        :aria-label="ariaLabel"
+        :ariaLabel="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="ariaDescribedby"
         @focusin="handleFocus"

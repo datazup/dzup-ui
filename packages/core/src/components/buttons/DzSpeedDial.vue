@@ -70,6 +70,21 @@ const attrs = useAttrs()
 const styles = speedDialVariants()
 const menuId = useId()
 
+const rootPositionClass = computed(() => {
+  switch (props.position) {
+    case 'bottom-right':
+      return 'fixed bottom-[var(--dz-spacing-6)] right-[var(--dz-spacing-6)] z-40'
+    case 'bottom-left':
+      return 'fixed bottom-[var(--dz-spacing-6)] left-[var(--dz-spacing-6)] z-40'
+    case 'top-right':
+      return 'fixed top-[var(--dz-spacing-6)] right-[var(--dz-spacing-6)] z-40'
+    case 'top-left':
+      return 'fixed top-[var(--dz-spacing-6)] left-[var(--dz-spacing-6)] z-40'
+    default:
+      return ''
+  }
+})
+
 const rootClasses = computed(() =>
   cn(styles.root(), rootPositionClass.value, attrs.class as string | undefined),
 )
@@ -94,21 +109,6 @@ const actionButtonSize = computed(() => {
 })
 
 const isVertical = computed(() => props.direction === 'up' || props.direction === 'down')
-
-const rootPositionClass = computed(() => {
-  switch (props.position) {
-    case 'bottom-right':
-      return 'fixed bottom-[var(--dz-spacing-6)] right-[var(--dz-spacing-6)] z-40'
-    case 'bottom-left':
-      return 'fixed bottom-[var(--dz-spacing-6)] left-[var(--dz-spacing-6)] z-40'
-    case 'top-right':
-      return 'fixed top-[var(--dz-spacing-6)] right-[var(--dz-spacing-6)] z-40'
-    case 'top-left':
-      return 'fixed top-[var(--dz-spacing-6)] left-[var(--dz-spacing-6)] z-40'
-    default:
-      return ''
-  }
-})
 
 // ---------------------------------------------------------------------------
 // Expansion geometry

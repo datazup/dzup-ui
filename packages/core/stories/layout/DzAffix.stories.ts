@@ -62,7 +62,7 @@ export const AffixTop: Story = {
     const canvas = within(canvasElement)
 
     // The affix root wrapper must be present in the DOM
-    const affixRoot
+    const _affixRoot
       = canvasElement.querySelector('[data-affixed]')
         ?? canvasElement.querySelector('.dz-affix, [class]')
     const wrapper = canvasElement.firstElementChild

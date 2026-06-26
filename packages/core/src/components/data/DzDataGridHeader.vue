@@ -138,7 +138,7 @@ const {
           v-if="isColumnFilterable(col) && openFilterField === col.field"
           :class="filterPopoverClasses"
           role="dialog"
-          :aria-label="`Filter ${col.header}`"
+          :ariaLabel="`Filter ${col.header}`"
           data-testid="filter-popover"
           @click.stop
           @keydown="handleFilterKeyDown"

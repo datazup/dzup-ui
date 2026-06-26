@@ -284,7 +284,9 @@ export const Interactive: Story = {
     components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter },
     setup() {
       const collapsed = ref(false)
-      function toggle(): void { collapsed.value = !collapsed.value }
+      function toggle(): void {
+        collapsed.value = !collapsed.value
+      }
       return { collapsed, toggle }
     },
     template: `

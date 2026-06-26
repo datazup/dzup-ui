@@ -43,29 +43,29 @@ afterEach(() => {
 })
 
 describe('dzInfiniteScroll', () => {
-  it('emits load-more once when the sentinel enters view', () => {
+  it('emits loadMore once when the sentinel enters view', () => {
     const wrapper = mountScroll()
     intersect(true)
     intersect(true)
-    expect(wrapper.emitted('load-more')).toHaveLength(1)
+    expect(wrapper.emitted('loadMore')).toHaveLength(1)
   })
 
   it('does not emit while loading', () => {
     const wrapper = mountScroll({ loading: true })
     intersect(true)
-    expect(wrapper.emitted('load-more')).toBeUndefined()
+    expect(wrapper.emitted('loadMore')).toBeUndefined()
   })
 
   it('does not emit when hasMore is false', () => {
     const wrapper = mountScroll({ hasMore: false })
     intersect(true)
-    expect(wrapper.emitted('load-more')).toBeUndefined()
+    expect(wrapper.emitted('loadMore')).toBeUndefined()
   })
 
   it('does not emit when disabled', () => {
     const wrapper = mountScroll({ disabled: true })
     intersect(true)
-    expect(wrapper.emitted('load-more')).toBeUndefined()
+    expect(wrapper.emitted('loadMore')).toBeUndefined()
   })
 
   it('does not render the sentinel once hasMore is false', () => {
@@ -111,7 +111,7 @@ describe('dzInfiniteScroll', () => {
     // Error suppresses the sentinel, so there is nothing to intersect.
     expect(wrapper.find('.dz-infinite-scroll-sentinel').exists()).toBe(false)
     intersect(true)
-    expect(wrapper.emitted('load-more')).toBeUndefined()
+    expect(wrapper.emitted('loadMore')).toBeUndefined()
   })
 
   it('exposes retry() via template ref', () => {
@@ -125,13 +125,13 @@ describe('dzInfiniteScroll', () => {
   it('pages again after the parent completes a loading cycle', async () => {
     const wrapper = mountScroll()
     intersect(true)
-    expect(wrapper.emitted('load-more')).toHaveLength(1)
+    expect(wrapper.emitted('loadMore')).toHaveLength(1)
 
     await wrapper.setProps({ loading: true })
     await wrapper.setProps({ loading: false })
     await nextTick()
 
-    expect(wrapper.emitted('load-more')).toHaveLength(2)
+    expect(wrapper.emitted('loadMore')).toHaveLength(2)
   })
 
   it('disconnects the observer on unmount', () => {

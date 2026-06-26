@@ -264,7 +264,7 @@ function buildColumns(): { node: VNode, index: number }[][] {
   const balanced = measured.value && heights.some(h => h > 0)
 
   const columns: { node: VNode, index: number }[][] = Array.from({ length: count }, () => [])
-  const columnHeights = new Array<number>(count).fill(0)
+  const columnHeights = Array.from({ length: count }, (): number => 0)
 
   for (let i = 0; i < list.length; i++) {
     const node = list[i]
