@@ -448,8 +448,9 @@ export const Accessibility: Story = {
     const item = canvas.getByText('components').closest('[role="treeitem"]') as HTMLElement
     await expect(item).toHaveAttribute('aria-expanded', 'false')
 
-    // ArrowRight expands a focused, collapsed branch; ArrowLeft collapses it.
-    item.focus()
+    // The interactive row is the focusable child div (tabindex="0"); focus it.
+    const row = (item.querySelector('[data-dz-tree-row]') ?? item) as HTMLElement
+    row.focus()
     await userEvent.keyboard('{ArrowRight}')
     await waitFor(() => expect(item).toHaveAttribute('aria-expanded', 'true'))
     await userEvent.keyboard('{ArrowLeft}')

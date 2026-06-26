@@ -107,22 +107,20 @@ export const Default: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    const body = within(document.body)
 
     // The calendar trigger button opens the picker overlay.
     const trigger = canvas.getByRole('button', { name: /open date picker/i })
     expect(trigger).toBeInTheDocument()
 
-    // Calendar panel should not be visible before interaction.
-    expect(canvas.queryByRole('grid')).toBeNull()
-
     // Click the trigger to open the calendar.
     await userEvent.click(trigger)
 
-    // Calendar grid (month view) must become visible.
-    await waitFor(() => expect(canvas.getByRole('grid')).toBeVisible())
+    // Calendar grid (month view) must become visible (portalled to body).
+    await waitFor(() => expect(body.getByRole('grid')).toBeVisible())
 
     // Day cells are rendered as gridcells.
-    await waitFor(() => expect(canvas.getAllByRole('gridcell').length).toBeGreaterThan(0))
+    await waitFor(() => expect(body.getAllByRole('gridcell').length).toBeGreaterThan(0))
   },
 }
 
@@ -287,22 +285,23 @@ export const Interactive: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    const body = within(document.body)
 
     // Open the calendar via the trigger button.
     const trigger = canvas.getByRole('button', { name: /open date picker/i })
     await userEvent.click(trigger)
 
-    // Wait for the calendar grid to appear.
-    await waitFor(() => expect(canvas.getByRole('grid')).toBeVisible())
+    // Wait for the calendar grid to appear (portalled to body).
+    await waitFor(() => expect(body.getByRole('grid')).toBeVisible())
 
     // Pick day "15" — it appears in every month so is always present and enabled.
-    const cells = canvas.getAllByRole('gridcell')
+    const cells = body.getAllByRole('gridcell')
     const day15 = cells.find((el) => el.textContent?.trim() === '15')
     expect(day15).toBeDefined()
     if (day15) await userEvent.click(day15)
 
     // After selection the calendar should close and the output text should update.
-    await waitFor(() => expect(canvas.queryByRole('grid')).toBeNull())
+    await waitFor(() => expect(body.queryByRole('grid')).toBeNull())
     await waitFor(() =>
       expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),
     )

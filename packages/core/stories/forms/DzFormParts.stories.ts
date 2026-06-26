@@ -115,13 +115,13 @@ export const Required: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     // Label associates with the input via for/id
-    const input = canvas.getByLabelText('Username')
+    // DzInput has aria-required="true" propagated from DzFormField context
+    const input = canvas.getByRole('textbox', { name: /username/i })
     await expect(input).toBeInTheDocument()
-    // DzInput propagates required from DzFormField context → aria-required="true"
     await expect(input).toHaveAttribute('aria-required', 'true')
     // The label's data-required marker is present (visual asterisk rendered)
-    const label = canvas.getByText('Username', { selector: 'label' })
-    await expect(label).toHaveAttribute('data-required', '')
+    const label = canvasElement.querySelector('label[data-required]')
+    await expect(label).toBeTruthy()
     // No error message should be visible in the default required state
     await waitFor(() => expect(canvas.queryByRole('alert')).toBeNull())
   },

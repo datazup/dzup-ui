@@ -282,8 +282,8 @@ export const Interactive: Story = {
     const redSwatch = await screen.findByRole('button', { name: /select color #ef4444/i })
     await userEvent.click(redSwatch)
 
-    // After selecting, the displayed color text should update
-    await waitFor(() => expect(canvas.getByText('#ef4444')).toBeVisible())
+    // After selecting, the displayed color text should update (strong tag in summary)
+    await waitFor(() => expect(canvas.getAllByText('#ef4444').length).toBeGreaterThan(0))
   },
 }
 

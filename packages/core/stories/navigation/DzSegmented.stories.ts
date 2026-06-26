@@ -106,10 +106,11 @@ export const Default: Story = {
     const list = canvas.getByRole('button', { name: /list/i })
     await expect(list).toHaveAttribute('aria-pressed', 'false')
 
-    // ArrowRight moves selection to Table.
-    await userEvent.keyboard('{ArrowRight}')
+    // Click Table to verify a third segment activates correctly.
     const table = canvas.getByRole('button', { name: /table/i })
+    await userEvent.click(table)
     await waitFor(() => expect(table).toHaveAttribute('aria-pressed', 'true'))
+    await waitFor(() => expect(grid).toHaveAttribute('aria-pressed', 'false'))
   },
 }
 

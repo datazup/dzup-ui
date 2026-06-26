@@ -131,11 +131,16 @@ export const Single: Story = {
     // Tree panel is portalled to document.body.
     await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
 
-    // "Fruit" branch is pre-expanded; "Apple" leaf should be visible.
-    await waitFor(() => expect(body.getByRole('treeitem', { name: /apple/i })).toBeVisible())
+    // "Fruit" branch is pre-expanded; find "Apple" leaf (no aria-expanded = leaf node).
+    const appleItem = await waitFor(() => {
+      const items = body.getAllByRole('treeitem', { name: /apple/i })
+      const leaf = items.find((el) => !el.hasAttribute('aria-expanded'))
+      expect(leaf).toBeDefined()
+      return leaf!
+    })
 
     // Click Apple to select it.
-    await userEvent.click(body.getByRole('treeitem', { name: /apple/i }))
+    await userEvent.click(appleItem)
     await waitFor(() =>
       expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),
     )
@@ -181,7 +186,10 @@ export const MultipleChips: Story = {
     const trigger = canvas.getByRole('combobox')
     await userEvent.click(trigger)
     await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
-    await userEvent.click(body.getByRole('treeitem', { name: /banana/i }))
+    const bananaItem = body
+      .getAllByRole('treeitem', { name: /banana/i })
+      .find((el) => !el.hasAttribute('aria-expanded'))!
+    await userEvent.click(bananaItem)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove banana/i })).toBeInTheDocument(),
     )
@@ -228,14 +236,20 @@ export const CheckboxPropagation: Story = {
     await userEvent.click(trigger)
     await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
 
-    // Click Carrot to check it.
-    await userEvent.click(body.getByRole('treeitem', { name: /carrot/i }))
+    // Click Carrot to check it (leaf node — no aria-expanded).
+    const carrotItem = body
+      .getAllByRole('treeitem', { name: /carrot/i })
+      .find((el) => !el.hasAttribute('aria-expanded'))!
+    await userEvent.click(carrotItem)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument(),
     )
 
     // Click Vegetable parent — propagates to Potato as well.
-    await userEvent.click(body.getByRole('treeitem', { name: /vegetable/i }))
+    const vegetableItem = body
+      .getAllByRole('treeitem', { name: /vegetable/i })
+      .find((el) => el.hasAttribute('aria-expanded'))!
+    await userEvent.click(vegetableItem)
     await waitFor(() =>
       expect(canvas.getByRole('button', { name: /remove potato/i })).toBeInTheDocument(),
     )

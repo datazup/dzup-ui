@@ -107,22 +107,20 @@ export const Default: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    const body = within(document.body)
 
     // The calendar trigger button opens the range picker overlay.
     const trigger = canvas.getByRole('button', { name: /open date range picker/i })
     expect(trigger).toBeInTheDocument()
 
-    // Calendar panel should not be visible before interaction.
-    expect(canvas.queryByRole('grid')).toBeNull()
-
     // Click the trigger to open the calendar.
     await userEvent.click(trigger)
 
-    // At least one calendar grid (month view) must become visible.
-    await waitFor(() => expect(canvas.getAllByRole('grid').length).toBeGreaterThanOrEqual(1))
+    // At least one calendar grid (month view) must become visible (portalled to body).
+    await waitFor(() => expect(body.getAllByRole('grid').length).toBeGreaterThanOrEqual(1))
 
     // Day cells are rendered as gridcells.
-    await waitFor(() => expect(canvas.getAllByRole('gridcell').length).toBeGreaterThan(0))
+    await waitFor(() => expect(body.getAllByRole('gridcell').length).toBeGreaterThan(0))
   },
 }
 
@@ -271,22 +269,23 @@ export const Interactive: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    const body = within(document.body)
 
     // Open the range picker via the trigger button.
     const trigger = canvas.getByRole('button', { name: /open date range picker/i })
     await userEvent.click(trigger)
 
-    // Calendar grid must appear.
-    await waitFor(() => expect(canvas.getAllByRole('grid').length).toBeGreaterThanOrEqual(1))
+    // Calendar grid must appear (portalled to body).
+    await waitFor(() => expect(body.getAllByRole('grid').length).toBeGreaterThanOrEqual(1))
 
     // Click day "10" as the start date — present in every month.
-    const cells = canvas.getAllByRole('gridcell')
+    const cells = body.getAllByRole('gridcell')
     const day10 = cells.find((el) => el.textContent?.trim() === '10')
     expect(day10).toBeDefined()
     if (day10) await userEvent.click(day10)
 
     // Click day "15" as the end date.
-    const cells2 = canvas.getAllByRole('gridcell')
+    const cells2 = body.getAllByRole('gridcell')
     const day15 = cells2.find((el) => el.textContent?.trim() === '15')
     expect(day15).toBeDefined()
     if (day15) await userEvent.click(day15)

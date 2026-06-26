@@ -111,8 +111,8 @@ export const TextMark: Story = {
     const overlay = canvasElement.querySelector('[aria-hidden="true"]')
     expect(overlay).toBeTruthy()
     // Slotted content must be rendered inside the watermark wrapper
-    const heading = canvas.getByText(/Revenue|Forecast/i)
-    expect(heading).toBeTruthy()
+    const headings = canvas.getAllByText(/Revenue|Forecast/i)
+    expect(headings.length).toBeGreaterThan(0)
   },
 }
 

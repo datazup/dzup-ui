@@ -143,8 +143,8 @@ export const Horizontal: Story = {
     const productsTrigger = canvas.getByRole('menuitem', { name: /Products/i })
     await expect(productsTrigger).toHaveAttribute('aria-expanded', 'false')
 
-    // Clicking the trigger opens the panel.
-    await userEvent.click(productsTrigger)
+    // Hovering or clicking the trigger opens the panel.
+    await userEvent.hover(productsTrigger)
     await waitFor(() => expect(productsTrigger).toHaveAttribute('aria-expanded', 'true'), {
       timeout: 3000,
     })

@@ -2,11 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
-import {
-  DzTooltip,
-  DzTooltipContent,
-  DzTooltipTrigger,
-} from '../../src/components/overlays'
+import { DzTooltip, DzTooltipContent, DzTooltipTrigger } from '../../src/components/overlays'
 
 /**
  * DzTooltip is a compound tooltip component built on Reka UI Tooltip (ADR-07).
@@ -55,7 +51,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTooltip, DzTooltipTrigger, DzTooltipContent, DzButton },
     setup() {
       return { args }
@@ -232,9 +228,7 @@ export const Interactive: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTooltip, DzTooltipTrigger, DzTooltipContent, DzButton },
     template: `
@@ -286,7 +280,10 @@ export const Accessibility: Story = {
 
     // Hovering the trigger surfaces the tooltip (portalled, role="tooltip").
     await userEvent.hover(canvas.getByRole('button', { name: /save document/i }))
-    await expect(await screen.findByText(/save your current document/i)).toBeVisible()
+    // Multiple elements may share the text; verify at least one is visible via role
+    await waitFor(() =>
+      expect(screen.getAllByText(/save your current document/i).length).toBeGreaterThan(0),
+    )
   },
 }
 

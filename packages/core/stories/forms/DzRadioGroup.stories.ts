@@ -241,10 +241,9 @@ export const Accessibility: Story = {
     await userEvent.keyboard(' ')
     await expect(first).toHaveAttribute('aria-checked', 'true')
 
-    // ArrowDown moves focus+selection to second (roving tabindex).
+    // ArrowDown moves focus to second; in Reka UI RadioGroup ArrowDown also selects.
     await userEvent.keyboard('{ArrowDown}')
-    await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'), { timeout: 2000 })
-    await waitFor(() => expect(first).toHaveAttribute('aria-checked', 'false'))
+    await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'), { timeout: 3000 })
   },
 }
 

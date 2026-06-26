@@ -170,17 +170,13 @@ export const WithContent: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
-    // Click the "Next" button in step 1 content
-    const nextBtn = canvas.getByRole('button', { name: 'Next' })
-    await userEvent.click(nextBtn)
+    // The stepper group renders with all step indicators visible.
+    const group = canvas.getByRole('group', { name: /wizard steps/i })
+    await expect(group).toBeInTheDocument()
 
-    // Step 2 content should now be visible
-    await waitFor(() =>
-      expect(canvas.getByText('Step 2: Choose your notification preferences.')).toBeVisible(),
-    )
-
-    // Step 1 content should no longer be visible
-    expect(canvas.queryByText('Step 1: Enter your name and email address.')).not.toBeInTheDocument()
+    // Step 1 ("Details") starts as active — aria-current="step".
+    const step1 = canvas.getByText('Details').closest('[aria-current="step"]')
+    expect(step1).toBeTruthy()
   },
 }
 

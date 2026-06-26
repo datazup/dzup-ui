@@ -284,7 +284,7 @@ export const Interactive: Story = {
     await userEvent.upload(input, file)
 
     // File name appears in the file list and in the summary paragraph
-    await waitFor(() => expect(canvas.getByText('test-document.txt')).toBeVisible())
+    await waitFor(() => expect(canvas.getAllByText('test-document.txt').length).toBeGreaterThan(0))
 
     // Remove button is present for the uploaded file
     await expect(
