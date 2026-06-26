@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzPopover, DzPopoverContent, DzPopoverTrigger } from '../../src/components/overlays'
@@ -59,6 +60,23 @@ export const Default: Story = {
       </DzPopover>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open popover/i })
+
+    // Popover is closed on mount; trigger advertises collapsed state.
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click opens the popover; content panel (role="dialog") becomes visible.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+    const content = await waitFor(() => within(document.body).getByRole('dialog'))
+    await expect(content).toBeVisible()
+
+    // Escape closes the popover and trigger collapses.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -166,4 +184,22 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open accessible popover/i })
+
+    // Trigger exposes correct ARIA semantics before interaction.
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click opens the dialog panel and focus moves into it.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await expect(dialog).toBeVisible()
+
+    // Escape dismisses the panel and returns focus to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }

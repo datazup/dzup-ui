@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzBackTop } from '../../src/components/navigation'
 import { darkModeDecorator } from '../_shared'
@@ -78,7 +79,7 @@ function fillerTemplate(): string {
 
 export const Default: Story = {
   args: { visibilityHeight: 400 },
-  render: args => ({
+  render: (args) => ({
     components: { DzBackTop },
     setup() {
       return { args, filler: fillerTemplate() }
@@ -91,6 +92,25 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // The button is always in the DOM (hidden via aria-hidden + tabindex=-1 before scroll)
+    const button = canvas.getByRole('button', { hidden: true })
+    await expect(button).toBeInTheDocument()
+    // Accessible label defaults to "Back to top"
+    await expect(button).toHaveAttribute('aria-label', 'Back to top')
+    // Scroll the window past the 400px threshold to make the button visible
+    await userEvent.pointer([
+      { target: canvasElement },
+      { keys: '[TouchA>]', target: canvasElement },
+    ])
+    canvasElement.ownerDocument.defaultView?.scrollTo({ top: 500 })
+    await waitFor(() => expect(button).not.toHaveAttribute('aria-hidden', 'true'), {
+      timeout: 1500,
+    })
+    // Once visible the button is reachable via role lookup without hidden flag
+    await expect(canvas.getByRole('button')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -100,7 +120,7 @@ export const Default: Story = {
 export const CustomThreshold: Story = {
   name: 'Custom threshold',
   args: { visibilityHeight: 100, tone: 'primary' },
-  render: args => ({
+  render: (args) => ({
     components: { DzBackTop },
     setup() {
       return { args, filler: fillerTemplate() }
@@ -152,7 +172,7 @@ export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [darkModeDecorator],
   args: { visibilityHeight: 200, tone: 'primary' },
-  render: args => ({
+  render: (args) => ({
     components: { DzBackTop },
     setup() {
       return { args, filler: fillerTemplate() }

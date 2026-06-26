@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzMeterGroup } from '../../src/components/feedback'
 
@@ -87,13 +88,23 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzMeterGroup },
     setup() {
       return { args }
     },
     template: '<DzMeterGroup v-bind="args" class="max-w-md" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const meters = canvas.getAllByRole('meter')
+    await expect(meters.length).toBeGreaterThan(0)
+    for (const meter of meters) {
+      await expect(meter).toHaveAttribute('aria-valuenow')
+      await expect(meter).toHaveAttribute('aria-valuemin', '0')
+      await expect(meter).toHaveAttribute('aria-valuemax')
+    }
+  },
 }
 
 // ---------------------------------------------------------------------------

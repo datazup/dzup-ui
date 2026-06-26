@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzSkeleton } from '../../src/components/feedback'
 
@@ -57,13 +58,23 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzSkeleton },
     setup() {
       return { args }
     },
     template: '<DzSkeleton v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const skeleton =
+      canvas.getByRole('presentation', { hidden: true }) ??
+      canvasElement.querySelector('[data-state="loading"]')
+    const el = canvasElement.querySelector('[aria-hidden="true"][data-state="loading"]')
+    await expect(el).not.toBeNull()
+    await expect(el).toHaveAttribute('aria-hidden', 'true')
+    await expect(el).toHaveAttribute('data-state', 'loading')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -232,9 +243,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSkeleton },
     template: `

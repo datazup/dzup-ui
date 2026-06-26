@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzTable,
   DzTableBody,
@@ -83,6 +84,17 @@ export const Default: Story = {
       </DzTable>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const table = canvas.getByRole('table')
+    await expect(table).toBeInTheDocument()
+    const headers = canvas.getAllByRole('columnheader')
+    await expect(headers).toHaveLength(3)
+    const rows = canvas.getAllByRole('row')
+    // 1 header row + 2 body rows
+    await expect(rows.length).toBeGreaterThanOrEqual(3)
+    await expect(canvas.getByRole('columnheader', { name: /name/i })).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -112,6 +124,19 @@ export const CellAlignment: Story = {
       </DzTable>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const table = canvas.getByRole('table')
+    await expect(table).toBeInTheDocument()
+    const headers = canvas.getAllByRole('columnheader')
+    await expect(headers).toHaveLength(3)
+    const leftHeader = canvas.getByRole('columnheader', { name: /left/i })
+    await expect(leftHeader).toHaveClass('text-left')
+    const centerHeader = canvas.getByRole('columnheader', { name: /center/i })
+    await expect(centerHeader).toHaveClass('text-center')
+    const rightHeader = canvas.getByRole('columnheader', { name: /right/i })
+    await expect(rightHeader).toHaveClass('text-right')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -153,6 +178,19 @@ export const RowSelection: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const table = canvas.getByRole('table')
+    await expect(table).toBeInTheDocument()
+    // Initial state: row at index 1 (Bob) is selected
+    const rows = canvas.getAllByRole('row')
+    // rows[0] = header row, rows[1..3] = body rows
+    await expect(rows[2]).toHaveAttribute('aria-selected', 'true')
+    // Click the first body row (Alice) and verify selection moves
+    await userEvent.click(rows[1])
+    await waitFor(() => expect(rows[1]).toHaveAttribute('aria-selected', 'true'))
+    await expect(rows[2]).not.toHaveAttribute('aria-selected', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -229,4 +267,20 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const table = canvas.getByRole('table')
+    await expect(table).toBeInTheDocument()
+    // All column headers must carry scope="col"
+    const headers = canvas.getAllByRole('columnheader')
+    await expect(headers).toHaveLength(3)
+    for (const th of headers) {
+      await expect(th).toHaveAttribute('scope', 'col')
+    }
+    // The pre-selected row (Widget B) carries aria-selected="true"
+    const rows = canvas.getAllByRole('row')
+    // rows[0] = header row, rows[1] = Widget A, rows[2] = Widget B (selected)
+    await expect(rows[2]).toHaveAttribute('aria-selected', 'true')
+    await expect(rows[1]).not.toHaveAttribute('aria-selected', 'true')
+  },
 }

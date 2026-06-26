@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzProgress } from '../../src/components/feedback'
 
@@ -89,13 +90,21 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzProgress },
     setup() {
       return { args }
     },
     template: '<DzProgress v-bind="args" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const progress = canvas.getByRole('progressbar')
+    await expect(progress).toHaveAttribute('aria-valuenow')
+    await expect(progress).toHaveAttribute('aria-valuemin', '0')
+    await expect(progress).toHaveAttribute('aria-valuemax', '100')
+    await expect(progress).toHaveAttribute('aria-label', 'Progress')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -277,9 +286,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzProgress },
     template: `

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzToolbar } from '../../src/components/layout'
 
@@ -74,7 +75,25 @@ const btn = (label: string) =>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Toolbar must expose role="toolbar"
+    const toolbar = canvas.getByRole('toolbar')
+    await expect(toolbar).toBeInTheDocument()
+
+    // Buttons in the start and end regions are discoverable
+    const backBtn = canvas.getByRole('button', { name: 'Back' })
+    await expect(backBtn).toBeInTheDocument()
+
+    const saveBtn = canvas.getByRole('button', { name: 'Save' })
+    await expect(saveBtn).toBeInTheDocument()
+
+    // Tab into the toolbar — focus should land on the first button
+    await userEvent.tab()
+    await expect(backBtn).toHaveFocus()
+  },
+  render: (args) => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -101,7 +120,7 @@ export const Default: Story = {
 export const TitleCentered: Story = {
   name: 'Title Centered',
   args: { variant: 'outlined' },
-  render: args => ({
+  render: (args) => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -125,7 +144,7 @@ export const TitleCentered: Story = {
 export const Sticky: Story = {
   name: 'Sticky',
   args: { sticky: true, variant: 'elevated' },
-  render: args => ({
+  render: (args) => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -153,7 +172,7 @@ export const Sticky: Story = {
 export const ResponsiveWrap: Story = {
   name: 'Responsive Wrap',
   args: { wrap: true, variant: 'outlined' },
-  render: args => ({
+  render: (args) => ({
     components: { DzToolbar },
     setup() {
       return { args }
@@ -177,7 +196,7 @@ export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [darkModeDecorator],
   args: { variant: 'elevated' },
-  render: args => ({
+  render: (args) => ({
     components: { DzToolbar },
     setup() {
       return { args }

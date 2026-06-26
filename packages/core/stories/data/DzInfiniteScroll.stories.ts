@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
 import { darkModeDecorator } from '../_shared'
 import { DzInfiniteScroll } from '../../src/components/data'
@@ -76,16 +77,16 @@ type Story = StoryObj<typeof meta>
 const PAGE_SIZE = 8
 const TOTAL = 32
 
-function makePage(start: number, count: number): Array<{ id: number, title: string }> {
+function makePage(start: number, count: number): Array<{ id: number; title: string }> {
   return Array.from({ length: count }, (_, i) => ({
     id: start + i,
     title: `Item #${start + i + 1}`,
   }))
 }
 
-const rowClass
-  = 'flex items-center gap-3 rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] '
-    + 'bg-[var(--dz-surface)] px-4 py-3 text-[var(--dz-foreground)]'
+const rowClass =
+  'flex items-center gap-3 rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] ' +
+  'bg-[var(--dz-surface)] px-4 py-3 text-[var(--dz-foreground)]'
 
 // ---------------------------------------------------------------------------
 // Basic feed — loads the next page on scroll until exhausted
@@ -136,7 +137,7 @@ export const BasicFeed: Story = {
 
 export const EndState: Story = {
   args: { hasMore: false },
-  render: args => ({
+  render: (args) => ({
     components: { DzInfiniteScroll },
     setup: () => ({ args, rows: makePage(0, 4), rowClass }),
     template: `
@@ -149,6 +150,14 @@ export const EndState: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const items = canvas.getAllByRole('listitem')
+    await expect(items.length).toBe(4)
+    await expect(items[0]).toHaveTextContent('Item #1')
+    await expect(items[3]).toHaveTextContent('Item #4')
+    await expect(canvas.getByText("You've reached the end.")).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

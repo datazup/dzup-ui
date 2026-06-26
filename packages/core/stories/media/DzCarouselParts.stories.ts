@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import {
   DzCarousel,
@@ -68,6 +69,30 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const nextBtn = canvas.getByRole('button', { name: /next slide/i })
+    const prevBtn = canvas.getByRole('button', { name: /previous slide/i })
+
+    // On slide 1 the prev button must be disabled (no loop)
+    expect(prevBtn).toBeDisabled()
+    expect(nextBtn).not.toBeDisabled()
+
+    // Navigate forward to slide 2
+    await userEvent.click(nextBtn)
+    await waitFor(() => {
+      expect(canvas.getByText(/slide two/i)).toBeInTheDocument()
+      // prev is now enabled; next still enabled (slide 3 exists)
+      expect(prevBtn).not.toBeDisabled()
+    })
+
+    // Navigate back to slide 1
+    await userEvent.click(prevBtn)
+    await waitFor(() => {
+      expect(canvas.getByText(/slide one/i)).toBeInTheDocument()
+      expect(prevBtn).toBeDisabled()
+    })
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -119,6 +144,33 @@ export const CompoundComposition: Story = {
 
 export const RealWorld: Story = {
   name: 'Real World: Image Card Carousel',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const nextBtn = canvas.getByRole('button', { name: /next slide/i })
+    const prevBtn = canvas.getByRole('button', { name: /previous slide/i })
+
+    // Loop carousel — both buttons always enabled
+    expect(nextBtn).not.toBeDisabled()
+    expect(prevBtn).not.toBeDisabled()
+
+    // Advance to card 2
+    await userEvent.click(nextBtn)
+    await waitFor(() => {
+      expect(canvas.getByText(/accessible by default/i)).toBeInTheDocument()
+    })
+
+    // Advance to card 3
+    await userEvent.click(nextBtn)
+    await waitFor(() => {
+      expect(canvas.getByText(/reka ui primitives/i)).toBeInTheDocument()
+    })
+
+    // Step back to card 2
+    await userEvent.click(prevBtn)
+    await waitFor(() => {
+      expect(canvas.getByText(/accessible by default/i)).toBeInTheDocument()
+    })
+  },
   render: () => ({
     components: { DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots },
     setup() {
@@ -190,6 +242,29 @@ export const RealWorld: Story = {
 
 export const DotsOnly: Story = {
   name: 'Dots Only (No Nav Buttons)',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Slide 1 text is present on mount
+    expect(canvas.getByText(/slide 1/i)).toBeInTheDocument()
+
+    // After one autoplay interval (2500 ms) slide 2 should be active.
+    // waitFor polls for up to 5 s by default — well within Storybook's test timeout.
+    await waitFor(
+      () => {
+        expect(canvas.getByText(/slide 2/i)).toBeInTheDocument()
+      },
+      { timeout: 5000 },
+    )
+
+    // After another interval slide 3 advances
+    await waitFor(
+      () => {
+        expect(canvas.getByText(/slide 3/i)).toBeInTheDocument()
+      },
+      { timeout: 5000 },
+    )
+  },
   render: () => ({
     components: { DzCarousel, DzCarouselSlide, DzCarouselDots },
     template: `

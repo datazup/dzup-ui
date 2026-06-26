@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { darkModeDecorator } from '../_shared'
 import { DzImageComparison } from '../../src/components/media'
@@ -22,12 +23,36 @@ const meta = {
   component: DzImageComparison,
   tags: ['autodocs', 'status:experimental'],
   argTypes: {
-    beforeSrc: { control: 'text', description: 'Base ("before") image URL', table: { category: 'Content' } },
-    afterSrc: { control: 'text', description: 'Revealed ("after") image URL', table: { category: 'Content' } },
-    beforeAlt: { control: 'text', description: 'Alt text for the before image', table: { category: 'Content' } },
-    afterAlt: { control: 'text', description: 'Alt text for the after image', table: { category: 'Content' } },
-    beforeLabel: { control: 'text', description: 'Caption chip over the before image', table: { category: 'Content' } },
-    afterLabel: { control: 'text', description: 'Caption chip over the after image', table: { category: 'Content' } },
+    beforeSrc: {
+      control: 'text',
+      description: 'Base ("before") image URL',
+      table: { category: 'Content' },
+    },
+    afterSrc: {
+      control: 'text',
+      description: 'Revealed ("after") image URL',
+      table: { category: 'Content' },
+    },
+    beforeAlt: {
+      control: 'text',
+      description: 'Alt text for the before image',
+      table: { category: 'Content' },
+    },
+    afterAlt: {
+      control: 'text',
+      description: 'Alt text for the after image',
+      table: { category: 'Content' },
+    },
+    beforeLabel: {
+      control: 'text',
+      description: 'Caption chip over the before image',
+      table: { category: 'Content' },
+    },
+    afterLabel: {
+      control: 'text',
+      description: 'Caption chip over the after image',
+      table: { category: 'Content' },
+    },
     orientation: {
       control: 'inline-radio',
       options: ['horizontal', 'vertical'],
@@ -49,7 +74,11 @@ const meta = {
       description: 'Disable pointer and keyboard interaction',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
-    ariaLabel: { control: 'text', description: 'Accessible label for the slider grip', table: { category: 'Accessibility' } },
+    ariaLabel: {
+      control: 'text',
+      description: 'Accessible label for the slider grip',
+      table: { category: 'Accessibility' },
+    },
   },
   args: {
     beforeSrc: BEFORE,
@@ -71,7 +100,27 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Horizontal: Story = {
-  render: args => ({
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Slider grip must carry role="slider"
+    const slider = canvas.getByRole('slider')
+    await expect(slider).toBeInTheDocument()
+
+    // Default position is 50 — aria-valuenow should reflect that
+    await expect(slider).toHaveAttribute('aria-valuenow', '50')
+    await expect(slider).toHaveAttribute('aria-valuemin', '0')
+    await expect(slider).toHaveAttribute('aria-valuemax', '100')
+
+    // Focus the grip and press ArrowRight — position should increase
+    slider.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => {
+      const now = Number(slider.getAttribute('aria-valuenow'))
+      expect(now).toBeGreaterThan(50)
+    })
+  },
+  render: (args) => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -86,7 +135,7 @@ export const Horizontal: Story = {
 
 export const Vertical: Story = {
   args: { orientation: 'vertical' },
-  render: args => ({
+  render: (args) => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -101,7 +150,7 @@ export const Vertical: Story = {
 
 export const WithLabels: Story = {
   args: { beforeLabel: 'Before', afterLabel: 'After' },
-  render: args => ({
+  render: (args) => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -115,7 +164,7 @@ export const WithLabels: Story = {
 // ---------------------------------------------------------------------------
 
 export const CustomHandle: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzImageComparison },
     setup() {
       return { args }
@@ -137,7 +186,7 @@ export const CustomHandle: Story = {
 // ---------------------------------------------------------------------------
 
 export const Controlled: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzImageComparison },
     setup() {
       const pos = ref(50)
@@ -168,7 +217,7 @@ export const DarkMode: Story = {
   name: 'Dark Mode Preview',
   decorators: [darkModeDecorator],
   args: { beforeLabel: 'Raw', afterLabel: 'Edited' },
-  render: args => ({
+  render: (args) => ({
     components: { DzImageComparison },
     setup() {
       return { args }

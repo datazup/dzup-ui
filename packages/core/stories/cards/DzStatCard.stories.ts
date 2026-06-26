@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { Activity, DollarSign, Package, ShoppingCart, TrendingUp, Users } from 'lucide-vue-next'
 import { DzStatCard } from '../../src/components/cards'
@@ -69,13 +70,22 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzStatCard },
     setup() {
       return { args }
     },
     template: '<DzStatCard v-bind="args" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByText('Revenue')).toBeInTheDocument()
+    await expect(canvas.getByText('$12,450')).toBeInTheDocument()
+    const svgIcons = canvasElement.querySelectorAll('svg[aria-hidden="true"]')
+    for (const icon of svgIcons) {
+      await expect(icon).toHaveAttribute('aria-hidden', 'true')
+    }
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -171,9 +181,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzStatCard },
     setup() {

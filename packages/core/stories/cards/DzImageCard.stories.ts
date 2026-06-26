@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzImageCard } from '../../src/components/cards'
 
@@ -73,7 +74,7 @@ const images = {
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzImageCard },
     setup() {
       return { args }
@@ -87,6 +88,16 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const img = canvas.getByRole('img')
+    await expect(img).toBeInTheDocument()
+    await expect(img).toHaveAttribute('alt')
+    await expect(img.getAttribute('alt')).not.toBe('')
+    const heading = canvas.getByRole('heading', { level: 3 })
+    await expect(heading).toBeInTheDocument()
+    await expect(heading).toHaveTextContent('Mountain Landscape')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -248,9 +259,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzImageCard },
     setup() {

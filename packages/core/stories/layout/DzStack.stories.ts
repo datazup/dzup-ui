@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzStack } from '../../src/components/layout'
 
@@ -75,7 +76,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzStack },
     setup() {
       return { args }
@@ -88,6 +89,15 @@ export const Default: Story = {
       </DzStack>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const stackContainer = canvasElement.querySelector('div')
+    await expect(stackContainer).toBeInTheDocument()
+    const itemA = canvas.getByText('Item A')
+    await expect(itemA).toBeInTheDocument()
+    const itemC = canvas.getByText('Item C')
+    await expect(itemC).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -174,9 +184,7 @@ export const AllAlignments: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzStack },
     template: `

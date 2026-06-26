@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
@@ -87,7 +88,19 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const ToDeadline: Story = {
-  render: args => ({
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Root div must carry role="timer" for accessibility
+    const timer = canvas.getByRole('timer')
+    expect(timer).toBeTruthy()
+    // The sr-only live region must be present for polite announcements
+    const liveRegion = canvasElement.querySelector('[aria-live="polite"]')
+    expect(liveRegion).toBeTruthy()
+    // The visible figure must display a colon-separated time string
+    const figure = canvasElement.querySelector('[aria-hidden="true"]')
+    expect(figure?.textContent).toMatch(/\d/)
+  },
+  render: (args) => ({
     components: { DzCountdown },
     setup: () => ({ args, target: Date.now() + 2 * 60 * 60 * 1000 + 5_000 }),
     template: `
@@ -104,7 +117,7 @@ export const ToDeadline: Story = {
 
 export const DurationTimer: Story = {
   args: { mode: 'duration', format: 'mm:ss' },
-  render: args => ({
+  render: (args) => ({
     components: { DzCountdown },
     setup: () => ({ args, span: 90_000 }),
     template: `
@@ -121,7 +134,7 @@ export const DurationTimer: Story = {
 
 export const CustomFormat: Story = {
   args: { format: 'DD:HH:mm:ss', size: 'lg' },
-  render: args => ({
+  render: (args) => ({
     components: { DzCountdown },
     setup: () => ({ args, target: Date.now() + 3 * 86_400_000 + 12_345 }),
     template: `
@@ -146,7 +159,7 @@ export const CustomFormat: Story = {
 
 export const SlotRender: Story = {
   args: { mode: 'duration' },
-  render: args => ({
+  render: (args) => ({
     components: { DzCountdown },
     setup: () => ({ args, span: 2 * 60 * 60 * 1000 + 34_000 }),
     template: `
@@ -178,7 +191,7 @@ export const PauseResume: Story = {
   render: () => ({
     components: { DzCountdown, DzButton },
     setup() {
-      const timer = ref<{ start: () => void, pause: () => void, reset: () => void } | null>(null)
+      const timer = ref<{ start: () => void; pause: () => void; reset: () => void } | null>(null)
       return { timer, span: 5 * 60 * 1000 }
     },
     template: `

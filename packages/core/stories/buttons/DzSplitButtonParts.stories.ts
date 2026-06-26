@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu } from '../../src/components/buttons'
 
@@ -49,6 +50,18 @@ export const Default: Story = {
       </DzSplitButton>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Action button is present and interactive
+    const actionBtn = canvas.getByRole('button', { name: /save/i })
+    await expect(actionBtn).toBeInTheDocument()
+    await expect(actionBtn).not.toBeDisabled()
+    await userEvent.click(actionBtn)
+    await expect(actionBtn).toHaveFocus()
+    // Menu chevron wrapper is present (slot override renders as div, not button)
+    const menuWrapper = canvasElement.querySelector('[data-state="idle"]')
+    await expect(menuWrapper).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------

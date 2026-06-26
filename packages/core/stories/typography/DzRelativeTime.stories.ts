@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzRelativeTime } from '../../src/components/typography'
 
@@ -73,6 +74,14 @@ const DAY = 24 * HOUR
 
 export const JustNow: Story = {
   args: { value: Date.now() - 3 * SECOND },
+  play: async ({ canvasElement }) => {
+    const time = canvasElement.querySelector('time')
+    await expect(time).toBeInTheDocument()
+    await expect(time!.tagName.toLowerCase()).toBe('time')
+    const datetime = time!.getAttribute('datetime')
+    await expect(datetime).toBeTruthy()
+    await expect(time).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -104,7 +113,7 @@ export const Localized: Story = {
 // ---------------------------------------------------------------------------
 
 export const InFeed: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzRelativeTime },
     setup() {
       const now = Date.now()

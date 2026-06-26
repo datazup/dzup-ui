@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzAffix } from '../../src/components/layout'
 
@@ -57,7 +58,25 @@ type Story = StoryObj<typeof meta>
 export const AffixTop: Story = {
   name: 'Affix Top',
   args: { offsetTop: 16 },
-  render: args => ({
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The affix root wrapper must be present in the DOM
+    const affixRoot =
+      canvasElement.querySelector('[data-affixed]') ??
+      canvasElement.querySelector('.dz-affix, [class]')
+    const wrapper = canvasElement.firstElementChild
+    await expect(wrapper).not.toBeNull()
+
+    // The inner content div (placeholder) should be visible
+    const content = canvasElement.querySelector('div > div')
+    await expect(content).not.toBeNull()
+
+    // The text content rendered by the slot should be discoverable
+    const slotText = canvas.getByText(/Scroll to pin me|Pinned to top/)
+    await expect(slotText).toBeInTheDocument()
+  },
+  render: (args) => ({
     components: { DzAffix },
     setup() {
       const container = ref<HTMLElement | null>(null)
@@ -96,7 +115,7 @@ export const AffixTop: Story = {
 export const AffixBottom: Story = {
   name: 'Affix Bottom',
   args: { offsetBottom: 16 },
-  render: args => ({
+  render: (args) => ({
     components: { DzAffix },
     setup() {
       const container = ref<HTMLElement | null>(null)

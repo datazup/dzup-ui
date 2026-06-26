@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzDescriptions, DzDescriptionsItem } from '../../src/components/data'
 
@@ -86,6 +87,20 @@ export const Horizontal: Story = {
   args: {
     items: sampleItems,
     ariaLabel: 'User profile',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const dl = canvasElement.querySelector('dl')
+    await expect(dl).not.toBeNull()
+
+    const terms = canvasElement.querySelectorAll('dt')
+    await expect(terms.length).toBe(sampleItems.length)
+
+    const details = canvasElement.querySelectorAll('dd')
+    await expect(details.length).toBe(sampleItems.length)
+
+    await expect(canvas.getByText('Ada Lovelace')).toBeVisible()
   },
 }
 

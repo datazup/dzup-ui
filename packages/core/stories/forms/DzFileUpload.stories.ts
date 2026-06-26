@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzFileUpload } from '../../src/components/forms'
 
@@ -89,13 +90,32 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
     },
     template: '<DzFileUpload v-bind="args" class="max-w-md" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Drop zone is rendered with role="button" and default aria-label
+    const dropzone = canvas.getByRole('button', { name: /upload files/i })
+    await expect(dropzone).toBeInTheDocument()
+    await expect(dropzone).toBeVisible()
+
+    // Drop zone is keyboard-accessible (tabindex="0")
+    await expect(dropzone).toHaveAttribute('tabindex', '0')
+
+    // Hidden file input exists (sr-only, not disabled)
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
+    await expect(input).toBeInTheDocument()
+    await expect(input).not.toBeDisabled()
+
+    // Default prompt text is shown
+    await expect(canvas.getByText(/drop files here or click to upload/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -127,7 +147,7 @@ export const MultipleFiles: Story = {
     multiple: true,
     maxFiles: 5,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -146,7 +166,7 @@ export const AcceptFilter: Story = {
     accept: 'image/*',
     multiple: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -165,7 +185,7 @@ export const MaxFileSize: Story = {
     maxSize: 5 * 1024 * 1024,
     multiple: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
@@ -185,13 +205,32 @@ export const MaxFileSize: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
     },
     template: '<DzFileUpload v-bind="args" class="max-w-md" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Drop zone is present but aria-disabled
+    const dropzone = canvas.getByRole('button', { name: /upload files/i })
+    await expect(dropzone).toBeInTheDocument()
+    await expect(dropzone).toHaveAttribute('aria-disabled', 'true')
+
+    // Keyboard navigation is blocked (tabindex="-1")
+    await expect(dropzone).toHaveAttribute('tabindex', '-1')
+
+    // The underlying file input is disabled
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
+    await expect(input).toBeDisabled()
+
+    // Root element carries data-disabled marker
+    const root = canvasElement.firstElementChild as HTMLElement
+    await expect(root).toHaveAttribute('data-disabled', '')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -204,13 +243,29 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please upload at least one file',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFileUpload },
     setup() {
       return { args }
     },
     template: '<DzFileUpload v-bind="args" class="max-w-md" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Drop zone advertises invalid state
+    const dropzone = canvas.getByRole('button', { name: /upload files/i })
+    await expect(dropzone).toHaveAttribute('aria-invalid', 'true')
+
+    // Error message is rendered with role="alert" and is visible
+    const alert = canvas.getByRole('alert')
+    await expect(alert).toBeVisible()
+    await expect(alert).toHaveTextContent('Please upload at least one file')
+
+    // Drop zone is still interactive (not disabled)
+    await expect(dropzone).toHaveAttribute('tabindex', '0')
+    await expect(dropzone).not.toHaveAttribute('aria-disabled')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -245,9 +300,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzFileUpload },
     template: '<DzFileUpload multiple class="max-w-md" />',
@@ -273,6 +326,26 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Initially no files selected
+    await expect(canvas.getByText(/none/i)).toBeVisible()
+
+    // Upload a mock file via the hidden input
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
+    const file = new File(['hello world'], 'test-document.txt', { type: 'text/plain' })
+    await userEvent.upload(input, file)
+
+    // File name appears in the file list and in the summary paragraph
+    await waitFor(() => expect(canvas.getByText('test-document.txt')).toBeVisible())
+    await expect(canvas.getByText(/test-document\.txt/)).toBeVisible()
+
+    // Remove button is present for the uploaded file
+    await expect(
+      canvas.getByRole('button', { name: /remove test-document\.txt/i }),
+    ).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

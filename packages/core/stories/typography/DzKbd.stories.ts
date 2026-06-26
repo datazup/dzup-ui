@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzKbd } from '../../src/components/typography'
 
@@ -21,7 +22,7 @@ const meta = {
   argTypes: {
     keys: {
       control: 'object',
-      description: 'Ordered keys to render as a combo (e.g. [\'mod\', \'k\'])',
+      description: "Ordered keys to render as a combo (e.g. ['mod', 'k'])",
       table: { category: 'Content' },
     },
     platformAware: {
@@ -63,13 +64,21 @@ type Story = StoryObj<typeof meta>
 
 export const SingleKey: Story = {
   args: { keys: undefined },
-  render: args => ({
+  render: (args) => ({
     components: { DzKbd },
     setup() {
       return { args }
     },
     template: '<p>Press <DzKbd v-bind="args">Esc</DzKbd> to close the dialog.</p>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const kbdElements = canvasElement.querySelectorAll('kbd')
+    await expect(kbdElements.length).toBeGreaterThan(0)
+    await expect(kbdElements[0]!.tagName.toLowerCase()).toBe('kbd')
+    await expect(canvas.getByText('Esc')).toBeInTheDocument()
+    await expect(canvas.getByText('Esc')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -78,7 +87,7 @@ export const SingleKey: Story = {
 
 export const Combo: Story = {
   name: 'Combo (keys prop)',
-  render: args => ({
+  render: (args) => ({
     components: { DzKbd },
     setup() {
       return { args }

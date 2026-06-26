@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzDeferredContent } from '../../src/components/layout'
 import { DzSkeleton } from '../../src/components/feedback'
@@ -61,21 +62,41 @@ type Story = StoryObj<typeof meta>
 // Shared scaffolding — a tall spacer pushes the deferred block below the fold
 // ---------------------------------------------------------------------------
 
-const spacerClass
-  = 'flex items-center justify-center rounded-[var(--dz-radius-md)] '
-    + 'border border-dashed border-[var(--dz-border)] '
-    + 'text-[var(--dz-muted-foreground)]'
+const spacerClass =
+  'flex items-center justify-center rounded-[var(--dz-radius-md)] ' +
+  'border border-dashed border-[var(--dz-border)] ' +
+  'text-[var(--dz-muted-foreground)]'
 
-const cardClass
-  = 'rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] '
-    + 'bg-[var(--dz-surface)] p-6 text-[var(--dz-foreground)]'
+const cardClass =
+  'rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] ' +
+  'bg-[var(--dz-surface)] p-6 text-[var(--dz-foreground)]'
 
 // ---------------------------------------------------------------------------
 // DeferredImage — a heavy image mounts only when scrolled into view
 // ---------------------------------------------------------------------------
 
 export const DeferredImage: Story = {
-  render: args => ({
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The wrapper should have aria-busy while content is not yet revealed
+    // (IntersectionObserver may fire immediately in jsdom, so we check either state)
+    const wrapper = canvasElement.querySelector('[aria-label="Deferred image"]')
+    await expect(wrapper).not.toBeNull()
+
+    // Wait for the content to be revealed (aria-busy removed, data-loaded set)
+    await waitFor(
+      () => {
+        expect(wrapper?.getAttribute('aria-busy')).toBeNull()
+      },
+      { timeout: 3000 },
+    )
+
+    // After reveal the deferred image must be in the DOM
+    const img = canvas.getByAltText('Lazily loaded scenery')
+    await expect(img).toBeInTheDocument()
+  },
+  render: (args) => ({
     components: { DzDeferredContent },
     setup: () => ({ args, spacerClass }),
     template: `
@@ -100,7 +121,7 @@ export const DeferredImage: Story = {
 // ---------------------------------------------------------------------------
 
 export const DeferredList: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzDeferredContent },
     setup() {
       const rows = Array.from({ length: 30 }, (_, i) => `Row #${i + 1}`)
@@ -124,7 +145,7 @@ export const DeferredList: Story = {
 // ---------------------------------------------------------------------------
 
 export const CustomPlaceholder: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzDeferredContent, DzSkeleton },
     setup: () => ({ args, spacerClass, cardClass }),
     template: `

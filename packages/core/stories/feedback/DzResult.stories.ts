@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzResult } from '../../src/components/feedback'
 
@@ -54,13 +55,24 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzResult },
     setup() {
       return { args }
     },
     template: '<DzResult v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const result = canvas.getByRole('status')
+    await expect(result).toBeInTheDocument()
+    await expect(canvas.getByRole('heading', { level: 3 })).toHaveTextContent(
+      'Operation Successful',
+    )
+    const icon = result.querySelector('svg[aria-hidden="true"]')
+    await expect(icon).not.toBeNull()
+    await expect(icon).toHaveAttribute('aria-hidden', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -183,9 +195,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzResult },
     template: `

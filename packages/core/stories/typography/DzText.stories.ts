@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzText } from '../../src/components/typography'
 
@@ -72,13 +73,21 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzText },
     setup() {
       return { args }
     },
     template: '<DzText v-bind="args">The quick brown fox jumps over the lazy dog.</DzText>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const el = canvasElement.querySelector('p')
+    await expect(el).toBeInTheDocument()
+    await expect(el).toBeVisible()
+    await expect(canvas.getByText(/the quick brown fox/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/the quick brown fox/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -242,9 +251,7 @@ export const LineClamp: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzText },
     template: `

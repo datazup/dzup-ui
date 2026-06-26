@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
 import { DzButton } from '../../src/components/buttons'
@@ -73,6 +74,18 @@ export const Default: Story = {
       </DzCard>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const heading = canvas.getByRole('heading', { level: 3 })
+    await expect(heading).toBeInTheDocument()
+    await expect(heading).toHaveTextContent('Card Title')
+    const cancelButton = canvas.getByRole('button', { name: /cancel/i })
+    await expect(cancelButton).toBeInTheDocument()
+    const confirmButton = canvas.getByRole('button', { name: /confirm/i })
+    await expect(confirmButton).toBeInTheDocument()
+    await userEvent.click(confirmButton)
+    await expect(confirmButton).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

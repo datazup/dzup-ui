@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzBlockquote } from '../../src/components/typography'
 
@@ -36,7 +37,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzBlockquote },
     setup() {
       return { args }
@@ -47,6 +48,14 @@ export const Default: Story = {
       </DzBlockquote>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const blockquote = canvasElement.querySelector('blockquote')
+    await expect(blockquote).toBeInTheDocument()
+    await expect(blockquote!.tagName.toLowerCase()).toBe('blockquote')
+    await expect(canvas.getByText(/the only way to do great work/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/the only way to do great work/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -164,9 +173,7 @@ export const WithCiteAttribute: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzBlockquote },
     template: `

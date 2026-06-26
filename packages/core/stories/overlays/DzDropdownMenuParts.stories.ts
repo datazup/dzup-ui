@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
@@ -70,6 +71,30 @@ export const Default: Story = {
       </DzDropdownMenu>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /options/i })
+
+    // Menu is closed initially
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click trigger to open menu
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // Menu panel is portaled to document.body — query from there
+    const body = within(document.body)
+    const menu = body.getByRole('menu')
+    await expect(menu).toBeVisible()
+
+    // All menu items are present
+    const items = body.getAllByRole('menuitem')
+    await expect(items.length).toBeGreaterThan(0)
+
+    // Escape dismisses the menu
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -174,4 +199,29 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open accessible menu/i })
+
+    // Trigger exposes aria-haspopup="menu"
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
+
+    // Tab to trigger and open with Enter key
+    trigger.focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+
+    const body = within(document.body)
+    const menu = body.getByRole('menu')
+    await expect(menu).toBeVisible()
+
+    // Arrow-down moves focus through menu items
+    await userEvent.keyboard('{ArrowDown}')
+    const items = body.getAllByRole('menuitem')
+    await expect(items.length).toBeGreaterThan(0)
+
+    // Escape closes the menu and returns focus to the trigger
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }

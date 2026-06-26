@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzTooltip, DzTooltipContent, DzTooltipTrigger } from '../../src/components/overlays'
@@ -53,6 +54,25 @@ export const Default: Story = {
       </DzTooltip>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // DzTooltipContent is portalled to document.body (Reka UI TooltipPortal, ADR-07),
+    // so the tooltip element lives outside canvasElement.
+    const body = within(document.body)
+
+    // Tooltip is not present before hovering.
+    await expect(body.queryByRole('tooltip')).not.toBeInTheDocument()
+
+    // Hovering the trigger reveals the tooltip content.
+    const trigger = canvas.getByRole('button', { name: /Hover me/i })
+    await userEvent.hover(trigger)
+    await waitFor(() => expect(body.getByRole('tooltip')).toBeVisible())
+    await expect(body.getByRole('tooltip')).toHaveTextContent('This is a helpful tooltip label')
+
+    // Moving the pointer away hides the tooltip.
+    await userEvent.unhover(trigger)
+    await waitFor(() => expect(body.queryByRole('tooltip')).not.toBeVisible())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -163,4 +183,26 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // DzTooltipContent is portalled to document.body (Reka UI TooltipPortal, ADR-07).
+    const body = within(document.body)
+
+    // Tab-focus onto the first trigger ("Save") reveals its tooltip via keyboard.
+    const saveTrigger = canvas.getByRole('button', { name: /Save/i })
+    await userEvent.tab()
+    await expect(saveTrigger).toHaveFocus()
+    await waitFor(() => expect(body.getByRole('tooltip')).toBeVisible())
+    await expect(body.getByRole('tooltip')).toHaveTextContent('Save changes (Ctrl+S)')
+
+    // The trigger carries aria-describedby pointing at the tooltip element.
+    const tooltipEl = body.getByRole('tooltip')
+    const describedById = saveTrigger.getAttribute('aria-describedby')
+    await expect(describedById).toBeTruthy()
+    await expect(tooltipEl.id).toBe(describedById)
+
+    // Pressing Escape dismisses the tooltip.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body.queryByRole('tooltip')).not.toBeVisible())
+  },
 }

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzTimePicker } from '../../src/components/forms'
 
@@ -153,13 +154,27 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTimePicker },
     setup() {
       return { args }
     },
     template: '<DzTimePicker v-bind="args" class="max-w-xs" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // The trigger is a button with aria-haspopup; clicking it opens the popover
+    const trigger = canvas.getByRole('button', { name: /select time/i })
+    expect(trigger).toBeVisible()
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.click(trigger)
+    // After opening, the Hours listbox should appear in the document
+    await waitFor(() => expect(canvas.getByRole('listbox', { name: /hours/i })).toBeVisible())
+    // Minutes column is also present
+    expect(canvas.getByRole('listbox', { name: /minutes/i })).toBeVisible()
+    // The trigger should now report expanded state
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -299,6 +314,26 @@ export const NoFooter: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /pick a time/i })
+    await userEvent.click(trigger)
+    // Panel opens — no Cancel/OK footer buttons present
+    await waitFor(() => expect(canvas.getByRole('listbox', { name: /hours/i })).toBeVisible())
+    expect(canvas.queryByRole('button', { name: /ok/i })).toBeNull()
+    // Click the "09" hour option; step=15 so minutes are 00, 15, 30, 45
+    const hourListbox = canvas.getByRole('listbox', { name: /hours/i })
+    const hour9 = within(hourListbox).getByText('09')
+    await userEvent.click(hour9)
+    // After selecting an hour the minute column is visible and the hour is marked selected
+    await waitFor(() => expect(hour9).toHaveAttribute('aria-selected', 'true'))
+    // Select minute "00"
+    const minuteListbox = canvas.getByRole('listbox', { name: /minutes/i })
+    const minute00 = within(minuteListbox).getByText('00')
+    await userEvent.click(minute00)
+    // With footer=false the value commits immediately and the display text updates
+    await waitFor(() => expect(trigger).not.toHaveAttribute('aria-expanded', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -324,7 +359,7 @@ export const MinimalTrigger: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzTimePicker },
     setup() {
       return { args }
@@ -343,7 +378,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please select a valid time',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzTimePicker },
     setup() {
       return { args }
@@ -387,6 +422,27 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /pick a time/i })
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getByRole('listbox', { name: /hours/i })).toBeVisible())
+    // Select hour 14 and minute 30
+    const hourListbox = canvas.getByRole('listbox', { name: /hours/i })
+    await userEvent.click(within(hourListbox).getByText('14'))
+    await waitFor(() =>
+      expect(within(hourListbox).getByText('14')).toHaveAttribute('aria-selected', 'true'),
+    )
+    const minuteListbox = canvas.getByRole('listbox', { name: /minutes/i })
+    await userEvent.click(within(minuteListbox).getByText('30'))
+    // Confirm via the OK footer button
+    const okButton = canvas.getByRole('button', { name: /ok/i })
+    await userEvent.click(okButton)
+    // Panel closes after confirm
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    // The committed value appears in the output text
+    expect(canvas.getByText('02:30 PM')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

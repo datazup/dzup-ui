@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import type { DateRangeValue } from '../../src/components/forms'
 import { DzDateRangePicker } from '../../src/components/forms'
@@ -97,13 +98,32 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzDateRangePicker },
     setup() {
       return { args }
     },
     template: '<DzDateRangePicker v-bind="args" class="max-w-sm" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The calendar trigger button opens the range picker overlay.
+    const trigger = canvas.getByRole('button', { name: /open date range picker/i })
+    expect(trigger).toBeInTheDocument()
+
+    // Calendar panel should not be visible before interaction.
+    expect(canvas.queryByRole('grid')).toBeNull()
+
+    // Click the trigger to open the calendar.
+    await userEvent.click(trigger)
+
+    // At least one calendar grid (month view) must become visible.
+    await waitFor(() => expect(canvas.getAllByRole('grid').length).toBeGreaterThanOrEqual(1))
+
+    // Day cells are rendered as gridcells.
+    await waitFor(() => expect(canvas.getAllByRole('gridcell').length).toBeGreaterThan(0))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -150,7 +170,7 @@ export const AllSizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzDateRangePicker },
     setup() {
       return { args }
@@ -186,7 +206,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'A valid date range is required',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzDateRangePicker },
     setup() {
       return { args }
@@ -218,9 +238,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzDateRangePicker },
     template: `
@@ -251,6 +269,33 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the range picker via the trigger button.
+    const trigger = canvas.getByRole('button', { name: /open date range picker/i })
+    await userEvent.click(trigger)
+
+    // Calendar grid must appear.
+    await waitFor(() => expect(canvas.getAllByRole('grid').length).toBeGreaterThanOrEqual(1))
+
+    // Click day "10" as the start date — present in every month.
+    const cells = canvas.getAllByRole('gridcell')
+    const day10 = cells.find((el) => el.textContent?.trim() === '10')
+    expect(day10).toBeDefined()
+    if (day10) await userEvent.click(day10)
+
+    // Click day "15" as the end date.
+    const cells2 = canvas.getAllByRole('gridcell')
+    const day15 = cells2.find((el) => el.textContent?.trim() === '15')
+    expect(day15).toBeDefined()
+    if (day15) await userEvent.click(day15)
+
+    // After selecting both dates the output text should reflect the range.
+    await waitFor(() =>
+      expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------

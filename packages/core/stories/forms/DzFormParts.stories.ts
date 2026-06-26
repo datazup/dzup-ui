@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzFormDescription,
   DzFormField,
@@ -65,7 +66,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput },
     setup() {
       return { args }
@@ -79,6 +80,19 @@ export const Default: Story = {
       </DzFormField>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Field group is in the DOM
+    await expect(canvas.getByRole('group')).toBeInTheDocument()
+    // Label is associated with the input via for/id wiring
+    const input = canvas.getByLabelText('Email Address')
+    await expect(input).toBeInTheDocument()
+    // Default story has no required prop — aria-required should be absent
+    await expect(input).not.toHaveAttribute('aria-required')
+    // Input accepts typing
+    await userEvent.type(input, 'test@example.com')
+    await expect(input).toHaveValue('test@example.com')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -98,6 +112,19 @@ export const Required: Story = {
       </DzFormField>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Label associates with the input via for/id
+    const input = canvas.getByLabelText('Username')
+    await expect(input).toBeInTheDocument()
+    // DzInput propagates required from DzFormField context → aria-required="true"
+    await expect(input).toHaveAttribute('aria-required', 'true')
+    // The label's data-required marker is present (visual asterisk rendered)
+    const label = canvas.getByText('Username', { selector: 'label' })
+    await expect(label).toHaveAttribute('data-required', '')
+    // No error message should be visible in the default required state
+    await waitFor(() => expect(canvas.queryByRole('alert')).toBeNull())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -117,6 +144,20 @@ export const WithError: Story = {
       </DzFormField>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Error message renders immediately (invalid + error props already set)
+    const alert = await waitFor(() => canvas.getByRole('alert'))
+    await expect(alert).toBeVisible()
+    await expect(alert).toHaveTextContent('Email address is required')
+    // Input is associated with label
+    const input = canvas.getByLabelText('Email')
+    await expect(input).toBeInTheDocument()
+    // DzInput picks up invalid state from context → aria-invalid="true"
+    await expect(input).toHaveAttribute('aria-invalid', 'true')
+    // Field group carries data-invalid marker
+    await expect(canvas.getByRole('group')).toHaveAttribute('data-invalid', '')
+  },
 }
 
 // ---------------------------------------------------------------------------

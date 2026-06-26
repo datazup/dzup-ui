@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzList, DzListItem } from '../../src/components/data'
 
 /**
@@ -47,13 +48,21 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzListItem },
     setup() {
       return { args }
     },
     template: '<DzListItem v-bind="args">A simple list item</DzListItem>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const item = canvas.getByRole('listitem')
+    await expect(item).toBeInTheDocument()
+    await expect(item).toBeVisible()
+    await expect(canvas.getByText('A simple list item')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -101,6 +110,20 @@ export const ActiveState: Story = {
       </DzList>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const items = canvas.getAllByRole('listitem')
+    await expect(items).toHaveLength(3)
+
+    const dashboardItem = canvas.getByText('Dashboard')
+    await userEvent.click(dashboardItem)
+
+    await waitFor(() => {
+      const li = dashboardItem.closest('[role="listitem"]')
+      expect(li).toHaveAttribute('aria-selected', 'true')
+    })
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -143,7 +166,7 @@ export const WithSlots: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzListItem },
     setup() {
       return { args }

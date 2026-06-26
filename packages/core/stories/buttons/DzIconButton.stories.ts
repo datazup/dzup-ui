@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import {
   ChevronLeft,
@@ -95,7 +96,16 @@ type Story = StoryObj<typeof meta>
 // Default
 // ---------------------------------------------------------------------------
 
-export const Default: Story = {}
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const btn = canvas.getByRole('button', { name: /add item/i })
+    await expect(btn).toBeInTheDocument()
+    await expect(btn).toHaveAttribute('aria-label')
+    await userEvent.click(btn)
+    await expect(btn).toHaveFocus()
+  },
+}
 
 // ---------------------------------------------------------------------------
 // All Sizes
@@ -105,7 +115,9 @@ export const AllSizes: Story = {
   name: 'Size Gallery',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Plus } },
+    setup() {
+      return { Plus }
+    },
     template: `
       <div class="flex items-end gap-4">
         <div class="text-center">
@@ -141,7 +153,9 @@ export const AllVariants: Story = {
   name: 'Variant Gallery',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Heart } },
+    setup() {
+      return { Heart }
+    },
     template: `
       <div class="flex gap-4 items-center">
         <div class="text-center">
@@ -177,7 +191,9 @@ export const AllTones: Story = {
   name: 'Tone Gallery',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Star } },
+    setup() {
+      return { Star }
+    },
     template: `
       <div class="flex gap-4 items-center">
         <div class="text-center">
@@ -216,7 +232,9 @@ export const AllTones: Story = {
 export const States: Story = {
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Plus } },
+    setup() {
+      return { Plus }
+    },
     template: `
       <div class="flex gap-4 items-center">
         <div class="text-center">
@@ -256,6 +274,13 @@ export const Disabled: Story = {
     disabled: true,
     ariaLabel: 'Disabled action',
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const btn = canvas.getByRole('button', { name: /disabled action/i })
+    await expect(btn).toBeInTheDocument()
+    await expect(btn).toBeDisabled()
+    await expect(btn).toHaveAttribute('aria-disabled', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -264,12 +289,12 @@ export const Disabled: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Heart } },
+    setup() {
+      return { Heart }
+    },
     template: `
       <div class="flex gap-4 items-center">
         <DzIconButton :icon="Heart" aria-label="Solid" variant="solid" />
@@ -288,7 +313,9 @@ export const Interactive: Story = {
   name: 'Interactive: Toggle',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Heart } },
+    setup() {
+      return { Heart }
+    },
     data() {
       return { favorited: false }
     },
@@ -315,7 +342,9 @@ export const RealWorldToolbar: Story = {
   name: 'Real World: Toolbar',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Pencil, Trash2, Settings, Search } },
+    setup() {
+      return { Pencil, Trash2, Settings, Search }
+    },
     template: `
       <div class="flex gap-1 p-2 border rounded-lg">
         <DzIconButton :icon="Search" aria-label="Search" variant="ghost" tone="neutral" />
@@ -336,7 +365,9 @@ export const RealWorldPagination: Story = {
   name: 'Real World: Pagination',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { ChevronLeft, ChevronRight } },
+    setup() {
+      return { ChevronLeft, ChevronRight }
+    },
     template: `
       <div class="flex items-center gap-2">
         <DzIconButton :icon="ChevronLeft" aria-label="Previous page" variant="outline" tone="neutral" size="sm" />
@@ -355,7 +386,9 @@ export const RealWorldClose: Story = {
   name: 'Real World: Close Button',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { X } },
+    setup() {
+      return { X }
+    },
     template: `
       <div class="relative border rounded-lg p-4 pr-10 max-w-xs">
         <DzIconButton
@@ -381,7 +414,9 @@ export const Accessibility: Story = {
   name: 'Accessibility: Focus States',
   render: () => ({
     components: { DzIconButton },
-    setup() { return { Settings, Pencil, Trash2 } },
+    setup() {
+      return { Settings, Pencil, Trash2 }
+    },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">

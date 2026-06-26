@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzCaption } from '../../src/components/typography'
 
@@ -41,13 +42,21 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzCaption },
     setup() {
       return { args }
     },
     template: '<DzCaption v-bind="args">Last updated: 2 hours ago</DzCaption>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const small = canvasElement.querySelector('small')
+    await expect(small).toBeInTheDocument()
+    await expect(small!.tagName.toLowerCase()).toBe('small')
+    await expect(canvas.getByText(/last updated/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/last updated/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -151,9 +160,7 @@ export const AsMetadata: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzCaption },
     template: `

@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { TreeNode } from '../../src/components/data'
-import {
-  DzFormField,
-  DzFormLabel,
-  DzTreeSelect,
-} from '../../src/components/forms'
+import { DzFormField, DzFormLabel, DzTreeSelect } from '../../src/components/forms'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 
 const categories: TreeNode[] = [
@@ -14,10 +11,14 @@ const categories: TreeNode[] = [
     children: [
       { key: 'apple', label: 'Apple' },
       { key: 'banana', label: 'Banana' },
-      { key: 'citrus', label: 'Citrus', children: [
-        { key: 'orange', label: 'Orange' },
-        { key: 'lemon', label: 'Lemon' },
-      ] },
+      {
+        key: 'citrus',
+        label: 'Citrus',
+        children: [
+          { key: 'orange', label: 'Orange' },
+          { key: 'lemon', label: 'Lemon' },
+        ],
+      },
     ],
   },
   {
@@ -104,7 +105,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Single: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzTreeSelect },
     setup() {
       return { args }
@@ -119,6 +120,28 @@ export const Single: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Panel should be closed initially
+    const trigger = canvas.getByRole('combobox')
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+
+    // Click trigger to open the panel
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getByRole('tree')).toBeVisible())
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+
+    // Fruit branch is pre-expanded — Apple should be visible as a treeitem
+    await waitFor(() => expect(canvas.getByRole('treeitem', { name: /apple/i })).toBeVisible())
+
+    // Click Apple (a leaf node in the pre-expanded Fruit branch) to select it
+    await userEvent.click(canvas.getByRole('treeitem', { name: /apple/i }))
+
+    // Panel closes on single selection and the trigger reflects the chosen label
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
+    expect(trigger).toHaveTextContent(/apple/i)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -148,6 +171,32 @@ export const MultipleChips: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Two chips (Apple + Carrot) should be pre-rendered in the trigger
+    expect(canvas.getByRole('button', { name: /remove apple/i })).toBeInTheDocument()
+    expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument()
+
+    // Open the panel and verify the tree is shown
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getByRole('tree')).toBeVisible())
+
+    // Banana is visible (Fruit branch pre-expanded) — click it to add a third selection
+    await userEvent.click(canvas.getByRole('treeitem', { name: /banana/i }))
+
+    // Panel stays open in multiple mode; Banana chip should now appear
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: /remove banana/i })).toBeInTheDocument(),
+    )
+
+    // Remove the Apple chip without reopening
+    await userEvent.click(canvas.getByRole('button', { name: /remove apple/i }))
+    await waitFor(() =>
+      expect(canvas.queryByRole('button', { name: /remove apple/i })).not.toBeInTheDocument(),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -177,6 +226,30 @@ export const CheckboxPropagation: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open the panel
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getByRole('tree')).toBeVisible())
+
+    // All three top-level branches are pre-expanded — treeitems should be present
+    const items = canvas.getAllByRole('treeitem')
+    expect(items.length).toBeGreaterThan(3)
+
+    // Click the Carrot leaf — it should get a chip in the trigger
+    await userEvent.click(canvas.getByRole('treeitem', { name: /carrot/i }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: /remove carrot/i })).toBeInTheDocument(),
+    )
+
+    // Click the Vegetable parent — checkbox propagation should check Carrot + Potato
+    await userEvent.click(canvas.getByRole('treeitem', { name: /vegetable/i }))
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: /remove potato/i })).toBeInTheDocument(),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------

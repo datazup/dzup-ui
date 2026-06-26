@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzCascader } from '../../src/components/forms'
 
@@ -158,13 +159,39 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzCascader },
     setup() {
       return { args }
     },
     template: '<DzCascader v-bind="args" class="max-w-xs" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Trigger is a combobox button; initially collapsed.
+    const trigger = canvas.getByRole('combobox')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click opens the first-level listbox.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
+
+    // First item in the root column is "China" which has children.
+    const options = canvas.getAllByRole('option')
+    const chinaOption = options.find((el) => el.textContent?.includes('China'))!
+    await userEvent.click(chinaOption)
+
+    // Clicking a parent reveals the second-level listbox (two listboxes now visible).
+    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))
+
+    // The child column contains Zhejiang as first option.
+    await waitFor(() =>
+      expect(canvas.getAllByRole('option').some((el) => el.textContent?.includes('Zhejiang'))).toBe(
+        true,
+      ),
+    )
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -186,6 +213,36 @@ export const ChangeOnSelect: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('combobox')
+
+    // Open the panel.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
+
+    // Click "USA" (a parent) — with change-on-select it commits immediately.
+    const usaOption = canvas.getAllByRole('option').find((el) => el.textContent?.includes('USA'))!
+    await userEvent.click(usaOption)
+
+    // Panel stays open (change-on-select keeps it open to drill deeper).
+    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))
+
+    // Click the leaf "California → Los Angeles" path: click California first.
+    const californiaOption = canvas
+      .getAllByRole('option')
+      .find((el) => el.textContent?.includes('California'))!
+    await userEvent.click(californiaOption)
+    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))
+
+    // Select leaf "Los Angeles" — panel closes and trigger shows the full path.
+    const laOption = canvas
+      .getAllByRole('option')
+      .find((el) => el.textContent?.includes('Los Angeles'))!
+    await userEvent.click(laOption)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    await expect(trigger).toHaveTextContent(/Los Angeles/)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -226,6 +283,34 @@ export const Filterable: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('combobox')
+
+    // Open the panel.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(canvas.getByRole('searchbox')).toBeVisible())
+
+    // Type a query — flat listbox of matching paths appears.
+    const searchInput = canvas.getByRole('searchbox')
+    await userEvent.type(searchInput, 'hang')
+    await waitFor(() => expect(canvas.getByRole('listbox')).toBeVisible())
+
+    // "Hangzhou" path should appear as a flat option.
+    await waitFor(() =>
+      expect(canvas.getAllByRole('option').some((el) => el.textContent?.includes('Hangzhou'))).toBe(
+        true,
+      ),
+    )
+
+    // Click the Hangzhou option — panel closes and trigger shows the selected path.
+    const hangzhouOption = canvas
+      .getAllByRole('option')
+      .find((el) => el.textContent?.includes('Hangzhou'))!
+    await userEvent.click(hangzhouOption)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    await expect(trigger).toHaveTextContent(/Hangzhou/)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -261,7 +346,7 @@ export const InvalidState: Story = {
     invalid: true,
     error: 'Please select a region',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzCascader },
     setup() {
       return { args }
@@ -276,7 +361,7 @@ export const InvalidState: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: args => ({
+  render: (args) => ({
     components: { DzCascader },
     setup() {
       return { args }

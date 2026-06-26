@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzMasonry } from '../../src/components/layout'
 
@@ -44,7 +45,8 @@ const meta = {
     },
     sequential: {
       control: 'boolean',
-      description: 'CSS multi-column fast path (true) vs. measured shortest-column balancing (false)',
+      description:
+        'CSS multi-column fast path (true) vs. measured shortest-column balancing (false)',
       table: { category: 'Behavior', defaultValue: { summary: 'true' } },
     },
     ordered: {
@@ -97,6 +99,39 @@ function tiles(count: number): string {
 }
 
 // ---------------------------------------------------------------------------
+// Default -- basic 3-column CSS fast path with 9 tiles
+// ---------------------------------------------------------------------------
+
+export const Default: Story = {
+  render: (args) => ({
+    components: { DzMasonry },
+    setup() {
+      return { args }
+    },
+    template: `
+      <DzMasonry v-bind="args" aria-label="Default masonry">
+        ${tiles(9)}
+      </DzMasonry>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The masonry root is rendered as a div with the aria-label we set
+    const container = canvas.getByRole('generic', { name: 'Default masonry' })
+    await expect(container).toBeInTheDocument()
+
+    // 9 tiles should be in the DOM as direct children
+    const items = container.querySelectorAll(':scope > div')
+    await expect(items.length).toBe(9)
+
+    // Each tile shows a 1-based number — verify first and last are visible
+    await expect(canvas.getByText('1')).toBeVisible()
+    await expect(canvas.getByText('9')).toBeVisible()
+  },
+}
+
+// ---------------------------------------------------------------------------
 // ImageWall -- exact shortest-column balancing (measured path)
 // ---------------------------------------------------------------------------
 
@@ -107,7 +142,7 @@ export const ImageWall: Story = {
     gap: 'md',
     sequential: false,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzMasonry },
     setup() {
       return { args }
@@ -131,7 +166,7 @@ export const CardFeed: Story = {
     gap: 'lg',
     sequential: true,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzMasonry },
     setup() {
       const cards = Array.from({ length: 9 }, (_, i) => ({
@@ -212,7 +247,7 @@ export const DarkMode: Story = {
     gap: 'md',
     sequential: false,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzMasonry },
     setup() {
       return { args }

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 import { DzContainer } from '../../src/components/layout'
 
@@ -75,7 +76,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzContainer },
     setup() {
       return { args }
@@ -86,6 +87,14 @@ export const Default: Story = {
       </DzContainer>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const container = canvasElement.querySelector('div')
+    await expect(container).toBeInTheDocument()
+    const content = canvas.getByText('Content inside a default DzContainer.')
+    await expect(content).toBeInTheDocument()
+    await expect(container).toContainElement(content)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -120,7 +129,7 @@ export const NoPadding: Story = {
   args: {
     padding: false,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzContainer },
     setup() {
       return { args }
@@ -145,7 +154,7 @@ export const NotCentered: Story = {
     centered: false,
     maxWidth: 'md',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzContainer },
     setup() {
       return { args }
@@ -190,9 +199,7 @@ export const PolymorphicAs: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzContainer },
     template: `

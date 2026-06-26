@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzSpinner } from '../../src/components/feedback'
 
@@ -48,13 +49,22 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzSpinner },
     setup() {
       return { args }
     },
     template: '<DzSpinner v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const spinner = canvas.getByRole('status')
+    await expect(spinner).toBeInTheDocument()
+    await expect(spinner).toBeVisible()
+    await expect(spinner).toHaveAttribute('aria-label', 'Loading')
+    const svg = spinner.querySelector('svg')
+    await expect(svg).toHaveAttribute('aria-hidden', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -174,9 +184,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSpinner },
     template: `

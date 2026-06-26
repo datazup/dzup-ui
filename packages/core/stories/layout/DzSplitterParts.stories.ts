@@ -1,9 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import {
-  DzSplitter,
-  DzSplitterHandle,
-  DzSplitterPanel,
-} from '../../src/components/layout'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { DzSplitter, DzSplitterHandle, DzSplitterPanel } from '../../src/components/layout'
 
 /**
  * DzSplitter compound sub-parts: DzSplitterPanel and DzSplitterHandle.
@@ -66,6 +63,28 @@ export const Default: Story = {
       </DzSplitter>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const separator = canvas.getByRole('separator')
+
+    // Handle renders as separator with horizontal data-orientation
+    await expect(separator).toBeInTheDocument()
+    await expect(separator).toHaveAttribute('data-orientation', 'horizontal')
+
+    // Separator is keyboard focusable
+    await expect(separator).toHaveAttribute('tabindex', '0')
+
+    // Keyboard resize: ArrowRight should shift the split point
+    separator.focus()
+    const beforeValue = separator.getAttribute('aria-valuenow')
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(separator.getAttribute('aria-valuenow')).not.toBe(beforeValue))
+
+    // ArrowLeft moves it back toward the original position
+    const afterRight = separator.getAttribute('aria-valuenow')
+    await userEvent.keyboard('{ArrowLeft}')
+    await waitFor(() => expect(separator.getAttribute('aria-valuenow')).not.toBe(afterRight))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -96,6 +115,32 @@ export const Nested: Story = {
       </DzSplitter>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const separators = canvas.getAllByRole('separator')
+
+    // Two splitters → two separators
+    await expect(separators).toHaveLength(2)
+
+    // Outer separator is horizontal
+    const [outerSep, innerSep] = separators
+    await expect(outerSep).toHaveAttribute('data-orientation', 'horizontal')
+
+    // Inner separator belongs to the vertical splitter
+    await expect(innerSep).toHaveAttribute('data-orientation', 'vertical')
+
+    // Keyboard resize on the outer (horizontal) handle
+    outerSep.focus()
+    const outerBefore = outerSep.getAttribute('aria-valuenow')
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(outerSep.getAttribute('aria-valuenow')).not.toBe(outerBefore))
+
+    // Keyboard resize on the inner (vertical) handle
+    innerSep.focus()
+    const innerBefore = innerSep.getAttribute('aria-valuenow')
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(innerSep.getAttribute('aria-valuenow')).not.toBe(innerBefore))
+  },
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzFlex } from '../../src/components/layout'
 
@@ -95,7 +96,7 @@ function box(label: string, color = 'blue') {
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzFlex },
     setup() {
       return { args }
@@ -108,6 +109,15 @@ export const Default: Story = {
       </DzFlex>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const flexContainer = canvasElement.querySelector('div')
+    await expect(flexContainer).toBeInTheDocument()
+    const itemA = canvas.getByText('Item A')
+    await expect(itemA).toBeInTheDocument()
+    const itemB = canvas.getByText('Item B')
+    await expect(itemB).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -213,7 +223,7 @@ export const Wrapping: Story = {
     wrap: true,
     gap: 'md',
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzFlex },
     setup() {
       return { args }
@@ -256,9 +266,7 @@ export const InlineFlex: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzFlex },
     template: `

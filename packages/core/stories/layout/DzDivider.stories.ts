@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzDivider, DzFlex, DzStack } from '../../src/components/layout'
 
@@ -62,7 +63,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzDivider },
     setup() {
       return { args }
@@ -75,6 +76,13 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const separator = canvas.getByRole('separator')
+    await expect(separator).toBeInTheDocument()
+    await expect(separator).toHaveAttribute('aria-orientation', 'horizontal')
+    await expect(separator).not.toHaveAttribute('aria-hidden')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -166,9 +174,7 @@ export const VerticalInToolbar: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzDivider },
     template: `
