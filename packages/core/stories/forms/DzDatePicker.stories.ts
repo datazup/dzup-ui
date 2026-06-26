@@ -107,6 +107,8 @@ export const Default: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    // Calendar popup teleports to iframe body — query via ownerDocument.body
+    const iframeBody = within(canvasElement.ownerDocument.body)
 
     // The calendar trigger button opens the picker overlay.
     const trigger = canvas.getByRole('button', { name: /open date picker/i })
@@ -115,11 +117,11 @@ export const Default: Story = {
     // Click the trigger to open the calendar.
     await userEvent.click(trigger)
 
-    // Calendar grid (month view) must become visible (may be portalled via screen).
-    await waitFor(() => expect(screen.getByRole('grid')).toBeVisible(), { timeout: 3000 })
+    // Calendar grid (month view) must become visible.
+    await waitFor(() => expect(iframeBody.getByRole('grid')).toBeVisible(), { timeout: 3000 })
 
     // Day cells are rendered as gridcells.
-    await waitFor(() => expect(screen.getAllByRole('gridcell').length).toBeGreaterThan(0))
+    await waitFor(() => expect(iframeBody.getAllByRole('gridcell').length).toBeGreaterThan(0))
   },
 }
 
@@ -284,22 +286,23 @@ export const Interactive: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    const iframeBody = within(canvasElement.ownerDocument.body)
 
     // Open the calendar via the trigger button.
     const trigger = canvas.getByRole('button', { name: /open date picker/i })
     await userEvent.click(trigger)
 
-    // Wait for the calendar grid to appear (may be portalled, use screen).
-    await waitFor(() => expect(screen.getByRole('grid')).toBeVisible(), { timeout: 3000 })
+    // Wait for the calendar grid to appear (portalled to iframe body).
+    await waitFor(() => expect(iframeBody.getByRole('grid')).toBeVisible(), { timeout: 3000 })
 
     // Pick day "15" — it appears in every month so is always present and enabled.
-    const cells = screen.getAllByRole('gridcell')
+    const cells = iframeBody.getAllByRole('gridcell')
     const day15 = cells.find((el) => el.textContent?.trim() === '15')
     expect(day15).toBeDefined()
     if (day15) await userEvent.click(day15)
 
     // After selection the calendar should close and the output text should update.
-    await waitFor(() => expect(screen.queryByRole('grid')).toBeNull(), { timeout: 3000 })
+    await waitFor(() => expect(iframeBody.queryByRole('grid')).toBeNull(), { timeout: 3000 })
     await waitFor(() =>
       expect(canvas.getByText(/selected:/i).closest('p')).not.toHaveTextContent('none'),
     )
