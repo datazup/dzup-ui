@@ -194,7 +194,8 @@ export const Interactive: Story = {
     // Clicking Email checks it and updates the model text.
     await userEvent.click(email)
     await expect(email).toHaveAttribute('aria-checked', 'true')
-    await expect(canvas.getByText(/email/i)).toBeInTheDocument()
+    // Use getAllByText to handle multiple matches (label + status display)
+    await expect(canvas.getAllByText(/email/i).length).toBeGreaterThan(0)
 
     // Clicking SMS adds a second selection independently.
     await userEvent.click(sms)

@@ -129,9 +129,11 @@ export const Single: Story = {
     await userEvent.click(amsterdam)
     await waitFor(() => expect(amsterdam).toHaveAttribute('aria-selected', 'true'))
 
-    // ArrowDown moves focus to Berlin.
+    // ArrowDown moves keyboard focus to Berlin; press Enter/Space to select.
     await userEvent.keyboard('{ArrowDown}')
     const berlin = canvas.getByRole('option', { name: /^berlin$/i })
+    await expect(berlin).toBeInTheDocument()
+    await userEvent.keyboard('{Enter}')
     await waitFor(() => expect(berlin).toHaveAttribute('aria-selected', 'true'))
 
     // Disabled option (none in Single story) — verify Copenhagen is present.

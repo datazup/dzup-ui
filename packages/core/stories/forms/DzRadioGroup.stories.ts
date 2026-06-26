@@ -202,7 +202,8 @@ export const Interactive: Story = {
     // Click Standard selects it exclusively.
     await userEvent.click(standard)
     await expect(standard).toHaveAttribute('aria-checked', 'true')
-    await expect(canvas.getByText(/standard/i)).toBeInTheDocument()
+    // Use getAllByText to handle multiple matches (label + status display)
+    await expect(canvas.getAllByText(/standard/i).length).toBeGreaterThan(0)
 
     // Click Express — radio group allows only one selection.
     await userEvent.click(express)
@@ -242,8 +243,8 @@ export const Accessibility: Story = {
 
     // ArrowDown moves focus+selection to second (roving tabindex).
     await userEvent.keyboard('{ArrowDown}')
-    await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'))
-    await expect(first).toHaveAttribute('aria-checked', 'false')
+    await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'), { timeout: 2000 })
+    await waitFor(() => expect(first).toHaveAttribute('aria-checked', 'false'))
   },
 }
 

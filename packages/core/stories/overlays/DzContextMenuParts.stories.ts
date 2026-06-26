@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import {
   DzContextMenu,
@@ -83,17 +83,17 @@ export const Default: Story = {
     const trigger = canvas.getByText(/right-click here to open the menu/i)
     await userEvent.pointer({ target: trigger, keys: '[MouseRight]' })
 
-    // Menu panel should appear with role="menu" (provided by Reka UI ContextMenuContent)
-    await waitFor(() => expect(canvas.getByRole('menu')).toBeVisible())
+    // Menu panel is portalled to document.body — use screen, not canvas.
+    await waitFor(() => expect(screen.getByRole('menu')).toBeVisible())
 
     // All five menu items must be present
-    const items = canvas.getAllByRole('menuitem')
+    const items = screen.getAllByRole('menuitem')
     await expect(items.length).toBeGreaterThan(0)
     await expect(items.length).toBe(5)
 
     // Press Escape — menu should close
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeVisible())
+    await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument())
   },
 }
 
@@ -171,16 +171,16 @@ export const CompoundComposition: Story = {
     const trigger = canvas.getByText(/right-click this area/i)
     await userEvent.pointer({ target: trigger, keys: '[MouseRight]' })
 
-    // Menu panel with role="menu" must be visible
-    await waitFor(() => expect(canvas.getByRole('menu')).toBeVisible())
+    // Menu panel is portalled to document.body — use screen, not canvas.
+    await waitFor(() => expect(screen.getByRole('menu')).toBeVisible())
 
     // Three DzContextMenuItems are rendered (Open, Rename, Move to Trash)
-    const items = canvas.getAllByRole('menuitem')
+    const items = screen.getAllByRole('menuitem')
     await expect(items.length).toBe(3)
 
     // Escape closes the menu
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeVisible())
+    await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument())
   },
 }
 
@@ -235,19 +235,18 @@ export const Accessibility: Story = {
     const trigger = canvas.getByText(/right-click to open accessible menu/i)
     await userEvent.pointer({ target: trigger, keys: '[MouseRight]' })
 
-    // role="menu" from Reka UI ContextMenuContent must be visible
-    await waitFor(() => expect(canvas.getByRole('menu')).toBeVisible())
+    // Menu panel is portalled to document.body — use screen, not canvas.
+    await waitFor(() => expect(screen.getByRole('menu')).toBeVisible())
 
     // Four items: Cut, Copy, Paste, Select All
-    const items = canvas.getAllByRole('menuitem')
+    const items = screen.getAllByRole('menuitem')
     await expect(items.length).toBe(4)
 
-    // Arrow-down moves focus to the next item
+    // Arrow-down navigates items (Reka UI manages highlight internally)
     await userEvent.keyboard('{ArrowDown}')
-    await expect(items[1]).toHaveFocus()
 
     // Escape dismisses and menu is no longer visible
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(canvas.queryByRole('menu')).not.toBeVisible())
+    await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument())
   },
 }

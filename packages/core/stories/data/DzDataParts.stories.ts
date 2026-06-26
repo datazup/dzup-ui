@@ -219,7 +219,7 @@ export const DataGridAnatomy: Story = {
           </p>
         </div>
 
-        <DzDataGrid :columns="columns" :rows="rows" :pagination="pagination" aria-label="Team members">
+        <DzDataGrid :columns="columns" :rows="rows" :data="rows" :pagination="pagination" aria-label="Team members">
           <DzDataGridHeader />
           <DzDataGridBody />
           <DzDataGridPagination />

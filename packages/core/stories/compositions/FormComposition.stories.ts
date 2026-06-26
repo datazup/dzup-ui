@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
+import { expect, screen, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
@@ -50,19 +50,6 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   name: 'Create User Modal',
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    // The dialog trigger button must be rendered
-    const trigger = canvas.getByRole('button', { name: /Create User/i })
-    expect(trigger).toBeTruthy()
-    // Clicking the trigger opens the dialog; dialog role must appear
-    trigger.click()
-    const dialog = await canvas.findByRole('dialog')
-    expect(dialog).toBeTruthy()
-    // The submit button must be present inside the dialog
-    const submit = within(dialog).getByRole('button', { name: /Send Invitation/i })
-    expect(submit).toBeTruthy()
-  },
   render: () => ({
     components: {
       DzButton,
@@ -159,6 +146,19 @@ export const Default: Story = {
       </DzDialog>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // The dialog trigger button must be rendered
+    const trigger = canvas.getByRole('button', { name: /Create User/i })
+    expect(trigger).toBeTruthy()
+    // Dialog is portalled to document.body — use screen, not canvas.
+    trigger.click()
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toBeTruthy()
+    // The submit button must be present inside the dialog
+    const submit = within(dialog).getByRole('button', { name: /Send Invitation/i })
+    expect(submit).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------

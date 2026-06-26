@@ -1,0 +1,28 @@
+{
+  "name": "@dzup-ui/landing",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Public marketing/landing page for dzup-ui — the production front door into the free Storybook and (later) Pro components",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run --root ../.. apps/landing/src"
+  },
+  "dependencies": {
+    "@dzup-ui/core": "workspace:*",
+    "@dzup-ui/tokens": "workspace:*",
+    "lucide-vue-next": "^0.475.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.1.0",
+    "vitest": "^3.2.4"
+  }
+}

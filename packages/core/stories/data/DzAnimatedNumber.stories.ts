@@ -87,8 +87,9 @@ export const Integer: Story = {
     // The sr-only live region must be present for screen-reader announcements
     const liveRegion = canvasElement.querySelector('[aria-live="polite"]')
     expect(liveRegion).toBeTruthy()
-    // The visible figure span must have content (aria-hidden from SR)
-    const hiddenFigure = canvas.getByText(/\d/, { exact: false })
+    // The visible figure span must have content (aria-hidden from SR).
+    // Use querySelector on the aria-hidden wrapper to avoid matching the sr-only live region.
+    const hiddenFigure = canvasElement.querySelector('[aria-hidden="true"]')
     expect(hiddenFigure).toBeTruthy()
   },
   render: (args) => ({

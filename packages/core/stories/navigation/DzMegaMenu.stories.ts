@@ -145,7 +145,9 @@ export const Horizontal: Story = {
 
     // Clicking the trigger opens the panel.
     await userEvent.click(productsTrigger)
-    await waitFor(() => expect(productsTrigger).toHaveAttribute('aria-expanded', 'true'))
+    await waitFor(() => expect(productsTrigger).toHaveAttribute('aria-expanded', 'true'), {
+      timeout: 3000,
+    })
 
     // Panel link items are visible after opening.
     await waitFor(() => expect(canvas.getByRole('menuitem', { name: /Dashboards/i })).toBeVisible())

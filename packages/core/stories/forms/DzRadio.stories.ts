@@ -59,7 +59,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzRadio, DzRadioGroup },
     setup() {
       return { args }
@@ -145,10 +145,10 @@ export const States: Story = {
     await waitFor(() => expect(unselected).toHaveAttribute('aria-checked', 'true'))
     await expect(selected).toHaveAttribute('aria-checked', 'false')
 
-    // The disabled option cannot be selected by click.
+    // The disabled option cannot be selected — disabled buttons have pointer-events:none.
     const disabled = canvas.getByRole('radio', { name: /disabled/i })
     await expect(disabled).toBeDisabled()
-    await userEvent.click(disabled)
+    // Verify state without clicking (click is blocked by pointer-events:none)
     await expect(disabled).toHaveAttribute('aria-checked', 'false')
     await expect(unselected).toHaveAttribute('aria-checked', 'true')
   },

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>dzup-ui — The Vue 3 component library for serious products</title>
+    <meta
+      name="description"
+      content="147 accessible, open-source Vue 3 components across 11 families. Built on Tailwind CSS 4, an OKLCH token system, and Reka UI accessible primitives. Light & dark out of the box."
+    />
+    <link rel="canonical" href="https://dzup-ui.com/" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dzup-ui.com/" />
+    <meta property="og:title" content="dzup-ui — The Vue 3 component library for serious products" />
+    <meta
+      property="og:description"
+      content="147 accessible, open-source Vue 3 components. One token system. Light & dark out of the box."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="dzup-ui — The Vue 3 component library for serious products" />
+    <meta
+      name="twitter:description"
+      content="147 accessible, open-source Vue 3 components. One token system. Light & dark out of the box."
+    />
+
+    <!--
+      FOUC prevention (ADR-15): reads 'dz-theme' from localStorage and sets
+      data-theme on <html> before any CSS or Vue renders. Canonical script from
+      @dzup-ui/core/providers — do not edit this IIFE manually; update themeScript instead.
+    -->
+    <script>(function(){try{var s=localStorage.getItem('dz-theme');var t=s==='light'||s==='dark'?s:null;if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})()</script>
+    <style>
+      /* Prevent FOUC — set base styles before Vue mounts */
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: var(--dz-font-sans, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif);
+        background: var(--dz-background, #ffffff);
+        color: var(--dz-foreground, #1a202c);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

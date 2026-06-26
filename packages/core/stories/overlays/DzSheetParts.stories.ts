@@ -156,11 +156,11 @@ export const WithFormContent: Story = {
           <form class="space-y-4 mt-4" @submit.prevent>
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
-              <input type="text" value="Alice Johnson" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="text" value="Alice Johnson" placeholder="Full name" class="w-full border rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Email</label>
-              <input type="email" value="alice@example.com" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="email" value="alice@example.com" placeholder="Email address" class="w-full border rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Bio</label>
@@ -186,9 +186,10 @@ export const WithFormContent: Story = {
     const dialog = await screen.findByRole('dialog')
     await expect(dialog).toHaveAttribute('aria-modal', 'true')
 
-    // Form fields are present inside the sheet
-    await expect(within(dialog).getByLabelText(/name/i)).toBeVisible()
-    await expect(within(dialog).getByLabelText(/email/i)).toBeVisible()
+    // Form fields are present inside the sheet — use placeholder to locate inputs
+    // (labels lack `for` attribute so getByLabelText would fail)
+    await expect(within(dialog).getByPlaceholderText(/full name/i)).toBeVisible()
+    await expect(within(dialog).getByPlaceholderText(/email address/i)).toBeVisible()
 
     // Cancel (DzSheetClose) closes the sheet
     await userEvent.click(within(dialog).getByRole('button', { name: /cancel/i }))

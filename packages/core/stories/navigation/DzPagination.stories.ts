@@ -92,7 +92,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
+  render: (args) => ({
     components: { DzPagination },
     setup() {
       return { args }
@@ -168,7 +168,7 @@ export const Disabled: Story = {
     disabled: true,
     total: 100,
   },
-  render: args => ({
+  render: (args) => ({
     components: { DzPagination },
     setup() {
       return { args }
@@ -228,9 +228,7 @@ export const FewPages: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzPagination },
     template: `
@@ -264,18 +262,27 @@ export const Interactive: Story = {
     const canvas = within(canvasElement)
 
     // Page 1 is active and advertises aria-current="page".
-    await expect(canvas.getByRole('button', { name: '1' })).toHaveAttribute('aria-current', 'page')
+    await expect(canvas.getByRole('button', { name: 'Page 1' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
 
     // Next advances to page 2.
     await userEvent.click(canvas.getByRole('button', { name: 'Go to next page' }))
     await waitFor(() =>
-      expect(canvas.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page'),
+      expect(canvas.getByRole('button', { name: 'Page 2' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      ),
     )
 
     // Previous returns to page 1.
     await userEvent.click(canvas.getByRole('button', { name: 'Go to previous page' }))
     await waitFor(() =>
-      expect(canvas.getByRole('button', { name: '1' })).toHaveAttribute('aria-current', 'page'),
+      expect(canvas.getByRole('button', { name: 'Page 1' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      ),
     )
   },
 }

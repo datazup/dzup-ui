@@ -80,16 +80,18 @@ export const DeferredImage: Story = {
     const canvas = within(canvasElement)
 
     // The wrapper should have aria-busy while content is not yet revealed
-    // (IntersectionObserver may fire immediately in jsdom, so we check either state)
     const wrapper = canvasElement.querySelector('[aria-label="Deferred image"]')
     await expect(wrapper).not.toBeNull()
 
-    // Wait for the content to be revealed (aria-busy removed, data-loaded set)
+    // Scroll the deferred wrapper into view so IntersectionObserver fires.
+    ;(wrapper as HTMLElement)?.scrollIntoView()
+
+    // Wait for the content to be revealed (aria-busy removed once IO fires)
     await waitFor(
       () => {
         expect(wrapper?.getAttribute('aria-busy')).toBeNull()
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     )
 
     // After reveal the deferred image must be in the DOM

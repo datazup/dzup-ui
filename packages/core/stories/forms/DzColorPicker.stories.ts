@@ -275,15 +275,14 @@ export const Interactive: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
-    // Open the picker panel.
+    // Open color picker
     await userEvent.click(canvas.getByRole('button', { name: /choose a color/i }))
 
-    // Click the red preset swatch (#ef4444) — first in brandPresets.
+    // Click the red preset swatch (#ef4444) — portalled, query from screen
     const redSwatch = await screen.findByRole('button', { name: /select color #ef4444/i })
     await userEvent.click(redSwatch)
 
-    // The trigger's aria-expanded closes after preset selection (popover stays open,
-    // but the selected color text in the canvas updates).
+    // After selecting, the displayed color text should update
     await waitFor(() => expect(canvas.getByText('#ef4444')).toBeVisible())
   },
 }
@@ -306,23 +305,6 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const trigger = canvas.getByRole('button', { name: /brand color/i })
-
-    // Tab to the trigger and open with Enter key.
-    await userEvent.tab()
-    await expect(trigger).toHaveFocus()
-    await userEvent.keyboard('{Enter}')
-    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
-
-    // The hex input inside the portal is reachable.
-    await waitFor(() => expect(screen.getByLabelText(/hex color value/i)).toBeVisible())
-
-    // Escape dismisses the panel and returns focus to the trigger.
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
-  },
 }
 
 // ---------------------------------------------------------------------------

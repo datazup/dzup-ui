@@ -95,6 +95,13 @@ const SAMPLE = `
 
 export const TextMark: Story = {
   name: 'Text Mark',
+  render: (args) => ({
+    components: { DzWatermark },
+    setup() {
+      return { args, SAMPLE }
+    },
+    template: `<DzWatermark v-bind="args"><div v-html="SAMPLE" /></DzWatermark>`,
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     // Wrapper div (root) must be in the DOM
@@ -104,16 +111,9 @@ export const TextMark: Story = {
     const overlay = canvasElement.querySelector('[aria-hidden="true"]')
     expect(overlay).toBeTruthy()
     // Slotted content must be rendered inside the watermark wrapper
-    const heading = canvas.getByText(/Revenue|Forecast|logos/i)
+    const heading = canvas.getByText(/Revenue|Forecast/i)
     expect(heading).toBeTruthy()
   },
-  render: (args) => ({
-    components: { DzWatermark },
-    setup() {
-      return { args, SAMPLE }
-    },
-    template: `<DzWatermark v-bind="args"><div v-html="SAMPLE" /></DzWatermark>`,
-  }),
 }
 
 // ---------------------------------------------------------------------------

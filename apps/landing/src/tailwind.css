@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/* Scan landing and core sources for utility classes */
+@source "./**/*.{ts,vue}";
+@source "../../../packages/core/src/**/*.{ts,vue}";
+
+/* =========================================================================
+ * Landing design primitives — "elegant & refined" direction.
+ * Restrained gradients, generous whitespace, hairline borders, soft layered
+ * shadows, quiet motion. Shared globals so every section stays consistent.
+ * ========================================================================= */
+
+:root {
+  /* Soft, layered elevation — a tight contact shadow + a wide ambient one. */
+  --lp-shadow-sm:
+    0 1px 2px color-mix(in oklch, var(--dz-foreground, #000) 6%, transparent),
+    0 1px 1px color-mix(in oklch, var(--dz-foreground, #000) 4%, transparent);
+  --lp-shadow:
+    0 1px 2px color-mix(in oklch, var(--dz-foreground, #000) 5%, transparent),
+    0 12px 28px -12px color-mix(in oklch, var(--dz-foreground, #000) 18%, transparent);
+  --lp-shadow-lg:
+    0 1px 2px color-mix(in oklch, var(--dz-foreground, #000) 5%, transparent),
+    0 18px 40px -20px color-mix(in oklch, var(--dz-foreground, #000) 22%, transparent),
+    0 40px 80px -32px color-mix(in oklch, var(--dz-foreground, #000) 30%, transparent);
+
+  /* Hairline border — slightly translucent so it reads as a fine line. */
+  --lp-hairline: color-mix(in oklch, var(--dz-border, #e2e8f0) 75%, transparent);
+
+  /* Crisp top highlight that gives surfaces a faint glassy lift. */
+  --lp-highlight: inset 0 1px 0 color-mix(in oklch, #fff 60%, transparent);
+
+  /* Brand wash used for hero/CTA auroras and accents. */
+  --lp-brand: var(--dz-colors-primary-500, #6366f1);
+  --lp-brand-2: var(--dz-colors-secondary-500, #a855f7);
+
+  /* Fine self-tiling grain — a premium, near-subliminal texture (spec §6). */
+  --lp-grain:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Smooth color transition when re-theming (spec §7). */
+  --dz-landing-theme-transition:
+    background-color var(--dz-duration-normal, 240ms) var(--dz-ease-default, ease),
+    border-color var(--dz-duration-normal, 240ms) var(--dz-ease-default, ease),
+    color var(--dz-duration-normal, 240ms) var(--dz-ease-default, ease);
+
+  --lp-section-pad: clamp(72px, 11vw, 144px);
+  --lp-container: 1120px;
+}
+
+/* Dark mode deepens the glass highlight and shadow so depth survives the flip. */
+[data-theme="dark"] {
+  --lp-highlight: inset 0 1px 0 color-mix(in oklch, #fff 8%, transparent);
+  --lp-hairline: color-mix(in oklch, var(--dz-border, #2a2a35) 80%, transparent);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Balance multi-line headings for a typeset, refined look. */
+.lp-balance {
+  text-wrap: balance;
+}
+
+/* Brand gradient applied to text — refined primary → secondary sheen. */
+.lp-gradient-text {
+  background: linear-gradient(100deg,
+    var(--dz-colors-primary-600, #4f46e5) 0%,
+    var(--dz-colors-secondary-500, #a855f7) 55%,
+    var(--dz-colors-primary-500, #6366f1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Eyebrow: small uppercase pill above a section title — tinted, bordered. */
+.lp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 11px;
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 22%, transparent);
+  border-radius: var(--dz-radius-full, 9999px);
+  background: color-mix(in oklch, var(--dz-primary, #6366f1) 9%, transparent);
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dz-primary, #4f46e5);
+}
+
+.lp-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: var(--dz-radius-full, 9999px);
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in oklch, currentColor 22%, transparent);
+}
+
+/* Gradient hairline divider — a fading center line for section seams. */
+.lp-divider {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(to right,
+    transparent,
+    var(--lp-hairline) 18%,
+    color-mix(in oklch, var(--dz-primary, #6366f1) 30%, var(--lp-hairline)) 50%,
+    var(--lp-hairline) 82%,
+    transparent);
+}
+
+/* Aurora — soft multi-blob brand wash for hero/CTA backdrops. */
+.lp-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.lp-aurora::before,
+.lp-aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.7;
+}
+
+.lp-aurora::before {
+  width: 52%;
+  height: 60%;
+  top: -22%;
+  left: 8%;
+  background: radial-gradient(circle,
+    color-mix(in oklch, var(--lp-brand) 42%, transparent), transparent 68%);
+}
+
+.lp-aurora::after {
+  width: 46%;
+  height: 56%;
+  top: -16%;
+  right: 4%;
+  background: radial-gradient(circle,
+    color-mix(in oklch, var(--lp-brand-2) 38%, transparent), transparent 68%);
+}
+
+[data-theme="dark"] .lp-aurora::before,
+[data-theme="dark"] .lp-aurora::after {
+  opacity: 0.45;
+}
+
+/* Grain overlay — a faint film of noise for premium texture. */
+.lp-grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--lp-grain);
+  background-size: 160px 160px;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+}
+
+[data-theme="dark"] .lp-grain-layer {
+  opacity: 0.04;
+}
+
+/* Surface card — the canonical refined panel with a glassy top highlight. */
+.lp-card {
+  border: 1px solid var(--lp-hairline);
+  border-radius: var(--dz-radius-xl, 0.875rem);
+  background: var(--dz-surface, #fff);
+  box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
+  transition:
+    transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
+    box-shadow var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
+    border-color var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+}
+
+.lp-card--hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lp-shadow), var(--lp-highlight);
+  border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 32%, var(--lp-hairline));
+}
+
+/* =========================================================================
+ * Scroll-reveal (spec §7) — gentle fade + rise, staggerable via --reveal-delay.
+ * ========================================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s var(--dz-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    transform 0.7s var(--dz-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: opacity 0.2s linear;
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
+import { expect, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzAnchor } from '../../src/components/navigation'
 
@@ -99,8 +99,13 @@ export const Default: Story = {
     await expect(links.length).toBeGreaterThanOrEqual(sections.length)
     // Links are real anchor hrefs
     await expect(links[0]).toHaveAttribute('href', '#introduction')
-    // First link carries aria-current="location" (scrollspy sets it on mount)
-    await expect(links[0]).toHaveAttribute('aria-current', 'location')
+    // Scroll the first section into view so the IntersectionObserver fires.
+    const firstSection = canvasElement.querySelector('#introduction')
+    firstSection?.scrollIntoView()
+    // Wait for scrollspy to set aria-current="location" on the first link.
+    await waitFor(() => expect(links[0]).toHaveAttribute('aria-current', 'location'), {
+      timeout: 3000,
+    })
     // Last link does not carry aria-current
     await expect(links[links.length - 1]).not.toHaveAttribute('aria-current')
   },

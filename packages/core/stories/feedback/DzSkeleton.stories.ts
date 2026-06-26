@@ -66,10 +66,8 @@ export const Default: Story = {
     template: '<DzSkeleton v-bind="args" />',
   }),
   async play({ canvasElement }) {
-    const canvas = within(canvasElement)
-    const skeleton =
-      canvas.getByRole('presentation', { hidden: true }) ??
-      canvasElement.querySelector('[data-state="loading"]')
+    // Skeleton elements are aria-hidden and carry data-state="loading".
+    // Do not query by role="presentation" (not guaranteed); check DOM directly.
     const el = canvasElement.querySelector('[aria-hidden="true"][data-state="loading"]')
     await expect(el).not.toBeNull()
     await expect(el).toHaveAttribute('aria-hidden', 'true')

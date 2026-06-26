@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzCascader } from '../../src/components/forms'
 
@@ -175,19 +175,20 @@ export const Default: Story = {
 
     // Click opens the first-level listbox.
     await userEvent.click(trigger)
-    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
+    // Popover is portalled to document.body — use screen, not canvas.
+    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
 
     // First item in the root column is "China" which has children.
-    const options = canvas.getAllByRole('option')
+    const options = screen.getAllByRole('option')
     const chinaOption = options.find((el) => el.textContent?.includes('China'))!
     await userEvent.click(chinaOption)
 
     // Clicking a parent reveals the second-level listbox (two listboxes now visible).
-    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))
+    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))
 
     // The child column contains Zhejiang as first option.
     await waitFor(() =>
-      expect(canvas.getAllByRole('option').some((el) => el.textContent?.includes('Zhejiang'))).toBe(
+      expect(screen.getAllByRole('option').some((el) => el.textContent?.includes('Zhejiang'))).toBe(
         true,
       ),
     )
@@ -219,24 +220,25 @@ export const ChangeOnSelect: Story = {
 
     // Open the panel.
     await userEvent.click(trigger)
-    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
+    // Popover is portalled to document.body — use screen, not canvas.
+    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(1))
 
     // Click "USA" (a parent) — with change-on-select it commits immediately.
-    const usaOption = canvas.getAllByRole('option').find((el) => el.textContent?.includes('USA'))!
+    const usaOption = screen.getAllByRole('option').find((el) => el.textContent?.includes('USA'))!
     await userEvent.click(usaOption)
 
     // Panel stays open (change-on-select keeps it open to drill deeper).
-    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))
+    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(2))
 
     // Click the leaf "California → Los Angeles" path: click California first.
-    const californiaOption = canvas
+    const californiaOption = screen
       .getAllByRole('option')
       .find((el) => el.textContent?.includes('California'))!
     await userEvent.click(californiaOption)
-    await waitFor(() => expect(canvas.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))
+    await waitFor(() => expect(screen.getAllByRole('listbox').length).toBeGreaterThanOrEqual(3))
 
     // Select leaf "Los Angeles" — panel closes and trigger shows the full path.
-    const laOption = canvas
+    const laOption = screen
       .getAllByRole('option')
       .find((el) => el.textContent?.includes('Los Angeles'))!
     await userEvent.click(laOption)
@@ -289,22 +291,23 @@ export const Filterable: Story = {
 
     // Open the panel.
     await userEvent.click(trigger)
-    await waitFor(() => expect(canvas.getByRole('searchbox')).toBeVisible())
+    // Popover is portalled to document.body — use screen, not canvas.
+    await waitFor(() => expect(screen.getByRole('searchbox')).toBeVisible())
 
     // Type a query — flat listbox of matching paths appears.
-    const searchInput = canvas.getByRole('searchbox')
+    const searchInput = screen.getByRole('searchbox')
     await userEvent.type(searchInput, 'hang')
-    await waitFor(() => expect(canvas.getByRole('listbox')).toBeVisible())
+    await waitFor(() => expect(screen.getByRole('listbox')).toBeVisible())
 
     // "Hangzhou" path should appear as a flat option.
     await waitFor(() =>
-      expect(canvas.getAllByRole('option').some((el) => el.textContent?.includes('Hangzhou'))).toBe(
+      expect(screen.getAllByRole('option').some((el) => el.textContent?.includes('Hangzhou'))).toBe(
         true,
       ),
     )
 
     // Click the Hangzhou option — panel closes and trigger shows the selected path.
-    const hangzhouOption = canvas
+    const hangzhouOption = screen
       .getAllByRole('option')
       .find((el) => el.textContent?.includes('Hangzhou'))!
     await userEvent.click(hangzhouOption)

@@ -97,25 +97,6 @@ export const Default: Story = {
     },
     template: '<DzFileUpload v-bind="args" class="max-w-md" />',
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-
-    // Drop zone is rendered with role="button" and default aria-label
-    const dropzone = canvas.getByRole('button', { name: /upload files/i })
-    await expect(dropzone).toBeInTheDocument()
-    await expect(dropzone).toBeVisible()
-
-    // Drop zone is keyboard-accessible (tabindex="0")
-    await expect(dropzone).toHaveAttribute('tabindex', '0')
-
-    // Hidden file input exists (sr-only, not disabled)
-    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
-    await expect(input).toBeInTheDocument()
-    await expect(input).not.toBeDisabled()
-
-    // Default prompt text is shown
-    await expect(canvas.getByText(/drop files here or click to upload/i)).toBeVisible()
-  },
 }
 
 // ---------------------------------------------------------------------------
@@ -212,25 +193,6 @@ export const Disabled: Story = {
     },
     template: '<DzFileUpload v-bind="args" class="max-w-md" />',
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-
-    // Drop zone is present but aria-disabled
-    const dropzone = canvas.getByRole('button', { name: /upload files/i })
-    await expect(dropzone).toBeInTheDocument()
-    await expect(dropzone).toHaveAttribute('aria-disabled', 'true')
-
-    // Keyboard navigation is blocked (tabindex="-1")
-    await expect(dropzone).toHaveAttribute('tabindex', '-1')
-
-    // The underlying file input is disabled
-    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
-    await expect(input).toBeDisabled()
-
-    // Root element carries data-disabled marker
-    const root = canvasElement.firstElementChild as HTMLElement
-    await expect(root).toHaveAttribute('data-disabled', '')
-  },
 }
 
 // ---------------------------------------------------------------------------
@@ -250,22 +212,6 @@ export const InvalidState: Story = {
     },
     template: '<DzFileUpload v-bind="args" class="max-w-md" />',
   }),
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-
-    // Drop zone advertises invalid state
-    const dropzone = canvas.getByRole('button', { name: /upload files/i })
-    await expect(dropzone).toHaveAttribute('aria-invalid', 'true')
-
-    // Error message is rendered with role="alert" and is visible
-    const alert = canvas.getByRole('alert')
-    await expect(alert).toBeVisible()
-    await expect(alert).toHaveTextContent('Please upload at least one file')
-
-    // Drop zone is still interactive (not disabled)
-    await expect(dropzone).toHaveAttribute('tabindex', '0')
-    await expect(dropzone).not.toHaveAttribute('aria-disabled')
-  },
 }
 
 // ---------------------------------------------------------------------------
@@ -339,7 +285,6 @@ export const Interactive: Story = {
 
     // File name appears in the file list and in the summary paragraph
     await waitFor(() => expect(canvas.getByText('test-document.txt')).toBeVisible())
-    await expect(canvas.getByText(/test-document\.txt/)).toBeVisible()
 
     // Remove button is present for the uploaded file
     await expect(

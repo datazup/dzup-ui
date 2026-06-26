@@ -355,6 +355,17 @@ function generateTailwindTheme(): string {
     semanticColors.neutral = colorEntries.neutral
   }
 
+  // Expose every remaining primitive palette (the decorative spectrum: blue,
+  // rose, teal, slate, … ) as a plain numbered Tailwind color so authors can
+  // reach for `bg-blue-500` / `text-rose-600` in blocks and templates. Intent
+  // palettes are skipped here — they're already attached above with their
+  // semantic DEFAULT/foreground.
+  for (const [palette, shades] of Object.entries(colorEntries)) {
+    if (!(palette in semanticColors)) {
+      semanticColors[palette] = shades
+    }
+  }
+
   // Spacing entries
   const spacingEntries: Record<string, string> = {}
   for (const [key, value] of Object.entries(spacing)) {

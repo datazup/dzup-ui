@@ -223,7 +223,8 @@ export const Interactive: Story = {
     await waitFor(() => expect(canvas.getByText(/selected: dashboard/i)).toBeInTheDocument())
 
     // The Dashboard listitem should now have data-state="active".
-    const dashItem = canvas.getByRole('listitem', { name: /dashboard/i })
+    // Use closest('[role="listitem"]') since listitem has no accessible name.
+    const dashItem = dashboard.closest('[role="listitem"]') as HTMLElement
     await expect(dashItem).toHaveAttribute('data-state', 'active')
 
     // Click Settings — selection moves.

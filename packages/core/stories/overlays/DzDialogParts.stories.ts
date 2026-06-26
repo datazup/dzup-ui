@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
@@ -96,11 +96,15 @@ export const Default: Story = {
     const dialog = await screen.findByRole('dialog')
     await expect(dialog).toHaveAttribute('aria-modal', 'true')
     await expect(dialog).toHaveAccessibleName()
-    await expect(within(dialog).getByText(/dialog body content/i)).toBeVisible()
+    // Use waitFor to ensure dialog is open and content is visible.
+    await waitFor(() => expect(within(dialog).getByText(/dialog body content/i)).toBeVisible())
 
     // DzDialogClose via Cancel closes the dialog.
     await userEvent.click(within(dialog).getByRole('button', { name: /cancel/i }))
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // waitFor to allow exit animation to complete before asserting removal.
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 2000,
+    })
   },
 }
 
@@ -280,7 +284,10 @@ export const Accessibility: Story = {
 
     // Escape closes the dialog and focus returns to the trigger.
     await userEvent.keyboard('{Escape}')
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // waitFor to allow exit animation to complete before asserting removal.
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 2000,
+    })
     await expect(trigger).toHaveFocus()
   },
 }

@@ -96,19 +96,20 @@ export const Default: Story = {
     const group = canvas.getByRole('group')
     await expect(group).toBeInTheDocument()
 
+    // Reka UI ToggleGroup uses role="button" with aria-pressed (not role="radio").
     // Click Grid — it becomes the active segment.
-    const grid = canvas.getByRole('radio', { name: /grid/i })
+    const grid = canvas.getByRole('button', { name: /grid/i })
     await userEvent.click(grid)
-    await waitFor(() => expect(grid).toHaveAttribute('aria-checked', 'true'))
+    await waitFor(() => expect(grid).toHaveAttribute('aria-pressed', 'true'))
 
-    // The previously active List button is no longer checked.
-    const list = canvas.getByRole('radio', { name: /list/i })
-    await expect(list).toHaveAttribute('aria-checked', 'false')
+    // The previously active List button is no longer pressed.
+    const list = canvas.getByRole('button', { name: /list/i })
+    await expect(list).toHaveAttribute('aria-pressed', 'false')
 
     // ArrowRight moves selection to Table.
     await userEvent.keyboard('{ArrowRight}')
-    const table = canvas.getByRole('radio', { name: /table/i })
-    await waitFor(() => expect(table).toHaveAttribute('aria-checked', 'true'))
+    const table = canvas.getByRole('button', { name: /table/i })
+    await waitFor(() => expect(table).toHaveAttribute('aria-pressed', 'true'))
   },
 }
 

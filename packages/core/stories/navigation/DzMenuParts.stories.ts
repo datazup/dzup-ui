@@ -78,7 +78,8 @@ export const Default: Story = {
     const dashboard = canvas.getByRole('button', { name: /Dashboard/i })
     await expect(dashboard).toHaveAttribute('aria-current', 'page')
     const settings = canvas.getByRole('button', { name: /Settings/i })
-    await expect(settings).toHaveAttribute('aria-disabled', 'true')
+    // DzMenuItem uses native disabled — check with toBeDisabled() not aria-disabled
+    await expect(settings).toBeDisabled()
   },
 }
 

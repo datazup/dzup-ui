@@ -101,8 +101,9 @@ export const Default: Story = {
     await userEvent.click(successBtn)
 
     // Toast appears in the portal — query from document body.
-    const toast = await screen.findByText(/success toast/i)
-    await expect(toast).toBeVisible()
+    // findAllByText used because Reka UI duplicates the text in a live region.
+    const toasts = await screen.findAllByText(/success toast/i)
+    await expect(toasts[0]).toBeVisible()
   },
 }
 
@@ -231,8 +232,9 @@ export const Accessibility: Story = {
     await userEvent.click(canvas.getByRole('button', { name: /neutral/i }))
 
     // Toast appears in portal; verify it has accessible text.
-    const toast = await screen.findByText(/neutral toast/i)
-    await expect(toast).toBeVisible()
+    // findAllByText used because Reka UI duplicates the text in a live region.
+    const toasts = await screen.findAllByText(/neutral toast/i)
+    await expect(toasts[0]).toBeVisible()
 
     // The viewport region is present in the document.
     await waitFor(() => expect(screen.getByRole('region')).toBeInTheDocument())

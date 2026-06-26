@@ -284,8 +284,8 @@ export const Accessibility: Story = {
     const tablist = canvas.getByRole('tablist')
     await expect(tablist).toBeInTheDocument()
 
-    // Disabled trigger is aria-disabled and cannot be selected.
-    await expect(billingTab).toHaveAttribute('aria-disabled', 'true')
+    // Disabled trigger uses data-disabled (Reka UI) and cannot be selected.
+    await expect(billingTab).toHaveAttribute('data-disabled', '')
 
     // Arrow key moves focus: click Profile, then ArrowRight lands on Security.
     await userEvent.click(profileTab)

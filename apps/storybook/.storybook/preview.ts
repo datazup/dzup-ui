@@ -38,7 +38,7 @@ export default definePreview({
           'Introduction',
           'Getting Started',
           'Guides',
-          ['Theming', 'Design Tokens', 'Accessibility'],
+          ['Theming', 'Color Palette', 'Design Tokens', 'Accessibility'],
           'Contributing',
           'Core',
           [

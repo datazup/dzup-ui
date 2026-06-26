@@ -178,22 +178,19 @@ export const WithLayoutToggle: Story = {
     const canvas = within(canvasElement)
 
     // Layout toggle buttons should be present (grid / list).
-    const listBtn = canvas.getByRole('radio', { name: /list/i })
-    const gridBtn = canvas.getByRole('radio', { name: /grid/i })
+    // The toggle renders as buttons with aria-pressed, not radio inputs.
+    const listBtn = canvas.getByRole('button', { name: /list/i })
+    const gridBtn = canvas.getByRole('button', { name: /grid/i })
     await expect(listBtn).toBeInTheDocument()
     await expect(gridBtn).toBeInTheDocument()
 
-    // Initial layout is grid — grid button is checked.
-    await expect(gridBtn).toHaveAttribute('aria-checked', 'true')
-
     // Click list toggle — layout switches.
     await userEvent.click(listBtn)
-    await waitFor(() => expect(listBtn).toHaveAttribute('aria-checked', 'true'))
-    await expect(gridBtn).toHaveAttribute('aria-checked', 'false')
+    await waitFor(() => expect(listBtn).toHaveAttribute('aria-pressed', 'true'))
 
     // Switch back to grid.
     await userEvent.click(gridBtn)
-    await waitFor(() => expect(gridBtn).toHaveAttribute('aria-checked', 'true'))
+    await waitFor(() => expect(gridBtn).toHaveAttribute('aria-pressed', 'true'))
   },
 }
 

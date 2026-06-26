@@ -1,6 +1,7 @@
 {/* DesignTokens.mdx */}
-import { Meta, ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/blocks'
+import { Meta, Typeset } from '@storybook/addon-docs/blocks'
 import { DocTable } from './_blocks/DocTable.ts'
+import { PaletteGrid } from './_blocks/ColorScale.ts'
 
 <Meta title="Guides/Design Tokens" />
 
@@ -27,15 +28,12 @@ primitive  →  semantic  →  component
 
 ## Primitive color scales
 
-Each hue ships steps `50 → 950`. Use these only when a semantic token doesn't
-express your intent.
+Each hue ships steps `50 → 950` in OKLCH. The seven **intent** ramps below back
+the semantic roles; a full Tailwind-aligned **decorative** spectrum plus neutral
+undertones live on the dedicated **[Color Palette](?path=/docs/guides-color-palette--docs)**
+page. Use primitive steps only when a semantic token doesn't express your intent.
 
-<ColorPalette>
-  <ColorItem title="Primary" subtitle="--dz-colors-primary-*" colors={{ 50: 'var(--dz-colors-primary-50)', 100: 'var(--dz-colors-primary-100)', 300: 'var(--dz-colors-primary-300)', 500: 'var(--dz-colors-primary-500)', 700: 'var(--dz-colors-primary-700)', 900: 'var(--dz-colors-primary-900)' }} />
-  <ColorItem title="Neutral" subtitle="--dz-colors-neutral-*" colors={{ 50: 'var(--dz-colors-neutral-50)', 100: 'var(--dz-colors-neutral-100)', 300: 'var(--dz-colors-neutral-300)', 500: 'var(--dz-colors-neutral-500)', 700: 'var(--dz-colors-neutral-700)', 900: 'var(--dz-colors-neutral-900)' }} />
-  <ColorItem title="Success" subtitle="--dz-colors-success-*" colors={{ 100: 'var(--dz-colors-success-100)', 300: 'var(--dz-colors-success-300)', 500: 'var(--dz-colors-success-500)', 700: 'var(--dz-colors-success-700)' }} />
-  <ColorItem title="Danger" subtitle="--dz-colors-danger-*" colors={{ 100: 'var(--dz-colors-danger-100)', 300: 'var(--dz-colors-danger-300)', 500: 'var(--dz-colors-danger-500)', 700: 'var(--dz-colors-danger-700)' }} />
-</ColorPalette>
+<PaletteGrid names={['primary', 'secondary', 'neutral', 'success', 'warning', 'danger', 'info']} />
 
 ## Radius scale
 

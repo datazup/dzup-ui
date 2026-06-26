@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { darkModeDecorator } from '../_shared'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDialog,
@@ -57,8 +57,16 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: args => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+  render: (args) => ({
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     setup() {
       return { args }
     },
@@ -91,7 +99,15 @@ export const Default: Story = {
 export const AllSizes: Story = {
   name: 'Size Gallery',
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     template: `
       <div class="flex flex-wrap gap-4 items-center">
         <DzDialog v-for="size in ['sm', 'md', 'lg', 'xl', 'full']" :key="size">
@@ -120,7 +136,15 @@ export const AllSizes: Story = {
 export const WithLongContent: Story = {
   name: 'With Long Content',
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     template: `
       <DzDialog>
         <DzDialogTrigger as-child>
@@ -157,7 +181,15 @@ export const WithLongContent: Story = {
 export const WithSlots: Story = {
   name: 'With Custom Slot Content',
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     template: `
       <DzDialog>
         <DzDialogTrigger as-child>
@@ -194,7 +226,15 @@ export const WithSlots: Story = {
 
 export const Interactive: Story = {
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     data() {
       return { isOpen: false, confirmed: false }
     },
@@ -231,7 +271,10 @@ export const Interactive: Story = {
     // Confirm closes the dialog and flips the confirmed flag.
     await userEvent.click(within(dialog).getByRole('button', { name: /^confirm$/i }))
     await expect(canvas.getByText(/confirmed!/i)).toBeInTheDocument()
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // waitFor to allow exit animation to complete before asserting removal.
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 2000,
+    })
   },
 }
 
@@ -241,11 +284,17 @@ export const Interactive: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     template: `
       <DzDialog>
         <DzDialogTrigger as-child>
@@ -270,7 +319,15 @@ export const DarkMode: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: Focus Management',
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -312,7 +369,10 @@ export const Accessibility: Story = {
 
     // Escape dismisses the dialog and returns focus to the trigger.
     await userEvent.keyboard('{Escape}')
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // waitFor to allow exit animation to complete before asserting removal.
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 2000,
+    })
     await expect(trigger).toHaveFocus()
   },
 }
@@ -394,7 +454,15 @@ export const CompoundComposition: Story = {
 export const RealWorldFormDialog: Story = {
   name: 'Real World: Form Dialog',
   render: () => ({
-    components: { DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton },
+    components: {
+      DzDialog,
+      DzDialogTrigger,
+      DzDialogContent,
+      DzDialogTitle,
+      DzDialogDescription,
+      DzDialogClose,
+      DzButton,
+    },
     template: `
       <DzDialog>
         <DzDialogTrigger as-child>
