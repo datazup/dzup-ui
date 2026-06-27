@@ -44,6 +44,8 @@ const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'm
 /** Whether to show the image */
 const showImage = computed(() => !!props.src && !imageError.value)
 
+const accessibleLabel = computed(() => props.ariaLabel ?? props.alt ?? props.fallback)
+
 const classes = computed(() =>
   cn(
     avatarVariants({ size: resolvedSize.value, shape: props.shape }),
@@ -61,7 +63,7 @@ function handleImageError(event: Event): void {
   <span
     :id="id"
     :class="classes"
-    :aria-label="ariaLabel ?? alt"
+    :aria-label="accessibleLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     role="img"
