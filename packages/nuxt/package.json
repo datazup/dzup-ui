@@ -31,13 +31,13 @@
     "nuxt": ">=3.0.0"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.14.0"
+    "@nuxt/kit": "3.14.0"
   },
   "devDependencies": {
     "@dzup-ui/core": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
-    "@nuxt/schema": "^3.14.0",
-    "nuxt": "^3.14.0",
+    "@nuxt/schema": "3.14.0",
+    "nuxt": "3.14.0",
     "typescript": "^5.8.3"
   }
 }
