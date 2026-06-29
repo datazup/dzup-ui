@@ -91,14 +91,17 @@ export function useFloating(options?: UseFloatingOptions): UseFloatingReturn {
     ...(enableFlip ? [flipMiddleware()] : []),
     ...(enableShift ? [shiftMiddleware()] : []),
   ]
+  const floatingReferenceRef = referenceRef as unknown as FloatingReferenceRef
+  const floatingElementRef = floatingRef as unknown as FloatingElementRef
+  const floatingOptions: FloatingOptions = {
+    placement: initialPlacement as unknown as FloatingPlacementOption,
+    middleware,
+  }
 
   const { floatingStyles: rawStyles, placement: resolvedPlacement, update } = useFloatingUI(
-    referenceRef as unknown as FloatingReferenceRef,
-    floatingRef as unknown as FloatingElementRef,
-    {
-      placement: initialPlacement as unknown as FloatingPlacementOption,
-      middleware,
-    },
+    floatingReferenceRef,
+    floatingElementRef,
+    floatingOptions,
   )
 
   // Convert CSSProperties to Record<string, string> for consistent typing
