@@ -15,6 +15,9 @@ export type CanonicalSize = 'icon' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 /** Canonical semantic tone values */
 export type CanonicalTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
 
+/** Canonical orientation for components that support horizontal/vertical layout */
+export type Orientation = 'horizontal' | 'vertical'
+
 // ---------------------------------------------------------------------------
 // Per-family variant taxonomies (frozen per ADR-02)
 // ---------------------------------------------------------------------------
@@ -43,6 +46,12 @@ export type ProgressVariant = 'bar' | 'circular'
 /** Chip family: DzChip */
 export type ChipVariant = 'solid' | 'outline' | 'subtle'
 
+/** Toolbar family: DzToolbar */
+export type ToolbarVariant = 'flat' | 'outlined' | 'elevated'
+
+/** Panel family: DzPanel */
+export type PanelVariant = 'outlined' | 'elevated' | 'legend'
+
 // ---------------------------------------------------------------------------
 // Union helpers
 // ---------------------------------------------------------------------------
@@ -60,3 +69,5 @@ export type AnyVariant
     | TabsVariant
     | ProgressVariant
     | ChipVariant
+    | ToolbarVariant
+    | PanelVariant

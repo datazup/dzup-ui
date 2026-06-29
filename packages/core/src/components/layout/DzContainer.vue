@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzContainerProps, DzContainerSlots } from './DzContainer.types.ts'
 /**
  * DzContainer -- Centered content container.
@@ -20,6 +16,10 @@ import type { DzContainerProps, DzContainerSlots } from './DzContainer.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { containerVariants } from './DzContainer.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzContainerProps>(), {
   maxWidth: 'xl',
@@ -44,7 +44,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

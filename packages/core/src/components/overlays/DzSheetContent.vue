@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSheetContentEmits, DzSheetContentProps, DzSheetContentSlots } from './DzSheet.types.ts'
 import { DialogContent, DialogOverlay, DialogPortal, injectDialogRootContext } from 'reka-ui'
 /**
@@ -14,6 +10,10 @@ import { DialogContent, DialogOverlay, DialogPortal, injectDialogRootContext } f
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { sheetVariants } from './DzSheet.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzSheetContentProps>(), {
   side: 'right',
@@ -37,10 +37,14 @@ const rootContext = injectDialogRootContext()
  */
 const contentAria = computed<Record<string, unknown>>(() => {
   const aria: Record<string, unknown> = {}
-  if (props.ariaLabel !== undefined) aria['aria-label'] = props.ariaLabel
-  if (props.ariaLabelledby !== undefined) aria['aria-labelledby'] = props.ariaLabelledby
-  if (props.ariaDescribedby !== undefined) aria['aria-describedby'] = props.ariaDescribedby
-  if (rootContext.modal.value) aria['aria-modal'] = 'true'
+  if (props.ariaLabel !== undefined)
+    aria['aria-label'] = props.ariaLabel
+  if (props.ariaLabelledby !== undefined)
+    aria['aria-labelledby'] = props.ariaLabelledby
+  if (props.ariaDescribedby !== undefined)
+    aria['aria-describedby'] = props.ariaDescribedby
+  if (rootContext.modal.value)
+    aria['aria-modal'] = 'true'
   return aria
 })
 
@@ -62,7 +66,6 @@ function handleInteractOutside(event: Event): void {
   emit('interactOutside', event)
 }
 </script>
-
 
 <template>
   <DialogPortal>

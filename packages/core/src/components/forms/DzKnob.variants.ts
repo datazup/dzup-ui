@@ -19,14 +19,13 @@ export const knobVariants = tv({
       'dz-focus-ring-control',
       '[--dz-knob-range:var(--dz-muted)]',
     ].join(' '),
-    svg: [
-      'block touch-none select-none',
-      'cursor-pointer',
+    error: [
+      'mt-[var(--dz-spacing-1)]',
+      'text-[length:var(--dz-text-xs)]',
+      'text-[var(--dz-danger)]',
     ].join(' '),
-    rangeArc: [
-      'fill-none',
-      'stroke-[var(--dz-knob-range)]',
-    ].join(' '),
+    svg: ['block touch-none select-none', 'cursor-pointer'].join(' '),
+    rangeArc: ['fill-none', 'stroke-[var(--dz-knob-range)]'].join(' '),
     valueArc: [
       'fill-none',
       'stroke-[var(--dz-knob-value)]',

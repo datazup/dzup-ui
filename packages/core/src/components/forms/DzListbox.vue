@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { Component } from 'vue'
 import type {
   DzListboxEmits,
@@ -42,6 +38,12 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { listboxVariants } from './DzListbox.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
+const model = defineModel<DzListboxValue | DzListboxValue[] | null>({ default: null })
+
 const props = withDefaults(defineProps<DzListboxProps>(), {
   multiple: false,
   optionLabel: undefined,
@@ -64,8 +66,6 @@ const props = withDefaults(defineProps<DzListboxProps>(), {
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
 })
-
-const model = defineModel<DzListboxValue | DzListboxValue[] | null>({ default: null })
 
 const emit = defineEmits<DzListboxEmits>()
 defineSlots<DzListboxSlots>()

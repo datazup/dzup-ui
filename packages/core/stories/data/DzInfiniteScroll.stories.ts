@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzInfiniteScroll } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzInfiniteScroll is an IntersectionObserver-based "load more" wrapper. The
@@ -149,6 +150,14 @@ export const EndState: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const items = canvas.getAllByRole('listitem')
+    await expect(items.length).toBe(4)
+    await expect(items[0]).toHaveTextContent('Item #1')
+    await expect(items[3]).toHaveTextContent('Item #4')
+    await expect(canvas.getByText('You\'ve reached the end.')).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

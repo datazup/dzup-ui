@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzAvatar, DzAvatarGroup } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzAvatarGroup renders a stacked row of DzAvatar components with
@@ -54,6 +55,24 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Group container must carry role="group"
+    const group = canvas.getByRole('group')
+    await expect(group).toBeInTheDocument()
+
+    // Each avatar image must have non-empty alt text
+    const img1 = canvas.getByAltText('User 1')
+    await expect(img1).toBeInTheDocument()
+
+    const img2 = canvas.getByAltText('User 2')
+    await expect(img2).toBeInTheDocument()
+
+    // Default story has 3 avatars and no max — no overflow badge expected
+    const overflow = canvasElement.querySelector('[aria-hidden="true"]')
+    await expect(overflow).toBeNull()
+  },
   render: args => ({
     components: { DzAvatarGroup, DzAvatar },
     setup() {
@@ -165,9 +184,7 @@ export const NoOverflow: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzAvatarGroup, DzAvatar },
     template: `

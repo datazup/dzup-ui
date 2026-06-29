@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTableRowProps, DzTableRowSlots } from './DzTable.types.ts'
 /**
  * DzTableRow — Table row (<tr>).
@@ -13,6 +9,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTableRowProps>(), {
   selected: false,
@@ -40,7 +40,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <tr

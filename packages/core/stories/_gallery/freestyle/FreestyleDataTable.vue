@@ -113,7 +113,9 @@ const currentPage = ref(1)
   >
     <div class="mx-auto max-w-6xl px-6 py-10">
       <header class="mb-6">
-        <h1 class="text-2xl font-semibold tracking-tight">Deployments</h1>
+        <h1 class="text-2xl font-semibold tracking-tight">
+          Deployments
+        </h1>
         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Track every release across your environments.
         </p>
@@ -150,7 +152,7 @@ const currentPage = ref(1)
               type="search"
               placeholder="Search deployments…"
               class="w-full rounded-xl border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-100 dark:placeholder:text-slate-500"
-            />
+            >
           </div>
 
           <!-- Status filter -->
@@ -160,16 +162,23 @@ const currentPage = ref(1)
               aria-label="Filter by status"
               class="w-full appearance-none rounded-xl border border-slate-300 bg-white py-2 pl-3.5 pr-9 text-sm font-medium text-slate-700 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 sm:w-40 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-200"
             >
-              <option value="all">All statuses</option>
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
+              <option value="all">
+                All statuses
+              </option>
+              <option value="active">
+                Active
+              </option>
+              <option value="pending">
+                Pending
+              </option>
+              <option value="failed">
+                Failed
+              </option>
             </select>
             <span
               class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400"
               aria-hidden="true"
-              >▾</span
-            >
+            >▾</span>
           </div>
 
           <!-- Owner filter -->
@@ -179,16 +188,23 @@ const currentPage = ref(1)
               aria-label="Filter by owner"
               class="w-full appearance-none rounded-xl border border-slate-300 bg-white py-2 pl-3.5 pr-9 text-sm font-medium text-slate-700 shadow-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 sm:w-40 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-200"
             >
-              <option value="all">All owners</option>
-              <option value="ml">Mara Lindqvist</option>
-              <option value="dr">Devon Reyes</option>
-              <option value="pn">Priya Nair</option>
+              <option value="all">
+                All owners
+              </option>
+              <option value="ml">
+                Mara Lindqvist
+              </option>
+              <option value="dr">
+                Devon Reyes
+              </option>
+              <option value="pn">
+                Priya Nair
+              </option>
             </select>
             <span
               class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400"
               aria-hidden="true"
-              >▾</span
-            >
+            >▾</span>
           </div>
         </div>
 
@@ -217,8 +233,12 @@ const currentPage = ref(1)
                     <span class="opacity-40" aria-hidden="true">⇅</span>
                   </button>
                 </th>
-                <th class="px-5 py-3 font-semibold">Status</th>
-                <th class="px-5 py-3 font-semibold">Owner</th>
+                <th class="px-5 py-3 font-semibold">
+                  Status
+                </th>
+                <th class="px-5 py-3 font-semibold">
+                  Owner
+                </th>
                 <th class="px-5 py-3 font-semibold">
                   <button
                     type="button"
@@ -283,8 +303,7 @@ const currentPage = ref(1)
                   <div class="flex items-center gap-2.5">
                     <span
                       class="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-slate-200 to-slate-300 text-[11px] font-semibold text-slate-700 dark:from-slate-700 dark:to-slate-800 dark:text-slate-200"
-                      >{{ row.initials }}</span
-                    >
+                    >{{ row.initials }}</span>
                     <span class="text-slate-600 dark:text-slate-300">{{ row.owner }}</span>
                   </div>
                 </td>

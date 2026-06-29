@@ -4,7 +4,7 @@
  * A single list whose items can be reordered in place — by pointer drag (via a
  * grab handle), by Move Up / Down / Top / Bottom controls, and by keyboard
  * (grab → move → drop). It fills the gap left by DzTransfer, which moves items
- * *between* two lists but cannot reorder *within* one.
+ * between* two lists but cannot reorder *within* one.
  *
  * The ordered array is owned by the consumer through `v-model:value`
  * (defineModel, ADR-16); the component never mutates the bound array in place.
@@ -91,13 +91,13 @@ export interface OrderListReorderPayload {
  */
 export interface DzOrderListEmits {
   /** A reorder completed (drag, control button, or keyboard drop) */
-  'reorder': [payload: OrderListReorderPayload]
+  reorder: [payload: OrderListReorderPayload]
   /** The selected key set changed (only fired when `selectable`) */
-  'selection-change': [keys: OrderListKey[]]
+  selectionChange: [keys: OrderListKey[]]
   /** Focus entered the list */
-  'focus': [event: FocusEvent]
+  focus: [event: FocusEvent]
   /** Focus left the list */
-  'blur': [event: FocusEvent]
+  blur: [event: FocusEvent]
 }
 
 // ---------------------------------------------------------------------------

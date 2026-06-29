@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzOtpInput } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzOtpInput is a one-time password / PIN input component built on Reka UI
@@ -292,9 +292,7 @@ export const Invalid: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzOtpInput },
     template: `
@@ -337,10 +335,10 @@ export const Interactive: Story = {
   // TASK-2.C — type a full 6-digit code across the auto-advancing cells and
   // assert the model + the `complete` event both reflect it.
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const cells = Array.from(
-      canvasElement.querySelectorAll<HTMLInputElement>('input'),
-    ).filter(el => el.type !== 'hidden')
+    const _canvas = within(canvasElement)
+    const cells = Array.from(canvasElement.querySelectorAll<HTMLInputElement>('input')).filter(
+      el => el.type !== 'hidden',
+    )
     await expect(cells.length).toBe(6)
     // Focus the first cell; Reka PinInput advances focus as each digit lands.
     await userEvent.click(cells[0])
@@ -370,6 +368,31 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const _canvas = within(canvasElement)
+
+    // All six cells are individually focusable inputs.
+    const cells = Array.from(canvasElement.querySelectorAll<HTMLInputElement>('input')).filter(
+      el => el.type !== 'hidden',
+    )
+    await expect(cells.length).toBe(6)
+
+    // Tab lands focus on the first cell.
+    await userEvent.tab()
+    await expect(cells[0]).toHaveFocus()
+
+    // Each digit auto-advances focus to the next cell.
+    await userEvent.keyboard('1')
+    await expect(cells[1]).toHaveFocus()
+
+    await userEvent.keyboard('2')
+    await expect(cells[2]).toHaveFocus()
+
+    // Backspace moves focus back and clears the previous cell.
+    await userEvent.keyboard('{Backspace}')
+    await expect(cells[1]).toHaveFocus()
+    await expect(cells[2].value).toBe('')
+  },
 }
 
 // ---------------------------------------------------------------------------

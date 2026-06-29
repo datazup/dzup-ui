@@ -1,7 +1,8 @@
 // token-check-disable-file — color picker stories legitimately use raw color values as test data
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzColorPicker } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 const brandPresets = [
   '#ef4444',
@@ -99,6 +100,24 @@ export const Default: Story = {
     },
     template: '<DzColorPicker v-bind="args" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Trigger is the color swatch button; aria-expanded starts false.
+    const trigger = canvas.getByRole('button', { name: /choose a color/i })
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click to open; PopoverContent is portalled to document.body.
+    await userEvent.click(trigger)
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
+    // The hex text input is now visible inside the panel.
+    await waitFor(() => expect(screen.getByLabelText(/hex color value/i)).toBeVisible())
+
+    // Escape closes the popover.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -220,9 +239,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzColorPicker },
     setup() {
@@ -255,6 +272,19 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Open color picker
+    await userEvent.click(canvas.getByRole('button', { name: /choose a color/i }))
+
+    // Click the red preset swatch (#ef4444) — portalled, query from screen
+    const redSwatch = await screen.findByRole('button', { name: /select color #ef4444/i })
+    await userEvent.click(redSwatch)
+
+    // After selecting, the displayed color text should update (strong tag in summary)
+    await waitFor(() => expect(canvas.getAllByText('#ef4444').length).toBeGreaterThan(0))
+  },
 }
 
 // ---------------------------------------------------------------------------

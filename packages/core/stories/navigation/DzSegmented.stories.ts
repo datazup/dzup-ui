@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { AlignCenter, AlignLeft, AlignRight, LayoutGrid, List, Table2 } from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzSegmented } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSegmented is a toggle-style segmented control built on Reka UI ToggleGroup.
@@ -88,6 +89,29 @@ export const Default: Story = {
     },
     template: '<DzSegmented v-bind="args" v-model="value" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The toggle group should be present.
+    const group = canvas.getByRole('group')
+    await expect(group).toBeInTheDocument()
+
+    // Reka UI ToggleGroup uses role="button" with aria-pressed (not role="radio").
+    // Click Grid — it becomes the active segment.
+    const grid = canvas.getByRole('button', { name: /grid/i })
+    await userEvent.click(grid)
+    await waitFor(() => expect(grid).toHaveAttribute('aria-pressed', 'true'))
+
+    // The previously active List button is no longer pressed.
+    const list = canvas.getByRole('button', { name: /list/i })
+    await expect(list).toHaveAttribute('aria-pressed', 'false')
+
+    // Click Table to verify a third segment activates correctly.
+    const table = canvas.getByRole('button', { name: /table/i })
+    await userEvent.click(table)
+    await waitFor(() => expect(table).toHaveAttribute('aria-pressed', 'true'))
+    await waitFor(() => expect(grid).toHaveAttribute('aria-pressed', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -240,9 +264,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSegmented },
     setup() {

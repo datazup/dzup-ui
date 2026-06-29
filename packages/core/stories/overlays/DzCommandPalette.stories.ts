@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import type { CommandGroup, CommandItem } from '../../src/components/overlays'
+import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzCommandPalette } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCommandPalette is a searchable command launcher built on Reka UI Dialog + Combobox (ADR-07).

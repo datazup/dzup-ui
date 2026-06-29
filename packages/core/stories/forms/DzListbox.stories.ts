@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import type { DzListboxOption } from '../../src/components/forms'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { ref } from 'vue'
 import { DzFormDescription, DzFormField, DzFormLabel, DzListbox } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 const cities: DzListboxOption[] = [
   { label: 'Amsterdam', value: 'ams' },
@@ -116,6 +117,28 @@ export const Single: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The listbox is always-visible — Berlin is pre-selected.
+    const listbox = canvas.getByRole('listbox', { name: /city/i })
+    await expect(listbox).toBeVisible()
+
+    // Click Amsterdam — it should become selected.
+    const amsterdam = canvas.getByRole('option', { name: /amsterdam/i })
+    await userEvent.click(amsterdam)
+    await waitFor(() => expect(amsterdam).toHaveAttribute('aria-selected', 'true'))
+
+    // ArrowDown moves keyboard focus to Berlin; press Enter/Space to select.
+    await userEvent.keyboard('{ArrowDown}')
+    const berlin = canvas.getByRole('option', { name: /^berlin$/i })
+    await expect(berlin).toBeInTheDocument()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(berlin).toHaveAttribute('aria-selected', 'true'))
+
+    // Disabled option (none in Single story) — verify Copenhagen is present.
+    await expect(canvas.getByRole('option', { name: /copenhagen/i })).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

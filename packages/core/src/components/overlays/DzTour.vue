@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTourProps, DzTourSlotProps, DzTourSlots, DzTourStep } from './DzTour.types.ts'
 import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
@@ -12,6 +8,14 @@ import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
 import { tourTokens } from './DzTour.tokens.ts'
 import { tourVariants } from './DzTour.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
+const open = defineModel<boolean>('open', { default: false })
+
+const current = defineModel<number>('current', { default: 0 })
+
 /**
  * DzTour -- Step-by-step product walkthrough that spotlights target elements
  * and shows an anchored popover with title/description/controls.
@@ -50,10 +54,7 @@ const emit = defineEmits<{
   change: [index: number]
 }>()
 
-const slots = defineSlots<DzTourSlots>()
-
-const open = defineModel<boolean>('open', { default: false })
-const current = defineModel<number>('current', { default: 0 })
+const _slots = defineSlots<DzTourSlots>()
 
 const styles = tourVariants()
 
@@ -77,10 +78,13 @@ const isLast = computed(() => activeIndex.value >= total.value - 1)
 
 /** Resolve a step's target to a live element (selector | element | getter). */
 function resolveTarget(step: DzTourStep | undefined): HTMLElement | null {
-  if (!step || typeof document === 'undefined') return null
+  if (!step || typeof document === 'undefined')
+    return null
   const { target } = step
-  if (typeof target === 'string') return document.querySelector<HTMLElement>(target)
-  if (typeof target === 'function') return target()
+  if (typeof target === 'string')
+    return document.querySelector<HTMLElement>(target)
+  if (typeof target === 'function')
+    return target()
   return target ?? null
 }
 
@@ -117,7 +121,8 @@ function measure(): void {
 /** Cutout box geometry, padded around the target rect (px, viewport-fixed). */
 const cutoutStyle = computed<Record<string, string>>(() => {
   const rect = targetRect.value
-  if (!rect) return { display: 'none' } as Record<string, string>
+  if (!rect)
+    return { display: 'none' } as Record<string, string>
   const pad = tourTokens.mask.padding
   return {
     top: `${rect.top - pad}px`,
@@ -130,7 +135,8 @@ const cutoutStyle = computed<Record<string, string>>(() => {
 /** Fallback centered position used when a target cannot be resolved. */
 const hasTarget = computed(() => targetRect.value !== null)
 const panelStyle = computed<Record<string, string>>(() => {
-  if (hasTarget.value) return floatingStyles.value
+  if (hasTarget.value)
+    return floatingStyles.value
   return {
     position: 'fixed',
     top: '50%',
@@ -148,7 +154,8 @@ function prefersReducedMotion(): boolean {
 }
 
 function scrollTargetIntoView(): void {
-  if (!props.scrollIntoView) return
+  if (!props.scrollIntoView)
+    return
   const el = resolveTarget(activeStep.value)
   el?.scrollIntoView({
     behavior: prefersReducedMotion() ? 'auto' : 'smooth',
@@ -166,18 +173,21 @@ function handleViewportChange(): void {
 }
 
 function startTracking(): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   window.addEventListener('resize', handleViewportChange)
   window.addEventListener('scroll', handleViewportChange, true)
   if (typeof ResizeObserver !== 'undefined') {
     resizeObserver = new ResizeObserver(handleViewportChange)
     const el = resolveTarget(activeStep.value)
-    if (el) resizeObserver.observe(el)
+    if (el)
+      resizeObserver.observe(el)
   }
 }
 
 function stopTracking(): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   window.removeEventListener('resize', handleViewportChange)
   window.removeEventListener('scroll', handleViewportChange, true)
   resizeObserver?.disconnect()
@@ -201,7 +211,8 @@ function next(): void {
 }
 
 function prev(): void {
-  if (isFirst.value) return
+  if (isFirst.value)
+    return
   current.value = activeIndex.value - 1
 }
 

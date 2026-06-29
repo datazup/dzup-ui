@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import type { DateRangeValue } from '../../src/components/forms'
+import { expect, within } from 'storybook/test'
 import { DzDateRangePicker } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDateRangePicker allows users to select a start and end date range.
@@ -104,6 +105,18 @@ export const Default: Story = {
     },
     template: '<DzDateRangePicker v-bind="args" class="max-w-sm" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The calendar trigger button must be present and interactive.
+    const trigger = canvas.getByRole('button', { name: /open date range picker/i })
+    await expect(trigger).toBeInTheDocument()
+    await expect(trigger).not.toBeDisabled()
+
+    // The date range field is in the DOM.
+    const field = canvasElement.querySelector('[data-state]')
+    expect(field).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -218,9 +231,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzDateRangePicker },
     template: `
@@ -251,6 +262,17 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The trigger button is present and usable.
+    const trigger = canvas.getByRole('button', { name: /open date range picker/i })
+    await expect(trigger).toBeInTheDocument()
+
+    // Initially no range is selected.
+    const output = canvas.getByText(/selected:/i).closest('p')
+    expect(output).toHaveTextContent('none')
+  },
 }
 
 // ---------------------------------------------------------------------------

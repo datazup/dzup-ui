@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // dzup-ui gallery — record DETAIL page (project detail). ONLY @dzup-ui/core components + --dz-* tokens.
 
-import { ref } from 'vue'
 import {
   Activity,
   CheckCircle2,
@@ -10,6 +9,7 @@ import {
   Rocket,
   UserPlus,
 } from 'lucide-vue-next'
+import { ref } from 'vue'
 import { DzButton } from '../../../src/components/buttons'
 import { DzCard } from '../../../src/components/cards'
 import { DzBadge } from '../../../src/components/feedback'
@@ -111,20 +111,30 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
     <div class="mx-auto max-w-5xl space-y-6 px-6 py-10">
       <!-- Breadcrumb -->
       <DzBreadcrumb aria-label="Breadcrumb">
-        <DzBreadcrumbItem href="#">Projects</DzBreadcrumbItem>
+        <DzBreadcrumbItem href="#">
+          Projects
+        </DzBreadcrumbItem>
         <DzBreadcrumbSeparator />
-        <DzBreadcrumbItem current>Atlas Migration</DzBreadcrumbItem>
+        <DzBreadcrumbItem current>
+          Atlas Migration
+        </DzBreadcrumbItem>
       </DzBreadcrumb>
 
       <!-- Page header -->
       <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div class="flex flex-wrap items-center gap-3">
-            <DzHeading :level="1" size="xl" weight="semibold">Atlas Migration</DzHeading>
-            <DzBadge variant="subtle" tone="success" size="sm">Active</DzBadge>
+            <DzHeading :level="1" size="xl" weight="semibold">
+              Atlas Migration
+            </DzHeading>
+            <DzBadge variant="subtle" tone="success" size="sm">
+              Active
+            </DzBadge>
           </div>
           <div class="mt-1.5">
-            <DzText as="p" size="sm" tone="muted">Created 12 days ago</DzText>
+            <DzText as="p" size="sm" tone="muted">
+              Created 12 days ago
+            </DzText>
           </div>
         </div>
         <div class="flex shrink-0 items-center gap-2.5">
@@ -147,8 +157,12 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
       <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <DzCard v-for="stat in stats" :key="stat.label" variant="elevated" padding="none">
           <div style="padding: 1.5rem">
-            <DzText as="p" size="xs" tone="muted" weight="medium">{{ stat.label }}</DzText>
-            <p class="mt-2 text-2xl font-semibold leading-none tabular-nums">{{ stat.value }}</p>
+            <DzText as="p" size="xs" tone="muted" weight="medium">
+              {{ stat.label }}
+            </DzText>
+            <p class="mt-2 text-2xl font-semibold leading-none tabular-nums">
+              {{ stat.value }}
+            </p>
             <div class="mt-2">
               <DzText
                 as="span"
@@ -174,9 +188,15 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
               aria-label="Project detail sections"
             >
               <DzTabList>
-                <DzTabTrigger value="overview">Overview</DzTabTrigger>
-                <DzTabTrigger value="activity">Activity</DzTabTrigger>
-                <DzTabTrigger value="settings">Settings</DzTabTrigger>
+                <DzTabTrigger value="overview">
+                  Overview
+                </DzTabTrigger>
+                <DzTabTrigger value="activity">
+                  Activity
+                </DzTabTrigger>
+                <DzTabTrigger value="settings">
+                  Settings
+                </DzTabTrigger>
               </DzTabList>
 
               <!-- Overview: definition list -->
@@ -188,10 +208,14 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
                     class="flex items-center justify-between gap-4 py-3.5"
                   >
                     <dt>
-                      <DzText as="span" size="sm" tone="muted">{{ row.label }}</DzText>
+                      <DzText as="span" size="sm" tone="muted">
+                        {{ row.label }}
+                      </DzText>
                     </dt>
                     <dd>
-                      <DzText as="span" size="sm" weight="medium">{{ row.value }}</DzText>
+                      <DzText as="span" size="sm" weight="medium">
+                        {{ row.value }}
+                      </DzText>
                     </dd>
                   </div>
                 </dl>
@@ -207,14 +231,18 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
                       <component :is="entry.icon" class="h-4 w-4" aria-hidden="true" />
                     </span>
                     <div class="min-w-0 flex-1">
-                      <DzText as="p" size="sm" weight="medium">{{ entry.title }}</DzText>
+                      <DzText as="p" size="sm" weight="medium">
+                        {{ entry.title }}
+                      </DzText>
                       <div class="mt-0.5 flex items-center gap-2">
                         <span
                           class="h-1.5 w-1.5 rounded-[var(--dz-radius-full)]"
                           :class="dotTone[entry.tone]"
                           aria-hidden="true"
                         />
-                        <DzText as="span" size="xs" tone="muted">{{ entry.meta }}</DzText>
+                        <DzText as="span" size="xs" tone="muted">
+                          {{ entry.meta }}
+                        </DzText>
                       </div>
                     </div>
                   </li>
@@ -237,7 +265,9 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
         <DzCard variant="elevated" padding="none" class="lg:col-span-1">
           <div style="padding: 1.5rem">
             <div class="flex items-center justify-between">
-              <DzHeading :level="2" size="sm" weight="semibold">Team</DzHeading>
+              <DzHeading :level="2" size="sm" weight="semibold">
+                Team
+              </DzHeading>
               <DzButton variant="ghost" tone="neutral" size="sm">
                 <template #prefix>
                   <UserPlus class="h-4 w-4" aria-hidden="true" />
@@ -260,8 +290,12 @@ const dotTone: Record<ActivityEntry['tone'], string> = {
               <li v-for="member in team" :key="member.name" class="flex items-center gap-3">
                 <DzAvatar :fallback="member.initials" :alt="member.name" size="sm" />
                 <div class="min-w-0 flex-1">
-                  <DzText as="p" size="sm" weight="medium" truncate>{{ member.name }}</DzText>
-                  <DzText as="p" size="xs" tone="muted">{{ member.role }}</DzText>
+                  <DzText as="p" size="sm" weight="medium" truncate>
+                    {{ member.name }}
+                  </DzText>
+                  <DzText as="p" size="xs" tone="muted">
+                    {{ member.role }}
+                  </DzText>
                 </div>
               </li>
             </ul>

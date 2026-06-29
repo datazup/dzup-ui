@@ -62,25 +62,25 @@ describe('dzRating — Unit Tests', () => {
 
   // -- Keyboard -------------------------------------------------------------
 
-  it('ArrowRight increases by one step', async () => {
+  it('arrowRight increases by one step', async () => {
     const wrapper = mount(DzRating, { props: { value: 2 } })
     await wrapper.find('[role="slider"]').trigger('keydown', { key: 'ArrowRight' })
     expect(wrapper.emitted('update:value')?.[0]).toEqual([3])
   })
 
-  it('ArrowLeft decreases by one step', async () => {
+  it('arrowLeft decreases by one step', async () => {
     const wrapper = mount(DzRating, { props: { value: 2 } })
     await wrapper.find('[role="slider"]').trigger('keydown', { key: 'ArrowLeft' })
     expect(wrapper.emitted('update:value')?.[0]).toEqual([1])
   })
 
-  it('ArrowRight advances by 0.5 when allowHalf', async () => {
+  it('arrowRight advances by 0.5 when allowHalf', async () => {
     const wrapper = mount(DzRating, { props: { value: 2, allowHalf: true } })
     await wrapper.find('[role="slider"]').trigger('keydown', { key: 'ArrowRight' })
     expect(wrapper.emitted('update:value')?.[0]).toEqual([2.5])
   })
 
-  it('Home jumps to 0 and End jumps to count', async () => {
+  it('home jumps to 0 and End jumps to count', async () => {
     const wrapper = mount(DzRating, { props: { value: 3, count: 5 } })
     const slider = wrapper.find('[role="slider"]')
     await slider.trigger('keydown', { key: 'End' })

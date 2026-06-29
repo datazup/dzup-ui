@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzToastEmits, DzToastProps, DzToastSlots } from './DzToast.types.ts'
 import { X } from 'lucide-vue-next'
 import {
@@ -26,6 +22,10 @@ import {
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { toastVariants } from './DzToast.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzToastProps>(), {
   id: undefined,
@@ -59,7 +59,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <ToastRoot

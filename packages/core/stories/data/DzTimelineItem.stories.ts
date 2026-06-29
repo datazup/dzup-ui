@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { DzTimeline, DzTimelineItem } from '../../src/components/data'
 
 /**
@@ -54,6 +55,16 @@ export const Default: Story = {
       </DzTimelineItem>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const item = canvas.getByRole('listitem')
+    await expect(item).toBeInTheDocument()
+    await expect(item).toBeVisible()
+
+    await expect(canvas.getByText('Mar 15')).toBeVisible()
+    await expect(canvas.getByText(/Project milestone completed/)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------

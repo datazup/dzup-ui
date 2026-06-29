@@ -4,6 +4,19 @@
  * @module @dzup-ui/core/components/forms
  */
 
+// Types — DzCascader
+export type {
+  DzCascaderEmits,
+  DzCascaderExpandTrigger,
+  DzCascaderFlatPath,
+  DzCascaderKey,
+  DzCascaderOption,
+  DzCascaderProps,
+  DzCascaderSlots,
+  DzCascaderValue,
+} from './DzCascader.types.ts'
+export { type CascaderVariantProps, cascaderVariants } from './DzCascader.variants.ts'
+export { default as DzCascader } from './DzCascader.vue'
 // Types — DzCheckbox
 export type { DzCheckboxEmits, DzCheckboxProps, DzCheckboxSlots } from './DzCheckbox.types.ts'
 // Variants (for consumer customization)
@@ -19,19 +32,6 @@ export type {
 // Injection keys (runtime exports)
 export { DZ_CHECKBOX_GROUP_KEY } from './DzCheckboxGroup.types.ts'
 export { default as DzCheckboxGroup } from './DzCheckboxGroup.vue'
-// Types — DzCascader
-export type {
-  DzCascaderEmits,
-  DzCascaderExpandTrigger,
-  DzCascaderFlatPath,
-  DzCascaderKey,
-  DzCascaderOption,
-  DzCascaderProps,
-  DzCascaderSlots,
-  DzCascaderValue,
-} from './DzCascader.types.ts'
-export { type CascaderVariantProps, cascaderVariants } from './DzCascader.variants.ts'
-export { default as DzCascader } from './DzCascader.vue'
 export type {
   DzColorPickerEmits,
   DzColorPickerProps,
@@ -50,17 +50,6 @@ export type {
 } from './DzCombobox.types.ts'
 export { type ComboboxVariantProps, comboboxVariants } from './DzCombobox.variants.ts'
 export { default as DzCombobox } from './DzCombobox.vue'
-// Types — DzMention
-export type {
-  DzMentionEmits,
-  DzMentionOption,
-  DzMentionOptionResolver,
-  DzMentionProps,
-  DzMentionSlots,
-  DzMentionTrigger,
-} from './DzMention.types.ts'
-export { type MentionVariantProps, mentionVariants } from './DzMention.variants.ts'
-export { default as DzMention } from './DzMention.vue'
 // Types — DzDatePicker
 export type {
   DzDatePickerEmits,
@@ -76,10 +65,12 @@ export type {
   DzDateRangePickerProps,
   DzDateRangePickerSlots,
 } from './DzDateRangePicker.types.ts'
-
 export { type DateRangePickerVariantProps, dateRangePickerVariants } from './DzDateRangePicker.variants.ts'
-
 export { default as DzDateRangePicker } from './DzDateRangePicker.vue'
+// Types — DzFieldArray
+export type { DzFieldArrayEmits, DzFieldArrayProps, DzFieldArraySlotProps, DzFieldArraySlots } from './DzFieldArray.types.ts'
+
+export { default as DzFieldArray } from './DzFieldArray.vue'
 
 export type {
   DzFileUploadEmits,
@@ -99,9 +90,9 @@ export type {
   DzFloatLabelSlots,
   DzFloatLabelVariant,
 } from './DzFloatLabel.types.ts'
+
 export { type FloatLabelVariantProps, floatLabelVariants } from './DzFloatLabel.variants.ts'
 export { default as DzFloatLabel } from './DzFloatLabel.vue'
-
 export { default as DzFormDescription } from './DzFormDescription.vue'
 
 // Types — DzFormField
@@ -114,15 +105,27 @@ export { default as DzFormLabel } from './DzFormLabel.vue'
 
 export { default as DzFormMessage } from './DzFormMessage.vue'
 
+// Types — DzInplace
+export type {
+  DzInplaceDisplaySlotProps,
+  DzInplaceEditSlotProps,
+  DzInplaceEmits,
+  DzInplaceProps,
+  DzInplaceSaveOn,
+  DzInplaceSlots,
+} from './DzInplace.types.ts'
+
+export { type InplaceVariantProps, inplaceVariants } from './DzInplace.variants.ts'
+export { default as DzInplace } from './DzInplace.vue'
 // Types — DzKnob
 export type {
   DzKnobEmits,
   DzKnobProps,
   DzKnobSlots,
 } from './DzKnob.types.ts'
+
 export { type KnobVariantProps, knobVariants } from './DzKnob.variants.ts'
 export { default as DzKnob } from './DzKnob.vue'
-
 // Types — DzListbox
 export type {
   DzListboxEmits,
@@ -132,8 +135,23 @@ export type {
   DzListboxSlots,
   DzListboxValue,
 } from './DzListbox.types.ts'
+
 export { type ListboxVariantProps, listboxVariants } from './DzListbox.variants.ts'
+
 export { default as DzListbox } from './DzListbox.vue'
+
+// Types — DzMention
+export type {
+  DzMentionEmits,
+  DzMentionOption,
+  DzMentionOptionResolver,
+  DzMentionProps,
+  DzMentionSlots,
+  DzMentionTrigger,
+} from './DzMention.types.ts'
+
+export { type MentionVariantProps, mentionVariants } from './DzMention.variants.ts'
+export { default as DzMention } from './DzMention.vue'
 
 // Types — DzMultiSelect
 export type {
@@ -143,9 +161,7 @@ export type {
 } from './DzMultiSelect.types.ts'
 
 export { type MultiSelectVariantProps, multiSelectVariants } from './DzMultiSelect.variants.ts'
-
 export { default as DzMultiSelect } from './DzMultiSelect.vue'
-
 // Types — DzPersonaSelector
 export type {
   DzPersonaSelectorEmits,
@@ -154,10 +170,8 @@ export type {
   Persona,
 } from './DzPersonaSelector.types.ts'
 export { default as DzPersonaSelector } from './DzPersonaSelector.vue'
-
 // Types — DzRadio
 export type { DzRadioProps, DzRadioSlots } from './DzRadio.types.ts'
-
 export { type RadioVariantProps, radioVariants } from './DzRadio.variants.ts'
 export { default as DzRadio } from './DzRadio.vue'
 // Types — DzRadioGroup
@@ -167,14 +181,6 @@ export type {
   DzRadioGroupSlots,
 } from './DzRadioGroup.types.ts'
 export { default as DzRadioGroup } from './DzRadioGroup.vue'
-// Types — DzRating
-export type {
-  DzRatingEmits,
-  DzRatingProps,
-  DzRatingSlots,
-} from './DzRating.types.ts'
-export { type RatingVariantProps, ratingVariants } from './DzRating.variants.ts'
-export { default as DzRating } from './DzRating.vue'
 export type {
   DzRangeSliderEmits,
   DzRangeSliderProps,
@@ -183,6 +189,17 @@ export type {
 export { type RangeSliderVariantProps, rangeSliderVariants } from './DzRangeSlider.variants.ts'
 // ── DzRangeSlider ──
 export { default as DzRangeSlider } from './DzRangeSlider.vue'
+// Types — DzRating
+export type {
+  DzRatingEmits,
+  DzRatingProps,
+  DzRatingSlots,
+} from './DzRating.types.ts'
+
+export { type RatingVariantProps, ratingVariants } from './DzRating.variants.ts'
+
+export { default as DzRating } from './DzRating.vue'
+
 // Types — DzSelect
 export type {
   DzSelectEmits,
@@ -190,7 +207,9 @@ export type {
   DzSelectProps,
   DzSelectSlots,
 } from './DzSelect.types.ts'
+
 export { type SelectVariantProps, selectVariants } from './DzSelect.variants.ts'
+
 export { default as DzSelect } from './DzSelect.vue'
 
 // Types — DzSlider
@@ -231,7 +250,6 @@ export type {
 } from './DzTimePicker.types.ts'
 
 export { type TimePickerVariantProps, timePickerVariants } from './DzTimePicker.variants.ts'
-
 export { default as DzTimePicker } from './DzTimePicker.vue'
 
 export type {
@@ -241,27 +259,9 @@ export type {
   TransferChangePayload,
   TransferItem,
 } from './DzTransfer.types.ts'
-
 export { type TransferVariantProps, transferVariants } from './DzTransfer.variants.ts'
-
 // ── DzTransfer ──
 export { default as DzTransfer } from './DzTransfer.vue'
-
-// Types — DzFieldArray
-export type { DzFieldArrayEmits, DzFieldArrayProps, DzFieldArraySlotProps, DzFieldArraySlots } from './DzFieldArray.types.ts'
-export { default as DzFieldArray } from './DzFieldArray.vue'
-
-// Types — DzInplace
-export type {
-  DzInplaceDisplaySlotProps,
-  DzInplaceEditSlotProps,
-  DzInplaceEmits,
-  DzInplaceProps,
-  DzInplaceSaveOn,
-  DzInplaceSlots,
-} from './DzInplace.types.ts'
-export { type InplaceVariantProps, inplaceVariants } from './DzInplace.variants.ts'
-export { default as DzInplace } from './DzInplace.vue'
 
 // Types — DzTreeSelect
 export type {

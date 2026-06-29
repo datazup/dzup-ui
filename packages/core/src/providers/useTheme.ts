@@ -10,8 +10,7 @@
  */
 
 import type { DzThemeContext, ThemePreference } from './DzThemeProvider.types'
-import { computed, ref } from 'vue'
-import { inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { DZ_THEME_KEY } from './DzThemeProvider.types'
 
 export interface UseThemeOptions {
@@ -39,7 +38,8 @@ function createSentinelContext(): DzThemeContext {
 /**
  * Inject theme context from the nearest DzThemeProvider ancestor.
  *
- * @param options.optional - Return a no-op sentinel instead of throwing when
+ * @param [options] - Options object.
+ * @param [options.optional] - Return a no-op sentinel instead of throwing when
  *   no provider is found (useful in SSR layout slots).
  *
  * @throws When no provider is found and `optional` is `false` (default).

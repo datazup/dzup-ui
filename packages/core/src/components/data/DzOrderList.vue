@@ -6,6 +6,13 @@ import type {
   OrderListKey,
   OrderListMove,
 } from './DzOrderList.types.ts'
+import {
+  ChevronDown,
+  ChevronsDown,
+  ChevronsUp,
+  ChevronUp,
+  GripVertical,
+} from 'lucide-vue-next'
 /**
  * DzOrderList — reorderable list with drag, control-button, and keyboard reorder.
  *
@@ -27,13 +34,6 @@ import type {
  * ```
  */
 import { computed, nextTick, ref, useAttrs } from 'vue'
-import {
-  ChevronDown,
-  ChevronsDown,
-  ChevronsUp,
-  ChevronUp,
-  GripVertical,
-} from 'lucide-vue-next'
 import { cn } from '../../utilities/cn.ts'
 import DzIconButton from '../buttons/DzIconButton.vue'
 import { orderListVariants } from './DzOrderList.variants.ts'
@@ -41,6 +41,9 @@ import { orderListVariants } from './DzOrderList.variants.ts'
 defineOptions({
   inheritAttrs: false,
 })
+
+/** modelValue = the ordered array (never mutated in place) */
+const model = defineModel<T[]>('value', { default: () => [] })
 
 const props = withDefaults(defineProps<DzOrderListProps>(), {
   variant: 'bordered',
@@ -64,9 +67,6 @@ const props = withDefaults(defineProps<DzOrderListProps>(), {
 
 const emit = defineEmits<DzOrderListEmits>()
 defineSlots<DzOrderListSlots<T>>()
-
-/** modelValue = the ordered array (never mutated in place) */
-const model = defineModel<T[]>('value', { default: () => [] })
 
 const attrs = useAttrs()
 
@@ -278,7 +278,7 @@ function toggleSelection(item: T, index: number): void {
     next.delete(key)
   else next.add(key)
   selectedKeys.value = next
-  emit('selection-change', [...next])
+  emit('selectionChange', [...next])
 }
 
 function handleItemClick(item: T, index: number): void {
@@ -484,7 +484,7 @@ function handleBlur(event: FocusEvent): void {
     >
       <DzIconButton
         :icon="ChevronsUp"
-        :ariaLabel="moveTopLabel"
+        :aria-label="moveTopLabel"
         :disabled="!canMoveUp"
         variant="ghost"
         tone="neutral"
@@ -494,7 +494,7 @@ function handleBlur(event: FocusEvent): void {
       />
       <DzIconButton
         :icon="ChevronUp"
-        :ariaLabel="moveUpLabel"
+        :aria-label="moveUpLabel"
         :disabled="!canMoveUp"
         variant="ghost"
         tone="neutral"
@@ -504,7 +504,7 @@ function handleBlur(event: FocusEvent): void {
       />
       <DzIconButton
         :icon="ChevronDown"
-        :ariaLabel="moveDownLabel"
+        :aria-label="moveDownLabel"
         :disabled="!canMoveDown"
         variant="ghost"
         tone="neutral"
@@ -514,7 +514,7 @@ function handleBlur(event: FocusEvent): void {
       />
       <DzIconButton
         :icon="ChevronsDown"
-        :ariaLabel="moveBottomLabel"
+        :aria-label="moveBottomLabel"
         :disabled="!canMoveDown"
         variant="ghost"
         tone="neutral"
@@ -531,7 +531,7 @@ function handleBlur(event: FocusEvent): void {
         :class="styles.list()"
         :role="selectable ? 'listbox' : 'list'"
         :aria-multiselectable="selectable || undefined"
-        :aria-label="ariaLabel"
+        :ariaLabel="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="ariaDescribedby"
         @focusin="handleFocus"

@@ -7,6 +7,7 @@
  * @module @dzup-ui/core/composables/useTabs
  */
 
+import type { Orientation } from '@dzup-ui/contracts'
 import type { MaybeRef, Ref } from 'vue'
 import { computed, ref, toValue } from 'vue'
 
@@ -29,7 +30,7 @@ export interface UseTabsOptions {
   /** The currently active tab ID (reactive) */
   modelValue?: MaybeRef<string>
   /** Orientation of the tab list — determines keyboard navigation axis */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
 }
 
 /** Return value of the useTabs composable */
@@ -128,9 +129,8 @@ export function useTabs(options: UseTabsOptions = {}): UseTabsReturn {
       return
 
     const currentIndex = enabled.findIndex(t => t.id === activeTab.value)
-    const nextIndex = currentIndex === -1
-      ? 0
-      : (currentIndex + direction + enabled.length) % enabled.length
+    const nextIndex
+      = currentIndex === -1 ? 0 : (currentIndex + direction + enabled.length) % enabled.length
     const target = enabled[nextIndex]
     if (target) {
       activeTab.value = target.id

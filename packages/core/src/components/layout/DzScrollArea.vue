@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzScrollAreaProps, DzScrollAreaSlots } from './DzScrollArea.types.ts'
 import {
   ScrollAreaCorner,
@@ -26,6 +22,10 @@ import {
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { scrollAreaVariants } from './DzScrollArea.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzScrollAreaProps>(), {
   orientation: 'vertical',
@@ -59,7 +59,6 @@ const showHorizontal = computed(() =>
   props.orientation === 'horizontal' || props.orientation === 'both',
 )
 </script>
-
 
 <template>
   <ScrollAreaRoot

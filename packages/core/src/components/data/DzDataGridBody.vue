@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { ColumnDef } from './DzDataGrid.types.ts'
 /**
  * DzDataGridBody — Internal body sub-part for DzDataGrid.
@@ -11,10 +7,14 @@ import type { ColumnDef } from './DzDataGrid.types.ts'
  * Injects DzDataGrid context (ADR-08).
  */
 import { computed, inject } from 'vue'
-import DzCheckbox from '../forms/DzCheckbox.vue'
 import { cn } from '../../utilities/cn.ts'
+import DzCheckbox from '../forms/DzCheckbox.vue'
 import { DZ_DATA_GRID_KEY } from './DzDataGrid.types.ts'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineProps<{
   /** Key field for row identity */
@@ -61,7 +61,6 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
   }
 }
 </script>
-
 
 <template>
   <tbody :class="styles.body()" role="rowgroup">

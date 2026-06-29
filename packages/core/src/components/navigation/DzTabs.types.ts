@@ -12,6 +12,7 @@ import type {
   BaseAccessibilityProps,
   CanonicalSize,
   CanonicalTone,
+  Orientation,
   TabsVariant,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
@@ -31,7 +32,7 @@ export interface DzTabsContext {
   /** Semantic tone applied to the active state */
   tone: Ref<CanonicalTone>
   /** Layout orientation */
-  orientation: Ref<'horizontal' | 'vertical'>
+  orientation: Ref<Orientation>
   /** Handler called when a closable tab's close button is clicked */
   onClose: ((value: string) => void) | undefined
 }
@@ -46,7 +47,7 @@ export const DZ_TABS_KEY: InjectionKey<DzTabsContext> = Symbol('dz-tabs')
 /** Props for the DzTabs root component */
 export interface DzTabsProps extends BaseAccessibilityProps {
   /** Layout orientation */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
   /** Visual style variant */
   variant?: TabsVariant
   /** Component size */

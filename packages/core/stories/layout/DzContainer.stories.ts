@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzContainer } from '../../src/components/layout'
+import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 
 /**
  * DzContainer is a centered content container with responsive padding and max-width.
@@ -86,6 +87,14 @@ export const Default: Story = {
       </DzContainer>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const container = canvasElement.querySelector('div')
+    await expect(container).toBeInTheDocument()
+    const content = canvas.getByText('Content inside a default DzContainer.')
+    await expect(content).toBeInTheDocument()
+    await expect(container).toContainElement(content)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -190,9 +199,7 @@ export const PolymorphicAs: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzContainer },
     template: `

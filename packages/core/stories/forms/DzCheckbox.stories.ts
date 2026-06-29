@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { userEvent, within } from 'storybook/test'
 import { DzCheckbox } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCheckbox is a toggleable checkbox component built on Reka UI CheckboxRoot.

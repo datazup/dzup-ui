@@ -51,7 +51,7 @@ describe('dzInplace — Contract Spec v1', () => {
     const wrapper = mount(DzInplace, {
       props: { value: 'Hello' },
       slots: {
-        display: ({ value }: { value: unknown; activate: () => void }) =>
+        display: ({ value }: { value: unknown, activate: () => void }) =>
           h('span', { 'data-testid': 'disp' }, String(value)),
       },
     })

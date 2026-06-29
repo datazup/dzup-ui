@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzFileUpload } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFileUpload provides a drag-and-drop file upload zone with file validation.
@@ -245,9 +246,7 @@ export const States: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzFileUpload },
     template: '<DzFileUpload multiple class="max-w-md" />',
@@ -273,6 +272,25 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Initially no files selected
+    await expect(canvas.getByText(/none/i)).toBeVisible()
+
+    // Upload a mock file via the hidden input
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement
+    const file = new File(['hello world'], 'test-document.txt', { type: 'text/plain' })
+    await userEvent.upload(input, file)
+
+    // File name appears in the file list and in the summary paragraph
+    await waitFor(() => expect(canvas.getAllByText('test-document.txt').length).toBeGreaterThan(0))
+
+    // Remove button is present for the uploaded file
+    await expect(
+      canvas.getByRole('button', { name: /remove test-document\.txt/i }),
+    ).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

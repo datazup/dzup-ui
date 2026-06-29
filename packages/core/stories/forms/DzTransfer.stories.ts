@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import type { TransferItem } from '../../src/components/forms'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzTransfer } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 const sampleSource: TransferItem[] = [
   { key: '1', label: 'JavaScript' },

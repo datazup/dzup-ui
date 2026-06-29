@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // dzup-ui equivalent of FreestyleForm — ONLY @dzup-ui/core components + --dz-* tokens.
 
+import type { DzSelectItem } from '../../../src/components/forms'
 import { computed, ref } from 'vue'
 import { DzButton } from '../../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../../src/components/cards'
@@ -14,7 +15,6 @@ import {
 } from '../../../src/components/forms'
 import { DzInput, DzTextarea } from '../../../src/components/inputs'
 import { DzHeading, DzText } from '../../../src/components/typography'
-import type { DzSelectItem } from '../../../src/components/forms'
 
 const name = ref('')
 const visibility = ref<'private' | 'team' | 'public'>('team')
@@ -65,7 +65,9 @@ function submit() {
               >
                 Workspace
               </DzText>
-              <DzHeading :level="1" size="lg" weight="semibold">Create Project</DzHeading>
+              <DzHeading :level="1" size="lg" weight="semibold">
+                Create Project
+              </DzHeading>
               <DzText as="p" size="sm" tone="muted" class="mt-1">
                 Spin up a new project and invite your team.
               </DzText>
@@ -140,9 +142,7 @@ function submit() {
                 <div class="flex items-start gap-3 py-1">
                   <DzCheckbox v-model="notifications" class="mt-0.5" />
                   <span>
-                    <DzText as="span" size="sm" weight="medium" class="block"
-                      >Enable notifications</DzText
-                    >
+                    <DzText as="span" size="sm" weight="medium" class="block">Enable notifications</DzText>
                     <DzText as="span" size="xs" tone="muted" class="block">
                       Get an email when activity happens in this project.
                     </DzText>
@@ -166,8 +166,12 @@ function submit() {
           <!-- Footer — transparent band, sits on the card surface (no muted fill, no divider) -->
           <DzCardFooter>
             <div class="flex items-center justify-end gap-3 px-7 pb-6 pt-2">
-              <DzButton type="button" variant="outline" tone="neutral">Cancel</DzButton>
-              <DzButton type="submit" variant="solid" tone="primary">Create Project</DzButton>
+              <DzButton type="button" variant="outline" tone="neutral">
+                Cancel
+              </DzButton>
+              <DzButton type="submit" variant="solid" tone="primary">
+                Create Project
+              </DzButton>
             </div>
           </DzCardFooter>
         </DzCard>

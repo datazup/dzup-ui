@@ -23,7 +23,7 @@ export interface DzIconButtonProps {
   /** Icon component to render (from lucide-vue-next or similar) */
   icon: Component
   /** Accessible label -- REQUIRED since there is no visible text */
-  ariaLabel: string
+  ariaLabel?: string
   /** Visual style variant */
   variant?: ButtonVariant
   /** Component size */

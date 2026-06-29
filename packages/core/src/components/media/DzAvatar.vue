@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAvatarEmits, DzAvatarProps, DzAvatarSlots } from './DzAvatar.types.ts'
 /**
  * DzAvatar — User avatar component with image and fallback support.
@@ -24,6 +20,10 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_AVATAR_GROUP_KEY } from './DzAvatar.types.ts'
 import { avatarVariants } from './DzAvatar.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzAvatarProps>(), {
   size: undefined,
   shape: 'circle',
@@ -44,6 +44,8 @@ const resolvedSize = computed(() => props.size ?? groupContext?.size.value ?? 'm
 /** Whether to show the image */
 const showImage = computed(() => !!props.src && !imageError.value)
 
+const accessibleLabel = computed(() => props.ariaLabel ?? props.alt ?? props.fallback)
+
 const classes = computed(() =>
   cn(
     avatarVariants({ size: resolvedSize.value, shape: props.shape }),
@@ -57,12 +59,11 @@ function handleImageError(event: Event): void {
 }
 </script>
 
-
 <template>
   <span
     :id="id"
     :class="classes"
-    :aria-label="ariaLabel ?? alt"
+    :aria-label="accessibleLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     role="img"

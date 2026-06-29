@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzText } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzText is a general-purpose text component with semantic element control and visual styling.
@@ -79,6 +80,14 @@ export const Default: Story = {
     },
     template: '<DzText v-bind="args">The quick brown fox jumps over the lazy dog.</DzText>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const el = canvasElement.querySelector('p')
+    await expect(el).toBeInTheDocument()
+    await expect(el).toBeVisible()
+    await expect(canvas.getByText(/the quick brown fox/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/the quick brown fox/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -242,9 +251,7 @@ export const LineClamp: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzText },
     template: `

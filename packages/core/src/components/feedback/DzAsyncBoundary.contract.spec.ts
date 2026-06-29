@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
 import DzAsyncBoundary from './DzAsyncBoundary.vue'
 
-describe('DzAsyncBoundary — Contract Spec v1', () => {
+describe('dzAsyncBoundary — Contract Spec v1', () => {
   it('renders loading slot during suspension', () => {
     const AsyncChild = defineComponent({
       async setup() {
@@ -28,10 +28,10 @@ describe('DzAsyncBoundary — Contract Spec v1', () => {
     const wrapper = mount(DzAsyncBoundary, {
       slots: {
         default: () => h(ThrowingChild),
-        error: ({ error, reset }: { error: unknown; reset: () => void }) =>
+        error: ({ error, reset }: { error: unknown, reset: () => void }) =>
           h('div', [
             h('span', { 'data-testid': 'err' }, String(error)),
-            h('button', { 'data-testid': 'rst', onClick: reset }, 'reset'),
+            h('button', { 'data-testid': 'rst', 'onClick': reset }, 'reset'),
           ]),
       },
     })

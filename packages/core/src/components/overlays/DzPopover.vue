@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzPopoverProps, DzPopoverSlots } from './DzPopover.types.ts'
 /**
  * DzPopover -- Root compound component wrapping Reka UI PopoverRoot (ADR-07).
@@ -23,6 +19,10 @@ import type { DzPopoverProps, DzPopoverSlots } from './DzPopover.types.ts'
  */
 import { PopoverRoot } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const open = defineModel<boolean>('open', { default: false })
 
 withDefaults(defineProps<DzPopoverProps>(), {
@@ -31,7 +31,6 @@ withDefaults(defineProps<DzPopoverProps>(), {
 
 defineSlots<DzPopoverSlots>()
 </script>
-
 
 <template>
   <PopoverRoot v-model:open="open" :modal="modal">

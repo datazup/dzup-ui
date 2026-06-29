@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, within } from 'storybook/test'
 import { Lock, Shield } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzPasswordInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzPasswordInput is a password field with a built-in visibility toggle.

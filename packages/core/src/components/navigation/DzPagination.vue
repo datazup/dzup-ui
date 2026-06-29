@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzPaginationEmits, DzPaginationProps, DzPaginationSlots } from './DzPagination.types.ts'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from 'lucide-vue-next'
 import {
@@ -28,6 +24,10 @@ import {
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { paginationVariants } from './DzPagination.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<number>({ default: 1 })
 
@@ -70,7 +70,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <nav

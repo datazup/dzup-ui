@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzCode } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCode renders code content in monospace font with appropriate styling.
@@ -55,6 +56,14 @@ export const Default: Story = {
     },
     template: '<p>Use <DzCode v-bind="args">const x = 42</DzCode> to declare a constant.</p>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const code = canvasElement.querySelector('code')
+    await expect(code).toBeInTheDocument()
+    await expect(code!.tagName.toLowerCase()).toBe('code')
+    await expect(canvas.getByText(/const x = 42/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/const x = 42/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -230,9 +239,7 @@ export const VsCodeBlock: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzCode },
     template: `

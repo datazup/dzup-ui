@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzTransferEmits,
   DzTransferProps,
@@ -19,6 +15,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useTransfer } from '../../composables/useTransfer/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { transferVariants } from './DzTransfer.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 /** modelValue = array of keys currently in the target list */
 const model = defineModel<string[]>({ default: () => [] })
@@ -140,7 +140,6 @@ function handleBlur(event: FocusEvent): void {
 }
 </script>
 
-
 <template>
   <div :class="wrapperClasses" v-bind="{ ...$attrs, class: undefined }">
     <div
@@ -159,147 +158,147 @@ function handleBlur(event: FocusEvent): void {
       @focus.capture="handleFocus"
       @blur.capture="handleBlur"
     >
-    <!-- Source list -->
-    <div :class="styles.list()" data-dz-transfer-list>
-      <div :class="styles.listHeader()">
-        <slot name="source-header">
-          <span>Source</span>
-        </slot>
-        <span :class="styles.listCount()">
-          {{ sourceSelected.size }}/{{ sourceItems.length }}
-        </span>
-      </div>
-      <input
-        v-if="searchable"
-        v-model="sourceSearch"
-        type="text"
-        :class="styles.searchInput()"
-        :placeholder="searchPlaceholder"
-        aria-label="Search source items"
-      >
-      <div :class="styles.listBody()">
-        <template v-if="filteredSourceItems.length > 0">
-          <div
-            v-for="item in filteredSourceItems"
-            :key="item.key"
-            :class="cn(styles.item(), sourceSelected.has(item.key) ? styles.itemSelected() : '')"
-            :data-disabled="item.disabled ? '' : undefined"
-            role="option"
-            :aria-selected="sourceSelected.has(item.key)"
-            @click="toggleSourceItem(item)"
-          >
-            <slot name="item" :item="item" :selected="sourceSelected.has(item.key)">
-              <input
-                type="checkbox"
-                :class="styles.itemCheckbox()"
-                :checked="sourceSelected.has(item.key)"
-                :disabled="item.disabled"
-                tabindex="-1"
-                :aria-hidden="true"
-              >
-              <span>{{ item.label }}</span>
-            </slot>
+      <!-- Source list -->
+      <div :class="styles.list()" data-dz-transfer-list>
+        <div :class="styles.listHeader()">
+          <slot name="source-header">
+            <span>Source</span>
+          </slot>
+          <span :class="styles.listCount()">
+            {{ sourceSelected.size }}/{{ sourceItems.length }}
+          </span>
+        </div>
+        <input
+          v-if="searchable"
+          v-model="sourceSearch"
+          type="text"
+          :class="styles.searchInput()"
+          :placeholder="searchPlaceholder"
+          aria-label="Search source items"
+        >
+        <div :class="styles.listBody()">
+          <template v-if="filteredSourceItems.length > 0">
+            <div
+              v-for="item in filteredSourceItems"
+              :key="item.key"
+              :class="cn(styles.item(), sourceSelected.has(item.key) ? styles.itemSelected() : '')"
+              :data-disabled="item.disabled ? '' : undefined"
+              role="option"
+              :aria-selected="sourceSelected.has(item.key)"
+              @click="toggleSourceItem(item)"
+            >
+              <slot name="item" :item="item" :selected="sourceSelected.has(item.key)">
+                <input
+                  type="checkbox"
+                  :class="styles.itemCheckbox()"
+                  :checked="sourceSelected.has(item.key)"
+                  :disabled="item.disabled"
+                  tabindex="-1"
+                  :aria-hidden="true"
+                >
+                <span>{{ item.label }}</span>
+              </slot>
+            </div>
+          </template>
+          <div v-else :class="styles.empty()">
+            No items
           </div>
-        </template>
-        <div v-else :class="styles.empty()">
-          No items
         </div>
       </div>
-    </div>
 
-    <!-- Transfer actions -->
-    <div :class="styles.actions()">
-      <button
-        type="button"
-        :class="styles.actionButton()"
-        :disabled="sourceSelected.size === 0 || resolvedDisabled"
-        aria-label="Move selected to target"
-        @click="moveToTarget"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
+      <!-- Transfer actions -->
+      <div :class="styles.actions()">
+        <button
+          type="button"
+          :class="styles.actionButton()"
+          :disabled="sourceSelected.size === 0 || resolvedDisabled"
+          aria-label="Move selected to target"
+          @click="moveToTarget"
         >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </button>
-      <button
-        type="button"
-        :class="styles.actionButton()"
-        :disabled="targetSelected.size === 0 || resolvedDisabled"
-        aria-label="Move selected to source"
-        @click="moveToSource"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Target list -->
-    <div :class="styles.list()" data-dz-transfer-list>
-      <div :class="styles.listHeader()">
-        <slot name="target-header">
-          <span>Target</span>
-        </slot>
-        <span :class="styles.listCount()">
-          {{ targetSelected.size }}/{{ targetItems.length }}
-        </span>
-      </div>
-      <input
-        v-if="searchable"
-        v-model="targetSearch"
-        type="text"
-        :class="styles.searchInput()"
-        :placeholder="searchPlaceholder"
-        aria-label="Search target items"
-      >
-      <div :class="styles.listBody()">
-        <template v-if="filteredTargetItems.length > 0">
-          <div
-            v-for="item in filteredTargetItems"
-            :key="item.key"
-            :class="cn(styles.item(), targetSelected.has(item.key) ? styles.itemSelected() : '')"
-            :data-disabled="item.disabled ? '' : undefined"
-            role="option"
-            :aria-selected="targetSelected.has(item.key)"
-            @click="toggleTargetItem(item)"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
           >
-            <slot name="item" :item="item" :selected="targetSelected.has(item.key)">
-              <input
-                type="checkbox"
-                :class="styles.itemCheckbox()"
-                :checked="targetSelected.has(item.key)"
-                :disabled="item.disabled"
-                tabindex="-1"
-                :aria-hidden="true"
-              >
-              <span>{{ item.label }}</span>
-            </slot>
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          :class="styles.actionButton()"
+          :disabled="targetSelected.size === 0 || resolvedDisabled"
+          aria-label="Move selected to source"
+          @click="moveToSource"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Target list -->
+      <div :class="styles.list()" data-dz-transfer-list>
+        <div :class="styles.listHeader()">
+          <slot name="target-header">
+            <span>Target</span>
+          </slot>
+          <span :class="styles.listCount()">
+            {{ targetSelected.size }}/{{ targetItems.length }}
+          </span>
+        </div>
+        <input
+          v-if="searchable"
+          v-model="targetSearch"
+          type="text"
+          :class="styles.searchInput()"
+          :placeholder="searchPlaceholder"
+          aria-label="Search target items"
+        >
+        <div :class="styles.listBody()">
+          <template v-if="filteredTargetItems.length > 0">
+            <div
+              v-for="item in filteredTargetItems"
+              :key="item.key"
+              :class="cn(styles.item(), targetSelected.has(item.key) ? styles.itemSelected() : '')"
+              :data-disabled="item.disabled ? '' : undefined"
+              role="option"
+              :aria-selected="targetSelected.has(item.key)"
+              @click="toggleTargetItem(item)"
+            >
+              <slot name="item" :item="item" :selected="targetSelected.has(item.key)">
+                <input
+                  type="checkbox"
+                  :class="styles.itemCheckbox()"
+                  :checked="targetSelected.has(item.key)"
+                  :disabled="item.disabled"
+                  tabindex="-1"
+                  :aria-hidden="true"
+                >
+                <span>{{ item.label }}</span>
+              </slot>
+            </div>
+          </template>
+          <div v-else :class="styles.empty()">
+            No items
           </div>
-        </template>
-        <div v-else :class="styles.empty()">
-          No items
         </div>
       </div>
-    </div>
     </div>
 
     <!-- Error message -->

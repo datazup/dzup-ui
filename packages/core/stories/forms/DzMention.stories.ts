@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMention } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMention is a textarea/input that surfaces a suggestion dropdown when a
@@ -103,6 +104,49 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 // ---------------------------------------------------------------------------
+// Default -- @ trigger opens listbox; first option can be selected
+// ---------------------------------------------------------------------------
+
+export const Default: Story = {
+  render: () => ({
+    components: { DzMention },
+    setup() {
+      const triggers = [{ char: '@', options: users }]
+      return { triggers }
+    },
+    data() {
+      return { value: '' }
+    },
+    template: `
+      <div class="max-w-md p-4">
+        <DzMention v-model:value="value" :triggers="triggers" placeholder="Type @ to mention…" aria-label="Comment" />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The textarea is a combobox; focus it and type @ to open the listbox
+    const combobox = canvas.getByRole('combobox', { name: 'Comment' })
+    await expect(combobox).toBeInTheDocument()
+    await userEvent.click(combobox)
+    await userEvent.type(combobox, '@')
+
+    // A listbox should appear with @ suggestions
+    const listbox = await waitFor(() => canvas.getByRole('listbox'))
+    await expect(listbox).toBeVisible()
+
+    // At least one option is rendered
+    const options = within(listbox).getAllByRole('option')
+    await expect(options.length).toBeGreaterThan(0)
+
+    // Click the first option and assert the combobox value contains @ + label
+    await userEvent.click(options[0]!)
+    await expect((combobox as HTMLTextAreaElement).value).toMatch(/@\w/)
+  },
+}
+
+// ---------------------------------------------------------------------------
 // User mentions (@)
 // ---------------------------------------------------------------------------
 
@@ -125,6 +169,22 @@ export const UserMentions: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const combobox = canvas.getByRole('combobox', { name: 'Comment' })
+    await expect(combobox).toBeInTheDocument()
+    // Type @ to open the suggestions dropdown
+    await userEvent.click(combobox)
+    await userEvent.type(combobox, '@')
+    // Listbox with user options must appear
+    const listbox = await waitFor(() => canvas.getByRole('listbox'))
+    await expect(listbox).toBeVisible()
+    const options = within(listbox).getAllByRole('option')
+    await expect(options.length).toBeGreaterThan(0)
+    // Selecting the first option inserts @Label into the textarea
+    await userEvent.click(options[0]!)
+    await expect((combobox as HTMLTextAreaElement).value).toMatch(/@Alice/)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -149,6 +209,22 @@ export const Hashtags: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const combobox = canvas.getByRole('combobox', { name: 'Issue body' })
+    await expect(combobox).toBeInTheDocument()
+    // Type # to open the tag suggestions dropdown
+    await userEvent.click(combobox)
+    await userEvent.type(combobox, '#')
+    // Listbox with tag options must appear
+    const listbox = await waitFor(() => canvas.getByRole('listbox'))
+    await expect(listbox).toBeVisible()
+    const options = within(listbox).getAllByRole('option')
+    await expect(options.length).toBeGreaterThan(0)
+    // Selecting first option inserts #label into the textarea
+    await userEvent.click(options[0]!)
+    await expect((combobox as HTMLTextAreaElement).value).toMatch(/#\w/)
+  },
 }
 
 // ---------------------------------------------------------------------------

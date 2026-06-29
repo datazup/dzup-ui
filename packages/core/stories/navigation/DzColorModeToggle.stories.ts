@@ -1,4 +1,5 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzColorModeToggle } from '../../src/components/navigation'
 import { DzThemeProvider } from '../../src/providers'
 
@@ -78,6 +79,22 @@ export const IconCycle: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The cycle button is a button with an accessible label.
+    const btn = canvas.getByRole('button')
+    await expect(btn).toBeInTheDocument()
+    await expect(btn).toBeVisible()
+
+    // Click to cycle the mode — the button remains in the DOM after cycling.
+    await userEvent.click(btn)
+    await expect(btn).toBeInTheDocument()
+
+    // Click again — still interactive.
+    await userEvent.click(btn)
+    await expect(btn).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------

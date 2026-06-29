@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzImageComparisonEmits,
   DzImageComparisonProps,
@@ -28,6 +24,10 @@ import type {
 import { computed, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { imageComparisonVariants } from './DzImageComparison.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const position = defineModel<number>('position', { default: 50 })
 

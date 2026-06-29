@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzConfirmDialogEmits, DzConfirmDialogProps, DzConfirmDialogSlots } from './DzConfirmDialog.types.ts'
 /**
  * DzConfirmDialog -- Pre-composed confirmation dialog.
@@ -30,6 +26,10 @@ import DzDialog from './DzDialog.vue'
 import DzDialogContent from './DzDialogContent.vue'
 import DzDialogDescription from './DzDialogDescription.vue'
 import DzDialogTitle from './DzDialogTitle.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzConfirmDialogProps>(), {
   id: undefined,
@@ -112,7 +112,6 @@ function handleInteractOutside(): void {
   handleCancel()
 }
 </script>
-
 
 <template>
   <DzDialog

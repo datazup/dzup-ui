@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { DzInputMask } from '../../src/components/inputs'
+import { expect, userEvent, within } from 'storybook/test'
 import {
   DzFormDescription,
   DzFormField,
   DzFormLabel,
   DzFormMessage,
 } from '../../src/components/forms'
+import { DzInputMask } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzInputMask is a format-masked text input for structured fields such as phone
@@ -27,7 +28,8 @@ const meta = {
     // Behavior
     mask: {
       control: 'text',
-      description: 'Mask pattern — 9 = digit, a = letter, * = alphanumeric; everything else is a literal',
+      description:
+        'Mask pattern — 9 = digit, a = letter, * = alphanumeric; everything else is a literal',
       table: { category: 'Behavior' },
     },
     slotChar: {
@@ -144,6 +146,21 @@ export const Phone: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('textbox', { name: /phone number/i })
+
+    // Click to focus, then type the digits — literals (parentheses, space, dash)
+    // are auto-inserted by the mask engine.
+    await userEvent.click(input)
+    await userEvent.keyboard('2125550199')
+
+    // Masked value should reflect the (212) 555-0199 template.
+    await expect(input).toHaveValue('(212) 555-0199')
+
+    // Unmasked display shows the raw digits only.
+    await expect(canvas.getByText(/2125550199/)).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -286,4 +303,57 @@ export const DarkMode: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility: keyboard navigation and aria attributes
+// ---------------------------------------------------------------------------
+
+export const Accessibility: Story = {
+  name: 'Accessibility: Keyboard & ARIA',
+  render: () => ({
+    components: { DzInputMask },
+    template: `
+      <div class="space-y-4 max-w-xs">
+        <p class="text-sm text-gray-500">
+          Tab to focus, type digits — literals are skipped automatically.
+          Backspace erases one user-entered character at a time.
+        </p>
+        <DzInputMask
+          mask="(999) 999-9999"
+          aria-label="Phone number input"
+          placeholder="(___) ___-____"
+        />
+        <DzInputMask
+          mask="99/99/9999"
+          aria-label="Date input"
+          placeholder="MM/DD/YYYY"
+          invalid
+          error="Enter a valid date"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const phone = canvas.getByRole('textbox', { name: /phone number input/i })
+    const date = canvas.getByRole('textbox', { name: /date input/i })
+
+    // Phone: digits fill the mask slots; literals are inserted automatically.
+    await userEvent.click(phone)
+    await userEvent.keyboard('8005551234')
+    await expect(phone).toHaveValue('(800) 555-1234')
+
+    // Backspace removes the last user digit (skips the literal dash).
+    await userEvent.keyboard('{Backspace}')
+    await expect(phone).not.toHaveValue('(800) 555-1234')
+
+    // Invalid date input exposes aria-invalid.
+    await expect(date).toHaveAttribute('aria-invalid', 'true')
+
+    // Tab moves focus from phone to date field.
+    phone.focus()
+    await userEvent.tab()
+    await expect(date).toHaveFocus()
+  },
 }

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAspectRatioProps, DzAspectRatioSlots } from './DzAspectRatio.types.ts'
 /**
  * DzAspectRatio — Maintains a consistent aspect ratio for its content.
@@ -18,6 +14,10 @@ import type { DzAspectRatioProps, DzAspectRatioSlots } from './DzAspectRatio.typ
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzAspectRatioProps>(), {
   ratio: 1,
@@ -35,7 +35,6 @@ const style = computed(() => ({
   'aspect-ratio': `${props.ratio}`,
 }))
 </script>
-
 
 <template>
   <div

@@ -9,7 +9,7 @@
  * ```
  */
 
-export * from './options.ts'
 export * from './decorators.ts'
 export * from './DemoGrid.ts'
+export * from './options.ts'
 export * from './status.ts'

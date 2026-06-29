@@ -8,14 +8,14 @@
  * @module @dzup-ui/core/components/media/DzImageComparison
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, Orientation } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Orientation
 // ---------------------------------------------------------------------------
 
 /** Axis the divider travels along. */
-export type ImageComparisonOrientation = 'horizontal' | 'vertical'
+export type ImageComparisonOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Props

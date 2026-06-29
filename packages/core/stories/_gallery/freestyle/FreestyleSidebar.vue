@@ -2,6 +2,7 @@
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 
+import type { Component } from 'vue'
 import {
   BarChart3,
   FolderKanban,
@@ -12,7 +13,6 @@ import {
   Settings,
   Users,
 } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 interface NavItem {
   label: string
@@ -54,7 +54,7 @@ const groups: NavGroup[] = [
 ]
 
 // Flattened list for the collapsed icon-rail (same items, same active state).
-const railItems: NavItem[] = groups.flatMap((group) => group.items)
+const railItems: NavItem[] = groups.flatMap(group => group.items)
 </script>
 
 <template>
@@ -69,7 +69,9 @@ const railItems: NavItem[] = groups.flatMap((group) => group.items)
         >
           Navigation
         </p>
-        <h1 class="text-2xl font-semibold tracking-tight">Sidebar</h1>
+        <h1 class="text-2xl font-semibold tracking-tight">
+          Sidebar
+        </h1>
         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Grouped sections, count badges, and the icon-rail collapsed state.
         </p>
@@ -162,7 +164,9 @@ const railItems: NavItem[] = groups.flatMap((group) => group.items)
               </div>
             </div>
           </aside>
-          <p class="text-center text-xs font-medium text-slate-500 dark:text-slate-400">Expanded</p>
+          <p class="text-center text-xs font-medium text-slate-500 dark:text-slate-400">
+            Expanded
+          </p>
         </div>
 
         <!-- Collapsed icon-rail — same data, icons only -->

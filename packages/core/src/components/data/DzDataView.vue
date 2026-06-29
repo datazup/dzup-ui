@@ -40,6 +40,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
+const layout = defineModel<DataViewLayout>('layout', { default: 'list' })
+
+const first = defineModel<number>('first', { default: 0 })
+
+const sortField = defineModel<string>('sortField', { default: '' })
+
+const sortOrder = defineModel<DataViewSortOrder>('sortOrder', { default: 1 })
+
 const props = withDefaults(defineProps<DzDataViewProps<T>>(), {
   items: () => [],
   dataKey: undefined,
@@ -64,11 +72,6 @@ const props = withDefaults(defineProps<DzDataViewProps<T>>(), {
 
 const emit = defineEmits<DzDataViewEmits>()
 defineSlots<DzDataViewSlots<T>>()
-
-const layout = defineModel<DataViewLayout>('layout', { default: 'list' })
-const first = defineModel<number>('first', { default: 0 })
-const sortField = defineModel<string>('sortField', { default: '' })
-const sortOrder = defineModel<DataViewSortOrder>('sortOrder', { default: 1 })
 
 const attrs = useAttrs()
 

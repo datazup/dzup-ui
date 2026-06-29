@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect } from 'storybook/test'
 import { DzRelativeTime } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRelativeTime renders a timestamp as a live, localised phrase ("2 minutes
@@ -73,6 +74,14 @@ const DAY = 24 * HOUR
 
 export const JustNow: Story = {
   args: { value: Date.now() - 3 * SECOND },
+  play: async ({ canvasElement }) => {
+    const time = canvasElement.querySelector('time')
+    await expect(time).toBeInTheDocument()
+    await expect(time!.tagName.toLowerCase()).toBe('time')
+    const datetime = time!.getAttribute('datetime')
+    await expect(datetime).toBeTruthy()
+    await expect(time).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------

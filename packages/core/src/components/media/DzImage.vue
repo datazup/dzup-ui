@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzImageEmits, DzImageProps, DzImageSlots } from './DzImage.types.ts'
 /**
  * DzImage — Enhanced image component with loading and error states.
@@ -19,6 +15,10 @@ import type { DzImageEmits, DzImageProps, DzImageSlots } from './DzImage.types.t
 import { computed, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { imageVariants } from './DzImage.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzImageProps>(), {
   lazy: false,
@@ -79,7 +79,6 @@ function handleError(event: Event): void {
   emit('error', event)
 }
 </script>
-
 
 <template>
   <div

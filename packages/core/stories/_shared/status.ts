@@ -53,7 +53,8 @@ export const STATUS_BADGES: Record<ComponentStatus, StatusMeta> = {
 /** Extract the `ComponentStatus` from a list of Storybook tags, if present. */
 export function statusFromTags(tags: readonly string[] | undefined): ComponentStatus | undefined {
   const tag = tags?.find(t => t.startsWith(STATUS_TAG_PREFIX))
-  if (!tag) return undefined
+  if (!tag)
+    return undefined
   const value = tag.slice(STATUS_TAG_PREFIX.length) as ComponentStatus
   return value in STATUS_BADGES ? value : undefined
 }

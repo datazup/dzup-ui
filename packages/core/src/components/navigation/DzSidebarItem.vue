@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSidebarItemEmits, DzSidebarItemProps, DzSidebarItemSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebarItem -- Individual navigation item within a sidebar.
@@ -24,6 +20,10 @@ import { computed, inject, resolveComponent, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzSidebarItemProps>(), {
   active: false,
@@ -100,7 +100,6 @@ function handleClick(event: MouseEvent): void {
   emit('click', event)
 }
 </script>
-
 
 <template>
   <component

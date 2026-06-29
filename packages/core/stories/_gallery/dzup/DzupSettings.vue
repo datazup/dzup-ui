@@ -4,9 +4,9 @@
 import { ref } from 'vue'
 import { DzButton } from '../../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardHeader } from '../../../src/components/cards'
+import { DzAlert } from '../../../src/components/feedback'
 import { DzFormField, DzFormLabel, DzSwitch } from '../../../src/components/forms'
 import { DzInput, DzTextarea } from '../../../src/components/inputs'
-import { DzAlert } from '../../../src/components/feedback'
 import { DzAvatar } from '../../../src/components/media'
 import { DzHeading, DzText } from '../../../src/components/typography'
 
@@ -26,7 +26,9 @@ const productUpdates = ref(true)
     <div class="mx-auto w-full max-w-3xl">
       <!-- Page header -->
       <header class="mb-8">
-        <DzHeading :level="1" size="xl" weight="semibold">Settings</DzHeading>
+        <DzHeading :level="1" size="xl" weight="semibold">
+          Settings
+        </DzHeading>
         <DzText as="p" size="sm" tone="muted" class="mt-1">
           Manage your account, profile, and notification preferences.
         </DzText>
@@ -37,7 +39,9 @@ const productUpdates = ref(true)
         <DzCard variant="elevated" padding="none">
           <DzCardHeader>
             <div class="border-b border-[var(--dz-border)] px-7 py-5">
-              <DzHeading :level="2" size="md" weight="semibold">Profile</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Profile
+              </DzHeading>
               <DzText as="p" size="sm" tone="muted" class="mt-1">
                 This information will be displayed on your public profile.
               </DzText>
@@ -92,7 +96,9 @@ const productUpdates = ref(true)
         <DzCard variant="elevated" padding="none">
           <DzCardHeader>
             <div class="border-b border-[var(--dz-border)] px-7 py-5">
-              <DzHeading :level="2" size="md" weight="semibold">Preferences</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Preferences
+              </DzHeading>
               <DzText as="p" size="sm" tone="muted" class="mt-1">
                 Choose what you want to hear about.
               </DzText>
@@ -149,7 +155,9 @@ const productUpdates = ref(true)
         <DzCard variant="elevated" padding="none">
           <DzCardHeader>
             <div class="border-b border-[var(--dz-border)] px-7 py-5">
-              <DzHeading :level="2" size="md" weight="semibold">Danger zone</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Danger zone
+              </DzHeading>
               <DzText as="p" size="sm" tone="muted" class="mt-1">
                 Irreversible and destructive actions.
               </DzText>
@@ -175,8 +183,12 @@ const productUpdates = ref(true)
 
         <!-- Footer action row — transparent, sits on page background -->
         <div class="flex items-center justify-end gap-3 pt-2">
-          <DzButton type="button" variant="outline" tone="neutral">Cancel</DzButton>
-          <DzButton type="button" variant="solid" tone="primary">Save changes</DzButton>
+          <DzButton type="button" variant="outline" tone="neutral">
+            Cancel
+          </DzButton>
+          <DzButton type="button" variant="solid" tone="primary">
+            Save changes
+          </DzButton>
         </div>
       </div>
     </div>

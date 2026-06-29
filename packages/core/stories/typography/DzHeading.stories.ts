@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzHeading } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzHeading renders semantic heading elements (`h1` through `h6`) with independent visual sizing.
@@ -70,6 +71,14 @@ export const Default: Story = {
     },
     template: '<DzHeading v-bind="args">Section Heading</DzHeading>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const heading = canvas.getByRole('heading')
+    await expect(heading).toBeInTheDocument()
+    await expect(heading.tagName.toLowerCase()).toMatch(/^h[1-6]$/)
+    await expect(canvas.getByText(/section heading/i)).toBeInTheDocument()
+    await expect(canvas.getByText(/section heading/i)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -198,9 +207,7 @@ export const SizeVsLevel: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzHeading },
     template: `

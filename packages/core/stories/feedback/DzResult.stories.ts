@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzResult } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzResult displays the outcome of an operation with a status icon,
@@ -61,6 +62,17 @@ export const Default: Story = {
     },
     template: '<DzResult v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const result = canvas.getByRole('status')
+    await expect(result).toBeInTheDocument()
+    await expect(canvas.getByRole('heading', { level: 3 })).toHaveTextContent(
+      'Operation Successful',
+    )
+    const icon = result.querySelector('svg[aria-hidden="true"]')
+    await expect(icon).not.toBeNull()
+    await expect(icon).toHaveAttribute('aria-hidden', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -183,9 +195,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzResult },
     template: `

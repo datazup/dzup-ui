@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzDialogProps, DzDialogSlots } from './DzDialog.types.ts'
 import { DialogRoot } from 'reka-ui'
 /**
@@ -28,6 +24,10 @@ import { DialogRoot } from 'reka-ui'
 import { provide, toRef } from 'vue'
 import { DZ_DIALOG_KEY } from './DzDialog.types.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const open = defineModel<boolean>('open', { default: false })
 
 const props = withDefaults(defineProps<DzDialogProps>(), {
@@ -46,7 +46,6 @@ provide(DZ_DIALOG_KEY, {
   contentTransition: toRef(() => props.animated ? props.contentTransition : ''),
 })
 </script>
-
 
 <template>
   <DialogRoot v-model:open="open" :modal="modal">

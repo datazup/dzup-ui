@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzFieldArray, DzFormField, DzFormLabel, DzFormMessage } from '../../src/components/forms'
 import { DzInput } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFieldArray is a renderless helper for managing a dynamic list of fields bound
@@ -155,7 +155,7 @@ export const PerRowValidation: Story = {
     components: { DzFieldArray, DzFormField, DzFormLabel, DzFormMessage, DzInput, DzButton },
     setup() {
       const emails = ref<string[]>(['ada@example.com', 'not-an-email'])
-      const isValid = (v: string) => /.+@.+\..+/.test(v)
+      const isValid = (v: string) => /.[^\n\r@\u2028\u2029]*@.+\..+/.test(v)
       return { emails, isValid }
     },
     template: `

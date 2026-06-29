@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect } from 'storybook/test'
 import { DzSkeleton } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSkeleton is a placeholder loading state for content areas.
@@ -64,6 +65,14 @@ export const Default: Story = {
     },
     template: '<DzSkeleton v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    // Skeleton elements are aria-hidden and carry data-state="loading".
+    // Do not query by role="presentation" (not guaranteed); check DOM directly.
+    const el = canvasElement.querySelector('[aria-hidden="true"][data-state="loading"]')
+    await expect(el).not.toBeNull()
+    await expect(el).toHaveAttribute('aria-hidden', 'true')
+    await expect(el).toHaveAttribute('data-state', 'loading')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -232,9 +241,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSkeleton },
     template: `

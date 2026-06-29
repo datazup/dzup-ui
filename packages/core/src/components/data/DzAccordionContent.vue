@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAccordionContentSlots } from './DzAccordion.types.ts'
 import { AccordionContent } from 'reka-ui'
 /**
@@ -15,6 +11,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_ACCORDION_KEY } from './DzAccordion.types.ts'
 import { accordionVariants } from './DzAccordion.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineSlots<DzAccordionContentSlots>()
 
@@ -32,7 +32,6 @@ const classes = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <AccordionContent

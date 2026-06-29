@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 /**
  * DzCardBody — Structural sub-part for the card body/content section.
  *
@@ -17,6 +13,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { cardBodyVariants } from './DzCard.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const attrs = useAttrs()
 
 /** Computed class string merging variant classes with consumer overrides (ADR-10). */
@@ -24,7 +24,6 @@ const classes = computed(() =>
   cn(cardBodyVariants(), attrs.class as string),
 )
 </script>
-
 
 <template>
   <div :class="classes">

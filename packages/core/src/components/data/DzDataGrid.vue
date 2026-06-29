@@ -132,7 +132,6 @@ function handleRowClick(row: Record<string, unknown>, index: number): void {
 }
 </script>
 
-
 <template>
   <div
     :class="rootClasses"

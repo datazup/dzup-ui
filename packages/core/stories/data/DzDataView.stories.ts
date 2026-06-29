@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzDataView } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDataView renders a collection of records as either a vertical list or a
@@ -68,7 +69,12 @@ type Story = StoryObj<typeof meta>
 // Sample data
 // ---------------------------------------------------------------------------
 
-interface Product { id: number, name: string, category: string, price: number }
+interface Product {
+  id: number
+  name: string
+  category: string
+  price: number
+}
 
 const products: Product[] = [
   { id: 1, name: 'Aurora Headphones', category: 'Audio', price: 199 },
@@ -168,6 +174,24 @@ export const WithLayoutToggle: Story = {
       </DzDataView>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Layout toggle buttons should be present (grid / list).
+    // The toggle renders as buttons with aria-pressed, not radio inputs.
+    const listBtn = canvas.getByRole('button', { name: /list/i })
+    const gridBtn = canvas.getByRole('button', { name: /grid/i })
+    await expect(listBtn).toBeInTheDocument()
+    await expect(gridBtn).toBeInTheDocument()
+
+    // Click list toggle — layout switches.
+    await userEvent.click(listBtn)
+    await waitFor(() => expect(listBtn).toHaveAttribute('aria-pressed', 'true'))
+
+    // Switch back to grid.
+    await userEvent.click(gridBtn)
+    await waitFor(() => expect(gridBtn).toHaveAttribute('aria-pressed', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------

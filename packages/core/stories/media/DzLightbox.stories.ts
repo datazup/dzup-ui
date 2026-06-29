@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
 import type { LightboxImage } from '../../src/components/media'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzImage, DzLightbox } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzLightbox is a fullscreen image viewer overlay, built on Reka UI

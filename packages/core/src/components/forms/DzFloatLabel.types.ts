@@ -18,7 +18,7 @@ import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
 /**
  * Label rest/float positioning style.
  * - `over` — label rests over the control (placeholder position) and floats
- *   *above* the control on focus/fill (default).
+ *   above* the control on focus/fill (default).
  * - `in`   — label rests over the control and floats to the *top inside* it.
  * - `on`   — label rests over the control and floats *onto its top border*
  *   (notched-outline style, masked with a background).

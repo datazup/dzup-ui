@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { DzSelectItem } from '../../src/components/forms'
 import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
-import { DzAvatar } from '../../src/components/media'
 import {
   DzFormDescription,
   DzFormField,
@@ -13,9 +12,10 @@ import {
   DzSelect,
   DzSwitch,
 } from '../../src/components/forms'
-import type { DzSelectItem } from '../../src/components/forms'
 import { DzInput, DzTextarea } from '../../src/components/inputs'
+import { DzAvatar } from '../../src/components/media'
 import { DzTabContent, DzTabList, DzTabs, DzTabTrigger } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * SettingsPage is a cross-family composition combining **navigation** (tabbed

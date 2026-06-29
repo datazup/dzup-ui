@@ -1,9 +1,9 @@
+import { mount } from '@vue/test-utils'
 /**
  * useInfiniteScroll — Unit tests (mocked IntersectionObserver).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
-import { mount } from '@vue/test-utils'
 import { useInfiniteScroll } from './useInfiniteScroll.ts'
 
 let ioCallback: ((entries: Array<{ isIntersecting: boolean }>) => void) | null = null

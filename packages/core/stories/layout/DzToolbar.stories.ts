@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzToolbar } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzToolbar is a semantic horizontal action bar with start/center/end regions.
@@ -66,14 +67,33 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const btn = (label: string) =>
-  `<button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">${label}</button>`
+function btn(label: string) {
+  return `<button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">${label}</button>`
+}
 
 // ---------------------------------------------------------------------------
 // Default
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Toolbar must expose role="toolbar"
+    const toolbar = canvas.getByRole('toolbar')
+    await expect(toolbar).toBeInTheDocument()
+
+    // Buttons in the start and end regions are discoverable
+    const backBtn = canvas.getByRole('button', { name: 'Back' })
+    await expect(backBtn).toBeInTheDocument()
+
+    const saveBtn = canvas.getByRole('button', { name: 'Save' })
+    await expect(saveBtn).toBeInTheDocument()
+
+    // Tab into the toolbar — focus should land on the first button
+    await userEvent.tab()
+    await expect(backBtn).toHaveFocus()
+  },
   render: args => ({
     components: { DzToolbar },
     setup() {

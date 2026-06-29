@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzScrollProgressEmits, DzScrollProgressProps, DzScrollProgressSlots } from './DzScrollProgress.types.ts'
 /**
  * DzScrollProgress — Scroll-position progress indicator.
@@ -30,6 +26,10 @@ import {
   scrollProgressRootVariants,
   scrollProgressToneVar,
 } from './DzScrollProgress.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzScrollProgressProps>(), {
   target: undefined,

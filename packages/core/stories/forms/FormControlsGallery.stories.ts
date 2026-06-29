@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { DemoSection, darkModeDecorator, galleryDecorator } from '../_shared'
 import type { DzSelectItem } from '../../src/components/forms'
+import { expect, within } from 'storybook/test'
 import { DzSelect, DzSlider, DzSwitch } from '../../src/components/forms'
+import { darkModeDecorator, DemoSection, galleryDecorator } from '../_shared'
 
 /**
  * Control Variants & Sizes — a cross-component gallery ported from the sandbox
@@ -74,6 +75,21 @@ export const Default: Story = {
     setup: () => ({ items: selectItems }),
     template: galleryTemplate,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Three DzSelect triggers render as combobox buttons
+    const comboboxes = canvas.getAllByRole('combobox')
+    expect(comboboxes.length).toBeGreaterThanOrEqual(3)
+
+    // Three DzSwitch controls render as switch buttons
+    const switches = canvas.getAllByRole('switch')
+    expect(switches.length).toBeGreaterThanOrEqual(3)
+
+    // Section labels are present in the DOM
+    expect(canvas.getByText('Select Variants')).toBeTruthy()
+    expect(canvas.getByText('Switch Sizes')).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------

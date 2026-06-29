@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzListContext, DzListEmits, DzListProps, DzListSlots } from './DzList.types.ts'
 /**
  * DzList — Compound list root component.
@@ -22,6 +18,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_LIST_KEY } from './DzList.types.ts'
 import { listVariants } from './DzList.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzListProps>(), {
   variant: 'plain',
@@ -65,7 +65,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <component

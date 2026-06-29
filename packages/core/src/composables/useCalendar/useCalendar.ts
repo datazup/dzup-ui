@@ -11,8 +11,8 @@
  * @module @dzup-ui/core/composables/useCalendar
  */
 
-import type { Ref } from 'vue'
 import type { CalendarDate } from '@internationalized/date'
+import type { Ref } from 'vue'
 import {
   DateFormatter,
   getLocalTimeZone,

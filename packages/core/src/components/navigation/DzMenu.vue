@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzMenuContext, DzMenuProps, DzMenuSlots } from './DzMenu.types.ts'
 /**
  * DzMenu — Vertical navigation menu.
@@ -30,6 +26,10 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_MENU_KEY } from './DzMenu.types.ts'
 import { menuVariants } from './DzMenu.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzMenuProps>(), {
   size: 'md',
   collapsed: false,
@@ -52,7 +52,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <nav

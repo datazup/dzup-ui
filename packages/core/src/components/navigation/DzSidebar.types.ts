@@ -40,20 +40,28 @@ export interface DzSidebarProps extends BaseAccessibilityProps {
   collapsed?: boolean
   /** Whether the mobile overlay sidebar is open */
   mobileOpen?: boolean
-  /** Controls how the sidebar root positions itself on desktop.
+  /**
+   * Controls how the sidebar root positions itself on desktop.
    *  - `static` (default): `relative shrink-0` — sidebar is a flex sibling of the AppShell content panel.
    *  - `fixed`: `fixed inset-y-0 left-0` — legacy positioning; content area must reserve its own offset.
-   *  Mobile drawer behavior (when `mobileOpen` is true and `isMobile` is true) overrides position to `fixed` regardless. */
+   *  Mobile drawer behavior (when `mobileOpen` is true and `isMobile` is true) overrides position to `fixed` regardless.
+   */
   position?: 'static' | 'fixed'
-  /** Pixel breakpoint at or below which the sidebar enters mobile-drawer mode.
-   *  Only used when the parent does not pass `isMobile`. Default 1024 (Tailwind `lg`). */
+  /**
+   * Pixel breakpoint at or below which the sidebar enters mobile-drawer mode.
+   *  Only used when the parent does not pass `isMobile`. Default 1024 (Tailwind `lg`).
+   */
   mobileBreakpoint?: number
-  /** Externally controlled mobile state. When provided, the sidebar will not run its own matchMedia listener
-   *  and will defer entirely to this prop. Use this when a parent `useSidebar` already detects the breakpoint. */
+  /**
+   * Externally controlled mobile state. When provided, the sidebar will not run its own matchMedia listener
+   *  and will defer entirely to this prop. Use this when a parent `useSidebar` already detects the breakpoint.
+   */
   isMobile?: boolean
-  /** Visual treatment for active items.
+  /**
+   * Visual treatment for active items.
    *  - `filled` (default): solid `--dz-sidebar-item-active-bg` background, `--dz-sidebar-item-active-text` foreground. Matches modern dark-sidebar UX.
-   *  - `rail`: 3px left border accent, dimmer background. Legacy / minimalist look. */
+   *  - `rail`: 3px left border accent, dimmer background. Legacy / minimalist look.
+   */
   activeStyle?: 'filled' | 'rail'
   /** Expanded sidebar width (CSS value) */
   width?: string

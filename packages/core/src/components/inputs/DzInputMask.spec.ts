@@ -138,7 +138,7 @@ describe('dzInputMask engine — backspace / delete', () => {
 // Component
 // ---------------------------------------------------------------------------
 
-let wrapper: VueWrapper<any> | null = null
+let wrapper: VueWrapper<InstanceType<typeof DzInputMask>> | null = null
 
 afterEach(() => {
   wrapper?.unmount()
@@ -146,7 +146,7 @@ afterEach(() => {
 })
 
 /** Simulate the field receiving `raw` text with the caret at its end. */
-async function typeRaw(w: VueWrapper<any>, raw: string, caret?: number): Promise<void> {
+async function typeRaw(w: VueWrapper<InstanceType<typeof DzInputMask>>, raw: string, caret?: number): Promise<void> {
   const input = w.find('input')
   const el = input.element as HTMLInputElement
   el.value = raw
@@ -252,7 +252,7 @@ describe('dzInputMask — component behaviour', () => {
   it('exposes completed and unmasked state', async () => {
     wrapper = mount(DzInputMask, { props: { mask: '99' }, attachTo: document.body })
     await typeRaw(wrapper, '12')
-    expect((wrapper.vm as any).completed).toBe(true)
-    expect((wrapper.vm as any).unmasked).toBe('12')
+    expect((wrapper.vm as unknown as Record<string, unknown>).completed).toBe(true)
+    expect((wrapper.vm as unknown as Record<string, unknown>).unmasked).toBe('12')
   })
 })

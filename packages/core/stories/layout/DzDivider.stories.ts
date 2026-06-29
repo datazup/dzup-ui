@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzDivider, DzFlex, DzStack } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDivider is a visual separator with horizontal or vertical orientation.
@@ -75,6 +76,13 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const separator = canvas.getByRole('separator')
+    await expect(separator).toBeInTheDocument()
+    await expect(separator).toHaveAttribute('aria-orientation', 'horizontal')
+    await expect(separator).not.toHaveAttribute('aria-hidden')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -166,9 +174,7 @@ export const VerticalInToolbar: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzDivider },
     template: `

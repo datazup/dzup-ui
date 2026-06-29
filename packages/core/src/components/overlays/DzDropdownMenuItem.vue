@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzDropdownMenuItemEmits,
   DzDropdownMenuItemProps,
@@ -15,6 +11,10 @@ import { DropdownMenuItem } from 'reka-ui'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { dropdownMenuVariants } from './DzDropdownMenu.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 withDefaults(defineProps<DzDropdownMenuItemProps>(), {
   disabled: false,
@@ -39,7 +39,6 @@ function handleSelect(event: Event): void {
   emit('select', event)
 }
 </script>
-
 
 <template>
   <DropdownMenuItem

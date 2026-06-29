@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { DzSelectItem } from '../../src/components/forms'
 import { expect, userEvent, within } from 'storybook/test'
 import { computed, ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
-import type { DzSelectItem } from '../../src/components/forms'
 import {
   DzCheckbox,
   DzCheckboxGroup,
@@ -20,6 +19,7 @@ import {
   DzSlider,
   DzSwitch,
 } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * WorkspaceForm is the flagship real-world composition for the Forms family,
@@ -102,8 +102,10 @@ function useWorkspaceForm() {
   const termsAccepted = ref(false)
 
   const budgetTone = computed<'danger' | 'warning' | 'success'>(() => {
-    if (budget.value < 35) return 'danger'
-    if (budget.value < 70) return 'warning'
+    if (budget.value < 35)
+      return 'danger'
+    if (budget.value < 70)
+      return 'warning'
     return 'success'
   })
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzTimeline, DzTimelineItem } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTimeline displays a chronological sequence of events with an
@@ -84,6 +85,18 @@ export const Default: Story = {
       </DzTimeline>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const list = canvas.getByRole('list')
+    await expect(list).toBeInTheDocument()
+
+    const items = canvas.getAllByRole('listitem')
+    await expect(items).toHaveLength(4)
+
+    await expect(canvas.getByText('Jan 2026')).toBeVisible()
+    await expect(canvas.getByText(/Beta release and community feedback/)).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -220,9 +233,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTimeline, DzTimelineItem },
     template: `

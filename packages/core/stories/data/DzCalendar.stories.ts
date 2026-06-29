@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzCalendar } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCalendar is a full-surface month/week calendar for date selection and
@@ -95,6 +96,35 @@ export const Month: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The calendar grid should be present.
+    const grid = canvas.getByRole('grid')
+    await expect(grid).toBeVisible()
+
+    // Navigate to next month via the next button.
+    const nextBtn = canvas.getByRole('button', { name: /next/i })
+    await userEvent.click(nextBtn)
+
+    // Grid is still rendered after navigation.
+    await waitFor(() => expect(canvas.getByRole('grid')).toBeVisible())
+
+    // Navigate back to previous month.
+    const prevBtn = canvas.getByRole('button', { name: /prev/i })
+    await userEvent.click(prevBtn)
+    await waitFor(() => expect(canvas.getByRole('grid')).toBeVisible())
+
+    // Click a day cell to select it — day 10 is always present in a month grid.
+    const dayCells = canvas.getAllByRole('gridcell')
+    const clickable = dayCells.find(
+      cell => cell.getAttribute('aria-disabled') !== 'true' && cell.textContent?.trim() === '10',
+    )
+    if (clickable) {
+      await userEvent.click(clickable)
+      await waitFor(() => expect(canvas.getByText(/selected:/i)).toBeInTheDocument())
+    }
+  },
 }
 
 // ---------------------------------------------------------------------------

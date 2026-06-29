@@ -1,6 +1,6 @@
+import type { UserConfig } from 'vite'
 import { resolve } from 'node:path'
 import vue from '@vitejs/plugin-vue'
-import type { UserConfig } from 'vite'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
@@ -38,8 +38,8 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
     alias = {},
   } = options
 
-  const resolvedEntry =
-    typeof entry === 'string'
+  const resolvedEntry
+    = typeof entry === 'string'
       ? { index: resolve(baseDir, entry) }
       : Object.fromEntries(Object.entries(entry).map(([k, v]) => [k, resolve(baseDir, v)]))
 

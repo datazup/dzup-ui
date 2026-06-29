@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzFormField, DzTagsInput } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTagsInput is a free-text token / chips input: users type arbitrary values
@@ -119,6 +120,25 @@ export const Default: Story = {
     },
     template: '<DzTagsInput v-bind="args" v-model:value="value" class="max-w-sm" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const input = canvas.getByRole('textbox')
+
+    // Pre-existing tags should be present.
+    await expect(canvas.getByText('vue')).toBeInTheDocument()
+    await expect(canvas.getByText('typescript')).toBeInTheDocument()
+
+    // Type a new tag and commit it with Enter.
+    await userEvent.click(input)
+    await userEvent.keyboard('design{Enter}')
+
+    // The new chip should appear.
+    await waitFor(() => expect(canvas.getByText('design')).toBeInTheDocument())
+
+    // Backspace on an empty field removes the last tag.
+    await userEvent.keyboard('{Backspace}')
+    await waitFor(() => expect(canvas.queryByText('design')).not.toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -134,7 +154,7 @@ export const EmailValidation: Story = {
     },
     methods: {
       isEmail(token: string) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(token)
+        return /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(token)
       },
     },
     template: `

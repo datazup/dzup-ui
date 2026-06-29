@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { RESPONSIVE_VIEWPORTS } from '../_shared'
 import { DzAppShell } from '../../src/components/layout'
+import { RESPONSIVE_VIEWPORTS } from '../_shared'
 
 /**
  * `DzAppShell` is the application-level layout primitive. It composes a sidebar
@@ -73,7 +73,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzAppShell },
     setup() {
       return { args }
@@ -106,7 +106,7 @@ export const Default: Story = {
 
 export const NoHeader: Story = {
   args: { hasHeader: false },
-  render: (args) => ({
+  render: args => ({
     components: { DzAppShell },
     setup() {
       return { args }
@@ -128,7 +128,7 @@ export const NoHeader: Story = {
 
 export const NoSidebar: Story = {
   args: { hasSidebar: false },
-  render: (args) => ({
+  render: args => ({
     components: { DzAppShell },
     setup() {
       return { args }
@@ -148,7 +148,7 @@ export const NoSidebar: Story = {
 
 export const CustomHeaderHeight: Story = {
   args: { headerHeight: '3rem' },
-  render: (args) => ({
+  render: args => ({
     components: { DzAppShell },
     setup() {
       return { args }

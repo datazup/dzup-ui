@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzKnobEmits, DzKnobProps, DzKnobSlots } from './DzKnob.types.ts'
 /**
  * DzKnob -- rotary numeric input rendered as an SVG circular dial (ADR-16 defineModel).
@@ -22,6 +18,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { knobTokens } from './DzKnob.tokens.ts'
 import { knobVariants } from './DzKnob.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<number>('value', { default: 0 })
 
@@ -72,17 +72,13 @@ const dragging = ref(false)
 
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
-const resolvedDisabled = computed(
-  () => props.disabled || (fieldContext?.isDisabled.value ?? false),
-)
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
 
 const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
-const resolvedRequired = computed(
-  () => props.required || (fieldContext?.isRequired.value ?? false),
-)
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
 /** Interactive = neither disabled nor readonly (readonly is display-only). */
 const isInteractive = computed(() => !resolvedDisabled.value && !props.readonly)
@@ -154,9 +150,7 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
-)
+const rootClasses = computed(() => cn(styles.value.root(), attrs.class as string | undefined))
 
 /** Cartesian point on the gauge circle for an SVG-convention angle (deg). */
 function polar(angleDeg: number, r: number): { x: number, y: number } {
@@ -285,82 +279,73 @@ defineExpose({
 })
 </script>
 
-
 <template>
-  <div>
-    <div
-      :id="resolvedId"
-      ref="rootRef"
-      role="slider"
-      :class="rootClasses"
-      :style="{ width: `${diameter}px`, height: `${diameter}px` }"
-      :tabindex="resolvedDisabled ? -1 : 0"
-      :aria-valuemin="min"
-      :aria-valuemax="max"
-      :aria-valuenow="normalizedValue"
-      :aria-valuetext="valueText"
-      :aria-label="ariaLabel ?? 'Knob'"
-      :aria-labelledby="ariaLabelledby"
-      :aria-describedby="resolvedAriaDescribedby"
-      aria-orientation="horizontal"
-      :aria-disabled="resolvedDisabled || undefined"
-      :aria-readonly="readonly || undefined"
-      :aria-required="resolvedRequired || undefined"
-      :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-      :data-disabled="resolvedDisabled ? '' : undefined"
-      :data-readonly="readonly ? '' : undefined"
-      :data-invalid="resolvedInvalid ? '' : undefined"
-      :data-tone="tone"
-      @keydown="handleKeydown"
-      @focus="handleFocus"
-      @blur="handleBlur"
-      v-bind="{ ...$attrs, class: undefined }"
+  <div
+    :id="resolvedId"
+    ref="rootRef"
+    role="slider"
+    :class="rootClasses"
+    :style="{ width: `${diameter}px`, height: `${diameter}px` }"
+    :tabindex="resolvedDisabled ? -1 : 0"
+    :aria-valuemin="min"
+    :aria-valuemax="max"
+    :aria-valuenow="normalizedValue"
+    :aria-valuetext="valueText"
+    :aria-label="ariaLabel ?? 'Knob'"
+    :aria-labelledby="ariaLabelledby"
+    :aria-describedby="resolvedAriaDescribedby"
+    :aria-disabled="resolvedDisabled || undefined"
+    :aria-readonly="readonly || undefined"
+    :aria-required="resolvedRequired || undefined"
+    :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+    :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-invalid="resolvedInvalid ? '' : undefined"
+    :data-tone="tone"
+    v-bind="{ ...$attrs, class: undefined }"
+    @keydown="handleKeydown"
+    @focus="handleFocus"
+    @blur="handleBlur"
+  >
+    <svg
+      ref="svgRef"
+      :class="styles.svg()"
+      :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
+      :width="diameter"
+      :height="diameter"
+      aria-hidden="true"
+      @pointerdown="handlePointerDown"
+      @pointermove="handlePointerMove"
+      @pointerup="handlePointerUp"
+      @pointercancel="handlePointerUp"
     >
-      <svg
-        ref="svgRef"
-        :class="styles.svg()"
-        :viewBox="`0 0 ${VIEWBOX} ${VIEWBOX}`"
-        :width="diameter"
-        :height="diameter"
-        aria-hidden="true"
-        @pointerdown="handlePointerDown"
-        @pointermove="handlePointerMove"
-        @pointerup="handlePointerUp"
-        @pointercancel="handlePointerUp"
-      >
-        <path
-          :class="styles.rangeArc()"
-          :d="rangePath"
-          :stroke-width="strokeWidth"
-          stroke-linecap="round"
-        />
-        <path
-          v-if="fraction > 0"
-          :class="styles.valueArc()"
-          :d="valuePath"
-          :stroke-width="strokeWidth"
-          stroke-linecap="round"
-        />
-      </svg>
+      <path
+        :class="styles.rangeArc()"
+        :d="rangePath"
+        :stroke-width="strokeWidth"
+        stroke-linecap="round"
+      />
+      <path
+        v-if="fraction > 0"
+        :class="styles.valueArc()"
+        :d="valuePath"
+        :stroke-width="strokeWidth"
+        stroke-linecap="round"
+      />
+    </svg>
 
-      <span v-if="showValue" :class="styles.label()">
-        <slot name="value" :value="normalizedValue" :text="valueText">
-          {{ valueText }}
-        </slot>
-      </span>
+    <span v-if="showValue" :class="styles.label()">
+      <slot name="value" :value="normalizedValue" :text="valueText">
+        {{ valueText }}
+      </slot>
+    </span>
 
-      <!-- Hidden input for native form participation -->
-      <input v-if="name" type="hidden" :name="name" :value="normalizedValue">
-    </div>
-
-    <!-- Error message -->
-    <p
-      v-if="error"
-      :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
-      role="alert"
-    >
-      {{ error }}
-    </p>
+    <!-- Hidden input for native form participation -->
+    <input v-if="name" type="hidden" :name="name" :value="normalizedValue">
   </div>
+
+  <!-- Error message -->
+  <p v-if="error" :id="errorId" :class="styles.error()" role="alert">
+    {{ error }}
+  </p>
 </template>

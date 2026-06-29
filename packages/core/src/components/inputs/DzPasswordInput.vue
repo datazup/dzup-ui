@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzPasswordInputEmits,
   DzPasswordInputProps,
@@ -24,6 +20,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -89,9 +89,12 @@ const spinnerSize = computed(() => {
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 const resolvedAriaDescribedby = computed(() => {
   const parts: string[] = []
-  if (props.ariaDescribedby) parts.push(props.ariaDescribedby)
-  if (errorId.value) parts.push(errorId.value)
-  if (fieldContext?.ariaDescribedby.value) parts.push(fieldContext.ariaDescribedby.value)
+  if (props.ariaDescribedby)
+    parts.push(props.ariaDescribedby)
+  if (errorId.value)
+    parts.push(errorId.value)
+  if (fieldContext?.ariaDescribedby.value)
+    parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
@@ -157,7 +160,7 @@ defineExpose({ inputRef })
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
-      />
+      >
 
       <!-- Loading spinner -->
       <DzSpinner

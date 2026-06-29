@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzTextarea } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTextarea is a multiline text input with optional auto-resize behavior.

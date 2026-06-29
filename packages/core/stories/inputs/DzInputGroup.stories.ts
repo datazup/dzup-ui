@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, within } from 'storybook/test'
 import { Copy, Globe, Mail } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzInput, DzInputGroup } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzInputGroup is a compound wrapper that groups an input element with

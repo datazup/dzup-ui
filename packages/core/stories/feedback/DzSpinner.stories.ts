@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzSpinner } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSpinner is a loading indicator with a rotating animation.
@@ -55,6 +56,15 @@ export const Default: Story = {
     },
     template: '<DzSpinner v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const spinner = canvas.getByRole('status')
+    await expect(spinner).toBeInTheDocument()
+    await expect(spinner).toBeVisible()
+    await expect(spinner).toHaveAttribute('aria-label', 'Loading')
+    const svg = spinner.querySelector('svg')
+    await expect(svg).toHaveAttribute('aria-hidden', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -174,9 +184,7 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSpinner },
     template: `

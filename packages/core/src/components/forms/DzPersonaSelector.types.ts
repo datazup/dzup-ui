@@ -53,7 +53,7 @@ export interface DzPersonaSelectorProps {
  */
 export interface DzPersonaSelectorEmits {
   /** Fires with the full persona object when one is selected */
-  'change': [persona: Persona | undefined]
+  change: [persona: Persona | undefined]
 }
 
 // ---------------------------------------------------------------------------

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSidebarSectionProps, DzSidebarSectionSlots } from './DzSidebar.types.ts'
 /**
  * DzSidebarSection -- Groups sidebar items with an optional title.
@@ -22,6 +18,10 @@ import { computed, inject, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzSidebarSectionProps>(), {
   title: undefined,
@@ -59,7 +59,6 @@ function toggleSection(): void {
 /** Whether section content should be visible */
 const showContent = computed(() => !props.collapsible || isOpen.value)
 </script>
-
 
 <template>
   <div

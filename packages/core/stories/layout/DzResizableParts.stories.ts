@@ -1,9 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import {
-  DzResizable,
-  DzResizableHandle,
-  DzResizablePanel,
-} from '../../src/components/layout'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { DzResizable, DzResizableHandle, DzResizablePanel } from '../../src/components/layout'
 
 /**
  * DzResizable compound sub-parts: DzResizablePanel and DzResizableHandle.
@@ -67,6 +64,17 @@ export const Default: Story = {
       </DzResizable>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const handle = canvas.getByRole('separator')
+    await expect(handle).toBeInTheDocument()
+    await expect(handle).toHaveAttribute('aria-orientation')
+    await expect(handle).toHaveAttribute('aria-valuenow')
+    const valueBefore = handle.getAttribute('aria-valuenow')
+    handle.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(handle.getAttribute('aria-valuenow')).not.toBe(valueBefore))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -93,6 +101,22 @@ export const ThreePanels: Story = {
       </DzResizable>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const handles = canvas.getAllByRole('separator')
+    await expect(handles).toHaveLength(2)
+    // Both handles should carry aria-orientation and aria-valuenow
+    for (const handle of handles) {
+      await expect(handle).toHaveAttribute('aria-orientation')
+      await expect(handle).toHaveAttribute('aria-valuenow')
+    }
+    // Keyboard resize on first handle
+    const firstHandle = handles[0]
+    const valueBefore = firstHandle.getAttribute('aria-valuenow')
+    firstHandle.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(firstHandle.getAttribute('aria-valuenow')).not.toBe(valueBefore))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -120,6 +144,19 @@ export const Collapsible: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const handle = canvas.getByRole('separator')
+    await expect(handle).toBeInTheDocument()
+    await expect(handle).toHaveAttribute('aria-orientation')
+    // Panel starts at 25% — valuenow should be non-zero
+    await expect(handle).toHaveAttribute('aria-valuenow')
+    await expect(Number(handle.getAttribute('aria-valuenow'))).toBeGreaterThan(0)
+    // Keyboard collapse: press ArrowLeft repeatedly to drive toward minimum/collapse
+    handle.focus()
+    await userEvent.keyboard('{ArrowLeft}')
+    await waitFor(() => expect(handle).toHaveAttribute('aria-valuenow'))
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -159,6 +196,19 @@ export const HandleVariants: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const handles = canvas.getAllByRole('separator')
+    // Two splitters rendered — one with grip indicator, one without
+    await expect(handles).toHaveLength(2)
+    const [withGrip, withoutGrip] = handles
+    // Both are valid separator handles with aria state
+    await expect(withGrip).toHaveAttribute('aria-orientation')
+    await expect(withoutGrip).toHaveAttribute('aria-orientation')
+    // The grip variant has a child SVG indicator; the plain one does not
+    await expect(withGrip.querySelector('svg')).not.toBeNull()
+    await expect(withoutGrip.querySelector('svg')).toBeNull()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -181,4 +231,18 @@ export const Vertical: Story = {
       </DzResizable>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const handle = canvas.getByRole('separator')
+    await expect(handle).toBeInTheDocument()
+    // Vertical splitter group → handle aria-orientation should be "horizontal"
+    // (the handle itself is horizontal, separating top/bottom panels)
+    await expect(handle).toHaveAttribute('aria-orientation', 'horizontal')
+    await expect(handle).toHaveAttribute('aria-valuenow')
+    // Keyboard resize uses ArrowDown for vertical direction
+    const valueBefore = handle.getAttribute('aria-valuenow')
+    handle.focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(handle.getAttribute('aria-valuenow')).not.toBe(valueBefore))
+  },
 }

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DateValue } from '@internationalized/date'
 import type {
   DateRangeValue,
@@ -47,6 +43,10 @@ import { useDatePicker } from '../../composables/useDatePicker/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { dateRangePickerVariants } from './DzDateRangePicker.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<DateRangeValue>({ default: () => ({ start: '', end: '' }) })
 
@@ -173,40 +173,39 @@ const triggerClasses = computed(() =>
 )
 </script>
 
-
 <template>
   <div>
     <DateRangePickerRoot
-    :model-value="rangeValue"
-    :min-value="startPicker.minValue.value"
-    :max-value="startPicker.maxValue.value"
-    :locale="startPicker.resolvedLocale.value"
-    :disabled="resolvedDisabled"
-    :name="name"
-    :placeholder="startPicker.placeholderDate.value"
-    granularity="day"
-    @update:model-value="handleRangeChange"
-    @update:open="handleOpenChange"
-  >
-    <DateRangePickerAnchor>
-      <DateRangePickerField
-        :id="resolvedId"
-        v-slot="{ segments }"
-        :class="triggerClasses"
-        :aria-label="ariaLabel"
-        :aria-labelledby="ariaLabelledby"
-        :aria-describedby="resolvedAriaDescribedby"
-        :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-        :aria-required="resolvedRequired || undefined"
-        :data-state="resolvedDisabled ? 'disabled' : 'idle'"
-        :data-disabled="resolvedDisabled ? '' : undefined"
-        :data-invalid="resolvedInvalid ? '' : undefined"
-        style="contain: layout style"
-        v-bind="{ ...$attrs, class: undefined }"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      >
-        <!--
+      :model-value="rangeValue"
+      :min-value="startPicker.minValue.value"
+      :max-value="startPicker.maxValue.value"
+      :locale="startPicker.resolvedLocale.value"
+      :disabled="resolvedDisabled"
+      :name="name"
+      :placeholder="startPicker.placeholderDate.value"
+      granularity="day"
+      @update:model-value="handleRangeChange"
+      @update:open="handleOpenChange"
+    >
+      <DateRangePickerAnchor>
+        <DateRangePickerField
+          :id="resolvedId"
+          v-slot="{ segments }"
+          :class="triggerClasses"
+          :aria-label="ariaLabel"
+          :aria-labelledby="ariaLabelledby"
+          :aria-describedby="resolvedAriaDescribedby"
+          :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+          :aria-required="resolvedRequired || undefined"
+          :data-state="resolvedDisabled ? 'disabled' : 'idle'"
+          :data-disabled="resolvedDisabled ? '' : undefined"
+          :data-invalid="resolvedInvalid ? '' : undefined"
+          style="contain: layout style"
+          v-bind="{ ...$attrs, class: undefined }"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        >
+          <!--
           Placeholder text shown only while both ends are empty. Segment inputs
           stay mounted (v-show, not v-if) so a calendar selection is reflected
           immediately rather than mounting fresh, unpopulated segments.
@@ -214,96 +213,96 @@ const triggerClasses = computed(() =>
           value must be passed explicitly — otherwise only the literal "/"
           separators show.
         -->
-        <span
-          v-show="!model.start && !model.end && placeholder"
-          class="text-[var(--dz-muted-foreground)]"
-        >{{ placeholder }}</span>
-        <span
-          v-show="!(!model.start && !model.end && placeholder)"
-          class="inline-flex items-center"
-        >
-          <DateRangePickerInput
-            v-for="(item, index) in segments.start"
-            :key="`start-${item.part}-${index}`"
-            :part="item.part"
-            type="start"
-            :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
+          <span
+            v-show="!model.start && !model.end && placeholder"
+            class="text-[var(--dz-muted-foreground)]"
+          >{{ placeholder }}</span>
+          <span
+            v-show="!(!model.start && !model.end && placeholder)"
+            class="inline-flex items-center"
           >
-            {{ item.value }}
-          </DateRangePickerInput>
-
-          <span :class="styles.separator()">-</span>
-
-          <DateRangePickerInput
-            v-for="(item, index) in segments.end"
-            :key="`end-${item.part}-${index}`"
-            :part="item.part"
-            type="end"
-            :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
-          >
-            {{ item.value }}
-          </DateRangePickerInput>
-        </span>
-
-        <DateRangePickerTrigger
-          class="ml-auto"
-          :aria-label="ariaLabel ?? 'Open date range picker'"
-        >
-          <CalendarIcon :class="styles.icon()" aria-hidden="true" />
-        </DateRangePickerTrigger>
-      </DateRangePickerField>
-    </DateRangePickerAnchor>
-
-    <DateRangePickerContent :class="styles.content()" :side-offset="4">
-      <DateRangePickerCalendar v-slot="{ weekDays, grid }" :class="styles.calendar()">
-        <DateRangePickerHeader :class="styles.header()">
-          <DateRangePickerPrev :class="styles.navButton()">
-            <ChevronLeft class="h-4 w-4" aria-hidden="true" />
-          </DateRangePickerPrev>
-          <DateRangePickerHeading :class="styles.heading()" />
-          <DateRangePickerNext :class="styles.navButton()">
-            <ChevronRight class="h-4 w-4" aria-hidden="true" />
-          </DateRangePickerNext>
-        </DateRangePickerHeader>
-
-        <DateRangePickerGrid
-          v-for="month in grid"
-          :key="month.value.toString()"
-          :class="styles.grid()"
-        >
-          <DateRangePickerGridHead>
-            <DateRangePickerGridRow>
-              <DateRangePickerHeadCell
-                v-for="day in weekDays"
-                :key="day"
-                :class="styles.headCell()"
-              >
-                {{ day }}
-              </DateRangePickerHeadCell>
-            </DateRangePickerGridRow>
-          </DateRangePickerGridHead>
-          <DateRangePickerGridBody>
-            <DateRangePickerGridRow
-              v-for="(weekDates, index) in month.rows"
-              :key="`week-${index}`"
+            <DateRangePickerInput
+              v-for="(item, index) in segments.start"
+              :key="`start-${item.part}-${index}`"
+              :part="item.part"
+              type="start"
+              :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
             >
-              <DateRangePickerCell
-                v-for="weekDate in weekDates"
-                :key="weekDate.toString()"
-                :date="weekDate"
-                :class="styles.cell()"
+              {{ item.value }}
+            </DateRangePickerInput>
+
+            <span :class="styles.separator()">-</span>
+
+            <DateRangePickerInput
+              v-for="(item, index) in segments.end"
+              :key="`end-${item.part}-${index}`"
+              :part="item.part"
+              type="end"
+              :class="item.part === 'literal' ? styles.field() : styles.fieldInput()"
+            >
+              {{ item.value }}
+            </DateRangePickerInput>
+          </span>
+
+          <DateRangePickerTrigger
+            class="ml-auto"
+            :aria-label="ariaLabel ?? 'Open date range picker'"
+          >
+            <CalendarIcon :class="styles.icon()" aria-hidden="true" />
+          </DateRangePickerTrigger>
+        </DateRangePickerField>
+      </DateRangePickerAnchor>
+
+      <DateRangePickerContent :class="styles.content()" :side-offset="4">
+        <DateRangePickerCalendar v-slot="{ weekDays, grid }" :class="styles.calendar()">
+          <DateRangePickerHeader :class="styles.header()">
+            <DateRangePickerPrev :class="styles.navButton()">
+              <ChevronLeft class="h-4 w-4" aria-hidden="true" />
+            </DateRangePickerPrev>
+            <DateRangePickerHeading :class="styles.heading()" />
+            <DateRangePickerNext :class="styles.navButton()">
+              <ChevronRight class="h-4 w-4" aria-hidden="true" />
+            </DateRangePickerNext>
+          </DateRangePickerHeader>
+
+          <DateRangePickerGrid
+            v-for="month in grid"
+            :key="month.value.toString()"
+            :class="styles.grid()"
+          >
+            <DateRangePickerGridHead>
+              <DateRangePickerGridRow>
+                <DateRangePickerHeadCell
+                  v-for="day in weekDays"
+                  :key="day"
+                  :class="styles.headCell()"
+                >
+                  {{ day }}
+                </DateRangePickerHeadCell>
+              </DateRangePickerGridRow>
+            </DateRangePickerGridHead>
+            <DateRangePickerGridBody>
+              <DateRangePickerGridRow
+                v-for="(weekDates, index) in month.rows"
+                :key="`week-${index}`"
               >
-                <DateRangePickerCellTrigger
-                  :day="weekDate"
-                  :month="month.value"
-                  :class="styles.cellTrigger()"
-                />
-              </DateRangePickerCell>
-            </DateRangePickerGridRow>
-          </DateRangePickerGridBody>
-        </DateRangePickerGrid>
-      </DateRangePickerCalendar>
-    </DateRangePickerContent>
+                <DateRangePickerCell
+                  v-for="weekDate in weekDates"
+                  :key="weekDate.toString()"
+                  :date="weekDate"
+                  :class="styles.cell()"
+                >
+                  <DateRangePickerCellTrigger
+                    :day="weekDate"
+                    :month="month.value"
+                    :class="styles.cellTrigger()"
+                  />
+                </DateRangePickerCell>
+              </DateRangePickerGridRow>
+            </DateRangePickerGridBody>
+          </DateRangePickerGrid>
+        </DateRangePickerCalendar>
+      </DateRangePickerContent>
     </DateRangePickerRoot>
 
     <!-- Error message -->

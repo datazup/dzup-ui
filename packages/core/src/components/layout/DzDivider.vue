@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzDividerProps } from './DzDivider.types.ts'
 /**
  * DzDivider -- Visual separator component.
@@ -20,6 +16,10 @@ import type { DzDividerProps } from './DzDivider.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { dividerVariants } from './DzDivider.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzDividerProps>(), {
   orientation: 'horizontal',
@@ -46,7 +46,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

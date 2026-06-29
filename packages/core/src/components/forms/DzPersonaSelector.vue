@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzPersonaSelectorEmits,
   DzPersonaSelectorProps,
@@ -29,6 +25,10 @@ import type { DzSelectItem } from './DzSelect.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import DzCombobox from './DzCombobox.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -66,7 +66,6 @@ function handleUpdate(value: string): void {
 
 const rootClass = computed(() => cn(attrs.class as string | undefined))
 </script>
-
 
 <template>
   <DzCombobox

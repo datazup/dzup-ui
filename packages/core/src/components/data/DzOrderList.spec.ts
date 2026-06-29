@@ -109,10 +109,10 @@ describe('dzOrderList — multi-select group moves', () => {
     expect(labels(value)).toEqual(['Bravo', 'Delta', 'Alpha', 'Charlie'])
   })
 
-  it('emits selection-change with the selected keys', async () => {
+  it('emits selectionChange with the selected keys', async () => {
     const wrapper = mountList({ selectable: true })
     await wrapper.findAll('[role="option"]')[0]!.trigger('click')
-    expect(wrapper.emitted('selection-change')!.at(-1)![0]).toEqual([1])
+    expect(wrapper.emitted('selectionChange')!.at(-1)![0]).toEqual([1])
   })
 
   it('marks selected rows with aria-selected', async () => {

@@ -2,6 +2,8 @@
 import type { DzFieldArrayEmits, DzFieldArrayProps, DzFieldArraySlots } from './DzFieldArray.types.ts'
 import { computed } from 'vue'
 
+const model = defineModel<T[]>({ default: () => [] })
+
 const props = withDefaults(defineProps<DzFieldArrayProps>(), {
   min: undefined,
   max: undefined,
@@ -9,8 +11,6 @@ const props = withDefaults(defineProps<DzFieldArrayProps>(), {
 
 const emit = defineEmits<DzFieldArrayEmits<T>>()
 defineSlots<DzFieldArraySlots<T>>()
-
-const model = defineModel<T[]>({ default: () => [] })
 
 /** Current number of items in the array */
 const count = computed(() => model.value.length)

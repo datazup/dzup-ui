@@ -102,7 +102,7 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter },
     setup() {
       return { args }
@@ -138,7 +138,7 @@ export const Default: Story = {
 
 export const Collapsed: Story = {
   args: { collapsed: true },
-  render: (args) => ({
+  render: args => ({
     components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter },
     setup() {
       return { args }
@@ -165,7 +165,7 @@ export const Collapsed: Story = {
 
 export const FixedPosition: Story = {
   args: { position: 'fixed' },
-  render: (args) => ({
+  render: args => ({
     components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem },
     setup() {
       return { args }
@@ -200,7 +200,7 @@ export const MobileDrawer: Story = {
       },
     },
   },
-  render: (args) => ({
+  render: args => ({
     components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem },
     setup() {
       return { args }
@@ -229,7 +229,7 @@ export const MobileDrawer: Story = {
 
 export const ActiveStyleFilled: Story = {
   args: { activeStyle: 'filled' },
-  render: (args) => ({
+  render: args => ({
     components: { DzSidebar, DzSidebarSection, DzSidebarItem },
     setup() {
       return { args }
@@ -255,7 +255,7 @@ export const ActiveStyleFilled: Story = {
 
 export const ActiveStyleRail: Story = {
   args: { activeStyle: 'rail' },
-  render: (args) => ({
+  render: args => ({
     components: { DzSidebar, DzSidebarSection, DzSidebarItem },
     setup() {
       return { args }
@@ -284,7 +284,9 @@ export const Interactive: Story = {
     components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter },
     setup() {
       const collapsed = ref(false)
-      function toggle(): void { collapsed.value = !collapsed.value }
+      function toggle(): void {
+        collapsed.value = !collapsed.value
+      }
       return { collapsed, toggle }
     },
     template: `

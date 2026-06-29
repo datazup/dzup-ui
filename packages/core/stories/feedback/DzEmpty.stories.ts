@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { FileX, FolderOpen, Inbox, Search } from 'lucide-vue-next'
+import { expect, within } from 'storybook/test'
 import { DzEmpty } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzEmpty displays an empty state placeholder when content is unavailable
@@ -59,6 +60,14 @@ export const Default: Story = {
     },
     template: '<DzEmpty v-bind="args" />',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const empty = canvas.getByRole('status')
+    await expect(empty).toBeInTheDocument()
+    await expect(empty).toBeVisible()
+    await expect(canvas.getByText('No results found')).toBeVisible()
+    await expect(canvas.getByText('Try adjusting your search or filters.')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -69,7 +78,9 @@ export const WithIcon: Story = {
   name: 'With Icon',
   render: () => ({
     components: { DzEmpty },
-    setup() { return { Search, Inbox, FileX } },
+    setup() {
+      return { Search, Inbox, FileX }
+    },
     template: `
       <div class="space-y-8">
         <DzEmpty title="No search results" description="Try different keywords." :icon="Search" />
@@ -88,7 +99,9 @@ export const WithActions: Story = {
   name: 'With Action Buttons',
   render: () => ({
     components: { DzEmpty },
-    setup() { return { Search } },
+    setup() {
+      return { Search }
+    },
     template: `
       <DzEmpty title="No results found" description="Try adjusting your search criteria." :icon="Search">
         <template #actions>
@@ -132,7 +145,9 @@ export const WithSlots: Story = {
 export const Interactive: Story = {
   render: () => ({
     components: { DzEmpty },
-    setup() { return { FolderOpen } },
+    setup() {
+      return { FolderOpen }
+    },
     data() {
       return { items: [] as string[] }
     },
@@ -166,7 +181,9 @@ export const Accessibility: Story = {
   name: 'Accessibility: role="status"',
   render: () => ({
     components: { DzEmpty },
-    setup() { return { Inbox } },
+    setup() {
+      return { Inbox }
+    },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -186,12 +203,12 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzEmpty },
-    setup() { return { Search } },
+    setup() {
+      return { Search }
+    },
     template: `
       <DzEmpty title="No results" description="Try a different search term." :icon="Search">
         <template #actions>
@@ -210,7 +227,9 @@ export const RealWorldEmptyTable: Story = {
   name: 'Real World: Empty Table',
   render: () => ({
     components: { DzEmpty },
-    setup() { return { FileX } },
+    setup() {
+      return { FileX }
+    },
     template: `
       <div class="border rounded max-w-lg">
         <div class="flex items-center justify-between p-3 border-b bg-gray-50 text-sm font-medium">

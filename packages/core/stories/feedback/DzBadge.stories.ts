@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzBadge } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzBadge is a compact label for status indicators, counts, or categories.
@@ -55,6 +56,14 @@ export const Default: Story = {
     },
     template: '<DzBadge v-bind="args">Badge</DzBadge>',
   }),
+  async play({ canvasElement }) {
+    const canvas = within(canvasElement)
+    const badge = canvas.getByText('Badge')
+    await expect(badge).toBeInTheDocument()
+    await expect(badge).toBeVisible()
+    await expect(badge).toHaveAttribute('data-state', 'ready')
+    await expect(badge.tagName.toLowerCase()).toBe('span')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -169,9 +178,7 @@ export const WithSlots: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzBadge },
     template: `

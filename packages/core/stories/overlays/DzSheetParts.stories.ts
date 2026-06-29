@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzSheet,
@@ -49,7 +50,15 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => ({
-    components: { DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },
+    components: {
+      DzSheet,
+      DzSheetTrigger,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
     template: `
       <DzSheet>
         <DzSheetTrigger as-child>
@@ -68,6 +77,21 @@ export const Default: Story = {
       </DzSheet>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open sheet/i })
+
+    // Click trigger to open sheet — portals to document.body
+    await userEvent.click(trigger)
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(dialog).toHaveAccessibleName()
+    await expect(within(dialog).getByText(/sheet body content/i)).toBeVisible()
+
+    // Escape dismisses the sheet
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -77,7 +101,15 @@ export const Default: Story = {
 export const AllSides: Story = {
   name: 'All Slide Directions',
   render: () => ({
-    components: { DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },
+    components: {
+      DzSheet,
+      DzSheetTrigger,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
     template: `
       <div class="flex flex-wrap gap-4">
         <DzSheet v-for="side in ['top', 'right', 'bottom', 'left']" :key="side">
@@ -104,7 +136,15 @@ export const AllSides: Story = {
 export const WithFormContent: Story = {
   name: 'With Form Content',
   render: () => ({
-    components: { DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },
+    components: {
+      DzSheet,
+      DzSheetTrigger,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
     template: `
       <DzSheet>
         <DzSheetTrigger as-child>
@@ -116,11 +156,11 @@ export const WithFormContent: Story = {
           <form class="space-y-4 mt-4" @submit.prevent>
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
-              <input type="text" value="Alice Johnson" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="text" value="Alice Johnson" placeholder="Full name" class="w-full border rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Email</label>
-              <input type="email" value="alice@example.com" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="email" value="alice@example.com" placeholder="Email address" class="w-full border rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Bio</label>
@@ -137,6 +177,24 @@ export const WithFormContent: Story = {
       </DzSheet>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /edit profile/i })
+
+    // Open the sheet via trigger
+    await userEvent.click(trigger)
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+
+    // Form fields are present inside the sheet — use placeholder to locate inputs
+    // (labels lack `for` attribute so getByLabelText would fail)
+    await expect(within(dialog).getByPlaceholderText(/full name/i)).toBeVisible()
+    await expect(within(dialog).getByPlaceholderText(/email address/i)).toBeVisible()
+
+    // Cancel (DzSheetClose) closes the sheet
+    await userEvent.click(within(dialog).getByRole('button', { name: /cancel/i }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -146,7 +204,14 @@ export const WithFormContent: Story = {
 export const Interactive: Story = {
   name: 'Controlled Open State',
   render: () => ({
-    components: { DzSheet, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },
+    components: {
+      DzSheet,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
     data() {
       return { isOpen: false }
     },
@@ -166,6 +231,20 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const openBtn = canvas.getByRole('button', { name: /open programmatically/i })
+
+    // Click the external control button to set v-model:open=true
+    await userEvent.click(openBtn)
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(within(dialog).getByText(/opened via v-model/i)).toBeVisible()
+
+    // Close button inside the sheet sets isOpen=false
+    await userEvent.click(within(dialog).getByRole('button', { name: /close/i }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -175,7 +254,15 @@ export const Interactive: Story = {
 export const Accessibility: Story = {
   name: 'Accessibility: Focus Management',
   render: () => ({
-    components: { DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },
+    components: {
+      DzSheet,
+      DzSheetTrigger,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
     template: `
       <div class="space-y-4">
         <p class="text-sm text-gray-500">
@@ -204,4 +291,24 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /open accessible sheet/i })
+
+    // Open via keyboard — Tab to trigger then Enter
+    trigger.focus()
+    await userEvent.keyboard('{Enter}')
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(dialog).toHaveAccessibleName()
+
+    // Both DzSheetClose buttons are focusable inside the sheet
+    const buttons = within(dialog).getAllByRole('button')
+    await expect(buttons.length).toBeGreaterThanOrEqual(2)
+
+    // Escape closes the sheet and returns focus to the trigger
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(trigger).toHaveFocus()
+  },
 }

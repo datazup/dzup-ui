@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, within } from 'storybook/test'
 import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Underline } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzButton, DzButtonGroup, DzIconButton } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzButtonGroup groups buttons together with shared styling context.

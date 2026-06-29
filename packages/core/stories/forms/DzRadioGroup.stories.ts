@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzRadio, DzRadioGroup } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRadioGroup manages a set of DzRadio components with a single `string` model value.
@@ -155,9 +156,7 @@ export const Disabled: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzRadioGroup, DzRadio },
     template: `
@@ -191,6 +190,26 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const standard = canvas.getByRole('radio', { name: /standard/i })
+    const express = canvas.getByRole('radio', { name: /express/i })
+
+    // Nothing selected initially.
+    await expect(standard).toHaveAttribute('aria-checked', 'false')
+    await expect(canvas.getByText(/none/i)).toBeInTheDocument()
+
+    // Click Standard selects it exclusively.
+    await userEvent.click(standard)
+    await expect(standard).toHaveAttribute('aria-checked', 'true')
+    // Use getAllByText to handle multiple matches (label + status display)
+    await expect(canvas.getAllByText(/standard/i).length).toBeGreaterThan(0)
+
+    // Click Express — radio group allows only one selection.
+    await userEvent.click(express)
+    await expect(express).toHaveAttribute('aria-checked', 'true')
+    await expect(standard).toHaveAttribute('aria-checked', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -212,6 +231,20 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const first = canvas.getByRole('radio', { name: /first option/i })
+    const second = canvas.getByRole('radio', { name: /second option/i })
+
+    // Click the first radio to select it.
+    await userEvent.click(first)
+    await waitFor(() => expect(first).toHaveAttribute('aria-checked', 'true'))
+
+    // Click the second radio to verify selection moves.
+    await userEvent.click(second)
+    await waitFor(() => expect(second).toHaveAttribute('aria-checked', 'true'), { timeout: 3000 })
+    await waitFor(() => expect(first).toHaveAttribute('aria-checked', 'false'))
+  },
 }
 
 // ---------------------------------------------------------------------------

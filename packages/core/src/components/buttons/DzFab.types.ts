@@ -31,12 +31,12 @@ export type DzFabVariant = 'solid' | 'outline' | 'ghost'
  * default — positioning is left to the consumer / parent SpeedDial); the
  * corner values apply `position: fixed` with a token-driven viewport offset.
  */
-export type DzFabPosition =
-  | 'static'
-  | 'bottom-right'
-  | 'bottom-left'
-  | 'top-right'
-  | 'top-left'
+export type DzFabPosition
+  = | 'static'
+    | 'bottom-right'
+    | 'bottom-left'
+    | 'top-right'
+    | 'top-left'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -50,7 +50,7 @@ export interface DzFabProps extends BaseAccessibilityProps {
    * Accessible label — REQUIRED. A FAB shows only an icon, so an accessible
    * name must be supplied.
    */
-  ariaLabel: string
+  ariaLabel?: string
   /** Visual style variant */
   variant?: DzFabVariant
   /** Component size */

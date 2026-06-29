@@ -1,6 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, within } from 'storybook/test'
 import {
   Bell,
   Calendar,
@@ -15,7 +13,9 @@ import {
   Upload,
   User,
 } from 'lucide-vue-next'
+import { expect, within } from 'storybook/test'
 import { DzIcon } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzIcon wraps icon components (e.g. from lucide-vue-next) with consistent sizing

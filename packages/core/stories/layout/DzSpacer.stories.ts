@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzFlex, DzSpacer, DzStack } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSpacer is a flexible space filler component for layout spacing.
@@ -47,6 +48,15 @@ export const Default: Story = {
       </DzFlex>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const spacer = canvasElement.querySelector('[aria-hidden="true"]')
+    await expect(spacer).toBeInTheDocument()
+    const left = canvas.getByText('Left')
+    await expect(left).toBeInTheDocument()
+    const right = canvas.getByText('Right')
+    await expect(right).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -137,9 +147,7 @@ export const FixedSizesInStack: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzSpacer, DzFlex },
     template: `

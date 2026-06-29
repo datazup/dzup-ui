@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAvatarGroupContext } from './DzAvatar.types.ts'
 import type { DzAvatarGroupProps, DzAvatarGroupSlots } from './DzAvatarGroup.types.ts'
 /**
@@ -25,6 +21,10 @@ import { computed, provide, toRef, useAttrs, useSlots } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_AVATAR_GROUP_KEY } from './DzAvatar.types.ts'
 import { avatarGroupOverflowVariants, avatarGroupVariants } from './DzAvatarGroup.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzAvatarGroupProps>(), {
   size: 'md',
@@ -64,7 +64,6 @@ const overflowClasses = computed(() =>
   avatarGroupOverflowVariants({ size: props.size }),
 )
 </script>
-
 
 <template>
   <div

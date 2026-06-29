@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTooltipProps, DzTooltipSlots } from './DzTooltip.types.ts'
 /**
  * DzTooltip -- Root compound component wrapping Reka UI TooltipRoot (ADR-07).
@@ -22,6 +18,10 @@ import type { DzTooltipProps, DzTooltipSlots } from './DzTooltip.types.ts'
  */
 import { TooltipProvider, TooltipRoot } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const open = defineModel<boolean>('open', { default: undefined })
 
 const props = withDefaults(defineProps<DzTooltipProps>(), {
@@ -31,7 +31,6 @@ const props = withDefaults(defineProps<DzTooltipProps>(), {
 
 defineSlots<DzTooltipSlots>()
 </script>
-
 
 <template>
   <TooltipProvider :delay-duration="props.delayDuration">

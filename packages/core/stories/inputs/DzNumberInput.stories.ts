@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
-import { expect, userEvent, within } from 'storybook/test'
 import { DollarSign, Hash } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzNumberInput } from '../../src/components/inputs'
 import { DzIcon } from '../../src/components/media'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzNumberInput is a numeric input with increment/decrement buttons.

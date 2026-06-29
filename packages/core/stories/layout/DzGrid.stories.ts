@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzGrid } from '../../src/components/layout'
+import { darkModeDecorator, RESPONSIVE_VIEWPORTS } from '../_shared'
 
 /**
  * DzGrid is a CSS Grid layout component with responsive column support.
@@ -94,6 +95,15 @@ export const Default: Story = {
       </DzGrid>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const gridContainer = canvasElement.querySelector('div')
+    await expect(gridContainer).toBeInTheDocument()
+    const item1 = canvas.getByText('1')
+    await expect(item1).toBeInTheDocument()
+    const item6 = canvas.getByText('6')
+    await expect(item6).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -198,9 +208,7 @@ export const ExplicitRows: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzGrid },
     template: `

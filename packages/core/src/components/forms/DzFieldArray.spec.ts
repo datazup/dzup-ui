@@ -3,12 +3,12 @@ import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzFieldArray from './DzFieldArray.vue'
 
-describe('DzFieldArray', () => {
+describe('dzFieldArray', () => {
   it('renders correct number of items from modelValue', () => {
     const wrapper = mount(DzFieldArray, {
       props: { modelValue: ['a', 'b', 'c'] },
       slots: {
-        default: ({ field }: { field: unknown; index: number; remove: () => void; move: (to: number) => void }) =>
+        default: ({ field }: { field: unknown, index: number, remove: () => void, move: (to: number) => void }) =>
           h('span', { 'data-testid': 'item' }, String(field)),
       },
     })
@@ -34,8 +34,9 @@ describe('DzFieldArray', () => {
     const wrapper = mount(DzFieldArray, {
       props: { modelValue: ['a', 'b'] },
       slots: {
-        default: ({ remove, index }: { field: unknown; index: number; remove: () => void; move: (to: number) => void }) => {
-          if (index === 0) removeFn = remove
+        default: ({ remove, index }: { field: unknown, index: number, remove: () => void, move: (to: number) => void }) => {
+          if (index === 0)
+            removeFn = remove
           return h('span', 'item')
         },
       },
@@ -127,8 +128,9 @@ describe('DzFieldArray', () => {
     const wrapper = mount(DzFieldArray, {
       props: { modelValue: ['a', 'b', 'c'] },
       slots: {
-        default: ({ move, index }: { move: (to: number) => void; index: number }) => {
-          if (index === 0) moveFn = move
+        default: ({ move, index }: { move: (to: number) => void, index: number }) => {
+          if (index === 0)
+            moveFn = move
           return h('span', 'item')
         },
       },

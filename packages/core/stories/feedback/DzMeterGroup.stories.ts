@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzMeterGroup } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMeterGroup displays multiple proportional values in a single bar with a
@@ -94,6 +95,16 @@ export const Default: Story = {
     },
     template: '<DzMeterGroup v-bind="args" class="max-w-md" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const meters = canvas.getAllByRole('meter')
+    await expect(meters.length).toBeGreaterThan(0)
+    for (const meter of meters) {
+      await expect(meter).toHaveAttribute('aria-valuenow')
+      await expect(meter).toHaveAttribute('aria-valuemin', '0')
+      await expect(meter).toHaveAttribute('aria-valuemax')
+    }
+  },
 }
 
 // ---------------------------------------------------------------------------

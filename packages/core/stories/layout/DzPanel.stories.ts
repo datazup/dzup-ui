@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzPanel } from '../../src/components/layout'
 import { darkModeDecorator } from '../_shared'
@@ -113,6 +114,27 @@ export const Collapsible: Story = {
       </DzPanel>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The header is a real <button> exposing aria-expanded — starts expanded.
+    const trigger = canvas.getByRole('button', { name: /advanced options/i })
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
+    // aria-controls points at the collapsible region, which is visible.
+    const regionId = trigger.getAttribute('aria-controls')
+    await expect(regionId).toBeTruthy()
+    const region = canvasElement.ownerDocument.getElementById(regionId!)
+    await expect(region).toBeVisible()
+
+    // Click the header — the panel collapses and aria-expanded flips to false.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+
+    // Click again — it re-expands.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+  },
 }
 
 // ---------------------------------------------------------------------------

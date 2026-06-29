@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import type { DzSelectItem } from '../../src/components/forms'
+import { expect, within } from 'storybook/test'
 import {
   DzCheckbox,
   DzFormDescription,
@@ -9,6 +9,7 @@ import {
   DzFormMessage,
   DzSelect,
 } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFormField is a compound wrapper that provides form field context
@@ -107,6 +108,17 @@ export const Required: Story = {
       </DzFormField>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    // The label carries data-required and renders a visual "*" indicator.
+    const label = canvasElement.querySelector('label[data-required]')
+    await expect(label).toBeTruthy()
+    await expect(label).toHaveTextContent('Country')
+    await expect(label!.textContent).toContain('*')
+
+    // The "*" is decorative — hidden from assistive tech.
+    const star = label!.querySelector('[aria-hidden="true"]')
+    await expect(star).toHaveTextContent('*')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -155,6 +167,19 @@ export const InvalidWithError: Story = {
       </DzFormField>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The invalid state surfaces the error via DzFormMessage as a live alert.
+    const alert = canvas.getByRole('alert')
+    await expect(alert).toHaveTextContent('Country selection is required.')
+    await expect(alert).toHaveAttribute('aria-live', 'polite')
+
+    // The label reflects the invalid state for styling/AT hooks.
+    const label = canvasElement.querySelector('label[data-invalid]')
+    await expect(label).toBeTruthy()
+    await expect(label).toHaveTextContent('Country')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -225,9 +250,7 @@ export const WithCheckbox: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzSelect },
     setup() {
@@ -323,7 +346,14 @@ export const ResponsiveMobile: Story = {
 export const RealWorldRegistrationForm: Story = {
   name: 'Real World: Registration Form',
   render: () => ({
-    components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzSelect, DzCheckbox },
+    components: {
+      DzFormField,
+      DzFormLabel,
+      DzFormDescription,
+      DzFormMessage,
+      DzSelect,
+      DzCheckbox,
+    },
     setup() {
       return { countryItems }
     },

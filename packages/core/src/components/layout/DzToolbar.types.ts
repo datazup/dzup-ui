@@ -7,17 +7,20 @@
  * @module @dzup-ui/core/components/layout/DzToolbar
  */
 
-import type { BaseAccessibilityProps, BaseAppearanceProps, CanonicalSize } from '@dzup-ui/contracts'
+import type {
+  BaseAccessibilityProps,
+  BaseAppearanceProps,
+  CanonicalSize,
+  Orientation,
+  ToolbarVariant,
+} from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
-/** Surface-style variants mapped to global surface tokens */
-export type ToolbarVariant = 'flat' | 'outlined' | 'elevated'
-
 /** Logical orientation reported via `aria-orientation` */
-export type ToolbarOrientation = 'horizontal' | 'vertical'
+export type ToolbarOrientation = Orientation
 
 /**
  * Props for the DzToolbar component.
@@ -26,8 +29,7 @@ export type ToolbarOrientation = 'horizontal' | 'vertical'
  * surface treatment. Pure layout — no interaction logic.
  */
 export interface DzToolbarProps
-  extends BaseAppearanceProps<CanonicalSize, ToolbarVariant>,
-  BaseAccessibilityProps {
+  extends BaseAppearanceProps<CanonicalSize, ToolbarVariant>, BaseAccessibilityProps {
   /** Whether items wrap onto multiple lines when space runs out */
   wrap?: boolean
   /** Whether the toolbar sticks to the top of its scroll container */

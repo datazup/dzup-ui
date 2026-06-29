@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzDatePicker } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzDatePicker is a date selection component built on Reka UI DatePicker primitives
@@ -104,6 +105,18 @@ export const Default: Story = {
     },
     template: '<DzDatePicker v-bind="args" class="max-w-xs" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The calendar trigger button must be present and interactive.
+    const trigger = canvas.getByRole('button', { name: /open date picker/i })
+    await expect(trigger).toBeInTheDocument()
+    await expect(trigger).not.toBeDisabled()
+
+    // The date field renders segment inputs.
+    const field = canvasElement.querySelector('[data-state]')
+    expect(field).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -236,9 +249,7 @@ export const LocaleFormatting: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzDatePicker },
     template: `
@@ -267,6 +278,17 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The trigger button is present and usable.
+    const trigger = canvas.getByRole('button', { name: /open date picker/i })
+    await expect(trigger).toBeInTheDocument()
+
+    // Initially no date is selected.
+    const output = canvas.getByText(/selected:/i).closest('p')
+    expect(output).toHaveTextContent('none')
+  },
 }
 
 // ---------------------------------------------------------------------------

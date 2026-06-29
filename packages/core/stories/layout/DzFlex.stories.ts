@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzFlex } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFlex is a flexbox layout component with full control over direction,
@@ -108,6 +109,15 @@ export const Default: Story = {
       </DzFlex>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const flexContainer = canvasElement.querySelector('div')
+    await expect(flexContainer).toBeInTheDocument()
+    const itemA = canvas.getByText('Item A')
+    await expect(itemA).toBeInTheDocument()
+    const itemB = canvas.getByText('Item B')
+    await expect(itemB).toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -256,9 +266,7 @@ export const InlineFlex: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzFlex },
     template: `

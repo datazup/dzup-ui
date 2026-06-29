@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzLightboxEmits,
   DzLightboxProps,
@@ -30,6 +26,10 @@ import {
 import { computed, ref, useAttrs, useId, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { lightboxVariants } from './DzLightbox.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const open = defineModel<boolean>({ default: false })
 
@@ -95,7 +95,6 @@ function handleKeydown(event: KeyboardEvent): void {
   }
 }
 </script>
-
 
 <template>
   <slot />

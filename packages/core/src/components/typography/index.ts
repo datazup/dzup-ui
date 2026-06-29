@@ -31,18 +31,6 @@ export { type CodeVariantProps, codeVariants } from './DzCode.variants.ts'
 // ── DzCode ──
 export { default as DzCode } from './DzCode.vue'
 
-export { kbdTokens } from './DzKbd.tokens.ts'
-
-export type {
-  DzKbdProps,
-  DzKbdSlots,
-} from './DzKbd.types.ts'
-
-export { type KbdVariantProps, kbdVariants } from './DzKbd.variants.ts'
-
-// ── DzKbd ──
-export { default as DzKbd } from './DzKbd.vue'
-
 // Tokens
 export { headingTokens } from './DzHeading.tokens.ts'
 
@@ -61,6 +49,35 @@ export { headingVariants } from './DzHeading.variants.ts'
 
 // Components
 export { default as DzHeading } from './DzHeading.vue'
+
+export { kbdTokens } from './DzKbd.tokens.ts'
+
+export type {
+  DzKbdProps,
+  DzKbdSlots,
+} from './DzKbd.types.ts'
+
+export { type KbdVariantProps, kbdVariants } from './DzKbd.variants.ts'
+
+// ── DzKbd ──
+export { default as DzKbd } from './DzKbd.vue'
+
+// ── DzRelativeTime ──
+export { relativeTimeTokens } from './DzRelativeTime.tokens.ts'
+
+export type {
+  DzRelativeTimeProps,
+  DzRelativeTimeSlotProps,
+  DzRelativeTimeSlots,
+  RelativeTimeLocale,
+  RelativeTimeMode,
+  RelativeTimeTone,
+  RelativeTimeValue,
+} from './DzRelativeTime.types.ts'
+
+export { type RelativeTimeVariantProps, relativeTimeVariants } from './DzRelativeTime.variants.ts'
+
+export { default as DzRelativeTime } from './DzRelativeTime.vue'
 
 export { textTokens } from './DzText.tokens.ts'
 
@@ -90,20 +107,3 @@ export type {
 export { type VisuallyHiddenVariantProps, visuallyHiddenVariants } from './DzVisuallyHidden.variants.ts'
 
 export { default as DzVisuallyHidden } from './DzVisuallyHidden.vue'
-
-// ── DzRelativeTime ──
-export { relativeTimeTokens } from './DzRelativeTime.tokens.ts'
-
-export type {
-  DzRelativeTimeProps,
-  DzRelativeTimeSlotProps,
-  DzRelativeTimeSlots,
-  RelativeTimeLocale,
-  RelativeTimeMode,
-  RelativeTimeTone,
-  RelativeTimeValue,
-} from './DzRelativeTime.types.ts'
-
-export { type RelativeTimeVariantProps, relativeTimeVariants } from './DzRelativeTime.variants.ts'
-
-export { default as DzRelativeTime } from './DzRelativeTime.vue'

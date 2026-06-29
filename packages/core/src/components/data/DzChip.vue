@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzChipEmits, DzChipProps, DzChipSlots } from './DzChip.types.ts'
 /**
  * DzChip — Closable chip component with tone/variant styling.
@@ -19,6 +15,10 @@ import type { DzChipEmits, DzChipProps, DzChipSlots } from './DzChip.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { chipVariants } from './DzChip.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzChipProps>(), {
   variant: 'subtle',
@@ -64,7 +64,6 @@ function handleKeyDown(event: KeyboardEvent): void {
   }
 }
 </script>
-
 
 <template>
   <span

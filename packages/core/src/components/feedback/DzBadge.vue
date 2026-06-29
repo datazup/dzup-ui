@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBadgeProps, DzBadgeSlots } from './DzBadge.types.ts'
 /**
  * DzBadge — Compact label for status, counts, or categories.
@@ -19,6 +15,10 @@ import type { DzBadgeProps, DzBadgeSlots } from './DzBadge.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { badgeVariants } from './DzBadge.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzBadgeProps>(), {
   variant: 'solid',
@@ -38,7 +38,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <span

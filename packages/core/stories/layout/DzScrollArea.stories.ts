@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, waitFor } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzScrollArea } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzScrollArea provides custom styled scrollbars using Reka UI ScrollArea primitives.

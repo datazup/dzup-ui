@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCheckboxEmits, DzCheckboxProps, DzCheckboxSlots } from './DzCheckbox.types.ts'
 import { Check, Minus } from 'lucide-vue-next'
 import { CheckboxIndicator, CheckboxRoot } from 'reka-ui'
@@ -23,6 +19,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { checkboxVariants } from './DzCheckbox.variants.ts'
 import { DZ_CHECKBOX_GROUP_KEY } from './DzCheckboxGroup.types.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<boolean>({ default: false })
 
@@ -103,7 +103,6 @@ const iconSizeClass = computed(() => {
   return map[resolvedSize.value] ?? map.md
 })
 </script>
-
 
 <template>
   <label

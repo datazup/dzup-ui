@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzVisuallyHiddenProps } from './DzVisuallyHidden.types.ts'
 /**
  * DzVisuallyHidden — Screen-reader-only content wrapper.
@@ -29,6 +25,10 @@ import type { DzVisuallyHiddenProps } from './DzVisuallyHidden.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { visuallyHiddenVariants } from './DzVisuallyHidden.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzVisuallyHiddenProps>(), {
   as: 'span',

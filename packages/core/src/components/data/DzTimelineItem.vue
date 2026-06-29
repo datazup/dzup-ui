@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTimelineItemProps, DzTimelineItemSlots } from './DzTimeline.types.ts'
 /**
  * DzTimelineItem — Child item within a DzTimeline compound component.
@@ -21,6 +17,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TIMELINE_KEY } from './DzTimeline.types.ts'
 import { timelineVariants } from './DzTimeline.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTimelineItemProps>(), {
   tone: 'neutral',
@@ -59,7 +59,6 @@ const indicatorToneClass = computed(() => {
   return toneMap[props.tone] ?? toneMap.neutral
 })
 </script>
-
 
 <template>
   <div

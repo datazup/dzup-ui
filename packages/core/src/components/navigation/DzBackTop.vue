@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBackTopEmits, DzBackTopProps, DzBackTopSlots } from './DzBackTop.types.ts'
 /**
  * DzBackTop — Scroll-to-top button.
@@ -24,6 +20,10 @@ import { useScrollToTop } from '../../composables/useScrollToTop/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzFab from '../buttons/DzFab.vue'
 import { backTopVariants } from './DzBackTop.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzBackTopProps>(), {
   ariaLabel: 'Back to top',
@@ -61,7 +61,7 @@ function handleClick(event: MouseEvent): void {
 
 <template>
   <DzFab
-    :ariaLabel="ariaLabel"
+    :aria-label="ariaLabel"
     :variant="variant"
     :size="size"
     :tone="tone"

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCardEmits, DzCardProps } from './DzCard.types.ts'
 /**
  * DzCard — A surface container component.
@@ -25,6 +21,10 @@ import type { DzCardEmits, DzCardProps } from './DzCard.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { cardVariants } from './DzCard.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzCardProps>(), {
   variant: 'elevated',
@@ -95,7 +95,6 @@ function handleKeydown(event: KeyboardEvent): void {
   }
 }
 </script>
-
 
 <template>
   <div

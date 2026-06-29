@@ -10,7 +10,12 @@ export default defineMain({
   // Docs is the only addon that must be listed here for its manager UI; a11y and
   // themes register their preview behavior in preview.ts, but listing them here
   // guarantees the A11y panel and Theme toolbar mount on a fresh `storybook dev`.
-  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-themes'],
+  addons: [
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    '@storybook/addon-themes',
+    '@storybook/addon-vitest',
+  ],
   stories: [
     // Standalone stories directories
     '../../../packages/core/stories/**/*.stories.ts',
@@ -32,11 +37,23 @@ export default defineMain({
     config.resolve.alias = [
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
       // Token sub-path exports must come before the base alias
-      { find: '@dzup-ui/tokens/css', replacement: resolve(pkgRoot, 'packages/tokens/dist/tokens.css') },
-      { find: '@dzup-ui/tokens/tailwind', replacement: resolve(pkgRoot, 'packages/tokens/dist/tailwind-theme.js') },
-      { find: '@dzup-ui/tokens/utils', replacement: resolve(pkgRoot, 'packages/tokens/src/utils/index.ts') },
+      {
+        find: '@dzup-ui/tokens/css',
+        replacement: resolve(pkgRoot, 'packages/tokens/dist/tokens.css'),
+      },
+      {
+        find: '@dzup-ui/tokens/tailwind',
+        replacement: resolve(pkgRoot, 'packages/tokens/dist/tailwind-theme.js'),
+      },
+      {
+        find: '@dzup-ui/tokens/utils',
+        replacement: resolve(pkgRoot, 'packages/tokens/src/utils/index.ts'),
+      },
       { find: '@dzup-ui/tokens', replacement: resolve(pkgRoot, 'packages/tokens/src') },
-      { find: '@dzup-ui/contracts', replacement: resolve(pkgRoot, 'packages/contracts/src/index.ts') },
+      {
+        find: '@dzup-ui/contracts',
+        replacement: resolve(pkgRoot, 'packages/contracts/src/index.ts'),
+      },
       { find: '@dzup-ui/core', replacement: resolve(pkgRoot, 'packages/core/src') },
     ]
 

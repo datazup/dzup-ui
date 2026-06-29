@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, waitFor, within } from 'storybook/test'
 import {
   DzTable,
@@ -8,6 +7,7 @@ import {
   DzTableHeader,
   DzTableRow,
 } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTable is a simple semantic table wrapper with styling.
@@ -128,7 +128,12 @@ export const Default: Story = {
 // ---------------------------------------------------------------------------
 
 export const AllVariants: Story = {
+  args: {
+    hoverable: true,
+  },
+
   name: 'Variant Gallery',
+
   render: () => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     template: `
@@ -436,9 +441,7 @@ export const WithSpans: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     template: `

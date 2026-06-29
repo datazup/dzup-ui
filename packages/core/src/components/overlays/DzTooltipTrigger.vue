@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTooltipTriggerSlots } from './DzTooltip.types.ts'
 /**
  * DzTooltipTrigger -- Trigger element for DzTooltip compound.
@@ -12,9 +8,12 @@ import type { DzTooltipTriggerSlots } from './DzTooltip.types.ts'
  */
 import { TooltipTrigger } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 defineSlots<DzTooltipTriggerSlots>()
 </script>
-
 
 <template>
   <TooltipTrigger as-child>

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { AlertCircle, AlertTriangle, Bell, CheckCircle, Info } from 'lucide-vue-next'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzNotification } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzNotification displays a persistent notification message.
@@ -125,7 +126,9 @@ export const WithIcon: Story = {
   name: 'With Icon',
   render: () => ({
     components: { DzNotification },
-    setup() { return { CheckCircle, AlertTriangle, AlertCircle, Info } },
+    setup() {
+      return { CheckCircle, AlertTriangle, AlertCircle, Info }
+    },
     template: `
       <div class="space-y-4 max-w-md">
         <DzNotification tone="success" title="Saved" description="Your changes have been saved." :icon="CheckCircle" closable />
@@ -155,6 +158,20 @@ export const Closable: Story = {
     },
     template: '<div class="max-w-md"><DzNotification v-bind="args" /></div>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The notification title should be visible.
+    await expect(canvas.getByText('Dismissable Notification')).toBeVisible()
+
+    // Close button should be accessible.
+    const closeBtn = canvas.getByRole('button', { name: /close|dismiss/i })
+    await expect(closeBtn).toBeVisible()
+
+    // Click the close button — notification should be removed from DOM.
+    await userEvent.click(closeBtn)
+    await expect(canvas.queryByText('Dismissable Notification')).not.toBeInTheDocument()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -165,7 +182,9 @@ export const WithSlots: Story = {
   name: 'With Slots',
   render: () => ({
     components: { DzNotification },
-    setup() { return { Bell } },
+    setup() {
+      return { Bell }
+    },
     template: `
       <div class="max-w-md">
         <DzNotification tone="primary" title="New message" closable :icon="Bell">
@@ -188,7 +207,9 @@ export const AutoDismiss: Story = {
   name: 'Auto-dismiss (5s)',
   render: () => ({
     components: { DzNotification },
-    setup() { return { CheckCircle } },
+    setup() {
+      return { CheckCircle }
+    },
     data() {
       return { key: 0 }
     },
@@ -236,6 +257,21 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Notification is visible on mount.
+    await expect(canvas.getByText('Attention Required')).toBeVisible()
+
+    // Close it — the dismissed state message appears.
+    await userEvent.click(canvas.getByRole('button', { name: /close|dismiss/i }))
+    await expect(canvas.getByText(/notification was dismissed/i)).toBeInTheDocument()
+    await expect(canvas.queryByText('Attention Required')).not.toBeInTheDocument()
+
+    // Show again — notification reappears.
+    await userEvent.click(canvas.getByRole('button', { name: /show again/i }))
+    await expect(canvas.getByText('Attention Required')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -258,6 +294,23 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Danger notification uses role="alert".
+    const alert = canvas.getByRole('alert')
+    await expect(alert).toBeVisible()
+    await expect(alert).toHaveTextContent(/urgent/i)
+
+    // Info notification uses role="status".
+    const status = canvas.getByRole('status')
+    await expect(status).toBeVisible()
+    await expect(status).toHaveTextContent(/informational/i)
+
+    // Both have close buttons.
+    const closeBtns = canvas.getAllByRole('button', { name: /close|dismiss/i })
+    await expect(closeBtns.length).toBeGreaterThanOrEqual(2)
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -266,12 +319,12 @@ export const Accessibility: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzNotification },
-    setup() { return { CheckCircle, AlertCircle } },
+    setup() {
+      return { CheckCircle, AlertCircle }
+    },
     template: `
       <div class="space-y-4 max-w-md">
         <DzNotification tone="success" title="Success" description="Changes saved." :icon="CheckCircle" closable />
@@ -289,7 +342,9 @@ export const RealWorldNotificationStack: Story = {
   name: 'Real World: Notification Stack',
   render: () => ({
     components: { DzNotification },
-    setup() { return { CheckCircle, AlertTriangle, Info } },
+    setup() {
+      return { CheckCircle, AlertTriangle, Info }
+    },
     template: `
       <div class="space-y-3 max-w-md">
         <DzNotification

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzSidebarContext,
   DzSidebarEmits,
@@ -33,6 +29,10 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const collapsedModel = defineModel<boolean>('collapsed', { default: false })
 const mobileOpenModel = defineModel<boolean>('mobileOpen', { default: false })
 
@@ -51,44 +51,55 @@ const props = withDefaults(defineProps<DzSidebarProps>(), {
   ariaInvalid: undefined,
 })
 
+defineEmits<DzSidebarEmits>()
+
+defineSlots<DzSidebarSlots>()
+
 const canUseStorage = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
 
 function readStored(key: string): boolean | null {
-  if (!canUseStorage) return null
+  if (!canUseStorage)
+    return null
   try {
     const raw = window.localStorage.getItem(key)
-    if (raw === '1' || raw === 'true') return true
-    if (raw === '0' || raw === 'false') return false
+    if (raw === '1' || raw === 'true')
+      return true
+    if (raw === '0' || raw === 'false')
+      return false
     return null
-  } catch {
+  }
+  catch {
     return null
   }
 }
 
 function writeStored(key: string, value: boolean): void {
-  if (!canUseStorage) return
+  if (!canUseStorage)
+    return
   try {
     window.localStorage.setItem(key, value ? '1' : '0')
-  } catch {
+  }
+  catch {
     // ignore quota / disabled storage
   }
 }
 
 onMounted(() => {
-  if (!props.storageKey) return
+  if (!props.storageKey)
+    return
   const stored = readStored(props.storageKey)
-  if (stored !== null) collapsedModel.value = stored
+  if (stored !== null)
+    collapsedModel.value = stored
 })
 
 watch(
   () => [props.storageKey, collapsedModel.value] as const,
   ([key, value]) => {
-    if (typeof key === 'string' && key.length > 0) writeStored(key, value)
+    if (typeof key === 'string' && key.length > 0)
+      writeStored(key, value)
   },
 )
 
-defineEmits<DzSidebarEmits>()
-defineSlots<DzSidebarSlots>()
 const attrs = useAttrs()
 
 // Mobile detection: prop wins; otherwise self-managed matchMedia.
@@ -100,7 +111,8 @@ function onMqlChange(e: MediaQueryListEvent | MediaQueryList): void {
   internalMobile.value = e.matches
 }
 function setupMql(breakpoint: number): void {
-  if (!canUseMatchMedia) return
+  if (!canUseMatchMedia)
+    return
   if (mql) {
     mql.removeEventListener('change', onMqlChange as (e: MediaQueryListEvent) => void)
   }
@@ -110,15 +122,18 @@ function setupMql(breakpoint: number): void {
 }
 
 onMounted(() => {
-  if (props.isMobile === undefined) setupMql(props.mobileBreakpoint)
+  if (props.isMobile === undefined)
+    setupMql(props.mobileBreakpoint)
 })
 onUnmounted(() => {
-  if (mql) mql.removeEventListener('change', onMqlChange as (e: MediaQueryListEvent) => void)
+  if (mql)
+    mql.removeEventListener('change', onMqlChange as (e: MediaQueryListEvent) => void)
 })
 watch(
   () => props.mobileBreakpoint,
   (next) => {
-    if (props.isMobile === undefined) setupMql(next)
+    if (props.isMobile === undefined)
+      setupMql(next)
   },
 )
 
@@ -158,8 +173,10 @@ const bodyClasses = computed(() => styles.value.body())
 
 const rootStyles = computed(() => {
   const result: Record<string, string> = {}
-  if (props.width) result['--dz-sidebar-width'] = props.width
-  if (props.collapsedWidth) result['--dz-sidebar-collapsed-width'] = props.collapsedWidth
+  if (props.width)
+    result['--dz-sidebar-width'] = props.width
+  if (props.collapsedWidth)
+    result['--dz-sidebar-collapsed-width'] = props.collapsedWidth
   return result
 })
 

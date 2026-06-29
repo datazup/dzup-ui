@@ -1,8 +1,5 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
+import type { MaskResult } from './DzInputMask.engine.ts'
 import type { DzInputMaskEmits, DzInputMaskProps, DzInputMaskSlots } from './DzInputMask.types.ts'
 /**
  * DzInputMask — format-masked text input.
@@ -23,9 +20,13 @@ import type { DzInputMaskEmits, DzInputMaskProps, DzInputMaskSlots } from './DzI
 import { computed, inject, onMounted, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
-import { applyMask, backspaceValue, forwardDeleteValue, type MaskResult } from './DzInputMask.engine.ts'
 import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
+import { applyMask, backspaceValue, forwardDeleteValue } from './DzInputMask.engine.ts'
 import { maskElementVariants, maskWrapperVariants } from './DzInputMask.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -203,7 +204,6 @@ onMounted(() => {
 /** Expose the native input ref + validation state for consumers */
 defineExpose({ inputRef, completed, unmasked })
 </script>
-
 
 <template>
   <div

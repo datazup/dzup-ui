@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzCodeBlock } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCodeBlock renders code in a semantic `<pre><code>` structure with an

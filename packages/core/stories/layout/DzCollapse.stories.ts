@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzCollapse, DzStack } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCollapse is an animated expand/collapse container.

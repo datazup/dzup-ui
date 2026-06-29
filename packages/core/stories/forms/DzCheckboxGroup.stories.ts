@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, within } from 'storybook/test'
 import { DzCheckbox, DzCheckboxGroup } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCheckboxGroup manages a set of DzCheckbox components with a shared `string[]` model.
@@ -146,9 +147,7 @@ export const Disabled: Story = {
 
 export const DarkMode: Story = {
   name: 'Dark Mode Preview',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: { DzCheckboxGroup, DzCheckbox },
     template: `
@@ -183,6 +182,29 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const email = canvas.getByRole('checkbox', { name: /^email$/i })
+    const sms = canvas.getByRole('checkbox', { name: /^sms$/i })
+
+    // Nothing selected initially.
+    await expect(email).toHaveAttribute('aria-checked', 'false')
+    await expect(canvas.getByText(/none/i)).toBeInTheDocument()
+
+    // Clicking Email checks it and updates the model text.
+    await userEvent.click(email)
+    await expect(email).toHaveAttribute('aria-checked', 'true')
+    // Use getAllByText to handle multiple matches (label + status display)
+    await expect(canvas.getAllByText(/email/i).length).toBeGreaterThan(0)
+
+    // Clicking SMS adds a second selection independently.
+    await userEvent.click(sms)
+    await expect(sms).toHaveAttribute('aria-checked', 'true')
+
+    // Clicking Email again unchecks it (toggle off).
+    await userEvent.click(email)
+    await expect(email).toHaveAttribute('aria-checked', 'false')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -204,6 +226,25 @@ export const Accessibility: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const optionA = canvas.getByRole('checkbox', { name: /option a/i })
+    const optionB = canvas.getByRole('checkbox', { name: /option b/i })
+
+    // Space key toggles a focused checkbox.
+    optionA.focus()
+    await userEvent.keyboard(' ')
+    await expect(optionA).toHaveAttribute('aria-checked', 'true')
+
+    // Tab moves focus to next checkbox; Space toggles it.
+    await userEvent.tab()
+    await expect(optionB).toHaveFocus()
+    await userEvent.keyboard(' ')
+    await expect(optionB).toHaveAttribute('aria-checked', 'true')
+
+    // Checkboxes are independent — A stays checked after B is checked.
+    await expect(optionA).toHaveAttribute('aria-checked', 'true')
+  },
 }
 
 // ---------------------------------------------------------------------------

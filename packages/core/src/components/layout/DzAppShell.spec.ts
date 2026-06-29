@@ -151,9 +151,9 @@ describe('dzAppShell -- Unit Tests', () => {
     const wrapper = mount(DzAppShell, {
       slots: {
         'header-start': () => h('span', { 'data-testid': 'hs' }, 'L'),
-        header: () => h('span', { 'data-testid': 'hc' }, 'C'),
+        'header': () => h('span', { 'data-testid': 'hc' }, 'C'),
         'header-end': () => h('span', { 'data-testid': 'he' }, 'R'),
-        default: 'x',
+        'default': 'x',
       },
     })
     const headerHtml = wrapper.find('header').html()

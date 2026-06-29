@@ -7,7 +7,7 @@
  * @module @dzup-ui/core/components/forms/DzCheckboxGroup
  */
 
-import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ export const DZ_CHECKBOX_GROUP_KEY: InjectionKey<DzCheckboxGroupContext>
 /** Props for the DzCheckboxGroup component */
 export interface DzCheckboxGroupProps extends BaseAccessibilityProps {
   /** Layout orientation */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
   /** Disabled state propagated to all child checkboxes */
   disabled?: boolean
   /** Size propagated to all child checkboxes */

@@ -108,6 +108,19 @@ export { default as DzDropdownMenuItem } from './DzDropdownMenuItem.vue'
 
 export { default as DzDropdownMenuSeparator } from './DzDropdownMenuSeparator.vue'
 export { default as DzDropdownMenuTrigger } from './DzDropdownMenuTrigger.vue'
+export { popconfirmTokens } from './DzPopconfirm.tokens.ts'
+// ── Types — DzPopconfirm ──
+export type {
+  DzPopconfirmEmits,
+  DzPopconfirmProps,
+  DzPopconfirmSlots,
+  PopconfirmPlacement,
+} from './DzPopconfirm.types.ts'
+export { type PopconfirmVariantProps, popconfirmVariants } from './DzPopconfirm.variants.ts'
+
+// ── DzPopconfirm ──
+export { default as DzPopconfirm } from './DzPopconfirm.vue'
+
 // ── Types — DzPopover ──
 export type {
   DzPopoverContentEmits,
@@ -120,25 +133,12 @@ export type {
   PopoverContentSize,
   PopoverSide,
 } from './DzPopover.types.ts'
+
 export { type PopoverVariantProps, popoverVariants } from './DzPopover.variants.ts'
 // ── DzPopover (Compound) ──
 export { default as DzPopover } from './DzPopover.vue'
-
 export { default as DzPopoverContent } from './DzPopoverContent.vue'
-
 export { default as DzPopoverTrigger } from './DzPopoverTrigger.vue'
-
-// ── Types — DzPopconfirm ──
-export type {
-  DzPopconfirmEmits,
-  DzPopconfirmProps,
-  DzPopconfirmSlots,
-  PopconfirmPlacement,
-} from './DzPopconfirm.types.ts'
-export { popconfirmTokens } from './DzPopconfirm.tokens.ts'
-export { type PopconfirmVariantProps, popconfirmVariants } from './DzPopconfirm.variants.ts'
-// ── DzPopconfirm ──
-export { default as DzPopconfirm } from './DzPopconfirm.vue'
 
 export type {
   DzSheetCloseSlots,
@@ -165,22 +165,6 @@ export { default as DzSheetTitle } from './DzSheetTitle.vue'
 
 export { default as DzSheetTrigger } from './DzSheetTrigger.vue'
 
-// ── Types — DzTour ──
-export type {
-  DzTourEmits,
-  DzTourProps,
-  DzTourSlotProps,
-  DzTourSlots,
-  DzTourStep,
-  TourPlacement,
-  TourTarget,
-} from './DzTour.types.ts'
-
-export { type TourVariantProps, tourVariants } from './DzTour.variants.ts'
-
-// ── DzTour ──
-export { default as DzTour } from './DzTour.vue'
-
 // ── Types — DzTooltip ──
 export type {
   DzTooltipContentProps,
@@ -196,5 +180,21 @@ export { type TooltipVariantProps, tooltipVariants } from './DzTooltip.variants.
 
 // ── DzTooltip (Compound) ──
 export { default as DzTooltip } from './DzTooltip.vue'
+
 export { default as DzTooltipContent } from './DzTooltipContent.vue'
+
 export { default as DzTooltipTrigger } from './DzTooltipTrigger.vue'
+
+// ── Types — DzTour ──
+export type {
+  DzTourEmits,
+  DzTourProps,
+  DzTourSlotProps,
+  DzTourSlots,
+  DzTourStep,
+  TourPlacement,
+  TourTarget,
+} from './DzTour.types.ts'
+export { type TourVariantProps, tourVariants } from './DzTour.variants.ts'
+// ── DzTour ──
+export { default as DzTour } from './DzTour.vue'

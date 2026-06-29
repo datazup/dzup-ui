@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzOrderList } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzOrderList** is a single list whose items can be reordered in place — by

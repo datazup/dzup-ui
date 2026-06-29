@@ -1,20 +1,20 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
+import type { DzSelectItem } from '../forms/DzSelect.types.ts'
 import type { DzDataGridPaginationEmits, DzDataGridPaginationProps } from './DzDataGrid.types.ts'
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 /**
  * DzDataGridPagination — Internal pagination sub-part for DzDataGrid.
  *
  * Renders page navigation and page size selector.
  */
 import { computed } from 'vue'
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import type { DzSelectItem } from '../forms/DzSelect.types.ts'
 import DzIconButton from '../buttons/DzIconButton.vue'
 import DzSelect from '../forms/DzSelect.vue'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzDataGridPaginationProps>(), {
   pageSizeOptions: () => [10, 25, 50, 100],
@@ -41,7 +41,6 @@ function goToPage(page: number): void {
 }
 </script>
 
-
 <template>
   <div :class="styles.pagination()">
     <div class="flex items-center gap-[var(--dz-spacing-2)]">
@@ -62,7 +61,7 @@ function goToPage(page: number): void {
 
       <DzIconButton
         :icon="ChevronLeft"
-        ariaLabel="Previous page"
+        aria-label="Previous page"
         variant="ghost"
         size="sm"
         tone="neutral"
@@ -76,7 +75,7 @@ function goToPage(page: number): void {
 
       <DzIconButton
         :icon="ChevronRight"
-        ariaLabel="Next page"
+        aria-label="Next page"
         variant="ghost"
         size="sm"
         tone="neutral"

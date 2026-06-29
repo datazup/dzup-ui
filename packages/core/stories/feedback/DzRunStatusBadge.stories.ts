@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import type { DzRunStatus } from '../../src/components/feedback/DzRunStatusBadge.types.ts'
 import { expect, within } from 'storybook/test'
 import { DzRunStatusBadge } from '../../src/components/feedback'
-import type { DzRunStatus } from '../../src/components/feedback/DzRunStatusBadge.types.ts'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRunStatusBadge is an **app-specific** badge that maps a canonical run status

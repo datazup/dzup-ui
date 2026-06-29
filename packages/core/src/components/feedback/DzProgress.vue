@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzProgressProps, DzProgressSlots } from './DzProgress.types.ts'
 /**
  * DzProgress — Visual indicator of task completion.
@@ -24,6 +20,10 @@ import {
   progressBarVariants,
   progressTrackVariants,
 } from './DzProgress.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzProgressProps>(), {
   value: 0,
@@ -87,7 +87,6 @@ const toneColorVar = computed(() => {
   return map[props.tone] ?? map.primary
 })
 </script>
-
 
 <template>
   <div

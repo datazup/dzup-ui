@@ -123,7 +123,7 @@ describe('dzTagsInput — validation', () => {
     document.body.innerHTML = ''
   })
 
-  const isEmail = (t: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)
+  const isEmail = (t: string) => /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(t)
 
   it('rejects tokens failing the validate predicate', async () => {
     const wrapper = mountTags({ validate: isEmail })
@@ -163,7 +163,7 @@ describe('dzTagsInput — paste', () => {
   })
 
   it('drops invalid pieces while keeping valid ones', async () => {
-    const isEmail = (t: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)
+    const isEmail = (t: string) => /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(t)
     const wrapper = mountTags({ validate: isEmail })
     await paste(wrapper, 'a@b.com, nope, c@d.com')
     expect(wrapper.emitted('update:value')?.at(-1)?.[0]).toEqual(['a@b.com', 'c@d.com'])

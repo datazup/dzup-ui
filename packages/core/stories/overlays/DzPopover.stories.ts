@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzPopover,
   DzPopoverContent,
   DzPopoverTrigger,
 } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzPopover is a compound floating content panel built on Reka UI Popover (ADR-07).

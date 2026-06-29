@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { Heart } from 'lucide-vue-next'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import {
   DzFormDescription,
   DzFormField,
@@ -9,6 +8,7 @@ import {
   DzFormMessage,
   DzRating,
 } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzRating is a star/icon rating input implemented as a single

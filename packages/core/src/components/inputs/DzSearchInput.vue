@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzSearchInputEmits,
   DzSearchInputProps,
@@ -24,6 +20,10 @@ import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -154,7 +154,6 @@ function handleClear(): void {
 
 defineExpose({ inputRef })
 </script>
-
 
 <template>
   <div

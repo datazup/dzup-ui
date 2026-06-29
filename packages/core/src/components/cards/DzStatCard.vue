@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzStatCardProps, DzStatCardSlots } from './DzStatCard.types.ts'
 /**
  * DzStatCard — Statistics display card.
@@ -26,6 +22,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { statCardVariants } from './DzStatCard.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzStatCardProps>(), {
   variant: 'elevated',
 })
@@ -44,7 +44,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

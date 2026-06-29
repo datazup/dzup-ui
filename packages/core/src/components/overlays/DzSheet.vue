@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSheetProps, DzSheetSlots } from './DzSheet.types.ts'
 /**
  * DzSheet — Slide-out side panel root component using Reka UI Dialog (ADR-07).
@@ -24,6 +20,10 @@ import type { DzSheetProps, DzSheetSlots } from './DzSheet.types.ts'
  */
 import { DialogRoot } from 'reka-ui'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const open = defineModel<boolean>('open', { default: false })
 
 withDefaults(defineProps<DzSheetProps>(), {
@@ -32,7 +32,6 @@ withDefaults(defineProps<DzSheetProps>(), {
 
 defineSlots<DzSheetSlots>()
 </script>
-
 
 <template>
   <DialogRoot v-model:open="open" :modal="modal">

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzSplitterPanelProps, DzSplitterPanelSlots } from './DzSplitter.types.ts'
 import { SplitterPanel } from 'reka-ui'
 /**
@@ -15,6 +11,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_RESIZABLE_KEY } from './DzResizable.types.ts'
 import { resizableVariants } from './DzResizable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = defineProps<DzSplitterPanelProps>()
 defineSlots<DzSplitterPanelSlots>()
@@ -33,7 +33,6 @@ const classes = computed(() =>
   cn(styles.value.panel(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <SplitterPanel

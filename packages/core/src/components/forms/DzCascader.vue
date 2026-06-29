@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzCascaderEmits,
   DzCascaderFlatPath,
@@ -35,6 +31,10 @@ import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { cascaderVariants } from './DzCascader.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<DzCascaderValue>('value', { default: () => [] })
 

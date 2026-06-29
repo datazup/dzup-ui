@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzConfirmDialog } from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzConfirmDialog is a pre-composed confirmation dialog built on top of the
@@ -26,7 +26,8 @@ const meta = {
     variant: {
       control: 'inline-radio',
       options: ['default', 'danger'],
-      description: 'Visual variant — `danger` styles the icon + confirm button for destructive actions',
+      description:
+        'Visual variant — `danger` styles the icon + confirm button for destructive actions',
       table: { category: 'Appearance', defaultValue: { summary: 'default' } },
     },
     size: {
@@ -426,11 +427,15 @@ export const Interactive: Story = {
     // Dialog content is portalled to document.body — assert modal semantics.
     const dialog = await screen.findByRole('dialog')
     await expect(dialog).toHaveAttribute('aria-modal', 'true')
-    await expect(within(dialog).getByText(/confirm this action\?/i)).toBeVisible()
+    // waitFor to allow dialog enter animation to complete before querying text.
+    await waitFor(() => expect(within(dialog).getByText(/confirm this action\?/i)).toBeVisible())
 
     // Activate the confirm button and assert the handler fired + dialog closed.
     await userEvent.click(screen.getByTestId('confirm-dialog-confirm'))
     await expect(canvas.getByTestId('outcome')).toHaveTextContent(/confirmed/i)
-    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    // waitFor to allow exit animation to complete before asserting removal.
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 2000,
+    })
   },
 }

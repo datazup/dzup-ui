@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAppShellProps, DzAppShellSlots } from './DzAppShell.types.ts'
 /**
  * DzAppShell -- Application shell layout.
@@ -24,6 +20,10 @@ import type { DzAppShellProps, DzAppShellSlots } from './DzAppShell.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { appShellVariants } from './DzAppShell.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzAppShellProps>(), {
   hasSidebar: true,
@@ -56,7 +56,6 @@ const rootStyles = computed(() => {
   return base
 })
 </script>
-
 
 <template>
   <div

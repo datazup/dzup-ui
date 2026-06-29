@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzMentionEmits,
   DzMentionOption,
@@ -35,6 +31,10 @@ import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { mentionVariants } from './DzMention.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>('value', { default: '' })
 
@@ -395,11 +395,29 @@ function onKeyup(event: KeyboardEvent): void {
 // ---------------------------------------------------------------------------
 
 const MIRROR_PROPS = [
-  'boxSizing', 'width', 'height', 'overflowX', 'overflowY',
-  'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
-  'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-  'fontStyle', 'fontVariant', 'fontWeight', 'fontStretch', 'fontSize',
-  'fontFamily', 'lineHeight', 'textAlign', 'letterSpacing', 'whiteSpace',
+  'boxSizing',
+  'width',
+  'height',
+  'overflowX',
+  'overflowY',
+  'borderTopWidth',
+  'borderRightWidth',
+  'borderBottomWidth',
+  'borderLeftWidth',
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
+  'fontStyle',
+  'fontVariant',
+  'fontWeight',
+  'fontStretch',
+  'fontSize',
+  'fontFamily',
+  'lineHeight',
+  'textAlign',
+  'letterSpacing',
+  'whiteSpace',
 ] as const
 
 function updateMenuPosition(): void {

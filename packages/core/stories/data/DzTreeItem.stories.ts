@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { TreeNode } from '../../src/components/data'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzTree, DzTreeItem } from '../../src/components/data'
 
 /**
@@ -71,6 +72,18 @@ export const Default: Story = {
       />
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const treeItems = canvas.getAllByRole('treeitem')
+    await expect(treeItems.length).toBeGreaterThanOrEqual(1)
+
+    const rootItem = canvas.getByText('Root Node').closest('[role="treeitem"]')
+    await expect(rootItem).toHaveAttribute('aria-expanded', 'true')
+
+    await expect(canvas.getByText('Grandchild 1')).toBeVisible()
+    await expect(canvas.getByText('Child 3')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -101,6 +114,19 @@ export const WithSelection: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const treeItems = canvas.getAllByRole('treeitem')
+    await expect(treeItems.length).toBeGreaterThanOrEqual(1)
+
+    const child1 = canvas.getByText('Child 1').closest('[role="treeitem"]')
+    await userEvent.click(canvas.getByText('Child 1'))
+
+    await waitFor(() => {
+      expect(child1).toHaveAttribute('aria-selected', 'true')
+    })
+  },
 }
 
 // ---------------------------------------------------------------------------

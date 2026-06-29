@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzAnimatedNumber } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzAnimatedNumber tweens a figure from its previous value to the next whenever
@@ -78,6 +79,19 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const Integer: Story = {
+  play: async ({ canvasElement }) => {
+    const _canvas = within(canvasElement)
+    // Root span must be in the DOM
+    const root = canvasElement.querySelector('[data-size]')
+    await waitFor(() => expect(root).toBeTruthy())
+    // The sr-only live region must be present for screen-reader announcements
+    const liveRegion = canvasElement.querySelector('[aria-live="polite"]')
+    expect(liveRegion).toBeTruthy()
+    // The visible figure span must have content (aria-hidden from SR).
+    // Use querySelector on the aria-hidden wrapper to avoid matching the sr-only live region.
+    const hiddenFigure = canvasElement.querySelector('[aria-hidden="true"]')
+    expect(hiddenFigure).toBeTruthy()
+  },
   render: args => ({
     components: { DzAnimatedNumber },
     setup() {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots } from './DzAsyncBoundary.types.ts'
 import type { ComponentPublicInstance } from 'vue'
+import type { DzAsyncBoundaryEmits, DzAsyncBoundaryProps, DzAsyncBoundarySlots } from './DzAsyncBoundary.types.ts'
 import { onErrorCaptured, ref } from 'vue'
 import DzSpinner from './DzSpinner.vue'
 

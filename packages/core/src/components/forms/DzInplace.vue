@@ -29,6 +29,12 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Open state — `v-model:active` (ADR-16) */
+const active = defineModel<boolean>('active', { default: false })
+
+/** Edited value — `v-model:value` passthrough (ADR-16) */
+const value = defineModel<T>('value')
+
 const props = withDefaults(defineProps<DzInplaceProps>(), {
   saveOn: 'both',
   disabled: false,
@@ -37,12 +43,7 @@ const props = withDefaults(defineProps<DzInplaceProps>(), {
 })
 
 const emit = defineEmits<DzInplaceEmits<T>>()
-const slots = defineSlots<DzInplaceSlots<T>>()
-
-/** Open state — `v-model:active` (ADR-16) */
-const active = defineModel<boolean>('active', { default: false })
-/** Edited value — `v-model:value` passthrough (ADR-16) */
-const value = defineModel<T>('value')
+const _slots = defineSlots<DzInplaceSlots<T>>()
 
 const attrs = useAttrs()
 
@@ -173,13 +174,7 @@ defineExpose({ activate, save, cancel })
       @keydown="onEditorKeydown"
       @focusout="onEditorFocusout"
     >
-      <slot
-        name="edit"
-        :value="(value as T)"
-        :set-value="setValue"
-        :save="save"
-        :cancel="cancel"
-      >
+      <slot name="edit" :value="value as T" :set-value="setValue" :save="save" :cancel="cancel">
         <!-- Built-in editor when no #edit slot is supplied -->
         <DzInput
           ref="builtinRef"
@@ -203,7 +198,7 @@ defineExpose({ activate, save, cancel })
       :aria-describedby="ariaDescribedby"
       @click="activate"
     >
-      <slot name="display" :value="(value as T)" :activate="activate">
+      <slot name="display" :value="value as T" :activate="activate">
         {{ stringValue }}
       </slot>
       <svg

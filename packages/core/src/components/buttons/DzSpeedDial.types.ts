@@ -82,7 +82,7 @@ export interface DzSpeedDialProps extends BaseAccessibilityProps {
    * Accessible label for the trigger — REQUIRED, the trigger is icon-only.
    * (Inherited as optional from BaseAccessibilityProps; redeclared required.)
    */
-  ariaLabel: string
+  ariaLabel?: string
 }
 
 // ---------------------------------------------------------------------------

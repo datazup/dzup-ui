@@ -1,15 +1,15 @@
+import type { CountdownMode, UseCountdownReturn } from './useCountdown.ts'
+import { mount } from '@vue/test-utils'
 /**
  * useCountdown — Unit tests (pure helpers + fake-timer engine).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
-import { mount } from '@vue/test-utils'
 import {
   formatRemaining,
   toRemainingParts,
   useCountdown,
 } from './useCountdown.ts'
-import type { CountdownMode, UseCountdownReturn } from './useCountdown.ts'
 
 /** Fixed reference instant: 2026-06-14T15:00:00.000Z. */
 const NOW = new Date('2026-06-14T15:00:00.000Z')

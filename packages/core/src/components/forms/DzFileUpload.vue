@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzFileUploadEmits,
   DzFileUploadProps,
@@ -29,6 +25,10 @@ import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { fileUploadVariants } from './DzFileUpload.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<File[]>({ default: () => [] })
 
@@ -198,7 +198,6 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 </script>
-
 
 <template>
   <div

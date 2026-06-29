@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzSearchInput } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSearchInput is a search-specific input with a built-in search icon,

@@ -12,6 +12,12 @@
  * Kept local to @dzup-ui/core to avoid leaking product-specific runtime
  * dependencies into the base design-system package.
  */
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
+
+import type { CanonicalSize } from '@dzup-ui/contracts'
+
 export type DzRunStatus
   = | 'PENDING'
     | 'RUNNING'
@@ -19,12 +25,6 @@ export type DzRunStatus
     | 'COMPLETED'
     | 'FAILED'
     | 'CANCELLED'
-
-// ---------------------------------------------------------------------------
-// Props
-// ---------------------------------------------------------------------------
-
-import type { CanonicalSize } from '@dzup-ui/contracts'
 
 /** Props for the DzRunStatusBadge component */
 export interface DzRunStatusBadgeProps {

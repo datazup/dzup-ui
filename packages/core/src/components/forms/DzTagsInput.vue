@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { CanonicalSize } from '@dzup-ui/contracts'
 import type {
   DzTagsInputEmits,
@@ -35,6 +31,12 @@ import { cn } from '../../utilities/cn.ts'
 import DzChip from '../data/DzChip.vue'
 import { tagsInputVariants } from './DzTagsInput.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
+const model = defineModel<string[]>('value', { default: () => [] })
+
 const props = withDefaults(defineProps<DzTagsInputProps>(), {
   placeholder: undefined,
   max: undefined,
@@ -60,8 +62,6 @@ const props = withDefaults(defineProps<DzTagsInputProps>(), {
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
 })
-
-const model = defineModel<string[]>('value', { default: () => [] })
 
 const emit = defineEmits<DzTagsInputEmits>()
 defineSlots<DzTagsInputSlots>()

@@ -13,5 +13,5 @@ export interface DzAsyncBoundaryEmits {
 export interface DzAsyncBoundarySlots {
   default?: () => unknown
   loading?: () => unknown
-  error?: (props: { error: unknown; reset: () => void }) => unknown
+  error?: (props: { error: unknown, reset: () => void }) => unknown
 }

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzTreeContext,
   DzTreeEmits,
@@ -10,6 +6,7 @@ import type {
   DzTreeSlots,
   TreeNode,
 } from './DzTree.types.ts'
+import type { TreeNavDirection } from './treeNavigation.ts'
 /**
  * DzTree — Hierarchical tree view with expand/collapse, selection, and checkboxes.
  *
@@ -30,15 +27,19 @@ import { computed, nextTick, provide, toRef, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TREE_KEY } from './DzTree.types.ts'
 import { treeVariants } from './DzTree.variants.ts'
+import DzTreeItem from './DzTreeItem.vue'
 import {
-  type TreeNavDirection,
   firstFocusableKey,
   flattenVisibleNodes,
   getAdjacentKey,
   getFirstChildKey,
   getParentKey,
+
 } from './treeNavigation.ts'
-import DzTreeItem from './DzTreeItem.vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const expandedKeys = defineModel<string[]>('expandedKeys', { default: () => [] })
 
@@ -199,7 +200,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <ul

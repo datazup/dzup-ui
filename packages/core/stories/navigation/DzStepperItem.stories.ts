@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
 
@@ -53,6 +54,18 @@ export const Default: Story = {
       </DzStepper>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The stepper renders as role="group" with an aria-label
+    const stepper = canvas.getByRole('group', { name: 'Registration steps' })
+    expect(stepper).toBeInTheDocument()
+
+    // Step 2 ("Profile") is the active step — it carries aria-current="step"
+    const profileStep = canvas.getByText('Profile').closest('[aria-current="step"]')
+    expect(profileStep).not.toBeNull()
+    expect(profileStep).toHaveAttribute('aria-current', 'step')
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -154,6 +167,17 @@ export const WithContent: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The stepper group renders with all step indicators visible.
+    const group = canvas.getByRole('group', { name: /wizard steps/i })
+    await expect(group).toBeInTheDocument()
+
+    // Step 1 ("Details") starts as active — aria-current="step".
+    const step1 = canvas.getByText('Details').closest('[aria-current="step"]')
+    expect(step1).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------

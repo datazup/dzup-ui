@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { BarChart3, Bell, FileText, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import {
   DzMenu,
   DzMenuItem,
   DzMenuSeparator,
 } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMenu is a compound vertical navigation menu component.

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { DzMegaMenuItem } from '../../src/components/navigation/DzMegaMenu.types'
-import { darkModeDecorator } from '../_shared'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMegaMenu } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMegaMenu is a horizontal (or vertical) navigation menubar whose top-level
@@ -131,6 +132,27 @@ export const Horizontal: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Menubar role is present.
+    const menubar = canvas.getByRole('menubar')
+    await expect(menubar).toBeInTheDocument()
+
+    // "Products" trigger starts closed.
+    const productsTrigger = canvas.getByRole('menuitem', { name: /Products/i })
+    await expect(productsTrigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Hovering or clicking the trigger opens the panel.
+    await userEvent.hover(productsTrigger)
+    await waitFor(() => expect(productsTrigger).toHaveAttribute('aria-expanded', 'true'), {
+      timeout: 3000,
+    })
+
+    // Panel link items are visible after opening.
+    await waitFor(() => expect(canvas.getByRole('menuitem', { name: /Dashboards/i })).toBeVisible())
+    await expect(canvas.getByRole('menuitem', { name: /Reports/i })).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +166,7 @@ const featuredItems: DzMegaMenuItem[] = [
       {
         label: 'Highlight',
         featured: true,
-        items: [{ label: "What's new", href: '#' }],
+        items: [{ label: 'What\'s new', href: '#' }],
       },
       {
         label: 'Analytics',
@@ -228,6 +250,21 @@ export const Responsive: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // "Products" trigger starts collapsed (aria-expanded="false").
+    const productsTrigger = canvas.getByRole('button', { name: /Products/i })
+    await expect(productsTrigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Clicking expands the accordion section.
+    await userEvent.click(productsTrigger)
+    await waitFor(() => expect(productsTrigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // Child links are visible after expansion.
+    await waitFor(() => expect(canvas.getByText('Dashboards')).toBeVisible())
+    await expect(canvas.getByText('Pipelines')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------

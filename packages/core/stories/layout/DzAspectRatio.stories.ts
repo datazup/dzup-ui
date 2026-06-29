@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
 import { DzAspectRatio } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzAspectRatio maintains a consistent aspect ratio for its content.

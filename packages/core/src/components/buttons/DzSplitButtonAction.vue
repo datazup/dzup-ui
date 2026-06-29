@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzSplitButtonActionEmits,
   DzSplitButtonActionProps,
@@ -22,6 +18,10 @@ import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { buttonVariants } from './DzButton.variants.ts'
 import { DZ_SPLIT_BUTTON_KEY } from './DzSplitButton.types.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 defineProps<DzSplitButtonActionProps>()
 const emit = defineEmits<DzSplitButtonActionEmits>()
@@ -54,7 +54,6 @@ function handleClick(event: MouseEvent): void {
   emit('click', event)
 }
 </script>
-
 
 <template>
   <button

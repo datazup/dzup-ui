@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzBlockUI } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzBlockUI masks and disables an arbitrary region during async work — the

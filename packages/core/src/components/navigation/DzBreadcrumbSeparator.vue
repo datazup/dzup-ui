@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzBreadcrumbSeparatorProps, DzBreadcrumbSeparatorSlots } from './DzBreadcrumb.types.ts'
 /**
  * DzBreadcrumbSeparator — Visual separator between breadcrumb items.
@@ -24,6 +20,10 @@ import { cn } from '../../utilities/cn.ts'
 import { DZ_BREADCRUMB_KEY } from './DzBreadcrumb.types.ts'
 import { breadcrumbVariants } from './DzBreadcrumb.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzBreadcrumbSeparatorProps>(), {
   separator: undefined,
 })
@@ -42,7 +42,6 @@ const classes = computed(() =>
   cn(styles.separator(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <li

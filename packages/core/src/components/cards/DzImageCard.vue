@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzImageCardProps, DzImageCardSlots } from './DzImageCard.types.ts'
 /**
  * DzImageCard — Card component with a prominent image.
@@ -25,6 +21,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { imageCardVariants } from './DzImageCard.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(defineProps<DzImageCardProps>(), {
   variant: 'elevated',
   aspectRatio: '16/9',
@@ -44,7 +44,6 @@ const imageStyle = computed(() => ({
   'aspect-ratio': props.aspectRatio,
 }))
 </script>
-
 
 <template>
   <div

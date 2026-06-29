@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 /**
  * DzCardFooter — Structural sub-part for the card footer section.
  *
@@ -18,6 +14,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { cardFooterVariants } from './DzCard.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const attrs = useAttrs()
 
 /** Computed class string merging variant classes with consumer overrides (ADR-10). */
@@ -25,7 +25,6 @@ const classes = computed(() =>
   cn(cardFooterVariants(), attrs.class as string),
 )
 </script>
-
 
 <template>
   <div :class="classes">

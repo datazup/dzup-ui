@@ -1,17 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import {
-  Copy,
-  Image,
-  Link,
-  Pencil,
-  Plus,
-  Share2,
-  Sparkles,
-  Trash2,
-} from 'lucide-vue-next'
+import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from 'lucide-vue-next'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzFab, DzSpeedDial } from '../../src/components/buttons'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzSpeedDial** is a floating action button (DzFab) that fans out a set of
@@ -163,6 +155,22 @@ export const LinearUp: Story = {
   args: {
     direction: 'up',
     type: 'linear',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The trigger FAB should be present and labelled.
+    const trigger = canvas.getByRole('button', { name: /quick actions/i })
+    await expect(trigger).toBeVisible()
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Click to open — action items fan out.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // Click again to close.
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
   },
 }
 

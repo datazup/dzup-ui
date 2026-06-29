@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzPopoverContentEmits,
   DzPopoverContentProps,
@@ -25,6 +21,10 @@ import { PopoverArrow, PopoverContent, PopoverPortal } from 'reka-ui'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { popoverVariants } from './DzPopover.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzPopoverContentProps>(), {
   side: 'bottom',
@@ -63,7 +63,6 @@ function handleCloseAutoFocus(event: Event): void {
   emit('closeAutoFocus', event)
 }
 </script>
-
 
 <template>
   <PopoverPortal>

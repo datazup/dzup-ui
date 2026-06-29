@@ -47,6 +47,8 @@
     "test:e2e:update": "playwright test --update-snapshots",
     "storybook": "yarn workspace @dzup-ui/storybook dev",
     "storybook:build": "yarn workspace @dzup-ui/storybook build",
+    "storybook:test": "yarn workspace @dzup-ui/storybook test-storybook",
+    "storybook:install": "yarn install && yarn workspace @dzup-ui/storybook exec playwright install chromium",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "yarn build && changeset publish",
@@ -60,11 +62,13 @@
     "@testing-library/vue": "^8.1.0",
     "@types/node": "^22.13.0",
     "@vitejs/plugin-vue": "^6",
+    "@vitest/browser": "^3.2.4",
     "@vitest/coverage-v8": "^3.2.4",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^10.1.0",
     "eslint-plugin-vue": "^10.0.0",
     "jsdom": "^29.0.2",
+    "playwright": "^1.49.0",
     "prettier": "^3.5.0",
     "tsx": "^4.19.0",
     "typescript": "^5.8.3",
@@ -78,6 +82,9 @@
     "vue": "^3.5.13"
   },
   "resolutions": {
-    "@storybook/addon-vitest": "10.3.4"
+    "@storybook/addon-vitest": "10.3.4",
+    "vitest": "3.2.6",
+    "@vitest/browser": "3.2.6",
+    "@vitest/coverage-v8": "3.2.6"
   }
 }

@@ -3464,7 +3464,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/browser@npm:^3.0.0":
+"@vitest/browser@npm:^3.0.0, @vitest/browser@npm:^3.2.4":
   version: 3.2.6
   resolution: "@vitest/browser@npm:3.2.6"
   dependencies:
@@ -5146,11 +5146,13 @@ __metadata:
     "@testing-library/vue": "npm:^8.1.0"
     "@types/node": "npm:^22.13.0"
     "@vitejs/plugin-vue": "npm:^6"
+    "@vitest/browser": "npm:^3.2.4"
     "@vitest/coverage-v8": "npm:^3.2.4"
     "@vue/test-utils": "npm:^2.4.6"
     eslint: "npm:^10.1.0"
     eslint-plugin-vue: "npm:^10.0.0"
     jsdom: "npm:^29.0.2"
+    playwright: "npm:^1.49.0"
     prettier: "npm:^3.5.0"
     tsx: "npm:^4.19.0"
     typescript: "npm:^5.8.3"

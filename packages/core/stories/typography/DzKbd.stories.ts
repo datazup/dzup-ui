@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, within } from 'storybook/test'
 import { DzKbd } from '../../src/components/typography'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzKbd renders keyboard-shortcut hints as semantic `<kbd>` chips.
@@ -70,6 +71,14 @@ export const SingleKey: Story = {
     },
     template: '<p>Press <DzKbd v-bind="args">Esc</DzKbd> to close the dialog.</p>',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const kbdElements = canvasElement.querySelectorAll('kbd')
+    await expect(kbdElements.length).toBeGreaterThan(0)
+    await expect(kbdElements[0]!.tagName.toLowerCase()).toBe('kbd')
+    await expect(canvas.getByText('Esc')).toBeInTheDocument()
+    await expect(canvas.getByText('Esc')).toBeVisible()
+  },
 }
 
 // ---------------------------------------------------------------------------

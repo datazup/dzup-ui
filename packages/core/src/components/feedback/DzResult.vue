@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzResultProps, DzResultSlots } from './DzResult.types.ts'
 /**
  * DzResult — Operation result display component.
@@ -28,6 +24,10 @@ import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { resultVariants } from './DzResult.variants.ts'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = defineProps<DzResultProps>()
 defineSlots<DzResultSlots>()
 
@@ -38,7 +38,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

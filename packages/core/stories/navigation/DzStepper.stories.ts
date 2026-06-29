@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzStepper is a compound step-by-step progress indicator.

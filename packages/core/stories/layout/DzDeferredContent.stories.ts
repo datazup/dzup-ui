@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
-import { DzDeferredContent } from '../../src/components/layout'
 import { DzSkeleton } from '../../src/components/feedback'
+import { DzDeferredContent } from '../../src/components/layout'
 import { darkModeDecorator } from '../_shared'
 
 /**
@@ -75,6 +76,28 @@ const cardClass
 // ---------------------------------------------------------------------------
 
 export const DeferredImage: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The wrapper should have aria-busy while content is not yet revealed
+    const wrapper = canvasElement.querySelector('[aria-label="Deferred image"]')
+    await expect(wrapper).not.toBeNull()
+
+    // Scroll the deferred wrapper into view so IntersectionObserver fires.
+    ;(wrapper as HTMLElement)?.scrollIntoView()
+
+    // Wait for the content to be revealed (aria-busy removed once IO fires)
+    await waitFor(
+      () => {
+        expect(wrapper?.getAttribute('aria-busy')).toBeNull()
+      },
+      { timeout: 5000 },
+    )
+
+    // After reveal the deferred image must be in the DOM
+    const img = canvas.getByAltText('Lazily loaded scenery')
+    await expect(img).toBeInTheDocument()
+  },
   render: args => ({
     components: { DzDeferredContent },
     setup: () => ({ args, spacerClass }),
@@ -153,7 +176,7 @@ export const CustomPlaceholder: Story = {
 export const RepeatObserve: Story = {
   name: 'Repeat Observe',
   args: { once: false },
-  render: (args) => ({
+  render: args => ({
     components: { DzDeferredContent },
     setup() {
       const reveals = ref(0)

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzContextMenuContentEmits,
   DzContextMenuContentProps,
@@ -15,6 +11,10 @@ import { ContextMenuContent, ContextMenuPortal } from 'reka-ui'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { contextMenuVariants } from './DzContextMenu.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 withDefaults(defineProps<DzContextMenuContentProps>(), {
   side: 'bottom',
@@ -40,7 +40,6 @@ function handlePointerDownOutside(event: Event): void {
   emit('pointerDownOutside', event)
 }
 </script>
-
 
 <template>
   <ContextMenuPortal>

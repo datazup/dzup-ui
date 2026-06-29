@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzAlertEmits, DzAlertProps, DzAlertSlots } from './DzAlert.types.ts'
 /**
  * DzAlert — Contextual alert messages for user feedback.
@@ -20,6 +16,10 @@ import type { DzAlertEmits, DzAlertProps, DzAlertSlots } from './DzAlert.types.t
 import { computed, ref, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { alertVariants } from './DzAlert.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzAlertProps>(), {
   variant: 'subtle',
@@ -51,7 +51,6 @@ function handleClose(): void {
   emit('close')
 }
 </script>
-
 
 <template>
   <div

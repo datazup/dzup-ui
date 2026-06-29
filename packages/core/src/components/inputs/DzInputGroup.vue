@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzInputGroupContext, DzInputGroupProps, DzInputGroupSlots } from './DzInputGroup.types.ts'
 /**
  * DzInputGroup — Compound wrapper for input + addons.
@@ -26,6 +22,10 @@ import { computed, provide, toRef, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_INPUT_GROUP_KEY } from './DzInputGroup.types.ts'
 import { inputGroupVariants } from './DzInputGroup.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzInputGroupProps>(), {
   size: 'md',
@@ -53,7 +53,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

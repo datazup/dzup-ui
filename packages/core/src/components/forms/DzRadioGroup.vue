@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzRadioGroupEmits,
   DzRadioGroupProps,
@@ -27,6 +23,10 @@ import { RadioGroupRoot } from 'reka-ui'
 import { computed, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<string>({ default: '' })
 
@@ -76,7 +76,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <RadioGroupRoot

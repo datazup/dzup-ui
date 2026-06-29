@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTextProps } from './DzText.types.ts'
 /**
  * DzText — General-purpose text component with semantic element and tone control.
@@ -19,6 +15,10 @@ import type { DzTextProps } from './DzText.types.ts'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { textVariants } from './DzText.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTextProps>(), {
   as: 'p',
@@ -47,7 +47,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

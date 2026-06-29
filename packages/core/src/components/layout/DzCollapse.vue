@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
 /**
  * DzCollapse — Animated expand/collapse container.
@@ -21,6 +17,10 @@ import type { DzCollapseProps, DzCollapseSlots } from './DzCollapse.types.ts'
 import { computed, useAttrs } from 'vue'
 import { useCollapse } from '../../composables/useCollapse/useCollapse.ts'
 import { cn } from '../../utilities/cn.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const model = defineModel<boolean>({ default: false })
 
@@ -46,7 +46,6 @@ const classes = computed(() =>
   cn(attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

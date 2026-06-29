@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type {
   DzResizableContext,
   DzResizableEmits,
@@ -29,6 +25,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_RESIZABLE_KEY } from './DzResizable.types.ts'
 import { resizableVariants } from './DzResizable.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzResizableProps>(), {
   direction: 'horizontal',
@@ -61,7 +61,6 @@ function handleLayoutChange(sizes: number[]): void {
   emit('layoutChange', sizes)
 }
 </script>
-
 
 <template>
   <SplitterGroup

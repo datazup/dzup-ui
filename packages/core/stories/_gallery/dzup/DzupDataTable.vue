@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // dzup-ui equivalent of FreestyleDataTable — ONLY @dzup-ui/core components + --dz-* tokens.
 
-import { computed, ref } from 'vue'
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { DzSelectItem } from '../../../src/components/forms'
 import { ArrowUpDown, ChevronUp, MoreHorizontal, Search, SlidersHorizontal } from 'lucide-vue-next'
+import { computed, ref } from 'vue'
 import { DzButton, DzIconButton } from '../../../src/components/buttons'
 import { DzCard } from '../../../src/components/cards'
 import {
@@ -25,8 +27,6 @@ import {
   DzDropdownMenuTrigger,
 } from '../../../src/components/overlays'
 import { DzHeading, DzText } from '../../../src/components/typography'
-import type { CanonicalTone } from '@dzup-ui/contracts'
-import type { DzSelectItem } from '../../../src/components/forms'
 
 interface Deployment {
   id: string
@@ -130,9 +130,9 @@ const statusTone: Record<Deployment['status'], CanonicalTone> = {
 // Tab filter row with live counts (All · Active · Pending · Failed).
 const tabCounts = computed(() => ({
   all: rows.length,
-  active: rows.filter((r) => r.status === 'active').length,
-  pending: rows.filter((r) => r.status === 'pending').length,
-  failed: rows.filter((r) => r.status === 'failed').length,
+  active: rows.filter(r => r.status === 'active').length,
+  pending: rows.filter(r => r.status === 'pending').length,
+  failed: rows.filter(r => r.status === 'failed').length,
 }))
 
 const statusItems: DzSelectItem[] = [
@@ -167,7 +167,9 @@ function resetFilters(): void {
   <div class="min-h-screen bg-[var(--dz-background)] text-[var(--dz-foreground)] antialiased">
     <div class="mx-auto max-w-6xl px-6 py-10">
       <header class="mb-6">
-        <DzHeading :level="1" size="xl" weight="semibold">Deployments</DzHeading>
+        <DzHeading :level="1" size="xl" weight="semibold">
+          Deployments
+        </DzHeading>
         <DzText as="p" size="sm" tone="muted" class="mt-1">
           Track every release across your environments.
         </DzText>
@@ -259,8 +261,12 @@ function resetFilters(): void {
                   <ArrowUpDown class="h-3.5 w-3.5 opacity-50" aria-hidden="true" />
                 </button>
               </DzTableCell>
-              <DzTableCell header>Status</DzTableCell>
-              <DzTableCell header>Owner</DzTableCell>
+              <DzTableCell header>
+                Status
+              </DzTableCell>
+              <DzTableCell header>
+                Owner
+              </DzTableCell>
               <DzTableCell header align="right">
                 <button
                   type="button"
@@ -270,7 +276,9 @@ function resetFilters(): void {
                   <ArrowUpDown class="h-3.5 w-3.5 opacity-50" aria-hidden="true" />
                 </button>
               </DzTableCell>
-              <DzTableCell header align="right"><span class="sr-only">Actions</span></DzTableCell>
+              <DzTableCell header align="right">
+                <span class="sr-only">Actions</span>
+              </DzTableCell>
             </DzTableRow>
           </DzTableHeader>
           <DzTableBody>
@@ -291,19 +299,25 @@ function resetFilters(): void {
                     aria-hidden="true"
                   />
                   <div>
-                    <DzText as="span" size="sm" weight="medium" class="block">{{
-                      row.service
-                    }}</DzText>
-                    <DzText as="span" size="xs" tone="muted" class="block font-mono">{{
-                      row.id
-                    }}</DzText>
+                    <DzText as="span" size="sm" weight="medium" class="block">
+                      {{
+                        row.service
+                      }}
+                    </DzText>
+                    <DzText as="span" size="xs" tone="muted" class="block font-mono">
+                      {{
+                        row.id
+                      }}
+                    </DzText>
                   </div>
                 </div>
               </DzTableCell>
               <DzTableCell>
-                <DzTag variant="subtle" tone="neutral" size="sm" class="capitalize">{{
-                  row.env
-                }}</DzTag>
+                <DzTag variant="subtle" tone="neutral" size="sm" class="capitalize">
+                  {{
+                    row.env
+                  }}
+                </DzTag>
               </DzTableCell>
               <DzTableCell>
                 <DzBadge
@@ -319,22 +333,25 @@ function resetFilters(): void {
                 <div class="flex items-center gap-2.5">
                   <span
                     class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[var(--dz-radius-full)] bg-[var(--dz-muted)] text-[11px] font-semibold leading-none text-[var(--dz-muted-foreground)]"
-                    >{{ row.initials }}</span
-                  >
-                  <DzText as="span" size="sm" tone="muted">{{ row.owner }}</DzText>
+                  >{{ row.initials }}</span>
+                  <DzText as="span" size="sm" tone="muted">
+                    {{ row.owner }}
+                  </DzText>
                 </div>
               </DzTableCell>
               <DzTableCell align="right">
-                <DzText as="span" size="xs" tone="muted" class="font-mono tabular-nums">{{
-                  row.duration
-                }}</DzText>
+                <DzText as="span" size="xs" tone="muted" class="font-mono tabular-nums">
+                  {{
+                    row.duration
+                  }}
+                </DzText>
               </DzTableCell>
               <DzTableCell align="right">
                 <DzDropdownMenu>
                   <DzDropdownMenuTrigger as-child>
                     <DzIconButton
                       :icon="MoreHorizontal"
-                      ariaLabel="Row actions"
+                      aria-label="Row actions"
                       variant="ghost"
                       tone="neutral"
                       size="sm"

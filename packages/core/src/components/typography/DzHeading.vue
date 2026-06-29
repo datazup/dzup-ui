@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzHeadingProps, HeadingLevel, HeadingSize } from './DzHeading.types.ts'
 /**
  * DzHeading — Semantic heading component with independent visual sizing.
@@ -18,6 +14,10 @@ import type { DzHeadingProps, HeadingLevel, HeadingSize } from './DzHeading.type
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { headingVariants } from './DzHeading.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzHeadingProps>(), {
   level: 2,
@@ -57,7 +57,6 @@ const classes = computed(() =>
   ),
 )
 </script>
-
 
 <template>
   <component

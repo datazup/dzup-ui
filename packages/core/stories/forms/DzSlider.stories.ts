@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
-import { darkModeDecorator } from '../_shared'
 import { DzSlider } from '../../src/components/forms'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSlider is a single-thumb slider built on Reka UI Slider primitives.

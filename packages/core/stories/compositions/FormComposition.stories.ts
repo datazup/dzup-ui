@@ -1,10 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { darkModeDecorator } from '../_shared'
+import { expect, screen, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
-import { DzFormDescription, DzFormField, DzFormLabel, DzFormMessage } from '../../src/components/forms'
+import {
+  DzFormDescription,
+  DzFormField,
+  DzFormLabel,
+  DzFormMessage,
+} from '../../src/components/forms'
 import { DzInput } from '../../src/components/inputs'
-import { DzDialog, DzDialogClose, DzDialogContent, DzDialogDescription, DzDialogTitle, DzDialogTrigger } from '../../src/components/overlays'
+import {
+  DzDialog,
+  DzDialogClose,
+  DzDialogContent,
+  DzDialogDescription,
+  DzDialogTitle,
+  DzDialogTrigger,
+} from '../../src/components/overlays'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * FormComposition demonstrates how DzDialog, DzInput, DzFormField, and DzButton
@@ -21,7 +34,8 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Real-world composition: DzDialog + DzFormField + DzInput + DzButton forming a "Create User" modal.',
+        component:
+          'Real-world composition: DzDialog + DzFormField + DzInput + DzButton forming a "Create User" modal.',
       },
     },
   },
@@ -132,6 +146,19 @@ export const Default: Story = {
       </DzDialog>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // The dialog trigger button must be rendered
+    const trigger = canvas.getByRole('button', { name: /Create User/i })
+    expect(trigger).toBeTruthy()
+    // Dialog is portalled to document.body — use screen, not canvas.
+    trigger.click()
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toBeTruthy()
+    // The submit button must be present inside the dialog
+    const submit = within(dialog).getByRole('button', { name: /Send Invitation/i })
+    expect(submit).toBeTruthy()
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -140,9 +167,7 @@ export const Default: Story = {
 
 export const DarkMode: Story = {
   name: 'Create User Modal – Dark Mode',
-  decorators: [
-    darkModeDecorator,
-  ],
+  decorators: [darkModeDecorator],
   render: () => ({
     components: {
       DzButton,

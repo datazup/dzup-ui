@@ -1,8 +1,4 @@
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-})
-
 import type { DzTimelineContext, DzTimelineProps, DzTimelineSlots } from './DzTimeline.types.ts'
 /**
  * DzTimeline — Compound timeline root component.
@@ -22,6 +18,10 @@ import { computed, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TIMELINE_KEY } from './DzTimeline.types.ts'
 import { timelineVariants } from './DzTimeline.variants.ts'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const props = withDefaults(defineProps<DzTimelineProps>(), {
   size: 'md',
@@ -51,7 +51,6 @@ const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
 </script>
-
 
 <template>
   <div

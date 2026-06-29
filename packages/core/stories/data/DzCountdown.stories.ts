@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
-import { darkModeDecorator } from '../_shared'
 import { DzButton } from '../../src/components/buttons'
 import { DzCountdown } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzCountdown is a live countdown / elapsed timer. It ticks towards a fixed
@@ -87,6 +88,18 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 export const ToDeadline: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // Root div must carry role="timer" for accessibility
+    const timer = canvas.getByRole('timer')
+    expect(timer).toBeTruthy()
+    // The sr-only live region must be present for polite announcements
+    const liveRegion = canvasElement.querySelector('[aria-live="polite"]')
+    expect(liveRegion).toBeTruthy()
+    // The visible figure must display a colon-separated time string
+    const figure = canvasElement.querySelector('[aria-hidden="true"]')
+    expect(figure?.textContent).toMatch(/\d/)
+  },
   render: args => ({
     components: { DzCountdown },
     setup: () => ({ args, target: Date.now() + 2 * 60 * 60 * 1000 + 5_000 }),

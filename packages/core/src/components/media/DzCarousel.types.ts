@@ -6,10 +6,7 @@
  * @module @dzup-ui/core/components/media/DzCarousel
  */
 
-import type {
-  BaseAccessibilityProps,
-  CanonicalSize,
-} from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, CanonicalSize, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -17,7 +14,7 @@ import type { InjectionKey, Ref } from 'vue'
 // ---------------------------------------------------------------------------
 
 /** Carousel scroll orientation */
-export type CarouselOrientation = 'horizontal' | 'vertical'
+export type CarouselOrientation = Orientation
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
