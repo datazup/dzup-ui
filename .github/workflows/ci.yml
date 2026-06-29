@@ -230,6 +230,8 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
+      - name: Build token artifacts
+        run: yarn workspace @dzup-ui/tokens build
       - name: Build Storybook
         run: yarn storybook:build
       - name: Upload Storybook
@@ -260,6 +262,8 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
+      - name: Build token artifacts
+        run: yarn workspace @dzup-ui/tokens build
       - name: Install Playwright Chromium
         run: yarn workspace @dzup-ui/storybook exec playwright install --with-deps chromium
       # TASK-0.9/0.9b — runs every story's play() + a11y audit in-browser.
