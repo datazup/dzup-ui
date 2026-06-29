@@ -13,9 +13,9 @@
 -->
 
 <script setup lang="ts">
-import type { DzThemeProviderProps, ResolvedTheme, ThemePreference } from './DzThemeProvider.types'
+import type { DzThemeProviderProps, ResolvedTheme, ThemePreference } from './DzThemeProvider.types.ts'
 import { computed, onMounted, onUnmounted, provide, ref, watch } from 'vue'
-import { DZ_THEME_KEY } from './DzThemeProvider.types'
+import { DZ_THEME_KEY } from './DzThemeProvider.types.ts'
 
 // ---------------------------------------------------------------------------
 // Props

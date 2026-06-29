@@ -9,9 +9,9 @@
  * @module @dzup-ui/core/providers/useTheme
  */
 
-import type { DzThemeContext, ThemePreference } from './DzThemeProvider.types'
+import type { DzThemeContext, ThemePreference } from './DzThemeProvider.types.ts'
 import { computed, inject, ref } from 'vue'
-import { DZ_THEME_KEY } from './DzThemeProvider.types'
+import { DZ_THEME_KEY } from './DzThemeProvider.types.ts'
 
 export interface UseThemeOptions {
   /**
