@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "dock",
+  "type": "registry:block",
+  "title": "Dock magnification",
+  "description": "A row of icons scales by pointer proximity, neighbours easing — the macOS dock.",
+  "files": [
+    {
+      "path": "dock.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzIconButton } from '@dzup-ui/core'\nimport { Compass, Settings, Sparkles, Users } from 'lucide-vue-next'\nimport { DzDock, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\nconst items = [\n  { icon: Compass, label: 'Explore' },\n  { icon: Sparkles, label: 'Highlights' },\n  { icon: Users, label: 'Team' },\n  { icon: Settings, label: 'Settings' },\n]\n</script>\n\n<template>\n  <!-- rAF pointer; each item scales about its own centre so clicks never move.\n       Flat static row on touch/keyboard and under reduced motion (via disabled). -->\n  <DzDock :disabled=\"reduced\" aria-label=\"Workspace dock\">\n    <DzIconButton\n      v-for=\"item in items\"\n      :key=\"item.label\"\n      :icon=\"item.icon\"\n      :ariaLabel=\"item.label\"\n      variant=\"ghost\"\n      tone=\"primary\"\n      size=\"lg\"\n    />\n  </DzDock>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzIconButton",
+    "DzAvatar"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

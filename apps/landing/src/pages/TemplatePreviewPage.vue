@@ -5,15 +5,26 @@
  * (docs/templates.md §3, §5). App.vue suppresses the nav/footer for this route,
  * so the template owns the whole viewport.
  *
- * The render is resolved + lazy-loaded from the registry. The `?theme=` query
- * param (set by the detail page's preview toggle) drives `data-theme` on the
- * document so the preview can be re-skinned independently of the marketing page.
+ * The render is resolved + lazy-loaded from the registry. Three query params
+ * (set by the detail page's preview toolbar) re-skin the document independently
+ * of the marketing page, each deterministically applied on load:
+ *   - `?theme=light|dark` → `data-theme` on <html>,
+ *   - `?primary=<palette>` → remaps the primary colour ramp to a decorative
+ *     spectrum palette (see previewCustomiser.ts for the token mechanics),
+ *   - `?dir=rtl` → `dir` on <html> for an RTL layout check.
+ * With no params the template renders in its own native colours/LTR, as today.
  * An unknown slug redirects back to the gallery (the route guard already does
  * this; this is a defensive fallback if the page is reached another way).
+ *
+ * The template bundle is code-split per slug, so it lazy-loads on first paint.
+ * `<Suspense>` shows a centered DzSpinner while that bundle resolves, then swaps
+ * in the rendered template — the frame is never a blank white box mid-load.
  */
+import { DzSpinner } from '@dzup-ui/core'
 import { computed, defineAsyncComponent, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getTemplate } from '../templates/registry.ts'
+import { applyDir, applyPrimaryPalette, isPreviewPalette } from '../templates/previewCustomiser.ts'
 
 const props = defineProps<{ slug: string }>()
 const route = useRoute()
@@ -37,19 +48,33 @@ function applyTheme(theme: unknown): void {
   }
 }
 
-// Honour the initial query param and any later change. The parent updates the
-// iframe `src` (which reloads this document), but watching also keeps in-SPA
-// navigations correct.
-applyTheme(route.query.theme)
+/** Read all three customisation params off the query and apply them together. */
+function applyCustomisation(): void {
+  applyTheme(route.query.theme)
+  applyPrimaryPalette(isPreviewPalette(route.query.primary) ? route.query.primary : null)
+  applyDir(route.query.dir)
+}
+
+// Honour the initial query params and any later change. The parent updates the
+// iframe `src` (which reloads this document and re-runs setup), but watching
+// also keeps in-SPA navigations correct.
+applyCustomisation()
 watch(
-  () => route.query.theme,
-  (theme) => applyTheme(theme),
+  () => [route.query.theme, route.query.primary, route.query.dir],
+  applyCustomisation,
 )
 </script>
 
 <template>
   <div class="preview-root">
-    <component :is="TemplateComponent" v-if="TemplateComponent" />
+    <Suspense v-if="TemplateComponent">
+      <component :is="TemplateComponent" />
+      <template #fallback>
+        <div class="preview-loading">
+          <DzSpinner size="lg" tone="primary" label="Loading template preview…" />
+        </div>
+      </template>
+    </Suspense>
   </div>
 </template>
 
@@ -57,5 +82,13 @@ watch(
 .preview-root {
   min-height: 100vh;
   background: var(--dz-background, #ffffff);
+}
+
+/* Centered loading state shown while the per-slug template bundle resolves. */
+.preview-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 </style>

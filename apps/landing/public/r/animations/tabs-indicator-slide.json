@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "tabs-indicator-slide",
+  "type": "registry:block",
+  "title": "Tabs indicator slide",
+  "description": "The active-tab underline glides between tabs; instant move under reduced motion.",
+  "files": [
+    {
+      "path": "tabs-indicator-slide.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzTabs, DzTabList, DzTabTrigger, DzTabContent } from '@dzup-ui/core'\nimport { computed, nextTick, onMounted, ref, watch } from 'vue'\nimport { useReducedMotion } from '../motion'\n\nconst tabs = ['Overview', 'Pricing', 'Docs', 'Support']\nconst active = ref('Overview')\nconst reduced = useReducedMotion()\n\nconst rail = ref<HTMLElement | null>(null)\nconst bar = ref({ left: 0, width: 0 })\n\n// Measure the active trigger relative to the tablist so the bar tracks any width.\nfunction measure() {\n  const list = rail.value?.querySelector<HTMLElement>('[role=\"tablist\"]')\n  const tab = rail.value?.querySelector<HTMLElement>('[role=\"tab\"][data-state=\"active\"]')\n  if (!list || !tab) return\n  const l = list.getBoundingClientRect()\n  const t = tab.getBoundingClientRect()\n  bar.value = { left: t.left - l.left, width: t.width }\n}\n\nconst barStyle = computed(() => ({\n  transform: `translateX(${bar.value.left}px)`,\n  width: `${bar.value.width}px`,\n  transition: reduced.value\n    ? 'none'\n    : 'transform var(--dz-duration-normal) var(--dz-ease-default), width var(--dz-duration-normal) var(--dz-ease-default)',\n}))\n\nwatch(active, () => nextTick(measure), { flush: 'post' })\nonMounted(() => nextTick(measure))\n</script>\n\n<template>\n  <DzTabs v-model=\"active\" variant=\"line\" tone=\"primary\">\n    <div ref=\"rail\" style=\"position: relative\">\n      <DzTabList aria-label=\"Sections\">\n        <DzTabTrigger v-for=\"t in tabs\" :key=\"t\" :value=\"t\">{{ t }}</DzTabTrigger>\n      </DzTabList>\n      <span :style=\"barStyle\" aria-hidden=\"true\" class=\"indicator\" />\n    </div>\n  </DzTabs>\n</template>\n\n<style scoped>\n/* Hide the built-in snapping underline; the single bar is the indicator. */\n:deep([role=\"tab\"]) { border-bottom-color: transparent !important; }\n.indicator {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  height: 2px;\n  border-radius: var(--dz-radius-full);\n  background: var(--dz-primary);\n}\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzTabs",
+    "DzTabList",
+    "DzTabTrigger"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

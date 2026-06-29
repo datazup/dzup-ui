@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzText } from '@dzup-ui/core'
-import { Check, Code2, Copy, RotateCcw } from 'lucide-vue-next'
+import { Check, Code2, Copy, Link2, RotateCcw, Zap } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 import { useInView } from '../motion/index.ts'
 import { categoryAccentStyle } from './catalog.ts'
@@ -16,13 +16,24 @@ import type { CatalogEntry, CatalogType } from './catalog.ts'
  * "View code" disclosure so they never compete with the preview. The card is
  * effect-agnostic: adding a catalog entry needs no change here.
  *
+ * When an entry carries a `variants` matrix (SFC / Composable / CSS) the snippet
+ * area becomes a keyboard-accessible tab set (per-tab Copy); otherwise it shows
+ * the single `code` block exactly as before. A `native` badge surfaces any
+ * platform-API upgrade next to the type chip, and the card is deep-linkable by
+ * `#effect-<id>` (Task N10).
+ *
  * `size` lets the bento layout give inherently wide/ambient effects (backgrounds,
  * marquees, route transitions) a roomier stage without the card knowing which
- * effect it is.
+ * effect it is. `highlighted` is driven by the page when a permalink resolves to
+ * this card, briefly pulsing it so the reader can spot the deep-linked effect.
  */
 const props = withDefaults(
-  defineProps<{ entry: CatalogEntry, size?: 'normal' | 'wide' }>(),
-  { size: 'normal' },
+  defineProps<{
+    entry: CatalogEntry
+    size?: 'normal' | 'wide'
+    highlighted?: boolean
+  }>(),
+  { size: 'normal', highlighted: false },
 )
 
 // Replay re-mounts the demo by bumping its :key, re-triggering the effect
@@ -35,16 +46,72 @@ function replay(): void {
 // Cap concurrent looping animations: pause this demo's motion while its preview
 // stage is scrolled out of view (docs/animations.md §7). `once: false` so it
 // re-pauses on scroll-away; the rootMargin buffer resumes loops just before the
-// card enters, so there is no visible "frozen then starts" frame.
+// card enters, so there is no visible "frozen then starts" frame. (The card's
+// content-visibility:auto un-skips on a wider margin than this, so the stage is
+// laid out before inView flips — the loop cap and the perf skip stay in step.)
 const stageEl = ref<HTMLElement | null>(null)
 const inView = useInView(stageEl, { once: false, rootMargin: '160px 0px 160px 0px', threshold: 0 })
 
 const showCode = ref(false)
 const copied = ref(false)
 
+// ── Variant matrix (SFC / Composable / CSS) ─────────────────────────────────
+// Effect-agnostic: the card reads whichever subset of variants the entry offers
+// and renders them as tabs; an entry with no `variants` keeps the single-snippet
+// path untouched.
+type VariantKey = 'sfc' | 'composable' | 'css'
+const VARIANT_ORDER = ['sfc', 'composable', 'css'] as const
+const VARIANT_LABELS: Record<VariantKey, string> = {
+  sfc: 'SFC',
+  composable: 'Composable',
+  css: 'CSS',
+}
+const variantTabs = computed<VariantKey[]>(() => {
+  const v = props.entry.variants
+  return v ? VARIANT_ORDER.filter((k) => v[k]) : []
+})
+const hasVariants = computed(() => variantTabs.value.length > 0)
+
+// Active tab, defaulting to the first available and self-correcting if the entry
+// (and thus its tab set) changes under the same card slot.
+const activeTab = ref<VariantKey | null>(null)
+const currentTab = computed<VariantKey | null>(() => {
+  if (!hasVariants.value) return null
+  const active = activeTab.value
+  return active && variantTabs.value.includes(active) ? active : variantTabs.value[0]!
+})
+
+// What "Copy" copies and the disclosure renders: the active variant, else `code`.
+const displayedCode = computed(() =>
+  currentTab.value ? props.entry.variants![currentTab.value]! : props.entry.code,
+)
+
+const tablist = ref<HTMLElement | null>(null)
+
+function selectTab(key: VariantKey): void {
+  activeTab.value = key
+  copied.value = false
+}
+
+// Own the APG tabs entry point ourselves: roving tabindex + arrow/Home/End move
+// selection and focus together. (Reka's RovingFocusGroup would leave every tab
+// at tabindex=-1 until first focus — see memory reka-roving-focus-tabstop.)
+function onTabKeydown(event: KeyboardEvent, index: number): void {
+  const tabs = variantTabs.value
+  let next = index
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length
+  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + tabs.length) % tabs.length
+  else if (event.key === 'Home') next = 0
+  else if (event.key === 'End') next = tabs.length - 1
+  else return
+  event.preventDefault()
+  selectTab(tabs[next]!)
+  tablist.value?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus()
+}
+
 async function copyCode(): Promise<void> {
   try {
-    await navigator.clipboard.writeText(props.entry.code)
+    await navigator.clipboard.writeText(displayedCode.value)
     copied.value = true
     window.setTimeout(() => (copied.value = false), 1800)
   }
@@ -52,6 +119,33 @@ async function copyCode(): Promise<void> {
     /* clipboard unavailable */
   }
 }
+
+// ── Permalink ───────────────────────────────────────────────────────────────
+// `effect-<id>` is the card's anchor; the page scrolls + highlights it when the
+// hash matches (distinct from the category hashes, which carry no prefix).
+const anchorId = computed(() => `effect-${props.entry.id}`)
+const linkCopied = ref(false)
+
+async function copyLink(): Promise<void> {
+  if (typeof window === 'undefined') return
+  const url = `${window.location.origin}${window.location.pathname}#${anchorId.value}`
+  try {
+    await navigator.clipboard.writeText(url)
+    linkCopied.value = true
+    window.setTimeout(() => (linkCopied.value = false), 1800)
+  }
+  catch {
+    /* clipboard unavailable */
+  }
+}
+
+// ── Native-API badge ────────────────────────────────────────────────────────
+const nativeTooltip = computed(() => {
+  const native = props.entry.native
+  return native
+    ? `Upgrades to the native ${native.api} API where supported — ${native.supports}.`
+    : ''
+})
 
 /** Tone per effect type so the "type" chip reads at a glance. */
 const TYPE_TONE: Record<CatalogType, 'primary' | 'info' | 'success' | 'warning'> = {
@@ -69,7 +163,12 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 </script>
 
 <template>
-  <article class="anim-card" :class="`is-${size}`" :style="accentStyle">
+  <article
+    :id="anchorId"
+    class="anim-card"
+    :class="[`is-${size}`, { 'is-highlighted': highlighted }]"
+    :style="accentStyle"
+  >
     <!-- Live, replayable preview stage — the hero of the tile. -->
     <div class="stage-wrap">
       <div ref="stageEl" class="stage" :class="{ 'dz-stage-idle': !inView }">
@@ -98,7 +197,34 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
     <div class="body">
       <div class="title-row">
         <DzText weight="semibold" as="div" class="card-title">{{ entry.title }}</DzText>
-        <DzBadge variant="subtle" :tone="typeTone" size="sm">{{ entry.type }}</DzBadge>
+
+        <div class="title-meta">
+          <!-- Native-API badge: names the platform API the effect upgrades to,
+               with the fallback in its tooltip. Focusable so keyboard users can
+               surface the note (and get the --dz-ring). -->
+          <span
+            v-if="entry.native"
+            class="native-badge"
+            tabindex="0"
+            :title="nativeTooltip"
+            :aria-label="nativeTooltip"
+          >
+            <Zap :size="11" aria-hidden="true" />
+            {{ entry.native.api }}
+          </span>
+
+          <DzBadge variant="subtle" :tone="typeTone" size="sm">{{ entry.type }}</DzBadge>
+
+          <button
+            type="button"
+            class="link-btn"
+            :aria-label="linkCopied ? 'Link copied' : `Copy link to ${entry.title}`"
+            @click="copyLink"
+          >
+            <Check v-if="linkCopied" :size="14" aria-hidden="true" />
+            <Link2 v-else :size="14" aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
       <DzText size="sm" tone="muted" as="p" class="blurb">{{ entry.blurb }}</DzText>
@@ -146,7 +272,38 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
             {{ name }}
           </DzBadge>
         </div>
-        <pre class="code"><code>{{ entry.code }}</code></pre>
+
+        <!-- Variant matrix → tabs (SFC / Composable / CSS). Roving tabindex,
+             arrow/Home/End move selection + focus. Absent ⇒ single code block. -->
+        <div
+          v-if="hasVariants"
+          ref="tablist"
+          class="code-tabs"
+          role="tablist"
+          :aria-label="`Code variants for ${entry.title}`"
+        >
+          <button
+            v-for="(key, i) in variantTabs"
+            :id="`${anchorId}-tab-${key}`"
+            :key="key"
+            type="button"
+            role="tab"
+            class="code-tab"
+            :class="{ 'is-active': currentTab === key }"
+            :aria-selected="currentTab === key"
+            :tabindex="currentTab === key ? 0 : -1"
+            @click="selectTab(key)"
+            @keydown="onTabKeydown($event, i)"
+          >
+            {{ VARIANT_LABELS[key] }}
+          </button>
+        </div>
+
+        <pre
+          class="code"
+          :role="hasVariants ? 'tabpanel' : undefined"
+          :aria-labelledby="hasVariants && currentTab ? `${anchorId}-tab-${currentTab}` : undefined"
+        ><code>{{ displayedCode }}</code></pre>
       </div>
     </div>
   </article>
@@ -165,10 +322,41 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   backdrop-filter: blur(10px) saturate(1.1);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
   overflow: hidden;
+  /* Skip rendering work for off-screen cards so the larger (~57-card) gallery
+     stays cheap to scroll (docs/animations.md §3.5). `auto` makes the browser
+     remember each card's real size after first render, so the intrinsic-size
+     estimate only seeds never-yet-seen cards and the scrollbar never jumps.
+     content-visibility un-skips on a wider margin than the demo loop's IO, so
+     the off-screen loop cap is unaffected. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 460px;
   transition:
     transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
     box-shadow var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
     border-color var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+}
+
+/* Permalink target pulse — when the page deep-links to this card, ring + lift it
+   briefly so the reader can spot it. Token-only; calmed under reduced motion. */
+.anim-card.is-highlighted {
+  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 60%, var(--lp-hairline));
+  box-shadow:
+    var(--lp-shadow-lg),
+    0 0 0 3px color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 40%, transparent);
+  animation: card-highlight 1.6s var(--dz-ease-out, ease-out) 1;
+}
+
+@keyframes card-highlight {
+  0% {
+    box-shadow:
+      var(--lp-shadow-sm),
+      0 0 0 0 color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 65%, transparent);
+  }
+  30% {
+    box-shadow:
+      var(--lp-shadow-lg),
+      0 0 0 5px color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 45%, transparent);
+  }
 }
 
 .anim-card:hover {
@@ -262,6 +450,109 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   font-size: var(--dz-text-base, 1rem);
 }
 
+.title-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Native-API badge — a quiet accent-tinted pill beside the type chip. */
+.native-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--dz-radius-full, 9999px);
+  border: 1px solid color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 40%, transparent);
+  background: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 12%, transparent);
+  color: var(--accent-strong, var(--dz-primary, #4f46e5));
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.native-badge:focus-visible {
+  outline: 2px solid var(--dz-ring, var(--accent, #6366f1));
+  outline-offset: 2px;
+}
+
+/* Copy-permalink affordance — ghost until hover/focus on the card. */
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--dz-radius-md, 6px);
+  background: transparent;
+  color: var(--dz-muted-foreground, #64748b);
+  cursor: pointer;
+  opacity: 0.55;
+  transition:
+    color var(--dz-duration-fast, 150ms),
+    background var(--dz-duration-fast, 150ms),
+    opacity var(--dz-duration-fast, 150ms);
+}
+
+.anim-card:hover .link-btn,
+.link-btn:focus-visible {
+  opacity: 1;
+}
+
+.link-btn:hover {
+  color: var(--dz-foreground, #0f172a);
+  background: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 12%, transparent);
+}
+
+.link-btn:focus-visible {
+  outline: 2px solid var(--dz-ring, var(--accent, #6366f1));
+  outline-offset: 2px;
+}
+
+/* Variant matrix tab strip — segmented pills above the snippet. */
+.code-tabs {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--dz-radius-md, 6px);
+  background: color-mix(in oklch, var(--dz-muted, #f1f5f9) 70%, transparent);
+  border: 1px solid var(--lp-hairline);
+  align-self: flex-start;
+}
+
+.code-tab {
+  appearance: none;
+  border: none;
+  padding: 5px 12px;
+  border-radius: var(--dz-radius-sm, 4px);
+  background: transparent;
+  color: var(--dz-muted-foreground, #64748b);
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color var(--dz-duration-fast, 150ms),
+    background var(--dz-duration-fast, 150ms);
+}
+
+.code-tab:hover {
+  color: var(--dz-foreground, #0f172a);
+}
+
+.code-tab.is-active {
+  color: var(--dz-foreground, #0f172a);
+  background: var(--dz-surface, #fff);
+  box-shadow: var(--lp-shadow-sm);
+}
+
+.code-tab:focus-visible {
+  outline: 2px solid var(--dz-ring, var(--accent, #6366f1));
+  outline-offset: 2px;
+}
+
 .blurb {
   margin: 0;
   line-height: 1.6;
@@ -314,6 +605,11 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 
   .anim-card:hover {
     transform: none;
+  }
+
+  /* Keep the static ring (the permalink still reads as "this one"); drop the pulse. */
+  .anim-card.is-highlighted {
+    animation: none;
   }
 }
 </style>

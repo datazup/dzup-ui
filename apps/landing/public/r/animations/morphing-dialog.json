@@ -1,0 +1,33 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "morphing-dialog",
+  "type": "registry:block",
+  "title": "Morphing dialog",
+  "description": "A card expands into a dialog sharing its box — morphs via View Transitions, FLIPs otherwise.",
+  "files": [
+    {
+      "path": "morphing-dialog.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzDialogTitle, DzButton } from '@dzup-ui/core'\nimport { DzMorph, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <DzMorph size=\"md\" aria-label=\"Project Atlas details\" :disabled=\"reduced\">\n    <template #trigger=\"{ expand, expanded }\">\n      <DzCard clickable :aria-expanded=\"expanded\" @click=\"expand\">Project Atlas</DzCard>\n    </template>\n    <template #default=\"{ collapse }\">\n      <DzDialogTitle>Project Atlas</DzDialogTitle>\n      <DzButton tone=\"primary\" @click=\"collapse\">Done</DzButton>\n    </template>\n  </DzMorph>\n</template>",
+      "type": "registry:block"
+    },
+    {
+      "path": "morphing-dialog.ts",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { startViewTransition, supportsViewTransitions, useReducedMotion } from '../motion'\n\nconst open = ref(false)\nconst reduced = useReducedMotion()\n\n// Toggle inside startViewTransition so the browser snapshots before/after and\n// morphs the shared view-transition-name boxes; instant when unsupported/reduced.\nfunction toggle() {\n  if (!supportsViewTransitions() || reduced.value) { open.value = !open.value; return }\n  startViewTransition(() => { open.value = !open.value })\n}\n</script>\n\n<template>\n  <button v-if=\"!open\" style=\"view-transition-name: atlas\" @click=\"toggle\">Project Atlas</button>\n  <div v-else class=\"panel\" style=\"view-transition-name: atlas\" @click=\"toggle\">Project Atlas — details</div>\n</template>",
+      "type": "registry:block"
+    },
+    {
+      "path": "morphing-dialog.css",
+      "content": "/* The trigger and the panel share one view-transition-name, so the browser\n   morphs one box into the other. Gate the custom timing under no-preference so\n   reduced motion gets the instant default cross-fade. UNSCOPED (::view-transition\n   pseudos live on :root). */\n.atlas { view-transition-name: atlas; }\n\n@media (prefers-reduced-motion: no-preference) {\n  ::view-transition-group(atlas) {\n    animation-duration: var(--dz-duration-normal);\n    animation-timing-function: var(--dz-ease-emphasis, var(--dz-ease-out));\n  }\n}",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzMorph",
+    "DzCard",
+    "DzDialog"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "error-shake",
+  "type": "registry:block",
+  "title": "Error shake",
+  "description": "A field rejects invalid input with a damped horizontal shake plus the red invalid state.",
+  "files": [
+    {
+      "path": "error-shake.vue",
+      "content": "<script setup lang=\"ts\">\nimport { nextTick, ref } from 'vue'\nimport { DzInput } from '@dzup-ui/core'\nimport { useReducedMotion } from '../motion'\n\nconst value = ref('')\nconst invalid = ref(false)\nconst shaking = ref(false)\nconst reduced = useReducedMotion()\n\nfunction submit() {\n  if (value.value.trim()) { invalid.value = false; return }\n  invalid.value = true\n  if (reduced.value) return\n  // Restart the one-shot .dz-shake: drop the class, re-add next frame.\n  shaking.value = false\n  nextTick(() => (shaking.value = true))\n}\n</script>\n\n<template>\n  <div\n    :class=\"{ 'dz-shake': shaking, 'dz-shake--reduced': reduced }\"\n    @animationend=\"shaking = false\"\n  >\n    <DzInput v-model=\"value\" type=\"email\" :invalid=\"invalid\" placeholder=\"you@company.com\" />\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzInput",
+    "DzButton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

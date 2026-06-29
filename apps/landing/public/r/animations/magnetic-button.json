@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "magnetic-button",
+  "type": "registry:block",
+  "title": "Magnetic button",
+  "description": "A CTA eases toward the cursor within a small radius and springs back on leave.",
+  "files": [
+    {
+      "path": "magnetic-button.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzButton } from '@dzup-ui/core'\nimport { vMagnetic, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- Offset clamped to a few px so the click target never breaks. -->\n  <DzButton\n    v-magnetic=\"{ strength: 0.45, radius: 16, disabled: reduced }\"\n    variant=\"solid\"\n    tone=\"primary\"\n    size=\"lg\"\n  >\n    Pull me closer\n  </DzButton>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzButton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

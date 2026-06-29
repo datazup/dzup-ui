@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "floating-actions",
+  "type": "registry:block",
+  "title": "Floating action button & speed dial",
+  "description": "Circular elevated affordances — DzFab across tones and variants, and a DzSpeedDial that fans out related shortcuts on open, pinned inside a mock app canvas.",
+  "files": [
+    {
+      "path": "floating-actions.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzFab, DzSpeedDial, DzText } from '@dzup-ui/core'\nimport type { DzSpeedDialItem } from '@dzup-ui/core'\nimport {\n  ArrowUp,\n  Copy,\n  Pencil,\n  Plus,\n  Share2,\n  Sparkles,\n  Trash2,\n} from 'lucide-vue-next'\nimport { ref } from 'vue'\n\n/**\n * Floating action button & speed dial — the circular, elevated affordances of\n * the Buttons family:\n *   • DzFab — a single persistent primary action, shown across tones/variants.\n *   • DzSpeedDial — a FAB that fans out related shortcuts on open (click the\n *     \"＋\" in the canvas). Pinned to the canvas corner rather than the viewport\n *     by keeping `position=\"static\"` and letting the parent place it.\n *\n * Self-contained: local state only. Composed from free @dzup-ui/core components\n * and `--dz-*` tokens, so it re-themes light/dark automatically (docs §3.6).\n */\n\nconst open = ref(false)\n\nconst actions: DzSpeedDialItem[] = [\n  { icon: Pencil, label: 'Edit' },\n  { icon: Share2, label: 'Share' },\n  { icon: Copy, label: 'Duplicate' },\n  { icon: Trash2, label: 'Delete', tone: 'danger' },\n]\n</script>\n\n<template>\n  <section class=\"fa-wrap\" aria-label=\"Floating actions\">\n    <!-- FAB tones / variants -->\n    <div class=\"fa-col\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"fa-label\">Floating action button</DzText>\n      <div class=\"fa-fabs\">\n        <DzFab :icon=\"Plus\" ariaLabel=\"Create\" tone=\"primary\" />\n        <DzFab :icon=\"Pencil\" ariaLabel=\"Compose\" tone=\"neutral\" variant=\"outline\" />\n        <DzFab :icon=\"Sparkles\" ariaLabel=\"Ask AI\" tone=\"info\" />\n        <DzFab :icon=\"ArrowUp\" ariaLabel=\"Back to top\" tone=\"neutral\" variant=\"ghost\" size=\"sm\" />\n        <DzFab :icon=\"Plus\" ariaLabel=\"Loading\" tone=\"primary\" loading />\n      </div>\n    </div>\n\n    <!-- Speed dial pinned inside a mock canvas -->\n    <div class=\"fa-col\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"fa-label\">Speed dial</DzText>\n      <div class=\"fa-canvas\">\n        <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"fa-canvas-hint\">\n          Open the dial in the corner →\n        </DzText>\n        <div class=\"fa-dial\">\n          <DzSpeedDial\n            v-model:open=\"open\"\n            ariaLabel=\"Quick actions\"\n            :items=\"actions\"\n            direction=\"up\"\n            tone=\"primary\"\n          />\n        </div>\n      </div>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.fa-wrap {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: flex-start;\n  gap: clamp(1.5rem, 5vw, 3rem);\n  padding: clamp(1.25rem, 4vw, 2rem);\n  background: var(--dz-background, #fff);\n}\n\n.fa-col {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.fa-label {\n  margin: 0;\n  font-weight: var(--dz-font-semibold, 600);\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n}\n\n.fa-fabs {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--dz-space-4, 1rem);\n}\n\n/* A relative \"app surface\" so the speed dial pins to a corner like in real use. */\n.fa-canvas {\n  position: relative;\n  width: min(20rem, 100%);\n  min-height: 16rem;\n  padding: var(--dz-space-4, 1rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  border-radius: var(--dz-radius-xl, 0.875rem);\n  background:\n    radial-gradient(circle at 100% 100%, color-mix(in oklch, var(--dz-primary, #6366f1) 6%, transparent), transparent 45%),\n    var(--dz-surface-muted, var(--dz-surface, #fff));\n  overflow: hidden;\n}\n\n.fa-canvas-hint {\n  margin: 0;\n}\n\n.fa-dial {\n  position: absolute;\n  right: var(--dz-space-4, 1rem);\n  bottom: var(--dz-space-4, 1rem);\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzFab",
+    "DzSpeedDial",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

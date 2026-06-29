@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "accordion-height",
+  "type": "registry:block",
+  "title": "Accordion height",
+  "description": "Panels expand and collapse on a smooth height transition; instant under reduced motion.",
+  "files": [
+    {
+      "path": "accordion-height.vue",
+      "content": "<script setup lang=\"ts\">\nimport {\n  DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent,\n} from '@dzup-ui/core'\nimport { ref } from 'vue'\nimport { useReducedMotion } from '../motion'\n\n// DzAccordionContent already animates height 0 → --reka-accordion-content-height\n// (never to 'auto') via core's accordion-down/up keyframes — reuse it directly.\nconst open = ref('tokens')\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <div :class=\"{ reduced }\">\n    <DzAccordion v-model=\"open\" type=\"single\" collapsible variant=\"separated\">\n      <DzAccordionItem value=\"tokens\">\n        <DzAccordionTrigger>Is everything token-driven?</DzAccordionTrigger>\n        <DzAccordionContent class=\"acc-content\">Yes — every effect uses --dz-* tokens.</DzAccordionContent>\n      </DzAccordionItem>\n      <!-- …more items… -->\n    </DzAccordion>\n  </div>\n</template>\n\n<style scoped>\n/* OS reduced motion is zeroed globally by the tokens rule; mirror the page-level\n   toggle here so the height sweep collapses to an instant open/close. The\n   !important wins over the native-path animation set below too. */\n.reduced :deep(.acc-content) { animation-duration: 0.01ms !important; }\n\n/* Native path — only where interpolate-size is supported (Chromium) AND motion\n   is allowed: swap core's measured-var keyframes for true height: 0 → auto.\n   Reka still unmounts on animationend, so the swap is transparent; every other\n   browser keeps the accordion-down/up floor. */\n@media (prefers-reduced-motion: no-preference) {\n  @supports (interpolate-size: allow-keywords) {\n    .reduced-host { interpolate-size: allow-keywords; }\n    :deep(.acc-content[data-state='open']) {\n      animation: dz-acc-open var(--dz-duration-normal) var(--dz-ease-out);\n    }\n    :deep(.acc-content[data-state='closed']) {\n      animation: dz-acc-close var(--dz-duration-normal) var(--dz-ease-out);\n    }\n  }\n}\n@keyframes dz-acc-open { from { height: 0; } to { height: auto; } }\n@keyframes dz-acc-close { from { height: auto; } to { height: 0; } }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzAccordion",
+    "DzAccordionItem",
+    "DzAccordionContent"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

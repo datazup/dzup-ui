@@ -6,13 +6,18 @@
   "description": "Public marketing/landing page for dzup-ui — the production front door into the free Storybook and (later) Pro components",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:registry": "tsx scripts/build-registry.ts",
+    "build:animations-registry": "tsx scripts/build-animations-registry.ts",
+    "build": "yarn build:registry && yarn build:animations-registry && vite build",
     "preview": "vite preview",
-    "test": "vitest run --root ../.. apps/landing/src"
+    "test": "vitest run --root ../.. apps/landing/src",
+    "thumbnails": "tsx scripts/shoot-thumbnails.mts",
+    "og": "tsx scripts/shoot-og.mts"
   },
   "dependencies": {
     "@dzup-ui/core": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
+    "@formkit/auto-animate": "^0.8.2",
     "lucide-vue-next": "^0.475.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
@@ -20,7 +25,10 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-vue": "^5.2.0",
+    "playwright": "^1.61.0",
+    "sharp": "^0.33.5",
     "tailwindcss": "^4.0.0",
+    "tsx": "4.21.0",
     "typescript": "^5.7.0",
     "vite": "^6.1.0",
     "vitest": "^3.2.4"

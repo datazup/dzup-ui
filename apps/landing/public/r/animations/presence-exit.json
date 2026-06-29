@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "presence-exit",
+  "type": "registry:block",
+  "title": "Presence exit",
+  "description": "A closing element stays mounted so a pure-CSS leave animation plays before unmount; instant when reduced.",
+  "files": [
+    {
+      "path": "presence-exit.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzPresence } from '../motion'\n\n// DzPresence keeps the panel mounted while its data-state=\"closed\" animation runs,\n// then unmounts it — the Reka/Radix data-[state] convention, in pure CSS.\nconst open = ref(true)\n</script>\n\n<template>\n  <DzPresence :present=\"open\">\n    <div class=\"panel\">Deployment live</div>\n  </DzPresence>\n  <button @click=\"open = !open\">Toggle</button>\n</template>\n\n<style scoped>\n/* data-state is stamped onto the child by DzPresence. transform/opacity only. */\n.panel[data-state='open'] {\n  animation: in var(--dz-anim-duration-enter) var(--dz-anim-ease-entrance) both;\n}\n.panel[data-state='closed'] {\n  animation: out var(--dz-anim-duration-exit) var(--dz-anim-ease-exit) both;\n}\n@keyframes in { from { opacity: 0; transform: translateY(8px) scale(0.96); } }\n@keyframes out { to { opacity: 0; transform: translateY(8px) scale(0.96); } }\n\n/* Reduced motion → instant (DzPresence also skips the keep-alive wait). */\n@media (prefers-reduced-motion: reduce) {\n  .panel[data-state] { animation: none !important; }\n}\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzPresence"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

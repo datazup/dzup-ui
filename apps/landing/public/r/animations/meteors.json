@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "meteors",
+  "type": "registry:block",
+  "title": "Meteors",
+  "description": "Diagonal shooting-star streaks cross a hero or card on offset loops; static when reduced.",
+  "files": [
+    {
+      "path": "meteors.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n\n// Cap concurrent streaks in the markup — the .dz-meteors utility loops one per\n// child. Give each a randomised start, delay and duration (per-streak props).\nconst streaks = Array.from({ length: 14 }, (_, i) => ({\n  id: i,\n  style: {\n    '--dz-meteor-left': `${6 + (i / 14) * 90}%`,\n    '--dz-meteor-top': `${-12 + Math.random() * 26}%`,\n    '--dz-meteor-delay': `${(Math.random() * 5).toFixed(2)}s`,\n    '--dz-meteor-duration': `${(4.4 + Math.random() * 2.6).toFixed(2)}s`,\n  },\n}))\n\nconst field = computed(() => ({ 'dz-meteors': true, 'dz-meteors--reduced': reduced.value }))\n</script>\n\n<template>\n  <!-- Parent must be positioned + clip overflow; .dz-meteors fills it (aria-hidden). -->\n  <section class=\"hero\">\n    <div :class=\"field\" aria-hidden=\"true\">\n      <span v-for=\"s in streaks\" :key=\"s.id\" class=\"dz-meteors__streak\" :style=\"s.style\" />\n    </div>\n    <h2 class=\"title\">Meteor shower</h2>\n  </section>\n</template>\n\n<style scoped>\n.hero { position: relative; overflow: hidden; }\n.title { position: relative; z-index: 1; }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

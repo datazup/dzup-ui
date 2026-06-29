@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "bento-reveal",
+  "type": "registry:block",
+  "title": "Bento reveal",
+  "description": "A bento grid reveals with a shared spotlight and per-cell stagger as it enters view.",
+  "files": [
+    {
+      "path": "bento-reveal.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { DzBentoReveal } from '../motion'\n\nconst cells = [/* … */]\n</script>\n\n<template>\n  <!-- DzBentoReveal tags each direct child a cell, indexes it for the cascade and\n       lays a pointer-tracked spotlight over the grid. Where CSS scroll-driven\n       animations exist the reveal runs on the compositor (animation-timeline:\n       view()); in Firefox it falls back to useInView + the .dz-animate-in\n       entrance. Cells are fully visible by default in both paths. Reduced motion →\n       all cells shown at once, faint static glow. -->\n  <DzBentoReveal class=\"bento\" :step=\"70\">\n    <DzCard v-for=\"c in cells\" :key=\"c.title\" variant=\"outlined\" padding=\"md\">\n      <DzText weight=\"semibold\" size=\"sm\">{{ c.title }}</DzText>\n    </DzCard>\n  </DzBentoReveal>\n</template>\n\n<style scoped>\n.bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

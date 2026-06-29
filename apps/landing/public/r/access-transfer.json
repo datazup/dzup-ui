@@ -1,0 +1,29 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "access-transfer",
+  "type": "registry:block",
+  "title": "Share access",
+  "description": "A sharing / permissions panel — a searchable DzTransfer dual-list of capabilities, a DzPersonaSelector owner picker (avatar + name + role), and a DzMention note with @-mentions.",
+  "files": [
+    {
+      "path": "access-transfer.vue",
+      "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzFormField,\n  DzFormLabel,\n  DzHeading,\n  DzMention,\n  DzPersonaSelector,\n  DzText,\n  DzTransfer,\n} from '@dzup-ui/core'\nimport type { DzMentionTrigger, Persona, TransferItem } from '@dzup-ui/core'\nimport { ref } from 'vue'\n\n/**\n * Access transfer — a sharing / permissions panel.\n *\n * A DzTransfer dual-list moves capabilities from \"Available\" to \"Granted\", a\n * DzPersonaSelector assigns an owner (avatar + name + role), and a DzMention\n * note lets you @-mention teammates. Local ref() state only.\n *\n * Forms family: DzTransfer, DzPersonaSelector, DzMention, DzFormField,\n * DzFormLabel.\n */\n\nconst granted = ref<string[]>(['read', 'comment'])\nconst owner = ref('jamie')\nconst note = ref('')\n\nconst CAPABILITIES: TransferItem[] = [\n  { key: 'read', label: 'View content' },\n  { key: 'comment', label: 'Comment' },\n  { key: 'edit', label: 'Edit content' },\n  { key: 'publish', label: 'Publish' },\n  { key: 'invite', label: 'Invite members' },\n  { key: 'admin', label: 'Manage settings' },\n]\n\nconst PEOPLE: Persona[] = [\n  { id: 'jamie', name: 'Jamie Rivera', role: 'Design Lead' },\n  { id: 'priya', name: 'Priya Patel', role: 'Engineering Manager' },\n  { id: 'marco', name: 'Marco Rossi', role: 'Product Manager' },\n  { id: 'lena', name: 'Lena Müller', role: 'Content Strategist' },\n]\n\nconst MENTION_TRIGGERS: DzMentionTrigger[] = [\n  {\n    char: '@',\n    options: [\n      { label: 'jamie', value: 'jamie' },\n      { label: 'priya', value: 'priya' },\n      { label: 'marco', value: 'marco' },\n      { label: 'lena', value: 'lena' },\n    ],\n  },\n]\n</script>\n\n<template>\n  <section class=\"at-wrap\" aria-labelledby=\"at-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"at-card\">\n      <header class=\"at-head\">\n        <DzHeading id=\"at-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          Share access\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" as=\"p\">\n          Grant capabilities, set an owner, and leave a note for the team.\n        </DzText>\n      </header>\n\n      <div class=\"at-form\">\n        <DzFormField>\n          <DzFormLabel>Capabilities</DzFormLabel>\n          <DzTransfer\n            v-model=\"granted\"\n            :source=\"CAPABILITIES\"\n            searchable\n            aria-label=\"Capabilities\"\n          />\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>Owner</DzFormLabel>\n          <DzPersonaSelector\n            v-model=\"owner\"\n            :personas=\"PEOPLE\"\n            placeholder=\"Assign an owner…\"\n          />\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>Note</DzFormLabel>\n          <DzMention\n            v-model:value=\"note\"\n            :triggers=\"MENTION_TRIGGERS\"\n            multiline\n            filter\n            :rows=\"3\"\n            placeholder=\"Add a note — type @ to mention a teammate\"\n            aria-label=\"Note\"\n          />\n        </DzFormField>\n\n        <div class=\"at-actions\">\n          <DzButton variant=\"ghost\" tone=\"neutral\">Cancel</DzButton>\n          <DzButton variant=\"solid\" tone=\"primary\">Share</DzButton>\n        </div>\n      </div>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.at-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.at-card {\n  width: 100%;\n  max-width: 36rem;\n}\n\n.at-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.at-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-5, 1.25rem);\n}\n\n.at-actions {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--dz-space-2, 0.5rem);\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzTransfer",
+    "DzPersonaSelector",
+    "DzMention",
+    "DzFormField",
+    "DzFormLabel",
+    "DzButton",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

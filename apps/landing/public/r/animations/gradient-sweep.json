@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "gradient-sweep",
+  "type": "registry:block",
+  "title": "Gradient sweep",
+  "description": "An animated brand gradient sweeps continuously across a heading.",
+  "files": [
+    {
+      "path": "gradient-sweep.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzHeading } from '@dzup-ui/core'\nimport { DzGradientText } from '../motion'\n</script>\n\n<template>\n  <DzGradientText>\n    <DzHeading :level=\"2\" size=\"2xl\" weight=\"bold\">\n      Motion, on brand\n    </DzHeading>\n  </DzGradientText>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzHeading"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

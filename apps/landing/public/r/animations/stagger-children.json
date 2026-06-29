@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "stagger-children",
+  "type": "registry:block",
+  "title": "Stagger children",
+  "description": "Cascades a grid or list of children into view with a per-index delay.",
+  "files": [
+    {
+      "path": "stagger-children.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { DzStagger } from '../motion'\n</script>\n\n<template>\n  <DzStagger class=\"grid\">\n    <DzCard v-for=\"c in cells\" :key=\"c.title\" variant=\"outlined\" padding=\"md\">\n      <DzText weight=\"semibold\" size=\"sm\">{{ c.title }}</DzText>\n    </DzCard>\n  </DzStagger>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

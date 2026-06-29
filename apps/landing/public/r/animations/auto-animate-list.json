@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "auto-animate-list",
+  "type": "registry:block",
+  "title": "Auto-animate list",
+  "description": "Add, remove and reorder list items animate in one line via AutoAnimate; snaps when reduced.",
+  "files": [
+    {
+      "path": "auto-animate-list.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, watch } from 'vue'\nimport { DzListItem } from '@dzup-ui/core'\nimport { useAutoAnimate, useReducedMotion } from '../motion'\n\nconst items = ref([{ id: 1, name: 'Ada Lovelace' } /* … */])\n\n// useAutoAnimate animates every direct-child add/remove/move of the bound parent.\n// It respects OS prefers-reduced-motion by default; bind the page-level toggle too.\nconst [listRef, enable] = useAutoAnimate()\nconst reduced = useReducedMotion()\nwatch(reduced, (r) => enable(!r), { immediate: true })\n</script>\n\n<template>\n  <!-- One directive on the parent — no per-item transition wiring. -->\n  <ul ref=\"listRef\">\n    <DzListItem v-for=\"item in items\" :key=\"item.id\">{{ item.name }}</DzListItem>\n  </ul>\n\n  <!-- Or, with the plugin/directive registered, simply: -->\n  <!-- <ul v-auto-animate> … </ul> -->\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzListItem",
+    "DzAvatar",
+    "DzBadge"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

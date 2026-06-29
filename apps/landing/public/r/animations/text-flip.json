@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "text-flip",
+  "type": "registry:block",
+  "title": "Text flip",
+  "description": "Cycles a list of words, each flipping vertically (rotateX) in and out.",
+  "files": [
+    {
+      "path": "text-flip.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzHeading } from '@dzup-ui/core'\nimport { DzTextFlip } from '../motion'\n\nconst phrases = ['tokens', 'motion', 'demos', 'systems']\n</script>\n\n<template>\n  <!-- The flipping word is aria-hidden; the active phrase is mirrored into a polite\n       aria-live region. Box sized to the longest phrase (no shift); pauses on\n       hover/focus and off-screen. Reduced motion → first phrase, static. -->\n  <DzHeading :level=\"4\">\n    Built on design <DzTextFlip :phrases=\"phrases\" />\n  </DzHeading>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzHeading"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

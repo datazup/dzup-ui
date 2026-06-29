@@ -1,0 +1,28 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "float-label-form",
+  "type": "registry:block",
+  "title": "Float-label contact form",
+  "description": "A compact, modern contact variant — each control wrapped in a DzFloatLabel (notched \"on\" variant) whose label rests in-field and floats onto the border on focus/fill.",
+  "files": [
+    {
+      "path": "float-label-form.vue",
+      "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzFloatLabel,\n  DzHeading,\n  DzInput,\n  DzSelect,\n  DzText,\n  DzTextarea,\n} from '@dzup-ui/core'\nimport type { DzSelectItem } from '@dzup-ui/core'\nimport { ref } from 'vue'\n\n/**\n * Float-label form — a compact, modern contact variant.\n *\n * Each control is wrapped in a DzFloatLabel (notched \"on\" variant): the label\n * rests inside the field and floats onto the border when focused or filled.\n * Native inputs auto-detect their filled state; the non-native DzSelect is told\n * via `:filled`. Local ref() state only.\n *\n * Forms family: DzFloatLabel, DzSelect. Inputs family: DzInput, DzTextarea.\n */\n\nconst name = ref('')\nconst email = ref('')\nconst subject = ref('')\nconst message = ref('')\n\nconst SUBJECTS: DzSelectItem[] = [\n  { label: 'Sales enquiry', value: 'sales' },\n  { label: 'Support', value: 'support' },\n  { label: 'Partnership', value: 'partnership' },\n  { label: 'Other', value: 'other' },\n]\n</script>\n\n<template>\n  <section class=\"fl-wrap\" aria-labelledby=\"fl-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"fl-card\">\n      <header class=\"fl-head\">\n        <DzHeading id=\"fl-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          Say hello\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" as=\"p\">\n          A cleaner, label-in-field take on the classic contact form.\n        </DzText>\n      </header>\n\n      <form class=\"fl-form\" @submit.prevent>\n        <div class=\"fl-grid\">\n          <DzFloatLabel label=\"Full name\" variant=\"on\">\n            <DzInput v-model=\"name\" autocomplete=\"name\" />\n          </DzFloatLabel>\n          <DzFloatLabel label=\"Email\" variant=\"on\">\n            <DzInput v-model=\"email\" type=\"email\" autocomplete=\"email\" />\n          </DzFloatLabel>\n        </div>\n\n        <DzFloatLabel label=\"Subject\" variant=\"on\" :filled=\"!!subject\">\n          <DzSelect v-model=\"subject\" :items=\"SUBJECTS\" aria-label=\"Subject\" />\n        </DzFloatLabel>\n\n        <DzFloatLabel label=\"Message\" variant=\"on\">\n          <DzTextarea v-model=\"message\" :rows=\"4\" auto-resize />\n        </DzFloatLabel>\n\n        <DzButton type=\"submit\" variant=\"solid\" tone=\"primary\" class=\"fl-submit\">\n          Send message\n        </DzButton>\n      </form>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.fl-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.fl-card {\n  width: 100%;\n  max-width: 32rem;\n}\n\n.fl-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.fl-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-5, 1.25rem);\n}\n\n.fl-grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.fl-submit {\n  width: 100%;\n}\n\n@media (max-width: 480px) {\n  .fl-grid {\n    grid-template-columns: 1fr;\n  }\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzFloatLabel",
+    "DzInput",
+    "DzSelect",
+    "DzTextarea",
+    "DzButton",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

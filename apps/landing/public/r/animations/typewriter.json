@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "typewriter",
+  "type": "registry:block",
+  "title": "Typewriter",
+  "description": "Types and erases a rotating list of phrases, with a blinking caret.",
+  "files": [
+    {
+      "path": "typewriter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\nimport { DzTypewriter } from '../motion'\n\nconst phrases = ['design tokens.', 'accessible motion.', 'copy-paste demos.']\n</script>\n\n<template>\n  <DzText size=\"lg\" weight=\"medium\">\n    Built on <DzTypewriter :phrases=\"phrases\" />\n  </DzText>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

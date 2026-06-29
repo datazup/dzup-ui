@@ -1,0 +1,1171 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry.json",
+  "name": "dzup-ui-animations",
+  "homepage": "https://dzup-ui.dev",
+  "items": [
+    {
+      "name": "fade-rise",
+      "type": "registry:block",
+      "title": "Fade & rise",
+      "description": "Content fades in and lifts gently into place as it scrolls into view.",
+      "registryDependencies": [
+        "DzCard",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "fade-rise.vue",
+          "type": "registry:block"
+        },
+        {
+          "path": "fade-rise.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "fade-rise.css",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "stagger-children",
+      "type": "registry:block",
+      "title": "Stagger children",
+      "description": "Cascades a grid or list of children into view with a per-index delay.",
+      "registryDependencies": [
+        "DzCard",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "stagger-children.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "directional-slide",
+      "type": "registry:block",
+      "title": "Directional slide-in",
+      "description": "Enters from the left, right, up or down — pair with feature rows.",
+      "registryDependencies": [
+        "DzCard",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "directional-slide.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "blur-in",
+      "type": "registry:block",
+      "title": "Blur-in",
+      "description": "Resolves from a soft blur to sharp while fading in — great for media.",
+      "registryDependencies": [
+        "DzImage"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "blur-in.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "scale-in",
+      "type": "registry:block",
+      "title": "Scale-in",
+      "description": "Scales up from 0.96 to full size while fading in — pair with stat cards.",
+      "registryDependencies": [
+        "DzStatCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "scale-in.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "parallax-drift",
+      "type": "registry:block",
+      "title": "Scroll parallax drift",
+      "description": "A background layer drifts at a fraction of the scroll speed, travel capped.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "parallax-drift.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "bento-reveal",
+      "type": "registry:block",
+      "title": "Bento reveal",
+      "description": "A bento grid reveals with a shared spotlight and per-cell stagger as it enters view.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "bento-reveal.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "sticky-scroll",
+      "type": "registry:block",
+      "title": "Sticky / pinned scroll",
+      "description": "A panel pins while its content advances through steps; the progress bar tracks the scroll.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "sticky-scroll.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "scroll-linked",
+      "type": "registry:block",
+      "title": "Scroll-linked transforms",
+      "description": "Two layers’ transform and opacity are bound to scroll position — modernised parallax.",
+      "registryDependencies": [
+        "DzAurora"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "scroll-linked.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "gradient-sweep",
+      "type": "registry:block",
+      "title": "Gradient sweep",
+      "description": "An animated brand gradient sweeps continuously across a heading.",
+      "registryDependencies": [
+        "DzHeading"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "gradient-sweep.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "typewriter",
+      "type": "registry:block",
+      "title": "Typewriter",
+      "description": "Types and erases a rotating list of phrases, with a blinking caret.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "typewriter.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "word-stagger",
+      "type": "registry:block",
+      "title": "Word stagger",
+      "description": "Splits a line into words and reveals each one in sequence as it enters.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "word-stagger.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "letter-decode",
+      "type": "registry:block",
+      "title": "Letter decode",
+      "description": "Scrambles then resolves characters left-to-right when scrolled into view.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "letter-decode.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "highlight-sweep",
+      "type": "registry:block",
+      "title": "Highlight sweep",
+      "description": "A marker grows behind an emphasised word as the line scrolls into view.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "highlight-sweep.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "circular-text",
+      "type": "registry:block",
+      "title": "Circular text",
+      "description": "Lays a string around a ring that slowly rotates, like a rotating seal.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "circular-text.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "text-flip",
+      "type": "registry:block",
+      "title": "Text flip",
+      "description": "Cycles a list of words, each flipping vertically (rotateX) in and out.",
+      "registryDependencies": [
+        "DzHeading"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "text-flip.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "count-up",
+      "type": "registry:block",
+      "title": "Count-up",
+      "description": "Figures tween from 0 to their target when scrolled into view, with formatting.",
+      "registryDependencies": [
+        "DzAnimatedNumber"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "count-up.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "odometer",
+      "type": "registry:block",
+      "title": "Sliding number",
+      "description": "Each digit rolls vertically to its target like a mechanical odometer when in view.",
+      "registryDependencies": [
+        "DzStatCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "odometer.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "progress-fill",
+      "type": "registry:block",
+      "title": "Progress fill",
+      "description": "A DzProgress bar fills from 0 to its value the moment it scrolls into view.",
+      "registryDependencies": [
+        "DzProgress"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "progress-fill.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "rating-fill",
+      "type": "registry:block",
+      "title": "Rating fill",
+      "description": "A DzRating fills star-by-star when scrolled into view; final value under reduced motion.",
+      "registryDependencies": [
+        "DzRating"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "rating-fill.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "aurora-drift",
+      "type": "registry:block",
+      "title": "Aurora drift",
+      "description": "Soft brand blobs drift on slow, offset loops behind a hero or CTA surface.",
+      "registryDependencies": [
+        "DzAurora"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "aurora-drift.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "animated-grid",
+      "type": "registry:block",
+      "title": "Animated grid/dots",
+      "description": "A subtle line or dot pattern pans slowly behind a section as an ambient backdrop.",
+      "registryDependencies": [
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "animated-grid.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-follow",
+      "type": "registry:block",
+      "title": "Spotlight follow",
+      "description": "A radial light tracks the cursor across a surface; static glow under reduced motion.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "spotlight-follow.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "gradient-border-glow",
+      "type": "registry:block",
+      "title": "Gradient border glow",
+      "description": "An animated conic-gradient ring glows around a card; static brand border when reduced.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "gradient-border-glow.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "meteors",
+      "type": "registry:block",
+      "title": "Meteors",
+      "description": "Diagonal shooting-star streaks cross a hero or card on offset loops; static when reduced.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "meteors.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "particle-field",
+      "type": "registry:block",
+      "title": "Particle field",
+      "description": "A constellation of dots drifts, links near neighbours and eases aside under the pointer.",
+      "registryDependencies": [
+        "DzParticles"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "particle-field.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "progressive-blur",
+      "type": "registry:block",
+      "title": "Progressive blur",
+      "description": "Layered backdrop-filter stops fade a scroll edge; opaque surface fade under reduced transparency.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "progressive-blur.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "glass-surface",
+      "type": "registry:block",
+      "title": "Glass surface",
+      "description": "A frosted panel over a busy backdrop; opaque raised surface when transparency is reduced.",
+      "registryDependencies": [
+        "DzGlass",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "glass-surface.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "card-lift",
+      "type": "registry:block",
+      "title": "Card lift + glow",
+      "description": "A card rises with a soft shadow and a brand-tinted border on hover.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "card-lift.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "tilt",
+      "type": "registry:block",
+      "title": "3D tilt",
+      "description": "A card tilts toward the pointer with depth and an optional glare highlight.",
+      "registryDependencies": [
+        "DzImageCard",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "tilt.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "sheen-sweep",
+      "type": "registry:block",
+      "title": "Sheen sweep",
+      "description": "A diagonal light streak sweeps across a button or card on hover.",
+      "registryDependencies": [
+        "DzButton",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "sheen-sweep.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-button",
+      "type": "registry:block",
+      "title": "Magnetic button",
+      "description": "A CTA eases toward the cursor within a small radius and springs back on leave.",
+      "registryDependencies": [
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "magnetic-button.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "border-beam",
+      "type": "registry:block",
+      "title": "Border beam",
+      "description": "A light beam travels continuously around a card’s border on a loop.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "border-beam.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "dock",
+      "type": "registry:block",
+      "title": "Dock magnification",
+      "description": "A row of icons scales by pointer proximity, neighbours easing — the macOS dock.",
+      "registryDependencies": [
+        "DzIconButton",
+        "DzAvatar"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "dock.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "card-stack",
+      "type": "registry:block",
+      "title": "Card stack / swap",
+      "description": "Stacked cards cycle the front card to the back — morphs via View Transitions, FLIPs otherwise.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "card-stack.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "glare",
+      "type": "registry:block",
+      "title": "Glare card",
+      "description": "A glossy specular highlight tracks the pointer across a card — the gloss, no tilt.",
+      "registryDependencies": [
+        "DzCard",
+        "DzImageCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "glare.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "custom-cursor",
+      "type": "registry:block",
+      "title": "Custom cursor",
+      "description": "A soft blob trails the pointer inside a region; native cursor returns on leave.",
+      "registryDependencies": [
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "custom-cursor.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "image-compare",
+      "type": "registry:block",
+      "title": "Image comparison",
+      "description": "Drag — or arrow-key — a handle to wipe between a before and after image.",
+      "registryDependencies": [
+        "DzImage"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "image-compare.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "lens",
+      "type": "registry:block",
+      "title": "Lens / magnifier",
+      "description": "A magnified circle follows the pointer over an image, locking onto what is under it.",
+      "registryDependencies": [
+        "DzImage"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "lens.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "stagger-list-in",
+      "type": "registry:block",
+      "title": "Stagger list-in",
+      "description": "List items enter one-by-one on view — pair with avatars, lists or menus.",
+      "registryDependencies": [
+        "DzList",
+        "DzAvatar",
+        "DzBadge"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "stagger-list-in.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "marquee-strip",
+      "type": "registry:block",
+      "title": "Marquee strip",
+      "description": "A logo/badge strip scrolls infinitely and seamlessly; hover to pause.",
+      "registryDependencies": [
+        "DzBadge"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "marquee-strip.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "flip-on-change",
+      "type": "registry:block",
+      "title": "Flip on change",
+      "description": "A badge value flips with a half-turn whenever the underlying data updates.",
+      "registryDependencies": [
+        "DzBadge",
+        "DzTag"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "flip-on-change.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "auto-animate-list",
+      "type": "registry:block",
+      "title": "Auto-animate list",
+      "description": "Add, remove and reorder list items animate in one line via AutoAnimate; snaps when reduced.",
+      "registryDependencies": [
+        "DzListItem",
+        "DzAvatar",
+        "DzBadge"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "auto-animate-list.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "pulse-ping",
+      "type": "registry:block",
+      "title": "Pulse / ping",
+      "description": "An expanding ring radiates from a status dot to draw the eye to live updates.",
+      "registryDependencies": [
+        "DzNotification"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "pulse-ping.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "shimmer-skeleton",
+      "type": "registry:block",
+      "title": "Shimmer skeleton",
+      "description": "A soft highlight sweeps across loading placeholders to signal progress.",
+      "registryDependencies": [
+        "DzSkeleton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "shimmer-skeleton.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "toast-slide-in",
+      "type": "registry:block",
+      "title": "Toast slide-in",
+      "description": "Toasts enter and stack with a slide + fade; appear instantly when reduced.",
+      "registryDependencies": [
+        "DzToast",
+        "DzToastProvider"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "toast-slide-in.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "success-check",
+      "type": "registry:block",
+      "title": "Success check",
+      "description": "An SVG ring and tick draw themselves in with a small pop to confirm a completed action.",
+      "registryDependencies": [
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "success-check.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "confetti-burst",
+      "type": "registry:block",
+      "title": "Confetti burst",
+      "description": "A celebratory multi-colour particle pop fires on a milestone action; a no-op when reduced.",
+      "registryDependencies": [
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "confetti-burst.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "error-shake",
+      "type": "registry:block",
+      "title": "Error shake",
+      "description": "A field rejects invalid input with a damped horizontal shake plus the red invalid state.",
+      "registryDependencies": [
+        "DzInput",
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "error-shake.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "like-pop",
+      "type": "registry:block",
+      "title": "Like pop",
+      "description": "A like toggle pops in scale and radiates a ring of colour sparks on the rising edge.",
+      "registryDependencies": [
+        "DzToggleButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "like-pop.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "route-transition",
+      "type": "registry:block",
+      "title": "Route transition",
+      "description": "Pages fade and slide as you navigate between routes; instant under reduced motion.",
+      "registryDependencies": [
+        "router-view"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "route-transition.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "tabs-indicator-slide",
+      "type": "registry:block",
+      "title": "Tabs indicator slide",
+      "description": "The active-tab underline glides between tabs; instant move under reduced motion.",
+      "registryDependencies": [
+        "DzTabs",
+        "DzTabList",
+        "DzTabTrigger"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "tabs-indicator-slide.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "accordion-height",
+      "type": "registry:block",
+      "title": "Accordion height",
+      "description": "Panels expand and collapse on a smooth height transition; instant under reduced motion.",
+      "registryDependencies": [
+        "DzAccordion",
+        "DzAccordionItem",
+        "DzAccordionContent"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "accordion-height.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "presence-exit",
+      "type": "registry:block",
+      "title": "Presence exit",
+      "description": "A closing element stays mounted so a pure-CSS leave animation plays before unmount; instant when reduced.",
+      "registryDependencies": [
+        "DzPresence"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "presence-exit.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "animated-beam",
+      "type": "registry:block",
+      "title": "Animated beam",
+      "description": "A light gradient travels an SVG path connecting two referenced elements.",
+      "registryDependencies": [
+        "DzCard",
+        "DzAvatar"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "animated-beam.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "orbiting-icons",
+      "type": "registry:block",
+      "title": "Orbiting icons",
+      "description": "Avatars and badges orbit a central hub on one or more slow-spinning rings.",
+      "registryDependencies": [
+        "DzAvatar",
+        "DzBadge"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "orbiting-icons.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "morphing-dialog",
+      "type": "registry:block",
+      "title": "Morphing dialog",
+      "description": "A card expands into a dialog sharing its box — morphs via View Transitions, FLIPs otherwise.",
+      "registryDependencies": [
+        "DzMorph",
+        "DzCard",
+        "DzDialog"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "morphing-dialog.vue",
+          "type": "registry:block"
+        },
+        {
+          "path": "morphing-dialog.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "morphing-dialog.css",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-island",
+      "type": "registry:block",
+      "title": "Dynamic island",
+      "description": "A compact pill morphs to reveal expanded content and back; sizes via interpolate-size, FLIPs otherwise.",
+      "registryDependencies": [
+        "DzIsland",
+        "DzBadge",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "dynamic-island.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "native-popover-entrance",
+      "type": "registry:block",
+      "title": "Native popover entrance",
+      "description": "A menu/tooltip opens via the Popover API, animating in from @starting-style; <Transition> fallback.",
+      "registryDependencies": [
+        "DzNativePopover",
+        "DzMenu",
+        "DzTooltip"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "native-popover-entrance.vue",
+          "type": "registry:block"
+        }
+      ]
+    }
+  ]
+}

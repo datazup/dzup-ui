@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
       <!-- Loaded content -->
       <div v-else class="ls-media">
         <div class="ls-person">
-          <DzAvatar fallback="AR" size="md" />
+          <DzAvatar fallback="AR" alt="Ava Restić" size="md" />
           <div class="ls-person-lines">
             <DzText weight="medium" as="p" class="ls-line">Ava Restić</DzText>
             <DzText size="sm" tone="muted" as="p" class="ls-line">Updated just now</DzText>

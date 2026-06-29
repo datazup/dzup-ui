@@ -1,0 +1,152 @@
+# dzup-ui blocks
+
+> Ready-made UI blocks for Vue 3, composed purely from free @dzup-ui/core components and --dz-* design tokens — every block drops in already themed and accessible. Each entry links to its live preview and lists the real Dz* components it is built from.
+
+87 blocks across 12 categories. For each block's full SFC source inline see [/llms-full.txt](/llms-full.txt); for a single block fetch its markdown page at /r/<id>.md.
+
+## Marketing
+
+Heroes, pricing, testimonials, FAQs, CTAs and footers — the building blocks of a landing page.
+
+- [Centered hero](/blocks#hero-centered): Eyebrow chip, headline, subhead and two call-to-action buttons, centered. — built from DzBadge, DzHeading, DzText, DzButton
+- [Split hero with media](/blocks#hero-split): Copy and two CTAs on the left, a framed product image on the right; stacks to one column on narrow viewports. — built from DzBadge, DzHeading, DzText, DzButton, DzImage, DzAspectRatio
+- [Top navigation bar](/blocks#nav-bar): Responsive top bar with logo, nav links, search input, theme toggle, primary CTA, and a mobile drawer. — built from DzButton, DzIconButton, DzSearchInput, DzColorModeToggle, DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzText
+- [Feature grid](/blocks#feature-grid): Six feature cards, each with a lucide icon, title, and short blurb; responsive 3→2→1 column grid. — built from DzCard, DzCardBody, DzHeading, DzText, DzIcon
+- [Stats band](/blocks#stats-band): A horizontal band of four key metrics with icon, trend indicator, and an animated count-up on scroll. — built from DzStatCard, DzAnimatedNumber
+- [Three-tier pricing](/blocks#pricing-3): Free / Pro / Enterprise pricing cards with feature lists, a "Most popular" badge on Pro, and responsive 3→2→1 column layout. — built from DzCard, DzBadge, DzButton, DzDivider, DzHeading, DzText
+- [Testimonials grid](/blocks#testimonials): Grid of customer quote cards each with a star rating, avatar, name/role, and quote text; responsive 3→2→1 columns. — built from DzCard, DzAvatar, DzRating, DzHeading, DzText
+- [FAQ accordion](/blocks#faq): Six Q&A items in a separated collapsible accordion with a section header and a contact link. — built from DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent, DzHeading, DzText
+- [CTA band](/blocks#cta-band): Closing call-to-action with headline, subtext, and two buttons on a token gradient background. — built from DzHeading, DzText, DzButton
+- [Multi-column footer](/blocks#footer): Brand blurb, four link columns, social icon buttons, and a theme toggle; collapses to two columns on mobile. — built from DzText, DzDivider, DzIconButton, DzColorModeToggle
+
+## Application
+
+App shells, page headers, stat rows, data tables and settings — the surfaces of a product UI.
+
+- [App shell](/blocks#app-shell): Collapsible sidebar nav, breadcrumb top bar and user avatar menu inside a constrained app-shell preview. — built from DzAppShell, DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter, DzBreadcrumb, DzBreadcrumbItem, DzAvatar, DzBadge, DzButton, DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzHeading, DzText
+- [Page header](/blocks#page-header): Breadcrumb trail, page title with inline status badge, and a row of contextual action buttons. — built from DzBreadcrumb, DzBreadcrumbItem, DzHeading, DzBadge, DzButton
+- [Stat card row](/blocks#stat-row): Four KPI cards with up/down/neutral trend deltas in a responsive 4→2→1 column grid. — built from DzStatCard
+- [Data table card](/blocks#table-card): Outlined card with a search + segmented filter toolbar, a hoverable data table with avatars and status badges, and paginated results. — built from DzCard, DzSearchInput, DzSegmented, DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell, DzAvatar, DzBadge, DzPagination, DzText
+- [Empty state](/blocks#empty-state): Styled icon illustration, heading, supporting copy and a primary call-to-action button for zero-data screens. — built from DzEmpty, DzButton
+- [Settings layout](/blocks#settings-layout): Horizontal tab nav over three panels — profile form fields, notification switches, and appearance options — with a sticky footer. — built from DzTabs, DzTabList, DzTabTrigger, DzTabContent, DzFormField, DzFormLabel, DzFormDescription, DzInput, DzSelect, DzSwitch, DzDivider, DzButton, DzText
+
+## Layout
+
+Page shells and structural scaffolding composed from the Layout family — bento grids, resizable workspaces, masonry galleries, sticky asides, toolbar canvases and full page scaffolds built from Grid, Flex, Stack, Container, Panel, Toolbar, Resizable, Masonry, Affix, ScrollArea and Collapse.
+
+- [Bento dashboard grid](/blocks#bento-grid): A spanning "bento box" dashboard laid out with DzGrid — a 2×2 revenue hero, a fixed-ratio media tile, compact stat panels and a full-width footer cell, all collapsing to a single column on mobile. — built from DzGrid, DzPanel, DzAspectRatio, DzDivider, DzBadge, DzHeading, DzText, DzIcon
+- [Resizable workspace](/blocks#resizable-workspace): An IDE-style three-pane shell built on DzResizable — a collapsible file explorer, an editor and a live preview, each scrolling independently in a DzScrollArea, with draggable handles and a DzToolbar across the top. — built from DzResizable, DzResizablePanel, DzResizableHandle, DzScrollArea, DzToolbar, DzDivider, DzBadge, DzIcon, DzText
+- [Masonry gallery](/blocks#masonry-gallery): A Pinterest-style cascading board built on DzMasonry — variable-height DzCards, some leading with a DzAspectRatio media tile, packed into balanced responsive columns (3 → 2 → 1) with no row gaps. — built from DzMasonry, DzAspectRatio, DzCard, DzAvatar, DzBadge, DzTag, DzHeading, DzText
+- [Sticky aside docs layout](/blocks#sticky-aside): A documentation shell where the "On this page" nav pins on scroll via DzAffix — DzContainer sets the measure, DzFlex splits prose from the aside, a DzScrollArea holds a long related list, and the aside lifts onto a surface once pinned. — built from DzAffix, DzContainer, DzFlex, DzScrollArea, DzDivider, DzBadge, DzHeading, DzText
+- [Toolbar canvas shell](/blocks#toolbar-canvas): A design-tool shell — a DzToolbar with start/center/end regions over a vertical DzFlex tool rail (a DzSpacer pushing settings to the bottom), a scrollable DzScrollArea artboard, and a DzPanel inspector with DzDivider-fenced groups. — built from DzToolbar, DzFlex, DzSpacer, DzScrollArea, DzPanel, DzDivider, DzIconButton, DzBadge, DzIcon, DzText
+- [Responsive page scaffold](/blocks#page-scaffold): A whole landing page assembled from layout primitives only — DzContainer for measure, DzFlex + DzSpacer for the header bar, DzStack for hero rhythm, a responsive DzGrid feature row, a DzFlex content/aside split and a DzDivider-fenced footer. — built from DzContainer, DzGrid, DzFlex, DzStack, DzSpacer, DzDivider, DzButton, DzBadge, DzHeading, DzText, DzIcon
+- [Collapsible settings sections](/blocks#collapsible-sections): A settings page of expandable DzPanels (each owning its open state via v-model:collapsed) spaced by a DzStack, with DzSwitch rows and DzDivider inside — plus a standalone DzCollapse "advanced" region toggled by a button, the primitive DzPanel wraps. — built from DzPanel, DzCollapse, DzContainer, DzStack, DzDivider, DzSwitch, DzButton, DzHeading, DzText, DzIcon
+
+## Media
+
+Image-first surfaces composed from the Media family — lightbox galleries, autoplaying carousels, before/after comparison sliders, stacked avatar rosters, QR handoff cards and watermarked previews, all framed with DzImage, DzAspectRatio and `--dz-*` tokens.
+
+- [Lightbox gallery](/blocks#media-gallery): An asymmetric image grid where every ratio-stable DzImage tile (framed by DzAspectRatio) opens a focus-trapped DzLightbox with captions, a counter, and arrow-key navigation. — built from DzImage, DzAspectRatio, DzLightbox, DzBadge, DzHeading, DzText
+- [Featured carousel](/blocks#media-carousel): A looping, autoplaying DzCarousel of DzImage slides with gradient captions, hover-to-pause, and DzCarouselPrevious / DzCarouselNext / DzCarouselDots navigation. — built from DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots, DzImage, DzAspectRatio, DzBadge, DzHeading, DzText
+- [Before / after slider](/blocks#media-comparison): A draggable, keyboard-operable DzImageComparison revealing a graded edit over the raw frame, with before/after label chips and a live reveal read-out wired to v-model:position. — built from DzImageComparison, DzImage, DzBadge, DzHeading, DzText
+- [Team roster](/blocks#media-team): A stacked DzAvatarGroup with a "+N" overflow chip over a member list, each row pairing a DzAvatar (image or initials fallback) with a presence dot and an online/away DzBadge. — built from DzAvatarGroup, DzAvatar, DzBadge, DzHeading, DzText
+- [QR handoff card](/blocks#media-qr): A "continue on mobile" card built around DzQRCode — a token-styled SVG code with a centered brand mark via the #logo slot, error-level H, a pairing code, and an expire/refresh status flow. — built from DzQRCode, DzButton, DzDivider, DzBadge, DzHeading, DzText
+- [Watermarked preview](/blocks#media-watermark): A confidential asset draped in a tiled, rotated DzWatermark over a framed DzImage — the aria-hidden, pointer-transparent overlay stamps ownership without blocking interaction. — built from DzWatermark, DzImage, DzAspectRatio, DzBadge, DzHeading, DzText
+
+## Data display
+
+Data grids, timelines, descriptions, trees, collection galleries, ranked lists and countdowns — composed from the Data family to present records, history and metrics.
+
+- [Data grid card](/blocks#data-grid): A DzDataGrid of deployments with sortable columns, multi-row selection, a paginated footer, and a #cell slot rendering avatars, environment tags and status badges. — built from DzDataGrid, DzCard, DzAvatar, DzBadge, DzTag, DzText
+- [Activity timeline](/blocks#activity-timeline): A vertical DzTimeline feed of events — tone-coded dots, timestamp statuses, avatar indicators, and per-item tags for a "who did what, when" history. — built from DzTimeline, DzTimelineItem, DzAvatar, DzBadge, DzTag, DzText, DzCard
+- [Detail descriptions panel](/blocks#detail-descriptions): A read-only label/value record view built from DzDescriptions — a responsive, bordered term/definition grid with slot-rich values (status badge, plan and label tags, monospaced payment) and a full-width spanning row. — built from DzDescriptions, DzDescriptionsItem, DzBadge, DzTag, DzButton, DzText, DzCard
+- [File explorer tree](/blocks#file-tree): A hierarchical DzTree with per-node lucide icons, expand/collapse and selection (both v-modelled) and the full APG roving-tabindex keyboard model, beside a live selection panel. — built from DzTree, DzCard, DzBadge, DzText
+- [Collection gallery](/blocks#collection-gallery): A DzDataView template marketplace with a list/grid layout toggle, client-side sorting and a paginator; the #item slot renders rich cards in grid mode and compact rows in list mode from the same records. — built from DzDataView, DzCard, DzBadge, DzTag, DzButton, DzText
+- [Animated leaderboard](/blocks#leaderboard): A ranked DzList where each row pairs a rank badge + avatar prefix with a DzAnimatedNumber score and a tone-coded delta tag; a refresh button mutates the values so the figures re-animate live. — built from DzList, DzListItem, DzAnimatedNumber, DzAvatar, DzBadge, DzTag, DzButton, DzText, DzCard
+- [Release countdown](/blocks#release-countdown): A launch banner driven by DzCountdown — its slot renders labelled day/hour/minute/second cells ticking toward a deadline — with a DzAnimatedNumber count-up for claimed spots and a primary CTA. — built from DzCountdown, DzAnimatedNumber, DzBadge, DzHeading, DzButton, DzText
+
+## Feedback
+
+Alerts, notifications, toasts, loading skeletons, usage meters and result screens — composed from the Feedback family to keep users informed about state, progress and outcomes.
+
+- [Alert stack](/blocks#alert-stack): A column of inline DzAlerts spanning the variant taxonomy and tones — info, success with an actions row, a closable warning, and a dismissible filled danger alert that can be restored. — built from DzAlert, DzButton, DzHeading, DzText
+- [Notification center](/blocks#notification-center): A dismissible feed of persistent DzNotifications inside an outlined panel — tone-coded icons, titles, per-item action buttons, a live unread count badge, "Clear all", and an empty state. — built from DzNotification, DzCard, DzBadge, DzButton, DzHeading, DzText
+- [Toast notifications](/blocks#toast-launcher): The compound toast system wired up — DzToastProvider owns a capped, auto-dismissing queue, DzToastViewport renders it bottom-right, and a per-tone trigger row fires live toasts via the injected imperative API. — built from DzToastProvider, DzToastViewport, DzToast, DzButton, DzHeading, DzText
+- [Loading states](/blocks#loading-states): A content card that flips between loading and loaded — an indeterminate DzProgress bar and a DzSpinner status row over a DzSkeleton scaffold (circular, text and rectangular) that mirrors the real layout. "Reload" replays it. — built from DzSkeleton, DzSpinner, DzProgress, DzCard, DzAvatar, DzButton, DzHeading, DzText
+- [Usage meters](/blocks#usage-meters): A quota dashboard pairing a segmented DzMeterGroup storage breakdown (with legend) against tone-coded DzProgress limit bars and a circular DzProgress ring summarising overall usage. — built from DzMeterGroup, DzProgress, DzCard, DzBadge, DzDivider, DzHeading, DzText
+- [Result screens](/blocks#result-states): Full-page outcome screens from DzResult — a segmented switch across the success / error / warning / info statuses, each with its own icon, copy and contextual action buttons. — built from DzResult, DzCard, DzButton
+
+## Overlays
+
+Layered, anchored surfaces composed from the Overlays family — a ⌘K command palette, dropdown and context menus, popovers, tooltips, modal dialogs, slide-out sheets, inline/modal confirmations and a spotlight product tour, all focus-trapped, dismissible and token-themed.
+
+- [Command menu](/blocks#command-menu): A ⌘K command palette (DzCommandPalette) — a search-field launcher with a DzKbd hint opens a fuzzy-searchable, grouped list of commands with per-item icons and shortcuts; the global ⌘K / Ctrl+K shortcut opens it too. — built from DzCommandPalette, DzKbd, DzHeading, DzText
+- [Account dropdown menu](/blocks#account-menu): A product top bar with a rich DzDropdownMenu account menu — avatar trigger, an account header, icon-prefixed items with DzKbd shortcut suffixes, separators, and a destructive sign-out. — built from DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzAvatar, DzBadge, DzIconButton, DzKbd, DzText
+- [Context menu canvas](/blocks#context-menu-board): A file canvas wrapped in a DzContextMenuTrigger — right-click (or the context-menu key) opens a DzContextMenu with icon-prefixed items, DzKbd shortcut suffixes, separators, a disabled item, and a destructive delete. — built from DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator, DzBadge, DzHeading, DzKbd, DzText
+- [Anchored popovers](/blocks#info-popovers): Two DzPopover patterns side by side — a profile hover card (avatar, bio, follow action) and a non-modal filter panel with DzSwitch rows and apply/reset — each with an arrow and explicit side/alignment. — built from DzPopover, DzPopoverTrigger, DzPopoverContent, DzAvatar, DzBadge, DzButton, DzDivider, DzSwitch, DzHeading, DzText
+- [Tooltip toolbar](/blocks#tooltip-toolbar): A formatting toolbar where every DzIconButton is wrapped in a DzTooltip revealing its name and DzKbd shortcut on hover/focus — demonstrating per-side placement and a short open delay, with DzDivider-fenced groups. — built from DzTooltip, DzTooltipTrigger, DzTooltipContent, DzIconButton, DzKbd, DzDivider, DzHeading, DzText
+- [Create dialog](/blocks#create-dialog): A focus-trapped modal form built from the DzDialog compound — a trigger button, a backdrop-dimmed panel with title/description, a project form (input, textarea, select), a top-right close and a Cancel/Create footer. — built from DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton, DzInput, DzTextarea, DzSelect, DzFormField, DzFormLabel, DzBadge, DzHeading, DzText
+- [Confirm actions](/blocks#confirm-actions): A "danger zone" panel pairing the two confirmation patterns — heavy actions route through a modal DzConfirmDialog (the delete simulates an async, loading confirm) while low-risk row deletes use an inline DzPopconfirm bubble. — built from DzConfirmDialog, DzPopconfirm, DzButton, DzIconButton, DzDivider, DzBadge, DzHeading, DzText
+- [Detail sheet](/blocks#detail-sheet): A slide-out record panel (DzSheet) — an orders list where each row opens a right-side sheet with a pinned header/close, a scrollable body of customer and line-item details, a status badge, and a footer action bar. — built from DzSheet, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzAvatar, DzBadge, DzButton, DzIconButton, DzDivider, DzHeading, DzText
+- [Product tour](/blocks#product-tour): A spotlight onboarding walkthrough (DzTour) over a mini dashboard — "Start tour" dims the page, spotlights each target in turn, and shows an anchored step popover with Back/Next/Finish controls and progress dots. — built from DzTour, DzButton, DzIconButton, DzBadge, DzHeading, DzText
+
+## Buttons
+
+Action affordances composed from the Buttons family — galleries, toolbars, segmented groups, social sign-in, and floating actions.
+
+- [Button gallery](/blocks#button-showcase): A labelled specimen sheet of every DzButton variant, tone and size, plus icon and loading/disabled states — a living reference for the button scale. — built from DzButton, DzText
+- [Rich-text toolbar](/blocks#editor-toolbar): A document toolbar built from the Buttons family — toggle buttons for inline format and alignment, icon-button history/insert actions, a copy-link button, and a split "Publish" action. Toggles are live. — built from DzToggleButton, DzIconButton, DzCopyButton, DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu, DzText
+- [Button groups & segmented controls](/blocks#button-groups): DzButtonGroup wiring child buttons into connected controls — a live view switcher, a time-range segmented control, and a vertical action group. — built from DzButtonGroup, DzButton, DzText
+- [Social sign-in buttons](/blocks#social-auth-buttons): A stacked column of full-width provider buttons (Google, GitHub, Apple), a labelled divider, and an email fallback — drop-in for any auth screen. — built from DzButton, DzDivider, DzText
+- [Floating action button & speed dial](/blocks#floating-actions): Circular elevated affordances — DzFab across tones and variants, and a DzSpeedDial that fans out related shortcuts on open, pinned inside a mock app canvas. — built from DzFab, DzSpeedDial, DzText
+
+## Auth & Forms
+
+Sign-in, sign-up, password reset, OTP and multi-step wizards — accessible, validated form flows.
+
+- [Sign-in card](/blocks#sign-in): Centered card with email, password, remember-me checkbox, forgot-password link, primary submit, labeled divider, and GitHub/Google social buttons. — built from DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzCheckbox, DzDivider, DzButton, DzHeading, DzText
+- [Sign-up card](/blocks#sign-up): Centered card with name, email, password plus a live strength meter, terms checkbox, and submit. — built from DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzProgress, DzCheckbox, DzButton, DzHeading, DzText
+- [Two-column auth](/blocks#auth-split): Sign-in form left, token-gradient brand/marketing panel right; collapses to single column on mobile. — built from DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzButton, DzHeading, DzText
+- [Multi-step form wizard](/blocks#wizard): Three-step onboarding wizard with stepper nav, per-step form fields, Back/Continue buttons, and a completion state. — built from DzStepper, DzStepperItem, DzFormField, DzFormLabel, DzInput, DzButton, DzHeading, DzText
+- [OTP verification](/blocks#otp-verify): A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once the code is complete, a live resend countdown, and a success state on completion. — built from DzOtpInput, DzButton, DzHeading, DzText
+- [Forgot password](/blocks#forgot-password): A two-state reset-request card — a validated email field (inline error via DzFormMessage) that swaps to a "check your inbox" confirmation with resend and back-to-sign-in actions. — built from DzCard, DzFormField, DzFormLabel, DzFormMessage, DzInput, DzButton, DzHeading, DzText
+
+## Forms & Inputs
+
+Newsletter, contact, payment, feedback, filter and profile forms — composed from the Inputs and Forms families with built-in labels, validation and accessibility.
+
+- [Newsletter signup](/blocks#newsletter-form): A focused subscribe card — an email DzInput with a mail-icon prefix and inline submit, a consent checkbox, and a success state. Live validation. — built from DzInput, DzCheckbox, DzButton, DzHeading, DzText
+- [Contact form](/blocks#contact-form): A labeled "get in touch" card: two-column name/email row, topic select, message textarea with a live character counter, and consent — with inline email validation via DzFormMessage. — built from DzCard, DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput, DzSelect, DzTextarea, DzCheckbox, DzButton, DzHeading, DzText
+- [Payment details](/blocks#payment-form): A checkout card showcasing masked and grouped inputs: DzInputMask formats the card number and expiry as you type, and a DzInputGroup pairs a promo field with an inline Apply button. — built from DzCard, DzFormField, DzFormLabel, DzInput, DzInputMask, DzInputGroup, DzSelect, DzDivider, DzButton, DzHeading, DzText
+- [Feedback survey](/blocks#feedback-form): A rating + survey card built from the scale controls — a half-step star DzRating, a frequency radio group, a 0–10 recommend slider with a live read-out, and a comments textarea. — built from DzCard, DzRating, DzRadioGroup, DzRadio, DzSlider, DzTextarea, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
+- [Filter sidebar](/blocks#filter-panel): A product-listing filter rail: search input, category checkbox group, a dual-thumb price range slider with read-out, a minimum-rating radio group, and an in-stock switch, with a live active-filter count. — built from DzSearchInput, DzCheckboxGroup, DzCheckbox, DzRangeSlider, DzRadioGroup, DzRadio, DzSwitch, DzDivider, DzButton, DzHeading, DzText
+- [Edit profile](/blocks#profile-form): A broad account panel: a file-upload avatar drop zone, name/username inputs, a role select, a bio textarea with counter, a free-text skills tags input, and a public-profile switch. — built from DzCard, DzFileUpload, DzInput, DzTextarea, DzTagsInput, DzSelect, DzSwitch, DzFormField, DzFormLabel, DzFormDescription, DzDivider, DzButton, DzHeading, DzText
+- [Booking form](/blocks#booking-form): A reservation card pairing the date/time/number controls — a DzDatePicker day, a 30-minute-step DzTimePicker slot, a clamped DzNumberInput party size, and a seating DzSelect. — built from DzCard, DzDatePicker, DzTimePicker, DzNumberInput, DzSelect, DzFormField, DzFormLabel, DzFormDescription, DzButton, DzHeading, DzText
+- [Create record](/blocks#record-form): A "create issue" panel built from the selection inputs — a searchable DzCombobox assignee, a DzMultiSelect labels picker, a single-select DzListbox priority, plus title and description fields. — built from DzCard, DzCombobox, DzMultiSelect, DzListbox, DzInput, DzTextarea, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
+- [Category picker](/blocks#category-picker): A hierarchical classification panel — a filterable DzTreeSelect for a nested category, a DzCascader region path (country → state → city), and a DzDateRangePicker availability window. — built from DzCard, DzTreeSelect, DzCascader, DzDateRangePicker, DzFormField, DzFormLabel, DzFormDescription, DzButton, DzHeading, DzText
+- [Appearance editor](/blocks#appearance-editor): A brand/theme customizer with a live preview — a DzColorPicker (presets + hex input) and two DzKnob rotary dials for radius and scale, reflected instantly in a preview panel. — built from DzCard, DzColorPicker, DzKnob, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
+- [Invoice builder](/blocks#invoice-builder): A dynamic line-items editor — a DzInplace click-to-edit "Bill to" field over a DzFieldArray of removable description/qty/rate rows, an "Add line item" action, and a live total. — built from DzCard, DzFieldArray, DzInplace, DzInput, DzNumberInput, DzIconButton, DzDivider, DzButton, DzHeading, DzText
+- [Share access](/blocks#access-transfer): A sharing / permissions panel — a searchable DzTransfer dual-list of capabilities, a DzPersonaSelector owner picker (avatar + name + role), and a DzMention note with @-mentions. — built from DzCard, DzTransfer, DzPersonaSelector, DzMention, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
+- [Float-label contact form](/blocks#float-label-form): A compact, modern contact variant — each control wrapped in a DzFloatLabel (notched "on" variant) whose label rests in-field and floats onto the border on focus/fill. — built from DzCard, DzFloatLabel, DzInput, DzSelect, DzTextarea, DzButton, DzHeading, DzText
+
+## Commerce
+
+Product grids, detail pages, carts and checkout summaries for storefront experiences.
+
+- [Product card grid](/blocks#product-grid): A storefront grid of product cards — image with a sale/new corner badge, name, read-only star rating with review count, current/original price, and an add-to-cart button; reflows 3 → 2 → 1 columns. — built from DzImageCard, DzBadge, DzRating, DzButton, DzHeading, DzText
+- [Product detail](/blocks#product-detail): A two-column product page — a looping DzCarousel gallery beside a buy box with rating, sale price, a size toggle group, stock badge and primary actions, over a full-width description / specs / shipping DzTabs panel. — built from DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots, DzImage, DzAspectRatio, DzRating, DzButton, DzTabs, DzTabList, DzTabTrigger, DzTabContent, DzBadge, DzHeading, DzText
+- [Cart summary](/blocks#cart-summary): An editable cart — a divided list of line items each with a thumbnail, a clamped quantity stepper and a remove action, plus live subtotal/shipping/tax/total rows and a checkout button. — built from DzList, DzListItem, DzNumberInput, DzButton, DzDivider, DzHeading, DzText
+- [Checkout order summary](/blocks#checkout-summary): An order review panel — a DzDescriptions ship-to / delivery / payment grid, an itemised list, a promo-code field (try “SAVE10”) that adds a live discount line, and recomputed totals above a place-order button. — built from DzDescriptions, DzDescriptionsItem, DzInput, DzButton, DzDivider, DzBadge, DzHeading, DzText
+- [Category header](/blocks#category-header): The title bar above a product listing — a breadcrumb trail, category heading with a live product count, and a toolbar pairing a sort DzSelect with a grid/list DzSegmented view toggle. — built from DzHeading, DzSelect, DzSegmented, DzBreadcrumb, DzBreadcrumbItem, DzText
+- [Order status tracker](/blocks#order-status): A fulfilment timeline for a single order — a DzStepper rail from placed to delivered marking the parcel’s current stage, a tone-coded status badge, and a carrier / tracking / ETA detail grid; the rail turns vertical on mobile. — built from DzStepper, DzStepperItem, DzBadge, DzHeading, DzText
+
+## Content
+
+Blog lists, article headers, prose and code showcases for editorial and documentation pages.
+
+- [Blog post list](/blocks#blog-list): A grid of editorial cards — cover image with a category badge overlay, title, excerpt, and an author byline with avatar and read time; reflows 3 → 2 → 1 columns. — built from DzImageCard, DzBadge, DzAvatar, DzText
+- [Article header](/blocks#article-header): A long-form masthead — category eyebrow, title and standfirst, a byline pairing an avatar with the author and a live DzRelativeTime published stamp, and a row of topic tags. — built from DzHeading, DzText, DzAvatar, DzTag, DzRelativeTime
+- [Prose / rich content](/blocks#prose): A typographic article body composed from the long-form primitives — DzHeading sections, DzText paragraphs and lists with inline DzCode, a DzBlockquote pull-quote, a block code snippet, and DzDivider rules. — built from DzHeading, DzText, DzBlockquote, DzCode, DzDivider
+- [Code showcase](/blocks#code-showcase): A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with a filename header and an explicit DzCopyButton wired into its actions slot that copies exactly the snippet on screen. — built from DzCodeBlock, DzCopyButton, DzTabs, DzTabList, DzTabTrigger, DzTabContent
+- [Table-of-contents aside](/blocks#toc-aside): A docs layout where a sticky DzAnchor "On this page" nav scrollspy-highlights the section in view beside a column of DzText prose with matching heading ids; collapses to one column on mobile. — built from DzAnchor, DzText
+- [Two-column FAQ](/blocks#faq-2col): Questions grouped into two labelled DzAccordion columns (separated, single + collapsible) under a centered heading, so one answer is open per column at a time; stacks to one column on mobile. — built from DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent, DzHeading, DzText

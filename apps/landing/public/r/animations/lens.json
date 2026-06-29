@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "lens",
+  "type": "registry:block",
+  "title": "Lens / magnifier",
+  "description": "A magnified circle follows the pointer over an image, locking onto what is under it.",
+  "files": [
+    {
+      "path": "lens.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzLens, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- rAF pointer; transform + background-position. Pointer-only: touch/keyboard\n       get the plain image, and there is no lens under reduced motion (via disabled). -->\n  <DzLens :src=\"src\" alt=\"…\" :zoom=\"2.4\" :size=\"132\" aspect-ratio=\"4/3\" :disabled=\"reduced\" />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzImage"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

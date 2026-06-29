@@ -103,18 +103,25 @@ const tiers: PricingTier[] = [
       </DzText>
     </div>
 
-    <!-- Cards grid --------------------------------------------------------->
-    <div class="pt-grid" role="list">
-      <DzCard
+    <!-- Cards grid: a real <ul>/<li> so the set carries list semantics. DzCard
+         sets `inheritAttrs: false` and forwards only data/a11y/aria attrs, so a
+         `role="listitem"` passed to it would be dropped — native <li> is robust. -->
+    <ul class="pt-grid">
+      <li
         v-for="tier in tiers"
         :key="tier.id"
-        :variant="tier.popular ? 'outlined' : 'elevated'"
-        padding="lg"
-        class="pt-card"
-        :class="{ 'pt-card--popular': tier.popular }"
-        role="listitem"
-        :aria-label="`${tier.name} plan`"
+        class="pt-grid-item"
+        :class="{ 'pt-grid-item--popular': tier.popular }"
       >
+        <!-- No aria-label on the card: its root is a generic <div>, where naming
+             is prohibited (axe aria-prohibited-attr). The tier-name heading below
+             is the card's accessible label, and the <li> carries the list slot. -->
+        <DzCard
+          :variant="tier.popular ? 'outlined' : 'elevated'"
+          padding="lg"
+          class="pt-card"
+          :class="{ 'pt-card--popular': tier.popular }"
+        >
         <!-- Card header ---->
         <div class="pt-card-head">
           <div class="pt-name-row">
@@ -167,8 +174,9 @@ const tiers: PricingTier[] = [
         >
           {{ tier.cta }}
         </DzButton>
-      </DzCard>
-    </div>
+        </DzCard>
+      </li>
+    </ul>
   </section>
 </template>
 
@@ -199,12 +207,22 @@ const tiers: PricingTier[] = [
 
 /* Cards grid -------------------------------------------------------------*/
 .pt-grid {
+  list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--dz-space-5, 1.25rem);
   max-width: 64rem;
   margin: 0 auto;
+  padding: 0;
   align-items: start;
+}
+
+.pt-grid-item {
+  display: flex;
+}
+
+.pt-grid-item > .pt-card {
+  width: 100%;
 }
 
 /* Popular card lifts slightly and gets a coloured ring ------------------*/
@@ -288,8 +306,13 @@ const tiers: PricingTier[] = [
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .pt-card--popular {
+  /* The grid cell is the <li> now, so the span lives there; the card keeps its
+     own visual treatment but stops lifting once it spans the full row. */
+  .pt-grid-item--popular {
     grid-column: 1 / -1;
+  }
+
+  .pt-grid-item--popular > .pt-card--popular {
     transform: none;
   }
 }
@@ -299,7 +322,7 @@ const tiers: PricingTier[] = [
     grid-template-columns: 1fr;
   }
 
-  .pt-card--popular {
+  .pt-grid-item--popular {
     grid-column: auto;
   }
 }

@@ -110,7 +110,7 @@ export const ECOSYSTEM: EcosystemItem[] = [
     icon: 'Sparkles',
     title: 'Animations',
     blurb: 'Motion primitives and ready-made effects — scroll reveals, text and number transitions — that honour prefers-reduced-motion.',
-    meta: '32 effects · 8 categories',
+    meta: '59 effects · 11 categories',
     status: 'available',
     href: '/animations',
   },

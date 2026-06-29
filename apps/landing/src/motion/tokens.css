@@ -32,9 +32,15 @@
   /* Per-child stagger step for cascaded entrances. */
   --dz-anim-stagger-step: 80ms;
 
-  /* Text effects (docs/animations.md §6.2). */
+  /* Text effects (docs/animations.md §6.2, §5.2). */
   --dz-anim-caret-duration: 1s; /* typewriter caret blink */
   --dz-anim-highlight-height: 0.42em; /* highlight-sweep marker thickness */
+  --dz-anim-circular-duration: 18s; /* one full revolution of circular text (39) */
+  --dz-anim-text-flip-duration: 380ms; /* per-phrase vertical flip in/out (40) */
+
+  /* Numbers (docs/animations.md §6.3, §5.3). */
+  --dz-anim-odometer-duration: 1100ms; /* per-digit vertical roll to the target (41) */
+  --dz-anim-odometer-stagger: 60ms; /* extra delay per digit column → left-to-right settle (41) */
 
   /* Backgrounds & hero (docs/animations.md §6.4, effects 15–18). */
   --dz-anim-aurora-1-duration: 16s; /* aurora blob A drift loop */
@@ -68,6 +74,44 @@
   --dz-anim-shake-distance: 7px; /* error-shake peak displacement */
   --dz-anim-burst-duration: 0.52s; /* like-pop spark flight + fade */
   --dz-anim-burst-pop-scale: 1.2; /* like-pop core overshoot */
+
+  /* Connections (docs/animations.md §5.1, effects 37–38). */
+  --dz-anim-orbit-duration: 28s; /* one full ring revolution (orbiting icons) */
+  --dz-anim-beam-dash: 18; /* visible dash length on the normalised (pathLength=100) beam path */
+  --dz-anim-beam-gap: 82; /* gap after the dash (dash + gap = 100 → exactly one travelling pulse) */
+
+  /* Backgrounds v2 (docs/animations.md §5.4, effects 42–45 — Task N6). */
+  --dz-anim-meteor-duration: 5.2s; /* one streak's full diagonal flight (per-streak overridable via --dz-meteor-duration) */
+  --dz-anim-meteor-angle: 215deg; /* travel direction — each streak falls toward the bottom-left */
+  --dz-anim-meteor-distance: 560px; /* travel length along the angle (carries the head fully off-surface) */
+  --dz-anim-meteor-tail: 56px; /* length of the fading tail trailing each head */
+  --dz-anim-blur-stop-1: 1px; /* progressive blur: nearest, lightest stop */
+  --dz-anim-blur-stop-2: 3px; /* progressive blur: middle stop */
+  --dz-anim-blur-stop-3: 8px; /* progressive blur: edge, heaviest stop */
+  --dz-anim-glass-blur: 14px; /* DzGlass frost radius (backdrop blur) */
+  --dz-anim-glass-saturate: 1.6; /* DzGlass backdrop saturation boost */
+
+  /* -----------------------------------------------------------------------
+   * Semantic motion scale v2 (docs/animations.md §2.4, §3.2 — Task N0).
+   *
+   * Asymmetric enter/leave durations + entrance/exit easings, the way MUI's
+   * theme.transitions and Material motion ship them (enter is a touch slower
+   * and decelerates IN; leave is a touch faster and accelerates OUT). These
+   * feed the parametric enter/leave system below. The semantic values that
+   * fall outside the canonical --dz-duration-* scale (225/195/375ms) live
+   * here; the easings reuse the exact --dz-ease-* curves. Promotion to
+   * @dzup-ui/tokens is Open Decision D2-1 — keep landing-local for now.
+   * --------------------------------------------------------------------- */
+  --dz-anim-duration-enter: 225ms; /* entering: slightly slower, decelerating */
+  --dz-anim-duration-exit: 195ms; /* leaving: slightly faster, accelerating */
+  --dz-anim-duration-emphasis: 375ms; /* emphasised / large-surface moves */
+
+  /* Decelerate — cubic-bezier(0, 0, 0.2, 1), exact match for --dz-ease-out. */
+  --dz-anim-ease-entrance: var(--dz-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  /* Accelerate — cubic-bezier(0.4, 0, 1, 1), exact match for --dz-ease-in. */
+  --dz-anim-ease-exit: var(--dz-ease-in, cubic-bezier(0.4, 0, 1, 1));
+  /* Standard / emphasised — cubic-bezier(0.4, 0, 0.2, 1) = --dz-ease-in-out. */
+  --dz-anim-ease-emphasis: var(--dz-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 /* Foundational keyframes (effects extend this set in later tasks). */
@@ -89,6 +133,100 @@
   to {
     opacity: 1;
   }
+}
+
+/* =========================================================================
+ * Parametric enter/leave system (docs/animations.md §3.2 — Task N0).
+ *
+ * Two generic keyframes (`dz-enter` / `dz-leave`) interpolate a single
+ * transform + opacity built ENTIRELY from --dz-enter-* custom properties — the
+ * model tw-animate-css / tailwindcss-primeui / tailwindcss-animate ship. You
+ * compose an entrance by stacking ORTHOGONAL composer utilities that only SET
+ * those props (they never run the animation themselves), so they combine:
+ *
+ *   <div class="dz-animate-in  dz-fade-in  dz-slide-in-from-top">   (enter)
+ *   <div class="dz-animate-out dz-fade-out dz-slide-out-to-top">    (leave)
+ *
+ * …or set the props inline via enterStyle() from src/motion/useEnter.ts:
+ *
+ *   :style="enterStyle({ y: 12, opacity: 0 })" :class="'dz-animate-in'"
+ *
+ * Semantic tokens it reads:  --dz-anim-duration-enter/-exit,
+ *   --dz-anim-ease-entrance/-exit (the scale defined in :root above).
+ * Custom props it reads (all defaulted, so any subset composes cleanly):
+ *   --dz-enter-x / -y (translate), --dz-enter-scale, --dz-enter-rotate,
+ *   --dz-enter-opacity.
+ *
+ * forced-colors (§7): these utilities animate transform/opacity ONLY — never
+ * box-shadow or background-image — so nothing here silently vanishes under
+ * Windows High Contrast. Effects that DO add glow/depth/gradient decoration
+ * must ship a `border`/`outline` fallback under @media (forced-colors: active);
+ * see the border-beam / border-glow rules for the pattern.
+ * ========================================================================= */
+@keyframes dz-enter {
+  from {
+    opacity: var(--dz-enter-opacity, 1);
+    transform: translate3d(var(--dz-enter-x, 0), var(--dz-enter-y, 0), 0)
+      scale(var(--dz-enter-scale, 1)) rotate(var(--dz-enter-rotate, 0));
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0);
+  }
+}
+@keyframes dz-leave {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0);
+  }
+  to {
+    opacity: var(--dz-enter-opacity, 1);
+    transform: translate3d(var(--dz-enter-x, 0), var(--dz-enter-y, 0), 0)
+      scale(var(--dz-enter-scale, 1)) rotate(var(--dz-enter-rotate, 0));
+  }
+}
+
+/* Base runners — pair with one or more composer utilities (or enterStyle()).
+ * `both` fill-mode holds the start frame before and the end frame after. */
+.dz-animate-in {
+  animation: dz-enter var(--dz-anim-duration-enter, 225ms)
+    var(--dz-anim-ease-entrance, cubic-bezier(0, 0, 0.2, 1)) both;
+}
+.dz-animate-out {
+  animation: dz-leave var(--dz-anim-duration-exit, 195ms)
+    var(--dz-anim-ease-exit, cubic-bezier(0.4, 0, 1, 1)) both;
+}
+
+/* Composer utilities — set ONLY the custom props so they stack freely. Each
+ * `-in` variant feeds .dz-animate-in; each matching `-out` variant feeds
+ * .dz-animate-out (same from/to vector, played in reverse by dz-leave). */
+.dz-fade-in,
+.dz-fade-out {
+  --dz-enter-opacity: 0;
+}
+.dz-zoom-in,
+.dz-zoom-out {
+  --dz-enter-scale: 0.95;
+}
+.dz-slide-in-from-top,
+.dz-slide-out-to-top {
+  --dz-enter-y: -16px;
+}
+.dz-slide-in-from-bottom,
+.dz-slide-out-to-bottom {
+  --dz-enter-y: 16px;
+}
+.dz-slide-in-from-left,
+.dz-slide-out-to-left {
+  --dz-enter-x: -16px;
+}
+.dz-slide-in-from-right,
+.dz-slide-out-to-right {
+  --dz-enter-x: 16px;
+}
+.dz-spin-in,
+.dz-spin-out {
+  --dz-enter-rotate: -8deg;
 }
 
 /* =========================================================================
@@ -369,6 +507,17 @@
 .dz-anim-border-glow--reduced::before {
   animation: none;
 }
+/* forced-colors → the conic-gradient ring is a background-image, which Windows
+ * High Contrast forces to `none`, so the glow silently vanishes (§7). Fall back
+ * to a visible system-colour frame on the host so the card edge still reads. */
+@media (forced-colors: active) {
+  .dz-anim-border-glow {
+    border: 1px solid CanvasText;
+  }
+  .dz-anim-border-glow::before {
+    background: none;
+  }
+}
 
 /* =========================================================================
  * Hover micro-interactions (docs/animations.md §6.5, effects 19–23).
@@ -472,6 +621,37 @@
   opacity: 1;
 }
 
+/* Glare card — effect 48. The standalone specular overlay the `v-glare` directive
+ * appends; JS sets only `--dz-glare-x/y` + the active class. Same gloss as the
+ * tilt glare with no rotation, so it can dress a flat card on its own. */
+.dz-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
+  background: radial-gradient(
+    circle at var(--dz-glare-x, 50%) var(--dz-glare-y, 50%),
+    color-mix(in oklch, var(--dz-colors-base-white, #fff) 45%, transparent),
+    transparent 55%
+  );
+  mix-blend-mode: soft-light;
+}
+.dz-glare--active {
+  opacity: 1;
+}
+/* Forced-colors: a soft-light gloss would vanish — keep a hairline so the card
+ * edge still reads in Windows High Contrast. */
+@media (forced-colors: active) {
+  .dz-glare {
+    mix-blend-mode: normal;
+    background: none;
+    border: 1px solid CanvasText;
+  }
+}
+
 /* Border beam — effect 23. A bright arc rides a conic gradient around the card's
  * border band on a loop; the angle is a registered custom property so only the
  * gradient repaints (no box transform → the rounded ring stays true). */
@@ -523,6 +703,17 @@
 .dz-border-beam--reduced::before {
   animation: none;
   background: color-mix(in oklch, var(--dz-colors-primary-400, #818cf8) 36%, transparent);
+}
+/* forced-colors → the conic-gradient beam is a background-image, forced to `none`
+ * in Windows High Contrast, so the ring silently vanishes (§7). Fall back to a
+ * visible system-colour frame on the host so the card edge still reads. */
+@media (forced-colors: active) {
+  .dz-border-beam {
+    border: 1px solid CanvasText;
+  }
+  .dz-border-beam::before {
+    background: none;
+  }
 }
 
 /* =========================================================================
@@ -907,6 +1098,315 @@
 }
 
 /* =========================================================================
+ * Connections (docs/animations.md §5.1, effects 37–38).
+ *
+ * - Animated beam (37): `DzBeam` draws an SVG path between two referenced
+ *   elements and rides a short, bright dash along it. The path is normalised
+ *   (`pathLength="100"`) so a `dash + gap = 100` dasharray shows exactly one
+ *   pulse; animating `stroke-dashoffset` by one full length (`-100`) loops it
+ *   seamlessly. Stroke-only — the box never transforms, so the connector never
+ *   skews. `reverse` flips the travel via `animation-direction`.
+ * - Orbiting icons (38): `DzOrbit` spins each ring frame a full turn while every
+ *   item counter-rotates the same turn (opposite sign) so avatars/badges stay
+ *   upright. Transform (`rotate`) only.
+ *
+ * Reduced motion (OS or the page toggle) freezes both to their static end-state —
+ * a plain connector line / a still ring of icons — via the bound `--reduced`
+ * class the components apply (mirrored in the @media reset at the foot of the
+ * file). The off-screen loop cap below pauses both while a card is scrolled away.
+ * ========================================================================= */
+
+/* Animated beam — effect 37. One full normalised length, so the single dash
+ * returns exactly to where it started: a jump-free loop. */
+@keyframes dz-anim-beam-travel {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+/* Orbiting icons — effect 38. Ring frame turns +360°; items run the reverse so
+ * the net rotation on the slotted content is zero (it stays upright). */
+@keyframes dz-anim-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dz-anim-orbit-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* =========================================================================
+ * Backgrounds v2 (docs/animations.md §5.4, effects 42–45 — Task N6).
+ *
+ * - Meteors (42): `.dz-meteors` spawns N diagonal shooting-star streaks behind a
+ *   hero / DzCard. Each `.dz-meteors__streak` is a token-coloured head with a
+ *   gradient tail, rotated to the travel angle and translated along it on an
+ *   offset loop (transform/opacity only — GPU-cheap). The CONSUMER renders a
+ *   capped number of streaks and sets each one's --dz-meteor-top/-left/-delay/
+ *   -duration (the per-streak placement), exactly like the confetti per-piece
+ *   pattern — so concurrent streaks are bounded by the markup, never runaway.
+ * - Progressive blur (44): `.dz-progressive-blur` stacks three masked
+ *   backdrop-filter stops so the blur ramps from nothing to heavy across a scroll
+ *   edge. It is STATIC (no loop), so reduced motion needs nothing; under
+ *   prefers-reduced-transparency it drops the blur for an opaque surface fade so
+ *   the edge stays legible.
+ *
+ * Glass surface (45) is owned by DzGlass.vue; particle field (43) by
+ * DzParticles.vue (a self-pausing canvas).
+ *
+ * forced-colors (§7): the meteor head + tail are background-image gradients, which
+ * Windows High Contrast forces to `none` — so they are redrawn with the system
+ * `CanvasText` colour (allowed under forced-colors) so the streaks still read.
+ * ========================================================================= */
+
+/* Meteors — effect 42. The streak element is rotated to the travel angle; a
+ * translateX along that rotated axis carries the head + its trailing gradient
+ * diagonally across and off the surface, fading in then out so the loop is seamless. */
+@keyframes dz-anim-meteor {
+  0% {
+    transform: rotate(var(--dz-anim-meteor-angle, 215deg)) translateX(0);
+    opacity: 0;
+  }
+  8%,
+  72% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--dz-anim-meteor-angle, 215deg))
+      translateX(calc(-1 * var(--dz-anim-meteor-distance, 560px)));
+    opacity: 0;
+  }
+}
+
+.dz-meteors {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dz-meteors__streak {
+  position: absolute;
+  top: var(--dz-meteor-top, 0);
+  left: var(--dz-meteor-left, 50%);
+  width: 2px;
+  height: 2px;
+  border-radius: var(--dz-radius-full, 9999px);
+  background: var(--dz-colors-primary-300, #a5b4fc);
+  /* Hint the compositor only while looping; cleared off-screen + under reduced motion. */
+  will-change: transform, opacity;
+  animation: dz-anim-meteor var(--dz-meteor-duration, var(--dz-anim-meteor-duration, 5.2s))
+    linear var(--dz-meteor-delay, 0s) infinite;
+}
+
+/* The fading tail trails the head along its travel axis (solid at the head, fading out). */
+.dz-meteors__streak::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: var(--dz-anim-meteor-tail, 56px);
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--dz-colors-primary-300, #a5b4fc) 92%, transparent),
+    transparent
+  );
+}
+
+/* Page-level "Reduce motion" toggle (JS) → no streaks, no compositor layer. */
+.dz-meteors--reduced .dz-meteors__streak {
+  animation: none;
+  opacity: 0;
+  will-change: auto;
+}
+
+/* forced-colors → the gradient head + tail vanish; redraw both with a system
+ * colour so the streaks still read as a sparse meteor field. */
+@media (forced-colors: active) {
+  .dz-meteors__streak,
+  .dz-meteors__streak::before {
+    background: CanvasText;
+  }
+}
+
+/* Progressive blur — effect 44. Three stacked backdrop-filter stops, each masked
+ * to a band that reaches a little further from the edge, so the blur ramps up
+ * smoothly toward it. Pinned to the bottom edge by default; the host is positioned
+ * by the consumer. Static — no animation. */
+.dz-progressive-blur {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--dz-progressive-blur-height, 32%);
+  z-index: 1;
+  pointer-events: none;
+  backdrop-filter: blur(var(--dz-anim-blur-stop-1, 1px));
+  -webkit-backdrop-filter: blur(var(--dz-anim-blur-stop-1, 1px));
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 75%);
+  mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 75%);
+}
+.dz-progressive-blur::before,
+.dz-progressive-blur::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.dz-progressive-blur::before {
+  backdrop-filter: blur(var(--dz-anim-blur-stop-2, 3px));
+  -webkit-backdrop-filter: blur(var(--dz-anim-blur-stop-2, 3px));
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 14%, transparent 52%);
+  mask-image: linear-gradient(to top, #000 0%, #000 14%, transparent 52%);
+}
+.dz-progressive-blur::after {
+  backdrop-filter: blur(var(--dz-anim-blur-stop-3, 8px));
+  -webkit-backdrop-filter: blur(var(--dz-anim-blur-stop-3, 8px));
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 28%);
+  mask-image: linear-gradient(to top, #000 0%, transparent 28%);
+}
+
+/* prefers-reduced-transparency → drop the blur for an opaque surface fade so the
+ * scroll edge still reads, just without translucency (§7 legibility). */
+@media (prefers-reduced-transparency: reduce) {
+  .dz-progressive-blur {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    background: linear-gradient(
+      to top,
+      var(--dz-surface, #fff) 0%,
+      color-mix(in oklch, var(--dz-surface, #fff) 70%, transparent) 55%,
+      transparent 100%
+    );
+  }
+  .dz-progressive-blur::before,
+  .dz-progressive-blur::after {
+    display: none;
+  }
+}
+
+/* =========================================================================
+ * Scroll & layout v2 (docs/animations.md §5.6, §3.1, effects 52–54 — Task N8).
+ *
+ * Modern CSS scroll-driven animations (animation-timeline: view()/scroll()) run
+ * on the compositor — immune to a busy main thread where JS scroll listeners jank
+ * (§3.1 perf corollary). They are NOT Baseline (Chrome 115, Safari 26, Firefox
+ * flag only), so EVERY rule here is pure progressive enhancement, triple-gated:
+ *   1. @supports (animation-timeline: view()) — only where the platform has it.
+ *   2. @media (prefers-reduced-motion: no-preference) — never under OS reduced.
+ *   3. :not(.*--reduced) — the page-level "Reduce motion" toggle (JS, useReduced-
+ *      Motion) the @media can't see; the component binds the class.
+ * The components/demos ship the JS floor (useInView + the N0 .dz-animate-in
+ * utilities / useScrollProgress / useSticky), so where the native path is absent
+ * the content is always fully visible and correct — never stuck at opacity:0.
+ * transform/opacity only; the from-state opacity:0 lives ONLY inside @supports, so
+ * a non-supporting engine never paints a hidden cell.
+ * ========================================================================= */
+:root {
+  /* Per-cell shift of each bento cell's view() entry range → the reveal cascade
+   * (the scroll-driven analogue of --reveal-delay; consumer caps the cell count). */
+  --dz-anim-bento-stagger: 6%;
+  /* Capped travel of the scroll-linked back layer (modernised parallax, §5.6). */
+  --dz-anim-scroll-parallax: 40px;
+}
+
+/* --- 52 Bento reveal — per-cell entrance ---------------------------------- */
+@keyframes dz-anim-bento-cell {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Native path: each cell's progress is tied to its OWN box entering the scrollport
+ * (animation-timeline: view()); a per-cell --dz-bento-i offsets the entry range so
+ * the cells cascade in as the grid scrolls past. JS fallback (DzBentoReveal +
+ * useInView) adds .dz-animate-in with a staggered animation-delay instead. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dz-bento--native:not(.dz-bento--reduced) .dz-bento__cell {
+      animation: dz-anim-bento-cell linear both;
+      animation-timeline: view();
+      animation-range: entry
+        calc(var(--dz-bento-i, 0) * var(--dz-anim-bento-stagger, 6%)) cover 45%;
+    }
+  }
+}
+
+/* --- 53 Sticky / pinned scroll — progress bar ----------------------------- */
+@keyframes dz-anim-sticky-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* The bar's fill is the continuous scroll-linked motion, so offload it to the
+ * compositor where supported: animation-timeline: scroll() binds it to the demo's
+ * own internal scroll container (nearest scrollable ancestor). The JS floor
+ * (useSticky) sets --sticky-progress on the same bar (scaleX) for every other
+ * engine; the discrete active-step index stays JS in both paths. */
+.dz-sticky__bar {
+  transform-origin: left center;
+  transform: scaleX(var(--sticky-progress, 0));
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dz-sticky--native:not(.dz-sticky--reduced) .dz-sticky__bar {
+      animation: dz-anim-sticky-bar linear both;
+      animation-timeline: scroll();
+    }
+  }
+}
+
+/* --- 54 Scroll-linked transforms — modernised parallax -------------------- */
+@keyframes dz-anim-scroll-back {
+  from {
+    transform: translate3d(0, calc(-1 * var(--dz-anim-scroll-parallax, 40px)), 0);
+  }
+  to {
+    transform: translate3d(0, var(--dz-anim-scroll-parallax, 40px), 0);
+  }
+}
+@keyframes dz-anim-scroll-fore {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* The two layers run STATIC by default (no animation → fully visible end-state),
+ * the correct floor under reduced motion and where the native path is absent.
+ * Where supported + motion allowed, bind each layer's transform/opacity to the
+ * element's own view() progress: the back layer drifts (parallax over `cover`),
+ * the foreground fades + rises as it enters. The JS floor (useScrollProgress) sets
+ * the same transforms inline in DzScrollLinkedDemo when this block doesn't apply. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dz-scroll-linked--native:not(.dz-scroll-linked--reduced) .dz-scroll-linked__back {
+      animation: dz-anim-scroll-back linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+    .dz-scroll-linked--native:not(.dz-scroll-linked--reduced) .dz-scroll-linked__fore {
+      animation: dz-anim-scroll-fore linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
+
+/* =========================================================================
  * Off-screen loop cap (docs/animations.md §7 — "lazy-init below-the-fold demos,
  * cap concurrent looping animations"). The gallery harness (AnimationCard) tags a
  * demo's preview stage `.dz-stage-idle` while it is scrolled out of view. Pausing
@@ -923,7 +1423,12 @@
   animation-play-state: paused !important;
 }
 .dz-stage-idle .dz-marquee__track,
-.dz-stage-idle .dz-aurora__blob {
+.dz-stage-idle .dz-aurora__blob,
+.dz-stage-idle .dz-orbit__ring,
+.dz-stage-idle .dz-orbit__counter,
+.dz-stage-idle .dz-circular__ring,
+.dz-stage-idle .dz-beam__pulse,
+.dz-stage-idle .dz-meteors__streak {
   will-change: auto !important;
 }
 
@@ -938,6 +1443,17 @@
   [class*="dz-anim-"] {
     animation: none !important;
     transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+
+  /* Parametric enter/leave (Task N0) — the `.dz-animate-in/out` classes are NOT
+   * `dz-anim-`-prefixed, so the reset above can't reach them. Collapse to an
+   * opacity-only cross-fade: forcing transform:none neutralises every
+   * translate/scale/rotate the keyframe sets while the opacity tween survives
+   * (WCAG 2.3.3 excludes opacity from "motion animation"); shorten to fast. */
+  .dz-animate-in,
+  .dz-animate-out {
+    animation-duration: var(--dz-duration-fast, 150ms) !important;
     transform: none !important;
   }
 
@@ -1017,6 +1533,27 @@
     animation: none !important;
   }
   .dz-burst__spark {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Connections (§5.1) — the beam pulse + orbit ring/counter loops live on
+   * non-`dz-anim-`-prefixed classes; freeze each to its static end-state (a
+   * plain connector line / a still, upright ring of icons). */
+  .dz-beam__pulse {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .dz-orbit__ring,
+  .dz-orbit__counter {
+    animation: none !important;
+  }
+
+  /* Backgrounds v2 (§5.4) — the meteor streaks loop on the non-`dz-anim-`-prefixed
+   * `.dz-meteors__streak` class; freeze them out (the surface reads without the
+   * decoration). Particle field + glass own their own reduced-motion handling
+   * (DzParticles draws one static frame; DzGlass has no motion). */
+  .dz-meteors__streak {
     animation: none !important;
     opacity: 0 !important;
   }

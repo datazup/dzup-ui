@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "custom-cursor",
+  "type": "registry:block",
+  "title": "Custom cursor",
+  "description": "A soft blob trails the pointer inside a region; native cursor returns on leave.",
+  "files": [
+    {
+      "path": "custom-cursor.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCursor, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- The blob eases toward the pointer each frame (transform only, rAF) and is\n       non-interactive, so it never traps the pointer — links inside stay\n       clickable. Touch/keyboard keep the native cursor; off under reduced motion. -->\n  <DzCursor :disabled=\"reduced\" :size=\"36\">\n    <!-- …any surface / content… -->\n  </DzCursor>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

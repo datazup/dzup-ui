@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "directional-slide",
+  "type": "registry:block",
+  "title": "Directional slide-in",
+  "description": "Enters from the left, right, up or down — pair with feature rows.",
+  "files": [
+    {
+      "path": "directional-slide.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { vReveal } from '../motion'\n</script>\n\n<template>\n  <DzCard v-reveal.left variant=\"outlined\" padding=\"md\">\n    <DzText size=\"sm\">Enters from the left</DzText>\n  </DzCard>\n  <DzCard v-reveal.right variant=\"outlined\" padding=\"md\">\n    <DzText size=\"sm\">Enters from the right</DzText>\n  </DzCard>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

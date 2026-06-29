@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "blur-in",
+  "type": "registry:block",
+  "title": "Blur-in",
+  "description": "Resolves from a soft blur to sharp while fading in — great for media.",
+  "files": [
+    {
+      "path": "blur-in.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzImage } from '@dzup-ui/core'\nimport { vReveal } from '../motion'\n</script>\n\n<template>\n  <DzImage v-reveal.blur :src=\"src\" alt=\"…\" fit=\"cover\" aspect-ratio=\"16/9\" />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzImage"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

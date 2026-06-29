@@ -62,7 +62,7 @@ function choose(label: string): void {
         <DzDropdownMenu>
           <DzDropdownMenuTrigger as-child>
             <button type="button" class="am-trigger" aria-label="Open account menu">
-              <DzAvatar fallback="JD" size="sm" />
+              <DzAvatar fallback="JD" alt="Jamie Doe" size="sm" />
               <span class="am-trigger-name">Jamie Doe</span>
               <ChevronDown :size="15" class="am-trigger-caret" aria-hidden="true" />
             </button>
@@ -70,7 +70,7 @@ function choose(label: string): void {
 
           <DzDropdownMenuContent align="end" :side-offset="8">
             <div class="am-menu-head">
-              <DzAvatar fallback="JD" size="md" />
+              <DzAvatar fallback="JD" alt="Jamie Doe" size="md" />
               <span class="am-menu-meta">
                 <span class="am-menu-name">
                   <DzText as="span" size="sm" weight="semibold">Jamie Doe</DzText>

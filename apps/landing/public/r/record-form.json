@@ -1,0 +1,31 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "record-form",
+  "type": "registry:block",
+  "title": "Create record",
+  "description": "A \"create issue\" panel built from the selection inputs — a searchable DzCombobox assignee, a DzMultiSelect labels picker, a single-select DzListbox priority, plus title and description fields.",
+  "files": [
+    {
+      "path": "record-form.vue",
+      "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzCombobox,\n  DzFormField,\n  DzFormLabel,\n  DzHeading,\n  DzInput,\n  DzListbox,\n  DzMultiSelect,\n  DzText,\n  DzTextarea,\n} from '@dzup-ui/core'\nimport type { DzListboxOption, DzSelectItem } from '@dzup-ui/core'\nimport { SignalHigh, SignalLow, SignalMedium } from 'lucide-vue-next'\nimport { ref } from 'vue'\n\n/**\n * Record form — a \"create issue\" panel built from the selection inputs.\n *\n * A DzInput title, a searchable DzCombobox assignee, a DzMultiSelect for labels\n * (chips), a compact single-select DzListbox for priority (with icons + check\n * indicators), and a DzTextarea description. Per the combobox accessible-name\n * rule, the Combobox and MultiSelect carry explicit `aria-label`s. Local ref()\n * state only.\n *\n * Forms family: DzCombobox, DzMultiSelect, DzListbox, DzFormField, DzFormLabel.\n * Inputs family: DzInput, DzTextarea.\n */\n\nconst title = ref('')\nconst assignee = ref('')\nconst labels = ref<string[]>(['bug'])\nconst priority = ref<string | null>('medium')\nconst description = ref('')\n\nconst ASSIGNEES: DzSelectItem[] = [\n  { label: 'Jamie Rivera', value: 'jamie' },\n  { label: 'Priya Patel', value: 'priya' },\n  { label: 'Marco Rossi', value: 'marco' },\n  { label: 'Lena Müller', value: 'lena' },\n  { label: 'Sam Okafor', value: 'sam' },\n]\n\nconst LABELS: DzSelectItem[] = [\n  { label: 'Bug', value: 'bug' },\n  { label: 'Feature', value: 'feature' },\n  { label: 'Documentation', value: 'docs' },\n  { label: 'Good first issue', value: 'good-first' },\n  { label: 'Needs triage', value: 'triage' },\n]\n\nconst PRIORITIES: DzListboxOption[] = [\n  { label: 'Low', value: 'low', icon: SignalLow },\n  { label: 'Medium', value: 'medium', icon: SignalMedium },\n  { label: 'High', value: 'high', icon: SignalHigh },\n]\n</script>\n\n<template>\n  <section class=\"rf-wrap\" aria-labelledby=\"rf-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"rf-card\">\n      <header class=\"rf-head\">\n        <DzHeading id=\"rf-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          Create issue\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" as=\"p\">\n          Describe the problem and route it to the right person.\n        </DzText>\n      </header>\n\n      <form class=\"rf-form\" @submit.prevent>\n        <DzFormField required>\n          <DzFormLabel>Title</DzFormLabel>\n          <DzInput v-model=\"title\" placeholder=\"Summarize the issue\" />\n        </DzFormField>\n\n        <div class=\"rf-grid\">\n          <DzFormField required>\n            <DzFormLabel>Assignee</DzFormLabel>\n            <DzCombobox\n              v-model=\"assignee\"\n              :items=\"ASSIGNEES\"\n              placeholder=\"Search people…\"\n              aria-label=\"Assignee\"\n            />\n          </DzFormField>\n\n          <DzFormField>\n            <DzFormLabel>Labels</DzFormLabel>\n            <DzMultiSelect\n              v-model=\"labels\"\n              :items=\"LABELS\"\n              placeholder=\"Add labels…\"\n              aria-label=\"Labels\"\n            />\n          </DzFormField>\n        </div>\n\n        <DzFormField>\n          <DzFormLabel>Priority</DzFormLabel>\n          <DzListbox\n            v-model=\"priority\"\n            :options=\"PRIORITIES\"\n            checkmark\n            aria-label=\"Priority\"\n            class=\"rf-listbox\"\n          />\n        </DzFormField>\n\n        <DzFormField required>\n          <DzFormLabel>Description</DzFormLabel>\n          <DzTextarea\n            v-model=\"description\"\n            :rows=\"3\"\n            auto-resize\n            placeholder=\"Steps to reproduce, expected vs. actual…\"\n          />\n        </DzFormField>\n\n        <div class=\"rf-actions\">\n          <DzButton variant=\"ghost\" tone=\"neutral\">Cancel</DzButton>\n          <DzButton type=\"submit\" variant=\"solid\" tone=\"primary\">Create issue</DzButton>\n        </div>\n      </form>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.rf-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.rf-card {\n  width: 100%;\n  max-width: 34rem;\n}\n\n.rf-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.rf-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.rf-grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.rf-listbox {\n  max-width: 16rem;\n}\n\n.rf-actions {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--dz-space-2, 0.5rem);\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n\n@media (max-width: 540px) {\n  .rf-grid {\n    grid-template-columns: 1fr;\n  }\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzCombobox",
+    "DzMultiSelect",
+    "DzListbox",
+    "DzInput",
+    "DzTextarea",
+    "DzFormField",
+    "DzFormLabel",
+    "DzButton",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

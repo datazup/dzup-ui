@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "progress-fill",
+  "type": "registry:block",
+  "title": "Progress fill",
+  "description": "A DzProgress bar fills from 0 to its value the moment it scrolls into view.",
+  "files": [
+    {
+      "path": "progress-fill.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue'\nimport { DzProgress } from '@dzup-ui/core'\nimport { useInView, useReducedMotion } from '../motion'\n\nconst root = ref<HTMLElement | null>(null)\nconst inView = useInView(root)\nconst reduced = useReducedMotion()\n\n// Filled once in view; immediately filled (no sweep) under reduced motion.\nconst filled = computed(() => reduced.value || inView.value)\n</script>\n\n<template>\n  <div ref=\"root\">\n    <DzProgress :value=\"filled ? 92 : 0\" :max=\"100\" tone=\"success\" aria-label=\"Coverage\" />\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzProgress"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "success-check",
+  "type": "registry:block",
+  "title": "Success check",
+  "description": "An SVG ring and tick draw themselves in with a small pop to confirm a completed action.",
+  "files": [
+    {
+      "path": "success-check.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzButton } from '@dzup-ui/core'\nimport { DzSuccessCheck } from '../motion'\n\n// Flip `active` once the action resolves; the ring + tick draw via stroke-dashoffset.\nconst done = ref(false)\n</script>\n\n<template>\n  <DzSuccessCheck v-if=\"done\" :active=\"true\" tone=\"success\" label=\"Payment confirmed\" />\n  <DzButton v-else variant=\"solid\" tone=\"primary\" @click=\"done = true\">\n    Confirm payment\n  </DzButton>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzButton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

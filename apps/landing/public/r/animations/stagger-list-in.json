@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "stagger-list-in",
+  "type": "registry:block",
+  "title": "Stagger list-in",
+  "description": "List items enter one-by-one on view — pair with avatars, lists or menus.",
+  "files": [
+    {
+      "path": "stagger-list-in.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzAvatar, DzBadge, DzListItem } from '@dzup-ui/core'\nimport { DzStagger } from '../motion'\n\nconst team = [\n  { name: 'Ada Lovelace', role: 'Design', tone: 'primary', initials: 'AL' },\n  { name: 'Alan Turing', role: 'Engineering', tone: 'info', initials: 'AT' },\n]\n</script>\n\n<template>\n  <!-- DzStagger gives each direct child an incremental --reveal-delay. -->\n  <DzStagger as=\"ul\" :step=\"90\">\n    <DzListItem v-for=\"m in team\" :key=\"m.name\">\n      <template #prefix><DzAvatar :fallback=\"m.initials\" size=\"sm\" :alt=\"m.name\" /></template>\n      {{ m.name }}\n      <template #suffix><DzBadge variant=\"subtle\" :tone=\"m.tone\" size=\"sm\">{{ m.role }}</DzBadge></template>\n    </DzListItem>\n  </DzStagger>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzList",
+    "DzAvatar",
+    "DzBadge"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

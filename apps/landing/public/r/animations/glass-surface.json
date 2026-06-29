@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "glass-surface",
+  "type": "registry:block",
+  "title": "Glass surface",
+  "description": "A frosted panel over a busy backdrop; opaque raised surface when transparency is reduced.",
+  "files": [
+    {
+      "path": "glass-surface.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzHeading, DzText } from '@dzup-ui/core'\nimport { DzGlass } from '../motion'\n</script>\n\n<template>\n  <!-- DzGlass frosts whatever sits behind it (backdrop-filter blur + saturate).\n       prefers-reduced-transparency → opaque raised surface; forced-colors → a\n       solid system surface + border. Token-only, light + dark. -->\n  <div class=\"busy-backdrop\">\n    <DzGlass :blur=\"'16px'\" padding=\"24px\">\n      <DzHeading :level=\"2\" size=\"md\" weight=\"semibold\">Frosted panel</DzHeading>\n      <DzText size=\"sm\" tone=\"muted\">Legible over a busy backdrop.</DzText>\n    </DzGlass>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzGlass",
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

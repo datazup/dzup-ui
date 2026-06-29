@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "particle-field",
+  "type": "registry:block",
+  "title": "Particle field",
+  "description": "A constellation of dots drifts, links near neighbours and eases aside under the pointer.",
+  "files": [
+    {
+      "path": "particle-field.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzHeading } from '@dzup-ui/core'\nimport { DzParticles } from '../motion'\n</script>\n\n<template>\n  <!-- Parent must be positioned; DzParticles fills it (aria-hidden, non-interactive).\n       The canvas loop self-pauses off-screen; touch/keyboard + reduced motion get a\n       single static frame of dots + links. count is capped to the surface area. -->\n  <section class=\"hero\">\n    <DzParticles :count=\"48\" :link-distance=\"108\" />\n    <DzHeading :level=\"1\" size=\"3xl\" weight=\"bold\">Constellation</DzHeading>\n  </section>\n</template>\n\n<style scoped>\n.hero { position: relative; overflow: hidden; }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzParticles"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

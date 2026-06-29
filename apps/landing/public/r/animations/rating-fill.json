@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "rating-fill",
+  "type": "registry:block",
+  "title": "Rating fill",
+  "description": "A DzRating fills star-by-star when scrolled into view; final value under reduced motion.",
+  "files": [
+    {
+      "path": "rating-fill.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, watch, onBeforeUnmount } from 'vue'\nimport { DzRating } from '@dzup-ui/core'\nimport { useInView, useReducedMotion } from '../motion'\n\nconst root = ref<HTMLElement | null>(null)\nconst inView = useInView(root)\nconst reduced = useReducedMotion()\nconst rating = ref(0)\nlet timer: ReturnType<typeof setTimeout> | null = null\n\nfunction fillStep() {\n  if (rating.value >= 4.5) return\n  rating.value += 0.5\n  timer = setTimeout(fillStep, 140)\n}\n\nwatch([inView, reduced], ([visible, isReduced]) => {\n  if (isReduced) rating.value = 4.5\n  else if (visible && rating.value === 0) fillStep()\n}, { immediate: true })\n\nonBeforeUnmount(() => timer && clearTimeout(timer))\n</script>\n\n<template>\n  <div ref=\"root\">\n    <DzRating v-model:value=\"rating\" :count=\"5\" allow-half readonly tone=\"warning\" />\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzRating"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

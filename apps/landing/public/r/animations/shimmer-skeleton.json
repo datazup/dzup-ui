@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "shimmer-skeleton",
+  "type": "registry:block",
+  "title": "Shimmer skeleton",
+  "description": "A soft highlight sweeps across loading placeholders to signal progress.",
+  "files": [
+    {
+      "path": "shimmer-skeleton.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzSkeleton } from '@dzup-ui/core'\nimport { DzShimmer } from '../motion'\n</script>\n\n<template>\n  <!-- Wrap placeholders; pass :animate=\"false\" so the sweep is the only motion. -->\n  <DzShimmer>\n    <DzSkeleton variant=\"circular\" width=\"44px\" height=\"44px\" :animate=\"false\" />\n    <DzSkeleton variant=\"text\" :lines=\"3\" :animate=\"false\" />\n  </DzShimmer>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzSkeleton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

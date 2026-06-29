@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "parallax-drift",
+  "type": "registry:block",
+  "title": "Scroll parallax drift",
+  "description": "A background layer drifts at a fraction of the scroll speed, travel capped.",
+  "files": [
+    {
+      "path": "parallax-drift.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue'\nimport { useScrollProgress, useReducedMotion } from '../motion'\n\nconst root = ref<HTMLElement | null>(null)\nconst progress = useScrollProgress(root)\nconst reduced = useReducedMotion()\n\nconst layerStyle = computed(() =>\n  reduced.value\n    ? { transform: 'none' }\n    : { transform: `translate3d(0, ${(0.5 - progress.value) * 96}px, 0)` },\n)\n</script>\n\n<template>\n  <div ref=\"root\" class=\"stage\">\n    <div class=\"layer\" :style=\"layerStyle\" aria-hidden=\"true\" />\n    <slot />\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

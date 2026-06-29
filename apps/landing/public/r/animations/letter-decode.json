@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "letter-decode",
+  "type": "registry:block",
+  "title": "Letter decode",
+  "description": "Scrambles then resolves characters left-to-right when scrolled into view.",
+  "files": [
+    {
+      "path": "letter-decode.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\nimport { DzTextDecode } from '../motion'\n</script>\n\n<template>\n  <DzText size=\"sm\" weight=\"semibold\">\n    <DzTextDecode text=\"ECOSYSTEM · ANIMATIONS\" />\n  </DzText>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "highlight-sweep",
+  "type": "registry:block",
+  "title": "Highlight sweep",
+  "description": "A marker grows behind an emphasised word as the line scrolls into view.",
+  "files": [
+    {
+      "path": "highlight-sweep.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue'\nimport { DzText } from '@dzup-ui/core'\nimport { useInView, useReducedMotion } from '../motion'\n\nconst root = ref<HTMLElement | null>(null)\nconst inView = useInView(root)\nconst reduced = useReducedMotion()\n\nconst mark = computed(() => ({\n  'dz-highlight-sweep': true,\n  'dz-highlight-sweep--in': inView.value,\n  'dz-highlight-sweep--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <div ref=\"root\">\n    <DzText size=\"lg\">Motion that feels <strong :class=\"mark\">effortless</strong></DzText>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

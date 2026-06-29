@@ -66,7 +66,7 @@ function resetFilters(): void {
       <DzPopover>
         <DzPopoverTrigger>
           <button type="button" class="ip-chip" aria-label="Preview Ada Lovelace">
-            <DzAvatar fallback="AL" size="sm" />
+            <DzAvatar fallback="AL" alt="Ada Lovelace" size="sm" />
             <span class="ip-chip-name">@ada</span>
             <ChevronDown :size="14" aria-hidden="true" class="ip-chip-caret" />
           </button>
@@ -74,7 +74,7 @@ function resetFilters(): void {
         <DzPopoverContent side="bottom" align="start" size="md">
           <div class="ip-card">
             <div class="ip-card-head">
-              <DzAvatar fallback="AL" size="lg" />
+              <DzAvatar fallback="AL" alt="Ada Lovelace" size="lg" />
               <div class="ip-card-id">
                 <DzText size="sm" weight="semibold" as="span">Ada Lovelace</DzText>
                 <DzText size="xs" tone="muted" as="span">@ada · Engineering</DzText>

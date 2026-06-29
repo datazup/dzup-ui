@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "aurora-drift",
+  "type": "registry:block",
+  "title": "Aurora drift",
+  "description": "Soft brand blobs drift on slow, offset loops behind a hero or CTA surface.",
+  "files": [
+    {
+      "path": "aurora-drift.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzHeading } from '@dzup-ui/core'\nimport { DzAurora } from '../motion'\n</script>\n\n<template>\n  <!-- Parent must be positioned; DzAurora fills it, aria-hidden + non-interactive. -->\n  <section class=\"hero\">\n    <DzAurora />\n    <DzHeading :level=\"1\" size=\"3xl\" weight=\"bold\">Motion, ready to drop in</DzHeading>\n  </section>\n</template>\n\n<style scoped>\n.hero { position: relative; overflow: hidden; }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzAurora"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

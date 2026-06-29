@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "animated-grid",
+  "type": "registry:block",
+  "title": "Animated grid/dots",
+  "description": "A subtle line or dot pattern pans slowly behind a section as an ambient backdrop.",
+  "files": [
+    {
+      "path": "animated-grid.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n// Swap 'dz-anim-grid' for 'dz-anim-dots' for the dotted variant.\nconst grid = computed(() => ({\n  'dz-anim-grid': true,\n  'dz-anim-grid--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <section class=\"stage\">\n    <div :class=\"grid\" />\n    <div class=\"content\"><!-- section content --></div>\n  </section>\n</template>\n\n<style scoped>\n.stage { position: relative; overflow: hidden; }\n.content { position: relative; z-index: 1; }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

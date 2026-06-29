@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "count-up",
+  "type": "registry:block",
+  "title": "Count-up",
+  "description": "Figures tween from 0 to their target when scrolled into view, with formatting.",
+  "files": [
+    {
+      "path": "count-up.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCountUp } from '../motion'\n</script>\n\n<template>\n  <!-- Thousands separators on by default; static prefix/suffix via slots. -->\n  <DzCountUp :value=\"48200\" tone=\"primary\" />\n  <DzCountUp :value=\"12\" suffix=\"k\" />\n  <DzCountUp :value=\"99\" suffix=\"+\" />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzAnimatedNumber"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

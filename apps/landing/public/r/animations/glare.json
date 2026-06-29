@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "glare",
+  "type": "registry:block",
+  "title": "Glare card",
+  "description": "A glossy specular highlight tracks the pointer across a card — the gloss, no tilt.",
+  "files": [
+    {
+      "path": "glare.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzHeading } from '@dzup-ui/core'\nimport { vGlare, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- rAF pointer; opacity/background-position only. The glare is an aria-hidden,\n       pointer-events:none overlay so the card's click target never moves. Flat\n       surface on touch/keyboard and under reduced motion (via disabled). -->\n  <DzCard v-glare=\"{ disabled: reduced }\" variant=\"elevated\" padding=\"lg\">\n    <DzHeading :level=\"4\" size=\"lg\" weight=\"bold\">Membership card</DzHeading>\n  </DzCard>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzImageCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

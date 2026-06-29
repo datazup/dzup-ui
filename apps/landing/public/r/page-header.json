@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "page-header",
+  "type": "registry:block",
+  "title": "Page header",
+  "description": "Breadcrumb trail, page title with inline status badge, and a row of contextual action buttons.",
+  "files": [
+    {
+      "path": "page-header.vue",
+      "content": "<script setup lang=\"ts\">\n/**\n * Page header — breadcrumb, page title, status badge, action buttons.\n *\n * A surface-level page header pattern: location breadcrumb, an H4 page\n * title with a status DzBadge inline, and a right-aligned row of action\n * buttons. Self-contained — no props, no router, local state only.\n *\n * Heading level: H4 so the visual hierarchy nests under the BlockPreview's\n * H3 title. On a real page, raise :level to match your document outline.\n */\nimport {\n  DzBadge,\n  DzBreadcrumb,\n  DzBreadcrumbItem,\n  DzButton,\n  DzHeading,\n} from '@dzup-ui/core'\nimport { Download, Plus, Share2 } from 'lucide-vue-next'\n</script>\n\n<template>\n  <section class=\"ph-wrap\" aria-labelledby=\"ph-title\">\n    <!-- Breadcrumb row -->\n    <DzBreadcrumb aria-label=\"Page location\" class=\"ph-breadcrumb\">\n      <DzBreadcrumbItem href=\"#\">Workspace</DzBreadcrumbItem>\n      <DzBreadcrumbItem href=\"#\">Projects</DzBreadcrumbItem>\n      <DzBreadcrumbItem :current=\"true\">Q3 Launch Plan</DzBreadcrumbItem>\n    </DzBreadcrumb>\n\n    <!-- Title + actions row -->\n    <div class=\"ph-row\">\n      <div class=\"ph-left\">\n        <div class=\"ph-title-group\">\n          <DzHeading id=\"ph-title\" :level=\"4\" size=\"2xl\" weight=\"bold\">\n            Q3 Launch Plan\n          </DzHeading>\n          <DzBadge variant=\"subtle\" tone=\"success\" size=\"sm\">In progress</DzBadge>\n        </div>\n      </div>\n\n      <div class=\"ph-actions\">\n        <DzButton variant=\"ghost\" tone=\"neutral\" size=\"sm\">\n          <template #prefix><Share2 :size=\"15\" aria-hidden=\"true\" /></template>\n          Share\n        </DzButton>\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"sm\">\n          <template #prefix><Download :size=\"15\" aria-hidden=\"true\" /></template>\n          Export\n        </DzButton>\n        <DzButton variant=\"solid\" tone=\"primary\" size=\"sm\">\n          <template #prefix><Plus :size=\"15\" aria-hidden=\"true\" /></template>\n          New task\n        </DzButton>\n      </div>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.ph-wrap {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n  padding: var(--dz-space-6, 1.5rem);\n  background: var(--dz-background, #fff);\n  border-radius: var(--dz-radius-lg, 0.5rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n}\n\n.ph-breadcrumb {\n  /* Breadcrumb sits above the main title row */\n}\n\n.ph-row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--dz-space-4, 1rem);\n  flex-wrap: wrap;\n}\n\n.ph-left {\n  min-width: 0;\n}\n\n.ph-title-group {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  flex-wrap: wrap;\n}\n\n.ph-actions {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n  flex-wrap: wrap;\n}\n\n@media (max-width: 560px) {\n  .ph-row {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n\n  .ph-actions {\n    width: 100%;\n  }\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzBreadcrumb",
+    "DzBreadcrumbItem",
+    "DzHeading",
+    "DzBadge",
+    "DzButton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

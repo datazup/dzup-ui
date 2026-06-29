@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "sheen-sweep",
+  "type": "registry:block",
+  "title": "Sheen sweep",
+  "description": "A diagonal light streak sweeps across a button or card on hover.",
+  "files": [
+    {
+      "path": "sheen-sweep.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzButton } from '@dzup-ui/core'\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\nconst sheen = computed(() => ({\n  'dz-sheen': true,\n  'dz-sheen--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <DzButton variant=\"solid\" tone=\"primary\" :class=\"sheen\">Get started</DzButton>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzButton",
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "spotlight-follow",
+  "type": "registry:block",
+  "title": "Spotlight follow",
+  "description": "A radial light tracks the cursor across a surface; static glow under reduced motion.",
+  "files": [
+    {
+      "path": "spotlight-follow.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzHeading } from '@dzup-ui/core'\nimport { DzSpotlight } from '../motion'\n</script>\n\n<template>\n  <DzSpotlight>\n    <DzCard variant=\"elevated\" padding=\"lg\">\n      <DzHeading :level=\"2\" size=\"lg\">Follow the light</DzHeading>\n    </DzCard>\n  </DzSpotlight>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

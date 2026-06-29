@@ -101,7 +101,7 @@ function view(order: Order): void {
 
     <ul class="ds-list">
       <li v-for="order in orders" :key="order.id" class="ds-row">
-        <DzAvatar :fallback="order.initials" size="sm" />
+        <DzAvatar :fallback="order.initials" :alt="order.customer" size="sm" />
         <span class="ds-row-main">
           <DzText size="sm" weight="medium" as="span">{{ order.customer }}</DzText>
           <DzText size="xs" tone="muted" as="span">{{ order.id }} · {{ order.placed }}</DzText>
@@ -133,7 +133,7 @@ function view(order: Order): void {
 
         <div class="ds-sheet-body">
           <div class="ds-customer">
-            <DzAvatar :fallback="selected.initials" size="md" />
+            <DzAvatar :fallback="selected.initials" :alt="selected.customer" size="md" />
             <div class="ds-customer-meta">
               <DzText size="sm" weight="semibold" as="span">{{ selected.customer }}</DzText>
               <DzText size="xs" tone="muted" as="span">{{ selected.email }}</DzText>

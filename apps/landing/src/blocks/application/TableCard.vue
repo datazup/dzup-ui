@@ -131,7 +131,7 @@ function onFilter(value: string) {
             <DzTableRow v-for="row in pageRows" :key="row.id">
               <DzTableCell>
                 <div class="member-cell">
-                  <DzAvatar :fallback="row.name.slice(0, 1)" size="sm" />
+                  <DzAvatar :fallback="row.name.slice(0, 1)" :alt="row.name" size="sm" />
                   <div class="member-meta">
                     <DzText size="sm" weight="medium" as="div">{{ row.name }}</DzText>
                     <DzText size="xs" tone="muted" as="div">{{ row.email }}</DzText>

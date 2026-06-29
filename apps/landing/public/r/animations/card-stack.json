@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "card-stack",
+  "type": "registry:block",
+  "title": "Card stack / swap",
+  "description": "Stacked cards cycle the front card to the back — morphs via View Transitions, FLIPs otherwise.",
+  "files": [
+    {
+      "path": "card-stack.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzHeading, DzText } from '@dzup-ui/core'\nimport { DzCardStack, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\nconst cards = [\n  { title: 'Design tokens', body: 'One source of truth.' },\n  { title: 'Accessible motion', body: 'Respects reduced motion.' },\n  { title: 'Copy-paste demos', body: 'Drop a snippet in and ship.' },\n]\n</script>\n\n<template>\n  <!-- Click the stack or the keyboard-operable \"Next\" button to advance. The swap\n       uses startViewTransition where supported, FLIP (WAAPI) otherwise, and is\n       instant under reduced motion (via disabled). -->\n  <DzCardStack :items=\"cards\" :disabled=\"reduced\">\n    <template #card=\"{ item }\">\n      <DzCard variant=\"elevated\" padding=\"lg\">\n        <DzHeading :level=\"4\" size=\"lg\" weight=\"bold\">{{ item.title }}</DzHeading>\n        <DzText size=\"sm\" tone=\"muted\">{{ item.body }}</DzText>\n      </DzCard>\n    </template>\n  </DzCardStack>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

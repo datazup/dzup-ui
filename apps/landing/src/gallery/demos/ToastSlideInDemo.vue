@@ -13,9 +13,16 @@ import ToastSlideInControls from './ToastSlideInControls.vue'
  * landing build doesn't ship those animate utilities. The viewport, normally
  * `position: fixed`, is constrained to this card so the demo stays self-contained.
  *
+ * Native path (docs/animations.md §3.1, §4): where `transition-behavior:
+ * allow-discrete` is supported (the `@starting-style` pair), the scoped style
+ * upgrades the entrance to a `@starting-style` transition instead of a keyframe —
+ * the entry state is declared once and the browser animates from it on insertion,
+ * no JS. Everywhere else the `toast-in` keyframe (keyed on Reka's data-state)
+ * remains the floor. The exit keeps the `toast-out` keyframe so Reka's Presence
+ * detects `animationend` and unmounts cleanly.
+ *
  * Under reduced motion (OS or the page toggle) toasts appear instantly with no
- * slide — gated here for the live page toggle; DzToast also disables its own
- * motion for the OS setting.
+ * slide — both paths are neutralised below.
  */
 const reduced = useReducedMotion()
 </script>
@@ -79,8 +86,40 @@ const reduced = useReducedMotion()
   }
 }
 
-/* Page-level "Reduce motion" toggle (JS) → toasts appear/leave instantly. */
+/* Native entrance — @starting-style + transition-behavior: allow-discrete. Only
+   where supported: swap the entry keyframe for a transition that animates from
+   the `@starting-style` state on insertion. The exit stays on the keyframe so
+   Reka's Presence still unmounts on animationend. */
+@supports (transition-behavior: allow-discrete) {
+  :deep(.demo-viewport [data-state='open']) {
+    animation: none;
+    transition:
+      opacity var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out),
+      transform var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
+    opacity: 1;
+    transform: none;
+  }
+  /* The state the toast animates IN from on first paint. */
+  @starting-style {
+    :deep(.demo-viewport [data-state='open']) {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+}
+
+/* Page-level "Reduce motion" toggle (JS) → toasts appear/leave instantly. Kills
+   both the keyframe and the @starting-style transition. */
 .stage--reduced :deep([data-state]) {
   animation: none !important;
+  transition: none !important;
+}
+
+/* OS reduced motion → instant for both paths (last so it wins). */
+@media (prefers-reduced-motion: reduce) {
+  :deep(.demo-viewport [data-state]) {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 </style>

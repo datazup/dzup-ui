@@ -102,7 +102,7 @@ const columns: ColumnDef<Deployment>[] = [
           <template #cell="{ row, column, value }">
             <template v-if="column.field === 'service'">
               <span class="dg-service">
-                <DzAvatar :fallback="(row as Deployment).service.slice(0, 1).toUpperCase()" size="xs" />
+                <DzAvatar :fallback="(row as Deployment).service.slice(0, 1).toUpperCase()" :alt="(row as Deployment).service" size="xs" />
                 <DzText size="sm" weight="medium" as="span">{{ (row as Deployment).service }}</DzText>
               </span>
             </template>

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "animated-beam",
+  "type": "registry:block",
+  "title": "Animated beam",
+  "description": "A light gradient travels an SVG path connecting two referenced elements.",
+  "files": [
+    {
+      "path": "animated-beam.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzAvatar, DzCard } from '@dzup-ui/core'\nimport { ref } from 'vue'\nimport { DzBeam } from '../motion'\n\n// Endpoints are element refs (or CSS selectors). DzBeam measures their live\n// boxes relative to its own overlay and re-measures on resize.\nconst hub = ref<HTMLElement | null>(null)\nconst node = ref<HTMLElement | null>(null)\n</script>\n\n<template>\n  <!-- The parent must be positioned; DzBeam fills it (aria-hidden, non-interactive). -->\n  <div style=\"position: relative\">\n    <DzBeam :from=\"hub\" :to=\"node\" :curvature=\"38\" />\n    <!-- Ref the DOM wrappers, not the components, so DzBeam gets real elements. -->\n    <div ref=\"hub\"><DzCard variant=\"elevated\" padding=\"sm\">Core</DzCard></div>\n    <div ref=\"node\"><DzAvatar fallback=\"AL\" alt=\"Ada Lovelace\" /></div>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzAvatar"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

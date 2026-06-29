@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { DzButton, DzHeading, DzSearchInput, DzSwitch, DzText } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, SearchX, Sparkles } from 'lucide-vue-next'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import AnimationCard from '../gallery/AnimationCard.vue'
 import { CATALOG, CATEGORIES, categoryAccentStyle } from '../gallery/catalog.ts'
-import { DzAurora, provideMotionPreference } from '../motion/index.ts'
+import { DzAurora, provideMotionPreference, vAutoAnimate } from '../motion/index.ts'
 import { LINKS } from '../config.ts'
 
 /**
@@ -26,6 +26,15 @@ import { LINKS } from '../config.ts'
 // the bento's own enter/move transitions so the gallery demos its accessible
 // fallback end-to-end.
 const reduceMotion = provideMotionPreference()
+
+// Bento animation path (docs/animations.md §3.4 — Task N2). When motion is allowed
+// we let AutoAnimate (@formkit/auto-animate) own the add/remove/move of cards on
+// every filter change — one directive, GPU-cheap, and reduced-motion-aware by
+// default. When the page-level "Reduce motion" toggle is on we fall back to the
+// TransitionGroup path with `is-still`, which snaps instantly (and the
+// TransitionGroup is also the staggered-enter / no-Web-Animations floor).
+// AutoAnimate honours the OS prefers-reduced-motion setting on its own.
+const useAutoAnimateBento = computed(() => !reduceMotion.value)
 
 // ── Filter state ──────────────────────────────────────────────────────────
 const query = ref('')
@@ -61,6 +70,7 @@ const typeChips = computed(() => {
 // Inherently wide/ambient effects get a 2-column stage in the bento. Keyed by id
 // so the layout intent lives here, not in the catalog or the card.
 const WIDE = new Set([
+  'bento-reveal',
   'gradient-sweep',
   'aurora-drift',
   'animated-grid',
@@ -128,9 +138,18 @@ function onBeforeLeave(el: Element): void {
 }
 
 // ── Deep-linking ──────────────────────────────────────────────────────────
+// Two distinct hash shapes share `/animations`, told apart by the `effect-`
+// prefix so neither breaks the other:
+//   • a bare category id (`#text`) preselects that filter (the old contract);
+//   • `#effect-<id>` scrolls to and briefly highlights one card (Task N10).
+// Category ids never carry the prefix, so an effect permalink never trips the
+// category logic and vice-versa.
+const EFFECT_HASH_PREFIX = 'effect-'
+
 // Preserve the old `/animations#text` contract: an initial category hash
 // preselects that filter, and changing the category reflects back into the URL
-// (replaceState — no scroll, no history spam).
+// (replaceState — no scroll, no history spam). An `effect-` hash is left alone
+// here; onMounted resolves it to a card below.
 if (typeof window !== 'undefined') {
   const initial = window.location.hash.slice(1)
   if (initial && populatedCategories.value.some((c) => c.id === initial)) {
@@ -146,6 +165,49 @@ watch(activeCategory, (id) => {
     '',
     `${window.location.pathname}${window.location.search}${hash}`,
   )
+})
+
+// The card a permalink resolved to — pulsed briefly so the reader can spot it.
+const highlightedId = ref<string | null>(null)
+let highlightTimer: number | null = null
+
+// Resolve `#effect-<id>` to a card: relax any active filter that would hide it
+// (so a shared link always lands on a visible card), then scroll it into view
+// and trigger the highlight pulse.
+function focusEffectFromHash(): void {
+  if (typeof window === 'undefined') return
+  const hash = window.location.hash.slice(1)
+  if (!hash.startsWith(EFFECT_HASH_PREFIX)) return
+  const id = hash.slice(EFFECT_HASH_PREFIX.length)
+  const entry = CATALOG.find((e) => e.id === id)
+  if (!entry) return
+
+  if (!filtered.value.some((e) => e.id === id)) {
+    query.value = ''
+    activeType.value = 'all'
+    if (entry.category !== activeCategory.value) activeCategory.value = 'all'
+  }
+
+  nextTick(() => {
+    const el = document.getElementById(`effect-${id}`)
+    if (!el) return
+    const reduce
+      = reduceMotion.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })
+    highlightedId.value = id
+    if (highlightTimer) window.clearTimeout(highlightTimer)
+    highlightTimer = window.setTimeout(() => (highlightedId.value = null), 2200)
+  })
+}
+
+onMounted(() => {
+  focusEffectFromHash()
+  window.addEventListener('hashchange', focusEffectFromHash)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', focusEffectFromHash)
+  if (highlightTimer) window.clearTimeout(highlightTimer)
 })
 </script>
 
@@ -253,8 +315,27 @@ watch(activeCategory, (id) => {
 
     <!-- Bento gallery -->
     <div class="gallery">
+      <!-- Native path: AutoAnimate owns add/remove/move on filter changes. -->
+      <div
+        v-if="filtered.length && useAutoAnimateBento"
+        v-auto-animate
+        class="bento"
+      >
+        <AnimationCard
+          v-for="entry in filtered"
+          :key="entry.id"
+          :entry="entry"
+          :size="sizeFor(entry.id)"
+          :highlighted="entry.id === highlightedId"
+          class="bento-item"
+          :class="`span-${sizeFor(entry.id)}`"
+        />
+      </div>
+
+      <!-- Fallback / reduced-motion path: TransitionGroup (staggered enter, snaps
+           instantly when the page toggle is on). -->
       <TransitionGroup
-        v-if="filtered.length"
+        v-else-if="filtered.length"
         tag="div"
         name="bento"
         class="bento"
@@ -266,6 +347,7 @@ watch(activeCategory, (id) => {
           :key="entry.id"
           :entry="entry"
           :size="sizeFor(entry.id)"
+          :highlighted="entry.id === highlightedId"
           class="bento-item"
           :class="`span-${sizeFor(entry.id)}`"
           :style="{ '--enter-i': i }"

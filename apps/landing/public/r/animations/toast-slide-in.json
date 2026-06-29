@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "toast-slide-in",
+  "type": "registry:block",
+  "title": "Toast slide-in",
+  "description": "Toasts enter and stack with a slide + fade; appear instantly when reduced.",
+  "files": [
+    {
+      "path": "toast-slide-in.vue",
+      "content": "<script setup lang=\"ts\">\nimport { inject } from 'vue'\nimport { DZ_TOAST_KEY, DzToastProvider, DzToastViewport } from '@dzup-ui/core'\nimport type { DzToastContext } from '@dzup-ui/core'\n\n// Inside the provider, inject the context to push toasts imperatively (ADR-08).\nconst toast = inject<DzToastContext>(DZ_TOAST_KEY)\nfunction notify() {\n  toast?.add({ title: 'Build passed', description: 'CI · 2m 14s', tone: 'success' })\n}\n</script>\n\n<template>\n  <DzToastProvider :duration=\"4000\">\n    <!-- … app content; call notify() from any descendant … -->\n    <DzToastViewport position=\"bottom-right\" />\n  </DzToastProvider>\n</template>\n\n<style scoped>\n/* Slide + fade keyed on Reka's data-state — the universal floor. */\n:deep([data-state='open']) {\n  animation: toast-in var(--dz-duration-normal) var(--dz-ease-out) both;\n}\n:deep([data-state='closed']) {\n  animation: toast-out var(--dz-duration-fast) var(--dz-ease-in) both;\n}\n@keyframes toast-in { from { opacity: 0; transform: translateY(16px) scale(0.98); } }\n@keyframes toast-out { to { opacity: 0; transform: translateX(40px); } }\n\n/* Native entrance — where @starting-style / transition-behavior: allow-discrete\n   is supported, animate IN from the @starting-style state on insertion (no\n   keyframe). Exit stays on the keyframe so Reka unmounts on animationend. */\n@supports (transition-behavior: allow-discrete) {\n  :deep([data-state='open']) {\n    animation: none;\n    transition:\n      opacity var(--dz-duration-normal) var(--dz-ease-out),\n      transform var(--dz-duration-normal) var(--dz-ease-out);\n    opacity: 1;\n    transform: none;\n  }\n  @starting-style {\n    :deep([data-state='open']) { opacity: 0; transform: translateY(16px) scale(0.98); }\n  }\n}\n\n/* Reduced motion → instant for both paths. */\n@media (prefers-reduced-motion: reduce) {\n  :deep([data-state]) { animation: none !important; transition: none !important; }\n}\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzToast",
+    "DzToastProvider"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "image-compare",
+  "type": "registry:block",
+  "title": "Image comparison",
+  "description": "Drag — or arrow-key — a handle to wipe between a before and after image.",
+  "files": [
+    {
+      "path": "image-compare.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCompare, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- The handle is a real role=\"slider\": drag it, or focus it and use\n       Arrow / Home / End keys (aria-valuenow announced). The one-shot intro sweep\n       is skipped under reduced motion (via disabled) — manual control still works;\n       the static baseline is the full \"before\" image. -->\n  <DzCompare\n    :before-src=\"beforeSrc\" before-alt=\"Before\"\n    :after-src=\"afterSrc\" after-alt=\"After\"\n    aspect-ratio=\"16/9\"\n    :disabled=\"reduced\"\n  />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzImage"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "fade-rise",
+  "type": "registry:block",
+  "title": "Fade & rise",
+  "description": "Content fades in and lifts gently into place as it scrolls into view.",
+  "files": [
+    {
+      "path": "fade-rise.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { vReveal } from '../motion'\n</script>\n\n<template>\n  <!-- The v-reveal directive owns the IntersectionObserver + reduced-motion guard. -->\n  <DzCard v-reveal variant=\"elevated\" padding=\"lg\">\n    <DzText weight=\"semibold\">Fade & rise</DzText>\n    <DzText size=\"sm\" tone=\"muted\">Opacity 0 → 1, lifts into place.</DzText>\n  </DzCard>\n</template>",
+      "type": "registry:block"
+    },
+    {
+      "path": "fade-rise.ts",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { useInView, useReducedMotion } from '../motion'\n\nconst root = ref<HTMLElement | null>(null)\nconst inView = useInView(root, { once: true })\nconst reduced = useReducedMotion()\n// Drive the entrance from state — fully visible when reduced or once seen.\nconst shown = computed(() => reduced.value || inView.value)\n</script>\n\n<template>\n  <DzCard\n    ref=\"root\"\n    variant=\"elevated\"\n    padding=\"lg\"\n    :style=\"{\n      opacity: shown ? 1 : 0,\n      transform: shown ? 'none' : 'translateY(16px)',\n      transition: 'opacity .5s var(--dz-ease-out), transform .5s var(--dz-ease-out)',\n    }\"\n  >\n    <DzText weight=\"semibold\">Fade & rise</DzText>\n  </DzCard>\n</template>",
+      "type": "registry:block"
+    },
+    {
+      "path": "fade-rise.css",
+      "content": "<template>\n  <!-- The .dz-animate-in utility runs the reveal on the compositor via\n       animation-timeline: view() where supported; static (visible) otherwise. -->\n  <div class=\"dz-animate-in dz-animate-in--rise\">\n    <slot />\n  </div>\n</template>\n\n<style>\n/* tokens.css ships .dz-animate-in; this is the gist of what it expands to. */\n@supports (animation-timeline: view()) {\n  @media (prefers-reduced-motion: no-preference) {\n    .dz-animate-in--rise {\n      animation: dz-rise linear both;\n      animation-timeline: view();\n      animation-range: entry 0% cover 30%;\n    }\n    @keyframes dz-rise {\n      from { opacity: 0; transform: translateY(16px); }\n    }\n  }\n}\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "media-comparison",
+  "type": "registry:block",
+  "title": "Before / after slider",
+  "description": "A draggable, keyboard-operable DzImageComparison revealing a graded edit over the raw frame, with before/after label chips and a live reveal read-out wired to v-model:position.",
+  "files": [
+    {
+      "path": "media-comparison.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzBadge, DzHeading, DzImage, DzImageComparison, DzText } from '@dzup-ui/core'\nimport { ref } from 'vue'\n\n/**\n * Before / after — a draggable reveal slider for comparing two states.\n *\n * DzImageComparison is a single `role=\"slider\"` widget: pointer-draggable,\n * click-to-set on the track, and fully keyboard-operable (Arrows nudge,\n * Shift+Arrow jumps 10, Home/End snap to the edges). `v-model:position` is the\n * percentage of the \"after\" layer revealed (ADR-16); the live read-out below\n * tracks that same bound value.\n *\n * The before/after layers here are the same DzImage with different CSS grades —\n * a believable \"raw vs. edited\" demo using only @dzup-ui/core + `--dz-*` tokens.\n */\n\nconst SRC = 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&q=80'\n\n/** Reveal position, 0–100. Starts mid-track. */\nconst position = ref(50)\n</script>\n\n<template>\n  <section class=\"cmp\" aria-labelledby=\"media-comparison-title\">\n    <header class=\"cmp-head\">\n      <DzBadge variant=\"subtle\" tone=\"primary\" size=\"sm\">Compare</DzBadge>\n      <DzHeading id=\"media-comparison-title\" :level=\"4\" size=\"xl\" weight=\"semibold\" class=\"cmp-title\">\n        Before &amp; after\n      </DzHeading>\n      <DzText size=\"sm\" tone=\"muted\" class=\"cmp-lede\">\n        Drag the handle, or focus it and use the arrow keys, to reveal the edit.\n      </DzText>\n    </header>\n\n    <DzImageComparison\n      v-model:position=\"position\"\n      before-label=\"Raw\"\n      after-label=\"Graded\"\n      aria-label=\"Compare the raw and graded photo\"\n      class=\"cmp-frame\"\n    >\n      <template #before>\n        <DzImage :src=\"SRC\" alt=\"Unedited landscape photo\" fit=\"cover\" class=\"cmp-img cmp-img--raw\" />\n      </template>\n      <template #after>\n        <DzImage :src=\"SRC\" alt=\"Colour-graded landscape photo\" fit=\"cover\" class=\"cmp-img cmp-img--graded\" />\n      </template>\n    </DzImageComparison>\n\n    <div class=\"cmp-meter\" aria-hidden=\"true\">\n      <span class=\"cmp-meter-label\">Reveal</span>\n      <span class=\"cmp-meter-track\">\n        <span class=\"cmp-meter-fill\" :style=\"{ width: `${position}%` }\" />\n      </span>\n      <span class=\"cmp-meter-value\">{{ Math.round(position) }}%</span>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.cmp {\n  padding: clamp(1.25rem, 4vw, 2rem);\n  background: var(--dz-background, #fff);\n}\n\n.cmp-head {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  gap: var(--dz-space-2, 0.5rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.cmp-title {\n  margin: 0;\n  letter-spacing: -0.01em;\n}\n\n.cmp-lede {\n  margin: 0;\n  line-height: 1.55;\n}\n\n/* Fix the framing ratio so both layers register exactly. */\n.cmp-frame {\n  aspect-ratio: 16 / 10;\n  width: 100%;\n  border-radius: var(--dz-radius-xl, 0.875rem);\n  border: 1px solid color-mix(in oklch, var(--dz-border, #e2e8f0) 60%, transparent);\n  box-shadow: 0 4px 12px -6px color-mix(in oklch, var(--dz-shadow, #000) 20%, transparent);\n}\n\n.cmp-img {\n  width: 100%;\n  height: 100%;\n  display: block;\n}\n\n/* \"Raw\" = flat, cool, low-contrast capture. */\n.cmp-img--raw :deep(img) {\n  filter: saturate(0.55) brightness(0.96) contrast(0.92);\n}\n\n/* \"Graded\" = warm, punchy edit. */\n.cmp-img--graded :deep(img) {\n  filter: saturate(1.25) contrast(1.08) brightness(1.03);\n}\n\n.cmp-meter {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  margin-top: var(--dz-space-4, 1rem);\n  font-size: var(--dz-text-xs, 0.75rem);\n}\n\n.cmp-meter-label {\n  font-weight: 600;\n  color: var(--dz-muted-foreground, #64748b);\n}\n\n.cmp-meter-track {\n  position: relative;\n  flex: 1;\n  height: 6px;\n  border-radius: var(--dz-radius-full, 9999px);\n  background: var(--dz-muted, #e2e8f0);\n  overflow: hidden;\n}\n\n.cmp-meter-fill {\n  position: absolute;\n  inset: 0 auto 0 0;\n  border-radius: inherit;\n  background: var(--dz-primary, #6366f1);\n}\n\n.cmp-meter-value {\n  min-width: 3ch;\n  text-align: right;\n  font-variant-numeric: tabular-nums;\n  font-weight: 600;\n  color: var(--dz-foreground, #0f172a);\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzImageComparison",
+    "DzImage",
+    "DzBadge",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

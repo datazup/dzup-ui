@@ -19,6 +19,13 @@ import { useReducedMotion } from '../../motion/index.ts'
  * Reduced motion: the OS setting is handled globally (the tokens reduced-motion
  * rule zeroes every animation duration). The page-level toggle is JS-only, so we
  * mirror it here by collapsing the content animation to an instant open/close.
+ *
+ * Native path (docs/animations.md §3.1, §4): where `interpolate-size:
+ * allow-keywords` is supported (Chromium), the scoped style below upgrades the
+ * panel to a TRUE `height: 0 → auto` animation — no measured `--reka-*` var, no
+ * JS `scrollHeight`. Reka still drives mount/unmount off `animationend`, so the
+ * swap to native keyframes is transparent. Everywhere else the core
+ * accordion-down/up keyframes (the measured-height workaround) remain the floor.
  */
 const items = [
   {
@@ -72,8 +79,47 @@ const reduced = useReducedMotion()
 }
 
 /* Page-level "Reduce motion" toggle (JS) → instant open/close, no height sweep
-   (the OS setting is already zeroed globally by the tokens reduced-motion rule). */
+   (the OS setting is already zeroed globally by the tokens reduced-motion rule).
+   The `animation-duration` override is `!important`, so it also wins over the
+   native-path animation set in the @supports block below — keeping the page
+   toggle instant even where interpolate-size is supported. */
 .stage--reduced :deep(.acc-content) {
   animation-duration: 0.01ms !important;
+}
+
+/* Native height:auto path — only when motion is allowed (so OS reduced motion
+   keeps the prior, already-instant behaviour) AND interpolate-size is supported.
+   Swaps core's measured-var keyframes for true height: 0 → auto animation. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    .stage {
+      interpolate-size: allow-keywords;
+    }
+    .stage :deep(.acc-content[data-state='open']) {
+      animation: dz-accordion-open-auto var(--dz-duration-normal, 200ms)
+        var(--dz-ease-out, ease-out);
+    }
+    .stage :deep(.acc-content[data-state='closed']) {
+      animation: dz-accordion-close-auto var(--dz-duration-normal, 200ms)
+        var(--dz-ease-out, ease-out);
+    }
+  }
+}
+
+@keyframes dz-accordion-open-auto {
+  from {
+    height: 0;
+  }
+  to {
+    height: auto;
+  }
+}
+@keyframes dz-accordion-close-auto {
+  from {
+    height: auto;
+  }
+  to {
+    height: 0;
+  }
 }
 </style>

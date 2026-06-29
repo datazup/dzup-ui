@@ -5,15 +5,30 @@ import { DzThemeProvider, DzToastProvider, DzToastViewport } from '@dzup-ui/core
 import TopNav from './components/TopNav.vue'
 import AppFooter from './components/Footer.vue'
 import { useTheme } from './composables/useTheme.ts'
+import { supportsViewTransitions, useReducedMotion } from './motion/index.ts'
 
 // Initialise the theme singleton at the root so the toggle re-themes the whole
 // page (spec §4.2 / §6.4). DzToastProvider lets showcase components raise toasts.
 useTheme()
 
-// The template preview route (docs/templates.md §3) renders chromeless — it is
-// the iframe + fullscreen target — so suppress the nav and footer around it.
+// The preview routes render chromeless — they are the iframe / fullscreen /
+// "open in new tab" targets — so suppress the nav and footer around them: the
+// template preview (docs/templates.md §3) and the standalone block preview
+// (docs/blocks.md §3.5).
+const CHROMELESS_ROUTES = new Set(['template-preview', 'block-preview'])
 const route = useRoute()
-const isPreview = computed(() => route.name === 'template-preview')
+const isPreview = computed(() => CHROMELESS_ROUTES.has(route.name as string))
+
+// Native route transition (docs/animations.md §3.1, §4 — effect 30). When the
+// View Transitions API is available and motion is allowed, the route swap is
+// driven through `document.startViewTransition` by the router guard (router.ts)
+// and animated by the scoped `::view-transition-*` keyframes below — so the Vue
+// `<Transition name="route">` must NOT also fire (its out-in mode would defer the
+// mount past the snapshot). We render the routed view bare on the native path and
+// keep the original `<Transition>` untouched as the guaranteed fallback for
+// unsupported browsers and reduced motion. Reactive to OS reduced-motion changes.
+const reduced = useReducedMotion()
+const useNativeRoute = computed(() => supportsViewTransitions() && !reduced.value)
 </script>
 
 <template>
@@ -34,7 +49,16 @@ const isPreview = computed(() => route.name === 'template-preview')
              after the swap. Reduced motion degrades to an instant opacity swap
              via the scoped @media block below. -->
         <router-view v-slot="{ Component, route: current }">
-          <Transition name="route" mode="out-in">
+          <!-- Native path: the router guard wraps the swap in a View Transition,
+               so render bare (no Vue <Transition>) to avoid double-animating. The
+               wrapper still carries one root so the routed `root` snapshot is the
+               whole view. -->
+          <div v-if="useNativeRoute" :key="current.path" class="route-view">
+            <component :is="Component" />
+          </div>
+          <!-- Fallback path (unsupported / reduced motion): the original Vue
+               <Transition>, unchanged. -->
+          <Transition v-else name="route" mode="out-in">
             <!-- Wrap the routed component in a single element so the transition
                  always has one root to animate. Page components may have
                  multiple root nodes (e.g. HomePage), which <Transition> cannot
@@ -120,5 +144,40 @@ const isPreview = computed(() => route.name === 'template-preview')
 
 .skip-link:focus {
   top: 12px;
+}
+</style>
+
+<!-- Native route transition keyframes (docs/animations.md §3.1, §4 — effect 30).
+     UNSCOPED on purpose: the `::view-transition-*` pseudo-elements live in the
+     top layer attached to :root, outside this component's scoped DOM, so a scoped
+     selector can never reach them. Gated inside @media (prefers-reduced-motion:
+     no-preference) so the custom morph NEVER runs under reduced motion — there the
+     guard also skips the View Transition entirely and the <Transition> fallback
+     handles the instant swap. transform/opacity only; tokens for timing. -->
+<style>
+@media (prefers-reduced-motion: no-preference) {
+  /* Replace the UA default cross-fade on the whole-page `root` snapshot with a
+     fade + short vertical slide that mirrors the <Transition> fallback. */
+  ::view-transition-old(root) {
+    animation: dz-route-vt-out var(--dz-duration-normal, 200ms) var(--dz-ease-in, ease-in)
+      both;
+  }
+  ::view-transition-new(root) {
+    animation: dz-route-vt-in var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out)
+      both;
+  }
+
+  @keyframes dz-route-vt-out {
+    to {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes dz-route-vt-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
 }
 </style>

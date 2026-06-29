@@ -1,1022 +1,1284 @@
-# Templates — Investigation, Display Design & Implementation Tasks
+# Templates — Best-in-Class Enhancement & Expansion Backlog
 
-> **Status:** Specification + task backlog. **No implementation yet.**
-> **Owner:** dzup-ui team · **Last updated:** 2026-06-23
-> **Scope:** The **Templates** offering of the dzup-ui ecosystem — the full-page / full-app *starters* built from the **free** `@dzup-ui/core` components, surfaced from the landing page's Ecosystem grid (`apps/landing`). This document is the result of reviewing the landing page, deciding how the Templates section should behave when a visitor clicks it, cataloguing the ready-made templates we will ship, and breaking the work into implementation tasks.
-> **Companion doc:** [`docs/landing.md`](./landing.md) (the landing-page spec; §4.6a "Ecosystem" introduces Blocks / Templates / Animations).
-> **Pro extension:** §1–§9 specify the **free** templates. [§10](#10-pro-templates-paid-tier) adds an *additive* **pro** template tier built from `@dzup-ui-pro/pro` (the enterprise components shown in `dzup-ui-pro/apps/storybook`), surfaced in the same gallery with a "Pro" badge.
+> **Status:** Specification + task backlog. The foundation and 24 free templates are **already shipped**; this doc is the plan to make `/templates` best-in-class.
+> **Owner:** dzup-ui team · **Last updated:** 2026-06-25
+> **Scope:** The **Templates** offering of the dzup-ui ecosystem — full-page / full-app *starters* built from the **free** `@dzup-ui/core` components, surfaced at `/templates` in `apps/landing`. This document reviews what currently ships, distils web + competitor research into a quality and breadth target, and breaks the remaining work into self-contained, executable tasks.
+> **Predecessor:** [`docs/templates-old.md`](./templates-old.md) — the original investigation and the T1–T14 build backlog that produced the current gallery, detail/preview shell and the first 24 templates. Read it for the architectural decisions (Option B in-app gallery + iframe preview, the registry data model, routing) that this doc builds on rather than re-deciding.
+> **Companion docs:** [`docs/landing.md`](./landing.md) (landing-page spec; §4.6a "Ecosystem"). Pro tier is in [§9](#9-pro-templates-paid-tier).
 
 ---
 
-## 0. How to read this document
+## 0. How to read & execute this document
 
-The brief asked for two things: (1) an **investigation** of how Templates should be implemented and displayed, and (2) a set of **tasks** written so an agent (or person) can later execute them to the highest possible quality.
+This doc has two halves. **§1–§5 are the investigation and target** — the current state, the research, the catalogue we are growing into, and the non-negotiable quality bar. **§6–§9 are the task backlog.**
 
-§1–§7 are the **investigation and design**. §8 is the **task backlog**.
+Tasks are written following Anthropic's prompt-engineering guidance ([Prompting best practices](https://platform.claude.com/docs/en/docs/build-with-claude/prompt-engineering/claude-prompting-best-practices)). Each runnable task is a **self-contained prompt** that applies these techniques:
 
-The tasks in §8 are written following Anthropic's prompt-engineering guidance (see [Anthropic — Prompt engineering overview](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview)). Each task is a self-contained prompt that applies these techniques:
-
-- **Be clear, direct and contextual** — every task states *why* it exists and *who* the reader is before *what* to do.
+- **Be clear, direct and contextual** — every task states *why* it exists and *who* reads it before *what* to do, and explains the motivation behind constraints (the model generalises from the "why").
 - **Give a role** (`<role>`) — sets the executor's expertise and bar.
-- **Structure with tags** — `<context>`, `<task>`, `<inputs>`, `<constraints>`, `<deliverables>`, `<acceptance_criteria>`, `<example>`.
+- **Structure with XML tags** — `<context>`, `<task>`, `<constraints>`, `<deliverables>`, `<acceptance_criteria>`, `<example>`, `<thinking>` so the model parses instructions, inputs and examples unambiguously.
 - **Provide examples (multishot)** — each authoring task points at a concrete reference file already in the repo to imitate.
-- **Let the model think** (`<thinking>` step) before it writes code.
-- **Chain complex prompts** — large work (24 templates) is decomposed into one reusable *authoring* prompt + per-template spec rows + small batches, rather than one mega-task.
+- **Let the model reason** (`<thinking>`) before it writes code, and **ask it to self-check** against the acceptance criteria before finishing.
+- **Request "above and beyond"** explicitly — say "go beyond the basics", because vague prompts converge on generic output.
 - **Define success criteria** — every task ends with objective, checkable acceptance criteria.
 
-Do **not** implement from this doc yet. Its purpose is to be a precise brief so the eventual build gets the best possible result.
+> **Execution note (for `/run-tasks`).** The orchestrator (`scripts/run-tasks.ps1`) runs each open task in a **fresh `claude -p` context**, strictly in order, ticking `[ ] → [x]` as each passes, and **stops on the first failure**. It selects a task by its heading checkbox and sends **the first fenced code block whose body opens with a prompt tag** (`<role>`, `<context>`, `<task>`, …) as the prompt. Therefore: (a) every task that must run headlessly carries its **own** self-contained prompt block; (b) tasks are **ordered so dependencies land first** (registry/data changes before the UI that reads them); (c) Pro tasks live under [§9](#9-pro-templates-paid-tier) (a `## … Pro … (paid tier)` section) and are **parsed but skipped** unless run with `-Tier pro|all`. Do not implement from this doc by hand unless you are executing a single task — the point is a precise brief so the eventual build gets the best result.
 
 ---
 
-## 1. Investigation — current state
+## 1. Current state — what already ships
 
-### 1.1 What exists today
+The Templates feature is **live and production-ready** (built by templates-old.md T1–T10). Do not rebuild it; this backlog *extends* it.
 
-The landing app (`apps/landing`, Vite + Vue 3 + vue-router) renders an **Ecosystem** section near the bottom of the home page:
+**Infrastructure (all present, working):**
 
-- `apps/landing/src/components/EcosystemGrid.vue` renders a 3-column grid of tiles from the `ECOSYSTEM` array in `apps/landing/src/data.ts`.
-- The six tiles are **Blocks, Templates, Animations, Icons, Themes, Figma kit**. Each has `icon`, `title`, `blurb`, `meta`, and `status: 'planned'`.
-- Every tile is **non-interactive**: it shows a "Planned" `DzBadge` and has **no link, no route, no click handler**. (`EcosystemGrid.vue` renders `<li class="lp-card tile">` — there is no `<a>` or `router-link`.)
-- The top nav (`TopNav.vue`) links **"Ecosystem"** to `{ path: '/', hash: '#ecosystem' }` — it only scrolls to the grid; there is no per-offering page.
-- Routing (`router.ts`) has exactly two routes: `/` (HomePage) and `/pro` (ProPage), plus a catch-all redirect to `/`. **There is no `/templates` route.**
+- `apps/landing/src/templates/registry.ts` — `TemplateMeta` model (`slug`, `name`, `blurb`, `category`, `stack`, `icon`, optional `thumbnail`, lazy `load`, `source`, `tier: 'free'`, `featured?`, decorative `accent?`), the six free `TEMPLATE_CATEGORIES` (each with a display label + spectrum accent), the `TEMPLATES` array (24 rows) and `getTemplate(slug)`.
+- `router.ts` — `/templates`, `/templates/:slug`, `/templates/:slug/preview`, each guarded by `resolveTemplateSlug` (unknown slug → `/templates`). The preview route is chromeless (TopNav/Footer suppressed in `App.vue`).
+- `pages/TemplatesPage.vue` — gallery: a `Section` header with a derived count, a **`DzSegmented` category filter**, a responsive 3/2/1-col card grid with **per-card spectrum accent tinting**, `DzEmpty` for an empty filter, whole-card cover links, and staggered scroll-reveal.
+- `pages/TemplateDetailPage.vue` — the conversion surface: "Built with" `DzBadge` chips deep-linking to Storybook (`componentDocs()`), a **live `<iframe>` preview** with a **device switcher** (mobile 390 / tablet 768 / desktop 100%, animated, reduced-motion aware), an **independent light/dark toggle** (drives `?theme=`), **"Open fullscreen"** (new tab), **"View source"** (GitHub) + **`DzCopyButton`** for the path, and **prev/next** navigation with wraparound.
+- `pages/TemplatePreviewPage.vue` — resolves the slug, lazy-loads `template.load()`, reads `?theme=` and applies `data-theme`, renders chromeless.
 
-The **Templates** tile specifically (`data.ts` lines ~93–99):
+**The 24 shipped templates** (`tier: 'free'`, built only from `@dzup-ui/core`):
 
-```ts
-{
-  icon: 'LayoutTemplate',
-  title: 'Templates',
-  blurb: 'Full-page and full-app starters — dashboards, admin panels, landing pages, settings flows — wired and themed out of the box.',
-  meta: 'Dashboards · Landing · Auth',
-  status: 'planned',
-}
-```
+- **Dashboards & Apps (8):** analytics-dashboard ⭐, admin-crm, project-board, app-settings, user-profile, billing-plans, team-members, inbox-notifications
+- **Auth (1):** sign-in ⭐
+- **Marketing (1):** saas-landing ⭐
+- **Commerce (4):** product-detail ⭐, product-listing, checkout (emerald re-skin), order-tracking (teal re-skin)
+- **Content (6):** blog-post ⭐, blog-index, help-center, changelog, docs-guide, newsroom
+- **Utility (4):** states-pack ⭐, not-found, system-status, maintenance
 
-### 1.2 Conclusion of the investigation
+**Known gaps in the *experience*** (from the implementation audit): no gallery **search**, no **tags** or "New" badge, no **sort**, no **static thumbnails** (icons only — every card looks alike, scales poorly past ~30), no **in-page source/code viewer** (must leave for GitHub), no **per-template SEO** head, no **preview loading state**, no **in-preview theme/colour customisation** beyond light/dark, no **RTL** preview, and the gallery `<ul>` is unlabelled.
 
-**Clicking "Templates" does nothing today.** To make it real we need: (a) a place for it to go, (b) a way to display a catalogue of templates, (c) a way to preview each template live, and (d) the templates themselves. The landing app already establishes every pattern we need to do this without inventing new infrastructure:
-
-| Need | Existing pattern to reuse |
-|---|---|
-| A dedicated page for an offering | `pages/ProPage.vue` + a route in `router.ts` (the `/pro` precedent) |
-| A section shell (eyebrow → title → lede) | `components/Section.vue` |
-| A responsive card grid with deep-links | `components/ComponentGallery.vue` (tiles, `lp-card`, hover, staggered `--reveal-delay`) |
-| Live composition from free components | `components/ShowcaseDashboard.vue` (a real dashboard built only from `@dzup-ui/core`) |
-| Light/dark theming + FOUC safety | `composables/useTheme.ts`, `ThemeToggle.vue`, the `index.html` IIFE |
-| Scroll reveal | `composables/useScrollReveal.ts` (`v-reveal`) |
-| Centralised links/config | `config.ts` (`LINKS`, `storybookDocs()`) |
-
-> **Note on free vs pro.** Per `docs/landing.md` §4.6a, some ecosystem offerings (Blocks, Templates) are paid in comparable libraries (PrimeVue, Tailwind Plus). The brief here is explicit: **these Templates are built from the *free* `@dzup-ui/core` components and are themselves free.** Keep the word "Pro" reserved strictly for the paid tier (Ant Design cautionary note in `landing.md` §2.1). Templates carry a **"Free"** badge, never "Pro".
+**Known gaps in the *catalogue*** (from the competitor benchmark): auth is 1-of-~6, there are **no app templates** (chat, calendar, file manager, tasks, data-table/CRUD list, invoice), marketing is one page (no pricing/feature/contact/about), and the error set lacks **500 / 403 / coming-soon**.
 
 ---
 
-## 2. How "Templates" should behave when clicked — the decision
+## 2. Research — what makes a template gallery best-in-class (2025–2026)
 
-### 2.1 Options considered
+Synthesised from Tailwind Plus, shadcn/ui blocks + v0, Vercel templates, PrimeVue (PrimeBlocks/Sakai/Apollo), Nuxt UI v4, Vuetify, Flowbite, Preline, Origin UI, Magic UI and Aceternity. The patterns below are ranked by impact-to-effort for a small team; the ones we adopt become tasks in §7.
 
-| Option | What it is | Pros | Cons |
-|---|---|---|---|
-| **A. Storybook deep-link** | Templates tile links into Storybook stories (like the component gallery does) | Cheapest; reuses docs infra | Storybook's manager/iframe chrome is wrong for "full-page app starters"; no marketing framing; no viewport/device switching; weak previews |
-| **B. In-app gallery + detail routes** *(recommended)* | New `/templates` index route + `/templates/:slug` detail route inside `apps/landing`, each template a real Vue page rendered live | Full control of layout, live re-theming, device/viewport preview, "view code"; on-brand; no Storybook chrome | More to build than a link |
-| **C. Separate deployed preview app per template** | Each template is its own deployable mini-app | Cleanest isolation | Heavy ops; over-engineered for static starters; duplicates tooling |
+**Discovery (gallery index):**
 
-### 2.2 Decision
+1. **Static thumbnails, not a wall of icons** — a real screenshot per card lets visitors *recognise* a template at a glance. Universal across the field. (Live previews are reserved for the detail page; N live iframes in a grid is catastrophic for performance.) — *Vercel, shadcn, every theme gallery.*
+2. **Paired light/dark thumbnails** — show the template in both themes on the card to advertise first-class dark mode before the click. — *Tailwind Plus, Nuxt UI.*
+3. **⌘K command-palette search** — keyboard-first search is expected once a catalogue exceeds ~20 items. dzup-ui already ships `DzCommandPalette`. — *Magic UI, Aceternity, Flowbite, Nuxt UI.*
+4. **Intent-based taxonomy with counts** — categories named the way users think ("I need a pricing page"), each showing how many templates it holds. — *Tailwind Plus, PrimeBlocks, Flowbite.*
+5. **"New" / "Featured" badges** — surface fresh content so repeat visitors have a reason to return and active maintenance is visible. — *Magic UI, shadcn.*
+6. **Sort** (featured / newest / A–Z) — once the catalogue is large. — *Vuetify store.*
 
-**Adopt Option B**, with the live preview **isolated in an `<iframe>` that points at a chromeless preview route**. This is the pattern Tailwind Plus / shadcn blocks use and it gives us three things a plain in-page render can't:
+**Per-template page:**
 
-1. **Real responsive preview** — the iframe width can be set to phone / tablet / desktop so visitors see the template reflow, without media queries fighting the landing page's own layout.
-2. **Style isolation** — the template renders against the token CSS only, not the landing page's section/`lp-*` styles, so previews look exactly like a consumer's app.
-3. **Independent theme** — the preview can be toggled light/dark independently of the marketing page.
+7. **Preview / Code tabs with copy** — toggle the live render against a syntax-highlighted source view with one-click copy and an explicit dependency list, so "what will this add to my app?" is answered in-page. dzup-ui ships `DzCodeBlock`, `DzCopyButton`, `DzTabs`. — *shadcn blocks, Aceternity.*
+8. **Standalone fullscreen preview route** (already shipped) — a real, resizable, shareable URL; the truest responsive test. — *shadcn.*
+9. **In-preview customisation (the differentiator)** — let visitors swap the **primary colour** and toggle **dark mode** live; the most persuasive thing they can do is re-skin the template and watch it hold together. Most indie libraries only toggle light/dark — doing colour well is a real edge, and dzup-ui's token architecture makes it cheap (remap `--dz-primary`). — *PrimeVue configurators.*
+10. **RTL toggle in the preview toolbar** — rare in the field (only Flowbite) and a strong quality signal for international audiences. — *Flowbite.*
+11. **"Built with these components" → docs** (already shipped) — proves the template is part of a coherent, documented system and routes browsers into the component docs. — *shadcn, PrimeVue.*
+12. **Trust framing** — a prominent **"Free · MIT"** note removes adoption anxiety; "yours to keep". — *shadcn, Origin UI.*
 
-So, when a visitor clicks **Templates**:
+**Performance & a11y (hygiene, do alongside):**
 
-```
-Ecosystem grid "Templates" tile
-        │  (click — now a router-link, no longer inert)
-        ▼
-/templates                      ← Templates GALLERY (index)
-  • hero strip: "N free templates, built from core"
-  • category filter (All · Dashboards · Auth · Marketing · Commerce · Content)
-  • responsive grid of template cards (thumbnail + name + category + "Free" badge + stack)
-        │  (click a card)
-        ▼
-/templates/:slug                ← Template DETAIL / PREVIEW
-  • title + description + component list ("Built with: DzAppShell, DzTable, …")
-  • LIVE preview pane (iframe → /templates/:slug/preview)
-      – device toggle: mobile / tablet / desktop
-      – theme toggle: light / dark (independent)
-      – "Open fullscreen" → /templates/:slug/preview in a new tab
-  • "View source" (link to the template's source file on GitHub) + copy-path
-  • prev / next template
+13. **Lazy-load previews + reserved space** — `loading="lazy"` (already on the detail iframe), explicit `aspect-ratio` on cards, skeleton/blur-up while thumbnails load → no layout shift.
+14. **Pre-generated thumbnails** — screenshot templates at build time (Playwright) and commit optimised images; per-request generation does not scale.
+15. **Accessible grid + previews** — grid as a labelled `<ul>/<li>`, real link/button per card (no nested interactives), arrow-key navigation, every preview iframe `title`d, theme/colour swaps announced via `aria-live`. No surveyed gallery did this well — another edge.
 
-/templates/:slug/preview        ← CHROMELESS full render (the iframe target & fullscreen target)
-```
-
-The Ecosystem **Templates** tile becomes a `router-link` to `/templates`. The other five tiles stay "Planned" until their own offering is built. The top-nav "Ecosystem" link keeps scrolling to `#ecosystem`; optionally add a direct "Templates" entry later.
+**Strategic / AI-native (2025→2026, mostly out of scope for now — see [§8](#8-open-decisions--strategic-ideas)):** registry + CLI distribution (`npx … add`), "Open in v0", an MCP server exposing templates to coding agents, `llms.txt` + "Copy page as Markdown / Copy for LLM". These shift the gallery from "a site you browse" to "a surface agents install from". Vue-native AI distribution is still underserved — high strategic value, but larger than this backlog. We adopt only the cheap slice now: a **"Copy for LLM"** affordance on the detail page (part of E4).
 
 ---
 
-## 3. Information architecture & routing
+## 3. Catalogue benchmark — the breadth gap
 
-Add to `apps/landing/src/router.ts` (mirror the `/pro` precedent — lazy-load the pages):
+Against PrimeVue, CoreUI, Ant Design Pro, MUI, Tailwind Plus, shadcn, Flowbite, Preline, Materio/Vuexy, Refine and Tremor, dzup-ui **leads** on content (newsroom, system-status, maintenance are uncommon) and is solid on commerce basics and core dashboards. The clear, near-universal gaps competitors standardise on:
 
-```ts
-{ path: '/templates', name: 'templates', component: () => import('./pages/TemplatesPage.vue') },
-{ path: '/templates/:slug', name: 'template-detail', component: () => import('./pages/TemplateDetailPage.vue'), props: true },
-{ path: '/templates/:slug/preview', name: 'template-preview', component: () => import('./pages/TemplatePreviewPage.vue'), props: true },
-```
+- **Auth depth** — we ship 1 of ~6. Missing: **sign-up**, **forgot/reset password**, **OTP/2FA verify**, **onboarding/setup wizard** (and a split sign-in variant).
+- **App templates** — we ship none of the "apps" every premium suite includes: **chat/messages**, **calendar/scheduler**, **file manager**, **tasks/to-do**, **data-table / CRUD list page**, **invoice**.
+- **Marketing breadth** — one landing vs. the field's **pricing**, **feature**, **contact**, **about/FAQ**, **coming-soon**.
+- **Error completeness** — we have 404 but not **500**, **403**, or a dedicated success/result page (CoreUI ships 500 even free).
+- **Commerce completeness** — we have checkout but not **shopping-cart** or **order-history**.
+- **Account depth** — app-settings exists but not a fuller multi-tab **account centre** (profile / security / notifications / billing).
 
-- `/templates/:slug` and `/templates/:slug/preview` must **404-redirect to `/templates`** when `slug` is unknown (resolve against the registry, else `router.replace('/templates')`).
-- The **preview route uses a bare layout** (no `TopNav`/`Footer`). The app shell (`App.vue`) renders `TopNav`/`Footer` around `<router-view>`; gate them off for `route.name === 'template-preview'` (e.g. `v-if="!isPreview"`), so the iframe content is chromeless.
-- `scrollBehavior` already handles hashes; keep it.
-
----
-
-## 4. Data model
-
-Create `apps/landing/src/templates/registry.ts` (sibling concept to `data.ts`, but templates are richer than the flat `ECOSYSTEM` items, so they get their own module). Each template is described by metadata; the **rendered page** is a lazy-loaded component.
-
-```ts
-import type { Component } from 'vue'
-
-export type TemplateCategory =
-  | 'dashboards' | 'auth' | 'marketing' | 'commerce' | 'content' | 'utility'
-
-export interface TemplateMeta {
-  /** URL slug, e.g. 'analytics-dashboard'. Unique. */
-  slug: string
-  /** Display name, e.g. 'Analytics Dashboard'. */
-  name: string
-  /** One-line description for the card + detail header. */
-  blurb: string
-  /** Primary category (drives the filter). */
-  category: TemplateCategory
-  /** The @dzup-ui/core components this template is built from (for the "Built with" list). */
-  stack: string[]
-  /** lucide icon key (icons.ts) for the card when no thumbnail is ready. */
-  icon: string
-  /** Optional static thumbnail (screenshot) path; falls back to a live mini-render. */
-  thumbnail?: string
-  /** Lazy import of the full-page template component (the chromeless render). */
-  load: () => Promise<{ default: Component }>
-  /** Path to the source file, for "View source" deep-links. */
-  source: string
-  /** 'free' for all of these (reserve 'pro' for the paid tier). */
-  tier: 'free'
-  /** Optional: marks the 3–4 best templates to feature first on the gallery. */
-  featured?: boolean
-}
-
-export const TEMPLATE_CATEGORIES: { key: TemplateCategory; label: string }[] = [
-  { key: 'dashboards', label: 'Dashboards & Apps' },
-  { key: 'auth', label: 'Auth & Account' },
-  { key: 'marketing', label: 'Marketing' },
-  { key: 'commerce', label: 'Commerce' },
-  { key: 'content', label: 'Content' },
-  { key: 'utility', label: 'Utility' },
-]
-
-export const TEMPLATES: TemplateMeta[] = [ /* one entry per §6 catalogue row */ ]
-
-export function getTemplate(slug: string): TemplateMeta | undefined {
-  return TEMPLATES.find((t) => t.slug === slug)
-}
-```
-
-Each template's render lives at `apps/landing/src/templates/<slug>/<Name>.vue`. Co-locate any sample data the template needs (`<slug>/data.ts`) so templates are self-contained and copy-pasteable.
+§6 grows the free catalogue from **24 → ~42** to close these, all from `@dzup-ui/core`.
 
 ---
 
-## 5. The preview experience (UX spec)
+## 4. Information architecture — what changes, what stays
 
-The detail page (`/templates/:slug`) is the conversion surface — it must *show, don't tell*, exactly like the landing page's live showcase.
+The shipped IA from templates-old.md §2–§5 stands. This backlog makes only **additive, backward-compatible** changes:
 
-- **Preview pane:** an `<iframe>` whose `src` is `/templates/:slug/preview`. Default device = desktop (100% width). A `DzSegmented` device switcher sets the iframe's rendered width: `mobile` 390px · `tablet` 768px · `desktop` 100%. Animate width changes. Center narrower widths on a tinted "stage".
-- **Theme:** a light/dark toggle scoped to the preview. Implement by passing `?theme=dark` to the preview route and setting `data-theme` on the iframe document's `<html>` (the preview page reads the query param on mount). This is independent of the marketing page's theme.
-- **Fullscreen:** "Open fullscreen" opens `/templates/:slug/preview` in a new tab (real, shareable URL).
-- **Built with:** render `stack` as a row of `DzBadge variant="outline"` chips; each links to that component's Storybook docs via `storybookDocs()` from `config.ts`.
-- **View source:** a `DzButton variant="outline"` linking to the template's `source` on GitHub, plus a `DzCopyButton` to copy the source path.
-- **Prev / next:** navigate within the same category, then across categories, so visitors can browse the whole set.
-- **Performance:** the iframe should lazy-load (`loading="lazy"`); on the gallery, prefer static `thumbnail` screenshots over live iframes per card (24 live iframes would be heavy). One live iframe on the detail page is fine.
-- **Accessibility:** the iframe needs a `title`; device/theme toggles are real buttons with labels; honour `prefers-reduced-motion` for the width animation; the gallery grid is a `<ul>`/`<li>` with card-cover links (reuse the `ComponentGallery` `tile-link-cover` technique).
+- **`registry.ts`** gains optional fields (`tags?: string[]`, `createdAt?: string`, `order?`/derived `isNew`) and ~18 new rows. The existing fields and the 24 rows are untouched.
+- **`TemplatesPage.vue`** gains search, tag filtering, badges and sort *on top of* the existing category filter and accent tinting — the category filter is not replaced.
+- **`TemplateDetailPage.vue`** gains a Preview/Code tab set, a customiser, an RTL toggle and SEO — *on top of* the existing toolbar.
+- New templates follow the **exact** shipped pattern: `apps/landing/src/templates/<slug>/<Name>.vue` (+ co-located `data.ts`), registered in `TEMPLATES`, chromeless, self-contained.
+
+No new routes, no new infrastructure, no breaking changes to the data model.
 
 ---
 
-## 6. The template catalogue (what we will ship)
+## 5. The quality bar (applies to every template and every UI change)
 
-**24 ready-made templates** across 6 categories, every one built **only from free `@dzup-ui/core` components**. The count gives the gallery a strong headline ("24 free templates"). Components named below are all confirmed exports of `@dzup-ui/core` (see Appendix A). The flagship reference already exists in spirit as `ShowcaseDashboard.vue`.
+A template or change that breaks these is not "best-in-class", it is off-brand. This is the mandatory `<constraints>` every authoring task inherits.
 
-### 6.1 Dashboards & Apps (8)
-
-| Done | slug | Name | Built with (free core components) |
-|---|---|---|---|
-| [ ] | `analytics-dashboard` | Analytics Dashboard ⭐ | DzAppShell, DzSidebar(+Item/Section/Header/Footer), DzStatCard, DzCard, DzTable, DzProgress, DzBadge, DzSegmented, DzSearchInput, DzAvatar |
-| [ ] | `admin-crm` | Admin / CRM | DzAppShell, DzSidebar, DzDataGrid(+Header/Body/Pagination), DzPagination, DzSearchInput, DzDropdownMenu, DzAvatar, DzBadge, DzTabs, DzButton |
-| [ ] | `project-board` | Project / Task Board | DzAppShell, DzCard, DzList(+Item), DzCheckbox, DzAvatarGroup, DzTag, DzProgress, DzTabs, DzBadge |
-| [ ] | `app-settings` | App Settings | DzAppShell, DzTabs, DzFormField, DzInput, DzSwitch, DzSelect, DzRadioGroup, DzDivider, DzButton |
-| [ ] | `user-profile` | User Profile | DzCard, DzAvatar, DzDescriptions(+Item), DzTabs, DzBadge, DzTimeline(+Item), DzButton |
-| [ ] | `billing-plans` | Billing & Plans | DzCard, DzTable, DzBadge, DzButton, DzProgress, DzMeterGroup, DzAlert, DzSegmented |
-| [ ] | `team-members` | Team Members | DzDataGrid, DzAvatar, DzBadge, DzDropdownMenu, DzDialog(+Content/Title), DzMultiSelect, DzButton |
-| [ ] | `inbox-notifications` | Inbox / Notifications | DzAppShell, DzList(+Item), DzAvatar, DzBadge, DzTabs, DzEmpty, DzButton |
-
-### 6.2 Auth & Account (5)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `sign-in` | Sign In ⭐ | DzCard, DzFormField, DzInput, DzPasswordInput, DzCheckbox, DzButton, DzDivider |
-| [ ] | `sign-up` | Sign Up | DzCard, DzFormField, DzInput, DzPasswordInput, DzCheckbox, DzButton, DzDivider |
-| [ ] | `reset-password` | Forgot / Reset Password | DzCard, DzFormField, DzInput, DzButton, DzResult |
-| [ ] | `verify-otp` | OTP / 2FA Verify | DzCard, DzOtpInput, DzButton, DzCountdown, DzText |
-| [ ] | `onboarding-wizard` | Onboarding Wizard | DzStepper(+Item), DzFormField, DzInput, DzSelect, DzRadioGroup, DzProgress, DzButton |
-
-### 6.3 Marketing (4)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `saas-landing` | SaaS Landing ⭐ | DzButton, DzCard, DzBadge, DzAvatar, DzAccordion(+Item/Trigger/Content), DzCarousel(+Slide/Dots), DzImage |
-| [ ] | `pricing` | Pricing Page | DzCard, DzBadge, DzSegmented, DzButton, DzTable, DzTooltip(+Content/Trigger) |
-| [ ] | `feature-product` | Feature / Product | DzCard, DzTabs, DzImage, DzImageComparison, DzBadge |
-| [ ] | `changelog-roadmap` | Changelog / Roadmap | DzTimeline(+Item), DzBadge, DzCard, DzTag, DzText |
-
-### 6.4 Commerce (4)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [x] | `product-listing` | Product Listing | DzImageCard, DzBadge, DzRating, DzSelect, DzCheckboxGroup, DzRangeSlider, DzPagination |
-| [x] | `product-detail` | Product Detail ⭐ | DzBreadcrumb, DzImage, DzRating, DzBadge, DzNumberInput, DzButton, DzTag, DzTabs, DzAccordion, DzCard, DzAvatar |
-| [x] | `checkout` | Checkout | DzStepper, DzFormField, DzInput, DzSelect, DzRadioGroup, DzNumberInput, DzCheckbox, DzAlert, DzCard, DzBadge, DzButton |
-| [x] | `order-tracking` | Order Tracking | DzResult, DzStepper, DzTimeline, DzDescriptions, DzCard, DzBadge, DzDivider, DzButton |
-
-> Note: `checkout` and `order-tracking` are deliberately re-skinned away from the
-> headphone storefront's indigo — emerald and teal respectively — by remapping
-> `--dz-primary` to another semantic token at the template root (token-only, no
-> raw hex, correct in light + dark). They form a browse → view → buy → track
-> journey with the two product pages.
-
-### 6.5 Content (6)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [x] | `blog-index` | Blog Index | DzImageCard, DzTag, DzPagination, DzAvatar, DzSearchInput |
-| [x] | `blog-post` | Blog Post / Article ⭐ | DzHeading, DzText, DzBlockquote, DzCodeBlock, DzAnchor, DzImage, DzImageCard, DzAvatar, DzTag, DzDivider, DzCard |
-| [x] | `help-center` | Help Center / FAQ | DzSearchInput, DzCard, DzAccordion(+Item/Trigger/Content), DzAlert, DzTag, DzBadge, DzAvatar, DzButton |
-| [x] | `changelog` | Changelog / Releases | DzTimeline(+Item), DzCard, DzBadge, DzTag, DzCodeBlock, DzDivider, DzButton |
-| [x] | `docs-guide` | Docs / Guide | DzBreadcrumb(+Item), DzAnchor, DzAlert, DzCodeBlock, DzSearchInput, DzBadge, DzDivider, DzButton |
-| [x] | `newsroom` | Newsroom / Press | DzCard, DzList(+Item), DzBadge, DzAvatar, DzDivider, DzButton, DzHeading, DzText |
-
-### 6.6 Utility (4)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [x] | `states-pack` | Empty & Error States | DzEmpty, DzResult, DzCard, DzButton, DzHeading, DzText |
-| [x] | `not-found` | 404 — Page Not Found | DzResult, DzCard, DzButton, DzDivider, DzText |
-| [x] | `system-status` | System Status | DzAlert, DzCard, DzBadge, DzProgress, DzTimeline, DzDivider, DzHeading, DzText, DzButton |
-| [x] | `maintenance` | Scheduled Maintenance | DzCard, DzProgress, DzInput, DzButton, DzBadge, DzDivider, DzHeading, DzText |
-
-> ⭐ = **featured** (`featured: true`) — the strongest first impression for the gallery's lead row. Build these first as the canonical references (T2 below).
+- **Token-only styling (ADR-04).** Never raw hex or hardcoded Tailwind colours — only `var(--dz-*)`. Layout CSS (grid/flex/spacing) may live in `<style scoped>` inside a *template page* (templates are app code, not library components, so scoped styles are allowed there); **colour, radius, shadow, font come from tokens**. Re-skins (e.g. emerald checkout) remap a semantic token at the template root, never raw colour.
+- **Built from `@dzup-ui/core`.** Use the real component wherever one exists (Appendix A); drop to raw markup only for pure layout scaffolding. Never invent an import — if a needed component does not exist, pick the closest real one and note the substitution.
+- **Light & dark verified.** Correct in both themes — the preview toggle is the proof.
+- **Responsive.** Reflows cleanly at 390 / 768 / desktop. The device switcher will expose breakage.
+- **Accessible (WCAG AA).** Semantic landmarks, one logical heading order, keyboard reachable, visible focus, labelled controls — inherited from core components when used correctly.
+- **Realistic sample content.** Plausible names, numbers and copy (see `ShowcaseDashboard.vue` / the shipped `*/data.ts`). Never lorem ipsum in hero positions.
+- **Self-contained & copy-pasteable.** Co-locate sample data; no dependency on landing-only `lp-*` styles; no cross-template imports.
+- **Distinctive, not "AI slop".** Per Anthropic's frontend guidance: commit to a cohesive aesthetic, use atmosphere/depth over flat fills, and reserve motion for high-impact moments (one orchestrated load with staggered reveals beats scattered micro-interactions). Honour `prefers-reduced-motion` (landing.md §7). Avoid clichéd purple-on-white gradients and predictable layouts — each template should feel designed for *its* job.
+- **Don't over-engineer.** Build what the spec asks; no speculative abstractions, no config nobody requested.
+- **Verify before done.** `yarn typecheck` = 0 errors and `vite build` (apps/landing) succeeds. ESLint cannot run locally — do not rely on it (see [[dzup-ui-local-env]]).
 
 ---
 
-## 7. Visual & quality bar (applies to every template)
+## 6. Free catalogue additions (§6 rows the §7 tasks build)
 
-Carry the same rules the library and landing page already enforce — a template that breaks these is not "beautiful and functional", it's off-brand:
+Every component named is a confirmed `@dzup-ui/core` export (Appendix A). ⭐ marks the new reference to build most carefully within its task. Categories reuse the existing six (new app templates fall under **Dashboards & Apps**).
 
-- **Token-only styling.** Never raw hex / hardcoded Tailwind colors — only `var(--dz-*)` (ADR-04). Layout CSS (grid/flex/spacing) is fine in `<style scoped>`; **color, radius, shadow, font** come from tokens.
-- **Built from `@dzup-ui/core`** wherever a component exists; drop to raw markup only for pure layout scaffolding.
-- **Light & dark verified.** Every template must look right in both themes (the preview toggle is the proof).
-- **Responsive.** Must reflow cleanly at mobile (390px) and desktop. The detail-page device switcher will expose any breakage.
-- **Accessible (WCAG AA).** Semantic landmarks, one logical heading order per template, keyboard reachable, visible focus, labelled controls — inherited from core components when used correctly.
-- **Realistic sample content.** Plausible names, numbers, copy (see `ShowcaseDashboard.vue`'s `rows`) — never lorem ipsum in hero positions.
-- **Self-contained & copy-pasteable.** Co-locate sample data; no dependency on landing-page-only styles (`lp-*`).
-- **Motion restrained**, `prefers-reduced-motion` honoured (landing.md §7).
+### 6.1 Auth & Account (→ task C1)
+
+| slug | Name | Built with |
+|---|---|---|
+| `sign-up` | Sign Up ⭐ | DzCard, DzFormField, DzInput, DzPasswordInput, DzCheckbox, DzButton, DzDivider, DzProgress *(password strength)* |
+| `reset-password` | Forgot / Reset Password | DzCard, DzFormField, DzInput, DzButton, DzResult, DzAlert |
+| `verify-otp` | OTP / 2FA Verify | DzCard, DzOtpInput, DzButton, DzCountdown, DzText, DzAlert |
+| `onboarding-wizard` | Onboarding Wizard | DzStepper, DzFormField, DzInput, DzSelect, DzRadioGroup, DzCheckboxGroup, DzProgress, DzButton, DzCard |
+
+### 6.2 Marketing (→ tasks C2, C3)
+
+| slug | Name | Built with |
+|---|---|---|
+| `pricing` | Pricing Page ⭐ | DzCard, DzBadge, DzSegmented, DzButton, DzTable, DzTooltip, DzDivider |
+| `feature-product` | Feature / Product | DzCard, DzTabs, DzImage, DzImageComparison, DzBadge, DzHeading, DzText |
+| `contact` | Contact | DzCard, DzFormField, DzInput, DzTextarea, DzSelect, DzButton, DzAlert, DzDivider |
+| `about-faq` | About & FAQ | DzHeading, DzText, DzAccordion, DzCard, DzAvatar, DzAvatarGroup, DzTimeline, DzDivider |
+
+### 6.3 Utility & Errors (→ task C4)
+
+| slug | Name | Built with |
+|---|---|---|
+| `error-500` | 500 — Server Error | DzResult, DzCard, DzButton, DzDivider, DzText |
+| `error-403` | 403 — Access Denied | DzResult, DzCard, DzButton, DzText, DzAlert |
+| `coming-soon` | Coming Soon | DzCard, DzCountdown, DzInput, DzButton, DzBadge, DzHeading, DzText, DzDivider |
+
+### 6.4 Communication & Productivity apps (→ tasks C5, C6)
+
+| slug | Name | Built with |
+|---|---|---|
+| `chat-messages` | Chat / Messages ⭐ | DzAppShell, DzList, DzAvatar, DzBadge, DzScrollArea, DzTextarea, DzInput, DzButton, DzSearchInput, DzDropdownMenu |
+| `calendar-scheduler` | Calendar / Scheduler | DzAppShell, DzCalendar, DzSegmented, DzBadge, DzPopover, DzButton, DzAvatarGroup, DzDialog |
+| `file-manager` | File Manager | DzAppShell, DzSidebar, DzTree, DzDataView, DzBreadcrumb, DzDropdownMenu, DzContextMenu, DzButton, DzSearchInput, DzBadge |
+| `tasks-todo` | Tasks / To-Do | DzAppShell, DzList, DzCheckbox, DzTag, DzBadge, DzInput, DzDropdownMenu, DzSegmented, DzButton |
+
+### 6.5 Data & Commerce (→ tasks C7, C8)
+
+| slug | Name | Built with |
+|---|---|---|
+| `data-table` | Data Table (CRUD list) ⭐ | DzAppShell, DzDataGrid, DzSearchInput, DzMultiSelect, DzDropdownMenu, DzPagination, DzDialog, DzButton, DzBadge, DzCheckbox |
+| `invoice` | Invoice | DzCard, DzTable, DzDescriptions, DzDivider, DzBadge, DzButton, DzHeading, DzText |
+| `shopping-cart` | Shopping Cart | DzCard, DzList, DzNumberInput, DzButton, DzBadge, DzAlert, DzInput, DzDivider, DzImage |
+| `order-history` | Order History | DzCard, DzDataView, DzList, DzBadge, DzTag, DzPagination, DzSearchInput, DzButton |
+
+### 6.6 Account (→ task C9)
+
+| slug | Name | Built with |
+|---|---|---|
+| `account-settings` | Account Centre | DzAppShell, DzTabs, DzFormField, DzInput, DzSwitch, DzSelect, DzAvatar, DzButton, DzDivider, DzAlert, DzBadge, DzDescriptions |
+
+> **Re-skin opportunities (token-only, optional but encouraged):** give a few new templates a distinct semantic colourway so the gallery reads as a spread of hues — e.g. `pricing` violet, `chat-messages` cyan, `calendar-scheduler` indigo — by remapping `--dz-primary` at the template root and setting the matching `accent` in the registry row. Never raw hex; correct in light + dark.
 
 ---
 
-## 8. Implementation tasks
+## 7. Task backlog (free tier)
 
-Tasks are ordered. **T1 → T2 → T3 are foundational and sequential.** T4–T9 (the template batches) can run in parallel **after** T3 lands the reference templates and the preview shell. T10 is the closing QA gate.
+**Order matters** (the orchestrator runs sequentially and stops on first failure). Run **E1 → E2 → E3 → E4 → E5 → E6** (experience; E1 is the data foundation the others read), then the catalogue batches **C1 → C9** (each depends only on the shipped shell + E1's registry fields and can otherwise run in any order), then **Q1** (closing QA gate).
 
-Each task is a ready-to-use prompt. When executing one, paste it as the instruction and let the executor read the referenced files.
+Checklist:
 
-Mark a task `[x]` when its acceptance criteria are met. Checklist:
-
-- [ ] **T1** — Foundation: registry, routing, clickable Templates tile
-- [ ] **T2** — Templates gallery page (`/templates`)
-- [ ] **T3** — Preview shell + detail page + 3 featured reference templates
-- [ ] **T4** — Dashboards batch (7 templates)
-- [ ] **T5** — Auth batch (4 templates)
-- [ ] **T6** — Marketing batch (3 templates)
-- [ ] **T7** — Commerce batch (3 templates)
-- [ ] **T8** — Content batch (3 templates)
-- [ ] **T9** — Utility batch (1 template)
-- [ ] **T10** — QA, accessibility & build verification
+- [ ] **E1** — Registry enrichment: `tags`, `isNew`/`createdAt`, sort order (foundation)
+- [ ] **E2** — Gallery: ⌘K search + tag filter + "New"/"Featured" badges + sort
+- [ ] **E3** — Gallery/detail polish: per-template SEO, preview loading skeleton, grid a11y, thumbnail rendering
+- [ ] **E4** — Detail: Preview/Code tabs + in-page source viewer + copy-all + "Copy for LLM"
+- [ ] **E5** — Detail: in-preview customiser (primary-colour presets) + RTL toggle
+- [ ] **E6** — Build-time thumbnail screenshots (paired light/dark), wired into the gallery
+- [ ] **C1** — Auth pack: sign-up, reset-password, verify-otp, onboarding-wizard
+- [ ] **C2** — Marketing A: pricing, feature-product
+- [ ] **C3** — Marketing B: contact, about-faq
+- [ ] **C4** — Errors & utility: error-500, error-403, coming-soon
+- [ ] **C5** — Communication apps: chat-messages, calendar-scheduler
+- [ ] **C6** — Productivity apps: file-manager, tasks-todo
+- [ ] **C7** — Data & commerce A: data-table, invoice
+- [ ] **C8** — Data & commerce B: shopping-cart, order-history
+- [ ] **C9** — Account centre: account-settings
+- [ ] **Q1** — QA, accessibility & build verification (closing gate)
 
 ---
 
-### [x] T1 — Foundation: registry, routing, and the clickable Templates tile
+### [x] E1 — Registry enrichment: tags, recency, sort order
 
 ```xml
 <role>
-You are a senior Vue 3 + TypeScript engineer working in the dzup-ui monorepo's
-landing app (apps/landing). You follow the repo's existing conventions exactly.
+You are a senior Vue 3 + TypeScript engineer in the dzup-ui monorepo's landing app
+(apps/landing). You follow the repo's existing conventions exactly and make minimal,
+backward-compatible changes.
 </role>
 
 <context>
-The landing page's Ecosystem grid (apps/landing/src/components/EcosystemGrid.vue,
-fed by ECOSYSTEM in apps/landing/src/data.ts) shows a "Templates" tile that is
-currently inert ("Planned" badge, no link). We are turning Templates into a real,
-free offering: a gallery of full-page starters built from @dzup-ui/core. This
-task builds ONLY the foundation — data model, routes, and making the tile
-clickable. It renders NO templates yet (those come in later tasks).
-Read first: docs/templates.md §3, §4; apps/landing/src/router.ts;
-apps/landing/src/data.ts; apps/landing/src/components/EcosystemGrid.vue;
-apps/landing/src/pages/ProPage.vue; apps/landing/src/config.ts.
+The Templates gallery (/templates) lists 24 templates from a flat registry. We are about
+to add search, tag-filtering, "New" badges and sort to the gallery (task E2) and ~18 new
+templates (tasks C1–C9). Those features need data that the registry does not yet carry.
+This task ONLY widens the data model and backfills the 24 existing rows — it changes NO
+UI. Keeping it separate means E2 and the C-tasks can rely on the fields existing.
+Read first: docs/templates.md §1, §4, §6; apps/landing/src/templates/registry.ts (the
+full file — note the existing fields, JSDoc density, and the accent spectrum);
+apps/landing/src/data.ts (comment style to match).
 </context>
 
 <task>
-1. Create apps/landing/src/templates/registry.ts implementing the TemplateMeta
-   interface, TemplateCategory union, TEMPLATE_CATEGORIES, an EMPTY (for now)
-   TEMPLATES array, and getTemplate(slug). Match the JSDoc/comment density of
-   data.ts.
-2. Add three lazy routes to router.ts (/templates, /templates/:slug,
-   /templates/:slug/preview) per docs/templates.md §3, including the
-   unknown-slug → /templates redirect guard.
-3. In App.vue, suppress TopNav and Footer when route.name === 'template-preview'
-   so the preview render is chromeless.
-4. In data.ts, give the Templates ECOSYSTEM item a way to be interactive: add an
-   optional `href?: string` to EcosystemItem and set it to '/templates' on the
-   Templates item only. In EcosystemGrid.vue, render items WITH an href as a
-   router-link (whole-card cover link, reuse ComponentGallery's tile-link-cover
-   technique) and items WITHOUT one exactly as today ("Planned", inert). Replace
-   the Templates "Planned" badge with a "Free" badge (tone="success").
+Edit apps/landing/src/templates/registry.ts:
+1. Add to the TemplateMeta interface, all OPTIONAL so existing rows stay valid:
+   - `tags?: string[]` — lowercase, kebab-case facets for filtering/search, e.g.
+     ['dashboard','data-table','dark-mode'] or ['auth','form','split-layout']. Document
+     that tags are a controlled vocabulary (define and export a `TEMPLATE_TAGS` const of
+     allowed tag keys + display labels so E2 can render a tag filter without a free-for-all).
+   - `createdAt?: string` — ISO date 'YYYY-MM-DD' the template was added (for recency).
+2. Add a derived helper `isNew(t: TemplateMeta, now?: Date): boolean` — true when
+   `createdAt` is within the last 30 days. Pure, testable, no side effects.
+3. Backfill all 24 existing rows with a sensible `tags` array (3–6 tags each, drawn from
+   the controlled vocabulary you define — cover: category, dominant component/pattern,
+   and notable traits like 'dark-mode','responsive','form-heavy','data-table','timeline')
+   and a `createdAt` (use a plausible past date, e.g. the shipped templates predate today;
+   you may cluster them in the weeks before 2026-06-25 — do NOT mark any of the 24 as new).
+4. Keep getTemplate() and the existing exports working unchanged.
 </task>
 
 <constraints>
-- TypeScript strict; no `any`. Use `.ts` extensions in relative imports (repo rule).
-- Token-only styling; no raw colors; no new color literals.
-- Do NOT touch the other five Ecosystem tiles' behaviour.
-- Do NOT create template pages or gallery UI here — keep scope to foundation.
+- TypeScript strict; no `any`. `.ts` extensions in relative imports (repo rule).
+- 100% backward compatible: the 24 rows must still type-check and the gallery must still
+  render exactly as before (you are not touching any .vue here).
+- Do NOT use Date.now() in module top-level code; isNew() takes an injectable `now` for
+  testability and defaults to a fresh Date() inside the function body only.
+- Match the JSDoc/comment density already in registry.ts.
 - vue-tsc must pass (`yarn typecheck`). ESLint cannot run locally — do not rely on it.
 </constraints>
 
 <deliverables>
-registry.ts, edited router.ts, edited App.vue, edited data.ts, edited
-EcosystemGrid.vue. A short note of any deviation from §3/§4.
+Edited registry.ts (interface + TEMPLATE_TAGS + isNew + 24 backfilled rows). A short note
+listing the tag vocabulary you settled on and why.
 </deliverables>
 
 <acceptance_criteria>
-- Clicking the Templates tile navigates to /templates (which may render a stub).
-- The other five tiles are unchanged and still inert.
-- /templates/<unknown> redirects to /templates.
-- Visiting a /preview route shows no TopNav/Footer.
-- `yarn typecheck` passes with 0 errors.
+- TemplateMeta has optional `tags` and `createdAt`; TEMPLATE_TAGS and isNew() are exported.
+- All 24 rows carry tags (from the vocabulary) and a createdAt; none are "new".
+- `yarn typecheck` passes with 0 errors; the gallery is visually unchanged.
 </acceptance_criteria>
 
 <thinking>
-Before writing code, restate the EcosystemItem type change and confirm it is
-backwards-compatible with the five inert tiles. Confirm how App.vue currently
-lays out router-view and where to gate the chrome.
+Before coding, restate the three field additions and confirm each is optional and
+backward-compatible. Decide the tag vocabulary (aim ~20–30 controlled tags) by scanning
+the 24 rows' stacks and blurbs, then map each row to its tags. Only then edit the file.
 </thinking>
 ```
 
 ---
 
-### [x] T2 — The Templates gallery page (`/templates`)
+### [x] E2 — Gallery: ⌘K search, tag filter, "New"/"Featured" badges, sort
 
 ```xml
 <role>
-You are a senior Vue 3 + TypeScript engineer and UI designer building the
-marketing-grade gallery index for dzup-ui Templates.
+You are a senior Vue 3 + TypeScript engineer and UI designer improving the discovery
+experience of the dzup-ui Templates gallery to a best-in-class bar.
 </role>
 
 <context>
-T1 has landed registry.ts, routing, and the clickable tile. Now build the gallery
-that lists all templates with a category filter. Reuse existing landing patterns —
-do not invent new layout primitives.
-Read first: docs/templates.md §2.2, §5, §6; apps/landing/src/components/
-ComponentGallery.vue (the closest pattern: Section + lp-card grid + cover links +
-staggered --reveal-delay); apps/landing/src/components/Section.vue;
-apps/landing/src/templates/registry.ts; apps/landing/src/config.ts.
+E1 added `tags`, `createdAt`, isNew() and TEMPLATE_TAGS to the registry. The gallery
+(apps/landing/src/pages/TemplatesPage.vue) today has only a DzSegmented CATEGORY filter
+and accent-tinted cards. Research (docs/templates.md §2) shows the field's tables stakes
+for a >20-item catalogue are: keyboard search (⌘K), tag filtering, "New"/"Featured"
+badges and sort. dzup-ui already ships DzCommandPalette (overlays), DzSegmented, DzBadge,
+DzTag, DzSelect, DzSearchInput, DzEmpty — use them; do not invent new primitives.
+Read first: docs/templates.md §2 (discovery patterns), §5 (quality bar);
+apps/landing/src/pages/TemplatesPage.vue (the full file — preserve its accent tinting,
+cover-link technique and staggered reveal); apps/landing/src/templates/registry.ts;
+the DzCommandPalette story under packages/core/stories/overlays/ to confirm its props.
 </context>
 
 <task>
-Create apps/landing/src/pages/TemplatesPage.vue:
-- A Section header: eyebrow "Templates", title "{N} free templates, built from
-  core" (N = TEMPLATES.length), a lede, and a "Free · MIT" note.
-- A category filter using DzSegmented (All + the TEMPLATE_CATEGORIES labels),
-  driven by a ref; filtering is client-side over TEMPLATES.
-- A responsive card grid (3 / 2 / 1 cols like ComponentGallery). Each card:
-  template name, category label, a "Free" DzBadge, the stack as small muted
-  text, an icon or thumbnail, and a whole-card router-link to
-  /templates/:slug (tile-link-cover technique). Featured templates first.
-- Empty-filter safety: if a category has no templates, show DzEmpty.
+Enhance TemplatesPage.vue. Go beyond the basics — this is the front door:
+1. SEARCH: add a search affordance that filters by name, blurb and tags (case-insensitive,
+   debounced). Wire a ⌘K / Ctrl+K keyboard shortcut that opens DzCommandPalette listing
+   templates (grouped by category, each entry jumps to its detail route); typing filters.
+   Also provide a visible DzSearchInput for non-keyboard users. The palette and the inline
+   search must share the same filter predicate.
+2. TAG FILTER: render the TEMPLATE_TAGS as a row of toggleable DzTag/DzBadge chips (or a
+   DzMultiSelect) that AND-composes with the existing category filter. "Clear filters" resets.
+3. BADGES: on each card show a "Featured" badge for `featured` rows and a "New" badge when
+   isNew(t) is true. Keep the existing "Free" framing (a "Free · MIT" note in the header).
+4. SORT: a DzSelect with Featured (default) / Newest / A–Z, applied after filtering.
+5. EMPTY: keep DzEmpty for any filter combination that yields nothing, with a reset action.
+6. Show per-category counts in the category filter labels or header.
 </task>
 
 <constraints>
-- Token-only styling; mirror ComponentGallery's CSS structure and class naming.
-- Use @dzup-ui/core components (DzBadge, DzText, DzSegmented, DzEmpty) — not raw markup — for anything a component covers.
-- Cards must be keyboard-navigable with visible focus (copy tile-link-cover focus style).
-- No live iframes on the gallery (perf) — icon/thumbnail only.
-- vue-tsc clean.
+- Token-only styling; mirror the existing card/grid CSS and class naming — do not regress
+  the accent tinting, cover links, focus rings or staggered reveal.
+- Use @dzup-ui/core components for anything they cover (palette, chips, select, badges).
+- Keyboard-first: ⌘K opens the palette; the grid stays arrow/tab navigable with visible focus.
+- No live iframes on the gallery (perf) — cards stay icon/thumbnail only.
+- vue-tsc clean; `vite build` (apps/landing) succeeds.
 </constraints>
 
 <deliverables>
-TemplatesPage.vue, plus any icon additions to apps/landing/src/icons.ts needed
-for the category/template icons.
+Edited TemplatesPage.vue (+ any small icons.ts additions). A note on how the shared filter
+predicate is structured and how ⌘K is registered/cleaned up.
 </deliverables>
 
 <acceptance_criteria>
-- /templates lists all registered templates; count in the title is derived, not hardcoded.
-- The DzSegmented filter narrows the grid live; "All" shows everything.
-- Each card links to its detail route; whole card is the click target; focus ring visible.
-- Looks correct in light and dark, at 390px and desktop widths.
-- `yarn typecheck` passes.
+- ⌘K/Ctrl+K opens a working command-palette search; selecting an entry navigates to its detail.
+- Tag chips + category filter + sort compose; "Featured" and "New" badges render correctly.
+- Empty combinations show DzEmpty with a reset; "All" + no tags + no query shows everything.
+- Looks correct in light & dark at 390px and desktop; `yarn typecheck` + `vite build` pass.
 </acceptance_criteria>
+
+<thinking>
+Before coding, sketch the single computed filter pipeline (query → category → tags → sort)
+and confirm the palette and inline search both feed it. Decide how to register the global
+keydown listener and remove it on unmount. Only then edit the file.
+</thinking>
 ```
 
 ---
 
-### [x] T3 — Preview shell + detail page + the 3 featured reference templates
+### [x] E3 — Per-template SEO, preview loading skeleton, grid a11y, thumbnail rendering
 
 ```xml
 <role>
-You are a senior Vue 3 + TypeScript engineer establishing the canonical preview
-experience and the first three reference templates that all later templates copy.
+You are a senior Vue 3 + TypeScript engineer focused on accessibility, SEO and perceived
+performance for the dzup-ui Templates pages.
 </role>
 
 <context>
-This task creates the preview infrastructure AND the three featured (⭐) templates
-that prove it end to end: analytics-dashboard, sign-in, saas-landing. Later batch
-tasks (T4–T9) will imitate these. Get the quality bar right here.
-Read first: docs/templates.md §5 (preview UX), §6 (catalogue rows for the 3
-featured), §7 (quality bar); apps/landing/src/components/ShowcaseDashboard.vue
-(the gold-standard live composition — imitate its realism and token use);
-Section.vue; config.ts (storybookDocs, LINKS).
+Three quality gaps remain on the shipped Templates pages (docs/templates.md §1, §2 #13/#15):
+(a) the detail page sets no per-template SEO head, so social shares show the generic home
+title; (b) the chromeless preview shows a blank frame while the template bundle lazy-loads;
+(c) the gallery <ul> is unlabelled and cards have no reserved aspect-ratio; and the
+`thumbnail` field exists in the registry but the gallery never renders paired light/dark
+images with a graceful icon fallback (E6 will GENERATE the images — this task makes the
+gallery READY to show them).
+Read first: apps/landing/src/router.ts (how meta.head syncs OG/Twitter tags — follow that
+pattern); apps/landing/src/pages/TemplateDetailPage.vue; TemplatePreviewPage.vue;
+TemplatesPage.vue; registry.ts; and how useHead/meta is done elsewhere (HomePage route meta).
 </context>
 
 <task>
-1. TemplatePreviewPage.vue (route /templates/:slug/preview): resolves the slug via
-   getTemplate(), lazy-loads template.load(), renders it chromeless. Reads ?theme=
-   from the query and applies data-theme to the document. Unknown slug → redirect
-   to /templates.
-2. TemplateDetailPage.vue (route /templates/:slug): the conversion surface per §5 —
-   title, blurb, "Built with" badges linking to Storybook via storybookDocs(),
-   a live <iframe src="/templates/:slug/preview"> with a DzSegmented device
-   switcher (mobile 390 / tablet 768 / desktop 100%), an independent light/dark
-   toggle (drives the iframe ?theme), an "Open fullscreen" link (new tab), a
-   "View source" DzButton + DzCopyButton, and prev/next navigation within TEMPLATES.
-3. Build the three featured templates as full-page chromeless components under
-   apps/landing/src/templates/<slug>/<Name>.vue, each with co-located sample data,
-   built ONLY from the free core components listed in their §6 rows, honouring §7.
-4. Register all three in registry.ts TEMPLATES with correct metadata and featured: true.
+1. SEO: set a per-template document head on the detail route — title "{name} — dzup-ui
+   Templates", description = blurb, and OG/Twitter tags — mirroring the existing meta.head
+   mechanism in router.ts/App. If a template later has a thumbnail, use it as og:image.
+2. PREVIEW LOADING: in TemplatePreviewPage.vue, show a tasteful loading state (DzSpinner or
+   DzSkeleton from core) while the async template component resolves; render the template
+   when ready; keep the unknown-slug redirect.
+3. GALLERY A11Y + CLS: label the gallery <ul> (aria-label="Templates"), give each card a
+   reserved aspect-ratio so thumbnails don't shift layout, and confirm the cover-link/focus
+   pattern still passes keyboard + screen-reader use.
+4. THUMBNAIL RENDERING: render `template.thumbnail` (and an optional dark variant) as a
+   lazy <img> with the existing icon as the fallback when no thumbnail is set. Support a
+   paired light/dark convention (e.g. `<thumb>.webp` + `<thumb>-dark.webp`) chosen by the
+   current theme. No images exist yet — verify the icon fallback still renders for all 24.
 </task>
 
 <constraints>
-- §7 quality bar is mandatory (token-only color/radius/shadow/font, light+dark,
-  responsive, WCAG AA, realistic content, self-contained, restrained motion).
-- Templates must NOT import landing-only lp-* styles; they stand alone.
-- iframe must have a title; device width animation respects prefers-reduced-motion.
-- vue-tsc clean. Validate via `vite build` for apps/landing (ESLint is unavailable locally).
+- Token-only styling; no raw colors. Use core components (DzSpinner/DzSkeleton) for states.
+- Do not regress the existing toolbar, device switcher, theme toggle or prev/next.
+- Images must be loading="lazy" with width/height or aspect-ratio set (no CLS).
+- vue-tsc clean; `vite build` (apps/landing) succeeds.
 </constraints>
 
 <deliverables>
-TemplatePreviewPage.vue, TemplateDetailPage.vue, three template folders with
-components + data, updated registry.ts.
+Edited TemplateDetailPage.vue, TemplatePreviewPage.vue, TemplatesPage.vue (+ router/meta
+wiring). A note on the thumbnail naming convention E6 must produce.
 </deliverables>
 
 <acceptance_criteria>
-- /templates/analytics-dashboard shows the detail page with a working live preview.
-- Device switcher reflows the preview; theme toggle re-skins ONLY the preview.
-- "Open fullscreen" opens the chromeless render at its own URL.
-- "Built with" badges deep-link to the right Storybook docs pages.
-- All three templates pass §7 in both themes at mobile + desktop.
-- `vite build` (apps/landing) succeeds; `yarn typecheck` passes.
+- Visiting /templates/<slug> sets a per-template title + description + OG/Twitter tags.
+- The preview shows a loading state then the template; unknown slugs still redirect.
+- The gallery <ul> is labelled; cards reserve space; all 24 still show their icon fallback.
+- `yarn typecheck` + `vite build` pass.
 </acceptance_criteria>
 
-<example>
-The analytics-dashboard template should read like ShowcaseDashboard.vue promoted to
-a full page: an app shell with DzSidebar, a toolbar, a DzStatCard row, a chart card,
-a DzTable of members, and a side column — all live @dzup-ui/core, all token-styled,
-correct in light and dark.
-</example>
+<thinking>
+Restate the four sub-changes and confirm each is additive. Confirm exactly how meta.head is
+read and synced today so the per-template head uses the same path. Decide the thumbnail
+light/dark naming so E6 can target it. Only then edit.
+</thinking>
 ```
 
 ---
 
-### [x] T4–T9 — Template authoring batches (one batch per remaining category)
-
-These six tasks share one **reusable authoring prompt**. For each, fill the
-`<batch>` block with the category's catalogue rows from §6 and run it. Each batch
-depends only on T3 (the shell + reference templates) and can run in parallel.
-
-| Task | Batch | Templates (slugs) |
-|---|---|---|
-| **T4** | Dashboards (remaining) | admin-crm, project-board, app-settings, user-profile, billing-plans, team-members, inbox-notifications |
-| **T5** | Auth (remaining) | sign-up, reset-password, verify-otp, onboarding-wizard |
-| **T6** | Marketing (remaining) | pricing, feature-product, changelog-roadmap |
-| **T7** | Commerce | product-listing, product-detail, checkout |
-| **T8** | Content | blog-index, blog-post, docs-page |
-| **T9** | Utility | states-pack |
-
-**Reusable authoring prompt:**
+### [x] E4 — Detail page: Preview/Code tabs, in-page source viewer, copy-all, "Copy for LLM"
 
 ```xml
 <role>
-You are a senior Vue 3 + TypeScript engineer and product designer building
-production-grade, free page templates for dzup-ui from the @dzup-ui/core library.
+You are a senior Vue 3 + TypeScript engineer building the code-access experience that turns
+a template preview into something a visitor can actually adopt.
 </role>
 
 <context>
-The Templates gallery, detail/preview shell, and three featured reference
-templates already exist (docs/templates.md T2, T3). You are adding more templates
-that must match those references exactly in structure, quality and registration.
+Today the detail page (apps/landing/src/pages/TemplateDetailPage.vue) only links out to
+GitHub for source — visitors must leave the page to read code. The field's standard
+(docs/templates.md §2 #7) is a Preview/Code tab set with syntax highlighting and one-click
+copy. dzup-ui ships DzTabs, DzCodeBlock and DzCopyButton — use them. The template source
+must be available to the page at build time. Vite supports importing a file's raw text via
+`?raw` (e.g. `import src from '../templates/x/X.vue?raw'`); prefer `import.meta.glob` with
+`{ query: '?raw', import: 'default' }` so all template sources resolve generically from the
+registry `source`/`load` path without hand-maintaining a map.
+Read first: docs/templates.md §2 (#7, #12); apps/landing/src/pages/TemplateDetailPage.vue;
+registry.ts (the `source` path shape); the DzCodeBlock + DzTabs + DzCopyButton stories
+under packages/core/stories/ to confirm props (language, copy slot, etc.).
+</context>
+
+<task>
+Add a Preview / Code experience to the detail page. Go beyond a single file:
+1. TABS: wrap the existing live preview in DzTabs — "Preview" (the current iframe + toolbar,
+   unchanged) and "Code" (new).
+2. CODE VIEWER: in the Code tab, load the template's source via import.meta.glob('?raw')
+   keyed off the registry `source` path, and render it in DzCodeBlock with vue/ts syntax
+   highlighting. If a template has a co-located data.ts, show it too (a sub-tab or a second
+   block labelled by filename). Handle long files gracefully (scroll, not overflow).
+3. COPY: a DzCopyButton to copy the full source; show the "Built with" dependency list near
+   the code so "what will this add?" is answered in-page (reuse the existing chips).
+4. COPY FOR LLM: add a "Copy for LLM" button that copies a prompt-friendly markdown bundle —
+   a short header ("dzup-ui template: {name}, built with {stack}"), then the source in a
+   fenced ```vue block (+ the data file if present) — so a visitor can paste it into an AI
+   assistant. This is the cheap slice of the AI-native direction (docs/templates.md §8).
+</task>
+
+<constraints>
+- Token-only styling; reuse existing detail-page class naming. Do not regress the toolbar,
+  device switcher, theme toggle, fullscreen, view-source, copy-path or prev/next.
+- Use DzCodeBlock/DzTabs/DzCopyButton — not a hand-rolled highlighter.
+- The ?raw imports must be generic (driven by the registry), not a hardcoded per-slug map.
+- vue-tsc clean; `vite build` (apps/landing) succeeds (confirm ?raw glob builds, not just dev).
+</constraints>
+
+<deliverables>
+Edited TemplateDetailPage.vue (+ any tiny helper for resolving raw source from `source`).
+A note on how import.meta.glob is keyed and how missing sources fail safely.
+</deliverables>
+
+<acceptance_criteria>
+- The detail page has Preview/Code tabs; Code shows the real, highlighted template source
+  (+ data file when present) for every template, resolved generically.
+- "Copy" copies the full source; "Copy for LLM" copies the markdown bundle.
+- Light/dark correct; `yarn typecheck` + `vite build` pass (raw imports resolve in build).
+</acceptance_criteria>
+
+<thinking>
+Before coding, confirm how import.meta.glob('../templates/**/*.{vue,ts}', { query:'?raw' })
+maps to a registry `source` path, and how to pick the right entry per slug. Decide the
+DzTabs structure and where the existing toolbar lives. Only then edit.
+</thinking>
+```
+
+---
+
+### [x] E5 — Detail page: in-preview customiser (primary-colour presets) + RTL toggle
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer building the single most persuasive feature of
+the gallery: live, in-preview customisation that proves dzup-ui templates are genuinely
+themeable.
+</role>
+
+<context>
+The preview already toggles light/dark independently (via ?theme= on the iframe). Research
+(docs/templates.md §2 #9, #10) shows the strongest differentiator — and a gap across most
+indie libraries — is letting visitors swap the PRIMARY COLOUR live and validate RTL. dzup-ui's
+token architecture makes this cheap: the preview document's `--dz-primary` (and its
+foreground/shade ramp) can be remapped to a decorative spectrum palette, and `dir="rtl"` can
+be set on its <html>. The preview page must accept these as query params so the iframe
+re-renders deterministically (same mechanism as ?theme=).
+Read first: docs/templates.md §2 (#9, #10); apps/landing/src/pages/TemplateDetailPage.vue
+(the toolbar + previewSrc computed); TemplatePreviewPage.vue (how ?theme is read/applied);
+the @dzup-ui/tokens decorative spectrum + PALETTE_CONFIGS (how a palette maps to
+--dz-colors-<name>-* and how --dz-primary is defined) so the remap is correct in light+dark.
+</context>
+
+<task>
+1. PREVIEW PARAMS: extend TemplatePreviewPage.vue to read `?primary=<palette>` and `?dir=rtl`
+   (in addition to ?theme). On mount/param-change, remap --dz-primary (+ foreground + the
+   shades the primary ramp uses) to the chosen spectrum palette on the document root, and set
+   `dir` on <html>. Default (no param) = the template's own colours, exactly as today.
+2. TOOLBAR: in TemplateDetailPage.vue add to the preview toolbar — a compact primary-colour
+   swatch picker (a row of DzSegmented/DzButton swatches or DzColorPicker presets drawn from
+   the spectrum) and an LTR/RTL toggle. They drive the iframe src params (like the theme toggle).
+   Keep all existing controls. Announce changes via aria-live.
+3. RESET: a "Reset" control returns the preview to the template's native theme/colour/dir.
+</task>
+
+<constraints>
+- Token-only: the remap sets CSS custom properties to var(--dz-colors-<palette>-*) values —
+  NEVER raw hex. Must be correct in BOTH light and dark (resolve the right shade per theme).
+- Only the PREVIEW re-skins; the marketing/detail page chrome is unaffected.
+- Respect prefers-reduced-motion for any transition; controls are real buttons with labels.
+- Do not regress device switcher, theme toggle, fullscreen, code tabs (E4) or prev/next.
+- vue-tsc clean; `vite build` (apps/landing) succeeds.
+</constraints>
+
+<deliverables>
+Edited TemplatePreviewPage.vue (param handling + token remap) and TemplateDetailPage.vue
+(swatch picker + RTL toggle + reset). A note on which token properties the remap sets and how
+light/dark shade selection works.
+</deliverables>
+
+<acceptance_criteria>
+- Picking a primary colour live re-skins ONLY the preview, correct in light and dark; the
+  template's components (buttons, badges, links, focus rings) all pick up the new primary.
+- The RTL toggle flips the preview to dir="rtl" and the layout mirrors sensibly.
+- "Reset" restores native theme/colour/LTR; fullscreen/open-in-new-tab preserve the params.
+- `yarn typecheck` + `vite build` pass.
+</acceptance_criteria>
+
+<thinking>
+Before coding, open the tokens package and confirm exactly which custom properties define
+--dz-primary and its on-color/ramp, and how a decorative palette exposes per-shade values per
+theme. Decide the minimal set of properties to remap so all core components follow. Confirm
+the iframe re-render path for a new query param. Only then edit.
+</thinking>
+```
+
+---
+
+### [x] E6 — Build-time thumbnail screenshots (paired light/dark), wired into the gallery
+
+```xml
+<role>
+You are a senior frontend build engineer adding a reproducible, committed thumbnail pipeline
+so the Templates gallery shows real screenshots instead of icons.
+</role>
+
+<context>
+The gallery currently shows a Lucide icon per card; the field standard (docs/templates.md §2
+#1, #2, #14) is a static SCREENSHOT per template, ideally a light/dark pair, generated at
+build time and committed (per-request generation does not scale; N live iframes is too heavy).
+E3 already made the gallery render `template.thumbnail` (+ dark variant) with an icon
+fallback. This task produces those images. Each template renders chromeless at
+/templates/<slug>/preview?theme=light|dark — a headless browser can screenshot that route.
+Read first: docs/templates.md §2 (#1, #2, #13, #14); apps/landing/src/pages/
+TemplatePreviewPage.vue and registry.ts (slugs + the thumbnail naming convention E3 defined);
+apps/landing/package.json + vite config (how the app builds/serves) and any existing scripts/.
+This task may run shell commands (yarn, a headless browser); it is acceptable in this repo.
+</context>
+
+<task>
+1. SCRIPT: add a Node script (e.g. apps/landing/scripts/shoot-thumbnails.mjs) that builds or
+   serves the landing app, then uses a headless browser (Playwright — add as a devDependency)
+   to load /templates/<slug>/preview?theme=light and ?theme=dark for every slug in TEMPLATES,
+   screenshot at a consistent gallery aspect ratio (e.g. 1200×750), and write optimised WebP
+   to a committed assets dir (e.g. src/templates/_thumbnails/<slug>.webp and <slug>-dark.webp),
+   matching the naming convention from E3.
+2. WIRE-UP: add a `yarn thumbnails` script in apps/landing/package.json. Populate the
+   `thumbnail` field on the registry rows (or derive the path by convention so new templates
+   are covered automatically — prefer convention-by-slug over hand-maintained paths).
+3. GALLERY: confirm cards now show the paired light/dark screenshot per theme with the icon
+   still used as fallback when an image is missing. No CLS (E3 reserved the aspect-ratio).
+4. DOCS: document how to regenerate (`yarn thumbnails`) and when to re-run (after adding/
+   changing a template) in a short README near the script.
+</task>
+
+<constraints>
+- The pipeline must be reproducible and idempotent; images are committed artifacts.
+- Keep image weight reasonable (WebP, sensible dimensions); lazy-loaded in the gallery.
+- Do not change template source to suit the screenshotter; screenshot what ships.
+- Token-only styling unaffected. vue-tsc clean; `vite build` (apps/landing) still succeeds.
+- If a headless browser cannot run in this environment, FAIL LOUDLY with a clear message and
+  leave the icon fallback intact — do not commit broken/empty images.
+</constraints>
+
+<deliverables>
+The screenshot script, the `yarn thumbnails` wiring, generated+committed thumbnails for all
+slugs, registry/convention wiring, and a short regeneration README. A note on the browser/
+tooling chosen and the per-image weight.
+</deliverables>
+
+<acceptance_criteria>
+- `yarn thumbnails` regenerates a light+dark WebP for every template, reproducibly.
+- The gallery shows real screenshots (theme-matched) with icon fallback for any gap.
+- Images are committed and lazy-loaded with no layout shift; `vite build` passes.
+</acceptance_criteria>
+
+<thinking>
+Before coding, decide build-then-serve vs. preview-server, and confirm the chromeless preview
+route renders standalone. Pick Playwright, define the viewport/output size, and the
+slug→filename convention (matching E3). Only then write the script.
+</thinking>
+```
+
+---
+
+### [x] C1 — Auth pack: sign-up, reset-password, verify-otp, onboarding-wizard
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free page templates for dzup-ui from the @dzup-ui/core library.
+</role>
+
+<context>
+The Templates gallery, detail/preview shell and 24 reference templates already ship. dzup-ui
+ships only 1 of ~6 auth pages competitors standardise on (docs/templates.md §3); this task
+adds the four most common missing ones. They must match the shipped templates exactly in
+structure, quality and registration.
 Read first, every time:
-- docs/templates.md §6 (your batch's rows: exact slug, name, blurb, category, stack)
-  and §7 (the non-negotiable quality bar).
-- apps/landing/src/templates/analytics-dashboard/ (or sign-in / saas-landing) as the
-  structural reference to imitate.
-- apps/landing/src/components/ShowcaseDashboard.vue for realism and token usage.
-- apps/landing/src/templates/registry.ts for the registration shape.
-- Appendix A of docs/templates.md to confirm a component name is a real core export
-  before using it. If a needed component does not exist, choose the closest real one
-  and note the substitution — never invent an import.
-</context>
+- docs/templates.md §6.1 (your rows: exact slug, name, built-with) and §5 (the quality bar).
+- apps/landing/src/templates/sign-in/ (the shipped auth flagship — imitate its split-screen
+  structure, token use and realism) and registry.ts (the registration shape, incl. the
+  `tags`/`createdAt` fields from E1).
+- Appendix A of docs/templates.md to confirm a component name is a real core export before
+  using it. If a needed component does not exist, choose the closest real one and note it.
 
 <batch>
-<!-- Paste this batch's §6 rows here. For EACH template, list: slug, name, blurb,
-     category, and the exact "Built with" component list. -->
+- sign-up — "Sign Up": a split-screen register page mirroring sign-in; form card with name,
+  email, DzPasswordInput WITH a live DzProgress strength meter, terms DzCheckbox, social
+  providers, and a marketing panel. Built with: DzCard, DzFormField, DzInput, DzPasswordInput,
+  DzCheckbox, DzButton, DzDivider, DzProgress. (mark featured: true — this is the C1 reference)
+- reset-password — "Forgot / Reset Password": a centered card with two states in one page —
+  request (email + "Send reset link") and a sent confirmation (DzResult / DzAlert "check your
+  inbox"), plus a back-to-sign-in link. Built with: DzCard, DzFormField, DzInput, DzButton,
+  DzResult, DzAlert.
+- verify-otp — "OTP / 2FA Verify": a centered card with a DzOtpInput, a DzCountdown resend
+  timer, an explanatory DzText/DzAlert, and verify/back actions. Built with: DzCard,
+  DzOtpInput, DzButton, DzCountdown, DzText, DzAlert.
+- onboarding-wizard — "Onboarding Wizard": a multi-step setup using DzStepper — steps like
+  Profile → Workspace → Invite team → Done, each a real form panel, with a DzProgress and
+  prev/next; final step a success state. Built with: DzStepper, DzFormField, DzInput, DzSelect,
+  DzRadioGroup, DzCheckboxGroup, DzProgress, DzButton, DzCard.
 </batch>
+</context>
 
 <task>
-For each template in <batch>:
-1. Create apps/landing/src/templates/<slug>/<Name>.vue — a full-page, chromeless
-   component built ONLY from the listed free core components, with realistic
-   co-located sample data (<slug>/data.ts when non-trivial).
-2. Register it in registry.ts TEMPLATES with accurate metadata (slug, name, blurb,
-   category, stack, icon, load, source, tier: 'free').
-3. Verify it renders correctly via the existing /templates/<slug> detail preview in
-   BOTH themes and at mobile (390px) + desktop.
+For each template in <batch>, in order:
+1. Create apps/landing/src/templates/<slug>/<Name>.vue — a full-page, chromeless component
+   built ONLY from the listed free core components, with realistic co-located sample data
+   (<slug>/data.ts when non-trivial). Make it genuinely good, not a stub — go beyond the basics.
+2. Register it in registry.ts TEMPLATES with accurate metadata: slug, name, blurb, category
+   ('auth'), stack, icon (a fitting Lucide key), load, source, tier: 'free', tags (from E1's
+   vocabulary), createdAt (today, 2026-06-25, so it shows the "New" badge), and featured where
+   noted.
+3. Verify it renders correctly via /templates/<slug> in BOTH themes and at mobile (390px) +
+   desktop.
 </task>
 
 <constraints>
-- §7 quality bar is mandatory and checked per template.
-- Token-only color/radius/shadow/font; layout CSS may be scoped; no raw colors.
+- The §5 quality bar is mandatory and checked per template (token-only color/radius/shadow/
+  font; light+dark; responsive; WCAG AA; realistic content; self-contained; restrained motion;
+  distinctive, not "AI slop").
 - Use the real component for anything core covers; raw markup only for layout scaffold.
-- Self-contained: no lp-* landing styles, no cross-template imports.
+- Self-contained: no lp-* landing styles, no cross-template imports. No invented imports.
 - TypeScript strict, `.ts` import extensions, vue-tsc clean.
-- Validate with `vite build` (apps/landing). ESLint is unavailable locally.
+- Validate with `vite build` (apps/landing). ESLint is unavailable locally — do not rely on it.
 </constraints>
 
 <deliverables>
-One folder per template (component + optional data), and the registry.ts additions.
-A one-line-per-template self-check confirming light/dark + responsive were verified,
-plus any component substitutions made.
+One folder per template (component + optional data) and the registry.ts additions. A
+one-line-per-template self-check confirming light/dark + responsive were verified, plus any
+component substitutions made.
 </deliverables>
 
 <acceptance_criteria>
-- Every batch template appears on /templates, filters under the correct category,
-  and previews live on its detail page.
-- Each passes §7 in both themes at mobile + desktop.
+- All four templates appear on /templates, filter under "Auth & Account", carry the "New"
+  badge, and preview live on their detail pages in both themes at mobile + desktop.
 - No invented imports; every import resolves from @dzup-ui/core (Appendix A).
 - `vite build` succeeds; `yarn typecheck` passes.
 </acceptance_criteria>
 
 <thinking>
-Before coding each template, sketch its layout in 3–5 bullets and map each region to
-a specific core component from the stack. If a region has no matching component, decide
-the closest real substitute and record it. Only then write the .vue file.
+Before coding each template, sketch its layout in 3–5 bullets and map each region to a
+specific core component from its stack. If a region has no matching component, decide the
+closest real substitute and record it. Build sign-up first (the reference), then the rest.
 </thinking>
 ```
 
 ---
 
-### [x] T10 — QA, accessibility & build verification (closing gate)
+### [x] C2 — Marketing A: pricing, feature-product
 
 ```xml
 <role>
-You are a meticulous quality engineer auditing the complete Templates feature
-before it ships.
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free marketing page templates for dzup-ui from the @dzup-ui/core library.
 </role>
 
 <context>
-All 24 templates (§6), the gallery (T2), and the detail/preview shell (T3) are
-implemented. Verify the whole feature against the spec and the quality bar.
-Read first: docs/templates.md §5, §6, §7; the executed T1–T9 output.
-</context>
-
-<task>
-1. Confirm TEMPLATES has all 24 slugs from §6, each with complete metadata and a
-   working load() — no dead routes, no missing detail pages.
-2. For each template: verify it renders in light AND dark, reflows at 390/768/desktop,
-   has one logical heading order, keyboard-reachable controls with visible focus, and
-   uses ONLY token-based color/radius/shadow/font (grep for raw hex / hardcoded
-   Tailwind color classes inside src/templates — report any).
-3. Verify the gallery count is derived, the category filter covers every template,
-   DzEmpty shows for an empty filter, and prev/next traverses the full set.
-4. Verify "Built with" badges deep-link to valid Storybook docs ids; "View source"
-   paths resolve; "Open fullscreen" loads the chromeless render.
-5. Run `yarn typecheck` and `vite build` (apps/landing); both must pass.
-</task>
-
-<deliverables>
-A checklist report: per-template pass/fail on §7, a list of any raw-color or a11y
-violations with file:line, and the typecheck/build results. Fix or file follow-ups
-for every failure.
-</deliverables>
-
-<acceptance_criteria>
-- 24/24 templates reachable, registered, and previewing in both themes.
-- Zero raw-color violations inside src/templates.
-- `yarn typecheck` = 0 errors; `vite build` (apps/landing) succeeds.
-</acceptance_criteria>
-```
-
----
-
-## 9. Open decisions (confirm before building)
-
-1. **Thumbnails:** static screenshots (sharper, need a capture step + committed images) vs live mini-renders on cards (zero assets, heavier). Recommendation: ship with icon placeholders (T2), add screenshots in a polish pass.
-2. **"Copy the code" depth:** link to GitHub source only (cheap) vs an in-page source viewer with `DzCodeBlock` + `DzCopyButton` (stronger, more work). Recommendation: GitHub link now, in-page viewer later.
-3. **Nav entry:** keep only the `#ecosystem` scroll, or add a top-level "Templates" nav link once the gallery exists. Recommendation: add it after T2.
-4. **Pro templates later:** if a future paid tier adds premium templates, the `tier` field already exists — gate with a "Pro" badge then (keep "Pro" reserved for paid). **This is now specified in [§10](#10-pro-templates-paid-tier) — the pro-template catalogue and task backlog (T11–T14).**
-5. **Storybook vs landing as the home for templates:** this doc commits to the landing app (Option B). Reconfirm before T1 if Storybook deep-linking (Option A) is preferred for cost reasons.
-
----
-
-## 10. Pro templates (paid tier)
-
-> **Added 2026-06-23.** §1–§9 above cover the **free** templates built from `@dzup-ui/core`. This section answers a follow-up question: *can we also ship **pro** templates built from the enterprise `@dzup-ui-pro/pro` components, surfaced in the same gallery but marked as a paid option?* The investigation below says **yes**, with no new infrastructure — only a small foundation delta and a "Pro" badge. The pro task backlog (T11–T14) follows the same prompt-authoring format as §8.
-
-### 10.1 Feasibility — is this possible?
-
-**Yes.** The blocker one might expect — "the landing app only depends on `@dzup-ui/core`, it can't see pro components" — does not apply here, because of how the monorepo is wired:
-
-| Question | Finding | Source |
-|---|---|---|
-| Is the pro package reachable from `apps/landing`? | **Yes.** The repo root (`dzup-ui-workspace`) declares one Yarn workspace that includes **both** `dzup-ui/apps/*` **and** `dzup-ui-pro/packages/*`. So `@dzup-ui-pro/pro` resolves as a normal `workspace:*` dependency the landing app can add. | root `package.json` `workspaces` |
-| What pro components exist? | **41 components across 8 families** — builders, business, communication, data-pro, editors, planning, visualization, workflow. Full list in **Appendix B**. | `dzup-ui-pro/packages/pro/src/components/*/index.ts` |
-| Where are they documented? | Pro Storybook (`dzup-ui-pro/apps/storybook`), published at `/pro/` in Phase 2. Story ids follow `pro-<family>-<dzcomponent>` (e.g. `pro-planning-dzgantt`). | pro stories `title: 'Pro/Planning/DzGantt'` |
-| Does the data model already allow it? | **Yes.** `TemplateMeta.tier` exists precisely for this (§4); today it is the literal `'free'`. Widening it to `'free' | 'pro'` is the only type change. | §4; §9 decision #4 |
-| Does the gallery/preview infra need changes? | **No structural change.** The gallery, detail page, chromeless preview iframe, device + theme toggles (T1–T3) are tier-agnostic. Pro templates are just registry rows with `tier: 'pro'`, a Pro badge, and pro-Storybook deep-links. | §2.2, §3, §5 |
-
-**Conclusion.** Pro templates are an *additive* extension of the free system, not a parallel build. They live in the **same** `apps/landing` gallery, render through the **same** preview shell, and reuse the **same** card/detail components — they only differ by (a) importing from `@dzup-ui-pro/pro`, (b) carrying a **"Pro"** badge instead of "Free", and (c) deep-linking "Built with" chips to the **pro** Storybook.
-
-### 10.2 Free vs Pro — what changes
-
-- **Badge.** Free templates carry a `DzBadge variant="solid" tone="success"` reading **"Free"**. Pro templates carry a `DzBadge variant="solid" tone="primary"` reading **"Pro"** (a visually distinct, premium-reading chip). The word "Pro" stays reserved for the paid tier (consistent with `landing.md` §2.1).
-- **Dependency.** `apps/landing/package.json` gains `"@dzup-ui-pro/pro": "workspace:*"`. Pro templates may still use free `@dzup-ui/core` components for layout scaffolding (the pro components are built *on top of* core), so a pro template's "Built with" list mixes pro + core.
-- **Docs deep-links.** Free "Built with" chips link via `storybookDocs()` → `/storybook/`. Pro chips link via a new `proStorybookDocs()` → `/pro/` (Phase 2 target; Phase 1 it resolves to the `/pro` coming-soon route).
-- **Phase gating.** The Pro funnel is currently Phase 1 (`PRO_LIVE = false` in `config.ts`, `landing.md` §13). Pro template **previews still render live** (the components physically exist in the repo) — that *is* the conversion surface — but the detail page surfaces a Pro badge + an "Explore Pro / Join the waitlist" CTA (mirroring `landing.md`'s Phase-1 pro treatment) rather than implying the template is free to copy. Flip to a live "Get the source" affordance in Phase 2 alongside the rest of the pro funnel.
-- **Filter.** The gallery filter gains the pro categories (§10.4) and a **tier toggle** (All · Free · Pro) so visitors can narrow to either tier.
-
-### 10.3 Dependency on the free foundation
-
-Pro tasks **T11–T14 depend on the free T1–T3** having landed (the registry, routing, gallery, and preview shell). They extend that foundation; they do not re-create it. Run the pro backlog after T3, in parallel with or after the free batches T4–T9.
-
-### 10.4 The pro template catalogue (what we will ship)
-
-**12 pro templates across 6 pro-flavoured categories**, each built from `@dzup-ui-pro/pro` (plus free core for scaffolding). Every component named below is a confirmed export (Appendix B). ⭐ = featured reference (build first).
-
-Add these to the `TemplateCategory` union: `analytics`, `productivity`, `collaboration`, `editor`, `builder`, `automation`. Add matching `TEMPLATE_CATEGORIES` rows.
-
-#### 10.4.1 Analytics (2)
-
-| Done | slug | Name | Built with (pro + free core) |
-|---|---|---|---|
-| [ ] | `enterprise-analytics` | Enterprise Analytics ⭐ `Pro` | DzWorkspaceShell, DzChart, DzScorecard, DzSparkline, DzGauge, DzDataGridPro, DzHeatMap (+ DzCard, DzSegmented, DzBadge) |
-| [ ] | `data-explorer` | Data Explorer / BI `Pro` | DzPivotTable, DzQueryBuilder, DzFilterBuilder, DzQuickFilter, DzVirtualTable, DzChart (+ DzButton, DzTabs) |
-
-#### 10.4.2 Productivity (2)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `project-planner` | Project Planner (Gantt) `Pro` | DzGantt, DzGanttTaskRow, DzScheduler, DzCalendar (+ DzAppShell, DzToolbar, DzBadge) |
-| [ ] | `kanban-board` | Kanban Board `Pro` | DzKanban, DzKanbanColumn, DzKanbanCard (+ DzWorkspaceShell, DzAvatarGroup, DzTag) |
-
-#### 10.4.3 Collaboration (2)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `ai-assistant` | AI Assistant ⭐ `Pro` | DzAiAssistant, DzChat, DzChatMessage, DzAiMarkdown, DzAiCodeBlock, DzToolCallCard (+ DzButton, DzAvatar) |
-| [ ] | `team-collaboration` | Team Collaboration `Pro` | DzComments, DzCommentItem, DzReactionPicker, DzNotificationCenter (+ DzAvatar, DzTabs, DzBadge) |
-
-#### 10.4.4 Editors (2)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `document-editor` | Document Editor `Pro` | DzRichTextEditor, DzMarkdownEditor, DzComments (+ DzToolbar, DzTabs) |
-| [ ] | `code-workspace` | Code Workspace `Pro` | DzCodeEditor, DzDiffViewer, DzNotebook, DzNotebookCell, DzJsonEditor (+ DzSidebar, DzTabs) |
-
-#### 10.4.5 Builder (3)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `form-builder-studio` | Form Builder Studio `Pro` | DzFormBuilder, DzFormBuilderSection, DzFormBuilderField, DzSchemaForm (+ DzAppShell, DzButton) |
-| [ ] | `dashboard-builder` | Dashboard Builder `Pro` | DzDashboardBuilder, DzDashboardWidget (+ DzAppShell, DzButton, DzSegmented) |
-| [ ] | `report-builder` | Report Builder `Pro` | DzReportBuilder, DzReportBand, DzReportElement (+ DzToolbar, DzButton) |
-
-#### 10.4.6 Automation (1)
-
-| Done | slug | Name | Built with |
-|---|---|---|---|
-| [ ] | `workflow-designer` | Workflow Designer `Pro` | DzWorkflowDesigner, DzWorkflowNode, DzWorkflowEdge, DzWorkflowToolbar, DzApprovalFlow (+ DzAppShell, DzButton) |
-
-> `Pro` in the Name column denotes a `tier: 'pro'` entry that renders the **"Pro"** badge on its card and detail header. ⭐ = `featured: true`, built first in T12 as the canonical references the rest copy.
-
-### 10.5 Pro task backlog
-
-Tasks follow the same prompt format as §8 and continue the numbering. Checklist:
-
-- [ ] **T11** — Pro foundation: workspace dep, `tier` widening, "Pro" badge, pro-Storybook deep-links, tier filter
-- [ ] **T12** — Pro preview proof + the 2 featured reference templates (`enterprise-analytics`, `ai-assistant`)
-- [ ] **T13** — Pro authoring batches (remaining 10 templates)
-- [ ] **T14** — Pro QA, licensing-state & build verification (closing gate)
-
----
-
-### [ ] T11 — Pro foundation: dependency, tier widening, "Pro" badge & pro-Storybook links
-
-```xml
-<role>
-You are a senior Vue 3 + TypeScript engineer working in the dzup-ui monorepo's
-landing app (apps/landing). You follow the repo's existing conventions exactly
-and respect the free/pro boundary.
-</role>
-
-<context>
-The free Templates foundation (docs/templates.md T1–T3: registry, routing, gallery,
-preview shell) is already in place. We are now ADDITIVELY enabling PRO templates:
-full-page starters built from @dzup-ui-pro/pro, shown in the SAME gallery but marked
-as a paid option. This task builds ONLY the pro foundation — dependency, type
-widening, badge, pro-Storybook deep-links, and the tier filter. It renders NO pro
-templates yet (those are T12/T13).
-Key facts (verify before coding):
-- The repo root package.json defines ONE Yarn workspace covering both dzup-ui/apps/*
-  and dzup-ui-pro/packages/*, so @dzup-ui-pro/pro resolves as workspace:*.
-- Pro Storybook is published at /pro/ in Phase 2; story ids are
-  pro-<family>-<dzcomponent> (e.g. pro-planning-dzgantt). PRO_LIVE is false today.
-Read first: docs/templates.md §4, §10.1, §10.2; apps/landing/package.json;
-apps/landing/src/templates/registry.ts; apps/landing/src/config.ts;
-apps/landing/src/pages/TemplatesPage.vue; docs/landing.md §13 (Phase 1/2 pro funnel).
-</context>
-
-<task>
-1. Add "@dzup-ui-pro/pro": "workspace:*" to apps/landing/package.json dependencies.
-2. In registry.ts: widen TemplateMeta.tier from 'free' to 'free' | 'pro'. Add the six
-   pro categories (analytics, productivity, collaboration, editor, builder,
-   automation) to the TemplateCategory union and TEMPLATE_CATEGORIES (with labels per
-   §10.4). Do NOT add template rows yet.
-3. In config.ts: add STORYBOOK_PRO_BASE ('/pro/') and a proStorybookDocs(storyId)
-   helper mirroring storybookDocs(). Keep the Phase-1 reality (PRO_LIVE=false) in
-   mind — document that Phase 1 these resolve to the /pro coming-soon route.
-4. Gallery (TemplatesPage.vue) + card component: render the tier badge from
-   meta.tier — tone="success" "Free" for free, tone="primary" "Pro" for pro. Add a
-   tier toggle (All · Free · Pro) using DzSegmented alongside the category filter;
-   filtering composes (tier AND category) client-side.
-</task>
-
-<constraints>
-- TypeScript strict; no `any`. `.ts` extensions in relative imports (repo rule).
-- Token-only styling; no raw colors. Keep the word "Pro" reserved for the paid tier.
-- Do NOT import @dzup-ui-pro/pro into any FREE template or core path — only pro
-  templates (T12+) may import it. Respect the free/pro boundary.
-- Do NOT build pro template pages here — foundation only.
-- vue-tsc must pass (yarn typecheck). ESLint cannot run locally — do not rely on it.
-</constraints>
-
-<deliverables>
-Edited package.json, registry.ts, config.ts, TemplatesPage.vue (+ card component).
-A short note on the Phase-1 (PRO_LIVE=false) handling you chose for pro deep-links.
-</deliverables>
-
-<acceptance_criteria>
-- @dzup-ui-pro/pro resolves in apps/landing (yarn install clean; an import in a scratch
-  file type-checks, then removed).
-- registry.tier accepts 'pro'; the six pro categories exist with labels.
-- The gallery shows a tier toggle; with zero pro rows yet, "Pro" yields DzEmpty.
-- Free cards still show the "Free" badge unchanged.
-- `yarn typecheck` passes with 0 errors.
-</acceptance_criteria>
-
-<thinking>
-Before coding, restate the tier widening and confirm it is backwards-compatible with
-the existing free rows (tier: 'free'). Confirm how the existing category filter is
-implemented so the tier toggle composes with it rather than replacing it.
-</thinking>
-```
-
----
-
-### [ ] T12 — Pro preview proof + the 2 featured reference templates
-
-```xml
-<role>
-You are a senior Vue 3 + TypeScript engineer establishing the canonical PRO template
-experience and the first two reference templates that all later pro templates copy.
-</role>
-
-<context>
-T11 landed the pro foundation (dependency, tier, badge, pro-Storybook links, tier
-filter). The free preview shell (TemplatePreviewPage / TemplateDetailPage, T3) already
-exists and is tier-agnostic. This task proves a PRO template renders end-to-end through
-that shell, and builds the two featured (⭐) pro references: enterprise-analytics and
-ai-assistant. Later batches (T13) imitate these. Get the quality bar right here.
-Read first: docs/templates.md §5, §7, §10.2, §10.4 (the two featured rows); Appendix B
-(confirm every pro component name); apps/landing/src/templates/analytics-dashboard/
-(the FREE flagship, for structure) and ShowcaseDashboard.vue (realism + token use);
-config.ts (proStorybookDocs); the pro Storybook stories for DzChart, DzDataGridPro,
-DzAiAssistant, DzChat under dzup-ui-pro/packages/pro/stories/ for correct prop usage.
-</context>
-
-<task>
-1. Confirm the detail page (§5) correctly handles a tier:'pro' template: "Built with"
-   chips for pro components deep-link via proStorybookDocs(); free-core chips still use
-   storybookDocs(); the detail header shows the "Pro" badge; per §10.2, surface an
-   "Explore Pro / Join the waitlist" CTA while PRO_LIVE is false instead of a plain
-   free "copy source" affordance. Make the minimal edits to the existing shell to
-   support this — do NOT fork it into a pro-only copy.
-2. Build the two featured pro templates as full-page chromeless components under
-   apps/landing/src/templates/<slug>/<Name>.vue with co-located realistic sample data,
-   built from the pro (+ free core) components in their §10.4 rows, honouring §7:
-   - enterprise-analytics: a DzWorkspaceShell app — KPI row of DzScorecard + DzSparkline,
-     a DzChart panel, a DzGauge, a DzHeatMap, and a DzDataGridPro of records. Reads like
-     ShowcaseDashboard.vue promoted to a full pro page.
-   - ai-assistant: a DzAiAssistant / DzChat surface with DzChatMessage history,
-     DzAiMarkdown + DzAiCodeBlock rendered responses, and a DzToolCallCard.
-3. Register both in registry.ts TEMPLATES with tier:'pro', featured:true, correct
-   category (analytics / collaboration), stack, icon, load, and source.
-</task>
-
-<constraints>
-- §7 quality bar is mandatory (token-only color/radius/shadow/font, light+dark,
-  responsive, WCAG AA, realistic content, self-contained, restrained motion).
-- Pro components may be composed with free core for layout, but use the REAL pro
-  component for anything it covers — never re-implement a pro component from scratch.
-- No invented imports: every pro import resolves from @dzup-ui-pro/pro (Appendix B);
-  confirm prop usage against the pro Storybook stories.
-- Templates must NOT import landing-only lp-* styles; they stand alone.
-- vue-tsc clean. Validate via `vite build` for apps/landing (ESLint unavailable locally).
-</constraints>
-
-<deliverables>
-Minimal edits to TemplateDetailPage.vue for pro handling, two template folders
-(component + data), updated registry.ts. A one-line self-check per template confirming
-light/dark + responsive, plus any component substitutions.
-</deliverables>
-
-<acceptance_criteria>
-- /templates/enterprise-analytics and /templates/ai-assistant show the detail page with
-  a working live preview and a "Pro" badge.
-- "Built with" pro chips deep-link to the right pro-Storybook docs ids; free-core chips
-  link to the free Storybook.
-- Device switcher reflows the preview; theme toggle re-skins ONLY the preview.
-- Both templates pass §7 in both themes at mobile (390px) + desktop.
-- `vite build` (apps/landing) succeeds; `yarn typecheck` passes.
-</acceptance_criteria>
-
-<example>
-enterprise-analytics should read like ShowcaseDashboard.vue rebuilt with pro parts: a
-DzWorkspaceShell frame, a row of DzScorecard cards with inline DzSparkline trends, a
-primary DzChart, a DzGauge for an SLA/quota, a DzHeatMap for activity, and a
-DzDataGridPro table — all live @dzup-ui-pro/pro, all token-styled, correct in both themes.
-</example>
-```
-
----
-
-### [ ] T13 — Pro authoring batches (remaining 10 templates)
-
-This task uses one **reusable pro authoring prompt**, run once per batch. Each batch
-depends only on T12 (the pro references + pro-aware detail page) and can run in parallel.
-
-| Batch | Templates (slugs) |
-|---|---|
-| Analytics + Productivity | data-explorer, project-planner, kanban-board |
-| Collaboration + Editors | team-collaboration, document-editor, code-workspace |
-| Builder + Automation | form-builder-studio, dashboard-builder, report-builder, workflow-designer |
-
-**Reusable pro authoring prompt:**
-
-```xml
-<role>
-You are a senior Vue 3 + TypeScript engineer and product designer building
-production-grade, PRO page templates for dzup-ui from the @dzup-ui-pro/pro library.
-</role>
-
-<context>
-The Templates gallery, tier-aware detail/preview shell, and two featured pro reference
-templates already exist (docs/templates.md T11, T12). You are adding more PRO templates
-that must match those references exactly in structure, quality and registration.
+The Templates shell and 24 templates ship; marketing is under-served (one landing). This task
+adds the two most-requested marketing pages (docs/templates.md §3). Match the shipped
+templates exactly in structure, quality and registration.
 Read first, every time:
-- docs/templates.md §10.4 (your batch's rows: exact slug, name, category, stack),
-  §10.2 (Pro badge + pro deep-link behaviour), and §7 (the non-negotiable quality bar).
-- apps/landing/src/templates/enterprise-analytics/ (or ai-assistant/) as the structural
-  reference to imitate.
-- apps/landing/src/templates/registry.ts for the registration shape (tier:'pro').
-- Appendix B of docs/templates.md to confirm a pro component name is a real export
-  before using it; the matching pro Storybook story (dzup-ui-pro/packages/pro/stories/
-  FAMILY/) to confirm its props. If a needed component does not exist, choose the closest
-  real one and note the substitution — never invent an import.
-</context>
+- docs/templates.md §6.2 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/saas-landing/ (the shipped marketing flagship — imitate its
+  conversion structure, token-painted media and realism) and registry.ts (registration shape
+  incl. E1's tags/createdAt).
+- Appendix A to confirm every component is a real core export before using it.
 
 <batch>
-<!-- Paste this batch's §10.4 rows here. For EACH template, list: slug, name, category,
-     and the exact "Built with" pro + free-core component list. -->
+- pricing — "Pricing Page" (featured: true — C2 reference): a monthly/annual DzSegmented
+  toggle that updates prices live, 3 plan DzCards (one "Most popular" via DzBadge), a feature
+  DzTable / comparison matrix with DzTooltip explainers, and an FAQ teaser. Consider an
+  optional violet primary re-skin (token-only) + accent:'violet'. Built with: DzCard, DzBadge,
+  DzSegmented, DzButton, DzTable, DzTooltip, DzDivider.
+- feature-product — "Feature / Product": a deep-dive page — hero, alternating feature rows
+  with DzImage, a DzTabs feature explorer, a before/after DzImageComparison, spec DzBadges,
+  and a closing CTA. Built with: DzCard, DzTabs, DzImage, DzImageComparison, DzBadge,
+  DzHeading, DzText.
 </batch>
+</context>
 
 <task>
-For each template in <batch>:
-1. Create apps/landing/src/templates/<slug>/<Name>.vue — a full-page, chromeless
-   component built from the listed pro components (free core only for layout scaffold),
-   with realistic co-located sample data (<slug>/data.ts when non-trivial).
-2. Register it in registry.ts TEMPLATES with accurate metadata (slug, name, blurb,
-   category, stack, icon, load, source, tier: 'pro').
-3. Verify it renders correctly via the existing /templates/<slug> detail preview in
-   BOTH themes and at mobile (390px) + desktop, with the "Pro" badge showing.
+For each template in <batch>, in order:
+1. Create apps/landing/src/templates/<slug>/<Name>.vue (full-page, chromeless), built ONLY
+   from the listed core components, with realistic co-located sample data. Go beyond basics —
+   working price toggle, real comparison data, plausible product copy.
+2. Register in registry.ts with full metadata (category 'marketing'; tags from E1; createdAt
+   2026-06-25; featured where noted; accent where re-skinned).
+3. Verify via /templates/<slug> in both themes at 390px + desktop.
 </task>
 
 <constraints>
-- §7 quality bar is mandatory and checked per template.
-- Token-only color/radius/shadow/font; layout CSS may be scoped; no raw colors.
-- Use the real pro component for anything it covers; raw markup only for layout scaffold.
-- Self-contained: no lp-* landing styles, no cross-template imports.
-- No invented imports; every pro import resolves from @dzup-ui-pro/pro (Appendix B),
-  every free import from @dzup-ui/core (Appendix A). Confirm props against pro stories.
-- TypeScript strict, `.ts` import extensions, vue-tsc clean.
-- Validate with `vite build` (apps/landing). ESLint is unavailable locally.
+- §5 quality bar mandatory per template. Token-only; real component for anything core covers.
+- Self-contained; no lp-* styles; no invented imports. TS strict; `.ts` extensions; vue-tsc clean.
+- Validate with `vite build` (apps/landing). ESLint unavailable locally.
 </constraints>
 
 <deliverables>
-One folder per template (component + optional data), and the registry.ts additions.
-A one-line-per-template self-check confirming light/dark + responsive + Pro badge, plus
-any component substitutions made.
+Two template folders + registry additions. A one-line self-check per template (light/dark +
+responsive) and any substitutions.
 </deliverables>
 
 <acceptance_criteria>
-- Every batch template appears on /templates, filters under the correct pro category and
-  the "Pro" tier, and previews live on its detail page with a "Pro" badge.
-- Each passes §7 in both themes at mobile + desktop.
-- No invented imports; every import resolves (Appendix A/B).
-- `vite build` succeeds; `yarn typecheck` passes.
+- Both appear under "Marketing", carry "New", preview live in both themes at mobile + desktop;
+  the pricing monthly/annual toggle changes prices live.
+- No invented imports; `vite build` + `yarn typecheck` pass.
 </acceptance_criteria>
 
 <thinking>
-Before coding each template, sketch its layout in 3–5 bullets and map each region to a
-specific pro component from the stack (free core only for scaffolding). If a region has
-no matching component, decide the closest real substitute and record it. Only then write
-the .vue file.
+Sketch each layout in 3–5 bullets; map regions to components; decide the price-toggle data
+model. Build pricing first. Only then write the .vue files.
 </thinking>
 ```
 
 ---
 
-### [ ] T14 — Pro QA, licensing-state & build verification (closing gate)
+### [x] C3 — Marketing B: contact, about-faq
 
 ```xml
 <role>
-You are a meticulous quality engineer auditing the complete PRO Templates feature
-before it ships.
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free marketing page templates for dzup-ui from the @dzup-ui/core library.
 </role>
 
 <context>
-All 12 pro templates (§10.4), the tier filter + "Pro" badge (T11), and the pro-aware
-detail/preview shell (T12) are implemented. Verify the whole pro feature against the
-spec and the quality bar, and confirm the free templates are unaffected.
-Read first: docs/templates.md §5, §7, §10; the executed T11–T13 output.
+Companion to C2; adds the contact and about/FAQ pages competitors standardise on
+(docs/templates.md §3). Match the shipped templates exactly.
+Read first, every time:
+- docs/templates.md §6.2 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/saas-landing/ and help-center/ (shipped references for marketing
+  structure and the FAQ accordion pattern) and registry.ts (registration shape incl. tags/createdAt).
+- Appendix A to confirm every component is real.
+
+<batch>
+- contact — "Contact": a two-column page — a real contact form (DzFormField + DzInput +
+  DzTextarea + DzSelect for topic + DzButton, with client-side validation and a DzAlert
+  success state) beside a contact-details / map-placeholder / office-hours card. Built with:
+  DzCard, DzFormField, DzInput, DzTextarea, DzSelect, DzButton, DzAlert, DzDivider.
+- about-faq — "About & FAQ": a company page — mission heading, a story DzTimeline, a team grid
+  (DzAvatar/DzAvatarGroup + DzCard), values cards, and a DzAccordion FAQ. Built with: DzHeading,
+  DzText, DzAccordion, DzCard, DzAvatar, DzAvatarGroup, DzTimeline, DzDivider.
+</batch>
 </context>
 
 <task>
-1. Confirm TEMPLATES has all 12 pro slugs from §10.4, each tier:'pro', with complete
-   metadata and a working load() — no dead routes, no missing detail pages.
-2. For each pro template: verify it renders in light AND dark, reflows at
-   390/768/desktop, has one logical heading order, keyboard-reachable controls with
-   visible focus, and uses ONLY token-based color/radius/shadow/font (grep for raw hex /
-   hardcoded Tailwind color classes inside its folder — report any).
-3. Verify the gallery tier toggle (All · Free · Pro) and category filter compose
-   correctly; pro cards show the "Pro" badge, free cards the "Free" badge; DzEmpty shows
-   for an empty combination; prev/next traverses within the displayed set.
-4. Verify "Built with" pro chips deep-link to valid pro-Storybook ids
-   (pro-<family>-<dzcomponent>) and free-core chips to the free Storybook; confirm the
-   Phase-1 pro CTA (PRO_LIVE=false) renders the waitlist/explore affordance, not a plain
-   free "copy source".
-5. Confirm the free/pro boundary holds: @dzup-ui-pro/pro is imported ONLY by pro
-   templates, never by free templates or core paths (grep src/templates).
-6. Run `yarn typecheck` and `vite build` (apps/landing); both must pass.
+For each template in <batch>: create apps/landing/src/templates/<slug>/<Name>.vue (full-page,
+chromeless) built ONLY from the listed core components with realistic co-located data; register
+in registry.ts (category 'marketing'; tags from E1; createdAt 2026-06-25); verify via
+/templates/<slug> in both themes at 390px + desktop. Go beyond basics — working form validation,
+a plausible company narrative.
 </task>
 
+<constraints>
+- §5 quality bar mandatory. Token-only; real components; self-contained; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
 <deliverables>
-A checklist report: per-template pass/fail on §7, a list of any raw-color / a11y /
-boundary violations with file:line, the pro deep-link audit, and the typecheck/build
-results. Fix or file follow-ups for every failure.
+Two template folders + registry additions; one-line self-check per template + any substitutions.
 </deliverables>
 
 <acceptance_criteria>
-- 12/12 pro templates reachable, registered as tier:'pro', previewing in both themes.
-- Tier toggle + category filter compose correctly; badges correct per tier.
-- Zero raw-color violations and zero free→pro import-boundary violations.
-- `yarn typecheck` = 0 errors; `vite build` (apps/landing) succeeds.
+- Both appear under "Marketing", carry "New", preview live in both themes at mobile + desktop;
+  the contact form validates and shows a success state client-side.
+- No invented imports; `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Sketch each layout; map regions to components; decide the form validation model. Only then write.
+</thinking>
+```
+
+---
+
+### [x] C4 — Errors & utility: error-500, error-403, coming-soon
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free utility page templates for dzup-ui from the @dzup-ui/core library.
+</role>
+
+<context>
+dzup-ui ships 404 + states-pack + system-status + maintenance but lacks the 500/403/coming-soon
+pages competitors standardise on (CoreUI ships 500 even free) — docs/templates.md §3. Match the
+shipped templates exactly.
+Read first, every time:
+- docs/templates.md §6.3 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/not-found/ and maintenance/ (the shipped references — imitate the
+  centered DzResult composition, the oversized glyph treatment and the notify-me card) and
+  registry.ts (registration shape incl. tags/createdAt).
+- Appendix A to confirm every component is real.
+
+<batch>
+- error-500 — "500 — Server Error": a centered DzResult (status error) with recovery actions
+  (retry, status page, contact) and a card of next steps; a tasteful oversized "500" treatment.
+  Built with: DzResult, DzCard, DzButton, DzDivider, DzText.
+- error-403 — "403 — Access Denied": a centered DzResult with a DzAlert explaining the missing
+  permission, request-access + sign-in-as-different-user actions. Built with: DzResult, DzCard,
+  DzButton, DzText, DzAlert.
+- coming-soon — "Coming Soon": a launch page — a DzCountdown to launch, a notify-me email
+  capture (DzInput + DzButton with a client-side success state), a DzBadge status, brand and
+  social. Built with: DzCard, DzCountdown, DzInput, DzButton, DzBadge, DzHeading, DzText, DzDivider.
+</batch>
+</context>
+
+<task>
+For each template in <batch>: create apps/landing/src/templates/<slug>/<Name>.vue (full-page,
+chromeless) built ONLY from the listed core components with realistic data; register in
+registry.ts (category 'utility'; tags from E1; createdAt 2026-06-25); verify via /templates/<slug>
+in both themes at 390px + desktop.
+</task>
+
+<constraints>
+- §5 quality bar mandatory. Token-only; real components; self-contained; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
+<deliverables>
+Three template folders + registry additions; one-line self-check per template + any substitutions.
+</deliverables>
+
+<acceptance_criteria>
+- All three appear under "Utility", carry "New", preview live in both themes at mobile + desktop;
+  coming-soon's countdown ticks and the notify form shows a success state.
+- No invented imports; `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Sketch each layout; map regions to components. Only then write.
+</thinking>
+```
+
+---
+
+### [x] C5 — Communication apps: chat-messages, calendar-scheduler
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free APP templates for dzup-ui from the @dzup-ui/core library. These are full app surfaces —
+the hardest, highest-value templates — so hold a high bar.
+</role>
+
+<context>
+Every premium admin suite ships chat and calendar apps; dzup-ui ships neither
+(docs/templates.md §3). Build them from free core only. Match the shipped app templates'
+structure (DzAppShell frame, realistic data, token use).
+Read first, every time:
+- docs/templates.md §6.4 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/analytics-dashboard/ and inbox-notifications/ (the shipped
+  app-shell references — imitate the DzAppShell + sidebar + main composition and realism) and
+  registry.ts (registration shape incl. tags/createdAt).
+- Appendix A to confirm every component is real; confirm DzCalendar's props against its story
+  under packages/core/stories/data/.
+
+<batch>
+- chat-messages — "Chat / Messages" (featured: true — C5 reference): a messaging app —
+  DzAppShell with a conversation list (DzList + DzAvatar + unread DzBadge + DzSearchInput) and a
+  thread pane (message bubbles in a DzScrollArea with day separators and read receipts) and a
+  composer (DzTextarea/DzInput + send DzButton + DzDropdownMenu for attach). Consider a cyan
+  re-skin (token-only) + accent:'cyan'. Built with: DzAppShell, DzList, DzAvatar, DzBadge,
+  DzScrollArea, DzTextarea, DzInput, DzButton, DzSearchInput, DzDropdownMenu.
+- calendar-scheduler — "Calendar / Scheduler": a calendar app — DzAppShell with a DzCalendar
+  month view of events (colour-coded via tokens), a DzSegmented month/week switcher, an event
+  DzPopover, and a "new event" DzDialog. Consider an indigo re-skin + accent:'indigo'. Built
+  with: DzAppShell, DzCalendar, DzSegmented, DzBadge, DzPopover, DzButton, DzAvatarGroup, DzDialog.
+</batch>
+</context>
+
+<task>
+For each template in <batch>, in order: create apps/landing/src/templates/<slug>/<Name>.vue
+(full-page, chromeless) built ONLY from the listed core components with realistic co-located
+sample data (conversations/messages; events across a month). Go well beyond a stub — these
+should read like real apps. Register in registry.ts (category 'dashboards'; tags from E1;
+createdAt 2026-06-25; featured/accent where noted). Verify via /templates/<slug> in both themes
+at 390px + desktop (chat must reflow to a single pane on mobile).
+</task>
+
+<constraints>
+- §5 quality bar mandatory per template. Token-only; real component for anything core covers;
+  raw markup only for layout scaffold (message bubbles may be scaffold + tokens).
+- Self-contained; no lp-* styles; no cross-template imports; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
+<deliverables>
+Two template folders (component + data) + registry additions; one-line self-check per template
+(light/dark + responsive) and any substitutions.
+</deliverables>
+
+<acceptance_criteria>
+- Both appear under "Dashboards & Apps", carry "New", preview live in both themes at mobile +
+  desktop; chat reflows to one pane on mobile; calendar shows a real month of colour-coded events.
+- No invented imports (DzCalendar props match its story); `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Before coding each, sketch the app-shell layout in 3–5 bullets and map each region to a core
+component. Decide the chat and calendar data models. Confirm DzCalendar's event API from its
+story. Build chat-messages first. Only then write.
+</thinking>
+```
+
+---
+
+### [x] C6 — Productivity apps: file-manager, tasks-todo
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free APP templates for dzup-ui from the @dzup-ui/core library.
+</role>
+
+<context>
+File managers and task apps appear in every premium suite; dzup-ui ships neither
+(docs/templates.md §3). Build from free core only, matching the shipped app templates.
+Read first, every time:
+- docs/templates.md §6.4 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/analytics-dashboard/ and project-board/ (shipped references for
+  the app-shell frame and board/list patterns) and registry.ts (registration shape incl.
+  tags/createdAt).
+- Appendix A to confirm every component is real; confirm DzTree and DzDataView props against
+  their stories under packages/core/stories/data/.
+
+<batch>
+- file-manager — "File Manager": DzAppShell with a folder DzTree sidebar, a DzBreadcrumb path,
+  a main file area as DzDataView (grid/list toggle) of files/folders with type icons and size/
+  modified badges, a DzContextMenu / row DzDropdownMenu of actions (rename/move/delete), a
+  DzSearchInput, and a storage meter. Built with: DzAppShell, DzSidebar, DzTree, DzDataView,
+  DzBreadcrumb, DzDropdownMenu, DzContextMenu, DzButton, DzSearchInput, DzBadge.
+- tasks-todo — "Tasks / To-Do": DzAppShell with a "My day" task list — DzList of tasks with
+  DzCheckbox completion, priority DzBadge, label DzTag, a quick-add DzInput, a DzSegmented
+  view switcher (Today/Upcoming/Done) and a per-task DzDropdownMenu. Built with: DzAppShell,
+  DzList, DzCheckbox, DzTag, DzBadge, DzInput, DzDropdownMenu, DzSegmented, DzButton.
+</batch>
+</context>
+
+<task>
+For each template in <batch>: create apps/landing/src/templates/<slug>/<Name>.vue (full-page,
+chromeless) built ONLY from the listed core components with realistic co-located data (a folder
+tree + files; a believable task list). Make checkboxes/quick-add/view-switch work client-side.
+Register in registry.ts (category 'dashboards'; tags from E1; createdAt 2026-06-25). Verify via
+/templates/<slug> in both themes at 390px + desktop.
+</task>
+
+<constraints>
+- §5 quality bar mandatory. Token-only; real components; self-contained; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
+<deliverables>
+Two template folders (component + data) + registry additions; one-line self-check per template
++ any substitutions.
+</deliverables>
+
+<acceptance_criteria>
+- Both appear under "Dashboards & Apps", carry "New", preview live in both themes at mobile +
+  desktop; tasks can be checked/added and views switched client-side; the file grid/list toggles.
+- No invented imports (DzTree/DzDataView props match their stories); `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Sketch each app-shell layout; map regions to components; decide the tree/file and task data
+models; confirm DzTree/DzDataView APIs from their stories. Only then write.
+</thinking>
+```
+
+---
+
+### [x] C7 — Data & commerce A: data-table, invoice
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free templates for dzup-ui from the @dzup-ui/core library.
+</role>
+
+<context>
+A generic CRUD data-table/list page is a foundational primitive shipped by Ant Design Pro,
+Refine, Flowbite and CoreUI; an invoice page is in every premium suite. dzup-ui ships neither
+(docs/templates.md §3). Build from free core only.
+Read first, every time:
+- docs/templates.md §6.5 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/admin-crm/ and team-members/ (shipped DzDataGrid references —
+  imitate the grid + filter-bar + row-actions + dialog patterns) and order-tracking/ (for the
+  descriptions/summary composition the invoice resembles) and registry.ts (registration shape).
+- Appendix A to confirm every component is real; confirm DzDataGrid props against its story.
+
+<batch>
+- data-table — "Data Table (CRUD list)" (featured: true — C7 reference): DzAppShell with a
+  records DzDataGrid — a filter bar (DzSearchInput + DzMultiSelect facets), column sort,
+  row-select DzCheckbox with a bulk-action bar, row DzDropdownMenu (edit/delete), DzPagination,
+  status DzBadges, and a "New record" DzDialog with a form. Built with: DzAppShell, DzDataGrid,
+  DzSearchInput, DzMultiSelect, DzDropdownMenu, DzPagination, DzDialog, DzButton, DzBadge, DzCheckbox.
+- invoice — "Invoice": a printable invoice — header with from/to DzDescriptions, a line-item
+  DzTable with totals, status DzBadge, notes, and download/print/send DzButtons. Built with:
+  DzCard, DzTable, DzDescriptions, DzDivider, DzBadge, DzButton, DzHeading, DzText.
+</batch>
+</context>
+
+<task>
+For each template in <batch>, in order: create apps/landing/src/templates/<slug>/<Name>.vue
+(full-page, chromeless) built ONLY from the listed core components with realistic co-located
+data (a believable record set with working filter/sort/pagination/bulk-select for data-table;
+a complete invoice with correct arithmetic). Register in registry.ts (category 'dashboards' for
+data-table, 'commerce' for invoice; tags from E1; createdAt 2026-06-25; featured where noted).
+Verify via /templates/<slug> in both themes at 390px + desktop.
+</task>
+
+<constraints>
+- §5 quality bar mandatory. Token-only; real components; self-contained; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
+<deliverables>
+Two template folders (component + data) + registry additions; one-line self-check per template
++ any substitutions.
+</deliverables>
+
+<acceptance_criteria>
+- data-table appears under "Dashboards & Apps" and invoice under "Commerce", both carry "New",
+  preview live in both themes at mobile + desktop; data-table filters/sorts/paginates and
+  bulk-selects client-side; invoice totals are arithmetically correct.
+- No invented imports (DzDataGrid props match its story); `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Sketch each layout; map regions to components; decide the record and invoice data models;
+confirm DzDataGrid's API from its story. Build data-table first. Only then write.
+</thinking>
+```
+
+---
+
+### [x] C8 — Data & commerce B: shopping-cart, order-history
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building production-grade,
+free commerce templates for dzup-ui from the @dzup-ui/core library.
+</role>
+
+<context>
+dzup-ui has checkout but not a cart or order-history page (docs/templates.md §3); together with
+the shipped product-listing/detail/checkout/order-tracking they complete a browse → cart →
+buy → track → re-order journey. Build from free core only.
+Read first, every time:
+- docs/templates.md §6.5 (your rows) and §5 (quality bar).
+- apps/landing/src/templates/checkout/ (the shipped commerce flagship — imitate its line-item
+  editing, promo code, live totals and emerald token re-skin) and order-tracking/ and
+  blog-index/ (for the DzDataView list pattern) and registry.ts.
+- Appendix A to confirm every component is real.
+
+<batch>
+- shopping-cart — "Shopping Cart": a cart page — editable line items (DzNumberInput qty,
+  remove, DzImage thumb), a promo DzInput, a free-shipping nudge DzAlert, and a sticky order
+  summary with live totals; an empty-cart state. Built with: DzCard, DzList, DzNumberInput,
+  DzButton, DzBadge, DzAlert, DzInput, DzDivider, DzImage.
+- order-history — "Order History": an account orders page — a searchable DzDataView/list of
+  past orders with date, items, total, status DzBadge/DzTag, and view/reorder DzButtons, plus
+  DzPagination. Built with: DzCard, DzDataView, DzList, DzBadge, DzTag, DzPagination,
+  DzSearchInput, DzButton.
+</batch>
+</context>
+
+<task>
+For each template in <batch>: create apps/landing/src/templates/<slug>/<Name>.vue (full-page,
+chromeless) built ONLY from the listed core components with realistic co-located data; make
+cart quantity/promo/totals work client-side. Register in registry.ts (category 'commerce'; tags
+from E1; createdAt 2026-06-25; consider matching the commerce emerald accent). Verify via
+/templates/<slug> in both themes at 390px + desktop.
+</task>
+
+<constraints>
+- §5 quality bar mandatory. Token-only (re-skins remap a semantic token, no raw hex); real
+  components; self-contained; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
+<deliverables>
+Two template folders (component + data) + registry additions; one-line self-check per template
++ any substitutions.
+</deliverables>
+
+<acceptance_criteria>
+- Both appear under "Commerce", carry "New", preview live in both themes at mobile + desktop;
+  cart quantity/promo/totals update live and show an empty state; order-history searches/paginates.
+- No invented imports; `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Sketch each layout; map regions to components; decide the cart and orders data models. Only then write.
+</thinking>
+```
+
+---
+
+### [x] C9 — Account centre: account-settings
+
+```xml
+<role>
+You are a senior Vue 3 + TypeScript engineer and product designer building a production-grade,
+free account-management template for dzup-ui from the @dzup-ui/core library.
+</role>
+
+<context>
+The shipped app-settings is a single settings surface; competitors ship a fuller multi-tab
+ACCOUNT CENTRE (profile / security / notifications / billing) — docs/templates.md §3. Build a
+distinct, richer template from free core only.
+Read first:
+- docs/templates.md §6.6 (your row) and §5 (quality bar).
+- apps/landing/src/templates/app-settings/ and user-profile/ and billing-plans/ (shipped
+  references for the tabbed settings, profile and billing patterns to combine) and registry.ts.
+- Appendix A to confirm every component is real.
+
+<batch>
+- account-settings — "Account Centre": DzAppShell + DzTabs across Profile (avatar upload
+  placeholder, name/bio DzFormFields), Security (password change, 2FA DzSwitch, active
+  sessions DzDescriptions/list), Notifications (a matrix of DzSwitches), and Billing (current
+  plan DzBadge, payment method, invoices snippet). Real form controls, a sticky save bar with
+  a DzAlert confirmation. Built with: DzAppShell, DzTabs, DzFormField, DzInput, DzSwitch,
+  DzSelect, DzAvatar, DzButton, DzDivider, DzAlert, DzBadge, DzDescriptions.
+</batch>
+</context>
+
+<task>
+Create apps/landing/src/templates/account-settings/AccountSettings.vue (full-page, chromeless)
+built ONLY from the listed core components with realistic co-located data; make tab switching
+and the save confirmation work client-side. Register in registry.ts (category 'dashboards';
+tags from E1; createdAt 2026-06-25). Verify via /templates/account-settings in both themes at
+390px + desktop. Go beyond basics — make it feel like a real account centre, not a form dump.
+</task>
+
+<constraints>
+- §5 quality bar mandatory. Token-only; real components; self-contained; no invented imports.
+- TS strict; `.ts` extensions; vue-tsc clean; validate with `vite build` (apps/landing).
+</constraints>
+
+<deliverables>
+The template folder (component + optional data) + the registry.ts addition; a one-line
+self-check (light/dark + responsive) + any substitutions.
+</deliverables>
+
+<acceptance_criteria>
+- account-settings appears under "Dashboards & Apps", carries "New", previews live in both
+  themes at mobile + desktop; tabs switch and the save bar confirms client-side.
+- No invented imports; `vite build` + `yarn typecheck` pass.
+</acceptance_criteria>
+
+<thinking>
+Sketch the four tabs and map each field/region to a core component; decide the settings data
+model. Only then write.
+</thinking>
+```
+
+---
+
+### [x] Q1 — QA, accessibility & build verification (closing gate)
+
+```xml
+<role>
+You are a meticulous quality engineer auditing the complete, enhanced Templates feature before
+it ships.
+</role>
+
+<context>
+The experience upgrades (E1–E6) and ~18 new free templates (C1–C9) are implemented on top of
+the original 24. Verify the whole feature against the spec and the §5 quality bar, and confirm
+nothing regressed.
+Read first: docs/templates.md §1, §2, §5, §6, §7; the executed E1–E6 and C1–C9 output;
+apps/landing/src/templates/registry.ts; the three Templates pages.
+</context>
+
+<task>
+1. CATALOGUE: confirm TEMPLATES now has the original 24 plus every §6 slug (≈42 total), each
+   with complete metadata, tags, createdAt, a working load(), and a resolvable source — no dead
+   routes, no missing detail pages, no duplicate slugs.
+2. PER-TEMPLATE: for each NEW template verify it renders in light AND dark, reflows at
+   390/768/desktop, has one logical heading order, keyboard-reachable controls with visible
+   focus, and uses ONLY token-based color/radius/shadow/font (grep src/templates for raw hex
+   and hardcoded Tailwind color classes — report any with file:line).
+3. GALLERY (E2/E3): ⌘K search opens and filters; tag chips + category + sort compose; "New" and
+   "Featured" badges are correct; DzEmpty shows for empty combinations; per-category counts are
+   right; the grid <ul> is labelled and cards reserve aspect-ratio (no CLS).
+4. DETAIL (E3/E4/E5): per-template SEO head is set; Preview/Code tabs show real highlighted
+   source + "Copy" + "Copy for LLM"; the primary-colour swatch re-skins ONLY the preview
+   correctly in light+dark; the RTL toggle mirrors; reset/fullscreen preserve params; device
+   switcher, theme toggle, built-with deep-links, view-source, copy-path and prev/next still work.
+5. THUMBNAILS (E6): `yarn thumbnails` regenerates light+dark images for every slug; the gallery
+   shows them theme-matched with icon fallback; images are committed and lazy-loaded.
+6. BUILD: run `yarn typecheck` and `vite build` (apps/landing); both must pass.
+</task>
+
+<deliverables>
+A checklist report: per-template pass/fail on §5, a list of any raw-color or a11y violations
+with file:line, the gallery/detail/thumbnail feature audit, and the typecheck/build results.
+Fix or file follow-ups for every failure.
+</deliverables>
+
+<acceptance_criteria>
+- ≈42/42 templates reachable, registered, and previewing in both themes at mobile + desktop.
+- Search, tag/category/sort filtering, badges, code tabs, colour customiser, RTL and thumbnails
+  all function as specified; nothing from the original 24 regressed.
+- Zero raw-color violations inside src/templates; `yarn typecheck` = 0 errors; `vite build` succeeds.
 </acceptance_criteria>
 ```
+
+---
+
+## 8. Open decisions & strategic ideas
+
+Confirm these before/around building; the AI-native items are deliberately **out of this backlog's scope** (larger than a landing-app task) but recorded so they aren't lost:
+
+1. **Thumbnails timing.** E3 makes the gallery thumbnail-ready; E6 generates them with Playwright. If headless screenshots can't run in the unattended `/run-tasks` environment, run E6 attended (`-Attended`) or by hand — the icon fallback keeps the gallery shipping in the meantime.
+2. **Catalogue size.** §6 grows free templates 24 → ~42. If that's too many for one push, the C-tasks are independent — run the highest-value first (recommend C1 auth, C5 chat/calendar, C7 data-table).
+3. **In-preview customiser depth.** E5 ships primary-colour presets + RTL. A full theme generator that *exports* copy-paste CSS variables (tweakcn / PrimeVue Theme Designer style) is a bigger, separate feature — defer.
+4. **AI-native distribution (high strategic value, separate project).** A Vue-native **shadcn-style registry + `npx … add` CLI**, an **"Open in v0"** deep-link, an **MCP server** exposing templates to coding agents, and **`llms.txt` + per-page Markdown**. Vue's AI-distribution rails are still underserved — a real chance to leapfrog — but this is its own initiative, not a landing-app task. (E4 ships the cheap slice: "Copy for LLM".)
+5. **Nav entry.** Consider promoting "Templates" to a top-level nav link now that the gallery is rich (landing.md §13 / TopNav), instead of only the `#ecosystem` scroll.
+6. **Pro templates.** The paid tier is specified in [§9](#9-pro-templates-paid-tier); it depends on the free foundation and is skipped by `/run-tasks` until `-Tier pro`.
+
+---
+
+## 9. Pro templates (paid tier)
+
+> The full Pro investigation, catalogue (12 templates across analytics / productivity / collaboration / editors / builder / automation) and the T11–T14 task backlog are specified in [`docs/templates-old.md` §10](./templates-old.md). That spec stands unchanged: Pro templates are an **additive** extension built from `@dzup-ui-pro/pro`, surfaced in the **same** gallery with a **"Pro"** badge and pro-Storybook deep-links, gated behind the Phase-1 funnel (`PRO_LIVE=false`). They reuse every enhancement in this doc (search, tags, code tabs, customiser, thumbnails) for free once those land.
+>
+> **Execution note:** Pro tasks live under this `## … Pro … (paid tier)` heading so `/run-tasks` parses them as the Pro tier and **skips them by default** (`-Tier free`). Run them only with `-Tier pro|all`, and only after the free foundation + `@dzup-ui-pro/pro` are ready. When picking the Pro work up, port T11–T14 from templates-old.md §10 here (or run that file directly) and apply this doc's §5 quality bar and the experience features (E1–E6) to the Pro rows as well.
 
 ---
 
@@ -1038,9 +1300,9 @@ Confirmed exports (from `packages/core/src/components/*/index.ts`). Templates mu
 
 ---
 
-## Appendix B — Pro `@dzup-ui-pro/pro` components available to pro templates
+## Appendix B — Pro `@dzup-ui-pro/pro` components (for §9 Pro templates only)
 
-Confirmed exports (from `dzup-ui-pro/packages/pro/src/components/*/index.ts`) — **41 components across 8 families**. Pro templates (§10.4) must draw from this set; do not invent names. Pro components may be composed with the free `@dzup-ui/core` set (Appendix A) for layout scaffolding. Pro Storybook story ids follow `pro-<family>-<dzcomponent>` (e.g. `pro-planning-dzgantt`).
+Confirmed exports (from `dzup-ui-pro/packages/pro/src/components/*/index.ts`) — **41 components across 8 families**. Pro story ids follow `pro-<family>-<dzcomponent>`. Reachable from `apps/landing` because the repo root declares one Yarn workspace spanning both `dzup-ui/*` and `dzup-ui-pro/*`. Import via the package name `@dzup-ui-pro/pro`, never a relative path into the sibling package.
 
 - **builders:** DzDashboardBuilder, DzDashboardWidget, DzFormBuilder, DzFormBuilderField, DzFormBuilderSection, DzSchemaForm, DzReportBand, DzReportBuilder, DzReportElement
 - **business:** DzWorkspaceShell, DzAuditLog, DzNotificationCenter, DzFileManager, DzRibbon
@@ -1050,5 +1312,3 @@ Confirmed exports (from `dzup-ui-pro/packages/pro/src/components/*/index.ts`) �
 - **planning:** DzCalendar(+DayView/WeekView/MonthView), DzGantt, DzGanttTaskRow, DzKanban, DzKanbanCard, DzKanbanColumn, DzMindMap, DzScheduler, DzCronEditor
 - **visualization:** DzChart, DzChartDataTable, DzDiagramEditor, DzHeatMap, DzTreeMap, DzOrgChart, DzSparkline, DzGauge, DzScorecard, DzGeoMap, DzWhiteboard, DzSankeyDiagram, DzNetworkGraph, DzFunnelChart, DzStockChart, DzSchemaDesigner, DzBarcode
 - **workflow:** DzWorkflowDesigner, DzWorkflowEdge, DzWorkflowNode, DzWorkflowToolbar, DzApprovalFlow
-
-> **Note.** `@dzup-ui-pro/pro` is reachable from `apps/landing` only because the repo root declares a single Yarn workspace spanning both `dzup-ui/*` and `dzup-ui-pro/*` (§10.1). Pro templates must import pro components via the package name `@dzup-ui-pro/pro` (workspace dependency), never via a relative path into the sibling package.

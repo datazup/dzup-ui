@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "word-stagger",
+  "type": "registry:block",
+  "title": "Word stagger",
+  "description": "Splits a line into words and reveals each one in sequence as it enters.",
+  "files": [
+    {
+      "path": "word-stagger.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzWordReveal } from '../motion'\n</script>\n\n<template>\n  <DzWordReveal as=\"p\" text=\"Ship motion that respects everyone\" />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "sticky-scroll",
+  "type": "registry:block",
+  "title": "Sticky / pinned scroll",
+  "description": "A panel pins while its content advances through steps; the progress bar tracks the scroll.",
+  "files": [
+    {
+      "path": "sticky-scroll.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { supportsScrollTimeline, useReducedMotion, useSticky } from '../motion'\n\nconst reduced = useReducedMotion()\nconst native = supportsScrollTimeline()\n\n// useSticky reports an internal scroll container's 0→1 progress (the JS floor).\nconst scroller = ref<HTMLElement | null>(null)\nconst progress = useSticky(scroller)\n\nconst steps = [/* … */]\nconst active = computed(() =>\n  Math.min(steps.length - 1, Math.floor(progress.value * steps.length)),\n)\n// Bar reads --sticky-progress (scaleX). The native path overrides it with a\n// scroll()-driven animation, so the continuous fill runs on the compositor.\nconst barStyle = computed(() => ({ '--sticky-progress': progress.value.toFixed(3) }))\n</script>\n\n<template>\n  <!-- Reduced motion → normal stacked flow (no pin, no scroll-linked bar). -->\n  <div v-if=\"reduced\"><!-- …stacked step list… --></div>\n\n  <div v-else class=\"sticky\" :class=\"{ 'dz-sticky--native': native }\">\n    <div ref=\"scroller\" class=\"scroller\">\n      <div class=\"track\">\n        <div class=\"pinned\">\n          <p>{{ steps[active].title }}</p>\n          <div class=\"bar-track\"><div class=\"dz-sticky__bar\" :style=\"barStyle\" /></div>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<style scoped>\n.scroller { height: 188px; overflow-y: auto; }\n.track { height: calc(188px * 3); }          /* the scroll distance */\n.pinned { position: sticky; top: 0; min-height: 188px; }\n</style>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

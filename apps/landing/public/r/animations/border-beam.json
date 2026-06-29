@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "border-beam",
+  "type": "registry:block",
+  "title": "Border beam",
+  "description": "A light beam travels continuously around a card’s border on a loop.",
+  "files": [
+    {
+      "path": "border-beam.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzCard } from '@dzup-ui/core'\nimport { DzBorderBeam } from '../motion'\n</script>\n\n<template>\n  <!-- Give the inner card a matching radius + opaque surface so the ring peeks at the edges. -->\n  <DzBorderBeam>\n    <DzCard variant=\"flat\" padding=\"lg\" style=\"border-radius: var(--dz-radius-xl); background: var(--dz-surface)\">\n      Live status\n    </DzCard>\n  </DzBorderBeam>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

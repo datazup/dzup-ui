@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "tilt",
+  "type": "registry:block",
+  "title": "3D tilt",
+  "description": "A card tilts toward the pointer with depth and an optional glare highlight.",
+  "files": [
+    {
+      "path": "tilt.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzImageCard } from '@dzup-ui/core'\nimport { vTilt, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- Pointer-only + rAF-throttled; flat on touch/keyboard and under reduced motion. -->\n  <DzImageCard\n    v-tilt=\"{ max: 12, glare: true, scale: 1.02, disabled: reduced }\"\n    :src=\"src\"\n    alt=\"…\"\n    aspect-ratio=\"16/9\"\n  />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzImageCard",
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

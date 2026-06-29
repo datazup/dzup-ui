@@ -121,7 +121,7 @@ const items: Item[] = [
           <DzText size="sm" tone="muted" class="mg-card-body">{{ item.body }}</DzText>
 
           <div class="mg-foot">
-            <DzAvatar :fallback="item.initials" size="xs" />
+            <DzAvatar :fallback="item.initials" :alt="item.author" size="xs" />
             <DzText size="xs" tone="muted" as="span">{{ item.author }}</DzText>
             <DzBadge variant="subtle" tone="neutral" size="sm" class="mg-read">4 min</DzBadge>
           </div>

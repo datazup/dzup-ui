@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "pulse-ping",
+  "type": "registry:block",
+  "title": "Pulse / ping",
+  "description": "An expanding ring radiates from a status dot to draw the eye to live updates.",
+  "files": [
+    {
+      "path": "pulse-ping.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzNotification } from '@dzup-ui/core'\nimport { useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <DzNotification title=\"Deployment live\" tone=\"info\">\n    <template #icon>\n      <!-- .dz-ping radiates a ring (currentColor) behind the dot; static when reduced. -->\n      <span class=\"dz-ping\" :class=\"{ 'dz-ping--reduced': reduced }\" style=\"color: var(--dz-info)\" aria-hidden=\"true\">\n        <span class=\"dz-ping__ring\" />\n        <span class=\"dz-ping__dot\" />\n      </span>\n    </template>\n  </DzNotification>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzNotification"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

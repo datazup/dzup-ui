@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "gradient-border-glow",
+  "type": "registry:block",
+  "title": "Gradient border glow",
+  "description": "An animated conic-gradient ring glows around a card; static brand border when reduced.",
+  "files": [
+    {
+      "path": "gradient-border-glow.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DzCard } from '@dzup-ui/core'\nimport { useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\nconst frame = computed(() => ({\n  'dz-anim-border-glow': true,\n  'dz-anim-border-glow--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <div :class=\"frame\">\n    <DzCard variant=\"flat\" padding=\"lg\">Featured</DzCard>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

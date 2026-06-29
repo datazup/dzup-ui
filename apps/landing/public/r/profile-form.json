@@ -1,0 +1,34 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "profile-form",
+  "type": "registry:block",
+  "title": "Edit profile",
+  "description": "A broad account panel: a file-upload avatar drop zone, name/username inputs, a role select, a bio textarea with counter, a free-text skills tags input, and a public-profile switch.",
+  "files": [
+    {
+      "path": "profile-form.vue",
+      "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzDivider,\n  DzFileUpload,\n  DzFormDescription,\n  DzFormField,\n  DzFormLabel,\n  DzHeading,\n  DzInput,\n  DzSelect,\n  DzSwitch,\n  DzTagsInput,\n  DzText,\n  DzTextarea,\n} from '@dzup-ui/core'\nimport type { DzSelectItem } from '@dzup-ui/core'\nimport { ref } from 'vue'\n\n/**\n * Profile form — an account \"edit profile\" panel.\n *\n * A broad settings card combining a DzFileUpload avatar drop zone, name /\n * username DzInputs, a DzSelect role picker, a DzTextarea bio with a maxlength\n * counter, a DzTagsInput for free-text skills (v-model:value), and a DzSwitch\n * for profile visibility — closed by a sticky-feeling action row. Self-contained:\n * local ref() state only.\n *\n * Inputs family: DzInput, DzTextarea.\n * Forms family: DzFileUpload, DzSelect, DzTagsInput, DzSwitch, DzFormField,\n * DzFormLabel, DzFormDescription.\n */\n\nconst avatar = ref<File[]>([])\nconst fullName = ref('Jamie Rivera')\nconst username = ref('jamie')\nconst role = ref('design')\nconst bio = ref('Product designer focused on design systems and accessible UI.')\nconst skills = ref<string[]>(['Design Systems', 'Accessibility', 'Vue'])\nconst publicProfile = ref(true)\n\nconst BIO_MAX = 160\n\nconst ROLES: DzSelectItem[] = [\n  { label: 'Product Designer', value: 'design' },\n  { label: 'Frontend Engineer', value: 'frontend' },\n  { label: 'Product Manager', value: 'pm' },\n  { label: 'Founder', value: 'founder' },\n  { label: 'Other', value: 'other' },\n]\n</script>\n\n<template>\n  <section class=\"pr-wrap\" aria-labelledby=\"pr-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"pr-card\">\n      <header class=\"pr-head\">\n        <DzHeading id=\"pr-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          Edit profile\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" as=\"p\">\n          This information appears on your public profile.\n        </DzText>\n      </header>\n\n      <form class=\"pr-form\" @submit.prevent>\n        <DzFormField>\n          <DzFormLabel>Profile photo</DzFormLabel>\n          <DzFileUpload\n            v-model=\"avatar\"\n            accept=\"image/*\"\n            :max-files=\"1\"\n            :max-size=\"2_000_000\"\n            aria-label=\"Profile photo\"\n          />\n          <DzFormDescription>PNG or JPG, up to 2&nbsp;MB.</DzFormDescription>\n        </DzFormField>\n\n        <div class=\"pr-grid\">\n          <DzFormField required>\n            <DzFormLabel>Full name</DzFormLabel>\n            <DzInput v-model=\"fullName\" autocomplete=\"name\" />\n          </DzFormField>\n          <DzFormField required>\n            <DzFormLabel>Username</DzFormLabel>\n            <DzInput v-model=\"username\" autocomplete=\"username\">\n              <template #prefix>\n                <span class=\"pr-at\">@</span>\n              </template>\n            </DzInput>\n          </DzFormField>\n        </div>\n\n        <DzFormField>\n          <DzFormLabel>Role</DzFormLabel>\n          <DzSelect v-model=\"role\" :items=\"ROLES\" aria-label=\"Role\" />\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>Bio</DzFormLabel>\n          <DzTextarea\n            v-model=\"bio\"\n            :rows=\"3\"\n            :maxlength=\"BIO_MAX\"\n            auto-resize\n            placeholder=\"A short line about you…\"\n          />\n          <DzFormDescription>\n            <span class=\"pr-counter\">{{ bio.length }} / {{ BIO_MAX }}</span>\n          </DzFormDescription>\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>Skills</DzFormLabel>\n          <DzTagsInput\n            v-model:value=\"skills\"\n            placeholder=\"Type a skill and press Enter…\"\n            :max=\"8\"\n            chip-variant=\"subtle\"\n            chip-tone=\"primary\"\n            aria-label=\"Skills\"\n          />\n          <DzFormDescription>Press Enter or comma to add. Up to 8 tags.</DzFormDescription>\n        </DzFormField>\n\n        <DzDivider decorative />\n\n        <div class=\"pr-switch-row\">\n          <div class=\"pr-switch-copy\">\n            <DzText size=\"sm\" weight=\"medium\" as=\"div\">Public profile</DzText>\n            <DzText size=\"xs\" tone=\"muted\" as=\"div\">Anyone with the link can view it.</DzText>\n          </div>\n          <DzSwitch v-model=\"publicProfile\" aria-label=\"Public profile\" />\n        </div>\n\n        <div class=\"pr-actions\">\n          <DzButton variant=\"ghost\" tone=\"neutral\">Cancel</DzButton>\n          <DzButton type=\"submit\" variant=\"solid\" tone=\"primary\">Save changes</DzButton>\n        </div>\n      </form>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.pr-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.pr-card {\n  width: 100%;\n  max-width: 36rem;\n}\n\n.pr-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.pr-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.pr-grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.pr-at {\n  color: var(--dz-muted-foreground, #6b7280);\n}\n\n.pr-counter {\n  font-variant-numeric: tabular-nums;\n}\n\n.pr-switch-row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.pr-switch-copy {\n  line-height: 1.3;\n  min-width: 0;\n}\n\n.pr-actions {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--dz-space-2, 0.5rem);\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n\n@media (max-width: 540px) {\n  .pr-grid {\n    grid-template-columns: 1fr;\n  }\n\n  .pr-actions {\n    flex-direction: column-reverse;\n  }\n\n  .pr-actions :deep(button) {\n    width: 100%;\n  }\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzFileUpload",
+    "DzInput",
+    "DzTextarea",
+    "DzTagsInput",
+    "DzSelect",
+    "DzSwitch",
+    "DzFormField",
+    "DzFormLabel",
+    "DzFormDescription",
+    "DzDivider",
+    "DzButton",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

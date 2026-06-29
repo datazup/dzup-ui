@@ -1,0 +1,26 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "code-showcase",
+  "type": "registry:block",
+  "title": "Code showcase",
+  "description": "A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with a filename header and an explicit DzCopyButton wired into its actions slot that copies exactly the snippet on screen.",
+  "files": [
+    {
+      "path": "code-showcase.vue",
+      "content": "<script setup lang=\"ts\">\n/**\n * Code showcase — a tabbed snippet with one-click copy.\n *\n * DzTabs switch between the files of a minimal setup example; each tab renders a\n * DzCodeBlock (filename + language header, line numbers) whose built-in copy is\n * turned off in favour of an explicit DzCopyButton wired into the block's\n * `#actions` slot — copying exactly the snippet on screen.\n *\n * Self-contained: static content, no props, no network. Composed only from\n * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport {\n  DzCodeBlock,\n  DzCopyButton,\n  DzTabContent,\n  DzTabList,\n  DzTabs,\n  DzTabTrigger,\n} from '@dzup-ui/core'\nimport { ref } from 'vue'\n\nconst tab = ref('install')\n\ninterface Snippet {\n  value: string\n  label: string\n  filename: string\n  language: string\n  code: string\n}\n\nconst snippets: Snippet[] = [\n  {\n    value: 'install',\n    label: 'Install',\n    filename: 'terminal',\n    language: 'bash',\n    code: 'npm install @dzup-ui/core @dzup-ui/tokens',\n  },\n  {\n    value: 'setup',\n    label: 'main.ts',\n    filename: 'main.ts',\n    language: 'typescript',\n    code: `import { createApp } from 'vue'\nimport '@dzup-ui/tokens/theme.css'\nimport App from './App.vue'\n\ncreateApp(App).mount('#app')`,\n  },\n  {\n    value: 'usage',\n    label: 'App.vue',\n    filename: 'App.vue',\n    language: 'vue',\n    code: [\n      '<template>',\n      '  <DzButton tone=\"primary\" @click=\"start\">',\n      '    Get started',\n      '  </DzButton>',\n      '</template>',\n    ].join('\\n'),\n  },\n]\n</script>\n\n<template>\n  <section class=\"cs-wrap\" aria-labelledby=\"cs-title\">\n    <header class=\"cs-head\">\n      <h4 id=\"cs-title\" class=\"cs-title\">Add it to your app</h4>\n      <p class=\"cs-sub\">Three files from zero to a themed button.</p>\n    </header>\n\n    <DzTabs v-model=\"tab\" variant=\"enclosed\" aria-label=\"Setup snippets\" class=\"cs-tabs\">\n      <DzTabList>\n        <DzTabTrigger v-for=\"snippet in snippets\" :key=\"snippet.value\" :value=\"snippet.value\">\n          {{ snippet.label }}\n        </DzTabTrigger>\n      </DzTabList>\n\n      <DzTabContent v-for=\"snippet in snippets\" :key=\"snippet.value\" :value=\"snippet.value\">\n        <DzCodeBlock\n          :code=\"snippet.code\"\n          :language=\"snippet.language\"\n          :filename=\"snippet.filename\"\n          :show-line-numbers=\"snippet.value !== 'install'\"\n          :copyable=\"false\"\n          :aria-label=\"`${snippet.filename} snippet`\"\n        >\n          <template #actions>\n            <DzCopyButton\n              :value=\"snippet.code\"\n              variant=\"ghost\"\n              size=\"sm\"\n              label=\"Copy\"\n              copied-label=\"Copied\"\n              :aria-label=\"`Copy ${snippet.filename} snippet`\"\n            />\n          </template>\n        </DzCodeBlock>\n      </DzTabContent>\n    </DzTabs>\n  </section>\n</template>\n\n<style scoped>\n.cs-wrap {\n  padding: clamp(1.25rem, 4vw, 2rem);\n  background: var(--dz-background, #fff);\n}\n\n.cs-head {\n  margin-bottom: var(--dz-space-4, 1rem);\n}\n\n.cs-title {\n  margin: 0;\n  font-size: var(--dz-text-xl, 1.25rem);\n  font-weight: var(--dz-font-bold, 700);\n  color: var(--dz-foreground, inherit);\n}\n\n.cs-sub {\n  margin: var(--dz-space-1, 0.25rem) 0 0;\n  font-size: var(--dz-text-sm, 0.875rem);\n  color: var(--dz-muted-foreground, var(--dz-foreground-muted, inherit));\n}\n\n.cs-tabs {\n  max-width: 44rem;\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCodeBlock",
+    "DzCopyButton",
+    "DzTabs",
+    "DzTabList",
+    "DzTabTrigger",
+    "DzTabContent"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

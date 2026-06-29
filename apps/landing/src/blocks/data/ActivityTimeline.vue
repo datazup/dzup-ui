@@ -101,7 +101,7 @@ const events: Event[] = [
           :status="event.status"
         >
           <template #indicator>
-            <DzAvatar :fallback="event.initials" size="sm" />
+            <DzAvatar :fallback="event.initials" :alt="event.actor" size="sm" />
           </template>
 
           <div class="at-body">

@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import Section from '../components/Section.vue'
+import BlockAiCallout from '../components/blocks/BlockAiCallout.vue'
 import BlockCard from '../components/blocks/BlockCard.vue'
 import BlockCategoryNav from '../components/blocks/BlockCategoryNav.vue'
-import BlockPreview from '../components/blocks/BlockPreview.vue'
+import BlockCommandPalette from '../components/blocks/BlockCommandPalette.vue'
+import BlockSearchBar from '../components/blocks/BlockSearchBar.vue'
+import BlockThemeToolbar from '../components/blocks/BlockThemeToolbar.vue'
+import LazyBlockPreview from '../components/blocks/LazyBlockPreview.vue'
+import type { BlockNavTarget } from '../components/blocks/BlockCommandPalette.vue'
 import { BLOCKS, CATEGORIES, blocksByCategory } from '../blocks/registry.ts'
-import type { CategoryMeta } from '../blocks/registry.ts'
+import type { BlockDef, CategoryMeta } from '../blocks/registry.ts'
+import { useBlockSearch } from '../composables/useBlockSearch.ts'
 import { vReveal } from '../composables/useScrollReveal.ts'
 
 /**
@@ -41,6 +47,73 @@ const sections = computed<CategorySection[]>(() =>
     (section) => section.blocks.length > 0,
   ),
 )
+
+// --- Results mode (search / tag filter) ------------------------------------
+//
+// An *additional* browse mode layered over the deck (docs/blocks.md §3.1): when a
+// query or tag is active the deck + pager are replaced by a flat grid spanning
+// every category, driven entirely by this shared `useBlockSearch` state (the
+// search bar writes it, the page reads it). Clearing it restores the deck
+// unchanged. The on-page filter never touches the URL hash — only selecting a
+// block does (via BlockCard's `#<id>` link) — so deep-linking is preserved.
+const search = useBlockSearch()
+const isFiltering = search.isFiltering
+const results = search.results
+
+// Deep-linkable component filter: `/blocks?component=DzTable` opens results mode
+// pre-filtered to every block using that component. This is the cross-page
+// reverse-lookup target — a "Built from" chip on the standalone BlockDetailPage
+// (which has no live filter of its own) routes here with the component set, so
+// the affordance keeps working across the page boundary (Task E4, I4). Seeded
+// synchronously at setup (validated against the catalog) so the first paint is
+// already in results mode rather than flashing the deck.
+if (typeof window !== 'undefined') {
+  const requested = new URLSearchParams(window.location.search).get('component')
+  if (requested && search.allComponents().includes(requested)) {
+    search.activeComponent.value = requested
+  }
+}
+
+/**
+ * Reverse-lookup entry point (Task E4): a component chip on any BlockCard /
+ * BlockPreview asks the index to show every block using that component. We route
+ * it through the *same* `useBlockSearch` instance as the search bar — setting
+ * `activeComponent` flips the page into results mode — rather than adding a
+ * parallel filter. Free-text and tag facets are cleared so the component filter
+ * stands alone, then the search bar (live count + Clear) is scrolled into view.
+ */
+function showBlocksUsing(name: string): void {
+  search.query.value = ''
+  search.activeTags.value = []
+  search.activeComponent.value = name
+  if (typeof window === 'undefined') return
+  requestAnimationFrame(() => {
+    document.querySelector('.block-search')?.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'start',
+    })
+  })
+}
+
+/** Live, count-aware lede for the results section heading. */
+const resultsLede = computed(() => {
+  const n = results.value.length
+  if (n === 0) return 'No blocks match your search and tag filters. Clear them to browse by category.'
+  return `${n} ${n === 1 ? 'block' : 'blocks'} across all categories match your filters.`
+})
+
+/** Category id → decorative accent, so each cross-category card/preview keeps its group's hue. */
+const accentByCategory = new Map(CATEGORIES.map((c) => [c.id, c.accent] as const))
+
+/**
+ * Per-block accent custom property for results mode. In the deck the accent is
+ * set once on the panel; here results mix categories, so each item carries its
+ * own `--lp-cat-500` (chips/preview wash inherit it through the cascade).
+ */
+function itemAccentStyle(block: BlockDef) {
+  const accent = accentByCategory.get(block.category)
+  return accent ? { '--lp-cat-500': `var(--dz-colors-${accent}-500)` } : undefined
+}
 
 /** Resolve the category to open on load from the URL hash, if any. */
 function initialCategory(): string {
@@ -131,6 +204,83 @@ function scrollToPanelTop() {
   }
 }
 
+/**
+ * Block ids that must mount their live preview immediately, bypassing the lazy
+ * scroll gate (Task E5). A `BlockPreview` is only mounted as it nears the
+ * viewport — but a below-the-fold deep-link / ⌘K target has to render *before*
+ * we can scroll to it, since the `#<id>` anchor lives on BlockPreview's root
+ * (`LazyBlockPreview`'s skeleton has no such anchor). Forcing the target mount
+ * makes the element exist for `scrollIntoView`. A reactive Set drives the
+ * per-card `force-mount` binding.
+ */
+const forcedBlockIds = reactive(new Set<string>())
+
+// Seed the initial deep-link target (#<block-id>) so it renders live on the
+// first paint — no skeleton flash — and its #id anchor exists for the onMounted
+// scroll, even when the block sits below the fold.
+if (typeof window !== 'undefined') {
+  const initialHash = window.location.hash.slice(1)
+  if (initialHash && BLOCKS.some((b) => b.id === initialHash)) forcedBlockIds.add(initialHash)
+}
+
+/** Whether a block should skip the lazy gate and render its preview now. */
+function isForced(id: string): boolean {
+  return forcedBlockIds.has(id)
+}
+
+/**
+ * Scroll a block's live preview into view by its `#<id>` anchor (the id
+ * BlockPreview sets on its root). Shared by the initial deep-link jump and the
+ * ⌘K palette so both honour `prefers-reduced-motion` identically. Force-mounts
+ * the target first (so its anchor exists even when it's still a lazy skeleton),
+ * then waits a tick + rAF so the scroll fires after the preview has painted.
+ */
+async function scrollToBlock(id: string) {
+  if (typeof window === 'undefined') return
+  forcedBlockIds.add(id)
+  await nextTick()
+  requestAnimationFrame(() => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      block: 'start',
+    })
+  })
+}
+
+/**
+ * A block waiting to be scrolled to once its category deck finishes its enter
+ * transition (set when the palette jumps to a block in a not-yet-active group).
+ */
+const pendingBlockId = ref<string | null>(null)
+
+/** When the palette navigates to a block, open its deck then scroll to it. */
+function openBlock(blockId: string) {
+  const block = BLOCKS.find((b) => b.id === blockId)
+  if (!block) return
+  if (block.category === active.value) {
+    // Deck already showing this group — just scroll the preview into view.
+    scrollToBlock(blockId)
+  } else {
+    // Switch decks first; the scroll waits for the enter transition (after-enter).
+    pendingBlockId.value = blockId
+    goTo(block.category)
+  }
+}
+
+/** Handle a ⌘K palette selection: open the target block or category deck. */
+function onPaletteNavigate(target: BlockNavTarget) {
+  if (target.blockId) openBlock(target.blockId)
+  else goTo(target.category)
+}
+
+/** After a deck enter transition, flush any pending palette block scroll. */
+function onPanelEntered() {
+  if (pendingBlockId.value) {
+    scrollToBlock(pendingBlockId.value)
+    pendingBlockId.value = null
+  }
+}
+
 let isMounted = false
 
 watch(active, async (id) => {
@@ -153,12 +303,7 @@ onMounted(async () => {
     const block = hash ? BLOCKS.find((b) => b.id === hash) : undefined
     if (block) {
       await nextTick()
-      requestAnimationFrame(() => {
-        document.getElementById(block.id)?.scrollIntoView({
-          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-          block: 'start',
-        })
-      })
+      scrollToBlock(block.id)
     }
   }
 })
@@ -180,20 +325,74 @@ onMounted(async () => {
           @dzup-ui/core components and design tokens. Copy the markup, paste it in, and it drops in already
           themed, accessible, and light/dark-ready.
         </DzText>
+
+        <!-- ⌘K navigator: jump to any block, category or component. -->
+        <BlockCommandPalette class="blocks-hero-search" @navigate="onPaletteNavigate" />
       </div>
     </Section>
 
-    <!-- Sticky category tab bar — switches the visible group below. -->
-    <BlockCategoryNav
-      v-if="sections.length"
-      v-model="active"
-      :categories="sections"
-      :panel-id-prefix="PANEL_PREFIX"
-    />
+    <!-- Search + tag-filter bar — always visible; drives results mode below. -->
+    <BlockSearchBar :search="search" />
 
-    <!-- The deck: one animated group at a time. -->
-    <div id="blocks-deck" class="blocks-deck">
-      <Transition :name="transitionName" mode="out-in">
+    <!-- Global token editor (docs/blocks.md §3.4): one instance re-themes every
+         live preview AND injects the same `:root{}` into copied snippets. -->
+    <BlockThemeToolbar />
+
+    <!-- Mode switch: a flat results grid while filtering, else the category deck.
+         out-in fade; degrades to an instant swap under prefers-reduced-motion. -->
+    <Transition name="mode-fade" mode="out-in">
+      <!-- Results mode: a flat BlockCard grid + previews spanning ALL categories. -->
+      <div v-if="isFiltering" key="results" class="blocks-results">
+        <Section
+          title="Search results"
+          :lede="resultsLede"
+          heading-id="blocks-results-title"
+          align="left"
+        >
+          <template v-if="results.length">
+            <ul class="block-grid">
+              <li
+                v-for="(block, i) in results"
+                :key="block.id"
+                :style="itemAccentStyle(block)"
+                v-reveal="i * 45"
+              >
+                <BlockCard :block="block" @select-component="showBlocksUsing" />
+              </li>
+            </ul>
+
+            <!-- Reuse the same lazy preview mounting as the deck, flat. -->
+            <div class="block-previews">
+              <div
+                v-for="block in results"
+                :key="block.id"
+                :style="itemAccentStyle(block)"
+              >
+                <LazyBlockPreview
+                  :block="block"
+                  :force-mount="isForced(block.id)"
+                  v-reveal
+                  @select-component="showBlocksUsing"
+                />
+              </div>
+            </div>
+          </template>
+        </Section>
+      </div>
+
+      <!-- Deck mode: the existing category nav + one-group-at-a-time deck. -->
+      <div v-else key="deck" class="blocks-deck-mode">
+        <!-- Sticky category tab bar — switches the visible group below. -->
+        <BlockCategoryNav
+          v-if="sections.length"
+          v-model="active"
+          :categories="sections"
+          :panel-id-prefix="PANEL_PREFIX"
+        />
+
+        <!-- The deck: one animated group at a time. -->
+        <div id="blocks-deck" class="blocks-deck">
+      <Transition :name="transitionName" mode="out-in" @after-enter="onPanelEntered">
         <section
           v-if="activeSection"
           :key="activeSection.id"
@@ -218,17 +417,20 @@ onMounted(async () => {
                 :key="block.id"
                 v-reveal="i * 45"
               >
-                <BlockCard :block="block" />
+                <BlockCard :block="block" @select-component="showBlocksUsing" />
               </li>
             </ul>
 
-            <!-- Live previews: each block's full chrome (tabs / viewport / copy). -->
+            <!-- Live previews: each block's full chrome (tabs / viewport / copy),
+                 lazily mounted as it nears the viewport (Task E5). -->
             <div class="block-previews">
-              <BlockPreview
+              <LazyBlockPreview
                 v-for="block in activeSection.blocks"
                 :key="block.id"
                 :block="block"
+                :force-mount="isForced(block.id)"
                 v-reveal
+                @select-component="showBlocksUsing"
               />
             </div>
           </Section>
@@ -265,7 +467,14 @@ onMounted(async () => {
           <span class="blocks-pager-name">{{ nextSection?.label ?? 'End' }}</span>
         </DzButton>
       </nav>
-    </div>
+      </div>
+      </div>
+    </Transition>
+
+    <!-- "Use with AI" — the AI-native distribution entry points (Task G5):
+         llms.txt, registry.json, and the copy-paste MCP server config. Outside
+         the deck⇄results Transition so it's always present, below the catalog. -->
+    <BlockAiCallout />
   </div>
 </template>
 
@@ -290,10 +499,27 @@ onMounted(async () => {
   line-height: 1.65;
 }
 
+.blocks-hero-search {
+  margin-top: 8px;
+}
+
 .blocks-deck {
   /* Clip the in/out slide so a transitioning panel never spills sideways and
      spawns a horizontal scrollbar. */
   overflow-x: clip;
+}
+
+/* ---- Mode switch (deck ⇄ results): a plain cross-fade, no overlap. ---------
+   out-in means the leaving mode is gone before the next enters, so opacity
+   alone reads cleanly. Degrades to an instant swap under reduced motion. */
+.mode-fade-enter-active,
+.mode-fade-leave-active {
+  transition: opacity var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.mode-fade-enter-from,
+.mode-fade-leave-to {
+  opacity: 0;
 }
 
 .blocks-panel {
@@ -408,6 +634,8 @@ onMounted(async () => {
 
 /* Reduced motion: instant opacity swap, no slide/scale. */
 @media (prefers-reduced-motion: reduce) {
+  .mode-fade-enter-active,
+  .mode-fade-leave-active,
   .deck-fwd-enter-active,
   .deck-fwd-leave-active,
   .deck-back-enter-active,

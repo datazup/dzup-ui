@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "odometer",
+  "type": "registry:block",
+  "title": "Sliding number",
+  "description": "Each digit rolls vertically to its target like a mechanical odometer when in view.",
+  "files": [
+    {
+      "path": "odometer.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzStatCard } from '@dzup-ui/core'\nimport { DzOdometer } from '../motion'\n</script>\n\n<template>\n  <!-- Per-digit vertical roll (transform-only) on a left-to-right stagger; the\n       value lives in a real DzStatCard via its #value slot. Thousands separators\n       on by default; static prefix/suffix; tabular-nums avoids any width jump.\n       Reduced motion → final number shown instantly, no roll. -->\n  <DzStatCard title=\"Active projects\" :value=\"48200\" trend=\"up\" trend-value=\"+12%\">\n    <template #value>\n      <DzOdometer :value=\"48200\" tone=\"primary\" aria-label=\"Active projects\" />\n    </template>\n  </DzStatCard>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzStatCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

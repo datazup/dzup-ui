@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "orbiting-icons",
+  "type": "registry:block",
+  "title": "Orbiting icons",
+  "description": "Avatars and badges orbit a central hub on one or more slow-spinning rings.",
+  "files": [
+    {
+      "path": "orbiting-icons.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzAvatar, DzBadge, DzCard } from '@dzup-ui/core'\nimport { DzOrbit } from '../motion'\n</script>\n\n<template>\n  <!-- Slotted items spread across the rings and stay upright as they orbit.\n       The decorative tracks are aria-hidden; the items stay accessible. -->\n  <DzOrbit :radius=\"52\" :ring-gap=\"38\" :rings=\"2\" speed=\"26s\">\n    <template #center>\n      <DzCard variant=\"elevated\" padding=\"sm\">dzup</DzCard>\n    </template>\n    <DzAvatar fallback=\"AL\" alt=\"Ada Lovelace\" size=\"sm\" />\n    <DzBadge variant=\"solid\" tone=\"primary\">UI</DzBadge>\n    <DzAvatar fallback=\"GH\" alt=\"Grace Hopper\" size=\"sm\" />\n    <DzBadge variant=\"subtle\" tone=\"info\">API</DzBadge>\n  </DzOrbit>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzAvatar",
+    "DzBadge"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

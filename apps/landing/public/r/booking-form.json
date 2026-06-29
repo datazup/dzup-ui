@@ -1,0 +1,31 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "booking-form",
+  "type": "registry:block",
+  "title": "Booking form",
+  "description": "A reservation card pairing the date/time/number controls — a DzDatePicker day, a 30-minute-step DzTimePicker slot, a clamped DzNumberInput party size, and a seating DzSelect.",
+  "files": [
+    {
+      "path": "booking-form.vue",
+      "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzDatePicker,\n  DzFormDescription,\n  DzFormField,\n  DzFormLabel,\n  DzHeading,\n  DzNumberInput,\n  DzSelect,\n  DzText,\n  DzTimePicker,\n} from '@dzup-ui/core'\nimport type { DzSelectItem } from '@dzup-ui/core'\nimport { CalendarCheck, Users } from 'lucide-vue-next'\nimport { ref } from 'vue'\n\n/**\n * Booking form — a restaurant reservation card.\n *\n * Brings together the date / time / number controls in one realistic flow:\n * a DzDatePicker for the day, a DzTimePicker (30-minute steps) for the slot, a\n * DzNumberInput for party size (clamped 1–12), and a DzSelect for seating\n * preference. Self-contained: local ref() state only.\n *\n * Forms family: DzDatePicker, DzTimePicker, DzSelect, DzFormField, DzFormLabel,\n * DzFormDescription. Inputs family: DzNumberInput.\n */\n\nconst date = ref('')\nconst time = ref('19:00')\nconst guests = ref<number | undefined>(2)\nconst seating = ref('indoor')\n\nconst SEATING: DzSelectItem[] = [\n  { label: 'Indoor', value: 'indoor' },\n  { label: 'Outdoor terrace', value: 'outdoor' },\n  { label: 'Bar', value: 'bar' },\n  { label: 'No preference', value: 'any' },\n]\n</script>\n\n<template>\n  <section class=\"bk-wrap\" aria-labelledby=\"bk-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"bk-card\">\n      <header class=\"bk-head\">\n        <span class=\"bk-badge\" aria-hidden=\"true\">\n          <CalendarCheck :size=\"20\" />\n        </span>\n        <div>\n          <DzHeading id=\"bk-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n            Reserve a table\n          </DzHeading>\n          <DzText tone=\"muted\" size=\"sm\" as=\"p\">Book in a few seconds — confirmation is instant.</DzText>\n        </div>\n      </header>\n\n      <form class=\"bk-form\" @submit.prevent>\n        <DzFormField required>\n          <DzFormLabel>Date</DzFormLabel>\n          <DzDatePicker v-model=\"date\" placeholder=\"Pick a date\" aria-label=\"Reservation date\" />\n        </DzFormField>\n\n        <div class=\"bk-grid\">\n          <DzFormField required>\n            <DzFormLabel>Time</DzFormLabel>\n            <DzTimePicker\n              v-model=\"time\"\n              :step=\"30\"\n              placeholder=\"Select time\"\n              aria-label=\"Reservation time\"\n            />\n          </DzFormField>\n\n          <DzFormField required>\n            <DzFormLabel>Guests</DzFormLabel>\n            <DzNumberInput v-model=\"guests\" :min=\"1\" :max=\"12\" :step=\"1\" aria-label=\"Number of guests\">\n              <template #prefix>\n                <Users :size=\"15\" aria-hidden=\"true\" />\n              </template>\n            </DzNumberInput>\n          </DzFormField>\n        </div>\n\n        <DzFormField>\n          <DzFormLabel>Seating preference</DzFormLabel>\n          <DzSelect v-model=\"seating\" :items=\"SEATING\" aria-label=\"Seating preference\" />\n          <DzFormDescription>We'll do our best to honour your request.</DzFormDescription>\n        </DzFormField>\n\n        <DzButton type=\"submit\" variant=\"solid\" tone=\"primary\" class=\"bk-submit\">\n          Confirm reservation\n        </DzButton>\n      </form>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.bk-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.bk-card {\n  width: 100%;\n  max-width: 30rem;\n}\n\n.bk-head {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.bk-badge {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 2.75rem;\n  height: 2.75rem;\n  flex-shrink: 0;\n  border-radius: var(--dz-radius-lg, 0.75rem);\n  color: var(--dz-primary, #4f46e5);\n  background: var(--dz-primary-muted, #eef2ff);\n}\n\n.bk-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.bk-grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.bk-submit {\n  width: 100%;\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n\n@media (max-width: 480px) {\n  .bk-grid {\n    grid-template-columns: 1fr;\n  }\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzCard",
+    "DzDatePicker",
+    "DzTimePicker",
+    "DzNumberInput",
+    "DzSelect",
+    "DzFormField",
+    "DzFormLabel",
+    "DzFormDescription",
+    "DzButton",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

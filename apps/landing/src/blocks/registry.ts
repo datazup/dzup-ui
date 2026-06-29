@@ -939,9 +939,205 @@ export const BLOCKS: BlockDef[] = [
     components: ['DzCard', 'DzFloatLabel', 'DzInput', 'DzSelect', 'DzTextarea', 'DzButton', 'DzHeading', 'DzText'],
     path: './forms/FloatLabelForm.vue',
   }),
+
+  // — Commerce —
+  defineBlock({
+    id: 'product-grid',
+    title: 'Product card grid',
+    description: 'A storefront grid of product cards — image with a sale/new corner badge, name, read-only star rating with review count, current/original price, and an add-to-cart button; reflows 3 → 2 → 1 columns.',
+    category: 'commerce',
+    tags: ['product', 'grid', 'cards', 'rating'],
+    components: ['DzImageCard', 'DzBadge', 'DzRating', 'DzButton', 'DzHeading', 'DzText'],
+    path: './commerce/ProductGrid.vue',
+    responsive: { mobile: true },
+  }),
+  defineBlock({
+    id: 'product-detail',
+    title: 'Product detail',
+    description: 'A two-column product page — a looping DzCarousel gallery beside a buy box with rating, sale price, a size toggle group, stock badge and primary actions, over a full-width description / specs / shipping DzTabs panel.',
+    category: 'commerce',
+    tags: ['product', 'detail', 'gallery', 'tabs'],
+    components: ['DzCarousel', 'DzCarouselSlide', 'DzCarouselPrevious', 'DzCarouselNext', 'DzCarouselDots', 'DzImage', 'DzAspectRatio', 'DzRating', 'DzButton', 'DzTabs', 'DzTabList', 'DzTabTrigger', 'DzTabContent', 'DzBadge', 'DzHeading', 'DzText'],
+    path: './commerce/ProductDetail.vue',
+    responsive: { mobile: true },
+  }),
+  defineBlock({
+    id: 'cart-summary',
+    title: 'Cart summary',
+    description: 'An editable cart — a divided list of line items each with a thumbnail, a clamped quantity stepper and a remove action, plus live subtotal/shipping/tax/total rows and a checkout button.',
+    category: 'commerce',
+    tags: ['cart', 'checkout', 'quantity', 'totals'],
+    components: ['DzList', 'DzListItem', 'DzNumberInput', 'DzButton', 'DzDivider', 'DzHeading', 'DzText'],
+    path: './commerce/CartSummary.vue',
+  }),
+  defineBlock({
+    id: 'checkout-summary',
+    title: 'Checkout order summary',
+    description: 'An order review panel — a DzDescriptions ship-to / delivery / payment grid, an itemised list, a promo-code field (try “SAVE10”) that adds a live discount line, and recomputed totals above a place-order button.',
+    category: 'commerce',
+    tags: ['checkout', 'order', 'promo', 'summary'],
+    components: ['DzDescriptions', 'DzDescriptionsItem', 'DzInput', 'DzButton', 'DzDivider', 'DzBadge', 'DzHeading', 'DzText'],
+    path: './commerce/CheckoutSummary.vue',
+  }),
+  defineBlock({
+    id: 'category-header',
+    title: 'Category header',
+    description: 'The title bar above a product listing — a breadcrumb trail, category heading with a live product count, and a toolbar pairing a sort DzSelect with a grid/list DzSegmented view toggle.',
+    category: 'commerce',
+    tags: ['category', 'header', 'sort', 'toolbar'],
+    components: ['DzHeading', 'DzSelect', 'DzSegmented', 'DzBreadcrumb', 'DzBreadcrumbItem', 'DzText'],
+    path: './commerce/CategoryHeader.vue',
+    responsive: { mobile: true },
+  }),
+  defineBlock({
+    id: 'order-status',
+    title: 'Order status tracker',
+    description: 'A fulfilment timeline for a single order — a DzStepper rail from placed to delivered marking the parcel’s current stage, a tone-coded status badge, and a carrier / tracking / ETA detail grid; the rail turns vertical on mobile.',
+    category: 'commerce',
+    tags: ['order', 'tracking', 'stepper', 'status'],
+    components: ['DzStepper', 'DzStepperItem', 'DzBadge', 'DzHeading', 'DzText'],
+    path: './commerce/OrderStatus.vue',
+    responsive: { mobile: true },
+  }),
+
+  // — Content —
+  defineBlock({
+    id: 'blog-list',
+    title: 'Blog post list',
+    description: 'A grid of editorial cards — cover image with a category badge overlay, title, excerpt, and an author byline with avatar and read time; reflows 3 → 2 → 1 columns.',
+    category: 'content',
+    tags: ['blog', 'cards', 'editorial', 'grid'],
+    components: ['DzImageCard', 'DzBadge', 'DzAvatar', 'DzText'],
+    path: './content/BlogList.vue',
+    responsive: { mobile: true },
+  }),
+  defineBlock({
+    id: 'article-header',
+    title: 'Article header',
+    description: 'A long-form masthead — category eyebrow, title and standfirst, a byline pairing an avatar with the author and a live DzRelativeTime published stamp, and a row of topic tags.',
+    category: 'content',
+    tags: ['article', 'header', 'byline', 'tags'],
+    components: ['DzHeading', 'DzText', 'DzAvatar', 'DzTag', 'DzRelativeTime'],
+    path: './content/ArticleHeader.vue',
+  }),
+  defineBlock({
+    id: 'prose',
+    title: 'Prose / rich content',
+    description: 'A typographic article body composed from the long-form primitives — DzHeading sections, DzText paragraphs and lists with inline DzCode, a DzBlockquote pull-quote, a block code snippet, and DzDivider rules.',
+    category: 'content',
+    tags: ['prose', 'typography', 'article', 'blockquote', 'code'],
+    components: ['DzHeading', 'DzText', 'DzBlockquote', 'DzCode', 'DzDivider'],
+    path: './content/Prose.vue',
+  }),
+  defineBlock({
+    id: 'code-showcase',
+    title: 'Code showcase',
+    description: 'A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with a filename header and an explicit DzCopyButton wired into its actions slot that copies exactly the snippet on screen.',
+    category: 'content',
+    tags: ['code', 'tabs', 'copy', 'snippet'],
+    components: ['DzCodeBlock', 'DzCopyButton', 'DzTabs', 'DzTabList', 'DzTabTrigger', 'DzTabContent'],
+    path: './content/CodeShowcase.vue',
+  }),
+  defineBlock({
+    id: 'toc-aside',
+    title: 'Table-of-contents aside',
+    description: 'A docs layout where a sticky DzAnchor "On this page" nav scrollspy-highlights the section in view beside a column of DzText prose with matching heading ids; collapses to one column on mobile.',
+    category: 'content',
+    tags: ['toc', 'anchor', 'docs', 'sticky', 'scrollspy'],
+    components: ['DzAnchor', 'DzText'],
+    path: './content/TocAside.vue',
+    responsive: { mobile: true },
+  }),
+  defineBlock({
+    id: 'faq-2col',
+    title: 'Two-column FAQ',
+    description: 'Questions grouped into two labelled DzAccordion columns (separated, single + collapsible) under a centered heading, so one answer is open per column at a time; stacks to one column on mobile.',
+    category: 'content',
+    tags: ['faq', 'accordion', 'two-column', 'content'],
+    components: ['DzAccordion', 'DzAccordionItem', 'DzAccordionTrigger', 'DzAccordionContent', 'DzHeading', 'DzText'],
+    path: './content/Faq2Col.vue',
+    responsive: { mobile: true },
+  }),
 ]
 
 /** All blocks in a given category, preserving registration order. */
 export function blocksByCategory(category: BlockCategory): BlockDef[] {
   return BLOCKS.filter((block) => block.category === category)
+}
+
+/**
+ * A single block by its `id` (the kebab-case deep-link anchor), or `undefined`
+ * when no block owns that id. Backs the `/blocks/preview/:id` standalone route
+ * and its router guard (docs/blocks.md §3.5) — an unknown id resolves here so the
+ * caller can redirect rather than render a dead page.
+ */
+export function getBlock(id: string): BlockDef | undefined {
+  return BLOCKS.find((block) => block.id === id)
+}
+
+// ---------------------------------------------------------------------------
+// Derived indexes (docs/blocks.md §3.1 — search/filter/reverse-lookup data)
+// ---------------------------------------------------------------------------
+//
+// Pure projections of the (immutable) BLOCKS array shared by the discovery UI:
+// the search composable, the tag-filter bar, the ⌘K palette and the component
+// reverse-lookup. The catalog is built once at module load and never mutated,
+// so the unique-value lists are memoized on first use and reused thereafter.
+
+/** Memoized unique, sorted tag list across the whole catalog. */
+let tagsCache: readonly string[] | null = null
+/** Memoized unique, sorted component-name list across the whole catalog. */
+let componentsCache: readonly string[] | null = null
+/** Memoized component-name → blocks index, built lazily on first lookup. */
+let usageCache: Map<string, BlockDef[]> | null = null
+
+/**
+ * Every tag used anywhere in the catalog — unique and alphabetically sorted.
+ * Stable identity across calls (memoized), so it is safe to use as a render key.
+ */
+export function allTags(): readonly string[] {
+  if (tagsCache === null) {
+    const seen = new Set<string>()
+    for (const block of BLOCKS) {
+      for (const tag of block.tags) seen.add(tag)
+    }
+    tagsCache = [...seen].sort()
+  }
+  return tagsCache
+}
+
+/**
+ * The union of every block's `components[]` — the real `Dz*` export names used
+ * across the catalog, unique and alphabetically sorted. Memoized.
+ */
+export function allComponents(): readonly string[] {
+  if (componentsCache === null) {
+    const seen = new Set<string>()
+    for (const block of BLOCKS) {
+      for (const name of block.components) seen.add(name)
+    }
+    componentsCache = [...seen].sort()
+  }
+  return componentsCache
+}
+
+/**
+ * Reverse lookup: every block whose `components[]` includes `name`, in registry
+ * order. `name` is matched exactly (component names are real `Dz*` exports, e.g.
+ * `blocksUsingComponent('DzTable')`). Returns a fresh array each call so callers
+ * may sort/slice it freely; the underlying index is memoized.
+ */
+export function blocksUsingComponent(name: string): BlockDef[] {
+  if (usageCache === null) {
+    usageCache = new Map<string, BlockDef[]>()
+    for (const block of BLOCKS) {
+      for (const component of block.components) {
+        const bucket = usageCache.get(component)
+        if (bucket) bucket.push(block)
+        else usageCache.set(component, [block])
+      }
+    }
+  }
+  const blocks = usageCache.get(name)
+  return blocks ? [...blocks] : []
 }

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "scroll-linked",
+  "type": "registry:block",
+  "title": "Scroll-linked transforms",
+  "description": "Two layers’ transform and opacity are bound to scroll position — modernised parallax.",
+  "files": [
+    {
+      "path": "scroll-linked.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { supportsScrollTimeline, useReducedMotion, useScrollProgress } from '../motion'\n\nconst reduced = useReducedMotion()\nconst native = supportsScrollTimeline()\n\nconst root = ref<HTMLElement | null>(null)\nconst progress = useScrollProgress(root)\n\n// JS floor — applied only when the native CSS path is absent and motion is\n// allowed. Native: the .dz-scroll-linked animation owns the transform (return {}).\n// Reduced motion: static end-state (return {}). Travel is capped.\nconst backStyle = computed(() =>\n  native || reduced.value\n    ? {}\n    : { transform: `translate3d(0, ${(progress.value - 0.5) * 80}px, 0)` },\n)\n</script>\n\n<template>\n  <!-- The .dz-scroll-linked utility (tokens.css) binds each layer to the element's\n       own view() progress behind @supports; here the JS fallback drives the same\n       transform. The static end-state is always visible — never opacity:0. -->\n  <div\n    ref=\"root\"\n    class=\"dz-scroll-linked\"\n    :class=\"{ 'dz-scroll-linked--native': native, 'dz-scroll-linked--reduced': reduced }\"\n  >\n    <div class=\"dz-scroll-linked__back\" :style=\"backStyle\" aria-hidden=\"true\" />\n    <div class=\"dz-scroll-linked__fore\">Scroll-linked</div>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzAurora"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

@@ -130,7 +130,15 @@ const renderKeys = computed(() => {
   return keys.map(k => resolveKey(k, map))
 })
 
-/** Words combo for screen readers, e.g. "Command K". Slot mode → undefined. */
+/**
+ * Words combo for screen readers, e.g. "Command K". Slot mode → undefined.
+ *
+ * When set, the root `<kbd>` also takes `role="img"` (see template): the glyphs
+ * inside are `aria-hidden`, so the combo is a single named graphic. Without a
+ * role, naming a generic `<kbd>` via `aria-label` is prohibited (axe
+ * `aria-prohibited-attr`). Slot mode leaves `aria-label` (and the role) unset, so
+ * the bare `<kbd>` keeps its visible text as its name.
+ */
 const ariaLabel = computed(() =>
   renderKeys.value.length > 0
     ? renderKeys.value.map(k => k.word).join(' ')
@@ -153,6 +161,7 @@ const separatorClass = slots.separator()
     :id="id"
     :class="rootClass"
     :data-size="size"
+    :role="ariaLabel ? 'img' : undefined"
     :aria-label="ariaLabel"
     v-bind="{ ...$attrs, class: undefined }"
   >

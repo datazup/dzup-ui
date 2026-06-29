@@ -1,0 +1,2212 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry.json",
+  "name": "dzup-ui",
+  "homepage": "https://dzup-ui.dev",
+  "items": [
+    {
+      "name": "hero-centered",
+      "type": "registry:block",
+      "title": "Centered hero",
+      "description": "Eyebrow chip, headline, subhead and two call-to-action buttons, centered.",
+      "registryDependencies": [
+        "DzBadge",
+        "DzHeading",
+        "DzText",
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "hero-centered.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "hero-split",
+      "type": "registry:block",
+      "title": "Split hero with media",
+      "description": "Copy and two CTAs on the left, a framed product image on the right; stacks to one column on narrow viewports.",
+      "registryDependencies": [
+        "DzBadge",
+        "DzHeading",
+        "DzText",
+        "DzButton",
+        "DzImage",
+        "DzAspectRatio"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "hero-split.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "nav-bar",
+      "type": "registry:block",
+      "title": "Top navigation bar",
+      "description": "Responsive top bar with logo, nav links, search input, theme toggle, primary CTA, and a mobile drawer.",
+      "registryDependencies": [
+        "DzButton",
+        "DzIconButton",
+        "DzSearchInput",
+        "DzColorModeToggle",
+        "DzSheet",
+        "DzSheetTrigger",
+        "DzSheetContent",
+        "DzSheetTitle",
+        "DzSheetDescription",
+        "DzSheetClose",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "nav-bar.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "feature-grid",
+      "type": "registry:block",
+      "title": "Feature grid",
+      "description": "Six feature cards, each with a lucide icon, title, and short blurb; responsive 3→2→1 column grid.",
+      "registryDependencies": [
+        "DzCard",
+        "DzCardBody",
+        "DzHeading",
+        "DzText",
+        "DzIcon"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "feature-grid.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "stats-band",
+      "type": "registry:block",
+      "title": "Stats band",
+      "description": "A horizontal band of four key metrics with icon, trend indicator, and an animated count-up on scroll.",
+      "registryDependencies": [
+        "DzStatCard",
+        "DzAnimatedNumber"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "stats-band.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "pricing-3",
+      "type": "registry:block",
+      "title": "Three-tier pricing",
+      "description": "Free / Pro / Enterprise pricing cards with feature lists, a \"Most popular\" badge on Pro, and responsive 3→2→1 column layout.",
+      "registryDependencies": [
+        "DzCard",
+        "DzBadge",
+        "DzButton",
+        "DzDivider",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "pricing-3.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "testimonials",
+      "type": "registry:block",
+      "title": "Testimonials grid",
+      "description": "Grid of customer quote cards each with a star rating, avatar, name/role, and quote text; responsive 3→2→1 columns.",
+      "registryDependencies": [
+        "DzCard",
+        "DzAvatar",
+        "DzRating",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "testimonials.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "faq",
+      "type": "registry:block",
+      "title": "FAQ accordion",
+      "description": "Six Q&A items in a separated collapsible accordion with a section header and a contact link.",
+      "registryDependencies": [
+        "DzAccordion",
+        "DzAccordionItem",
+        "DzAccordionTrigger",
+        "DzAccordionContent",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "faq.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "cta-band",
+      "type": "registry:block",
+      "title": "CTA band",
+      "description": "Closing call-to-action with headline, subtext, and two buttons on a token gradient background.",
+      "registryDependencies": [
+        "DzHeading",
+        "DzText",
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "cta-band.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "footer",
+      "type": "registry:block",
+      "title": "Multi-column footer",
+      "description": "Brand blurb, four link columns, social icon buttons, and a theme toggle; collapses to two columns on mobile.",
+      "registryDependencies": [
+        "DzText",
+        "DzDivider",
+        "DzIconButton",
+        "DzColorModeToggle"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "footer.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "App shell",
+      "description": "Collapsible sidebar nav, breadcrumb top bar and user avatar menu inside a constrained app-shell preview.",
+      "registryDependencies": [
+        "DzAppShell",
+        "DzSidebar",
+        "DzSidebarHeader",
+        "DzSidebarSection",
+        "DzSidebarItem",
+        "DzSidebarFooter",
+        "DzBreadcrumb",
+        "DzBreadcrumbItem",
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzDropdownMenu",
+        "DzDropdownMenuTrigger",
+        "DzDropdownMenuContent",
+        "DzDropdownMenuItem",
+        "DzDropdownMenuSeparator",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "app-shell.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:block",
+      "title": "Page header",
+      "description": "Breadcrumb trail, page title with inline status badge, and a row of contextual action buttons.",
+      "registryDependencies": [
+        "DzBreadcrumb",
+        "DzBreadcrumbItem",
+        "DzHeading",
+        "DzBadge",
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "page-header.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "stat-row",
+      "type": "registry:block",
+      "title": "Stat card row",
+      "description": "Four KPI cards with up/down/neutral trend deltas in a responsive 4→2→1 column grid.",
+      "registryDependencies": [
+        "DzStatCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "stat-row.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "table-card",
+      "type": "registry:block",
+      "title": "Data table card",
+      "description": "Outlined card with a search + segmented filter toolbar, a hoverable data table with avatars and status badges, and paginated results.",
+      "registryDependencies": [
+        "DzCard",
+        "DzSearchInput",
+        "DzSegmented",
+        "DzTable",
+        "DzTableHeader",
+        "DzTableBody",
+        "DzTableRow",
+        "DzTableCell",
+        "DzAvatar",
+        "DzBadge",
+        "DzPagination",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "table-card.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:block",
+      "title": "Empty state",
+      "description": "Styled icon illustration, heading, supporting copy and a primary call-to-action button for zero-data screens.",
+      "registryDependencies": [
+        "DzEmpty",
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "empty-state.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "settings-layout",
+      "type": "registry:block",
+      "title": "Settings layout",
+      "description": "Horizontal tab nav over three panels — profile form fields, notification switches, and appearance options — with a sticky footer.",
+      "registryDependencies": [
+        "DzTabs",
+        "DzTabList",
+        "DzTabTrigger",
+        "DzTabContent",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormDescription",
+        "DzInput",
+        "DzSelect",
+        "DzSwitch",
+        "DzDivider",
+        "DzButton",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "settings-layout.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "bento-grid",
+      "type": "registry:block",
+      "title": "Bento dashboard grid",
+      "description": "A spanning \"bento box\" dashboard laid out with DzGrid — a 2×2 revenue hero, a fixed-ratio media tile, compact stat panels and a full-width footer cell, all collapsing to a single column on mobile.",
+      "registryDependencies": [
+        "DzGrid",
+        "DzPanel",
+        "DzAspectRatio",
+        "DzDivider",
+        "DzBadge",
+        "DzHeading",
+        "DzText",
+        "DzIcon"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "bento-grid.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "resizable-workspace",
+      "type": "registry:block",
+      "title": "Resizable workspace",
+      "description": "An IDE-style three-pane shell built on DzResizable — a collapsible file explorer, an editor and a live preview, each scrolling independently in a DzScrollArea, with draggable handles and a DzToolbar across the top.",
+      "registryDependencies": [
+        "DzResizable",
+        "DzResizablePanel",
+        "DzResizableHandle",
+        "DzScrollArea",
+        "DzToolbar",
+        "DzDivider",
+        "DzBadge",
+        "DzIcon",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "resizable-workspace.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "masonry-gallery",
+      "type": "registry:block",
+      "title": "Masonry gallery",
+      "description": "A Pinterest-style cascading board built on DzMasonry — variable-height DzCards, some leading with a DzAspectRatio media tile, packed into balanced responsive columns (3 → 2 → 1) with no row gaps.",
+      "registryDependencies": [
+        "DzMasonry",
+        "DzAspectRatio",
+        "DzCard",
+        "DzAvatar",
+        "DzBadge",
+        "DzTag",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "masonry-gallery.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "sticky-aside",
+      "type": "registry:block",
+      "title": "Sticky aside docs layout",
+      "description": "A documentation shell where the \"On this page\" nav pins on scroll via DzAffix — DzContainer sets the measure, DzFlex splits prose from the aside, a DzScrollArea holds a long related list, and the aside lifts onto a surface once pinned.",
+      "registryDependencies": [
+        "DzAffix",
+        "DzContainer",
+        "DzFlex",
+        "DzScrollArea",
+        "DzDivider",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "sticky-aside.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "toolbar-canvas",
+      "type": "registry:block",
+      "title": "Toolbar canvas shell",
+      "description": "A design-tool shell — a DzToolbar with start/center/end regions over a vertical DzFlex tool rail (a DzSpacer pushing settings to the bottom), a scrollable DzScrollArea artboard, and a DzPanel inspector with DzDivider-fenced groups.",
+      "registryDependencies": [
+        "DzToolbar",
+        "DzFlex",
+        "DzSpacer",
+        "DzScrollArea",
+        "DzPanel",
+        "DzDivider",
+        "DzIconButton",
+        "DzBadge",
+        "DzIcon",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "toolbar-canvas.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "page-scaffold",
+      "type": "registry:block",
+      "title": "Responsive page scaffold",
+      "description": "A whole landing page assembled from layout primitives only — DzContainer for measure, DzFlex + DzSpacer for the header bar, DzStack for hero rhythm, a responsive DzGrid feature row, a DzFlex content/aside split and a DzDivider-fenced footer.",
+      "registryDependencies": [
+        "DzContainer",
+        "DzGrid",
+        "DzFlex",
+        "DzStack",
+        "DzSpacer",
+        "DzDivider",
+        "DzButton",
+        "DzBadge",
+        "DzHeading",
+        "DzText",
+        "DzIcon"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "page-scaffold.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "collapsible-sections",
+      "type": "registry:block",
+      "title": "Collapsible settings sections",
+      "description": "A settings page of expandable DzPanels (each owning its open state via v-model:collapsed) spaced by a DzStack, with DzSwitch rows and DzDivider inside — plus a standalone DzCollapse \"advanced\" region toggled by a button, the primitive DzPanel wraps.",
+      "registryDependencies": [
+        "DzPanel",
+        "DzCollapse",
+        "DzContainer",
+        "DzStack",
+        "DzDivider",
+        "DzSwitch",
+        "DzButton",
+        "DzHeading",
+        "DzText",
+        "DzIcon"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "collapsible-sections.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "media-gallery",
+      "type": "registry:block",
+      "title": "Lightbox gallery",
+      "description": "An asymmetric image grid where every ratio-stable DzImage tile (framed by DzAspectRatio) opens a focus-trapped DzLightbox with captions, a counter, and arrow-key navigation.",
+      "registryDependencies": [
+        "DzImage",
+        "DzAspectRatio",
+        "DzLightbox",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "media-gallery.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "media-carousel",
+      "type": "registry:block",
+      "title": "Featured carousel",
+      "description": "A looping, autoplaying DzCarousel of DzImage slides with gradient captions, hover-to-pause, and DzCarouselPrevious / DzCarouselNext / DzCarouselDots navigation.",
+      "registryDependencies": [
+        "DzCarousel",
+        "DzCarouselSlide",
+        "DzCarouselPrevious",
+        "DzCarouselNext",
+        "DzCarouselDots",
+        "DzImage",
+        "DzAspectRatio",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "media-carousel.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "media-comparison",
+      "type": "registry:block",
+      "title": "Before / after slider",
+      "description": "A draggable, keyboard-operable DzImageComparison revealing a graded edit over the raw frame, with before/after label chips and a live reveal read-out wired to v-model:position.",
+      "registryDependencies": [
+        "DzImageComparison",
+        "DzImage",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "media-comparison.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "media-team",
+      "type": "registry:block",
+      "title": "Team roster",
+      "description": "A stacked DzAvatarGroup with a \"+N\" overflow chip over a member list, each row pairing a DzAvatar (image or initials fallback) with a presence dot and an online/away DzBadge.",
+      "registryDependencies": [
+        "DzAvatarGroup",
+        "DzAvatar",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "media-team.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "media-qr",
+      "type": "registry:block",
+      "title": "QR handoff card",
+      "description": "A \"continue on mobile\" card built around DzQRCode — a token-styled SVG code with a centered brand mark via the #logo slot, error-level H, a pairing code, and an expire/refresh status flow.",
+      "registryDependencies": [
+        "DzQRCode",
+        "DzButton",
+        "DzDivider",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "media-qr.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "media-watermark",
+      "type": "registry:block",
+      "title": "Watermarked preview",
+      "description": "A confidential asset draped in a tiled, rotated DzWatermark over a framed DzImage — the aria-hidden, pointer-transparent overlay stamps ownership without blocking interaction.",
+      "registryDependencies": [
+        "DzWatermark",
+        "DzImage",
+        "DzAspectRatio",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "media-watermark.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "data-grid",
+      "type": "registry:block",
+      "title": "Data grid card",
+      "description": "A DzDataGrid of deployments with sortable columns, multi-row selection, a paginated footer, and a #cell slot rendering avatars, environment tags and status badges.",
+      "registryDependencies": [
+        "DzDataGrid",
+        "DzCard",
+        "DzAvatar",
+        "DzBadge",
+        "DzTag",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "data-grid.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "activity-timeline",
+      "type": "registry:block",
+      "title": "Activity timeline",
+      "description": "A vertical DzTimeline feed of events — tone-coded dots, timestamp statuses, avatar indicators, and per-item tags for a \"who did what, when\" history.",
+      "registryDependencies": [
+        "DzTimeline",
+        "DzTimelineItem",
+        "DzAvatar",
+        "DzBadge",
+        "DzTag",
+        "DzText",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "activity-timeline.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "detail-descriptions",
+      "type": "registry:block",
+      "title": "Detail descriptions panel",
+      "description": "A read-only label/value record view built from DzDescriptions — a responsive, bordered term/definition grid with slot-rich values (status badge, plan and label tags, monospaced payment) and a full-width spanning row.",
+      "registryDependencies": [
+        "DzDescriptions",
+        "DzDescriptionsItem",
+        "DzBadge",
+        "DzTag",
+        "DzButton",
+        "DzText",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "detail-descriptions.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "file-tree",
+      "type": "registry:block",
+      "title": "File explorer tree",
+      "description": "A hierarchical DzTree with per-node lucide icons, expand/collapse and selection (both v-modelled) and the full APG roving-tabindex keyboard model, beside a live selection panel.",
+      "registryDependencies": [
+        "DzTree",
+        "DzCard",
+        "DzBadge",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "file-tree.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "collection-gallery",
+      "type": "registry:block",
+      "title": "Collection gallery",
+      "description": "A DzDataView template marketplace with a list/grid layout toggle, client-side sorting and a paginator; the #item slot renders rich cards in grid mode and compact rows in list mode from the same records.",
+      "registryDependencies": [
+        "DzDataView",
+        "DzCard",
+        "DzBadge",
+        "DzTag",
+        "DzButton",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "collection-gallery.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard",
+      "type": "registry:block",
+      "title": "Animated leaderboard",
+      "description": "A ranked DzList where each row pairs a rank badge + avatar prefix with a DzAnimatedNumber score and a tone-coded delta tag; a refresh button mutates the values so the figures re-animate live.",
+      "registryDependencies": [
+        "DzList",
+        "DzListItem",
+        "DzAnimatedNumber",
+        "DzAvatar",
+        "DzBadge",
+        "DzTag",
+        "DzButton",
+        "DzText",
+        "DzCard"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "leaderboard.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "release-countdown",
+      "type": "registry:block",
+      "title": "Release countdown",
+      "description": "A launch banner driven by DzCountdown — its slot renders labelled day/hour/minute/second cells ticking toward a deadline — with a DzAnimatedNumber count-up for claimed spots and a primary CTA.",
+      "registryDependencies": [
+        "DzCountdown",
+        "DzAnimatedNumber",
+        "DzBadge",
+        "DzHeading",
+        "DzButton",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "release-countdown.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "alert-stack",
+      "type": "registry:block",
+      "title": "Alert stack",
+      "description": "A column of inline DzAlerts spanning the variant taxonomy and tones — info, success with an actions row, a closable warning, and a dismissible filled danger alert that can be restored.",
+      "registryDependencies": [
+        "DzAlert",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "alert-stack.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "notification-center",
+      "type": "registry:block",
+      "title": "Notification center",
+      "description": "A dismissible feed of persistent DzNotifications inside an outlined panel — tone-coded icons, titles, per-item action buttons, a live unread count badge, \"Clear all\", and an empty state.",
+      "registryDependencies": [
+        "DzNotification",
+        "DzCard",
+        "DzBadge",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "notification-center.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "toast-launcher",
+      "type": "registry:block",
+      "title": "Toast notifications",
+      "description": "The compound toast system wired up — DzToastProvider owns a capped, auto-dismissing queue, DzToastViewport renders it bottom-right, and a per-tone trigger row fires live toasts via the injected imperative API.",
+      "registryDependencies": [
+        "DzToastProvider",
+        "DzToastViewport",
+        "DzToast",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "toast-launcher.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "loading-states",
+      "type": "registry:block",
+      "title": "Loading states",
+      "description": "A content card that flips between loading and loaded — an indeterminate DzProgress bar and a DzSpinner status row over a DzSkeleton scaffold (circular, text and rectangular) that mirrors the real layout. \"Reload\" replays it.",
+      "registryDependencies": [
+        "DzSkeleton",
+        "DzSpinner",
+        "DzProgress",
+        "DzCard",
+        "DzAvatar",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "loading-states.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "usage-meters",
+      "type": "registry:block",
+      "title": "Usage meters",
+      "description": "A quota dashboard pairing a segmented DzMeterGroup storage breakdown (with legend) against tone-coded DzProgress limit bars and a circular DzProgress ring summarising overall usage.",
+      "registryDependencies": [
+        "DzMeterGroup",
+        "DzProgress",
+        "DzCard",
+        "DzBadge",
+        "DzDivider",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "usage-meters.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "result-states",
+      "type": "registry:block",
+      "title": "Result screens",
+      "description": "Full-page outcome screens from DzResult — a segmented switch across the success / error / warning / info statuses, each with its own icon, copy and contextual action buttons.",
+      "registryDependencies": [
+        "DzResult",
+        "DzCard",
+        "DzButton"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "result-states.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "command-menu",
+      "type": "registry:block",
+      "title": "Command menu",
+      "description": "A ⌘K command palette (DzCommandPalette) — a search-field launcher with a DzKbd hint opens a fuzzy-searchable, grouped list of commands with per-item icons and shortcuts; the global ⌘K / Ctrl+K shortcut opens it too.",
+      "registryDependencies": [
+        "DzCommandPalette",
+        "DzKbd",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "command-menu.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "account-menu",
+      "type": "registry:block",
+      "title": "Account dropdown menu",
+      "description": "A product top bar with a rich DzDropdownMenu account menu — avatar trigger, an account header, icon-prefixed items with DzKbd shortcut suffixes, separators, and a destructive sign-out.",
+      "registryDependencies": [
+        "DzDropdownMenu",
+        "DzDropdownMenuTrigger",
+        "DzDropdownMenuContent",
+        "DzDropdownMenuItem",
+        "DzDropdownMenuSeparator",
+        "DzAvatar",
+        "DzBadge",
+        "DzIconButton",
+        "DzKbd",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "account-menu.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "context-menu-board",
+      "type": "registry:block",
+      "title": "Context menu canvas",
+      "description": "A file canvas wrapped in a DzContextMenuTrigger — right-click (or the context-menu key) opens a DzContextMenu with icon-prefixed items, DzKbd shortcut suffixes, separators, a disabled item, and a destructive delete.",
+      "registryDependencies": [
+        "DzContextMenu",
+        "DzContextMenuTrigger",
+        "DzContextMenuContent",
+        "DzContextMenuItem",
+        "DzContextMenuSeparator",
+        "DzBadge",
+        "DzHeading",
+        "DzKbd",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "context-menu-board.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "info-popovers",
+      "type": "registry:block",
+      "title": "Anchored popovers",
+      "description": "Two DzPopover patterns side by side — a profile hover card (avatar, bio, follow action) and a non-modal filter panel with DzSwitch rows and apply/reset — each with an arrow and explicit side/alignment.",
+      "registryDependencies": [
+        "DzPopover",
+        "DzPopoverTrigger",
+        "DzPopoverContent",
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzDivider",
+        "DzSwitch",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "info-popovers.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-toolbar",
+      "type": "registry:block",
+      "title": "Tooltip toolbar",
+      "description": "A formatting toolbar where every DzIconButton is wrapped in a DzTooltip revealing its name and DzKbd shortcut on hover/focus — demonstrating per-side placement and a short open delay, with DzDivider-fenced groups.",
+      "registryDependencies": [
+        "DzTooltip",
+        "DzTooltipTrigger",
+        "DzTooltipContent",
+        "DzIconButton",
+        "DzKbd",
+        "DzDivider",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "tooltip-toolbar.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "create-dialog",
+      "type": "registry:block",
+      "title": "Create dialog",
+      "description": "A focus-trapped modal form built from the DzDialog compound — a trigger button, a backdrop-dimmed panel with title/description, a project form (input, textarea, select), a top-right close and a Cancel/Create footer.",
+      "registryDependencies": [
+        "DzDialog",
+        "DzDialogTrigger",
+        "DzDialogContent",
+        "DzDialogTitle",
+        "DzDialogDescription",
+        "DzDialogClose",
+        "DzButton",
+        "DzInput",
+        "DzTextarea",
+        "DzSelect",
+        "DzFormField",
+        "DzFormLabel",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "create-dialog.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "confirm-actions",
+      "type": "registry:block",
+      "title": "Confirm actions",
+      "description": "A \"danger zone\" panel pairing the two confirmation patterns — heavy actions route through a modal DzConfirmDialog (the delete simulates an async, loading confirm) while low-risk row deletes use an inline DzPopconfirm bubble.",
+      "registryDependencies": [
+        "DzConfirmDialog",
+        "DzPopconfirm",
+        "DzButton",
+        "DzIconButton",
+        "DzDivider",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "confirm-actions.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "detail-sheet",
+      "type": "registry:block",
+      "title": "Detail sheet",
+      "description": "A slide-out record panel (DzSheet) — an orders list where each row opens a right-side sheet with a pinned header/close, a scrollable body of customer and line-item details, a status badge, and a footer action bar.",
+      "registryDependencies": [
+        "DzSheet",
+        "DzSheetContent",
+        "DzSheetTitle",
+        "DzSheetDescription",
+        "DzSheetClose",
+        "DzAvatar",
+        "DzBadge",
+        "DzButton",
+        "DzIconButton",
+        "DzDivider",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "detail-sheet.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "product-tour",
+      "type": "registry:block",
+      "title": "Product tour",
+      "description": "A spotlight onboarding walkthrough (DzTour) over a mini dashboard — \"Start tour\" dims the page, spotlights each target in turn, and shows an anchored step popover with Back/Next/Finish controls and progress dots.",
+      "registryDependencies": [
+        "DzTour",
+        "DzButton",
+        "DzIconButton",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "product-tour.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "button-showcase",
+      "type": "registry:block",
+      "title": "Button gallery",
+      "description": "A labelled specimen sheet of every DzButton variant, tone and size, plus icon and loading/disabled states — a living reference for the button scale.",
+      "registryDependencies": [
+        "DzButton",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "button-showcase.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "editor-toolbar",
+      "type": "registry:block",
+      "title": "Rich-text toolbar",
+      "description": "A document toolbar built from the Buttons family — toggle buttons for inline format and alignment, icon-button history/insert actions, a copy-link button, and a split \"Publish\" action. Toggles are live.",
+      "registryDependencies": [
+        "DzToggleButton",
+        "DzIconButton",
+        "DzCopyButton",
+        "DzSplitButton",
+        "DzSplitButtonAction",
+        "DzSplitButtonMenu",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "editor-toolbar.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "button-groups",
+      "type": "registry:block",
+      "title": "Button groups & segmented controls",
+      "description": "DzButtonGroup wiring child buttons into connected controls — a live view switcher, a time-range segmented control, and a vertical action group.",
+      "registryDependencies": [
+        "DzButtonGroup",
+        "DzButton",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "button-groups.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "social-auth-buttons",
+      "type": "registry:block",
+      "title": "Social sign-in buttons",
+      "description": "A stacked column of full-width provider buttons (Google, GitHub, Apple), a labelled divider, and an email fallback — drop-in for any auth screen.",
+      "registryDependencies": [
+        "DzButton",
+        "DzDivider",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "social-auth-buttons.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "floating-actions",
+      "type": "registry:block",
+      "title": "Floating action button & speed dial",
+      "description": "Circular elevated affordances — DzFab across tones and variants, and a DzSpeedDial that fans out related shortcuts on open, pinned inside a mock app canvas.",
+      "registryDependencies": [
+        "DzFab",
+        "DzSpeedDial",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "floating-actions.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "sign-in",
+      "type": "registry:block",
+      "title": "Sign-in card",
+      "description": "Centered card with email, password, remember-me checkbox, forgot-password link, primary submit, labeled divider, and GitHub/Google social buttons.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzInput",
+        "DzPasswordInput",
+        "DzCheckbox",
+        "DzDivider",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "sign-in.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "sign-up",
+      "type": "registry:block",
+      "title": "Sign-up card",
+      "description": "Centered card with name, email, password plus a live strength meter, terms checkbox, and submit.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzInput",
+        "DzPasswordInput",
+        "DzProgress",
+        "DzCheckbox",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "sign-up.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "auth-split",
+      "type": "registry:block",
+      "title": "Two-column auth",
+      "description": "Sign-in form left, token-gradient brand/marketing panel right; collapses to single column on mobile.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzInput",
+        "DzPasswordInput",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "auth-split.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "wizard",
+      "type": "registry:block",
+      "title": "Multi-step form wizard",
+      "description": "Three-step onboarding wizard with stepper nav, per-step form fields, Back/Continue buttons, and a completion state.",
+      "registryDependencies": [
+        "DzStepper",
+        "DzStepperItem",
+        "DzFormField",
+        "DzFormLabel",
+        "DzInput",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "wizard.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "otp-verify",
+      "type": "registry:block",
+      "title": "OTP verification",
+      "description": "A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once the code is complete, a live resend countdown, and a success state on completion.",
+      "registryDependencies": [
+        "DzOtpInput",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "otp-verify.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "forgot-password",
+      "type": "registry:block",
+      "title": "Forgot password",
+      "description": "A two-state reset-request card — a validated email field (inline error via DzFormMessage) that swaps to a \"check your inbox\" confirmation with resend and back-to-sign-in actions.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormMessage",
+        "DzInput",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "forgot-password.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "newsletter-form",
+      "type": "registry:block",
+      "title": "Newsletter signup",
+      "description": "A focused subscribe card — an email DzInput with a mail-icon prefix and inline submit, a consent checkbox, and a success state. Live validation.",
+      "registryDependencies": [
+        "DzInput",
+        "DzCheckbox",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "newsletter-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "contact-form",
+      "type": "registry:block",
+      "title": "Contact form",
+      "description": "A labeled \"get in touch\" card: two-column name/email row, topic select, message textarea with a live character counter, and consent — with inline email validation via DzFormMessage.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormDescription",
+        "DzFormMessage",
+        "DzInput",
+        "DzSelect",
+        "DzTextarea",
+        "DzCheckbox",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "contact-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "payment-form",
+      "type": "registry:block",
+      "title": "Payment details",
+      "description": "A checkout card showcasing masked and grouped inputs: DzInputMask formats the card number and expiry as you type, and a DzInputGroup pairs a promo field with an inline Apply button.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFormField",
+        "DzFormLabel",
+        "DzInput",
+        "DzInputMask",
+        "DzInputGroup",
+        "DzSelect",
+        "DzDivider",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "payment-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "feedback-form",
+      "type": "registry:block",
+      "title": "Feedback survey",
+      "description": "A rating + survey card built from the scale controls — a half-step star DzRating, a frequency radio group, a 0–10 recommend slider with a live read-out, and a comments textarea.",
+      "registryDependencies": [
+        "DzCard",
+        "DzRating",
+        "DzRadioGroup",
+        "DzRadio",
+        "DzSlider",
+        "DzTextarea",
+        "DzFormField",
+        "DzFormLabel",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "feedback-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "filter-panel",
+      "type": "registry:block",
+      "title": "Filter sidebar",
+      "description": "A product-listing filter rail: search input, category checkbox group, a dual-thumb price range slider with read-out, a minimum-rating radio group, and an in-stock switch, with a live active-filter count.",
+      "registryDependencies": [
+        "DzSearchInput",
+        "DzCheckboxGroup",
+        "DzCheckbox",
+        "DzRangeSlider",
+        "DzRadioGroup",
+        "DzRadio",
+        "DzSwitch",
+        "DzDivider",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "filter-panel.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "profile-form",
+      "type": "registry:block",
+      "title": "Edit profile",
+      "description": "A broad account panel: a file-upload avatar drop zone, name/username inputs, a role select, a bio textarea with counter, a free-text skills tags input, and a public-profile switch.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFileUpload",
+        "DzInput",
+        "DzTextarea",
+        "DzTagsInput",
+        "DzSelect",
+        "DzSwitch",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormDescription",
+        "DzDivider",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "profile-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "booking-form",
+      "type": "registry:block",
+      "title": "Booking form",
+      "description": "A reservation card pairing the date/time/number controls — a DzDatePicker day, a 30-minute-step DzTimePicker slot, a clamped DzNumberInput party size, and a seating DzSelect.",
+      "registryDependencies": [
+        "DzCard",
+        "DzDatePicker",
+        "DzTimePicker",
+        "DzNumberInput",
+        "DzSelect",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormDescription",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "booking-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "record-form",
+      "type": "registry:block",
+      "title": "Create record",
+      "description": "A \"create issue\" panel built from the selection inputs — a searchable DzCombobox assignee, a DzMultiSelect labels picker, a single-select DzListbox priority, plus title and description fields.",
+      "registryDependencies": [
+        "DzCard",
+        "DzCombobox",
+        "DzMultiSelect",
+        "DzListbox",
+        "DzInput",
+        "DzTextarea",
+        "DzFormField",
+        "DzFormLabel",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "record-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "category-picker",
+      "type": "registry:block",
+      "title": "Category picker",
+      "description": "A hierarchical classification panel — a filterable DzTreeSelect for a nested category, a DzCascader region path (country → state → city), and a DzDateRangePicker availability window.",
+      "registryDependencies": [
+        "DzCard",
+        "DzTreeSelect",
+        "DzCascader",
+        "DzDateRangePicker",
+        "DzFormField",
+        "DzFormLabel",
+        "DzFormDescription",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "category-picker.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "appearance-editor",
+      "type": "registry:block",
+      "title": "Appearance editor",
+      "description": "A brand/theme customizer with a live preview — a DzColorPicker (presets + hex input) and two DzKnob rotary dials for radius and scale, reflected instantly in a preview panel.",
+      "registryDependencies": [
+        "DzCard",
+        "DzColorPicker",
+        "DzKnob",
+        "DzFormField",
+        "DzFormLabel",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "appearance-editor.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "invoice-builder",
+      "type": "registry:block",
+      "title": "Invoice builder",
+      "description": "A dynamic line-items editor — a DzInplace click-to-edit \"Bill to\" field over a DzFieldArray of removable description/qty/rate rows, an \"Add line item\" action, and a live total.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFieldArray",
+        "DzInplace",
+        "DzInput",
+        "DzNumberInput",
+        "DzIconButton",
+        "DzDivider",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "invoice-builder.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "access-transfer",
+      "type": "registry:block",
+      "title": "Share access",
+      "description": "A sharing / permissions panel — a searchable DzTransfer dual-list of capabilities, a DzPersonaSelector owner picker (avatar + name + role), and a DzMention note with @-mentions.",
+      "registryDependencies": [
+        "DzCard",
+        "DzTransfer",
+        "DzPersonaSelector",
+        "DzMention",
+        "DzFormField",
+        "DzFormLabel",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "access-transfer.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "float-label-form",
+      "type": "registry:block",
+      "title": "Float-label contact form",
+      "description": "A compact, modern contact variant — each control wrapped in a DzFloatLabel (notched \"on\" variant) whose label rests in-field and floats onto the border on focus/fill.",
+      "registryDependencies": [
+        "DzCard",
+        "DzFloatLabel",
+        "DzInput",
+        "DzSelect",
+        "DzTextarea",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "float-label-form.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "product-grid",
+      "type": "registry:block",
+      "title": "Product card grid",
+      "description": "A storefront grid of product cards — image with a sale/new corner badge, name, read-only star rating with review count, current/original price, and an add-to-cart button; reflows 3 → 2 → 1 columns.",
+      "registryDependencies": [
+        "DzImageCard",
+        "DzBadge",
+        "DzRating",
+        "DzButton",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "product-grid.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "product-detail",
+      "type": "registry:block",
+      "title": "Product detail",
+      "description": "A two-column product page — a looping DzCarousel gallery beside a buy box with rating, sale price, a size toggle group, stock badge and primary actions, over a full-width description / specs / shipping DzTabs panel.",
+      "registryDependencies": [
+        "DzCarousel",
+        "DzCarouselSlide",
+        "DzCarouselPrevious",
+        "DzCarouselNext",
+        "DzCarouselDots",
+        "DzImage",
+        "DzAspectRatio",
+        "DzRating",
+        "DzButton",
+        "DzTabs",
+        "DzTabList",
+        "DzTabTrigger",
+        "DzTabContent",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "product-detail.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "cart-summary",
+      "type": "registry:block",
+      "title": "Cart summary",
+      "description": "An editable cart — a divided list of line items each with a thumbnail, a clamped quantity stepper and a remove action, plus live subtotal/shipping/tax/total rows and a checkout button.",
+      "registryDependencies": [
+        "DzList",
+        "DzListItem",
+        "DzNumberInput",
+        "DzButton",
+        "DzDivider",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "cart-summary.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "checkout-summary",
+      "type": "registry:block",
+      "title": "Checkout order summary",
+      "description": "An order review panel — a DzDescriptions ship-to / delivery / payment grid, an itemised list, a promo-code field (try “SAVE10”) that adds a live discount line, and recomputed totals above a place-order button.",
+      "registryDependencies": [
+        "DzDescriptions",
+        "DzDescriptionsItem",
+        "DzInput",
+        "DzButton",
+        "DzDivider",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "checkout-summary.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "category-header",
+      "type": "registry:block",
+      "title": "Category header",
+      "description": "The title bar above a product listing — a breadcrumb trail, category heading with a live product count, and a toolbar pairing a sort DzSelect with a grid/list DzSegmented view toggle.",
+      "registryDependencies": [
+        "DzHeading",
+        "DzSelect",
+        "DzSegmented",
+        "DzBreadcrumb",
+        "DzBreadcrumbItem",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "category-header.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "order-status",
+      "type": "registry:block",
+      "title": "Order status tracker",
+      "description": "A fulfilment timeline for a single order — a DzStepper rail from placed to delivered marking the parcel’s current stage, a tone-coded status badge, and a carrier / tracking / ETA detail grid; the rail turns vertical on mobile.",
+      "registryDependencies": [
+        "DzStepper",
+        "DzStepperItem",
+        "DzBadge",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "order-status.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "blog-list",
+      "type": "registry:block",
+      "title": "Blog post list",
+      "description": "A grid of editorial cards — cover image with a category badge overlay, title, excerpt, and an author byline with avatar and read time; reflows 3 → 2 → 1 columns.",
+      "registryDependencies": [
+        "DzImageCard",
+        "DzBadge",
+        "DzAvatar",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "blog-list.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "article-header",
+      "type": "registry:block",
+      "title": "Article header",
+      "description": "A long-form masthead — category eyebrow, title and standfirst, a byline pairing an avatar with the author and a live DzRelativeTime published stamp, and a row of topic tags.",
+      "registryDependencies": [
+        "DzHeading",
+        "DzText",
+        "DzAvatar",
+        "DzTag",
+        "DzRelativeTime"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "article-header.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "prose",
+      "type": "registry:block",
+      "title": "Prose / rich content",
+      "description": "A typographic article body composed from the long-form primitives — DzHeading sections, DzText paragraphs and lists with inline DzCode, a DzBlockquote pull-quote, a block code snippet, and DzDivider rules.",
+      "registryDependencies": [
+        "DzHeading",
+        "DzText",
+        "DzBlockquote",
+        "DzCode",
+        "DzDivider"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "prose.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "code-showcase",
+      "type": "registry:block",
+      "title": "Code showcase",
+      "description": "A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with a filename header and an explicit DzCopyButton wired into its actions slot that copies exactly the snippet on screen.",
+      "registryDependencies": [
+        "DzCodeBlock",
+        "DzCopyButton",
+        "DzTabs",
+        "DzTabList",
+        "DzTabTrigger",
+        "DzTabContent"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "code-showcase.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "toc-aside",
+      "type": "registry:block",
+      "title": "Table-of-contents aside",
+      "description": "A docs layout where a sticky DzAnchor \"On this page\" nav scrollspy-highlights the section in view beside a column of DzText prose with matching heading ids; collapses to one column on mobile.",
+      "registryDependencies": [
+        "DzAnchor",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "toc-aside.vue",
+          "type": "registry:block"
+        }
+      ]
+    },
+    {
+      "name": "faq-2col",
+      "type": "registry:block",
+      "title": "Two-column FAQ",
+      "description": "Questions grouped into two labelled DzAccordion columns (separated, single + collapsible) under a centered heading, so one answer is open per column at a time; stacks to one column on mobile.",
+      "registryDependencies": [
+        "DzAccordion",
+        "DzAccordionItem",
+        "DzAccordionTrigger",
+        "DzAccordionContent",
+        "DzHeading",
+        "DzText"
+      ],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens"
+      ],
+      "files": [
+        {
+          "path": "faq-2col.vue",
+          "type": "registry:block"
+        }
+      ]
+    }
+  ]
+}

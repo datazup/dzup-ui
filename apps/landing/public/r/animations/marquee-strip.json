@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "marquee-strip",
+  "type": "registry:block",
+  "title": "Marquee strip",
+  "description": "A logo/badge strip scrolls infinitely and seamlessly; hover to pause.",
+  "files": [
+    {
+      "path": "marquee-strip.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzBadge } from '@dzup-ui/core'\nimport { DzMarquee } from '../motion'\n\nconst logos = ['Acme', 'Globex', 'Initech', 'Umbrella', 'Soylent', 'Hooli']\n</script>\n\n<template>\n  <!-- Content is duplicated internally for a seamless loop; static row when reduced. -->\n  <DzMarquee aria-label=\"Trusted by teams\">\n    <DzBadge v-for=\"logo in logos\" :key=\"logo\" variant=\"outline\" tone=\"neutral\" size=\"md\">\n      {{ logo }}\n    </DzBadge>\n  </DzMarquee>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzBadge"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

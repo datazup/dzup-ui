@@ -1,0 +1,22 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "flip-on-change",
+  "type": "registry:block",
+  "title": "Flip on change",
+  "description": "A badge value flips with a half-turn whenever the underlying data updates.",
+  "files": [
+    {
+      "path": "flip-on-change.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue'\nimport { DzBadge } from '@dzup-ui/core'\nimport { DzFlip } from '../motion'\n\nconst states = [\n  { label: 'Queued', tone: 'neutral' },\n  { label: 'Running', tone: 'info' },\n  { label: 'Passed', tone: 'success' },\n]\nconst i = ref(0)\nconst current = computed(() => states[i.value])\n</script>\n\n<template>\n  <!-- Pass the changing value to DzFlip; it remounts + flips the face on each update. -->\n  <DzFlip :value=\"current.label\">\n    <DzBadge variant=\"solid\" :tone=\"current.tone\">{{ current.label }}</DzBadge>\n  </DzFlip>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzBadge",
+    "DzTag"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

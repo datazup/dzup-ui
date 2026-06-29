@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "native-popover-entrance",
+  "type": "registry:block",
+  "title": "Native popover entrance",
+  "description": "A menu/tooltip opens via the Popover API, animating in from @starting-style; <Transition> fallback.",
+  "files": [
+    {
+      "path": "native-popover-entrance.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzMenu, DzMenuItem } from '@dzup-ui/core'\nimport { DzNativePopover, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- DzNativePopover renders a popovertarget trigger + a [popover] panel, so the\n       browser owns light-dismiss, Esc and top-layer stacking. The entrance animates\n       from @starting-style with transition-behavior: allow-discrete (the exit plays\n       too) behind @supports; where the Popover API is absent it falls back to a\n       <Transition> with re-added Esc + outside-click. Reduced motion → instant. -->\n  <DzNativePopover aria-label=\"Document actions\" :disabled=\"reduced\">\n    <template #trigger>\n      <span class=\"trigger\">Actions</span>\n    </template>\n    <template #default=\"{ close }\">\n      <DzMenu aria-label=\"Document actions\" size=\"sm\">\n        <DzMenuItem @click=\"close()\">Edit</DzMenuItem>\n        <DzMenuItem @click=\"close()\">Share</DzMenuItem>\n        <DzMenuItem @click=\"close()\">Delete</DzMenuItem>\n      </DzMenu>\n    </template>\n  </DzNativePopover>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzNativePopover",
+    "DzMenu",
+    "DzTooltip"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

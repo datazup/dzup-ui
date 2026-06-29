@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "dynamic-island",
+  "type": "registry:block",
+  "title": "Dynamic island",
+  "description": "A compact pill morphs to reveal expanded content and back; sizes via interpolate-size, FLIPs otherwise.",
+  "files": [
+    {
+      "path": "dynamic-island.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzIsland, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- DzIsland sizes the morph with interpolate-size: allow-keywords (a true\n       width/height → auto transition) where supported, and a FLIP fallback\n       elsewhere; the expanded content fades + rises in via @starting-style.\n       Reduced motion → instant expand/collapse. The expanded state is announced\n       politely to assistive tech via a persistent aria-live region. -->\n  <DzIsland :disabled=\"reduced\" announce=\"Now playing: Midnight Pulse. Controls available.\">\n    <template #pill=\"{ expanded }\">\n      <span class=\"pill\">Now playing {{ expanded ? '· tap to close' : '' }}</span>\n    </template>\n    <template #default>\n      <!-- …track + playback controls… -->\n    </template>\n  </DzIsland>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzIsland",
+    "DzBadge",
+    "DzCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

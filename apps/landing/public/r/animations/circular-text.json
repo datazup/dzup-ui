@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "circular-text",
+  "type": "registry:block",
+  "title": "Circular text",
+  "description": "Lays a string around a ring that slowly rotates, like a rotating seal.",
+  "files": [
+    {
+      "path": "circular-text.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\nimport { DzCircularText } from '../motion'\n</script>\n\n<template>\n  <!-- The curved glyphs are aria-hidden; the full string stays in the DOM (sr-only)\n       and is announced once. Reduced motion → static curved text. -->\n  <div style=\"position: relative; display: grid; place-items: center\">\n    <DzCircularText text=\"· DESIGN TOKENS · ACCESSIBLE MOTION \" :radius=\"74\" />\n    <DzText size=\"sm\" weight=\"semibold\" aria-hidden=\"true\">dzup</DzText>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

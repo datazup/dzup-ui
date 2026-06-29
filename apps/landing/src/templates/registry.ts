@@ -60,6 +60,21 @@ export interface TemplateMeta {
    * order-tracking page). See `PALETTE_CONFIGS` in `@dzup-ui/tokens`.
    */
   accent?: TemplateAccent
+  /**
+   * Free-text facets for gallery search + tag filtering. Drawn from the
+   * controlled `TEMPLATE_TAGS` vocabulary (the `TemplateTag` union enforces this
+   * at compile time so the catalogue stays a closed set, not a free-for-all).
+   * Orthogonal to `category` — a row carries its category as a tag *plus* its
+   * dominant patterns and notable traits (3–6 each), so the tag filter composes
+   * with the category filter rather than duplicating it.
+   */
+  tags?: TemplateTag[]
+  /**
+   * ISO date ('YYYY-MM-DD') the template was added — drives recency sort and the
+   * "New" badge (see `isNew`). Optional so pre-existing rows stay valid; new
+   * rows should set it to their ship date.
+   */
+  createdAt?: string
 }
 
 /**
@@ -97,6 +112,86 @@ export const TEMPLATE_CATEGORIES: { key: TemplateCategory; label: string; accent
 ]
 
 /**
+ * The controlled tag vocabulary the gallery's search + tag filter draw from
+ * (docs/templates.md §2 "discovery", §4). Tags are an orthogonal facet to
+ * `TEMPLATE_CATEGORIES`: a row tags its category *and* its dominant patterns and
+ * notable traits, so the two filters AND-compose instead of overlapping. Keeping
+ * this a closed list (the `TemplateTag` union below is derived from these keys)
+ * means a typo in a row's `tags` is a type error, and E2 can render the filter
+ * chips straight from this array without inventing labels. Grouped by facet for
+ * readability; `key` is the kebab-case filter value, `label` the display chip.
+ * Order = display order in the tag filter.
+ */
+export const TEMPLATE_TAGS = [
+  // Category facets (mirror `TEMPLATE_CATEGORIES`, so tag-only search still hits a category).
+  { key: 'dashboard', label: 'Dashboard' },
+  { key: 'auth', label: 'Auth' },
+  { key: 'marketing', label: 'Marketing' },
+  { key: 'commerce', label: 'Commerce' },
+  { key: 'content', label: 'Content' },
+  { key: 'utility', label: 'Utility' },
+  // Layout / structure facets — the page's skeleton.
+  { key: 'app-shell', label: 'App shell' },
+  { key: 'sidebar', label: 'Sidebar' },
+  { key: 'split-layout', label: 'Split layout' },
+  { key: 'centered', label: 'Centered' },
+  { key: 'grid', label: 'Grid' },
+  { key: 'timeline', label: 'Timeline' },
+  { key: 'kanban', label: 'Kanban' },
+  { key: 'stepper', label: 'Stepper' },
+  { key: 'tabs', label: 'Tabs' },
+  // Component / interaction facets — the dominant building block.
+  { key: 'form', label: 'Form' },
+  { key: 'data-table', label: 'Data table' },
+  { key: 'search', label: 'Search' },
+  { key: 'pagination', label: 'Pagination' },
+  { key: 'filters', label: 'Filters' },
+  { key: 'accordion', label: 'Accordion' },
+  { key: 'carousel', label: 'Carousel' },
+  // Domain facets — what the page is *for*.
+  { key: 'pricing', label: 'Pricing' },
+  { key: 'billing', label: 'Billing' },
+  { key: 'checkout', label: 'Checkout' },
+  { key: 'product', label: 'Product' },
+  { key: 'profile', label: 'Profile' },
+  { key: 'settings', label: 'Settings' },
+  { key: 'error-page', label: 'Error page' },
+  { key: 'empty-state', label: 'Empty state' },
+  // Trait facets — notable qualities worth filtering on.
+  { key: 'responsive', label: 'Responsive' },
+  { key: 'dark-mode', label: 'Dark mode' },
+  { key: 'form-heavy', label: 'Form-heavy' },
+  { key: 'typography', label: 'Typography' },
+  { key: 're-skin', label: 'Re-skin' },
+] as const
+
+/**
+ * The allowed tag keys, derived from `TEMPLATE_TAGS` so the vocabulary has a
+ * single source of truth. `TemplateMeta.tags` is typed to this union, so any tag
+ * not in the list above fails `yarn typecheck`.
+ */
+export type TemplateTag = (typeof TEMPLATE_TAGS)[number]['key']
+
+/** Number of days a template stays "New" after its `createdAt`. */
+const NEW_WINDOW_DAYS = 30
+
+/**
+ * True when `t` was added within the last {@link NEW_WINDOW_DAYS} days — drives
+ * the gallery's "New" badge (E2). Pure and side-effect-free: pass `now` to make
+ * it deterministic in tests; it only falls back to a fresh `Date` when omitted
+ * (never at module load, so importing this file does no clock reads). Rows
+ * without a `createdAt`, or with an unparseable one, are never "new".
+ */
+export function isNew(t: TemplateMeta, now?: Date): boolean {
+  if (!t.createdAt) return false
+  const created = new Date(`${t.createdAt}T00:00:00`)
+  if (Number.isNaN(created.getTime())) return false
+  const reference = now ?? new Date()
+  const ageMs = reference.getTime() - created.getTime()
+  return ageMs >= 0 && ageMs <= NEW_WINDOW_DAYS * 24 * 60 * 60 * 1000
+}
+
+/**
  * The template catalogue — one entry per §6 row. The three featured (⭐) starters
  * land first as the canonical references later batches copy (T3); the remaining
  * rows are added as their render components are authored (T4+).
@@ -125,6 +220,8 @@ export const TEMPLATES: TemplateMeta[] = [
     source: 'apps/landing/src/templates/analytics-dashboard/AnalyticsDashboard.vue',
     tier: 'free',
     featured: true,
+    tags: ['dashboard', 'app-shell', 'sidebar', 'data-table', 'responsive'],
+    createdAt: '2026-04-28',
   },
   {
     slug: 'sign-in',
@@ -146,6 +243,84 @@ export const TEMPLATES: TemplateMeta[] = [
     source: 'apps/landing/src/templates/sign-in/SignIn.vue',
     tier: 'free',
     featured: true,
+    tags: ['auth', 'form', 'split-layout', 'responsive'],
+    createdAt: '2026-04-29',
+  },
+  {
+    slug: 'sign-up',
+    name: 'Sign Up',
+    blurb:
+      'A split-screen register page — name, email and a password field with a live strength meter, terms and social sign-up, beside a marketing panel.',
+    category: 'auth',
+    stack: [
+      'DzCard',
+      'DzFormField',
+      'DzInput',
+      'DzPasswordInput',
+      'DzCheckbox',
+      'DzButton',
+      'DzDivider',
+      'DzProgress',
+    ],
+    icon: 'UserPlus',
+    load: () => import('./sign-up/SignUp.vue'),
+    source: 'apps/landing/src/templates/sign-up/SignUp.vue',
+    tier: 'free',
+    featured: true,
+    tags: ['auth', 'form', 'split-layout', 'form-heavy', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'reset-password',
+    name: 'Forgot / Reset Password',
+    blurb:
+      'A centered card with two states in one page — request a reset link, then a "check your inbox" confirmation with a resend nudge.',
+    category: 'auth',
+    stack: ['DzCard', 'DzFormField', 'DzInput', 'DzButton', 'DzResult', 'DzAlert'],
+    icon: 'KeyRound',
+    load: () => import('./reset-password/ResetPassword.vue'),
+    source: 'apps/landing/src/templates/reset-password/ResetPassword.vue',
+    tier: 'free',
+    tags: ['auth', 'form', 'centered', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'verify-otp',
+    name: 'OTP / 2FA Verify',
+    blurb:
+      'A centered verification card — a six-box one-time-code input, a resend countdown, an explanatory alert and verify / back actions with a success state.',
+    category: 'auth',
+    stack: ['DzCard', 'DzOtpInput', 'DzButton', 'DzCountdown', 'DzText', 'DzAlert'],
+    icon: 'ShieldCheck',
+    load: () => import('./verify-otp/VerifyOtp.vue'),
+    source: 'apps/landing/src/templates/verify-otp/VerifyOtp.vue',
+    tier: 'free',
+    tags: ['auth', 'form', 'centered', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'onboarding-wizard',
+    name: 'Onboarding Wizard',
+    blurb:
+      'A multi-step setup — Profile, Workspace and Invite panels on a stepper with a progress bar and prev/next, ending in a success state.',
+    category: 'auth',
+    stack: [
+      'DzStepper',
+      'DzFormField',
+      'DzInput',
+      'DzSelect',
+      'DzRadioGroup',
+      'DzCheckboxGroup',
+      'DzProgress',
+      'DzButton',
+      'DzCard',
+    ],
+    icon: 'ListChecks',
+    load: () => import('./onboarding-wizard/OnboardingWizard.vue'),
+    source: 'apps/landing/src/templates/onboarding-wizard/OnboardingWizard.vue',
+    tier: 'free',
+    tags: ['auth', 'stepper', 'form', 'form-heavy', 'responsive'],
+    createdAt: '2026-06-25',
   },
   {
     slug: 'saas-landing',
@@ -159,6 +334,8 @@ export const TEMPLATES: TemplateMeta[] = [
     source: 'apps/landing/src/templates/saas-landing/SaasLanding.vue',
     tier: 'free',
     featured: true,
+    tags: ['marketing', 'pricing', 'carousel', 'accordion', 'responsive'],
+    createdAt: '2026-04-30',
   },
   {
     slug: 'blog-post',
@@ -185,6 +362,8 @@ export const TEMPLATES: TemplateMeta[] = [
     source: 'apps/landing/src/templates/blog-post/BlogPost.vue',
     tier: 'free',
     featured: true,
+    tags: ['content', 'typography', 'responsive'],
+    createdAt: '2026-05-01',
   },
   {
     slug: 'blog-index',
@@ -206,6 +385,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./blog-index/BlogIndex.vue'),
     source: 'apps/landing/src/templates/blog-index/BlogIndex.vue',
     tier: 'free',
+    tags: ['content', 'grid', 'search', 'pagination', 'responsive'],
+    createdAt: '2026-05-05',
   },
   {
     slug: 'help-center',
@@ -227,6 +408,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./help-center/HelpCenter.vue'),
     source: 'apps/landing/src/templates/help-center/HelpCenter.vue',
     tier: 'free',
+    tags: ['content', 'search', 'accordion', 'responsive'],
+    createdAt: '2026-05-06',
   },
   {
     slug: 'changelog',
@@ -247,6 +430,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./changelog/Changelog.vue'),
     source: 'apps/landing/src/templates/changelog/Changelog.vue',
     tier: 'free',
+    tags: ['content', 'timeline', 'responsive'],
+    createdAt: '2026-05-07',
   },
   {
     slug: 'docs-guide',
@@ -268,6 +453,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./docs-guide/DocsGuide.vue'),
     source: 'apps/landing/src/templates/docs-guide/DocsGuide.vue',
     tier: 'free',
+    tags: ['content', 'sidebar', 'search', 'responsive'],
+    createdAt: '2026-05-08',
   },
   {
     slug: 'newsroom',
@@ -289,6 +476,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./newsroom/Newsroom.vue'),
     source: 'apps/landing/src/templates/newsroom/Newsroom.vue',
     tier: 'free',
+    tags: ['content', 'grid', 'responsive'],
+    createdAt: '2026-05-09',
   },
   {
     slug: 'admin-crm',
@@ -312,6 +501,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./admin-crm/AdminCrm.vue'),
     source: 'apps/landing/src/templates/admin-crm/AdminCrm.vue',
     tier: 'free',
+    tags: ['dashboard', 'app-shell', 'sidebar', 'data-table', 'tabs', 'responsive'],
+    createdAt: '2026-05-10',
   },
   {
     slug: 'project-board',
@@ -334,6 +525,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./project-board/ProjectBoard.vue'),
     source: 'apps/landing/src/templates/project-board/ProjectBoard.vue',
     tier: 'free',
+    tags: ['dashboard', 'app-shell', 'kanban', 'tabs', 'responsive'],
+    createdAt: '2026-05-11',
   },
   {
     slug: 'app-settings',
@@ -356,6 +549,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./app-settings/AppSettings.vue'),
     source: 'apps/landing/src/templates/app-settings/AppSettings.vue',
     tier: 'free',
+    tags: ['dashboard', 'app-shell', 'settings', 'form', 'tabs', 'form-heavy'],
+    createdAt: '2026-05-12',
   },
   {
     slug: 'user-profile',
@@ -376,6 +571,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./user-profile/UserProfile.vue'),
     source: 'apps/landing/src/templates/user-profile/UserProfile.vue',
     tier: 'free',
+    tags: ['dashboard', 'profile', 'tabs', 'timeline', 'responsive'],
+    createdAt: '2026-05-13',
   },
   {
     slug: 'billing-plans',
@@ -397,6 +594,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./billing-plans/BillingPlans.vue'),
     source: 'apps/landing/src/templates/billing-plans/BillingPlans.vue',
     tier: 'free',
+    tags: ['dashboard', 'billing', 'pricing', 'data-table', 'responsive'],
+    createdAt: '2026-05-14',
   },
   {
     slug: 'team-members',
@@ -417,6 +616,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./team-members/TeamMembers.vue'),
     source: 'apps/landing/src/templates/team-members/TeamMembers.vue',
     tier: 'free',
+    tags: ['dashboard', 'data-table', 'responsive'],
+    createdAt: '2026-05-15',
   },
   {
     slug: 'inbox-notifications',
@@ -429,6 +630,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./inbox-notifications/InboxNotifications.vue'),
     source: 'apps/landing/src/templates/inbox-notifications/InboxNotifications.vue',
     tier: 'free',
+    tags: ['dashboard', 'app-shell', 'tabs', 'empty-state', 'responsive'],
+    createdAt: '2026-05-16',
   },
   {
     slug: 'states-pack',
@@ -442,6 +645,8 @@ export const TEMPLATES: TemplateMeta[] = [
     source: 'apps/landing/src/templates/states-pack/StatesPack.vue',
     tier: 'free',
     featured: true,
+    tags: ['utility', 'empty-state', 'responsive'],
+    createdAt: '2026-05-02',
   },
   {
     slug: 'not-found',
@@ -454,6 +659,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./not-found/NotFound.vue'),
     source: 'apps/landing/src/templates/not-found/NotFound.vue',
     tier: 'free',
+    tags: ['utility', 'error-page', 'centered', 'responsive'],
+    createdAt: '2026-05-17',
   },
   {
     slug: 'system-status',
@@ -476,6 +683,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./system-status/SystemStatus.vue'),
     source: 'apps/landing/src/templates/system-status/SystemStatus.vue',
     tier: 'free',
+    tags: ['utility', 'timeline', 'responsive'],
+    createdAt: '2026-05-18',
   },
   {
     slug: 'maintenance',
@@ -497,6 +706,59 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./maintenance/Maintenance.vue'),
     source: 'apps/landing/src/templates/maintenance/Maintenance.vue',
     tier: 'free',
+    tags: ['utility', 'centered', 'form', 'responsive'],
+    createdAt: '2026-05-19',
+  },
+  {
+    slug: 'error-500',
+    name: '500 — Server Error',
+    blurb:
+      'A centered server-error page — an oversized "500" glyph, a DzResult headline with retry / status / contact actions, a card of next steps and an incident reference.',
+    category: 'utility',
+    stack: ['DzResult', 'DzCard', 'DzButton', 'DzDivider', 'DzText'],
+    icon: 'ServerCrash',
+    load: () => import('./error-500/Error500.vue'),
+    source: 'apps/landing/src/templates/error-500/Error500.vue',
+    tier: 'free',
+    tags: ['utility', 'error-page', 'centered', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'error-403',
+    name: '403 — Access Denied',
+    blurb:
+      'A centered access-denied page — an oversized "403" glyph, a DzResult with a DzAlert spelling out the missing permission, and request-access / switch-account actions with a client-side "request sent" state.',
+    category: 'utility',
+    stack: ['DzResult', 'DzCard', 'DzButton', 'DzText', 'DzAlert'],
+    icon: 'ShieldAlert',
+    load: () => import('./error-403/Error403.vue'),
+    source: 'apps/landing/src/templates/error-403/Error403.vue',
+    tier: 'free',
+    tags: ['utility', 'error-page', 'centered', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'coming-soon',
+    name: 'Coming Soon',
+    blurb:
+      'A launch page — a status badge, a live countdown to launch in day/hour/minute/second segments, and a notify-me email capture that flips to a success state, with brand and social links.',
+    category: 'utility',
+    stack: [
+      'DzCard',
+      'DzCountdown',
+      'DzInput',
+      'DzButton',
+      'DzBadge',
+      'DzHeading',
+      'DzText',
+      'DzDivider',
+    ],
+    icon: 'Hourglass',
+    load: () => import('./coming-soon/ComingSoon.vue'),
+    source: 'apps/landing/src/templates/coming-soon/ComingSoon.vue',
+    tier: 'free',
+    tags: ['utility', 'centered', 'form', 'responsive'],
+    createdAt: '2026-06-25',
   },
   {
     slug: 'product-detail',
@@ -522,6 +784,8 @@ export const TEMPLATES: TemplateMeta[] = [
     source: 'apps/landing/src/templates/product-detail/ProductDetail.vue',
     tier: 'free',
     featured: true,
+    tags: ['commerce', 'product', 'tabs', 'accordion', 're-skin', 'responsive'],
+    createdAt: '2026-05-03',
   },
   {
     slug: 'product-listing',
@@ -544,6 +808,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./product-listing/ProductListing.vue'),
     source: 'apps/landing/src/templates/product-listing/ProductListing.vue',
     tier: 'free',
+    tags: ['commerce', 'grid', 'filters', 'pagination', 'responsive'],
+    createdAt: '2026-05-20',
   },
   {
     slug: 'checkout',
@@ -568,6 +834,8 @@ export const TEMPLATES: TemplateMeta[] = [
     load: () => import('./checkout/Checkout.vue'),
     source: 'apps/landing/src/templates/checkout/Checkout.vue',
     tier: 'free',
+    tags: ['commerce', 'checkout', 'stepper', 'form', 'form-heavy', 're-skin'],
+    createdAt: '2026-05-21',
   },
   {
     slug: 'order-tracking',
@@ -591,8 +859,351 @@ export const TEMPLATES: TemplateMeta[] = [
     tier: 'free',
     // The page itself re-skins teal via tokens — preview the same colourway.
     accent: 'teal',
+    tags: ['commerce', 'timeline', 'stepper', 're-skin', 'responsive'],
+    createdAt: '2026-05-22',
+  },
+  {
+    slug: 'pricing',
+    name: 'Pricing Page',
+    blurb:
+      'A conversion-ready pricing page — a live monthly/annual toggle that re-prices three plan cards, a grouped feature-comparison matrix with tooltip explainers and an FAQ teaser. Re-skinned violet via tokens.',
+    category: 'marketing',
+    stack: [
+      'DzCard',
+      'DzBadge',
+      'DzSegmented',
+      'DzButton',
+      'DzTable',
+      'DzTooltip',
+      'DzDivider',
+    ],
+    icon: 'BadgeDollarSign',
+    load: () => import('./pricing/Pricing.vue'),
+    source: 'apps/landing/src/templates/pricing/Pricing.vue',
+    tier: 'free',
+    featured: true,
+    // The page re-skins violet via tokens — preview the same colourway.
+    accent: 'violet',
+    tags: ['marketing', 'pricing', 'data-table', 're-skin', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'feature-product',
+    name: 'Feature / Product',
+    blurb:
+      'A product deep-dive — a hero with a token-painted mock, alternating feature rows, a tabbed feature explorer, a before/after reveal slider and a closing CTA.',
+    category: 'marketing',
+    stack: [
+      'DzCard',
+      'DzTabs',
+      'DzImage',
+      'DzImageComparison',
+      'DzBadge',
+      'DzHeading',
+      'DzText',
+    ],
+    icon: 'LayoutTemplate',
+    load: () => import('./feature-product/FeatureProduct.vue'),
+    source: 'apps/landing/src/templates/feature-product/FeatureProduct.vue',
+    tier: 'free',
+    tags: ['marketing', 'product', 'tabs', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'contact',
+    name: 'Contact',
+    blurb:
+      'A two-column contact page — a client-side-validated enquiry form that flips to a success state, beside direct channels, a token-painted map and office hours.',
+    category: 'marketing',
+    stack: [
+      'DzCard',
+      'DzFormField',
+      'DzInput',
+      'DzTextarea',
+      'DzSelect',
+      'DzButton',
+      'DzAlert',
+      'DzDivider',
+    ],
+    icon: 'Contact',
+    load: () => import('./contact/Contact.vue'),
+    source: 'apps/landing/src/templates/contact/Contact.vue',
+    tier: 'free',
+    tags: ['marketing', 'form', 'form-heavy', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'about-faq',
+    name: 'About & FAQ',
+    blurb:
+      'A company page — a mission hero with headline stats, a founding-to-today story timeline, values cards, a leadership grid and an FAQ accordion.',
+    category: 'marketing',
+    stack: [
+      'DzHeading',
+      'DzText',
+      'DzAccordion',
+      'DzCard',
+      'DzAvatar',
+      'DzAvatarGroup',
+      'DzTimeline',
+      'DzDivider',
+    ],
+    icon: 'Users',
+    load: () => import('./about-faq/AboutFaq.vue'),
+    source: 'apps/landing/src/templates/about-faq/AboutFaq.vue',
+    tier: 'free',
+    tags: ['marketing', 'timeline', 'accordion', 'grid', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'chat-messages',
+    name: 'Chat / Messages',
+    blurb:
+      'A messaging app — a conversation list with search, presence dots and unread badges beside a thread of day-separated message bubbles with read receipts, and an attach-and-send composer. Re-skinned cyan via tokens.',
+    category: 'dashboards',
+    stack: [
+      'DzAppShell',
+      'DzList',
+      'DzAvatar',
+      'DzBadge',
+      'DzScrollArea',
+      'DzTextarea',
+      'DzInput',
+      'DzButton',
+      'DzSearchInput',
+      'DzDropdownMenu',
+    ],
+    icon: 'MessagesSquare',
+    load: () => import('./chat-messages/ChatMessages.vue'),
+    source: 'apps/landing/src/templates/chat-messages/ChatMessages.vue',
+    tier: 'free',
+    featured: true,
+    // The page re-skins cyan via tokens — preview the same colourway.
+    accent: 'cyan',
+    tags: ['dashboard', 'app-shell', 'sidebar', 'search', 're-skin', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'calendar-scheduler',
+    name: 'Calendar / Scheduler',
+    blurb:
+      'A calendar app — a month/week DzCalendar with token-coloured event dots, a colour-coded calendar legend, a day agenda where each event opens a details popover, and a quick-add new-event dialog. Re-skinned indigo via tokens.',
+    category: 'dashboards',
+    stack: [
+      'DzAppShell',
+      'DzCalendar',
+      'DzSegmented',
+      'DzBadge',
+      'DzPopover',
+      'DzButton',
+      'DzAvatarGroup',
+      'DzDialog',
+    ],
+    icon: 'CalendarRange',
+    load: () => import('./calendar-scheduler/CalendarScheduler.vue'),
+    source: 'apps/landing/src/templates/calendar-scheduler/CalendarScheduler.vue',
+    tier: 'free',
+    // The page re-skins indigo via tokens — preview the same colourway.
+    accent: 'indigo',
+    tags: ['dashboard', 'app-shell', 'sidebar', 'grid', 're-skin', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'file-manager',
+    name: 'File Manager',
+    blurb:
+      'A cloud-drive workspace — a folder tree sidebar with a storage meter, a breadcrumb path, and a list/grid file browser with type icons, size and modified badges, right-click and per-row action menus, and search.',
+    category: 'dashboards',
+    stack: [
+      'DzAppShell',
+      'DzSidebar',
+      'DzTree',
+      'DzDataView',
+      'DzBreadcrumb',
+      'DzDropdownMenu',
+      'DzContextMenu',
+      'DzButton',
+      'DzSearchInput',
+      'DzBadge',
+    ],
+    icon: 'FolderTree',
+    load: () => import('./file-manager/FileManager.vue'),
+    source: 'apps/landing/src/templates/file-manager/FileManager.vue',
+    tier: 'free',
+    tags: ['dashboard', 'app-shell', 'sidebar', 'grid', 'search', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'tasks-todo',
+    name: 'Tasks / To-Do',
+    blurb:
+      'A personal to-do app — a left rail of lists, a My Day task list with completion checkboxes, priority badges and label tags, a quick-add field, a Today / Upcoming / Done view switcher and a per-task menu.',
+    category: 'dashboards',
+    stack: [
+      'DzAppShell',
+      'DzList',
+      'DzCheckbox',
+      'DzTag',
+      'DzBadge',
+      'DzInput',
+      'DzDropdownMenu',
+      'DzSegmented',
+      'DzButton',
+    ],
+    icon: 'ListTodo',
+    load: () => import('./tasks-todo/TasksTodo.vue'),
+    source: 'apps/landing/src/templates/tasks-todo/TasksTodo.vue',
+    tier: 'free',
+    tags: ['dashboard', 'app-shell', 'sidebar', 'form', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'data-table',
+    name: 'Data Table (CRUD list)',
+    blurb:
+      'A working customer ledger — a filter bar with a search field and plan/status facets, a sortable, paginated, multi-select data grid with status badges and row actions, a bulk-action bar and a "New customer" dialog that appends a real row.',
+    category: 'dashboards',
+    stack: [
+      'DzAppShell',
+      'DzDataGrid',
+      'DzSearchInput',
+      'DzMultiSelect',
+      'DzDropdownMenu',
+      'DzPagination',
+      'DzDialog',
+      'DzButton',
+      'DzBadge',
+      'DzCheckbox',
+    ],
+    icon: 'Table2',
+    load: () => import('./data-table/DataTable.vue'),
+    source: 'apps/landing/src/templates/data-table/DataTable.vue',
+    tier: 'free',
+    featured: true,
+    tags: ['dashboard', 'app-shell', 'data-table', 'filters', 'pagination', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'invoice',
+    name: 'Invoice',
+    blurb:
+      'A printable studio invoice — a branded header with a status badge, from / bill-to / details description grids, a line-item table and a derived totals block where every figure is computed from the lines, plus payment notes and download / print / send actions.',
+    category: 'commerce',
+    stack: [
+      'DzCard',
+      'DzTable',
+      'DzDescriptions',
+      'DzDivider',
+      'DzBadge',
+      'DzButton',
+      'DzHeading',
+      'DzText',
+    ],
+    icon: 'ReceiptText',
+    load: () => import('./invoice/Invoice.vue'),
+    source: 'apps/landing/src/templates/invoice/Invoice.vue',
+    tier: 'free',
+    tags: ['commerce', 'billing', 'data-table', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'shopping-cart',
+    name: 'Shopping Cart',
+    blurb:
+      'A grocery cart page — editable line items with image thumbnails, a quantity stepper and remove, a working promo code, a free-shipping progress nudge and a sticky summary with live totals, plus an empty-cart state and a one-click "add" cross-sell rail. Re-skinned emerald via tokens.',
+    category: 'commerce',
+    stack: [
+      'DzCard',
+      'DzList',
+      'DzNumberInput',
+      'DzButton',
+      'DzBadge',
+      'DzAlert',
+      'DzInput',
+      'DzDivider',
+      'DzImage',
+    ],
+    icon: 'ShoppingBag',
+    load: () => import('./shopping-cart/ShoppingCart.vue'),
+    source: 'apps/landing/src/templates/shopping-cart/ShoppingCart.vue',
+    tier: 'free',
+    // The page re-skins emerald via tokens — preview the same colourway.
+    accent: 'emerald',
+    tags: ['commerce', 'checkout', 'empty-state', 're-skin', 'responsive'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'account-settings',
+    name: 'Account Centre',
+    blurb:
+      'A multi-tab account hub in an app shell — Profile with avatar upload, Security with a password change, 2FA and revocable sessions, a notification channel matrix, and Billing with the current plan, payment method and invoices. A sticky save bar confirms client-side.',
+    category: 'dashboards',
+    stack: [
+      'DzAppShell',
+      'DzTabs',
+      'DzFormField',
+      'DzInput',
+      'DzSwitch',
+      'DzSelect',
+      'DzAvatar',
+      'DzButton',
+      'DzDivider',
+      'DzAlert',
+      'DzBadge',
+      'DzDescriptions',
+    ],
+    icon: 'UserCog',
+    load: () => import('./account-settings/AccountSettings.vue'),
+    source: 'apps/landing/src/templates/account-settings/AccountSettings.vue',
+    tier: 'free',
+    tags: ['dashboard', 'app-shell', 'settings', 'profile', 'billing', 'tabs'],
+    createdAt: '2026-06-25',
+  },
+  {
+    slug: 'order-history',
+    name: 'Order History',
+    blurb:
+      'An account orders page — a searchable, status-filtered, sortable and paginated DzDataView of past orders, each with its products, total, a status badge and view / reorder actions (Reorder confirms live). Re-skinned emerald via tokens.',
+    category: 'commerce',
+    stack: [
+      'DzCard',
+      'DzDataView',
+      'DzList',
+      'DzBadge',
+      'DzTag',
+      'DzPagination',
+      'DzSearchInput',
+      'DzButton',
+    ],
+    icon: 'PackageSearch',
+    load: () => import('./order-history/OrderHistory.vue'),
+    source: 'apps/landing/src/templates/order-history/OrderHistory.vue',
+    tier: 'free',
+    // The page re-skins emerald via tokens — preview the same colourway.
+    accent: 'emerald',
+    tags: ['commerce', 'search', 'pagination', 'filters', 're-skin', 'responsive'],
+    createdAt: '2026-06-25',
   },
 ]
+
+/**
+ * Public-URL directory for the committed gallery thumbnails — the single source
+ * of truth shared with the screenshot pipeline (`scripts/shoot-thumbnails.mts`,
+ * which writes the files into `public/` + this path). Root-relative so it is a
+ * stable, un-hashed URL: the gallery derives the dark variant by inserting
+ * `-dark` before the extension (`<slug>.webp` → `<slug>-dark.webp`), and the
+ * detail route reuses it verbatim as the per-template `og:image`.
+ */
+export const THUMBNAIL_DIR = '/templates/thumbnails'
+
+// Wire each row's static thumbnail by slug CONVENTION rather than a
+// hand-maintained path, so a new template is covered the moment `yarn
+// thumbnails` generates its screenshots. Until those files exist the gallery's
+// <img onerror> handler falls back to the row's icon, so the derived path is
+// safe to set unconditionally (a missing file is a graceful gap, not a break).
+for (const template of TEMPLATES) {
+  template.thumbnail = `${THUMBNAIL_DIR}/${template.slug}.webp`
+}
 
 /** Resolve a template by its slug, or `undefined` if unknown. */
 export function getTemplate(slug: string): TemplateMeta | undefined {

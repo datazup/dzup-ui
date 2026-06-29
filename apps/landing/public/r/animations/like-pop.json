@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "like-pop",
+  "type": "registry:block",
+  "title": "Like pop",
+  "description": "A like toggle pops in scale and radiates a ring of colour sparks on the rising edge.",
+  "files": [
+    {
+      "path": "like-pop.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzToggleButton } from '@dzup-ui/core'\nimport { Heart } from 'lucide-vue-next'\nimport { DzBurst } from '../motion'\n\nconst liked = ref(false)\n</script>\n\n<template>\n  <!-- Burst fires when active goes false → true; the wrapped toggle owns the press state. -->\n  <DzBurst :active=\"liked\">\n    <DzToggleButton v-model=\"liked\" variant=\"outline\" :tone=\"liked ? 'danger' : 'neutral'\">\n      <template #prefix>\n        <Heart :size=\"18\" :fill=\"liked ? 'currentColor' : 'none'\" />\n      </template>\n      Like\n    </DzToggleButton>\n  </DzBurst>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzToggleButton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

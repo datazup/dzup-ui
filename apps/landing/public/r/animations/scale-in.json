@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "scale-in",
+  "type": "registry:block",
+  "title": "Scale-in",
+  "description": "Scales up from 0.96 to full size while fading in — pair with stat cards.",
+  "files": [
+    {
+      "path": "scale-in.vue",
+      "content": "<script setup lang=\"ts\">\nimport { DzStatCard } from '@dzup-ui/core'\nimport { vReveal } from '../motion'\n</script>\n\n<template>\n  <DzStatCard v-reveal.scale title=\"Monthly active\" value=\"48.2k\" trend=\"up\" />\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzStatCard"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

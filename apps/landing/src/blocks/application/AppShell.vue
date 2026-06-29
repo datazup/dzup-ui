@@ -106,7 +106,7 @@ const secondaryNav = [
 
           <DzSidebarFooter>
             <span class="user-row">
-              <DzAvatar fallback="JD" size="sm" />
+              <DzAvatar fallback="JD" alt="Jamie Doe" size="sm" />
               <span class="user-meta">
                 <DzText size="sm" weight="medium" as="span">Jamie Doe</DzText>
                 <DzText size="xs" tone="muted" as="span">jamie@acme.io</DzText>
@@ -141,7 +141,7 @@ const secondaryNav = [
         <DzDropdownMenu>
           <DzDropdownMenuTrigger as-child>
             <button class="avatar-btn" aria-label="Open user menu">
-              <DzAvatar fallback="JD" size="sm" />
+              <DzAvatar fallback="JD" alt="Jamie Doe" size="sm" />
             </button>
           </DzDropdownMenuTrigger>
           <DzDropdownMenuContent align="end">

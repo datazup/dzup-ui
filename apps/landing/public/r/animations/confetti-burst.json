@@ -1,0 +1,21 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "confetti-burst",
+  "type": "registry:block",
+  "title": "Confetti burst",
+  "description": "A celebratory multi-colour particle pop fires on a milestone action; a no-op when reduced.",
+  "files": [
+    {
+      "path": "confetti-burst.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzButton } from '@dzup-ui/core'\nimport { DzConfetti } from '../motion'\n\n// Call the exposed burst() on a key action; the overlay fills the positioned host.\nconst confetti = ref<InstanceType<typeof DzConfetti> | null>(null)\n</script>\n\n<template>\n  <div style=\"position: relative\">\n    <DzConfetti ref=\"confetti\" />\n    <DzButton variant=\"solid\" tone=\"primary\" @click=\"confetti?.burst()\">\n      Ship it\n    </DzButton>\n  </div>\n</template>",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzButton"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

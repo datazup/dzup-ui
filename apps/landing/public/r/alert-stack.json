@@ -1,0 +1,24 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "alert-stack",
+  "type": "registry:block",
+  "title": "Alert stack",
+  "description": "A column of inline DzAlerts spanning the variant taxonomy and tones — info, success with an actions row, a closable warning, and a dismissible filled danger alert that can be restored.",
+  "files": [
+    {
+      "path": "alert-stack.vue",
+      "content": "<script setup lang=\"ts\">\n/**\n * Alert stack — inline DzAlert messages across tones and variants.\n *\n * A vertical column of contextual alerts that exercises the AlertVariant\n * taxonomy (subtle / outline / filled), every relevant tone, the `#actions`\n * slot, leading icons, and the live `closable` + `@close` flow (the danger\n * alert can be dismissed and restored).\n *\n * Self-contained: local reactive state. Composed only from free @dzup-ui/core\n * components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport { ref } from 'vue'\nimport { CheckCircle2, Info, ShieldAlert, TriangleAlert } from 'lucide-vue-next'\nimport { DzAlert, DzButton, DzHeading, DzText } from '@dzup-ui/core'\n\nconst showDanger = ref(true)\n</script>\n\n<template>\n  <section class=\"as-wrap\" aria-labelledby=\"as-title\">\n    <header class=\"as-head\">\n      <DzHeading id=\"as-title\" :level=\"4\" size=\"md\" weight=\"semibold\" class=\"as-title\">Alerts</DzHeading>\n      <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"as-sub\">\n        Inline contextual feedback across every tone and variant.\n      </DzText>\n    </header>\n\n    <div class=\"as-stack\">\n      <DzAlert variant=\"subtle\" tone=\"info\" :icon=\"Info\" title=\"Heads up\">\n        A refreshed dashboard layout is rolling out next week. No action needed on your part.\n      </DzAlert>\n\n      <DzAlert variant=\"outline\" tone=\"success\" :icon=\"CheckCircle2\" title=\"Payment received\">\n        We've emailed your receipt for invoice <strong>#DZ-4821</strong>.\n        <template #actions>\n          <DzButton size=\"sm\" variant=\"solid\" tone=\"success\">View invoice</DzButton>\n          <DzButton size=\"sm\" variant=\"ghost\" tone=\"success\">Download PDF</DzButton>\n        </template>\n      </DzAlert>\n\n      <DzAlert variant=\"subtle\" tone=\"warning\" :icon=\"TriangleAlert\" title=\"Approaching your limit\" closable>\n        You've used 86% of this month's API quota. Upgrade your plan to avoid request throttling.\n      </DzAlert>\n\n      <DzAlert\n        v-if=\"showDanger\"\n        variant=\"filled\"\n        tone=\"danger\"\n        :icon=\"ShieldAlert\"\n        title=\"Couldn't save changes\"\n        closable\n        @close=\"showDanger = false\"\n      >\n        The connection timed out before your edits were stored. Check your network and try again.\n      </DzAlert>\n      <div v-else class=\"as-restore\">\n        <DzText size=\"sm\" tone=\"muted\" as=\"span\">Danger alert dismissed.</DzText>\n        <DzButton size=\"sm\" variant=\"outline\" tone=\"neutral\" @click=\"showDanger = true\">Restore</DzButton>\n      </div>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.as-wrap {\n  background: var(--dz-background, #fff);\n  max-width: 40rem;\n  margin: 0 auto;\n}\n\n.as-head {\n  margin-bottom: var(--dz-space-4, 1rem);\n}\n\n.as-title {\n  margin: 0;\n}\n\n.as-sub {\n  margin: var(--dz-space-1, 0.25rem) 0 0;\n}\n\n.as-stack {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.as-restore {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n  padding: var(--dz-space-3, 0.75rem) var(--dz-space-4, 1rem);\n  border: 1px dashed var(--dz-border, #e2e8f0);\n  border-radius: var(--dz-radius-md, 0.5rem);\n}\n</style>\n",
+      "type": "registry:block"
+    }
+  ],
+  "registryDependencies": [
+    "DzAlert",
+    "DzButton",
+    "DzHeading",
+    "DzText"
+  ],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens"
+  ]
+}

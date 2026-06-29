@@ -84,7 +84,7 @@ function deltaTone(delta: number): CanonicalTone {
               >
                 {{ index + 1 }}
               </DzBadge>
-              <DzAvatar :fallback="player.initials" size="sm" />
+              <DzAvatar :fallback="player.initials" :alt="player.name" size="sm" />
             </span>
           </template>
 
