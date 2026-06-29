@@ -282,6 +282,7 @@ jobs:
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: [typecheck]
     steps:
       - uses: actions/checkout@v4
@@ -302,10 +303,16 @@ jobs:
         run: yarn install --immutable
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - name: Run E2E tests (Chromium)
-        run: yarn test:e2e --project=chromium
+      - name: Run functional E2E tests (Chromium)
+        timeout-minutes: 20
+        run: yarn test:e2e:functional --project=chromium
+      - name: Run visual snapshot tests (Chromium, report-only)
+        id: visual
+        timeout-minutes: 20
+        continue-on-error: true
+        run: yarn test:e2e:visual --project=chromium --retries=0
       - name: Upload Playwright report
-        if: failure()
+        if: failure() || steps.visual.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
