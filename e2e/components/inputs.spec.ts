@@ -83,7 +83,7 @@ test.describe('DzPasswordInput', () => {
   })
 
   test('toggles password visibility on toggle button click', async ({ page }) => {
-    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--interactive`)
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     // Initially the input is masked
     const input = frame.locator('input[type="password"]')
