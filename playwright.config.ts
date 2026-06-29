@@ -1,10 +1,14 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const useStaticStorybook = process.env.STORYBOOK_E2E_STATIC === '1'
-const staticStorybookCommand = [
-  'yarn storybook:build',
-  'yarn exec vite preview --outDir apps/storybook/storybook-static --host 127.0.0.1 --port 6006',
-].join(' && ')
+const staticStorybookPreviewCommand = 'yarn exec vite preview --outDir apps/storybook/storybook-static --host 127.0.0.1 --port 6006'
+const staticStorybookCommand = process.env.STORYBOOK_E2E_PREBUILT === '1'
+  ? staticStorybookPreviewCommand
+  : [
+      'yarn workspace @dzup-ui/tokens build',
+      'yarn storybook:build',
+      staticStorybookPreviewCommand,
+    ].join(' && ')
 
 export default defineConfig({
   testDir: './e2e',
@@ -15,7 +19,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'line',
   use: {
-    baseURL: 'http://localhost:6006', // Storybook
+    baseURL: 'http://127.0.0.1:6006', // Storybook
     trace: 'on-first-retry',
   },
   projects: [
@@ -25,8 +29,8 @@ export default defineConfig({
   ],
   webServer: {
     command: useStaticStorybook ? staticStorybookCommand : 'yarn storybook --no-open',
-    url: 'http://localhost:6006',
+    url: 'http://127.0.0.1:6006',
     reuseExistingServer: !process.env.CI,
-    timeout: useStaticStorybook ? 300_000 : 120_000,
+    timeout: useStaticStorybook ? 420_000 : 120_000,
   },
 })
