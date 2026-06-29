@@ -190,8 +190,6 @@ describe('dzToastContext — context operations', () => {
     await nextTick()
     await nextTick()
 
-    // DEBUG
-    console.log('toast debug', wrapper.html(), document.body.innerHTML, ctx!.toasts.value)
     await expect.poll(() => document.body.textContent).toContain('Changes saved')
 
     // Rendering the toast must not steal focus from the page. (Reka's
