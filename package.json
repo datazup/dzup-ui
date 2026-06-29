@@ -45,7 +45,7 @@
     "test:perf": "vitest run packages/tooling/src/perf-bench.spec.ts",
     "test:e2e": "playwright test",
     "test:e2e:functional": "playwright test e2e/a11y e2e/components e2e/smoke",
-    "test:e2e:visual": "playwright test e2e/visual --max-failures=1",
+    "test:e2e:visual": "STORYBOOK_E2E_STATIC=1 playwright test e2e/visual --max-failures=1",
     "test:e2e:update": "playwright test --update-snapshots",
     "storybook": "yarn workspace @dzup-ui/storybook dev",
     "storybook:build": "yarn workspace @dzup-ui/storybook build",
