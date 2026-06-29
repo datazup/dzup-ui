@@ -31,7 +31,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "echo 'No unit tests in tokens — run yarn typecheck'",
-    "build": "node --import tsx src/generate.ts && vite build"
+    "build": "vite build && node --import tsx src/generate.ts"
   },
   "devDependencies": {
     "tsx": "^4.19.0",
