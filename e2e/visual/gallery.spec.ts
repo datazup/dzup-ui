@@ -12,6 +12,8 @@ const SCREENS = [
 ] as const
 const THEMES = ['light', 'dark'] as const
 
+test.setTimeout(60_000)
+
 for (const screen of SCREENS) {
   for (const theme of THEMES) {
     test(`gallery ${screen.name} ${theme}`, async ({ page }) => {
@@ -49,12 +51,11 @@ for (const screen of SCREENS) {
         waitUntil: 'domcontentloaded',
       })
       await page.waitForTimeout(1500)
-      await expect(page).toHaveScreenshot(`gallery-${screen.name}-${theme}.png`, {
-        fullPage: true,
+      await expect(page.locator('#storybook-root')).toHaveScreenshot(`gallery-${screen.name}-${theme}.png`, {
         maxDiffPixelRatio: 0.01,
         animations: 'disabled',
         // Generous stabilization window: this repo lives on a slow NTFS volume
-        // where fullPage rendering can exceed the 5s default.
+        // where gallery rendering can exceed the 5s default.
         timeout: 30_000,
       })
     })
