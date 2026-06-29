@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { loadStoryCanvas } from '../utils/storybook'
 
 /**
  * Smoke tests for the Navigation component family.
@@ -18,9 +19,7 @@ const STORY_ROOT = 'core-navigation-dztabs'
 
 test.describe('DzTabs', () => {
   test('default story loads and first tab panel is visible', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     // The default story starts on the "account" tab
     await expect(frame.getByRole('tab', { name: /account/i })).toBeVisible()
@@ -28,9 +27,7 @@ test.describe('DzTabs', () => {
   })
 
   test('clicking a tab trigger switches the visible panel', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--interactive`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--interactive`)
 
     // Initially on tab1 (Account)
     const tab2 = frame.getByRole('tab', { name: /billing/i })
@@ -46,9 +43,7 @@ test.describe('DzTabs', () => {
   })
 
   test('switching tabs updates the active tab indicator', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--interactive`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--interactive`)
 
     const teamTab = frame.getByRole('tab', { name: /team/i })
     await teamTab.click()
@@ -62,9 +57,7 @@ test.describe('DzTabs', () => {
   })
 
   test('Tab key reaches the active tab (roving tabindex entry point)', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     // The active "Account" tab must be the single roving tab stop.
     const accountTab = frame.getByRole('tab', { name: /account/i })
@@ -91,9 +84,7 @@ test.describe('DzTabs', () => {
   })
 
   test('exactly one tab is a tab stop after arrow navigation', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--accessibility`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--accessibility`)
 
     const firstTab = frame.getByRole('tab', { name: /first/i })
     await firstTab.focus()
@@ -109,9 +100,7 @@ test.describe('DzTabs', () => {
   })
 
   test('disabled tab is never the roving tab stop', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--disabled-tab`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--disabled-tab`)
 
     const disabledTab = frame.getByRole('tab', { name: /disabled/i })
     await expect(disabledTab).toHaveAttribute('tabindex', '-1')
@@ -122,9 +111,7 @@ test.describe('DzTabs', () => {
   })
 
   test('ArrowRight moves focus to the next tab trigger', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--accessibility`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--accessibility`)
 
     // Focus the first tab trigger
     const firstTab = frame.getByRole('tab', { name: /first/i })
@@ -139,9 +126,7 @@ test.describe('DzTabs', () => {
   })
 
   test('ArrowLeft moves focus back to the previous tab trigger', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--accessibility`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--accessibility`)
 
     // Start on the first tab, move right, then back left
     const firstTab = frame.getByRole('tab', { name: /first/i })
@@ -154,9 +139,7 @@ test.describe('DzTabs', () => {
   })
 
   test('ArrowRight skips disabled tabs', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--accessibility`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--accessibility`)
 
     // Accessibility story has tabs: First, Second, Disabled, Fourth
     const secondTab = frame.getByRole('tab', { name: /second/i })
@@ -171,9 +154,7 @@ test.describe('DzTabs', () => {
   })
 
   test('variant gallery renders all three variants', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--all-variants`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--all-variants`)
 
     // Each variant group has "Overview" tab triggers
     const overviewTabs = frame.getByRole('tab', { name: /overview/i })
@@ -182,9 +163,7 @@ test.describe('DzTabs', () => {
   })
 
   test('disabled tab trigger cannot be selected', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--disabled-tab`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--disabled-tab`)
 
     const disabledTab = frame.getByRole('tab', { name: /disabled/i })
     await expect(disabledTab).toBeVisible()

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { loadStoryCanvas } from '../utils/storybook'
 
 /**
  * Storybook infrastructure smoke tests.
@@ -61,11 +62,7 @@ test.describe('Story rendering', () => {
    * to finish rendering. Returns the frame locator.
    */
   async function loadStory(page: import('@playwright/test').Page, storyId: string) {
-    await page.goto(`/?path=/story/${storyId}`)
-    const frame = page.frameLocator('#storybook-preview-iframe')
-    // Wait for the iframe body to exist — proof the story rendered
-    await frame.locator('body').waitFor({ state: 'visible', timeout: 20_000 })
-    return frame
+    return loadStoryCanvas(page, storyId)
   }
 
   // ---- Buttons family ----
@@ -77,7 +74,7 @@ test.describe('Story rendering', () => {
 
   test('DzIconButton default story renders without errors', async ({ page }) => {
     const frame = await loadStory(page, 'core-buttons-dziconbutton--default')
-    await expect(frame.locator('button').first()).toBeVisible()
+    await expect(frame.locator('#storybook-root button').first()).toBeVisible()
   })
 
   // ---- Inputs family ----
@@ -130,7 +127,7 @@ test.describe('Story rendering', () => {
 
   test('DzToast tone gallery renders toast items', async ({ page }) => {
     const frame = await loadStory(page, 'core-feedback-dztoast--all-tones')
-    await expect(frame.getByText('Success')).toBeVisible()
+    await expect(frame.getByText('Success', { exact: true })).toBeVisible()
   })
 
   // ---- Forms family ----
@@ -192,9 +189,7 @@ test.describe('No console errors on key stories', () => {
         }
       })
 
-      await page.goto(`/?path=/story/${storyId}`)
-      const frame = page.frameLocator('#storybook-preview-iframe')
-      await frame.locator('body').waitFor({ state: 'visible', timeout: 20_000 })
+      const frame = await loadStoryCanvas(page, storyId)
 
       // Filter out known non-critical browser warnings that are not Vue/component errors
       const actionableErrors = consoleErrors.filter(
