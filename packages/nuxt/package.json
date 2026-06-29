@@ -30,11 +30,6 @@
     "@dzup-ui/tokens": ">=0.1.0-alpha.0",
     "nuxt": ">=3.0.0"
   },
-  "peerDependenciesMeta": {
-    "@dzup-ui/pro": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "@nuxt/kit": "^3.14.0"
   },
@@ -42,6 +37,7 @@
     "@dzup-ui/core": "workspace:*",
     "@dzup-ui/tokens": "workspace:*",
     "@nuxt/schema": "^3.14.0",
+    "nuxt": "^3.14.0",
     "typescript": "^5.8.3"
   }
 }
