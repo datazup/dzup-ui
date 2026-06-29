@@ -113,11 +113,11 @@ describe('dzInput — Unit Tests', () => {
     expect(wrapper.html()).toContain('dz-danger')
   })
 
-  it('applies tone focus-color token overrides on the wrapper', () => {
+  it('applies tone focus-border token overrides on the wrapper', () => {
     const wrapper = mount(DzInput, { props: { tone: 'success' } })
-    // Tone recolors the focus border/ring via input token indirection
+    // Tone recolors the focus border while the semantic utility owns the ring.
     expect(wrapper.html()).toContain('--dz-input-border-focus:var(--dz-success)')
-    expect(wrapper.html()).toContain('--dz-input-focus-ring-color:var(--dz-success)')
+    expect(wrapper.html()).toContain('dz-focus-within-ring-input')
     expect(wrapper.attributes('data-tone')).toBe('success')
   })
 

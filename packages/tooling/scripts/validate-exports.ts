@@ -124,8 +124,8 @@ function getExportedSymbols(filePath: string): { symbols: Set<string>, hasStarEx
     match = namedRe.exec(content)
   }
 
-  // Destructured exports: export { Foo, Bar, Baz as Qux }
-  const bracketRe = /export\s*\{([^}]+)\}/g
+  // Destructured exports: export { Foo, Bar, Baz as Qux } or export type { Foo }
+  const bracketRe = /export\s+(?:type\s+)?\{([^}]+)\}/g
   match = bracketRe.exec(content)
   while (match !== null) {
     if (match[1] !== undefined) {

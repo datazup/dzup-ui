@@ -71,10 +71,10 @@ export const inputWrapperVariants = tv({
     },
 
     /**
-     * Semantic tone — recolors the focus border/ring via the input's
-     * `--dz-input-border-focus` / `--dz-input-focus-ring-color` token
-     * indirection. Actual classes are applied through compoundVariants so
-     * that `invalid` always wins (see below). `neutral` keeps the default.
+     * Semantic tone — recolors the focus border while the shared semantic
+     * input focus utility owns the focus ring. Actual classes are applied
+     * through compoundVariants so that `invalid` always wins (see below).
+     * `neutral` keeps the default.
      */
     tone: {
       neutral: '',
@@ -104,12 +104,12 @@ export const inputWrapperVariants = tv({
   },
 
   compoundVariants: [
-    // ── Tone focus color (only when not invalid; invalid forces danger) ──
-    { tone: 'primary', invalid: false, class: '[--dz-input-border-focus:var(--dz-primary)] [--dz-input-focus-ring-color:var(--dz-primary)]' },
-    { tone: 'success', invalid: false, class: '[--dz-input-border-focus:var(--dz-success)] [--dz-input-focus-ring-color:var(--dz-success)]' },
-    { tone: 'warning', invalid: false, class: '[--dz-input-border-focus:var(--dz-warning-solid)] [--dz-input-focus-ring-color:var(--dz-warning-solid)]' },
-    { tone: 'danger', invalid: false, class: '[--dz-input-border-focus:var(--dz-danger)] [--dz-input-focus-ring-color:var(--dz-danger)]' },
-    { tone: 'info', invalid: false, class: '[--dz-input-border-focus:var(--dz-info)] [--dz-input-focus-ring-color:var(--dz-info)]' },
+    // ── Tone focus border (only when not invalid; invalid forces danger) ──
+    { tone: 'primary', invalid: false, class: '[--dz-input-border-focus:var(--dz-primary)]' },
+    { tone: 'success', invalid: false, class: '[--dz-input-border-focus:var(--dz-success)]' },
+    { tone: 'warning', invalid: false, class: '[--dz-input-border-focus:var(--dz-warning-solid)]' },
+    { tone: 'danger', invalid: false, class: '[--dz-input-border-focus:var(--dz-danger)]' },
+    { tone: 'info', invalid: false, class: '[--dz-input-border-focus:var(--dz-info)]' },
   ],
 
   defaultVariants: {
