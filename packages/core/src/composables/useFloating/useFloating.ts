@@ -8,7 +8,6 @@
  * @module @dzup-ui/core/composables/useFloating
  */
 
-import type { Placement } from '@floating-ui/vue'
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue'
 import {
   flip as flipMiddleware,
@@ -17,6 +16,11 @@ import {
   useFloating as useFloatingUI,
 } from '@floating-ui/vue'
 import { computed, ref } from 'vue'
+
+type FloatingReferenceRef = Parameters<typeof useFloatingUI>[0]
+type FloatingElementRef = Parameters<typeof useFloatingUI>[1]
+type FloatingOptions = NonNullable<Parameters<typeof useFloatingUI>[2]>
+type FloatingPlacementOption = NonNullable<FloatingOptions['placement']>
 
 /** Placement options for the floating element */
 export type FloatingPlacement
@@ -89,10 +93,10 @@ export function useFloating(options?: UseFloatingOptions): UseFloatingReturn {
   ]
 
   const { floatingStyles: rawStyles, placement: resolvedPlacement, update } = useFloatingUI(
-    referenceRef,
-    floatingRef,
+    referenceRef as unknown as FloatingReferenceRef,
+    floatingRef as unknown as FloatingElementRef,
     {
-      placement: initialPlacement as MaybeRefOrGetter<Placement>,
+      placement: initialPlacement as unknown as FloatingPlacementOption,
       middleware,
     },
   )
