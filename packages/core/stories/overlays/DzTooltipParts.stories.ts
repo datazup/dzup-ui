@@ -115,9 +115,9 @@ export const CompoundComposition: Story = {
           class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
-          <p>&lt;DzTooltip&gt;              <!-- root, manages delay + open state --&gt;</p>
-          <p class="pl-4">&lt;DzTooltipTrigger /&gt;   <!-- hover/focus target; wires aria-describedby --&gt;</p>
-          <p class="pl-4">&lt;DzTooltipContent&gt;     <!-- floating label, role="tooltip" --&gt;</p>
+          <p>&lt;DzTooltip&gt;              &lt;!-- root, manages delay + open state --&gt;</p>
+          <p class="pl-4">&lt;DzTooltipTrigger /&gt;   &lt;!-- hover/focus target; wires aria-describedby --&gt;</p>
+          <p class="pl-4">&lt;DzTooltipContent&gt;     &lt;!-- floating label, role="tooltip" --&gt;</p>
           <p class="pl-8">Short informational text</p>
           <p class="pl-4">&lt;/DzTooltipContent&gt;</p>
           <p>&lt;/DzTooltip&gt;</p>

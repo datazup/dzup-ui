@@ -23,7 +23,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const open = defineModel<boolean>('open', { default: undefined })
+const open = defineModel<boolean | undefined>('open')
 
 withDefaults(defineProps<DzDropdownMenuProps>(), {
   modal: true,

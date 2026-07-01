@@ -22,7 +22,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const open = defineModel<boolean>('open', { default: undefined })
+const open = defineModel<boolean | undefined>('open')
 
 const props = withDefaults(defineProps<DzTooltipProps>(), {
   delayDuration: 200,

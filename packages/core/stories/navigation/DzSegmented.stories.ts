@@ -226,19 +226,14 @@ export const States: Story = {
 export const WithSlots: Story = {
   name: 'Custom Item Slot (Icons)',
   render: () => ({
-    components: { DzSegmented },
+    components: { DzSegmented, List, LayoutGrid, Table2 },
     setup() {
       const items = [
         { value: 'list', label: 'List View' },
         { value: 'grid', label: 'Grid View' },
         { value: 'table', label: 'Table View' },
       ]
-      const iconMap: Record<string, string> = {
-        list: 'List',
-        grid: 'LayoutGrid',
-        table: 'Table2',
-      }
-      return { items, iconMap, List, LayoutGrid, Table2 }
+      return { items }
     },
     data() {
       return { value: 'list' }
@@ -348,14 +343,14 @@ export const Accessibility: Story = {
 export const RealWorldViewSwitcher: Story = {
   name: 'Real World: View Mode Switcher',
   render: () => ({
-    components: { DzSegmented },
+    components: { DzSegmented, List, LayoutGrid, Table2 },
     setup() {
       const items = [
         { value: 'list', label: 'List' },
         { value: 'grid', label: 'Grid' },
         { value: 'table', label: 'Table' },
       ]
-      return { items, List, LayoutGrid, Table2 }
+      return { items }
     },
     data() {
       return { view: 'grid' }
@@ -426,14 +421,14 @@ export const RealWorldCalendarRange: Story = {
 export const RealWorldTextAlignment: Story = {
   name: 'Real World: Text Alignment',
   render: () => ({
-    components: { DzSegmented },
+    components: { DzSegmented, AlignLeft, AlignCenter, AlignRight },
     setup() {
       const items = [
         { value: 'left', label: 'Left' },
         { value: 'center', label: 'Center' },
         { value: 'right', label: 'Right' },
       ]
-      return { items, AlignLeft, AlignCenter, AlignRight }
+      return { items }
     },
     data() {
       return { align: 'left' }
