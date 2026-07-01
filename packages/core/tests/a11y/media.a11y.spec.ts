@@ -7,6 +7,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import { defineComponent, h } from 'vue'
 import DzAvatar from '../../src/components/media/DzAvatar.vue'
 import DzAvatarGroup from '../../src/components/media/DzAvatarGroup.vue'

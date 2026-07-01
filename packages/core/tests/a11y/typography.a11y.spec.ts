@@ -7,6 +7,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import DzBlockquote from '../../src/components/typography/DzBlockquote.vue'
 import DzCaption from '../../src/components/typography/DzCaption.vue'
 import DzCode from '../../src/components/typography/DzCode.vue'

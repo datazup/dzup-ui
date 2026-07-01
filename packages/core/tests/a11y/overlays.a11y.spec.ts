@@ -13,6 +13,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
+import './register-matchers.ts'
 import { nextTick } from 'vue'
 import DzContextMenu from '../../src/components/overlays/DzContextMenu.vue'
 import DzContextMenuContent from '../../src/components/overlays/DzContextMenuContent.vue'
