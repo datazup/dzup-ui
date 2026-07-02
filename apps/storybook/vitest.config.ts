@@ -46,7 +46,6 @@ export default defineConfig({
       headless: true,
       instances: [{ browser: 'chromium' }],
     },
-    setupFiles: ['./.storybook/vitest.setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
