@@ -33,7 +33,7 @@ import { warnDeprecated } from '../utils/deprecation.ts'
 const visible = defineModel<boolean>('visible', { default: false })
 
 /** Also support the new `open` name for gradual migration */
-const open = defineModel<boolean>('open', { default: undefined })
+const open = defineModel<boolean>('open')
 
 withDefaults(defineProps<DzDialogCompatProps>(), {
   modal: true,
