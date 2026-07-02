@@ -13,7 +13,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import { nextTick } from 'vue'
 import DzContextMenu from '../../src/components/overlays/DzContextMenu.vue'
 import DzContextMenuContent from '../../src/components/overlays/DzContextMenuContent.vue'
@@ -41,6 +40,7 @@ import DzSheetTrigger from '../../src/components/overlays/DzSheetTrigger.vue'
 import DzTooltip from '../../src/components/overlays/DzTooltip.vue'
 import DzTooltipContent from '../../src/components/overlays/DzTooltipContent.vue'
 import DzTooltipTrigger from '../../src/components/overlays/DzTooltipTrigger.vue'
+import './register-matchers.ts'
 
 /**
  * Axe rules to disable when scanning portaled overlay content via baseElement.

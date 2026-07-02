@@ -1,4 +1,5 @@
-import { mount, type VueWrapper } from '@vue/test-utils'
+import type { VueWrapper } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 /**
  * DzAspectRatio — Unit / behavior tests.
  */

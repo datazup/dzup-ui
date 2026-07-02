@@ -7,7 +7,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzAccordion from '../../src/components/data/DzAccordion.vue'
 import DzAccordionContent from '../../src/components/data/DzAccordionContent.vue'
 import DzAccordionItem from '../../src/components/data/DzAccordionItem.vue'
@@ -23,6 +22,7 @@ import DzTableRow from '../../src/components/data/DzTableRow.vue'
 import DzTag from '../../src/components/data/DzTag.vue'
 import DzTimeline from '../../src/components/data/DzTimeline.vue'
 import DzTimelineItem from '../../src/components/data/DzTimelineItem.vue'
+import './register-matchers.ts'
 
 describe('data family — Accessibility', () => {
   // ---------------------------------------------------------------------------

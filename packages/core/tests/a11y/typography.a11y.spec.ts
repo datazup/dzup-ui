@@ -7,12 +7,12 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzBlockquote from '../../src/components/typography/DzBlockquote.vue'
 import DzCaption from '../../src/components/typography/DzCaption.vue'
 import DzCode from '../../src/components/typography/DzCode.vue'
 import DzHeading from '../../src/components/typography/DzHeading.vue'
 import DzText from '../../src/components/typography/DzText.vue'
+import './register-matchers.ts'
 
 describe('typography family — Accessibility', () => {
   // ---------------------------------------------------------------------------

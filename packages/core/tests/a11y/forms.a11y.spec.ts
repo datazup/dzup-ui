@@ -9,13 +9,13 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzCombobox from '../../src/components/forms/DzCombobox.vue'
 import DzFileUpload from '../../src/components/forms/DzFileUpload.vue'
 import DzFormField from '../../src/components/forms/DzFormField.vue'
 import DzFormLabel from '../../src/components/forms/DzFormLabel.vue'
 import DzMultiSelect from '../../src/components/forms/DzMultiSelect.vue'
 import DzSlider from '../../src/components/forms/DzSlider.vue'
+import './register-matchers.ts'
 
 describe('forms family — Accessibility', () => {
   // ---------------------------------------------------------------------------

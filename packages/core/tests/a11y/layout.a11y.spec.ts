@@ -7,7 +7,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzCollapse from '../../src/components/layout/DzCollapse.vue'
 import DzContainer from '../../src/components/layout/DzContainer.vue'
 import DzDivider from '../../src/components/layout/DzDivider.vue'
@@ -15,6 +14,7 @@ import DzFlex from '../../src/components/layout/DzFlex.vue'
 import DzGrid from '../../src/components/layout/DzGrid.vue'
 import DzScrollArea from '../../src/components/layout/DzScrollArea.vue'
 import DzStack from '../../src/components/layout/DzStack.vue'
+import './register-matchers.ts'
 
 describe('layout family — Accessibility', () => {
   // ---------------------------------------------------------------------------

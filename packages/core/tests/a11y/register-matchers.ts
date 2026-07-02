@@ -1,3 +1,4 @@
+import * as jestDomMatchers from '@testing-library/jest-dom/matchers'
 /**
  * Registers the custom matchers used by the a11y suites against the active
  * vitest `expect` instance: `toHaveNoViolations` (vitest-axe) and the
@@ -15,7 +16,6 @@
  * is sufficient; it extends `expect` at module-eval time.
  */
 import { expect } from 'vitest'
-import * as jestDomMatchers from '@testing-library/jest-dom/matchers'
 import { toHaveNoViolations } from 'vitest-axe/matchers'
 
 expect.extend(jestDomMatchers)

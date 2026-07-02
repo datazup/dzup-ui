@@ -7,12 +7,12 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import { defineComponent, h } from 'vue'
 import DzAvatar from '../../src/components/media/DzAvatar.vue'
 import DzAvatarGroup from '../../src/components/media/DzAvatarGroup.vue'
 import DzIcon from '../../src/components/media/DzIcon.vue'
 import DzImage from '../../src/components/media/DzImage.vue'
+import './register-matchers.ts'
 
 // Minimal icon component stub
 const StubIcon = defineComponent({

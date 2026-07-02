@@ -7,10 +7,10 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzAlert from '../../src/components/feedback/DzAlert.vue'
 import DzProgress from '../../src/components/feedback/DzProgress.vue'
 import DzSpinner from '../../src/components/feedback/DzSpinner.vue'
+import './register-matchers.ts'
 
 describe('feedback family — Accessibility', () => {
   // ---------------------------------------------------------------------------

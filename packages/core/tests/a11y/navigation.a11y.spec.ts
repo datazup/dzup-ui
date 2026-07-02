@@ -7,7 +7,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzBreadcrumb from '../../src/components/navigation/DzBreadcrumb.vue'
 import DzBreadcrumbItem from '../../src/components/navigation/DzBreadcrumbItem.vue'
 import DzBreadcrumbSeparator from '../../src/components/navigation/DzBreadcrumbSeparator.vue'
@@ -20,6 +19,7 @@ import DzTabContent from '../../src/components/navigation/DzTabContent.vue'
 import DzTabList from '../../src/components/navigation/DzTabList.vue'
 import DzTabs from '../../src/components/navigation/DzTabs.vue'
 import DzTabTrigger from '../../src/components/navigation/DzTabTrigger.vue'
+import './register-matchers.ts'
 
 describe('navigation family — Accessibility', () => {
   // ---------------------------------------------------------------------------

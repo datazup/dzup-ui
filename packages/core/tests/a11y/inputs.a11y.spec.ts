@@ -7,7 +7,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import './register-matchers.ts'
 import DzCheckbox from '../../src/components/forms/DzCheckbox.vue'
 import DzRadio from '../../src/components/forms/DzRadio.vue'
 import DzRadioGroup from '../../src/components/forms/DzRadioGroup.vue'
@@ -15,6 +14,7 @@ import DzSelect from '../../src/components/forms/DzSelect.vue'
 import DzSwitch from '../../src/components/forms/DzSwitch.vue'
 import DzInput from '../../src/components/inputs/DzInput.vue'
 import DzTextarea from '../../src/components/inputs/DzTextarea.vue'
+import './register-matchers.ts'
 
 describe('inputs family — Accessibility', () => {
   // ---------------------------------------------------------------------------
