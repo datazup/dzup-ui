@@ -36,7 +36,7 @@ import {
  * />
  * ```
  */
-import { computed, onMounted, onUnmounted, ref, useAttrs, useId, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 import { useEscapeKey } from '../../composables/useEscapeKey/useEscapeKey.ts'
 import { cn } from '../../utilities/cn.ts'
 import { commandPaletteVariants } from './DzCommandPalette.variants.ts'
@@ -63,18 +63,25 @@ const emit = defineEmits<DzCommandPaletteEmits>()
 defineSlots<DzCommandPaletteSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
 const searchQuery = ref('')
 const searchModel = ref<string>('')
 
 const styles = computed(() => commandPaletteVariants())
 
-const fallbackDescriptionId = computed(() => `${props.id ?? autoId}-description`)
-const resolvedAriaDescribedby = computed(() => props.ariaDescribedby ?? fallbackDescriptionId.value)
-
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
+const fallbackTitle = computed(() => props.ariaLabel ?? 'Command palette')
+const contentAria = computed<Record<string, unknown>>(() => {
+  const aria: Record<string, unknown> = {}
+  if (props.ariaLabel !== undefined)
+    aria['aria-label'] = props.ariaLabel
+  if (props.ariaLabelledby !== undefined)
+    aria['aria-labelledby'] = props.ariaLabelledby
+  if (props.ariaDescribedby !== undefined)
+    aria['aria-describedby'] = props.ariaDescribedby
+  return aria
+})
 
 /** Items filtered by search query */
 const filteredItems = computed(() => {
@@ -165,16 +172,13 @@ watch(open, (isOpen) => {
       <DialogContent
         :id="id"
         :class="contentClasses"
-        :aria-label="ariaLabel"
-        :aria-describedby="resolvedAriaDescribedby"
-        role="dialog"
         style="contain: layout style"
-        v-bind="{ ...$attrs, class: undefined }"
+        v-bind="{ ...contentAria, ...$attrs, class: undefined }"
       >
         <DialogTitle class="sr-only">
-          {{ ariaLabel }}
+          {{ fallbackTitle }}
         </DialogTitle>
-        <DialogDescription v-if="!ariaDescribedby" :id="fallbackDescriptionId" class="sr-only">
+        <DialogDescription class="sr-only">
           Search commands, then use arrow keys to move through results and Enter to select.
         </DialogDescription>
         <ComboboxRoot

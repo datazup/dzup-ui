@@ -184,4 +184,28 @@ describe('dzCommandPalette — Escape dismissal', () => {
 
     wrapper.unmount()
   })
+
+  it('registers hidden dialog title and description without Reka warnings', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+    const wrapper = mount(DzCommandPalette, {
+      attachTo: document.body,
+      props: {
+        open: true,
+        items: sampleItems,
+      },
+    })
+
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 0))
+
+    const rekaWarnings = warnSpy.mock.calls
+      .map(([message]) => String(message))
+      .filter(message => message.includes('DialogContent'))
+
+    expect(rekaWarnings).toEqual([])
+
+    wrapper.unmount()
+    warnSpy.mockRestore()
+  })
 })
