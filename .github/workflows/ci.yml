@@ -25,15 +25,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -51,15 +47,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -80,15 +72,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -112,15 +100,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -161,15 +145,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -235,15 +215,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -270,15 +246,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -312,15 +284,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -355,15 +323,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: |
-          cache_dir="$(yarn config get cacheFolder 2>/dev/null | awk '/^\// { value=$0 } END { print value }')"
-          test -n "$cache_dir"
-          printf 'dir=%s\n' "$cache_dir" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
