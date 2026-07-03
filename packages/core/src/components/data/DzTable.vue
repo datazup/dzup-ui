@@ -3,8 +3,9 @@ import type { DzTableContext, DzTableEmits, DzTableProps, DzTableSlots } from '.
 /**
  * DzTable — Compound semantic table root component.
  *
- * Simple styled table wrapper. For advanced features (sorting, pagination,
- * selection), use DzDataGrid instead.
+ * Simple styled table wrapper with opt-in column pinning, column resizing, and
+ * virtual (windowed) scrolling. For sorting, pagination, and row selection, use
+ * DzDataGrid instead.
  *
  * Provides context to DzTableHeader, DzTableBody, DzTableRow, DzTableCell
  * children via provide/inject (ADR-08).
@@ -44,6 +45,10 @@ const props = withDefaults(defineProps<DzTableProps>(), {
   density: 'default',
   loading: false,
   captionVisible: false,
+  virtualScroll: false,
+  rowHeight: 44,
+  maxHeight: undefined,
+  overscan: 4,
 })
 
 const emit = defineEmits<DzTableEmits>()
@@ -60,12 +65,53 @@ function toggleExpand(rowId: string): void {
     next.delete(rowId)
     expandedRows.value = next
     emit('rowCollapse', rowId)
-  }
-  else {
+  } else {
     next.add(rowId)
     expandedRows.value = next
     emit('rowExpand', rowId)
   }
+}
+
+// ── Column resizing ──────────────────────────────────────────────────────
+const colWidths = ref<Map<string, number>>(new Map())
+
+function setColWidth(colId: string, width: number): void {
+  const next = new Map(colWidths.value)
+  next.set(colId, width)
+  colWidths.value = next
+}
+
+// ── Virtual scroll ───────────────────────────────────────────────────────
+const scrollEl = ref<HTMLElement | null>(null)
+const scrollTop = ref(0)
+/** Measured viewport height; `0` = not yet laid out (falls back to maxHeight). */
+const measuredViewportHeight = ref(0)
+
+const isVirtual = computed(() => props.virtualScroll)
+
+/** Parse a px length like `'400px'` → 400; returns 0 for non-px units. */
+function parsePx(value: string | undefined): number {
+  if (!value) return 0
+  const match = /^(\d+(?:\.\d+)?)px$/.exec(value.trim())
+  return match ? Number(match[1]) : 0
+}
+
+/**
+ * Viewport height windowing assumes. Prefers the measured height once laid out;
+ * otherwise falls back to `maxHeight` (or the 400px default) so the first render
+ * already windows correctly instead of rendering every row.
+ */
+const effectiveViewportHeight = computed(() =>
+  measuredViewportHeight.value > 0
+    ? measuredViewportHeight.value
+    : parsePx(props.maxHeight ?? '400px') || 400,
+)
+
+function onScroll(): void {
+  const el = scrollEl.value
+  if (!el) return
+  scrollTop.value = el.scrollTop
+  if (el.clientHeight > 0) measuredViewportHeight.value = el.clientHeight
 }
 
 const context: DzTableContext = {
@@ -76,6 +122,13 @@ const context: DzTableContext = {
   loading: toRef(() => props.loading),
   expandedRows,
   toggleExpand,
+  colWidths,
+  setColWidth,
+  virtualScroll: isVirtual,
+  rowHeight: toRef(() => props.rowHeight),
+  overscan: toRef(() => props.overscan),
+  scrollTop,
+  viewportHeight: effectiveViewportHeight,
 }
 
 provide(DZ_TABLE_KEY, context)
@@ -91,16 +144,25 @@ const styles = computed(() =>
 
 const rootClasses = computed(() => cn('relative overflow-auto', attrs.class as string | undefined))
 
+const rootStyle = computed(() => {
+  const base = 'contain: layout style'
+  if (isVirtual.value) return `${base}; overflow-y: auto; max-height: ${props.maxHeight ?? '400px'}`
+  return base
+})
+
 const tableClasses = computed(() => styles.value.root())
 </script>
 
 <template>
   <div
+    ref="scrollEl"
     :class="rootClasses"
     :data-state="loading ? 'loading' : 'ready'"
     :data-loading="loading ? '' : undefined"
-    style="contain: layout style"
+    :data-virtual="virtualScroll ? '' : undefined"
+    :style="rootStyle"
     v-bind="{ ...$attrs, class: undefined }"
+    @scroll="isVirtual ? onScroll() : undefined"
   >
     <table
       :id="id"

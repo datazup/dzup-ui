@@ -688,3 +688,140 @@ export const RealWorldInvoice: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Column Pinning
+// ---------------------------------------------------------------------------
+
+/**
+ * Pin columns to the left or right edge with `pin="left" | "right"` on every
+ * cell in the column. Stack multiple pinned columns by giving each a cumulative
+ * `pinOffset` (px). Mark the last pinned-left / first pinned-right column with
+ * `pinBoundary` to render the edge shadow. Scroll the table horizontally to see
+ * the pinned columns stay in place.
+ */
+export const ColumnPinning: Story = {
+  name: 'Column Pinning',
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
+    setup() {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const rows = [
+        { name: 'Revenue', total: '$1.2M' },
+        { name: 'Expenses', total: '$0.8M' },
+        { name: 'Profit', total: '$0.4M' },
+      ]
+      return { months, rows }
+    },
+    template: `
+      <div style="max-width: 640px">
+        <DzTable variant="bordered" hoverable aria-label="Pinned columns demo">
+          <DzTableHeader>
+            <DzTableRow>
+              <DzTableCell header pin="left" :pin-offset="0" pin-boundary>Metric</DzTableCell>
+              <DzTableCell header v-for="m in months" :key="m" align="right">{{ m }}</DzTableCell>
+              <DzTableCell header pin="right" :pin-offset="0" pin-boundary align="right">Total</DzTableCell>
+            </DzTableRow>
+          </DzTableHeader>
+          <DzTableBody>
+            <DzTableRow v-for="row in rows" :key="row.name">
+              <DzTableCell pin="left" :pin-offset="0" pin-boundary>{{ row.name }}</DzTableCell>
+              <DzTableCell v-for="m in months" :key="m" align="right">$—</DzTableCell>
+              <DzTableCell pin="right" :pin-offset="0" pin-boundary align="right">{{ row.total }}</DzTableCell>
+            </DzTableRow>
+          </DzTableBody>
+        </DzTable>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Column Resizing
+// ---------------------------------------------------------------------------
+
+/**
+ * Give a header cell `resizable` + a stable `colId` to render a drag handle at
+ * its right edge. Drag (or focus the handle and press Arrow Left / Right) to
+ * change the width; body cells sharing the same `colId` follow. Minimum width is
+ * controlled by the `--dz-table-col-min-width` token (fallback 48px).
+ */
+export const ColumnResizing: Story = {
+  name: 'Column Resizing',
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
+    template: `
+      <DzTable variant="bordered" aria-label="Resizable columns demo">
+        <DzTableHeader>
+          <DzTableRow>
+            <DzTableCell header resizable col-id="name">Name</DzTableCell>
+            <DzTableCell header resizable col-id="role">Role</DzTableCell>
+            <DzTableCell header resizable col-id="email">Email</DzTableCell>
+          </DzTableRow>
+        </DzTableHeader>
+        <DzTableBody>
+          <DzTableRow>
+            <DzTableCell col-id="name">Alice Johnson</DzTableCell>
+            <DzTableCell col-id="role">Engineer</DzTableCell>
+            <DzTableCell col-id="email">alice@example.com</DzTableCell>
+          </DzTableRow>
+          <DzTableRow>
+            <DzTableCell col-id="name">Bob Smith</DzTableCell>
+            <DzTableCell col-id="role">Designer</DzTableCell>
+            <DzTableCell col-id="email">bob@example.com</DzTableCell>
+          </DzTableRow>
+        </DzTableBody>
+      </DzTable>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Virtual Scroll
+// ---------------------------------------------------------------------------
+
+/**
+ * Set `virtual-scroll` with a fixed `row-height` (px) and a bounded `max-height`
+ * to window-render very large datasets. Only the visible rows plus an overscan
+ * buffer are mounted; spacer rows preserve the scrollbar geometry. Here 10,000
+ * rows render smoothly.
+ */
+export const VirtualScroll: Story = {
+  name: 'Virtual Scroll',
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
+    setup() {
+      const data = Array.from({ length: 10000 }, (_, i) => ({
+        id: i,
+        name: `User ${i + 1}`,
+        email: `user${i + 1}@example.com`,
+      }))
+      return { data }
+    },
+    template: `
+      <DzTable
+        virtual-scroll
+        :row-height="44"
+        max-height="360px"
+        variant="bordered"
+        hoverable
+        aria-label="10,000 rows, virtualized"
+      >
+        <DzTableHeader>
+          <DzTableRow>
+            <DzTableCell header>#</DzTableCell>
+            <DzTableCell header>Name</DzTableCell>
+            <DzTableCell header>Email</DzTableCell>
+          </DzTableRow>
+        </DzTableHeader>
+        <DzTableBody>
+          <DzTableRow v-for="row in data" :key="row.id" style="height: 44px">
+            <DzTableCell>{{ row.id + 1 }}</DzTableCell>
+            <DzTableCell>{{ row.name }}</DzTableCell>
+            <DzTableCell>{{ row.email }}</DzTableCell>
+          </DzTableRow>
+        </DzTableBody>
+      </DzTable>
+    `,
+  }),
+}
