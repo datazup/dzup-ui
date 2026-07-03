@@ -1,24 +1,32 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "otp-verify",
   "type": "registry:block",
   "title": "OTP verification",
   "description": "A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once the code is complete, a live resend countdown, and a success state on completion.",
+  "categories": [
+    "auth"
+  ],
   "files": [
     {
       "path": "otp-verify.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzButton, DzHeading, DzOtpInput, DzText } from '@dzup-ui/core'\nimport { CheckCircle2, ShieldCheck } from 'lucide-vue-next'\nimport { computed, onBeforeUnmount, onMounted, ref } from 'vue'\n\n/**\n * OTP verification — a one-time-code entry card.\n *\n * A DzOtpInput collects a 6-digit code; the Verify button enables once all\n * digits are filled, and `@complete` flips the card to a success state. A live\n * resend countdown (local timer) disables \"Resend code\" until it elapses.\n * Composed only from free `@dzup-ui/core` components and `--dz-*` tokens.\n *\n * Inputs family: DzOtpInput.\n *\n * Heading level: `:level=\"4\"` nests cleanly under BlockPreview's H3.\n */\n\nconst LENGTH = 6\nconst code = ref('')\nconst verified = ref(false)\nconst seconds = ref(30)\nlet timer: ReturnType<typeof setInterval> | undefined\n\nconst canResend = computed(() => seconds.value === 0)\nconst canVerify = computed(() => code.value.length === LENGTH)\n\nfunction tick() {\n  if (seconds.value > 0) seconds.value -= 1\n}\n\nfunction resend() {\n  if (!canResend.value) return\n  seconds.value = 30\n  code.value = ''\n}\n\nfunction verify() {\n  if (canVerify.value) verified.value = true\n}\n\nonMounted(() => {\n  timer = setInterval(tick, 1000)\n})\nonBeforeUnmount(() => {\n  if (timer) clearInterval(timer)\n})\n</script>\n\n<template>\n  <section class=\"otp-wrap\" aria-labelledby=\"otp-title\">\n    <div class=\"otp-card\">\n      <!-- Success state -->\n      <div v-if=\"verified\" class=\"otp-success\">\n        <span class=\"otp-success-icon\" aria-hidden=\"true\">\n          <CheckCircle2 :size=\"30\" />\n        </span>\n        <DzHeading :level=\"4\" size=\"lg\" weight=\"semibold\" align=\"center\">\n          Verified\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" align=\"center\" as=\"p\">\n          Your email has been confirmed. You can close this window and continue.\n        </DzText>\n      </div>\n\n      <!-- Entry state -->\n      <template v-else>\n        <span class=\"otp-badge\" aria-hidden=\"true\">\n          <ShieldCheck :size=\"22\" />\n        </span>\n        <DzHeading id=\"otp-title\" :level=\"4\" size=\"xl\" weight=\"semibold\" align=\"center\">\n          Verify your email\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" align=\"center\" as=\"p\" class=\"otp-lede\">\n          Enter the {{ LENGTH }}-digit code we sent to <strong>jane@company.com</strong>.\n        </DzText>\n\n        <form class=\"otp-form\" @submit.prevent=\"verify\">\n          <div class=\"otp-field\">\n            <DzOtpInput\n              v-model=\"code\"\n              :length=\"LENGTH\"\n              type=\"number\"\n              aria-label=\"One-time verification code\"\n              @complete=\"verify\"\n            />\n          </div>\n\n          <DzButton\n            type=\"submit\"\n            variant=\"solid\"\n            tone=\"primary\"\n            :disabled=\"!canVerify\"\n            class=\"otp-submit\"\n          >\n            Verify\n          </DzButton>\n\n          <div class=\"otp-resend\">\n            <DzText size=\"sm\" tone=\"muted\" as=\"span\">Didn't get a code?</DzText>\n            <DzButton variant=\"text\" tone=\"primary\" size=\"sm\" :disabled=\"!canResend\" @click=\"resend\">\n              {{ canResend ? 'Resend code' : `Resend in ${seconds}s` }}\n            </DzButton>\n          </div>\n        </form>\n      </template>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.otp-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.otp-card {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  width: 100%;\n  max-width: 26rem;\n  padding: clamp(1.5rem, 4vw, 2.25rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  border-radius: var(--dz-radius-xl, 0.875rem);\n  background: var(--dz-surface, #fff);\n  box-shadow: var(--dz-shadow-sm, 0 1px 2px rgb(0 0 0 / 0.06));\n}\n\n.otp-badge {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 3rem;\n  height: 3rem;\n  margin-bottom: var(--dz-space-3, 0.75rem);\n  border-radius: var(--dz-radius-full, 9999px);\n  color: var(--dz-primary, #4f46e5);\n  background: var(--dz-primary-muted, #eef2ff);\n}\n\n.otp-lede {\n  margin: var(--dz-space-2, 0.5rem) 0 var(--dz-space-5, 1.25rem);\n  max-width: 30ch;\n}\n\n.otp-form {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: var(--dz-space-4, 1rem);\n  width: 100%;\n}\n\n.otp-field {\n  display: flex;\n  justify-content: center;\n}\n\n.otp-submit {\n  width: 100%;\n}\n\n.otp-resend {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-1, 0.25rem);\n}\n\n.otp-success {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n  padding: var(--dz-space-4, 1rem) 0;\n}\n\n.otp-success-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 3.5rem;\n  height: 3.5rem;\n  margin-bottom: var(--dz-space-1, 0.25rem);\n  border-radius: var(--dz-radius-full, 9999px);\n  color: var(--dz-success, #16a34a);\n  background: color-mix(in oklch, var(--dz-success, #16a34a) 14%, transparent);\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/otp-verify.vue"
     }
   ],
-  "registryDependencies": [
-    "DzOtpInput",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzOtpInput",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

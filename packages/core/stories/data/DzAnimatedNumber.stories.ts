@@ -20,6 +20,11 @@ const meta = {
   component: DzAnimatedNumber,
   tags: ['autodocs', 'status:experimental'],
   decorators: [darkModeDecorator],
+  // TASK-APP-01 — the figure tweens (counts up) on mount, so a capture lands on an
+  // arbitrary mid-animation frame; several stories also re-roll to a Math.random()
+  // target. Skip visual snapshots; the play() test still asserts the live-region
+  // and aria-hidden figure semantics.
+  parameters: { chromatic: { disableSnapshot: true } },
   argTypes: {
     value: {
       control: { type: 'number' },

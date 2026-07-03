@@ -73,6 +73,19 @@ export { defaultStrokeWidth, iconVariants } from './DzIcon.variants.ts'
 // Components
 export { default as DzIcon } from './DzIcon.vue'
 
+// ── DzEmoji ──
+export { emojiTokens } from './DzEmoji.tokens.ts'
+
+export type {
+  DzEmojiProps,
+  DzEmojiSlots,
+  EmojiSize,
+} from './DzEmoji.types.ts'
+
+export { type EmojiVariantProps, emojiVariants } from './DzEmoji.variants.ts'
+
+export { default as DzEmoji } from './DzEmoji.vue'
+
 export type {
   DzImageEmits,
   DzImageProps,

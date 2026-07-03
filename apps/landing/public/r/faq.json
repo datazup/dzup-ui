@@ -1,26 +1,33 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "faq",
   "type": "registry:block",
   "title": "FAQ accordion",
   "description": "Six Q&A items in a separated collapsible accordion with a section header and a contact link.",
+  "categories": [
+    "marketing"
+  ],
   "files": [
     {
       "path": "faq.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzAccordion,\n  DzAccordionContent,\n  DzAccordionItem,\n  DzAccordionTrigger,\n  DzHeading,\n  DzText,\n} from '@dzup-ui/core'\nimport { ref } from 'vue'\n\n/**\n * Faq — a \"separated\" DzAccordion with six common Q&A items about\n * dzup-ui, wired to a local v-model so one item is open at a time.\n *\n * DzAccordion compound structure (Reka UI based):\n *   DzAccordion (root, provides context via DZ_ACCORDION_KEY)\n *     └─ DzAccordionItem  value=\"…\"   ← unique key per item\n *          ├─ DzAccordionTrigger       ← renders the button\n *          └─ DzAccordionContent       ← animated panel\n *\n * collapsible is set so users can collapse the open item back to\n * zero items open, which is the standard FAQ UX expectation.\n *\n * Heading level: section title at :level=\"4\" (BlockPreview uses H3).\n * The accordion triggers are buttons (not headings), which is the\n * Reka UI / ARIA Accordion pattern — triggers must NOT be wrapped\n * in heading elements.\n */\n\nconst openItem = ref<string>('')\n\ninterface FaqItem {\n  value: string\n  question: string\n  answer: string\n}\n\nconst faqs: FaqItem[] = [\n  {\n    value: 'faq-what',\n    question: 'What is dzup-ui?',\n    answer:\n      'dzup-ui is a Vue 3 component library built with TypeScript, Tailwind CSS 4, and Reka UI headless primitives. It ships a fully themed, WCAG AA–compliant component set with light/dark mode, design tokens, and a growing catalog of ready-made page blocks.',\n  },\n  {\n    value: 'faq-install',\n    question: 'How do I install and set it up?',\n    answer:\n      'Add the package with your package manager: `npm install @dzup-ui/core`. Then wrap your app root with `DzThemeProvider`, import the global CSS, and start using components. A Nuxt module is also available for first-class SSR support with automatic FOUC prevention.',\n  },\n  {\n    value: 'faq-themes',\n    question: 'Can I customise the visual theme?',\n    answer:\n      'Yes — every colour, radius, shadow, and spacing value is a CSS custom property (`--dz-*`). Override them on `:root` or scoped to a container to create your brand theme without touching component source code. Pro tiers can also use the visual Token Studio integration.',\n  },\n  {\n    value: 'faq-accessibility',\n    question: 'How is accessibility handled?',\n    answer:\n      'All components target WCAG 2.1 AA compliance. Interactive primitives are built on Reka UI which handles ARIA roles, states, and keyboard navigation patterns (accordion, dialog, combobox, etc.) in line with WAI-ARIA Authoring Practices. Automated contract tests assert compliance on every PR.',\n  },\n  {\n    value: 'faq-frameworks',\n    question: 'Which frameworks and build tools are supported?',\n    answer:\n      'dzup-ui targets Vue 3 with `<script setup>` and Vite. The Nuxt module provides SSR integration. React and Angular adapters are on the roadmap. Storybook 10 is used for component development and interactive documentation.',\n  },\n  {\n    value: 'faq-pro',\n    question: 'What is the difference between the free tier and Pro?',\n    answer:\n      'The free Core package contains all foundational components and is MIT-licensed. The Pro package adds advanced data-intensive components (DataGrid, Charts, Kanban, etc.), the token customisation studio, priority support, and a commercial licence for closed-source products.',\n  },\n]\n</script>\n\n<template>\n  <section class=\"faq-section\" aria-labelledby=\"faq-title\">\n    <!-- Section header ----------------------------------------------------->\n    <div class=\"faq-header\">\n      <DzHeading id=\"faq-title\" :level=\"4\" size=\"2xl\" weight=\"bold\" align=\"center\" class=\"faq-title\">\n        Frequently asked questions\n      </DzHeading>\n      <DzText size=\"md\" tone=\"muted\" align=\"center\" class=\"faq-subtitle\">\n        Can't find what you're looking for?\n        <a href=\"#\" class=\"faq-contact-link\">Contact our team</a>.\n      </DzText>\n    </div>\n\n    <!-- Accordion ------------------------------------------------------------>\n    <DzAccordion\n      v-model=\"openItem\"\n      type=\"single\"\n      variant=\"separated\"\n      collapsible\n      class=\"faq-accordion\"\n      aria-label=\"Frequently asked questions\"\n    >\n      <DzAccordionItem\n        v-for=\"item in faqs\"\n        :key=\"item.value\"\n        :value=\"item.value\"\n      >\n        <DzAccordionTrigger>{{ item.question }}</DzAccordionTrigger>\n        <DzAccordionContent>\n          <DzText size=\"sm\" tone=\"muted\" class=\"faq-answer\">{{ item.answer }}</DzText>\n        </DzAccordionContent>\n      </DzAccordionItem>\n    </DzAccordion>\n  </section>\n</template>\n\n<style scoped>\n.faq-section {\n  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);\n  background: var(--dz-background, #fff);\n}\n\n/* Section header ---------------------------------------------------------*/\n.faq-header {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  margin-bottom: clamp(2rem, 4vw, 3rem);\n  text-align: center;\n}\n\n.faq-title,\n.faq-subtitle {\n  margin: 0;\n}\n\n.faq-contact-link {\n  color: var(--dz-primary, #6366f1);\n  text-decoration: underline;\n  text-underline-offset: 2px;\n}\n\n.faq-contact-link:hover,\n.faq-contact-link:focus-visible {\n  color: var(--dz-primary-hover, #4f46e5);\n  outline: none;\n}\n\n.faq-contact-link:focus-visible {\n  outline: 2px solid var(--dz-primary, #6366f1);\n  outline-offset: 2px;\n  border-radius: var(--dz-radius-sm, 0.125rem);\n}\n\n/* Accordion container ----------------------------------------------------*/\n.faq-accordion {\n  max-width: 48rem;\n  margin: 0 auto;\n}\n\n/* Answer text inside panel -----------------------------------------------*/\n.faq-answer {\n  margin: 0;\n  line-height: 1.7;\n  padding-bottom: var(--dz-space-1, 0.25rem);\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/faq.vue"
     }
   ],
-  "registryDependencies": [
-    "DzAccordion",
-    "DzAccordionItem",
-    "DzAccordionTrigger",
-    "DzAccordionContent",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzAccordion",
+      "DzAccordionItem",
+      "DzAccordionTrigger",
+      "DzAccordionContent",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

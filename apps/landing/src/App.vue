@@ -2,8 +2,10 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { DzThemeProvider, DzToastProvider, DzToastViewport } from '@dzup-ui/core'
+import AnnouncementBanner from './components/AnnouncementBanner.vue'
 import TopNav from './components/TopNav.vue'
 import AppFooter from './components/Footer.vue'
+import GlobalCommandPalette from './components/GlobalCommandPalette.vue'
 import { useTheme } from './composables/useTheme.ts'
 import { supportsViewTransitions, useReducedMotion } from './motion/index.ts'
 
@@ -41,6 +43,9 @@ const useNativeRoute = computed(() => supportsViewTransitions() && !reduced.valu
   <DzToastProvider>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="landing-shell">
+      <!-- Config-driven announcement bar above the nav. Hidden on the chromeless
+           preview routes (iframe / new-tab render targets), like the nav/footer. -->
+      <AnnouncementBanner v-if="!isPreview" />
       <TopNav v-if="!isPreview" />
       <main id="main" class="landing-main">
         <!-- Route transition (docs/animations.md §6.8, effect 30) — a fade+slide
@@ -73,6 +78,10 @@ const useNativeRoute = computed(() => supportsViewTransitions() && !reduced.valu
       </main>
       <AppFooter v-if="!isPreview" />
     </div>
+    <!-- Site-wide ⌘K / Ctrl+K palette (its own global shortcut + focus trap).
+         Skipped on the chromeless preview routes — those are iframe/new-tab
+         render targets, not surfaces a visitor navigates from. -->
+    <GlobalCommandPalette v-if="!isPreview" />
     <DzToastViewport position="bottom-right" />
   </DzToastProvider>
   </DzThemeProvider>

@@ -4,6 +4,8 @@
 
 87 blocks across 12 categories. For each block's full SFC source inline see [/llms-full.txt](/llms-full.txt); for a single block fetch its markdown page at /r/<id>.md.
 
+These blocks are built from the @dzup-ui/core component library, whose full API (import paths, frozen variant/size/tone taxonomy, props/emits/slots) is documented at [/storybook/llms.txt](/storybook/llms.txt).
+
 ## Marketing
 
 Heroes, pricing, testimonials, FAQs, CTAs and footers — the building blocks of a landing page.

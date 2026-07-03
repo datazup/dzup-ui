@@ -1,31 +1,38 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "filter-panel",
   "type": "registry:block",
   "title": "Filter sidebar",
   "description": "A product-listing filter rail: search input, category checkbox group, a dual-thumb price range slider with read-out, a minimum-rating radio group, and an in-stock switch, with a live active-filter count.",
+  "categories": [
+    "forms"
+  ],
   "files": [
     {
       "path": "filter-panel.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCheckbox,\n  DzCheckboxGroup,\n  DzDivider,\n  DzHeading,\n  DzRadio,\n  DzRadioGroup,\n  DzRangeSlider,\n  DzSearchInput,\n  DzSwitch,\n  DzText,\n} from '@dzup-ui/core'\nimport { computed, ref } from 'vue'\n\n/**\n * Filter panel — a product-listing sidebar of filter controls.\n *\n * A self-contained filter rail: a DzSearchInput, a DzCheckboxGroup of\n * categories, a DzRangeSlider price band with a live read-out, a DzRadioGroup\n * for minimum rating, and a DzSwitch toggle — with a count of active filters\n * and a Reset action. Mirrors a real e-commerce/results sidebar. Local ref()\n * state only.\n *\n * Inputs family: DzSearchInput.\n * Forms family: DzCheckboxGroup, DzCheckbox, DzRangeSlider, DzRadioGroup,\n * DzRadio, DzSwitch.\n */\n\nconst query = ref('')\nconst categories = ref<string[]>(['apparel', 'shoes'])\nconst price = ref<[number, number]>([25, 180])\nconst minRating = ref('any')\nconst inStock = ref(true)\n\nconst CATEGORIES = [\n  { value: 'apparel', label: 'Apparel' },\n  { value: 'shoes', label: 'Shoes' },\n  { value: 'accessories', label: 'Accessories' },\n  { value: 'bags', label: 'Bags' },\n  { value: 'outdoor', label: 'Outdoor' },\n]\n\nconst priceLabel = computed(() => `$${price.value[0]} – $${price.value[1]}`)\n\nconst activeCount = computed(() => {\n  let n = categories.value.length\n  if (price.value[0] > 0 || price.value[1] < 250) n += 1\n  if (minRating.value !== 'any') n += 1\n  if (inStock.value) n += 1\n  return n\n})\n\nfunction reset() {\n  query.value = ''\n  categories.value = []\n  price.value = [0, 250]\n  minRating.value = 'any'\n  inStock.value = false\n}\n</script>\n\n<template>\n  <section class=\"fp-panel\" aria-label=\"Filters\">\n    <header class=\"fp-head\">\n      <DzHeading :level=\"4\" size=\"md\" weight=\"semibold\" class=\"fp-title\">Filters</DzHeading>\n      <DzButton\n        v-if=\"activeCount > 0\"\n        variant=\"text\"\n        tone=\"neutral\"\n        size=\"sm\"\n        @click=\"reset\"\n      >\n        Reset ({{ activeCount }})\n      </DzButton>\n    </header>\n\n    <DzSearchInput\n      v-model=\"query\"\n      placeholder=\"Search products…\"\n      clearable\n      aria-label=\"Search products\"\n    />\n\n    <DzDivider decorative />\n\n    <!-- Category -->\n    <div class=\"fp-group\">\n      <DzText size=\"sm\" weight=\"medium\" as=\"div\" class=\"fp-group-title\">Category</DzText>\n      <DzCheckboxGroup v-model=\"categories\" orientation=\"vertical\" aria-label=\"Category\">\n        <DzCheckbox\n          v-for=\"cat in CATEGORIES\"\n          :key=\"cat.value\"\n          :value=\"cat.value\"\n          size=\"sm\"\n        >\n          {{ cat.label }}\n        </DzCheckbox>\n      </DzCheckboxGroup>\n    </div>\n\n    <DzDivider decorative />\n\n    <!-- Price -->\n    <div class=\"fp-group\">\n      <div class=\"fp-group-row\">\n        <DzText size=\"sm\" weight=\"medium\" as=\"div\" class=\"fp-group-title\">Price</DzText>\n        <span class=\"fp-readout\">{{ priceLabel }}</span>\n      </div>\n      <DzRangeSlider\n        v-model=\"price\"\n        :min=\"0\"\n        :max=\"250\"\n        :step=\"5\"\n        tone=\"primary\"\n        aria-label=\"Price range\"\n      />\n    </div>\n\n    <DzDivider decorative />\n\n    <!-- Rating -->\n    <div class=\"fp-group\">\n      <DzText size=\"sm\" weight=\"medium\" as=\"div\" class=\"fp-group-title\">Minimum rating</DzText>\n      <DzRadioGroup v-model=\"minRating\" orientation=\"vertical\" aria-label=\"Minimum rating\">\n        <DzRadio value=\"any\" size=\"sm\">Any rating</DzRadio>\n        <DzRadio value=\"4\" size=\"sm\">4 stars &amp; up</DzRadio>\n        <DzRadio value=\"3\" size=\"sm\">3 stars &amp; up</DzRadio>\n      </DzRadioGroup>\n    </div>\n\n    <DzDivider decorative />\n\n    <!-- Availability -->\n    <div class=\"fp-switch-row\">\n      <div class=\"fp-switch-copy\">\n        <DzText size=\"sm\" weight=\"medium\" as=\"div\">In stock only</DzText>\n        <DzText size=\"xs\" tone=\"muted\" as=\"div\">Hide sold-out items</DzText>\n      </div>\n      <DzSwitch v-model=\"inStock\" aria-label=\"In stock only\" />\n    </div>\n\n    <DzButton variant=\"solid\" tone=\"primary\" class=\"fp-apply\">\n      Show results\n    </DzButton>\n  </section>\n</template>\n\n<style scoped>\n.fp-panel {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-4, 1rem);\n  width: 100%;\n  max-width: 19rem;\n  padding: var(--dz-space-5, 1.25rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  border-radius: var(--dz-radius-lg, 0.75rem);\n  background: var(--dz-surface, #fff);\n  box-shadow: var(--dz-shadow-sm, 0 1px 2px rgb(0 0 0 / 0.06));\n}\n\n.fp-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.fp-title {\n  margin: 0;\n}\n\n.fp-group {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.fp-group-title {\n  margin: 0;\n}\n\n.fp-group-row {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.fp-readout {\n  font-size: var(--dz-text-xs, 0.75rem);\n  font-weight: 600;\n  font-variant-numeric: tabular-nums;\n  color: var(--dz-primary, #4f46e5);\n}\n\n.fp-switch-row {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.fp-switch-copy {\n  line-height: 1.3;\n  min-width: 0;\n}\n\n.fp-apply {\n  width: 100%;\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/filter-panel.vue"
     }
   ],
-  "registryDependencies": [
-    "DzSearchInput",
-    "DzCheckboxGroup",
-    "DzCheckbox",
-    "DzRangeSlider",
-    "DzRadioGroup",
-    "DzRadio",
-    "DzSwitch",
-    "DzDivider",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzSearchInput",
+      "DzCheckboxGroup",
+      "DzCheckbox",
+      "DzRangeSlider",
+      "DzRadioGroup",
+      "DzRadio",
+      "DzSwitch",
+      "DzDivider",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

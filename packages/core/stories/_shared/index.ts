@@ -9,6 +9,7 @@
  * ```
  */
 
+export * from './a11y.ts'
 export * from './decorators.ts'
 export * from './DemoGrid.ts'
 export * from './options.ts'

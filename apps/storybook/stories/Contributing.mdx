@@ -108,6 +108,35 @@ const meta = {
 }
 ```
 
+## Design reference <a id="design-reference" />
+
+Link each component to its Figma frame so the **Design** addon panel shows the
+source-of-truth beside the live render (feeds the maturity dashboard's *Design*
+column). Set `parameters.design` on the `meta` — **required whenever a frame
+exists**:
+
+```ts
+const meta = {
+  title: 'Core/Buttons/DzButton',
+  component: DzButton,
+  parameters: {
+    design: { type: 'figma', url: 'https://www.figma.com/design/…?node-id=…' },
+  },
+  // …
+}
+```
+
+- **No frame yet?** Omit the parameter entirely — the Design panel then shows a
+  friendly "design link coming soon" placeholder rather than an error. Do **not**
+  point it at a placeholder file; an empty panel is the honest signal.
+- Use the frame's deep link (**Copy link to selection** in Figma, which carries a
+  `node-id`) so the panel opens on the exact component, not the whole file.
+- To embed a frame inside a family **Overview** MDX page, import the `Figma` block
+  from `@storybook/addon-designs/blocks` and pass the same URL — see `Buttons.mdx`.
+
+The story template (`_shared/Dz.stories.template.ts`) seeds this parameter with a
+`REPLACE_ME` URL as a reminder; swap it for the real frame or delete it.
+
 ## Do / Don't
 
 <DoDont>

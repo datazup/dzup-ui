@@ -1,0 +1,64 @@
+{/* Releases.mdx — "What's New" page generated from CHANGELOG.md + .changeset (TASK-APP-07). */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import {
+  HighlightsCallout,
+  PendingSection,
+  ReleaseList,
+} from './_blocks/ReleaseNotes.ts'
+import {
+  RELEASES,
+  PENDING,
+  HIGHLIGHTS,
+  GENERATED_AT,
+  TOTAL_RELEASES,
+} from './_data/releases.generated.ts'
+
+<Meta title="Guides/Releases" />
+
+export const generatedDate = GENERATED_AT.slice(0, 10)
+
+# What's New
+
+The evolution of `@dzup-ui/*`, straight from the source of truth. This page is
+**generated** at build time from the workspace [`CHANGELOG.md`](?path=/docs/introduction--docs)
+and the pending [`.changeset`](https://github.com/changesets/changesets) entries by
+`scripts/build-releases.mjs` — so it never drifts from what actually shipped.
+Deprecations and breaking changes are pulled to the top so an upgrade is never a
+surprise.
+
+<p style={{ color: 'var(--dz-muted-foreground)', fontSize: 13 }}>
+  Showing the {RELEASES.length} most recent of {TOTAL_RELEASES} releases · generated {generatedDate}.
+</p>
+
+## Deprecations & breaking changes
+
+Read this before you upgrade. Everything here is scanned out of the per-package
+semver changelogs and the timeline below, then surfaced in one place.
+
+<HighlightsCallout highlights={HIGHLIGHTS} />
+
+## Coming next
+
+Changes merged to `main` and staged for the next version, but not yet released.
+
+<PendingSection pending={PENDING} />
+
+{PENDING.length === 0 && (
+  <p><em>Nothing staged right now — the tree is level with the latest release.</em></p>
+)}
+
+## Release history
+
+Every release, newest first. Categories follow
+[Keep a Changelog](https://keepachangelog.com): **Added** for new capabilities,
+**Changed** for behaviour changes, **Fixed** for bug fixes, plus **Deprecated**
+and **Breaking** where they apply.
+
+<ReleaseList releases={RELEASES} />
+
+---
+
+<p style={{ color: 'var(--dz-muted-foreground)', fontSize: 13 }}>
+  Looking for what's <em>ready to use</em> rather than what changed? See the live{' '}
+  <a href="?path=/docs/guides-component-status--docs">Component Status</a> dashboard.
+</p>

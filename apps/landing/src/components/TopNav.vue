@@ -22,10 +22,11 @@ onMounted(() => {
 })
 onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
+// External Storybook links. "Themes" now points to the in-app /themes editor
+// (a router-link below), so it's no longer duplicated here.
 const navLinks = [
   { label: 'Components', href: LINKS.components, external: true },
   { label: 'Docs', href: LINKS.gettingStarted, external: true },
-  { label: 'Themes', href: LINKS.theming, external: true },
 ]
 
 function goPro(): void {
@@ -52,6 +53,9 @@ function goPro(): void {
         <router-link :to="{ path: '/', hash: '#ecosystem' }" class="nav-link">Ecosystem</router-link>
         <router-link to="/blocks" class="nav-link">Blocks</router-link>
         <router-link to="/animations" class="nav-link">Animations</router-link>
+        <router-link to="/themes" class="nav-link">Themes</router-link>
+        <router-link to="/ai" class="nav-link">AI IDE</router-link>
+        <router-link to="/compare" class="nav-link">Compare</router-link>
         <router-link to="/pro" class="nav-link">Pro</router-link>
       </nav>
 
@@ -91,6 +95,9 @@ function goPro(): void {
       <router-link :to="{ path: '/', hash: '#ecosystem' }" class="mobile-link" @click="mobileOpen = false">Ecosystem</router-link>
       <router-link to="/blocks" class="mobile-link" @click="mobileOpen = false">Blocks</router-link>
       <router-link to="/animations" class="mobile-link" @click="mobileOpen = false">Animations</router-link>
+      <router-link to="/themes" class="mobile-link" @click="mobileOpen = false">Themes</router-link>
+      <router-link to="/ai" class="mobile-link" @click="mobileOpen = false">AI IDE</router-link>
+      <router-link to="/compare" class="mobile-link" @click="mobileOpen = false">Compare</router-link>
       <button type="button" class="mobile-link" @click="goPro">Pro</button>
       <a class="mobile-link" :href="LINKS.github" target="_blank" rel="noreferrer noopener">GitHub</a>
     </div>

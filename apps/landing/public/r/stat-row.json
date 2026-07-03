@@ -1,21 +1,29 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stat-row",
   "type": "registry:block",
   "title": "Stat card row",
   "description": "Four KPI cards with up/down/neutral trend deltas in a responsive 4→2→1 column grid.",
+  "categories": [
+    "application"
+  ],
   "files": [
     {
       "path": "stat-row.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Stat card row — four KPI cards with trend deltas.\n *\n * Four DzStatCard components laid out in a responsive grid that collapses\n * from 4 → 2 → 1 column(s) at the standard breakpoints. Each card carries\n * a trend direction (up/down/neutral), a trendValue string and an icon —\n * the exact API exposed by DzStatCardProps.\n *\n * Self-contained: static sample data, no props, no router.\n */\nimport { DzStatCard } from '@dzup-ui/core'\nimport { Activity, DollarSign, ShoppingCart, Users } from 'lucide-vue-next'\n\nconst stats = [\n  {\n    title: 'Total revenue',\n    value: '$84,230',\n    trend: 'up' as const,\n    trendValue: '+12.4%',\n    icon: DollarSign,\n  },\n  {\n    title: 'Active users',\n    value: '14,820',\n    trend: 'up' as const,\n    trendValue: '+8.1%',\n    icon: Users,\n  },\n  {\n    title: 'New orders',\n    value: '1,204',\n    trend: 'down' as const,\n    trendValue: '-3.2%',\n    icon: ShoppingCart,\n  },\n  {\n    title: 'Uptime',\n    value: '99.97%',\n    trend: 'neutral' as const,\n    trendValue: '0%',\n    icon: Activity,\n  },\n]\n</script>\n\n<template>\n  <section class=\"sr-wrap\" aria-label=\"Key performance indicators\">\n    <div class=\"sr-grid\">\n      <DzStatCard\n        v-for=\"stat in stats\"\n        :key=\"stat.title\"\n        :title=\"stat.title\"\n        :value=\"stat.value\"\n        :trend=\"stat.trend\"\n        :trend-value=\"stat.trendValue\"\n        :icon=\"stat.icon\"\n        variant=\"outlined\"\n      />\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.sr-wrap {\n  padding: var(--dz-space-6, 1.5rem);\n  background: var(--dz-background, #fff);\n}\n\n.sr-grid {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: var(--dz-space-4, 1rem);\n}\n\n/* 4 → 2 columns */\n@media (max-width: 900px) {\n  .sr-grid {\n    grid-template-columns: repeat(2, 1fr);\n  }\n}\n\n/* 2 → 1 column */\n@media (max-width: 480px) {\n  .sr-grid {\n    grid-template-columns: 1fr;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/stat-row.vue"
     }
   ],
-  "registryDependencies": [
-    "DzStatCard"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzStatCard"
+    ]
+  }
 }

@@ -228,6 +228,13 @@ jobs:
         run: yarn workspace @dzup-ui/tokens build
       - name: Build Storybook
         run: yarn storybook:build
+      # TASK-X.7 — track the docs build's total size as a NON-BLOCKING metric.
+      # `yarn validate:bundle` budgets packages/*/dist (the shipped library); this
+      # covers the Storybook static build, which nothing else watched. It always
+      # exits 0 for now and writes a shields.io size badge into the uploaded
+      # artifact; promote to an enforced budget later with `check:size --max-mb <n>`.
+      - name: Storybook build-size metric (non-blocking)
+        run: yarn workspace @dzup-ui/storybook check:size --badge storybook-static/size-badge.json
       - name: Upload Storybook
         uses: actions/upload-artifact@v4
         with:
@@ -259,10 +266,23 @@ jobs:
         run: yarn workspace @dzup-ui/tokens build
       - name: Install Playwright Chromium
         run: yarn workspace @dzup-ui/storybook exec playwright install --with-deps chromium
-      # TASK-0.9/0.9b — runs every story's play() + a11y audit in-browser.
-      # a11y assertions are 'todo' (report-only) until each family is gated (TASK-X.3).
-      - name: Run Storybook tests (play + a11y)
-        run: yarn workspace @dzup-ui/storybook test-storybook:coverage
+      # TASK-0.9 / TASK-X.3 — runs every story's play() + WCAG 2.2 AA axe audit
+      # in-browser. The a11y gate rolls out per family (preview.ts): the default
+      # is report-only, but any family opted into `a11yError` runs at 'error', so
+      # a violation there fails this step and blocks the PR. Reporters write the
+      # per-story results (incl. axe violation detail) to apps/storybook/a11y-report
+      # for the artifact below — a11y findings are visible even while report-only.
+      - name: Run Storybook tests (play + WCAG 2.2 AA a11y audit)
+        run: yarn workspace @dzup-ui/storybook test-storybook:ci
+      # Publish the a11y/test results even when the step above fails, so a gated
+      # violation is inspectable from the run without re-running locally.
+      - name: Upload Storybook a11y report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-a11y-report
+          path: apps/storybook/a11y-report/
+          retention-days: 7
       # TASK-0.10 — coverage is a barometer for untested states, not a 100% gate.
       - name: Upload Storybook coverage
         if: always()
@@ -309,6 +329,60 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 7
+
+  landing-perf:
+    name: Landing Perf (Lighthouse + bundle budget)
+    runs-on: ubuntu-latest
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn install --immutable
+      # The landing app imports @dzup-ui/core + @dzup-ui/contracts from source
+      # (see apps/landing/vite.config.ts aliases), but @dzup-ui/tokens/css and
+      # /tailwind resolve to packages/tokens/dist — so build tokens first to
+      # materialise those artifacts before the landing build.
+      - name: Build design tokens
+        run: yarn workspace @dzup-ui/tokens build
+      - name: Build landing site
+        run: yarn workspace @dzup-ui/landing build
+      # Payload budget (gzip) for the first-paint JS/CSS — asserts the bytes that
+      # produce the Core Web Vitals, and writes the shields.io perf badge endpoint.
+      - name: Landing bundle-size budget + perf badge
+        run: yarn workspace @dzup-ui/landing check:bundle --badge dist/perf-badge.json
+      # Lab Core Web Vitals — hard-asserts LCP < 2.5s and CLS < 0.1 (advisory
+      # warnings for perf/a11y score, TBT, FCP). Report uploads to temporary
+      # public storage; the run URL is printed in the step log.
+      - name: Lighthouse CI (LCP < 2.5s, CLS < 0.1)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./apps/landing/lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+      # Publish the perf badge + Lighthouse results as a downloadable artifact so
+      # the score is inspectable from the run even when an assertion fails.
+      - name: Upload landing perf artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-perf
+          path: |
+            apps/landing/dist/perf-badge.json
+            .lighthouseci/
           retention-days: 7
 
   coverage:

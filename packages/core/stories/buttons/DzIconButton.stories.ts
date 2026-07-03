@@ -122,23 +122,23 @@ export const AllSizes: Story = {
       <div class="flex items-end gap-4">
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Add (xs)" size="xs" />
-          <p class="text-xs mt-1 text-gray-500">xs</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">xs</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Add (sm)" size="sm" />
-          <p class="text-xs mt-1 text-gray-500">sm</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">sm</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Add (md)" size="md" />
-          <p class="text-xs mt-1 text-gray-500">md</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">md</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Add (lg)" size="lg" />
-          <p class="text-xs mt-1 text-gray-500">lg</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">lg</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Add (xl)" size="xl" />
-          <p class="text-xs mt-1 text-gray-500">xl</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">xl</p>
         </div>
       </div>
     `,
@@ -160,23 +160,23 @@ export const AllVariants: Story = {
       <div class="flex gap-4 items-center">
         <div class="text-center">
           <DzIconButton :icon="Heart" aria-label="Like (solid)" variant="solid" />
-          <p class="text-xs mt-1 text-gray-500">solid</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">solid</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Heart" aria-label="Like (outline)" variant="outline" />
-          <p class="text-xs mt-1 text-gray-500">outline</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">outline</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Heart" aria-label="Like (ghost)" variant="ghost" />
-          <p class="text-xs mt-1 text-gray-500">ghost</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">ghost</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Heart" aria-label="Like (text)" variant="text" />
-          <p class="text-xs mt-1 text-gray-500">text</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">text</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Heart" aria-label="Like (link)" variant="link" />
-          <p class="text-xs mt-1 text-gray-500">link</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">link</p>
         </div>
       </div>
     `,
@@ -198,27 +198,27 @@ export const AllTones: Story = {
       <div class="flex gap-4 items-center">
         <div class="text-center">
           <DzIconButton :icon="Star" aria-label="Neutral" tone="neutral" />
-          <p class="text-xs mt-1 text-gray-500">neutral</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">neutral</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Star" aria-label="Primary" tone="primary" />
-          <p class="text-xs mt-1 text-gray-500">primary</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">primary</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Star" aria-label="Success" tone="success" />
-          <p class="text-xs mt-1 text-gray-500">success</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">success</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Star" aria-label="Warning" tone="warning" />
-          <p class="text-xs mt-1 text-gray-500">warning</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">warning</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Star" aria-label="Danger" tone="danger" />
-          <p class="text-xs mt-1 text-gray-500">danger</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">danger</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Star" aria-label="Info" tone="info" />
-          <p class="text-xs mt-1 text-gray-500">info</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">info</p>
         </div>
       </div>
     `,
@@ -239,15 +239,15 @@ export const States: Story = {
       <div class="flex gap-4 items-center">
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Default" />
-          <p class="text-xs mt-1 text-gray-500">default</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">default</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Disabled" disabled />
-          <p class="text-xs mt-1 text-gray-500">disabled</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">disabled</p>
         </div>
         <div class="text-center">
           <DzIconButton :icon="Plus" aria-label="Loading" loading />
-          <p class="text-xs mt-1 text-gray-500">loading</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">loading</p>
         </div>
       </div>
     `,
@@ -328,7 +328,7 @@ export const Interactive: Story = {
           :variant="favorited ? 'solid' : 'outline'"
           @click="favorited = !favorited"
         />
-        <span class="text-sm text-gray-600">{{ favorited ? 'Favorited' : 'Not favorited' }}</span>
+        <span class="text-sm text-[var(--dz-muted-foreground)]">{{ favorited ? 'Favorited' : 'Not favorited' }}</span>
       </div>
     `,
   }),
@@ -400,7 +400,7 @@ export const RealWorldClose: Story = {
           class="absolute top-2 right-2"
         />
         <p class="text-sm font-medium">Notification title</p>
-        <p class="text-sm text-gray-500 mt-1">This is a notification with a close button.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">This is a notification with a close button.</p>
       </div>
     `,
   }),
@@ -419,7 +419,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Icon buttons have no visible text, so <code>ariaLabel</code> is required.
           Tab through to see focus rings; each control exposes an accessible name.
         </p>

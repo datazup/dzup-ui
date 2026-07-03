@@ -1,0 +1,31 @@
+{
+  "//": "Lighthouse CI budget for the landing site. Runs in ci.yml (job: landing-perf) against a production `vite preview` build. The Core Web Vitals thresholds (LCP < 2.5s, CLS < 0.1) are hard assertions; category/TBT/FCP are advisory warnings. Runs the desktop preset — the site's primary evaluation audience — three times per URL and reports the median. Reports upload to temporary public storage and as a CI artifact. Complements the payload budget in scripts/check-bundle-budget.ts.",
+  "ci": {
+    "collect": {
+      "startServerCommand": "yarn workspace @dzup-ui/landing preview --port 4173 --strictPort",
+      "startServerReadyPattern": "Local:",
+      "startServerReadyTimeout": 60000,
+      "url": [
+        "http://localhost:4173/",
+        "http://localhost:4173/compare"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 1800 }],
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "categories:accessibility": ["warn", { "minScore": 0.9 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

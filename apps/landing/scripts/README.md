@@ -1,15 +1,27 @@
 # apps/landing build scripts
 
-## shadcn-vue registry (`build-registry.ts`)
+## shadcn registry (`build-registry.ts`)
 
-[`build-registry.ts`](./build-registry.ts) generates a
-**shadcn-vue-compatible registry** for the Blocks catalog into
-`public/r/` — `registry.json` (the index) plus one `<id>.json` per block. These
-are **generated build artifacts derived from the `BLOCKS` array** — never
-hand-edited. The shaping lives in
-[`src/blocks/registryItem.ts`](../src/blocks/registryItem.ts) (shared with the
-`registryItem.spec.ts` Vitest guard); the schema target is the shadcn-vue
-registry JSON Schema, pinned via the `$schema` URLs there.
+[`build-registry.ts`](./build-registry.ts) generates a **shadcn-CLI-compatible
+registry** into `public/r/` so blocks, the design tokens, and templates each
+install with a single `npx shadcn@latest add <url>`. It emits:
+
+- `registry.json` — the top-level index (every block + a `tokens` directory entry);
+- `<id>.json` — one `registry-item.json` per block (SFC inlined as a targeted
+  `registry:file`);
+- `tokens.json` — the `--dz-*` design tokens as a `registry:theme` with light/dark
+  `cssVars` (parsed from `@dzup-ui/tokens/dist/tokens.css`);
+- `templates/<slug>.json` + `templates/registry.json` — the free full-page
+  templates as their own sub-registry (see the collision note below).
+
+All are **generated build artifacts derived from the `BLOCKS` / `TEMPLATES` arrays
+and the tokens stylesheet** — never hand-edited. The shaping lives in
+[`registryItem.ts`](../src/blocks/registryItem.ts),
+[`tokensItem.ts`](../src/blocks/tokensItem.ts) and
+[`templatesItem.ts`](../src/blocks/templatesItem.ts) (each shared with a
+`*.spec.ts` Vitest guard). The schema target is the **canonical** shadcn registry
+JSON Schema (`ui.shadcn.com`), pinned via the `$schema` URLs — so a plain
+`shadcn add` resolves these items, not just the `shadcn-vue` fork.
 
 ### Regenerate
 
@@ -19,21 +31,52 @@ yarn build:registry
 ```
 
 `yarn build` runs this first, so `vite build` always copies a fresh `public/r/*`
-into `dist/`. Re-run after adding, renaming, or editing a block. The out dir is
-wiped and rewritten each run, so a removed block leaves no stale JSON.
+into `dist/`. Re-run after adding, renaming, or editing a block/template or the
+tokens. The out dir is wiped and rewritten each run, so a removed item leaves no
+stale JSON.
 
 ### Consume
 
-Each block installs into a downstream project via the shadcn-vue CLI:
-
 ```bash
-npx shadcn-vue add https://<landing-host>/r/<id>.json
+npx shadcn@latest add https://<landing-host>/r/hero-centered.json        # a block
+npx shadcn@latest add https://<landing-host>/r/tokens.json               # the tokens theme
+npx shadcn@latest add https://<landing-host>/r/templates/sign-in.json    # a template
 ```
 
-(e.g. `…/r/hero-centered.json`). The fetched item inlines the block's SFC as its
-single `files[]` entry, lists its `@dzup-ui/core` component names as
-`registryDependencies`, and declares `@dzup-ui/core` + `@dzup-ui/tokens` as npm
-`dependencies`.
+The gallery surfaces these commands with per-package-manager tabs
+(npm/pnpm/yarn/bun) and a **Copy code** button on every block card and detail
+page (`PmCommandTabs.vue` + `BlockManifest.vue` + `BlockCard.vue`).
+
+### Vue-SFC spike — what conforms, and the limitations
+
+shadcn's registry format is React-first; projecting a **Vue SFC** library onto it
+cleanly required three deliberate choices, so a `shadcn add` genuinely produces a
+buildable file rather than a schema-valid-but-broken one:
+
+1. **`registryDependencies` is empty — components ship via npm, not as items.**
+   In shadcn's model `registryDependencies` names OTHER registry items the CLI
+   fetches and vendors as source (its `ui/` primitives). dzup-ui ships its
+   primitives as a versioned package (`@dzup-ui/core`), so a bare `DzButton` there
+   would make the CLI resolve `<registry>/DzButton.json` and **404**. We therefore
+   emit `registryDependencies: []`, list `@dzup-ui/core` + `@dzup-ui/tokens` (and
+   any `lucide-vue-next` the source imports — detected via `sourceDependencies`) in
+   `dependencies`, and keep the human-facing component list in `meta.components`.
+2. **Files are `registry:file` with an explicit `target`.** A block lands at
+   `components/blocks/<id>.vue` (templates under `components/templates/<slug>/`)
+   regardless of how the consumer's `components.json` aliases are set.
+3. **Tokens ship as `cssVars`, the shadcn vehicle for design tokens.** shadcn
+   writes `cssVars.light` under `:root` and `cssVars.dark` under `.dark`; dzup-ui's
+   own runtime toggles dark via `[data-theme="dark"]`. The token *values* are
+   identical — only the activating selector differs — so a consumer either drives
+   them the shadcn `.dark` way or adds `@import '@dzup-ui/tokens/css'` for the
+   native selectors.
+
+**Known limits (ship-what-works):** templates are emitted at the SFC + co-located
+`data.ts` level (what `resolveTemplateSources` surfaces) — a template that fans
+out into many sub-components beyond that pair is out of scope. Template slugs live
+under `/r/templates/` (not the flat `/r/`) because a few collide with block ids
+(`sign-in`, `sign-up`, `product-detail`); a shared namespace would overwrite one
+with the other.
 
 ## Animations registry (`build-animations-registry.ts`)
 
@@ -97,7 +140,37 @@ index as a doc source:
 The assistant reads the index, follows each `/blocks#<id>` deep link to a block's
 live preview, fetches a single block's source from `/r/<id>.md` (or the whole
 catalog from `/llms-full.txt`), and installs it with the
-`npx shadcn-vue add …/r/<id>.json` line above.
+`npx shadcn@latest add …/r/<id>.json` line above.
+
+## Live social-proof stats (`build-stats.ts`)
+
+[`build-stats.ts`](./build-stats.ts) bakes the two **live** social-proof metrics —
+GitHub stars and npm weekly downloads — into
+[`src/generated/liveStats.ts`](../src/generated/liveStats.ts) so the static site
+carries real numbers and visitors trigger **no per-page API calls**. The endpoints
+and response parsing live in [`src/lib/liveStats.ts`](../src/lib/liveStats.ts),
+shared with the runtime refresh (`useLiveStats`) so build and browser never drift.
+
+### Regenerate
+
+```bash
+# from apps/landing
+yarn build:stats
+```
+
+`yarn build` runs this after the registries and ahead of `vite build`, so each
+build refreshes the baked numbers. Re-run manually to update them locally.
+
+### Fail-safe, not fail-loud
+
+Unlike the registry generators, a down API must **never break the build**. Each
+metric degrades independently — `fresh value → last baked non-null value → null` —
+and the generated module is always rewritten with whatever could be resolved. An
+offline build simply keeps the previously-committed numbers; a metric that has
+**never** resolved stays `null`, and `SocialProof.vue` renders a plain
+call-to-action for it rather than a fabricated figure. This is covered by
+[`src/lib/liveStats.spec.ts`](../src/lib/liveStats.ts), which drives every failure
+mode (rejection, non-2xx, malformed body) through the helpers.
 
 ## MCP — agent-callable registry (Task G5)
 

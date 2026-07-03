@@ -330,7 +330,7 @@ export const Interactive: Story = {
           <DzSplitButtonAction @click="lastAction = 'save'">Save</DzSplitButtonAction>
           <DzSplitButtonMenu aria-label="More save options" />
         </DzSplitButton>
-        <p class="text-sm text-gray-500">Last action: {{ lastAction }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Last action: {{ lastAction }}</p>
       </div>
     `,
   }),
@@ -389,7 +389,7 @@ export const InteractiveMenu: Story = {
             >Save and Close</li>
           </ul>
         </div>
-        <p class="text-sm text-gray-500">Last action: {{ lastAction }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Last action: {{ lastAction }}</p>
       </div>
     `,
   }),
@@ -422,7 +422,7 @@ export const Accessibility: Story = {
     components: { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tab through to see focus rings. The split button uses role="group"
           and each part is independently focusable.
         </p>
@@ -451,7 +451,7 @@ export const RealWorldSaveWithOptions: Story = {
     components: { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Common pattern: primary save action with dropdown for alternatives.
         </p>
         <div class="flex gap-4">

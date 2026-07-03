@@ -1,0 +1,191 @@
+{/* ChoosingComponents.mdx — "when to use which" decision guide for commonly-confused component pairs */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DocTable } from './_blocks/DocTable.ts'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+
+<Meta title="Guides/Choosing Components" />
+
+# Choosing Components
+
+Most real-world questions about dzup-ui aren't "how do I style this?" — they're
+**"which of these similar components do I use?"** This guide answers the five
+most-confused choices, each as a one-line rule, a decision table, and paired
+Do / Don't examples.
+
+- [Switch vs Checkbox](#switch-vs-checkbox)
+- [Button vs IconButton vs Link](#button-vs-iconbutton-vs-link)
+- [Dialog vs Sheet vs Popover](#dialog-vs-sheet-vs-popover)
+- [Select vs Combobox vs Listbox](#select-vs-combobox-vs-listbox)
+- [Toast vs Alert vs Notification](#toast-vs-alert-vs-notification)
+
+---
+
+## Switch vs Checkbox
+
+> **Rule:** A **switch** turns a setting on/off **immediately**; a **checkbox**
+> records a choice that takes effect **on submit** — or selects items from a set.
+
+<DocTable
+  head={['Reach for', 'When', 'Effect', 'Extras']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`DzSwitch`', 'A single on/off **setting** (dark mode, notifications)', 'Applies **instantly**', 'Binary only — no indeterminate state'],
+    ['`DzCheckbox`', 'A choice **confirmed on submit**, consent, or "select all"', 'Applies **on Save**', 'Supports `indeterminate` + `DzCheckboxGroup` for multi-select'],
+  ]}
+/>
+
+Both are `role`-correct and keyboard operable. The deciding question is **timing**:
+if flipping it changes state right now, it's a switch; if it's staged until the
+user commits the form, it's a checkbox.
+
+<DoDont>
+  <Do>Use `DzSwitch` for "Enable email notifications" in a settings panel that saves each change immediately.</Do>
+  <Dont>Use a `DzSwitch` inside a form that only applies after a "Save" button — users expect switches to be live.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use a `DzCheckbox` for "I agree to the terms" and for multi-select rows (with `indeterminate` on the header).</Do>
+  <Dont>Use a `DzSwitch` for consent or list selection — it implies an instant action, not a pending choice.</Dont>
+</DoDont>
+
+See [`DzSwitch`](?path=/docs/core-forms-dzswitch--docs) and
+[`DzCheckbox`](?path=/docs/core-forms-dzcheckbox--docs).
+
+---
+
+## Button vs IconButton vs Link
+
+> **Rule:** If it **navigates** to a URL, it's a **link** (`<a>`); if it **does
+> something**, it's a **button** — labeled (`DzButton`) or icon-only (`DzIconButton`).
+
+<DocTable
+  head={['Reach for', 'When', 'Semantics', 'Notes']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`DzButton`', 'A labeled **action** — submit, open dialog, run', '`<button>`', 'Full `variant` / `tone` / `size` taxonomy'],
+    ['`DzIconButton`', 'An **action with no room for a label** — toolbar, close (✕)', '`<button>`', 'Requires `ariaLabel` — the icon has no accessible text'],
+    ['`<a>` / `<RouterLink>`', 'It **goes somewhere** — page, route, external URL', '`<a href>`', 'Right-click / open-in-new-tab / crawlable'],
+  ]}
+/>
+
+`DzButton`'s `variant="link"` and `variant="text"` only **look** like a link —
+they are still `<button>` elements for **actions**. Use a real anchor whenever the
+target is a URL, so browser navigation affordances (middle-click, "copy link")
+work and assistive tech announces it as a link.
+
+<DoDont>
+  <Do>Use `<DzButton variant="link">` for an in-page action that should read as a link (e.g. "Show more").</Do>
+  <Dont>Use `<DzButton variant="link">` to navigate to another page — use a real `<a>`/`<RouterLink>` so the URL is real.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Give every `DzIconButton` a descriptive `ariaLabel` (camelCase prop), e.g. `ariaLabel="Close dialog"`.</Do>
+  <Dont>Ship an icon-only button with no `ariaLabel` — screen-reader users hear an unlabelled button (and it fails typecheck).</Dont>
+</DoDont>
+
+See [`DzButton`](?path=/docs/core-buttons-dzbutton--docs) and
+[`DzIconButton`](?path=/docs/core-buttons-dziconbutton--docs).
+
+---
+
+## Dialog vs Sheet vs Popover
+
+> **Rule:** Pick by **how much it interrupts** — a **dialog** blocks the page, a
+> **sheet** slides a longer flow in from an edge, a **popover** floats next to a
+> trigger without blocking.
+
+<DocTable
+  head={['Reach for', 'Interruption', 'Best for', 'Focus']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`DzDialog`', '**Modal** — traps focus, dims page', 'A short, self-contained task or decision', 'Trapped; returns to trigger on close'],
+    ['`DzSheet`', '**Modal**, slides from an edge', 'A longer flow, navigation, or detail/settings pane', 'Trapped; edge-anchored'],
+    ['`DzPopover`', '**Non-modal** — anchored float', 'Rich extra content next to its trigger', 'Not trapped; page stays interactive'],
+  ]}
+/>
+
+All three portal to `<body>` via Reka UI (ADR-07), so you don't manage `z-index`.
+For a **passive, text-only** hint use a [`DzTooltip`](?path=/docs/core-overlays-dztooltip--docs)
+instead of a popover, and for a list of **actions** use a
+[`DzDropdownMenu`](?path=/docs/core-overlays-dzdropdownmenu--docs). The full
+overlay taxonomy lives in the [Overlays Overview](?path=/docs/core-overlays-overview--docs).
+
+<DoDont>
+  <Do>Use a `DzDialog` (or `DzConfirmDialog`) to confirm a destructive action — it must block until the user decides.</Do>
+  <Dont>Use a `DzPopover` for a critical confirmation — it doesn't block the page, so it's easy to ignore or dismiss by accident.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Reach for a `DzSheet` when the panel hosts a multi-step flow or persistent navigation that benefits from sliding in.</Do>
+  <Dont>Force a long settings flow into a small centered `DzDialog` — an edge `DzSheet` gives it room and context.</Dont>
+</DoDont>
+
+---
+
+## Select vs Combobox vs Listbox
+
+> **Rule:** Short fixed list → **Select**; long/searchable list → **Combobox**;
+> always-visible inline options (single or multi) → **Listbox**.
+
+<DocTable
+  head={['Reach for', 'When', 'Presentation', 'Filtering']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`DzSelect`', 'Pick **one** from a short, fixed list (country, status)', 'Collapsed trigger → popup', 'None — scroll to find'],
+    ['`DzCombobox`', 'Pick **one** from a **long / searchable** list', 'Text input → filtered popup', '**Type-to-filter** built in'],
+    ['`DzListbox`', 'Choose from an **always-visible** inline list', 'Inline, no popup', 'None; supports `multiple` selection'],
+  ]}
+/>
+
+For picking **many** from a searchable set, use
+[`DzMultiSelect`](?path=/docs/core-forms-dzmultiselect--docs); for two large lists
+side by side, [`DzTransfer`](?path=/docs/core-forms-dztransfer--docs). A
+`role="combobox"` doesn't take its accessible name from placeholder text — always
+wire `ariaLabel` / `ariaLabelledby` on `DzSelect` and `DzCombobox`.
+
+<DoDont>
+  <Do>Use `DzCombobox` once a list passes ~10 options, so users can type to narrow it.</Do>
+  <Dont>Use a plain `DzSelect` for a 200-country list — scrolling to find a value is slow and error-prone.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use `DzListbox` (with `multiple`) when the options should stay visible and comparable, like a filter rail.</Do>
+  <Dont>Hide a small, decision-critical set behind a `DzSelect` popup when showing them inline would be clearer.</Dont>
+</DoDont>
+
+See [`DzSelect`](?path=/docs/core-forms-dzselect--docs),
+[`DzCombobox`](?path=/docs/core-forms-dzcombobox--docs), and
+[`DzListbox`](?path=/docs/core-forms-dzlistbox--docs).
+
+---
+
+## Toast vs Alert vs Notification
+
+> **Rule:** **Alert** = a persistent message **inside the page**; **Toast** =
+> a transient, auto-dismissing confirmation of an action; **Notification** =
+> a persistent, dismiss-when-read item (notification center).
+
+<DocTable
+  head={['Reach for', 'Lifetime', 'Placement', 'Trigger']}
+  align={['left', 'left', 'left', 'left']}
+  rows={[
+    ['`DzAlert`', 'Stays until the condition changes', '**Inline**, in the page flow', 'Page state (a form error, a banner)'],
+    ['`DzToast`', 'Auto-dismisses (`duration`, `0` = sticky)', '**Overlay**, stacked corner', 'A discrete action just completed ("Saved")'],
+    ['`DzNotification`', 'Persists until the user dismisses it', '**Stacked / center**, dismissible', 'An event to review later (title + icon + action)'],
+  ]}
+/>
+
+The axis is **lifetime × placement**: an alert lives *in* the content and stays,
+a toast lives *over* the content and leaves on its own, a notification lives in a
+tray and waits for the user. See the
+[Feedback Overview](?path=/docs/core-feedback-overview--docs) for the full family.
+
+<DoDont>
+  <Do>Use a `DzToast` to confirm a completed action ("Message sent") that needs no acknowledgement.</Do>
+  <Dont>Use a `DzToast` for a validation error the user must fix — put a `DzAlert` next to the field so it persists.</Dont>
+</DoDont>
+
+<DoDont>
+  <Do>Use a `DzNotification` for events worth reviewing later (a mention, a finished export) with a title and action.</Do>
+  <Dont>Use an auto-dismissing `DzToast` for something important — if it vanishes before it's read, it's lost.</Dont>
+</DoDont>

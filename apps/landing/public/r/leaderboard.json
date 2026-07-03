@@ -1,29 +1,36 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "leaderboard",
   "type": "registry:block",
   "title": "Animated leaderboard",
   "description": "A ranked DzList where each row pairs a rank badge + avatar prefix with a DzAnimatedNumber score and a tone-coded delta tag; a refresh button mutates the values so the figures re-animate live.",
+  "categories": [
+    "data"
+  ],
   "files": [
     {
       "path": "leaderboard.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Leaderboard — a ranked DzList with animated score figures.\n *\n * DzList (divided variant) stacks DzListItem rows; each row uses the `#prefix`\n * slot for a rank badge + DzAvatar and the `#suffix` slot for a DzAnimatedNumber\n * score (count-up on scroll-into-view) beside a DzTag delta. A \"Refresh scores\"\n * button mutates the values so the figures re-animate live.\n *\n * Self-contained: local reactive data. Composed only from free @dzup-ui/core\n * components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport { ref } from 'vue'\nimport {\n  DzAnimatedNumber,\n  DzAvatar,\n  DzBadge,\n  DzButton,\n  DzCard,\n  DzHeading,\n  DzList,\n  DzListItem,\n  DzTag,\n  DzText,\n} from '@dzup-ui/core'\nimport type { CanonicalTone } from '@dzup-ui/contracts'\n\ninterface Player {\n  id: number\n  name: string\n  initials: string\n  score: number\n  delta: number\n}\n\nconst RANK_TONE: Record<number, CanonicalTone> = {\n  1: 'warning',\n  2: 'neutral',\n  3: 'primary',\n}\n\nconst players = ref<Player[]>([\n  { id: 1, name: 'Ava Restić', initials: 'AR', score: 9820, delta: 4.2 },\n  { id: 2, name: 'Marcus Chen', initials: 'MC', score: 9134, delta: 1.1 },\n  { id: 3, name: 'Priya Nair', initials: 'PN', score: 8766, delta: -2.4 },\n  { id: 4, name: 'Luca Ferraro', initials: 'LF', score: 8210, delta: 0.7 },\n  { id: 5, name: 'Sofia Andersen', initials: 'SA', score: 7995, delta: 3.8 },\n])\n\nfunction refresh() {\n  players.value = players.value.map((player) => {\n    const drift = Math.round((Math.random() - 0.4) * 400)\n    return { ...player, score: Math.max(0, player.score + drift), delta: Math.round((Math.random() * 8 - 3) * 10) / 10 }\n  })\n}\n\nfunction deltaTone(delta: number): CanonicalTone {\n  if (delta > 0) return 'success'\n  if (delta < 0) return 'danger'\n  return 'neutral'\n}\n</script>\n\n<template>\n  <section class=\"lb-wrap\" aria-labelledby=\"lb-title\">\n    <DzCard variant=\"outlined\" padding=\"lg\">\n      <header class=\"lb-head\">\n        <div>\n          <DzHeading id=\"lb-title\" :level=\"4\" size=\"md\" weight=\"semibold\" class=\"lb-title\">Weekly leaderboard</DzHeading>\n          <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"lb-sub\">Points earned this week</DzText>\n        </div>\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"sm\" @click=\"refresh\">Refresh scores</DzButton>\n      </header>\n\n      <DzList variant=\"divided\" size=\"md\">\n        <DzListItem v-for=\"(player, index) in players\" :key=\"player.id\">\n          <template #prefix>\n            <span class=\"lb-prefix\">\n              <DzBadge\n                variant=\"solid\"\n                :tone=\"RANK_TONE[index + 1] ?? 'neutral'\"\n                size=\"sm\"\n                class=\"lb-rank\"\n              >\n                {{ index + 1 }}\n              </DzBadge>\n              <DzAvatar :fallback=\"player.initials\" :alt=\"player.name\" size=\"sm\" />\n            </span>\n          </template>\n\n          <DzText weight=\"medium\" as=\"span\">{{ player.name }}</DzText>\n\n          <template #suffix>\n            <span class=\"lb-suffix\">\n              <DzTag variant=\"subtle\" :tone=\"deltaTone(player.delta)\" size=\"sm\">\n                {{ player.delta > 0 ? '+' : '' }}{{ player.delta }}%\n              </DzTag>\n              <DzAnimatedNumber\n                :value=\"player.score\"\n                :duration=\"900\"\n                easing=\"ease-out\"\n                :format=\"{ useGrouping: true }\"\n                size=\"md\"\n                class=\"lb-score\"\n              />\n            </span>\n          </template>\n        </DzListItem>\n      </DzList>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.lb-wrap {\n  background: var(--dz-background, #fff);\n  max-width: 34rem;\n  margin: 0 auto;\n}\n\n.lb-head {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n  margin-bottom: var(--dz-space-4, 1rem);\n  flex-wrap: wrap;\n}\n\n.lb-title {\n  margin: 0;\n}\n\n.lb-sub {\n  margin: var(--dz-space-1, 0.25rem) 0 0;\n}\n\n.lb-prefix {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.lb-rank {\n  min-width: 1.5rem;\n  justify-content: center;\n}\n\n.lb-suffix {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.lb-score {\n  font-variant-numeric: tabular-nums;\n  min-width: 3.5rem;\n  text-align: right;\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/leaderboard.vue"
     }
   ],
-  "registryDependencies": [
-    "DzList",
-    "DzListItem",
-    "DzAnimatedNumber",
-    "DzAvatar",
-    "DzBadge",
-    "DzTag",
-    "DzButton",
-    "DzText",
-    "DzCard"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzList",
+      "DzListItem",
+      "DzAnimatedNumber",
+      "DzAvatar",
+      "DzBadge",
+      "DzTag",
+      "DzButton",
+      "DzText",
+      "DzCard"
+    ]
+  }
 }

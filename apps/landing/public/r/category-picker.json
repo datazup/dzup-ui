@@ -1,30 +1,37 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "category-picker",
   "type": "registry:block",
   "title": "Category picker",
   "description": "A hierarchical classification panel — a filterable DzTreeSelect for a nested category, a DzCascader region path (country → state → city), and a DzDateRangePicker availability window.",
+  "categories": [
+    "forms"
+  ],
   "files": [
     {
       "path": "category-picker.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzCascader,\n  DzDateRangePicker,\n  DzFormDescription,\n  DzFormField,\n  DzFormLabel,\n  DzHeading,\n  DzText,\n  DzTreeSelect,\n} from '@dzup-ui/core'\nimport type { DateRangeValue, DzCascaderOption } from '@dzup-ui/core'\nimport { ref } from 'vue'\n\n/**\n * Category picker — a hierarchical classification panel.\n *\n * Three \"deep selection\" controls in one form: a filterable DzTreeSelect for a\n * nested department/category, a DzCascader for a region path (country → state →\n * city), and a DzDateRangePicker for an effective window. The tree `nodes` and\n * cascader `options` are plain nested data. Local ref() state only.\n *\n * Forms family: DzTreeSelect, DzCascader, DzDateRangePicker, DzFormField,\n * DzFormLabel, DzFormDescription.\n */\n\nconst category = ref<string | undefined>(undefined)\nconst expandedKeys = ref<string[]>(['product'])\nconst region = ref<string[]>([])\nconst window = ref<DateRangeValue>({ start: '', end: '' })\n\n/** Nested category tree (TreeNode shape: `key` + `label` + optional `children`). */\nconst CATEGORY_NODES = [\n  {\n    key: 'product',\n    label: 'Product',\n    children: [\n      { key: 'apparel', label: 'Apparel' },\n      { key: 'footwear', label: 'Footwear' },\n      { key: 'accessories', label: 'Accessories' },\n    ],\n  },\n  {\n    key: 'home',\n    label: 'Home & Living',\n    children: [\n      { key: 'furniture', label: 'Furniture' },\n      { key: 'kitchen', label: 'Kitchen' },\n    ],\n  },\n  {\n    key: 'digital',\n    label: 'Digital',\n    children: [\n      { key: 'ebooks', label: 'E-books' },\n      { key: 'software', label: 'Software' },\n    ],\n  },\n]\n\nconst REGION_OPTIONS: DzCascaderOption[] = [\n  {\n    label: 'United States',\n    value: 'us',\n    children: [\n      {\n        label: 'California',\n        value: 'ca',\n        children: [\n          { label: 'San Francisco', value: 'sf' },\n          { label: 'Los Angeles', value: 'la' },\n        ],\n      },\n      {\n        label: 'New York',\n        value: 'ny',\n        children: [{ label: 'New York City', value: 'nyc' }],\n      },\n    ],\n  },\n  {\n    label: 'Germany',\n    value: 'de',\n    children: [\n      {\n        label: 'Bavaria',\n        value: 'by',\n        children: [{ label: 'Munich', value: 'muc' }],\n      },\n    ],\n  },\n]\n</script>\n\n<template>\n  <section class=\"cp-wrap\" aria-labelledby=\"cp-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"cp-card\">\n      <header class=\"cp-head\">\n        <DzHeading id=\"cp-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          Classify listing\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" as=\"p\">\n          Place this item in the catalog and set where and when it goes live.\n        </DzText>\n      </header>\n\n      <form class=\"cp-form\" @submit.prevent>\n        <DzFormField required>\n          <DzFormLabel>Category</DzFormLabel>\n          <DzTreeSelect\n            v-model:value=\"category\"\n            v-model:expanded-keys=\"expandedKeys\"\n            :nodes=\"CATEGORY_NODES\"\n            selection-mode=\"single\"\n            filter\n            placeholder=\"Choose a category\"\n            aria-label=\"Category\"\n          />\n          <DzFormDescription>Pick the most specific branch that applies.</DzFormDescription>\n        </DzFormField>\n\n        <DzFormField required>\n          <DzFormLabel>Region</DzFormLabel>\n          <DzCascader\n            v-model:value=\"region\"\n            :options=\"REGION_OPTIONS\"\n            filter\n            placeholder=\"Country / State / City\"\n            aria-label=\"Region\"\n          />\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>Availability window</DzFormLabel>\n          <DzDateRangePicker\n            v-model=\"window\"\n            placeholder=\"Start — End\"\n            aria-label=\"Availability window\"\n          />\n          <DzFormDescription>Leave empty to publish immediately and indefinitely.</DzFormDescription>\n        </DzFormField>\n\n        <DzButton type=\"submit\" variant=\"solid\" tone=\"primary\" class=\"cp-submit\">\n          Save classification\n        </DzButton>\n      </form>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.cp-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.cp-card {\n  width: 100%;\n  max-width: 32rem;\n}\n\n.cp-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.cp-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.cp-submit {\n  width: 100%;\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/category-picker.vue"
     }
   ],
-  "registryDependencies": [
-    "DzCard",
-    "DzTreeSelect",
-    "DzCascader",
-    "DzDateRangePicker",
-    "DzFormField",
-    "DzFormLabel",
-    "DzFormDescription",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard",
+      "DzTreeSelect",
+      "DzCascader",
+      "DzDateRangePicker",
+      "DzFormField",
+      "DzFormLabel",
+      "DzFormDescription",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

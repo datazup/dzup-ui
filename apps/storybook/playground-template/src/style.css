@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* dzup-ui components render Tailwind utility classes (`inline-flex`,
+   `h-[var(--dz-…)]`, …) at runtime. Tailwind ignores node_modules by default,
+   so tell it to scan the installed library for those classes — otherwise the
+   components render unstyled. */
+@source "../node_modules/@dzup-ui/core/dist/**/*.{js,mjs}";

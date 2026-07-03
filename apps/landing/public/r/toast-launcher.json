@@ -1,26 +1,33 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toast-launcher",
   "type": "registry:block",
   "title": "Toast notifications",
   "description": "The compound toast system wired up — DzToastProvider owns a capped, auto-dismissing queue, DzToastViewport renders it bottom-right, and a per-tone trigger row fires live toasts via the injected imperative API.",
+  "categories": [
+    "feedback"
+  ],
   "files": [
     {
       "path": "toast-launcher.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Toast launcher — fire ephemeral DzToasts from the imperative provider API.\n *\n * Wraps the compound toast system: DzToastProvider owns the queue (capped,\n * auto-dismissing), DzToastViewport teleports active toasts to a screen corner,\n * and a small launcher fans out one trigger button per tone. The launcher is a\n * child of the provider so `inject(DZ_TOAST_KEY)` resolves to the live context;\n * it's a render-function component (no runtime template compiler in app builds).\n *\n * Self-contained. Composed only from free @dzup-ui/core components and `--dz-*`\n * tokens (docs/blocks.md §3.6).\n */\nimport { defineComponent, h, inject } from 'vue'\nimport { DZ_TOAST_KEY, DzButton, DzHeading, DzText, DzToastProvider, DzToastViewport } from '@dzup-ui/core'\nimport type { CanonicalTone } from '@dzup-ui/contracts'\n\ninterface ToastSpec {\n  tone: CanonicalTone\n  title: string\n  description: string\n  action?: string\n}\n\nconst TOASTS: ToastSpec[] = [\n  { tone: 'success', title: 'Changes saved', description: 'Your profile was updated.', action: 'Undo' },\n  { tone: 'info', title: 'Sync started', description: 'Pulling the latest from origin/main.' },\n  { tone: 'warning', title: 'Storage almost full', description: '92% of your quota is in use.' },\n  { tone: 'danger', title: 'Upload failed', description: 'cover.png exceeded the 10 MB limit.', action: 'Retry' },\n]\n\n/**\n * Trigger row, rendered as a child of DzToastProvider so it can inject the\n * toast context. Written with `h()` because app builds ship Vue without the\n * runtime template compiler that string `template:` options would require.\n */\nconst ToastLauncher = defineComponent({\n  name: 'ToastLauncher',\n  setup() {\n    const ctx = inject(DZ_TOAST_KEY)\n    return () =>\n      h(\n        'div',\n        { class: 'tl-buttons' },\n        TOASTS.map((spec) =>\n          h(\n            DzButton,\n            {\n              key: spec.tone,\n              variant: 'outline',\n              tone: spec.tone,\n              size: 'sm',\n              onClick: () =>\n                ctx?.add({\n                  title: spec.title,\n                  description: spec.description,\n                  tone: spec.tone,\n                  duration: 4000,\n                  actionLabel: spec.action,\n                }),\n            },\n            () => spec.title,\n          ),\n        ),\n      )\n  },\n})\n</script>\n\n<template>\n  <section class=\"tl-wrap\" aria-labelledby=\"tl-title\">\n    <DzToastProvider :duration=\"4000\" :max-toasts=\"4\">\n      <header class=\"tl-head\">\n        <DzHeading id=\"tl-title\" :level=\"4\" size=\"md\" weight=\"semibold\" class=\"tl-title\">Toasts</DzHeading>\n        <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"tl-sub\">\n          Fire an ephemeral, auto-dismissing toast for each tone — it appears bottom-right and clears itself after 4s.\n        </DzText>\n      </header>\n\n      <ToastLauncher />\n\n      <DzToastViewport position=\"bottom-right\" />\n    </DzToastProvider>\n  </section>\n</template>\n\n<style scoped>\n.tl-wrap {\n  background: var(--dz-background, #fff);\n  max-width: 34rem;\n  margin: 0 auto;\n}\n\n.tl-head {\n  margin-bottom: var(--dz-space-4, 1rem);\n}\n\n.tl-title {\n  margin: 0;\n}\n\n.tl-sub {\n  margin: var(--dz-space-1, 0.25rem) 0 0;\n}\n\n.tl-buttons {\n  display: flex;\n  flex-wrap: wrap;\n  gap: var(--dz-space-2, 0.5rem);\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/toast-launcher.vue"
     }
   ],
-  "registryDependencies": [
-    "DzToastProvider",
-    "DzToastViewport",
-    "DzToast",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzToastProvider",
+      "DzToastViewport",
+      "DzToast",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

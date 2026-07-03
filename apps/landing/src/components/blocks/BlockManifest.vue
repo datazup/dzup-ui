@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { DzCodeBlock, DzText } from '@dzup-ui/core'
+import { DzCodeBlock, DzCopyButton, DzText } from '@dzup-ui/core'
 import { computed } from 'vue'
-import { REGISTRY_ENABLED, npmInstallCommand, registryAddCommand } from '../../blocks/config.ts'
+import { REGISTRY_ENABLED, installCommands, registryAddCommands } from '../../blocks/config.ts'
 import type { BlockDef } from '../../blocks/registry.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
 import { buildImportLine } from '../../composables/useBlockCodeView.ts'
+import PmCommandTabs from './PmCommandTabs.vue'
 
 /**
  * BlockManifest — a block's full dependency manifest (docs/blocks.md §1.2 #9, §3.3).
@@ -18,10 +19,11 @@ import { buildImportLine } from '../../composables/useBlockCodeView.ts'
  *     and preview header; each emits `select-component` to filter the index.
  *   • Import line — `buildImportLine(components[])` (Task F5), the single source
  *     of truth shared with the Code tab.
- *   • Install — `npm i @dzup-ui/core @dzup-ui/tokens` always; the
- *     `npx shadcn-vue add …/r/<id>.json` registry line only once Task G1 has
- *     shipped (gated by the single `REGISTRY_ENABLED` flag), so it never renders
- *     a dead command before the registry exists.
+ *   • Install — `@dzup-ui/core @dzup-ui/tokens` across npm/pnpm/yarn/bun tabs
+ *     (PmCommandTabs); the `npx shadcn@latest add …/r/<id>.json` registry line
+ *     (also per-PM) only once Task G1 has shipped (gated by `REGISTRY_ENABLED`),
+ *     so it never renders a dead command before the registry exists.
+ *   • Copy code — the block's SFC source verbatim (DzCopyButton over `block.source`).
  *
  * Each command is a DzCodeBlock with `copyable`, which copies the EXACT text via
  * DzCopyButton. Chrome is dogfooded from @dzup-ui/core; the only CSS is layout +
@@ -53,8 +55,11 @@ function usageCount(name: string): number {
 /** The one consumer import, derived from `components[]` in authored order (Task F5). */
 const importLine = computed(() => buildImportLine(props.block.components))
 
-/** `npx shadcn-vue add <origin>/r/<id>.json` — only shown when REGISTRY_ENABLED. */
-const registryAdd = computed(() => registryAddCommand(props.block.id))
+/** `npm i …` per package manager (npm/pnpm/yarn/bun) for the install tab set. */
+const installCmds = installCommands()
+
+/** `npx shadcn@latest add …/r/<id>.json` per PM — only shown when REGISTRY_ENABLED. */
+const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 </script>
 
 <template>
@@ -96,25 +101,32 @@ const registryAdd = computed(() => registryAddCommand(props.block.id))
     </div>
 
     <div class="bm-group">
-      <DzText size="xs" tone="muted" as="div" class="bm-label">Install</DzText>
-      <DzCodeBlock
-        :code="npmInstallCommand"
-        language="bash"
-        copyable
-        aria-label="Install command"
-        class="bm-code"
+      <DzText size="xs" tone="muted" as="div" class="bm-label">Install packages</DzText>
+      <PmCommandTabs :commands="installCmds" aria-label="Install the dzup-ui packages" />
+    </div>
+
+    <!-- One-command install straight from the registry via the canonical shadcn
+         CLI — only once the registry has shipped public/r/<id>.json (Task G1). -->
+    <div v-if="REGISTRY_ENABLED" class="bm-group">
+      <DzText size="xs" tone="muted" as="div" class="bm-label">Add with the shadcn CLI</DzText>
+      <PmCommandTabs
+        :commands="registryAddCmds"
+        :aria-label="`Add ${block.title} from the dzup-ui registry`"
       />
     </div>
 
-    <!-- Registry one-liner — only once Task G1 has shipped public/r/<id>.json. -->
-    <div v-if="REGISTRY_ENABLED" class="bm-group">
-      <DzText size="xs" tone="muted" as="div" class="bm-label">Add via shadcn-vue</DzText>
-      <DzCodeBlock
-        :code="registryAdd"
-        language="bash"
-        copyable
-        :aria-label="`Add ${block.title} via the shadcn-vue CLI`"
-        class="bm-code"
+    <!-- Copy the block's SFC source verbatim (the ?raw string on the BlockDef). -->
+    <div class="bm-group">
+      <DzText size="xs" tone="muted" as="div" class="bm-label">Or copy the source</DzText>
+      <DzCopyButton
+        :value="block.source"
+        label="Copy code"
+        copied-label="Copied!"
+        variant="outline"
+        tone="neutral"
+        size="sm"
+        :aria-label="`Copy the ${block.title} block source`"
+        class="bm-copy-code"
       />
     </div>
   </section>

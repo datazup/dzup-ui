@@ -1,0 +1,67 @@
+{
+  "name": "@dzup-ui/mcp",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for dzup-ui — browse components, blocks, templates and design tokens, and fetch real block source + install commands from any AI coding tool (Cursor, Claude Code, Windsurf).",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "dzup-ui",
+    "vue",
+    "ui",
+    "registry",
+    "shadcn",
+    "ai",
+    "cursor",
+    "claude",
+    "windsurf"
+  ],
+  "license": "MIT",
+  "homepage": "https://dzup-ui.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dzup-ui/dzup-ui.git",
+    "directory": "packages/mcp"
+  },
+  "bin": {
+    "dzup-ui-mcp": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "import": "./dist/registry.js"
+    }
+  },
+  "files": [
+    "dist",
+    "server.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "tsx": "4.21.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

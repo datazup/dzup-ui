@@ -1,22 +1,30 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stats-band",
   "type": "registry:block",
   "title": "Stats band",
   "description": "A horizontal band of four key metrics with icon, trend indicator, and an animated count-up on scroll.",
+  "categories": [
+    "marketing"
+  ],
   "files": [
     {
       "path": "stats-band.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzAnimatedNumber, DzStatCard } from '@dzup-ui/core'\nimport { DollarSign, TrendingUp, Users, Zap } from 'lucide-vue-next'\nimport type { Component } from 'vue'\n\n/**\n * Stats band — a horizontal strip of four key product metrics.\n *\n * Self-contained: no props, no external data. Composed only from free\n * @dzup-ui/core components and `--dz-*` tokens (no landing-only `--lp-*` props),\n * so it drops into any app already themed, accessible, and light/dark-ready\n * (docs/blocks.md §3.6).\n *\n * Uses DzStatCard for richer structured display (icon, trend, description) and\n * DzAnimatedNumber inside its `#value` slot to add a count-up entrance — the\n * animation starts when the component scrolls into view (`startOnView: true` is\n * the DzAnimatedNumber default). `prefers-reduced-motion` is handled inside the\n * component: it snaps to the final value with no animation.\n *\n * Responsive: four columns on wide screens, two on medium, one on narrow.\n */\n\ninterface Stat {\n  title: string\n  /** The numeric value passed directly to DzAnimatedNumber. */\n  displayValue: number\n  format: Intl.NumberFormatOptions\n  icon: Component\n  trend: 'up' | 'down' | 'neutral'\n  trendValue: string\n  description: string\n}\n\nconst stats: Stat[] = [\n  {\n    title: 'Revenue tracked',\n    displayValue: 48250,\n    format: { style: 'currency', currency: 'USD', maximumFractionDigits: 0 },\n    icon: DollarSign,\n    trend: 'up',\n    trendValue: '+14.2%',\n    description: 'vs. last month',\n  },\n  {\n    title: 'Active users',\n    displayValue: 12340,\n    format: { useGrouping: true },\n    icon: Users,\n    trend: 'up',\n    trendValue: '+8.1%',\n    description: 'vs. last week',\n  },\n  {\n    title: 'Queries / day',\n    displayValue: 3450000,\n    format: { notation: 'compact', compactDisplay: 'short' },\n    icon: Zap,\n    trend: 'up',\n    trendValue: '+22%',\n    description: 'avg this quarter',\n  },\n  {\n    title: 'Growth rate',\n    /* Intl percent style expects a fraction (0–1); 23.5% → 0.235 */\n    displayValue: 0.235,\n    format: { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 },\n    icon: TrendingUp,\n    trend: 'up',\n    trendValue: '+2.1pp',\n    description: 'quarter-over-quarter',\n  },\n]\n</script>\n\n<template>\n  <section class=\"stats-band\" aria-label=\"Key product metrics\">\n    <div class=\"sb-inner\">\n      <ul class=\"sb-grid\" role=\"list\">\n        <li v-for=\"stat in stats\" :key=\"stat.title\">\n          <DzStatCard\n            :title=\"stat.title\"\n            :value=\"stat.displayValue\"\n            :icon=\"stat.icon\"\n            :trend=\"stat.trend\"\n            :trend-value=\"stat.trendValue\"\n            :description=\"stat.description\"\n            variant=\"elevated\"\n          >\n            <!-- Animated count-up overrides the static `value` prop via the\n                 #value slot; the prop is still supplied (it's required, and is\n                 the non-animated / SSR fallback). Starts on scroll-into-view. -->\n            <template #value>\n              <DzAnimatedNumber\n                :value=\"stat.displayValue\"\n                :format=\"stat.format\"\n                :duration=\"1200\"\n                easing=\"ease-out\"\n                size=\"lg\"\n              />\n            </template>\n          </DzStatCard>\n        </li>\n      </ul>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.stats-band {\n  padding: clamp(2rem, 5vw, 3.5rem) var(--dz-space-6, 1.5rem);\n  background: var(--dz-surface, #f8fafc);\n}\n\n.sb-inner {\n  max-width: 72rem;\n  margin: 0 auto;\n}\n\n.sb-grid {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: var(--dz-space-5, 1.25rem);\n}\n\n/* Responsive: 4 → 2 → 1 columns */\n@media (max-width: 900px) {\n  .sb-grid {\n    grid-template-columns: repeat(2, 1fr);\n  }\n}\n\n@media (max-width: 480px) {\n  .sb-grid {\n    grid-template-columns: 1fr;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/stats-band.vue"
     }
   ],
-  "registryDependencies": [
-    "DzStatCard",
-    "DzAnimatedNumber"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzStatCard",
+      "DzAnimatedNumber"
+    ]
+  }
 }

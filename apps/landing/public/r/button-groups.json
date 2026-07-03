@@ -1,23 +1,31 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button-groups",
   "type": "registry:block",
   "title": "Button groups & segmented controls",
   "description": "DzButtonGroup wiring child buttons into connected controls — a live view switcher, a time-range segmented control, and a vertical action group.",
+  "categories": [
+    "buttons"
+  ],
   "files": [
     {
       "path": "button-groups.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzButton, DzButtonGroup, DzText } from '@dzup-ui/core'\nimport {\n  Archive,\n  Calendar,\n  Copy,\n  Files,\n  LayoutGrid,\n  LayoutList,\n} from 'lucide-vue-next'\nimport { ref } from 'vue'\n\n/**\n * Button groups & segmented controls — DzButtonGroup wiring child DzButtons into\n * a single connected control (shared `size` / `variant` / `tone` via injection,\n * with the inner corners and borders merged).\n *\n * Shows the three everyday shapes:\n *   • a live segmented \"view switcher\" (the selected segment overrides the\n *     group's variant/tone to read as active),\n *   • a live time-range segmented control,\n *   • a vertical action group.\n *\n * Self-contained: local state only. Composed from free @dzup-ui/core components\n * and `--dz-*` tokens, so it re-themes light/dark automatically (docs §3.6).\n */\n\nconst view = ref<'list' | 'board' | 'calendar'>('board')\nconst range = ref<'day' | 'week' | 'month' | 'year'>('week')\n</script>\n\n<template>\n  <section class=\"bgr-wrap\" aria-label=\"Button groups\">\n    <!-- View switcher -->\n    <div class=\"bgr-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bgr-label\">View switcher</DzText>\n      <DzButtonGroup size=\"sm\" variant=\"outline\" tone=\"neutral\" aria-label=\"Select view\">\n        <DzButton\n          :variant=\"view === 'list' ? 'solid' : undefined\"\n          :tone=\"view === 'list' ? 'primary' : undefined\"\n          @click=\"view = 'list'\"\n        >\n          <template #prefix><LayoutList :size=\"15\" aria-hidden=\"true\" /></template>\n          List\n        </DzButton>\n        <DzButton\n          :variant=\"view === 'board' ? 'solid' : undefined\"\n          :tone=\"view === 'board' ? 'primary' : undefined\"\n          @click=\"view = 'board'\"\n        >\n          <template #prefix><LayoutGrid :size=\"15\" aria-hidden=\"true\" /></template>\n          Board\n        </DzButton>\n        <DzButton\n          :variant=\"view === 'calendar' ? 'solid' : undefined\"\n          :tone=\"view === 'calendar' ? 'primary' : undefined\"\n          @click=\"view = 'calendar'\"\n        >\n          <template #prefix><Calendar :size=\"15\" aria-hidden=\"true\" /></template>\n          Calendar\n        </DzButton>\n      </DzButtonGroup>\n    </div>\n\n    <!-- Time range -->\n    <div class=\"bgr-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bgr-label\">Time range</DzText>\n      <DzButtonGroup size=\"sm\" variant=\"outline\" tone=\"neutral\" aria-label=\"Select time range\">\n        <DzButton\n          v-for=\"r in (['day', 'week', 'month', 'year'] as const)\"\n          :key=\"r\"\n          :variant=\"range === r ? 'solid' : undefined\"\n          :tone=\"range === r ? 'primary' : undefined\"\n          @click=\"range = r\"\n        >\n          {{ r.charAt(0).toUpperCase() + r.slice(1) }}\n        </DzButton>\n      </DzButtonGroup>\n    </div>\n\n    <!-- Vertical action group -->\n    <div class=\"bgr-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bgr-label\">Vertical group</DzText>\n      <DzButtonGroup orientation=\"vertical\" size=\"sm\" variant=\"outline\" tone=\"neutral\" aria-label=\"Row actions\">\n        <DzButton>\n          <template #prefix><Copy :size=\"15\" aria-hidden=\"true\" /></template>\n          Copy\n        </DzButton>\n        <DzButton>\n          <template #prefix><Files :size=\"15\" aria-hidden=\"true\" /></template>\n          Duplicate\n        </DzButton>\n        <DzButton>\n          <template #prefix><Archive :size=\"15\" aria-hidden=\"true\" /></template>\n          Archive\n        </DzButton>\n      </DzButtonGroup>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.bgr-wrap {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: flex-start;\n  gap: clamp(1.5rem, 5vw, 3rem);\n  padding: clamp(1.25rem, 4vw, 2rem);\n  background: var(--dz-background, #fff);\n}\n\n.bgr-group {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.bgr-label {\n  margin: 0;\n  font-weight: var(--dz-font-semibold, 600);\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/button-groups.vue"
     }
   ],
-  "registryDependencies": [
-    "DzButtonGroup",
-    "DzButton",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzButtonGroup",
+      "DzButton",
+      "DzText"
+    ]
+  }
 }

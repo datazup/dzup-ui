@@ -1,26 +1,33 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "product-grid",
   "type": "registry:block",
   "title": "Product card grid",
   "description": "A storefront grid of product cards — image with a sale/new corner badge, name, read-only star rating with review count, current/original price, and an add-to-cart button; reflows 3 → 2 → 1 columns.",
+  "categories": [
+    "commerce"
+  ],
   "files": [
     {
       "path": "product-grid.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Product card grid — a storefront listing of products.\n *\n * Each product is a DzImageCard: a prominent image with a corner DzBadge for\n * sale / new-arrival flags (rendered in the `#overlay` slot), a body pairing the\n * name with a read-only DzRating + review count and a current/original price,\n * and a footer \"Add to cart\" DzButton. The grid reflows 3 → 2 → 1 columns.\n *\n * Self-contained: local static data, no props, no network. Composed only from\n * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport { DzBadge, DzButton, DzHeading, DzImageCard, DzRating, DzText } from '@dzup-ui/core'\nimport type { CanonicalTone } from '@dzup-ui/contracts'\n\ninterface Product {\n  id: number\n  name: string\n  category: string\n  src: string\n  alt: string\n  price: number\n  was?: number\n  rating: number\n  reviews: number\n  flag?: { label: string, tone: CanonicalTone }\n}\n\nconst products: Product[] = [\n  {\n    id: 1,\n    name: 'Aero Running Shoe',\n    category: 'Footwear',\n    src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',\n    alt: 'Red low-top running shoe on a plain background',\n    price: 119,\n    was: 149,\n    rating: 4.5,\n    reviews: 218,\n    flag: { label: '-20%', tone: 'danger' },\n  },\n  {\n    id: 2,\n    name: 'Field Daypack 18L',\n    category: 'Bags',\n    src: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',\n    alt: 'Grey canvas backpack standing upright',\n    price: 89,\n    rating: 5,\n    reviews: 96,\n    flag: { label: 'New', tone: 'success' },\n  },\n  {\n    id: 3,\n    name: 'Studio Headphones',\n    category: 'Audio',\n    src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',\n    alt: 'Black over-ear headphones',\n    price: 199,\n    was: 229,\n    rating: 4,\n    reviews: 341,\n  },\n  {\n    id: 4,\n    name: 'Classic Wristwatch',\n    category: 'Accessories',\n    src: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=800&q=80',\n    alt: 'Analog wristwatch with a leather strap',\n    price: 245,\n    rating: 4.5,\n    reviews: 64,\n  },\n  {\n    id: 5,\n    name: 'Polaroid Instant Camera',\n    category: 'Photography',\n    src: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&q=80',\n    alt: 'Retro instant film camera',\n    price: 79,\n    was: 99,\n    rating: 4,\n    reviews: 152,\n    flag: { label: '-20%', tone: 'danger' },\n  },\n  {\n    id: 6,\n    name: 'Linen Throw Blanket',\n    category: 'Home',\n    src: 'https://images.unsplash.com/photo-1580301762395-21ce84d00bc6?w=800&q=80',\n    alt: 'Folded textured linen throw blanket',\n    price: 64,\n    rating: 5,\n    reviews: 38,\n    flag: { label: 'New', tone: 'success' },\n  },\n]\n\nconst money = (value: number) => `$${value.toFixed(2)}`\n</script>\n\n<template>\n  <section class=\"pg-wrap\" aria-labelledby=\"pg-title\">\n    <header class=\"pg-head\">\n      <DzHeading id=\"pg-title\" :level=\"4\" size=\"lg\" weight=\"semibold\" class=\"pg-heading\">\n        Featured products\n      </DzHeading>\n      <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"pg-sub\">Free shipping on orders over $75</DzText>\n    </header>\n\n    <ul class=\"pg-grid\">\n      <li v-for=\"product in products\" :key=\"product.id\" class=\"pg-cell\">\n        <DzImageCard\n          :src=\"product.src\"\n          :alt=\"product.alt\"\n          variant=\"outlined\"\n          aspect-ratio=\"4/5\"\n          class=\"pg-card\"\n        >\n          <template v-if=\"product.flag\" #overlay>\n            <span class=\"pg-flag\">\n              <DzBadge variant=\"solid\" :tone=\"product.flag.tone\" size=\"sm\">{{ product.flag.label }}</DzBadge>\n            </span>\n          </template>\n\n          <div class=\"pg-body\">\n            <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"pg-eyebrow\">{{ product.category }}</DzText>\n            <DzHeading :level=\"5\" size=\"md\" weight=\"semibold\" class=\"pg-name\">{{ product.name }}</DzHeading>\n\n            <div class=\"pg-rating\">\n              <DzRating\n                :value=\"product.rating\"\n                readonly\n                allow-half\n                size=\"sm\"\n                :aria-label=\"`Rated ${product.rating} out of 5`\"\n              />\n              <DzText size=\"xs\" tone=\"muted\" as=\"span\">({{ product.reviews }})</DzText>\n            </div>\n\n            <p class=\"pg-price\">\n              <DzText size=\"md\" weight=\"bold\" as=\"span\">{{ money(product.price) }}</DzText>\n              <DzText v-if=\"product.was\" size=\"sm\" tone=\"muted\" as=\"span\" class=\"pg-was\">\n                {{ money(product.was) }}\n              </DzText>\n            </p>\n          </div>\n\n          <template #footer>\n            <DzButton variant=\"solid\" tone=\"primary\" size=\"sm\" class=\"pg-add\">Add to cart</DzButton>\n          </template>\n        </DzImageCard>\n      </li>\n    </ul>\n  </section>\n</template>\n\n<style scoped>\n.pg-wrap {\n  padding: clamp(1.25rem, 4vw, 2rem);\n  background: var(--dz-background, #fff);\n}\n\n.pg-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.pg-heading,\n.pg-sub {\n  margin: 0;\n}\n\n.pg-grid {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: grid;\n  grid-template-columns: repeat(3, minmax(0, 1fr));\n  gap: var(--dz-space-5, 1.25rem);\n}\n\n.pg-cell {\n  min-width: 0;\n}\n\n.pg-card {\n  height: 100%;\n}\n\n/* Corner flag sits inside the image overlay, top-left. */\n.pg-flag {\n  position: absolute;\n  top: var(--dz-space-3, 0.75rem);\n  left: var(--dz-space-3, 0.75rem);\n}\n\n.pg-body {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n}\n\n.pg-eyebrow {\n  margin: 0;\n  text-transform: uppercase;\n  letter-spacing: 0.06em;\n}\n\n.pg-name {\n  margin: 0;\n}\n\n.pg-rating {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n\n.pg-price {\n  display: flex;\n  align-items: baseline;\n  gap: var(--dz-space-2, 0.5rem);\n  margin: var(--dz-space-2, 0.5rem) 0 0;\n}\n\n.pg-was {\n  text-decoration: line-through;\n}\n\n.pg-add {\n  width: 100%;\n}\n\n@media (max-width: 900px) {\n  .pg-grid {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n  }\n}\n\n@media (max-width: 560px) {\n  .pg-grid {\n    grid-template-columns: minmax(0, 1fr);\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/product-grid.vue"
     }
   ],
-  "registryDependencies": [
-    "DzImageCard",
-    "DzBadge",
-    "DzRating",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzImageCard",
+      "DzBadge",
+      "DzRating",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

@@ -1,9 +1,11 @@
 import tailwindcss from '@tailwindcss/vite'
+import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/vue3-vite/node'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const require = createRequire(import.meta.url)
 
 export default defineMain({
   // Keep this list in sync with the `addons` registered in preview.ts (TASK-0.1).
@@ -15,6 +17,10 @@ export default defineMain({
     '@storybook/addon-a11y',
     '@storybook/addon-themes',
     '@storybook/addon-vitest',
+    // Design panel — reads `parameters.design = { type: 'figma', url }` (TASK-0.15).
+    // The convention was reserved in storybook-decisions.md; this is the one-line
+    // switch-on. Stories without the parameter show a friendly empty Design panel.
+    '@storybook/addon-designs',
   ],
   stories: [
     // Standalone stories directories
@@ -30,6 +36,31 @@ export default defineMain({
     // Tailwind CSS 4 — required for utility classes in component variants
     config.plugins = config.plugins || []
     config.plugins.push(tailwindcss())
+
+    // @vue/repl (the "Try it now" doc block) imports `vue/compiler-sfc`. Two
+    // problems bundling that for the browser, both fixed by a pre-enforced
+    // resolveId that runs before alias resolution:
+    //
+    // 1. The Vue plugin's broad `vue` → `vue/dist/vue.esm-bundler.js` alias runs
+    //    after this hook and would rewrite the specifier to the non-existent
+    //    `…/vue.esm-bundler.js/compiler-sfc`.
+    // 2. Node's default resolution picks compiler-sfc's CJS build, which bundles
+    //    @vue/consolidate and its dozens of OPTIONAL, node-only template-engine
+    //    requires (pug, velocityjs, teacup/lib/express, …) — unresolvable in the
+    //    browser. We pin to the `esm-browser` build instead (the one
+    //    play.vuejs.org uses): it drops consolidate entirely.
+    const compilerSfcBrowser = require
+      .resolve('@vue/compiler-sfc')
+      .replace(/compiler-sfc\.cjs\.js$/, 'compiler-sfc.esm-browser.js')
+    config.plugins.push({
+      name: 'dzup-repl-compiler-sfc',
+      enforce: 'pre',
+      resolveId(id: string) {
+        if (id === 'vue/compiler-sfc' || id.endsWith('vue.esm-bundler.js/compiler-sfc'))
+          return compilerSfcBrowser
+        return null
+      },
+    })
 
     // Workspace package aliases — Storybook doesn't auto-resolve yarn workspace links
     const pkgRoot = resolve(__dirname, '../../..')
@@ -59,6 +90,11 @@ export default defineMain({
 
     return config
   },
+  // Brand favicon (apps/storybook/public/favicon.svg — served at the manager
+  // root by Vite's publicDir). Injected explicitly so the dzup-ui mark replaces
+  // Storybook's default favicon on a fresh `dev` and in the built static app.
+  managerHead: (head) =>
+    `${head}\n<link rel="icon" type="image/svg+xml" href="./favicon.svg" />`,
   docs: {
     autodocs: 'tag',
   },

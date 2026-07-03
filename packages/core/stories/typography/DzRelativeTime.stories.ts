@@ -19,6 +19,11 @@ const meta = {
   component: DzRelativeTime,
   tags: ['autodocs', 'status:experimental'],
   decorators: [darkModeDecorator],
+  // TASK-APP-01 — every story renders a `Date.now()`-relative phrase ("3 seconds
+  // ago") kept fresh by an age-adaptive timer, so the text both differs run-to-run
+  // and can flip across a unit boundary mid-capture. Skip visual snapshots; the
+  // play() test still asserts the <time datetime> semantics.
+  parameters: { chromatic: { disableSnapshot: true } },
   argTypes: {
     value: {
       control: 'date',

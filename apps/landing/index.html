@@ -27,6 +27,27 @@
     />
 
     <!--
+      Structured data (schema.org): the library as a SoftwareApplication, so search
+      engines and AI answer engines can attribute the free Vue 3 component library.
+      Site-wide + static here (crawlable without JS, like the canonical/OG above);
+      per-route BreadcrumbList JSON-LD is injected client-side by the router head
+      mechanism (src/router.ts) on the block/template detail pages.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "dzup-ui",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "url": "https://dzup-ui.com/",
+        "description": "147 accessible, open-source Vue 3 components across 11 families. Built on Tailwind CSS 4, an OKLCH token system, and Reka UI accessible primitives. Light & dark out of the box.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Organization", "name": "dzup-ui", "url": "https://dzup-ui.com/" }
+      }
+    </script>
+
+    <!--
       FOUC prevention (ADR-15): reads 'dz-theme' from localStorage and sets
       data-theme on <html> before any CSS or Vue renders. Canonical script from
       @dzup-ui/core/providers — do not edit this IIFE manually; update themeScript instead.

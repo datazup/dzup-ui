@@ -1,7 +1,7 @@
 /**
- * Blocks distribution config — the single switch for the shadcn-vue registry.
+ * Blocks distribution config — the single switch for the shadcn registry.
  *
- * `REGISTRY_ENABLED` gates every surface that prints the `npx shadcn-vue add …`
+ * `REGISTRY_ENABLED` gates every surface that prints the `npx shadcn@latest add …`
  * command (Task F6's BlockManifest, Task G3's block actions). It flipped to
  * `true` in the change that landed the registry generator (Task G1,
  * `apps/landing/scripts/build-registry.ts`), which emits `public/r/<id>.json`,
@@ -122,6 +122,58 @@ export function mcpServerConfig(): string {
 }
 
 /**
+ * The published npm package for the dedicated dzup-ui MCP server
+ * (`packages/mcp`, Task G5). Unlike `mcpServerConfig()` above — which wires the
+ * shadcn CLI's GENERIC `registry:mcp` at the blocks registry — this is a
+ * first-party server that also exposes the component API, templates and design
+ * tokens, and is run with a single `npx -y @dzup-ui/mcp` (no env needed; it
+ * defaults to the public site). The `/ai` docs page renders per-client configs
+ * from these helpers so the copy-paste snippets can never drift.
+ */
+export const DZUP_MCP_PACKAGE = '@dzup-ui/mcp'
+
+/** The stdio launch command every MCP client uses, as `[command, ...args]`. */
+export const DZUP_MCP_COMMAND = ['npx', '-y', DZUP_MCP_PACKAGE] as const
+
+/** The canonical `{ mcpServers: { "dzup-ui": … } }` block (Cursor, Claude Code, Windsurf). */
+export function dzupMcpConfig(): string {
+  return JSON.stringify(
+    {
+      mcpServers: {
+        [MCP_SERVER_KEY]: {
+          command: DZUP_MCP_COMMAND[0],
+          args: [...DZUP_MCP_COMMAND.slice(1)],
+        },
+      },
+    },
+    null,
+    2,
+  )
+}
+
+/** VS Code / Copilot use `servers` with an explicit `type: "stdio"`. */
+export function dzupMcpVscodeConfig(): string {
+  return JSON.stringify(
+    {
+      servers: {
+        [MCP_SERVER_KEY]: {
+          type: 'stdio',
+          command: DZUP_MCP_COMMAND[0],
+          args: [...DZUP_MCP_COMMAND.slice(1)],
+        },
+      },
+    },
+    null,
+    2,
+  )
+}
+
+/** The one-line Claude Code CLI registration. */
+export function dzupMcpClaudeCliCommand(): string {
+  return `claude mcp add ${MCP_SERVER_KEY} -- ${DZUP_MCP_COMMAND.join(' ')}`
+}
+
+/**
  * The "Open in v0" handoff URL (docs/blocks.md §1.2 #10, §1.3, Task G4). v0
  * fetches the block's registry item JSON and remixes it with the `--dz-*` design
  * tokens preloaded; v0 is React-centric, so for this Vue library it's a
@@ -159,15 +211,111 @@ export function registryDiscoveryCommands(sampleId = 'hero-centered'): string {
  */
 export const BLOCK_DEPENDENCIES = ['@dzup-ui/core', '@dzup-ui/tokens'] as const
 
-/** `npm i @dzup-ui/core @dzup-ui/tokens` — the copy-paste manual install. */
-export const npmInstallCommand = `npm i ${BLOCK_DEPENDENCIES.join(' ')}`
+/**
+ * Extra runtime npm packages a block/template SFC may import beyond the base two
+ * (`@dzup-ui/core` + `@dzup-ui/tokens`). Detected from the SFC source so the
+ * emitted registry item's `dependencies[]` lists EVERYTHING the copied file needs
+ * to build in a fresh project — otherwise `shadcn add`-ing a block that imports,
+ * say, `lucide-vue-next` would drop in a `.vue` that fails to resolve its icons.
+ * `vue` is a peer every Vue project already has, so it is intentionally omitted.
+ */
+export const OPTIONAL_DEPENDENCIES = ['lucide-vue-next', '@formkit/auto-animate'] as const
 
 /**
- * The consumer one-liner that installs a single block via the shadcn-vue CLI,
- * resolved to an ABSOLUTE URL against the current origin (a developer pastes it
- * into their own terminal, so a root-relative path would not work). Only
- * meaningful when `REGISTRY_ENABLED` — callers gate on that flag first.
+ * The npm `dependencies[]` for a given SFC source: the base packages plus any
+ * `OPTIONAL_DEPENDENCIES` the source actually imports (matched on the quoted
+ * specifier, so a substring in a comment does not false-positive). Order is
+ * stable — base first, optionals in declared order — for clean diffs.
  */
-export function registryAddCommand(id: string): string {
-  return `npx shadcn-vue add ${registryItemUrl(id)}`
+export function sourceDependencies(source: string): string[] {
+  const extra = OPTIONAL_DEPENDENCIES.filter(
+    (pkg) => source.includes(`'${pkg}'`) || source.includes(`"${pkg}"`),
+  )
+  return [...BLOCK_DEPENDENCIES, ...extra]
+}
+
+/**
+ * The four package managers we print copy-paste commands for. Kept as a const
+ * tuple so the UI (the PM tab set) and every command helper below iterate the
+ * SAME ordered set — a developer picks their manager once and every snippet on
+ * the page matches. `npm` is first (the default tab).
+ */
+export const PACKAGE_MANAGERS = ['npm', 'pnpm', 'yarn', 'bun'] as const
+export type PackageManager = (typeof PACKAGE_MANAGERS)[number]
+
+/**
+ * Per-manager `add`/`install` verb for a runtime dependency. `npm` uses `i`; the
+ * others their native add verb. Source of truth for the hero + manifest install
+ * snippets (mirrors the on-disk lockfiles a consumer already has).
+ */
+const PM_ADD: Record<PackageManager, string> = {
+  npm: 'npm i',
+  pnpm: 'pnpm add',
+  yarn: 'yarn add',
+  bun: 'bun add',
+}
+
+/**
+ * Per-manager one-off runner (`dlx`) prefix for executing a CLI package WITHOUT
+ * a global install — how `shadcn` is meant to be invoked. npm→`npx`,
+ * pnpm→`pnpm dlx`, yarn→`yarn dlx`, bun→`bunx`.
+ */
+const PM_DLX: Record<PackageManager, string> = {
+  npm: 'npx',
+  pnpm: 'pnpm dlx',
+  yarn: 'yarn dlx',
+  bun: 'bunx',
+}
+
+/**
+ * The copy-paste manual install for the runtime packages, for a given manager
+ * (defaults to npm). e.g. `pnpm add @dzup-ui/core @dzup-ui/tokens`. The hero and
+ * BlockManifest render one per `PACKAGE_MANAGERS` tab.
+ */
+export function installCommand(pm: PackageManager = 'npm'): string {
+  return `${PM_ADD[pm]} ${BLOCK_DEPENDENCIES.join(' ')}`
+}
+
+/** `npm i @dzup-ui/core @dzup-ui/tokens` — the default (npm) manual install. */
+export const npmInstallCommand = installCommand('npm')
+
+/**
+ * The consumer one-liner that installs a single block from the registry via the
+ * shadcn CLI, resolved to an ABSOLUTE URL against the current origin (a developer
+ * pastes it into their own terminal, so a root-relative path would not work).
+ *
+ * Targets the canonical, framework-agnostic `shadcn` CLI (`npx shadcn@latest
+ * add <url>`) — the emitted items conform to the ui.shadcn.com registry-item
+ * schema (`registryItem.ts`), so a plain `shadcn add` resolves them; there is no
+ * dependency on the `shadcn-vue` fork. Only meaningful when `REGISTRY_ENABLED` —
+ * callers gate on that flag first. Pass `pm` for the pnpm/yarn/bun equivalents.
+ */
+export function registryAddCommand(id: string, pm: PackageManager = 'npm'): string {
+  return `${PM_DLX[pm]} shadcn@latest add ${registryItemUrl(id)}`
+}
+
+/**
+ * `shadcn add` for an ABSOLUTE item URL (not resolved through a block id) — used
+ * for the tokens theme and templates, whose URLs the caller already holds.
+ */
+export function registryAddUrlCommand(url: string, pm: PackageManager = 'npm'): string {
+  return `${PM_DLX[pm]} shadcn@latest add ${url}`
+}
+
+/** All four PMs mapped to their value produced by `fn` — the shape `PmCommandTabs` renders. */
+function byPackageManager(fn: (pm: PackageManager) => string): Record<PackageManager, string> {
+  return Object.fromEntries(PACKAGE_MANAGERS.map((pm) => [pm, fn(pm)])) as Record<
+    PackageManager,
+    string
+  >
+}
+
+/** Per-PM manual install commands (`{ npm, pnpm, yarn, bun }`) for the hero + manifest. */
+export function installCommands(): Record<PackageManager, string> {
+  return byPackageManager(installCommand)
+}
+
+/** Per-PM `shadcn add <block>` commands (`{ npm, pnpm, yarn, bun }`) for the CLI tab set. */
+export function registryAddCommands(id: string): Record<PackageManager, string> {
+  return byPackageManager((pm) => registryAddCommand(id, pm))
 }

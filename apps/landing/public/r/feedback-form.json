@@ -1,31 +1,38 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "feedback-form",
   "type": "registry:block",
   "title": "Feedback survey",
   "description": "A rating + survey card built from the scale controls — a half-step star DzRating, a frequency radio group, a 0–10 recommend slider with a live read-out, and a comments textarea.",
+  "categories": [
+    "forms"
+  ],
   "files": [
     {
       "path": "feedback-form.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzFormField,\n  DzFormLabel,\n  DzHeading,\n  DzRadio,\n  DzRadioGroup,\n  DzRating,\n  DzSlider,\n  DzText,\n  DzTextarea,\n} from '@dzup-ui/core'\nimport { computed, ref } from 'vue'\n\n/**\n * Feedback form — a rating + survey card built from the scale controls.\n *\n * Brings together the \"value\" form controls: DzRating for an overall star\n * score (v-model:value), a DzRadioGroup of frequency options, a DzSlider for a\n * 0–10 recommend score with a live read-out, and a DzTextarea for comments.\n * Self-contained: local ref() state only.\n *\n * Forms family: DzRating, DzRadioGroup, DzRadio, DzSlider, DzFormField,\n * DzFormLabel. Inputs family: DzTextarea.\n */\n\nconst rating = ref(0)\nconst frequency = ref('weekly')\nconst recommend = ref(8)\nconst comments = ref('')\nconst sent = ref(false)\n\nconst RATING_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent']\nconst ratingLabel = computed(() => RATING_LABELS[Math.round(rating.value)] ?? '')\n\nfunction submit() {\n  sent.value = true\n}\n</script>\n\n<template>\n  <section class=\"fb-wrap\" aria-labelledby=\"fb-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"fb-card\">\n      <header class=\"fb-head\">\n        <DzHeading id=\"fb-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          Share your feedback\n        </DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" as=\"p\">\n          A few quick questions — it takes less than a minute.\n        </DzText>\n      </header>\n\n      <form class=\"fb-form\" @submit.prevent=\"submit\">\n        <DzFormField>\n          <DzFormLabel>Overall rating</DzFormLabel>\n          <div class=\"fb-rating-row\">\n            <DzRating v-model:value=\"rating\" allow-half aria-label=\"Overall rating\" />\n            <DzText v-if=\"ratingLabel\" size=\"sm\" tone=\"muted\" as=\"span\">{{ ratingLabel }}</DzText>\n          </div>\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>How often do you use the product?</DzFormLabel>\n          <DzRadioGroup v-model=\"frequency\" orientation=\"vertical\" aria-label=\"Usage frequency\">\n            <DzRadio value=\"daily\">Every day</DzRadio>\n            <DzRadio value=\"weekly\">A few times a week</DzRadio>\n            <DzRadio value=\"monthly\">A few times a month</DzRadio>\n            <DzRadio value=\"rarely\">Rarely</DzRadio>\n          </DzRadioGroup>\n        </DzFormField>\n\n        <DzFormField>\n          <div class=\"fb-label-row\">\n            <DzFormLabel>How likely are you to recommend us?</DzFormLabel>\n            <span class=\"fb-score\">{{ recommend }}/10</span>\n          </div>\n          <DzSlider\n            v-model=\"recommend\"\n            :min=\"0\"\n            :max=\"10\"\n            :step=\"1\"\n            tone=\"primary\"\n            aria-label=\"Likelihood to recommend\"\n          />\n          <div class=\"fb-scale\">\n            <DzText size=\"xs\" tone=\"muted\" as=\"span\">Not likely</DzText>\n            <DzText size=\"xs\" tone=\"muted\" as=\"span\">Very likely</DzText>\n          </div>\n        </DzFormField>\n\n        <DzFormField>\n          <DzFormLabel>Anything else?</DzFormLabel>\n          <DzTextarea\n            v-model=\"comments\"\n            :rows=\"3\"\n            auto-resize\n            placeholder=\"Tell us what's working well or what we could improve…\"\n          />\n        </DzFormField>\n\n        <div class=\"fb-actions\">\n          <DzText v-if=\"sent\" size=\"sm\" tone=\"success\" as=\"span\">\n            Thanks for the feedback!\n          </DzText>\n          <DzButton type=\"submit\" variant=\"solid\" tone=\"primary\" class=\"fb-submit\">\n            Submit feedback\n          </DzButton>\n        </div>\n      </form>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.fb-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.fb-card {\n  width: 100%;\n  max-width: 32rem;\n}\n\n.fb-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-1, 0.25rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.fb-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-5, 1.25rem);\n}\n\n.fb-rating-row {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.fb-label-row {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.fb-score {\n  font-size: var(--dz-text-sm, 0.875rem);\n  font-weight: 600;\n  font-variant-numeric: tabular-nums;\n  color: var(--dz-primary, #4f46e5);\n}\n\n.fb-scale {\n  display: flex;\n  justify-content: space-between;\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n\n.fb-actions {\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n@media (max-width: 480px) {\n  .fb-actions {\n    flex-direction: column-reverse;\n    align-items: stretch;\n  }\n\n  .fb-submit {\n    width: 100%;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/feedback-form.vue"
     }
   ],
-  "registryDependencies": [
-    "DzCard",
-    "DzRating",
-    "DzRadioGroup",
-    "DzRadio",
-    "DzSlider",
-    "DzTextarea",
-    "DzFormField",
-    "DzFormLabel",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard",
+      "DzRating",
+      "DzRadioGroup",
+      "DzRadio",
+      "DzSlider",
+      "DzTextarea",
+      "DzFormField",
+      "DzFormLabel",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }
