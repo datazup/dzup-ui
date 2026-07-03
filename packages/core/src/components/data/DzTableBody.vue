@@ -20,13 +20,6 @@ import DzEmpty from '../feedback/DzEmpty.vue'
 import DzSkeleton from '../feedback/DzSkeleton.vue'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 
-/**
- * Functional renderer that emits a pre-computed array of row VNodes. Used to
- * inject the windowed slice of `<DzTableRow>` nodes between the virtual spacer
- * rows without re-wrapping them in an extra element.
- */
-const RowFragment = (fnProps: { nodes: VNode[] }): VNode[] => fnProps.nodes
-
 defineOptions({
   inheritAttrs: false,
 })
@@ -36,6 +29,13 @@ const props = withDefaults(defineProps<DzTableBodyProps>(), {
 })
 
 const slots = defineSlots<DzTableBodySlots>()
+
+/**
+ * Functional renderer that emits a pre-computed array of row VNodes. Used to
+ * inject the windowed slice of `<DzTableRow>` nodes between the virtual spacer
+ * rows without re-wrapping them in an extra element.
+ */
+const RowFragment = (fnProps: { nodes: VNode[] }): VNode[] => fnProps.nodes
 
 const attrs = useAttrs()
 const tableContext = inject(DZ_TABLE_KEY, null)
@@ -47,16 +47,20 @@ function flattenVNodes(nodes: VNode[]): VNode[] {
   const out: VNode[] = []
   for (const node of nodes) {
     if (node.type === Fragment) {
-      if (Array.isArray(node.children)) out.push(...flattenVNodes(node.children as VNode[]))
-    } else if (node.type === Comment) {
+      if (Array.isArray(node.children))
+        out.push(...flattenVNodes(node.children as VNode[]))
+    }
+    else if (node.type === Comment) {
       continue
-    } else if (
-      node.type === Text &&
-      typeof node.children === 'string' &&
-      node.children.trim() === ''
+    }
+    else if (
+      node.type === Text
+      && typeof node.children === 'string'
+      && node.children.trim() === ''
     ) {
       continue
-    } else {
+    }
+    else {
       out.push(node)
     }
   }
@@ -80,11 +84,13 @@ const isVirtual = computed(() => tableContext?.virtualScroll.value ?? false)
  * to a row-index slice.
  */
 const virtualWindow = computed<VirtualWindow | null>(() => {
-  if (!isVirtual.value || !tableContext) return null
+  if (!isVirtual.value || !tableContext)
+    return null
   const total = rows.value.length
   const rh = Math.max(1, tableContext.rowHeight.value)
   const overscan = Math.max(0, tableContext.overscan.value)
-  if (total === 0) return { startIndex: 0, endIndex: 0, paddingTop: 0, paddingBottom: 0 }
+  if (total === 0)
+    return { startIndex: 0, endIndex: 0, paddingTop: 0, paddingBottom: 0 }
   const vh = tableContext.viewportHeight.value || total * rh
   const first = Math.floor(tableContext.scrollTop.value / rh)
   const visibleCount = Math.ceil(vh / rh) + 1
@@ -101,7 +107,8 @@ const virtualWindow = computed<VirtualWindow | null>(() => {
 /** The subset of rows actually rendered when virtual scroll is active. */
 const windowedRows = computed<VNode[]>(() => {
   const win = virtualWindow.value
-  if (!win) return rows.value
+  if (!win)
+    return rows.value
   return rows.value.slice(win.startIndex, win.endIndex)
 })
 </script>

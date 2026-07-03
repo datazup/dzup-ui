@@ -65,7 +65,8 @@ function toggleExpand(rowId: string): void {
     next.delete(rowId)
     expandedRows.value = next
     emit('rowCollapse', rowId)
-  } else {
+  }
+  else {
     next.add(rowId)
     expandedRows.value = next
     emit('rowExpand', rowId)
@@ -91,7 +92,8 @@ const isVirtual = computed(() => props.virtualScroll)
 
 /** Parse a px length like `'400px'` → 400; returns 0 for non-px units. */
 function parsePx(value: string | undefined): number {
-  if (!value) return 0
+  if (!value)
+    return 0
   const match = /^(\d+(?:\.\d+)?)px$/.exec(value.trim())
   return match ? Number(match[1]) : 0
 }
@@ -109,9 +111,11 @@ const effectiveViewportHeight = computed(() =>
 
 function onScroll(): void {
   const el = scrollEl.value
-  if (!el) return
+  if (!el)
+    return
   scrollTop.value = el.scrollTop
-  if (el.clientHeight > 0) measuredViewportHeight.value = el.clientHeight
+  if (el.clientHeight > 0)
+    measuredViewportHeight.value = el.clientHeight
 }
 
 const context: DzTableContext = {
@@ -146,7 +150,8 @@ const rootClasses = computed(() => cn('relative overflow-auto', attrs.class as s
 
 const rootStyle = computed(() => {
   const base = 'contain: layout style'
-  if (isVirtual.value) return `${base}; overflow-y: auto; max-height: ${props.maxHeight ?? '400px'}`
+  if (isVirtual.value)
+    return `${base}; overflow-y: auto; max-height: ${props.maxHeight ?? '400px'}`
   return base
 })
 

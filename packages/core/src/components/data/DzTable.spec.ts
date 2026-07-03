@@ -329,7 +329,7 @@ describe('dzTableFooter', () => {
   it('applies a top-border footer style distinct from header', () => {
     const wrapper = mountWithFooter()
     const footerClasses = wrapper.find('tfoot').classes()
-    expect(footerClasses.some((c) => c.includes('border-t'))).toBe(true)
+    expect(footerClasses.some(c => c.includes('border-t'))).toBe(true)
   })
 
   it('merges consumer class via cn()', () => {
@@ -505,9 +505,9 @@ describe('dzTableCell — column pinning', () => {
   it('adds the sticky z-index and a background on pinned cells', () => {
     const wrapper = mountPinned({ pin: 'left' })
     const classes = wrapper.find('td').classes()
-    expect(classes.some((c) => c.includes('sticky'))).toBe(true)
-    expect(classes.some((c) => c.includes('z-[var(--dz-z-sticky)]'))).toBe(true)
-    expect(classes.some((c) => c.includes('bg-'))).toBe(true)
+    expect(classes.some(c => c.includes('sticky'))).toBe(true)
+    expect(classes.some(c => c.includes('z-[var(--dz-z-sticky)]'))).toBe(true)
+    expect(classes.some(c => c.includes('bg-'))).toBe(true)
   })
 
   it('adds an edge shadow only on the boundary column', () => {
@@ -516,14 +516,14 @@ describe('dzTableCell — column pinning', () => {
       boundary
         .find('td')
         .classes()
-        .some((c) => c.includes('shadow-')),
+        .some(c => c.includes('shadow-')),
     ).toBe(true)
     const inner = mountPinned({ pin: 'left', pinBoundary: false })
     expect(
       inner
         .find('td')
         .classes()
-        .some((c) => c.includes('shadow-')),
+        .some(c => c.includes('shadow-')),
     ).toBe(false)
   })
 
@@ -534,7 +534,7 @@ describe('dzTableCell — column pinning', () => {
       wrapper
         .find('td')
         .classes()
-        .some((c) => c.includes('sticky')),
+        .some(c => c.includes('sticky')),
     ).toBe(false)
   })
 })
@@ -628,8 +628,7 @@ describe('dzTable — virtual scroll', () => {
                   {
                     default: () => h(DzTableCell, null, { default: () => `Row ${i}` }),
                   },
-                ),
-              ),
+                )),
           }),
       },
     })
@@ -645,7 +644,7 @@ describe('dzTable — virtual scroll', () => {
     const wrapper = mountVirtual(1000)
     const dataRows = wrapper
       .findAll('tbody tr')
-      .filter((r) => !r.classes().includes('dz-virtual-spacer'))
+      .filter(r => !r.classes().includes('dz-virtual-spacer'))
     expect(dataRows.length).toBeGreaterThan(0)
     expect(dataRows.length).toBeLessThan(1000)
   })
@@ -684,8 +683,7 @@ describe('dzTable — virtual scroll', () => {
                   {
                     default: () => h(DzTableCell, null, { default: () => `Row ${i}` }),
                   },
-                ),
-              ),
+                )),
           }),
       },
     })

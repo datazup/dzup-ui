@@ -84,8 +84,10 @@ const cellStyle = computed<CSSProperties>(() => {
   const style: CSSProperties = {}
   if (isPinned.value) {
     style.position = 'sticky'
-    if (props.pin === 'left') style.left = `${props.pinOffset}px`
-    else if (props.pin === 'right') style.right = `${props.pinOffset}px`
+    if (props.pin === 'left')
+      style.left = `${props.pinOffset}px`
+    else if (props.pin === 'right')
+      style.right = `${props.pinOffset}px`
   }
   if (resolvedWidth.value != null) {
     style.width = `${resolvedWidth.value}px`
@@ -102,14 +104,16 @@ let dragStartWidth = 0
 /** Minimum column width (px), from `--dz-table-col-min-width` (fallback 48). */
 function minColWidth(): number {
   const el = cellEl.value
-  if (!el) return 48
+  if (!el)
+    return 48
   const raw = getComputedStyle(el).getPropertyValue('--dz-table-col-min-width').trim()
   const parsed = Number.parseFloat(raw)
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 48
 }
 
 function onResizeMove(event: PointerEvent): void {
-  if (props.colId == null) return
+  if (props.colId == null)
+    return
   const delta = event.clientX - dragStartX
   const next = Math.max(minColWidth(), dragStartWidth + delta)
   tableContext?.setColWidth(props.colId, next)
@@ -122,12 +126,13 @@ function onResizeEnd(event: PointerEvent): void {
 }
 
 function onResizeStart(event: PointerEvent): void {
-  if (props.colId == null) return
+  if (props.colId == null)
+    return
   event.preventDefault()
   event.stopPropagation()
   dragStartX = event.clientX
-  dragStartWidth =
-    resolvedWidth.value ?? cellEl.value?.getBoundingClientRect().width ?? minColWidth()
+  dragStartWidth
+    = resolvedWidth.value ?? cellEl.value?.getBoundingClientRect().width ?? minColWidth()
   ;(event.target as HTMLElement | null)?.setPointerCapture?.(event.pointerId)
   window.addEventListener('pointermove', onResizeMove)
   window.addEventListener('pointerup', onResizeEnd)
@@ -135,14 +140,16 @@ function onResizeStart(event: PointerEvent): void {
 
 /** Keyboard resize: arrow keys nudge the column width by 8px. */
 function onResizeKey(event: KeyboardEvent): void {
-  if (props.colId == null) return
+  if (props.colId == null)
+    return
   const step = event.shiftKey ? 24 : 8
-  const current =
-    resolvedWidth.value ?? cellEl.value?.getBoundingClientRect().width ?? minColWidth()
+  const current
+    = resolvedWidth.value ?? cellEl.value?.getBoundingClientRect().width ?? minColWidth()
   if (event.key === 'ArrowLeft') {
     event.preventDefault()
     tableContext?.setColWidth(props.colId, Math.max(minColWidth(), current - step))
-  } else if (event.key === 'ArrowRight') {
+  }
+  else if (event.key === 'ArrowRight') {
     event.preventDefault()
     tableContext?.setColWidth(props.colId, current + step)
   }
@@ -176,7 +183,7 @@ const classes = computed(() =>
       v-if="showResizeHandle"
       type="button"
       class="absolute -right-1 top-0 z-10 h-full w-2 cursor-col-resize touch-none select-none bg-transparent hover:bg-[var(--dz-primary)]/40"
-      :aria-label="`Resize column`"
+      aria-label="Resize column"
       data-dz-resize-handle
       @pointerdown="onResizeStart"
       @keydown="onResizeKey"
