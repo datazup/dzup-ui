@@ -175,6 +175,60 @@ describe('dzTableBody', () => {
     })
     expect(wrapper.text()).toContain('No records found.')
   })
+
+  it('renders 3 skeleton rows by default when loading', () => {
+    const wrapper = mount(DzTable, {
+      props: { loading: true },
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'Alice' }),
+              }),
+          }),
+      },
+    })
+    expect(wrapper.findAll('tbody tr').length).toBe(3)
+    expect(wrapper.find('[aria-hidden="true"]').exists()).toBe(true)
+  })
+
+  it('respects a custom skeletonRows prop', () => {
+    const wrapper = mount(DzTable, {
+      props: { loading: true },
+      slots: {
+        default: () => h(DzTableBody, { skeletonRows: 5 }, {}),
+      },
+    })
+    expect(wrapper.findAll('tbody tr').length).toBe(5)
+  })
+
+  it('prioritizes loading skeleton over real row content', () => {
+    const wrapper = mount(DzTable, {
+      props: { loading: true },
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'Alice' }),
+              }),
+          }),
+      },
+    })
+    expect(wrapper.text()).not.toContain('Alice')
+  })
+
+  it('prioritizes loading skeleton over the empty state', () => {
+    const wrapper = mount(DzTable, {
+      props: { loading: true },
+      slots: {
+        default: () => h(DzTableBody, null, {}),
+      },
+    })
+    expect(wrapper.text()).not.toContain('No records found.')
+    expect(wrapper.findAll('tbody tr').length).toBe(3)
+  })
 })
 
 describe('dzTableRow', () => {

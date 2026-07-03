@@ -69,6 +69,8 @@ export interface DzTableContext {
   hoverable: Ref<boolean>
   /** Table density */
   density: Ref<TableDensity>
+  /** Whether the table is in a loading state */
+  loading: Ref<boolean>
 }
 
 /** Typed injection key for DzTable context (ADR-08, SCREAMING_SNAKE) */
@@ -145,6 +147,8 @@ export interface DzTableHeaderSlots {
 export interface DzTableBodyProps {
   /** Additional class name */
   class?: string
+  /** Number of skeleton rows to render while the table is loading */
+  skeletonRows?: number
 }
 
 /** Slot definitions for DzTableBody */

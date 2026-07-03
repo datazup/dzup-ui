@@ -55,6 +55,7 @@ const context: DzTableContext = {
   striped: toRef(() => props.striped),
   hoverable: toRef(() => props.hoverable),
   density: toRef(() => props.density),
+  loading: toRef(() => props.loading),
 }
 
 provide(DZ_TABLE_KEY, context)
