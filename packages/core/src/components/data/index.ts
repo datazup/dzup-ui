@@ -147,7 +147,10 @@ export type {
   DzInfiniteScrollSlots,
   InfiniteScrollDirection,
 } from './DzInfiniteScroll.types.ts'
-export { type InfiniteScrollVariantProps, infiniteScrollVariants } from './DzInfiniteScroll.variants.ts'
+export {
+  type InfiniteScrollVariantProps,
+  infiniteScrollVariants,
+} from './DzInfiniteScroll.variants.ts'
 // ── DzInfiniteScroll ──
 export { default as DzInfiniteScroll } from './DzInfiniteScroll.vue'
 export type {
@@ -186,6 +189,8 @@ export type {
   DzTableCellProps,
   DzTableCellSlots,
   DzTableContext,
+  DzTableFooterProps,
+  DzTableFooterSlots,
   DzTableHeaderProps,
   DzTableHeaderSlots,
   DzTableProps,
@@ -202,6 +207,7 @@ export { default as DzTable } from './DzTable.vue'
 export { default as DzTableBody } from './DzTableBody.vue'
 export { default as DzTableCell } from './DzTableCell.vue'
 
+export { default as DzTableFooter } from './DzTableFooter.vue'
 export { default as DzTableHeader } from './DzTableHeader.vue'
 export { default as DzTableRow } from './DzTableRow.vue'
 export type { DzTagEmits, DzTagProps, DzTagSlots } from './DzTag.types.ts'

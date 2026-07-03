@@ -7,6 +7,7 @@ import { h } from 'vue'
 import DzTable from './DzTable.vue'
 import DzTableBody from './DzTableBody.vue'
 import DzTableCell from './DzTableCell.vue'
+import DzTableFooter from './DzTableFooter.vue'
 import DzTableHeader from './DzTableHeader.vue'
 import DzTableRow from './DzTableRow.vue'
 
@@ -290,5 +291,63 @@ describe('dzTableCell', () => {
     })
     const cell = wrapper.findComponent(DzTableCell)
     expect(cell.classes().some((c: string) => c.includes('text-right'))).toBe(true)
+  })
+})
+
+describe('dzTableFooter', () => {
+  function mountWithFooter() {
+    return mount(DzTable, {
+      slots: {
+        default: () => [
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'Alice' }),
+              }),
+          }),
+          h(DzTableFooter, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'Total: 1' }),
+              }),
+          }),
+        ],
+      },
+    })
+  }
+
+  it('renders a <tfoot> element', () => {
+    const wrapper = mountWithFooter()
+    expect(wrapper.find('tfoot').exists()).toBe(true)
+  })
+
+  it('renders footer slot content', () => {
+    const wrapper = mountWithFooter()
+    expect(wrapper.find('tfoot').text()).toContain('Total: 1')
+  })
+
+  it('applies a top-border footer style distinct from header', () => {
+    const wrapper = mountWithFooter()
+    const footerClasses = wrapper.find('tfoot').classes()
+    expect(footerClasses.some((c) => c.includes('border-t'))).toBe(true)
+  })
+
+  it('merges consumer class via cn()', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(
+            DzTableFooter,
+            { class: 'my-footer' },
+            {
+              default: () =>
+                h(DzTableRow, null, {
+                  default: () => h(DzTableCell, null, { default: () => 'X' }),
+                }),
+            },
+          ),
+      },
+    })
+    expect(wrapper.find('tfoot').classes()).toContain('my-footer')
   })
 })

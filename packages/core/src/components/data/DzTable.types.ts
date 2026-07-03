@@ -140,6 +140,22 @@ export interface DzTableHeaderSlots {
 }
 
 // ---------------------------------------------------------------------------
+// DzTableFooter Props
+// ---------------------------------------------------------------------------
+
+/** Props for the DzTableFooter component */
+export interface DzTableFooterProps {
+  /** Additional class name */
+  class?: string
+}
+
+/** Slot definitions for DzTableFooter */
+export interface DzTableFooterSlots {
+  /** Table footer rows */
+  default: () => unknown
+}
+
+// ---------------------------------------------------------------------------
 // DzTableBody Props
 // ---------------------------------------------------------------------------
 

@@ -3,7 +3,9 @@ import { mount } from '@vue/test-utils'
  * DzTable — Contract Spec v1 conformance tests.
  */
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
 import DzTable from './DzTable.vue'
+import DzTableFooter from './DzTableFooter.vue'
 
 describe('dzTable — Contract Spec v1', () => {
   it('renders without errors', () => {
@@ -74,5 +76,17 @@ describe('dzTable — Contract Spec v1', () => {
       slots: { default: '<tr><td>Cell</td></tr>' },
     })
     expect(wrapper.html()).toContain('custom-class')
+  })
+})
+
+describe('dzTableFooter — Contract Spec v1', () => {
+  it('renders without errors', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () => h(DzTableFooter, null, { default: () => '<tr><td>Total</td></tr>' }),
+      },
+    })
+    expect(wrapper.exists()).toBe(true)
+    expect(wrapper.find('tfoot').exists()).toBe(true)
   })
 })
