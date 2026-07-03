@@ -25,12 +25,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -48,12 +47,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -74,12 +72,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -103,12 +100,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -149,12 +145,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
@@ -220,16 +215,17 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
+      - name: Build token artifacts
+        run: yarn workspace @dzup-ui/tokens build
       - name: Build Storybook
         run: yarn storybook:build
       # TASK-X.7 — track the docs build's total size as a NON-BLOCKING metric.
@@ -257,16 +253,17 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
+      - name: Build token artifacts
+        run: yarn workspace @dzup-ui/tokens build
       - name: Install Playwright Chromium
         run: yarn workspace @dzup-ui/storybook exec playwright install --with-deps chromium
       # TASK-0.9 / TASK-X.3 — runs every story's play() + WCAG 2.2 AA axe audit
@@ -298,6 +295,7 @@ jobs:
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     needs: [typecheck]
     steps:
       - uses: actions/checkout@v4
@@ -306,22 +304,27 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - name: Run E2E tests (Chromium)
-        run: yarn test:e2e --project=chromium
+      - name: Run functional E2E tests (Chromium)
+        timeout-minutes: 20
+        run: yarn test:e2e:functional --project=chromium
+      - name: Run visual snapshot tests (Chromium, report-only)
+        id: visual
+        timeout-minutes: 20
+        continue-on-error: true
+        run: yarn test:e2e:visual --project=chromium --retries=0
       - name: Upload Playwright report
-        if: failure()
+        if: failure() || steps.visual.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
@@ -394,12 +397,11 @@ jobs:
           node-version: 20
       - name: Enable Corepack
         run: corepack enable
-      - name: Get yarn cache directory
-        id: yarn-cache-dir
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies

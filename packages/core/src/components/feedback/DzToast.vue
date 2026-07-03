@@ -58,6 +58,13 @@ function handleAction(): void {
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+const rootStateProps = computed(() => ({
+  ...attrs,
+  class: undefined,
+  ...(props.open === undefined ? {} : { open: props.open }),
+  ...(props.defaultOpen === undefined ? {} : { defaultOpen: props.defaultOpen }),
+}))
 </script>
 
 <template>
@@ -66,7 +73,7 @@ const rootClasses = computed(() =>
     :class="rootClasses"
     :data-tone="toast.tone ?? 'neutral'"
     style="contain: layout style"
-    v-bind="{ ...$attrs, class: undefined }"
+    v-bind="rootStateProps"
     @update:open="(open: boolean) => { if (!open) handleClose() }"
   >
     <div :class="styles.toneIndicator()" aria-hidden="true" />

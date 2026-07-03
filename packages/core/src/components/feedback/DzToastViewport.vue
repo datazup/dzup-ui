@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DzToastViewportProps, DzToastViewportSlots } from './DzToast.types.ts'
+import type { DzToastViewportProps, DzToastViewportSlots, ToastItem } from './DzToast.types.ts'
 import { ToastViewport } from 'reka-ui'
 /**
  * DzToastViewport -- Renders the toast viewport and active toasts.
@@ -17,10 +17,7 @@ import { ToastViewport } from 'reka-ui'
  */
 import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
-import {
-  DZ_TOAST_KEY,
-
-} from './DzToast.types.ts'
+import { DZ_TOAST_KEY } from './DzToast.types.ts'
 import { toastVariants } from './DzToast.variants.ts'
 import DzToast from './DzToast.vue'
 
@@ -36,6 +33,7 @@ defineSlots<DzToastViewportSlots>()
 
 const attrs = useAttrs()
 const context = inject(DZ_TOAST_KEY)
+const visibleToasts = computed<ToastItem[]>(() => context?.toasts.value ?? [])
 
 const styles = computed(() =>
   toastVariants({
@@ -56,12 +54,12 @@ const viewportClasses = computed(() =>
   <ToastViewport
     :class="viewportClasses"
     v-bind="{ ...$attrs, class: undefined }"
-  >
-    <DzToast
-      v-for="toast in context?.toasts.value"
-      :key="toast.id"
-      :toast="toast"
-      @close="handleToastClose"
-    />
-  </ToastViewport>
+  />
+  <DzToast
+    v-for="toast in visibleToasts"
+    :key="toast.id"
+    :toast="toast"
+    open
+    @close="handleToastClose"
+  />
 </template>

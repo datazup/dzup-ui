@@ -69,37 +69,33 @@ export const Default: Story = {
     components: {
       DzToastProvider,
       DzToastViewport,
-      ToastButtons: {
-        setup() {
-          const ctx = inject(DZ_TOAST_KEY)
-          function fire(tone: string) {
-            ctx?.add({
-              title: `${tone.charAt(0).toUpperCase() + tone.slice(1)} Toast`,
-              description: `This is a ${tone} toast notification.`,
-              tone: tone as ToastItem['tone'],
-              duration: 5000,
-            })
-          }
-          return { fire }
-        },
-        template: `
-          <div class="flex flex-wrap gap-3">
-            <button v-for="tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']"
-              :key="tone"
-              class="px-3 py-1.5 text-sm border rounded capitalize"
-              @click="fire(tone)">
-              {{ tone }}
-            </button>
-          </div>
-        `,
-      },
+      DzToast,
     },
     setup() {
-      return { inject, DZ_TOAST_KEY }
+      const toasts = ref<ToastItem[]>([])
+      const tones: ToastItem['tone'][] = ['neutral', 'primary', 'success', 'warning', 'danger', 'info']
+      function fire(tone: ToastItem['tone']) {
+        toasts.value = [{
+          id: `${tone}-${Date.now()}`,
+          title: `${tone.charAt(0).toUpperCase() + tone.slice(1)} Toast`,
+          description: `This is a ${tone} toast notification.`,
+          tone,
+          duration: 0,
+        }]
+      }
+      return { fire, tones, toasts }
     },
     template: `
       <DzToastProvider :duration="5000">
-        <ToastButtons />
+        <div class="flex flex-wrap gap-3">
+          <button v-for="tone in tones"
+            :key="tone"
+            class="px-3 py-1.5 text-sm border rounded capitalize"
+            @click="fire(tone)">
+            {{ tone }}
+          </button>
+        </div>
+        <DzToast v-for="toast in toasts" :key="toast.id" :toast="toast" open />
         <DzToastViewport position="bottom-right" />
       </DzToastProvider>
     `,
@@ -113,23 +109,24 @@ export const Default: Story = {
 export const AllTones: Story = {
   name: 'Tone Gallery',
   render: () => ({
-    components: { DzToastProvider, DzToast },
+    components: { DzToastProvider, DzToast, DzToastViewport },
     setup() {
       const toasts: ToastItem[] = [
-        { id: '1', title: 'Neutral', description: 'A neutral notification.', tone: 'neutral' },
-        { id: '2', title: 'Primary', description: 'A primary notification.', tone: 'primary' },
-        { id: '3', title: 'Success', description: 'Operation completed.', tone: 'success' },
-        { id: '4', title: 'Warning', description: 'Proceed with caution.', tone: 'warning' },
-        { id: '5', title: 'Danger', description: 'Something went wrong.', tone: 'danger' },
-        { id: '6', title: 'Info', description: 'Informational message.', tone: 'info' },
+        { id: '1', title: 'Neutral', description: 'A neutral notification.', tone: 'neutral', duration: 0 },
+        { id: '2', title: 'Primary', description: 'A primary notification.', tone: 'primary', duration: 0 },
+        { id: '3', title: 'Success', description: 'Operation completed.', tone: 'success', duration: 0 },
+        { id: '4', title: 'Warning', description: 'Proceed with caution.', tone: 'warning', duration: 0 },
+        { id: '5', title: 'Danger', description: 'Something went wrong.', tone: 'danger', duration: 0 },
+        { id: '6', title: 'Info', description: 'Informational message.', tone: 'info', duration: 0 },
       ]
       return { toasts }
     },
     template: `
       <DzToastProvider>
         <div class="space-y-3 max-w-sm">
-          <DzToast v-for="t in toasts" :key="t.id" :toast="t" />
+          <DzToast v-for="t in toasts" :key="t.id" :toast="t" open />
         </div>
+        <DzToastViewport position="bottom-right" />
       </DzToastProvider>
     `,
   }),
@@ -142,13 +139,14 @@ export const AllTones: Story = {
 export const WithAction: Story = {
   name: 'With Action Button',
   render: () => ({
-    components: { DzToastProvider, DzToast },
+    components: { DzToastProvider, DzToast, DzToastViewport },
     setup() {
       const toast: ToastItem = {
         id: 'action-1',
         title: 'Message archived',
         description: 'The conversation has been moved to archive.',
         tone: 'neutral',
+        duration: 0,
         actionLabel: 'Undo',
         onAction: () => {
           // no-op for story
@@ -159,8 +157,9 @@ export const WithAction: Story = {
     template: `
       <DzToastProvider>
         <div class="max-w-sm">
-          <DzToast :toast="toast" />
+          <DzToast :toast="toast" open />
         </div>
+        <DzToastViewport position="bottom-right" />
       </DzToastProvider>
     `,
   }),

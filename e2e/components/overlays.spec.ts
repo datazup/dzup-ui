@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { loadStoryCanvas } from '../utils/storybook'
 
 /**
  * Smoke tests for the Overlays component family.
@@ -15,18 +16,14 @@ test.describe('DzDialog', () => {
   const STORY_ROOT = 'core-overlays-dzdialog'
 
   test('default story renders trigger button', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     const trigger = frame.getByRole('button', { name: /open dialog/i })
     await expect(trigger).toBeVisible()
   })
 
   test('dialog opens when trigger button is clicked', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     const trigger = frame.getByRole('button', { name: /open dialog/i })
     await trigger.click()
@@ -40,9 +37,7 @@ test.describe('DzDialog', () => {
   })
 
   test('dialog closes via the Cancel button', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     await frame.getByRole('button', { name: /open dialog/i }).click()
 
@@ -58,9 +53,7 @@ test.describe('DzDialog', () => {
   })
 
   test('dialog closes via Escape key', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     await frame.getByRole('button', { name: /open dialog/i }).click()
 
@@ -74,9 +67,7 @@ test.describe('DzDialog', () => {
   })
 
   test('dialog can be dismissed via the Confirm button', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     await frame.getByRole('button', { name: /open dialog/i }).click()
 
@@ -90,9 +81,7 @@ test.describe('DzDialog', () => {
   })
 
   test('controlled interactive story: open state text updates on open', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--interactive`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--interactive`)
 
     // Initial state shows "Closed"
     await expect(frame.getByText(/state: closed/i)).toBeVisible()
@@ -104,9 +93,7 @@ test.describe('DzDialog', () => {
   })
 
   test('size gallery renders multiple size trigger buttons', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--all-sizes`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--all-sizes`)
 
     // Each size has its own trigger button labelled with the size abbreviation
     for (const size of ['SM', 'MD', 'LG', 'XL', 'FULL']) {
@@ -120,9 +107,7 @@ test.describe('DzToast', () => {
 
   test('tone gallery story renders toast notifications for all tones', async ({ page }) => {
     // "Tone Gallery" story (export: AllTones → kebab: all-tones)
-    await page.goto(`/?path=/story/${STORY_ROOT}--all-tones`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--all-tones`)
 
     // Each tone has its title rendered as visible text
     for (const title of ['Neutral', 'Primary', 'Success', 'Warning', 'Danger', 'Info']) {
@@ -132,18 +117,14 @@ test.describe('DzToast', () => {
 
   test('toast with action button renders the action label', async ({ page }) => {
     // "With Action Button" story (export: WithAction → kebab: with-action)
-    await page.goto(`/?path=/story/${STORY_ROOT}--with-action`)
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--with-action`)
 
-    const frame = page.frameLocator('#storybook-preview-iframe')
-
-    await expect(frame.getByText('Message archived')).toBeVisible()
+    await expect(frame.getByText('Message archived', { exact: true })).toBeVisible()
     await expect(frame.getByRole('button', { name: /undo/i })).toBeVisible()
   })
 
   test('default interactive story renders tone trigger buttons', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     // The interactive story renders a row of tone trigger buttons
     for (const tone of ['neutral', 'primary', 'success', 'warning', 'danger', 'info']) {
@@ -152,14 +133,12 @@ test.describe('DzToast', () => {
   })
 
   test('clicking a tone trigger fires a toast notification', async ({ page }) => {
-    await page.goto(`/?path=/story/${STORY_ROOT}--default`)
-
-    const frame = page.frameLocator('#storybook-preview-iframe')
+    const frame = await loadStoryCanvas(page, `${STORY_ROOT}--default`)
 
     // Click the "success" trigger
     await frame.getByRole('button', { name: /success/i }).click()
 
     // The toast should appear — its title contains "Success Toast"
-    await expect(frame.getByText(/success toast/i)).toBeVisible()
+    await expect(frame.getByText('Success Toast', { exact: true })).toBeVisible()
   })
 })

@@ -3,7 +3,12 @@ import { mount } from '@vue/test-utils'
  * DzTable — Contract Spec v1 conformance tests.
  */
 import { describe, expect, it } from 'vitest'
+import { h } from 'vue'
 import DzTable from './DzTable.vue'
+import DzTableBody from './DzTableBody.vue'
+import DzTableCell from './DzTableCell.vue'
+import DzTableFooter from './DzTableFooter.vue'
+import DzTableRow from './DzTableRow.vue'
 
 describe('dzTable — Contract Spec v1', () => {
   it('renders without errors', () => {
@@ -74,5 +79,45 @@ describe('dzTable — Contract Spec v1', () => {
       slots: { default: '<tr><td>Cell</td></tr>' },
     })
     expect(wrapper.html()).toContain('custom-class')
+  })
+})
+
+describe('dzTableFooter — Contract Spec v1', () => {
+  it('renders without errors', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () => h(DzTableFooter, null, { default: () => '<tr><td>Total</td></tr>' }),
+      },
+    })
+    expect(wrapper.exists()).toBe(true)
+    expect(wrapper.find('tfoot').exists()).toBe(true)
+  })
+})
+
+describe('dzTableRow (expandable) — Contract Spec v1', () => {
+  it('renders an accessible toggle and detail row on expand', async () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(
+                DzTableRow,
+                { expandable: true, rowId: 'r1' },
+                {
+                  default: () => h(DzTableCell, null, { default: () => 'Alice' }),
+                  expand: () => 'Detail',
+                },
+              ),
+          }),
+      },
+    })
+    const toggle = wrapper.find('button[aria-expanded]')
+    expect(toggle.exists()).toBe(true)
+    expect(toggle.attributes('aria-expanded')).toBe('false')
+    await toggle.trigger('click')
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.find('tr.expand-row').exists()).toBe(true)
+    expect(wrapper.emitted('rowExpand')).toEqual([['r1']])
   })
 })

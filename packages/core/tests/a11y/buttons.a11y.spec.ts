@@ -13,6 +13,7 @@ import DzIconButton from '../../src/components/buttons/DzIconButton.vue'
 import DzSplitButton from '../../src/components/buttons/DzSplitButton.vue'
 import DzSplitButtonAction from '../../src/components/buttons/DzSplitButtonAction.vue'
 import DzSplitButtonMenu from '../../src/components/buttons/DzSplitButtonMenu.vue'
+import './register-matchers.ts'
 
 // Minimal icon component stub for DzIconButton tests
 const StubIcon = defineComponent({

@@ -126,9 +126,9 @@ export const CompoundComposition: Story = {
           class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
-          <p>&lt;DzPopover&gt;              <!-- root, v-model:open --&gt;</p>
-          <p class="pl-4">&lt;DzPopoverTrigger /&gt;   <!-- click target --&gt;</p>
-          <p class="pl-4">&lt;DzPopoverContent&gt;     <!-- floating panel, role="dialog" --&gt;</p>
+          <p>&lt;DzPopover&gt;              &lt;!-- root, v-model:open --&gt;</p>
+          <p class="pl-4">&lt;DzPopoverTrigger /&gt;   &lt;!-- click target --&gt;</p>
+          <p class="pl-4">&lt;DzPopoverContent&gt;     &lt;!-- floating panel, role="dialog" --&gt;</p>
           <p class="pl-8">...interactive content...</p>
           <p class="pl-4">&lt;/DzPopoverContent&gt;</p>
           <p>&lt;/DzPopover&gt;</p>

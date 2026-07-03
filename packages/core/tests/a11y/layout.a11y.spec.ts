@@ -14,6 +14,7 @@ import DzFlex from '../../src/components/layout/DzFlex.vue'
 import DzGrid from '../../src/components/layout/DzGrid.vue'
 import DzScrollArea from '../../src/components/layout/DzScrollArea.vue'
 import DzStack from '../../src/components/layout/DzStack.vue'
+import './register-matchers.ts'
 
 describe('layout family — Accessibility', () => {
   // ---------------------------------------------------------------------------

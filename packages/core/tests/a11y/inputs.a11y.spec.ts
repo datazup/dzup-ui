@@ -14,6 +14,7 @@ import DzSelect from '../../src/components/forms/DzSelect.vue'
 import DzSwitch from '../../src/components/forms/DzSwitch.vue'
 import DzInput from '../../src/components/inputs/DzInput.vue'
 import DzTextarea from '../../src/components/inputs/DzTextarea.vue'
+import './register-matchers.ts'
 
 describe('inputs family — Accessibility', () => {
   // ---------------------------------------------------------------------------

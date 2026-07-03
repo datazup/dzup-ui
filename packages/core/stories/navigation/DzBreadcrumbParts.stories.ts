@@ -169,7 +169,7 @@ export const WithCustomSeparator: Story = {
           <DzBreadcrumb aria-label="Dot separator breadcrumb">
             <DzBreadcrumbItem href="/">Root</DzBreadcrumbItem>
             <DzBreadcrumbSeparator separator="·" />
-            <DzBreadcrumbItem href="/account">Account</DzBreadcrumbSeparator>
+            <DzBreadcrumbItem href="/account">Account</DzBreadcrumbItem>
             <DzBreadcrumbSeparator separator="·" />
             <DzBreadcrumbItem current>Billing</DzBreadcrumbItem>
           </DzBreadcrumb>

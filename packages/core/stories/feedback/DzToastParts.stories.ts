@@ -151,17 +151,7 @@ export const ViewportPositions: Story = {
 export const WithAction: Story = {
   name: 'With Action Button',
   render: () => ({
-    components: { DzToastProvider, DzToastViewport, DzButton },
-    setup() {
-      const ctx = { add: null as ReturnType<typeof inject<DzToastContext>> }
-      return { ctx }
-    },
-    mounted() {
-      const toastCtx = inject<DzToastContext>(DZ_TOAST_KEY)
-      if (toastCtx) {
-        this.ctx.add = toastCtx.add as ReturnType<typeof inject<DzToastContext>>
-      }
-    },
+    components: { DzToastProvider, DzToastViewport, ToastTrigger },
     template: `
       <DzToastProvider>
         <div class="space-y-4">
@@ -183,10 +173,7 @@ export const WithAction: Story = {
 export const Persistent: Story = {
   name: 'Persistent (No Auto-Dismiss)',
   render: () => ({
-    components: { DzToastProvider, DzToastViewport, DzButton },
-    setup() {
-      return {}
-    },
+    components: { DzToastProvider, DzToastViewport, ToastTrigger },
     template: `
       <DzToastProvider :duration="0">
         <div class="space-y-4">

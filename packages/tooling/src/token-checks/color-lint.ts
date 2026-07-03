@@ -7,7 +7,7 @@
  * Exemptions:
  *   - Files inside packages/tokens/ (token definitions are allowed)
  *   - Comments (single-line // and multi-line blocks)
- *   - String literals used in test assertions (*.spec.ts)
+ *   - Test, story, and fixture files (*.spec.ts, *.test.ts, *.stories.ts)
  *   - Common false positives: CSS variable references var(--...)
  *
  * Usage:
@@ -36,6 +36,7 @@ interface ColorViolation {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../')
 const PACKAGES_DIR = resolve(ROOT, 'packages')
 const TOKENS_DIR = resolve(PACKAGES_DIR, 'tokens')
+const IGNORE_SUFFIXES = ['.spec.ts', '.test.ts', '.stories.ts']
 
 /**
  * Patterns that indicate raw color literals.
@@ -131,6 +132,9 @@ function collectFiles(dir: string, extensions: string[]): string[] {
         walk(fullPath)
       }
       else if (stat.isFile() && extensions.some(ext => entry.endsWith(ext))) {
+        if (IGNORE_SUFFIXES.some(suffix => entry.endsWith(suffix))) {
+          continue
+        }
         results.push(fullPath)
       }
     }

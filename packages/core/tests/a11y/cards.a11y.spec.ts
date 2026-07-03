@@ -10,6 +10,7 @@ import { axe } from 'vitest-axe'
 import DzCard from '../../src/components/cards/DzCard.vue'
 import DzImageCard from '../../src/components/cards/DzImageCard.vue'
 import DzStatCard from '../../src/components/cards/DzStatCard.vue'
+import './register-matchers.ts'
 
 describe('cards family — Accessibility', () => {
   // ---------------------------------------------------------------------------

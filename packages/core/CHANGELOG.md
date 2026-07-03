@@ -1,6 +1,6 @@
 # @dzup-ui/core
 
-## 0.1.0
+## 0.1.0 (2026-05-03)
 
 ### Minor Changes
 

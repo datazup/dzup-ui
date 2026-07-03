@@ -12,6 +12,7 @@ import DzAvatar from '../../src/components/media/DzAvatar.vue'
 import DzAvatarGroup from '../../src/components/media/DzAvatarGroup.vue'
 import DzIcon from '../../src/components/media/DzIcon.vue'
 import DzImage from '../../src/components/media/DzImage.vue'
+import './register-matchers.ts'
 
 // Minimal icon component stub
 const StubIcon = defineComponent({

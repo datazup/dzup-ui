@@ -137,7 +137,7 @@ const template = `
     </template>
 
     <div style="padding:var(--dz-spacing-6);display:flex;flex-direction:column;gap:var(--dz-spacing-6);">
-      <DzGrid cols="4" gap="md">
+      <DzGrid :cols="4" gap="md">
         <DzStatCard
           v-for="s in stats"
           :key="s.title"

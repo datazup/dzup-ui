@@ -110,6 +110,9 @@ function collectFiles(dir: string): string[] {
   for (const entry of entries) {
     const fullPath = resolve(dir, entry.name)
     if (entry.isDirectory()) {
+      if (entry.name === 'node_modules') {
+        continue
+      }
       results.push(...collectFiles(fullPath))
     }
     else {

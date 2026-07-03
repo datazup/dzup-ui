@@ -28,6 +28,13 @@ export const tableTokens = {
   bordered: {
     border: 'var(--dz-border)',
   },
+  /** Expandable (accordion) rows */
+  expand: {
+    detailBackground: 'var(--dz-muted)',
+    detailBorder: 'var(--dz-border)',
+    toggleForeground: 'var(--dz-muted-foreground)',
+    toggleTransition: 'var(--dz-duration-fast)',
+  },
   /** Cell density */
   density: {
     compact: {

@@ -15,6 +15,7 @@ import DzFormField from '../../src/components/forms/DzFormField.vue'
 import DzFormLabel from '../../src/components/forms/DzFormLabel.vue'
 import DzMultiSelect from '../../src/components/forms/DzMultiSelect.vue'
 import DzSlider from '../../src/components/forms/DzSlider.vue'
+import './register-matchers.ts'
 
 describe('forms family — Accessibility', () => {
   // ---------------------------------------------------------------------------

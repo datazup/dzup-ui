@@ -19,6 +19,7 @@ import DzTabContent from '../../src/components/navigation/DzTabContent.vue'
 import DzTabList from '../../src/components/navigation/DzTabList.vue'
 import DzTabs from '../../src/components/navigation/DzTabs.vue'
 import DzTabTrigger from '../../src/components/navigation/DzTabTrigger.vue'
+import './register-matchers.ts'
 
 describe('navigation family — Accessibility', () => {
   // ---------------------------------------------------------------------------

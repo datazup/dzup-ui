@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { loadStoryCanvas } from '../utils/storybook.ts'
 
 const SCREENS = [
   { name: 'dashboard', id: 'visual-refresh-dashboard--dzup-ui' },
@@ -11,6 +12,8 @@ const SCREENS = [
   { name: 'detail', id: 'visual-refresh-detail--dzup-ui' },
 ] as const
 const THEMES = ['light', 'dark'] as const
+
+test.setTimeout(90_000)
 
 for (const screen of SCREENS) {
   for (const theme of THEMES) {
@@ -43,18 +46,14 @@ for (const screen of SCREENS) {
         }
       }, theme)
 
-      // Storybook's iframe keeps a live HMR connection open, so the page never
-      // reaches 'networkidle'. Wait for DOM ready instead, then settle.
-      await page.goto(`/iframe.html?id=${screen.id}&globals=theme:${theme}`, {
-        waitUntil: 'domcontentloaded',
-      })
-      await page.waitForTimeout(1500)
-      await expect(page).toHaveScreenshot(`gallery-${screen.name}-${theme}.png`, {
-        fullPage: true,
+      const canvas = await loadStoryCanvas(page, screen.id, `theme:${theme}`, { waitForMainClass: false })
+      const root = canvas.locator('#storybook-root')
+      await expect(root).toBeVisible({ timeout: 60_000 })
+      await expect(root).toHaveScreenshot(`gallery-${screen.name}-${theme}.png`, {
         maxDiffPixelRatio: 0.01,
         animations: 'disabled',
         // Generous stabilization window: this repo lives on a slow NTFS volume
-        // where fullPage rendering can exceed the 5s default.
+        // where gallery rendering can exceed the 5s default.
         timeout: 30_000,
       })
     })

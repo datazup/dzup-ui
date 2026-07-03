@@ -190,7 +190,7 @@ describe('dzToastContext — context operations', () => {
     await nextTick()
     await nextTick()
 
-    expect(document.body.textContent).toContain('Changes saved')
+    await expect.poll(() => document.body.textContent).toContain('Changes saved')
 
     // Rendering the toast must not steal focus from the page. (Reka's
     // aria-live announce region is RAF/timeout-gated and is asserted in the
@@ -200,7 +200,7 @@ describe('dzToastContext — context operations', () => {
     // Dismiss: removing the toast unmounts its content.
     ctx!.remove(id)
     await nextTick()
-    expect(document.body.textContent).not.toContain('Changes saved')
+    await expect.poll(() => document.body.textContent).not.toContain('Changes saved')
 
     wrapper.unmount()
   })

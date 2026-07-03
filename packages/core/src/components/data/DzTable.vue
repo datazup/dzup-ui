@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DzTableContext, DzTableProps, DzTableSlots } from './DzTable.types.ts'
+import type { DzTableContext, DzTableEmits, DzTableProps, DzTableSlots } from './DzTable.types.ts'
 /**
  * DzTable — Compound semantic table root component.
  *
@@ -27,7 +27,7 @@ import type { DzTableContext, DzTableProps, DzTableSlots } from './DzTable.types
  * </DzTable>
  * ```
  */
-import { computed, provide, toRef, useAttrs } from 'vue'
+import { computed, provide, ref, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
@@ -43,17 +43,39 @@ const props = withDefaults(defineProps<DzTableProps>(), {
   hoverable: false,
   density: 'default',
   loading: false,
+  captionVisible: false,
 })
+
+const emit = defineEmits<DzTableEmits>()
 
 defineSlots<DzTableSlots>()
 
 const attrs = useAttrs()
+
+const expandedRows = ref<Set<string>>(new Set())
+
+function toggleExpand(rowId: string): void {
+  const next = new Set(expandedRows.value)
+  if (next.has(rowId)) {
+    next.delete(rowId)
+    expandedRows.value = next
+    emit('rowCollapse', rowId)
+  }
+  else {
+    next.add(rowId)
+    expandedRows.value = next
+    emit('rowExpand', rowId)
+  }
+}
 
 const context: DzTableContext = {
   size: toRef(() => props.size),
   striped: toRef(() => props.striped),
   hoverable: toRef(() => props.hoverable),
   density: toRef(() => props.density),
+  loading: toRef(() => props.loading),
+  expandedRows,
+  toggleExpand,
 }
 
 provide(DZ_TABLE_KEY, context)
@@ -67,9 +89,7 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() =>
-  cn('relative overflow-auto', attrs.class as string | undefined),
-)
+const rootClasses = computed(() => cn('relative overflow-auto', attrs.class as string | undefined))
 
 const tableClasses = computed(() => styles.value.root())
 </script>
@@ -91,7 +111,7 @@ const tableClasses = computed(() => styles.value.root())
       :aria-busy="loading || undefined"
       role="table"
     >
-      <caption v-if="$slots.caption" class="sr-only">
+      <caption v-if="$slots.caption" :class="captionVisible ? undefined : 'sr-only'">
         <slot name="caption" />
       </caption>
       <slot />

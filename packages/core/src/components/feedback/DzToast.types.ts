@@ -73,6 +73,10 @@ export interface DzToastProviderProps {
 export interface DzToastProps extends BaseAccessibilityProps {
   /** Toast data item */
   toast: ToastItem
+  /** Whether the toast should be open on initial render */
+  defaultOpen?: boolean
+  /** Controlled open state for static or externally managed toasts */
+  open?: boolean
 }
 
 // ---------------------------------------------------------------------------

@@ -22,6 +22,7 @@ import DzTableRow from '../../src/components/data/DzTableRow.vue'
 import DzTag from '../../src/components/data/DzTag.vue'
 import DzTimeline from '../../src/components/data/DzTimeline.vue'
 import DzTimelineItem from '../../src/components/data/DzTimelineItem.vue'
+import './register-matchers.ts'
 
 describe('data family — Accessibility', () => {
   // ---------------------------------------------------------------------------

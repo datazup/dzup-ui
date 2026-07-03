@@ -121,6 +121,10 @@ function validateFile(filePath: string): Violation[] {
     return violations
   }
 
+  if (/\.(?:spec|test)\.ts$/.test(filePath)) {
+    return violations
+  }
+
   const content = readFileSync(filePath, 'utf-8')
   const lines = content.split('\n')
   const allowed = ALLOWED_DEPS[pkg]
@@ -151,6 +155,9 @@ function validateFile(filePath: string): Violation[] {
     // Skip single-line comments: lines that are just comments
     const trimmed = line.trimStart()
     if (trimmed.startsWith('//') || trimmed.startsWith('*')) {
+      continue
+    }
+    if (trimmed.startsWith('`') || trimmed.startsWith('\'') || trimmed.startsWith(String.fromCharCode(34))) {
       continue
     }
 

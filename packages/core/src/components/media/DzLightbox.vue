@@ -23,7 +23,7 @@ import {
  * <DzLightbox v-model="isOpen" :images="gallery" :start-index="0" />
  * ```
  */
-import { computed, ref, useAttrs, useId, watch } from 'vue'
+import { computed, ref, useAttrs, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { lightboxVariants } from './DzLightbox.variants.ts'
 
@@ -41,7 +41,6 @@ const emit = defineEmits<DzLightboxEmits>()
 defineSlots<DzLightboxSlots>()
 
 const attrs = useAttrs()
-const autoId = useId()
 const currentIndex = ref(props.startIndex)
 const styles = lightboxVariants()
 
@@ -54,8 +53,6 @@ watch(open, (val) => {
 const currentImage = computed(() => props.images[currentIndex.value])
 const hasPrev = computed(() => currentIndex.value > 0)
 const hasNext = computed(() => currentIndex.value < props.images.length - 1)
-const fallbackTitleId = computed(() => `${props.id ?? autoId}-title`)
-const fallbackDescriptionId = computed(() => `${props.id ?? autoId}-description`)
 const fallbackTitle = computed(() => props.ariaLabel ?? currentImage.value?.alt ?? 'Image viewer')
 const fallbackDescription = computed(() => {
   if (!currentImage.value)
@@ -64,6 +61,16 @@ const fallbackDescription = computed(() => {
   if (currentImage.value.caption)
     parts.push(currentImage.value.caption)
   return parts.join('. ')
+})
+const contentAria = computed<Record<string, unknown>>(() => {
+  const aria: Record<string, unknown> = {}
+  if (props.ariaLabel !== undefined)
+    aria['aria-label'] = props.ariaLabel
+  if (props.ariaLabelledby !== undefined)
+    aria['aria-labelledby'] = props.ariaLabelledby
+  if (props.ariaDescribedby !== undefined)
+    aria['aria-describedby'] = props.ariaDescribedby
+  return aria
 })
 
 function goTo(index: number): void {
@@ -106,17 +113,14 @@ function handleKeydown(event: KeyboardEvent): void {
       <DialogContent
         :id="id"
         :class="cn(styles.content, attrs.class as string | undefined)"
-        :aria-label="ariaLabel ?? 'Image viewer'"
-        :aria-labelledby="ariaLabelledby ?? fallbackTitleId"
-        :aria-describedby="ariaDescribedby ?? fallbackDescriptionId"
         style="contain: layout style"
-        v-bind="{ ...$attrs, class: undefined }"
+        v-bind="{ ...contentAria, ...$attrs, class: undefined }"
         @keydown="handleKeydown"
       >
-        <DialogTitle :id="fallbackTitleId" class="sr-only">
+        <DialogTitle class="sr-only">
           {{ fallbackTitle }}
         </DialogTitle>
-        <DialogDescription :id="fallbackDescriptionId" class="sr-only">
+        <DialogDescription class="sr-only">
           {{ fallbackDescription }}
         </DialogDescription>
         <!-- Counter -->

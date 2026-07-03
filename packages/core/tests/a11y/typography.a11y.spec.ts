@@ -12,6 +12,7 @@ import DzCaption from '../../src/components/typography/DzCaption.vue'
 import DzCode from '../../src/components/typography/DzCode.vue'
 import DzHeading from '../../src/components/typography/DzHeading.vue'
 import DzText from '../../src/components/typography/DzText.vue'
+import './register-matchers.ts'
 
 describe('typography family — Accessibility', () => {
   // ---------------------------------------------------------------------------

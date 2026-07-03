@@ -145,11 +145,11 @@ export const CompoundComposition: Story = {
           class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
-          <p>&lt;DzDropdownMenu&gt;                <!-- root, v-model:open --&gt;</p>
-          <p class="pl-4">&lt;DzDropdownMenuTrigger /&gt;     <!-- click target --&gt;</p>
-          <p class="pl-4">&lt;DzDropdownMenuContent&gt;       <!-- floating panel --&gt;</p>
-          <p class="pl-8">&lt;DzDropdownMenuItem /&gt;        <!-- role="menuitem" --&gt;</p>
-          <p class="pl-8">&lt;DzDropdownMenuSeparator /&gt;   <!-- divider --&gt;</p>
+          <p>&lt;DzDropdownMenu&gt;                &lt;!-- root, v-model:open --&gt;</p>
+          <p class="pl-4">&lt;DzDropdownMenuTrigger /&gt;     &lt;!-- click target --&gt;</p>
+          <p class="pl-4">&lt;DzDropdownMenuContent&gt;       &lt;!-- floating panel --&gt;</p>
+          <p class="pl-8">&lt;DzDropdownMenuItem /&gt;        &lt;!-- role="menuitem" --&gt;</p>
+          <p class="pl-8">&lt;DzDropdownMenuSeparator /&gt;   &lt;!-- divider --&gt;</p>
           <p class="pl-8">&lt;DzDropdownMenuItem /&gt;</p>
           <p class="pl-4">&lt;/DzDropdownMenuContent&gt;</p>
           <p>&lt;/DzDropdownMenu&gt;</p>

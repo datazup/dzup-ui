@@ -10,6 +10,7 @@ import { axe } from 'vitest-axe'
 import DzAlert from '../../src/components/feedback/DzAlert.vue'
 import DzProgress from '../../src/components/feedback/DzProgress.vue'
 import DzSpinner from '../../src/components/feedback/DzSpinner.vue'
+import './register-matchers.ts'
 
 describe('feedback family — Accessibility', () => {
   // ---------------------------------------------------------------------------

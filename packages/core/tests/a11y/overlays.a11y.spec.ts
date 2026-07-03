@@ -40,6 +40,7 @@ import DzSheetTrigger from '../../src/components/overlays/DzSheetTrigger.vue'
 import DzTooltip from '../../src/components/overlays/DzTooltip.vue'
 import DzTooltipContent from '../../src/components/overlays/DzTooltipContent.vue'
 import DzTooltipTrigger from '../../src/components/overlays/DzTooltipTrigger.vue'
+import './register-matchers.ts'
 
 /**
  * Axe rules to disable when scanning portaled overlay content via baseElement.
