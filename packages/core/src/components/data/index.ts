@@ -199,7 +199,9 @@ export type {
   DzTableRowSlots,
   DzTableSlots,
   TableDensity,
+  TablePin,
   TableVariant,
+  VirtualWindow,
 } from './DzTable.types.ts'
 export { DZ_TABLE_KEY } from './DzTable.types.ts'
 export { type TableVariantProps, tableVariants } from './DzTable.variants.ts'

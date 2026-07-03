@@ -8,42 +8,38 @@
  *
  * @module @dzup-ui/core/components/data/DzTable
  *
- * ## Missing features (tracked TODOs)
+ * ## Feature set
  *
- * TODO(DzTable-column-pinning): Sticky/pinned column support.
- *   Required by CapabilityMatrixView (skill names column must stay fixed while
- *   category columns scroll horizontally). Design: add `pin?: 'left' | 'right'`
- *   to DzTableCellProps; DzTableCell emits its offsetLeft into DzTableContext;
- *   DzTable wrapper applies `position: sticky; left: <offset>` via inline style
- *   and `z-index: var(--dz-z-sticky)` on pinned cells. Shadow on the right edge
- *   of the last pinned column via `box-shadow: inset -4px 0 var(--dz-shadow-xs)`.
- *   Requires token `--dz-z-sticky` in @dzup-ui/tokens.
+ * Column pinning, virtual scroll, and column resizing are implemented (see the
+ * respective props below). Column sorting and row selection are intentionally
+ * NOT part of DzTable — they live in the richer `DzDataGrid` component. DzTable
+ * remains a lightweight, uncontrolled, slot-driven semantic table.
  *
- * TODO(DzTable-column-sorting): Per-column sort indicator and sort-change emit.
- *   Add `sortable?: boolean`, `sortDirection?: 'asc' | 'desc' | 'none'` to
- *   DzTableCellProps (header cells only). DzTableCell renders a sort icon and
- *   emits `sort` with the column key. DzTable emits
- *   `sort-change: [key: string, direction: 'asc' | 'desc']`.
- *   Caller owns sort state; DzTable is uncontrolled (no internal sort logic).
+ * ### Column pinning (implemented)
+ *   `pin?: 'left' | 'right'` on DzTableCellProps sticks a column to the edge of
+ *   the scroll container while other columns scroll horizontally. Cumulative
+ *   offset for stacked pinned columns is supplied explicitly via `pinOffset`
+ *   (a compound slot-driven table cannot measure sibling widths reliably).
+ *   Pinned cells get `position: sticky`, `z-index: var(--dz-z-sticky)`, an
+ *   opaque background, and an edge shadow on the boundary column.
  *
- * TODO(DzTable-row-selection): Checkbox-based multi-row selection.
- *   Add `selectable?: boolean` to DzTableProps; DzTable provides
- *   `selected: Ref<Set<string>>` and `toggleRow(id: string)` in context.
- *   DzTableRow accepts `rowId?: string`; renders a leading DzCheckbox cell when
- *   selectable context is active. DzTable emits `selection-change: [ids: string[]]`.
- *   Select-all checkbox in DzTableHeader.
+ * ### Virtual scroll (implemented)
+ *   `virtualScroll` + `rowHeight` on DzTableProps enable windowed rendering of
+ *   the DzTableBody default slot. Requires fixed row heights (`rowHeight`, px).
+ *   Only the visible window (plus an overscan buffer) is rendered; top/bottom
+ *   spacer rows preserve scroll geometry. Sticky pinned columns continue to work
+ *   because stickiness is applied per-cell, not on the tbody.
  *
- * TODO(DzTable-virtual-scroll): Windowed rendering for large datasets.
- *   Add `virtualScroll?: boolean` and `rowHeight?: number` to DzTableProps.
- *   Use @vueuse/core useVirtualList on the scroll container. Requires fixed row
- *   heights. Column pinning must work with virtual rows (sticky on container,
- *   not tbody).
+ * ### Column resizing (implemented)
+ *   `resizable` + `colId` on DzTableCellProps (header cells) render a drag handle
+ *   at the cell's right edge. Pointer drag updates `colWidths` in context; any
+ *   cell sharing the same `colId` reads its width from that map. Min width is
+ *   `--dz-table-col-min-width` (fallback 48px).
  *
- * TODO(DzTable-column-resizing): Drag-to-resize column widths.
- *   Add `resizable?: boolean` to DzTableCellProps (header cells only). DzTableCell
- *   renders a drag handle at the right edge; pointer events update
- *   `colWidths: Ref<Map<string, number>>` in context. Requires `colId` prop on
- *   DzTableCell. Min-width via `--dz-table-col-min-width` token.
+ * ## Out of scope (intentionally in DzDataGrid, not DzTable)
+ *
+ *   - Column sorting (sort indicators, sort-change emits) → DzDataGrid.
+ *   - Row selection (checkbox multi-select, select-all) → DzDataGrid.
  */
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
@@ -69,6 +65,46 @@ export interface DzTableContext {
   expandedRows: Ref<Set<string>>
   /** Toggle the expanded state of the row with the given id */
   toggleExpand: (rowId: string) => void
+  // ── Column resizing ──
+  /**
+   * Per-column widths (px), keyed by `colId`. A header DzTableCell with
+   * `resizable` writes into this map on drag; any DzTableCell sharing the same
+   * `colId` reads its width from it. Empty until a column is resized.
+   */
+  colWidths: Ref<Map<string, number>>
+  /** Set the resolved width (px) for a column id (used by the resize handle). */
+  setColWidth: (colId: string, width: number) => void
+  // ── Virtual scroll ──
+  /** Whether windowed (virtual) rendering is active for the body. */
+  virtualScroll: Ref<boolean>
+  /** Fixed row height (px) used for virtual-scroll geometry. */
+  rowHeight: Ref<number>
+  /** Overscan buffer (rows rendered above/below the visible window). */
+  overscan: Ref<number>
+  /** Current scroll offset (px) of the scroll container. */
+  scrollTop: Ref<number>
+  /** Current visible height (px) of the scroll container. */
+  viewportHeight: Ref<number>
+}
+
+// ---------------------------------------------------------------------------
+// Virtual scroll
+// ---------------------------------------------------------------------------
+
+/**
+ * Windowed-render state derived by DzTableBody from container geometry + row
+ * count. Only rows in `[startIndex, endIndex)` are rendered; spacer rows of
+ * `paddingTop` / `paddingBottom` preserve the scrollbar geometry.
+ */
+export interface VirtualWindow {
+  /** Index of the first rendered row (inclusive). */
+  startIndex: number
+  /** Index one past the last rendered row (exclusive). */
+  endIndex: number
+  /** Height (px) of the top spacer row that offsets the visible window. */
+  paddingTop: number
+  /** Height (px) of the bottom spacer row below the visible window. */
+  paddingBottom: number
 }
 
 /** Typed injection key for DzTable context (ADR-08, SCREAMING_SNAKE) */
@@ -107,6 +143,29 @@ export interface DzTableProps extends BaseAccessibilityProps {
    * Default `false` preserves the original `sr-only` behaviour.
    */
   captionVisible?: boolean
+  /**
+   * Enable windowed (virtual) rendering of DzTableBody rows for large datasets.
+   * Requires fixed row heights (`rowHeight`). Only visible rows plus an overscan
+   * buffer are rendered; spacer rows preserve scroll geometry. Default `false`.
+   */
+  virtualScroll?: boolean
+  /**
+   * Fixed row height in pixels, used for virtual-scroll geometry. Only meaningful
+   * when `virtualScroll` is set. Default `44`.
+   */
+  rowHeight?: number
+  /**
+   * Max height (CSS length) of the scroll container. Needed so virtual scroll has
+   * a bounded, scrollable viewport (e.g. `'400px'`, `'60vh'`). When omitted while
+   * `virtualScroll` is set, defaults to `'400px'`.
+   */
+  maxHeight?: string
+  /**
+   * Number of extra rows rendered above and below the visible window to reduce
+   * blank flashes while scrolling. Only meaningful with `virtualScroll`.
+   * Default `4`.
+   */
+  overscan?: number
 }
 
 // ---------------------------------------------------------------------------
@@ -228,6 +287,9 @@ export interface DzTableRowSlots {
 // DzTableCell Props
 // ---------------------------------------------------------------------------
 
+/** Which edge a column is pinned (stuck) to while the table scrolls horizontally. */
+export type TablePin = 'left' | 'right'
+
 /** Props for the DzTableCell component */
 export interface DzTableCellProps {
   /** Whether this cell is a header cell (<th> vs <td>) */
@@ -238,6 +300,35 @@ export interface DzTableCellProps {
   colspan?: number
   /** Row span */
   rowspan?: number
+  /**
+   * Pin this cell's column to the `left` or `right` edge of the scroll container
+   * so it stays visible while other columns scroll horizontally. Apply the same
+   * `pin` value to every cell in the column (header + body) for a coherent column.
+   */
+  pin?: TablePin
+  /**
+   * Cumulative offset (px) from the pinned edge, for stacking multiple pinned
+   * columns. The first pinned column uses `0`; each subsequent pinned column uses
+   * the summed width of the pinned columns before it. Ignored when `pin` is unset.
+   */
+  pinOffset?: number
+  /**
+   * Mark this pinned cell as the boundary column (the last pinned-left or first
+   * pinned-right column) so it renders an edge shadow separating pinned from
+   * scrolling content. Ignored when `pin` is unset.
+   */
+  pinBoundary?: boolean
+  /**
+   * Stable column id. Required to participate in column resizing: a `resizable`
+   * header cell writes its width under this id, and body cells sharing the id
+   * adopt that width.
+   */
+  colId?: string
+  /**
+   * Header cells only: render a drag handle at the right edge that resizes the
+   * column. Requires `colId`. No-op on body cells.
+   */
+  resizable?: boolean
 }
 
 /** Slot definitions for DzTableCell */
