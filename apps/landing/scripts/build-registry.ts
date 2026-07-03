@@ -42,12 +42,14 @@
  * nothing, rather than publishing a partial/empty registry.
  */
 
-import { mkdir, rm, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createServer } from 'vite'
+import { createServer, type ViteDevServer } from 'vite'
 import { REGISTRY_PATH } from '../src/blocks/config.ts'
 import type { BlockDef, CategoryMeta } from '../src/blocks/registry.ts'
+import type { TemplateMeta } from '../src/templates/registry.ts'
+import type { resolveTemplateSources } from '../src/templates/rawSources.ts'
 import {
   blockMarkdown,
   LLMS_FULL_TXT,
@@ -56,6 +58,13 @@ import {
   llmsTxt,
 } from '../src/blocks/llmsText.ts'
 import { buildRegistryIndex, toRegistryItem } from '../src/blocks/registryItem.ts'
+import { toTokensItem, tokensDirectoryEntry } from '../src/blocks/tokensItem.ts'
+import {
+  buildTemplatesIndex,
+  toTemplateItem,
+  type ResolvedTemplateFile,
+  type TemplateRegistryItem,
+} from '../src/blocks/templatesItem.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
@@ -65,6 +74,17 @@ const PUBLIC_DIR = resolve(LANDING_ROOT, 'public')
 
 /** `public/` mirror of the public-URL dir the registry is served from (`/r`). */
 const OUT_DIR = resolve(PUBLIC_DIR, REGISTRY_PATH.replace(/^\//, ''))
+
+/**
+ * Templates sub-registry dir (`/r/templates`). Kept off the flat `/r/` root
+ * because some template slugs collide with block ids (`sign-in`, `product-detail`)
+ * — see `templatesItem.ts`. Nested INSIDE `OUT_DIR` so the single `rm(OUT_DIR)`
+ * below wipes it too.
+ */
+const TEMPLATES_OUT_DIR = resolve(OUT_DIR, 'templates')
+
+/** The generated `@dzup-ui/tokens` stylesheet the tokens theme item is parsed from. */
+const TOKENS_CSS = resolve(LANDING_ROOT, '../../packages/tokens/dist/tokens.css')
 
 /** Pretty JSON with a trailing newline (POSIX-friendly, clean diffs). */
 function toJson(value: unknown): string {
@@ -77,7 +97,14 @@ function toJson(value: unknown): string {
  * its `?raw` source) is transformed. The server runs in middleware mode, so it
  * binds no port; we always close it.
  */
-async function loadCatalog(): Promise<{ blocks: BlockDef[]; categories: CategoryMeta[] }> {
+interface Catalog {
+  blocks: BlockDef[]
+  categories: CategoryMeta[]
+  /** Each template paired with its resolved (`?raw`-loaded) source files. */
+  templates: Array<{ meta: TemplateMeta; files: ResolvedTemplateFile[] }>
+}
+
+async function loadCatalog(): Promise<Catalog> {
   const server = await createServer({
     root: LANDING_ROOT,
     logLevel: 'warn',
@@ -85,18 +112,50 @@ async function loadCatalog(): Promise<{ blocks: BlockDef[]; categories: Category
     server: { middlewareMode: true },
   })
   try {
-    const mod = (await server.ssrLoadModule('/src/blocks/registry.ts')) as {
+    const blocksMod = (await server.ssrLoadModule('/src/blocks/registry.ts')) as {
       BLOCKS: BlockDef[]
       CATEGORIES: CategoryMeta[]
     }
-    return { blocks: mod.BLOCKS, categories: mod.CATEGORIES }
+    const templates = await loadTemplates(server)
+    return { blocks: blocksMod.BLOCKS, categories: blocksMod.CATEGORIES, templates }
   } finally {
     await server.close()
   }
 }
 
+/**
+ * Load `TEMPLATES` and resolve every template's `?raw` source files — the SFC and
+ * its optional co-located `data.ts` (whatever `resolveTemplateSources` surfaces).
+ * The `load()` thunks pull `?raw` chunks through the SSR module graph, so they
+ * MUST be awaited while `server` is alive (the caller closes it right after).
+ * A template whose source can't be resolved is skipped with a warning rather than
+ * failing the whole build.
+ */
+async function loadTemplates(server: ViteDevServer): Promise<Catalog['templates']> {
+  const templatesMod = (await server.ssrLoadModule('/src/templates/registry.ts')) as {
+    TEMPLATES: TemplateMeta[]
+  }
+  const rawMod = (await server.ssrLoadModule('/src/templates/rawSources.ts')) as {
+    resolveTemplateSources: typeof resolveTemplateSources
+  }
+
+  const out: Catalog['templates'] = []
+  for (const meta of templatesMod.TEMPLATES) {
+    const rawFiles = rawMod.resolveTemplateSources(meta.source)
+    if (rawFiles.length === 0) {
+      console.warn(`⚠ template "${meta.slug}": no source resolved for ${meta.source} — skipped`)
+      continue
+    }
+    const files: ResolvedTemplateFile[] = await Promise.all(
+      rawFiles.map(async (file) => ({ filename: file.filename, content: await file.load() })),
+    )
+    out.push({ meta, files })
+  }
+  return out
+}
+
 async function main(): Promise<void> {
-  const { blocks, categories } = await loadCatalog()
+  const { blocks, categories, templates } = await loadCatalog()
   if (blocks.length === 0) {
     throw new Error('Registry has no blocks — nothing to generate.')
   }
@@ -111,17 +170,40 @@ async function main(): Promise<void> {
     await writeFile(resolve(OUT_DIR, `${block.id}.md`), blockMarkdown(block, categories))
   }
 
-  // The registry index listing every item.
-  await writeFile(resolve(OUT_DIR, 'registry.json'), toJson(buildRegistryIndex(blocks)))
+  // The tokens theme item (`--dz-*` cssVars, light/dark) — installable standalone
+  // via `shadcn add …/r/tokens.json`, and referenced from the index directory.
+  const tokensItem = toTokensItem(await readFile(TOKENS_CSS, 'utf8'))
+  await writeFile(resolve(OUT_DIR, `${tokensItem.name}.json`), toJson(tokensItem))
+
+  // The top-level registry index: every block + the tokens theme entry.
+  const index = buildRegistryIndex(blocks)
+  index.items.push(tokensDirectoryEntry(tokensItem))
+  await writeFile(resolve(OUT_DIR, 'registry.json'), toJson(index))
+
+  // Templates sub-registry (`/r/templates/*`) — collision-free namespace.
+  await mkdir(TEMPLATES_OUT_DIR, { recursive: true })
+  const templateItems: TemplateRegistryItem[] = []
+  for (const { meta, files } of templates) {
+    const item = toTemplateItem(meta, files)
+    templateItems.push(item)
+    await writeFile(resolve(TEMPLATES_OUT_DIR, `${meta.slug}.json`), toJson(item))
+  }
+  await writeFile(
+    resolve(TEMPLATES_OUT_DIR, 'registry.json'),
+    toJson(buildTemplatesIndex(templateItems)),
+  )
 
   // AI-readable docs at the public root: the concise index + the full-source one.
   await writeFile(resolve(PUBLIC_DIR, LLMS_TXT), llmsTxt(blocks, categories))
   await writeFile(resolve(PUBLIC_DIR, LLMS_FULL_TXT), llmsFullTxt(blocks, categories))
 
   console.log(
-    `▸ Registry: wrote registry.json + ${blocks.length} item(s) (.json + .md) to ${OUT_DIR}\n` +
+    `▸ Registry: wrote registry.json + ${blocks.length} block(s), tokens.json, and ` +
+      `${templateItems.length} template(s) under ${OUT_DIR}\n` +
       `▸ AI docs: wrote ${LLMS_TXT} + ${LLMS_FULL_TXT} to ${PUBLIC_DIR}\n` +
-      `  Install a block: npx shadcn-vue add https://<landing-host>${REGISTRY_PATH}/<id>.json\n` +
+      `  Install a block:    npx shadcn@latest add https://<landing-host>${REGISTRY_PATH}/<id>.json\n` +
+      `  Install the tokens: npx shadcn@latest add https://<landing-host>${REGISTRY_PATH}/tokens.json\n` +
+      `  Install a template: npx shadcn@latest add https://<landing-host>${REGISTRY_PATH}/templates/<slug>.json\n` +
       `  Point an assistant at it: @docs https://<landing-host>/${LLMS_TXT}`,
   )
 }

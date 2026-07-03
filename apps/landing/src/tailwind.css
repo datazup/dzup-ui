@@ -47,6 +47,30 @@
   --lp-container: 1120px;
 }
 
+/* Full-page re-skin cross-fade (spec §7). The "Re-theme the page" control flips
+   `data-theme` inside document.startViewTransition (useThemeTransition) and tags
+   <html> with `.dz-theming`; this pure opacity cross-fade then REPLACES the route
+   fade+slide (App.vue) for that one swap, so the whole surface — component
+   internals included — dissolves between light and dark rather than hard-
+   flipping. Transform-free, so no layout thrash. Gated `no-preference`: under
+   reduced motion the control skips the View Transition entirely and the CSS
+   `--dz-landing-theme-transition` on surfaces is the (near-instant) floor. */
+@media (prefers-reduced-motion: no-preference) {
+  html.dz-theming::view-transition-old(root) {
+    animation: dz-theme-fade-out var(--dz-duration-slower, 500ms) var(--dz-ease-default, ease) both;
+  }
+  html.dz-theming::view-transition-new(root) {
+    animation: dz-theme-fade-in var(--dz-duration-slower, 500ms) var(--dz-ease-default, ease) both;
+  }
+
+  @keyframes dz-theme-fade-out {
+    to { opacity: 0; }
+  }
+  @keyframes dz-theme-fade-in {
+    from { opacity: 0; }
+  }
+}
+
 /* Dark mode deepens the glass highlight and shadow so depth survives the flip. */
 [data-theme="dark"] {
   --lp-highlight: inset 0 1px 0 color-mix(in oklch, #fff 8%, transparent);

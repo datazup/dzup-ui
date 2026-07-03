@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "not-found",
+  "type": "registry:block",
+  "title": "404 — Page Not Found",
+  "description": "A polished, centered 404 page — an oversized glyph, a DzResult headline with recovery actions and a card of helpful destinations.",
+  "categories": [
+    "utility"
+  ],
+  "files": [
+    {
+      "path": "NotFound.vue",
+      "content": "<script setup lang=\"ts\">\n/**\n * 404 — Page Not Found — Utility template (docs/templates.md §6.6).\n *\n * A chromeless, centered error page: a brand lockup, an oversized 404 glyph, a\n * DzResult headline + description, primary/secondary DzButtons to recover, and\n * a DzCard of helpful destinations so a dead link still ends somewhere useful.\n * Built only from free `@dzup-ui/core` components, token-styled, light + dark,\n * reflows cleanly 390px → up.\n */\nimport { DzButton, DzCard, DzDivider, DzResult, DzText } from '@dzup-ui/core'\nimport { ArrowRight, Boxes, Compass, Home, LifeBuoy, Search } from 'lucide-vue-next'\nimport type { Component } from 'vue'\n\ninterface QuickLink {\n  icon: Component\n  label: string\n  description: string\n  href: string\n}\n\nconst LINKS: QuickLink[] = [\n  {\n    icon: Compass,\n    label: 'Dashboard',\n    description: 'Your workspace overview',\n    href: '#',\n  },\n  {\n    icon: Search,\n    label: 'Search docs',\n    description: 'Find guides and references',\n    href: '#',\n  },\n  {\n    icon: LifeBuoy,\n    label: 'Help center',\n    description: 'Answers and how-tos',\n    href: '#',\n  },\n]\n</script>\n\n<template>\n  <main class=\"nf-page\">\n    <div class=\"nf-wrap\">\n      <span class=\"brand\">\n        <span class=\"brand-mark\" aria-hidden=\"true\"><Boxes :size=\"18\" /></span>\n        <span class=\"brand-name\">Northwind</span>\n      </span>\n\n      <p class=\"nf-code\" aria-hidden=\"true\">404</p>\n\n      <DzResult\n        status=\"info\"\n        title=\"We can't find that page\"\n        description=\"The page you're looking for may have moved, been renamed, or never existed. Let's get you back on track.\"\n      >\n        <template #actions>\n          <DzButton variant=\"solid\" tone=\"primary\" href=\"#\">\n            <template #prefix><Home :size=\"16\" aria-hidden=\"true\" /></template>\n            Back to home\n          </DzButton>\n          <DzButton variant=\"outline\" tone=\"neutral\" href=\"#\">Contact support</DzButton>\n        </template>\n      </DzResult>\n\n      <DzCard variant=\"outlined\" padding=\"none\" class=\"nf-links\">\n        <DzText size=\"xs\" tone=\"muted\" weight=\"semibold\" as=\"div\" class=\"nf-links-label\">\n          OR JUMP TO\n        </DzText>\n        <ul class=\"nf-links-list\">\n          <template v-for=\"(link, i) in LINKS\" :key=\"link.label\">\n            <DzDivider v-if=\"i > 0\" />\n            <li>\n              <a class=\"nf-link\" :href=\"link.href\">\n                <span class=\"nf-link-icon\" aria-hidden=\"true\">\n                  <component :is=\"link.icon\" :size=\"18\" />\n                </span>\n                <span class=\"nf-link-meta\">\n                  <DzText weight=\"medium\" as=\"span\">{{ link.label }}</DzText>\n                  <DzText size=\"sm\" tone=\"muted\" as=\"span\">{{ link.description }}</DzText>\n                </span>\n                <ArrowRight :size=\"16\" aria-hidden=\"true\" class=\"nf-link-arrow\" />\n              </a>\n            </li>\n          </template>\n        </ul>\n      </DzCard>\n    </div>\n  </main>\n</template>\n\n<style scoped>\n.nf-page {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  width: 100%;\n  padding: clamp(24px, 5vw, 64px);\n  background:\n    radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--dz-primary) 8%, transparent), transparent 60%),\n    var(--dz-background);\n  color: var(--dz-foreground);\n  font-family: var(--dz-font-sans);\n}\n\n.nf-wrap {\n  width: 100%;\n  max-width: 460px;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 8px;\n  text-align: center;\n}\n\n.brand {\n  display: inline-flex;\n  align-items: center;\n  gap: 10px;\n  font-weight: var(--dz-font-semibold);\n  margin-bottom: 8px;\n}\n\n.brand-mark {\n  display: grid;\n  place-items: center;\n  width: 30px;\n  height: 30px;\n  border-radius: var(--dz-radius-md);\n  background: var(--dz-primary);\n  color: var(--dz-primary-foreground);\n}\n\n.nf-code {\n  margin: 0;\n  font-size: clamp(5rem, 18vw, 8rem);\n  font-weight: var(--dz-font-bold);\n  line-height: 1;\n  letter-spacing: -0.04em;\n  background: linear-gradient(\n    135deg,\n    var(--dz-primary),\n    color-mix(in oklch, var(--dz-primary) 55%, var(--dz-foreground))\n  );\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n}\n\n.nf-links {\n  width: 100%;\n  margin-top: 24px;\n  text-align: left;\n  overflow: hidden;\n}\n\n.nf-links-label {\n  letter-spacing: 0.06em;\n  padding: 14px 16px 6px;\n}\n\n.nf-links-list {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.nf-link {\n  display: flex;\n  align-items: center;\n  gap: 14px;\n  padding: 14px 16px;\n  text-decoration: none;\n  color: var(--dz-foreground);\n  transition: background-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);\n}\n\n.nf-link:hover {\n  background: var(--dz-muted);\n}\n\n.nf-link:focus-visible {\n  outline: 2px solid var(--dz-ring);\n  outline-offset: -2px;\n}\n\n.nf-link-icon {\n  display: grid;\n  place-items: center;\n  flex: none;\n  width: 36px;\n  height: 36px;\n  border-radius: var(--dz-radius-md);\n  background: color-mix(in oklch, var(--dz-primary) 12%, transparent);\n  color: var(--dz-primary);\n}\n\n.nf-link-meta {\n  display: flex;\n  flex-direction: column;\n  line-height: 1.3;\n  min-width: 0;\n}\n\n.nf-link-arrow {\n  margin-left: auto;\n  color: var(--dz-muted-foreground);\n  flex: none;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .nf-link {\n    transition: none;\n  }\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/templates/not-found/NotFound.vue"
+    }
+  ],
+  "registryDependencies": [],
+  "dependencies": [
+    "@dzup-ui/core",
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzResult",
+      "DzCard",
+      "DzButton",
+      "DzDivider",
+      "DzText"
+    ],
+    "tier": "free"
+  }
+}

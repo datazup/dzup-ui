@@ -293,7 +293,7 @@ export const Interactive: Story = {
             <DzIcon :icon="Underline" size="sm" />
           </DzToggleButton>
         </div>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Bold: {{ bold }} | Italic: {{ italic }} | Underline: {{ underline }}
         </p>
       </div>
@@ -329,7 +329,7 @@ export const Accessibility: Story = {
     setup() { return { AlignLeft, AlignCenter, AlignRight } },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tab through buttons. Each renders aria-pressed="true|false"
           and data-state="on|off" for screen readers and styling hooks.
         </p>

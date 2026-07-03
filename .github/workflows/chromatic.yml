@@ -1,0 +1,78 @@
+# TASK-APP-01 — Visual regression via Chromatic (light × dark modes).
+#
+# Snapshots every non-excluded Storybook story in both themes (the modes are
+# defined in apps/storybook/.storybook/preview.ts) in Chromatic's isolated
+# server environment, so there is no Mac-vs-Linux baseline flake.
+#
+# NON-BLOCKING while baselines stabilise: the job is `continue-on-error` and
+# Chromatic runs with `exitZeroOnChanges`, so a visual diff never fails the PR.
+# See docs/storybook-decisions.md (TASK-0.11 / TASK-X.5) for the checklist to
+# promote this to a required check once the baselines are trusted.
+name: Chromatic
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: chromatic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  chromatic:
+    name: Visual Regression (Chromatic)
+    runs-on: ubuntu-latest
+    # Non-blocking initially — never fail the build while baselines settle.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Chromatic needs full git history to detect the baseline commit and
+          # to run TurboSnap (onlyChanged). A shallow clone breaks both.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Run Chromatic
+        id: chromatic
+        uses: chromaui/action@latest
+        with:
+          # Never committed — configure the token as a repo secret.
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: apps/storybook
+          # Reuse the app's `build` script (storybook build) so Chromatic and CI
+          # produce an identical static build.
+          buildScriptName: build
+          # Visual changes are surfaced for review but do not fail the job while
+          # this check is non-blocking (belt-and-braces with continue-on-error).
+          exitZeroOnChanges: true
+          # TurboSnap: only re-snapshot stories affected by the diff, keeping
+          # runs (and the OSS snapshot budget) cheap.
+          onlyChanged: true
+      - name: Publish Chromatic review link
+        if: always()
+        run: |
+          {
+            echo "### 🎨 Chromatic visual regression (light × dark)"
+            echo ""
+            echo "- **Build / review:** ${{ steps.chromatic.outputs.buildUrl }}"
+            echo "- **Published Storybook:** ${{ steps.chromatic.outputs.storybookUrl }}"
+            echo "- **Component changes:** ${{ steps.chromatic.outputs.changeCount }}"
+            echo "- **New/errored components:** ${{ steps.chromatic.outputs.componentCount }}"
+            echo ""
+            echo "> Non-blocking check — review diffs in Chromatic and accept baselines there."
+          } >> "$GITHUB_STEP_SUMMARY"

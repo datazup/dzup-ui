@@ -205,6 +205,10 @@ export const AllSizes: Story = {
 
 export const Autoplay: Story = {
   name: 'Autoplay',
+  // TASK-APP-01 — auto-advances every 2 s, so the active slide under the capture
+  // is a race. Skip the visual snapshot; the deterministic Default story already
+  // covers the carousel's rendered states.
+  parameters: { chromatic: { disableSnapshot: true } },
   args: {
     autoplay: true,
     interval: 2000,
@@ -536,6 +540,9 @@ export const RealWorldImageGallery: Story = {
 
 export const RealWorldTestimonials: Story = {
   name: 'Real World: Testimonials',
+  // TASK-APP-01 — autoplay (:interval="4000") auto-advances the quote, so the
+  // captured slide is non-deterministic. Skip the visual snapshot.
+  parameters: { chromatic: { disableSnapshot: true } },
   render: () => ({
     components: { DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots },
     template: `

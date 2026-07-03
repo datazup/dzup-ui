@@ -1,7 +1,40 @@
 {/* Buttons.mdx */}
 import { Meta } from '@storybook/addon-docs/blocks'
+import { Figma } from '@storybook/addon-designs/blocks'
 import { StatusBadge } from './_blocks/StatusBadge.ts'
 import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { DzRepl } from './_blocks/DzRepl.ts'
+import { OpenInStackblitz } from './_blocks/OpenInStackblitz.ts'
+
+export const buttonExample = `<script setup lang="ts">
+import { DzButton } from '@dzup-ui/core'
+</script>
+
+<template>
+  <div style="display: grid; gap: 12px;">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <DzButton variant="solid" tone="primary">Solid</DzButton>
+      <DzButton variant="outline" tone="primary">Outline</DzButton>
+      <DzButton variant="ghost" tone="primary">Ghost</DzButton>
+      <DzButton variant="text" tone="primary">Text</DzButton>
+      <DzButton variant="link" tone="primary">Link</DzButton>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <DzButton tone="success">Success</DzButton>
+      <DzButton tone="warning">Warning</DzButton>
+      <DzButton tone="danger">Danger</DzButton>
+      <DzButton tone="info">Info</DzButton>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+      <DzButton size="xs">xs</DzButton>
+      <DzButton size="sm">sm</DzButton>
+      <DzButton size="md">md</DzButton>
+      <DzButton size="lg">lg</DzButton>
+      <DzButton size="xl">xl</DzButton>
+    </div>
+  </div>
+</template>
+`
 
 <Meta title="Core/Buttons/Overview" />
 
@@ -23,6 +56,17 @@ Tones (`neutral`, `primary`, `success`, `warning`, `danger`, `info`) carry
 **meaning**, not decoration — reach for `danger` only for destructive actions and
 `primary` for the affirmative path.
 
+## Try it live
+
+Edit the markup below — the preview re-renders instantly. Swap a `variant`,
+`tone` or `size` to feel the taxonomy. Or fork the full project on StackBlitz.
+
+<DzRepl code={buttonExample} height={520} />
+
+<div style={{ margin: '8px 0 4px' }}>
+  <OpenInStackblitz code={buttonExample} title="dzup-ui — Buttons" />
+</div>
+
 ## Components
 
 | Component | Status | When to use |
@@ -34,7 +78,18 @@ Tones (`neutral`, `primary`, `success`, `warning`, `danger`, `info`) carry
 | [DzToggleButton](?path=/docs/core-buttons-dztogglebutton--docs) | <StatusBadge status="stable" /> | A two-state on/off control (e.g. formatting). Exposes `aria-pressed`. |
 | [DzCopyButton](?path=/docs/core-buttons-dzcopybutton--docs) | <StatusBadge status="stable" /> | Copy a value to the clipboard with built-in "copied" feedback. |
 
+## Design source
+
+The button family is specified in Figma — the frame below is the same one linked
+from each component's **Design** panel, embedded here so the design intent and the
+live docs sit together.
+
+<Figma url="https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-2&t=DzButton" />
+
 ## When to use which
+
+> See also [**Guides/Choosing Components**](?path=/docs/guides-choosing-components--docs#button-vs-iconbutton-vs-link)
+> for Button vs IconButton vs Link (real `<a>`) — action vs navigation.
 
 - **One affirmative action per view** → `solid` `primary` `DzButton`. Everything
   else steps down to `outline`/`ghost`.

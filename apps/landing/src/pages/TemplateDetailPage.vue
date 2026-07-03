@@ -27,10 +27,11 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun } from 'lucide-vue-next'
+import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun, Zap } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import Section from '../components/Section.vue'
 import { componentDocs, LINKS } from '../config.ts'
+import { openInStackblitz } from '../lib/stackblitz.ts'
 import { useTheme } from '../composables/useTheme.ts'
 import { getTemplate, TEMPLATES } from '../templates/registry.ts'
 import { resolveTemplateSources, type TemplateRawFile } from '../templates/rawSources.ts'
@@ -184,6 +185,25 @@ watch(
 const mainSource = computed(() => sources.value[0]?.code ?? '')
 
 /**
+ * Fork this template into a live StackBlitz project (docs/templates.md §2). The
+ * `.vue` becomes `src/App.vue`; a co-located `data.ts` (which the template imports
+ * via `./data.ts`) is injected next to it as `src/data.ts` so the relative import
+ * resolves. Disabled until the source has loaded (see `:disabled` below).
+ */
+function openStackblitz(): void {
+  const t = template.value
+  if (!t || !mainSource.value) return
+  const files: Record<string, string> = { 'src/App.vue': mainSource.value }
+  const data = sources.value.find((file) => file.filename === 'data.ts')
+  if (data) files['src/data.ts'] = data.code
+  openInStackblitz({
+    title: `${t.name} — dzup-ui template`,
+    description: t.blurb,
+    files,
+  })
+}
+
+/**
  * A prompt-friendly markdown bundle of the template (docs/templates.md §8): a
  * short "what this is / built with" header, then each source file in a fenced
  * block. A visitor pastes this straight into an AI assistant.
@@ -236,6 +256,27 @@ const llmBundle = computed(() => {
         </div>
 
         <div class="source-actions">
+          <DzButton
+            variant="solid"
+            tone="primary"
+            size="sm"
+            :disabled="!mainSource"
+            :aria-label="`Open ${template.name} in a live StackBlitz project`"
+            @click="openStackblitz"
+          >
+            <template #prefix><Zap :size="16" aria-hidden="true" /></template>
+            Open in StackBlitz
+          </DzButton>
+          <DzCopyButton
+            :value="mainSource"
+            :disabled="!mainSource"
+            variant="outline"
+            tone="neutral"
+            size="sm"
+            label="Copy code"
+            copied-label="Copied!"
+            :aria-label="`Copy the full source of ${template.name}`"
+          />
           <DzButton
             variant="outline"
             tone="neutral"

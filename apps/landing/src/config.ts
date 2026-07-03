@@ -4,6 +4,15 @@
  * plain relative URLs; Phase 2 flips the Pro targets without structural change.
  */
 
+/**
+ * Canonical production origin (no trailing slash). The single source of truth for
+ * absolute URLs the client can't derive from `window.location` at build time:
+ * the generated `sitemap.xml`/`robots.txt` (scripts/build-sitemap.ts) and the
+ * absolute BreadcrumbList item URLs in the per-route JSON-LD. Kept in lockstep
+ * with the `<link rel="canonical">`/`og:url` origin authored in index.html.
+ */
+export const SITE_ORIGIN = 'https://dzup-ui.com'
+
 /** Where the free component docs (Storybook) are mounted in production (§3.4). */
 export const STORYBOOK_BASE = '/storybook/'
 
@@ -122,3 +131,34 @@ export const FACTS = {
 
 /** Whether the Pro funnel is live (Phase 2). Phase 1 keeps this false. */
 export const PRO_LIVE = false
+
+/**
+ * A single site-wide announcement (the thin bar above the nav). Surfaces a
+ * release/news item and drives repeat traffic — landing.md reserves the slot.
+ *
+ * Edit ONE entry to change what shows; set `ANNOUNCEMENT` to `null` to hide the
+ * bar entirely. The `id` is the dismissal key: a visitor who dismisses the bar
+ * won't see it again (persisted in localStorage), but bumping `id` for a NEW
+ * announcement re-shows it to everyone.
+ */
+export interface Announcement {
+  /** Stable, unique id. Bump it for a new announcement so the bar re-shows. */
+  id: string
+  /** The short message shown in the bar. */
+  message: string
+  /**
+   * Optional call-to-action target. An in-app path ('/blocks') renders a
+   * router-link; an absolute URL ('https://…') renders an external anchor.
+   */
+  href?: string
+  /** Optional label for the CTA link (defaults to "Learn more"). */
+  linkLabel?: string
+}
+
+/** The live announcement, or `null` to hide the bar. */
+export const ANNOUNCEMENT: Announcement | null = {
+  id: '2026-07-blocks',
+  message: 'New — 90+ copy-paste Vue blocks, each runnable in one click.',
+  href: '/blocks',
+  linkLabel: 'Browse blocks',
+}

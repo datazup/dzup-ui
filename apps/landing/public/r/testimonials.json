@@ -1,25 +1,32 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "testimonials",
   "type": "registry:block",
   "title": "Testimonials grid",
   "description": "Grid of customer quote cards each with a star rating, avatar, name/role, and quote text; responsive 3→2→1 columns.",
+  "categories": [
+    "marketing"
+  ],
   "files": [
     {
       "path": "testimonials.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzAvatar,\n  DzCard,\n  DzHeading,\n  DzRating,\n  DzText,\n} from '@dzup-ui/core'\n\n/**\n * Testimonials — a masonry-style grid of customer quote cards, each\n * containing the quote text, a DzRating (read-only star display),\n * a DzAvatar, and the reviewer's name and role.\n *\n * DzRating with `readonly` prop renders a static slider widget that is\n * announced by screen readers as the user's rating score. The `v-model:value`\n * binding is intentionally omitted — a static `:value` prop is all we need\n * for display. (Confirmed from DzRating ReadOnly story: `:value=\"4\"` with\n * no v-model is valid and renders correctly.)\n *\n * Heading level: section title at :level=\"4\" (BlockPreview uses H3).\n * No heading inside individual cards — the quote is the primary content.\n */\n\ninterface Testimonial {\n  id: string\n  quote: string\n  rating: number\n  name: string\n  role: string\n  company: string\n  initials: string\n  avatarSrc?: string\n}\n\nconst testimonials: Testimonial[] = [\n  {\n    id: 't1',\n    quote: 'DataZup cut our dashboard build time in half. The component library is incredibly polished — every detail from spacing to dark-mode is already sorted.',\n    rating: 5,\n    name: 'Priya Nakamura',\n    role: 'Lead Frontend Engineer',\n    company: 'Shopstream',\n    initials: 'PN',\n  },\n  {\n    id: 't2',\n    quote: 'We migrated three products in a month. The token system means our brand just drops in with zero overrides. Accessibility out of the box is a game changer.',\n    rating: 5,\n    name: 'Marcus Webb',\n    role: 'CTO',\n    company: 'Helix Analytics',\n    initials: 'MW',\n  },\n  {\n    id: 't3',\n    quote: 'The blocks catalog saved weeks of design work. Our designers and engineers finally speak the same language — we reference component names, not Figma frames.',\n    rating: 5,\n    name: 'Sofia Andersen',\n    role: 'Head of Product',\n    company: 'Clair Finance',\n    initials: 'SA',\n  },\n  {\n    id: 't4',\n    quote: 'Best DX I have experienced in a component library. TypeScript types are strict and complete — my IDE knows every prop before I even check the docs.',\n    rating: 5,\n    name: 'James Okonkwo',\n    role: 'Senior Developer',\n    company: 'Orbital Labs',\n    initials: 'JO',\n  },\n  {\n    id: 't5',\n    quote: 'We were skeptical about adopting a third-party design system, but the customisation depth is remarkable. It feels like we built it ourselves.',\n    rating: 4,\n    name: 'Lena Ström',\n    role: 'Engineering Manager',\n    company: 'NorthBridge',\n    initials: 'LS',\n  },\n  {\n    id: 't6',\n    quote: 'The dark-mode support is flawless and the WCAG compliance means we passed our accessibility audit on the first attempt. That alone justified the switch.',\n    rating: 5,\n    name: 'Ren Chaturvedi',\n    role: 'UI / UX Engineer',\n    company: 'Pebble Works',\n    initials: 'RC',\n  },\n]\n</script>\n\n<template>\n  <section class=\"testimonials\" aria-labelledby=\"testimonials-title\">\n    <!-- Section header ----------------------------------------------------->\n    <div class=\"tm-header\">\n      <DzHeading id=\"testimonials-title\" :level=\"4\" size=\"2xl\" weight=\"bold\" align=\"center\" class=\"tm-title\">\n        Loved by engineering teams\n      </DzHeading>\n      <DzText size=\"md\" tone=\"muted\" align=\"center\" class=\"tm-subtitle\">\n        Over 2,000 teams ship faster with dzup-ui every day.\n      </DzText>\n    </div>\n\n    <!-- Testimonial grid --------------------------------------------------->\n    <ul class=\"tm-grid\" aria-label=\"Customer testimonials\">\n      <li\n        v-for=\"item in testimonials\"\n        :key=\"item.id\"\n        class=\"tm-item\"\n      >\n        <DzCard variant=\"elevated\" padding=\"lg\" class=\"tm-card\">\n          <!-- Star rating ---->\n          <DzRating\n            :value=\"item.rating\"\n            :count=\"5\"\n            readonly\n            tone=\"warning\"\n            size=\"sm\"\n            :aria-label=\"`${item.rating} out of 5 stars`\"\n            class=\"tm-rating\"\n          />\n\n          <!-- Quote text — blockquote is semantic HTML; DzText renders the\n               visible copy inside it as a paragraph. -->\n          <blockquote class=\"tm-quote-wrapper\">\n            <DzText size=\"sm\" class=\"tm-quote\">\n              \"{{ item.quote }}\"\n            </DzText>\n          </blockquote>\n\n          <!-- Reviewer identity ---->\n          <div class=\"tm-reviewer\">\n            <DzAvatar\n              :fallback=\"item.initials\"\n              :alt=\"`Avatar of ${item.name}`\"\n              size=\"md\"\n              shape=\"circle\"\n            />\n            <div class=\"tm-reviewer-info\">\n              <DzText size=\"sm\" weight=\"semibold\" class=\"tm-name\">{{ item.name }}</DzText>\n              <DzText size=\"xs\" tone=\"muted\" class=\"tm-role\">\n                {{ item.role }}, {{ item.company }}\n              </DzText>\n            </div>\n          </div>\n        </DzCard>\n      </li>\n    </ul>\n  </section>\n</template>\n\n<style scoped>\n.testimonials {\n  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem);\n  background: var(--dz-background, #fff);\n}\n\n/* Section header ---------------------------------------------------------*/\n.tm-header {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  margin-bottom: clamp(2rem, 4vw, 3rem);\n  text-align: center;\n}\n\n.tm-title,\n.tm-subtitle {\n  margin: 0;\n}\n\n/* Grid -------------------------------------------------------------------*/\n.tm-grid {\n  list-style: none;\n  margin: 0 auto;\n  padding: 0;\n  max-width: 72rem;\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: var(--dz-space-4, 1rem);\n  align-items: start;\n}\n\n.tm-item {\n  /* break-inside: avoid for print / masonry polyfill */\n  break-inside: avoid;\n}\n\n/* Card internals ---------------------------------------------------------*/\n.tm-card {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.tm-rating {\n  flex-shrink: 0;\n}\n\n.tm-quote-wrapper {\n  flex: 1;\n  margin: 0;\n  padding: 0;\n}\n\n.tm-quote {\n  margin: 0;\n  line-height: 1.6;\n  font-style: italic;\n}\n\n/* Reviewer row -----------------------------------------------------------*/\n.tm-reviewer {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  padding-top: var(--dz-space-3, 0.75rem);\n  border-top: 1px solid var(--dz-border, #e5e7eb);\n}\n\n.tm-reviewer-info {\n  min-width: 0;\n}\n\n.tm-name,\n.tm-role {\n  margin: 0;\n  display: block;\n}\n\n/* Responsive: 2 cols on tablet, 1 on mobile ------------------------------*/\n@media (max-width: 900px) {\n  .tm-grid {\n    grid-template-columns: repeat(2, 1fr);\n  }\n}\n\n@media (max-width: 560px) {\n  .tm-grid {\n    grid-template-columns: 1fr;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/testimonials.vue"
     }
   ],
-  "registryDependencies": [
-    "DzCard",
-    "DzAvatar",
-    "DzRating",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard",
+      "DzAvatar",
+      "DzRating",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

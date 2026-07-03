@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Moon, Sun } from 'lucide-vue-next'
-import { useTheme } from '../composables/useTheme.ts'
+import { useThemeTransition } from '../composables/useThemeTransition.ts'
 
-const { resolved, toggle } = useTheme()
+// Share the re-theme behaviour with the hero control: a smooth cross-fade swap
+// (instant under reduced motion), driven off the same theme singleton.
+const { resolved, retheme } = useThemeTransition()
 </script>
 
 <template>
@@ -11,7 +13,7 @@ const { resolved, toggle } = useTheme()
     class="theme-toggle"
     :aria-label="`Switch to ${resolved === 'dark' ? 'light' : 'dark'} mode`"
     :title="`Theme: ${resolved}`"
-    @click="toggle"
+    @click="retheme"
   >
     <Sun v-if="resolved === 'dark'" :size="18" aria-hidden="true" />
     <Moon v-else :size="18" aria-hidden="true" />

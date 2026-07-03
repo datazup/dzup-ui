@@ -1,29 +1,37 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "resizable-workspace",
   "type": "registry:block",
   "title": "Resizable workspace",
   "description": "An IDE-style three-pane shell built on DzResizable — a collapsible file explorer, an editor and a live preview, each scrolling independently in a DzScrollArea, with draggable handles and a DzToolbar across the top.",
+  "categories": [
+    "layout"
+  ],
   "files": [
     {
       "path": "resizable-workspace.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Resizable workspace — an IDE-style three-pane shell built on DzResizable.\n *\n * DzResizable wires a draggable SplitterGroup; each DzResizablePanel takes a\n * `defaultSize`/`minSize` (percent) and the explorer pane is `collapsible`.\n * DzResizableHandle (`with-handle`) renders the drag affordances between panes.\n * Each pane scrolls independently inside a DzScrollArea, and a DzToolbar spans\n * the top — the canonical \"chrome + resizable body\" application layout.\n *\n * Drag the handles to re-balance the panes; the explorer collapses to a rail.\n *\n * Self-contained: local static data, no props, no router. Composed only from\n * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport {\n  DzBadge,\n  DzDivider,\n  DzIcon,\n  DzResizable,\n  DzResizableHandle,\n  DzResizablePanel,\n  DzScrollArea,\n  DzText,\n  DzToolbar,\n} from '@dzup-ui/core'\nimport { Circle, FileCode, FileText, Folder, Play, Save } from 'lucide-vue-next'\n\ninterface TreeRow {\n  label: string\n  depth: number\n  active?: boolean\n  dir?: boolean\n}\n\nconst tree: TreeRow[] = [\n  { label: 'src', depth: 0, dir: true },\n  { label: 'components', depth: 1, dir: true },\n  { label: 'App.vue', depth: 2, active: true },\n  { label: 'main.ts', depth: 1 },\n  { label: 'router.ts', depth: 1 },\n  { label: 'package.json', depth: 0 },\n  { label: 'README.md', depth: 0 },\n]\n\nconst code: string[] = [\n  '<script setup lang=\"ts\">',\n  \"import { ref } from 'vue'\",\n  '',\n  'const count = ref(0)',\n  '<\\/script>',\n  '',\n  '<template>',\n  '  <button @click=\"count++\">',\n  '    Clicked {{ count }} times',\n  '  </button>',\n  '</template>',\n]\n</script>\n\n<template>\n  <section class=\"rw\" aria-labelledby=\"rw-title\">\n    <DzText id=\"rw-title\" class=\"dz-sr-only\">Resizable code workspace</DzText>\n\n    <DzToolbar variant=\"outlined\" size=\"sm\" class=\"rw-toolbar\">\n      <template #start>\n        <DzIcon :icon=\"FileCode\" size=\"sm\" />\n        <DzText size=\"sm\" weight=\"semibold\" as=\"span\">App.vue</DzText>\n        <DzBadge variant=\"subtle\" tone=\"warning\" size=\"sm\">Unsaved</DzBadge>\n      </template>\n      <template #end>\n        <button type=\"button\" class=\"rw-tbtn\">\n          <DzIcon :icon=\"Save\" size=\"xs\" /> Save\n        </button>\n        <button type=\"button\" class=\"rw-tbtn rw-tbtn--primary\">\n          <DzIcon :icon=\"Play\" size=\"xs\" /> Run\n        </button>\n      </template>\n    </DzToolbar>\n\n    <DzResizable direction=\"horizontal\" size=\"sm\" class=\"rw-body\">\n      <!-- Explorer (collapsible) -->\n      <DzResizablePanel :default-size=\"26\" :min-size=\"16\" collapsible :collapsed-size=\"0\" class=\"rw-pane\">\n        <DzScrollArea class=\"rw-scroll\">\n          <DzText size=\"xs\" tone=\"muted\" weight=\"semibold\" class=\"rw-pane-head\">EXPLORER</DzText>\n          <ul class=\"rw-tree\" role=\"list\">\n            <li\n              v-for=\"row in tree\"\n              :key=\"row.label\"\n              class=\"rw-tree-row\"\n              :class=\"{ 'rw-tree-row--active': row.active }\"\n              :style=\"{ paddingLeft: `calc(${row.depth} * 0.85rem + 0.5rem)` }\"\n            >\n              <DzIcon :icon=\"row.dir ? Folder : FileText\" size=\"xs\" />\n              <DzText size=\"sm\" as=\"span\">{{ row.label }}</DzText>\n            </li>\n          </ul>\n        </DzScrollArea>\n      </DzResizablePanel>\n\n      <DzResizableHandle with-handle />\n\n      <!-- Editor -->\n      <DzResizablePanel :default-size=\"48\" :min-size=\"30\" class=\"rw-pane\">\n        <DzScrollArea class=\"rw-scroll\">\n          <pre class=\"rw-code\"><code v-for=\"(line, i) in code\" :key=\"i\" class=\"rw-code-line\"><span class=\"rw-gutter\">{{ i + 1 }}</span>{{ line }}</code></pre>\n        </DzScrollArea>\n      </DzResizablePanel>\n\n      <DzResizableHandle with-handle />\n\n      <!-- Preview -->\n      <DzResizablePanel :default-size=\"26\" :min-size=\"18\" class=\"rw-pane\">\n        <DzScrollArea class=\"rw-scroll\">\n          <DzText size=\"xs\" tone=\"muted\" weight=\"semibold\" class=\"rw-pane-head\">PREVIEW</DzText>\n          <div class=\"rw-preview\">\n            <button type=\"button\" class=\"rw-preview-btn\">Clicked 3 times</button>\n          </div>\n          <DzDivider class=\"rw-preview-rule\" />\n          <div class=\"rw-status\">\n            <DzIcon :icon=\"Circle\" size=\"xs\" class=\"rw-status-dot\" />\n            <DzText size=\"xs\" tone=\"muted\">Live · port 5173</DzText>\n          </div>\n        </DzScrollArea>\n      </DzResizablePanel>\n    </DzResizable>\n  </section>\n</template>\n\n<style scoped>\n.rw {\n  background: var(--dz-background, #fff);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  border-radius: var(--dz-radius-lg, 0.75rem);\n  overflow: hidden;\n  max-width: 56rem;\n  margin: 0 auto;\n}\n\n.dz-sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  padding: 0;\n  margin: -1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  border: 0;\n}\n\n.rw-toolbar {\n  border-radius: 0;\n  border-left: 0;\n  border-right: 0;\n  border-top: 0;\n}\n\n.rw-toolbar :deep(.rw-tbtn),\n.rw-tbtn {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--dz-space-1, 0.25rem);\n  font: inherit;\n  font-size: var(--dz-text-sm, 0.875rem);\n  padding: var(--dz-space-1, 0.25rem) var(--dz-space-3, 0.75rem);\n  border-radius: var(--dz-radius-md, 0.5rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  background: var(--dz-background, #fff);\n  color: var(--dz-foreground, #111);\n  cursor: pointer;\n}\n\n.rw-tbtn--primary {\n  background: var(--dz-primary, #6366f1);\n  border-color: var(--dz-primary, #6366f1);\n  color: var(--dz-primary-foreground, #fff);\n}\n\n.rw-body {\n  height: 22rem;\n}\n\n.rw-pane {\n  background: var(--dz-background, #fff);\n  min-width: 0;\n}\n\n.rw-scroll {\n  height: 100%;\n  padding: var(--dz-space-3, 0.75rem);\n}\n\n.rw-pane-head {\n  display: block;\n  letter-spacing: 0.06em;\n  margin-bottom: var(--dz-space-2, 0.5rem);\n}\n\n.rw-tree {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.rw-tree-row {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n  padding-block: var(--dz-space-1, 0.25rem);\n  border-radius: var(--dz-radius-sm, 0.25rem);\n  color: var(--dz-muted-foreground, #6b7280);\n}\n\n.rw-tree-row--active {\n  background: color-mix(in oklch, var(--dz-primary, #6366f1) 12%, transparent);\n  color: var(--dz-foreground, #111);\n}\n\n.rw-code {\n  margin: 0;\n  font-family: var(--dz-font-mono, ui-monospace, monospace);\n  font-size: var(--dz-text-xs, 0.8125rem);\n  line-height: 1.7;\n}\n\n.rw-code-line {\n  display: block;\n  white-space: pre;\n  color: var(--dz-foreground, #111);\n}\n\n.rw-gutter {\n  display: inline-block;\n  width: 1.75rem;\n  margin-right: var(--dz-space-3, 0.75rem);\n  text-align: right;\n  color: var(--dz-muted-foreground, #9ca3af);\n  user-select: none;\n}\n\n.rw-preview {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: var(--dz-space-6, 1.5rem) 0;\n}\n\n.rw-preview-btn {\n  font: inherit;\n  padding: var(--dz-space-2, 0.5rem) var(--dz-space-4, 1rem);\n  border-radius: var(--dz-radius-md, 0.5rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  background: var(--dz-muted, #f3f4f6);\n  color: var(--dz-foreground, #111);\n  cursor: pointer;\n}\n\n.rw-preview-rule {\n  margin: var(--dz-space-3, 0.75rem) 0;\n}\n\n.rw-status {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.rw-status-dot {\n  color: var(--dz-success, #16a34a);\n}\n\n@media (max-width: 560px) {\n  .rw-body {\n    height: 30rem;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/resizable-workspace.vue"
     }
   ],
-  "registryDependencies": [
-    "DzResizable",
-    "DzResizablePanel",
-    "DzResizableHandle",
-    "DzScrollArea",
-    "DzToolbar",
-    "DzDivider",
-    "DzBadge",
-    "DzIcon",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzResizable",
+      "DzResizablePanel",
+      "DzResizableHandle",
+      "DzScrollArea",
+      "DzToolbar",
+      "DzDivider",
+      "DzBadge",
+      "DzIcon",
+      "DzText"
+    ]
+  }
 }

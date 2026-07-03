@@ -1,26 +1,33 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-grid",
   "type": "registry:block",
   "title": "Data grid card",
   "description": "A DzDataGrid of deployments with sortable columns, multi-row selection, a paginated footer, and a #cell slot rendering avatars, environment tags and status badges.",
+  "categories": [
+    "data"
+  ],
   "files": [
     {
       "path": "data-grid.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Data grid card — sortable, selectable, paginated DzDataGrid.\n *\n * The Data family's flagship: DzDataGrid renders a full table from `:columns`\n * + `:data` and owns sorting, multi-row selection (checkbox column), and the\n * paginated footer internally. The `#cell` slot takes over cell rendering so\n * the service column shows an avatar, the environment/status columns render as\n * tokenised DzTag / DzBadge, and latency reads as a unit.\n *\n * Self-contained: local static data, interactive via the grid's own state.\n * Composed only from free @dzup-ui/core components and `--dz-*` tokens\n * (docs/blocks.md §3.6) — drops in already themed, accessible, light/dark-ready.\n */\nimport {\n  DzAvatar,\n  DzBadge,\n  DzCard,\n  DzDataGrid,\n  DzHeading,\n  DzTag,\n  DzText,\n} from '@dzup-ui/core'\nimport type { ColumnDef } from '@dzup-ui/core'\nimport type { CanonicalTone } from '@dzup-ui/contracts'\n\ntype StatusKey = 'live' | 'building' | 'failed' | 'queued'\n\n/**\n * Index signature lets a typed row flow through DzDataGrid's generic default\n * (`Record<string, unknown>`) while the `#cell` slot narrows back to Deployment.\n */\ninterface Deployment {\n  [key: string]: unknown\n  id: number\n  service: string\n  environment: 'production' | 'staging' | 'preview'\n  version: string\n  latency: number\n  status: StatusKey\n  updated: string\n}\n\nconst STATUS_META: Record<StatusKey, { tone: CanonicalTone, label: string }> = {\n  live: { tone: 'success', label: 'Live' },\n  building: { tone: 'info', label: 'Building' },\n  queued: { tone: 'warning', label: 'Queued' },\n  failed: { tone: 'danger', label: 'Failed' },\n}\n\nconst ENV_TONE: Record<Deployment['environment'], CanonicalTone> = {\n  production: 'primary',\n  staging: 'warning',\n  preview: 'neutral',\n}\n\nconst rows: Deployment[] = [\n  { id: 1, service: 'api-gateway', environment: 'production', version: 'v2.8.1', latency: 84, status: 'live', updated: '2m ago' },\n  { id: 2, service: 'auth-service', environment: 'production', version: 'v1.14.0', latency: 112, status: 'live', updated: '11m ago' },\n  { id: 3, service: 'billing-worker', environment: 'staging', version: 'v0.9.7', latency: 203, status: 'building', updated: '1m ago' },\n  { id: 4, service: 'search-index', environment: 'production', version: 'v3.2.0', latency: 156, status: 'live', updated: '34m ago' },\n  { id: 5, service: 'media-resizer', environment: 'preview', version: 'pr-482', latency: 421, status: 'failed', updated: '5m ago' },\n  { id: 6, service: 'notifications', environment: 'staging', version: 'v1.3.2', latency: 98, status: 'queued', updated: 'just now' },\n  { id: 7, service: 'analytics-etl', environment: 'production', version: 'v2.0.4', latency: 312, status: 'live', updated: '1h ago' },\n  { id: 8, service: 'webhooks', environment: 'preview', version: 'pr-477', latency: 64, status: 'building', updated: '3m ago' },\n]\n\nconst columns: ColumnDef<Deployment>[] = [\n  { field: 'service', header: 'Service', sortable: true },\n  { field: 'environment', header: 'Environment', sortable: true },\n  { field: 'version', header: 'Version' },\n  { field: 'latency', header: 'p95 latency', sortable: true, align: 'right' },\n  { field: 'status', header: 'Status', sortable: true },\n  { field: 'updated', header: 'Updated', align: 'right' },\n]\n</script>\n\n<template>\n  <section class=\"dg-wrap\" aria-labelledby=\"dg-title\">\n    <DzCard variant=\"outlined\" padding=\"none\">\n      <header class=\"dg-head\">\n        <div>\n          <DzHeading id=\"dg-title\" :level=\"4\" size=\"md\" weight=\"semibold\" class=\"dg-card-title\">Deployments</DzHeading>\n          <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"dg-sub\">\n            Sort columns, select rows, page through results.\n          </DzText>\n        </div>\n        <DzBadge variant=\"subtle\" tone=\"success\" size=\"sm\">{{ rows.filter((r) => r.status === 'live').length }} live</DzBadge>\n      </header>\n\n      <div class=\"dg-scroll\">\n        <DzDataGrid\n          :data=\"rows\"\n          :columns=\"columns\"\n          row-key=\"id\"\n          sortable\n          selectable=\"multiple\"\n          :pagination=\"{ pageSize: 5 }\"\n          size=\"sm\"\n          aria-label=\"Deployments data grid\"\n        >\n          <template #cell=\"{ row, column, value }\">\n            <template v-if=\"column.field === 'service'\">\n              <span class=\"dg-service\">\n                <DzAvatar :fallback=\"(row as Deployment).service.slice(0, 1).toUpperCase()\" :alt=\"(row as Deployment).service\" size=\"xs\" />\n                <DzText size=\"sm\" weight=\"medium\" as=\"span\">{{ (row as Deployment).service }}</DzText>\n              </span>\n            </template>\n\n            <template v-else-if=\"column.field === 'environment'\">\n              <DzTag variant=\"subtle\" :tone=\"ENV_TONE[(row as Deployment).environment]\" size=\"sm\">\n                {{ (row as Deployment).environment }}\n              </DzTag>\n            </template>\n\n            <template v-else-if=\"column.field === 'status'\">\n              <DzBadge\n                variant=\"subtle\"\n                :tone=\"STATUS_META[(row as Deployment).status].tone\"\n                size=\"sm\"\n              >\n                {{ STATUS_META[(row as Deployment).status].label }}\n              </DzBadge>\n            </template>\n\n            <template v-else-if=\"column.field === 'latency'\">\n              <DzText size=\"sm\" :tone=\"(value as number) > 250 ? 'warning' : 'muted'\" as=\"span\">\n                {{ value }} ms\n              </DzText>\n            </template>\n\n            <template v-else>\n              <DzText size=\"sm\" tone=\"muted\" as=\"span\">{{ value }}</DzText>\n            </template>\n          </template>\n\n          <template #empty>\n            <DzText size=\"sm\" tone=\"muted\">No deployments to show.</DzText>\n          </template>\n        </DzDataGrid>\n      </div>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.dg-wrap {\n  background: var(--dz-background, #fff);\n}\n\n.dg-head {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n  padding: var(--dz-space-4, 1rem);\n  flex-wrap: wrap;\n}\n\n.dg-card-title {\n  margin: 0;\n}\n\n.dg-sub {\n  margin: var(--dz-space-1, 0.25rem) 0 0;\n}\n\n.dg-scroll {\n  overflow-x: auto;\n}\n\n.dg-service {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/data-grid.vue"
     }
   ],
-  "registryDependencies": [
-    "DzDataGrid",
-    "DzCard",
-    "DzAvatar",
-    "DzBadge",
-    "DzTag",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzDataGrid",
+      "DzCard",
+      "DzAvatar",
+      "DzBadge",
+      "DzTag",
+      "DzText"
+    ]
+  }
 }

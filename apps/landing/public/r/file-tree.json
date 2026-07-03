@@ -1,24 +1,32 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "file-tree",
   "type": "registry:block",
   "title": "File explorer tree",
   "description": "A hierarchical DzTree with per-node lucide icons, expand/collapse and selection (both v-modelled) and the full APG roving-tabindex keyboard model, beside a live selection panel.",
+  "categories": [
+    "data"
+  ],
   "files": [
     {
       "path": "file-tree.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * File explorer — a hierarchical DzTree with per-node icons + selection.\n *\n * DzTree renders the whole hierarchy from a `:items` array of TreeNodes\n * (each carrying an optional lucide `icon` component); expand/collapse and\n * selection are v-modelled (`expanded-keys` / `selected-keys`), and the tree\n * ships the full APG roving-tabindex keyboard model. A side panel reflects the\n * current selection to show the wiring.\n *\n * Self-contained: local static tree, no props. Composed only from free\n * @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport { computed, ref } from 'vue'\nimport { DzBadge, DzCard, DzHeading, DzText, DzTree } from '@dzup-ui/core'\nimport type { TreeNode } from '@dzup-ui/core'\nimport { FileCode2, FileJson, FileText, Folder, Image } from 'lucide-vue-next'\n\nconst items: TreeNode[] = [\n  {\n    key: 'src',\n    label: 'src',\n    icon: Folder,\n    children: [\n      {\n        key: 'components',\n        label: 'components',\n        icon: Folder,\n        children: [\n          { key: 'button.vue', label: 'DzButton.vue', icon: FileCode2 },\n          { key: 'card.vue', label: 'DzCard.vue', icon: FileCode2 },\n          { key: 'tree.vue', label: 'DzTree.vue', icon: FileCode2 },\n        ],\n      },\n      {\n        key: 'assets',\n        label: 'assets',\n        icon: Folder,\n        children: [\n          { key: 'logo.svg', label: 'logo.svg', icon: Image },\n          { key: 'hero.png', label: 'hero.png', icon: Image },\n        ],\n      },\n      { key: 'main.ts', label: 'main.ts', icon: FileCode2 },\n    ],\n  },\n  {\n    key: 'config',\n    label: 'config',\n    icon: Folder,\n    children: [\n      { key: 'tsconfig', label: 'tsconfig.json', icon: FileJson },\n      { key: 'vite', label: 'vite.config.ts', icon: FileCode2 },\n    ],\n  },\n  { key: 'readme', label: 'README.md', icon: FileText },\n]\n\nconst expandedKeys = ref<string[]>(['src', 'components'])\nconst selectedKeys = ref<string[]>(['tree.vue'])\n\nconst LABELS: Record<string, string> = Object.fromEntries(\n  flatten(items).map((node) => [node.key, node.label]),\n)\n\nconst selectedLabel = computed(() => {\n  const first = selectedKeys.value[0]\n  return first ? LABELS[first] ?? '—' : '—'\n})\n\nfunction flatten(nodes: TreeNode[]): TreeNode[] {\n  return nodes.flatMap((node) => [node, ...(node.children ? flatten(node.children) : [])])\n}\n</script>\n\n<template>\n  <section class=\"ft-wrap\" aria-labelledby=\"ft-title\">\n    <DzCard variant=\"outlined\" padding=\"none\">\n      <header class=\"ft-head\">\n        <DzHeading id=\"ft-title\" :level=\"4\" size=\"md\" weight=\"semibold\" class=\"ft-title\">Project files</DzHeading>\n        <DzBadge variant=\"subtle\" tone=\"neutral\" size=\"sm\">{{ flatten(items).length }} nodes</DzBadge>\n      </header>\n\n      <div class=\"ft-grid\">\n        <div class=\"ft-pane\">\n          <DzTree\n            :items=\"items\"\n            v-model:expanded-keys=\"expandedKeys\"\n            v-model:selected-keys=\"selectedKeys\"\n            selectable\n            size=\"sm\"\n            aria-label=\"Project file tree\"\n          />\n        </div>\n\n        <aside class=\"ft-detail\" aria-live=\"polite\">\n          <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"ft-detail-label\">Selected</DzText>\n          <DzText size=\"sm\" weight=\"medium\" as=\"p\" class=\"ft-detail-value\">{{ selectedLabel }}</DzText>\n        </aside>\n      </div>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.ft-wrap {\n  background: var(--dz-background, #fff);\n  max-width: 40rem;\n  margin: 0 auto;\n}\n\n.ft-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: var(--dz-space-3, 0.75rem);\n  padding: var(--dz-space-4, 1rem);\n  border-bottom: 1px solid var(--dz-border, #e5e7eb);\n}\n\n.ft-title {\n  margin: 0;\n}\n\n.ft-grid {\n  display: grid;\n  grid-template-columns: 1.6fr 1fr;\n}\n\n.ft-pane {\n  padding: var(--dz-space-3, 0.75rem);\n  min-height: 16rem;\n}\n\n.ft-detail {\n  padding: var(--dz-space-4, 1rem);\n  border-left: 1px solid var(--dz-border, #e5e7eb);\n  background: var(--dz-surface, #f8fafc);\n}\n\n.ft-detail-label {\n  margin: 0 0 var(--dz-space-1, 0.25rem);\n  text-transform: uppercase;\n  letter-spacing: 0.04em;\n}\n\n.ft-detail-value {\n  margin: 0;\n  word-break: break-word;\n}\n\n@media (max-width: 560px) {\n  .ft-grid {\n    grid-template-columns: 1fr;\n  }\n\n  .ft-detail {\n    border-left: none;\n    border-top: 1px solid var(--dz-border, #e5e7eb);\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/file-tree.vue"
     }
   ],
-  "registryDependencies": [
-    "DzTree",
-    "DzCard",
-    "DzBadge",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzTree",
+      "DzCard",
+      "DzBadge",
+      "DzText"
+    ]
+  }
 }

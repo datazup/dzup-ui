@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { DzText } from '@dzup-ui/core'
+import { computed } from 'vue'
+import { DzCopyButton, DzText } from '@dzup-ui/core'
 import { ArrowDown, ArrowUpRight } from 'lucide-vue-next'
+import { REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
 import type { BlockDef } from '../../blocks/registry.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
 import BlockTrustMarks from './BlockTrustMarks.vue'
+import PmCommandTabs from './PmCommandTabs.vue'
 
 /**
  * BlockCard — index tile for a single block on /blocks (docs/blocks.md §3.1, §4).
@@ -24,7 +27,7 @@ import BlockTrustMarks from './BlockTrustMarks.vue'
  * a subtle usage count (`blocksUsingComponent(name).length`, Task E1) so the
  * affordance reads as "DzTable — used in N blocks".
  */
-defineProps<{
+const props = defineProps<{
   block: BlockDef
 }>()
 
@@ -37,6 +40,9 @@ const emit = defineEmits<{
 function usageCount(name: string): number {
   return blocksUsingComponent(name).length
 }
+
+/** `npx shadcn@latest add …/r/<id>.json` per PM — the one-command install. */
+const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 </script>
 
 <template>
@@ -67,6 +73,22 @@ function usageCount(name: string): number {
           </button>
         </li>
       </ul>
+    </div>
+
+    <!-- One-command install + copy-code. Lifted above the whole-card `.block-card-cover`
+         link (like the chips) so the tabs/buttons stay independently clickable. -->
+    <div v-if="REGISTRY_ENABLED" class="block-card-cli">
+      <PmCommandTabs :commands="registryAddCmds" :aria-label="`Add ${block.title} from the dzup-ui registry`" />
+      <DzCopyButton
+        :value="block.source"
+        label="Copy code"
+        copied-label="Copied!"
+        variant="ghost"
+        tone="neutral"
+        size="sm"
+        :aria-label="`Copy the ${block.title} block source`"
+        class="block-card-copy"
+      />
     </div>
 
     <div class="block-card-actions">
@@ -170,6 +192,20 @@ function usageCount(name: string): number {
 .block-card-chip-count {
   font-variant-numeric: tabular-nums;
   opacity: 0.7;
+}
+
+/* Install command + copy-code, lifted above the whole-card cover link so its
+   tabs and buttons receive clicks (mirrors the interactive chips). */
+.block-card-cli {
+  position: relative;
+  z-index: 1;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--lp-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
 }
 
 /* Bottom action row: the primary whole-card anchor + the secondary permalink. */

@@ -38,7 +38,7 @@ export default definePreview({
           'Introduction',
           'Getting Started',
           'Guides',
-          ['Theming', 'Color Palette', 'Design Tokens', 'Accessibility'],
+          ['Choosing Components', 'Component Status', 'Releases', 'Theming', 'Color Palette', 'Design Tokens', 'Accessibility'],
           'Contributing',
           'Core',
           [
@@ -60,11 +60,46 @@ export default definePreview({
         ],
       },
     },
-    // TASK-0.9b — report a11y violations without failing the run yet. Flip to
-    // 'error' per family as their stories are cleaned up (TASK-X.3). Individual
-    // stories can override known false positives with a per-story `a11y` param.
+    // TASK-X.3 — enforced WCAG 2.2 AA a11y pipeline (Deque axe-core).
+    //
+    // `options` is forwarded to `axe.run`. axe's built-in defaults stop at WCAG
+    // 2.1, so we pin `runOnly` to the full A/AA tag set *including* `wcag22aa`
+    // — this turns on the new 2.2 AA success criteria (e.g. target-size,
+    // focus-not-obscured, dragging-movements) that would otherwise be skipped.
+    // `best-practice` rules are intentionally excluded so the gate maps exactly
+    // to the "WCAG 2.2 AA" claim, not to axe's opinionated extras.
+    //
+    // Rollout gate (`test`): the report-only default is `'todo'` — violations
+    // surface in the A11y panel / test output but do NOT fail CI. A family opts
+    // into ENFORCEMENT by spreading `a11yError` (stories/_shared/a11y.ts) into
+    // its meta `parameters` once its stories audit clean; from then on any
+    // violation in that family fails the Vitest browser run and the
+    // `storybook-test` CI job. A documented false positive disables the
+    // *specific* rule with `a11yDisableRules('<rule-id>')` — never a blanket
+    // disable. See stories/Accessibility.mdx for the per-family status table.
+    // TARGET END-STATE: once every family opts in, this global flips to 'error'
+    // and the per-family opt-ins are removed.
     a11y: {
+      options: {
+        runOnly: {
+          type: 'tag',
+          values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
+        },
+      },
       test: 'todo',
+    },
+    // TASK-APP-01 / TASK-X.5 — Chromatic visual-regression modes. Each mode sets
+    // the `theme` global registered by `withThemeByDataAttribute` (decorators
+    // below), so Chromatic captures every story in BOTH light and dark in a
+    // single run — which also proves the token system holds in dark mode. Applied
+    // globally here; a story opts out of a mode with its own
+    // `parameters.chromatic.modes` (e.g. `{ dark: { disable: true } }`) and opts
+    // out of snapshots entirely with `parameters.chromatic.disableSnapshot: true`.
+    chromatic: {
+      modes: {
+        light: { theme: 'light' },
+        dark: { theme: 'dark' },
+      },
     },
   },
   decorators: [

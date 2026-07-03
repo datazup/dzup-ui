@@ -1,22 +1,13 @@
 <script setup lang="ts">
 import { DzButton } from '@dzup-ui/core'
-import { ArrowRight, Check, Copy, Sparkles, Star } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { ArrowRight, Sparkles, Star } from 'lucide-vue-next'
 import { FACTS, LINKS } from '../config.ts'
+import { installCommands } from '../blocks/config.ts'
+import PmCommandTabs from './blocks/PmCommandTabs.vue'
+import RethemeButton from './RethemeButton.vue'
 
-const installCmd = 'npm i @dzup-ui/core'
-const copied = ref(false)
-
-async function copyInstall(): Promise<void> {
-  try {
-    await navigator.clipboard.writeText(installCmd)
-    copied.value = true
-    window.setTimeout(() => (copied.value = false), 1800)
-  }
-  catch {
-    /* clipboard unavailable — no-op */
-  }
-}
+/** `@dzup-ui/core @dzup-ui/tokens` install, one command per package manager. */
+const installCmds = installCommands()
 
 const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt']
 
@@ -66,16 +57,12 @@ const stats = [
       </div>
 
       <div class="hero-install">
-        <code class="hero-install-cmd"><span class="prompt" aria-hidden="true">$</span> {{ installCmd }}</code>
-        <button
-          type="button"
-          class="hero-install-copy"
-          :aria-label="copied ? 'Copied' : 'Copy install command'"
-          @click="copyInstall"
-        >
-          <Check v-if="copied" :size="15" aria-hidden="true" />
-          <Copy v-else :size="15" aria-hidden="true" />
-        </button>
+        <PmCommandTabs :commands="installCmds" aria-label="Install the dzup-ui packages" />
+      </div>
+
+      <div class="hero-retheme">
+        <RethemeButton />
+        <span class="hero-retheme-hint">One click re-skins the whole page — light&nbsp;⇄&nbsp;dark from one token system.</span>
       </div>
 
       <dl class="hero-stats">
@@ -229,47 +216,29 @@ const stats = [
   box-shadow: 0 8px 24px -8px color-mix(in oklch, var(--dz-primary, #6366f1) 60%, transparent);
 }
 
+/* Multi-package-manager install command with copy. Constrained + centered so the
+   tab set reads as a compact terminal card under the CTAs. */
 .hero-install {
-  display: inline-flex;
+  margin-top: 26px;
+  width: min(440px, 100%);
+  text-align: left;
+}
+
+/* Headline "seamless theming" proof — the prominent re-theme control + a hint. */
+.hero-retheme {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
   margin-top: 22px;
-  padding: 6px 6px 6px 16px;
-  border: 1px solid var(--lp-hairline);
-  border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-surface, #fff) 80%, transparent);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
 }
 
-.hero-install-cmd {
-  font-family: var(--dz-font-mono, monospace);
+.hero-retheme-hint {
+  max-width: 42ch;
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-foreground, #1a202c);
-}
-
-.hero-install-cmd .prompt {
-  color: var(--dz-primary, #4f46e5);
-  margin-right: 2px;
-}
-
-.hero-install-copy {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-muted, #f1f5f9);
+  line-height: 1.5;
   color: var(--dz-muted-foreground, #64748b);
-  cursor: pointer;
-  transition: background var(--dz-duration-fast, 150ms), color var(--dz-duration-fast, 150ms);
-}
-
-.hero-install-copy:hover {
-  background: var(--dz-primary-muted, #eef2ff);
-  color: var(--dz-primary, #4f46e5);
+  text-wrap: balance;
 }
 
 /* Inline credibility stats — concrete numbers, divider-separated. */

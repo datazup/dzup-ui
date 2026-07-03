@@ -1,22 +1,30 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button-showcase",
   "type": "registry:block",
   "title": "Button gallery",
   "description": "A labelled specimen sheet of every DzButton variant, tone and size, plus icon and loading/disabled states — a living reference for the button scale.",
+  "categories": [
+    "buttons"
+  ],
   "files": [
     {
       "path": "button-showcase.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzButton, DzText } from '@dzup-ui/core'\nimport { ArrowRight, Download, Trash2 } from 'lucide-vue-next'\n\n/**\n * Button gallery — a labelled specimen sheet of the whole DzButton surface:\n * every visual `variant`, every semantic `tone`, the five canonical sizes, and\n * the common content/states (prefix & suffix icons, loading, disabled).\n *\n * A living reference you can paste in to see, side by side, exactly how the\n * button scale renders in your theme. Composed only from free @dzup-ui/core\n * components and `--dz-*` tokens, so it re-themes light/dark automatically and\n * carries no raw color literals (docs/blocks.md §3.6).\n */\n</script>\n\n<template>\n  <section class=\"bg-wrap\" aria-label=\"Button gallery\">\n    <!-- Variants -->\n    <div class=\"bg-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bg-label\">Variants</DzText>\n      <div class=\"bg-row\">\n        <DzButton variant=\"solid\" tone=\"primary\">Solid</DzButton>\n        <DzButton variant=\"outline\" tone=\"primary\">Outline</DzButton>\n        <DzButton variant=\"ghost\" tone=\"primary\">Ghost</DzButton>\n        <DzButton variant=\"text\" tone=\"primary\">Text</DzButton>\n        <DzButton variant=\"link\" tone=\"primary\">Link</DzButton>\n      </div>\n    </div>\n\n    <!-- Tones -->\n    <div class=\"bg-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bg-label\">Tones</DzText>\n      <div class=\"bg-row\">\n        <DzButton variant=\"solid\" tone=\"neutral\">Neutral</DzButton>\n        <DzButton variant=\"solid\" tone=\"primary\">Primary</DzButton>\n        <DzButton variant=\"solid\" tone=\"success\">Success</DzButton>\n        <DzButton variant=\"solid\" tone=\"warning\">Warning</DzButton>\n        <DzButton variant=\"solid\" tone=\"danger\">Danger</DzButton>\n        <DzButton variant=\"solid\" tone=\"info\">Info</DzButton>\n      </div>\n    </div>\n\n    <!-- Sizes -->\n    <div class=\"bg-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bg-label\">Sizes</DzText>\n      <div class=\"bg-row bg-row-baseline\">\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"xs\">Extra small</DzButton>\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"sm\">Small</DzButton>\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"md\">Medium</DzButton>\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"lg\">Large</DzButton>\n        <DzButton variant=\"outline\" tone=\"neutral\" size=\"xl\">Extra large</DzButton>\n      </div>\n    </div>\n\n    <!-- Icons & states -->\n    <div class=\"bg-group\">\n      <DzText size=\"xs\" tone=\"muted\" as=\"p\" class=\"bg-label\">Icons &amp; states</DzText>\n      <div class=\"bg-row\">\n        <DzButton variant=\"solid\" tone=\"primary\">\n          <template #prefix><Download :size=\"16\" aria-hidden=\"true\" /></template>\n          Download\n        </DzButton>\n        <DzButton variant=\"outline\" tone=\"neutral\">\n          Continue\n          <template #suffix><ArrowRight :size=\"16\" aria-hidden=\"true\" /></template>\n        </DzButton>\n        <DzButton variant=\"solid\" tone=\"primary\" loading>Saving…</DzButton>\n        <DzButton variant=\"solid\" tone=\"primary\" disabled>Disabled</DzButton>\n        <DzButton variant=\"outline\" tone=\"danger\">\n          <template #prefix><Trash2 :size=\"16\" aria-hidden=\"true\" /></template>\n          Delete\n        </DzButton>\n      </div>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.bg-wrap {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-6, 1.5rem);\n  padding: clamp(1.25rem, 4vw, 2rem);\n  background: var(--dz-background, #fff);\n}\n\n.bg-group {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.bg-label {\n  margin: 0;\n  font-weight: var(--dz-font-semibold, 600);\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n}\n\n.bg-row {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n/* Sizes read most clearly aligned on their text baseline. */\n.bg-row-baseline {\n  align-items: baseline;\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/button-showcase.vue"
     }
   ],
-  "registryDependencies": [
-    "DzButton",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzButton",
+      "DzText"
+    ]
+  }
 }

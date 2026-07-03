@@ -17,6 +17,13 @@ const meta = {
   title: 'Core/Cards/DzCard',
   component: DzCard,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Design reference (TASK-0.15) — flagship seed. See Contributing → "Design reference".
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-3&t=DzCard',
+    },
+  },
   argTypes: {
     // Appearance
     variant: {

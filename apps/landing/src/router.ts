@@ -8,6 +8,7 @@ import BlocksIndexPage from './pages/BlocksIndexPage.vue'
 import AnimationsPage from './pages/AnimationsPage.vue'
 import { getTemplate } from './templates/registry.ts'
 import { getBlock } from './blocks/registry.ts'
+import { SITE_ORIGIN } from './config.ts'
 
 /**
  * Per-route document head. A route opts in via `meta.head`; routes without it
@@ -51,6 +52,33 @@ interface RouteHead {
    * and robots tags reset on routes that declare none.
    */
   canonical?: string
+  /**
+   * Optional JSON-LD structured data (schema.org) for the route, serialised into a
+   * single `<script type="application/ld+json">`. The detail pages emit a
+   * BreadcrumbList (Home › gallery › item) so search + AI answer engines understand
+   * the trail; the site-wide SoftwareApplication entity lives statically in
+   * index.html. Omitted ⇒ any JSON-LD a previous route set is cleared, so a detail
+   * page's breadcrumb never bleeds onto the next route (mirrors image/robots reset).
+   */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+}
+
+/**
+ * Build a schema.org BreadcrumbList for a detail page. Item URLs are absolute
+ * (`SITE_ORIGIN`-prefixed) as the vocabulary expects, and match each hop's
+ * canonical so the trail agrees with the indexed URLs.
+ */
+function breadcrumbList(trail: Array<{ name: string; path: string }>): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((hop, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: hop.name,
+      item: `${SITE_ORIGIN}${hop.path}`,
+    })),
+  }
 }
 
 /** A route's head is either a fixed object or resolved from the matched route. */
@@ -165,6 +193,12 @@ const router = createRouter({
             // Self-referential canonical so this page — not the /blocks#<id> anchor
             // — is the indexed source for the block (avoids duplicate content).
             canonical: `/blocks/${block.id}`,
+            // Breadcrumb trail (Home › Blocks › this block) for rich results.
+            jsonLd: breadcrumbList([
+              { name: 'Home', path: '/' },
+              { name: 'Blocks', path: '/blocks' },
+              { name: block.title, path: `/blocks/${block.id}` },
+            ]),
           }
         },
       },
@@ -172,6 +206,23 @@ const router = createRouter({
     // Animations — the live motion gallery (docs/animations.md §4). Placeholder
     // page until the gallery shell + catalog land (Task 2).
     { path: '/animations', name: 'animations', component: AnimationsPage },
+    // Themes — the visual token editor (the "Themes" Ecosystem offering). Lazy
+    // like /pro & /templates. Carries its own SEO head — it's a primary
+    // marketing surface and must not inherit the generic home title. The optional
+    // `?theme=` query encodes a shared design; the page reads it on mount.
+    {
+      path: '/themes',
+      name: 'themes',
+      component: () => import('./pages/ThemesPage.vue'),
+      meta: {
+        head: {
+          title: 'Theme Designer — visual OKLCH token editor | dzup-ui',
+          description:
+            'Design a complete dzup-ui theme in the browser: tune the OKLCH token palette, preview real components in light and dark, check WCAG contrast live, then export the --dz-* CSS variables or share a link.',
+          canonical: '/themes',
+        },
+      },
+    },
     // Templates — the free, full-page starters gallery (docs/templates.md §3).
     // Lazy-loaded like /pro; detail/preview resolve their slug against the
     // registry and redirect unknown slugs back to the gallery.
@@ -194,6 +245,15 @@ const router = createRouter({
             title: `${template.name} — dzup-ui Templates`,
             description: template.blurb,
             image: template.thumbnail,
+            // Self-canonical so this page — not the /templates gallery card — is the
+            // indexed source for the template (parity with /blocks/:id).
+            canonical: `/templates/${template.slug}`,
+            // Breadcrumb trail (Home › Templates › this template) for rich results.
+            jsonLd: breadcrumbList([
+              { name: 'Home', path: '/' },
+              { name: 'Templates', path: '/templates' },
+              { name: template.name, path: `/templates/${template.slug}` },
+            ]),
           }
         },
       },
@@ -204,6 +264,39 @@ const router = createRouter({
       component: () => import('./pages/TemplatePreviewPage.vue'),
       props: true,
       beforeEnter: resolveTemplateSlug,
+    },
+    // AI IDE — "Use dzup-ui with your AI IDE" (Task G5). Copy-paste MCP config +
+    // docs for the free @dzup-ui/mcp server. Lazy like the other secondary pages;
+    // carries its own SEO head (a primary distribution surface).
+    {
+      path: '/ai',
+      name: 'ai',
+      component: () => import('./pages/AiIdePage.vue'),
+      meta: {
+        head: {
+          title: 'Use dzup-ui with your AI IDE — MCP server | dzup-ui',
+          description:
+            'Connect the free @dzup-ui/mcp server to Cursor, Claude Code, Windsurf or VS Code and your assistant can browse every dzup-ui component, block, template and design token — and fetch the real source + install command on request.',
+          canonical: '/ai',
+        },
+      },
+    },
+    // Compare — an honest, sourced feature matrix vs. peer Vue 3 libraries
+    // (docs/landing.md — helps evaluators decide). Lazy like the other secondary
+    // pages; carries its own SEO head — a primary evaluation surface that must not
+    // inherit the generic home title.
+    {
+      path: '/compare',
+      name: 'compare',
+      component: () => import('./pages/ComparePage.vue'),
+      meta: {
+        head: {
+          title: 'dzup-ui vs. PrimeVue, Nuxt UI, Vuetify & Element Plus | dzup-ui',
+          description:
+            'An honest, sourced feature matrix comparing dzup-ui with other popular Vue 3 component libraries — component count, TypeScript, accessibility, design tokens, styling and license. Neutral facts, cited and dated.',
+          canonical: '/compare',
+        },
+      },
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
@@ -322,6 +415,29 @@ function setLink(rel: string, href: string): void {
 }
 
 /**
+ * Write (or replace) the route-managed JSON-LD `<script>` — the BreadcrumbList on
+ * a detail page. A single tag marked `data-dz-jsonld` is reused so navigation
+ * never accumulates stale structured data, and the distinct marker keeps it clear
+ * of the static SoftwareApplication script authored in index.html.
+ */
+function setJsonLd(data: Record<string, unknown> | Record<string, unknown>[]): void {
+  let el = document.head.querySelector<HTMLScriptElement>('script[data-dz-jsonld]')
+  if (!el) {
+    el = document.createElement('script')
+    el.type = 'application/ld+json'
+    el.setAttribute('data-dz-jsonld', '')
+    document.head.appendChild(el)
+  }
+  el.textContent = JSON.stringify(data)
+}
+
+/** Remove the route-managed JSON-LD script — used on routes that declare none, so
+ *  a detail page's breadcrumb never lingers on the next route. */
+function removeJsonLd(): void {
+  document.head.querySelector('script[data-dz-jsonld]')?.remove()
+}
+
+/**
  * Resolve a possibly root-relative share image to an absolute URL — crawlers
  * require an absolute og:image. Already-absolute URLs pass through unchanged.
  */
@@ -376,6 +492,15 @@ function applyHead(head?: RouteHead): void {
     setMeta('meta[name="robots"]', 'name', 'robots', snapshot.robots)
   } else {
     removeMeta('meta[name="robots"]')
+  }
+  // JSON-LD: write the route's structured data (BreadcrumbList on detail pages),
+  // otherwise clear any a prior route set so it never bleeds onto the next route.
+  // Read from `head` directly (not the snapshot) since it's route-specific and,
+  // like robots/image, resets to none when a route declares no head.
+  if (head?.jsonLd) {
+    setJsonLd(head.jsonLd)
+  } else {
+    removeJsonLd()
   }
 }
 

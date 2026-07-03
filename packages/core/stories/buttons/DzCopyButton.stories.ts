@@ -117,23 +117,23 @@ export const AllSizes: Story = {
       <div class="flex items-end gap-4">
         <div class="text-center">
           <DzCopyButton value="xs" size="xs" />
-          <p class="text-xs mt-1 text-gray-500">xs</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">xs</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="sm" size="sm" />
-          <p class="text-xs mt-1 text-gray-500">sm</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">sm</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="md" size="md" />
-          <p class="text-xs mt-1 text-gray-500">md</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">md</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="lg" size="lg" />
-          <p class="text-xs mt-1 text-gray-500">lg</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">lg</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="xl" size="xl" />
-          <p class="text-xs mt-1 text-gray-500">xl</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">xl</p>
         </div>
       </div>
     `,
@@ -152,23 +152,23 @@ export const AllVariants: Story = {
       <div class="flex items-end gap-4">
         <div class="text-center">
           <DzCopyButton value="solid" variant="solid" />
-          <p class="text-xs mt-1 text-gray-500">solid</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">solid</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="outline" variant="outline" />
-          <p class="text-xs mt-1 text-gray-500">outline</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">outline</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="ghost" variant="ghost" />
-          <p class="text-xs mt-1 text-gray-500">ghost</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">ghost</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="text" variant="text" />
-          <p class="text-xs mt-1 text-gray-500">text</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">text</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="link" variant="link" />
-          <p class="text-xs mt-1 text-gray-500">link</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">link</p>
         </div>
       </div>
     `,
@@ -187,27 +187,27 @@ export const AllTones: Story = {
       <div class="flex items-end gap-4">
         <div class="text-center">
           <DzCopyButton value="neutral" variant="solid" tone="neutral" />
-          <p class="text-xs mt-1 text-gray-500">neutral</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">neutral</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="primary" variant="solid" tone="primary" />
-          <p class="text-xs mt-1 text-gray-500">primary</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">primary</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="success" variant="solid" tone="success" />
-          <p class="text-xs mt-1 text-gray-500">success</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">success</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="warning" variant="solid" tone="warning" />
-          <p class="text-xs mt-1 text-gray-500">warning</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">warning</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="danger" variant="solid" tone="danger" />
-          <p class="text-xs mt-1 text-gray-500">danger</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">danger</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="info" variant="solid" tone="info" />
-          <p class="text-xs mt-1 text-gray-500">info</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">info</p>
         </div>
       </div>
     `,
@@ -225,11 +225,11 @@ export const States: Story = {
       <div class="flex gap-4 items-center">
         <div class="text-center">
           <DzCopyButton value="enabled" label="Copy" />
-          <p class="text-xs mt-1 text-gray-500">idle</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">idle</p>
         </div>
         <div class="text-center">
           <DzCopyButton value="disabled" label="Copy" disabled />
-          <p class="text-xs mt-1 text-gray-500">disabled</p>
+          <p class="text-xs mt-1 text-[var(--dz-muted-foreground)]">disabled</p>
         </div>
       </div>
     `,
@@ -284,7 +284,7 @@ export const Accessibility: Story = {
     components: { DzCopyButton },
     template: `
       <div class="space-y-3 max-w-sm">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           With no <code>ariaLabel</code> the accessible name flips from
           "Copy to clipboard" to "Copied" so screen readers announce the result.
           Pass <code>ariaLabel</code> to override.

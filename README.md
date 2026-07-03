@@ -3,7 +3,11 @@
 **Open-source Vue 3 component library — 147 foundational components.**
 
 ![npm version](https://img.shields.io/npm/v/@dzup-ui/core?label=%40dzup-ui%2Fcore)
+![npm downloads](https://img.shields.io/npm/dw/@dzup-ui/core?label=downloads)
+![bundle size](https://img.shields.io/bundlephobia/minzip/@dzup-ui/core?label=min%2Bgzip)
+![GitHub stars](https://img.shields.io/github/stars/datazup/dzup-ui?label=stars)
 ![build status](https://img.shields.io/github/actions/workflow/status/datazup/dzup-ui/ci.yml?branch=main)
+![Core Web Vitals](https://img.shields.io/badge/Core%20Web%20Vitals-LCP%3C2.5s%20%C2%B7%20CLS%3C0.1-6366f1)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
 > Looking for enterprise components? See [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro).
@@ -16,6 +20,22 @@
 - Reka UI headless primitives for accessible interactive components
 - WCAG AA accessibility with keyboard navigation and ARIA support
 - SSR-safe, ESM-only distribution with tree-shaking support
+
+## Performance
+
+The landing site is held to a performance budget in CI (`landing-perf` job):
+
+- **Core Web Vitals** — Lighthouse CI asserts **LCP < 2.5s** and **CLS < 0.1** on
+  every push (desktop preset, median of 3 runs), with advisory warnings on the
+  performance/accessibility scores, TBT and FCP. The full report uploads to
+  temporary public storage and as a run artifact.
+- **Bundle budget** — a gzip payload budget on the first-paint JS/CSS
+  (`apps/landing/scripts/check-bundle-budget.ts`) keeps the initial load lean and
+  fails the build on a large regression. Vendor code (Vue runtime, icons) is split
+  into long-cached chunks (`apps/landing/vite.config.ts`).
+
+See [`apps/landing/lighthouserc.json`](apps/landing/lighthouserc.json) for the
+thresholds and the `/compare` page for how dzup-ui lines up against peer libraries.
 
 ## Quick Start
 

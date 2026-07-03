@@ -17,6 +17,8 @@ import { computed, ref } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
 import { BLOCKS, allComponents, allTags, blocksUsingComponent } from '../blocks/registry.ts'
 import type { BlockDef } from '../blocks/registry.ts'
+import { scoreFields } from '../lib/searchScore.ts'
+import type { WeightedField } from '../lib/searchScore.ts'
 
 /**
  * Per-field weights for query ranking. A block's score is the sum of the weights
@@ -32,15 +34,25 @@ const FIELD_WEIGHT = {
   description: 1,
 } as const
 
+/**
+ * The block's matchable fields, weighted. Tags/components collapse to one
+ * space-joined value each — a substring hit anywhere in the group counts once,
+ * matching the original `.some(...)` semantics — so the shared {@link scoreFields}
+ * ranker treats a block exactly as the old bespoke `scoreBlock` did.
+ */
+function blockFields(block: BlockDef): WeightedField[] {
+  return [
+    { value: block.title, weight: FIELD_WEIGHT.title },
+    { value: block.id, weight: FIELD_WEIGHT.id },
+    { value: block.tags.join(' '), weight: FIELD_WEIGHT.tag },
+    { value: block.components.join(' '), weight: FIELD_WEIGHT.component },
+    { value: block.description, weight: FIELD_WEIGHT.description },
+  ]
+}
+
 /** Sum of matched-field weights for `block` against the normalized query `q` (0 = no match). */
 function scoreBlock(block: BlockDef, q: string): number {
-  let score = 0
-  if (block.title.toLowerCase().includes(q)) score += FIELD_WEIGHT.title
-  if (block.id.toLowerCase().includes(q)) score += FIELD_WEIGHT.id
-  if (block.tags.some((tag) => tag.toLowerCase().includes(q))) score += FIELD_WEIGHT.tag
-  if (block.components.some((name) => name.toLowerCase().includes(q))) score += FIELD_WEIGHT.component
-  if (block.description.toLowerCase().includes(q)) score += FIELD_WEIGHT.description
-  return score
+  return scoreFields(blockFields(block), q)
 }
 
 /** The reactive surface returned by {@link useBlockSearch}. */

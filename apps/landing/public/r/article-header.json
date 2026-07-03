@@ -1,25 +1,32 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "article-header",
   "type": "registry:block",
   "title": "Article header",
   "description": "A long-form masthead — category eyebrow, title and standfirst, a byline pairing an avatar with the author and a live DzRelativeTime published stamp, and a row of topic tags.",
+  "categories": [
+    "content"
+  ],
   "files": [
     {
       "path": "article-header.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Article header — the masthead above a long-form post.\n *\n * A category eyebrow, a DzHeading title and a DzText standfirst, a byline row\n * pairing a DzAvatar with the author name + a live DzRelativeTime \"published\"\n * stamp (degrades to an absolute date for assistive tech), and a row of DzTag\n * topic chips. Centered measure, stacks cleanly on narrow viewports.\n *\n * Self-contained: local static data, no props, no network. Composed only from\n * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).\n */\nimport { DzAvatar, DzHeading, DzRelativeTime, DzTag, DzText } from '@dzup-ui/core'\n\n/** Published ~3 days ago — a fixed offset from load so the relative phrase reads naturally. */\nconst publishedAt = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()\n\nconst tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']\n</script>\n\n<template>\n  <article class=\"ah-wrap\">\n    <header class=\"ah-head\" aria-labelledby=\"ah-title\">\n      <DzText size=\"sm\" weight=\"semibold\" tone=\"muted\" as=\"p\" class=\"ah-eyebrow\">\n        Engineering · Deep dive\n      </DzText>\n\n      <DzHeading id=\"ah-title\" :level=\"4\" size=\"3xl\" weight=\"bold\" align=\"center\" class=\"ah-title\">\n        Building a component library that themes itself\n      </DzHeading>\n\n      <DzText size=\"lg\" tone=\"muted\" align=\"center\" as=\"p\" class=\"ah-dek\">\n        One layer of design tokens, light and dark for free, and an accessible\n        baseline you don't have to think about. Here is how the pieces fit.\n      </DzText>\n\n      <div class=\"ah-meta\">\n        <DzAvatar\n          src=\"https://i.pravatar.cc/96?img=47\"\n          fallback=\"ML\"\n          alt=\"Mara Lindqvist\"\n          size=\"md\"\n        />\n        <div class=\"ah-byline\">\n          <DzText size=\"sm\" weight=\"semibold\" as=\"span\">Mara Lindqvist</DzText>\n          <DzText size=\"sm\" tone=\"muted\" as=\"span\" class=\"ah-byline-row\">\n            <span>Staff Engineer</span>\n            <span aria-hidden=\"true\" class=\"ah-dot\">·</span>\n            <DzRelativeTime :value=\"publishedAt\" />\n          </DzText>\n        </div>\n      </div>\n\n      <ul class=\"ah-tags\" aria-label=\"Article topics\">\n        <li v-for=\"tag in tags\" :key=\"tag\">\n          <DzTag variant=\"subtle\" tone=\"primary\" size=\"sm\">{{ tag }}</DzTag>\n        </li>\n      </ul>\n    </header>\n  </article>\n</template>\n\n<style scoped>\n.ah-wrap {\n  padding: clamp(2rem, 6vw, 3.5rem) var(--dz-space-6, 1.5rem);\n  background: var(--dz-background, #fff);\n}\n\n.ah-head {\n  max-width: 44rem;\n  margin: 0 auto;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: var(--dz-space-4, 1rem);\n  text-align: center;\n}\n\n.ah-eyebrow {\n  margin: 0;\n  text-transform: uppercase;\n  letter-spacing: 0.08em;\n}\n\n.ah-title,\n.ah-dek {\n  margin: 0;\n}\n\n.ah-dek {\n  line-height: 1.55;\n  max-width: 38rem;\n}\n\n.ah-meta {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-3, 0.75rem);\n  margin-top: var(--dz-space-2, 0.5rem);\n}\n\n.ah-byline {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  line-height: 1.35;\n}\n\n.ah-byline-row {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.ah-dot {\n  opacity: 0.6;\n}\n\n.ah-tags {\n  list-style: none;\n  margin: var(--dz-space-2, 0.5rem) 0 0;\n  padding: 0;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n@media (max-width: 560px) {\n  .ah-meta {\n    flex-direction: column;\n    text-align: center;\n  }\n\n  .ah-byline {\n    align-items: center;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/article-header.vue"
     }
   ],
-  "registryDependencies": [
-    "DzHeading",
-    "DzText",
-    "DzAvatar",
-    "DzTag",
-    "DzRelativeTime"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzHeading",
+      "DzText",
+      "DzAvatar",
+      "DzTag",
+      "DzRelativeTime"
+    ]
+  }
 }

@@ -1,0 +1,15 @@
+# Storybook build output
+storybook-static/
+
+# Generated playground assets — rebuilt from workspace source by
+# scripts/build-playground.mjs before every `storybook dev` / `build`.
+public/playground/
+
+# Generated "What's New" / Releases data — rebuilt from CHANGELOG.md + .changeset
+# by scripts/build-releases.mjs before every `storybook dev` / `build`.
+stories/_data/releases.generated.ts
+
+# Generated component-API llms.txt — rebuilt from packages/core + contracts by
+# scripts/build-llms.mjs before every `storybook dev` / `build`.
+public/llms.txt
+public/llms-full.txt

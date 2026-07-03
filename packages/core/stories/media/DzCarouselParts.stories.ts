@@ -242,6 +242,10 @@ export const RealWorld: Story = {
 
 export const DotsOnly: Story = {
   name: 'Dots Only (No Nav Buttons)',
+  // TASK-APP-01 — autoplay (:interval="2500") auto-advances the slide, so the
+  // captured frame is a race with the timer. Skip the visual snapshot; the play()
+  // test still asserts the auto-advance behaviour.
+  parameters: { chromatic: { disableSnapshot: true } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 

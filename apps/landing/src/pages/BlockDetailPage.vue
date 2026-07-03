@@ -19,14 +19,15 @@
  * The route guard redirects unknown ids to /blocks, so a resolved block is
  * guaranteed here; we still guard defensively for type-safety.
  */
-import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
+import { DzButton, DzCopyButton, DzHeading, DzText } from '@dzup-ui/core'
+import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Section from '../components/Section.vue'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
 import BlockPreview from '../components/blocks/BlockPreview.vue'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
+import { openInStackblitz } from '../lib/stackblitz.ts'
 
 const props = defineProps<{ id: string }>()
 const router = useRouter()
@@ -87,6 +88,22 @@ const nextBlock = computed(() => {
 function showBlocksUsing(name: string): void {
   router.push({ path: '/blocks', query: { component: name } })
 }
+
+/**
+ * Fork this block into a live StackBlitz project — its exact `?raw` source (the
+ * same string the Code tab shows) is injected as `src/App.vue` in the shared
+ * Vite + Vue 3 + @dzup-ui/core starter, so a visitor goes from "I like this" to
+ * "it runs in my editor" in one click.
+ */
+function openStackblitz(): void {
+  const b = block.value
+  if (!b) return
+  openInStackblitz({
+    title: `${b.title} — dzup-ui block`,
+    description: b.description,
+    files: { 'src/App.vue': b.source },
+  })
+}
 </script>
 
 <template>
@@ -112,6 +129,30 @@ function showBlocksUsing(name: string): void {
              + "Built from" chips, so the install path is visible without opening
              the Code tab. Reused verbatim from the catalog (single source). -->
         <BlockManifest :block="block" class="bd-manifest" @select-component="showBlocksUsing" />
+
+        <!-- One-click handoff: fork the block into a live StackBlitz project, or
+             copy its exact source. Both reuse the block's `?raw` `source`. -->
+        <div class="bd-actions">
+          <DzButton
+            variant="solid"
+            tone="primary"
+            size="sm"
+            :aria-label="`Open ${block.title} in a live StackBlitz project`"
+            @click="openStackblitz"
+          >
+            <template #prefix><Zap :size="16" aria-hidden="true" /></template>
+            Open in StackBlitz
+          </DzButton>
+          <DzCopyButton
+            :value="block.source"
+            variant="outline"
+            tone="neutral"
+            size="sm"
+            label="Copy code"
+            copied-label="Copied!"
+            :aria-label="`Copy the full source of ${block.title}`"
+          />
+        </div>
       </div>
     </Section>
 
@@ -212,6 +253,14 @@ function showBlocksUsing(name: string): void {
   margin-top: 10px;
   width: 100%;
   max-width: 640px;
+}
+
+.bd-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 /* ── Pager ────────────────────────────────────────────────────── */

@@ -15,6 +15,15 @@ const meta = {
   title: 'Core/Buttons/DzButton',
   component: DzButton,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Design reference (TASK-0.15) — flagship seed. Shows the Figma frame in the
+    // "Design" addon panel beside the live render. Replace node-id/file when the
+    // canonical DzButton frame lands.
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-2&t=DzButton',
+    },
+  },
   argTypes: {
     // Appearance
     variant: {
@@ -402,7 +411,7 @@ export const Accessibility: Story = {
     components: { DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab through the buttons to see focus rings.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab through the buttons to see focus rings.</p>
         <div class="flex gap-4">
           <DzButton aria-label="First action" variant="solid">First</DzButton>
           <DzButton aria-label="Second action" variant="outline">Second</DzButton>

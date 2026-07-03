@@ -10,6 +10,7 @@ dist/
 storybook-static/
 playwright-report/
 test-results/
+a11y-report/
 
 # source-adjacent TypeScript emit
 packages/core/src/providers/*.js

@@ -1,9 +1,10 @@
 {/* DesignTokens.mdx */}
-import { Meta, Typeset } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Typeset } from '@storybook/addon-docs/blocks'
 import { DocTable } from './_blocks/DocTable.ts'
 import { PaletteGrid } from './_blocks/ColorScale.ts'
+import * as DesignTokensStories from '../../../packages/core/stories/_gallery/DzTokenBrowser.stories.ts'
 
-<Meta title="Guides/Design Tokens" />
+<Meta of={DesignTokensStories} />
 
 # Design Tokens
 
@@ -25,6 +26,21 @@ them as CSS variables — never raw values (ADR-04).
 primitive  →  semantic  →  component
 --dz-colors-primary-500  →  --dz-primary  →  (consumed by) --dz-button bg
 ```
+
+## Browser
+
+The **live** browser below reads every `--dz-*` token from `@dzup-ui/tokens` and
+resolves its value with `getComputedStyle` in the current theme — flip the **Theme**
+toolbar (light ↔ dark) and the swatches, sizes, and printed values remap in place.
+Search by name, filter by tier or category, and copy either `--dz-name` or
+`var(--dz-name)` with one click. Cards also show the token's authored mapping
+(e.g. `--dz-primary → var(--dz-colors-primary-500)`) and, where detectable, the
+components that reference the token — a heuristic scan of each `*.tokens.ts`
+anatomy file, so it flags where a token is wired in, not every styling-layer use.
+
+<Canvas of={DesignTokensStories.Browser} />
+
+The static reference tables below stay as a quick, printable cheat-sheet.
 
 ## Primitive color scales
 

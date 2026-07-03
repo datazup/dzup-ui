@@ -132,7 +132,7 @@ export const AllSizes: Story = {
     template: `
       <div class="space-y-4">
         <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size" class="flex items-center gap-4">
-          <span class="text-xs font-mono w-8 text-gray-500">{{ size }}</span>
+          <span class="text-xs font-mono w-8 text-[var(--dz-muted-foreground)]">{{ size }}</span>
           <DzButtonGroup :size="size" variant="outline">
             <DzButton>Left</DzButton>
             <DzButton>Center</DzButton>
@@ -155,7 +155,7 @@ export const AllVariants: Story = {
     template: `
       <div class="space-y-4">
         <div v-for="variant in ['solid', 'outline', 'ghost', 'text']" :key="variant" class="flex items-center gap-4">
-          <span class="text-xs font-mono w-16 text-gray-500">{{ variant }}</span>
+          <span class="text-xs font-mono w-16 text-[var(--dz-muted-foreground)]">{{ variant }}</span>
           <DzButtonGroup :variant="variant">
             <DzButton>Left</DzButton>
             <DzButton>Center</DzButton>
@@ -178,7 +178,7 @@ export const AllTones: Story = {
     template: `
       <div class="space-y-4">
         <div v-for="tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']" :key="tone" class="flex items-center gap-4">
-          <span class="text-xs font-mono w-16 text-gray-500">{{ tone }}</span>
+          <span class="text-xs font-mono w-16 text-[var(--dz-muted-foreground)]">{{ tone }}</span>
           <DzButtonGroup :tone="tone" variant="outline">
             <DzButton>Left</DzButton>
             <DzButton>Center</DzButton>
@@ -217,7 +217,7 @@ export const ChildOverrides: Story = {
     components: { DzButtonGroup, DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Group sets variant="outline" tone="neutral", but individual buttons can override.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Group sets variant="outline" tone="neutral", but individual buttons can override.</p>
         <DzButtonGroup variant="outline" tone="neutral">
           <DzButton>Default</DzButton>
           <DzButton tone="primary">Primary Override</DzButton>
@@ -322,7 +322,7 @@ export const Accessibility: Story = {
     components: { DzButtonGroup, DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The group renders role="group" with an accessible label. Each child
           button is independently focusable; Tab moves through them in order.
         </p>

@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* dzup-ui components render Tailwind utility classes (`inline-flex`,
+   `h-[var(--dz-…)]`, …) at runtime. Tailwind ignores node_modules by default,
+   so tell it to scan the installed library for those classes — otherwise the
+   components render unstyled. */
+@source "../node_modules/@dzup-ui/core/dist/**/*.{js,mjs}";
+
+/* Comfortable page padding + the token background so an injected block/template
+   sits on the same surface it does on dzup-ui.com. */
+html,
+body {
+  margin: 0;
+  background: var(--dz-background, #fff);
+  color: var(--dz-foreground, #1a202c);
+  font-family: system-ui, -apple-system, sans-serif;
+}

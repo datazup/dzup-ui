@@ -47,6 +47,18 @@ const CATALOG_SUMMARY =
   'components it is built from.'
 
 /**
+ * Cross-link to the component-API index. These blocks are composed from
+ * `@dzup-ui/core`; the library's own `llms.txt` (import paths, the frozen
+ * variant/size/tone taxonomy, props/emits/slots) is generated separately and
+ * served from the Storybook build at `/storybook/llms.txt`. Pointing assistants
+ * at it lets them understand the primitives each block is built from.
+ */
+const COMPONENT_API_NOTE =
+  'These blocks are built from the @dzup-ui/core component library, whose full ' +
+  'API (import paths, frozen variant/size/tone taxonomy, props/emits/slots) is ' +
+  'documented at [/storybook/llms.txt](/storybook/llms.txt).'
+
+/**
  * Pick a code-fence longer than any backtick run inside `source`, so an SFC that
  * itself contains ``` (rare, but possible in a template string) can never break
  * out of its fence. Minimum three, per CommonMark.
@@ -165,6 +177,8 @@ export function llmsTxt(
     `${blocks.length} blocks across ${groups.length} categories. For each block's ` +
       `full SFC source inline see [/${LLMS_FULL_TXT}](/${LLMS_FULL_TXT}); for a single ` +
       `block fetch its markdown page at /r/<id>.md.`,
+    '',
+    COMPONENT_API_NOTE,
   ]
   for (const { meta, blocks: group } of groups) {
     parts.push(
@@ -197,6 +211,8 @@ export function llmsFullTxt(
     '',
     `${blocks.length} blocks across ${groups.length} categories, each with its ` +
       `complete Vue SFC. For the index alone see [/${LLMS_TXT}](/${LLMS_TXT}).`,
+    '',
+    COMPONENT_API_NOTE,
   ]
   for (const { meta, blocks: group } of groups) {
     parts.push('', heading(2, meta.label), '', meta.blurb)

@@ -7,26 +7,102 @@ import { DocTable } from './_blocks/DocTable.ts'
 # Accessibility
 
 Accessibility is a **contract**, not an afterthought. Every component targets
-**WCAG 2.1 AA**, and the Storybook **A11y** panel audits each story live (axe-core).
-Under the Vitest addon those audits also run in a real browser as part of the test
-suite (TASK-0.9).
+**WCAG 2.2 AA**, and the Storybook **A11y** panel audits each story live (Deque
+axe-core). Under the Vitest addon those same audits run in a real browser as part
+of the `storybook-test` CI job.
 
-## The a11y panel
+## The enforced pipeline
 
-Open the **Accessibility** panel (bottom dock) on any story to see Violations,
-Passes, and Incomplete checks. Audits currently run in **report-only** mode
-(`a11y.test: 'todo'`) so they surface issues without failing the build. As each
-family is cleaned up, its assertion level is flipped to `'error'` to gate
-regressions (TASK-X.3).
+The audit is wired as a **CI gate**, configured globally in
+`.storybook/preview.ts`:
+
+- **Ruleset** — `a11y.options.runOnly` pins the full **WCAG 2.2 AA** tag set
+  (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`). axe's defaults stop at
+  2.1, so this explicitly turns on the new 2.2 AA criteria (target size,
+  focus-not-obscured, dragging movements, …). `best-practice` rules are excluded
+  so the gate maps exactly to the "WCAG 2.2 AA" claim.
+- **Report artifact** — the `storybook-test` job runs the audit in-browser and
+  publishes the per-story results (with axe violation detail) as the
+  `storybook-a11y-report` CI artifact on every run.
+- **Gate level (`a11y.test`)** — rolled out **per family**. The default is
+  report-only (`'todo'`): violations surface in the panel and the CI report but do
+  **not** fail the build. A family flips to blocking by opting into
+  `a11yError` (`stories/_shared/a11y.ts`) once its stories audit clean; from then
+  on any violation in that family **fails the PR**.
+
+axe-core automatically catches roughly ~57% of WCAG issues — the gate makes that
+57% non-regressable **for enforced families**. The remaining criteria still
+require the manual [authoring checklist](#authoring-checklist) below.
+
+> **Why per-family?** The audit runs in a real browser via
+> `@storybook/addon-vitest`. Enabling it globally at `'error'` today would fail
+> the job on a backlog of pre-existing violations (see below), so families are
+> cleaned and flipped one at a time. **Target end-state:** every family enforced,
+> then the global default flips to `'error'`.
+
+## Family enforcement status
+
+<DocTable
+  head={['Family', 'Gate', 'Notes']}
+  align={['left', 'left', 'left']}
+  rows={[
+    ['Buttons', '🔍 Audit', 'Story helper text migrated off raw grays; blocked on tone-as-text contrast (see below)'],
+    ['Inputs', '🔍 Audit', 'Interaction bug fixed; contrast + labelling backlog'],
+    ['Forms', '🔍 Audit', 'Labelling / ARIA structure backlog'],
+    ['Cards', '🔍 Audit', ''],
+    ['Data', '🔍 Audit', 'nested-interactive + contrast backlog'],
+    ['Feedback', '🔍 Audit', ''],
+    ['Layout', '🔍 Audit', ''],
+    ['Navigation', '🔍 Audit', 'ARIA structure (tabs/menu/stepper) backlog'],
+    ['Overlays', '🔍 Audit', 'ARIA structure backlog'],
+    ['Media', '🔍 Audit', 'image-alt backlog'],
+    ['Typography', '🔍 Audit', 'contrast backlog'],
+  ]}
+/>
+
+Legend: **🔍 Audit** = report-only, violations tracked but non-blocking ·
+**✅ Enforced** = `a11yError`, violations fail CI.
+
+## Known a11y debt (from the enforced audit)
+
+Turning the gate on surfaced pre-existing violations. The dominant classes:
+
+- **`color-contrast` (largest)** — two root causes: (1) story helper text authored
+  with raw Tailwind grays (`text-gray-500` = 3.94:1 on the `--dz-background`
+  neutral-100 surface) — migrate to `text-[var(--dz-muted-foreground)]`; (2) a
+  **design-token defect**: the non-solid button/badge variants render the semantic
+  tone as text (`text-[var(--dz-primary)]`, `--dz-danger`, …) at the `-500` shade,
+  which is ~4.1–4.4:1 on the light surface — below AA. Fixing this needs the
+  non-solid variants to use the darker (`-600`/`-700`) tone shade for text.
+- **Structural ARIA** — `aria-allowed-attr`, `aria-required-parent`,
+  `aria-required-children`, `nested-interactive` in composite widgets
+  (tabs, menu, listbox, tree, stepper, tables).
+- **`target-size` (WCAG 2.2 AA)** — some `xs`/`sm` controls fall below the 24×24px
+  minimum touch target.
+
+## Escape hatches (use sparingly, always documented)
+
+Two documented ways to keep a family gating while handling a specific case, both in
+`stories/_shared/a11y.ts` — each **must** carry a comment explaining why.
 
 ```ts
-// Per-story override for a known false positive:
-export const PortalledOverlay: Story = {
-  parameters: {
-    a11y: { test: 'todo', config: { rules: [{ id: 'color-contrast', enabled: false }] } },
-  },
+import { a11yError, a11yDisableRules } from '../_shared'
+
+// Opt a clean family into enforcement (spread into every story meta in the family).
+const meta = {
+  title: 'Core/Buttons/DzButton',
+  parameters: { ...a11yError },
+} satisfies Meta<typeof DzButton>
+
+// Disable one SPECIFIC rule for a documented false positive, staying gated.
+export const DecorativePlaceholder: Story = {
+  // Placeholder bars are decorative and intentionally low-contrast.
+  parameters: { ...a11yDisableRules('color-contrast') },
 }
 ```
+
+Never blanket-disable the audit (`a11y: { test: 'off' }`) to silence a real
+regression — fix the component or the story instead.
 
 ## Contract a11y props
 

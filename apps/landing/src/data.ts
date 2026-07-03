@@ -124,9 +124,10 @@ export const ECOSYSTEM: EcosystemItem[] = [
   {
     icon: 'SwatchBook',
     title: 'Themes',
-    blurb: 'Ready-made token themes and a visual editor — re-skin the whole library from a preset, then export the CSS variables.',
-    meta: 'Presets · Editor',
-    status: 'planned',
+    blurb: 'A visual OKLCH token editor with curated presets — re-skin the whole library live in light and dark, check contrast, then export the CSS variables or share a link.',
+    meta: 'Editor · Presets · Export',
+    status: 'available',
+    href: '/themes',
   },
   {
     icon: 'Figma',

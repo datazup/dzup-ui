@@ -24,6 +24,11 @@ const meta = {
   component: DzCountdown,
   tags: ['autodocs', 'status:experimental'],
   decorators: [darkModeDecorator],
+  // TASK-APP-01 — every story here renders a live, drift-corrected timer that
+  // ticks every `interval` ms towards a `Date.now()`-relative target, so no two
+  // captures show the same figure. Skip visual snapshots entirely; the play()
+  // tests still assert the timer/live-region semantics.
+  parameters: { chromatic: { disableSnapshot: true } },
   argTypes: {
     target: {
       control: false,

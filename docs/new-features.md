@@ -1,694 +1,688 @@
-# dzup-ui — New Component Features (Round 2 Gap Analysis)
+# dzup-ui — App Experience Upgrades (Storybook + Landing)
 
-> **Round 2** backlog of new components for the **free** tier (`apps/storybook` +
-> `packages/core`). Round 1 (`docs/features.md`, TASK-NF-01 … 24) closed the obvious
-> gaps against PrimeVue, CoreUI/Bootstrap-Vue, Ant Design Vue, and MUI. The free tier
-> now ships ~155 components across 11 families, so this round targets the **remaining**
-> primitives those libraries expose that `dzup-ui` still lacks — plus a few
-> differentiating utilities that round out the surface.
+> **Status:** Proposal / specification. The `<task>` blocks below are the build.
+> **Owner:** dzup-ui team · **Last updated:** 2026-07-02
+> **Scope:** Take the two public-facing **apps** — `apps/storybook` (the free component
+> docs) and `apps/landing` (the marketing front door) — from *good* to
+> **best-in-class and unique for 2025–26**. This doc is **not** a component backlog:
+> new components live in [`features.md`](./features.md) / [`features-2.md`](./features-2.md)
+> (38 shipped). Here the product *is the app* — the docs experience and the marketing
+> site — and the goal is to make dzup-ui feel as professional and memorable as the
+> best design systems on the web.
 >
-> Numbering **continues** from Round 1: this file starts at `TASK-NF-25`.
+> **Free tier only.** Everything here ships in the open `dzup-ui` repo with no license
+> gate. The **Pro funnel** (pricing page, PRO badges, license enforcement, waitlist
+> backend) is deliberately **out of scope** — it is already specified in
+> [`landing.md`](./landing.md) §5 / §11 (Phase 2). Where a task touches the free↔pro
+> boundary it stops at the free side.
 >
-> **Scope:** free tier only. Every item below is a general-purpose primitive that
-> belongs in the open library. Enterprise surfaces (Kanban, Gantt, charts, editors,
-> virtualized data grids, builders, whiteboard, etc.) live in `@dzup-ui/pro` and are
-> **out of scope** here. Each candidate below was verified to exist in **neither**
-> `packages/core` **nor** `dzup-ui-pro/packages/pro` before being listed.
+> **Companion docs:** [`landing.md`](./landing.md) (landing spec & section order),
+> [`storybook-decisions.md`](./storybook-decisions.md) (what is already scaffolded in
+> Storybook), [`animations.md`](./animations.md) (motion gallery), [`tasks.md`](./tasks.md)
+> (Storybook Sprint 0). Read these before starting — several tasks *complete* work those
+> docs began rather than starting from zero.
+
+---
 
 ## How these tasks are written
 
 Each task is a **ready-to-run prompt** for a coding agent, authored per Anthropic's
 [prompt-engineering guidance](https://platform.claude.com/docs/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct):
 a clear role, the motivation/context behind the work, sequential numbered steps,
-`<example>` snippets, XML-tagged structure, and instructions phrased as _what to do_
-rather than what to avoid. Copy a prompt block verbatim into an agent to execute it.
+`<example>` snippets, XML-tagged structure, defined success criteria, and instructions
+phrased as _what to do_ rather than what to avoid. Copy a prompt block verbatim into an
+agent to execute it.
 
-Every prompt assumes the shared conventions below. Re-read these before starting any task.
+Unlike the component tasks in `features.md`, these touch **app code** (`apps/storybook`,
+`apps/landing`) and **tooling/CI**, not `packages/core` components. The shared conventions
+below apply to every task; re-read them before starting.
 
 ```xml
-<repo_conventions source="CLAUDE.md — authoritative, overrides defaults">
-  <packages>contracts (types, zero runtime deps) → tokens → core (depends on tokens + contracts). compat is never imported by stable core.</packages>
-  <file_layout dir="packages/core/src/components/{family}/">
-    Dz{Name}.vue                 — &lt;script setup lang="ts"&gt; implementation
-    Dz{Name}.types.ts            — Props/Emits/Slots interfaces, extend Base*Props from @dzup-ui/contracts
-    Dz{Name}.tokens.ts           — component-local --dz-{component}-* token mappings (anatomy indirection)
-    Dz{Name}.variants.ts         — tv() style definitions from tailwind-variants
-    Dz{Name}.contract.spec.ts    — Contract Spec v1 conformance tests
-    Dz{Name}.spec.ts             — unit/behaviour tests (vitest)
-    index.ts                     — public exports
-  </file_layout>
-  <stories>NOT colocated. Author at packages/core/stories/{family}/Dz{Name}.stories.ts. Add a status badge (experimental | beta | stable | deprecated). Stories are auto-discovered by apps/storybook/.storybook/main.ts.</stories>
+<repo_conventions source="CLAUDE.md + landing.md + storybook-decisions.md — authoritative">
+  <apps>
+    apps/storybook — Storybook 10.3.4, @storybook/vue3-vite. Config in .storybook/{main,manager,preview,vitest.setup}.ts.
+      Installed addons: @storybook/addon-docs, @storybook/addon-a11y (currently test:'todo' = report-only),
+      @storybook/addon-themes (data-theme light/dark toolbar), @storybook/addon-vitest (browser play() tests via Playwright).
+      Guide MDX in apps/storybook/stories/*.mdx; reusable doc blocks in apps/storybook/stories/_blocks/ (StatusBadge, DoDont, DocTable, ColorScale).
+      Component stories live in packages/core/stories/{family}/Dz{Name}.stories.ts with shared helpers in packages/core/stories/_shared/.
+    apps/landing — Vite + Vue 3 + vue-router marketing site. Sections in src/components/, blocks in src/blocks/ (90, ?raw source paired),
+      templates in src/templates/ (46), motion in src/motion/ (33 components + directives), gallery demos in src/gallery/.
+      Registry build: scripts/build-registry.ts → public/r/ + public/llms.txt + public/llms-full.txt. OG images: scripts/shoot-og.mts.
+      Static facts/links in src/config.ts (FACTS, LINKS, STORYBOOK_BASE); content data in src/data.ts.
+  </apps>
   <styling>
-    Use tv() in .variants.ts. NO &lt;style scoped&gt;. NO raw color literals, NO hardcoded Tailwind color classes.
-    All CSS values reference design tokens via var(--dz-*). Token naming: --dz-{component}-{property}. Global tokens: --dz-primary, --dz-radius-sm, --dz-shadow-xs, etc. (ADR-04, ADR-17).
+    Token-only, exactly like core (ADR-04): all CSS values reference var(--dz-*). NO raw hex, NO hardcoded Tailwind color classes.
+    Both apps import @dzup-ui/tokens/css then @dzup-ui/core base styles. Light/dark via the data-theme attribute on <html> with the
+    FOUC-safe IIFE in index.html (ADR-15). Build UI from real @dzup-ui/core components wherever one fits, so a11y & theming are inherited.
   </styling>
-  <api>
-    withDefaults(defineProps&lt;Props&gt;(), {...}); typed defineEmits; typed defineSlots.
-    v-model via defineModel (ADR-16) — never manual prop+emit.
-    Relative imports use explicit .ts extensions (e.g. import { cn } from '../../utilities/cn.ts').
-    Headless interaction/a11y primitives come from Reka UI where one fits (ADR-07).
-    Prefer existing composables (useFloating, useClickOutside, useEscapeKey, useScrollSpy, useFocusTrap, useTheme, useClipboard) over new dependencies.
-  </api>
-  <canonical_types from="@dzup-ui/contracts">
-    CanonicalSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-    CanonicalTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
-    Base prop interfaces: BaseAccessibilityProps, BaseBehaviorProps, BaseAppearanceProps&lt;TSize,TVariant&gt;, BaseValidationProps, BaseInteractiveProps&lt;TVariant&gt;, BaseFormControlProps&lt;TVariant&gt;.
-    Variant taxonomies are FROZEN per ADR-02 — if a new component needs a variant set not already in contracts, propose it as a typed addition to contracts/src, do not invent ad-hoc string unions in core.
-  </canonical_types>
-  <quality_gates>yarn typecheck → 0 errors. yarn lint → 0 errors. 80%+ coverage. Contract Spec v1 conformance. WCAG AA (keyboard + screen-reader + visible focus).</quality_gates>
+  <a11y>WCAG 2.2 AA. Keyboard reachable, visible focus rings (--dz-ring), semantic landmarks, honor prefers-reduced-motion. Verify light AND dark.</a11y>
+  <validation>
+    ESLint CANNOT run locally in this repo ([[dzup-ui-local-env]]). Validate the docs side with `storybook build`
+    (from apps/storybook) and the landing side with `vite build` (from apps/landing). Do not claim a task passes without a clean build.
+    Storybook play()/a11y tests: `yarn workspace @dzup-ui/storybook test-storybook` (needs `playwright install chromium` once).
+  </validation>
+  <scope>Free tier. Never gate a demo, never add a paywall, never introduce a parallel token/color system. Reserve the word "Pro" strictly for the paid tier (landing.md §4.8).</scope>
 </repo_conventions>
 ```
 
 > **Status legend:** `[ ]` todo · `[~]` in progress · `[x]` done
-> **Priority:** 🔴 P0 (high-value, broadly expected) · 🟠 P1 (strong addition) · 🟢 P2 (polish/utility)
+> **Priority:** 🔴 P0 (high-value, expected of a serious library) · 🟠 P1 (strong differentiator) · 🟢 P2 (polish/unique flourish)
 
 ---
 
-## 🔴 P0 — Primitives users expect from a serious form/overlay library
+# Part A — `apps/storybook`: make the docs best-in-class
 
-### [x] TASK-NF-25 — `DzInputMask` (format-masked text input)
+The Storybook is already strong (rich MDX guides, custom doc blocks, status taxonomy,
+play() tests, a11y addon). These tasks close the gap to the reference design-system docs
+(Polaris, Carbon, Spectrum, Nuxt UI) and add features few Vue libraries ship.
 
-_Gap: PrimeVue `InputMask`, Vuetify mask, Cleave-style inputs. `dzup-ui` has
-`DzInput`, `DzNumberInput`, and `DzOtpInput` but no general masked input for phone
-numbers, dates, SSNs, postcodes, or license keys — a baseline data-entry primitive._
+## 🔴 P0 — Quality pipeline the audience can see
+
+### [x] TASK-APP-01 — Activate visual regression (Chromatic OSS, light × dark modes)
+
+_Gap: `storybook-decisions.md` TASK-0.11 chose "Playwright snapshots first, Chromatic
+later" but neither is wired. Every reference design system runs visual regression;
+Chromatic is **free for open-source** and Storybook-native — the best available deal._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in the dzup-ui design system. Follow <repo_conventions> from docs/new-features.md exactly.</role>
+<role>You are a design-system infra engineer. Follow <repo_conventions> from docs/new-features.md exactly.</role>
 
-<task>Create DzInputMask, a format-masked text input, in packages/core/src/components/inputs/.</task>
+<task>Wire Chromatic visual-regression testing into apps/storybook, snapshotting each story across the light and dark themes, as a non-blocking CI check first.</task>
 
-<motivation>Structured fields (phone, date, credit card, IBAN, custom keys) need to guide and constrain typing. Today teams hand-roll keydown handlers on DzInput. A reusable mask primitive that composes with DzFormField and emits both the masked and unmasked value removes that duplication and prevents inconsistent UX.</motivation>
+<motivation>The library ships 173 stories with zero automated visual coverage — unintended color/spacing/layout regressions ship undetected. Chromatic runs snapshots in an isolated server environment (no Mac-vs-Linux baseline flake that plagues local Playwright snapshots) and is free for public repos. Using its "modes" feature we snapshot every story in both themes in one run, which also proves the token system holds in dark mode.</motivation>
 
 <requirements>
-  <api>
-    - v-model via defineModel&lt;string&gt; holding the displayed (masked) value; also emit `update:unmasked` with formatting characters stripped.
-    - Props extend BaseFormControlProps: size (CanonicalSize), variant (InputVariant), disabled, readonly, required, invalid, id, ariaLabel, placeholder.
-    - mask (string) using tokens 9 = digit, a = letter, * = alphanumeric; everything else is a literal (e.g. "(999) 999-9999", "99/99/9999", "***-***").
-    - slotChar (default '_') shown for unfilled positions; `autoClear` (boolean) clears the field on blur when input is incomplete.
-  </api>
-  <behavior>
-    - As the user types, skip literal positions automatically and only accept characters matching the next mask token.
-    - Support paste, backspace/delete, and caret placement that respects literal segments.
-    - Expose a `completed` state (all tokens filled) for validation; integrate with DzFormField invalid styling.
-  </behavior>
-  <a11y>Keep it a native &lt;input&gt; under the hood so screen readers and form autofill work. Announce the expected format via aria-describedby pointing at a DzFormDescription. Meet WCAG AA focus and contrast using tokens only.</a11y>
+  <setup>Add chromatic as a devDependency and a `chromatic` script in apps/storybook/package.json. Configure the Chromatic project token via a CI secret (CHROMATIC_PROJECT_TOKEN), never committed.</setup>
+  <modes>Define Chromatic modes for `light` and `dark` that set the data-theme global (reuse the @storybook/addon-themes global already in preview.ts). Apply globally so every story is captured in both themes; allow per-story opt-out via parameters.chromatic.modes for noisy/animated stories.</modes>
+  <stability>Disable snapshots on inherently non-deterministic stories (live countdowns, random data, autoplay motion) via parameters.chromatic.disableSnapshot. For DzDataGrid "1,000 Rows" and other heavy stories, keep the existing lazy loaders so snapshots stay cheap.</stability>
+  <ci>Add a GitHub Actions job that runs `chromatic` on PRs, uploads the diff/review link, and is NON-blocking initially (continue-on-error). Document in storybook-decisions.md how to promote it to a required check once baselines are trusted (mirror the TASK-X.5 rollout note).</ci>
 </requirements>
 
 <steps>
-  1. Scaffold the 7-file layout for inputs/DzInputMask.
-  2. Implement a small pure mask engine (apply mask, compute next caret, strip literals) as a local helper so it is unit-testable in isolation.
-  3. Define types extending BaseFormControlProps; build tv() variants reusing the existing DzInput token surface where possible (--dz-input-*).
-  4. Implement .vue with defineModel, caret management, and the update:unmasked emit.
-  5. Write .contract.spec.ts and .spec.ts (typing through literals, paste, backspace, autoClear, completed state, unmasked emit, disabled/readonly).
-  6. Author packages/core/stories/inputs/DzInputMask.stories.ts: Phone, Date, CreditCard, CustomKey, WithFormField, Sizes matrix. Tag status 'experimental'.
-  7. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Install chromatic; add scripts and the CI job (.github/workflows).
+  2. Add `chromatic` modes for light/dark in .storybook/preview.ts (or a modes file) using the existing theme global.
+  3. Sweep stories for non-determinism; add disableSnapshot where needed and document why in a comment.
+  4. Run `storybook build` to confirm the static build is clean, then run a first Chromatic baseline.
+  5. Update storybook-decisions.md TASK-0.11/TASK-X.5 with the chosen approach and the promote-to-required checklist.
 </steps>
 
-<example name="intended usage">
-  &lt;DzInputMask v-model="phone" mask="(999) 999-9999" @update:unmasked="raw = $event" /&gt;
-</example>
+<success_criteria>Chromatic runs on PRs, captures every non-excluded story in light + dark, posts a review link, and does not fail the build. `storybook build` stays green.</success_criteria>
 ```
 
 ---
 
-### [x] TASK-NF-26 — `DzListbox` (always-visible selectable list)
+### [x] TASK-APP-02 — Enforce accessibility (flip a11y `todo` → `error`, WCAG 2.2 AA, CI gate)
 
-_Gap: PrimeVue `Listbox`, MUI selectable List, Headless UI `Listbox`, Ant `List` with
-selection. `dzup-ui` has `DzSelect`/`DzMultiSelect` (collapsed dropdowns) and `DzList`
-(display only) but no inline, keyboard-navigable selection list for filter panels,
-settings, and side-by-side pickers._
+_Gap: `@storybook/addon-a11y` runs report-only (`test: 'todo'` in preview.ts). Violations
+are visible but never fail a build. Reference systems gate CI on a11y. This completes
+`storybook-decisions.md` TASK-X.3, which was blocked only on the Vitest addon install
+(now present)._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are an accessibility engineer for the dzup-ui design system. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzListbox, an always-visible single/multi-select list, in packages/core/src/components/forms/.</task>
+<task>Turn the Storybook a11y audit into an enforced, CI-gating check, family by family, targeting WCAG 2.2 AA.</task>
 
-<motivation>Dropdown selects hide their options; many UIs (faceted filters, transfer sources, preference panels) need the choices visible at all times with full keyboard navigation. DzList only renders content and DzTransfer is a heavier dual-list. A focused Listbox primitive fills the space between them and can become the building block DzTransfer reuses.</motivation>
+<motivation>dzup-ui claims "WCAG AA" as a headline selling point but nothing enforces it — a11y regressions can ship. The addon is already installed and the Vitest browser runner already works, so this is a configuration + audit-and-fix task, not new infrastructure. The a11y addon runs Deque axe-core, which catches ~57% of WCAG issues automatically; gating on it makes the claim real.</motivation>
 
 <requirements>
-  <api>
-    - v-model via defineModel for the selected value(s); `multiple` (boolean) switches between a single value and an array.
-    - options prop: array of { label, value, disabled?, icon? }; support `optionLabel`/`optionValue`/`optionGroup` keys for arbitrary objects.
-    - Props extend BaseFormControlProps: size, disabled, invalid, id, ariaLabel. Add `filter` (boolean) for a built-in search field, `checkmark` (boolean) to show a selected check, and `emptyMessage`.
-  </api>
-  <behavior>
-    - Roving tabindex: Up/Down move active option, Home/End jump, Enter/Space toggle, typeahead by first letter; Shift+click and Shift+Arrow range-select in multiple mode.
-    - When filter is on, narrowing the list keeps keyboard navigation scoped to visible options.
-  </behavior>
-  <a11y>Implement with Reka UI Listbox primitives if available, else role="listbox" with role="option" children and aria-selected/aria-multiselectable wired correctly. Manage aria-activedescendant. Meet WCAG AA.</a11y>
+  <ruleset>Configure the a11y addon `config.runOnly` (or tags) to include WCAG 2.2 AA rules, not just the axe defaults (which stop at 2.1). Set the global to `test: 'error'` as the target end-state.</ruleset>
+  <rollout>Roll out per family: audit a family's stories, fix real violations in the component or story, and only then flip that family to `error`. Where a "violation" is a documented false positive (e.g. intentional low-contrast decorative text), disable that specific rule at the story level with an explanatory comment — never blanket-disable.</rollout>
+  <ci>Ensure the storybook-test CI job (Vitest browser) fails when an a11y check fails on an `error`-level family. Publish the a11y results as a CI artifact.</ci>
+  <docs>Update apps/storybook/stories/Accessibility.mdx: change the wording from "report-only" to describe the enforced pipeline, and add a short table of which families are enforced vs still in audit.</docs>
 </requirements>
 
 <steps>
-  1. Scaffold forms/DzListbox (7 files) plus a DzListboxOption.vue subcomponent if the markup warrants it.
-  2. Define types extending BaseFormControlProps with the options/group model.
-  3. Build tv() variants and --dz-listbox-* tokens (item height, selected background, active ring) mapping to global semantic tokens.
-  4. Implement .vue: roving focus, single/multi selection, optional filter, typeahead.
-  5. Write .contract.spec.ts and .spec.ts (selection, multiple, range select, keyboard nav, filter, disabled options, a11y attributes).
-  6. Author packages/core/stories/forms/DzListbox.stories.ts: Single, Multiple, WithFilter, Grouped, Disabled, InsideFormField. Tag status 'experimental'.
-  7. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Set the WCAG 2.2 AA ruleset in .storybook/preview.ts a11y parameters.
+  2. Pick the cleanest family first (e.g. buttons); run the audit, fix findings, flip to error.
+  3. Repeat family by family; track progress in Accessibility.mdx.
+  4. Make the CI job block on error-level failures; upload the report artifact.
+  5. Run `yarn workspace @dzup-ui/storybook test-storybook` to confirm green, and `storybook build`.
 </steps>
 
-<example name="intended usage">
-  &lt;DzListbox v-model="selected" multiple filter checkmark :options="cities" /&gt;
-</example>
+<success_criteria>At least the P0 families (buttons, forms, inputs, overlays, navigation) audit clean and run at `test: 'error'`; CI fails on new violations there; Accessibility.mdx reflects the real state.</success_criteria>
 ```
 
 ---
 
-### [x] TASK-NF-27 — `DzPopconfirm` (inline confirm popover)
+### [x] TASK-APP-03 — Component maturity dashboard (status × tests × a11y × Figma)
 
-_Gap: Ant Design `Popconfirm`, Element Plus `Popconfirm`, PrimeVue `ConfirmPopup`.
-`dzup-ui` has `DzConfirmDialog` (a blocking modal) and `DzPopover` (free-form), but no
-lightweight "are you sure?" bubble anchored to the trigger — the standard pattern for
-delete/destructive actions in tables and toolbars._
+_Gap: status badges exist per component but there is no single **inventory** view. Polaris,
+Carbon, and Spectrum all ship a maturity matrix — it reads as "professional" and is now
+trivial with Storybook's tag system._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue + Storybook docs engineer. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzPopconfirm, an anchored confirmation popover, in packages/core/src/components/overlays/.</task>
+<task>Build a "Component Status" MDX dashboard page in apps/storybook/stories/ that renders a live matrix of every component with its maturity, test, a11y, and design-link signals.</task>
 
-<motivation>A full modal is heavy for low-risk confirmations like deleting a row. Peer libraries ship a popover that appears next to the trigger with a short message and confirm/cancel buttons. This is the most-requested overlay still missing from dzup-ui. Build it on the same floating/positioning composable that already powers DzPopover and DzTooltip so behaviour stays consistent.</motivation>
+<motivation>A young library earns trust by being honest and legible about maturity. The status taxonomy (experimental | beta | stable | deprecated) already exists in packages/core/stories/_shared/status.ts and is applied as `status:*` tags, so the data is present — it just isn't aggregated anywhere. A single matrix page turns scattered badges into a credibility asset and a roadmap-at-a-glance.</motivation>
 
 <requirements>
-  <api>
-    - Trigger via default slot; controlled `open` through defineModel&lt;boolean&gt; with uncontrolled fallback.
-    - Props: title, description, confirmText (default 'Confirm'), cancelText (default 'Cancel'), tone (CanonicalTone, default 'danger' for destructive intent), icon, placement, loading (for async confirm).
-    - Emits: confirm, cancel. Support an async confirm: keep the popover open and show the confirm button in loading state until the returned promise settles.
-  </api>
-  <behavior>
-    - Open on trigger click; close on confirm, cancel, Escape, or outside click (reuse useEscapeKey + useClickOutside).
-    - Return focus to the trigger on close. Confirm button is focused on open for fast keyboard confirmation.
-  </behavior>
-  <a11y>role="alertdialog" with aria-labelledby/aria-describedby pointing at title/description. Trap focus within the popover while open (useFocusTrap). Meet WCAG AA.</a11y>
+  <data>Derive the component list and status from the story index / status tags (avoid hand-maintained lists that drift). For each component show: family, status badge (reuse the _blocks/StatusBadge.ts block), whether it has a play() interaction test, whether its family is a11y-enforced (from TASK-APP-02), and whether a Figma design link exists (from TASK-APP-05's `design` parameter).</data>
+  <summary>At the top, render counts per status (e.g. "132 stable · 24 beta · 7 experimental · 0 deprecated") and per family, using the DocTable block for the full matrix (sortable/scrollable on mobile is already handled by DocTable).</summary>
+  <deprecations>List any `deprecated` components separately with their migration path, so the page doubles as an upgrade guide.</deprecations>
+  <placement>Add it to the Guides group, pinned high in storySort so it is easy to find. Link to it from Introduction.mdx.</placement>
 </requirements>
 
 <steps>
-  1. Scaffold overlays/DzPopconfirm (7 files).
-  2. Define types; reuse DzButton for the action buttons and DzIcon for the leading icon.
-  3. Position with the shared useFloating composable; build tv() variants + --dz-popconfirm-* tokens.
-  4. Implement .vue: open state, async confirm/loading, focus management, dismissal paths.
-  5. Write .contract.spec.ts and .spec.ts (confirm, cancel, escape, outside click, async loading, focus return, a11y roles).
-  6. Author packages/core/stories/overlays/DzPopconfirm.stories.ts: Default, DestructiveDelete, AsyncConfirm, CustomTexts, PlacementMatrix. Tag status 'experimental'.
-  7. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Write a small build/runtime helper that reads the status tags and test/a11y signals into a matrix data structure.
+  2. Author ComponentStatus.mdx rendering the summary counts + the DocTable matrix + the deprecations section.
+  3. Wire storySort + an Introduction.mdx link.
+  4. Run `storybook build` and confirm the page renders with live data in light and dark.
 </steps>
 
-<example name="intended usage">
-  &lt;DzPopconfirm title="Delete this run?" tone="danger" @confirm="remove(row)"&gt;
-    &lt;DzIconButton icon="trash" aria-label="Delete" /&gt;
-  &lt;/DzPopconfirm&gt;
+<example name="matrix row">
+  Component | Family | Status | Tests | A11y | Design
+  DzButton  | buttons | 🟢 stable | play ✓ | enforced ✓ | Figma ↗
 </example>
+```
+
+## 🟠 P1 — Signature docs features few Vue libraries ship
+
+### [x] TASK-APP-04 — Interactive design-token browser
+
+_Gap: tokens are shown as static swatches in DesignTokens.mdx / ColorPalette.mdx. The 2025
+Design Systems Report puts token adoption at 84%; a **searchable, copyable** token browser
+is now expected. Ours can be uniquely good because our tokens are OKLCH and three-tier._
+
+```xml
+<role>You are a Vue + Storybook docs engineer. Follow <repo_conventions> exactly.</role>
+
+<task>Build an interactive Design Token Browser in Storybook: a searchable, filterable, copy-to-clipboard view of every --dz-* token, reading live values from the running theme.</task>
+
+<motivation>Consumers constantly need "what is the exact token for this color/space/radius?" Today they read prose tables and eyeball swatches. A live browser that reads getComputedStyle for each --dz-* custom property shows the *actual* resolved value in the current theme (so it updates when the theme toolbar flips light↔dark) and lets them copy the token name or value in one click. Because our system is three-tier (primitive → semantic → component), grouping and cross-linking those tiers is a differentiator over flat token lists.</motivation>
+
+<requirements>
+  <source>Enumerate tokens from @dzup-ui/tokens (the canonical source) grouped by tier and family (color, spacing, radius, shadow, typography, motion). Read resolved values live via getComputedStyle on a probe element so light/dark values are real, not hardcoded.</source>
+  <ui>A search box (filter by token name), tier/category filters, and a grid of token cards. Each card: token name, a live preview (swatch / spacing bar / radius corner / shadow box / type sample), the resolved value, and copy buttons for both `--dz-name` and `var(--dz-name)`. Build the UI from @dzup-ui/core components (DzInput, DzChip, DzCard, DzCopyButton) so it is token-only and themable.</ui>
+  <token_usage>Where feasible, show which components consume a given component-tier token (e.g. --dz-button-md-height → DzButton) by scanning the *.tokens.ts files. If that scan is too heavy for a doc page, expose it as an optional detail and note the limitation.</token_usage>
+  <placement>Render as a story (so it lives in the Vitest/play pipeline) embedded into a Guides/DesignTokens "Browser" tab via <Canvas>.</placement>
+</requirements>
+
+<steps>
+  1. Build a DzTokenBrowser demo component under packages/core/stories/_gallery/ (or apps/storybook local stories) fed by the tokens package.
+  2. Implement live value resolution + search/filter + copy.
+  3. Embed it in DesignTokens.mdx via <Canvas of={...} />; keep the existing static reference tables below it.
+  4. Run `storybook build`; verify live values change with the theme toolbar.
+</steps>
+
+<success_criteria>Typing "radius" filters to radius tokens; each card shows the live resolved value; copy works; values update when the theme switches.</success_criteria>
 ```
 
 ---
 
-## 🟠 P1 — Strong additions that round out the library
+### [x] TASK-APP-05 — Figma integration via `@storybook/addon-designs`
 
-### [x] TASK-NF-28 — `DzMasonry` (cascading column layout)
-
-_Gap: MUI `Masonry`, Ant cascading galleries. `dzup-ui` has `DzGrid` and `DzFlex` but
-no masonry layout that packs variable-height items into balanced columns — wanted for
-image walls, card feeds, and dashboards._
+_Gap: `storybook-decisions.md` TASK-0.15 reserved the `design` parameter convention but
+deferred the addon "until Figma frames exist". Adopting the addon now (even sparsely
+populated) makes design-source-of-truth visible next to the live component._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Storybook docs engineer. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzMasonry, a responsive masonry/cascading-column layout, in packages/core/src/components/layout/.</task>
+<task>Install @storybook/addon-designs and adopt the `design` parameter convention across component stories, embedding Figma frames in a Design panel and MDX pages.</task>
 
-<motivation>Grids force uniform row heights, which crops or letterboxes variable-height content. Masonry packs items into the shortest column to minimise gaps. A token-driven, SSR-safe masonry primitive lets product teams build feeds and galleries without pulling a third-party layout library.</motivation>
+<motivation>storybook-decisions.md already reserved `parameters.design = { type: 'figma', url }` so that "turning on the addon later is a one-line main.ts change with zero story rewrites." This task performs that one-line change plus the rollout. Showing the design frame beside the code is a hallmark of mature systems and feeds the maturity dashboard's "Design" column (TASK-APP-03).</motivation>
 
 <requirements>
-  <api>
-    - columns prop: number, or a responsive object keyed by CanonicalSize breakpoints (e.g. { xs: 1, md: 2, lg: 3 }).
-    - gap prop referencing spacing tokens; `sequential` (boolean) to place items left-to-right by order vs. shortest-column balancing.
-    - Default slot renders arbitrary children; the component distributes them into columns.
-  </api>
-  <behavior>
-    - Recompute column assignment on container resize (ResizeObserver) and when children change.
-    - Provide a CSS-columns fast path for the common case and a measured-JS path when exact shortest-column balancing is requested.
-  </behavior>
-  <a11y>Preserve DOM order for reading/tab order regardless of visual column placement, or document the trade-off and offer an `ordered` mode that keeps source order. Meet WCAG AA.</a11y>
+  <install>Add @storybook/addon-designs to apps/storybook/package.json and register it in .storybook/main.ts addons.</install>
+  <convention>Document the `design` parameter in Contributing.mdx as a required-when-available field; add it to the story template in packages/core/stories/_shared/Dz.stories.template.ts.</convention>
+  <graceful>Where no Figma frame exists yet, the component simply omits the parameter — the Design panel then shows a friendly "design link coming soon" rather than an error. Seed a few flagship components (DzButton, DzCard, DzInput) with real or placeholder frame URLs to prove the wiring.</graceful>
+  <mdx>Demonstrate the <Figma /> doc block inside one family MDX page so design + live component sit together.</mdx>
 </requirements>
 
 <steps>
-  1. Scaffold layout/DzMasonry (7 files).
-  2. Define types with the responsive columns model; build tv() variants + --dz-masonry-* tokens (gap).
-  3. Implement resize-aware distribution with a ResizeObserver; debounce recomputation.
-  4. Write .contract.spec.ts and .spec.ts (column counts, responsive breakpoints, gap tokens, reflow on resize, dynamic children).
-  5. Author packages/core/stories/layout/DzMasonry.stories.ts: ImageWall, CardFeed, ResponsiveColumns, WithGap. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Install + register the addon.
+  2. Add the design parameter to the story template and Contributing.mdx guidance.
+  3. Seed flagship stories with design URLs; confirm the Design panel renders.
+  4. Add a <Figma> embed to one family MDX page.
+  5. Run `storybook build`.
 </steps>
-
-<example name="intended usage">
-  &lt;DzMasonry :columns="{ xs: 1, md: 2, lg: 3 }" gap="md"&gt;
-    &lt;DzImageCard v-for="p in photos" :key="p.id" v-bind="p" /&gt;
-  &lt;/DzMasonry&gt;
-</example>
 ```
 
 ---
 
-### [x] TASK-NF-29 — `DzImageComparison` (before/after slider)
+### [x] TASK-APP-06 — Live code playground + "Open in StackBlitz" on every example
 
-_Gap: img-comparison-slider (React/Vue/Angular), Nuxt UI / Magic UI compare widgets.
-No peer in this list ships it natively, so it is both a real demand and a
-differentiator. `dzup-ui` has `DzImage`, `DzLightbox`, and `DzCarousel` but nothing for
-side-by-side before/after reveal._
+_Gap: examples show source via `<Source>` but there is no editable playground and no
+one-click fork. PrimeVue and Nuxt UI both ship "open in StackBlitz". Embedding the official
+Vue SFC REPL (`@vue/repl`) inside docs is rare for Vue libraries and highly memorable._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue tooling + Storybook docs engineer. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzImageComparison, a draggable before/after image reveal slider, in packages/core/src/components/media/.</task>
+<task>Add two ways to try components without local setup: (1) an embedded, editable Vue REPL doc block for key guide pages, and (2) an "Open in StackBlitz" button on component examples.</task>
 
-<motivation>Before/after sliders are the clearest way to show edits, restorations, A/B variants, and data-quality diffs. Teams currently embed third-party widgets that ignore the design system's tokens and a11y baseline. A first-party, keyboard-accessible component keeps these visuals on-brand and accessible.</motivation>
+<motivation>The shortest path from "interesting" to "adopted" is letting a visitor edit real code and see it run. @vue/repl is the official SFC playground component (it powers play.vuejs.org) and can be embedded directly in an MDX doc page — very few Vue component libraries do this. For full-project forking, a prebuilt StackBlitz template deep-linked from each example gives a one-click real environment. Both are free and self-contained.</motivation>
 
 <requirements>
-  <api>
-    - Slots `before` and `after` (each typically a DzImage), plus convenience props beforeSrc/afterSrc/beforeAlt/afterAlt.
-    - v-model:position via defineModel&lt;number&gt; (0–100, default 50); `orientation` ('horizontal' | 'vertical'); optional before/after labels.
-    - handle slot to customise the divider grip.
-  </api>
-  <behavior>
-    - Drag the handle (pointer events) and click anywhere on the track to move it.
-    - Keyboard: focus the handle, Arrow keys nudge, Shift+Arrow jump by 10, Home/End to extremes.
-  </behavior>
-  <a11y>Handle is role="slider" with aria-valuemin/max/now and an accessible label describing it reveals the after image. Ensure both images carry alt text. Meet WCAG AA; respect prefers-reduced-motion for any transition.</a11y>
+  <repl>Create a reusable MDX doc block (apps/storybook/stories/_blocks/) that mounts @vue/repl preconfigured to import from @dzup-ui/core + @dzup-ui/tokens, seeded with a small editable example. Ensure it respects the current Storybook theme. Add it to GettingStarted.mdx as a "Try it now" section and to 1–2 family pages.</repl>
+  <stackblitz>Add an "Open in StackBlitz" action to the docs toolbar or example blocks that deep-links a prebuilt StackBlitz starter (Vite + Vue 3 + @dzup-ui/core) with the story's source injected. Keep the starter template in the repo (e.g. apps/storybook/playground-template/) so it stays in sync with the current major version.</stackblitz>
+  <perf>Lazy-load the REPL (dynamic import) so it never costs the docs bundle unless a user opens that page; honor prefers-reduced-motion for any editor animations.</perf>
 </requirements>
 
 <steps>
-  1. Scaffold media/DzImageComparison (7 files).
-  2. Define types; build tv() variants + --dz-image-comparison-* tokens (handle size, divider color/width, label chip).
-  3. Implement pointer drag + click-to-set + full keyboard handling; clamp position 0–100.
-  4. Write .contract.spec.ts and .spec.ts (drag, click, keyboard, vertical orientation, v-model sync, labels, a11y slider attrs).
-  5. Author packages/core/stories/media/DzImageComparison.stories.ts: Horizontal, Vertical, WithLabels, CustomHandle, Controlled. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Add @vue/repl; build the DzRepl doc block with dzup-ui imports preconfigured.
+  2. Embed it in GettingStarted.mdx and one family page.
+  3. Build the StackBlitz starter template + the deep-link action.
+  4. Run `storybook build`; verify the REPL compiles a dzup-ui example live and the StackBlitz link opens a working project.
 </steps>
 
-<example name="intended usage">
-  &lt;DzImageComparison before-src="/raw.jpg" after-src="/edited.jpg"
-    before-alt="Original" after-alt="Edited" v-model:position="pos" /&gt;
-</example>
+<success_criteria>A visitor edits `<DzButton>` markup in the page and sees it re-render; the StackBlitz button opens a runnable project importing @dzup-ui/core.</success_criteria>
 ```
 
 ---
 
-### [x] TASK-NF-30 — `DzInfiniteScroll` (viewport-sentinel loader)
+### [x] TASK-APP-07 — In-Storybook "What's New" / changelog page
 
-_Gap: Element Plus `InfiniteScroll`, Vuetify infinite scroll, Ant `List` infinite
-loading. `dzup-ui` has `DzPagination` and `DzDataGridPagination` but no scroll-driven
-"load more" primitive for feeds and long lists._
+_Gap: `CHANGELOG.md` (77 KB, Changesets-generated) exists at the repo root but is invisible
+inside the docs. Users should see recent additions, breaking changes, and deprecations
+without leaving Storybook._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Storybook docs engineer. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzInfiniteScroll, an IntersectionObserver-based load-more wrapper, in packages/core/src/components/data/.</task>
+<task>Surface the changelog inside Storybook as a "What's New" / Releases MDX page generated from CHANGELOG.md + .changeset entries.</task>
 
-<motivation>Paginated feeds increasingly load on scroll rather than via page numbers. Teams wire up IntersectionObserver by hand and get the edge cases wrong (firing during load, no end state, no error retry). A small, declarative primitive standardises the pattern and pairs with DzList, DzDataView, and DzTable.</motivation>
+<motivation>The repo already produces a rich CHANGELOG.md via Changesets, but a docs visitor has no way to see "what changed recently" or "what's deprecated." A Releases page gives version context, highlights breaking changes, and — paired with the maturity dashboard (TASK-APP-03) — tells an honest evolution story that mature libraries always show.</motivation>
 
 <requirements>
-  <api>
-    - Default slot for the already-rendered items; a sentinel is rendered after them.
-    - Props: disabled, loading, hasMore (boolean), `distance` (px threshold), `direction` ('down' | 'up' for reverse/chat lists).
-    - Emit `load-more` when the sentinel enters the viewport and not currently loading and hasMore is true.
-    - Slots: loading, end (no-more-items), error + a `retry` exposed for failed loads.
-  </api>
-  <behavior>
-    - Debounce/guard so load-more fires once per intersection until the parent flips loading back off.
-    - Use a single IntersectionObserver scoped to the nearest scroll container; clean up on unmount.
-  </behavior>
-  <a11y>Expose aria-busy during loading and an aria-live polite region announcing "loading more" and "end of results". Meet WCAG AA.</a11y>
+  <generation>Render the most recent N releases from CHANGELOG.md (parse or import it at build time). Prefer a build step that transforms CHANGELOG.md into the MDX/page content so it never drifts from the source of truth.</generation>
+  <highlights>Visually distinguish Added / Changed / Fixed / Deprecated / Breaking sections (reuse DoDont/StatusBadge styling conventions and token colors). Pull deprecations forward so they are easy to spot.</highlights>
+  <placement>Add "Releases" to the Guides group; link from Introduction.mdx and the footer of the maturity dashboard.</placement>
 </requirements>
 
 <steps>
-  1. Scaffold data/DzInfiniteScroll (7 files); consider extracting a useInfiniteScroll composable in composables/ for reuse.
-  2. Define types; build minimal tv() variants + --dz-infinite-scroll-* tokens (sentinel spacing).
-  3. Implement IntersectionObserver logic with loading guard, direction handling, and retry.
-  4. Write .contract.spec.ts and .spec.ts (fires once, respects hasMore/disabled/loading, end + error slots, retry, cleanup) — mock IntersectionObserver.
-  5. Author packages/core/stories/data/DzInfiniteScroll.stories.ts: BasicFeed, EndState, ErrorRetry, ReverseChat. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Add a build step (script) that reads CHANGELOG.md and emits the page content.
+  2. Author Releases.mdx (or a generated equivalent) with grouped, highlighted sections.
+  3. Wire storySort + cross-links.
+  4. Run `storybook build`.
 </steps>
+```
 
-<example name="intended usage">
-  &lt;DzInfiniteScroll :loading="loading" :has-more="hasMore" @load-more="fetchNext"&gt;
-    &lt;DzList :items="rows" /&gt;
-  &lt;/DzInfiniteScroll&gt;
-</example>
+## 🟢 P2 — Polish & unique flourishes
+
+### [x] TASK-APP-08 — Ship `llms.txt` for the component API (AI discoverability of the docs)
+
+_The landing site already serves `llms.txt`; the **docs** don't. Making the component API
+machine-ingestible means Claude Code / Cursor / Copilot generate correct dzup-ui code —
+one of the strongest low-effort adoption levers for 2025–26._
+
+```xml
+<role>You are a docs-tooling engineer. Follow <repo_conventions> exactly.</role>
+
+<task>Generate an llms.txt (and llms-full.txt) for the component library API and serve it from the Storybook build.</task>
+
+<motivation>AI coding tools increasingly discover libraries via llms.txt. apps/landing already ships one for blocks; the component API itself (props, variants, tokens, import paths) is not exposed. A structured Markdown index of every component's public API materially raises the odds that AI assistants recommend and correctly use dzup-ui — a compounding, near-zero-cost adoption channel.</motivation>
+
+<requirements>
+  <content>For each component, emit: import path, the frozen variant/size/tone taxonomy (from contracts), key props/emits/slots (from the *.types.ts interfaces), and a minimal usage snippet. Include the global conventions (token-only styling, data-theme theming, defineModel v-model).</content>
+  <generation>Generate from source (contracts + types), not by hand, so it never drifts. Emit both a concise llms.txt (index + summaries) and llms-full.txt (with snippets).</generation>
+  <serve>Output into the Storybook static build so it is reachable at /storybook/llms.txt (and cross-linked from the landing llms.txt).</serve>
+</requirements>
+
+<steps>
+  1. Write a generator that walks packages/core + contracts and emits the two files.
+  2. Hook it into the storybook build output.
+  3. Cross-link from apps/landing/public/llms.txt.
+  4. Verify both files build and validate as well-formed Markdown.
+</steps>
 ```
 
 ---
 
-### [x] TASK-NF-31 — `DzCountdown` (live countdown timer)
+### [x] TASK-APP-09 — Brand the Storybook manager (logo, theme, favicon) + "when to use X vs Y" guides
 
-_Gap: Ant Design `Statistic.Countdown`, Element Plus `Countdown`. `dzup-ui` has
-`DzStatCard` for static figures but nothing that ticks down to a deadline — needed for
-sales timers, token-expiry warnings, scheduled-run ETAs, and OTP resend windows._
+_Gap: the manager UI is near-stock (no logo), and while Do/Don't blocks exist, there is no
+systematic "decision guide" for similar components (Switch vs Checkbox, Button vs
+IconButton, Dialog vs Sheet). Both are cheap professionalism wins._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Storybook docs + brand engineer. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzCountdown, a live countdown/elapsed timer, in packages/core/src/components/data/.</task>
+<task>Give the Storybook manager a dzup-ui brand identity and add "when to use which" decision guides for commonly-confused component pairs.</task>
 
-<motivation>Deadlines and expiry windows are common across product UIs, and a correct timer is fiddly (drift-free ticking, format, pause/resume, finish event, cleanup). A shared primitive prevents each team from re-implementing setInterval logic and keeps formatting consistent.</motivation>
+<motivation>A branded manager (logo, brand colors from tokens, favicon) makes the docs feel like a product rather than a default Storybook. Separately, the most common real-world question is "which of these similar components do I use?" — decision guides answer it once, authoritatively, and reduce misuse. The DoDont doc block already exists to build them from.</motivation>
 
 <requirements>
-  <api>
-    - target prop (Date | number timestamp | ms duration) and `mode` ('to' a target time | 'duration' counting down a span).
-    - format prop (token string, default 'HH:mm:ss', supporting D, H, m, s, and ms); `valueStyle` via tone/size from canonical types.
-    - autoStart (default true), and exposed start/pause/reset methods; emit `finish` once at zero and `change` on each tick.
-    - Default/value slot receives the structured remaining { days, hours, minutes, seconds, ms } for custom rendering.
-  </api>
-  <behavior>
-    - Tick on requestAnimationFrame or a self-correcting interval to avoid drift; stop at zero (no negative).
-    - Pause when the tab is hidden if `pauseOnHidden` is set; resume on visibility.
-  </behavior>
-  <a11y>Wrap the live value in an aria-live polite region with a sensible update granularity (do not spam SR every animation frame — announce per second). Provide an accessible label. Meet WCAG AA.</a11y>
+  <brand>Configure a manager theme in .storybook/manager.ts (brandTitle, brandImage/logo, brand colors derived from --dz-* values) and set a proper favicon. Keep it consistent in light/dark.</brand>
+  <guides>Add a "Choosing components" guide page (or per-family sections) covering at least: Switch vs Checkbox, Button vs IconButton vs Link, Dialog vs Sheet vs Popover, Select vs Combobox vs Listbox, Toast vs Alert vs Notification. Each: a one-line rule, a small decision table (DocTable), and paired Do/Don't examples (DoDont).</guides>
 </requirements>
 
 <steps>
-  1. Scaffold data/DzCountdown (7 files); extract the ticking/formatting logic into a pure, testable helper (and optionally a useCountdown composable).
-  2. Define types; build tv() variants + --dz-countdown-* tokens reusing typography/number tokens.
-  3. Implement drift-corrected ticking, finish/change emits, start/pause/reset, slot payload.
-  4. Write .contract.spec.ts and .spec.ts using fake timers (counts down, format tokens, finish fires once, pause/reset, no negative, cleanup on unmount).
-  5. Author packages/core/stories/data/DzCountdown.stories.ts: ToDeadline, DurationTimer, CustomFormat, SlotRender, PauseResume. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Add the manager brand theme + favicon; verify against a fresh `storybook dev` and `storybook build`.
+  2. Author the decision-guide page(s) using DocTable + DoDont.
+  3. Cross-link the guides from the relevant family Overview pages.
 </steps>
-
-<example name="intended usage">
-  &lt;DzCountdown :target="expiresAt" format="mm:ss" @finish="resendEnabled = true" /&gt;
-</example>
 ```
 
 ---
 
-### [x] TASK-NF-32 — `DzColorModeToggle` (theme switch control)
+# Part B — `apps/landing`: make the front door professional and unique
 
-_Gap: Nuxt UI `ColorModeButton`, Mantine color-scheme toggle. `dzup-ui` already ships
-`useTheme` and `DzThemeProvider` but exposes no ready-made control — every consumer
-builds their own light/dark/system switch._
+The landing app is ~70% of the way to the reference sites (hero, live showcase, theming
+demo, 90 blocks, 46 templates, motion, `llms.txt`, OG images). These tasks add the missing
+credibility markers and the **AI-native distribution** layer that defines 2025–26 —
+the single biggest differentiator available to a free library.
+
+## 🔴 P0 — Credibility & distribution
+
+### [x] TASK-APP-10 — Live GitHub stars + npm downloads in social proof
+
+_Gap: `src/config.ts` `FACTS.githubStars` and `FACTS.npmDownloads` are hardcoded `null`;
+`SocialProof.vue` falls back to static text. Every mature library surfaces live numbers;
+hiding them is a documented anti-pattern (landing.md §2.2)._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue + Vite front-end engineer on the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzColorModeToggle, a light/dark/system theme switch, in packages/core/src/components/navigation/.</task>
+<task>Populate GitHub stars and npm weekly downloads with real numbers in SocialProof.vue, fetched at build time with a safe runtime fallback.</task>
 
-<motivation>Dark mode is table-stakes, and the plumbing already exists via useTheme/DzThemeProvider — what is missing is the off-the-shelf control. Shipping one (with the FOUC-safe behaviour from ADR-15) means consumers get a correct, accessible toggle for free instead of re-deriving it.</motivation>
+<motivation>Social proof only works with real numbers, and config.ts already reserves the fields (githubStars/npmDownloads = null). Fetching them at build time (baked into the static site) avoids per-visit API calls and rate-limit thrash, while a small runtime refresh keeps them fresh. This turns a placeholder into a trust signal on the highest-traffic page.</motivation>
 
 <requirements>
-  <api>
-    - Bind to the existing useTheme composable; do NOT introduce a parallel theme store.
-    - `variant` prop: 'icon' (single button that cycles), 'switch' (DzSwitch-style), 'segmented' (light/dark/system via DzSegmented).
-    - Props: showSystem (include the 'system' option, default true), size (CanonicalSize), labels override for i18n.
-  </api>
-  <behavior>
-    - Reflect and update the current resolved mode; when 'system', follow prefers-color-scheme and update live on OS change.
-    - Persist the choice through useTheme's existing persistence; avoid a flash on load (honor ADR-15).
-  </behavior>
-  <a11y>Use a real button/switch with aria-pressed or role="switch"/aria-checked, an accessible label that states the action ("Switch to dark theme"), and announce the new mode. Meet WCAG AA.</a11y>
+  <fetch>At build time (a script invoked from the landing `build`), fetch star count from the GitHub API and weekly downloads from the npm registry download-counts API; write the numbers into a generated data module or into config.ts FACTS. Cache/guard against network failure so a build never breaks if an API is down (fall back to the last known value or the static count).</fetch>
+  <display>Render the numbers in SocialProof.vue with an accessible label and a subtle count-up on scroll-in (reuse the existing motion CountUp component; honor prefers-reduced-motion). Keep the component count (147) and family count (11) alongside.</display>
+  <badges>Optionally add shields.io-style badges (stars, npm version, bundle size, license) to the README and footer for parity with the site.</badges>
 </requirements>
 
 <steps>
-  1. Read packages/core/src/composables/useTheme and providers/DzThemeProvider to wire to the real API before coding.
-  2. Scaffold navigation/DzColorModeToggle (7 files), composing DzIconButton/DzSwitch/DzSegmented for the three variants.
-  3. Define types; build tv() variants + --dz-color-mode-toggle-* tokens (icon swap, transition).
-  4. Implement variant rendering, system-following, and persistence via useTheme.
-  5. Write .contract.spec.ts and .spec.ts (cycles modes, reflects external theme change, system follows matchMedia — mocked, persistence, a11y state).
-  6. Author packages/core/stories/navigation/DzColorModeToggle.stories.ts: IconCycle, SwitchStyle, Segmented, WithoutSystem. Tag status 'experimental'.
-  7. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Write the fetch script; wire it into apps/landing package.json `build` before `vite build`.
+  2. Update SocialProof.vue to read the real values with CountUp.
+  3. Add a graceful fallback path and test it by simulating a failed fetch.
+  4. Run `vite build`; confirm real numbers render in light and dark.
 </steps>
 
-<example name="intended usage">
-  &lt;DzColorModeToggle variant="segmented" :show-system="true" /&gt;
-</example>
+<success_criteria>The live site shows real star + download counts; a network failure during build degrades gracefully instead of erroring.</success_criteria>
 ```
 
 ---
 
-## 🟢 P2 — Polish & utility primitives
+### [x] TASK-APP-11 — shadcn-compatible registry + `npx shadcn add` install + copy-code on blocks
 
-### [x] TASK-NF-33 — `DzKbd` (keyboard key hint)
-
-_Gap: shadcn `Kbd`, Mantine `Kbd`, Nuxt UI `Kbd`. `dzup-ui` has `DzCode` and `DzCode`
-inline type but no styled keyboard-key element — used in docs, tooltips, menus, and
-next to the existing DzCommandPalette to show shortcuts._
+_Gap: `scripts/build-registry.ts` already emits `public/r/`, but blocks/components aren't
+installable via the shadcn CLI, and block cards lack a copy-code button. Positioning
+dzup-ui as a **registry** (not just an npm package) is the defining 2025–26 distribution
+pattern — `npx shadcn add @dzup-ui/<item>` pulls a block straight into a project._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue + DX engineer building distribution for the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzKbd, a keyboard-key display element, in packages/core/src/components/typography/.</task>
+<task>Make the existing registry shadcn-CLI-compatible so blocks/templates/tokens install via `npx shadcn add`, and add copy-code affordances to every block.</task>
 
-<motivation>Shortcut hints appear throughout a product (command menus, tooltips, help). A small Kbd primitive standardises their look and, crucially, can render platform-aware modifiers (⌘ on macOS, Ctrl on Windows/Linux) so the same markup is correct everywhere — a nicety most peer libraries omit.</motivation>
+<motivation>shadcn's registry format (registry.json + per-item registry-item.json) is now the lingua franca for "add this UI to my project" — its CLI distributes components, blocks, tokens, and hooks across React, Svelte, AND Vue. We already build public/r/ artifacts and pair each block with its ?raw source; conforming that output to the registry-item schema lets users run one command to pull a dzup-ui block in. Combined with a per-block "Copy code" button and a hero install command, this is the highest-leverage adoption upgrade available and still rare for Vue libraries.</motivation>
 
 <requirements>
-  <api>
-    - Default slot for raw key content, OR a `keys` prop (string[] like ['mod', 'k']) that renders a combo with separators.
-    - `platformAware` (default true): map the synthetic 'mod' to ⌘ on macOS and Ctrl elsewhere; map 'alt'/'shift'/'enter'/'esc' to symbols.
-    - size (CanonicalSize), `separator` (default '+' or none for joined chips).
-  </api>
-  <behavior>Render each key as its own &lt;kbd&gt; chip; pure presentational, no interaction state.</behavior>
-  <a11y>Use semantic &lt;kbd&gt; elements; provide an aria-label spelling out the combo in words ("Command K") so screen readers do not read bare symbols. Meet WCAG AA contrast via tokens.</a11y>
+  <registry>Extend scripts/build-registry.ts to emit a top-level registry.json and per-item registry-item.json conforming to the shadcn registry schema (name, type, files, dependencies, registryDependencies, cssVars/tokens). Serve them under public/r/ so `npx shadcn add <url>` resolves.</registry>
+  <cli_ux>On each block detail page (/blocks/:id) and card, show the exact install command (e.g. `npx shadcn add https://<domain>/r/<id>.json`) with a copy button, plus a "Copy code" button that copies the block's SFC source (already available as ?raw). Add a package-manager tab set (npm/pnpm/yarn/bun) for the command.</cli_ux>
+  <hero>Confirm/extend the hero install command (already `npm i @dzup-ui/core`) with the same multi-package-manager copy tabs for consistency.</hero>
+  <spike>If Vue SFC blocks can't be cleanly expressed in the registry schema for a target project, document the limitation and ship what works (e.g. source + dependency manifest) rather than blocking.</spike>
 </requirements>
 
 <steps>
-  1. Scaffold typography/DzKbd (7 files).
-  2. Define types; build tv() variants + --dz-kbd-* tokens (key background, border, shadow, font).
-  3. Implement platform detection (SSR-safe) and the synthetic-key → symbol map.
-  4. Write .contract.spec.ts and .spec.ts (slot vs keys prop, platform mapping for mac/non-mac — mock userAgent/navigator, aria-label spelling, sizes).
-  5. Author packages/core/stories/typography/DzKbd.stories.ts: SingleKey, Combo, PlatformAware, Sizes, InsideTooltip. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Study one existing public/r/ artifact and the shadcn registry-item schema; map the fields.
+  2. Extend build-registry.ts to emit conformant registry.json + registry-item.json.
+  3. Add copy-command + copy-code UI (with PM tabs) to block cards/detail pages using DzCopyButton + DzTabs.
+  4. Verify `npx shadcn add <url>` pulls a block into a scratch Vite+Vue project; run `vite build`.
 </steps>
 
-<example name="intended usage">
-  &lt;DzKbd :keys="['mod', 'k']" /&gt;  &lt;!-- ⌘K on macOS, Ctrl+K elsewhere --&gt;
-</example>
+<success_criteria>`npx shadcn add <registry-url>/r/<block>.json` adds a working block to a fresh project; every block page shows a copy-command and copy-code button.</success_criteria>
 ```
 
 ---
 
-### [x] TASK-NF-34 — `DzRelativeTime` (auto-updating timestamp)
+### [x] TASK-APP-12 — Global ⌘K command palette (components + blocks + templates)
 
-_Gap: Element Plus `Time`, Ant relative time helpers, `<relative-time>` web component.
-`dzup-ui` has no component that renders "3 minutes ago" and keeps it fresh — useful in
-activity feeds, run histories, and comment threads._
+_Gap: a `BlockCommandPalette` exists but only searches blocks. A single ⌘K palette that
+searches components, blocks, and templates from anywhere is a signature 2025–26 landing
+feature and dramatically improves navigation of a large catalog._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue front-end engineer on the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzRelativeTime, a self-updating relative timestamp, in packages/core/src/components/typography/.</task>
+<task>Add a site-wide ⌘K / Ctrl+K command palette that fuzzy-searches components (→ Storybook), blocks (→ /blocks/:id), and templates (→ /templates/:slug) from any page.</task>
 
-<motivation>Relative timestamps must re-render as time passes and degrade gracefully (an absolute tooltip, correct ICU pluralisation, locale awareness). Hand-rolled versions drift or never update. A primitive built on the platform Intl.RelativeTimeFormat gives correct, dependency-free localisation.</motivation>
+<motivation>The catalog is large (147 components, 90 blocks, 46 templates) and a block-only palette already proves the pattern. Elevating it to a global, cross-catalog search — the shadcn/Linear ⌘K convention — is exactly what visitors reach for and is memorable. Build it from @dzup-ui/core's own DzCommandPalette so it dogfoods the library and inherits its a11y.</motivation>
 
 <requirements>
-  <api>
-    - value prop (Date | number | ISO string). `mode` ('relative' default | 'absolute'); `locale` override (else document/Intl default).
-    - `updateInterval` auto-derived from age (every second under a minute, every minute under an hour, etc.) with an override.
-    - `tooltip` (default true): wrap in DzTooltip showing the full absolute date.
-  </api>
-  <behavior>Use Intl.RelativeTimeFormat; pick the largest sensible unit; clear timers on unmount; recompute the interval as the value ages.</behavior>
-  <a11y>Render inside a &lt;time&gt; element with a machine-readable datetime attribute; the absolute value is available to assistive tech. Meet WCAG AA.</a11y>
+  <scope>Index three sources: FAMILIES/components (deep-link into Storybook via config.ts helpers), the block registry, and the template registry. Group results by type with icons; show a small preview or family/category meta per result.</scope>
+  <ux>Global keyboard shortcut (⌘K / Ctrl+K) mounted in App.vue; fuzzy match on title + tags + category; keyboard navigable; Enter routes. Recent/most-popular items when the query is empty. Fully accessible (focus trap, aria, Esc to close) — inherited from DzCommandPalette.</ux>
+  <reuse>Reuse the existing useBlockSearch fuzzy logic; extend it to the other two sources rather than duplicating.</reuse>
 </requirements>
 
 <steps>
-  1. Scaffold typography/DzRelativeTime (7 files); extract a pure format function (value, now, locale) → string for unit testing, plus an optional useRelativeTime composable.
-  2. Define types; minimal tv() variants + --dz-relative-time-* tokens (inherits text tokens).
-  3. Implement the adaptive interval, Intl formatting, and DzTooltip integration.
-  4. Write .contract.spec.ts and .spec.ts with fake timers and a fixed "now" (unit selection, updates over time, absolute mode, locale, &lt;time&gt; datetime, cleanup).
-  5. Author packages/core/stories/typography/DzRelativeTime.stories.ts: JustNow, MinutesAgo, AbsoluteMode, Localized, InFeed. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Build a unified search index (components + blocks + templates) from the existing data/registries.
+  2. Mount DzCommandPalette globally in App.vue with the ⌘K shortcut.
+  3. Wire result routing to Storybook / block / template destinations.
+  4. Run `vite build`; verify keyboard flow and both themes.
 </steps>
 
-<example name="intended usage">
-  &lt;DzRelativeTime :value="run.startedAt" /&gt;  &lt;!-- "2 minutes ago", updates live --&gt;
-</example>
+<success_criteria>Pressing ⌘K anywhere opens the palette; typing "button" surfaces the component, relevant blocks, and templates; Enter navigates correctly.</success_criteria>
+```
+
+## 🟠 P1 — Differentiating experiences
+
+### [x] TASK-APP-13 — Full interactive Theme Designer page (`/themes`) with export + shareable URL
+
+_Gap: `ThemingDemo.vue` offers 6 presets + hue/chroma/radius sliders + copy-CSS on the home
+page. The `Themes` ecosystem tile is "planned". A dedicated designer — modeled on tweakcn —
+with WCAG contrast checking, full token control, and shareable URLs is the highest-impact
+unique landing feature and fills the ecosystem slot._
+
+```xml
+<role>You are a Vue front-end engineer building a theming tool for the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
+
+<task>Build a full-page Theme Designer at /themes: live editing of the semantic token set with a real component preview, live WCAG contrast checking, and one-click export (CSS + JSON) plus a shareable URL.</task>
+
+<motivation>Our whole system is an OKLCH three-tier token model — the perfect substrate for a visual theme editor, and tweakcn/Nuxt UI prove the demand. The home ThemingDemo is a teaser; a dedicated /themes page (the "Themes" ecosystem offering) lets users design a complete theme against a live cluster of real components, verify accessibility as they go, and export --dz-* variables to drop into their app. Shareable URLs make themes spreadable. This is memorable, on-brand, and free.</motivation>
+
+<requirements>
+  <controls>OKLCH color pickers for the semantic aliases (primary, secondary, success, warning, danger, info, neutral surfaces/foregrounds) plus radius, spacing density, shadow intensity, and font selection — all writing to --dz-* on a scoped preview root, live.</controls>
+  <preview>A rich preview built from real @dzup-ui/core components (buttons, inputs, cards, alerts, table, chart-like panel) that re-renders instantly, viewable in light AND dark side by side.</preview>
+  <a11y_check>Compute and display WCAG contrast ratios for key foreground/background pairs as the user edits (pass/fail AA badges), so users can't ship an inaccessible theme unknowingly.</a11y_check>
+  <export>Buttons to copy/download the theme as a .css file of --dz-* custom properties and as JSON tokens. Encode the current theme in the URL (query/hash) so a link reproduces it; add a few curated preset themes as starting points.</export>
+  <stretch>Optional "theme from image/prompt": derive a palette from an uploaded image's dominant colors. Mark clearly as experimental; keep it free and client-side.</stretch>
+</requirements>
+
+<steps>
+  1. Add the /themes route + page; lift the existing ThemingDemo logic into a fuller editor.
+  2. Implement OKLCH controls writing live --dz-* on a scoped root; build the light/dark split preview from core components.
+  3. Add live WCAG contrast readouts.
+  4. Implement CSS + JSON export and URL encode/decode; wire curated presets.
+  5. Link /themes from the EcosystemGrid "Themes" tile (flip planned → available) and the nav.
+  6. Run `vite build`; verify export output actually re-themes a scratch page.
+</steps>
+
+<success_criteria>A user picks a primary hue, sees the whole preview re-theme with a live AA/fail contrast readout, downloads a CSS file, and shares a URL that reproduces the exact theme.</success_criteria>
 ```
 
 ---
 
-### [x] TASK-NF-35 — `DzAnimatedNumber` (count-up value)
+### [x] TASK-APP-14 — MCP server for AI IDEs (browse + install + source)
 
-_Gap: Ant `Statistic` animated value, Mantine `NumberFormatter`, count-up widgets.
-`dzup-ui` `DzStatCard` shows static numbers; an animated, formatted figure adds polish
-to dashboards and KPIs._
+_Gap: none exists. An MCP server exposing components, blocks, tokens, and install commands
+lets developers "connect Cursor / Claude Code / Windsurf to dzup-ui." Still rare for Vue
+libraries → strong differentiation, and it compounds with the registry (TASK-APP-11) and
+`llms.txt` (TASK-APP-08)._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a TypeScript engineer building an MCP server for the dzup-ui ecosystem. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzAnimatedNumber, a number that animates between values, in packages/core/src/components/data/.</task>
+<task>Build and document a free, open-source MCP (Model Context Protocol) server that exposes dzup-ui components, blocks, templates, tokens, and install commands to AI coding tools.</task>
 
-<motivation>Animated counters draw attention to changing metrics and feel responsive. Done naively they jank or ignore reduced-motion. A token-driven primitive with correct Intl formatting and accessibility handles those concerns once.</motivation>
+<motivation>AI IDEs increasingly consume libraries through MCP servers (the shadcn MCP server already supports Vue and is a forkable reference). Shipping one lets a developer say "add a dzup-ui pricing block" in Cursor/Claude Code and have it fetch the real source + dependencies. This is AI-native distribution — the top differentiator identified in research — and it reuses the registry data we already generate.</motivation>
 
 <requirements>
-  <api>
-    - v-model or `value` prop (number); animates from the previous value to the new one whenever it changes.
-    - duration, easing (token-referenced), `format` via Intl.NumberFormat options (currency, percent, decimals), prefix/suffix slots.
-    - `startOnView` (default true): begin the first animation only when scrolled into view (IntersectionObserver).
-  </api>
-  <behavior>Animate with requestAnimationFrame; interpolate then format each frame; cancel/restart cleanly on rapid value changes.</behavior>
-  <a11y>Respect prefers-reduced-motion by snapping to the final value with no animation. Mark the animating digits aria-hidden and expose the final formatted value to screen readers (aria-label or a visually-hidden node) so SR users are not flooded. Meet WCAG AA.</a11y>
+  <tools>Expose MCP tools/resources: list components (with API summary), get component source/props, list blocks/templates, get block source + install command, list design tokens. Back them by the existing registry artifacts (public/r/, llms.txt) so there is one source of truth.</tools>
+  <packaging>Ship as a small runnable server (e.g. an npx-able package under the monorepo, tooling package, or apps/) with a README showing how to connect it from Cursor, Claude Code, and Windsurf. MVP = browse + get-source + install-command; note fuller scope (demos, directory) as follow-up.</packaging>
+  <discovery>Add a landing section / docs page ("Use dzup-ui with your AI IDE") with copy-paste MCP config, and register the server in the public MCP registry for discovery.</discovery>
 </requirements>
 
 <steps>
-  1. Scaffold data/DzAnimatedNumber (7 files); extract the tween into a pure helper.
-  2. Define types; tv() variants + --dz-animated-number-* tokens (font, easing default).
-  3. Implement rAF tween, Intl formatting per frame, startOnView, reduced-motion snap.
-  4. Write .contract.spec.ts and .spec.ts (animates to target, formats, reduced-motion path, mid-flight value change, startOnView with mocked IntersectionObserver, SR value).
-  5. Author packages/core/stories/data/DzAnimatedNumber.stories.ts: Integer, Currency, Percent, OnScroll, ReducedMotion. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Scaffold the MCP server reading the registry/llms artifacts.
+  2. Implement the MVP tools (list/get/install/tokens).
+  3. Write connection docs for Cursor/Claude Code/Windsurf + a landing "AI IDE" section.
+  4. Test end-to-end from at least one MCP client; publish + register.
 </steps>
 
-<example name="intended usage">
-  &lt;DzAnimatedNumber :value="revenue" :format="{ style: 'currency', currency: 'USD' }" /&gt;
-</example>
+<success_criteria>Connecting the server in an MCP client lets the assistant list dzup-ui components and fetch a block's real source + install command.</success_criteria>
 ```
 
 ---
 
-### [x] TASK-NF-36 — `DzScrollProgress` (page reading-progress bar)
+### [x] TASK-APP-15 — Live light/dark split-view showcase ("click to re-theme the page")
 
-_Gap: Mantine reading progress, common docs-site progress bars. `dzup-ui` has
-`DzProgress` (value-bound) and `DzBackTop` but no scroll-position indicator for long
-articles, docs, and onboarding pages._
+_Gap: `ShowcaseDashboard.vue` re-themes with the toggle but there is no side-by-side
+light/dark proof and no memorable "re-theme the whole page" moment. Both are cheap, high-impact._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue front-end engineer on the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzScrollProgress, a scroll-position progress indicator, in packages/core/src/components/feedback/.</task>
+<task>Add a side-by-side light/dark split view to the showcase and a prominent "re-theme the entire page" control in the hero/nav.</task>
 
-<motivation>Long-form pages benefit from a thin bar showing how far the reader has scrolled. It is a small but expected piece of polish for documentation and marketing surfaces, and reuses the scroll-tracking pattern already present in useScrollSpy/useScrollToTop.</motivation>
+<motivation>"Show, don't tell" is universal for component-library landings, and seamless theming is our headline claim. A labeled light|dark split of the live dashboard makes the proof instant, and a single control that visibly re-themes the whole page (colors transitioning smoothly) is the kind of moment visitors screenshot. Both build on the existing showcase and theme composable.</motivation>
 
 <requirements>
-  <api>
-    - `target` (window default, or a ref/selector to a scroll container).
-    - `position` ('top' | 'bottom'), `variant` ('bar' default | 'circular'), thickness, tone (CanonicalTone).
-    - Expose the 0–100 progress value via a slot and a `change` emit for custom UIs.
-  </api>
-  <behavior>Track scroll with a passive, rAF-throttled listener; recompute on resize/content change; clamp 0–100.</behavior>
-  <a11y>Provide role="progressbar" with aria-valuenow/min/max and an accessible label ("Page scroll progress"); the bar is decorative-supplementary so do not steal focus. Meet WCAG AA.</a11y>
+  <split>Render the showcase dashboard twice in scoped data-theme="light" and data-theme="dark" containers, clearly labeled, side by side on desktop and as a toggle/stack on mobile. Keep it fully live (real components), not screenshots.</split>
+  <retheme>A hero/nav control that transitions the page theme with a short color transition (not a hard flip); reuse useTheme + the FOUC-safe attribute. Respect prefers-reduced-motion (instant swap when reduced).</retheme>
+  <perf>Transform/opacity/color transitions only; no layout thrash. Ensure the doubled render stays within the performance budget (lazy/simplified variant on small screens).</perf>
 </requirements>
 
 <steps>
-  1. Scaffold feedback/DzScrollProgress (7 files); reuse or extend an existing scroll composable rather than adding a new listener pattern.
-  2. Define types; tv() variants + --dz-scroll-progress-* tokens (height, fill).
-  3. Implement throttled scroll tracking for both window and element targets; bar + circular variants.
-  4. Write .contract.spec.ts and .spec.ts (computes percentage from scroll metrics — mocked, clamps, top/bottom, change emit, a11y attrs, cleanup).
-  5. Author packages/core/stories/feedback/DzScrollProgress.stories.ts: TopBar, BottomBar, Circular, ScopedContainer. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Wrap the showcase in scoped light/dark containers with labels + responsive behavior.
+  2. Add the animated page re-theme control; wire to useTheme.
+  3. Verify reduced-motion + both-theme correctness; run `vite build`.
 </steps>
+```
 
-<example name="intended usage">
-  &lt;DzScrollProgress position="top" tone="primary" /&gt;
-</example>
+## 🟢 P2 — SEO, discovery & polish
+
+### [x] TASK-APP-16 — Sitemap, robots.txt & per-page structured data
+
+_Gap: the landing analysis found no `sitemap.xml` or `robots.txt`, though per-route meta/OG
+and `noindex` on previews already exist. Complete the SEO foundation so the large catalog
+(90 blocks + 46 templates) is fully crawlable._
+
+```xml
+<role>You are a Vue + Vite SEO engineer on the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
+
+<task>Generate a sitemap.xml and robots.txt at build time and add JSON-LD structured data to key pages.</task>
+
+<motivation>The site already sets per-route titles, descriptions, canonicals, OG images, and noindex on preview routes — but without a sitemap, crawlers may miss the 90 block and 46 template detail pages. A generated sitemap + robots.txt + SoftwareApplication/BreadcrumbList JSON-LD closes the loop and improves both classic SEO and AI-SEO (alongside the existing llms.txt).</motivation>
+
+<requirements>
+  <sitemap>A build step enumerates all indexable routes (home, /blocks, /blocks/:id ×90, /templates, /templates/:slug ×46, /themes, /pro) — excluding noindex preview routes — into public/sitemap.xml with canonical URLs.</sitemap>
+  <robots>Emit public/robots.txt allowing crawl and pointing to the sitemap; disallow the /preview routes.</robots>
+  <structured_data>Add JSON-LD (SoftwareApplication for the library, BreadcrumbList on detail pages) via the existing per-route head mechanism.</structured_data>
+</requirements>
+
+<steps>
+  1. Add the sitemap/robots generation step to the landing build.
+  2. Inject JSON-LD through the head resolver used by block/template detail routes.
+  3. Run `vite build`; validate sitemap.xml and robots.txt in dist.
+</steps>
 ```
 
 ---
 
-### [x] TASK-NF-37 — `DzVisuallyHidden` (screen-reader-only wrapper)
+### [x] TASK-APP-17 — Dismissible announcement banner + "Open in StackBlitz" for blocks & templates
 
-_Gap: Reka/Radix `VisuallyHidden`, Chakra `VisuallyHidden`. A foundational a11y
-utility for labels that must exist for assistive tech but stay invisible — currently
-teams copy ad-hoc `sr-only` markup._
+_Gap: `landing.md` §4.0 specifies an optional announcement banner (not built), and blocks/
+templates have live previews but no one-click "fork this" like the docs will get in
+TASK-APP-06. Two small, high-utility additions._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue front-end engineer on the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzVisuallyHidden, a screen-reader-only content wrapper, in packages/core/src/components/typography/.</task>
+<task>Add (1) a config-driven dismissible announcement banner above the nav, and (2) an "Open in StackBlitz" action on block and template detail pages.</task>
 
-<motivation>Many components (icon buttons, live regions, skip links) need text that is announced but not painted. A single audited primitive guarantees the correct, robust hiding technique (not display:none, which removes it from the a11y tree) instead of scattered one-off classes. Prefer Reka UI's VisuallyHidden primitive if it is already a dependency (ADR-07).</motivation>
+<motivation>Mature libraries use a thin announcement bar to surface releases/news and drive repeat traffic; landing.md already reserves it. Separately, letting a visitor open any block or template in a live StackBlitz project (the source is already available as ?raw) removes the last friction between "I like this" and "it runs in my editor." Both are cheap and reuse existing data.</motivation>
 
 <requirements>
-  <api>
-    - Polymorphic `as` prop (default 'span') so it can wrap inline or block content.
-    - `focusable` (boolean): when true, becomes visible on focus (skip-link pattern).
-    - Default slot for the hidden content.
-  </api>
-  <behavior>Apply the standard clip-rect + 1px technique that keeps content in the accessibility tree; when focusable and focused, reveal it in place.</behavior>
-  <a11y>This component IS the a11y primitive — verify with tests that content remains reachable by accessible-name computation and is not display:none/aria-hidden. Meet WCAG AA.</a11y>
+  <banner>A thin, dismissible bar driven by a single config entry (message + link + id). Persist dismissal in localStorage keyed by id so a new announcement re-shows. Hidden entirely when no announcement is configured. Accessible (role, dismiss button, keyboard).</banner>
+  <stackblitz>On /blocks/:id and /templates/:slug, an "Open in StackBlitz" button that injects the item's source into a prebuilt Vite+Vue+@dzup-ui/core starter (share the starter template with TASK-APP-06 if built). Copy-code button alongside.</stackblitz>
 </requirements>
 
 <steps>
-  1. Check whether Reka UI exposes VisuallyHidden; if so, wrap it; otherwise implement the clip technique directly.
-  2. Scaffold typography/DzVisuallyHidden (7 files — variants may be minimal); --dz tokens likely unnecessary, document why if omitted.
-  3. Implement the polymorphic `as` and focusable reveal.
-  4. Write .contract.spec.ts and .spec.ts (content present in DOM/a11y tree, not display:none, focusable reveal on focus, polymorphic as).
-  5. Author packages/core/stories/typography/DzVisuallyHidden.stories.ts: HiddenLabel, SkipLink (focusable), InsideIconButton. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Build the AnnouncementBanner component fed by config.ts; wire dismissal persistence.
+  2. Add the StackBlitz action + copy-code to block/template detail pages.
+  3. Run `vite build`; verify dismissal persistence and that StackBlitz opens a runnable project.
 </steps>
-
-<example name="intended usage">
-  &lt;DzButton&gt;&lt;DzIcon name="save" /&gt;&lt;DzVisuallyHidden&gt;Save document&lt;/DzVisuallyHidden&gt;&lt;/DzButton&gt;
-</example>
 ```
 
 ---
 
-### [x] TASK-NF-38 — `DzDeferredContent` (lazy render on viewport)
+### [x] TASK-APP-18 — Honest "Compare" page (dzup-ui vs peers) + Core Web Vitals budget
 
-_Gap: PrimeVue `DeferredContent`. Renders heavy content only when it scrolls into view —
-a performance primitive for long pages with charts, images, or expensive lists._
+_Two credibility flourishes: a transparent feature-comparison page (a proven conversion
+asset) and a performance budget that lets the site advertise excellent Core Web Vitals —
+which OSS sites often fail, so beating it is a real differentiator._
 
 ```xml
-<role>You are a Vue 3 + TypeScript component engineer in dzup-ui. Follow <repo_conventions> exactly.</role>
+<role>You are a Vue front-end + performance engineer on the dzup-ui landing app. Follow <repo_conventions> exactly.</role>
 
-<task>Create DzDeferredContent, a viewport-triggered lazy renderer, in packages/core/src/components/layout/.</task>
+<task>Add a "Compare" page with an honest feature matrix vs peer libraries, and add a Core Web Vitals / bundle-size budget to CI with a visible score.</task>
 
-<motivation>Pages with many below-the-fold widgets pay a mount cost for content the user may never see. Deferring render until intersection improves first paint and reduces work. A declarative wrapper makes this opt-in without manual observer wiring, and complements DzInfiniteScroll (which loads more) by lazily mounting what is already listed.</motivation>
+<motivation>An honest comparison table (dzup-ui vs PrimeVue / Nuxt UI / others: component count, accessibility, tokens, TypeScript, license, framework) helps evaluators decide and signals confidence — done tastefully, not disparagingly. Separately, best-in-class landings advertise excellent Core Web Vitals; wiring a Lighthouse/bundle budget into CI both keeps the site fast and earns a badge we can show. Both reinforce "professional."</motivation>
 
 <requirements>
-  <api>
-    - Default slot is the deferred content; `placeholder` slot shown before it loads (default to a DzSkeleton).
-    - Props: `rootMargin` and `threshold` (IntersectionObserver options), `once` (default true — stop observing after first reveal).
-    - Emit `load` when the content is first rendered.
-  </api>
-  <behavior>Observe a sentinel; on intersection, mount the slot content (and keep it mounted when once=true). Fall back to immediate render if IntersectionObserver is unavailable (SSR/old engines).</behavior>
-  <a11y>Ensure deferred content participates normally in tab/reading order once mounted; the placeholder must not announce false "loaded" state. Meet WCAG AA.</a11y>
+  <compare>A /compare page (or home section) with a factual feature matrix sourced from public docs, built with DocTable/DzTable, clearly dated and citing sources. Keep claims accurate and neutral; avoid unverifiable superlatives.</compare>
+  <perf>Add a CI step (Lighthouse CI or equivalent) asserting LCP < 2.5s, CLS < 0.1, and a bundle-size budget for the landing build; publish the score as an artifact/badge. Fix any regressions the first run surfaces (font loading, lazy demos, image sizes).</perf>
 </requirements>
 
 <steps>
-  1. Scaffold layout/DzDeferredContent (7 files); reuse the IntersectionObserver helper/composable created for DzInfiniteScroll (TASK-NF-30) if present, else extract a shared useIntersection composable.
-  2. Define types; minimal tv() variants + --dz-deferred-content-* tokens.
-  3. Implement sentinel observation, slot mounting, once behaviour, SSR fallback, load emit.
-  4. Write .contract.spec.ts and .spec.ts (defers until intersection, renders placeholder first, once vs repeat, SSR/no-IO fallback, load emit, cleanup) — mock IntersectionObserver.
-  5. Author packages/core/stories/layout/DzDeferredContent.stories.ts: DeferredImage, DeferredList, CustomPlaceholder, RepeatObserve. Tag status 'experimental'.
-  6. Run yarn typecheck, yarn lint, and the tests; resolve all findings.
+  1. Compile the comparison data with sources; build the /compare page.
+  2. Add the Lighthouse/bundle-size CI job with thresholds; address initial findings.
+  3. Surface the score badge in the footer/README.
+  4. Run `vite build`; confirm the page and the CI check.
 </steps>
-
-<example name="intended usage">
-  &lt;DzDeferredContent&gt;
-    &lt;HeavyChart /&gt;
-    &lt;template #placeholder&gt;&lt;DzSkeleton height="320px" /&gt;&lt;/template&gt;
-  &lt;/DzDeferredContent&gt;
-</example>
 ```
 
 ---
 
-## Summary — gap map
+## Summary — task map
 
-| #   | Component         | Closest peer(s)                                   | dzup-ui status | Family     | Priority |
-| --- | ----------------- | ------------------------------------------------- | -------------- | ---------- | -------- |
-| 25  | DzInputMask       | PrimeVue InputMask · Vuetify mask                 | done           | inputs     | 🔴 P0    |
-| 26  | DzListbox         | PrimeVue Listbox · Headless UI · MUI              | done           | forms      | 🔴 P0    |
-| 27  | DzPopconfirm      | AntD Popconfirm · Element · PrimeVue ConfirmPopup | done           | overlays   | 🔴 P0    |
-| 28  | DzMasonry         | MUI Masonry                                       | done           | layout     | 🟠 P1    |
-| 29  | DzImageComparison | img-comparison-slider · Nuxt UI                   | done           | media      | 🟠 P1    |
-| 30  | DzInfiniteScroll  | Element Plus · Vuetify · AntD List                | done           | data       | 🟠 P1    |
-| 31  | DzCountdown       | AntD Statistic.Countdown · Element                | done           | data       | 🟠 P1    |
-| 32  | DzColorModeToggle | Nuxt UI ColorModeButton · Mantine                 | done           | navigation | 🟠 P1    |
-| 33  | DzKbd             | shadcn · Mantine · Nuxt UI Kbd                    | done           | typography | 🟢 P2    |
-| 34  | DzRelativeTime    | Element Plus Time · `<relative-time>`             | done           | typography | 🟢 P2    |
-| 35  | DzAnimatedNumber  | AntD Statistic · Mantine NumberFormatter          | done           | data       | 🟢 P2    |
-| 36  | DzScrollProgress  | Mantine reading progress                          | done           | feedback   | 🟢 P2    |
-| 37  | DzVisuallyHidden  | Reka/Radix · Chakra                               | done           | typography | 🟢 P2    |
-| 38  | DzDeferredContent | PrimeVue DeferredContent                          | done           | layout     | 🟢 P2    |
+| #  | Task | App | Type | Priority | Builds on |
+| -- | ---- | --- | ---- | -------- | --------- |
+| 01 | Visual regression (Chromatic, light×dark) | storybook | Quality/CI | 🔴 P0 | storybook-decisions TASK-0.11 |
+| 02 | Enforce a11y (todo→error, WCAG 2.2 AA gate) | storybook | Quality/CI | 🔴 P0 | storybook-decisions TASK-X.3 |
+| 03 | Component maturity dashboard | storybook | Docs | 🔴 P0 | status.ts tags |
+| 04 | Interactive design-token browser | storybook | Docs | 🟠 P1 | DesignTokens.mdx |
+| 05 | Figma integration (addon-designs) | storybook | Docs | 🟠 P1 | storybook-decisions TASK-0.15 |
+| 06 | Live REPL + Open in StackBlitz | storybook | DX | 🟠 P1 | — |
+| 07 | In-docs "What's New"/changelog | storybook | Docs | 🟠 P1 | CHANGELOG.md |
+| 08 | llms.txt for the component API | storybook | AI/discovery | 🟢 P2 | landing llms.txt |
+| 09 | Brand manager + "when to use X vs Y" guides | storybook | Brand/Docs | 🟢 P2 | DoDont block |
+| 10 | Live GitHub stars + npm downloads | landing | Credibility | 🔴 P0 | config.ts FACTS |
+| 11 | shadcn registry + `npx shadcn add` + copy-code | landing | Distribution | 🔴 P0 | build-registry.ts |
+| 12 | Global ⌘K command palette | landing | Discovery | 🔴 P0 | BlockCommandPalette |
+| 13 | Full Theme Designer (/themes) + export | landing | Differentiator | 🟠 P1 | ThemingDemo.vue |
+| 14 | MCP server for AI IDEs | landing | AI/distribution | 🟠 P1 | registry, llms.txt |
+| 15 | Light/dark split showcase + page re-theme | landing | Differentiator | 🟠 P1 | ShowcaseDashboard.vue |
+| 16 | Sitemap + robots.txt + JSON-LD | landing | SEO | 🟢 P2 | per-route head |
+| 17 | Announcement banner + Open in StackBlitz | landing | Polish | 🟢 P2 | landing.md §4.0 |
+| 18 | Compare page + Core Web Vitals budget | landing | Credibility/perf | 🟢 P2 | — |
 
-> **Deliberately excluded (Pro / enterprise tier — already in `@dzup-ui/pro` or belongs there):**
-> virtualized tables/scrollers (DzVirtualTable), charts/gauges/sparklines, rich-text and
-> code editors, Kanban/Gantt/Scheduler, query/filter/form/report builders, whiteboard,
-> diagram/network/org-chart, spreadsheet, AI chat. These are not general-purpose
-> primitives and stay out of the free `apps/storybook` scope.
+> **The through-line:** the single biggest 2025–26 differentiator for a *free* library is
+> **AI-native distribution** — TASK-APP-08 (`llms.txt` for the API), TASK-APP-11 (shadcn
+> registry + CLI), and TASK-APP-14 (MCP server) reinforce each other and are still rare for
+> Vue libraries. Ship those three together and dzup-ui reads as ahead of its peers, not
+> merely on par.
+
+> **Deliberately out of scope (Pro funnel — see [`landing.md`](./landing.md) §5/§11, Phase 2):**
+> the pricing page, per-seat license enforcement / watermarking, PRO sidebar badges and
+> upgrade banners, and the pro-waitlist backend. Those belong to the paid tier and are
+> already specified elsewhere. Everything above ships free.
 
 ## Sources
 
-- [PrimeVue — InputMask](https://primevue.org/inputmask/) · [Listbox](https://primevue.org/listbox/) · [DeferredContent](https://primevue.org/deferredcontent/)
-- [Ant Design Vue — Popconfirm](https://www.antdv.com/components/popconfirm/) · [Statistic / Countdown](https://ant.design/components/statistic/)
-- [MUI — Masonry](https://mui.com/material-ui/react-masonry/)
-- [img-comparison-slider (React/Vue/Angular)](https://github.com/sneas/img-comparison-slider) · [@img-comparison-slider/vue](https://www.npmjs.com/package/@img-comparison-slider/vue)
-- [Anthropic — Prompt engineering: Be clear and direct](https://platform.claude.com/docs/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct)
+- **Storybook 10 / testing:** [Storybook 9 release (testing overhaul)](https://storybook.js.org/blog/storybook-9/) · [Vitest addon](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon) · [Interaction testing](https://storybook.js.org/docs/writing-tests/interaction-testing) · [Accessibility testing](https://storybook.js.org/docs/writing-tests/accessibility-testing) · [Doc blocks](https://storybook.js.org/docs/writing-docs/doc-blocks)
+- **Visual regression:** [Chromatic (free for OSS)](https://www.chromatic.com/) · [Chromatic vs Playwright](https://www.chromatic.com/compare/playwright) · [Chromatic modes](https://www.chromatic.com/docs/modes/)
+- **Tokens / Figma / themes:** [storybook-design-token](https://github.com/UX-and-I/storybook-design-token) · [@storybook/addon-designs](https://github.com/storybookjs/addon-designs) · [@storybook/addon-themes](https://storybook.js.org/docs/essentials/themes)
+- **AI-native distribution:** [shadcn registry](https://ui.shadcn.com/docs/registry/examples) · [shadcn CLI](https://ui.shadcn.com/docs/cli) · [shadcn MCP (supports Vue)](https://ui.shadcn.com/docs/mcp) · [shadcn-ui-mcp-server (Vue)](https://github.com/Jpisnice/shadcn-ui-mcp-server) · [shadcn llms.txt](https://ui.shadcn.com/llms.txt) · [llms.txt spec](https://llmstxt.org/)
+- **Theme editor:** [tweakcn](https://tweakcn.com/) · [Nuxt UI theming](https://ui.nuxt.com/) · [Nuxt UI v4 (Pro merged to free)](https://nuxt.com/blog/nuxt-ui-v4)
+- **Playgrounds:** [Vue SFC Playground](https://play.vuejs.org/) · [vuejs/repl](https://github.com/vuejs/repl) · [PrimeVue playground](https://primevue.org/playground/)
+- **Docs / do-&-don't references:** [Best design-system docs sites (Backlight)](https://backlight.dev/mastery/the-best-design-system-documentation-sites) · Shopify Polaris · IBM Carbon · Adobe Spectrum
+- **Motion / landing:** [Aceternity UI](https://ui.aceternity.com/) · [Magic UI](https://magicui.design/)
+- **Method:** [Anthropic — Prompt engineering: Be clear and direct](https://platform.claude.com/docs/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct)

@@ -110,23 +110,23 @@ export const Fab: Story = {
       <div class="flex items-center gap-6 p-8">
         <div class="text-center">
           <DzFab :icon="Plus" aria-label="Add" />
-          <p class="text-xs mt-2 text-gray-500">solid / primary</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">solid / primary</p>
         </div>
         <div class="text-center">
           <DzFab :icon="Sparkles" aria-label="Ask AI" tone="info" />
-          <p class="text-xs mt-2 text-gray-500">info</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">info</p>
         </div>
         <div class="text-center">
           <DzFab :icon="Plus" aria-label="Add" variant="outline" tone="neutral" />
-          <p class="text-xs mt-2 text-gray-500">outline</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">outline</p>
         </div>
         <div class="text-center">
           <DzFab :icon="Plus" aria-label="Add" size="sm" />
-          <p class="text-xs mt-2 text-gray-500">sm</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">sm</p>
         </div>
         <div class="text-center">
           <DzFab :icon="Plus" aria-label="Add" size="xl" />
-          <p class="text-xs mt-2 text-gray-500">xl</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">xl</p>
         </div>
       </div>
     `,
@@ -219,7 +219,7 @@ export const WithLabels: Story = {
     },
     template: `
       <div class="flex flex-col items-center gap-6" style="height: 340px; justify-content: flex-end;">
-        <p class="text-sm text-gray-500">Last action: <strong>{{ last }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Last action: <strong>{{ last }}</strong></p>
         <DzSpeedDial v-bind="args" :items="items" v-model:open="open" aria-label="Compose actions" />
       </div>
     `,
@@ -271,7 +271,7 @@ export const Pinned: Story = {
     },
     template: `
       <div class="relative border rounded-lg overflow-hidden" style="height: 420px; width: 100%;">
-        <p class="p-4 text-sm text-gray-500">Scroll-anchored content. The dial stays pinned bottom-right.</p>
+        <p class="p-4 text-sm text-[var(--dz-muted-foreground)]">Scroll-anchored content. The dial stays pinned bottom-right.</p>
         <DzSpeedDial v-bind="args" v-model:open="open" position="bottom-right" aria-label="Page actions" />
       </div>
     `,

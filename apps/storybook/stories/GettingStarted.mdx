@@ -1,6 +1,8 @@
 {/* GettingStarted.mdx */}
 import { Meta } from '@storybook/addon-docs/blocks'
 import { DocTable } from './_blocks/DocTable.ts'
+import { DzRepl } from './_blocks/DzRepl.ts'
+import { OpenInStackblitz } from './_blocks/OpenInStackblitz.ts'
 
 <Meta title="Getting Started" />
 
@@ -10,6 +12,22 @@ import { DocTable } from './_blocks/DocTable.ts'
 and a three-tier design-token system. This Storybook is both the **documentation**
 and the **test suite** — every story doubles as an interaction/a11y test under the
 Vitest addon.
+
+## Try it now
+
+No install required — this is a live editor running the real `@dzup-ui/core`.
+Edit the `<DzButton>` markup and watch it re-render. It follows the current
+**Theme** toolbar toggle, so try it in dark mode too.
+
+<DzRepl />
+
+Want a full project to poke at? Fork a ready-made **Vite + Vue 3 + dzup-ui**
+starter — the same template lives in this repo, so it always matches the current
+version.
+
+<div style={{ margin: '8px 0 4px' }}>
+  <OpenInStackblitz title="dzup-ui — Getting Started" />
+</div>
 
 ## Install
 

@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { DzAnimatedNumber, DzText } from '@dzup-ui/core'
+import { DzText } from '@dzup-ui/core'
 import { FACTS, LINKS } from '../config.ts'
+import { useLiveStats } from '../composables/useLiveStats.ts'
+import { DzCountUp } from '../motion'
 
-// Hard numbers (spec §4.7). Counts animate up on view; live metrics
-// (stars/downloads) are labelled as such until a data source is wired — never
-// hiding the numbers (the CoreUI/Bootstrap anti-pattern).
+// Hard breadth numbers (spec §4.7) sit alongside the two *live* metrics —
+// GitHub stars and npm weekly downloads — baked in at build time and refreshed
+// best-effort at runtime (see useLiveStats). Every figure counts up on scroll-in
+// via DzCountUp, which honours prefers-reduced-motion. A live metric that is
+// still unknown (its API was down at build time and hasn't refreshed) degrades to
+// a plain call-to-action rather than a fabricated number — never hiding real
+// numbers, never inventing missing ones.
+const { githubStars, npmDownloads } = useLiveStats()
 </script>
 
 <template>
@@ -12,25 +19,43 @@ import { FACTS, LINKS } from '../config.ts'
     <div class="proof-inner">
       <a class="stat" :href="LINKS.components">
         <span class="stat-value">
-          <DzAnimatedNumber :value="FACTS.freeComponents" :duration="1200" start-on-view />
+          <DzCountUp :value="FACTS.freeComponents" :duration="1200" aria-label="Free components" />
         </span>
         <DzText size="sm" tone="muted">Free components</DzText>
       </a>
       <a class="stat" :href="LINKS.components">
         <span class="stat-value">
-          <DzAnimatedNumber :value="FACTS.families" :duration="1000" start-on-view />
+          <DzCountUp :value="FACTS.families" :duration="1000" aria-label="Component families" />
         </span>
         <DzText size="sm" tone="muted">Component families</DzText>
       </a>
       <a class="stat" :href="LINKS.pro">
         <span class="stat-value">
-          +<DzAnimatedNumber :value="FACTS.proComponents" :duration="1200" start-on-view />
+          <DzCountUp :value="FACTS.proComponents" :duration="1200" prefix="+" aria-label="Pro components coming soon" />
         </span>
         <DzText size="sm" tone="muted">Pro components soon</DzText>
       </a>
       <a class="stat" :href="LINKS.github" target="_blank" rel="noreferrer noopener">
-        <span class="stat-value stat-value--glyph">★</span>
-        <DzText size="sm" tone="muted">Star on GitHub</DzText>
+        <span class="stat-value">
+          <template v-if="githubStars !== null">
+            <span class="stat-value--glyph" aria-hidden="true">★</span>
+            <DzCountUp :value="githubStars" :duration="1400" aria-label="GitHub stars" />
+          </template>
+          <span v-else class="stat-value--glyph">★</span>
+        </span>
+        <DzText size="sm" tone="muted">{{ githubStars !== null ? 'GitHub stars' : 'Star on GitHub' }}</DzText>
+      </a>
+      <a class="stat" :href="LINKS.npm" target="_blank" rel="noreferrer noopener">
+        <span class="stat-value">
+          <DzCountUp
+            v-if="npmDownloads !== null"
+            :value="npmDownloads"
+            :duration="1600"
+            aria-label="npm downloads in the last week"
+          />
+          <span v-else class="stat-value--glyph">↓</span>
+        </span>
+        <DzText size="sm" tone="muted">{{ npmDownloads !== null ? 'npm downloads / week' : 'Install from npm' }}</DzText>
       </a>
     </div>
   </section>
@@ -55,7 +80,7 @@ import { FACTS, LINKS } from '../config.ts'
     var(--dz-surface, #fff);
   box-shadow: var(--lp-shadow), var(--lp-highlight);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0;
 }
 
@@ -82,6 +107,7 @@ import { FACTS, LINKS } from '../config.ts'
 .stat-value {
   display: inline-flex;
   align-items: baseline;
+  column-gap: 0.12em;
   font-size: clamp(2.1rem, 4.6vw, 3.1rem);
   font-weight: 750;
   letter-spacing: -0.035em;
@@ -109,7 +135,8 @@ import { FACTS, LINKS } from '../config.ts'
     grid-template-columns: repeat(2, 1fr);
     gap: 24px 0;
   }
-  .stat:nth-child(3) {
+  /* Left column of each row resets the vertical hairline. */
+  .stat:nth-child(odd) {
     border-left: none;
   }
 }

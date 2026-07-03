@@ -1,0 +1,128 @@
+{/* ComponentStatus.mdx — live maturity/test/a11y/design matrix (TASK-APP-06). */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { createElement as h } from 'react'
+import { DocTable } from './_blocks/DocTable.ts'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+import { STATUS_BADGES } from '../../../packages/core/stories/_shared/status.ts'
+import {
+  STATUS_ROWS,
+  STATUS_COUNTS,
+  STATUS_ORDER,
+  UNTAGGED_COUNT,
+  TOTAL_COUNT,
+  FAMILY_SUMMARIES,
+  DEPRECATED_ROWS,
+} from './_data/componentStatus.ts'
+
+<Meta title="Guides/Component Status" />
+
+export const link = (href, label) => h('a', { href, target: '_blank', rel: 'noreferrer' }, label)
+
+export const summaryLine = STATUS_ORDER
+  .map(s => `${STATUS_COUNTS[s]} ${s}`)
+  .join(' · ')
+
+export const statusSummaryRows = STATUS_ORDER.map(s => [
+  h(StatusBadge, { status: s, key: s }),
+  String(STATUS_COUNTS[s]),
+  STATUS_BADGES[s].description,
+])
+
+export const familyRows = FAMILY_SUMMARIES.map(f => [
+  `**${f.family}**`,
+  String(f.total),
+  f.byStatus.stable ? String(f.byStatus.stable) : '—',
+  f.byStatus.beta ? String(f.byStatus.beta) : '—',
+  f.byStatus.experimental ? String(f.byStatus.experimental) : '—',
+  f.byStatus.deprecated ? String(f.byStatus.deprecated) : '—',
+  f.a11yEnforced ? '✅ enforced' : '🔍 audit',
+])
+
+export const matrixRows = STATUS_ROWS.map(r => [
+  `**${r.component}**`,
+  r.family,
+  r.status ? h(StatusBadge, { status: r.status, key: 'badge' }) : '—',
+  r.hasPlay ? 'play ✓' : '—',
+  r.a11yEnforced ? '✅ enforced' : '🔍 audit',
+  r.design ? link(r.design, 'Figma ↗') : '—',
+])
+
+export const deprecatedRows = DEPRECATED_ROWS.map(r => [
+  `**${r.component}**`,
+  r.family,
+  r.migration ?? 'See the component docs page for the replacement.',
+])
+
+# Component Status
+
+A **live** maturity dashboard for every component in `@dzup-ui/core`. Nothing here
+is hand-maintained: the rows are built at render time from the real story files —
+the `status:*` tag on each `meta`, whether the file ships a `play()` interaction
+test, whether its family is a11y-enforced, and whether a Figma `design` link is
+wired. When a story changes, this page changes with it.
+
+**{TOTAL_COUNT} components** — {summaryLine}.
+
+## By status
+
+<DocTable
+  head={['Status', 'Count', 'Meaning']}
+  align={['left', 'right', 'left']}
+  rows={statusSummaryRows}
+/>
+
+{UNTAGGED_COUNT > 0 && (
+  <p>
+    <em>{UNTAGGED_COUNT} component{UNTAGGED_COUNT === 1 ? '' : 's'} carry no
+    <code>status:*</code> tag yet — add one to its story <code>meta.tags</code> so
+    it stops hiding from the roadmap.</em>
+  </p>
+)}
+
+## By family
+
+Each family rolls up its component counts by status, plus its a11y gate. **✅ enforced**
+means every component in the family passes the WCAG 2.2 AA audit at `error` level
+and any regression fails CI; **🔍 audit** means the audit runs report-only while the
+family works down its backlog (see
+[Accessibility](?path=/docs/guides-accessibility--docs)).
+
+<DocTable
+  head={['Family', 'Total', 'Stable', 'Beta', 'Experimental', 'Deprecated', 'A11y']}
+  align={['left', 'right', 'right', 'right', 'right', 'right', 'left']}
+  rows={familyRows}
+/>
+
+## Full matrix
+
+Every component and its four trust signals. **Tests** = at least one `play()`
+interaction test in the story; **A11y** = family gate level; **Design** = a linked
+Figma frame via the story's `design` parameter.
+
+<DocTable
+  head={['Component', 'Family', 'Status', 'Tests', 'A11y', 'Design']}
+  align={['left', 'left', 'left', 'left', 'left', 'left']}
+  rows={matrixRows}
+/>
+
+## Deprecations & migration
+
+Deprecated components are scheduled for removal — treat this section as the upgrade
+guide and move off them before the next major.
+
+{DEPRECATED_ROWS.length === 0
+  ? <p>🎉 <strong>No deprecated components.</strong> Every component in the library is on a supported track.</p>
+  : <DocTable
+      head={['Component', 'Family', 'Migration path']}
+      align={['left', 'left', 'left']}
+      rows={deprecatedRows}
+    />}
+
+---
+
+<p style={{ color: 'var(--dz-muted-foreground)', fontSize: 13 }}>
+  This dashboard is a snapshot of <em>what exists today</em>. For the timeline of{' '}
+  <em>what changed</em> — recent releases, deprecations, and breaking changes — see{' '}
+  <a href="?path=/docs/guides-releases--docs">Guides/Releases</a>, generated straight
+  from the changelog.
+</p>

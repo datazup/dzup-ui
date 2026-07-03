@@ -1,30 +1,38 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "invoice-builder",
   "type": "registry:block",
   "title": "Invoice builder",
   "description": "A dynamic line-items editor — a DzInplace click-to-edit \"Bill to\" field over a DzFieldArray of removable description/qty/rate rows, an \"Add line item\" action, and a live total.",
+  "categories": [
+    "forms"
+  ],
   "files": [
     {
       "path": "invoice-builder.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzButton,\n  DzCard,\n  DzDivider,\n  DzFieldArray,\n  DzHeading,\n  DzIconButton,\n  DzInplace,\n  DzInput,\n  DzNumberInput,\n  DzText,\n} from '@dzup-ui/core'\nimport { Plus, Trash2 } from 'lucide-vue-next'\nimport { computed, ref } from 'vue'\n\n/**\n * Invoice builder — a dynamic line-items editor.\n *\n * A DzInplace click-to-edit \"Bill to\" field sits above a DzFieldArray of\n * line-item rows (description + qty + rate), each removable, with an \"Add line\n * item\" action from the array's #append slot and a live total. Local ref()\n * state only.\n *\n * Forms family: DzFieldArray, DzInplace. Inputs family: DzInput, DzNumberInput.\n */\n\ninterface LineItem {\n  description: string\n  qty: number | undefined\n  rate: number | undefined\n}\n\nconst billTo = ref('Acme Corporation')\n\nconst items = ref<LineItem[]>([\n  { description: 'Design system audit', qty: 1, rate: 1800 },\n  { description: 'Component implementation', qty: 24, rate: 120 },\n])\n\nconst total = computed(() =>\n  items.value.reduce((sum, it) => sum + (it.qty ?? 0) * (it.rate ?? 0), 0),\n)\n\nconst money = (n: number) =>\n  n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })\n</script>\n\n<template>\n  <section class=\"ib-wrap\" aria-labelledby=\"ib-title\">\n    <DzCard variant=\"elevated\" padding=\"lg\" class=\"ib-card\">\n      <header class=\"ib-head\">\n        <DzHeading id=\"ib-title\" :level=\"4\" size=\"xl\" weight=\"semibold\">\n          New invoice\n        </DzHeading>\n        <div class=\"ib-billto\">\n          <DzText size=\"sm\" tone=\"muted\" as=\"span\">Bill to</DzText>\n          <DzInplace v-model:value=\"billTo\" save-on=\"both\" aria-label=\"Bill to\" class=\"ib-inplace\">\n            <template #display=\"{ value, activate }\">\n              <span class=\"ib-billto-name\" @click=\"activate\">{{ value }}</span>\n            </template>\n          </DzInplace>\n        </div>\n      </header>\n\n      <!-- Column headings -->\n      <div class=\"ib-row ib-row--head\">\n        <DzText size=\"xs\" tone=\"muted\" weight=\"medium\" as=\"span\">Description</DzText>\n        <DzText size=\"xs\" tone=\"muted\" weight=\"medium\" as=\"span\" class=\"ib-col-num\">Qty</DzText>\n        <DzText size=\"xs\" tone=\"muted\" weight=\"medium\" as=\"span\" class=\"ib-col-num\">Rate</DzText>\n        <DzText size=\"xs\" tone=\"muted\" weight=\"medium\" as=\"span\" class=\"ib-col-num\">Amount</DzText>\n        <span class=\"ib-col-act\" aria-hidden=\"true\" />\n      </div>\n\n      <DzFieldArray v-model=\"items\" :min=\"1\">\n        <template #default=\"{ field, index, remove, canRemove }\">\n          <div class=\"ib-row\">\n            <DzInput\n              v-model=\"field.description\"\n              :placeholder=\"`Line ${index + 1} description`\"\n              :aria-label=\"`Line ${index + 1} description`\"\n            />\n            <DzNumberInput\n              v-model=\"field.qty\"\n              :min=\"0\"\n              class=\"ib-col-num\"\n              :aria-label=\"`Line ${index + 1} quantity`\"\n            />\n            <DzNumberInput\n              v-model=\"field.rate\"\n              :min=\"0\"\n              class=\"ib-col-num\"\n              :aria-label=\"`Line ${index + 1} rate`\"\n            />\n            <span class=\"ib-amount ib-col-num\">{{ money((field.qty ?? 0) * (field.rate ?? 0)) }}</span>\n            <DzIconButton\n              :icon=\"Trash2\"\n              ariaLabel=\"Remove line item\"\n              variant=\"ghost\"\n              tone=\"danger\"\n              size=\"sm\"\n              :disabled=\"!canRemove\"\n              class=\"ib-col-act\"\n              @click=\"remove\"\n            />\n          </div>\n        </template>\n\n        <template #append=\"{ append }\">\n          <DzButton\n            variant=\"outline\"\n            tone=\"neutral\"\n            size=\"sm\"\n            class=\"ib-add\"\n            @click=\"append({ description: '', qty: 1, rate: 0 })\"\n          >\n            <template #prefix>\n              <Plus :size=\"15\" aria-hidden=\"true\" />\n            </template>\n            Add line item\n          </DzButton>\n        </template>\n      </DzFieldArray>\n\n      <DzDivider decorative class=\"ib-rule\" />\n\n      <div class=\"ib-total\">\n        <DzText size=\"sm\" tone=\"muted\" as=\"span\">Total due</DzText>\n        <DzText size=\"xl\" weight=\"bold\" as=\"span\" class=\"ib-total-amt\">{{ money(total) }}</DzText>\n      </div>\n\n      <div class=\"ib-actions\">\n        <DzButton variant=\"ghost\" tone=\"neutral\">Save draft</DzButton>\n        <DzButton variant=\"solid\" tone=\"primary\">Send invoice</DzButton>\n      </div>\n    </DzCard>\n  </section>\n</template>\n\n<style scoped>\n.ib-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: clamp(1.5rem, 5vw, 3rem) var(--dz-space-4, 1rem);\n  min-height: 100%;\n  background: var(--dz-background, #fff);\n}\n\n.ib-card {\n  width: 100%;\n  max-width: 42rem;\n}\n\n.ib-head {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-2, 0.5rem);\n  margin-bottom: var(--dz-space-5, 1.25rem);\n}\n\n.ib-billto {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.ib-inplace {\n  font-weight: 600;\n}\n\n.ib-billto-name {\n  font-weight: 600;\n  color: var(--dz-foreground, #111827);\n}\n\n.ib-row {\n  display: grid;\n  grid-template-columns: 1fr 5rem 6rem 6rem 2.25rem;\n  gap: var(--dz-space-2, 0.5rem);\n  align-items: center;\n  margin-bottom: var(--dz-space-2, 0.5rem);\n}\n\n.ib-row--head {\n  margin-bottom: var(--dz-space-2, 0.5rem);\n  padding: 0 var(--dz-space-1, 0.25rem);\n}\n\n.ib-col-num {\n  text-align: right;\n}\n\n.ib-amount {\n  font-size: var(--dz-text-sm, 0.875rem);\n  font-weight: 600;\n  font-variant-numeric: tabular-nums;\n  color: var(--dz-foreground, #111827);\n}\n\n.ib-col-act {\n  display: inline-flex;\n  justify-content: center;\n}\n\n.ib-add {\n  margin-top: var(--dz-space-1, 0.25rem);\n}\n\n.ib-rule {\n  margin: var(--dz-space-4, 1rem) 0;\n}\n\n.ib-total {\n  display: flex;\n  align-items: baseline;\n  justify-content: flex-end;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.ib-total-amt {\n  font-variant-numeric: tabular-nums;\n  color: var(--dz-foreground, #111827);\n}\n\n.ib-actions {\n  display: flex;\n  justify-content: flex-end;\n  gap: var(--dz-space-2, 0.5rem);\n  margin-top: var(--dz-space-5, 1.25rem);\n}\n\n@media (max-width: 560px) {\n  .ib-row {\n    grid-template-columns: 1fr 4rem 5rem;\n    grid-template-areas:\n      'desc desc desc'\n      'qty rate amt';\n  }\n\n  .ib-row--head,\n  .ib-col-act {\n    display: none;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/invoice-builder.vue"
     }
   ],
-  "registryDependencies": [
-    "DzCard",
-    "DzFieldArray",
-    "DzInplace",
-    "DzInput",
-    "DzNumberInput",
-    "DzIconButton",
-    "DzDivider",
-    "DzButton",
-    "DzHeading",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzCard",
+      "DzFieldArray",
+      "DzInplace",
+      "DzInput",
+      "DzNumberInput",
+      "DzIconButton",
+      "DzDivider",
+      "DzButton",
+      "DzHeading",
+      "DzText"
+    ]
+  }
 }

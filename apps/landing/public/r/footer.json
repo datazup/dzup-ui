@@ -1,24 +1,32 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "footer",
   "type": "registry:block",
   "title": "Multi-column footer",
   "description": "Brand blurb, four link columns, social icon buttons, and a theme toggle; collapses to two columns on mobile.",
+  "categories": [
+    "marketing"
+  ],
   "files": [
     {
       "path": "footer.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzColorModeToggle, DzDivider, DzIconButton, DzText } from '@dzup-ui/core'\nimport { Github, Linkedin, Twitter, Youtube } from 'lucide-vue-next'\n\n/**\n * Multi-column footer — brand blurb, four link columns, social icon buttons,\n * and a theme toggle.\n *\n * Self-contained: no props, no external data. Composed only from free\n * @dzup-ui/core components and `--dz-*` tokens (no landing-only `--lp-*` props),\n * so it drops into any app already themed, accessible, and light/dark-ready\n * (docs/blocks.md §3.6).\n *\n * Note: DzColorModeToggle requires a DzThemeProvider ancestor in the component\n * tree. The landing app's root already provides one; when embedding this footer\n * in another app, ensure DzThemeProvider wraps the page.\n *\n * Links are rendered as plain `<a>` elements (no router dependency) — replace\n * with `<RouterLink>` or your framework's link component as needed.\n *\n * Responsive: four columns → two → single stack on narrow viewports.\n */\n\nconst year = new Date().getFullYear()\n\nconst links = [\n  {\n    heading: 'Product',\n    items: [\n      { label: 'Features', href: '#' },\n      { label: 'Pricing', href: '#' },\n      { label: 'Changelog', href: '#' },\n      { label: 'Roadmap', href: '#' },\n    ],\n  },\n  {\n    heading: 'Developers',\n    items: [\n      { label: 'Documentation', href: '#' },\n      { label: 'API reference', href: '#' },\n      { label: 'SDKs', href: '#' },\n      { label: 'Status', href: '#' },\n    ],\n  },\n  {\n    heading: 'Company',\n    items: [\n      { label: 'About', href: '#' },\n      { label: 'Blog', href: '#' },\n      { label: 'Careers', href: '#' },\n      { label: 'Press', href: '#' },\n    ],\n  },\n  {\n    heading: 'Legal',\n    items: [\n      { label: 'Privacy', href: '#' },\n      { label: 'Terms', href: '#' },\n      { label: 'Security', href: '#' },\n      { label: 'Cookies', href: '#' },\n    ],\n  },\n] as const\n\nconst socials = [\n  { icon: Github, label: 'GitHub' },\n  { icon: Twitter, label: 'X / Twitter' },\n  { icon: Linkedin, label: 'LinkedIn' },\n  { icon: Youtube, label: 'YouTube' },\n] as const\n</script>\n\n<template>\n  <footer class=\"site-footer\" aria-label=\"Site footer\">\n    <div class=\"sf-inner\">\n      <!-- Top row: brand + link columns -->\n      <div class=\"sf-top\">\n        <!-- Brand column -->\n        <div class=\"sf-brand\">\n          <!-- Logotype — token-colored text mark; swap for an <img> if needed. -->\n          <span class=\"sf-logo\" aria-label=\"DataZup\">DataZup</span>\n          <DzText size=\"sm\" tone=\"muted\" class=\"sf-blurb\">\n            The fastest way to connect your data, build live dashboards, and\n            share insights with your entire team.\n          </DzText>\n        </div>\n\n        <!-- Link columns -->\n        <nav class=\"sf-cols\" aria-label=\"Footer navigation\">\n          <div v-for=\"col in links\" :key=\"col.heading\" class=\"sf-col\">\n            <DzText as=\"p\" size=\"sm\" weight=\"semibold\" class=\"sf-col-heading\">\n              {{ col.heading }}\n            </DzText>\n            <ul class=\"sf-col-list\" role=\"list\">\n              <li v-for=\"item in col.items\" :key=\"item.label\">\n                <a :href=\"item.href\" class=\"sf-link\">\n                  <DzText as=\"span\" size=\"sm\" tone=\"muted\">{{ item.label }}</DzText>\n                </a>\n              </li>\n            </ul>\n          </div>\n        </nav>\n      </div>\n\n      <DzDivider decorative />\n\n      <!-- Bottom bar: copyright, social icons, theme toggle -->\n      <div class=\"sf-bottom\">\n        <DzText size=\"sm\" tone=\"muted\">\n          &copy; {{ year }} DataZup, Inc. All rights reserved.\n        </DzText>\n\n        <div class=\"sf-bottom-controls\">\n          <!-- Social icon buttons -->\n          <div class=\"sf-socials\" role=\"list\" aria-label=\"Social links\">\n            <div v-for=\"social in socials\" :key=\"social.label\" role=\"listitem\">\n              <DzIconButton\n                :icon=\"social.icon\"\n                :aria-label=\"social.label\"\n                variant=\"ghost\"\n                tone=\"neutral\"\n                size=\"sm\"\n              />\n            </div>\n          </div>\n\n          <!-- Theme toggle — requires DzThemeProvider ancestor -->\n          <DzColorModeToggle variant=\"icon\" size=\"sm\" :show-system=\"true\" />\n        </div>\n      </div>\n    </div>\n  </footer>\n</template>\n\n<style scoped>\n.site-footer {\n  background: var(--dz-surface, #f8fafc);\n  border-top: 1px solid var(--dz-border, #e2e8f0);\n  padding: clamp(2.5rem, 6vw, 4rem) var(--dz-space-6, 1.5rem) clamp(1.5rem, 3vw, 2rem);\n}\n\n.sf-inner {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-8, 2rem);\n  max-width: 72rem;\n  margin: 0 auto;\n}\n\n/* Top row */\n.sf-top {\n  display: grid;\n  grid-template-columns: 1.4fr 3fr;\n  gap: var(--dz-space-10, 2.5rem);\n  align-items: flex-start;\n}\n\n/* Brand */\n.sf-brand {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n/* Logotype — primary-coloured wordmark, re-themes with the token. */\n.sf-logo {\n  font-size: var(--dz-text-xl, 1.25rem);\n  font-weight: 700;\n  color: var(--dz-primary, #6366f1);\n  letter-spacing: -0.02em;\n  line-height: 1;\n}\n\n.sf-blurb {\n  margin: 0;\n  line-height: 1.6;\n  max-width: 18rem;\n}\n\n/* Link columns */\n.sf-cols {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: var(--dz-space-6, 1.5rem);\n}\n\n.sf-col {\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-3, 0.75rem);\n}\n\n.sf-col-heading {\n  margin: 0;\n  /* Slightly elevated from muted so it reads as a heading */\n  color: var(--dz-foreground, #1e293b);\n}\n\n.sf-col-list {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: column;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n/* Links — token underline + focus ring, no raw colours. */\n.sf-link {\n  text-decoration: none;\n  outline-offset: 2px;\n  border-radius: var(--dz-radius-sm, 0.25rem);\n}\n\n.sf-link:hover > * {\n  color: var(--dz-foreground, #1e293b);\n}\n\n.sf-link:focus-visible {\n  outline: 2px solid var(--dz-primary, #6366f1);\n}\n\n/* Bottom bar */\n.sf-bottom {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  gap: var(--dz-space-4, 1rem);\n}\n\n.sf-bottom-controls {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n}\n\n.sf-socials {\n  display: flex;\n  align-items: center;\n  gap: var(--dz-space-1, 0.25rem);\n}\n\n/* Responsive: collapse columns on tablet */\n@media (max-width: 900px) {\n  .sf-top {\n    grid-template-columns: 1fr;\n  }\n\n  .sf-blurb {\n    max-width: 100%;\n  }\n\n  .sf-cols {\n    grid-template-columns: repeat(2, 1fr);\n  }\n}\n\n/* Single column on mobile */\n@media (max-width: 480px) {\n  .sf-cols {\n    grid-template-columns: 1fr 1fr;\n  }\n\n  .sf-bottom {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/footer.vue"
     }
   ],
-  "registryDependencies": [
-    "DzText",
-    "DzDivider",
-    "DzIconButton",
-    "DzColorModeToggle"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzText",
+      "DzDivider",
+      "DzIconButton",
+      "DzColorModeToggle"
+    ]
+  }
 }

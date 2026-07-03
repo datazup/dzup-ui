@@ -27,6 +27,7 @@ const columns = [
     title: 'Resources',
     links: [
       { label: 'Blocks', href: '/blocks', external: false },
+      { label: 'Compare', href: '/compare', external: false },
       { label: 'GitHub', href: LINKS.github, external: true },
       { label: 'Changelog', href: LINKS.changelog, external: true },
       { label: 'npm', href: LINKS.npm, external: true },
@@ -44,6 +45,41 @@ const columns = [
 ]
 
 const year = 2026
+
+// shields.io badges — live status images mirroring the README, so the footer and
+// repo show the same star / npm / bundle-size / license signals. Rendered as
+// linked images (each with alt text) rather than baked numbers: they refresh
+// themselves and never gate the build.
+const badges = [
+  {
+    alt: 'GitHub stars',
+    src: 'https://img.shields.io/github/stars/datazup/dzup-ui?label=stars&color=6366f1',
+    href: LINKS.github,
+  },
+  {
+    alt: 'npm version',
+    src: 'https://img.shields.io/npm/v/@dzup-ui/core?label=npm&color=6366f1',
+    href: LINKS.npm,
+  },
+  {
+    alt: 'Minified + gzipped bundle size',
+    src: 'https://img.shields.io/bundlephobia/minzip/@dzup-ui/core?label=min%2Bgzip&color=6366f1',
+    href: 'https://bundlephobia.com/package/@dzup-ui/core',
+  },
+  {
+    alt: 'License',
+    src: 'https://img.shields.io/npm/l/@dzup-ui/core?label=license&color=6366f1',
+    href: LINKS.changelog,
+  },
+  {
+    // Core Web Vitals budget the CI `landing-perf` job enforces on every push
+    // (Lighthouse: LCP < 2.5s, CLS < 0.1). A static badge stating the enforced
+    // budget — links to the CI workflow where the live run + report artifact live.
+    alt: 'Core Web Vitals budget — LCP under 2.5s, CLS under 0.1, enforced in CI',
+    src: 'https://img.shields.io/badge/Core%20Web%20Vitals-LCP%3C2.5s%20%C2%B7%20CLS%3C0.1-6366f1',
+    href: 'https://github.com/datazup/dzup-ui/actions/workflows/ci.yml',
+  },
+]
 </script>
 
 <template>
@@ -57,6 +93,13 @@ const year = 2026
         <p class="footer-tag">
           The open-source Vue 3 component library for serious products.
         </p>
+        <ul class="footer-badges" aria-label="Project badges">
+          <li v-for="badge in badges" :key="badge.alt">
+            <a :href="badge.href" target="_blank" rel="noreferrer noopener">
+              <img :src="badge.src" :alt="badge.alt" height="20" loading="lazy" decoding="async">
+            </a>
+          </li>
+        </ul>
       </div>
 
       <nav class="footer-cols" aria-label="Footer">
@@ -128,6 +171,21 @@ const year = 2026
   font-size: var(--dz-text-sm, 0.875rem);
   color: var(--dz-muted-foreground, #64748b);
   line-height: 1.6;
+}
+
+.footer-badges {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-badges img {
+  display: block;
+  height: 20px;
 }
 
 .footer-cols {

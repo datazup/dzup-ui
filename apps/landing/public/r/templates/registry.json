@@ -1,0 +1,1720 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "dzup-ui-templates",
+  "homepage": "https://dzup-ui.dev",
+  "items": [
+    {
+      "name": "analytics-dashboard",
+      "type": "registry:block",
+      "title": "Analytics Dashboard",
+      "description": "A full app shell — sidebar nav, KPI row, revenue chart and a members table — wired and themed out of the box.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzSidebar",
+          "DzStatCard",
+          "DzCard",
+          "DzTable",
+          "DzProgress",
+          "DzBadge",
+          "DzSegmented",
+          "DzSearchInput",
+          "DzAvatar"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "AnalyticsDashboard.vue",
+          "type": "registry:file",
+          "target": "components/templates/analytics-dashboard/AnalyticsDashboard.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/analytics-dashboard/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "sign-in",
+      "type": "registry:block",
+      "title": "Sign In",
+      "description": "A polished split-screen authentication page with a form card, social providers and a marketing panel.",
+      "categories": [
+        "auth"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzFormField",
+          "DzInput",
+          "DzPasswordInput",
+          "DzCheckbox",
+          "DzButton",
+          "DzDivider"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "SignIn.vue",
+          "type": "registry:file",
+          "target": "components/templates/sign-in/SignIn.vue"
+        }
+      ]
+    },
+    {
+      "name": "sign-up",
+      "type": "registry:block",
+      "title": "Sign Up",
+      "description": "A split-screen register page — name, email and a password field with a live strength meter, terms and social sign-up, beside a marketing panel.",
+      "categories": [
+        "auth"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzFormField",
+          "DzInput",
+          "DzPasswordInput",
+          "DzCheckbox",
+          "DzButton",
+          "DzDivider",
+          "DzProgress"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "SignUp.vue",
+          "type": "registry:file",
+          "target": "components/templates/sign-up/SignUp.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/sign-up/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "reset-password",
+      "type": "registry:block",
+      "title": "Forgot / Reset Password",
+      "description": "A centered card with two states in one page — request a reset link, then a \"check your inbox\" confirmation with a resend nudge.",
+      "categories": [
+        "auth"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzFormField",
+          "DzInput",
+          "DzButton",
+          "DzResult",
+          "DzAlert"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ResetPassword.vue",
+          "type": "registry:file",
+          "target": "components/templates/reset-password/ResetPassword.vue"
+        }
+      ]
+    },
+    {
+      "name": "verify-otp",
+      "type": "registry:block",
+      "title": "OTP / 2FA Verify",
+      "description": "A centered verification card — a six-box one-time-code input, a resend countdown, an explanatory alert and verify / back actions with a success state.",
+      "categories": [
+        "auth"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzOtpInput",
+          "DzButton",
+          "DzCountdown",
+          "DzText",
+          "DzAlert"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "VerifyOtp.vue",
+          "type": "registry:file",
+          "target": "components/templates/verify-otp/VerifyOtp.vue"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-wizard",
+      "type": "registry:block",
+      "title": "Onboarding Wizard",
+      "description": "A multi-step setup — Profile, Workspace and Invite panels on a stepper with a progress bar and prev/next, ending in a success state.",
+      "categories": [
+        "auth"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzStepper",
+          "DzFormField",
+          "DzInput",
+          "DzSelect",
+          "DzRadioGroup",
+          "DzCheckboxGroup",
+          "DzProgress",
+          "DzButton",
+          "DzCard"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "OnboardingWizard.vue",
+          "type": "registry:file",
+          "target": "components/templates/onboarding-wizard/OnboardingWizard.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/onboarding-wizard/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "saas-landing",
+      "type": "registry:block",
+      "title": "SaaS Landing",
+      "description": "A conversion-ready marketing page — hero, feature grid, testimonial carousel, pricing teaser and an FAQ.",
+      "categories": [
+        "marketing"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzButton",
+          "DzCard",
+          "DzBadge",
+          "DzAvatar",
+          "DzAccordion",
+          "DzCarousel",
+          "DzImage"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "SaasLanding.vue",
+          "type": "registry:file",
+          "target": "components/templates/saas-landing/SaasLanding.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/saas-landing/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "blog-post",
+      "type": "registry:block",
+      "title": "Blog Post / Article",
+      "description": "A long-form editorial page — byline, token-painted cover, a sticky table-of-contents, rich prose with a blockquote and code, an author bio and related posts.",
+      "categories": [
+        "content"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzHeading",
+          "DzText",
+          "DzBlockquote",
+          "DzCodeBlock",
+          "DzAnchor",
+          "DzImage",
+          "DzImageCard",
+          "DzAvatar",
+          "DzTag",
+          "DzDivider",
+          "DzCard",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "BlogPost.vue",
+          "type": "registry:file",
+          "target": "components/templates/blog-post/BlogPost.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/blog-post/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "blog-index",
+      "type": "registry:block",
+      "title": "Blog Index",
+      "description": "A magazine landing — searchable, category-filtered grid of article cards with a featured hero, bylines and pagination.",
+      "categories": [
+        "content"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzImageCard",
+          "DzSearchInput",
+          "DzTag",
+          "DzPagination",
+          "DzAvatar",
+          "DzHeading",
+          "DzText",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "BlogIndex.vue",
+          "type": "registry:file",
+          "target": "components/templates/blog-index/BlogIndex.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/blog-index/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "help-center",
+      "type": "registry:block",
+      "title": "Help Center / FAQ",
+      "description": "A support hub — a search hero with popular queries, a topic-card grid, a live-filtered FAQ accordion and a \"still need help\" panel with the support team.",
+      "categories": [
+        "content"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzSearchInput",
+          "DzCard",
+          "DzAccordion",
+          "DzAlert",
+          "DzTag",
+          "DzBadge",
+          "DzAvatar",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "HelpCenter.vue",
+          "type": "registry:file",
+          "target": "components/templates/help-center/HelpCenter.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/help-center/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "changelog",
+      "type": "registry:block",
+      "title": "Changelog / Releases",
+      "description": "A release feed on a vertical timeline — version badges, a \"Latest\" marker, changes tagged by type (Added / Fixed / Improved) and a code snippet, filterable by type.",
+      "categories": [
+        "content"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzTimeline",
+          "DzCard",
+          "DzBadge",
+          "DzTag",
+          "DzCodeBlock",
+          "DzDivider",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Changelog.vue",
+          "type": "registry:file",
+          "target": "components/templates/changelog/Changelog.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/changelog/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "docs-guide",
+      "type": "registry:block",
+      "title": "Docs / Guide",
+      "description": "A documentation page — a grouped sidebar nav, breadcrumb trail, a prose article with note / caution callouts and code blocks, a sticky on-this-page rail and prev/next pager.",
+      "categories": [
+        "content"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzBreadcrumb",
+          "DzAnchor",
+          "DzAlert",
+          "DzCodeBlock",
+          "DzSearchInput",
+          "DzBadge",
+          "DzDivider",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "DocsGuide.vue",
+          "type": "registry:file",
+          "target": "components/templates/docs-guide/DocsGuide.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/docs-guide/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "newsroom",
+      "type": "registry:block",
+      "title": "Newsroom / Press",
+      "description": "A press hub — a media-contact card, a pinned announcement, an \"as featured in\" wordmark row, downloadable press-kit cards and a dated release list with category badges.",
+      "categories": [
+        "content"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzList",
+          "DzBadge",
+          "DzAvatar",
+          "DzDivider",
+          "DzButton",
+          "DzHeading",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Newsroom.vue",
+          "type": "registry:file",
+          "target": "components/templates/newsroom/Newsroom.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/newsroom/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "admin-crm",
+      "type": "registry:block",
+      "title": "Admin / CRM",
+      "description": "A sales workspace — sidebar nav, lifecycle tabs, a searchable contacts data grid with row actions and pagination.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzSidebar",
+          "DzDataGrid",
+          "DzPagination",
+          "DzSearchInput",
+          "DzDropdownMenu",
+          "DzAvatar",
+          "DzBadge",
+          "DzTabs",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "AdminCrm.vue",
+          "type": "registry:file",
+          "target": "components/templates/admin-crm/AdminCrm.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/admin-crm/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "project-board",
+      "type": "registry:block",
+      "title": "Project / Task Board",
+      "description": "A kanban board with status lanes, checkable tasks, label tags, priority badges, assignee avatars and a list view.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzCard",
+          "DzList",
+          "DzCheckbox",
+          "DzAvatarGroup",
+          "DzTag",
+          "DzProgress",
+          "DzTabs",
+          "DzBadge"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ProjectBoard.vue",
+          "type": "registry:file",
+          "target": "components/templates/project-board/ProjectBoard.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/project-board/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "app-settings",
+      "type": "registry:block",
+      "title": "App Settings",
+      "description": "A tabbed settings surface — profile fields, notification switches and an appearance picker, wired with form controls.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzTabs",
+          "DzFormField",
+          "DzInput",
+          "DzSwitch",
+          "DzSelect",
+          "DzRadioGroup",
+          "DzDivider",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "AppSettings.vue",
+          "type": "registry:file",
+          "target": "components/templates/app-settings/AppSettings.vue"
+        }
+      ]
+    },
+    {
+      "name": "user-profile",
+      "type": "registry:block",
+      "title": "User Profile",
+      "description": "A profile page — banner card with avatar and stats, a details description grid and an activity timeline across tabs.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzAvatar",
+          "DzDescriptions",
+          "DzTabs",
+          "DzBadge",
+          "DzTimeline",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "UserProfile.vue",
+          "type": "registry:file",
+          "target": "components/templates/user-profile/UserProfile.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/user-profile/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "billing-plans",
+      "type": "registry:block",
+      "title": "Billing & Plans",
+      "description": "A billing page — trial alert, monthly/yearly toggle, plan cards, a seat meter with usage bars and an invoices table.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzTable",
+          "DzBadge",
+          "DzButton",
+          "DzProgress",
+          "DzMeterGroup",
+          "DzAlert",
+          "DzSegmented"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "BillingPlans.vue",
+          "type": "registry:file",
+          "target": "components/templates/billing-plans/BillingPlans.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/billing-plans/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "team-members",
+      "type": "registry:block",
+      "title": "Team Members",
+      "description": "A team directory — a members data grid with role and status badges, row actions, and an invite dialog with a team picker.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzDataGrid",
+          "DzAvatar",
+          "DzBadge",
+          "DzDropdownMenu",
+          "DzDialog",
+          "DzMultiSelect",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "TeamMembers.vue",
+          "type": "registry:file",
+          "target": "components/templates/team-members/TeamMembers.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/team-members/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "inbox-notifications",
+      "type": "registry:block",
+      "title": "Inbox / Notifications",
+      "description": "A notifications feed — folder sidebar, All/Unread/Mentions tabs, an actor list with unread markers and a caught-up empty state.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzList",
+          "DzAvatar",
+          "DzBadge",
+          "DzTabs",
+          "DzEmpty",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "InboxNotifications.vue",
+          "type": "registry:file",
+          "target": "components/templates/inbox-notifications/InboxNotifications.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/inbox-notifications/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "states-pack",
+      "type": "registry:block",
+      "title": "Empty & Error States",
+      "description": "A reference page of the states every app needs — empty placeholders and success / error / warning results, each framed in a card with a clear next step.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzEmpty",
+          "DzResult",
+          "DzCard",
+          "DzButton",
+          "DzHeading",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "StatesPack.vue",
+          "type": "registry:file",
+          "target": "components/templates/states-pack/StatesPack.vue"
+        }
+      ]
+    },
+    {
+      "name": "not-found",
+      "type": "registry:block",
+      "title": "404 — Page Not Found",
+      "description": "A polished, centered 404 page — an oversized glyph, a DzResult headline with recovery actions and a card of helpful destinations.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzResult",
+          "DzCard",
+          "DzButton",
+          "DzDivider",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "NotFound.vue",
+          "type": "registry:file",
+          "target": "components/templates/not-found/NotFound.vue"
+        }
+      ]
+    },
+    {
+      "name": "system-status",
+      "type": "registry:block",
+      "title": "System Status",
+      "description": "A public status page — a success-toned health summary, a service list with status badges and 90-day uptime bars, and a timeline of past incidents.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAlert",
+          "DzCard",
+          "DzBadge",
+          "DzProgress",
+          "DzTimeline",
+          "DzDivider",
+          "DzHeading",
+          "DzText",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "SystemStatus.vue",
+          "type": "registry:file",
+          "target": "components/templates/system-status/SystemStatus.vue"
+        }
+      ]
+    },
+    {
+      "name": "maintenance",
+      "type": "registry:block",
+      "title": "Scheduled Maintenance",
+      "description": "A centered \"we'll be right back\" page — an amber status badge, a live progress bar with an ETA, and a notify-me card pairing an email input with a call to action.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzProgress",
+          "DzInput",
+          "DzButton",
+          "DzBadge",
+          "DzDivider",
+          "DzHeading",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Maintenance.vue",
+          "type": "registry:file",
+          "target": "components/templates/maintenance/Maintenance.vue"
+        }
+      ]
+    },
+    {
+      "name": "error-500",
+      "type": "registry:block",
+      "title": "500 — Server Error",
+      "description": "A centered server-error page — an oversized \"500\" glyph, a DzResult headline with retry / status / contact actions, a card of next steps and an incident reference.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzResult",
+          "DzCard",
+          "DzButton",
+          "DzDivider",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Error500.vue",
+          "type": "registry:file",
+          "target": "components/templates/error-500/Error500.vue"
+        }
+      ]
+    },
+    {
+      "name": "error-403",
+      "type": "registry:block",
+      "title": "403 — Access Denied",
+      "description": "A centered access-denied page — an oversized \"403\" glyph, a DzResult with a DzAlert spelling out the missing permission, and request-access / switch-account actions with a client-side \"request sent\" state.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzResult",
+          "DzCard",
+          "DzButton",
+          "DzText",
+          "DzAlert"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Error403.vue",
+          "type": "registry:file",
+          "target": "components/templates/error-403/Error403.vue"
+        }
+      ]
+    },
+    {
+      "name": "coming-soon",
+      "type": "registry:block",
+      "title": "Coming Soon",
+      "description": "A launch page — a status badge, a live countdown to launch in day/hour/minute/second segments, and a notify-me email capture that flips to a success state, with brand and social links.",
+      "categories": [
+        "utility"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzCountdown",
+          "DzInput",
+          "DzButton",
+          "DzBadge",
+          "DzHeading",
+          "DzText",
+          "DzDivider"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ComingSoon.vue",
+          "type": "registry:file",
+          "target": "components/templates/coming-soon/ComingSoon.vue"
+        }
+      ]
+    },
+    {
+      "name": "product-detail",
+      "type": "registry:block",
+      "title": "Product Detail",
+      "description": "A storefront product page — a gallery that re-tints with the colourway, a buy box with rating, swatches and quantity, plus tabs for specs and reviews.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzBreadcrumb",
+          "DzImage",
+          "DzRating",
+          "DzBadge",
+          "DzNumberInput",
+          "DzButton",
+          "DzTag",
+          "DzTabs",
+          "DzAccordion",
+          "DzCard",
+          "DzAvatar"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ProductDetail.vue",
+          "type": "registry:file",
+          "target": "components/templates/product-detail/ProductDetail.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/product-detail/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "product-listing",
+      "type": "registry:block",
+      "title": "Product Listing",
+      "description": "A storefront catalogue — colour and feature filters, a price-range slider, sortable image cards with ratings and sale badges, and pagination.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzImageCard",
+          "DzBadge",
+          "DzRating",
+          "DzSelect",
+          "DzCheckboxGroup",
+          "DzRangeSlider",
+          "DzPagination",
+          "DzEmpty",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ProductListing.vue",
+          "type": "registry:file",
+          "target": "components/templates/product-listing/ProductListing.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/product-listing/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "checkout",
+      "type": "registry:block",
+      "title": "Checkout",
+      "description": "A single-page grocery checkout — a stepper funnel, contact and shipping forms, a delivery picker, card payment, and a sticky order summary with editable quantities, a working promo code, live totals and a free-shipping nudge. Re-skinned emerald via tokens.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzStepper",
+          "DzFormField",
+          "DzInput",
+          "DzSelect",
+          "DzRadioGroup",
+          "DzNumberInput",
+          "DzCheckbox",
+          "DzAlert",
+          "DzCard",
+          "DzBadge",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Checkout.vue",
+          "type": "registry:file",
+          "target": "components/templates/checkout/Checkout.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/checkout/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "order-tracking",
+      "type": "registry:block",
+      "title": "Order Tracking",
+      "description": "A post-purchase page — a DzResult success header, a horizontal delivery tracker, an ordered-items card with totals, an order-facts grid with the shipping address, and a timeline of the shipment history. Re-skinned teal via tokens.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzResult",
+          "DzStepper",
+          "DzTimeline",
+          "DzDescriptions",
+          "DzCard",
+          "DzBadge",
+          "DzDivider",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "OrderTracking.vue",
+          "type": "registry:file",
+          "target": "components/templates/order-tracking/OrderTracking.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/order-tracking/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "pricing",
+      "type": "registry:block",
+      "title": "Pricing Page",
+      "description": "A conversion-ready pricing page — a live monthly/annual toggle that re-prices three plan cards, a grouped feature-comparison matrix with tooltip explainers and an FAQ teaser. Re-skinned violet via tokens.",
+      "categories": [
+        "marketing"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzBadge",
+          "DzSegmented",
+          "DzButton",
+          "DzTable",
+          "DzTooltip",
+          "DzDivider"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Pricing.vue",
+          "type": "registry:file",
+          "target": "components/templates/pricing/Pricing.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/pricing/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "feature-product",
+      "type": "registry:block",
+      "title": "Feature / Product",
+      "description": "A product deep-dive — a hero with a token-painted mock, alternating feature rows, a tabbed feature explorer, a before/after reveal slider and a closing CTA.",
+      "categories": [
+        "marketing"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzTabs",
+          "DzImage",
+          "DzImageComparison",
+          "DzBadge",
+          "DzHeading",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "FeatureProduct.vue",
+          "type": "registry:file",
+          "target": "components/templates/feature-product/FeatureProduct.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/feature-product/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "contact",
+      "type": "registry:block",
+      "title": "Contact",
+      "description": "A two-column contact page — a client-side-validated enquiry form that flips to a success state, beside direct channels, a token-painted map and office hours.",
+      "categories": [
+        "marketing"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzFormField",
+          "DzInput",
+          "DzTextarea",
+          "DzSelect",
+          "DzButton",
+          "DzAlert",
+          "DzDivider"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Contact.vue",
+          "type": "registry:file",
+          "target": "components/templates/contact/Contact.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/contact/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "about-faq",
+      "type": "registry:block",
+      "title": "About & FAQ",
+      "description": "A company page — a mission hero with headline stats, a founding-to-today story timeline, values cards, a leadership grid and an FAQ accordion.",
+      "categories": [
+        "marketing"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzHeading",
+          "DzText",
+          "DzAccordion",
+          "DzCard",
+          "DzAvatar",
+          "DzAvatarGroup",
+          "DzTimeline",
+          "DzDivider"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "AboutFaq.vue",
+          "type": "registry:file",
+          "target": "components/templates/about-faq/AboutFaq.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/about-faq/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "chat-messages",
+      "type": "registry:block",
+      "title": "Chat / Messages",
+      "description": "A messaging app — a conversation list with search, presence dots and unread badges beside a thread of day-separated message bubbles with read receipts, and an attach-and-send composer. Re-skinned cyan via tokens.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzList",
+          "DzAvatar",
+          "DzBadge",
+          "DzScrollArea",
+          "DzTextarea",
+          "DzInput",
+          "DzButton",
+          "DzSearchInput",
+          "DzDropdownMenu"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ChatMessages.vue",
+          "type": "registry:file",
+          "target": "components/templates/chat-messages/ChatMessages.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/chat-messages/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "calendar-scheduler",
+      "type": "registry:block",
+      "title": "Calendar / Scheduler",
+      "description": "A calendar app — a month/week DzCalendar with token-coloured event dots, a colour-coded calendar legend, a day agenda where each event opens a details popover, and a quick-add new-event dialog. Re-skinned indigo via tokens.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzCalendar",
+          "DzSegmented",
+          "DzBadge",
+          "DzPopover",
+          "DzButton",
+          "DzAvatarGroup",
+          "DzDialog"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "CalendarScheduler.vue",
+          "type": "registry:file",
+          "target": "components/templates/calendar-scheduler/CalendarScheduler.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/calendar-scheduler/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "file-manager",
+      "type": "registry:block",
+      "title": "File Manager",
+      "description": "A cloud-drive workspace — a folder tree sidebar with a storage meter, a breadcrumb path, and a list/grid file browser with type icons, size and modified badges, right-click and per-row action menus, and search.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzSidebar",
+          "DzTree",
+          "DzDataView",
+          "DzBreadcrumb",
+          "DzDropdownMenu",
+          "DzContextMenu",
+          "DzButton",
+          "DzSearchInput",
+          "DzBadge"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "FileManager.vue",
+          "type": "registry:file",
+          "target": "components/templates/file-manager/FileManager.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/file-manager/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "tasks-todo",
+      "type": "registry:block",
+      "title": "Tasks / To-Do",
+      "description": "A personal to-do app — a left rail of lists, a My Day task list with completion checkboxes, priority badges and label tags, a quick-add field, a Today / Upcoming / Done view switcher and a per-task menu.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzList",
+          "DzCheckbox",
+          "DzTag",
+          "DzBadge",
+          "DzInput",
+          "DzDropdownMenu",
+          "DzSegmented",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "TasksTodo.vue",
+          "type": "registry:file",
+          "target": "components/templates/tasks-todo/TasksTodo.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/tasks-todo/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:block",
+      "title": "Data Table (CRUD list)",
+      "description": "A working customer ledger — a filter bar with a search field and plan/status facets, a sortable, paginated, multi-select data grid with status badges and row actions, a bulk-action bar and a \"New customer\" dialog that appends a real row.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzDataGrid",
+          "DzSearchInput",
+          "DzMultiSelect",
+          "DzDropdownMenu",
+          "DzPagination",
+          "DzDialog",
+          "DzButton",
+          "DzBadge",
+          "DzCheckbox"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "DataTable.vue",
+          "type": "registry:file",
+          "target": "components/templates/data-table/DataTable.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/data-table/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "invoice",
+      "type": "registry:block",
+      "title": "Invoice",
+      "description": "A printable studio invoice — a branded header with a status badge, from / bill-to / details description grids, a line-item table and a derived totals block where every figure is computed from the lines, plus payment notes and download / print / send actions.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzTable",
+          "DzDescriptions",
+          "DzDivider",
+          "DzBadge",
+          "DzButton",
+          "DzHeading",
+          "DzText"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "Invoice.vue",
+          "type": "registry:file",
+          "target": "components/templates/invoice/Invoice.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/invoice/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "shopping-cart",
+      "type": "registry:block",
+      "title": "Shopping Cart",
+      "description": "A grocery cart page — editable line items with image thumbnails, a quantity stepper and remove, a working promo code, a free-shipping progress nudge and a sticky summary with live totals, plus an empty-cart state and a one-click \"add\" cross-sell rail. Re-skinned emerald via tokens.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzList",
+          "DzNumberInput",
+          "DzButton",
+          "DzBadge",
+          "DzAlert",
+          "DzInput",
+          "DzDivider",
+          "DzImage"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "ShoppingCart.vue",
+          "type": "registry:file",
+          "target": "components/templates/shopping-cart/ShoppingCart.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/shopping-cart/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "account-settings",
+      "type": "registry:block",
+      "title": "Account Centre",
+      "description": "A multi-tab account hub in an app shell — Profile with avatar upload, Security with a password change, 2FA and revocable sessions, a notification channel matrix, and Billing with the current plan, payment method and invoices. A sticky save bar confirms client-side.",
+      "categories": [
+        "dashboards"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzAppShell",
+          "DzTabs",
+          "DzFormField",
+          "DzInput",
+          "DzSwitch",
+          "DzSelect",
+          "DzAvatar",
+          "DzButton",
+          "DzDivider",
+          "DzAlert",
+          "DzBadge",
+          "DzDescriptions"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "AccountSettings.vue",
+          "type": "registry:file",
+          "target": "components/templates/account-settings/AccountSettings.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/account-settings/data.ts"
+        }
+      ]
+    },
+    {
+      "name": "order-history",
+      "type": "registry:block",
+      "title": "Order History",
+      "description": "An account orders page — a searchable, status-filtered, sortable and paginated DzDataView of past orders, each with its products, total, a status badge and view / reorder actions (Reorder confirms live). Re-skinned emerald via tokens.",
+      "categories": [
+        "commerce"
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@dzup-ui/core",
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
+      ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzDataView",
+          "DzList",
+          "DzBadge",
+          "DzTag",
+          "DzPagination",
+          "DzSearchInput",
+          "DzButton"
+        ],
+        "tier": "free"
+      },
+      "files": [
+        {
+          "path": "OrderHistory.vue",
+          "type": "registry:file",
+          "target": "components/templates/order-history/OrderHistory.vue"
+        },
+        {
+          "path": "data.ts",
+          "type": "registry:file",
+          "target": "components/templates/order-history/data.ts"
+        }
+      ]
+    }
+  ]
+}

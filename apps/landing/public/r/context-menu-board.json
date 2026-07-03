@@ -1,29 +1,37 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "context-menu-board",
   "type": "registry:block",
   "title": "Context menu canvas",
   "description": "A file canvas wrapped in a DzContextMenuTrigger — right-click (or the context-menu key) opens a DzContextMenu with icon-prefixed items, DzKbd shortcut suffixes, separators, a disabled item, and a destructive delete.",
+  "categories": [
+    "overlays"
+  ],
   "files": [
     {
       "path": "context-menu-board.vue",
       "content": "<script setup lang=\"ts\">\n/**\n * Context menu board — right-click actions on a file canvas (DzContextMenu).\n *\n * A grid of file tiles wrapped in a DzContextMenuTrigger: right-click (or use\n * the context-menu key) anywhere on the board to open a DzContextMenu with\n * icon-prefixed items, shortcut suffixes (DzKbd), separators, a disabled item,\n * and a destructive Delete. The last action is echoed below.\n *\n * Self-contained — free @dzup-ui/core components and `--dz-*` tokens only.\n * Heading level 4 to nest under the BlockPreview H3.\n */\nimport {\n  DzBadge,\n  DzContextMenu,\n  DzContextMenuContent,\n  DzContextMenuItem,\n  DzContextMenuSeparator,\n  DzContextMenuTrigger,\n  DzHeading,\n  DzKbd,\n  DzText,\n} from '@dzup-ui/core'\nimport {\n  Copy,\n  Download,\n  FileText,\n  FolderOpen,\n  Image,\n  PencilLine,\n  Share2,\n  Sheet,\n  Star,\n  Trash2,\n} from 'lucide-vue-next'\nimport { ref } from 'vue'\n\ninterface Tile { name: string, icon: typeof FileText, kind: string }\n\nconst tiles: Tile[] = [\n  { name: 'Roadmap.pdf', icon: FileText, kind: 'PDF' },\n  { name: 'Brand kit', icon: Image, kind: 'Folder' },\n  { name: 'Q3 budget.xlsx', icon: Sheet, kind: 'Sheet' },\n  { name: 'Designs', icon: FolderOpen, kind: 'Folder' },\n]\n\nconst lastAction = ref('')\n\nfunction run(label: string): void {\n  lastAction.value = label\n}\n</script>\n\n<template>\n  <section class=\"cb-wrap\" aria-labelledby=\"cb-title\">\n    <header class=\"cb-head\">\n      <DzHeading id=\"cb-title\" :level=\"4\" size=\"md\" weight=\"semibold\" class=\"cb-title\">\n        File canvas\n      </DzHeading>\n      <DzText size=\"sm\" tone=\"muted\" as=\"p\" class=\"cb-sub\">\n        Right-click the board to open the context menu.\n      </DzText>\n    </header>\n\n    <DzContextMenu>\n      <DzContextMenuTrigger as-child>\n        <div class=\"cb-board\" role=\"group\" aria-label=\"Files (right-click for actions)\">\n          <article v-for=\"tile in tiles\" :key=\"tile.name\" class=\"cb-tile\">\n            <span class=\"cb-tile-icon\" aria-hidden=\"true\"><component :is=\"tile.icon\" :size=\"22\" /></span>\n            <DzText size=\"sm\" weight=\"medium\" as=\"span\" class=\"cb-tile-name\">{{ tile.name }}</DzText>\n            <DzBadge variant=\"subtle\" tone=\"neutral\" size=\"sm\">{{ tile.kind }}</DzBadge>\n          </article>\n        </div>\n      </DzContextMenuTrigger>\n\n      <DzContextMenuContent>\n        <DzContextMenuItem @select=\"run('Open')\">\n          <template #prefix><FolderOpen :size=\"16\" aria-hidden=\"true\" /></template>\n          Open\n          <template #suffix><DzKbd :keys=\"['enter']\" size=\"sm\" /></template>\n        </DzContextMenuItem>\n        <DzContextMenuItem @select=\"run('Rename')\">\n          <template #prefix><PencilLine :size=\"16\" aria-hidden=\"true\" /></template>\n          Rename\n          <template #suffix><DzKbd :keys=\"['f2']\" size=\"sm\" :platform-aware=\"false\" /></template>\n        </DzContextMenuItem>\n        <DzContextMenuItem @select=\"run('Duplicate')\">\n          <template #prefix><Copy :size=\"16\" aria-hidden=\"true\" /></template>\n          Duplicate\n          <template #suffix><DzKbd :keys=\"['mod', 'd']\" size=\"sm\" /></template>\n        </DzContextMenuItem>\n\n        <DzContextMenuSeparator />\n\n        <DzContextMenuItem @select=\"run('Add to favourites')\">\n          <template #prefix><Star :size=\"16\" aria-hidden=\"true\" /></template>\n          Add to favourites\n        </DzContextMenuItem>\n        <DzContextMenuItem @select=\"run('Download')\">\n          <template #prefix><Download :size=\"16\" aria-hidden=\"true\" /></template>\n          Download\n        </DzContextMenuItem>\n        <DzContextMenuItem disabled>\n          <template #prefix><Share2 :size=\"16\" aria-hidden=\"true\" /></template>\n          Share (Pro)\n        </DzContextMenuItem>\n\n        <DzContextMenuSeparator />\n\n        <DzContextMenuItem @select=\"run('Delete')\">\n          <template #prefix><Trash2 :size=\"16\" aria-hidden=\"true\" /></template>\n          <span class=\"cb-danger\">Delete</span>\n          <template #suffix><DzKbd :keys=\"['del']\" size=\"sm\" :platform-aware=\"false\" /></template>\n        </DzContextMenuItem>\n      </DzContextMenuContent>\n    </DzContextMenu>\n\n    <div class=\"cb-result\" role=\"status\" aria-live=\"polite\">\n      <DzText v-if=\"lastAction\" size=\"sm\" as=\"span\">\n        Action: <strong>{{ lastAction }}</strong>\n      </DzText>\n      <DzText v-else size=\"sm\" tone=\"muted\" as=\"span\">\n        No action yet.\n      </DzText>\n    </div>\n  </section>\n</template>\n\n<style scoped>\n.cb-wrap {\n  max-width: 38rem;\n  margin: 0 auto;\n}\n\n.cb-head {\n  margin-bottom: var(--dz-space-4, 1rem);\n}\n\n.cb-title {\n  margin: 0;\n}\n\n.cb-sub {\n  margin: var(--dz-space-1, 0.25rem) 0 0;\n}\n\n.cb-board {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: var(--dz-space-3, 0.75rem);\n  padding: var(--dz-space-4, 1rem);\n  border-radius: var(--dz-radius-lg, 0.5rem);\n  border: 1px dashed var(--dz-border, #e5e7eb);\n  background: var(--dz-surface-sunken, #f9fafb);\n}\n\n.cb-tile {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: var(--dz-space-2, 0.5rem);\n  padding: var(--dz-space-4, 1rem) var(--dz-space-2, 0.5rem);\n  border-radius: var(--dz-radius-md, 0.375rem);\n  border: 1px solid var(--dz-border, #e5e7eb);\n  background: var(--dz-surface, #fff);\n  text-align: center;\n}\n\n.cb-tile-icon {\n  display: grid;\n  place-items: center;\n  width: 2.75rem;\n  height: 2.75rem;\n  border-radius: var(--dz-radius-md, 0.375rem);\n  background: var(--dz-primary-subtle, #eef2ff);\n  color: var(--dz-primary, #6366f1);\n}\n\n.cb-tile-name {\n  max-width: 100%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.cb-danger {\n  color: var(--dz-danger, #dc2626);\n}\n\n.cb-result {\n  margin-top: var(--dz-space-3, 0.75rem);\n  min-height: 1.25rem;\n}\n\n@media (max-width: 560px) {\n  .cb-board {\n    grid-template-columns: repeat(2, 1fr);\n  }\n}\n</style>\n",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/blocks/context-menu-board.vue"
     }
   ],
-  "registryDependencies": [
-    "DzContextMenu",
-    "DzContextMenuTrigger",
-    "DzContextMenuContent",
-    "DzContextMenuItem",
-    "DzContextMenuSeparator",
-    "DzBadge",
-    "DzHeading",
-    "DzKbd",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzContextMenu",
+      "DzContextMenuTrigger",
+      "DzContextMenuContent",
+      "DzContextMenuItem",
+      "DzContextMenuSeparator",
+      "DzBadge",
+      "DzHeading",
+      "DzKbd",
+      "DzText"
+    ]
+  }
 }
