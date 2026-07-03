@@ -134,6 +134,47 @@ describe('dzTableBody', () => {
     const wrapper = mountTable()
     expect(wrapper.find('tbody').exists()).toBe(true)
   })
+
+  it('renders default DzEmpty with "No records found." when body has zero rows', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () => h(DzTableBody, null, {}),
+      },
+    })
+    expect(wrapper.find('tbody tr').exists()).toBe(true)
+    expect(wrapper.find('tbody td').attributes('colspan')).toBe('1000')
+    expect(wrapper.text()).toContain('No records found.')
+  })
+
+  it('renders custom #empty slot content when body has zero rows', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            empty: () => 'Nothing here yet',
+          }),
+      },
+    })
+    expect(wrapper.text()).toContain('Nothing here yet')
+    expect(wrapper.text()).not.toContain('No records found.')
+  })
+
+  it('does not render the empty state when rows are present', () => {
+    const wrapper = mountTable()
+    expect(wrapper.find('tbody tr td[colspan="1000"]').exists()).toBe(false)
+  })
+
+  it('treats whitespace-only / comment default slot content as empty', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () => ['   ', '\n'],
+          }),
+      },
+    })
+    expect(wrapper.text()).toContain('No records found.')
+  })
 })
 
 describe('dzTableRow', () => {

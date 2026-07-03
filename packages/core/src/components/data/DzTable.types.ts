@@ -50,20 +50,6 @@
  *   renders a drag handle at the right edge; pointer events update
  *   `colWidths: Ref<Map<string, number>>` in context. Requires `colId` prop on
  *   DzTableCell. Min-width via `--dz-table-col-min-width` token.
- *
- * TODO(DzTable-empty-state): Standardised empty state via DzEmpty slot.
- *   Add `#empty` slot to DzTable. When DzTableBody has zero rows, render a
- *   full-width placeholder row. DzTableContext tracks `rowCount: Ref<number>`.
- *   Default copy: "No records found."
- *
- * TODO(DzTable-loading-skeleton): Skeleton rows during loading state.
- *   Wire `loading` into DzTableContext (currently a prop but not provided).
- *   When loading, DzTableBody renders N skeleton rows (add `skeletonRows` prop,
- *   default 3) using DzSkeleton in place of slot content.
- *
- * TODO(DzTable-footer): DzTableFooter sub-part for summary/aggregate rows.
- *   Wraps `<tfoot>` with same density/size token application. Export
- *   DzTableFooter.vue and register in data/index.ts.
  */
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
@@ -165,6 +151,12 @@ export interface DzTableBodyProps {
 export interface DzTableBodySlots {
   /** Table body rows */
   default: () => unknown
+  /**
+   * Custom empty-state content, rendered inside a full-width placeholder row
+   * when the `default` slot yields zero rows (and not `loading`). Defaults to
+   * a `DzEmpty` with "No records found." when not provided.
+   */
+  empty?: () => unknown
 }
 
 // ---------------------------------------------------------------------------
