@@ -12,9 +12,9 @@ import type { DzTableBodyProps, DzTableBodySlots } from './DzTable.types.ts'
  *   placeholder row via the `#empty` slot (defaults to `DzEmpty`).
  */
 import { Comment, computed, Fragment, inject, Text, useAttrs } from 'vue'
+import { cn } from '../../utilities/cn.ts'
 import DzEmpty from '../feedback/DzEmpty.vue'
 import DzSkeleton from '../feedback/DzSkeleton.vue'
-import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 
 defineOptions({
@@ -37,16 +37,20 @@ function flattenVNodes(nodes: VNode[]): VNode[] {
   const out: VNode[] = []
   for (const node of nodes) {
     if (node.type === Fragment) {
-      if (Array.isArray(node.children)) out.push(...flattenVNodes(node.children as VNode[]))
-    } else if (node.type === Comment) {
+      if (Array.isArray(node.children))
+        out.push(...flattenVNodes(node.children as VNode[]))
+    }
+    else if (node.type === Comment) {
       continue
-    } else if (
-      node.type === Text &&
-      typeof node.children === 'string' &&
-      node.children.trim() === ''
+    }
+    else if (
+      node.type === Text
+      && typeof node.children === 'string'
+      && node.children.trim() === ''
     ) {
       continue
-    } else {
+    }
+    else {
       out.push(node)
     }
   }
@@ -56,7 +60,10 @@ function flattenVNodes(nodes: VNode[]): VNode[] {
 const isLoading = computed(() => tableContext?.loading.value ?? false)
 
 /** Whether the `default` slot rendered zero actual rows. */
-const isEmpty = computed(() => flattenVNodes(slots.default?.() ?? []).length === 0)
+const isEmpty = computed(() => {
+  const nodes = (slots.default?.() ?? []) as VNode[]
+  return flattenVNodes(nodes).length === 0
+})
 </script>
 
 <template>

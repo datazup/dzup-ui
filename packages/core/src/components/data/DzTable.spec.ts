@@ -329,7 +329,7 @@ describe('dzTableFooter', () => {
   it('applies a top-border footer style distinct from header', () => {
     const wrapper = mountWithFooter()
     const footerClasses = wrapper.find('tfoot').classes()
-    expect(footerClasses.some((c) => c.includes('border-t'))).toBe(true)
+    expect(footerClasses.some(c => c.includes('border-t'))).toBe(true)
   })
 
   it('merges consumer class via cn()', () => {
