@@ -18,6 +18,12 @@ export const tableVariants = tv({
     row: 'border-b border-[var(--dz-border)] transition-[var(--dz-transition-fast)]',
     headerCell: ['text-left font-medium text-[var(--dz-muted-foreground)]'].join(' '),
     cell: 'text-left',
+    expandToggle: [
+      'inline-flex items-center justify-center',
+      'text-[var(--dz-muted-foreground)]',
+      'transition-transform duration-[var(--dz-duration-fast)]',
+    ].join(' '),
+    expandRow: 'border-b border-[var(--dz-border)] bg-[var(--dz-muted)]/40',
   },
 
   variants: {

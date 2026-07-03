@@ -39,12 +39,6 @@
  *   heights. Column pinning must work with virtual rows (sticky on container,
  *   not tbody).
  *
- * TODO(DzTable-expandable-rows): Accordion-style row detail expansion.
- *   Add `expandable?: boolean` to DzTableRow. DzTableRow renders a toggle cell
- *   (chevron icon) and conditionally renders a `<tr class="expand-row">` with
- *   `<td :colspan="colCount">` for the `#expand` slot. DzTableContext tracks
- *   `expandedRows: Ref<Set<string>>`. DzTable emits `row-expand`/`row-collapse`.
- *
  * TODO(DzTable-column-resizing): Drag-to-resize column widths.
  *   Add `resizable?: boolean` to DzTableCellProps (header cells only). DzTableCell
  *   renders a drag handle at the right edge; pointer events update
@@ -71,6 +65,10 @@ export interface DzTableContext {
   density: Ref<TableDensity>
   /** Whether the table is in a loading state */
   loading: Ref<boolean>
+  /** Set of currently-expanded row ids (accordion-style detail rows) */
+  expandedRows: Ref<Set<string>>
+  /** Toggle the expanded state of the row with the given id */
+  toggleExpand: (rowId: string) => void
 }
 
 /** Typed injection key for DzTable context (ADR-08, SCREAMING_SNAKE) */
@@ -109,6 +107,23 @@ export interface DzTableProps extends BaseAccessibilityProps {
    * Default `false` preserves the original `sr-only` behaviour.
    */
   captionVisible?: boolean
+}
+
+// ---------------------------------------------------------------------------
+// DzTable Emits
+// ---------------------------------------------------------------------------
+
+/**
+ * Emit definitions for the DzTable root component.
+ *
+ * Following the repo convention (cf. DzDataGrid `rowClick`), events are declared
+ * camelCase and consumed kebab-case in templates (`@row-expand` / `@row-collapse`).
+ */
+export interface DzTableEmits {
+  /** Emitted when a row is expanded, with the row's id */
+  rowExpand: [rowId: string]
+  /** Emitted when a row is collapsed, with the row's id */
+  rowCollapse: [rowId: string]
 }
 
 // ---------------------------------------------------------------------------
@@ -187,12 +202,26 @@ export interface DzTableBodySlots {
 export interface DzTableRowProps {
   /** Whether this row is currently selected */
   selected?: boolean
+  /**
+   * Whether this row can be expanded to reveal accordion-style detail content
+   * (rendered via the `#expand` slot). When set, a leading toggle cell with a
+   * chevron icon is rendered and an id-tracked detail `<tr class="expand-row">`
+   * is conditionally shown.
+   */
+  expandable?: boolean
+  /**
+   * Stable id used to track this row's expanded state in DzTableContext.
+   * Required for `expandable` rows; if omitted, a per-instance id is generated.
+   */
+  rowId?: string
 }
 
 /** Slot definitions for DzTableRow */
 export interface DzTableRowSlots {
   /** Table cells */
   default: () => unknown
+  /** Accordion-style detail content shown when an `expandable` row is expanded */
+  expand?: () => unknown
 }
 
 // ---------------------------------------------------------------------------
