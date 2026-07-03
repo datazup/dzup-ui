@@ -254,7 +254,7 @@ describe('dzTableRow', () => {
           }),
       },
     })
-    const row = wrapper.findComponent(DzTableRow)
+    const row = wrapper.find('tbody tr')
     expect(row.attributes('aria-selected')).toBe('true')
     expect(row.attributes('data-state')).toBe('selected')
   })
@@ -349,5 +349,121 @@ describe('dzTableFooter', () => {
       },
     })
     expect(wrapper.find('tfoot').classes()).toContain('my-footer')
+  })
+})
+
+describe('dzTableRow — expandable', () => {
+  function mountExpandable() {
+    return mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(
+                DzTableRow,
+                { expandable: true, rowId: 'r1' },
+                {
+                  default: () => h(DzTableCell, null, { default: () => 'Alice' }),
+                  expand: () => 'Detail content',
+                },
+              ),
+          }),
+      },
+    })
+  }
+
+  it('renders a toggle button with a chevron for expandable rows', () => {
+    const wrapper = mountExpandable()
+    const button = wrapper.find('button[aria-expanded]')
+    expect(button.exists()).toBe(true)
+    expect(button.find('svg').exists()).toBe(true)
+    expect(button.attributes('aria-expanded')).toBe('false')
+  })
+
+  it('does not render a toggle cell for non-expandable rows', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'Alice' }),
+              }),
+          }),
+      },
+    })
+    expect(wrapper.find('button[aria-expanded]').exists()).toBe(false)
+  })
+
+  it('hides the expand detail row until expanded', () => {
+    const wrapper = mountExpandable()
+    expect(wrapper.find('tr.expand-row').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('Detail content')
+  })
+
+  it('reveals the #expand slot inside an expand-row when toggled', async () => {
+    const wrapper = mountExpandable()
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    const expandRow = wrapper.find('tr.expand-row')
+    expect(expandRow.exists()).toBe(true)
+    expect(expandRow.text()).toContain('Detail content')
+    expect(wrapper.find('button[aria-expanded]').attributes('aria-expanded')).toBe('true')
+  })
+
+  it('renders the detail cell with a full-width colspan', async () => {
+    const wrapper = mountExpandable()
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    const detailCell = wrapper.find('tr.expand-row td')
+    expect(detailCell.attributes('colspan')).toBe('1000')
+  })
+
+  it('collapses again on a second toggle', async () => {
+    const wrapper = mountExpandable()
+    const button = () => wrapper.find('button[aria-expanded]')
+    await button().trigger('click')
+    expect(wrapper.find('tr.expand-row').exists()).toBe(true)
+    await button().trigger('click')
+    expect(wrapper.find('tr.expand-row').exists()).toBe(false)
+  })
+
+  it('emits rowExpand then rowCollapse with the row id', async () => {
+    const wrapper = mountExpandable()
+    const button = () => wrapper.find('button[aria-expanded]')
+    await button().trigger('click')
+    await button().trigger('click')
+    expect(wrapper.emitted('rowExpand')).toEqual([['r1']])
+    expect(wrapper.emitted('rowCollapse')).toEqual([['r1']])
+  })
+
+  it('tracks expanded state per rowId across multiple rows', async () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () => [
+              h(
+                DzTableRow,
+                { expandable: true, rowId: 'a' },
+                {
+                  default: () => h(DzTableCell, null, { default: () => 'A' }),
+                  expand: () => 'Detail A',
+                },
+              ),
+              h(
+                DzTableRow,
+                { expandable: true, rowId: 'b' },
+                {
+                  default: () => h(DzTableCell, null, { default: () => 'B' }),
+                  expand: () => 'Detail B',
+                },
+              ),
+            ],
+          }),
+      },
+    })
+    await wrapper.findAll('button[aria-expanded]')[0]!.trigger('click')
+    expect(wrapper.text()).toContain('Detail A')
+    expect(wrapper.text()).not.toContain('Detail B')
+    expect(wrapper.emitted('rowExpand')).toEqual([['a']])
   })
 })

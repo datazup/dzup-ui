@@ -189,6 +189,7 @@ export type {
   DzTableCellProps,
   DzTableCellSlots,
   DzTableContext,
+  DzTableEmits,
   DzTableFooterProps,
   DzTableFooterSlots,
   DzTableHeaderProps,
