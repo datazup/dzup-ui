@@ -86,6 +86,40 @@ describe('dzTable', () => {
     })
     expect(wrapper.classes()).toContain('my-table')
   })
+
+  it('renders caption as sr-only by default', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        caption: () => 'Users',
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'X' }),
+              }),
+          }),
+      },
+    })
+    expect(wrapper.find('caption').classes()).toContain('sr-only')
+  })
+
+  it('renders caption visibly when captionVisible is true', () => {
+    const wrapper = mount(DzTable, {
+      props: { captionVisible: true },
+      slots: {
+        caption: () => 'Users',
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, null, { default: () => 'X' }),
+              }),
+          }),
+      },
+    })
+    expect(wrapper.find('caption').classes()).not.toContain('sr-only')
+    expect(wrapper.find('caption').text()).toBe('Users')
+  })
 })
 
 describe('dzTableHeader', () => {
@@ -114,9 +148,13 @@ describe('dzTableRow', () => {
         default: () =>
           h(DzTableBody, null, {
             default: () =>
-              h(DzTableRow, { selected: true }, {
-                default: () => h(DzTableCell, null, { default: () => 'X' }),
-              }),
+              h(
+                DzTableRow,
+                { selected: true },
+                {
+                  default: () => h(DzTableCell, null, { default: () => 'X' }),
+                },
+              ),
           }),
       },
     })
@@ -150,8 +188,7 @@ describe('dzTableCell', () => {
           h(DzTableBody, null, {
             default: () =>
               h(DzTableRow, null, {
-                default: () =>
-                  h(DzTableCell, { align: 'right' }, { default: () => '$100' }),
+                default: () => h(DzTableCell, { align: 'right' }, { default: () => '$100' }),
               }),
           }),
       },

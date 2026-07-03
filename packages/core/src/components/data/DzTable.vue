@@ -43,6 +43,7 @@ const props = withDefaults(defineProps<DzTableProps>(), {
   hoverable: false,
   density: 'default',
   loading: false,
+  captionVisible: false,
 })
 
 defineSlots<DzTableSlots>()
@@ -67,9 +68,7 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() =>
-  cn('relative overflow-auto', attrs.class as string | undefined),
-)
+const rootClasses = computed(() => cn('relative overflow-auto', attrs.class as string | undefined))
 
 const tableClasses = computed(() => styles.value.root())
 </script>
@@ -91,7 +90,7 @@ const tableClasses = computed(() => styles.value.root())
       :aria-busy="loading || undefined"
       role="table"
     >
-      <caption v-if="$slots.caption" class="sr-only">
+      <caption v-if="$slots.caption" :class="captionVisible ? undefined : 'sr-only'">
         <slot name="caption" />
       </caption>
       <slot />

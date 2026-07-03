@@ -64,10 +64,6 @@
  * TODO(DzTable-footer): DzTableFooter sub-part for summary/aggregate rows.
  *   Wraps `<tfoot>` with same density/size token application. Export
  *   DzTableFooter.vue and register in data/index.ts.
- *
- * TODO(DzTable-caption-visible): Make caption optionally visible (not sr-only).
- *   Add `captionVisible?: boolean` to DzTableProps. Default false preserves
- *   current screen-reader-only behaviour.
  */
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
@@ -120,6 +116,11 @@ export interface DzTableProps extends BaseAccessibilityProps {
   density?: TableDensity
   /** Loading state */
   loading?: boolean
+  /**
+   * Make the `caption` slot visibly rendered instead of screen-reader-only.
+   * Default `false` preserves the original `sr-only` behaviour.
+   */
+  captionVisible?: boolean
 }
 
 // ---------------------------------------------------------------------------
