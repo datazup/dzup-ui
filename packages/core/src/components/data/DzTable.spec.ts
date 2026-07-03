@@ -329,7 +329,7 @@ describe('dzTableFooter', () => {
   it('applies a top-border footer style distinct from header', () => {
     const wrapper = mountWithFooter()
     const footerClasses = wrapper.find('tfoot').classes()
-    expect(footerClasses.some(c => c.includes('border-t'))).toBe(true)
+    expect(footerClasses.some((c) => c.includes('border-t'))).toBe(true)
   })
 
   it('merges consumer class via cn()', () => {
@@ -465,5 +465,242 @@ describe('dzTableRow — expandable', () => {
     expect(wrapper.text()).toContain('Detail A')
     expect(wrapper.text()).not.toContain('Detail B')
     expect(wrapper.emitted('rowExpand')).toEqual([['a']])
+  })
+})
+
+describe('dzTableCell — column pinning', () => {
+  function mountPinned(cellProps: Record<string, unknown>) {
+    return mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () => h(DzTableCell, cellProps, { default: () => 'Cell' }),
+              }),
+          }),
+      },
+    })
+  }
+
+  it('applies position: sticky and left offset for pin="left"', () => {
+    const wrapper = mountPinned({ pin: 'left', pinOffset: 0 })
+    const cell = wrapper.find('td')
+    const style = cell.attributes('style') ?? ''
+    expect(style).toContain('position: sticky')
+    expect(style).toContain('left: 0px')
+  })
+
+  it('applies a right offset for pin="right" with a pinOffset', () => {
+    const wrapper = mountPinned({ pin: 'right', pinOffset: 120 })
+    const style = wrapper.find('td').attributes('style') ?? ''
+    expect(style).toContain('right: 120px')
+  })
+
+  it('sets data-pinned reflecting the pinned edge', () => {
+    const wrapper = mountPinned({ pin: 'left' })
+    expect(wrapper.find('td').attributes('data-pinned')).toBe('left')
+  })
+
+  it('adds the sticky z-index and a background on pinned cells', () => {
+    const wrapper = mountPinned({ pin: 'left' })
+    const classes = wrapper.find('td').classes()
+    expect(classes.some((c) => c.includes('sticky'))).toBe(true)
+    expect(classes.some((c) => c.includes('z-[var(--dz-z-sticky)]'))).toBe(true)
+    expect(classes.some((c) => c.includes('bg-'))).toBe(true)
+  })
+
+  it('adds an edge shadow only on the boundary column', () => {
+    const boundary = mountPinned({ pin: 'left', pinBoundary: true })
+    expect(
+      boundary
+        .find('td')
+        .classes()
+        .some((c) => c.includes('shadow-')),
+    ).toBe(true)
+    const inner = mountPinned({ pin: 'left', pinBoundary: false })
+    expect(
+      inner
+        .find('td')
+        .classes()
+        .some((c) => c.includes('shadow-')),
+    ).toBe(false)
+  })
+
+  it('does not mark unpinned cells as sticky', () => {
+    const wrapper = mountPinned({})
+    expect(wrapper.find('td').attributes('data-pinned')).toBeUndefined()
+    expect(
+      wrapper
+        .find('td')
+        .classes()
+        .some((c) => c.includes('sticky')),
+    ).toBe(false)
+  })
+})
+
+describe('dzTableCell — column resizing', () => {
+  function mountResizable(
+    headerCellProps: Record<string, unknown>,
+    bodyCellProps: Record<string, unknown> = {},
+  ) {
+    return mount(DzTable, {
+      slots: {
+        default: () => [
+          h(DzTableHeader, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () =>
+                  h(DzTableCell, { header: true, ...headerCellProps }, { default: () => 'Name' }),
+              }),
+          }),
+          h(DzTableBody, null, {
+            default: () =>
+              h(DzTableRow, null, {
+                default: () =>
+                  h(DzTableCell, { colId: 'name', ...bodyCellProps }, { default: () => 'Alice' }),
+              }),
+          }),
+        ],
+      },
+    })
+  }
+
+  it('renders a resize handle only on a resizable header cell with a colId', () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    expect(wrapper.find('[data-dz-resize-handle]').exists()).toBe(true)
+  })
+
+  it('does not render a handle on a resizable header cell without a colId', () => {
+    const wrapper = mountResizable({ resizable: true })
+    expect(wrapper.find('[data-dz-resize-handle]').exists()).toBe(false)
+  })
+
+  it('does not render a handle on non-resizable header cells', () => {
+    const wrapper = mountResizable({ colId: 'name' })
+    expect(wrapper.find('[data-dz-resize-handle]').exists()).toBe(false)
+  })
+
+  it('never renders a resize handle on a body cell', () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' }, { resizable: true })
+    // Only the header cell handle exists (body cells ignore resizable).
+    expect(wrapper.findAll('[data-dz-resize-handle]').length).toBe(1)
+    expect(wrapper.find('tbody [data-dz-resize-handle]').exists()).toBe(false)
+  })
+
+  it('writes the column width into context on keyboard resize and body cells adopt it', async () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    const handle = wrapper.find('[data-dz-resize-handle]')
+    // ArrowRight nudges width up by 8px from the measured base (0 in jsdom → min 48).
+    await handle.trigger('keydown', { key: 'ArrowRight' })
+    const bodyCell = wrapper.find('tbody td')
+    const style = bodyCell.attributes('style') ?? ''
+    expect(style).toContain('width:')
+    // Header cell reflects the same width.
+    const headerStyle = wrapper.find('thead th').attributes('style') ?? ''
+    expect(headerStyle).toContain('width:')
+    expect(headerStyle).toBe(style)
+  })
+
+  it('shrinks the column with ArrowLeft but never below the min width', async () => {
+    const wrapper = mountResizable({ resizable: true, colId: 'name' })
+    const handle = wrapper.find('[data-dz-resize-handle]')
+    await handle.trigger('keydown', { key: 'ArrowLeft' })
+    const style = wrapper.find('tbody td').attributes('style') ?? ''
+    // jsdom reports 0 width; clamped to the 48px fallback minimum.
+    expect(style).toContain('width: 48px')
+  })
+})
+
+describe('dzTable — virtual scroll', () => {
+  function mountVirtual(rowN: number, tableProps: Record<string, unknown> = {}) {
+    return mount(DzTable, {
+      props: { virtualScroll: true, rowHeight: 40, maxHeight: '200px', overscan: 2, ...tableProps },
+      attachTo: document.body,
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              Array.from({ length: rowN }, (_, i) =>
+                h(
+                  DzTableRow,
+                  { key: i },
+                  {
+                    default: () => h(DzTableCell, null, { default: () => `Row ${i}` }),
+                  },
+                ),
+              ),
+          }),
+      },
+    })
+  }
+
+  it('marks the root as virtual and constrains its height', () => {
+    const wrapper = mountVirtual(1000)
+    expect(wrapper.attributes('data-virtual')).toBe('')
+    expect(wrapper.attributes('style')).toContain('max-height: 200px')
+  })
+
+  it('renders only a windowed subset of rows, not all of them', () => {
+    const wrapper = mountVirtual(1000)
+    const dataRows = wrapper
+      .findAll('tbody tr')
+      .filter((r) => !r.classes().includes('dz-virtual-spacer'))
+    expect(dataRows.length).toBeGreaterThan(0)
+    expect(dataRows.length).toBeLessThan(1000)
+  })
+
+  it('renders a bottom spacer that preserves total scroll height', () => {
+    const wrapper = mountVirtual(1000)
+    const spacers = wrapper.findAll('tbody tr.dz-virtual-spacer')
+    expect(spacers.length).toBeGreaterThan(0)
+    // Bottom spacer height should be large for 1000 rows @ 40px.
+    const hasTallSpacer = spacers.some((s) => {
+      const style = s.attributes('style') ?? ''
+      const match = /height:\s*(\d+)px/.exec(style)
+      return match != null && Number(match[1]) > 1000
+    })
+    expect(hasTallSpacer).toBe(true)
+  })
+
+  it('renders the first rows at the top with no top spacer initially', () => {
+    const wrapper = mountVirtual(1000)
+    expect(wrapper.text()).toContain('Row 0')
+    // At scrollTop 0, paddingTop is 0 → no top spacer rendered.
+    const first = wrapper.find('tbody tr')
+    expect(first.classes()).not.toContain('dz-virtual-spacer')
+  })
+
+  it('falls back to normal rendering when virtualScroll is off', () => {
+    const wrapper = mount(DzTable, {
+      slots: {
+        default: () =>
+          h(DzTableBody, null, {
+            default: () =>
+              Array.from({ length: 50 }, (_, i) =>
+                h(
+                  DzTableRow,
+                  { key: i },
+                  {
+                    default: () => h(DzTableCell, null, { default: () => `Row ${i}` }),
+                  },
+                ),
+              ),
+          }),
+      },
+    })
+    expect(wrapper.attributes('data-virtual')).toBeUndefined()
+    expect(wrapper.findAll('tbody tr.dz-virtual-spacer').length).toBe(0)
+    expect(wrapper.findAll('tbody tr').length).toBe(50)
+  })
+
+  it('renders the empty state under virtual scroll when there are zero rows', () => {
+    const wrapper = mount(DzTable, {
+      props: { virtualScroll: true },
+      slots: {
+        default: () => h(DzTableBody, null, {}),
+      },
+    })
+    expect(wrapper.text()).toContain('No records found.')
   })
 })
