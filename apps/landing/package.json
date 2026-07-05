@@ -1,7 +1,7 @@
 {
   "name": "@dzup-ui/landing",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "Public marketing/landing page for dzup-ui — the production front door into the free Storybook and (later) Pro components",
   "scripts": {

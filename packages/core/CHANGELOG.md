@@ -1,5 +1,16 @@
 # @dzup-ui/core
 
+## 0.2.0
+
+### Minor Changes
+
+- ca9c390: Add `DzEmoji` — an accessible emoji primitive in the **media** family.
+
+  Renders an emoji glyph with a consistent type-scale (`xs`–`xl`) and correct
+  screen-reader semantics: decorative by default (`aria-hidden="true"`), or
+  meaningful (`role="img"` + `aria-label`) when a `label` is provided. Solves the
+  inconsistent announcement of raw emoji characters across assistive tech.
+
 ## 0.1.0 (2026-05-03)
 
 ### Minor Changes

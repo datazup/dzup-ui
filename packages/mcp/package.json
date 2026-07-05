@@ -1,7 +1,7 @@
 {
   "name": "@dzup-ui/mcp",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Model Context Protocol server for dzup-ui — browse components, blocks, templates and design tokens, and fetch real block source + install commands from any AI coding tool (Cursor, Claude Code, Windsurf).",
   "keywords": [
     "mcp",
