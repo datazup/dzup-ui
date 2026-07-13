@@ -217,11 +217,3 @@ function handleKeydown(event: KeyboardEvent): void {
     </DialogPortal>
   </DialogRoot>
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  [data-state] {
-    animation: none !important;
-  }
-}
-</style>

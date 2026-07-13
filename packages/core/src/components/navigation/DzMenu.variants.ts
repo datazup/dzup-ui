@@ -46,7 +46,7 @@ export const menuVariants = tv({
       xl: { item: 'px-[var(--dz-spacing-4)] py-[var(--dz-spacing-3)] text-[length:var(--dz-text-lg)]' },
     },
     active: {
-      true: { item: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)] font-[var(--dz-font-medium)]' },
+      true: { item: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] font-[var(--dz-font-medium)]' },
     },
   },
 

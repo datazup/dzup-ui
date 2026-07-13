@@ -178,7 +178,7 @@ export const Interactive: Story = {
           <DzCheckbox value="push">Push Notification</DzCheckbox>
           <DzCheckbox value="in-app">In-App</DzCheckbox>
         </DzCheckboxGroup>
-        <p class="text-sm text-gray-500">Selected: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -217,7 +217,7 @@ export const Accessibility: Story = {
     components: { DzCheckboxGroup, DzCheckbox },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab through the group, Space to toggle individual checkboxes.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab through the group, Space to toggle individual checkboxes.</p>
         <DzCheckboxGroup aria-label="Accessible group" role="group">
           <DzCheckbox value="a" aria-label="Option A">Option A</DzCheckbox>
           <DzCheckbox value="b" aria-label="Option B">Option B</DzCheckbox>
@@ -261,7 +261,7 @@ export const RealWorldNotifications: Story = {
     template: `
       <div class="max-w-md">
         <h3 class="text-base font-semibold mb-1">Notification Channels</h3>
-        <p class="text-sm text-gray-500 mb-3">Choose how you want to be notified.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">Choose how you want to be notified.</p>
         <DzCheckboxGroup v-model="channels" aria-label="Notification channels">
           <DzCheckbox value="email">Email notifications</DzCheckbox>
           <DzCheckbox value="sms">SMS alerts</DzCheckbox>

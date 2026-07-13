@@ -298,7 +298,7 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Active: <code>{{ activeItem }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Active: <code>{{ activeItem }}</code></p>
         <DzMenu aria-label="Navigation" class="w-64">
           <DzMenuItem :active="activeItem === 'dashboard'" @click="activeItem = 'dashboard'">
             <template #icon><Home class="h-4 w-4" /></template>
@@ -346,7 +346,7 @@ export const Accessibility: Story = {
     components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Settings, Users },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tab through the menu items to see focus rings. Active items use
           <code>aria-current="page"</code>. Disabled items have <code>aria-disabled</code>.
         </p>
@@ -395,10 +395,10 @@ export const RealWorldSidebar: Story = {
       return { active: 'dashboard' }
     },
     template: `
-      <div class="w-64 border-r min-h-[400px] p-4">
+      <div class="w-64 border-r border-r-[var(--dz-border)] min-h-[400px] p-4">
         <div class="mb-6">
           <p class="text-sm font-bold">Acme Inc.</p>
-          <p class="text-xs text-gray-500">Enterprise Dashboard</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Enterprise Dashboard</p>
         </div>
         <DzMenu aria-label="Main navigation">
           <DzMenuItem :active="active === 'dashboard'" @click="active = 'dashboard'">

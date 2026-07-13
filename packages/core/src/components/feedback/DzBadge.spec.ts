@@ -33,7 +33,7 @@ describe('dzBadge — Unit Tests', () => {
       slots: { default: 'Tag' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('bg-[var(--dz-primary)]')
+    expect(classStr).toContain('bg-[var(--dz-primary-solid)]')
     expect(classStr).toContain('text-[var(--dz-primary-foreground)]')
   })
 
@@ -43,8 +43,10 @@ describe('dzBadge — Unit Tests', () => {
       slots: { default: 'Tag' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('border-[var(--dz-danger)]')
-    expect(classStr).toContain('text-[var(--dz-danger)]')
+    // The BORDER keeps `--dz-danger` (a non-text boundary, SC 1.4.11 at 3:1);
+    // only the TEXT moves to the readable shade.
+    expect(classStr).toContain('border-[var(--dz-danger-solid)]')
+    expect(classStr).toContain('text-[var(--dz-danger-muted-foreground)]')
   })
 
   it('applies subtle+success variant classes', () => {
@@ -54,7 +56,8 @@ describe('dzBadge — Unit Tests', () => {
     })
     const classStr = wrapper.classes().join(' ')
     expect(classStr).toContain('bg-[var(--dz-success-muted)]')
-    expect(classStr).toContain('text-[var(--dz-success)]')
+    // 3.74:1 with `--dz-success`; 7.44:1 with the muted-foreground token.
+    expect(classStr).toContain('text-[var(--dz-success-muted-foreground)]')
   })
 
   it('applies xs size classes', () => {

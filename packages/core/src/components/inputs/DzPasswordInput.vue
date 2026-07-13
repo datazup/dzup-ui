@@ -68,7 +68,9 @@ const wrapperClasses = computed(() =>
   ),
 )
 
-const inputClasses = computed(() => inputElementVariants())
+// The outer shell paints the field surface, so the autofill cover stays clear
+// rather than repainting --dz-input-bg over it (styles/base.css § 4c).
+const inputClasses = computed(() => cn(inputElementVariants(), 'dz-native-input-autofill-clear'))
 
 /**
  * Spinner size mapped down from the field size so the indicator stays
@@ -229,24 +231,3 @@ defineExpose({ inputRef })
     </p>
   </div>
 </template>
-
-<style scoped>
-/* Neutralize browser autofill blue background (Chrome/Edge) */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
-  box-shadow: 0 0 0 1000px transparent inset !important;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-/* Accessibility: respect user's motion preference */
-@media (prefers-reduced-motion: reduce) {
-  :deep(*),
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>

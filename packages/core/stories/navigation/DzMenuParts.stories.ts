@@ -121,7 +121,7 @@ export const Interactive: Story = {
             Sign Out
           </DzMenuItem>
         </DzMenu>
-        <p class="text-sm text-gray-500">Active: {{ active }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Active: {{ active }}</p>
       </div>
     `,
   }),

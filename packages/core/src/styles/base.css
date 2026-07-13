@@ -202,6 +202,86 @@
   }
 
   /* ==========================================================================
+     4c. Native Input Chrome (TASK-DS-09)
+     Hoisted out of per-component <style scoped> blocks, which ADR-04 forbids.
+     Applied through each component's *.variants.ts, not by a nested selector,
+     so the rule is opt-in per input rather than leaking to every descendant.
+     ========================================================================== */
+
+  /* The wrapper shell owns focus chrome; the inner input must not paint its own. */
+  .dz-native-input:focus,
+  .dz-native-input:focus-visible {
+    outline: none;
+  }
+
+  /*
+   * Neutralise the browser autofill tint (Chrome/Edge paint a light-blue
+   * background on :-webkit-autofill). The inset box-shadow covers it and the
+   * 5000s transition defers the repaint indefinitely.
+   *
+   * `--dz-autofill-bg` lets a component opt into a transparent fill when its
+   * background is painted by an outer shell rather than by the input itself
+   * (DzPasswordInput). Default: the input's own surface token.
+   */
+  .dz-native-input {
+    --dz-autofill-bg: var(--dz-input-bg);
+  }
+
+  .dz-native-input:-webkit-autofill,
+  .dz-native-input:-webkit-autofill:hover,
+  .dz-native-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--dz-autofill-bg) inset !important;
+    box-shadow: 0 0 0 1000px var(--dz-autofill-bg) inset !important;
+    -webkit-text-fill-color: var(--dz-foreground) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* DzPasswordInput: the shell paints the surface, so the input stays clear. */
+  .dz-native-input-autofill-clear {
+    --dz-autofill-bg: transparent;
+  }
+
+  .dz-native-input::selection {
+    background: var(--dz-primary);
+    color: var(--dz-primary-foreground);
+  }
+
+  /*
+   * Suppress the browser's native search affordances. `type="search"` renders a
+   * platform clear ("x") button and decoration whenever the field has a value —
+   * independent of the `clearable` prop. Hiding them ensures the only clear
+   * control is our own button, which is gated on `clearable`.
+   */
+  .dz-search-input::-webkit-search-cancel-button,
+  .dz-search-input::-webkit-search-decoration,
+  .dz-search-input::-webkit-search-results-button,
+  .dz-search-input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* ==========================================================================
+     4d. Screen-Reader-Only Utility
+     Many core components render `.sr-only` text and, before TASK-DS-09, relied
+     on the consumer's Tailwind to define it — every component except DzSpinner,
+     which shipped a private copy. Declaring it here makes the library correct on
+     its own. Tailwind's unlayered utility still wins where present; the rules
+     are identical, so the outcome does not depend on which one applies.
+     ========================================================================== */
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* ==========================================================================
      5. Reduced Motion
      Respects user preference for reduced motion. Complements the token-level
      reduced-motion overrides in tokens.css (which zero out transition/animation
@@ -238,6 +318,20 @@
     to {
       height: 0;
     }
+  }
+
+  /* DzProgress — indeterminate bar sweep (hoisted from <style scoped>). */
+  @keyframes progress-indeterminate {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+
+  .animate-progress-indeterminate {
+    animation: progress-indeterminate 1.5s ease-in-out infinite;
   }
 }
 
@@ -656,6 +750,103 @@
 
   .dz-panel[data-tone='info'] {
     --dz-panel-accent: var(--dz-info);
+  }
+
+  /* ==========================================================================
+     5d. Component Transitions & Chrome (TASK-DS-09)
+     Hoisted verbatim out of per-component <style scoped> blocks (ADR-04). Every
+     selector is `dz-`-prefixed, so hoisting them to the global sheet changes
+     nothing about which elements they match.
+
+     None of these carry a `prefers-reduced-motion` override any more: the global
+     rule at the end of tokens.css is unlayered and `!important`, so it already
+     wins over every declaration here. Twenty-six components restated that rule
+     locally; it is expressed once, there.
+     ========================================================================== */
+
+  /*
+   * DzDialog — the transition NAMES are public API (`overlayTransition` /
+   * `contentTransition` props). These rules style the defaults; a consumer that
+   * passes a custom name supplies its own CSS. Previously duplicated between
+   * DzDialogContent and DzDialogOverlay.
+   */
+  .dz-dialog-overlay-enter-active,
+  .dz-dialog-overlay-leave-active {
+    transition: opacity var(--dz-transition-fast) ease;
+  }
+
+  .dz-dialog-overlay-enter-from,
+  .dz-dialog-overlay-leave-to {
+    opacity: 0;
+  }
+
+  .dz-dialog-content-enter-active,
+  .dz-dialog-content-leave-active {
+    transition:
+      opacity var(--dz-transition-fast) ease,
+      transform var(--dz-transition-fast) ease;
+  }
+
+  .dz-dialog-content-enter-from,
+  .dz-dialog-content-leave-to {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+
+  /* DzSidebar — mobile overlay backdrop fade. */
+  .dz-sidebar-overlay-enter-active,
+  .dz-sidebar-overlay-leave-active {
+    transition: opacity var(--dz-transition-normal) ease;
+  }
+
+  .dz-sidebar-overlay-enter-from,
+  .dz-sidebar-overlay-leave-to {
+    opacity: 0;
+  }
+
+  /* DzTabTrigger — the closable tab's dismiss button. */
+  .dz-tab-trigger-content {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .dz-tab-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--dz-spacing-1);
+    /* The spacing scale has no half-step; derive it rather than type 0.125rem. */
+    padding: calc(var(--dz-spacing-1) / 2);
+    border: none;
+    background: transparent;
+    color: currentColor;
+    border-radius: var(--dz-radius-sm);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity var(--dz-transition-fast),
+      background var(--dz-transition-fast);
+  }
+
+  /* Reveal on trigger hover, or whenever the closable tab is the active one. */
+  [data-closable]:hover .dz-tab-close-btn,
+  [data-state='active'][data-closable] .dz-tab-close-btn {
+    opacity: 0.5;
+  }
+
+  /*
+   * `!important` is load-bearing: the reveal rule above is more specific
+   * (0,3,0) than this one (0,2,0), so hovering the button on an ACTIVE closable
+   * tab would otherwise stay at 0.5 instead of going fully opaque.
+   */
+  .dz-tab-close-btn:hover {
+    opacity: 1 !important;
+    background: var(--dz-muted);
+  }
+
+  .dz-tab-close-btn:disabled {
+    pointer-events: none;
+    opacity: 0;
   }
 }
 

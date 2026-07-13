@@ -123,7 +123,7 @@ export const CompoundComposition: Story = {
 
         <!-- Anatomy map -->
         <div
-          class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
+          class="rounded border border-[var(--dz-border)] px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
           <p>&lt;DzPopover&gt;              &lt;!-- root, v-model:open --&gt;</p>

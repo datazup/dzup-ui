@@ -171,7 +171,7 @@ export const WithLanguage: Story = {
     components: { DzCode },
     template: `
       <div class="space-y-4 max-w-xl">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The language prop sets data-language on the element for future
           syntax highlighting integration.
         </p>
@@ -199,7 +199,7 @@ export const VsCodeBlock: Story = {
     components: { DzCode },
     template: `
       <div class="space-y-6 max-w-2xl">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           <DzCode>DzCode</DzCode> is a lightweight typography primitive for <strong>inline</strong>
           snippets and short, unadorned <strong>block</strong> samples. When you need a header,
           filename, language label, line numbers, scroll bounds, or copy-to-clipboard, reach for
@@ -207,23 +207,23 @@ export const VsCodeBlock: Story = {
         </p>
 
         <div class="grid gap-4 sm:grid-cols-2">
-          <div class="rounded-lg border p-4 space-y-2">
+          <div class="rounded-lg border border-[var(--dz-border)] p-4 space-y-2">
             <p class="text-sm font-semibold">DzCode (inline)</p>
             <p class="text-sm">
               Run <DzCode>yarn build</DzCode> then import <DzCode>{ DzButton }</DzCode>.
             </p>
-            <p class="text-xs text-gray-500">Best for: prose, prop names, short commands.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Best for: prose, prop names, short commands.</p>
           </div>
-          <div class="rounded-lg border p-4 space-y-2">
+          <div class="rounded-lg border border-[var(--dz-border)] p-4 space-y-2">
             <p class="text-sm font-semibold">DzCode (block)</p>
             <DzCode variant="block" language="bash">yarn add @dzup-ui/core</DzCode>
-            <p class="text-xs text-gray-500">Best for: a couple of plain lines, no chrome needed.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Best for: a couple of plain lines, no chrome needed.</p>
           </div>
         </div>
 
-        <div class="rounded-lg border border-dashed p-4 space-y-1">
+        <div class="rounded-lg border border-[var(--dz-border)] border-dashed p-4 space-y-1">
           <p class="text-sm font-semibold">Need a header, line numbers, or a copy button?</p>
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             Use <strong>DzCodeBlock</strong> — see
             <a class="underline" href="?path=/docs/core-data-dzcodeblock--docs">Core/Data/DzCodeBlock</a>.
           </p>
@@ -265,7 +265,7 @@ export const Accessibility: Story = {
     components: { DzCode },
     template: `
       <div class="space-y-4 max-w-lg">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Inline variant renders as a semantic &lt;code&gt; element.
           Block variant renders as &lt;pre&gt;&lt;code&gt;. Both are
           recognized by assistive technology as code content.
@@ -303,7 +303,7 @@ export const RealWorldInstallGuide: Story = {
 
         <div>
           <h3 class="text-lg font-semibold mb-2">3. Use in your template</h3>
-          <p class="text-sm text-gray-500 mb-2">
+          <p class="text-sm text-[var(--dz-muted-foreground)] mb-2">
             Pass <DzCode>variant</DzCode>, <DzCode>tone</DzCode>, and <DzCode>size</DzCode> props to customize appearance.
           </p>
           <DzCode variant="block" language="vue">&lt;DzButton variant="solid" tone="primary" size="md"&gt;

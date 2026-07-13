@@ -252,7 +252,7 @@ export const TwelveHourFormat: Story = {
     template: `
       <div class="space-y-2 max-w-xs">
         <DzTimePicker v-model="time" :hour12="true" placeholder="12-hour" />
-        <p class="text-sm text-gray-500">Value (24h): <strong>{{ time || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value (24h): <strong>{{ time || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -272,7 +272,7 @@ export const WithSeconds: Story = {
     template: `
       <div class="space-y-2 max-w-xs">
         <DzTimePicker v-model="time" seconds placeholder="HH:mm:ss" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ time || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ time || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -288,7 +288,7 @@ export const WithConstraints: Story = {
     components: { DzTimePicker },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Only business hours (09:00 - 17:00) with 30-min steps. Out-of-range options are disabled.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Only business hours (09:00 - 17:00) with 30-min steps. Out-of-range options are disabled.</p>
         <DzTimePicker min="09:00" max="17:00" :step="30" placeholder="Business hours" />
       </div>
     `,
@@ -308,9 +308,9 @@ export const NoFooter: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Selections apply immediately, without Cancel/OK.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selections apply immediately, without Cancel/OK.</p>
         <DzTimePicker v-model="time" :footer="false" :step="15" placeholder="Pick a time" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ time || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ time || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -415,7 +415,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-xs">
         <DzTimePicker v-model="time" placeholder="Pick a time" />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ time || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ time || 'none' }}</strong></p>
       </div>
     `,
   }),

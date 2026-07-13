@@ -170,19 +170,19 @@ export const WithContent: Story = {
       <div class="space-y-6">
         <DzStepper v-model="step">
           <DzStepperItem title="Account" description="Create your account">
-            <div v-if="step === 0" class="mt-4 p-4 border rounded text-sm">
+            <div v-if="step === 0" class="mt-4 p-4 border border-[var(--dz-border)] rounded text-sm">
               <p class="font-medium mb-2">Account Details</p>
               <p>Enter your email and password to get started.</p>
             </div>
           </DzStepperItem>
           <DzStepperItem title="Profile" description="Complete your profile">
-            <div v-if="step === 1" class="mt-4 p-4 border rounded text-sm">
+            <div v-if="step === 1" class="mt-4 p-4 border border-[var(--dz-border)] rounded text-sm">
               <p class="font-medium mb-2">Profile Information</p>
               <p>Tell us about yourself.</p>
             </div>
           </DzStepperItem>
           <DzStepperItem title="Done" description="All set!">
-            <div v-if="step === 2" class="mt-4 p-4 border rounded text-sm">
+            <div v-if="step === 2" class="mt-4 p-4 border border-[var(--dz-border)] rounded text-sm">
               <p class="font-medium mb-2">Complete</p>
               <p>Your account has been created successfully.</p>
             </div>
@@ -190,12 +190,12 @@ export const WithContent: Story = {
         </DzStepper>
         <div class="flex gap-2">
           <button
-            class="px-3 py-1.5 text-sm border rounded"
+            class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded"
             :disabled="step === 0"
             @click="step--"
           >Previous</button>
           <button
-            class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded"
+            class="px-3 py-1.5 text-sm bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded"
             :disabled="step === 2"
             @click="step++"
           >Next</button>
@@ -219,9 +219,9 @@ export const CustomIndicator: Story = {
           <template #indicator="{ step, status }">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
               :class="{
-                'bg-green-500 text-white': status === 'completed',
-                'bg-blue-500 text-white': status === 'active',
-                'bg-gray-200 text-gray-500': status === 'upcoming',
+                'bg-[var(--dz-success)] text-[var(--dz-success-foreground)]': status === 'completed',
+                'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]': status === 'active',
+                'bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)]': status === 'upcoming',
               }"
             >
               <span v-if="status === 'completed'">&#10003;</span>
@@ -233,9 +233,9 @@ export const CustomIndicator: Story = {
           <template #indicator="{ step, status }">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
               :class="{
-                'bg-green-500 text-white': status === 'completed',
-                'bg-blue-500 text-white': status === 'active',
-                'bg-gray-200 text-gray-500': status === 'upcoming',
+                'bg-[var(--dz-success)] text-[var(--dz-success-foreground)]': status === 'completed',
+                'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]': status === 'active',
+                'bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)]': status === 'upcoming',
               }"
             >
               <span v-if="status === 'completed'">&#10003;</span>
@@ -247,9 +247,9 @@ export const CustomIndicator: Story = {
           <template #indicator="{ step, status }">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
               :class="{
-                'bg-green-500 text-white': status === 'completed',
-                'bg-blue-500 text-white': status === 'active',
-                'bg-gray-200 text-gray-500': status === 'upcoming',
+                'bg-[var(--dz-success)] text-[var(--dz-success-foreground)]': status === 'completed',
+                'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]': status === 'active',
+                'bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)]': status === 'upcoming',
               }"
             >
               <span v-if="status === 'completed'">&#10003;</span>
@@ -303,7 +303,7 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-6">
-        <p class="text-sm text-gray-500">Active step: <code>{{ step }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Active step: <code>{{ step }}</code></p>
         <DzStepper v-model="step">
           <DzStepperItem title="Account" description="Create your account" />
           <DzStepperItem title="Profile" description="Complete your profile" />
@@ -312,17 +312,17 @@ export const Interactive: Story = {
         </DzStepper>
         <div class="flex gap-2">
           <button
-            class="px-3 py-1.5 text-sm border rounded disabled:opacity-50"
+            class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded disabled:opacity-50"
             :disabled="step === 0"
             @click="step--"
           >Previous</button>
           <button
-            class="px-3 py-1.5 text-sm bg-blue-600 text-white rounded disabled:opacity-50"
+            class="px-3 py-1.5 text-sm bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded disabled:opacity-50"
             :disabled="step === 3"
             @click="step++"
           >Next</button>
           <button
-            class="px-3 py-1.5 text-sm border rounded"
+            class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded"
             @click="step = 0"
           >Reset</button>
         </div>
@@ -356,7 +356,7 @@ export const Accessibility: Story = {
     components: { DzStepper, DzStepperItem },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The stepper renders as a <code>role="group"</code> with <code>aria-label="Progress steps"</code>.
           The active step has <code>aria-current="step"</code>. Each step item has a
           <code>data-state</code> attribute indicating completed, active, or upcoming status.
@@ -390,7 +390,7 @@ export const RealWorldCheckout: Story = {
           <DzStepperItem title="Payment" description="Add payment method" />
           <DzStepperItem title="Confirm" description="Place your order" />
         </DzStepper>
-        <div class="border rounded p-6 text-sm">
+        <div class="border border-[var(--dz-border)] rounded p-6 text-sm">
           <p v-if="step === 0">Review the items in your cart before proceeding.</p>
           <p v-if="step === 1">Enter your shipping address and choose a delivery method.</p>
           <p v-if="step === 2">Add your credit card or select an alternative payment method.</p>
@@ -398,12 +398,12 @@ export const RealWorldCheckout: Story = {
         </div>
         <div class="flex justify-between">
           <button
-            class="px-4 py-2 text-sm border rounded disabled:opacity-50"
+            class="px-4 py-2 text-sm border border-[var(--dz-border)] rounded disabled:opacity-50"
             :disabled="step === 0"
             @click="step--"
           >Back</button>
           <button
-            class="px-4 py-2 text-sm bg-blue-600 text-white rounded disabled:opacity-50"
+            class="px-4 py-2 text-sm bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded disabled:opacity-50"
             :disabled="step === 3"
             @click="step++"
           >{{ step === 2 ? 'Review Order' : 'Continue' }}</button>
@@ -429,21 +429,21 @@ export const RealWorldOnboarding: Story = {
         <h2 class="text-lg font-semibold">Welcome to Acme</h2>
         <DzStepper v-model="step" orientation="vertical">
           <DzStepperItem title="Connect your account" description="Link your GitHub or GitLab repository">
-            <div v-if="step === 0" class="ml-8 mt-2 p-4 border rounded text-sm">
+            <div v-if="step === 0" class="ml-8 mt-2 p-4 border border-[var(--dz-border)] rounded text-sm">
               <p>Select your source code provider and authorize access.</p>
-              <button class="mt-3 px-3 py-1.5 text-sm bg-blue-600 text-white rounded" @click="step++">Connect</button>
+              <button class="mt-3 px-3 py-1.5 text-sm bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded" @click="step++">Connect</button>
             </div>
           </DzStepperItem>
           <DzStepperItem title="Configure project" description="Choose framework and settings">
-            <div v-if="step === 1" class="ml-8 mt-2 p-4 border rounded text-sm">
+            <div v-if="step === 1" class="ml-8 mt-2 p-4 border border-[var(--dz-border)] rounded text-sm">
               <p>We detected a Vue.js project. Confirm the build settings.</p>
-              <button class="mt-3 px-3 py-1.5 text-sm bg-blue-600 text-white rounded" @click="step++">Confirm</button>
+              <button class="mt-3 px-3 py-1.5 text-sm bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded" @click="step++">Confirm</button>
             </div>
           </DzStepperItem>
           <DzStepperItem title="Deploy" description="Ship your first deployment" optional>
-            <div v-if="step === 2" class="ml-8 mt-2 p-4 border rounded text-sm">
+            <div v-if="step === 2" class="ml-8 mt-2 p-4 border border-[var(--dz-border)] rounded text-sm">
               <p>Your project is ready to deploy.</p>
-              <button class="mt-3 px-3 py-1.5 text-sm bg-green-600 text-white rounded" @click="step++">Deploy Now</button>
+              <button class="mt-3 px-3 py-1.5 text-sm bg-[var(--dz-success)] text-[var(--dz-success-foreground)] rounded" @click="step++">Deploy Now</button>
             </div>
           </DzStepperItem>
         </DzStepper>

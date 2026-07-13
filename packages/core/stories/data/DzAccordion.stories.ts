@@ -222,7 +222,7 @@ export const Collapsible: Story = {
     components: { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent },
     template: `
       <div class="space-y-3 max-w-lg">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           With collapsible enabled, clicking the open item again closes it.
           Without collapsible, one item always remains open.
         </p>
@@ -345,7 +345,7 @@ export const Accessibility: Story = {
     components: { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent },
     template: `
       <div class="space-y-4 max-w-lg">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Built on Reka UI AccordionRoot primitive. Tab focuses triggers.
           Arrow Up/Down moves between triggers. Enter or Space toggles the focused item.
           Home/End jump to first/last trigger. Screen readers announce expanded/collapsed state.
@@ -471,7 +471,7 @@ export const BindableModel: Story = {
             <DzAccordionContent>{{ faq.body }}</DzAccordionContent>
           </DzAccordionItem>
         </DzAccordion>
-        <p class="text-sm text-gray-500">Open item (v-model): <code>{{ open || 'none' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Open item (v-model): <code>{{ open || 'none' }}</code></p>
       </div>
     `,
   }),

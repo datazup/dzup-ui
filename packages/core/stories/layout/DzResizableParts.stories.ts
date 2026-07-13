@@ -53,7 +53,7 @@ export const Default: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable class="h-48 border rounded" aria-label="Resizable panels">
+      <DzResizable class="h-48 border border-[var(--dz-border)] rounded" aria-label="Resizable panels">
         <DzResizablePanel :default-size="30" :min-size="20">
           <div class="h-full p-4 text-sm">Sidebar (30%, min 20%)</div>
         </DzResizablePanel>
@@ -86,9 +86,9 @@ export const ThreePanels: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable class="h-48 border rounded" aria-label="Three resizable panels">
+      <DzResizable class="h-48 border border-[var(--dz-border)] rounded" aria-label="Three resizable panels">
         <DzResizablePanel :default-size="25" :min-size="15">
-          <div class="h-full p-4 text-sm bg-gray-50">Left</div>
+          <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Left</div>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="50" :min-size="25">
@@ -96,7 +96,7 @@ export const ThreePanels: Story = {
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="25" :min-size="15">
-          <div class="h-full p-4 text-sm bg-gray-50">Right</div>
+          <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Right</div>
         </DzResizablePanel>
       </DzResizable>
     `,
@@ -129,10 +129,10 @@ export const Collapsible: Story = {
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
       <div class="space-y-3">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Drag the handle fully left to collapse the sidebar. Drag right to expand.
         </p>
-        <DzResizable class="h-48 border rounded" aria-label="Collapsible sidebar">
+        <DzResizable class="h-48 border border-[var(--dz-border)] rounded" aria-label="Collapsible sidebar">
           <DzResizablePanel :default-size="25" :min-size="15" collapsible :collapsed-size="0">
             <div class="h-full p-4 text-sm">Collapsible Sidebar</div>
           </DzResizablePanel>
@@ -171,7 +171,7 @@ export const HandleVariants: Story = {
       <div class="space-y-6">
         <div>
           <p class="text-sm font-medium mb-2">With visual grip (withHandle=true)</p>
-          <DzResizable class="h-32 border rounded" aria-label="Handle with grip">
+          <DzResizable class="h-32 border border-[var(--dz-border)] rounded" aria-label="Handle with grip">
             <DzResizablePanel :default-size="50">
               <div class="h-full p-3 text-sm">Left</div>
             </DzResizablePanel>
@@ -183,7 +183,7 @@ export const HandleVariants: Story = {
         </div>
         <div>
           <p class="text-sm font-medium mb-2">Without visual grip (default)</p>
-          <DzResizable class="h-32 border rounded" aria-label="Handle without grip">
+          <DzResizable class="h-32 border border-[var(--dz-border)] rounded" aria-label="Handle without grip">
             <DzResizablePanel :default-size="50">
               <div class="h-full p-3 text-sm">Left</div>
             </DzResizablePanel>
@@ -220,7 +220,7 @@ export const Vertical: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable direction="vertical" class="h-64 border rounded" aria-label="Vertical panels">
+      <DzResizable direction="vertical" class="h-64 border border-[var(--dz-border)] rounded" aria-label="Vertical panels">
         <DzResizablePanel :default-size="30" :min-size="15">
           <div class="h-full p-4 text-sm">Top Panel</div>
         </DzResizablePanel>

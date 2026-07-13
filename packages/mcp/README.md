@@ -1,6 +1,11 @@
 # @dzup-ui/mcp
 
-**Use dzup-ui from your AI coding tool.** A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the whole [dzup-ui](https://dzup-ui.dev) ecosystem — **158 Vue 3 components, 88 blocks, 44 full-page templates and the `--dz-*` design tokens** — to Cursor, Claude Code, Windsurf and any other MCP client.
+**Use dzup-ui from your AI coding tool.** A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the whole [dzup-ui](https://dzup-ui.dev) ecosystem — **every Vue 3 component, block and full-page template, plus the `--dz-*` design tokens** — to Cursor, Claude Code, Windsurf and any other MCP client.
+
+> Catalog sizes are deliberately not typed here. This README is not generated, so
+> any number in it would drift. The server reports live counts via `list_components`,
+> `list_blocks` and `list_templates`; the glob-derived figures are published in
+> [`DESIGN.md`](../../DESIGN.md).
 
 Ask *"add a dzup-ui pricing block"* and the assistant browses the catalog, fetches the **real `.vue` source**, and gives you the exact `shadcn add` install command — grounded in the same registry the website ships, so it never hallucinates a prop or a component that doesn't exist.
 

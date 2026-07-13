@@ -44,10 +44,13 @@ export const Default: Story = {
   render: () => ({
     components: { DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots },
     setup() {
+      // Each fill carries its own foreground token — a solid intent fill is only
+      // legible against `--dz-{intent}-foreground`, which is not white for every
+      // intent.
       const slides = [
-        { id: 1, label: 'Slide One', color: 'var(--dz-primary)' },
-        { id: 2, label: 'Slide Two', color: 'var(--dz-success)' },
-        { id: 3, label: 'Slide Three', color: 'var(--dz-warning)' },
+        { id: 1, label: 'Slide One', color: 'var(--dz-primary)', fg: 'var(--dz-primary-foreground)' },
+        { id: 2, label: 'Slide Two', color: 'var(--dz-success)', fg: 'var(--dz-success-foreground)' },
+        { id: 3, label: 'Slide Three', color: 'var(--dz-warning)', fg: 'var(--dz-warning-foreground)' },
       ]
       return { slides }
     },
@@ -56,8 +59,8 @@ export const Default: Story = {
         <DzCarousel class="overflow-hidden rounded-lg border border-[var(--dz-border)]">
           <DzCarouselSlide v-for="slide in slides" :key="slide.id">
             <div
-              class="flex h-48 items-center justify-center rounded-lg text-white text-lg font-semibold"
-              :style="{ background: slide.color }"
+              class="flex h-48 items-center justify-center rounded-lg text-lg font-semibold"
+              :style="{ background: slide.color, color: slide.fg }"
             >
               {{ slide.label }}
             </div>
@@ -271,6 +274,14 @@ export const DotsOnly: Story = {
   },
   render: () => ({
     components: { DzCarousel, DzCarouselSlide, DzCarouselDots },
+    setup() {
+      const fills = [
+        { bg: 'var(--dz-primary)', fg: 'var(--dz-primary-foreground)' },
+        { bg: 'var(--dz-success)', fg: 'var(--dz-success-foreground)' },
+        { bg: 'var(--dz-danger)', fg: 'var(--dz-danger-foreground)' },
+      ]
+      return { fills }
+    },
     template: `
       <div class="max-w-md space-y-2">
         <p class="text-sm text-[var(--dz-muted-foreground)]">
@@ -278,10 +289,10 @@ export const DotsOnly: Story = {
           for touch-first or auto-advancing carousels.
         </p>
         <DzCarousel autoplay :interval="2500" loop class="overflow-hidden rounded-lg">
-          <DzCarouselSlide v-for="(color, i) in ['var(--dz-primary)', 'var(--dz-success)', 'var(--dz-danger)']" :key="i">
+          <DzCarouselSlide v-for="(fill, i) in fills" :key="i">
             <div
-              class="h-32 flex items-center justify-center text-white font-medium text-sm"
-              :style="{ background: color }"
+              class="h-32 flex items-center justify-center font-medium text-sm"
+              :style="{ background: fill.bg, color: fill.fg }"
             >
               Slide {{ i + 1 }}
             </div>

@@ -183,7 +183,7 @@ export const Accessibility: Story = {
     components: { DzRadio, DzRadioGroup },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab to focus the group, arrow keys to navigate between options.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus the group, arrow keys to navigate between options.</p>
         <DzRadioGroup aria-label="Accessible radio group">
           <DzRadio value="a" aria-label="Option A">Option A</DzRadio>
           <DzRadio value="b" aria-label="Option B">Option B</DzRadio>

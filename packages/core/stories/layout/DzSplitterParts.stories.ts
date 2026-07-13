@@ -52,7 +52,7 @@ export const Default: Story = {
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
-      <DzSplitter class="h-48 border rounded" aria-label="Splitter panels">
+      <DzSplitter class="h-48 border border-[var(--dz-border)] rounded" aria-label="Splitter panels">
         <DzSplitterPanel :default-size="40" :min-size="20">
           <div class="h-full p-4 text-sm">Panel A (40%)</div>
         </DzSplitterPanel>
@@ -96,9 +96,9 @@ export const Nested: Story = {
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
-      <DzSplitter class="h-64 border rounded" aria-label="Outer splitter">
+      <DzSplitter class="h-64 border border-[var(--dz-border)] rounded" aria-label="Outer splitter">
         <DzSplitterPanel :default-size="30" :min-size="15">
-          <div class="h-full p-4 text-sm bg-gray-50">Sidebar</div>
+          <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Sidebar</div>
         </DzSplitterPanel>
         <DzSplitterHandle with-handle />
         <DzSplitterPanel :default-size="70">
@@ -108,7 +108,7 @@ export const Nested: Story = {
             </DzSplitterPanel>
             <DzSplitterHandle with-handle />
             <DzSplitterPanel :default-size="40" :min-size="20">
-              <div class="h-full p-4 text-sm bg-gray-50">Terminal</div>
+              <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Terminal</div>
             </DzSplitterPanel>
           </DzSplitter>
         </DzSplitterPanel>
@@ -152,9 +152,9 @@ export const RealWorldIDE: Story = {
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
-      <DzSplitter class="h-80 border rounded" aria-label="IDE layout">
+      <DzSplitter class="h-80 border border-[var(--dz-border)] rounded" aria-label="IDE layout">
         <DzSplitterPanel :default-size="20" :min-size="10" collapsible>
-          <div class="h-full p-3 text-xs bg-gray-50 space-y-1">
+          <div class="h-full p-3 text-xs bg-[var(--dz-muted)] space-y-1">
             <p class="font-medium text-sm mb-2">Explorer</p>
             <p>src/</p>
             <p class="pl-3">components/</p>
@@ -169,7 +169,7 @@ export const RealWorldIDE: Story = {
             <DzSplitterPanel :default-size="70">
               <div class="h-full p-3 text-sm">
                 <p class="font-medium mb-2">DzButton.vue</p>
-                <pre class="text-xs text-gray-600">&lt;script setup lang="ts"&gt;
+                <pre class="text-xs text-[var(--dz-muted-foreground)]">&lt;script setup lang="ts"&gt;
 import { cn } from '../utilities/cn'
 // ...
 &lt;/script&gt;</pre>
@@ -177,9 +177,9 @@ import { cn } from '../utilities/cn'
             </DzSplitterPanel>
             <DzSplitterHandle />
             <DzSplitterPanel :default-size="30" :min-size="15">
-              <div class="h-full p-3 text-xs bg-gray-50">
+              <div class="h-full p-3 text-xs bg-[var(--dz-muted)]">
                 <p class="font-medium text-sm mb-2">Terminal</p>
-                <p class="text-green-600">$ yarn test</p>
+                <p class="text-[var(--dz-success-muted-foreground)]">$ yarn test</p>
                 <p>PASS src/components/DzButton.spec.ts</p>
               </div>
             </DzSplitterPanel>
@@ -187,7 +187,7 @@ import { cn } from '../utilities/cn'
         </DzSplitterPanel>
         <DzSplitterHandle with-handle />
         <DzSplitterPanel :default-size="25" :min-size="15" collapsible>
-          <div class="h-full p-3 text-xs bg-gray-50">
+          <div class="h-full p-3 text-xs bg-[var(--dz-muted)]">
             <p class="font-medium text-sm mb-2">Properties</p>
             <p>variant: solid</p>
             <p>size: md</p>

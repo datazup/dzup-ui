@@ -85,23 +85,23 @@ export const AllSizes: Story = {
       <div class="flex items-end gap-6">
         <div class="text-center">
           <DzIcon :icon="Heart" size="xs" />
-          <p class="text-xs mt-2 text-gray-500">xs</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">xs</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Heart" size="sm" />
-          <p class="text-xs mt-2 text-gray-500">sm</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">sm</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Heart" size="md" />
-          <p class="text-xs mt-2 text-gray-500">md</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">md</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Heart" size="lg" />
-          <p class="text-xs mt-2 text-gray-500">lg</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">lg</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Heart" size="xl" />
-          <p class="text-xs mt-2 text-gray-500">xl</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">xl</p>
         </div>
       </div>
     `,
@@ -121,27 +121,27 @@ export const StrokeWidths: Story = {
       <div class="flex items-end gap-6">
         <div class="text-center">
           <DzIcon :icon="Star" size="lg" :stroke-width="0.75" />
-          <p class="text-xs mt-2 text-gray-500">0.75</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">0.75</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Star" size="lg" :stroke-width="1" />
-          <p class="text-xs mt-2 text-gray-500">1</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">1</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Star" size="lg" :stroke-width="1.5" />
-          <p class="text-xs mt-2 text-gray-500">1.5</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">1.5</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Star" size="lg" :stroke-width="2" />
-          <p class="text-xs mt-2 text-gray-500">2 (default)</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">2 (default)</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Star" size="lg" :stroke-width="2.5" />
-          <p class="text-xs mt-2 text-gray-500">2.5</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">2.5</p>
         </div>
         <div class="text-center">
           <DzIcon :icon="Star" size="lg" :stroke-width="3" />
-          <p class="text-xs mt-2 text-gray-500">3</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">3</p>
         </div>
       </div>
     `,
@@ -160,7 +160,7 @@ export const IconGallery: Story = {
       <div class="grid grid-cols-6 gap-6">
         <div class="text-center" v-for="[name, icon] in icons" :key="name">
           <DzIcon :icon="icon" size="lg" class="mx-auto" />
-          <p class="text-xs mt-2 text-gray-500">{{ name }}</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">{{ name }}</p>
         </div>
       </div>
     `,
@@ -197,7 +197,7 @@ export const AccessibleIcon: Story = {
       <div class="space-y-6">
         <div class="space-y-2">
           <p class="text-sm font-medium">Decorative (default)</p>
-          <p class="text-xs text-gray-500">aria-hidden="true", no role. Used next to visible text.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">aria-hidden="true", no role. Used next to visible text.</p>
           <div class="flex items-center gap-2">
             <DzIcon :icon="Search" />
             <span>Search</span>
@@ -205,7 +205,7 @@ export const AccessibleIcon: Story = {
         </div>
         <div class="space-y-2">
           <p class="text-sm font-medium">Meaningful (with ariaLabel)</p>
-          <p class="text-xs text-gray-500">role="img", aria-label set. Used standalone where the icon conveys information.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">role="img", aria-label set. Used standalone where the icon conveys information.</p>
           <DzIcon :icon="Bell" aria-label="3 new notifications" size="lg" />
         </div>
       </div>
@@ -260,15 +260,15 @@ export const RealWorldIconWithText: Story = {
     template: `
       <div class="space-y-4">
         <div class="flex items-center gap-2">
-          <DzIcon :icon="Mail" size="sm" class="text-gray-500" />
+          <DzIcon :icon="Mail" size="sm" class="text-[var(--dz-muted-foreground)]" />
           <span class="text-sm">john@example.com</span>
         </div>
         <div class="flex items-center gap-2">
-          <DzIcon :icon="Calendar" size="sm" class="text-gray-500" />
+          <DzIcon :icon="Calendar" size="sm" class="text-[var(--dz-muted-foreground)]" />
           <span class="text-sm">March 27, 2026</span>
         </div>
         <div class="flex items-center gap-2">
-          <DzIcon :icon="User" size="sm" class="text-gray-500" />
+          <DzIcon :icon="User" size="sm" class="text-[var(--dz-muted-foreground)]" />
           <span class="text-sm">John Doe</span>
         </div>
       </div>
@@ -287,19 +287,19 @@ export const RealWorldNavigation: Story = {
     setup() { return { Home, Settings, Bell, User } },
     template: `
       <nav class="w-56 space-y-1">
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-100 text-sm font-medium">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[var(--dz-muted)] text-sm font-medium">
           <DzIcon :icon="Home" size="sm" />
           Home
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--dz-muted-foreground)] hover:bg-[var(--dz-muted)]">
           <DzIcon :icon="Bell" size="sm" />
           Notifications
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--dz-muted-foreground)] hover:bg-[var(--dz-muted)]">
           <DzIcon :icon="User" size="sm" />
           Profile
         </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--dz-muted-foreground)] hover:bg-[var(--dz-muted)]">
           <DzIcon :icon="Settings" size="sm" />
           Settings
         </a>

@@ -53,12 +53,12 @@ export const HiddenLabel: Story = {
     components: { DzVisuallyHidden },
     template: `
       <div class="space-y-3 max-w-md">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The button below shows only an icon visually, but exposes the text
           "Save document" to assistive technology. Inspect with the a11y panel —
           the accessible name is computed from the hidden text.
         </p>
-        <button type="button" class="inline-flex items-center justify-center w-10 h-10 border rounded">
+        <button type="button" class="inline-flex items-center justify-center w-10 h-10 border border-[var(--dz-border)] rounded">
           <span aria-hidden="true">💾</span>
           <DzVisuallyHidden>Save document</DzVisuallyHidden>
         </button>
@@ -77,8 +77,8 @@ export const SkipLink: Story = {
     components: { DzVisuallyHidden },
     template: `
       <div class="space-y-3 max-w-md">
-        <p class="text-sm text-gray-500">
-          Press <kbd class="px-1 border rounded">Tab</kbd> to focus the skip link —
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Press <kbd class="px-1 border border-[var(--dz-border)] rounded">Tab</kbd> to focus the skip link —
           it stays hidden until focused, then reveals itself in place. This is the
           standard "Skip to main content" pattern.
         </p>
@@ -90,7 +90,7 @@ export const SkipLink: Story = {
         >
           Skip to main content
         </DzVisuallyHidden>
-        <div id="main" class="border rounded p-4 text-sm">Main content region.</div>
+        <div id="main" class="border border-[var(--dz-border)] rounded p-4 text-sm">Main content region.</div>
       </div>
     `,
   }),
@@ -106,20 +106,20 @@ export const InsideIconButton: Story = {
     components: { DzVisuallyHidden },
     template: `
       <div class="space-y-3 max-w-md">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           A row of icon-only controls, each given an accessible name via
           DzVisuallyHidden so they are distinguishable to screen reader users.
         </p>
         <div class="flex gap-2">
-          <button type="button" class="inline-flex items-center justify-center w-10 h-10 border rounded">
+          <button type="button" class="inline-flex items-center justify-center w-10 h-10 border border-[var(--dz-border)] rounded">
             <span aria-hidden="true">✏️</span>
             <DzVisuallyHidden>Edit</DzVisuallyHidden>
           </button>
-          <button type="button" class="inline-flex items-center justify-center w-10 h-10 border rounded">
+          <button type="button" class="inline-flex items-center justify-center w-10 h-10 border border-[var(--dz-border)] rounded">
             <span aria-hidden="true">📋</span>
             <DzVisuallyHidden>Duplicate</DzVisuallyHidden>
           </button>
-          <button type="button" class="inline-flex items-center justify-center w-10 h-10 border rounded">
+          <button type="button" class="inline-flex items-center justify-center w-10 h-10 border border-[var(--dz-border)] rounded">
             <span aria-hidden="true">🗑️</span>
             <DzVisuallyHidden>Delete</DzVisuallyHidden>
           </button>

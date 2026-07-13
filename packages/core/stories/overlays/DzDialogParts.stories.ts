@@ -191,7 +191,7 @@ export const CompoundComposition: Story = {
 
             <!-- Anatomy map -->
             <div
-              class="mt-4 rounded border px-3 py-2 text-xs font-mono space-y-0.5"
+              class="mt-4 rounded border border-[var(--dz-border)] px-3 py-2 text-xs font-mono space-y-0.5"
               style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
             >
               <p>&lt;DzDialog&gt;                  <!-- root, manages open state --&gt;</p>

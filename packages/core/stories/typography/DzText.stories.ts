@@ -101,7 +101,7 @@ export const AllSizes: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size" class="flex items-baseline gap-4">
-          <span class="text-xs font-mono w-8 text-gray-400 shrink-0">{{ size }}</span>
+          <span class="text-xs font-mono w-8 text-[var(--dz-muted-foreground)] shrink-0">{{ size }}</span>
           <DzText :size="size">The quick brown fox jumps over the lazy dog.</DzText>
         </div>
       </div>
@@ -120,7 +120,7 @@ export const AllTones: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="tone in ['default', 'muted', 'success', 'warning', 'danger']" :key="tone" class="flex items-baseline gap-4">
-          <span class="text-xs font-mono w-16 text-gray-400 shrink-0">{{ tone }}</span>
+          <span class="text-xs font-mono w-16 text-[var(--dz-muted-foreground)] shrink-0">{{ tone }}</span>
           <DzText :tone="tone">The quick brown fox jumps over the lazy dog.</DzText>
         </div>
       </div>
@@ -139,7 +139,7 @@ export const AllWeights: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="weight in ['light', 'normal', 'medium', 'semibold', 'bold']" :key="weight" class="flex items-baseline gap-4">
-          <span class="text-xs font-mono w-20 text-gray-400 shrink-0">{{ weight }}</span>
+          <span class="text-xs font-mono w-20 text-[var(--dz-muted-foreground)] shrink-0">{{ weight }}</span>
           <DzText :weight="weight">The quick brown fox jumps over the lazy dog.</DzText>
         </div>
       </div>
@@ -158,7 +158,7 @@ export const AllElements: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="el in ['p', 'span', 'div', 'label', 'small', 'strong', 'em']" :key="el" class="flex items-baseline gap-4">
-          <span class="text-xs font-mono w-16 text-gray-400 shrink-0">&lt;{{ el }}&gt;</span>
+          <span class="text-xs font-mono w-16 text-[var(--dz-muted-foreground)] shrink-0">&lt;{{ el }}&gt;</span>
           <DzText :as="el">Rendered as a {{ el }} element.</DzText>
         </div>
       </div>
@@ -218,13 +218,13 @@ export const LineClamp: Story = {
     template: `
       <div class="space-y-6 max-w-xs">
         <div class="space-y-1">
-          <p class="text-xs font-mono text-gray-400">truncate (single line)</p>
+          <p class="text-xs font-mono text-[var(--dz-muted-foreground)]">truncate (single line)</p>
           <DzText truncate>
             This is a very long line of text that is truncated to a single line with an ellipsis.
           </DzText>
         </div>
         <div class="space-y-1">
-          <p class="text-xs font-mono text-gray-400">line-clamp-2 (utility class)</p>
+          <p class="text-xs font-mono text-[var(--dz-muted-foreground)]">line-clamp-2 (utility class)</p>
           <DzText class="line-clamp-2">
             DzText exposes a single-line <strong>truncate</strong> prop. For multi-line clamping,
             pass a Tailwind <code>line-clamp-{n}</code> utility — the class falls through to the
@@ -232,7 +232,7 @@ export const LineClamp: Story = {
           </DzText>
         </div>
         <div class="space-y-1">
-          <p class="text-xs font-mono text-gray-400">line-clamp-3 (utility class)</p>
+          <p class="text-xs font-mono text-[var(--dz-muted-foreground)]">line-clamp-3 (utility class)</p>
           <DzText class="line-clamp-3">
             DzText exposes a single-line <strong>truncate</strong> prop. For multi-line clamping,
             pass a Tailwind <code>line-clamp-{n}</code> utility — the class falls through to the
@@ -276,7 +276,7 @@ export const Accessibility: Story = {
     components: { DzText },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Using the correct semantic element improves screen reader experience.
           Use &lt;label&gt; for form labels, &lt;strong&gt; for importance, &lt;em&gt; for emphasis.
         </p>
@@ -330,17 +330,17 @@ export const RealWorldFormHelpers: Story = {
       <div class="max-w-sm space-y-4">
         <div class="space-y-1">
           <DzText as="label" weight="medium" size="sm">Username</DzText>
-          <div class="border rounded px-3 py-2 text-sm">johndoe</div>
+          <div class="border border-[var(--dz-border)] rounded px-3 py-2 text-sm">johndoe</div>
           <DzText size="xs" tone="muted">Must be 3-20 characters, letters and numbers only.</DzText>
         </div>
         <div class="space-y-1">
           <DzText as="label" weight="medium" size="sm">Password</DzText>
-          <div class="border rounded px-3 py-2 text-sm">********</div>
+          <div class="border border-[var(--dz-border)] rounded px-3 py-2 text-sm">********</div>
           <DzText size="xs" tone="danger">Password must be at least 8 characters.</DzText>
         </div>
         <div class="space-y-1">
           <DzText as="label" weight="medium" size="sm">Email</DzText>
-          <div class="border border-green-300 rounded px-3 py-2 text-sm">john@example.com</div>
+          <div class="border border-[var(--dz-success-border)] rounded px-3 py-2 text-sm">john@example.com</div>
           <DzText size="xs" tone="success">Email is available.</DzText>
         </div>
       </div>

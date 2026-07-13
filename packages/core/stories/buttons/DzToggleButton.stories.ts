@@ -364,7 +364,7 @@ export const RealWorldToolbar: Story = {
       return { bold, italic, underline, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight }
     },
     template: `
-      <div class="inline-flex items-center gap-1 p-1 rounded-md border border-[var(--dz-colors-border,#e5e7eb)]">
+      <div class="inline-flex items-center gap-1 p-1 rounded-md border border-[var(--dz-border)]">
         <DzToggleButton v-model="bold" variant="ghost" size="sm" aria-label="Bold">
           <DzIcon :icon="Bold" size="sm" />
         </DzToggleButton>
@@ -374,7 +374,7 @@ export const RealWorldToolbar: Story = {
         <DzToggleButton v-model="underline" variant="ghost" size="sm" aria-label="Underline">
           <DzIcon :icon="Underline" size="sm" />
         </DzToggleButton>
-        <div class="w-px h-5 bg-[var(--dz-colors-border,#e5e7eb)] mx-1" />
+        <div class="w-px h-5 bg-[var(--dz-border)] mx-1" />
         <DzToggleButton :model-value="true" variant="ghost" size="sm" aria-label="Align left">
           <DzIcon :icon="AlignLeft" size="sm" />
         </DzToggleButton>

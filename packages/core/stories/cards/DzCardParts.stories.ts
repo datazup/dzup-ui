@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzCard compound sub-parts: DzCardHeader, DzCardBody, DzCardFooter.
@@ -25,6 +25,8 @@ const meta = {
     DzCardFooter,
   },
   tags: ['autodocs', 'status:stable'],
+  // Cards is the first family on the enforced a11y gate (TASK-DS-06).
+  parameters: { ...a11yError },
   argTypes: {
     padding: {
       control: 'select',
@@ -119,7 +121,9 @@ export const CompoundComposition: Story = {
           <DzCardFooter>
             <div class="relative">
               <p class="text-sm font-semibold">DzCardFooter</p>
-              <span class="absolute -top-2 -right-2 text-[10px] px-1 rounded bg-[var(--dz-warning)] text-[var(--dz-warning-foreground)]">footer</span>
+              <!-- --dz-warning is a mid-scale fill: --dz-warning-foreground on it is 3.51:1 in light.
+                   --dz-warning-solid is the darker fill that exists for exactly this pair (8.44:1). -->
+              <span class="absolute -top-2 -right-2 text-[10px] px-1 rounded bg-[var(--dz-warning-solid)] text-[var(--dz-warning-foreground)]">footer</span>
             </div>
           </DzCardFooter>
         </DzCard>
@@ -163,8 +167,7 @@ export const RealWorldCard: Story = {
             <div class="flex items-start justify-between gap-2">
               <p class="text-sm font-semibold leading-snug">{{ article.title }}</p>
               <span
-                class="shrink-0 text-[10px] px-2 py-0.5 rounded-full"
-                style="background: var(--dz-primary-subtle, var(--dz-muted)); color: var(--dz-primary);"
+                class="shrink-0 text-[10px] px-2 py-0.5 rounded-full bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]"
               >
                 {{ article.category }}
               </span>

@@ -270,7 +270,7 @@ export const Pinned: Story = {
       return { args, open }
     },
     template: `
-      <div class="relative border rounded-lg overflow-hidden" style="height: 420px; width: 100%;">
+      <div class="relative border border-[var(--dz-border)] rounded-lg overflow-hidden" style="height: 420px; width: 100%;">
         <p class="p-4 text-sm text-[var(--dz-muted-foreground)]">Scroll-anchored content. The dial stays pinned bottom-right.</p>
         <DzSpeedDial v-bind="args" v-model:open="open" position="bottom-right" aria-label="Page actions" />
       </div>

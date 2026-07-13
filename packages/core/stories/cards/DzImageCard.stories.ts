@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
 import { DzImageCard } from '../../src/components/cards'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzImageCard is a card component with a prominent image area at the top.
@@ -13,6 +13,8 @@ const meta = {
   title: 'Core/Cards/DzImageCard',
   component: DzImageCard,
   tags: ['autodocs', 'status:stable'],
+  // Cards is the first family on the enforced a11y gate (TASK-DS-06).
+  parameters: { ...a11yError },
   argTypes: {
     // Appearance
     variant: {
@@ -83,7 +85,7 @@ export const Default: Story = {
       <div class="max-w-sm">
         <DzImageCard v-bind="args">
           <h3 class="text-lg font-semibold">Mountain Landscape</h3>
-          <p class="text-sm text-gray-500 mt-1">A beautiful view of the Alps.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">A beautiful view of the Alps.</p>
         </DzImageCard>
       </div>
     `,
@@ -115,11 +117,11 @@ export const AllVariants: Story = {
       <div class="grid grid-cols-2 gap-6 max-w-2xl">
         <DzImageCard variant="elevated" :src="images.mountain" alt="Mountain">
           <h3 class="text-lg font-semibold">Elevated</h3>
-          <p class="text-sm text-gray-500 mt-1">Card with shadow.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Card with shadow.</p>
         </DzImageCard>
         <DzImageCard variant="outlined" :src="images.city" alt="City">
           <h3 class="text-lg font-semibold">Outlined</h3>
-          <p class="text-sm text-gray-500 mt-1">Card with border.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Card with border.</p>
         </DzImageCard>
       </div>
     `,
@@ -169,16 +171,16 @@ export const WithHeaderAndFooter: Story = {
         <DzImageCard :src="images.mountain" alt="Mountain landscape">
           <template #header>
             <div class="flex items-center justify-between">
-              <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Featured</span>
-              <span class="text-xs text-gray-400">March 2026</span>
+              <span class="text-xs font-medium uppercase tracking-wider text-[var(--dz-muted-foreground)]">Featured</span>
+              <span class="text-xs text-[var(--dz-muted-foreground)]">March 2026</span>
             </div>
           </template>
           <h3 class="text-lg font-semibold">Mountain Adventure</h3>
-          <p class="text-sm text-gray-500 mt-1">Explore the breathtaking mountain trails of the Swiss Alps.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Explore the breathtaking mountain trails of the Swiss Alps.</p>
           <template #footer>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-500">By John Doe</span>
-              <button class="text-sm font-medium text-blue-600 hover:underline">Read more</button>
+              <span class="text-sm text-[var(--dz-muted-foreground)]">By John Doe</span>
+              <button class="text-sm font-medium text-[var(--dz-primary-muted-foreground)] hover:underline">Read more</button>
             </div>
           </template>
         </DzImageCard>
@@ -202,8 +204,8 @@ export const WithOverlay: Story = {
       <div class="max-w-sm">
         <DzImageCard :src="images.ocean" alt="Ocean sunset">
           <template #overlay>
-            <div class="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/60 to-transparent">
-              <div class="text-white">
+            <div class="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-[var(--dz-scrim)] to-transparent">
+              <div class="text-[var(--dz-colors-neutral-50)]">
                 <h3 class="text-lg font-bold">Sunset Beach</h3>
                 <p class="text-sm opacity-80">Tropical paradise</p>
               </div>
@@ -231,20 +233,20 @@ export const WithSlots: Story = {
         <DzImageCard :src="images.forest" alt="Forest path">
           <template #overlay>
             <div class="absolute top-3 right-3">
-              <span class="inline-flex items-center rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-medium">
+              <span class="inline-flex items-center rounded-full bg-[var(--dz-card)] text-[var(--dz-card-foreground)] px-2.5 py-0.5 text-xs font-medium">
                 New
               </span>
             </div>
           </template>
           <template #header>
-            <span class="text-xs uppercase tracking-wider text-green-600 font-semibold">Nature</span>
+            <span class="text-xs uppercase tracking-wider text-[var(--dz-success-muted-foreground)] font-semibold">Nature</span>
           </template>
           <h3 class="text-lg font-semibold">Forest Paths</h3>
-          <p class="text-sm text-gray-500 mt-1">Discover hidden trails through ancient forests.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Discover hidden trails through ancient forests.</p>
           <template #footer>
             <div class="flex gap-2">
-              <button class="flex-1 rounded-md border px-3 py-1.5 text-sm font-medium">Save</button>
-              <button class="flex-1 rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white">Explore</button>
+              <button class="flex-1 rounded-md border border-[var(--dz-border)] px-3 py-1.5 text-sm font-medium">Save</button>
+              <button class="flex-1 rounded-md bg-[var(--dz-success)] px-3 py-1.5 text-sm font-medium text-[var(--dz-success-foreground)]">Explore</button>
             </div>
           </template>
         </DzImageCard>
@@ -293,7 +295,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Every DzImageCard requires a descriptive alt attribute for the image.
           Screen readers will announce the alt text. The card itself can receive
           an ID for ARIA references.
@@ -305,7 +307,7 @@ export const Accessibility: Story = {
             alt="Snow-capped mountain peaks with a clear blue sky, viewed from a hiking trail"
           >
             <h3 class="text-lg font-semibold">Descriptive Alt Text</h3>
-            <p class="text-sm text-gray-500 mt-1">The image has a detailed alt attribute for accessibility.</p>
+            <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">The image has a detailed alt attribute for accessibility.</p>
           </DzImageCard>
         </div>
       </div>
@@ -328,40 +330,40 @@ export const RealWorldProductGrid: Story = {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <DzImageCard :src="images.mountain" alt="Mountain hiking boots" aspect-ratio="4/3">
           <template #header>
-            <span class="text-xs uppercase tracking-wider text-blue-600 font-semibold">Outdoor</span>
+            <span class="text-xs uppercase tracking-wider text-[var(--dz-primary-muted-foreground)] font-semibold">Outdoor</span>
           </template>
           <h3 class="font-semibold">Hiking Boots</h3>
-          <p class="text-sm text-gray-500 mt-1">Waterproof and durable.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Waterproof and durable.</p>
           <template #footer>
             <div class="flex items-center justify-between">
               <span class="font-bold">$149.99</span>
-              <button class="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white">Add to Cart</button>
+              <button class="rounded-md bg-[var(--dz-primary)] px-3 py-1.5 text-sm font-medium text-[var(--dz-primary-foreground)]">Add to Cart</button>
             </div>
           </template>
         </DzImageCard>
         <DzImageCard :src="images.forest" alt="Trail running shoes" aspect-ratio="4/3">
           <template #header>
-            <span class="text-xs uppercase tracking-wider text-green-600 font-semibold">Running</span>
+            <span class="text-xs uppercase tracking-wider text-[var(--dz-success-muted-foreground)] font-semibold">Running</span>
           </template>
           <h3 class="font-semibold">Trail Runners</h3>
-          <p class="text-sm text-gray-500 mt-1">Lightweight and grippy.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Lightweight and grippy.</p>
           <template #footer>
             <div class="flex items-center justify-between">
               <span class="font-bold">$129.99</span>
-              <button class="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white">Add to Cart</button>
+              <button class="rounded-md bg-[var(--dz-primary)] px-3 py-1.5 text-sm font-medium text-[var(--dz-primary-foreground)]">Add to Cart</button>
             </div>
           </template>
         </DzImageCard>
         <DzImageCard :src="images.ocean" alt="Beach sandals" aspect-ratio="4/3">
           <template #header>
-            <span class="text-xs uppercase tracking-wider text-orange-600 font-semibold">Casual</span>
+            <span class="text-xs uppercase tracking-wider text-[var(--dz-colors-orange-600)] font-semibold">Casual</span>
           </template>
           <h3 class="font-semibold">Beach Sandals</h3>
-          <p class="text-sm text-gray-500 mt-1">Perfect for summer.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">Perfect for summer.</p>
           <template #footer>
             <div class="flex items-center justify-between">
               <span class="font-bold">$49.99</span>
-              <button class="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white">Add to Cart</button>
+              <button class="rounded-md bg-[var(--dz-primary)] px-3 py-1.5 text-sm font-medium text-[var(--dz-primary-foreground)]">Add to Cart</button>
             </div>
           </template>
         </DzImageCard>

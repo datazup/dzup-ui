@@ -141,7 +141,7 @@ export const ResponsiveColumns: Story = {
     },
     template: `
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Resize the viewport: 1 column on mobile, 2 from <code>sm</code>, 3 from <code>lg</code>.
         </p>
         <DzDescriptions
@@ -216,7 +216,7 @@ export const Parts: Story = {
     components: { DzDescriptions, DzDescriptionsItem },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           <code>DzDescriptionsItem</code> is the composable sub-part. Each item
           renders a grouped <code>&lt;dt&gt;</code> (label) / <code>&lt;dd&gt;</code>
           (value) pair and inherits size, layout, and bordered density from the

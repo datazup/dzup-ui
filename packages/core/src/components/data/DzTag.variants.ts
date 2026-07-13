@@ -46,18 +46,18 @@ export const tagVariants = tv({
 
   compoundVariants: [
     // ── Solid + tone ──
-    { variant: 'solid', tone: 'primary', class: 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]' },
+    { variant: 'solid', tone: 'primary', class: 'bg-[var(--dz-primary-solid)] text-[var(--dz-primary-foreground)]' },
     { variant: 'solid', tone: 'neutral', class: 'bg-[var(--dz-foreground)] text-[var(--dz-background)]' },
-    { variant: 'solid', tone: 'success', class: 'bg-[var(--dz-success)] text-[var(--dz-success-foreground)]' },
+    { variant: 'solid', tone: 'success', class: 'bg-[var(--dz-success-solid)] text-[var(--dz-success-foreground)]' },
     { variant: 'solid', tone: 'warning', class: 'bg-[var(--dz-warning-solid)] text-[var(--dz-warning-foreground)]' },
-    { variant: 'solid', tone: 'danger', class: 'bg-[var(--dz-danger)] text-[var(--dz-danger-foreground)]' },
-    { variant: 'solid', tone: 'info', class: 'bg-[var(--dz-info)] text-[var(--dz-info-foreground)]' },
+    { variant: 'solid', tone: 'danger', class: 'bg-[var(--dz-danger-solid)] text-[var(--dz-danger-foreground)]' },
+    { variant: 'solid', tone: 'info', class: 'bg-[var(--dz-info-solid)] text-[var(--dz-info-foreground)]' },
 
     // ── Outline + tone ──
     {
       variant: 'outline',
       tone: 'primary',
-      class: 'border-[var(--dz-primary)] text-[var(--dz-primary)]',
+      class: 'border-[var(--dz-primary-solid)] text-[var(--dz-primary-muted-foreground)]',
     },
     {
       variant: 'outline',
@@ -67,25 +67,25 @@ export const tagVariants = tv({
     {
       variant: 'outline',
       tone: 'success',
-      class: 'border-[var(--dz-success)] text-[var(--dz-success)]',
+      class: 'border-[var(--dz-success-solid)] text-[var(--dz-success-muted-foreground)]',
     },
     {
       variant: 'outline',
       tone: 'warning',
-      class: 'border-[var(--dz-warning)] text-[var(--dz-warning)]',
+      class: 'border-[var(--dz-warning)] text-[var(--dz-warning-muted-foreground)]',
     },
     {
       variant: 'outline',
       tone: 'danger',
-      class: 'border-[var(--dz-danger)] text-[var(--dz-danger)]',
+      class: 'border-[var(--dz-danger-solid)] text-[var(--dz-danger-muted-foreground)]',
     },
-    { variant: 'outline', tone: 'info', class: 'border-[var(--dz-info)] text-[var(--dz-info)]' },
+    { variant: 'outline', tone: 'info', class: 'border-[var(--dz-info-solid)] text-[var(--dz-info-muted-foreground)]' },
 
     // ── Subtle + tone ──
     {
       variant: 'subtle',
       tone: 'primary',
-      class: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]',
+      class: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]',
     },
     {
       variant: 'subtle',
@@ -95,19 +95,19 @@ export const tagVariants = tv({
     {
       variant: 'subtle',
       tone: 'success',
-      class: 'bg-[var(--dz-success-muted)] text-[var(--dz-success)]',
+      class: 'bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)]',
     },
     {
       variant: 'subtle',
       tone: 'warning',
-      class: 'bg-[var(--dz-warning-muted)] text-[var(--dz-warning)]',
+      class: 'bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)]',
     },
     {
       variant: 'subtle',
       tone: 'danger',
-      class: 'bg-[var(--dz-danger-muted)] text-[var(--dz-danger)]',
+      class: 'bg-[var(--dz-danger-muted)] text-[var(--dz-danger-muted-foreground)]',
     },
-    { variant: 'subtle', tone: 'info', class: 'bg-[var(--dz-info-muted)] text-[var(--dz-info)]' },
+    { variant: 'subtle', tone: 'info', class: 'bg-[var(--dz-info-muted)] text-[var(--dz-info-muted-foreground)]' },
   ],
 
   defaultVariants: {

@@ -57,17 +57,31 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
 
   /* ── Primary ──
    * Per-intent state set (shared across every intent below):
-   *   {intent}            solid fill            (shade 500)
-   *   {intent}-foreground guaranteed-legible text on the solid fill
-   *   {intent}-hover      solid fill, hovered   (shade 600)
-   *   {intent}-active     solid fill, pressed   (shade 700)
+   *   {intent}            the intent color      (shade 500) — fills, borders, accents
+   *   {intent}-foreground guaranteed-legible text on the SOLID fill
+   *   {intent}-hover      the intent color, hovered (shade 600)
+   *   {intent}-active     the intent color, pressed (shade 700)
+   *   {intent}-solid      AA-safe solid fill    — put {intent}-foreground on THIS
+   *   {intent}-solid-hover  the solid fill, hovered
    *   {intent}-muted      subtle tinted bg      (shade 100) — badges, alerts
    *   {intent}-muted-foreground emphasis text on the subtle bg (shade 700)
-   *   {intent}-border     intent-tinted border for subtle/outline containers */
+   *   {intent}-border     intent-tinted border for subtle/outline containers
+   *
+   * `-solid` / `-solid-hover` (TASK-DS-10) exist so every intent exposes the SAME
+   * state set. For five intents they resolve to the same shades as `{intent}` /
+   * `{intent}-hover`; `warning` is the one intent whose legible fill is a lighter
+   * shade (see its block below). Components now read `{intent}-solid` uniformly and
+   * no longer branch on `tone === 'warning'`.
+   *
+   * `-active` is a pressed SURFACE color, not a text-bearing fill: nothing puts
+   * `{intent}-foreground` on it, and for `warning` it could not legibly carry it.
+   * The contrast gate asserts the `-solid` pair, which is what components render. */
   '--dz-primary': 'var(--dz-colors-primary-500)',
   '--dz-primary-foreground': 'oklch(1 0 0)',
   '--dz-primary-hover': 'var(--dz-colors-primary-600)',
   '--dz-primary-active': 'var(--dz-colors-primary-700)',
+  '--dz-primary-solid': 'var(--dz-colors-primary-500)',
+  '--dz-primary-solid-hover': 'var(--dz-colors-primary-600)',
   '--dz-primary-muted': 'var(--dz-colors-primary-100)',
   '--dz-primary-muted-foreground': 'var(--dz-colors-primary-700)',
   '--dz-primary-border': 'var(--dz-colors-primary-200)',
@@ -77,6 +91,8 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-secondary-foreground': 'oklch(1 0 0)',
   '--dz-secondary-hover': 'var(--dz-colors-secondary-600)',
   '--dz-secondary-active': 'var(--dz-colors-secondary-700)',
+  '--dz-secondary-solid': 'var(--dz-colors-secondary-500)',
+  '--dz-secondary-solid-hover': 'var(--dz-colors-secondary-600)',
   '--dz-secondary-muted': 'var(--dz-colors-secondary-100)',
   '--dz-secondary-muted-foreground': 'var(--dz-colors-secondary-700)',
   '--dz-secondary-border': 'var(--dz-colors-secondary-200)',
@@ -94,20 +110,30 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-success-foreground': 'oklch(1 0 0)',
   '--dz-success-hover': 'var(--dz-colors-success-600)',
   '--dz-success-active': 'var(--dz-colors-success-700)',
+  '--dz-success-solid': 'var(--dz-colors-success-500)',
+  '--dz-success-solid-hover': 'var(--dz-colors-success-600)',
   '--dz-success-muted': 'var(--dz-colors-success-100)',
   '--dz-success-muted-foreground': 'var(--dz-colors-success-700)',
   '--dz-success-border': 'var(--dz-colors-success-200)',
 
   /* ── Status: Warning ──
-   * `--dz-warning` stays at shade 500 so it remains legible as a text/border
-   * color on light surfaces. Solid fills (e.g. warning buttons) need a bright,
-   * clearly-yellow surface with dark text instead of a dark fill, so they use
-   * the dedicated `--dz-warning-solid` pair. */
+   * The one intent whose legible solid fill is a LIGHTER shade than its intent
+   * color. `--dz-warning` stays at shade 500 so it remains a usable border/accent
+   * on light surfaces, but near-black text on shade 500 measures only 3.51:1 —
+   * below AA. A warning button therefore fills with shade 300 (8.44:1) and hovers
+   * to 400 (5.87:1). Since TASK-DS-10 those live under the same `-solid` /
+   * `-solid-hover` names every other intent uses, so nothing branches on warning.
+   *
+   * The ramp affords exactly two AA-passing fill steps under `--dz-warning-foreground`:
+   * there is no shade between 400 (5.87:1) and 500 (3.51:1), so a third, darker
+   * pressed step is not available at AA. `-solid-active` therefore does not exist
+   * for any intent — the uniform fill set is `-solid` + `-solid-hover`. */
   '--dz-warning': 'var(--dz-colors-warning-500)',
   '--dz-warning-foreground': 'var(--dz-colors-neutral-900)',
+  '--dz-warning-hover': 'var(--dz-colors-warning-600)',
+  '--dz-warning-active': 'var(--dz-colors-warning-500)',
   '--dz-warning-solid': 'var(--dz-colors-warning-300)',
   '--dz-warning-solid-hover': 'var(--dz-colors-warning-400)',
-  '--dz-warning-active': 'var(--dz-colors-warning-500)',
   '--dz-warning-muted': 'var(--dz-colors-warning-100)',
   '--dz-warning-muted-foreground': 'var(--dz-colors-warning-700)',
   '--dz-warning-border': 'var(--dz-colors-warning-300)',
@@ -117,6 +143,8 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-danger-foreground': 'oklch(1 0 0)',
   '--dz-danger-hover': 'var(--dz-colors-danger-600)',
   '--dz-danger-active': 'var(--dz-colors-danger-700)',
+  '--dz-danger-solid': 'var(--dz-colors-danger-500)',
+  '--dz-danger-solid-hover': 'var(--dz-colors-danger-600)',
   '--dz-danger-muted': 'var(--dz-colors-danger-100)',
   '--dz-danger-muted-foreground': 'var(--dz-colors-danger-700)',
   '--dz-danger-border': 'var(--dz-colors-danger-200)',
@@ -126,6 +154,8 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-info-foreground': 'oklch(1 0 0)',
   '--dz-info-hover': 'var(--dz-colors-info-600)',
   '--dz-info-active': 'var(--dz-colors-info-700)',
+  '--dz-info-solid': 'var(--dz-colors-info-500)',
+  '--dz-info-solid-hover': 'var(--dz-colors-info-600)',
   '--dz-info-muted': 'var(--dz-colors-info-100)',
   '--dz-info-muted-foreground': 'var(--dz-colors-info-700)',
   '--dz-info-border': 'var(--dz-colors-info-200)',

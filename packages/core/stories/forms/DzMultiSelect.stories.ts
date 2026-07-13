@@ -273,7 +273,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-sm">
         <DzMultiSelect :items="items" v-model="selected" placeholder="Choose frameworks..." />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -305,7 +305,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">Tab to focus, type to filter, arrow keys to navigate, Enter to select, Backspace to remove last tag.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus, type to filter, arrow keys to navigate, Enter to select, Backspace to remove last tag.</p>
         <DzMultiSelect :items="items" placeholder="Keyboard navigable" aria-label="Framework selection" />
       </div>
     `,

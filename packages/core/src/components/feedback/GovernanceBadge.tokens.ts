@@ -20,9 +20,9 @@ import type { CoordinatorPattern } from './GovernanceBadge.types.ts'
  */
 export const GOVERNANCE_PATTERN_TOKENS: Readonly<Record<CoordinatorPattern, string>>
   = Object.freeze({
-    supervisor: 'var(--dz-primary)',
-    contract_net: 'var(--dz-info)',
+    supervisor: 'var(--dz-primary-solid)',
+    contract_net: 'var(--dz-info-solid)',
     blackboard: 'var(--dz-warning-solid)',
-    peer_to_peer: 'var(--dz-success)',
+    peer_to_peer: 'var(--dz-success-solid)',
     council: 'var(--dz-foreground)',
   })

@@ -339,8 +339,8 @@ export const Interactive: Story = {
           <DzInput v-model="domain" placeholder="my-site" />
           <template #suffix>.com</template>
         </DzInputGroup>
-        <p class="text-sm text-gray-500">
-          Full URL: <code class="bg-gray-100 px-1 rounded">https://{{ domain || 'my-site' }}.com</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Full URL: <code class="bg-[var(--dz-muted)] px-1 rounded">https://{{ domain || 'my-site' }}.com</code>
         </p>
       </div>
     `,
@@ -366,7 +366,7 @@ export const Accessibility: Story = {
     components: { DzInputGroup, DzInput },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzInputGroup renders addons as visual labels connected to the input.
           Use aria-label on the input for screen reader context.
         </p>

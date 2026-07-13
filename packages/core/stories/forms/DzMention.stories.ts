@@ -163,9 +163,9 @@ export const UserMentions: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Type <strong>@</strong> to mention a teammate.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type <strong>@</strong> to mention a teammate.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="Write a comment… (@ to mention)" aria-label="Comment" />
-        <p class="text-sm text-gray-500">Value: <code>{{ value || '—' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <code>{{ value || '—' }}</code></p>
       </div>
     `,
   }),
@@ -203,9 +203,9 @@ export const Hashtags: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Type <strong>#</strong> to add a label reference.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type <strong>#</strong> to add a label reference.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="Describe the issue… (# to tag)" aria-label="Issue body" />
-        <p class="text-sm text-gray-500">Value: <code>{{ value || '—' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <code>{{ value || '—' }}</code></p>
       </div>
     `,
   }),
@@ -285,7 +285,7 @@ export const AsyncSearch: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Type <strong>@</strong> — options resolve after a simulated network delay.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type <strong>@</strong> — options resolve after a simulated network delay.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="@ to search people…" aria-label="Comment" />
       </div>
     `,
@@ -312,9 +312,9 @@ export const MultiTrigger: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Use <strong>@</strong> for people and <strong>#</strong> for labels.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Use <strong>@</strong> for people and <strong>#</strong> for labels.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="@ someone or # a label…" aria-label="Comment" />
-        <p class="text-sm text-gray-500">Value: <code>{{ value || '—' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <code>{{ value || '—' }}</code></p>
       </div>
     `,
   }),

@@ -80,7 +80,7 @@ export const Default: Story = {
               <template #default="{ collapsed }">
                 <div class="flex items-center gap-2 px-4 py-3">
                   <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0" />
-                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-header-text)]">
+                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">
                     Datazup
                   </span>
                 </div>
@@ -132,7 +132,7 @@ export const Default: Story = {
               <template #default="{ collapsed }">
                 <div class="flex items-center gap-2 px-4 py-3">
                   <div class="w-7 h-7 rounded-full bg-[var(--dz-muted)] shrink-0" />
-                  <span v-if="!collapsed" class="text-sm text-[var(--dz-sidebar-footer-text)]">
+                  <span v-if="!collapsed" class="text-sm text-[var(--dz-sidebar-foreground)]">
                     ninel@datazup.com
                   </span>
                 </div>
@@ -179,7 +179,7 @@ export const CompoundComposition: Story = {
                 <template #default="{ collapsed }">
                   <div class="flex items-center gap-2 px-4 py-3">
                     <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0" />
-                    <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-header-text)]">App</span>
+                    <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">App</span>
                   </div>
                 </template>
               </DzSidebarHeader>
@@ -202,7 +202,7 @@ export const CompoundComposition: Story = {
                 <template #default="{ collapsed }">
                   <div class="flex items-center gap-2 px-4 py-3">
                     <div class="w-6 h-6 rounded-full bg-[var(--dz-muted)] shrink-0" />
-                    <span v-if="!collapsed" class="text-xs text-[var(--dz-sidebar-footer-text)]">User</span>
+                    <span v-if="!collapsed" class="text-xs text-[var(--dz-sidebar-foreground)]">User</span>
                   </div>
                 </template>
               </DzSidebarFooter>
@@ -259,7 +259,7 @@ export const RealWorld: Story = {
                   <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0 flex items-center justify-center text-[var(--dz-primary-foreground)] font-bold text-xs">
                     D
                   </div>
-                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-header-text)]">
+                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">
                     Datazup
                   </span>
                 </div>
@@ -321,7 +321,7 @@ export const RealWorld: Story = {
                     N
                   </div>
                   <div v-if="!collapsed" class="min-w-0">
-                    <p class="text-xs font-medium text-[var(--dz-sidebar-footer-text)] truncate">Ninel Hodzic</p>
+                    <p class="text-xs font-medium text-[var(--dz-sidebar-foreground)] truncate">Ninel Hodzic</p>
                     <p class="text-xs text-[var(--dz-muted-foreground)] truncate">ninel@datazup.com</p>
                   </div>
                 </div>

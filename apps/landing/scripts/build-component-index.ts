@@ -83,9 +83,15 @@ function toStoryId(title: string): string {
  * Extract the `Core/<Family>/<DzName>` title from a story module's source, or
  * `null` when it is not a single-component story (a "…Parts" bundle, a gallery,
  * or a composition). Matches the first `title:` string literal.
+ *
+ * A family may nest a sub-group before the component segment — e.g.
+ * `Core/Feedback/App-Specific/DzRunStatusBadge`. The component is always the
+ * LAST segment, so intermediate groups are matched non-greedily rather than
+ * assumed absent (assuming they were absent silently dropped two real
+ * components out of the palette).
  */
 function readComponentTitle(source: string): { name: string; title: string } | null {
-  const match = source.match(/title:\s*['"](Core\/[A-Za-z]+\/(Dz[A-Za-z0-9]+))['"]/)
+  const match = source.match(/title:\s*['"](Core\/(?:[A-Za-z0-9-]+\/)+?(Dz[A-Za-z0-9]+))['"]/)
   if (!match) return null
   const title = match[1]
   const name = match[2]

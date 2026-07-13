@@ -323,11 +323,11 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-3">
-        <p class="text-sm text-gray-500">Type a 6-digit code. The "complete" event fires when all digits are filled.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type a 6-digit code. The "complete" event fires when all digits are filled.</p>
         <DzOtpInput v-model="value" :length="6" @complete="handleComplete" />
-        <div class="text-sm text-gray-500 space-y-1">
-          <p>Value: <code class="bg-gray-100 px-1 rounded">{{ value || '(empty)' }}</code></p>
-          <p>Completed: <code class="bg-gray-100 px-1 rounded">{{ completed ? completedValue : 'No' }}</code></p>
+        <div class="text-sm text-[var(--dz-muted-foreground)] space-y-1">
+          <p>Value: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ value || '(empty)' }}</code></p>
+          <p>Completed: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ completed ? completedValue : 'No' }}</code></p>
         </div>
       </div>
     `,
@@ -359,7 +359,7 @@ export const Accessibility: Story = {
     components: { DzOtpInput },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tab to focus the first cell. Type a digit to advance to the next cell.
           Backspace moves back. Paste a full code to auto-fill all cells.
           Built on Reka UI PinInput for robust keyboard and screen reader support.
@@ -415,7 +415,7 @@ export const RealWorldEmailVerification: Story = {
       <div class="max-w-sm text-center space-y-4">
         <div>
           <p class="font-semibold text-lg">Verify your email</p>
-          <p class="text-sm text-gray-500 mt-1">
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-1">
             We sent a 6-digit code to user@example.com
           </p>
         </div>
@@ -425,11 +425,11 @@ export const RealWorldEmailVerification: Story = {
           :error="code.length === 6 && !verified ? 'Incorrect code. Try 123456.' : undefined"
           @complete="handleComplete"
         />
-        <div v-if="verified" class="text-sm text-green-600 font-medium">
+        <div v-if="verified" class="text-sm text-[var(--dz-success-muted-foreground)] font-medium">
           Email verified successfully!
         </div>
-        <p class="text-xs text-gray-400">
-          Didn't receive the code? <a href="#" class="text-blue-500 underline">Resend</a>
+        <p class="text-xs text-[var(--dz-muted-foreground)]">
+          Didn't receive the code? <a href="#" class="text-[var(--dz-primary-muted-foreground)] underline">Resend</a>
         </p>
       </div>
     `,
@@ -448,7 +448,7 @@ export const RealWorldPinEntry: Story = {
       <div class="max-w-xs text-center space-y-4">
         <p class="font-semibold">Enter your PIN</p>
         <DzOtpInput :length="4" type="number" mask aria-label="PIN" />
-        <p class="text-xs text-gray-400">Your 4-digit security PIN</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)]">Your 4-digit security PIN</p>
       </div>
     `,
   }),

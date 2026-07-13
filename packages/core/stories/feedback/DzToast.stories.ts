@@ -90,7 +90,7 @@ export const Default: Story = {
         <div class="flex flex-wrap gap-3">
           <button v-for="tone in tones"
             :key="tone"
-            class="px-3 py-1.5 text-sm border rounded capitalize"
+            class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded capitalize"
             @click="fire(tone)">
             {{ tone }}
           </button>
@@ -180,13 +180,13 @@ export const ViewportPositions: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzToastViewport supports six positions. Click a button to see a toast
           at that position (requires context from DzToastProvider).
         </p>
         <div class="grid grid-cols-3 gap-2 max-w-md">
           <div v-for="pos in ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']" :key="pos"
-            class="px-3 py-2 text-xs border rounded text-center capitalize">
+            class="px-3 py-2 text-xs border border-[var(--dz-border)] rounded text-center capitalize">
             {{ pos }}
           </div>
         </div>
@@ -224,8 +224,8 @@ export const Interactive: Story = {
         },
         template: `
           <div class="flex gap-3">
-            <button class="px-3 py-1.5 text-sm border rounded" @click="addToast">Add Toast</button>
-            <button class="px-3 py-1.5 text-sm border rounded" @click="clearAll">Clear All</button>
+            <button class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded" @click="addToast">Add Toast</button>
+            <button class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded" @click="clearAll">Clear All</button>
           </div>
         `,
       },
@@ -233,7 +233,7 @@ export const Interactive: Story = {
     template: `
       <DzToastProvider :duration="4000" :max-toasts="3">
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">Max 3 visible toasts, 4s auto-dismiss.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Max 3 visible toasts, 4s auto-dismiss.</p>
           <ToastControls />
         </div>
         <DzToastViewport position="bottom-right" />
@@ -271,7 +271,7 @@ export const InteractiveDismiss: Story = {
         template: `
           <button
             type="button"
-            class="px-3 py-1.5 text-sm border rounded"
+            class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded"
             @click="show"
           >
             Show toast
@@ -282,7 +282,7 @@ export const InteractiveDismiss: Story = {
     template: `
       <DzToastProvider :duration="5000">
         <div class="space-y-4 min-h-[120px]">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             Click "Show toast" to display a success toast, then dismiss it with the
             close control (it also auto-dismisses after 5s).
           </p>
@@ -340,10 +340,10 @@ export const WithSlots: Story = {
           <DzToast :toast="toast">
             <template #default="{ toast: t }">
               <div class="flex gap-3 items-start flex-1 pl-2">
-                <div class="w-8 h-8 rounded-full bg-blue-500 shrink-0 flex items-center justify-center text-white text-xs font-bold">A</div>
+                <div class="w-8 h-8 rounded-full bg-[var(--dz-primary)] shrink-0 flex items-center justify-center text-[var(--dz-primary-foreground)] text-xs font-bold">A</div>
                 <div>
                   <p class="text-sm font-medium">{{ t.title }}</p>
-                  <p class="text-xs text-gray-500">{{ t.description }}</p>
+                  <p class="text-xs text-[var(--dz-muted-foreground)]">{{ t.description }}</p>
                 </div>
               </div>
             </template>
@@ -374,7 +374,7 @@ export const Accessibility: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4 max-w-sm">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             DzToast uses Reka UI Toast primitives which handle aria-live regions,
             screen reader announcements, and keyboard navigation (Escape to dismiss)
             automatically.

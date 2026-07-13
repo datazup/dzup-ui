@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
+    // No rootDir: tooling ships as source (its exports point at ./src/*.ts,
+    // there is no build step) and the DESIGN.md gate imports @dzup-ui/tokens
+    // source directly, which lives outside src/.
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"],

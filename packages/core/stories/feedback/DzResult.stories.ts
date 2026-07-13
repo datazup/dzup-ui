@@ -106,8 +106,8 @@ export const WithActions: Story = {
       <div class="max-w-md">
         <DzResult status="success" title="Payment Successful" description="Your order #12345 has been placed.">
           <template #actions>
-            <button class="px-4 py-2 text-sm font-medium border rounded">View Order</button>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Go Home</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">View Order</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Go Home</button>
           </template>
         </DzResult>
       </div>
@@ -129,13 +129,13 @@ export const WithSlots: Story = {
           <template #icon>
             <div class="text-6xl">&#10060;</div>
           </template>
-          <div class="text-sm text-gray-500 mt-3 p-3 bg-gray-50 rounded">
+          <div class="text-sm text-[var(--dz-muted-foreground)] mt-3 p-3 bg-[var(--dz-muted)] rounded">
             <p class="font-medium">Error details:</p>
             <code class="text-xs">ERR_NETWORK_TIMEOUT: Connection timed out after 30s</code>
           </div>
           <template #actions>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Retry</button>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Contact Support</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Retry</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Contact Support</button>
           </template>
         </DzResult>
       </div>
@@ -157,7 +157,7 @@ export const Interactive: Story = {
       <div class="space-y-6">
         <div class="flex gap-3">
           <button v-for="s in ['success', 'error', 'warning', 'info']" :key="s"
-            class="px-3 py-1.5 text-sm border rounded capitalize"
+            class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded capitalize"
             :class="{ 'font-bold': status === s }"
             @click="status = s">
             {{ s }}
@@ -179,7 +179,7 @@ export const Accessibility: Story = {
     components: { DzResult },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzResult uses role="status" and data-state for the current status.
           Screen readers announce the result when it appears dynamically.
         </p>
@@ -216,15 +216,15 @@ export const RealWorldPaymentConfirmation: Story = {
   render: () => ({
     components: { DzResult },
     template: `
-      <div class="max-w-md border rounded-lg p-6">
+      <div class="max-w-md border border-[var(--dz-border)] rounded-lg p-6">
         <DzResult
           status="success"
           title="Payment Received"
           description="Thank you! Your payment of $49.99 has been processed. A confirmation email will be sent shortly."
         >
           <template #actions>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Download Receipt</button>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Return to Dashboard</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Download Receipt</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Return to Dashboard</button>
           </template>
         </DzResult>
       </div>
@@ -248,8 +248,8 @@ export const RealWorldNotFound: Story = {
           description="The page you are looking for might have been removed or is temporarily unavailable."
         >
           <template #actions>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Go Home</button>
-            <button class="px-4 py-2 text-sm font-medium border rounded">Contact Support</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Go Home</button>
+            <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Contact Support</button>
           </template>
         </DzResult>
       </div>

@@ -275,7 +275,7 @@ export const Accessibility: Story = {
     components: { DzBreadcrumb, DzBreadcrumbItem, DzBreadcrumbSeparator },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The breadcrumb renders as a <code>&lt;nav&gt;</code> with <code>aria-label="Breadcrumb"</code>,
           containing an ordered list. The current page has <code>aria-current="page"</code>.
           Separators are marked <code>aria-hidden="true"</code>.

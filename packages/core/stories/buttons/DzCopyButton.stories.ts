@@ -20,7 +20,7 @@ const meta = {
     variant: {
       control: 'select',
       options: ['solid', 'outline', 'ghost', 'text', 'link'],
-      description: 'Visual style variant (fill / border treatment)',
+      description: 'Visual style variant (fill / border border-[var(--dz-border)] treatment)',
       table: { category: 'Appearance', defaultValue: { summary: 'outline' } },
     },
     tone: {

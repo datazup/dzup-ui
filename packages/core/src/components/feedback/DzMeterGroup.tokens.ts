@@ -22,11 +22,11 @@ export const meterGroupTokens = {
   /** Semantic tone colors (mirrors DzProgress tone mapping) */
   tones: {
     neutral: 'var(--dz-foreground)',
-    primary: 'var(--dz-primary)',
-    success: 'var(--dz-success)',
+    primary: 'var(--dz-primary-solid)',
+    success: 'var(--dz-success-solid)',
     warning: 'var(--dz-warning-solid)',
-    danger: 'var(--dz-danger)',
-    info: 'var(--dz-info)',
+    danger: 'var(--dz-danger-solid)',
+    info: 'var(--dz-info-solid)',
   },
 
   /**
@@ -34,11 +34,11 @@ export const meterGroupTokens = {
    * Each entry references a semantic tone token (no raw colors).
    */
   palette: [
-    'var(--dz-primary)',
-    'var(--dz-info)',
-    'var(--dz-success)',
+    'var(--dz-primary-solid)',
+    'var(--dz-info-solid)',
+    'var(--dz-success-solid)',
     'var(--dz-warning-solid)',
-    'var(--dz-danger)',
+    'var(--dz-danger-solid)',
     'var(--dz-foreground)',
   ],
 
@@ -61,11 +61,11 @@ export const meterGroupTokens = {
 /** Tone-to-token map for segment fills */
 export const meterGroupToneColors: Record<string, string> = {
   neutral: 'var(--dz-foreground)',
-  primary: 'var(--dz-primary)',
-  success: 'var(--dz-success)',
+  primary: 'var(--dz-primary-solid)',
+  success: 'var(--dz-success-solid)',
   warning: 'var(--dz-warning-solid)',
-  danger: 'var(--dz-danger)',
-  info: 'var(--dz-info)',
+  danger: 'var(--dz-danger-solid)',
+  info: 'var(--dz-info-solid)',
 }
 
 /** Default cycling palette (token references) */

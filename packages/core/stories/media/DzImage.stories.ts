@@ -113,7 +113,7 @@ export const AllFitModes: Story = {
       <div class="grid grid-cols-2 gap-6 max-w-2xl">
         <div v-for="fit in ['cover', 'contain', 'fill', 'none']" :key="fit">
           <p class="text-sm font-medium mb-2 capitalize">{{ fit }}</p>
-          <div class="w-full h-48 border rounded overflow-hidden">
+          <div class="w-full h-48 border border-[var(--dz-border)] rounded overflow-hidden">
             <DzImage
               src="https://picsum.photos/seed/fit/600/400"
               :alt="'Fit mode: ' + fit"
@@ -170,7 +170,7 @@ export const LazyLoading: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           This image uses <code>loading="lazy"</code>. Scroll down to trigger loading.
         </p>
         <div class="w-80">
@@ -199,7 +199,7 @@ export const WithFallback: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Primary <code>src</code> is invalid; the <code>fallback</code> URL is displayed instead.
         </p>
         <div class="w-80">
@@ -227,7 +227,7 @@ export const ErrorState: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Both primary and fallback fail, so the error slot content is rendered.
         </p>
         <div class="w-80 h-48">
@@ -252,7 +252,7 @@ export const WithSlots: Story = {
           <p class="text-sm font-medium mb-2">Custom Error Slot</p>
           <DzImage src="https://invalid-url.test/broken.jpg" alt="Custom error">
             <template #error>
-              <div class="flex flex-col items-center justify-center gap-2 text-gray-400 h-full">
+              <div class="flex flex-col items-center justify-center gap-2 text-[var(--dz-muted-foreground)] h-full">
                 <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126Z" />
                 </svg>
@@ -328,16 +328,16 @@ export const Interactive: Story = {
         <div class="w-80">
           <DzImage :src="src" alt="Interactive demo" @load="onLoad" @error="onError" />
         </div>
-        <p class="text-sm text-gray-500">Status: <strong>{{ status }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Status: <strong>{{ status }}</strong></p>
         <div class="flex gap-2">
           <button
-            class="px-3 py-1 text-sm rounded border"
+            class="px-3 py-1 text-sm rounded border border-[var(--dz-border)]"
             @click="breakImage"
           >
             Break Image
           </button>
           <button
-            class="px-3 py-1 text-sm rounded border"
+            class="px-3 py-1 text-sm rounded border border-[var(--dz-border)]"
             @click="fixImage"
           >
             Fix Image
@@ -390,7 +390,7 @@ export const Accessibility: Story = {
     components: { DzImage },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzImage requires an <code>alt</code> prop. The root element supports
           <code>aria-label</code> and sets <code>data-state</code> to
           "loading", "loaded", or "error" for styling hooks.
@@ -424,7 +424,7 @@ export const RealWorldPhotoCard: Story = {
         />
         <div class="p-4 space-y-1">
           <h3 class="font-semibold text-sm">Mountain Cabin Retreat</h3>
-          <p class="text-xs text-gray-500">A cozy getaway nestled in the Rockies.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">A cozy getaway nestled in the Rockies.</p>
         </div>
       </div>
     `,

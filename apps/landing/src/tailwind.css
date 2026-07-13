@@ -193,6 +193,15 @@ html {
   opacity: 0.04;
 }
 
+/* Nav dropdown item (TASK-DS-12). Global, not scoped: DzDropdownMenuContent
+   portals its items to <body>, so a `<style scoped>` selector in TopNav.vue
+   cannot be relied on to reach them. Core gives menu items a focus *background*;
+   the landing's a11y bar asks for a visible focus ring, so add one. */
+.lp-menu-item:focus-visible {
+  outline: 2px solid var(--dz-ring);
+  outline-offset: -2px;
+}
+
 /* Surface card — the canonical refined panel with a glassy top highlight. */
 .lp-card {
   border: 1px solid var(--lp-hairline);

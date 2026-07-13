@@ -157,7 +157,7 @@ export const WithSteps: Story = {
     template: `
       <div class="space-y-4 w-[480px]">
         <DzRangeSlider v-model="range" :min="0" :max="100" :step="10" />
-        <p class="text-sm text-gray-500">Range: <strong>{{ range[0] }} - {{ range[1] }}</strong> (step: 10)</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Range: <strong>{{ range[0] }} - {{ range[1] }}</strong> (step: 10)</p>
       </div>
     `,
   }),
@@ -234,7 +234,7 @@ export const WithLabel: Story = {
     template: `
       <div class="space-y-4 w-[480px]">
         <DzRangeSlider v-model="range" tone="primary">Range</DzRangeSlider>
-        <p class="text-sm text-gray-500">{{ range[0] }} – {{ range[1] }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">{{ range[0] }} – {{ range[1] }}</p>
       </div>
     `,
   }),
@@ -273,7 +273,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 w-[480px]">
         <DzRangeSlider v-model="range" :min="0" :max="1000" :step="50" aria-label="Price range" />
-        <p class="text-sm text-gray-500">Price: <strong>\${{ range[0] }} - \${{ range[1] }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Price: <strong>\${{ range[0] }} - \${{ range[1] }}</strong></p>
       </div>
     `,
   }),
@@ -300,7 +300,7 @@ export const Accessibility: Story = {
     components: { DzRangeSlider },
     template: `
       <div class="space-y-4 w-[480px]">
-        <p class="text-sm text-gray-500">Tab to focus each thumb, arrow keys to adjust. Both thumbs are independently focusable.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus each thumb, arrow keys to adjust. Both thumbs are independently focusable.</p>
         <DzRangeSlider :model-value="[30, 70]" aria-label="Range selection" />
       </div>
     `,
@@ -322,7 +322,7 @@ export const RealWorldPriceFilter: Story = {
       <div class="w-[480px]">
         <label class="block text-sm font-medium mb-2">Price Range</label>
         <DzRangeSlider v-model="price" :min="0" :max="1000" :step="10" tone="primary" aria-label="Price filter" />
-        <div class="flex justify-between text-xs text-gray-400 mt-1">
+        <div class="flex justify-between text-xs text-[var(--dz-muted-foreground)] mt-1">
           <span>\${{ price[0] }}</span>
           <span>\${{ price[1] }}</span>
         </div>

@@ -88,15 +88,15 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <DzResizable v-bind="args" class="h-48 border rounded-lg" aria-label="Resizable panel demo">
+      <DzResizable v-bind="args" class="h-48 border border-[var(--dz-border)] rounded-lg" aria-label="Resizable panel demo">
         <DzResizablePanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-blue-50 text-blue-800 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4">
             Panel A (50%)
           </div>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-green-50 text-green-800 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-4">
             Panel B (50%)
           </div>
         </DzResizablePanel>
@@ -116,26 +116,26 @@ export const AllDirections: Story = {
     template: `
       <div class="space-y-6">
         <div>
-          <p class="text-xs text-gray-500 mb-2">direction="horizontal"</p>
-          <DzResizable direction="horizontal" class="h-40 border rounded-lg">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">direction="horizontal"</p>
+          <DzResizable direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg">
             <DzResizablePanel :default-size="50">
-              <div class="h-full flex items-center justify-center bg-blue-50 text-sm">Left</div>
+              <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm">Left</div>
             </DzResizablePanel>
             <DzResizableHandle with-handle />
             <DzResizablePanel :default-size="50">
-              <div class="h-full flex items-center justify-center bg-green-50 text-sm">Right</div>
+              <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm">Right</div>
             </DzResizablePanel>
           </DzResizable>
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">direction="vertical"</p>
-          <DzResizable direction="vertical" class="h-64 border rounded-lg">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">direction="vertical"</p>
+          <DzResizable direction="vertical" class="h-64 border border-[var(--dz-border)] rounded-lg">
             <DzResizablePanel :default-size="50">
-              <div class="h-full flex items-center justify-center bg-amber-50 text-sm">Top</div>
+              <div class="h-full flex items-center justify-center bg-[var(--dz-warning-muted)] text-sm">Top</div>
             </DzResizablePanel>
             <DzResizableHandle with-handle />
             <DzResizablePanel :default-size="50">
-              <div class="h-full flex items-center justify-center bg-purple-50 text-sm">Bottom</div>
+              <div class="h-full flex items-center justify-center bg-[var(--dz-colors-purple-50)] text-sm">Bottom</div>
             </DzResizablePanel>
           </DzResizable>
         </div>
@@ -153,17 +153,17 @@ export const ThreePanels: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable direction="horizontal" class="h-48 border rounded-lg">
+      <DzResizable direction="horizontal" class="h-48 border border-[var(--dz-border)] rounded-lg">
         <DzResizablePanel :default-size="25" :min-size="15">
-          <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2">Sidebar (25%)</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2">Sidebar (25%)</div>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="50" :min-size="30">
-          <div class="h-full flex items-center justify-center bg-white text-sm p-2">Main (50%)</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-card)] text-sm p-2">Main (50%)</div>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="25" :min-size="15">
-          <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2">Inspector (25%)</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm p-2">Inspector (25%)</div>
         </DzResizablePanel>
       </DzResizable>
     `,
@@ -180,16 +180,16 @@ export const MinMaxConstraints: Story = {
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">Left panel: min 20%, max 60%. Right panel: min 20%.</p>
-        <DzResizable direction="horizontal" class="h-40 border rounded-lg">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Left panel: min 20%, max 60%. Right panel: min 20%.</p>
+        <DzResizable direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg">
           <DzResizablePanel :default-size="40" :min-size="20" :max-size="60">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2">
               Constrained (20%-60%)
             </div>
           </DzResizablePanel>
           <DzResizableHandle with-handle />
           <DzResizablePanel :default-size="60" :min-size="20">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm p-2">
               Min 20%
             </div>
           </DzResizablePanel>
@@ -209,16 +209,16 @@ export const CollapsiblePanel: Story = {
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">Drag the left panel handle far enough to collapse it.</p>
-        <DzResizable direction="horizontal" class="h-48 border rounded-lg">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Drag the left panel handle far enough to collapse it.</p>
+        <DzResizable direction="horizontal" class="h-48 border border-[var(--dz-border)] rounded-lg">
           <DzResizablePanel :default-size="30" :min-size="15" collapsible :collapsed-size="0">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2">
               Collapsible Sidebar
             </div>
           </DzResizablePanel>
           <DzResizableHandle with-handle />
           <DzResizablePanel :default-size="70">
-            <div class="h-full flex items-center justify-center bg-white text-sm p-4">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-card)] text-sm p-4">
               Main Content
             </div>
           </DzResizablePanel>
@@ -242,15 +242,15 @@ export const Disabled: Story = {
       return { args }
     },
     template: `
-      <DzResizable v-bind="args" class="h-40 border rounded-lg">
+      <DzResizable v-bind="args" class="h-40 border border-[var(--dz-border)] rounded-lg">
         <DzResizablePanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-50 text-gray-400 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm p-4">
             Resizing disabled
           </div>
         </DzResizablePanel>
         <DzResizableHandle />
         <DzResizablePanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-50 text-gray-400 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm p-4">
             Resizing disabled
           </div>
         </DzResizablePanel>
@@ -269,14 +269,14 @@ export const HandleWithoutIndicator: Story = {
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">Handle without the visual drag indicator (with-handle=false).</p>
-        <DzResizable direction="horizontal" class="h-40 border rounded-lg">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Handle without the visual drag indicator (with-handle=false).</p>
+        <DzResizable direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg">
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm">Left</div>
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm">Left</div>
           </DzResizablePanel>
           <DzResizableHandle />
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm">Right</div>
+            <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm">Right</div>
           </DzResizablePanel>
         </DzResizable>
       </div>
@@ -293,19 +293,19 @@ export const NestedResizable: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable direction="horizontal" class="h-72 border rounded-lg">
+      <DzResizable direction="horizontal" class="h-72 border border-[var(--dz-border)] rounded-lg">
         <DzResizablePanel :default-size="30" :min-size="15">
-          <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2">Sidebar</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2">Sidebar</div>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="70">
           <DzResizable direction="vertical" class="h-full">
             <DzResizablePanel :default-size="60">
-              <div class="h-full flex items-center justify-center bg-white text-sm p-2">Editor</div>
+              <div class="h-full flex items-center justify-center bg-[var(--dz-card)] text-sm p-2">Editor</div>
             </DzResizablePanel>
             <DzResizableHandle with-handle />
             <DzResizablePanel :default-size="40">
-              <div class="h-full flex items-center justify-center bg-gray-50 text-sm p-2">Terminal</div>
+              <div class="h-full flex items-center justify-center bg-[var(--dz-muted)] text-sm p-2">Terminal</div>
             </DzResizablePanel>
           </DzResizable>
         </DzResizablePanel>
@@ -326,15 +326,15 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable direction="horizontal" class="h-48 border border-gray-700 rounded-lg">
+      <DzResizable direction="horizontal" class="h-48 border border-[var(--dz-colors-neutral-700)] rounded-lg">
         <DzResizablePanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-800 text-gray-200 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-colors-neutral-800)] text-[var(--dz-colors-neutral-200)] text-sm p-4">
             Left Panel
           </div>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-800 text-gray-200 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-colors-neutral-800)] text-[var(--dz-colors-neutral-200)] text-sm p-4">
             Right Panel
           </div>
         </DzResizablePanel>
@@ -356,18 +356,18 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Sizes: {{ sizes.map(s => Math.round(s) + '%').join(' | ') }}
         </p>
-        <DzResizable direction="horizontal" class="h-40 border rounded-lg" @layout-change="sizes = $event">
+        <DzResizable direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg" @layout-change="sizes = $event">
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2" data-testid="panel-a">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2" data-testid="panel-a">
               {{ Math.round(sizes[0]) }}%
             </div>
           </DzResizablePanel>
           <DzResizableHandle with-handle />
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2" data-testid="panel-b">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm p-2" data-testid="panel-b">
               {{ Math.round(sizes[1]) }}%
             </div>
           </DzResizablePanel>
@@ -406,15 +406,15 @@ export const RealWorldIDELayout: Story = {
   render: () => ({
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
-      <DzResizable direction="horizontal" class="h-96 border rounded-lg">
+      <DzResizable direction="horizontal" class="h-96 border border-[var(--dz-border)] rounded-lg">
         <DzResizablePanel :default-size="20" :min-size="10" collapsible :collapsed-size="0">
-          <div class="h-full bg-gray-50 p-3">
-            <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Explorer</p>
+          <div class="h-full bg-[var(--dz-muted)] p-3">
+            <p class="text-xs font-semibold text-[var(--dz-muted-foreground)] uppercase mb-2">Explorer</p>
             <div class="space-y-1 text-sm">
-              <div class="px-2 py-1 bg-blue-100 rounded text-blue-800">index.ts</div>
-              <div class="px-2 py-1 hover:bg-gray-100 rounded">App.vue</div>
-              <div class="px-2 py-1 hover:bg-gray-100 rounded">main.ts</div>
-              <div class="px-2 py-1 hover:bg-gray-100 rounded">styles.css</div>
+              <div class="px-2 py-1 bg-[var(--dz-primary-muted)] rounded text-[var(--dz-primary-muted-foreground)]">index.ts</div>
+              <div class="px-2 py-1 hover:bg-[var(--dz-muted)] rounded">App.vue</div>
+              <div class="px-2 py-1 hover:bg-[var(--dz-muted)] rounded">main.ts</div>
+              <div class="px-2 py-1 hover:bg-[var(--dz-muted)] rounded">styles.css</div>
             </div>
           </div>
         </DzResizablePanel>
@@ -423,31 +423,31 @@ export const RealWorldIDELayout: Story = {
           <DzResizable direction="vertical" class="h-full">
             <DzResizablePanel :default-size="65">
               <div class="h-full p-4 font-mono text-sm">
-                <p class="text-gray-400">// Editor area</p>
-                <p><span class="text-purple-600">import</span> { createApp } <span class="text-purple-600">from</span> <span class="text-green-600">'vue'</span></p>
-                <p><span class="text-purple-600">import</span> App <span class="text-purple-600">from</span> <span class="text-green-600">'./App.vue'</span></p>
+                <p class="text-[var(--dz-muted-foreground)]">// Editor area</p>
+                <p><span class="text-[var(--dz-colors-purple-600)]">import</span> { createApp } <span class="text-[var(--dz-colors-purple-600)]">from</span> <span class="text-[var(--dz-success-muted-foreground)]">'vue'</span></p>
+                <p><span class="text-[var(--dz-colors-purple-600)]">import</span> App <span class="text-[var(--dz-colors-purple-600)]">from</span> <span class="text-[var(--dz-success-muted-foreground)]">'./App.vue'</span></p>
                 <br />
-                <p>createApp(App).mount(<span class="text-green-600">'#app'</span>)</p>
+                <p>createApp(App).mount(<span class="text-[var(--dz-success-muted-foreground)]">'#app'</span>)</p>
               </div>
             </DzResizablePanel>
             <DzResizableHandle with-handle />
             <DzResizablePanel :default-size="35" :min-size="15">
-              <div class="h-full bg-gray-900 text-green-400 p-3 font-mono text-xs">
+              <div class="h-full bg-[var(--dz-colors-neutral-900)] text-[var(--dz-colors-green-400)] p-3 font-mono text-xs">
                 <p>$ npm run dev</p>
-                <p class="text-gray-500">VITE v6.0.0 ready in 200ms</p>
-                <p class="text-gray-500">Local: http://localhost:5173/</p>
+                <p class="text-[var(--dz-muted-foreground)]">VITE v6.0.0 ready in 200ms</p>
+                <p class="text-[var(--dz-muted-foreground)]">Local: http://localhost:5173/</p>
               </div>
             </DzResizablePanel>
           </DzResizable>
         </DzResizablePanel>
         <DzResizableHandle with-handle />
         <DzResizablePanel :default-size="25" :min-size="15" collapsible :collapsed-size="0">
-          <div class="h-full bg-gray-50 p-3">
-            <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Properties</p>
+          <div class="h-full bg-[var(--dz-muted)] p-3">
+            <p class="text-xs font-semibold text-[var(--dz-muted-foreground)] uppercase mb-2">Properties</p>
             <div class="space-y-2 text-sm">
-              <div><span class="text-gray-500">Type:</span> TypeScript</div>
-              <div><span class="text-gray-500">Size:</span> 1.2 KB</div>
-              <div><span class="text-gray-500">Modified:</span> 2 min ago</div>
+              <div><span class="text-[var(--dz-muted-foreground)]">Type:</span> TypeScript</div>
+              <div><span class="text-[var(--dz-muted-foreground)]">Size:</span> 1.2 KB</div>
+              <div><span class="text-[var(--dz-muted-foreground)]">Modified:</span> 2 min ago</div>
             </div>
           </div>
         </DzResizablePanel>
@@ -466,19 +466,19 @@ export const Accessibility: Story = {
     components: { DzResizable, DzResizablePanel, DzResizableHandle },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Focus the handle (Tab) and use Arrow keys to resize panels.
           The keyboard step is configurable via the keyboardResizeBy prop (default: 10%).
         </p>
-        <DzResizable direction="horizontal" class="h-40 border rounded-lg" aria-label="Keyboard resizable demo">
+        <DzResizable direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg" aria-label="Keyboard resizable demo">
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2">
               Panel A
             </div>
           </DzResizablePanel>
           <DzResizableHandle with-handle />
           <DzResizablePanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm p-2">
               Panel B
             </div>
           </DzResizablePanel>

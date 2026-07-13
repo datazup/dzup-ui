@@ -15,7 +15,7 @@ import { darkModeDecorator } from '../_shared'
 const meta = {
   title: 'Core/Compositions/DashboardCard',
   component: undefined,
-  tags: ['autodocs', 'composition'],
+  tags: ['autodocs', 'composition', 'status:stable'],
   parameters: {
     layout: 'padded',
     docs: {
@@ -135,19 +135,19 @@ export const WithActivityCard: Story = {
             <ul class="divide-y text-sm">
               <li class="py-2 flex justify-between">
                 <span>Order #1042 placed by Alice</span>
-                <span class="text-gray-400">2m ago</span>
+                <span class="text-[var(--dz-muted-foreground)]">2m ago</span>
               </li>
               <li class="py-2 flex justify-between">
                 <span>New user registered: bob@example.com</span>
-                <span class="text-gray-400">14m ago</span>
+                <span class="text-[var(--dz-muted-foreground)]">14m ago</span>
               </li>
               <li class="py-2 flex justify-between">
                 <span>Payment received: $320.00</span>
-                <span class="text-gray-400">1h ago</span>
+                <span class="text-[var(--dz-muted-foreground)]">1h ago</span>
               </li>
               <li class="py-2 flex justify-between">
                 <span>Order #1041 shipped</span>
-                <span class="text-gray-400">3h ago</span>
+                <span class="text-[var(--dz-muted-foreground)]">3h ago</span>
               </li>
             </ul>
           </DzCardBody>

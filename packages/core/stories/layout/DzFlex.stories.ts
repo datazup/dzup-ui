@@ -131,11 +131,11 @@ export const AllDirections: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="dir in ['row', 'column', 'row-reverse', 'column-reverse']" :key="dir">
-          <p class="text-xs text-gray-500 mb-2">direction="{{ dir }}"</p>
-          <DzFlex :direction="dir" gap="sm" class="border border-dashed border-gray-200 p-3 rounded">
-            <div class="bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded">A</div>
-            <div class="bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded">B</div>
-            <div class="bg-blue-100 text-blue-800 text-sm px-4 py-2 rounded">C</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">direction="{{ dir }}"</p>
+          <DzFlex :direction="dir" gap="sm" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
+            <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-4 py-2 rounded">A</div>
+            <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-4 py-2 rounded">B</div>
+            <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-4 py-2 rounded">C</div>
           </DzFlex>
         </div>
       </div>
@@ -154,11 +154,11 @@ export const AllAlignments: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="a in ['start', 'center', 'end', 'stretch', 'baseline']" :key="a">
-          <p class="text-xs text-gray-500 mb-2">align="{{ a }}"</p>
-          <DzFlex :align="a" gap="sm" class="border border-dashed border-gray-200 p-3 rounded h-24">
-            <div class="bg-green-100 text-green-800 text-sm px-4 py-1 rounded">Short</div>
-            <div class="bg-green-100 text-green-800 text-sm px-4 py-4 rounded">Taller</div>
-            <div class="bg-green-100 text-green-800 text-sm px-4 py-2 rounded">Medium</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">align="{{ a }}"</p>
+          <DzFlex :align="a" gap="sm" class="border border-dashed border-[var(--dz-border)] p-3 rounded h-24">
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm px-4 py-1 rounded">Short</div>
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm px-4 py-4 rounded">Taller</div>
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm px-4 py-2 rounded">Medium</div>
           </DzFlex>
         </div>
       </div>
@@ -177,11 +177,11 @@ export const AllJustifications: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="j in ['start', 'center', 'end', 'between', 'around', 'evenly']" :key="j">
-          <p class="text-xs text-gray-500 mb-2">justify="{{ j }}"</p>
-          <DzFlex :justify="j" gap="sm" class="border border-dashed border-gray-200 p-3 rounded">
-            <div class="bg-amber-100 text-amber-800 text-sm px-4 py-2 rounded">A</div>
-            <div class="bg-amber-100 text-amber-800 text-sm px-4 py-2 rounded">B</div>
-            <div class="bg-amber-100 text-amber-800 text-sm px-4 py-2 rounded">C</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">justify="{{ j }}"</p>
+          <DzFlex :justify="j" gap="sm" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
+            <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm px-4 py-2 rounded">A</div>
+            <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm px-4 py-2 rounded">B</div>
+            <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm px-4 py-2 rounded">C</div>
           </DzFlex>
         </div>
       </div>
@@ -200,10 +200,10 @@ export const AllGaps: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="g in ['none', 'xs', 'sm', 'md', 'lg', 'xl']" :key="g">
-          <p class="text-xs text-gray-500 mb-2">gap="{{ g }}"</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">gap="{{ g }}"</p>
           <DzFlex :gap="g">
             <div v-for="i in 4" :key="i"
-              class="bg-purple-100 text-purple-800 text-sm px-4 py-2 rounded">
+              class="bg-[var(--dz-colors-purple-100)] text-[var(--dz-colors-purple-800)] text-sm px-4 py-2 rounded">
               {{ i }}
             </div>
           </DzFlex>
@@ -229,9 +229,9 @@ export const Wrapping: Story = {
       return { args }
     },
     template: `
-      <DzFlex v-bind="args" class="max-w-md border border-dashed border-gray-200 p-3 rounded">
+      <DzFlex v-bind="args" class="max-w-md border border-dashed border-[var(--dz-border)] p-3 rounded">
         <div v-for="i in 10" :key="i"
-          class="bg-blue-100 text-blue-800 text-sm px-6 py-3 rounded">
+          class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-6 py-3 rounded">
           Item {{ i }}
         </div>
       </DzFlex>
@@ -251,8 +251,8 @@ export const InlineFlex: Story = {
       <p class="text-sm">
         Text before
         <DzFlex inline gap="xs" align="center" class="mx-1">
-          <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Tag A</span>
-          <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Tag B</span>
+          <span class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-xs px-2 py-0.5 rounded">Tag A</span>
+          <span class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-xs px-2 py-0.5 rounded">Tag B</span>
         </DzFlex>
         text after the inline flex.
       </p>
@@ -271,9 +271,9 @@ export const DarkMode: Story = {
     components: { DzFlex },
     template: `
       <DzFlex gap="md" align="center">
-        <div class="bg-gray-700 text-gray-200 text-sm px-4 py-2 rounded">A</div>
-        <div class="bg-gray-700 text-gray-200 text-sm px-4 py-2 rounded">B</div>
-        <div class="bg-gray-700 text-gray-200 text-sm px-4 py-2 rounded">C</div>
+        <div class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm px-4 py-2 rounded">A</div>
+        <div class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm px-4 py-2 rounded">B</div>
+        <div class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm px-4 py-2 rounded">C</div>
       </DzFlex>
     `,
   }),
@@ -288,11 +288,11 @@ export const RealWorldHeaderBar: Story = {
   render: () => ({
     components: { DzFlex },
     template: `
-      <DzFlex justify="between" align="center" class="bg-white border-b px-6 py-3">
+      <DzFlex justify="between" align="center" class="bg-[var(--dz-card)] border-b border-b-[var(--dz-border)] px-6 py-3">
         <span class="font-bold text-lg">AppName</span>
         <DzFlex gap="sm" align="center">
-          <span class="text-sm text-gray-600">user@example.com</span>
-          <div class="w-8 h-8 rounded-full bg-blue-500 text-white text-sm flex items-center justify-center">U</div>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">user@example.com</span>
+          <div class="w-8 h-8 rounded-full bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] text-sm flex items-center justify-center">U</div>
         </DzFlex>
       </DzFlex>
     `,
@@ -308,14 +308,14 @@ export const RealWorldToolbar: Story = {
   render: () => ({
     components: { DzFlex },
     template: `
-      <DzFlex as="nav" gap="xs" align="center" wrap class="bg-gray-50 border rounded-lg px-3 py-2">
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Bold</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Italic</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Underline</button>
-        <div class="w-px h-5 bg-gray-300 mx-1" />
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Left</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Center</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Right</button>
+      <DzFlex as="nav" gap="xs" align="center" wrap class="bg-[var(--dz-muted)] border border-[var(--dz-border)] rounded-lg px-3 py-2">
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Bold</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Italic</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Underline</button>
+        <div class="w-px h-5 bg-[var(--dz-border)] mx-1" />
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Left</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Center</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Right</button>
       </DzFlex>
     `,
   }),
@@ -331,11 +331,11 @@ export const Accessibility: Story = {
     components: { DzFlex },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab through items to verify focus order matches visual order across directions.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab through items to verify focus order matches visual order across directions.</p>
         <DzFlex as="nav" gap="sm" aria-label="Primary navigation">
-          <a href="#" class="text-sm px-3 py-2 rounded bg-blue-100 text-blue-800 focus:ring-2 focus:ring-blue-500">Home</a>
-          <a href="#" class="text-sm px-3 py-2 rounded bg-gray-100 text-gray-800 focus:ring-2 focus:ring-blue-500">About</a>
-          <a href="#" class="text-sm px-3 py-2 rounded bg-gray-100 text-gray-800 focus:ring-2 focus:ring-blue-500">Contact</a>
+          <a href="#" class="text-sm px-3 py-2 rounded bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] focus:ring-2 focus:ring-[var(--dz-ring)]">Home</a>
+          <a href="#" class="text-sm px-3 py-2 rounded bg-[var(--dz-muted)] text-[var(--dz-foreground)] focus:ring-2 focus:ring-[var(--dz-ring)]">About</a>
+          <a href="#" class="text-sm px-3 py-2 rounded bg-[var(--dz-muted)] text-[var(--dz-foreground)] focus:ring-2 focus:ring-[var(--dz-ring)]">Contact</a>
         </DzFlex>
       </div>
     `,

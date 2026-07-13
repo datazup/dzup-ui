@@ -11,49 +11,94 @@ import { DzCountUp } from '../motion'
 // still unknown (its API was down at build time and hasn't refreshed) degrades to
 // a plain call-to-action rather than a fabricated number — never hiding real
 // numbers, never inventing missing ones.
-const { githubStars, npmDownloads } = useLiveStats()
+const { githubStars, npmDownloads, asOf } = useLiveStats()
+
+const numberFormat = new Intl.NumberFormat()
+
+/**
+ * Reserve the figure's final width *before* it counts up.
+ *
+ * `DzCountUp` tweens 0 → value, so the glyph count grows mid-animation (1 char
+ * → 6). Combined with `font-variant-numeric: tabular-nums` — every digit the
+ * same advance — reserving the formatted length in `ch` keeps the box a fixed
+ * size for the whole tween, so nothing shifts. The landing-perf CI job budgets
+ * CLS < 0.1; an unreserved count-up is the cheapest way to blow it.
+ *
+ * Separators (`,`) are narrower than a digit, so this over-reserves slightly —
+ * the safe direction.
+ */
+function reserve(value: number | null): string {
+  const glyphs = value === null ? 1 : numberFormat.format(value).length
+  return `${glyphs}ch`
+}
+
+/** Full-sentence accessible name for a tile: "12,400 GitHub stars". */
+function statLabel(value: number | null, noun: string, cta: string): string {
+  return value === null ? cta : `${numberFormat.format(value)} ${noun}`
+}
+
+/** "Numbers as of 2 Jul 2026" — a static figure, honestly dated. */
+const freshness = `As of the last site build, ${asOf}`
 </script>
 
 <template>
   <section class="proof" aria-label="Project stats">
     <div class="proof-inner">
-      <a class="stat" :href="LINKS.components">
-        <span class="stat-value">
-          <DzCountUp :value="FACTS.freeComponents" :duration="1200" aria-label="Free components" />
+      <a
+        class="stat"
+        :href="LINKS.components"
+        :aria-label="statLabel(FACTS.freeComponents, 'free components', 'Browse components')"
+      >
+        <span class="stat-value" :style="{ '--reserve': reserve(FACTS.freeComponents) }">
+          <DzCountUp :value="FACTS.freeComponents" :duration="1200" />
         </span>
         <DzText size="sm" tone="muted">Free components</DzText>
       </a>
-      <a class="stat" :href="LINKS.components">
-        <span class="stat-value">
-          <DzCountUp :value="FACTS.families" :duration="1000" aria-label="Component families" />
+      <a
+        class="stat"
+        :href="LINKS.components"
+        :aria-label="statLabel(FACTS.families, 'component families', 'Browse components')"
+      >
+        <span class="stat-value" :style="{ '--reserve': reserve(FACTS.families) }">
+          <DzCountUp :value="FACTS.families" :duration="1000" />
         </span>
         <DzText size="sm" tone="muted">Component families</DzText>
       </a>
-      <a class="stat" :href="LINKS.pro">
-        <span class="stat-value">
-          <DzCountUp :value="FACTS.proComponents" :duration="1200" prefix="+" aria-label="Pro components coming soon" />
+      <a
+        class="stat"
+        :href="LINKS.pro"
+        :aria-label="`${FACTS.proComponents} Pro components coming soon`"
+      >
+        <span class="stat-value" :style="{ '--reserve': reserve(FACTS.proComponents) }">
+          <DzCountUp :value="FACTS.proComponents" :duration="1200" prefix="+" />
         </span>
         <DzText size="sm" tone="muted">Pro components soon</DzText>
       </a>
-      <a class="stat" :href="LINKS.github" target="_blank" rel="noreferrer noopener">
-        <span class="stat-value">
-          <template v-if="githubStars !== null">
-            <span class="stat-value--glyph" aria-hidden="true">★</span>
-            <DzCountUp :value="githubStars" :duration="1400" aria-label="GitHub stars" />
-          </template>
-          <span v-else class="stat-value--glyph">★</span>
+      <a
+        class="stat"
+        :href="LINKS.github"
+        target="_blank"
+        rel="noreferrer noopener"
+        :title="githubStars !== null ? freshness : undefined"
+        :aria-label="statLabel(githubStars, 'GitHub stars', 'Star dzup-ui on GitHub')"
+      >
+        <span class="stat-value" :style="{ '--reserve': reserve(githubStars) }">
+          <span class="stat-value--glyph" aria-hidden="true">★</span>
+          <DzCountUp v-if="githubStars !== null" :value="githubStars" :duration="1400" />
         </span>
         <DzText size="sm" tone="muted">{{ githubStars !== null ? 'GitHub stars' : 'Star on GitHub' }}</DzText>
       </a>
-      <a class="stat" :href="LINKS.npm" target="_blank" rel="noreferrer noopener">
-        <span class="stat-value">
-          <DzCountUp
-            v-if="npmDownloads !== null"
-            :value="npmDownloads"
-            :duration="1600"
-            aria-label="npm downloads in the last week"
-          />
-          <span v-else class="stat-value--glyph">↓</span>
+      <a
+        class="stat"
+        :href="LINKS.npm"
+        target="_blank"
+        rel="noreferrer noopener"
+        :title="npmDownloads !== null ? freshness : undefined"
+        :aria-label="statLabel(npmDownloads, 'npm downloads in the last week', 'Install dzup-ui from npm')"
+      >
+        <span class="stat-value" :style="{ '--reserve': reserve(npmDownloads) }">
+          <DzCountUp v-if="npmDownloads !== null" :value="npmDownloads" :duration="1600" />
+          <span v-else class="stat-value--glyph" aria-hidden="true">↓</span>
         </span>
         <DzText size="sm" tone="muted">{{ npmDownloads !== null ? 'npm downloads / week' : 'Install from npm' }}</DzText>
       </a>
@@ -107,12 +152,19 @@ const { githubStars, npmDownloads } = useLiveStats()
 .stat-value {
   display: inline-flex;
   align-items: baseline;
+  justify-content: center;
   column-gap: 0.12em;
   font-size: clamp(2.1rem, 4.6vw, 3.1rem);
   font-weight: 750;
   letter-spacing: -0.035em;
   line-height: 1;
   color: var(--dz-foreground, #1a202c);
+  /* Hold the figure's final width for the whole count-up so nothing reflows:
+     `--reserve` is set inline from the formatted value's glyph count, and
+     tabular figures give every digit the same advance. Guards the CLS < 0.1
+     budget the landing-perf CI job asserts. */
+  min-width: var(--reserve, 0);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-value :deep(*) {

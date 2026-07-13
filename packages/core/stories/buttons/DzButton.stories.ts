@@ -15,15 +15,6 @@ const meta = {
   title: 'Core/Buttons/DzButton',
   component: DzButton,
   tags: ['autodocs', 'status:stable'],
-  parameters: {
-    // Design reference (TASK-0.15) — flagship seed. Shows the Figma frame in the
-    // "Design" addon panel beside the live render. Replace node-id/file when the
-    // canonical DzButton frame lands.
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-2&t=DzButton',
-    },
-  },
   argTypes: {
     // Appearance
     variant: {
@@ -431,7 +422,7 @@ export const RealWorldFormActions: Story = {
   render: () => ({
     components: { DzButton },
     template: `
-      <div class="flex justify-end gap-3 border-t pt-4">
+      <div class="flex justify-end gap-3 border-t border-t-[var(--dz-border)] pt-4">
         <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
         <DzButton variant="outline" tone="neutral">Save Draft</DzButton>
         <DzButton tone="primary">Submit</DzButton>

@@ -125,6 +125,10 @@ export const inputWrapperVariants = tv({
 export const inputElementVariants = tv({
   base: [
     'dz-field-input-reset',
+    // Autofill-tint neutralization + selection color, hoisted from the
+    // per-component <style scoped> blocks these inputs used to carry (TASK-DS-09).
+    // Defined once in styles/base.css.
+    'dz-native-input',
     'flex-1 w-full bg-transparent outline-none focus:outline-none focus-visible:outline-none border-none',
     'text-[var(--dz-foreground)]',
     'placeholder:text-[var(--dz-input-placeholder)]',

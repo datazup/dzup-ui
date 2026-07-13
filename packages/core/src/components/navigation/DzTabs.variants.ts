@@ -103,12 +103,12 @@ export const tabsVariants = tv({
 
   compoundVariants: [
     // ── line variant + tone (active underline + active text color) ──
-    { variant: 'line', tone: 'primary', class: { trigger: 'data-[state=active]:border-[var(--dz-primary)] data-[state=active]:text-[var(--dz-primary)]' } },
+    { variant: 'line', tone: 'primary', class: { trigger: 'data-[state=active]:border-[var(--dz-primary-solid)] data-[state=active]:text-[var(--dz-primary)]' } },
     { variant: 'line', tone: 'neutral', class: { trigger: 'data-[state=active]:border-[var(--dz-foreground)] data-[state=active]:text-[var(--dz-foreground)]' } },
-    { variant: 'line', tone: 'success', class: { trigger: 'data-[state=active]:border-[var(--dz-success)] data-[state=active]:text-[var(--dz-success)]' } },
+    { variant: 'line', tone: 'success', class: { trigger: 'data-[state=active]:border-[var(--dz-success-solid)] data-[state=active]:text-[var(--dz-success)]' } },
     { variant: 'line', tone: 'warning', class: { trigger: 'data-[state=active]:border-[var(--dz-warning)] data-[state=active]:text-[var(--dz-warning)]' } },
-    { variant: 'line', tone: 'danger', class: { trigger: 'data-[state=active]:border-[var(--dz-danger)] data-[state=active]:text-[var(--dz-danger)]' } },
-    { variant: 'line', tone: 'info', class: { trigger: 'data-[state=active]:border-[var(--dz-info)] data-[state=active]:text-[var(--dz-info)]' } },
+    { variant: 'line', tone: 'danger', class: { trigger: 'data-[state=active]:border-[var(--dz-danger-solid)] data-[state=active]:text-[var(--dz-danger)]' } },
+    { variant: 'line', tone: 'info', class: { trigger: 'data-[state=active]:border-[var(--dz-info-solid)] data-[state=active]:text-[var(--dz-info)]' } },
 
     // ── enclosed variant + tone (active text color; border stays neutral so the tab joins the panel cleanly) ──
     { variant: 'enclosed', tone: 'primary', class: { trigger: 'data-[state=active]:text-[var(--dz-primary)]' } },
@@ -119,12 +119,12 @@ export const tabsVariants = tv({
     { variant: 'enclosed', tone: 'info', class: { trigger: 'data-[state=active]:text-[var(--dz-info)]' } },
 
     // ── pills variant + tone (active background + foreground) ──
-    { variant: 'pills', tone: 'primary', class: { trigger: 'data-[state=active]:bg-[var(--dz-primary)] data-[state=active]:text-[var(--dz-primary-foreground)] data-[state=active]:hover:bg-[var(--dz-primary-hover)]' } },
+    { variant: 'pills', tone: 'primary', class: { trigger: 'data-[state=active]:bg-[var(--dz-primary-solid)] data-[state=active]:text-[var(--dz-primary-foreground)] data-[state=active]:hover:bg-[var(--dz-primary-solid-hover)]' } },
     { variant: 'pills', tone: 'neutral', class: { trigger: 'data-[state=active]:bg-[var(--dz-foreground)] data-[state=active]:text-[var(--dz-background)]' } },
-    { variant: 'pills', tone: 'success', class: { trigger: 'data-[state=active]:bg-[var(--dz-success)] data-[state=active]:text-[var(--dz-success-foreground)]' } },
+    { variant: 'pills', tone: 'success', class: { trigger: 'data-[state=active]:bg-[var(--dz-success-solid)] data-[state=active]:text-[var(--dz-success-foreground)]' } },
     { variant: 'pills', tone: 'warning', class: { trigger: 'data-[state=active]:bg-[var(--dz-warning-solid)] data-[state=active]:text-[var(--dz-warning-foreground)] data-[state=active]:hover:bg-[var(--dz-warning-solid-hover)]' } },
-    { variant: 'pills', tone: 'danger', class: { trigger: 'data-[state=active]:bg-[var(--dz-danger)] data-[state=active]:text-[var(--dz-danger-foreground)]' } },
-    { variant: 'pills', tone: 'info', class: { trigger: 'data-[state=active]:bg-[var(--dz-info)] data-[state=active]:text-[var(--dz-info-foreground)]' } },
+    { variant: 'pills', tone: 'danger', class: { trigger: 'data-[state=active]:bg-[var(--dz-danger-solid)] data-[state=active]:text-[var(--dz-danger-foreground)]' } },
+    { variant: 'pills', tone: 'info', class: { trigger: 'data-[state=active]:bg-[var(--dz-info-solid)] data-[state=active]:text-[var(--dz-info-foreground)]' } },
 
     // ── Vertical orientation re-layout (tone-agnostic) ──
     {

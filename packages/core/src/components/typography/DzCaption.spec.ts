@@ -37,7 +37,7 @@ describe('dzCaption — Unit Tests', () => {
       props: { tone: 'danger' },
       slots: { default: 'text' },
     })
-    expect(wrapper.classes().join(' ')).toContain('text-[var(--dz-danger)]')
+    expect(wrapper.classes().join(' ')).toContain('text-[var(--dz-danger-muted-foreground)]')
   })
 
   it('applies success tone classes', () => {
@@ -45,7 +45,7 @@ describe('dzCaption — Unit Tests', () => {
       props: { tone: 'success' },
       slots: { default: 'text' },
     })
-    expect(wrapper.classes().join(' ')).toContain('text-[var(--dz-success)]')
+    expect(wrapper.classes().join(' ')).toContain('text-[var(--dz-success-muted-foreground)]')
   })
 
   it('sets id attribute when provided', () => {

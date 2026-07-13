@@ -209,7 +209,7 @@ export const Accessibility: Story = {
     components: { DzAvatarGroup, DzAvatar },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The group uses <code>role="group"</code> and accepts <code>aria-label</code>.
           The overflow indicator has <code>aria-hidden="true"</code>.
         </p>
@@ -242,7 +242,7 @@ export const RealWorldTeamMembers: Story = {
           <DzAvatar src="https://i.pravatar.cc/150?u=team5" alt="Eve" />
           <DzAvatar src="https://i.pravatar.cc/150?u=team6" alt="Frank" />
         </DzAvatarGroup>
-        <span class="text-sm text-gray-500">6 members</span>
+        <span class="text-sm text-[var(--dz-muted-foreground)]">6 members</span>
       </div>
     `,
   }),
@@ -273,7 +273,7 @@ export const DataDriven: Story = {
         <DzAvatarGroup :max="max" size="sm" aria-label="Team">
           <DzAvatar v-for="member in team" :key="member.id" :alt="member.name" />
         </DzAvatarGroup>
-        <span class="text-sm text-gray-500">{{ team.length }} members · +{{ Math.max(0, team.length - max) }} overflow</span>
+        <span class="text-sm text-[var(--dz-muted-foreground)]">{{ team.length }} members · +{{ Math.max(0, team.length - max) }} overflow</span>
       </div>
     `,
   }),

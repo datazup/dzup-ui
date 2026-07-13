@@ -44,11 +44,11 @@ export const governanceBadgeVariants = tv({
     },
     {
       variant: 'outline',
-      class: 'border-[var(--dz-primary)] text-[var(--dz-primary)]',
+      class: 'border-[var(--dz-primary)] text-[var(--dz-primary-muted-foreground)]',
     },
     {
       variant: 'subtle',
-      class: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]',
+      class: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]',
     },
   ],
 

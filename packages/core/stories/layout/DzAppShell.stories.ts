@@ -86,13 +86,13 @@ export const Default: Story = {
           </aside>
         </template>
         <template #header-start>
-          <button type="button" aria-label="Toggle sidebar" style="background:transparent;border:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">☰</button>
+          <button type="button" aria-label="Toggle sidebar" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">☰</button>
         </template>
         <template #header>
           <span style="color:var(--dz-foreground);font-weight:500;">Page title or breadcrumb</span>
         </template>
         <template #header-end>
-          <button type="button" style="background:transparent;border:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">User</button>
+          <button type="button" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">User</button>
         </template>
         <div style="padding:var(--dz-spacing-4);">Main content area. Background and padding come from --dz-appshell-main-* tokens.</div>
       </DzAppShell>
@@ -244,14 +244,14 @@ export const RealWorldDashboard: Story = {
           </aside>
         </template>
         <template #header-start>
-          <button type="button" aria-label="Toggle sidebar" style="background:transparent;border:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">☰</button>
+          <button type="button" aria-label="Toggle sidebar" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">☰</button>
         </template>
         <template #header>
           <span style="color:var(--dz-foreground);font-weight:600;">Overview</span>
         </template>
         <template #header-end>
           <div style="display:flex;align-items:center;gap:var(--dz-spacing-3);">
-            <button type="button" aria-label="Notifications" style="background:transparent;border:none;color:var(--dz-muted-foreground);cursor:pointer;">🔔</button>
+            <button type="button" aria-label="Notifications" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-muted-foreground);cursor:pointer;">🔔</button>
             <div style="width:2rem;height:2rem;border-radius:9999px;background:var(--dz-primary);color:var(--dz-primary-foreground);display:flex;align-items:center;justify-content:center;font-size:var(--dz-text-sm);font-weight:600;">JD</div>
           </div>
         </template>
@@ -259,7 +259,7 @@ export const RealWorldDashboard: Story = {
         <div style="padding:var(--dz-spacing-6);display:flex;flex-direction:column;gap:var(--dz-spacing-6);">
           <section aria-label="Key metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:var(--dz-spacing-4);">
             <div v-for="s in stats" :key="s.label"
-              style="border:1px solid var(--dz-border);border-radius:var(--dz-radius-lg);padding:var(--dz-spacing-4);background:var(--dz-surface);">
+              style="border border-[var(--dz-border)]:1px solid var(--dz-border);border-radius:var(--dz-radius-lg);padding:var(--dz-spacing-4);background:var(--dz-surface);">
               <p style="font-size:var(--dz-text-sm);color:var(--dz-muted-foreground);margin:0;">{{ s.label }}</p>
               <p style="font-size:var(--dz-text-2xl);font-weight:700;margin:0.25rem 0 0;color:var(--dz-foreground);">{{ s.value }}</p>
               <p :style="{ fontSize: 'var(--dz-text-xs)', margin: '0.25rem 0 0', color: s.delta.startsWith('-') ? 'var(--dz-danger)' : 'var(--dz-success)' }">
@@ -267,7 +267,7 @@ export const RealWorldDashboard: Story = {
               </p>
             </div>
           </section>
-          <section aria-label="Recent activity" style="border:1px solid var(--dz-border);border-radius:var(--dz-radius-lg);background:var(--dz-surface);">
+          <section aria-label="Recent activity" style="border border-[var(--dz-border)]:1px solid var(--dz-border);border-radius:var(--dz-radius-lg);background:var(--dz-surface);">
             <header style="padding:var(--dz-spacing-4);border-bottom:1px solid var(--dz-border);font-weight:600;color:var(--dz-foreground);">Recent activity</header>
             <ul style="margin:0;padding:0;list-style:none;">
               <li v-for="i in 4" :key="i"
@@ -303,7 +303,7 @@ function responsiveShell() {
           </aside>
         </template>
         <template #header-start>
-          <button type="button" aria-label="Toggle sidebar" style="background:transparent;border:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">☰</button>
+          <button type="button" aria-label="Toggle sidebar" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-muted-foreground);cursor:pointer;padding:var(--dz-spacing-2);">☰</button>
         </template>
         <template #header>
           <span style="color:var(--dz-foreground);font-weight:600;">Overview</span>

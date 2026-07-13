@@ -98,7 +98,7 @@ export const WithFormFields: Story = {
           <input
             id="email"
             type="email"
-            class="w-full rounded-md border px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-border)] px-3 py-2 text-sm"
             placeholder="you@example.com"
             aria-describedby="email-hint"
           />
@@ -109,7 +109,7 @@ export const WithFormFields: Story = {
           <input
             id="password"
             type="password"
-            class="w-full rounded-md border border-red-300 px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-danger-border)] px-3 py-2 text-sm"
             aria-invalid="true"
             aria-describedby="password-error"
           />
@@ -121,7 +121,7 @@ export const WithFormFields: Story = {
             id="username"
             type="text"
             value="johndoe"
-            class="w-full rounded-md border border-green-300 px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-success-border)] px-3 py-2 text-sm"
             aria-describedby="username-success"
           />
           <DzCaption id="username-success" tone="success">Username is available!</DzCaption>
@@ -141,12 +141,12 @@ export const AsMetadata: Story = {
     components: { DzCaption },
     template: `
       <div class="space-y-4 max-w-sm">
-        <div class="rounded-md border p-4">
+        <div class="rounded-md border border-[var(--dz-border)] p-4">
           <h3 class="font-semibold">Project Report</h3>
           <DzCaption tone="muted">Created by John Doe</DzCaption>
-          <span class="mx-1 text-gray-300">|</span>
+          <span class="mx-1 text-[var(--dz-muted-foreground)]">|</span>
           <DzCaption tone="muted">March 28, 2026</DzCaption>
-          <span class="mx-1 text-gray-300">|</span>
+          <span class="mx-1 text-[var(--dz-muted-foreground)]">|</span>
           <DzCaption tone="muted">PDF, 2.4 MB</DzCaption>
         </div>
       </div>
@@ -189,7 +189,7 @@ export const Accessibility: Story = {
     components: { DzCaption },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzCaption renders as a &lt;small&gt; element. Use the id prop with
           aria-describedby on the associated input so screen readers announce
           the caption when the field receives focus.
@@ -199,7 +199,7 @@ export const Accessibility: Story = {
           <input
             id="a11y-input"
             type="text"
-            class="w-full rounded-md border px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-border)] px-3 py-2 text-sm"
             aria-describedby="a11y-caption"
           />
           <DzCaption id="a11y-caption" tone="muted">
@@ -222,7 +222,7 @@ export const RealWorldImageCaption: Story = {
     template: `
       <div class="max-w-sm">
         <figure>
-          <div class="aspect-video rounded-md bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
+          <div class="aspect-video rounded-md bg-[var(--dz-muted)] flex items-center justify-center text-[var(--dz-muted-foreground)] text-sm">
             [Image placeholder]
           </div>
           <figcaption class="mt-2">
@@ -253,7 +253,7 @@ export const RealWorldValidation: Story = {
           <input
             type="email"
             value="invalid-email"
-            class="w-full rounded-md border border-red-300 px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-danger-border)] px-3 py-2 text-sm"
           />
           <DzCaption tone="danger">Please enter a valid email address.</DzCaption>
         </div>
@@ -262,7 +262,7 @@ export const RealWorldValidation: Story = {
           <input
             type="number"
             value="15"
-            class="w-full rounded-md border border-yellow-300 px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-warning-border)] px-3 py-2 text-sm"
           />
           <DzCaption tone="warning">You must be at least 18 years old to register.</DzCaption>
         </div>
@@ -271,7 +271,7 @@ export const RealWorldValidation: Story = {
           <input
             type="text"
             value="johndoe42"
-            class="w-full rounded-md border border-green-300 px-3 py-2 text-sm"
+            class="w-full rounded-md border border-[var(--dz-success-border)] px-3 py-2 text-sm"
           />
           <DzCaption tone="success">Username is available.</DzCaption>
         </div>

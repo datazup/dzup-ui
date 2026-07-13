@@ -54,11 +54,11 @@ export const scrollProgressBarVariants = tv({
   variants: {
     tone: {
       neutral: 'bg-[var(--dz-foreground)]',
-      primary: 'bg-[var(--dz-primary)]',
-      success: 'bg-[var(--dz-success)]',
+      primary: 'bg-[var(--dz-primary-solid)]',
+      success: 'bg-[var(--dz-success-solid)]',
       warning: 'bg-[var(--dz-warning-solid)]',
-      danger: 'bg-[var(--dz-danger)]',
-      info: 'bg-[var(--dz-info)]',
+      danger: 'bg-[var(--dz-danger-solid)]',
+      info: 'bg-[var(--dz-info-solid)]',
     },
   },
 
@@ -70,11 +70,11 @@ export const scrollProgressBarVariants = tv({
 /** Tone → CSS custom property used for the circular SVG stroke. */
 export const scrollProgressToneVar: Record<string, string> = {
   neutral: 'var(--dz-foreground)',
-  primary: 'var(--dz-primary)',
-  success: 'var(--dz-success)',
+  primary: 'var(--dz-primary-solid)',
+  success: 'var(--dz-success-solid)',
   warning: 'var(--dz-warning-solid)',
-  danger: 'var(--dz-danger)',
-  info: 'var(--dz-info)',
+  danger: 'var(--dz-danger-solid)',
+  info: 'var(--dz-info-solid)',
 }
 
 /** Circular indicator diameters (px) per canonical size. */

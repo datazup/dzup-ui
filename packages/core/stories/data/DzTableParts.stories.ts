@@ -4,16 +4,22 @@ import {
   DzTable,
   DzTableBody,
   DzTableCell,
+  DzTableFooter,
   DzTableHeader,
   DzTableRow,
 } from '../../src/components/data'
 
 /**
- * DzTable compound sub-parts: DzTableHeader, DzTableBody, DzTableRow, DzTableCell.
+ * DzTable compound sub-parts: DzTableHeader, DzTableBody, DzTableFooter,
+ * DzTableRow, DzTableCell.
  *
  * These sub-parts receive context (size, density, striped, hoverable) from the
  * DzTable root via inject (ADR-08). DzTableCell supports header mode, alignment,
  * colspan, and rowspan props for full semantic table construction.
+ *
+ * `DzTableHeader`, `DzTableBody`, and `DzTableFooter` render the three semantic
+ * table sections — `<thead>`, `<tbody>`, `<tfoot>` — so a screen reader can tell a
+ * summary row apart from a data row.
  */
 
 const meta = {
@@ -22,6 +28,7 @@ const meta = {
   subcomponents: {
     DzTableHeader,
     DzTableBody,
+    DzTableFooter,
     DzTableRow,
   },
   tags: ['autodocs', 'status:stable'],
@@ -174,7 +181,7 @@ export const RowSelection: Story = {
             </DzTableRow>
           </DzTableBody>
         </DzTable>
-        <p class="text-sm text-gray-500">Click a row to select it. Selected index: {{ selectedRow }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Click a row to select it. Selected index: {{ selectedRow }}</p>
       </div>
     `,
   }),
@@ -238,7 +245,7 @@ export const Accessibility: Story = {
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzTableCell with header=true renders a th element with scope="col".
           Screen readers use these scope attributes to associate data cells with
           their column headers. DzTableRow with selected highlights the active row.
@@ -282,5 +289,68 @@ export const Accessibility: Story = {
     // rows[0] = header row, rows[1] = Widget A, rows[2] = Widget B (selected)
     await expect(rows[2]).toHaveAttribute('aria-selected', 'true')
     await expect(rows[1]).not.toHaveAttribute('aria-selected', 'true')
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Footer: <tfoot> summary row
+// ---------------------------------------------------------------------------
+
+export const WithFooter: Story = {
+  name: 'DzTableFooter: Summary Row',
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableFooter, DzTableRow, DzTableCell },
+    template: `
+      <div class="space-y-4 max-w-xl">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          DzTableFooter renders a &lt;tfoot&gt;, which is the semantic home for an
+          aggregate row. Keeping the total out of &lt;tbody&gt; means it is never
+          mistaken for another data row — by a screen reader, a sort, or a filter.
+        </p>
+        <DzTable>
+          <DzTableHeader>
+            <DzTableRow>
+              <DzTableCell header>Product</DzTableCell>
+              <DzTableCell header align="right">Price</DzTableCell>
+              <DzTableCell header align="right">Units</DzTableCell>
+            </DzTableRow>
+          </DzTableHeader>
+          <DzTableBody>
+            <DzTableRow>
+              <DzTableCell>Widget A</DzTableCell>
+              <DzTableCell align="right">$9.99</DzTableCell>
+              <DzTableCell align="right">142</DzTableCell>
+            </DzTableRow>
+            <DzTableRow>
+              <DzTableCell>Widget B</DzTableCell>
+              <DzTableCell align="right">$14.99</DzTableCell>
+              <DzTableCell align="right">58</DzTableCell>
+            </DzTableRow>
+          </DzTableBody>
+          <DzTableFooter>
+            <DzTableRow>
+              <DzTableCell header>Total</DzTableCell>
+              <DzTableCell align="right">$24.98</DzTableCell>
+              <DzTableCell align="right">200</DzTableCell>
+            </DzTableRow>
+          </DzTableFooter>
+        </DzTable>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const table = canvas.getByRole('table')
+
+    // The summary row must live in <tfoot>, not <tbody> — that is the whole point.
+    const tfoot = table.querySelector('tfoot')
+    await expect(tfoot).not.toBeNull()
+    await expect(within(tfoot as HTMLElement).getByText('Total')).toBeInTheDocument()
+    await expect(within(tfoot as HTMLElement).getByText('$24.98')).toBeInTheDocument()
+
+    // …and the two data rows must remain the only rows in <tbody>.
+    const tbody = table.querySelector('tbody')
+    await expect(tbody).not.toBeNull()
+    await expect(within(tbody as HTMLElement).getAllByRole('row')).toHaveLength(2)
   },
 }

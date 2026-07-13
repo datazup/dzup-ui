@@ -365,7 +365,7 @@ export const WithCaption: Story = {
     template: `
       <DzTable variant="bordered" aria-label="Table with caption">
         <template #caption>
-          <caption class="text-sm text-gray-500 mb-2">Table 1: Quarterly Revenue by Region</caption>
+          <caption class="text-sm text-[var(--dz-muted-foreground)] mb-2">Table 1: Quarterly Revenue by Region</caption>
         </template>
         <DzTableHeader>
           <DzTableRow>
@@ -485,7 +485,7 @@ export const Accessibility: Story = {
     components: { DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzTable renders semantic HTML table elements (table, thead, tbody, tr, th, td).
           The header prop on DzTableCell renders th with appropriate scope attributes.
           Screen readers announce header-cell associations for each data cell.

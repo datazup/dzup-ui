@@ -65,7 +65,7 @@ function fillerTemplate(): string {
   return Array.from({ length: 30 })
     .map(
       (_, i) => `
-        <p class="text-sm text-gray-500 max-w-prose">
+        <p class="text-sm text-[var(--dz-muted-foreground)] max-w-prose">
           Paragraph ${i + 1}. Scroll the page down — the back-to-top button fades
           in once you pass the visibility threshold. Click it to glide back up.
         </p>`,

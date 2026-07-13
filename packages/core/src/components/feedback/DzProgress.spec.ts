@@ -55,7 +55,7 @@ describe('dzProgress — Unit Tests', () => {
   it('applies tone class to bar fill', () => {
     const wrapper = mount(DzProgress, { props: { value: 50, tone: 'success' } })
     const bar = wrapper.element.children[0] as HTMLElement
-    expect(bar.className).toContain('bg-[var(--dz-success)]')
+    expect(bar.className).toContain('bg-[var(--dz-success-solid)]')
   })
 
   it('renders circular SVG with two circle elements', () => {

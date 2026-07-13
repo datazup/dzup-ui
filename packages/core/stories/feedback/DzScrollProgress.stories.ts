@@ -67,7 +67,7 @@ type Story = StoryObj<typeof meta>
 const FILLER = `
   <div class="space-y-4 max-w-2xl mx-auto py-8 px-4">
     <h2 class="text-xl font-semibold">Scroll this container</h2>
-    <p v-for="n in 30" :key="n" class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+    <p v-for="n in 30" :key="n" class="text-sm text-[var(--dz-muted-foreground)] leading-relaxed">
       Paragraph {{ n }} — scroll up and down to watch the indicator track your reading
       position. The bar spans the pinned edge while the circular variant sits in the
       corner. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -82,7 +82,7 @@ const FILLER = `
  */
 function scopedTemplate(indicator: string): string {
   return `
-    <div ref="scrollRef" style="position: relative; height: 360px; overflow-y: auto; border: 1px solid var(--dz-border); border-radius: var(--dz-radius-md);" class="dz-scroll-progress-demo">
+    <div ref="scrollRef" style="position: relative; height: 360px; overflow-y: auto; border border-[var(--dz-border)]: 1px solid var(--dz-border); border-radius: var(--dz-radius-md);" class="dz-scroll-progress-demo">
       ${indicator}
       ${FILLER}
     </div>

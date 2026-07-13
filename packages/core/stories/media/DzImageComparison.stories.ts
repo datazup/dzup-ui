@@ -200,9 +200,9 @@ export const Controlled: Story = {
           <span class="text-sm tabular-nums w-12 text-right">{{ Math.round(pos) }}%</span>
         </div>
         <div class="flex gap-2">
-          <button class="px-3 py-1 text-sm rounded border" @click="pos = 0">Before</button>
-          <button class="px-3 py-1 text-sm rounded border" @click="pos = 50">Split</button>
-          <button class="px-3 py-1 text-sm rounded border" @click="pos = 100">After</button>
+          <button class="px-3 py-1 text-sm rounded border border-[var(--dz-border)]" @click="pos = 0">Before</button>
+          <button class="px-3 py-1 text-sm rounded border border-[var(--dz-border)]" @click="pos = 50">Split</button>
+          <button class="px-3 py-1 text-sm rounded border border-[var(--dz-border)]" @click="pos = 100">After</button>
         </div>
       </div>
     `,

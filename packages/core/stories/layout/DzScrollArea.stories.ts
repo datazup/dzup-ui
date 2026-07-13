@@ -59,9 +59,9 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <DzScrollArea v-bind="args" class="h-48 w-72 border rounded-lg">
+      <DzScrollArea v-bind="args" class="h-48 w-72 border border-[var(--dz-border)] rounded-lg">
         <div class="p-4 space-y-2">
-          <p v-for="i in 20" :key="i" class="text-sm text-gray-600">
+          <p v-for="i in 20" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">
             Line {{ i }}: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
         </div>
@@ -81,29 +81,29 @@ export const AllOrientations: Story = {
     template: `
       <div class="space-y-8">
         <div>
-          <p class="text-xs text-gray-500 mb-2">orientation="vertical"</p>
-          <DzScrollArea orientation="vertical" class="h-40 w-64 border rounded-lg">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">orientation="vertical"</p>
+          <DzScrollArea orientation="vertical" class="h-40 w-64 border border-[var(--dz-border)] rounded-lg">
             <div class="p-4 space-y-2">
-              <p v-for="i in 15" :key="i" class="text-sm text-gray-600">Vertical line {{ i }}</p>
+              <p v-for="i in 15" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">Vertical line {{ i }}</p>
             </div>
           </DzScrollArea>
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">orientation="horizontal"</p>
-          <DzScrollArea orientation="horizontal" class="h-20 w-64 border rounded-lg">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">orientation="horizontal"</p>
+          <DzScrollArea orientation="horizontal" class="h-20 w-64 border border-[var(--dz-border)] rounded-lg">
             <div class="p-4 flex gap-4" style="width: 800px;">
               <div v-for="i in 12" :key="i"
-                class="bg-blue-100 text-blue-800 text-sm px-6 py-2 rounded shrink-0">
+                class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-6 py-2 rounded shrink-0">
                 Item {{ i }}
               </div>
             </div>
           </DzScrollArea>
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">orientation="both"</p>
-          <DzScrollArea orientation="both" class="h-40 w-64 border rounded-lg">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">orientation="both"</p>
+          <DzScrollArea orientation="both" class="h-40 w-64 border border-[var(--dz-border)] rounded-lg">
             <div class="p-4" style="width: 600px;">
-              <p v-for="i in 15" :key="i" class="text-sm text-gray-600 whitespace-nowrap">
+              <p v-for="i in 15" :key="i" class="text-sm text-[var(--dz-muted-foreground)] whitespace-nowrap">
                 Line {{ i }}: This is a very long line of text that extends well beyond the visible area of the scroll container.
               </p>
             </div>
@@ -125,10 +125,10 @@ export const AllTypes: Story = {
     template: `
       <div class="grid grid-cols-2 gap-6">
         <div v-for="t in ['auto', 'always', 'scroll', 'hover']" :key="t">
-          <p class="text-xs text-gray-500 mb-2">type="{{ t }}"</p>
-          <DzScrollArea :type="t" class="h-32 w-full border rounded-lg">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">type="{{ t }}"</p>
+          <DzScrollArea :type="t" class="h-32 w-full border border-[var(--dz-border)] rounded-lg">
             <div class="p-4 space-y-2">
-              <p v-for="i in 10" :key="i" class="text-sm text-gray-600">Line {{ i }}</p>
+              <p v-for="i in 10" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">Line {{ i }}</p>
             </div>
           </DzScrollArea>
         </div>
@@ -146,11 +146,11 @@ export const HorizontalTagList: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea orientation="horizontal" class="w-80 border rounded-lg">
+      <DzScrollArea orientation="horizontal" class="w-80 border border-[var(--dz-border)] rounded-lg">
         <div class="flex gap-2 p-3" style="width: max-content;">
           <span v-for="tag in ['Vue', 'React', 'Angular', 'Svelte', 'Solid', 'Qwik', 'Astro', 'Nuxt', 'Next', 'Remix', 'SvelteKit']"
             :key="tag"
-            class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full whitespace-nowrap">
+            class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-xs px-3 py-1 rounded-full whitespace-nowrap">
             {{ tag }}
           </span>
         </div>
@@ -171,9 +171,9 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea class="h-40 w-64 border border-gray-700 rounded-lg">
+      <DzScrollArea class="h-40 w-64 border border-[var(--dz-colors-neutral-700)] rounded-lg">
         <div class="p-4 space-y-2">
-          <p v-for="i in 15" :key="i" class="text-sm text-gray-300">
+          <p v-for="i in 15" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">
             Line {{ i }}: Dark mode content
           </p>
         </div>
@@ -191,22 +191,22 @@ export const RealWorldChatMessages: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <div class="border rounded-lg max-w-sm">
-        <div class="px-4 py-3 border-b font-semibold text-sm">Chat</div>
+      <div class="border border-[var(--dz-border)] rounded-lg max-w-sm">
+        <div class="px-4 py-3 border-b border-b-[var(--dz-border)] font-semibold text-sm">Chat</div>
         <DzScrollArea class="h-64">
           <div class="p-4 space-y-3">
             <div v-for="i in 12" :key="i" class="flex gap-2">
               <div class="w-8 h-8 rounded-full shrink-0"
-                :class="i % 2 === 0 ? 'bg-blue-500' : 'bg-green-500'" />
+                :class="i % 2 === 0 ? 'bg-[var(--dz-primary)]' : 'bg-[var(--dz-success)]'" />
               <div class="rounded-lg p-2 text-sm"
-                :class="i % 2 === 0 ? 'bg-blue-50' : 'bg-gray-100'">
+                :class="i % 2 === 0 ? 'bg-[var(--dz-primary-muted)]' : 'bg-[var(--dz-muted)]'">
                 Message {{ i }}: This is a chat message with some content.
               </div>
             </div>
           </div>
         </DzScrollArea>
-        <div class="px-4 py-3 border-t">
-          <input type="text" placeholder="Type a message..." class="w-full text-sm border rounded px-3 py-2" />
+        <div class="px-4 py-3 border-t border-t-[var(--dz-border)]">
+          <input type="text" placeholder="Type a message..." class="w-full text-sm border border-[var(--dz-border)] rounded px-3 py-2" />
         </div>
       </div>
     `,
@@ -222,8 +222,8 @@ export const RealWorldCodeBlock: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea orientation="both" class="h-48 w-96 bg-gray-900 rounded-lg">
-        <pre v-pre class="p-4 text-sm text-gray-300 font-mono"><code>import { createApp } from 'vue'
+      <DzScrollArea orientation="both" class="h-48 w-96 bg-[var(--dz-colors-neutral-900)] rounded-lg">
+        <pre v-pre class="p-4 text-sm text-[var(--dz-muted-foreground)] font-mono"><code>import { createApp } from 'vue'
 import { DzScrollArea, DzContainer, DzGrid, DzFlex, DzStack } from '@dzup-ui/core'
 
 const app = createApp({
@@ -253,9 +253,9 @@ export const OverflowScroll: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea class="h-48 w-72 border rounded-lg">
+      <DzScrollArea class="h-48 w-72 border border-[var(--dz-border)] rounded-lg">
         <div class="p-4 space-y-2">
-          <p v-for="i in 40" :key="i" class="text-sm text-gray-600">
+          <p v-for="i in 40" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">
             Row {{ i }} — content overflows the fixed-height viewport.
           </p>
         </div>
@@ -288,15 +288,15 @@ export const Accessibility: Story = {
     components: { DzScrollArea },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzScrollArea uses Reka UI ScrollArea primitives, which handle ARIA
           attributes for the scrollable viewport. Content remains in the
           natural tab order.
         </p>
-        <DzScrollArea class="h-40 w-64 border rounded-lg" aria-label="Scrollable list">
+        <DzScrollArea class="h-40 w-64 border border-[var(--dz-border)] rounded-lg" aria-label="Scrollable list">
           <div class="p-4 space-y-2">
             <a v-for="i in 15" :key="i" href="#"
-              class="block text-sm text-blue-600 hover:underline focus:ring-2 focus:ring-blue-500 rounded px-1">
+              class="block text-sm text-[var(--dz-primary-muted-foreground)] hover:underline focus:ring-2 focus:ring-[var(--dz-ring)] rounded px-1">
               Focusable link {{ i }}
             </a>
           </div>

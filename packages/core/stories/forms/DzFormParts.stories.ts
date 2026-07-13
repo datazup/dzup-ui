@@ -222,7 +222,7 @@ export const Accessibility: Story = {
     components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzFormField automatically generates unique IDs and wires aria-labelledby,
           aria-describedby, and aria-errormessage across its children.
           DzFormLabel renders a label element. DzFormDescription and DzFormMessage

@@ -1,83 +1,123 @@
 <script setup lang="ts">
 import { DzButton } from '@dzup-ui/core'
-import { ArrowRight, Sparkles, Star } from 'lucide-vue-next'
+import { ArrowRight, Star } from 'lucide-vue-next'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { FACTS, LINKS } from '../config.ts'
-import { installCommands } from '../blocks/config.ts'
-import PmCommandTabs from './blocks/PmCommandTabs.vue'
+import HeroCodePanel from './HeroCodePanel.vue'
 import RethemeButton from './RethemeButton.vue'
+import ShowcaseFrame from './ShowcaseFrame.vue'
 
-/** `@dzup-ui/core @dzup-ui/tokens` install, one command per package manager. */
-const installCmds = installCommands()
+/**
+ * Hero v2 (TASK-DS-11) — lead with the product, not the gradient.
+ *
+ * Three deliberate changes from v1:
+ *
+ * 1. **A live dashboard above the fold.** `ShowcaseFrame` in `compact` mode —
+ *    real `@dzup-ui/core` components, never a screenshot. It is the single
+ *    strongest proof on the site and it used to sit a full scroll down.
+ * 2. **One decorative layer, not four.** The aurora, hairline grid and grain
+ *    overlay are gone; only `.hero-spot` remains. Measured (Playwright, 6 runs,
+ *    1280x800, median FCP/LCP): aurora ~52ms, spot ~48ms, grid+grain ~4ms.
+ *    Dropping all four moved LCP 772ms -> 668ms. The spot is the cheapest layer
+ *    that still does real work — it focuses the LCP text — so it is the one kept.
+ * 3. **No entrance animation on the headline path.** v1 staggered seven hero
+ *    children through an `opacity: 0` keyframe, promoting seven compositing
+ *    layers and gating the LCP element on an animation. Only the visual column
+ *    animates now, and it fades in behind the text rather than in front of it.
+ *
+ * The stat row moved out: `SocialProof` already renders those figures, and the
+ * duplicate cost ~90px of fold that the product visual now uses.
+ */
+
+// The compact frame is ~600px of live component tree. On phones it would be a
+// heavy above-the-fold mount for a layout that cannot show it well — and the
+// full side-by-side `ShowcaseDashboard` is the very next section anyway. So we
+// resolve the breakpoint with matchMedia, not just CSS, and never mount it.
+const VISUAL_QUERY = '(min-width: 1024px)'
+
+function matchesWide(): boolean {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia(VISUAL_QUERY).matches
+    : true
+}
+
+// Seeded synchronously so a phone never flashes the frame before onMounted runs.
+const showVisual = ref(matchesWide())
+let mql: MediaQueryList | null = null
+
+function onChange(event: MediaQueryListEvent): void {
+  showVisual.value = event.matches
+}
+
+onMounted(() => {
+  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+    mql = window.matchMedia(VISUAL_QUERY)
+    showVisual.value = mql.matches
+    mql.addEventListener('change', onChange)
+  }
+})
+
+onBeforeUnmount(() => mql?.removeEventListener('change', onChange))
 
 const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt']
-
-// Inline credibility facts — concrete, verifiable, fills the hero with substance.
-const stats = [
-  { value: FACTS.freeComponents, label: 'components' },
-  { value: FACTS.families, label: 'families' },
-  { value: 'MIT', label: 'licensed' },
-  { value: 'AA', label: 'WCAG' },
-]
 </script>
 
 <template>
   <section class="hero" aria-labelledby="hero-title">
-    <div class="lp-aurora hero-aurora" aria-hidden="true" />
-    <div class="hero-grid" aria-hidden="true" />
+    <!-- The single remaining full-bleed decorative layer. No filter, no
+         mix-blend-mode: it paints into the hero's own layer rather than forcing
+         another composited one. -->
     <div class="hero-spot" aria-hidden="true" />
-    <div class="lp-grain-layer" aria-hidden="true" />
 
     <div class="hero-inner">
-      <a class="hero-pill" :href="LINKS.pro">
-        <span class="hero-pill-icon" aria-hidden="true"><Sparkles :size="13" /></span>
-        <span class="hero-pill-text">{{ FACTS.proComponents }} Pro components coming soon</span>
-        <ArrowRight :size="13" aria-hidden="true" class="hero-pill-arrow" />
-      </a>
+      <div class="hero-copy">
+        <h1 id="hero-title" class="hero-title lp-balance">
+          The Vue&nbsp;3 component library
+          <span class="hero-accent">for serious products</span>
+        </h1>
 
-      <h1 id="hero-title" class="hero-title lp-balance">
-        The Vue&nbsp;3 component library
-        <span class="hero-accent lp-gradient-text">for serious products</span>
-      </h1>
+        <p class="hero-lede lp-balance">
+          {{ FACTS.freeComponents }} open-source components across {{ FACTS.families }} families —
+          built on Tailwind CSS&nbsp;4, an OKLCH token system, and Reka UI accessible primitives.
+          Light &amp; dark out of the box.
+        </p>
 
-      <p class="hero-lede lp-balance">
-        {{ FACTS.freeComponents }} open-source components across {{ FACTS.families }} families —
-        built on Tailwind CSS&nbsp;4, an OKLCH token system, and Reka UI accessible primitives.
-        Light &amp; dark out of the box.
-      </p>
-
-      <div class="hero-ctas">
-        <DzButton size="lg" variant="solid" tone="primary" as="a" :href="LINKS.components" class="hero-cta-primary">
-          Browse components
-          <template #suffix><ArrowRight :size="18" aria-hidden="true" /></template>
-        </DzButton>
-        <DzButton size="lg" variant="outline" tone="neutral" as="a" :href="LINKS.github" target="_blank" rel="noreferrer noopener">
-          <template #prefix><Star :size="16" aria-hidden="true" /></template>
-          Star on GitHub
-        </DzButton>
-      </div>
-
-      <div class="hero-install">
-        <PmCommandTabs :commands="installCmds" aria-label="Install the dzup-ui packages" />
-      </div>
-
-      <div class="hero-retheme">
-        <RethemeButton />
-        <span class="hero-retheme-hint">One click re-skins the whole page — light&nbsp;⇄&nbsp;dark from one token system.</span>
-      </div>
-
-      <dl class="hero-stats">
-        <div v-for="s in stats" :key="s.label" class="hero-stat">
-          <dt class="hero-stat-value">{{ s.value }}</dt>
-          <dd class="hero-stat-label">{{ s.label }}</dd>
+        <div class="hero-ctas">
+          <DzButton size="lg" variant="solid" tone="primary" as="a" :href="LINKS.components">
+            Browse components
+            <template #suffix>
+              <ArrowRight :size="18" aria-hidden="true" />
+            </template>
+          </DzButton>
+          <DzButton size="lg" variant="outline" tone="neutral" as="a" :href="LINKS.github" target="_blank" rel="noreferrer noopener">
+            <template #prefix>
+              <Star :size="16" aria-hidden="true" />
+            </template>
+            Star on GitHub
+          </DzButton>
         </div>
-      </dl>
 
-      <div class="hero-trust">
-        <span class="hero-trust-label">Built with</span>
-        <ul class="hero-trust-list">
-          <li v-for="t in trust" :key="t">{{ t }}</li>
-        </ul>
+        <HeroCodePanel class="hero-code" />
       </div>
+
+      <div v-if="showVisual" class="hero-visual">
+        <div class="hero-visual-bar">
+          <span class="hero-visual-hint">
+            One click re-skins every component below — light&nbsp;⇄&nbsp;dark from one token system.
+          </span>
+          <RethemeButton />
+        </div>
+        <ShowcaseFrame label="the current" compact :glow="false" />
+      </div>
+    </div>
+
+    <div class="hero-trust">
+      <span class="hero-trust-label">Built with</span>
+      <ul class="hero-trust-list">
+        <li v-for="t in trust" :key="t">
+          {{ t }}
+        </li>
+      </ul>
     </div>
   </section>
 </template>
@@ -87,118 +127,61 @@ const stats = [
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding: clamp(88px, 13vw, 152px) 24px clamp(56px, 8vw, 96px);
+  padding: clamp(28px, 3.4vw, 44px) 24px clamp(48px, 6vw, 72px);
 }
 
-/* Aurora sits at the very top, then we fade everything into the page below. */
-.hero-aurora {
-  bottom: 30%;
-  -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent);
-  mask-image: linear-gradient(to bottom, #000 35%, transparent);
-}
-
-/* Hairline grid that dissolves toward the content. */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image:
-    linear-gradient(to right, color-mix(in oklch, var(--dz-foreground, #000) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklch, var(--dz-foreground, #000) 5%, transparent) 1px, transparent 1px);
-  background-size: 60px 60px;
-  -webkit-mask-image: radial-gradient(ellipse 78% 56% at 50% 0%, #000 6%, transparent 70%);
-  mask-image: radial-gradient(ellipse 78% 56% at 50% 0%, #000 6%, transparent 70%);
-}
-
-/* A tight conic spotlight directly behind the headline for focus. */
+/* A soft brand glow behind the headline. The only decorative layer left. */
 .hero-spot {
   position: absolute;
-  top: -12%;
+  top: -14%;
   left: 50%;
-  width: min(900px, 92vw);
-  height: 560px;
+  width: min(1100px, 96vw);
+  height: 620px;
   transform: translateX(-50%);
   z-index: 0;
   background: radial-gradient(ellipse 50% 50% at 50% 50%,
-    color-mix(in oklch, var(--lp-brand) 16%, transparent), transparent 70%);
+    color-mix(in oklch, var(--lp-brand) 15%, transparent), transparent 70%);
 }
 
 .hero-inner {
   position: relative;
   z-index: 1;
-  max-width: 840px;
+  max-width: 1200px;
   margin: 0 auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  /* Top-aligned, not centred: centring each column against the other's height is
+     what pushed the taller one (the frame) through the fold. */
+  align-items: start;
 }
 
-.hero-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 6px 8px 6px 8px;
-  border: 1px solid var(--lp-hairline);
-  border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-surface, #fff) 70%, transparent);
-  backdrop-filter: blur(8px);
-  box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
-  font-size: var(--dz-text-sm, 0.875rem);
-  font-weight: 500;
-  color: var(--dz-foreground, #1a202c);
-  text-decoration: none;
-  transition:
-    border-color var(--dz-duration-fast, 150ms),
-    transform var(--dz-duration-fast, 150ms);
-}
-
-.hero-pill:hover {
-  border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 40%, var(--lp-hairline));
-  transform: translateY(-1px);
-}
-
-.hero-pill-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: var(--dz-radius-full, 9999px);
-  background: linear-gradient(135deg, var(--lp-brand), var(--lp-brand-2));
-  color: #fff;
-}
-
-.hero-pill-text {
-  color: var(--dz-muted-foreground, #64748b);
-}
-
-.hero-pill-arrow {
-  color: var(--dz-muted-foreground, #64748b);
-  transition: transform var(--dz-duration-fast, 150ms);
-}
-
-.hero-pill:hover .hero-pill-arrow {
-  transform: translateX(2px);
+.hero-copy {
+  min-width: 0;
 }
 
 .hero-title {
-  margin: 26px 0 0;
+  margin: 0;
   font-weight: 700;
   letter-spacing: -0.04em;
-  line-height: 1.03;
-  font-size: clamp(2.7rem, 6.6vw, 5rem);
+  line-height: 1.05;
+  font-size: clamp(2.4rem, 4vw, 3.1rem);
   color: var(--dz-foreground, #1a202c);
 }
 
+/* v1 ran the second line through `lp-gradient-text`. A gradient headline is the
+   most-copied move in the archetype this hero is trying to leave, and it is also
+   a background-clip paint on the LCP element. A token-coloured accent reads as
+   ours and paints as plain text. */
 .hero-accent {
   display: block;
+  color: var(--dz-primary-muted-foreground, #4338ca);
 }
 
 .hero-lede {
-  margin: 24px 0 0;
-  max-width: 58ch;
-  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  margin: 16px 0 0;
+  max-width: 56ch;
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
   line-height: 1.6;
   color: var(--dz-muted-foreground, #64748b);
 }
@@ -206,95 +189,42 @@ const stats = [
 .hero-ctas {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 12px;
-  margin-top: 36px;
-}
-
-/* A soft brand glow lifts the primary CTA off the page. */
-.hero-cta-primary {
-  box-shadow: 0 8px 24px -8px color-mix(in oklch, var(--dz-primary, #6366f1) 60%, transparent);
-}
-
-/* Multi-package-manager install command with copy. Constrained + centered so the
-   tab set reads as a compact terminal card under the CTAs. */
-.hero-install {
-  margin-top: 26px;
-  width: min(440px, 100%);
-  text-align: left;
-}
-
-/* Headline "seamless theming" proof — the prominent re-theme control + a hint. */
-.hero-retheme {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
   margin-top: 22px;
 }
 
-.hero-retheme-hint {
-  max-width: 42ch;
+.hero-code {
+  margin-top: 24px;
+}
+
+.hero-visual {
+  min-width: 0;
+}
+
+.hero-visual-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.hero-visual-hint {
   font-size: var(--dz-text-sm, 0.875rem);
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--dz-muted-foreground, #64748b);
   text-wrap: balance;
 }
 
-/* Inline credibility stats — concrete numbers, divider-separated. */
-.hero-stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: clamp(20px, 4vw, 44px);
-  margin: 52px 0 0;
-  padding: 0;
-}
-
-.hero-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  position: relative;
-}
-
-.hero-stat + .hero-stat::before {
-  content: "";
-  position: absolute;
-  left: clamp(-10px, -2vw, -22px);
-  top: 50%;
-  height: 28px;
-  width: 1px;
-  transform: translateY(-50%);
-  background: var(--lp-hairline);
-}
-
-.hero-stat-value {
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: var(--dz-foreground, #1a202c);
-}
-
-.hero-stat-label {
-  margin: 0;
-  font-size: var(--dz-text-xs, 0.75rem);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
-}
-
 .hero-trust {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
-  margin-top: 44px;
+  margin: clamp(40px, 5vw, 64px) auto 0;
   padding-top: 28px;
   border-top: 1px solid var(--lp-hairline);
   width: min(620px, 100%);
@@ -319,33 +249,41 @@ const stats = [
   list-style: none;
 }
 
+/* v1 dimmed full-strength foreground to `opacity: 0.62`, which measures 4.41:1
+   on the page background — below AA. axe never caught it: the aurora and grain
+   layers made the backdrop uncomputable, so the rule reported "incomplete"
+   rather than "fail". Removing those layers surfaced it. The muted foreground
+   token is the colour this always wanted, and it is contrast-gated. */
 .hero-trust-list li {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
-  opacity: 0.62;
-  transition: opacity var(--dz-duration-fast, 150ms);
+  color: var(--dz-muted-foreground, #64748b);
+  transition: color var(--dz-duration-fast, 150ms);
 }
 
 .hero-trust-list li:hover {
-  opacity: 1;
+  color: var(--dz-foreground, #1a202c);
 }
 
-/* Quiet entrance for the hero stack. */
-.hero-inner > * {
-  animation: hero-rise 0.7s var(--dz-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
+/* Two columns only where the frame has room to be legible — the same 1024px
+   threshold `showVisual` gates the mount on. */
+@media (min-width: 1024px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+    gap: 44px;
+  }
 }
-.hero-inner > :nth-child(2) { animation-delay: 0.06s; }
-.hero-inner > :nth-child(3) { animation-delay: 0.12s; }
-.hero-inner > :nth-child(4) { animation-delay: 0.18s; }
-.hero-inner > :nth-child(5) { animation-delay: 0.24s; }
-.hero-inner > :nth-child(6) { animation-delay: 0.30s; }
-.hero-inner > :nth-child(7) { animation-delay: 0.36s; }
+
+/* Motion: transform + opacity only, and never on the LCP text. The visual column
+   rises once; the headline, lede and CTAs paint in their final position. */
+.hero-visual {
+  animation: hero-rise 0.6s var(--dz-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
 
 @keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -353,17 +291,8 @@ const stats = [
   }
 }
 
-@media (max-width: 520px) {
-  .hero-trust {
-    gap: 12px;
-  }
-  .hero-trust-list {
-    gap: 14px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .hero-inner > * {
+  .hero-visual {
     animation: none;
   }
 }

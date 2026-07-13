@@ -4,6 +4,8 @@
  * plain relative URLs; Phase 2 flips the Pro targets without structural change.
  */
 
+import { COMPONENTS } from './generated/components.ts'
+
 /**
  * Canonical production origin (no trailing slash). The single source of truth for
  * absolute URLs the client can't derive from `window.location` at build time:
@@ -89,7 +91,8 @@ const COMPONENT_FAMILY: Record<string, string> = {
  */
 export function componentDocs(component: string): string {
   const family = COMPONENT_FAMILY[component]
-  if (!family) return STORYBOOK_BASE
+  if (!family)
+    return STORYBOOK_BASE
   return storybookDocs(`core-${family}-${component.toLowerCase()}`)
 }
 
@@ -116,21 +119,63 @@ export const LINKS = {
   nuxtModule: storybookDocs('guides-nuxt'),
 } as const
 
-/** Headline library facts (Appendix A). Surfaced as social proof + breadth. */
+/**
+ * Headline library facts (Appendix A). Surfaced as social proof + breadth.
+ *
+ * `freeComponents` is **derived**, not typed: it is the number of components
+ * with a dedicated Storybook page, counted from the story files by
+ * `scripts/build-component-index.ts`. Hand-maintained counts drift — this one
+ * used to read `147` while the real figure was `139`. Never replace it with a
+ * literal; add a component and the number follows.
+ *
+ * Note this is the *documented* count, not the catalog size. `DESIGN.md`
+ * publishes both, each with its rule stated: 205 exported `.vue` components,
+ * of which `freeComponents` have a page of their own.
+ */
 export const FACTS = {
-  freeComponents: 147,
+  freeComponents: COMPONENTS.length,
   proComponents: 41,
   families: 11,
   proFamilies: 8,
-  // Live numbers (stars / downloads) would be fetched at build/runtime; until a
-  // data source is wired we show the static, verifiable facts and label the
-  // dynamic ones as such rather than inventing figures.
-  githubStars: null as number | null,
-  npmDownloads: null as number | null,
 } as const
 
 /** Whether the Pro funnel is live (Phase 2). Phase 1 keeps this false. */
 export const PRO_LIVE = false
+
+/**
+ * A real testimonial from a real person who really uses dzup-ui, published with
+ * their permission.
+ *
+ * @see TESTIMONIALS for why the list is empty.
+ */
+export interface Testimonial {
+  /** The quote, verbatim. Never paraphrase, never compose one. */
+  quote: string
+  /** Attribution. A quote nobody signs is not social proof. */
+  name: string
+  /** Role and company, e.g. "Staff Engineer, Acme". */
+  title: string
+  /** Optional avatar URL. `alt` is derived from `name`. */
+  avatar?: string
+  /** Optional link to the source (tweet, issue, post) so the claim is checkable. */
+  href?: string
+}
+
+/**
+ * **Empty on purpose.** dzup-ui has no public users yet: the GitHub repo and the
+ * npm package are both unpublished (see `useLiveStats`, which degrades its star
+ * and download tiles to calls-to-action for the same reason). There is therefore
+ * no real quote to print and no customer logo we have permission to display.
+ *
+ * `HomeTestimonials` renders nothing while this array is empty, so the home page
+ * carries no trust section at all rather than a fabricated one. Add real,
+ * permission-cleared entries here and the section appears — no other change.
+ *
+ * Do not seed this with placeholder or example quotes. The demo quotes in
+ * `src/blocks/marketing/Testimonials.vue` are illustrative block content and are
+ * labelled as such; they are not evidence and must not be lifted onto this page.
+ */
+export const TESTIMONIALS: Testimonial[] = []
 
 /**
  * A single site-wide announcement (the thin bar above the nav). Surfaces a

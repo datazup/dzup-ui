@@ -318,8 +318,8 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-3 max-w-[200px]">
         <DzNumberInput v-model="value" :min="0" :max="100" :step="1" />
-        <p class="text-sm text-gray-500">
-          Value: <code class="bg-gray-100 px-1 rounded">{{ value ?? '(undefined)' }}</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Value: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ value ?? '(undefined)' }}</code>
         </p>
       </div>
     `,
@@ -361,7 +361,7 @@ export const Accessibility: Story = {
     components: { DzNumberInput },
     template: `
       <div class="space-y-4 max-w-[200px]">
-        <p class="text-sm text-gray-500">Use Arrow Up/Down keys to increment/decrement. The component uses role="spinbutton" with aria-valuemin, aria-valuemax, and aria-valuenow.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Use Arrow Up/Down keys to increment/decrement. The component uses role="spinbutton" with aria-valuemin, aria-valuemax, and aria-valuenow.</p>
         <DzNumberInput
           aria-label="Quantity"
           :min="0"
@@ -395,7 +395,7 @@ export const RealWorldQuantitySelector: Story = {
       <div class="flex items-center gap-4 max-w-sm">
         <div class="flex-1">
           <p class="font-medium">Wireless Headphones</p>
-          <p class="text-sm text-gray-500">$129.99 each</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">$129.99 each</p>
         </div>
         <DzNumberInput v-model="quantity" :min="1" :max="10" size="sm" class="w-[120px]" />
         <p class="text-sm font-medium w-20 text-right">\${{ ((quantity ?? 0) * 129.99).toFixed(2) }}</p>

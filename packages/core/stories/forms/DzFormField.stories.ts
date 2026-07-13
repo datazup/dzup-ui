@@ -288,7 +288,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzFormField automatically generates matching IDs for the label (htmlFor),
           the control (id), description (aria-describedby), and message (aria-errormessage).
           Inspect the DOM to verify.
@@ -381,7 +381,7 @@ export const RealWorldRegistrationForm: Story = {
 
         <button
           :disabled="!country || !agreed"
-          class="w-full px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white disabled:opacity-50"
+          class="w-full px-4 py-2 rounded text-sm font-medium bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] disabled:opacity-50"
         >
           Register
         </button>

@@ -110,10 +110,13 @@ const meta = {
 
 ## Design reference <a id="design-reference" />
 
-Link each component to its Figma frame so the **Design** addon panel shows the
-source-of-truth beside the live render (feeds the maturity dashboard's *Design*
-column). Set `parameters.design` on the `meta` — **required whenever a frame
-exists**:
+**There is no Figma library for dzup-ui today, so no component links a frame and
+every component's Design panel is empty.** The code is the source of truth: a
+component's specification is its `*.variants.ts`, its tokens, and its stories.
+
+`@storybook/addon-designs` stays installed and the `design` parameter convention
+stays reserved, so the day a library exists the rollout is per-component and needs
+no story rewrites. When you have a real frame, add it to that component's `meta`:
 
 ```ts
 const meta = {
@@ -126,16 +129,19 @@ const meta = {
 }
 ```
 
-- **No frame yet?** Omit the parameter entirely — the Design panel then shows a
+- **No frame?** Omit the parameter entirely — the Design panel then shows a
   friendly "design link coming soon" placeholder rather than an error. Do **not**
-  point it at a placeholder file; an empty panel is the honest signal.
+  point it at a placeholder file: the addon only accepts a real 22-character file
+  key, so a made-up URL renders a broken iframe. An empty panel is the honest signal.
 - Use the frame's deep link (**Copy link to selection** in Figma, which carries a
   `node-id`) so the panel opens on the exact component, not the whole file.
 - To embed a frame inside a family **Overview** MDX page, import the `Figma` block
-  from `@storybook/addon-designs/blocks` and pass the same URL — see `Buttons.mdx`.
+  from `@storybook/addon-designs/blocks` and pass the same URL.
 
-The story template (`_shared/Dz.stories.template.ts`) seeds this parameter with a
-`REPLACE_ME` URL as a reminder; swap it for the real frame or delete it.
+The maturity dashboard's *Design* column reads this parameter, so it reports `—`
+for every component until the first real frame lands. See
+[storybook-decisions.md](https://github.com/dzup-ui/dzup-ui/blob/main/docs/storybook-decisions.md)
+TASK-0.15 for the decision and its rationale.
 
 ## Do / Don't
 

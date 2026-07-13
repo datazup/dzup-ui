@@ -75,13 +75,13 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const SAMPLE = `
-  <div class="max-w-md rounded-lg border border-gray-200 p-6 space-y-3">
+  <div class="max-w-md rounded-lg border border-[var(--dz-border)] p-6 space-y-3">
     <h3 class="text-lg font-semibold">Q3 Revenue Forecast</h3>
-    <p class="text-sm text-gray-600">
+    <p class="text-sm text-[var(--dz-muted-foreground)]">
       Projected revenue grows 14% QoQ on the back of the new self-serve tier.
       This preview is shared under NDA and should not be redistributed.
     </p>
-    <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+    <ul class="text-sm text-[var(--dz-muted-foreground)] list-disc pl-5 space-y-1">
       <li>New logos: 128</li>
       <li>Net retention: 117%</li>
       <li>Pipeline coverage: 3.2x</li>

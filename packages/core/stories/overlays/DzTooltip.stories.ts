@@ -254,7 +254,7 @@ export const Accessibility: Story = {
     components: { DzTooltip, DzTooltipTrigger, DzTooltipContent, DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tooltips appear on hover and focus. Tab to the button to trigger the tooltip
           via keyboard. The tooltip content is announced to screen readers.
         </p>

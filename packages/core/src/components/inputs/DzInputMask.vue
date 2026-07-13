@@ -273,27 +273,3 @@ defineExpose({ inputRef, completed, unmasked })
     </p>
   </div>
 </template>
-
-<style scoped>
-/* Remove native browser focus outline — the wrapper handles focus styling */
-input:focus,
-input:focus-visible {
-  outline: none;
-}
-
-/* Selection highlight uses the primary colour */
-input::selection {
-  background: var(--dz-primary, #6366f1);
-  color: white;
-}
-
-/* Accessibility: respect user's motion preference */
-@media (prefers-reduced-motion: reduce) {
-  :deep(*),
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>

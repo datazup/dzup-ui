@@ -202,7 +202,7 @@ export const AutoResize: Story = {
     components: { DzTextarea },
     template: `
       <div class="flex flex-col gap-4 max-w-sm">
-        <p class="text-sm text-gray-500">The textarea grows as you type. Try pasting a long paragraph.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">The textarea grows as you type. Try pasting a long paragraph.</p>
         <DzTextarea autoResize placeholder="Type or paste text -- this will grow..." />
         <DzTextarea autoResize :maxRows="6" placeholder="Auto-resize with max 6 rows" />
       </div>
@@ -256,7 +256,7 @@ export const Loading: Story = {
     components: { DzTextarea },
     template: `
       <div class="flex flex-col gap-4 max-w-sm">
-        <p class="text-sm text-gray-500">A spinner appears and the field becomes read-only while loading.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">A spinner appears and the field becomes read-only while loading.</p>
         <DzTextarea loading model-value="Fetching saved draft..." />
         <DzTextarea loading loadingLabel="Saving" placeholder="Saving your changes..." />
       </div>
@@ -314,7 +314,7 @@ export const WithMaxLength: Story = {
     template: `
       <div class="space-y-2 max-w-sm">
         <DzTextarea v-model="value" :maxlength="200" placeholder="Limited to 200 characters..." />
-        <p class="text-xs text-gray-400 text-right">{{ value.length }} / 200</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)] text-right">{{ value.length }} / 200</p>
       </div>
     `,
   }),
@@ -355,10 +355,10 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-3 max-w-sm">
         <DzTextarea v-model="value" autoResize placeholder="Type something..." />
-        <p class="text-sm text-gray-500">
-          Value: <code class="bg-gray-100 px-1 rounded text-xs">{{ value || '(empty)' }}</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Value: <code class="bg-[var(--dz-muted)] px-1 rounded text-xs">{{ value || '(empty)' }}</code>
         </p>
-        <p class="text-sm text-gray-500">Lines: {{ value.split('\\n').length }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Lines: {{ value.split('\\n').length }}</p>
       </div>
     `,
   }),
@@ -382,7 +382,7 @@ export const Accessibility: Story = {
     components: { DzTextarea },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">Tab through the textareas. Error messages are linked via aria-describedby.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab through the textareas. Error messages are linked via aria-describedby.</p>
         <div>
           <label id="bio-label" class="block text-sm font-medium mb-1">Bio</label>
           <DzTextarea aria-labelledby="bio-label" placeholder="Tell us about yourself..." required />
@@ -408,7 +408,7 @@ export const RealWorldCommentBox: Story = {
       return { comment: '' }
     },
     template: `
-      <div class="max-w-md border rounded-lg p-4 space-y-3">
+      <div class="max-w-md border border-[var(--dz-border)] rounded-lg p-4 space-y-3">
         <p class="text-sm font-medium">Leave a comment</p>
         <DzTextarea
           v-model="comment"
@@ -417,8 +417,8 @@ export const RealWorldCommentBox: Story = {
           placeholder="Write your comment..."
         />
         <div class="flex justify-between items-center">
-          <span class="text-xs text-gray-400">{{ comment.length }} characters</span>
-          <button class="text-sm px-3 py-1 bg-blue-500 text-white rounded" :disabled="!comment.trim()">
+          <span class="text-xs text-[var(--dz-muted-foreground)]">{{ comment.length }} characters</span>
+          <button class="text-sm px-3 py-1 bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded" :disabled="!comment.trim()">
             Post
           </button>
         </div>
@@ -438,7 +438,7 @@ export const RealWorldIssueDescription: Story = {
     template: `
       <div class="max-w-md space-y-4">
         <div>
-          <label class="block text-sm font-medium mb-1">Steps to Reproduce <span class="text-red-500">*</span></label>
+          <label class="block text-sm font-medium mb-1">Steps to Reproduce <span class="text-[var(--dz-danger-muted-foreground)]">*</span></label>
           <DzTextarea :rows="4" required placeholder="1. Go to...&#10;2. Click on...&#10;3. Observe..." />
         </div>
         <div>

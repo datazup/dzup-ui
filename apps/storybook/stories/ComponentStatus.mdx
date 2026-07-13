@@ -28,6 +28,12 @@ export const statusSummaryRows = STATUS_ORDER.map(s => [
   STATUS_BADGES[s].description,
 ])
 
+export const ladderRows = STATUS_ORDER.map(s => [
+  h(StatusBadge, { status: s, key: s }),
+  STATUS_BADGES[s].entry,
+  STATUS_BADGES[s].exit,
+])
+
 export const familyRows = FAMILY_SUMMARIES.map(f => [
   `**${f.family}**`,
   String(f.total),
@@ -63,6 +69,17 @@ wired. When a story changes, this page changes with it.
 
 **{TOTAL_COUNT} components** — {summaryLine}.
 
+**Why this is smaller than the `.vue` file count.** `@dzup-ui/core` ships 205 `.vue`
+files, but many are compound sub-parts — `DzCardBody`, `DzAccordionTrigger`,
+`DzDialogOverlay` — which have no independent API and are documented **through their
+parent**: either on that family's `*Parts` anatomy page, or inside the parent's own
+story. **A sub-part without a story of its own is documented, not missing**, and the
+matrix below counts parents and anatomy pages rather than individual sub-parts.
+
+`packages/tooling/src/validators/story-status.ts` holds the line: every entry in this
+matrix carries exactly one `status:*` tag, so a component can never quietly drop off
+the roadmap.
+
 ## By status
 
 <DocTable
@@ -78,6 +95,25 @@ wired. When a story changes, this page changes with it.
     it stops hiding from the roadmap.</em>
   </p>
 )}
+
+### Entry and exit criteria
+
+The ladder is **experimental → beta → stable**, with **deprecated** reachable from any
+tier. A tier that nobody can apply consistently is noise, so each one states what must
+be true to enter it and to leave it.
+
+<DocTable
+  head={['Status', 'To enter', 'To leave']}
+  align={['left', 'left', 'left']}
+  rows={ladderRows}
+/>
+
+These criteria are **applied by reviewers, not derived by a machine.** What CI enforces
+is narrower, and worth stating exactly: `packages/tooling/src/validators/story-status.ts`
+asserts that every `Core/<Family>/<Component>` story carries exactly one `status:*` tag
+and that a `deprecated` component names its replacement. No check can decide whether a
+`stable` component *deserves* to be stable — writing the criteria down makes that
+judgment reviewable, which is the most a taxonomy can honestly promise.
 
 ## By family
 
@@ -98,6 +134,11 @@ family works down its backlog (see
 Every component and its four trust signals. **Tests** = at least one `play()`
 interaction test in the story; **A11y** = family gate level; **Design** = a linked
 Figma frame via the story's `design` parameter.
+
+**Design reads `—` for every component, and that is correct:** no Figma library
+exists for dzup-ui, so nothing is linked. The column stays in place because the
+`design` parameter is wired end-to-end and will populate the day a real frame
+lands — see [Contributing → Design reference](?path=/docs/guides-contributing--docs#design-reference).
 
 <DocTable
   head={['Component', 'Family', 'Status', 'Tests', 'A11y', 'Design']}

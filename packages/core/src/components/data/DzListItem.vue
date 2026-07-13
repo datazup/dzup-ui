@@ -47,7 +47,7 @@ const styles = computed(() =>
 const classes = computed(() =>
   cn(
     styles.value.item(),
-    props.active ? 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]' : '',
+    props.active ? 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]' : '',
     'dz-disabled-control',
     attrs.class as string | undefined,
   ),

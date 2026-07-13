@@ -208,9 +208,9 @@ export const ChangeOnSelect: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Any level commits; the popover stays open to drill deeper.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Any level commits; the popover stays open to drill deeper.</p>
         <DzCascader v-model:value="value" :options="regions" change-on-select placeholder="Select region" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -260,7 +260,7 @@ export const HoverExpand: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Hover a node to reveal its children; click to select.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Hover a node to reveal its children; click to select.</p>
         <DzCascader :options="regions" expand-trigger="hover" placeholder="Hover to expand" />
       </div>
     `,
@@ -279,9 +279,9 @@ export const Filterable: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Open and type to search across full paths (e.g. "hang").</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Open and type to search across full paths (e.g. "hang").</p>
         <DzCascader v-model:value="value" :options="regions" filter placeholder="Search regions" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
       </div>
     `,
   }),

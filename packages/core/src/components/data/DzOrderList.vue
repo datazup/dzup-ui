@@ -595,14 +595,3 @@ function handleBlur(event: FocusEvent): void {
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Accessibility: respect the user's motion preference for drag transitions */
-@media (prefers-reduced-motion: reduce) {
-  :deep(*),
-  * {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
-}
-</style>

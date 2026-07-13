@@ -182,7 +182,7 @@ export const WithConstraints: Story = {
     components: { DzDateRangePicker },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">Only dates in Q1 2026 are selectable.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Only dates in Q1 2026 are selectable.</p>
         <DzDateRangePicker min="2026-01-01" max="2026-03-31" placeholder="Q1 2026 range" />
       </div>
     `,
@@ -256,7 +256,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-sm">
         <DzDateRangePicker v-model="range" placeholder="Pick a range" />
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Selected: <strong>{{ range ? range.start + ' to ' + range.end : 'none' }}</strong>
         </p>
       </div>
@@ -285,7 +285,7 @@ export const Accessibility: Story = {
     components: { DzDateRangePicker },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">Tab to focus, Enter to open, arrow keys to navigate, select start then end date.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus, Enter to open, arrow keys to navigate, select start then end date.</p>
         <DzDateRangePicker placeholder="Keyboard navigable" aria-label="Booking date range" />
       </div>
     `,
@@ -309,7 +309,7 @@ export const RealWorldBooking: Story = {
           name="booking-dates"
           aria-label="Hotel stay dates"
         />
-        <p class="text-xs text-gray-400 mt-1">Minimum stay: 1 night.</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Minimum stay: 1 night.</p>
       </div>
     `,
   }),

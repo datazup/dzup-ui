@@ -102,19 +102,19 @@ export const WithCustomIndicator: Story = {
       <DzTimeline aria-label="Custom indicators">
         <DzTimelineItem status="Step 1">
           <template #indicator>
-            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs font-bold">1</div>
+            <div class="w-6 h-6 rounded-full bg-[var(--dz-success-muted)] flex items-center justify-center text-[var(--dz-success-muted-foreground)] text-xs font-bold">1</div>
           </template>
           First step with numbered indicator.
         </DzTimelineItem>
         <DzTimelineItem status="Step 2">
           <template #indicator>
-            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">2</div>
+            <div class="w-6 h-6 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-[var(--dz-primary-muted-foreground)] text-xs font-bold">2</div>
           </template>
           Second step with numbered indicator.
         </DzTimelineItem>
         <DzTimelineItem status="Step 3">
           <template #indicator>
-            <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xs font-bold">3</div>
+            <div class="w-6 h-6 rounded-full bg-[var(--dz-colors-purple-100)] flex items-center justify-center text-[var(--dz-colors-purple-600)] text-xs font-bold">3</div>
           </template>
           Third step with numbered indicator.
         </DzTimelineItem>
@@ -136,15 +136,15 @@ export const RichContent: Story = {
       <DzTimeline aria-label="Activity log">
         <DzTimelineItem tone="success" status="10:23 AM">
           <p class="font-medium text-sm">Build Succeeded</p>
-          <p class="text-xs text-gray-500 mt-1">Pipeline #42 completed in 3m 12s. All 120 tests passed.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Pipeline #42 completed in 3m 12s. All 120 tests passed.</p>
         </DzTimelineItem>
         <DzTimelineItem tone="danger" status="11:45 AM">
           <p class="font-medium text-sm">Deployment Failed</p>
-          <p class="text-xs text-gray-500 mt-1">Staging environment returned HTTP 502 during health check.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Staging environment returned HTTP 502 during health check.</p>
         </DzTimelineItem>
         <DzTimelineItem tone="info" status="1:00 PM">
           <p class="font-medium text-sm">PR #128 Merged</p>
-          <p class="text-xs text-gray-500 mt-1">Alice merged "feat: add dark mode support" into main.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Alice merged "feat: add dark mode support" into main.</p>
         </DzTimelineItem>
       </DzTimeline>
     `,

@@ -19,7 +19,7 @@ import {
   DzText,
 } from '@dzup-ui/core'
 import { Activity, DollarSign, Search, TrendingUp, Users } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 // The live browser-window dashboard, composed entirely from @dzup-ui/core
 // (spec §4.3). Extracted from ShowcaseDashboard so it can be rendered twice —
@@ -30,7 +30,24 @@ import { ref } from 'vue'
 // `.frame-shell` is an inline-size container: the internal layout responds to
 // the *frame's* width (via @container below), not the viewport — essential when
 // each frame is only ~half the page in the desktop split.
-withDefaults(defineProps<{ label?: string }>(), { label: 'the current' })
+const props = withDefaults(
+  defineProps<{
+    label?: string
+    /**
+     * Trim the frame to what fits above the fold in the hero: drop the side
+     * column and shorten the member table. Still live components, never a
+     * screenshot — that is the whole point of showing it (TASK-DS-11).
+     */
+    compact?: boolean
+    /**
+     * The blurred brand glow pooling under the frame. Off in the hero: it is a
+     * `filter: blur(56px)` pass over the LCP element's neighbourhood, and the
+     * hero's decorative budget allows exactly one full-bleed layer.
+     */
+    glow?: boolean
+  }>(),
+  { label: 'the current', compact: false, glow: true },
+)
 
 const query = ref('')
 const notifications = ref(true)
@@ -41,12 +58,14 @@ const rangeItems = [
   { value: '90d', label: '90d' },
 ]
 
-const rows = [
+const allRows = [
   { name: 'Ava Restić', email: 'ava@acme.io', plan: 'Team', usage: 72, status: 'Active' },
   { name: 'Liam Novak', email: 'liam@acme.io', plan: 'Solo', usage: 38, status: 'Active' },
   { name: 'Mara Petrović', email: 'mara@acme.io', plan: 'Org', usage: 91, status: 'Trial' },
   { name: 'Noah Kvist', email: 'noah@acme.io', plan: 'Solo', usage: 14, status: 'Invited' },
 ]
+
+const rows = computed(() => (props.compact ? allRows.slice(0, 3) : allRows))
 
 const statusTone: Record<string, 'success' | 'warning' | 'info'> = {
   Active: 'success',
@@ -59,9 +78,14 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
 </script>
 
 <template>
-  <div class="frame-shell">
-    <div class="frame-glow" aria-hidden="true" />
-    <div class="window" role="img" :aria-label="`Example analytics dashboard built with dzup-ui, shown in ${label} theme`">
+  <div class="frame-shell" :class="{ 'frame-shell--compact': compact }">
+    <div v-if="glow" class="frame-glow" aria-hidden="true" />
+    <!-- `role="group"`, not `role="img"`. The frame is a *live* dashboard: it
+         contains a segmented control, a search input, a switch and buttons, all
+         of them tabbable. Announcing that as a single image is both wrong and an
+         axe `nested-interactive` violation — a screen reader would present one
+         opaque graphic that the keyboard can nevertheless walk into. -->
+    <div class="window" role="group" :aria-label="`Example analytics dashboard built with dzup-ui, shown in ${label} theme`">
       <div class="window-bar" aria-hidden="true">
         <span class="dots">
           <span class="dot dot-r" /><span class="dot dot-y" /><span class="dot dot-g" />
@@ -73,15 +97,23 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
       <div class="window-body">
         <div class="dash-toolbar">
           <div class="dash-title">
-            <DzHeading :level="3" size="lg" weight="semibold">Overview</DzHeading>
-            <DzBadge variant="subtle" tone="success" size="sm">Live</DzBadge>
+            <DzHeading :level="3" size="lg" weight="semibold">
+              Overview
+            </DzHeading>
+            <DzBadge variant="subtle" tone="success" size="sm">
+              Live
+            </DzBadge>
           </div>
           <div class="dash-toolbar-right">
             <DzSegmented v-model="range" :items="rangeItems" size="sm" aria-label="Date range" />
             <DzInput v-model="query" placeholder="Search…" size="sm" clearable class="dash-search">
-              <template #prefix><Search :size="15" aria-hidden="true" /></template>
+              <template #prefix>
+                <Search :size="15" aria-hidden="true" />
+              </template>
             </DzInput>
-            <DzButton size="sm" variant="solid" tone="primary">New report</DzButton>
+            <DzButton size="sm" variant="solid" tone="primary">
+              New report
+            </DzButton>
           </div>
         </div>
 
@@ -97,10 +129,16 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
             <DzCard variant="outlined" padding="md" class="chart-card">
               <div class="card-head-row">
                 <div>
-                  <DzText size="sm" tone="muted" as="div">Revenue</DzText>
-                  <DzText weight="semibold" as="div" class="chart-figure">$48,210</DzText>
+                  <DzText size="sm" tone="muted" as="div">
+                    Revenue
+                  </DzText>
+                  <DzText weight="semibold" as="div" class="chart-figure">
+                    $48,210
+                  </DzText>
                 </div>
-                <DzBadge variant="subtle" tone="success" size="sm">+12.4%</DzBadge>
+                <DzBadge variant="subtle" tone="success" size="sm">
+                  +12.4%
+                </DzBadge>
               </div>
               <div class="chart" aria-hidden="true">
                 <span v-for="(b, i) in bars" :key="i" class="bar" :style="{ height: `${b}%` }" />
@@ -110,17 +148,29 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
             <DzCard variant="outlined" padding="none" class="dash-table-card">
               <DzCardHeader>
                 <div class="card-head-row">
-                  <DzText weight="semibold">Members</DzText>
-                  <DzBadge variant="subtle" tone="primary">{{ rows.length }} seats</DzBadge>
+                  <DzText weight="semibold">
+                    Members
+                  </DzText>
+                  <DzBadge variant="subtle" tone="primary">
+                    {{ rows.length }} seats
+                  </DzBadge>
                 </div>
               </DzCardHeader>
               <DzTable size="sm" hoverable>
                 <DzTableHeader>
                   <DzTableRow>
-                    <DzTableCell header>Member</DzTableCell>
-                    <DzTableCell header>Plan</DzTableCell>
-                    <DzTableCell header>Usage</DzTableCell>
-                    <DzTableCell header>Status</DzTableCell>
+                    <DzTableCell header>
+                      Member
+                    </DzTableCell>
+                    <DzTableCell header>
+                      Plan
+                    </DzTableCell>
+                    <DzTableCell header>
+                      Usage
+                    </DzTableCell>
+                    <DzTableCell header>
+                      Status
+                    </DzTableCell>
                   </DzTableRow>
                 </DzTableHeader>
                 <DzTableBody>
@@ -129,22 +179,32 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
                       <div class="member-cell">
                         <DzAvatar :fallback="r.name.slice(0, 1)" size="sm" />
                         <div class="member-meta">
-                          <DzText size="sm" weight="medium" as="div">{{ r.name }}</DzText>
-                          <DzText size="xs" tone="muted" as="div">{{ r.email }}</DzText>
+                          <DzText size="sm" weight="medium" as="div">
+                            {{ r.name }}
+                          </DzText>
+                          <DzText size="xs" tone="muted" as="div">
+                            {{ r.email }}
+                          </DzText>
                         </div>
                       </div>
                     </DzTableCell>
                     <DzTableCell>
-                      <DzBadge variant="outline" tone="neutral" size="sm">{{ r.plan }}</DzBadge>
+                      <DzBadge variant="outline" tone="neutral" size="sm">
+                        {{ r.plan }}
+                      </DzBadge>
                     </DzTableCell>
                     <DzTableCell>
                       <div class="usage-cell">
                         <DzProgress :value="r.usage" size="sm" tone="primary" class="usage-bar" />
-                        <DzText size="xs" tone="muted">{{ r.usage }}%</DzText>
+                        <DzText size="xs" tone="muted">
+                          {{ r.usage }}%
+                        </DzText>
                       </div>
                     </DzTableCell>
                     <DzTableCell>
-                      <DzBadge variant="subtle" :tone="statusTone[r.status]" size="sm">{{ r.status }}</DzBadge>
+                      <DzBadge variant="subtle" :tone="statusTone[r.status]" size="sm">
+                        {{ r.status }}
+                      </DzBadge>
                     </DzTableCell>
                   </DzTableRow>
                 </DzTableBody>
@@ -152,24 +212,38 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
             </DzCard>
           </div>
 
-          <div class="dash-side">
+          <div v-if="!compact" class="dash-side">
             <DzCard variant="outlined" padding="md">
-              <DzText weight="semibold" as="div" class="side-title">Storage</DzText>
-              <DzText size="sm" tone="muted" as="div" class="side-sub">68.4 GB of 100 GB used</DzText>
+              <DzText weight="semibold" as="div" class="side-title">
+                Storage
+              </DzText>
+              <DzText size="sm" tone="muted" as="div" class="side-sub">
+                68.4 GB of 100 GB used
+              </DzText>
               <DzProgress :value="68" tone="primary" class="side-progress" />
             </DzCard>
 
             <DzCard variant="outlined" padding="md">
-              <DzText weight="semibold" as="div" class="side-title">Preferences</DzText>
+              <DzText weight="semibold" as="div" class="side-title">
+                Preferences
+              </DzText>
               <div class="pref-row">
-                <DzText size="sm">Email notifications</DzText>
+                <DzText size="sm">
+                  Email notifications
+                </DzText>
                 <DzSwitch v-model="notifications" size="sm" aria-label="Email notifications" />
               </div>
               <div class="pref-row">
-                <DzText size="sm">Two-factor auth</DzText>
-                <DzBadge variant="subtle" tone="success" size="sm">On</DzBadge>
+                <DzText size="sm">
+                  Two-factor auth
+                </DzText>
+                <DzBadge variant="subtle" tone="success" size="sm">
+                  On
+                </DzBadge>
               </div>
-              <DzButton size="sm" variant="ghost" tone="primary" class="side-btn">Manage plan</DzButton>
+              <DzButton size="sm" variant="ghost" tone="primary" class="side-btn">
+                Manage plan
+              </DzButton>
             </DzCard>
           </div>
         </div>
@@ -378,6 +452,37 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
 }
 .side-btn {
   margin-top: 8px;
+}
+
+/* Compact (hero) frame: no side column, so the main column takes the full width,
+   and the chart + padding shrink to keep the whole frame above the fold at
+   1280x800. Everything inside stays live.
+
+   These rules deliberately outrank the @container fallbacks below (two class
+   selectors beat one): the hero pane is ~610px wide, which would otherwise trip
+   the 640px breakpoint and stack the stat cards into two rows there is no fold
+   budget for. The compact frame is narrow, but it is not *small*. */
+.frame-shell--compact .dash-grid {
+  grid-template-columns: 1fr;
+}
+
+.frame-shell--compact .stat-row {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.frame-shell--compact .window-body {
+  gap: 12px;
+  padding: clamp(12px, 1.8cqw, 16px);
+}
+
+.frame-shell--compact .dash-search {
+  width: 128px;
+}
+
+.frame-shell--compact .chart {
+  height: 56px;
+  margin-top: 10px;
 }
 
 /* Frame-width breakpoints (container queries): the dashboard collapses when the

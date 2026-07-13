@@ -117,6 +117,52 @@ As predicted, switch-on was a single `addons` line — zero story rewrites.
 This feeds the maturity dashboard's **Design** column (a component counts as
 "design-linked" once its `meta` carries `parameters.design`).
 
+### Update 2026-07-10 (TASK-DS-07) — scoped back: no Figma library exists
+
+**Decision: Path B.** The placeholder seeds are removed and the documentation now
+says plainly that no component links a Figma frame. Confirmed with the maintainer
+on 2026-07-10: there is no maintained Figma library for dzup-ui and none is in
+progress.
+
+**Why the previous state was worse than doing nothing.** Points 4 and 5 above
+described seeds that never worked. `addon-designs` parses a Figma URL with
+`/figma\.com\/([\w-]+)\/([0-9a-zA-Z]{22,128})/` — the file key must be 22+
+*alphanumeric* characters. `dzup-ui-design-system` is 21 characters and contains
+hyphens, so it never matched; the addon fell through to a plain iframe of a URL
+that does not resolve. All three "flagship seeds" and the `Buttons.mdx` embed
+rendered a broken frame, not a design. Meanwhile `Contributing.mdx` told authors
+"Do not point it at a placeholder file; an empty panel is the honest signal" — a
+rule the repo itself broke in the three most-visited stories.
+
+A blank Design panel reads as *scope*. A broken iframe reads as *neglect*. Half of
+~139 components showing the first and three showing the second was the one state
+not worth staying in.
+
+**What changed:**
+
+- `parameters.design` deleted from `DzButton`, `DzCard`, `DzInput` stories. (In
+  `DzCard` the surrounding `parameters` block survives — it carries `a11yError`.)
+- The `<Figma>` embed and its import deleted from `Buttons.mdx`, along with the
+  "Design source" section that claimed the family "is specified in Figma."
+- `_shared/Dz.stories.template.ts` no longer seeds a `REPLACE_ME` URL. The
+  convention survives as a comment showing the shape to add when a frame exists.
+- **Contributing → "Design reference"** now leads with the ground truth ("there is
+  no Figma library for dzup-ui today"), and states that the code — variants,
+  tokens, stories — is the source of truth.
+- **ComponentStatus** explains that its Design column reads `—` for every component
+  by design, rather than leaving a fully-empty column to read as an unfilled gap.
+
+**What was deliberately kept.** `@storybook/addon-designs` stays installed and the
+`design` parameter stays wired through `componentStatus.ts`. The original Sprint-0
+reasoning still holds: the convention costs nothing while unused, and keeping it
+means the first real frame is a one-line story change rather than a migration. The
+dashboard column is the coverage tracker Path A would have needed — it simply reads
+zero today.
+
+**Revisit when:** a Figma library ships. At that point Path A becomes available —
+seed the flagships first, add `design` to the story template, and the Design column
+starts counting without any further plumbing.
+
 ## TASK-X.4 — Public vs app-specific triage (Feedback components)
 
 **Decision (Sprint 6 scope):** classify the five flagged feedback components as
@@ -217,13 +263,31 @@ and `showRoots: true` in `manager.ts`.
 
 ### TASK-X.3 / TASK-X.5 / TASK-X.8 — gated on infrastructure
 
-- **TASK-X.3 (a11y `error` gate):** the rollout is per-family — set
-  `parameters: { a11y: { test: 'error' } }` on a family's stories once its audit is
-  clean. This **cannot be validated locally** until the Vitest addon install lands
-  (TASK-0.9 — needs `yarn install` + `playwright install chromium`). Left global at
-  `'todo'`; flipping families to `'error'` without being able to run the audit would
-  risk red CI on states never actually scanned. Ready to roll out family-by-family
-  once TASK-0.9 is green.
+- **TASK-X.3 (a11y `error` gate): IN PROGRESS — 1 of 11 families enforced
+  (2026-07-09, TASK-DS-06).** The rollout is per-family: spread `a11yError` into a
+  family's story metas once its audit is clean. The blocker named below (TASK-0.9)
+  is resolved — the Vitest browser runner works, and the audit has now been run for
+  real across all 175 story files.
+
+  **Cards is enforced** (`packages/core/stories/cards/*.stories.ts`, 4 files,
+  0 violations). The global default stays `'todo'`; the remaining 10 families are
+  report-only against a measured backlog (Buttons 0, Overlays 1, Compositions 3,
+  Media 3, Typography 3, Feedback 13, Layout 14, Inputs 26, Navigation 36, Data 39,
+  Forms 82 failing stories).
+
+  Choosing Cards over Typography followed the task's own instruction, and the data
+  agreed: Cards had 3 failing stories to Typography's 9. **Buttons audits at 0 and
+  is the obvious next notch** — it was excluded here only because the task said to
+  start narrow and not with buttons.
+
+  Driving Cards to zero required one **component** fix, not a story patch:
+  `DzText`, `DzCaption`, `DzRelativeTime` and `DzStatCard` rendered
+  `--dz-{intent}` as a text colour (3.69–4.38:1 in light — below AA). They now use
+  `--dz-{intent}-muted-foreground` (7.31–10.25:1). That single fix also cleared 6
+  of Typography's 9.
+
+  The per-family recipe is written down in `apps/storybook/stories/Accessibility.mdx`
+  so the next family is a checklist, not a rediscovery.
 - **TASK-X.5 (visual-regression gate):** Chromatic now runs non-blocking on PRs
   (TASK-APP-01 / `.github/workflows/chromatic.yml`). **Promote to a required
   check once baselines are trusted:**

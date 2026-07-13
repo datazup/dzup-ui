@@ -298,7 +298,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Click the trigger or press Enter/Space to open. Use ArrowUp/ArrowDown to navigate items.
           Press Enter to select, Escape to close. Disabled items are skipped during navigation.
         </p>
@@ -357,8 +357,8 @@ export const RealWorldAccountMenu: Story = {
       <div class="flex justify-end py-4 px-4">
         <DzDropdownMenu>
           <DzDropdownMenuTrigger as-child>
-            <button class="flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm hover:bg-gray-50">
-              <span class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-medium">J</span>
+            <button class="flex items-center gap-2 rounded-full border border-[var(--dz-border)] px-3 py-1.5 text-sm hover:bg-[var(--dz-muted)]">
+              <span class="w-6 h-6 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-[var(--dz-primary-muted-foreground)] text-xs font-medium">J</span>
               John Doe
             </button>
           </DzDropdownMenuTrigger>

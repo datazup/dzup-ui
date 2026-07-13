@@ -45,7 +45,7 @@ export const comboboxVariants = tv({
       'outline-none',
       'transition-[var(--dz-transition-fast)]',
       'data-[highlighted]:bg-[var(--dz-muted)]',
-      'data-[state=checked]:bg-[var(--dz-primary-muted)] data-[state=checked]:text-[var(--dz-primary)]',
+      'data-[state=checked]:bg-[var(--dz-primary-muted)] data-[state=checked]:text-[var(--dz-primary-muted-foreground)]',
       'dz-disabled-control',
     ].join(' '),
     empty: [

@@ -145,11 +145,3 @@ onBeforeUnmount(() => {
     </button>
   </div>
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  [data-state] {
-    transition: none !important;
-  }
-}
-</style>

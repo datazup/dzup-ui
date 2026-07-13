@@ -45,24 +45,41 @@ type CanonicalTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 
 
 ## Component Structure
 
-155 `.vue` files in `packages/core/src/components/` across 11 families:
+**205** `.vue` files in `packages/core/src/components/` across 11 families:
 `buttons`, `cards`, `data`, `feedback`, `forms`, `inputs`, `layout`, `media`,
 `navigation`, `overlays`, `typography`
 
+> The count is **glob-derived**, not hand-maintained: `packages/tokens/src/design-md.ts`
+> counts `.vue` files at generate time and feeds DESIGN.md. Re-run
+> `yarn tokens:generate` after adding a component; never edit a count by hand.
+> Counting rule: every exported `.vue` component, **including** compound
+> sub-parts such as `DzCardBody` and `DzSplitButtonMenu`.
+
 17 composables in `packages/core/src/composables/`.
 
-### File layout per component (example: `buttons/DzButton`)
+### File layout — flat within each family
+
+Components are **not** nested in a folder of their own. Every file for every
+component in a family sits directly in the family directory, and each family has
+exactly one `index.ts` (11 in total, one per family — not one per component).
 
 ```
 packages/core/src/components/buttons/
-  DzButton.vue               # <script setup lang="ts"> implementation
+  DzButton.vue                # <script setup lang="ts"> implementation
   DzButton.types.ts           # Props, emits, slots interfaces (extends contracts)
   DzButton.tokens.ts          # Component-specific token mappings
   DzButton.variants.ts        # tailwind-variants tv() style definitions
   DzButton.contract.spec.ts   # Contract conformance tests
   DzButton.spec.ts            # Unit/behavior tests (vitest)
-  index.ts                    # Public exports
+  DzButtonGroup.vue           # …the next component, same directory
+  DzSplitButton.vue
+  DzSplitButtonMenu.vue       # compound sub-part — bare .vue, no sibling files
+  index.ts                    # ONE per family: re-exports every component in it
 ```
+
+Only `.vue` + `.types.ts` are universal. `.tokens.ts` and `.variants.ts` exist
+where a component needs them (`DzCopyButton` has no `.tokens.ts`; `DzIconButton`
+has no `.variants.ts`), and compound sub-parts are often a lone `.vue`.
 
 Stories are NOT colocated -- they live in:
 `packages/core/stories/{FAMILY}/DzComponent.stories.ts`
@@ -203,6 +220,9 @@ All PRs must pass:
 ## Quick Rules for Agents
 
 1. **Never use raw colors** -- always `var(--dz-*)` tokens inside Tailwind classes
+1b. **`--dz-{intent}` is a fill/border color, never a text color.** For intent-colored
+   text use `--dz-{intent}-muted-foreground`. `text-[var(--dz-danger)]` fails WCAG AA
+   on the page background and on `--dz-danger-muted`; `yarn validate:tokens` rejects it.
 2. **Never use `<style scoped>`** -- use `tv()` in `.variants.ts`
 3. **Always extend contracts** -- props interfaces extend `Base*Props` from `@dzup-ui/contracts`
 4. **Use `defineModel`** for v-model, not manual prop+emit (ADR-16)

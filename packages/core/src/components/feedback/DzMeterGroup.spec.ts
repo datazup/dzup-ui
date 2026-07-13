@@ -93,7 +93,7 @@ describe('dzMeterGroup — Unit Tests', () => {
 
   it('resolves tone to a token-based background color', () => {
     const wrapper = mount(DzMeterGroup, { props: { values } })
-    expect(segmentStyles(wrapper)[0]!.backgroundColor).toBe('var(--dz-primary)')
+    expect(segmentStyles(wrapper)[0]!.backgroundColor).toBe('var(--dz-primary-solid)')
   })
 
   it('prefers an explicit color token over tone', () => {
@@ -108,8 +108,8 @@ describe('dzMeterGroup — Unit Tests', () => {
       props: { values: [{ label: 'A', value: 1 }, { label: 'B', value: 1 }] },
     })
     const colors = segmentStyles(wrapper).map(s => s.backgroundColor)
-    expect(colors[0]).toBe('var(--dz-primary)')
-    expect(colors[1]).toBe('var(--dz-info)')
+    expect(colors[0]).toBe('var(--dz-primary-solid)')
+    expect(colors[1]).toBe('var(--dz-info-solid)')
   })
 
   // -- Legend --

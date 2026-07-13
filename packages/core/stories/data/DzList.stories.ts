@@ -205,7 +205,7 @@ export const Interactive: Story = {
             @click="selected = item"
           >{{ item }}</DzListItem>
         </DzList>
-        <p class="text-sm text-gray-500">Selected: {{ selected || 'none' }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: {{ selected || 'none' }}</p>
       </div>
     `,
   }),
@@ -246,29 +246,29 @@ export const WithSlots: Story = {
       <DzList variant="divided" aria-label="Contact list">
         <DzListItem>
           <template #prefix>
-            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-medium text-blue-700">AJ</div>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-xs font-medium text-[var(--dz-primary-muted-foreground)]">AJ</div>
           </template>
           Alice Johnson
           <template #suffix>
-            <span class="text-xs text-gray-400">Online</span>
+            <span class="text-xs text-[var(--dz-muted-foreground)]">Online</span>
           </template>
         </DzListItem>
         <DzListItem>
           <template #prefix>
-            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-xs font-medium text-green-700">BS</div>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-success-muted)] flex items-center justify-center text-xs font-medium text-[var(--dz-success-muted-foreground)]">BS</div>
           </template>
           Bob Smith
           <template #suffix>
-            <span class="text-xs text-gray-400">Away</span>
+            <span class="text-xs text-[var(--dz-muted-foreground)]">Away</span>
           </template>
         </DzListItem>
         <DzListItem disabled>
           <template #prefix>
-            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-400">CL</div>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-muted)] flex items-center justify-center text-xs font-medium text-[var(--dz-muted-foreground)]">CL</div>
           </template>
           Charlie Lee
           <template #suffix>
-            <span class="text-xs text-gray-400">Offline</span>
+            <span class="text-xs text-[var(--dz-muted-foreground)]">Offline</span>
           </template>
         </DzListItem>
       </DzList>
@@ -349,7 +349,7 @@ export const Empty: Story = {
     template: `
       <DzList variant="bordered" aria-label="Empty list">
         <template #empty>
-          <div class="text-center py-6 text-gray-500">
+          <div class="text-center py-6 text-[var(--dz-muted-foreground)]">
             No items yet. Add your first item to get started.
           </div>
         </template>
@@ -398,7 +398,7 @@ export const Accessibility: Story = {
     components: { DzList, DzListItem },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Interactive lists support keyboard navigation. Tab into the list,
           then use Arrow Up/Down to move between items. Enter or Space activates the focused item.
           Disabled items are skipped during keyboard navigation.
@@ -435,7 +435,7 @@ export const RealWorldSettingsMenu: Story = {
             @click="active = section"
           >
             <template #suffix>
-              <span class="text-gray-400">&rsaquo;</span>
+              <span class="text-[var(--dz-muted-foreground)]">&rsaquo;</span>
             </template>
             {{ section }}
           </DzListItem>
@@ -480,29 +480,29 @@ export const RealWorldActivityFeed: Story = {
         <DzList variant="divided" aria-label="Recent activity">
           <DzListItem tone="success">
             <template #prefix>
-              <div class="w-2 h-2 rounded-full bg-green-500 mt-1.5"></div>
+              <div class="w-2 h-2 rounded-full bg-[var(--dz-success)] mt-1.5"></div>
             </template>
             <div>
               <p class="text-sm font-medium">Build #42 passed</p>
-              <p class="text-xs text-gray-400">2 minutes ago</p>
+              <p class="text-xs text-[var(--dz-muted-foreground)]">2 minutes ago</p>
             </div>
           </DzListItem>
           <DzListItem tone="danger">
             <template #prefix>
-              <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5"></div>
+              <div class="w-2 h-2 rounded-full bg-[var(--dz-danger)] mt-1.5"></div>
             </template>
             <div>
               <p class="text-sm font-medium">Deployment failed on staging</p>
-              <p class="text-xs text-gray-400">15 minutes ago</p>
+              <p class="text-xs text-[var(--dz-muted-foreground)]">15 minutes ago</p>
             </div>
           </DzListItem>
           <DzListItem tone="info">
             <template #prefix>
-              <div class="w-2 h-2 rounded-full bg-blue-500 mt-1.5"></div>
+              <div class="w-2 h-2 rounded-full bg-[var(--dz-primary)] mt-1.5"></div>
             </template>
             <div>
               <p class="text-sm font-medium">PR #128 merged by Alice</p>
-              <p class="text-xs text-gray-400">1 hour ago</p>
+              <p class="text-xs text-[var(--dz-muted-foreground)]">1 hour ago</p>
             </div>
           </DzListItem>
         </DzList>

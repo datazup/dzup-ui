@@ -85,9 +85,13 @@ const contentStyles = computed(() => {
       <slot name="header" :filename="filename" :language="language">
         <div :class="styles.filename()">
           <span v-if="filename" data-part="filename">{{ filename }}</span>
+          <!-- The chip inherits the header's muted foreground, which measures
+               3.64:1 against its own 10%-foreground fill — below WCAG AA. It
+               carries real information (the language), so it takes the full
+               foreground colour rather than the muted one. -->
           <span
             v-if="language"
-            class="rounded bg-[var(--dz-foreground)]/10 px-1.5 py-0.5"
+            class="rounded bg-[var(--dz-foreground)]/10 px-1.5 py-0.5 text-[var(--dz-foreground)]"
             data-part="language"
           >
             {{ language }}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// token-check-disable-file — this screen is the raw-Tailwind visual target the token system is measured against; tokenizing it would erase the comparison.
 // Free-styled reference screen — RAW Tailwind 4 only.
 // No @dzup-ui components, no design-system tokens. This is the "looks great" visual target.
 

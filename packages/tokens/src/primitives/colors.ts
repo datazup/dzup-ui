@@ -67,6 +67,29 @@ interface PaletteConfig {
  *     semantic meaning on their own; reach for them only when no intent token
  *     expresses your purpose. Hues are spaced ~15–20° apart around the OKLCH
  *     wheel so adjacent categorical series stay visually distinct.
+ *
+ * ── On the intent/decorative "near-twins" (TASK-DS-10, investigated 2026-07-10) ──
+ *
+ * Several intents sit within a few degrees of a decorative palette — `primary` 260°
+ * vs `blue` 258°, `secondary` 290° vs `violet` 292°, `danger` 25° vs `red` 27°. They
+ * look like duplicates. **They are not, and they must not be aliased onto each other.**
+ *
+ *  - They differ in CHROMA, which a hue comparison hides. Measured in Oklab (JND ≈
+ *    0.02), only `danger`/`red` (ΔE 0.012), `info`/`sky` (0.016) and `neutral`/`slate`
+ *    (0.008) are perceptually equivalent. `secondary`/`violet` is ΔE 0.060 — 3× JND,
+ *    a visibly different color (chroma 0.14 vs 0.20).
+ *  - `apps/landing/src/templates/previewCustomiser.ts` re-skins a preview by writing
+ *    `--dz-colors-primary-<shade>: var(--dz-colors-<palette>-<shade>)` at runtime, and
+ *    its preset list includes `blue` and `violet`. Aliasing a decorative ramp onto an
+ *    intent would make that a CIRCULAR var() reference — CSS resolves it to the
+ *    guaranteed-invalid value, blanking the entire primary ramp.
+ *  - `useThemeDesigner.ts` regenerates `--dz-colors-{intent}-*` for every intent, so an
+ *    alias would make a user's intent retune silently move their decorative chart colors.
+ *  - There is no payload win: aliasing the three safe pairs makes the emitted tokens.css
+ *    63 bytes LARGER raw and 18 bytes (0.29%) smaller gzipped. `var(--dz-colors-danger-500)`
+ *    is longer than the `oklch(…)` literal it would replace.
+ *
+ * The duplication is deliberate. Keep the ramps independent.
  */
 export const PALETTE_CONFIGS = {
   /* ── Intent palettes ── */

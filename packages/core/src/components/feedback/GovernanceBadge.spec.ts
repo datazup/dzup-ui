@@ -68,7 +68,7 @@ describe('governanceBadge — Unit Tests', () => {
   it('applies pattern color as background and border in inline style', () => {
     const wrapper = mount(GovernanceBadge, { props: { pattern: 'peer_to_peer' } })
     const style = wrapper.attributes('style') ?? ''
-    expect(style).toContain('var(--dz-success)')
+    expect(style).toContain('var(--dz-success-solid)')
     expect(style).toContain('var(--dz-primary-foreground)')
   })
 })

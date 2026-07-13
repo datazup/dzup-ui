@@ -39,6 +39,7 @@ const jsonSnippet = `{
 }`
 
 // A single very long line, used to demonstrate horizontal overflow.
+// token-check-disable-next-line — this is source code rendered as content, not a style applied to the page.
 const longLineSnippet = `const config = { theme: 'system', tokens: { primary: '#3b82f6', radius: '8px' }, components: ['DzButton', 'DzCard', 'DzInput', 'DzTable', 'DzDataGrid', 'DzAccordion'] }`
 
 // A tall snippet, used to demonstrate max-height + vertical scroll.

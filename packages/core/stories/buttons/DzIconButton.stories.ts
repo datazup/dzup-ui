@@ -346,11 +346,11 @@ export const RealWorldToolbar: Story = {
       return { Pencil, Trash2, Settings, Search }
     },
     template: `
-      <div class="flex gap-1 p-2 border rounded-lg">
+      <div class="flex gap-1 p-2 border border-[var(--dz-border)] rounded-lg">
         <DzIconButton :icon="Search" aria-label="Search" variant="ghost" tone="neutral" />
         <DzIconButton :icon="Pencil" aria-label="Edit" variant="ghost" tone="neutral" />
         <DzIconButton :icon="Settings" aria-label="Settings" variant="ghost" tone="neutral" />
-        <div class="w-px bg-gray-200 mx-1"></div>
+        <div class="w-px bg-[var(--dz-muted)] mx-1"></div>
         <DzIconButton :icon="Trash2" aria-label="Delete" variant="ghost" tone="danger" />
       </div>
     `,
@@ -390,7 +390,7 @@ export const RealWorldClose: Story = {
       return { X }
     },
     template: `
-      <div class="relative border rounded-lg p-4 pr-10 max-w-xs">
+      <div class="relative border border-[var(--dz-border)] rounded-lg p-4 pr-10 max-w-xs">
         <DzIconButton
           :icon="X"
           aria-label="Close"

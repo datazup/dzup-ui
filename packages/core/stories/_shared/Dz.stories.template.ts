@@ -36,15 +36,14 @@ const meta = {
           'One-sentence summary of what DzExample is and when to reach for it.',
       },
     },
-    // Design reference (TASK-0.15) — link the Figma frame for this component so the
-    // "Design" addon panel shows the source-of-truth beside the live render.
-    // REQUIRED when a Figma frame exists; omit entirely if none does yet (the panel
-    // then shows a friendly "design link coming soon" placeholder rather than an error).
-    // See Contributing → "Design reference".
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/design/REPLACE_ME/dzup-ui?node-id=0-0',
-    },
+    // Design reference (TASK-0.15) — no Figma library exists for dzup-ui today, so
+    // no story carries this parameter. If a frame ever lands, add it here and the
+    // "Design" addon panel picks it up beside the live render:
+    //
+    //   design: { type: 'figma', url: 'https://www.figma.com/design/<key>?node-id=<id>' }
+    //
+    // Leave it out until then — an empty panel is the honest signal, and a
+    // placeholder URL renders a broken iframe. See Contributing → "Design reference".
   },
   argTypes: {
     // Appearance

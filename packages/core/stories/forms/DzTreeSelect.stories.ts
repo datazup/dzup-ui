@@ -116,7 +116,7 @@ export const Single: Story = {
     template: `
       <div class="max-w-xs space-y-3">
         <DzTreeSelect v-bind="args" v-model:value="value" :expanded-keys="['fruit']" />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ value || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ value || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -172,7 +172,7 @@ export const MultipleChips: Story = {
           :expanded-keys="['fruit', 'vegetable']"
           placeholder="Select categories..."
         />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ value.join(', ') || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ value.join(', ') || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -226,7 +226,7 @@ export const CheckboxPropagation: Story = {
           :expanded-keys="['fruit', 'citrus', 'vegetable']"
           placeholder="Select with checkboxes..."
         />
-        <p class="text-sm text-gray-500">Checked: <strong>{{ value.join(', ') || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Checked: <strong>{{ value.join(', ') || 'none' }}</strong></p>
       </div>
     `,
   }),

@@ -167,7 +167,7 @@ export const WithConstraints: Story = {
     components: { DzDatePicker },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Only dates in 2026 are selectable.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Only dates in 2026 are selectable.</p>
         <DzDatePicker min="2026-01-01" max="2026-12-31" placeholder="Pick a date in 2026" />
       </div>
     `,
@@ -274,7 +274,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-xs">
         <DzDatePicker v-model="date" placeholder="Pick a date" />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ date || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ date || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -301,7 +301,7 @@ export const Accessibility: Story = {
     components: { DzDatePicker },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Tab to focus, Enter/Space to open calendar, arrow keys to navigate dates.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus, Enter/Space to open calendar, arrow keys to navigate dates.</p>
         <DzDatePicker placeholder="Keyboard navigable" aria-label="Appointment date" />
       </div>
     `,
@@ -326,7 +326,7 @@ export const RealWorldBirthDate: Story = {
           required
           aria-label="Date of birth"
         />
-        <p class="text-xs text-gray-400 mt-1">You must be at least 18 years old.</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">You must be at least 18 years old.</p>
       </div>
     `,
   }),

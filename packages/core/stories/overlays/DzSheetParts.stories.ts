@@ -156,17 +156,17 @@ export const WithFormContent: Story = {
           <form class="space-y-4 mt-4" @submit.prevent>
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
-              <input type="text" value="Alice Johnson" placeholder="Full name" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="text" value="Alice Johnson" placeholder="Full name" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Email</label>
-              <input type="email" value="alice@example.com" placeholder="Email address" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="email" value="alice@example.com" placeholder="Email address" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Bio</label>
-              <textarea class="w-full border rounded px-3 py-2 text-sm" rows="3">Software engineer at Acme Inc.</textarea>
+              <textarea class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" rows="3">Software engineer at Acme Inc.</textarea>
             </div>
-            <div class="flex gap-3 pt-2 border-t">
+            <div class="flex gap-3 pt-2 border-t border-t-[var(--dz-border)]">
               <DzSheetClose as-child>
                 <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
               </DzSheetClose>
@@ -219,7 +219,7 @@ export const Interactive: Story = {
       <div class="space-y-4">
         <div class="flex gap-4 items-center">
           <DzButton @click="isOpen = true">Open Programmatically</DzButton>
-          <span class="text-sm text-gray-500">State: {{ isOpen ? 'Open' : 'Closed' }}</span>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">State: {{ isOpen ? 'Open' : 'Closed' }}</span>
         </div>
         <DzSheet v-model:open="isOpen">
           <DzSheetContent side="right">
@@ -265,7 +265,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSheet uses Reka UI Dialog for focus management. Focus is trapped inside
           the sheet when open. Pressing Escape closes the sheet. Focus returns to
           the trigger on close. DzSheetTitle and DzSheetDescription provide

@@ -119,7 +119,7 @@ export const WithSelect: Story = {
         <DzFloatLabel label="Country" :filled="!!country">
           <DzSelect v-model="country" :items="items" />
         </DzFloatLabel>
-        <p class="text-sm text-gray-500">Value: <strong>{{ country || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ country || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -136,19 +136,19 @@ export const Variants: Story = {
     template: `
       <div class="max-w-xs space-y-10 pt-6">
         <div>
-          <p class="mb-1 text-xs uppercase tracking-wide text-gray-400">over</p>
+          <p class="mb-1 text-xs uppercase tracking-wide text-[var(--dz-muted-foreground)]">over</p>
           <DzFloatLabel label="Over label" variant="over">
             <DzInput />
           </DzFloatLabel>
         </div>
         <div>
-          <p class="mb-1 text-xs uppercase tracking-wide text-gray-400">in</p>
+          <p class="mb-1 text-xs uppercase tracking-wide text-[var(--dz-muted-foreground)]">in</p>
           <DzFloatLabel label="In label" variant="in">
             <DzInput class="pt-5" />
           </DzFloatLabel>
         </div>
         <div>
-          <p class="mb-1 text-xs uppercase tracking-wide text-gray-400">on</p>
+          <p class="mb-1 text-xs uppercase tracking-wide text-[var(--dz-muted-foreground)]">on</p>
           <DzFloatLabel label="On label" variant="on">
             <DzInput />
           </DzFloatLabel>

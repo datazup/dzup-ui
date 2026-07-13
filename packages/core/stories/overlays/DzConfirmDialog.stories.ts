@@ -199,7 +199,7 @@ export const DangerConfirm: Story = {
       <div class="space-y-4">
         <div class="flex gap-4 items-center">
           <DzButton tone="danger" @click="isOpen = true; deleted = false">Delete Items</DzButton>
-          <span v-if="deleted" class="text-sm text-red-600">Items deleted.</span>
+          <span v-if="deleted" class="text-sm text-[var(--dz-danger-muted-foreground)]">Items deleted.</span>
         </div>
         <DzConfirmDialog
           v-bind="args"
@@ -237,7 +237,7 @@ export const AsyncLoading: Story = {
       <div class="space-y-4">
         <div class="flex gap-4 items-center">
           <DzButton @click="isOpen = true; saved = false">Save Changes</DzButton>
-          <span v-if="saved" class="text-sm text-green-600">Saved!</span>
+          <span v-if="saved" class="text-sm text-[var(--dz-success-muted-foreground)]">Saved!</span>
         </div>
         <DzConfirmDialog
           v-model:open="isOpen"
@@ -277,7 +277,7 @@ export const WithSlots: Story = {
           <template #icon>
             <span class="text-2xl" aria-hidden="true">&#128274;</span>
           </template>
-          <div class="text-center text-sm text-gray-500 space-y-2">
+          <div class="text-center text-sm text-[var(--dz-muted-foreground)] space-y-2">
             <p>You'll be signed out of <strong>4 active sessions</strong>:</p>
             <ul class="text-xs">
               <li>MacBook Pro · San Francisco</li>
@@ -334,7 +334,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500 max-w-md">
+        <p class="text-sm text-[var(--dz-muted-foreground)] max-w-md">
           The dialog uses <code>role="dialog"</code> with <code>aria-modal="true"</code>,
           and its title/message are wired to <code>aria-labelledby</code> /
           <code>aria-describedby</code>. Focus is trapped while open; Escape or an
@@ -367,14 +367,14 @@ export const RealWorldUnsavedChanges: Story = {
     },
     template: `
       <div class="space-y-4 max-w-md">
-        <div class="rounded-lg border p-4 space-y-2">
+        <div class="rounded-lg border border-[var(--dz-border)] p-4 space-y-2">
           <label class="block text-sm font-medium">Article title</label>
-          <input type="text" value="Draft: untitled" class="w-full border rounded px-3 py-2 text-sm" />
-          <p class="text-xs text-amber-600">You have unsaved changes.</p>
+          <input type="text" value="Draft: untitled" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
+          <p class="text-xs text-[var(--dz-warning-muted-foreground)]">You have unsaved changes.</p>
         </div>
         <div class="flex gap-3 items-center">
           <DzButton variant="outline" tone="neutral" @click="isOpen = true">Leave page</DzButton>
-          <span v-if="navigated" class="text-sm text-gray-500">Navigated away.</span>
+          <span v-if="navigated" class="text-sm text-[var(--dz-muted-foreground)]">Navigated away.</span>
         </div>
         <DzConfirmDialog
           v-model:open="isOpen"

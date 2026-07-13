@@ -7,7 +7,9 @@ import {
   dzupMcpConfig,
   dzupMcpVscodeConfig,
 } from '../blocks/config.ts'
-import { LINKS } from '../config.ts'
+import { BLOCKS } from '../blocks/registry.ts'
+import { FACTS, LINKS } from '../config.ts'
+import { TEMPLATES } from '../templates/registry.ts'
 
 /**
  * /ai — "Use dzup-ui with your AI IDE" (Task G5, discovery half).
@@ -59,10 +61,13 @@ const clients: Array<{ id: string, name: string, where: string, cli?: string, co
   },
 ]
 
+// Counts are derived from the registries, never typed. A hand-maintained
+// literal here drifted to "158 components / 88 blocks" while the real figures
+// were 139 and 87.
 const tools = [
-  { icon: Boxes, name: 'list_components / get_component', blurb: '158 components — families, props, emits, slots, taxonomy and a usage snippet.' },
-  { icon: LayoutTemplate, name: 'list_blocks / get_block', blurb: '88 pre-composed blocks — fetch the real .vue source and install command.' },
-  { icon: LayoutTemplate, name: 'list_templates / get_template', blurb: '44 full-page templates — dashboards, auth, settings and marketing pages.' },
+  { icon: Boxes, name: 'list_components / get_component', blurb: `${FACTS.freeComponents} components — families, props, emits, slots, taxonomy and a usage snippet.` },
+  { icon: LayoutTemplate, name: 'list_blocks / get_block', blurb: `${BLOCKS.length} pre-composed blocks — fetch the real .vue source and install command.` },
+  { icon: LayoutTemplate, name: 'list_templates / get_template', blurb: `${TEMPLATES.length} full-page templates — dashboards, auth, settings and marketing pages.` },
   { icon: Palette, name: 'list_tokens', blurb: 'The --dz-* OKLCH design tokens as light/dark CSS variables.' },
   { icon: Terminal, name: 'get_install_command', blurb: 'The exact shadcn add command for any block/template, per package manager.' },
   { icon: Sparkles, name: 'search', blurb: 'One query across components, blocks and templates.' },

@@ -113,7 +113,7 @@ export const AllSizes: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']" :key="size" class="flex items-baseline gap-4">
-          <span class="text-xs font-mono w-10 text-gray-400 shrink-0">{{ size }}</span>
+          <span class="text-xs font-mono w-10 text-[var(--dz-muted-foreground)] shrink-0">{{ size }}</span>
           <DzHeading :level="3" :size="size">The quick brown fox</DzHeading>
         </div>
       </div>
@@ -132,7 +132,7 @@ export const AllWeights: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="weight in ['light', 'normal', 'medium', 'semibold', 'bold']" :key="weight" class="flex items-baseline gap-4">
-          <span class="text-xs font-mono w-20 text-gray-400 shrink-0">{{ weight }}</span>
+          <span class="text-xs font-mono w-20 text-[var(--dz-muted-foreground)] shrink-0">{{ weight }}</span>
           <DzHeading :level="3" size="xl" :weight="weight">The quick brown fox</DzHeading>
         </div>
       </div>
@@ -191,7 +191,7 @@ export const SizeVsLevel: Story = {
     components: { DzHeading },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Semantic level and visual size are independent. An h6 can look like an h1.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Semantic level and visual size are independent. An h6 can look like an h1.</p>
         <DzHeading :level="6" size="4xl">h6 styled as 4xl</DzHeading>
         <DzHeading :level="1" size="xs">h1 styled as xs</DzHeading>
         <DzHeading :level="3" size="2xl">h3 styled as 2xl (explicit)</DzHeading>
@@ -230,7 +230,7 @@ export const Accessibility: Story = {
     components: { DzHeading },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Proper heading hierarchy is critical for screen readers. Use consecutive levels
           without skipping (h1 > h2 > h3, not h1 > h3).
         </p>
@@ -261,9 +261,9 @@ export const RealWorldPageHeader: Story = {
   render: () => ({
     components: { DzHeading },
     template: `
-      <div class="border-b pb-4 space-y-1">
+      <div class="border-b border-b-[var(--dz-border)] pb-4 space-y-1">
         <DzHeading :level="1" size="2xl">Dashboard</DzHeading>
-        <p class="text-sm text-gray-500">Welcome back. Here is your overview.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Welcome back. Here is your overview.</p>
       </div>
     `,
   }),
@@ -279,13 +279,13 @@ export const RealWorldCardHeadings: Story = {
     components: { DzHeading },
     template: `
       <div class="space-y-6">
-        <div class="border rounded-lg p-4">
+        <div class="border border-[var(--dz-border)] rounded-lg p-4">
           <DzHeading :level="3" size="lg" weight="semibold">Recent Activity</DzHeading>
-          <p class="text-sm text-gray-500 mt-2">Your latest actions and updates.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-2">Your latest actions and updates.</p>
         </div>
-        <div class="border rounded-lg p-4">
+        <div class="border border-[var(--dz-border)] rounded-lg p-4">
           <DzHeading :level="3" size="lg" weight="semibold">Quick Stats</DzHeading>
-          <p class="text-sm text-gray-500 mt-2">Performance metrics at a glance.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)] mt-2">Performance metrics at a glance.</p>
         </div>
       </div>
     `,

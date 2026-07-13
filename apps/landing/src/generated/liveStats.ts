@@ -22,5 +22,5 @@ export interface BakedLiveStats extends LiveStats {
 export const LIVE_STATS: BakedLiveStats = {
   githubStars: null,
   npmDownloads: null,
-  generatedAt: '2026-07-02T20:59:52.680Z',
+  generatedAt: '2026-07-10T14:33:24.468Z',
 }

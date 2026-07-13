@@ -17,13 +17,6 @@ const meta = {
   title: 'Core/Inputs/DzInput',
   component: DzInput,
   tags: ['autodocs', 'status:stable'],
-  parameters: {
-    // Design reference (TASK-0.15) — flagship seed. See Contributing → "Design reference".
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-4&t=DzInput',
-    },
-  },
   argTypes: {
     // Appearance
     variant: {
@@ -237,7 +230,7 @@ export const Tones: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Click into each field — the focus border and ring adopt the semantic tone color.',
+        story: 'Click into each field — the focus border border-[var(--dz-border)] and ring adopt the semantic tone color.',
       },
     },
   },
@@ -409,10 +402,10 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-3 max-w-xs">
         <DzInput v-model="value" placeholder="Type something..." clearable />
-        <p class="text-sm text-gray-500">
-          Value: <code class="bg-gray-100 px-1 rounded">{{ value || '(empty)' }}</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Value: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ value || '(empty)' }}</code>
         </p>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Length: {{ value.length }}
         </p>
       </div>
@@ -436,7 +429,7 @@ export const Accessibility: Story = {
     components: { DzInput },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Tab through the inputs to see focus rings. Error messages are linked via aria-describedby.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab through the inputs to see focus rings. Error messages are linked via aria-describedby.</p>
         <DzInput aria-label="First name" placeholder="First name" required />
         <DzInput aria-label="Last name" placeholder="Last name" required />
         <DzInput aria-label="Email" placeholder="Email" error="Please enter a valid email" />

@@ -110,7 +110,7 @@ export const WithSelection: Story = {
           aria-label="Selectable tree"
           @update:selected-keys="selected = $event"
         />
-        <p class="text-sm text-gray-500">Selected: {{ selected.length ? selected.join(', ') : 'none' }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: {{ selected.length ? selected.join(', ') : 'none' }}</p>
       </div>
     `,
   }),
@@ -153,7 +153,7 @@ export const WithCheckboxes: Story = {
           aria-label="Checkable tree"
           @update:selected-keys="checked = $event"
         />
-        <p class="text-sm text-gray-500">Checked: {{ checked.length ? checked.join(', ') : 'none' }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Checked: {{ checked.length ? checked.join(', ') : 'none' }}</p>
       </div>
     `,
   }),
@@ -172,7 +172,7 @@ export const DisabledNodes: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           "Child 3" is disabled (disabled: true on its TreeNode).
           Disabled nodes cannot be selected, expanded, or interacted with.
         </p>
@@ -204,7 +204,7 @@ export const CustomItemSlot: Story = {
           <span class="flex items-center gap-1.5">
             <span v-if="node.children" class="text-xs">{{ expanded ? '&#128194;' : '&#128193;' }}</span>
             <span v-else class="text-xs">&#128196;</span>
-            <span :class="[node.children ? 'font-medium' : '', node.disabled ? 'text-gray-400 line-through' : '']">
+            <span :class="[node.children ? 'font-medium' : '', node.disabled ? 'text-[var(--dz-muted-foreground)] line-through' : '']">
               {{ node.label }}
             </span>
           </span>

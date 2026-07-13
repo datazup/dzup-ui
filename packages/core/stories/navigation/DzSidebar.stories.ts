@@ -298,7 +298,7 @@ export const Interactive: Story = {
             <DzSidebarItem aria-label="Drafts">{{ collapsed ? '📄' : 'Drafts' }}</DzSidebarItem>
           </DzSidebarSection>
           <DzSidebarFooter>
-            <button type="button" @click="toggle" style="background:transparent;border:none;color:var(--dz-sidebar-foreground);cursor:pointer;font-size:var(--dz-text-xs);">
+            <button type="button" @click="toggle" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-sidebar-foreground);cursor:pointer;font-size:var(--dz-text-xs);">
               {{ collapsed ? 'Expand →' : '← Collapse' }}
             </button>
           </DzSidebarFooter>

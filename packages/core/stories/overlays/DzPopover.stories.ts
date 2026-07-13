@@ -178,16 +178,16 @@ export const WithSlots: Story = {
           </DzPopoverTrigger>
           <DzPopoverContent size="lg">
             <div class="flex items-start gap-3">
-              <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium text-sm">
+              <div class="w-10 h-10 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-[var(--dz-primary-muted-foreground)] font-medium text-sm">
                 JD
               </div>
               <div>
                 <p class="font-medium text-sm">Jane Doe</p>
-                <p class="text-xs text-gray-500">jane@example.com</p>
-                <p class="text-xs text-gray-500 mt-1">Product Designer</p>
+                <p class="text-xs text-[var(--dz-muted-foreground)]">jane@example.com</p>
+                <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Product Designer</p>
               </div>
             </div>
-            <div class="flex gap-2 mt-3 pt-3 border-t">
+            <div class="flex gap-2 mt-3 pt-3 border-t border-t-[var(--dz-border)]">
               <DzButton size="xs" variant="outline" tone="neutral">Profile</DzButton>
               <DzButton size="xs" variant="outline" tone="neutral">Message</DzButton>
             </div>
@@ -277,7 +277,7 @@ export const Accessibility: Story = {
     components: { DzPopover, DzPopoverTrigger, DzPopoverContent, DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Click the trigger or press Enter/Space to open. Press Escape to close.
           Tab navigates to interactive content inside the popover.
         </p>
@@ -325,14 +325,14 @@ export const RealWorldDatePicker: Story = {
           <DzPopoverContent size="md" :arrow="false">
             <p class="text-sm font-medium mb-3">Select Date</p>
             <div class="grid grid-cols-7 gap-1 text-xs text-center">
-              <span v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']" :key="day" class="text-gray-400 py-1">
+              <span v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']" :key="day" class="text-[var(--dz-muted-foreground)] py-1">
                 {{ day }}
               </span>
               <button
                 v-for="n in 28"
                 :key="n"
-                class="py-1 rounded hover:bg-blue-100 text-sm"
-                :class="{ 'bg-blue-500 text-white hover:bg-blue-600': n === 15 }"
+                class="py-1 rounded hover:bg-[var(--dz-primary-muted)] text-sm"
+                :class="{ 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] hover:bg-[var(--dz-primary-hover)]': n === 15 }"
               >
                 {{ n }}
               </button>

@@ -139,20 +139,20 @@ export const WithSlots: Story = {
       <DzList variant="divided" aria-label="Contacts">
         <DzListItem>
           <template #prefix>
-            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-medium text-blue-700">AJ</div>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-xs font-medium text-[var(--dz-primary-muted-foreground)]">AJ</div>
           </template>
           Alice Johnson
           <template #suffix>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">Online</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)]">Online</span>
           </template>
         </DzListItem>
         <DzListItem>
           <template #prefix>
-            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-xs font-medium text-purple-700">BS</div>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-colors-purple-100)] flex items-center justify-center text-xs font-medium text-[var(--dz-colors-purple-700)]">BS</div>
           </template>
           Bob Smith
           <template #suffix>
-            <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">Offline</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)]">Offline</span>
           </template>
         </DzListItem>
       </DzList>

@@ -84,7 +84,7 @@ export const Default: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">Click a button to add a toast notification.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Click a button to add a toast notification.</p>
           <ToastTrigger />
         </div>
         <DzToastViewport position="bottom-right" />
@@ -129,12 +129,12 @@ export const ViewportPositions: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             DzToastViewport supports six positions: top-right, top-left, bottom-right,
             bottom-left, top-center, and bottom-center. The viewport anchor point
             determines where toasts stack.
           </p>
-          <p class="text-xs text-gray-400">
+          <p class="text-xs text-[var(--dz-muted-foreground)]">
             Positions: {{ positions.join(', ') }}
           </p>
         </div>
@@ -155,7 +155,7 @@ export const WithAction: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             Toasts can include an action button via the actionLabel and onAction properties.
           </p>
           <ToastTrigger />
@@ -177,7 +177,7 @@ export const Persistent: Story = {
     template: `
       <DzToastProvider :duration="0">
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             With duration=0 on the provider, toasts persist until manually dismissed.
           </p>
           <ToastTrigger />
@@ -199,7 +199,7 @@ export const Accessibility: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             DzToastViewport renders as a Reka UI ToastViewport with role="region"
             and aria-live="polite". New toasts are announced to screen readers
             as they appear. Each toast has role="status" and includes its title

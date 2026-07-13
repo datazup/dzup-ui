@@ -105,6 +105,7 @@ export const Default: Story = {
 const LOGO_SRC
   = `data:image/svg+xml;utf8,${
     encodeURIComponent(
+      // token-check-disable-next-line — a data: URI is parsed outside the document, so var(--dz-*) cannot resolve inside it.
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4f46e5">'
       + '<circle cx="12" cy="12" r="10"/></svg>',
     )}`
@@ -125,7 +126,7 @@ export const WithLogo: Story = {
     },
     template: `
       <div class="space-y-3">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           A centered logo overlays the code. Use <code>error-level="H"</code> so the
           code remains scannable despite the occlusion.
         </p>
@@ -177,7 +178,7 @@ export const ExpiredState: Story = {
     },
     template: `
       <div class="space-y-3">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           When <code>status="expired"</code> an overlay covers the code with a
           refresh action that emits <code>@refresh</code>.
         </p>

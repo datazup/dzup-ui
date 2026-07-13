@@ -79,7 +79,7 @@ export const AllSizes: Story = {
       <div class="flex items-end gap-6">
         <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size" class="flex flex-col items-center gap-2">
           <DzSpinner :size="size" />
-          <span class="text-xs text-gray-500 uppercase">{{ size }}</span>
+          <span class="text-xs text-[var(--dz-muted-foreground)] uppercase">{{ size }}</span>
         </div>
       </div>
     `,
@@ -98,7 +98,7 @@ export const AllTones: Story = {
       <div class="flex flex-wrap gap-6 items-center">
         <div v-for="tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']" :key="tone" class="flex flex-col items-center gap-2">
           <DzSpinner :tone="tone" size="lg" />
-          <span class="text-xs text-gray-500 capitalize">{{ tone }}</span>
+          <span class="text-xs text-[var(--dz-muted-foreground)] capitalize">{{ tone }}</span>
         </div>
       </div>
     `,
@@ -147,7 +147,7 @@ export const Interactive: Story = {
         </div>
         <div class="h-16 flex items-center">
           <DzSpinner v-if="loading" size="lg" />
-          <span v-else class="text-sm text-gray-500">Content loaded.</span>
+          <span v-else class="text-sm text-[var(--dz-muted-foreground)]">Content loaded.</span>
         </div>
       </div>
     `,
@@ -164,7 +164,7 @@ export const Accessibility: Story = {
     components: { DzSpinner },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSpinner uses role="status" and a visually hidden label for screen readers.
           The label defaults to "Loading" but can be customized for context.
         </p>
@@ -208,14 +208,14 @@ export const RealWorldLoadingButton: Story = {
     components: { DzSpinner },
     template: `
       <div class="space-y-6">
-        <div class="flex items-center gap-2 p-3 border rounded max-w-xs">
+        <div class="flex items-center gap-2 p-3 border border-[var(--dz-border)] rounded max-w-xs">
           <DzSpinner size="sm" />
           <span class="text-sm">Loading dashboard...</span>
         </div>
-        <div class="flex items-center justify-center p-8 border rounded max-w-md">
+        <div class="flex items-center justify-center p-8 border border-[var(--dz-border)] rounded max-w-md">
           <div class="flex flex-col items-center gap-3">
             <DzSpinner size="xl" tone="primary" />
-            <span class="text-sm text-gray-500">Preparing your workspace</span>
+            <span class="text-sm text-[var(--dz-muted-foreground)]">Preparing your workspace</span>
           </div>
         </div>
       </div>

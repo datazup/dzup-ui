@@ -36,28 +36,28 @@ export const badgeTokens = {
     },
     primary: {
       solid: { background: 'var(--dz-primary)', foreground: 'var(--dz-primary-foreground)' },
-      outline: { border: 'var(--dz-primary)', foreground: 'var(--dz-primary)' },
-      subtle: { background: 'var(--dz-primary-muted)', foreground: 'var(--dz-primary)' },
+      outline: { border: 'var(--dz-primary)', foreground: 'var(--dz-primary-muted-foreground)' },
+      subtle: { background: 'var(--dz-primary-muted)', foreground: 'var(--dz-primary-muted-foreground)' },
     },
     success: {
       solid: { background: 'var(--dz-success)', foreground: 'var(--dz-success-foreground)' },
-      outline: { border: 'var(--dz-success)', foreground: 'var(--dz-success)' },
-      subtle: { background: 'var(--dz-success-muted)', foreground: 'var(--dz-success)' },
+      outline: { border: 'var(--dz-success)', foreground: 'var(--dz-success-muted-foreground)' },
+      subtle: { background: 'var(--dz-success-muted)', foreground: 'var(--dz-success-muted-foreground)' },
     },
     warning: {
       solid: { background: 'var(--dz-warning)', foreground: 'var(--dz-warning-foreground)' },
-      outline: { border: 'var(--dz-warning)', foreground: 'var(--dz-warning)' },
-      subtle: { background: 'var(--dz-warning-muted)', foreground: 'var(--dz-warning)' },
+      outline: { border: 'var(--dz-warning)', foreground: 'var(--dz-warning-muted-foreground)' },
+      subtle: { background: 'var(--dz-warning-muted)', foreground: 'var(--dz-warning-muted-foreground)' },
     },
     danger: {
       solid: { background: 'var(--dz-danger)', foreground: 'var(--dz-danger-foreground)' },
-      outline: { border: 'var(--dz-danger)', foreground: 'var(--dz-danger)' },
-      subtle: { background: 'var(--dz-danger-muted)', foreground: 'var(--dz-danger)' },
+      outline: { border: 'var(--dz-danger)', foreground: 'var(--dz-danger-muted-foreground)' },
+      subtle: { background: 'var(--dz-danger-muted)', foreground: 'var(--dz-danger-muted-foreground)' },
     },
     info: {
       solid: { background: 'var(--dz-info)', foreground: 'var(--dz-info-foreground)' },
-      outline: { border: 'var(--dz-info)', foreground: 'var(--dz-info)' },
-      subtle: { background: 'var(--dz-info-muted)', foreground: 'var(--dz-info)' },
+      outline: { border: 'var(--dz-info)', foreground: 'var(--dz-info-muted-foreground)' },
+      subtle: { background: 'var(--dz-info-muted)', foreground: 'var(--dz-info-muted-foreground)' },
     },
   },
 } as const
