@@ -21,6 +21,11 @@ export default defineConfig({
   },
   server: {
     port: 3001,
+    // Fail loudly when 3001 is taken instead of drifting to the next free port.
+    // Without this Vite serves on 3002+ while `open` and any bookmarked tab still
+    // point at 3001 — which then shows a stale server (or nothing) and reads as
+    // "the app doesn't render". Override the port with `vite --port <n>`.
+    strictPort: true,
     open: true,
   },
   build: {

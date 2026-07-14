@@ -358,6 +358,21 @@ jobs:
       # materialise those artifacts before the landing build.
       - name: Build design tokens
         run: yarn workspace @dzup-ui/tokens build
+      # Blank-page guard, light AND dark. A `mix-blend-mode` on <html> once
+      # screen-blended the whole document against the white canvas, so dark mode
+      # painted every pixel white while the DOM, computed styles, scroll height and
+      # console all looked perfectly healthy. Only a PIXEL check catches that class
+      # of bug — and only if the run sets `prefers-color-scheme: dark`, which
+      # Playwright does NOT do by default.
+      #
+      # `--grep` selects the histogram/blend assertions and skips the hero
+      # `toHaveScreenshot` baselines: those are committed per-platform (…-win32.png)
+      # and would need Linux baselines to run here. The guard below is
+      # platform-independent, so it works on any runner.
+      - name: Install Playwright Chromium
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
+      - name: Landing renders in light + dark
+        run: yarn test:visual:landing --grep "renders real pixels"
       - name: Build landing site
         run: yarn workspace @dzup-ui/landing build
       # Payload budget (gzip) for the first-paint JS/CSS — asserts the bytes that
