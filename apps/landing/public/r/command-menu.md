@@ -4,7 +4,7 @@ A ⌘K command palette (DzCommandPalette) — a search-field launcher with a DzK
 
 - **Category:** Overlays
 - **Components:** DzCommandPalette, DzKbd, DzHeading, DzText
-- **Preview:** /blocks#command-menu
+- **Preview:** /blocks/command-menu
 
 ```vue
 <script setup lang="ts">

@@ -108,25 +108,25 @@ describe('checkContrast', () => {
   })
 
   it('names both tokens, the theme, both ratios and the criterion when a pair fails', () => {
-    // A deliberately-failing fixture: `--dz-warning` (shade 500) under
-    // `--dz-warning-foreground` (neutral-900) sits at ~3.5:1 in light — the
-    // exact reason the solid fill lives at `--dz-warning-solid` instead.
+    // A deliberately-failing fixture: `--dz-warning` is a fill/accent color, so
+    // using it as body TEXT on the page fails AA (warning-400 on --dz-background
+    // ≈ 2.3:1 in light). This is the misuse rule 1b in CLAUDE.md warns about.
     const { issues } = checkContrast([
       {
-        fg: '--dz-warning-foreground',
-        bg: '--dz-warning',
+        fg: '--dz-warning',
+        bg: '--dz-background',
         theme: 'light',
         min: 4.5,
         criterion: 'WCAG 2.2 AA, 1.4.3 body text',
-        label: 'warning text on warning fill',
+        label: 'warning intent color as body text on the page',
       },
     ])
     expect(issues).toHaveLength(1)
     const message = issues[0]?.message ?? ''
     expect(message).toContain('contrast(light)')
-    expect(message).toContain('--dz-warning-foreground')
     expect(message).toContain('--dz-warning')
-    expect(message).toMatch(/= 3\.\d\d:1/) // the measured ratio
+    expect(message).toContain('--dz-background')
+    expect(message).toMatch(/= \d\.\d\d:1/) // the measured ratio
     expect(message).toContain('requires 4.5:1')
     expect(message).toContain('1.4.3 body text')
   })
@@ -163,15 +163,17 @@ describe('buildContrastPairs', () => {
     expect(has('--dz-muted-foreground', '--dz-muted')).toBe(true)
   })
 
-  it('asserts warning through its bespoke solid tokens, not the uniform fill', () => {
+  it('gates warning-foreground on the base intent color and both solid fills', () => {
     const warningFills = pairs
       .filter(p => p.fg === '--dz-warning-foreground' && p.theme === 'light')
       .map(p => p.bg)
+    // Since TASK-DS-10 normalized `--dz-warning` to shade 400 (5.87:1 under
+    // near-black text), the advertised `bg-[var(--dz-warning)]
+    // text-[var(--dz-warning-foreground)]` solid fill passes AA and is gated —
+    // alongside the `-solid` / `-solid-hover` fills components render.
+    expect(warningFills).toContain('--dz-warning')
     expect(warningFills).toContain('--dz-warning-solid')
     expect(warningFills).toContain('--dz-warning-solid-hover')
-    // `--dz-warning` is a text/border color, never a solid fill — gating text
-    // on it would assert a pair the system never renders (and it fails at 3.5:1).
-    expect(warningFills).not.toContain('--dz-warning')
   })
 
   it('maps the focus ring to the non-text criterion, not body text', () => {

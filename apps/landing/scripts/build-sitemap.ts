@@ -30,13 +30,15 @@
  * rather than publishing a partial sitemap that hides pages from crawlers.
  */
 
+import type { BlockDef } from '../src/blocks/registry.ts'
+import type { TemplateMeta } from '../src/templates/registry.ts'
+import { execFileSync } from 'node:child_process'
 import { writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
 import { SITE_ORIGIN } from '../src/config.ts'
-import type { BlockDef } from '../src/blocks/registry.ts'
-import type { TemplateMeta } from '../src/templates/registry.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
@@ -54,8 +56,56 @@ const PUBLIC_DIR = resolve(LANDING_ROOT, 'public')
  */
 const STATIC_ROUTES = ['/', '/pro', '/blocks', '/animations', '/themes', '/templates', '/ai', '/compare']
 
+/**
+ * The page component behind each static route (relative to the repo root) — the
+ * file whose last commit dates the route's `<lastmod>`. Kept beside
+ * `STATIC_ROUTES` so the two lists change together.
+ */
+const STATIC_ROUTE_FILES: Record<string, string> = {
+  '/': 'apps/landing/src/pages/HomePage.vue',
+  '/pro': 'apps/landing/src/pages/ProPage.vue',
+  '/blocks': 'apps/landing/src/pages/BlocksIndexPage.vue',
+  '/animations': 'apps/landing/src/pages/AnimationsPage.vue',
+  '/themes': 'apps/landing/src/pages/ThemesPage.vue',
+  '/templates': 'apps/landing/src/pages/TemplatesPage.vue',
+  '/ai': 'apps/landing/src/pages/AiIdePage.vue',
+  '/compare': 'apps/landing/src/pages/ComparePage.vue',
+}
+
+/**
+ * Last-commit date ('YYYY-MM-DD') per repo-relative file, from ONE git pass:
+ * `git log --format=%cs --name-only` prints each commit's date followed by its
+ * files, so the first date a file appears under is its most recent change.
+ * Derived, never typed — a hand-maintained lastmod is exactly the drift this
+ * repo keeps re-learning to avoid. Files git does not know (uncommitted) simply
+ * get no `<lastmod>`, which is honest: the sitemap spec makes it optional.
+ */
+function gitLastModified(scope: string): Map<string, string> {
+  const dates = new Map<string, string>()
+  let output: string
+  try {
+    output = execFileSync('git', ['log', '--format=%cs', '--name-only', '--', scope], {
+      cwd: resolve(LANDING_ROOT, '..', '..'),
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024,
+    })
+  }
+  catch {
+    // Not a git checkout (e.g. an exported tarball) — emit no lastmod at all.
+    return dates
+  }
+  let current = ''
+  for (const line of output.split('\n')) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(line))
+      current = line
+    else if (line !== '' && !dates.has(line))
+      dates.set(line, current)
+  }
+  return dates
+}
+
 /** Load the real registries via a throwaway Vite SSR server (see file header). */
-async function loadRegistries(): Promise<{ blocks: BlockDef[]; templates: TemplateMeta[] }> {
+async function loadRegistries(): Promise<{ blocks: BlockDef[], templates: TemplateMeta[] }> {
   const server = await createServer({
     root: LANDING_ROOT,
     logLevel: 'warn',
@@ -70,7 +120,8 @@ async function loadRegistries(): Promise<{ blocks: BlockDef[]; templates: Templa
       TEMPLATES: TemplateMeta[]
     }
     return { blocks: blocksMod.BLOCKS, templates: templatesMod.TEMPLATES }
-  } finally {
+  }
+  finally {
     await server.close()
   }
 }
@@ -93,12 +144,18 @@ function urlEntry(path: string, lastmod?: string): string {
 }
 
 function buildSitemap(blocks: BlockDef[], templates: TemplateMeta[]): string {
+  // One git pass dates every landing source file; routes map to their files.
+  const modified = gitLastModified('apps/landing/src')
   const entries = [
-    ...STATIC_ROUTES.map((path) => urlEntry(path)),
-    // Blocks carry no ship date, so no <lastmod>.
-    ...blocks.map((block) => urlEntry(`/blocks/${block.id}`)),
-    // Templates expose `createdAt` (ISO date) — use it for <lastmod> when present.
-    ...templates.map((template) => urlEntry(`/templates/${template.slug}`, template.createdAt)),
+    ...STATIC_ROUTES.map(path => urlEntry(path, modified.get(STATIC_ROUTE_FILES[path] ?? ''))),
+    // Blocks are dated by their SFC's last commit (BlockDef.path is relative to src/blocks/).
+    ...blocks.map(block =>
+      urlEntry(`/blocks/${block.id}`, modified.get(`apps/landing/src/blocks/${block.path.replace(/^\.\//, '')}`)),
+    ),
+    // Templates expose `createdAt` (ISO ship date); fall back to the SFC's last commit.
+    ...templates.map(template =>
+      urlEntry(`/templates/${template.slug}`, template.createdAt ?? modified.get(template.source)),
+    ),
   ]
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.join('\n')}\n</urlset>\n`
 }

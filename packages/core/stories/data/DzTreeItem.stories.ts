@@ -2,17 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { TreeNode } from '../../src/components/data'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzTree, DzTreeItem } from '../../src/components/data'
-
-/**
- * DzTreeItem is a compound sub-part of DzTree.
- *
- * It renders a single tree node with expand/collapse, selection, and optional
- * checkbox support. DzTreeItem receives context (size, expandedKeys, selectedKeys,
- * toggle functions) from DzTree via inject (ADR-08).
- *
- * DzTreeItem is typically rendered internally by DzTree, but understanding its
- * API is useful for custom node rendering via the item slot.
- */
+import { darkModeDecorator } from '../_shared'
 
 const sampleTree: TreeNode[] = [
   {
@@ -33,6 +23,16 @@ const sampleTree: TreeNode[] = [
   },
 ]
 
+/**
+ * DzTreeItem is a compound sub-part of DzTree.
+ *
+ * It renders a single tree node with expand/collapse, selection, and optional
+ * checkbox support. DzTreeItem receives context (size, expandedKeys, selectedKeys,
+ * toggle functions) from DzTree via inject (ADR-08).
+ *
+ * DzTreeItem is typically rendered internally by DzTree, but understanding its
+ * API is useful for custom node rendering via the item slot.
+ */
 const meta = {
   title: 'Core/Data/DzTreeItem',
   component: DzTreeItem,
@@ -210,6 +210,30 @@ export const CustomItemSlot: Story = {
           </span>
         </template>
       </DzTree>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzTree },
+    setup() {
+      return { items: sampleTree }
+    },
+    template: `
+      <DzTree
+        :items="items"
+        selectable
+        :expanded-keys="['root', 'child-2']"
+        :selected-keys="['child-1']"
+        aria-label="Dark mode tree"
+      />
     `,
   }),
 }

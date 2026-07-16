@@ -1,8 +1,10 @@
-import tailwindcss from '@tailwindcss/vite'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/vue3-vite/node'
+import tailwindcss from '@tailwindcss/vite'
+import remarkGfm from 'remark-gfm'
+import { workspaceAliases } from '../../../packages/tooling/src/workspace-aliases.ts'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const require = createRequire(import.meta.url)
@@ -13,14 +15,25 @@ export default defineMain({
   // themes register their preview behavior in preview.ts, but listing them here
   // guarantees the A11y panel and Theme toolbar mount on a fresh `storybook dev`.
   addons: [
-    '@storybook/addon-docs',
+    // GitHub-flavoured markdown, for TABLES above all (TASK-FREE-14). MDX2+ ships
+    // CommonMark only, which has no table syntax — so every `| a | b |` block in
+    // this repo's MDX rendered as a literal row of pipes and dashes, in prose, in
+    // the built docs. Thirteen files were affected, including every family
+    // Overview's "when to use which" table. Nothing caught it because the page
+    // still *built*: broken markdown is just text.
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
     '@storybook/addon-a11y',
     '@storybook/addon-themes',
     '@storybook/addon-vitest',
-    // Design panel — reads `parameters.design = { type: 'figma', url }` (TASK-0.15).
-    // The convention was reserved in storybook-decisions.md; this is the one-line
-    // switch-on. Stories without the parameter show a friendly empty Design panel.
-    '@storybook/addon-designs',
   ],
   stories: [
     // Standalone stories directories
@@ -62,30 +75,13 @@ export default defineMain({
       },
     })
 
-    // Workspace package aliases — Storybook doesn't auto-resolve yarn workspace links
-    const pkgRoot = resolve(__dirname, '../../..')
+    // Workspace package aliases — Storybook doesn't auto-resolve yarn workspace
+    // links to source. Single-sourced; see workspace-aliases.ts for the ordering
+    // rule and why the token CSS targets resolve to dist/.
     config.resolve = config.resolve || {}
     config.resolve.alias = [
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
-      // Token sub-path exports must come before the base alias
-      {
-        find: '@dzup-ui/tokens/css',
-        replacement: resolve(pkgRoot, 'packages/tokens/dist/tokens.css'),
-      },
-      {
-        find: '@dzup-ui/tokens/tailwind',
-        replacement: resolve(pkgRoot, 'packages/tokens/dist/tailwind-theme.js'),
-      },
-      {
-        find: '@dzup-ui/tokens/utils',
-        replacement: resolve(pkgRoot, 'packages/tokens/src/utils/index.ts'),
-      },
-      { find: '@dzup-ui/tokens', replacement: resolve(pkgRoot, 'packages/tokens/src') },
-      {
-        find: '@dzup-ui/contracts',
-        replacement: resolve(pkgRoot, 'packages/contracts/src/index.ts'),
-      },
-      { find: '@dzup-ui/core', replacement: resolve(pkgRoot, 'packages/core/src') },
+      ...workspaceAliases(resolve(__dirname, '../../..')),
     ]
 
     return config
@@ -93,7 +89,7 @@ export default defineMain({
   // Brand favicon (apps/storybook/public/favicon.svg — served at the manager
   // root by Vite's publicDir). Injected explicitly so the dzup-ui mark replaces
   // Storybook's default favicon on a fresh `dev` and in the built static app.
-  managerHead: (head) =>
+  managerHead: head =>
     `${head}\n<link rel="icon" type="image/svg+xml" href="./favicon.svg" />`,
   docs: {
     autodocs: 'tag',

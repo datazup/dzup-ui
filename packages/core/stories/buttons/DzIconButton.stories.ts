@@ -13,7 +13,7 @@ import {
 } from 'lucide-vue-next'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzIconButton } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzIconButton renders a single icon with no visible text.
@@ -25,6 +25,10 @@ const meta = {
   title: 'Core/Buttons/DzIconButton',
   component: DzIconButton,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     icon: {

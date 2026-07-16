@@ -3,7 +3,7 @@ import { ChevronRight, Download, Mail, Plus, Search } from 'lucide-vue-next'
 import { userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzButton is the primary interactive button component.
@@ -15,6 +15,10 @@ const meta = {
   title: 'Core/Buttons/DzButton',
   component: DzButton,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     variant: {

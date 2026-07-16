@@ -3,7 +3,6 @@ import type { Directive, DirectiveBinding } from 'vue'
 /**
  * v-reveal — scroll-reveal directive (docs/animations.md §6.1, effects 1, 3–5).
  *
- * Migrated from `composables/useScrollReveal.ts` and extended with modifiers.
  * Adds the `dz-reveal` class immediately (so the element starts in its hidden
  * pre-animation state) and toggles `dz-reveal--in` via a single shared
  * `IntersectionObserver` when the element scrolls into view. The shared class

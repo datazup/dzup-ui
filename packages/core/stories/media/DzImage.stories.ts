@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, waitFor } from 'storybook/test'
 import { DzImage } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 // Offline-safe fixtures for the fallback play() test: an invalid base64 data
 // URI that always errors, and a valid 1x1 transparent PNG that always loads.
@@ -20,6 +20,10 @@ const meta = {
   title: 'Core/Media/DzImage',
   component: DzImage,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     src: {

@@ -4,7 +4,7 @@ A compact, modern contact variant — each control wrapped in a DzFloatLabel (no
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFloatLabel, DzInput, DzSelect, DzTextarea, DzButton, DzHeading, DzText
-- **Preview:** /blocks#float-label-form
+- **Preview:** /blocks/float-label-form
 
 ```vue
 <script setup lang="ts">

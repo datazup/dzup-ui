@@ -4,6 +4,14 @@ import { expect, within } from 'storybook/test'
 import { GovernanceBadge } from '../../src/components/feedback'
 import { darkModeDecorator } from '../_shared'
 
+const PATTERNS: CoordinatorPattern[] = [
+  'supervisor',
+  'contract_net',
+  'blackboard',
+  'peer_to_peer',
+  'council',
+]
+
 /**
  * GovernanceBadge renders the coordinator pattern governing a team run
  * (`supervisor` · `contract_net` · `blackboard` · `peer_to_peer` · `council`)
@@ -16,15 +24,6 @@ import { darkModeDecorator } from '../_shared'
  * > **Scope:** encodes datazup multi-agent vocabulary; lives under
  * > **Core/Feedback/App-Specific**. See GovernanceBadge.types.ts.
  */
-
-const PATTERNS: CoordinatorPattern[] = [
-  'supervisor',
-  'contract_net',
-  'blackboard',
-  'peer_to_peer',
-  'council',
-]
-
 const meta = {
   title: 'Core/Feedback/App-Specific/GovernanceBadge',
   component: GovernanceBadge,

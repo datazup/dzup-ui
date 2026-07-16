@@ -4,7 +4,7 @@ A long-form masthead — category eyebrow, title and standfirst, a byline pairin
 
 - **Category:** Content
 - **Components:** DzHeading, DzText, DzAvatar, DzTag, DzRelativeTime
-- **Preview:** /blocks#article-header
+- **Preview:** /blocks/article-header
 
 ```vue
 <script setup lang="ts">

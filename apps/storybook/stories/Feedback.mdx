@@ -2,6 +2,7 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import { StatusBadge } from './_blocks/StatusBadge.ts'
 import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { FamilyComponents } from './_blocks/FamilyComponents.ts'
 
 <Meta title="Core/Feedback/Overview" />
 
@@ -23,19 +24,7 @@ flow until acknowledged?
 
 ## Components
 
-| Component | Use it for | Docs |
-|-----------|------------|------|
-| **DzAlert** | Inline, persistent contextual messages with tone + variant. | [DzAlert](?path=/docs/core-feedback-dzalert--docs) |
-| **DzBadge** | Compact status labels / counts. | [DzBadge](?path=/docs/core-feedback-dzbadge--docs) |
-| **DzProgress** | Determinate / indeterminate task progress (bar or circular). | [DzProgress](?path=/docs/core-feedback-dzprogress--docs) |
-| **DzSpinner** | Indeterminate "working" indicator. | [DzSpinner](?path=/docs/core-feedback-dzspinner--docs) |
-| **DzSkeleton** | Content-shaped loading placeholders. | [DzSkeleton](?path=/docs/core-feedback-dzskeleton--docs) |
-| **DzToast** | Transient, stackable notifications (Provider + Viewport + Toast). | [DzToast](?path=/docs/core-feedback-dztoast--docs) |
-| **DzNotification** | Richer, often persistent notification surface. | [DzNotification](?path=/docs/core-feedback-dznotification--docs) |
-| **DzEmpty** | Empty-state placeholder when a list/region has no content. | [DzEmpty](?path=/docs/core-feedback-dzempty--docs) |
-| **DzResult** | Full-page / panel outcome (success / error / warning / info). | [DzResult](?path=/docs/core-feedback-dzresult--docs) |
-| **DzAsyncBoundary** | Coordinate pending → resolved → error for async children. | [DzAsyncBoundary](?path=/docs/core-feedback-dzasyncboundary--docs) |
-| **DzErrorBoundary** | Catch descendant render errors and render a fallback. | [DzErrorBoundary](?path=/docs/core-feedback-dzerrorboundary--docs) |
+<FamilyComponents family="Feedback" />
 
 ## When to use which
 

@@ -12,8 +12,9 @@
  * always-loaded vendor chunks it imports (`vendor-vue-*`, `vendor-icons-*` — see
  * the manualChunks split in vite.config.ts). Those three download on the first
  * render of every route, so their combined gzip size is the number that matters.
- * Lazy route chunks (themes, templates, blocks, …) are reported but not gated —
- * they load on navigation, not first paint.
+ * The entry stylesheet joins them in the `Initial payload (JS+CSS)` total, because
+ * it is render-blocking too. Lazy route chunks (themes, templates, blocks, …) are
+ * reported but not gated — they load on navigation, not first paint.
  *
  * Sizes are gzip level 9, matching packages/tooling/src/bundle-budget-check.ts so
  * the two budgets speak the same units.
@@ -36,9 +37,23 @@ const LANDING_ROOT = resolve(HERE, '..')
 const ASSETS_DIR = join(LANDING_ROOT, 'dist', 'assets')
 
 // ---------------------------------------------------------------------------
-// Budgets (gzip). Set with modest headroom over the measured baseline so normal
-// growth is fine but a big regression (an eager import, an un-lazy demo, a heavy
-// dependency) trips the gate. Tighten these as the entry chunk is trimmed.
+// Budgets (gzip).
+//
+// Every number below is the value MEASURED on the 2026-07-16 build (recorded in
+// the comment beside it) plus ~15% headroom, rounded to a whole kB. 15% absorbs
+// ordinary growth — a section, a few components — while a structural regression
+// (an eager import, an un-lazy route, a heavy dependency) trips the gate. A budget
+// set at 2× the real size is not a gate; it is a note saying what we happened to
+// ship. When a change legitimately grows a chunk, re-measure and move the number
+// deliberately, in the same commit, with the new baseline in the comment.
+//
+// History (TASK-FREE-13): entry JS was 292.85 kB against a 320 kB budget (92% —
+// the gate was one section away from firing, and its own comment admitted the
+// numbers were "modest headroom over the measured baseline"). Two changes took it
+// to 152.13 kB: lazy-loading /pro, /blocks and /animations (−40.35 kB), and moving
+// the 87 blocks' `?raw` SFC text out of the entry graph into `blocks/sources.ts`
+// (−100.37 kB — it was reachable from `router.ts` and the ⌘K palette, neither of
+// which needs a byte of it).
 // ---------------------------------------------------------------------------
 
 const KB = 1024
@@ -49,26 +64,47 @@ interface Budget {
   match: RegExp
   /** Max combined gzip size in bytes for all files that match. */
   maxGzipBytes: number
-  /** Whether this budget is part of the "initial load" total. */
+  /**
+   * Whether this budget is part of the initial payload — the bytes downloaded
+   * before first render on every route. Both JS and CSS count: CSS is
+   * render-blocking, so it belongs in the payload gate even though it is not
+   * script. See INITIAL_PAYLOAD_BUDGET.
+   */
   initial: boolean
 }
 
 const BUDGETS: Budget[] = [
-  { label: 'Entry JS (index-*.js)', match: /^index-.*\.js$/, maxGzipBytes: 320 * KB, initial: true },
-  { label: 'Vendor · Vue runtime', match: /^vendor-vue-.*\.js$/, maxGzipBytes: 55 * KB, initial: true },
-  { label: 'Vendor · Lucide icons', match: /^vendor-icons-.*\.js$/, maxGzipBytes: 30 * KB, initial: true },
-  { label: 'Entry CSS (index-*.css)', match: /^index-.*\.css$/, maxGzipBytes: 60 * KB, initial: false },
+  // measured 152.13 kB
+  { label: 'Entry JS (index-*.js)', match: /^index-.*\.js$/, maxGzipBytes: 175 * KB, initial: true },
+  // measured 37.12 kB
+  { label: 'Vendor · Vue runtime', match: /^vendor-vue-.*\.js$/, maxGzipBytes: 43 * KB, initial: true },
+  // measured 16.96 kB
+  { label: 'Vendor · Lucide icons', match: /^vendor-icons-.*\.js$/, maxGzipBytes: 20 * KB, initial: true },
+  // measured 38.16 kB — `initial: true` since TASK-FREE-13: this stylesheet blocks
+  // render, so it is part of the initial payload, not a bystander to it.
+  { label: 'Entry CSS (index-*.css)', match: /^index-.*\.css$/, maxGzipBytes: 44 * KB, initial: true },
 ]
 
-/** The initial-load JS total (entry + always-loaded vendors) gets its own gate. */
-const INITIAL_JS_BUDGET = 400 * KB
+/**
+ * The initial-load JS total (entry + always-loaded vendors). Measured 206.21 kB.
+ * Kept as its own gate because JS costs more than its bytes — it parses, compiles
+ * and executes on the main thread, which is what TBT measures.
+ */
+const INITIAL_JS_BUDGET = 240 * KB
+
+/**
+ * The whole render-blocking payload: initial JS + initial CSS. Measured 244.37 kB.
+ * This is the number a visitor actually waits on before first paint.
+ */
+const INITIAL_PAYLOAD_BUDGET = 285 * KB
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
 function formatBytes(bytes: number): string {
-  if (bytes < KB) return `${bytes} B`
+  if (bytes < KB)
+    return `${bytes} B`
   return `${(bytes / KB).toFixed(2)} kB`
 }
 
@@ -82,7 +118,12 @@ interface BudgetResult extends Budget {
   passed: boolean
 }
 
-function evaluate(): { results: BudgetResult[], initialJs: number, allFiles: string[] } {
+function evaluate(): {
+  results: BudgetResult[]
+  initialJs: number
+  initialPayload: number
+  allFiles: string[]
+} {
   if (!existsSync(ASSETS_DIR)) {
     throw new Error(`Build output not found: ${ASSETS_DIR}\nRun \`yarn workspace @dzup-ui/landing build\` first.`)
   }
@@ -94,11 +135,13 @@ function evaluate(): { results: BudgetResult[], initialJs: number, allFiles: str
     return { ...budget, files, actualGzipBytes, passed: actualGzipBytes <= budget.maxGzipBytes }
   })
 
-  const initialJs = results
-    .filter(r => r.initial && r.match.source.endsWith('js$'))
-    .reduce((sum, r) => sum + r.actualGzipBytes, 0)
+  const sum = (rs: BudgetResult[]): number => rs.reduce((total, r) => total + r.actualGzipBytes, 0)
+  const initial = results.filter(r => r.initial)
 
-  return { results, initialJs, allFiles }
+  const initialJs = sum(initial.filter(r => r.match.source.endsWith('js$')))
+  const initialPayload = sum(initial)
+
+  return { results, initialJs, initialPayload, allFiles }
 }
 
 // ---------------------------------------------------------------------------
@@ -119,14 +162,15 @@ function main(): void {
     return
   }
 
-  const { results, initialJs } = evaluation
+  const { results, initialJs, initialPayload } = evaluation
 
   console.log('\n=== Landing Bundle Budget (gzip) ===\n')
 
   let failed = 0
   for (const r of results) {
     const status = r.passed ? 'PASS' : 'FAIL'
-    if (!r.passed) failed++
+    if (!r.passed)
+      failed++
     const missing = r.files.length === 0 ? '  (no matching chunk)' : ''
     const pct = ((r.actualGzipBytes / r.maxGzipBytes) * 100).toFixed(0)
     console.log(
@@ -135,10 +179,19 @@ function main(): void {
   }
 
   const initialPassed = initialJs <= INITIAL_JS_BUDGET
-  if (!initialPassed) failed++
+  if (!initialPassed)
+    failed++
   const initialPct = ((initialJs / INITIAL_JS_BUDGET) * 100).toFixed(0)
   console.log(
     `\n  ${initialPassed ? 'PASS' : 'FAIL'}  ${'Initial load JS (total)'.padEnd(26)} ${formatBytes(initialJs).padStart(10)} / ${formatBytes(INITIAL_JS_BUDGET).padStart(9)}  (${initialPct}%)`,
+  )
+
+  const payloadPassed = initialPayload <= INITIAL_PAYLOAD_BUDGET
+  if (!payloadPassed)
+    failed++
+  const payloadPct = ((initialPayload / INITIAL_PAYLOAD_BUDGET) * 100).toFixed(0)
+  console.log(
+    `  ${payloadPassed ? 'PASS' : 'FAIL'}  ${'Initial payload (JS+CSS)'.padEnd(26)} ${formatBytes(initialPayload).padStart(10)} / ${formatBytes(INITIAL_PAYLOAD_BUDGET).padStart(9)}  (${payloadPct}%)`,
   )
 
   console.log(`\n${'='.repeat(64)}`)

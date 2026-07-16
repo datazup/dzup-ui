@@ -9,7 +9,7 @@ import {
   DzSheetTitle,
   DzSheetTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzSheet is a compound slide-out side panel built on Reka UI Dialog (ADR-07).
@@ -28,6 +28,10 @@ const meta = {
     DzSheetClose,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {

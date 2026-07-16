@@ -4,7 +4,7 @@ A product top bar with a rich DzDropdownMenu account menu — avatar trigger, an
 
 - **Category:** Overlays
 - **Components:** DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzAvatar, DzBadge, DzIconButton, DzKbd, DzText
-- **Preview:** /blocks#account-menu
+- **Preview:** /blocks/account-menu
 
 ```vue
 <script setup lang="ts">

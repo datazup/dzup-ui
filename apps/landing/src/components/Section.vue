@@ -17,8 +17,15 @@ withDefaults(
     bordered?: boolean
     /** Accessible id for the heading (links the section's aria-labelledby). */
     headingId?: string
+    /**
+     * Semantic heading level. Defaults to 2 (a section under the page's h1);
+     * a page whose FIRST Section carries the page title passes 1 so every
+     * route has exactly one h1 (WCAG heading structure). Visual size is
+     * unchanged — only the semantics shift.
+     */
+    headingLevel?: 1 | 2
   }>(),
-  { align: 'center', surface: false, bordered: false },
+  { align: 'center', surface: false, bordered: false, headingLevel: 2 },
 )
 </script>
 
@@ -31,7 +38,7 @@ withDefaults(
     <div class="section-inner">
       <header v-if="eyebrow || title || lede" class="section-head" :class="`is-${align}`">
         <span v-if="eyebrow" class="lp-eyebrow">{{ eyebrow }}</span>
-        <DzHeading v-if="title" :id="headingId" :level="2" size="3xl" weight="semibold" class="section-title lp-balance">
+        <DzHeading v-if="title" :id="headingId" :level="headingLevel" size="3xl" weight="semibold" class="section-title lp-balance">
           {{ title }}
         </DzHeading>
         <DzText v-if="lede" size="lg" tone="muted" class="section-lede lp-balance">

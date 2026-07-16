@@ -4,7 +4,7 @@ A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once th
 
 - **Category:** Auth & Forms
 - **Components:** DzOtpInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#otp-verify
+- **Preview:** /blocks/otp-verify
 
 ```vue
 <script setup lang="ts">

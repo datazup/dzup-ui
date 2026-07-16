@@ -163,6 +163,39 @@ zero today.
 seed the flagships first, add `design` to the story template, and the Design column
 starts counting without any further plumbing.
 
+### Update 2026-07-16 (TASK-FREE-12) — addon removed; the column is gone
+
+**Decision: uninstall.** The "deliberately kept" paragraph above did not survive
+contact with the cost. `@storybook/addon-designs` was mounting an empty Design panel
+on **all 1,393 stories** and adding weight to every build, to display a parameter
+that zero stories carried and — per the 2026-07-10 finding above — that nothing was
+going to fill. "The convention costs nothing while unused" was the load-bearing
+claim, and it was false: an addon is not free, and a permanently-empty panel is
+itself an assertion that a design source exists somewhere.
+
+**What changed:**
+
+- `@storybook/addon-designs` removed from `apps/storybook/package.json` and from the
+  `addons` array in `.storybook/main.ts`.
+- The **Design** column removed from the ComponentStatus matrix, along with the
+  `design` field and its regex in `stories/_data/componentStatus.ts`. A column that
+  reads `—` for every row reports the absence of a thing, not the state of one; the
+  page now says so explicitly instead of rendering it.
+- **Contributing → "Design reference"** now states the addon is not installed and
+  documents the two-line path to bring it back.
+- `_shared/Dz.stories.template.ts` drops the reserved-parameter comment block.
+
+**Why this is not a reversal of Sprint 0.** Sprint 0 said "do not add the addon
+until Figma frames exist to link." That was right. TASK-APP-03 added it anyway on
+the theory that switch-on should be pre-paid; three years of an empty panel is a
+worse price than the one-line change it was avoiding. This restores the Sprint-0
+position — with the switch-on cost now measured rather than assumed.
+
+**Revisit when:** a Figma library ships. Re-add the dependency and the `addons` line,
+re-add the `design` field to `componentStatus.ts`, and seed the flagships. The
+convention's *shape* is still documented in Contributing; only the unused machinery
+is gone.
+
 ## TASK-X.4 — Public vs app-specific triage (Feedback components)
 
 **Decision (Sprint 6 scope):** classify the five flagged feedback components as

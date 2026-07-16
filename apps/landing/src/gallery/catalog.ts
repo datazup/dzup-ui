@@ -8,8 +8,11 @@
  * harness ({@link AnimationCard}) is effect-agnostic — adding an effect means
  * adding an entry here (and its demo component), never touching the card.
  *
- * Seeded with two end-to-end demos (one directive, one component) to prove the
- * harness. Tasks 3–9 fill in the remaining ~30 effects across all categories.
+ * `CATALOG.length` and `CATEGORIES.length` are the SOURCE OF TRUTH for the
+ * "N effects · M categories" line on the home page and the `/animations` header:
+ * `scripts/build-counts.ts` SSR-loads this module and bakes both into
+ * `generated/counts.ts`. Add an entry and the copy follows — never type the
+ * number into a page.
  */
 import type { Component } from 'vue'
 import { defineAsyncComponent } from 'vue'
@@ -67,8 +70,11 @@ export interface CatalogEntry {
 }
 
 /**
- * The nine gallery categories, in display order (docs/animations.md §6).
- * The page renders a section per category that has at least one entry.
+ * The gallery categories, in display order (docs/animations.md §6). The page
+ * renders a section per category that has at least one entry.
+ *
+ * Do not restate how many there are in this comment — it said "nine" above an
+ * eleven-element array. Anything that needs the number reads `CATEGORIES.length`.
  */
 export const CATEGORIES: CatalogCategory[] = [
   { id: 'scroll', label: 'Scroll' },

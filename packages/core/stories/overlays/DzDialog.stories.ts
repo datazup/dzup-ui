@@ -9,7 +9,7 @@ import {
   DzDialogTitle,
   DzDialogTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDialog is a compound modal overlay component built on Reka UI Dialog (ADR-07).
@@ -31,6 +31,10 @@ const meta = {
     DzDialogClose,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {

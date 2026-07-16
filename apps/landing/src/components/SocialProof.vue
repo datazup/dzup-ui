@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { DzText } from '@dzup-ui/core'
 import { FACTS, LINKS } from '../config.ts'
+import { PRO_FACTS } from '../data.ts'
 import { useLiveStats } from '../composables/useLiveStats.ts'
 import { DzCountUp } from '../motion'
 
@@ -64,15 +65,20 @@ const freshness = `As of the last site build, ${asOf}`
         </span>
         <DzText size="sm" tone="muted">Component families</DzText>
       </a>
+      <!--
+        The one forward-looking tile. `plannedComponents` is a roadmap target, not
+        a shipped count, so the label says "planned" — the tiles either side of it
+        are present-tense facts and a visitor must be able to tell which is which.
+      -->
       <a
         class="stat"
         :href="LINKS.pro"
-        :aria-label="`${FACTS.proComponents} Pro components coming soon`"
+        :aria-label="`${PRO_FACTS.plannedComponents} Pro components planned`"
       >
-        <span class="stat-value" :style="{ '--reserve': reserve(FACTS.proComponents) }">
-          <DzCountUp :value="FACTS.proComponents" :duration="1200" prefix="+" />
+        <span class="stat-value" :style="{ '--reserve': reserve(PRO_FACTS.plannedComponents) }">
+          <DzCountUp :value="PRO_FACTS.plannedComponents" :duration="1200" prefix="+" />
         </span>
-        <DzText size="sm" tone="muted">Pro components soon</DzText>
+        <DzText size="sm" tone="muted">Pro components planned</DzText>
       </a>
       <a
         class="stat"
@@ -88,9 +94,12 @@ const freshness = `As of the last site build, ${asOf}`
         </span>
         <DzText size="sm" tone="muted">{{ githubStars !== null ? 'GitHub stars' : 'Star on GitHub' }}</DzText>
       </a>
+      <!-- Until @dzup-ui/core is published, the npm package page 404s — the
+           degraded "Install from npm" CTA points at the install guide instead
+           (TASK-FREE-11). Flips to the real npm page once downloads resolve. -->
       <a
         class="stat"
-        :href="LINKS.npm"
+        :href="npmDownloads !== null ? LINKS.npm : LINKS.gettingStarted"
         target="_blank"
         rel="noreferrer noopener"
         :title="npmDownloads !== null ? freshness : undefined"

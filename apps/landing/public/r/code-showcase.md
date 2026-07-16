@@ -4,7 +4,7 @@ A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with 
 
 - **Category:** Content
 - **Components:** DzCodeBlock, DzCopyButton, DzTabs, DzTabList, DzTabTrigger, DzTabContent
-- **Preview:** /blocks#code-showcase
+- **Preview:** /blocks/code-showcase
 
 ```vue
 <script setup lang="ts">

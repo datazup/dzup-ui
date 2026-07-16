@@ -93,6 +93,27 @@ for (const theme of THEMES) {
       }
     })
 
+    /**
+     * LOCAL-ONLY — this test does not run in CI, by design.
+     *
+     * `toHaveScreenshot` baselines are per-platform, and the only ones committed
+     * are `…-chromium-win32.png`. CI is `ubuntu-latest`, where a win32 baseline
+     * is meaningless (font rasterisation and subpixel AA differ), so the CI job
+     * runs `--grep "renders real pixels"` and never reaches this test.
+     *
+     * That is a deliberate split, not an oversight:
+     *   • `renders real pixels` (above) is the regression guard that matters —
+     *     it asserts a pixel HISTOGRAM, is platform-independent, and runs on
+     *     every CI push. It is what catches the blank-page compositing class of
+     *     bug this file exists for.
+     *   • this snapshot is a finer-grained local check for a developer changing
+     *     the hero. Refresh it with `yarn test:visual:landing:update`.
+     *
+     * To make it a CI gate, commit `…-chromium-linux.png` baselines generated on
+     * a Linux runner (or in the Playwright container) and drop the `--grep` from
+     * the `landing-perf` job. Until then, do not read a green CI as evidence that
+     * the hero looks right.
+     */
     test(`hero snapshot — ${theme}`, async ({ page }) => {
       await page.goto('/', { waitUntil: 'networkidle' })
       const hero = page.locator('section.hero')

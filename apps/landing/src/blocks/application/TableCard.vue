@@ -14,6 +14,7 @@ import {
   DzAvatar,
   DzBadge,
   DzCard,
+  DzHeading,
   DzPagination,
   DzSearchInput,
   DzSegmented,
@@ -95,7 +96,7 @@ function onFilter(value: string) {
     <DzCard variant="outlined" padding="none">
       <!-- Toolbar -->
       <div class="tc-toolbar">
-        <DzText id="tc-title" weight="semibold" as="h4" class="tc-card-title">Team members</DzText>
+        <DzHeading id="tc-title" :level="4" size="md" weight="semibold" class="tc-card-title">Team members</DzHeading>
         <div class="tc-controls">
           <DzSearchInput
             v-model="query"

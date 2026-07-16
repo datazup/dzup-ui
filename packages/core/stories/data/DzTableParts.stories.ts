@@ -8,6 +8,7 @@ import {
   DzTableHeader,
   DzTableRow,
 } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzTable compound sub-parts: DzTableHeader, DzTableBody, DzTableFooter,
@@ -353,4 +354,46 @@ export const WithFooter: Story = {
     await expect(tbody).not.toBeNull()
     await expect(within(tbody as HTMLElement).getAllByRole('row')).toHaveLength(2)
   },
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzTable, DzTableHeader, DzTableBody, DzTableFooter, DzTableRow, DzTableCell },
+    template: `
+      <DzTable variant="bordered" hoverable aria-label="Dark mode table parts">
+        <DzTableHeader>
+          <DzTableRow>
+            <DzTableCell header>Product</DzTableCell>
+            <DzTableCell header align="right">Price</DzTableCell>
+            <DzTableCell header align="right">Units</DzTableCell>
+          </DzTableRow>
+        </DzTableHeader>
+        <DzTableBody>
+          <DzTableRow>
+            <DzTableCell>Widget A</DzTableCell>
+            <DzTableCell align="right">$9.99</DzTableCell>
+            <DzTableCell align="right">142</DzTableCell>
+          </DzTableRow>
+          <DzTableRow selected>
+            <DzTableCell>Widget B</DzTableCell>
+            <DzTableCell align="right">$14.99</DzTableCell>
+            <DzTableCell align="right">58</DzTableCell>
+          </DzTableRow>
+        </DzTableBody>
+        <DzTableFooter>
+          <DzTableRow>
+            <DzTableCell header>Total</DzTableCell>
+            <DzTableCell align="right">$24.98</DzTableCell>
+            <DzTableCell align="right">200</DzTableCell>
+          </DzTableRow>
+        </DzTableFooter>
+      </DzTable>
+    `,
+  }),
 }

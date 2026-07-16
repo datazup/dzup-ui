@@ -1,3 +1,4 @@
+import type { ChildProcess } from 'node:child_process'
 /**
  * shoot-thumbnails — the committed thumbnail pipeline for the Templates gallery.
  *
@@ -37,7 +38,7 @@
  * exits non-zero with a clear message and writes NOTHING — the gallery keeps its
  * icon fallback rather than shipping blank/broken images.
  */
-import { spawn, type ChildProcess } from 'node:child_process'
+import { spawn } from 'node:child_process'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
@@ -79,7 +80,8 @@ async function loadToolchain() {
   let playwright: typeof import('playwright')
   try {
     playwright = await import('playwright')
-  } catch {
+  }
+  catch {
     throw new Error(
       'Playwright is not installed. Run `yarn install` then `npx playwright install chromium`.',
     )
@@ -91,7 +93,8 @@ async function loadToolchain() {
   try {
     const mod = (await import('sharp')) as { default?: typeof import('sharp') }
     sharp = mod.default ?? (mod as unknown as typeof import('sharp'))
-  } catch {
+  }
+  catch {
     throw new Error('sharp is not installed. Run `yarn install` in the repo root.')
   }
   return { chromium: playwright.chromium, sharp }
@@ -107,7 +110,7 @@ const ANSI = /\[[0-9;]*m/g
  * stops it popping a browser; Vite auto-picks a free port if the configured one
  * is busy, and we read whichever it actually bound.
  */
-function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
+function startDevServer(): Promise<{ base: string, child: ChildProcess }> {
   const require = createRequire(import.meta.url)
   // Resolve via package.json so Vite's "exports" map can't block the deep bin path.
   const viteBin = resolve(dirname(require.resolve('vite/package.json')), 'bin/vite.js')
@@ -126,7 +129,7 @@ function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
     let stderr = ''
     const onData = (buf: Buffer) => {
       const text = buf.toString().replace(ANSI, '')
-      const match = text.match(/Local:\s*(https?:\/\/\S+)/i) ?? text.match(/(https?:\/\/localhost:\d+\S*)/i)
+      const match = text.match(/Local:\s*(https?:\/\/\S+)/i) ?? text.match(/(https?:\/\/localhost:\d\S*)/i)
       if (match) {
         clearTimeout(timeout)
         child.stdout?.off('data', onData)
@@ -146,10 +149,12 @@ function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
 
 /** Kill the dev server and its child processes (esbuild) — tree-kill on Windows. */
 function stopDevServer(child: ChildProcess): void {
-  if (child.pid === undefined || child.killed) return
+  if (child.pid === undefined || child.killed)
+    return
   if (process.platform === 'win32') {
     spawn('taskkill', ['/pid', String(child.pid), '/f', '/t'], { stdio: 'ignore' })
-  } else {
+  }
+  else {
     child.kill('SIGTERM')
   }
 }
@@ -171,11 +176,12 @@ async function main(): Promise<void> {
   let browser: Awaited<ReturnType<typeof chromium.launch>>
   try {
     browser = await chromium.launch()
-  } catch (error) {
+  }
+  catch (error) {
     stopDevServer(child)
     throw new Error(
-      'Could not launch headless Chromium. Install it with `npx playwright install chromium`.\n' +
-        `Underlying error: ${(error as Error).message}`,
+      'Could not launch headless Chromium. Install it with `npx playwright install chromium`.\n'
+      + `Underlying error: ${(error as Error).message}`,
     )
   }
 
@@ -195,7 +201,8 @@ async function main(): Promise<void> {
       await context.addInitScript((t) => {
         try {
           localStorage.setItem('dz-theme', t as string)
-        } catch {
+        }
+        catch {
           /* private mode / no storage — the query param still applies the theme */
         }
       }, theme)
@@ -249,7 +256,8 @@ async function main(): Promise<void> {
 
       await context.close()
     }
-  } finally {
+  }
+  finally {
     await browser.close()
     stopDevServer(child)
   }
@@ -257,9 +265,9 @@ async function main(): Promise<void> {
   const total = weights.reduce((a, b) => a + b, 0)
   const avg = total / weights.length
   console.log(
-    `\n▸ Done: ${weights.length} images (${TEMPLATES.length} templates × ${THEMES.length} themes)\n` +
-      `  Total ${kb(total)} · avg ${kb(avg)} · max ${kb(Math.max(...weights))} per image\n` +
-      `  Written to ${OUT_DIR}`,
+    `\n▸ Done: ${weights.length} images (${TEMPLATES.length} templates × ${THEMES.length} themes)\n`
+    + `  Total ${kb(total)} · avg ${kb(avg)} · max ${kb(Math.max(...weights))} per image\n`
+    + `  Written to ${OUT_DIR}`,
   )
 }
 

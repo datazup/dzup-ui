@@ -8,7 +8,7 @@ import {
   DzDropdownMenuSeparator,
   DzDropdownMenuTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDropdownMenu is a compound dropdown menu built on Reka UI DropdownMenu (ADR-07).
@@ -27,6 +27,10 @@ const meta = {
     DzDropdownMenuSeparator,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {

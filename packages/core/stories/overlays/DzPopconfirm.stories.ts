@@ -3,6 +3,7 @@ import { AlertTriangle, Trash2 } from 'lucide-vue-next'
 import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzButton, DzIconButton } from '../../src/components/buttons'
 import { DzPopconfirm } from '../../src/components/overlays'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzPopconfirm is a lightweight, anchored "are you sure?" popover for low-risk
@@ -20,6 +21,10 @@ const meta = {
   title: 'Core/Overlays/DzPopconfirm',
   component: DzPopconfirm,
   tags: ['autodocs', 'status:experimental'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     title: { control: 'text', description: 'Question rendered as the popover heading', table: { category: 'Content' } },
     description: { control: 'text', description: 'Optional supporting text below the title', table: { category: 'Content' } },
@@ -190,6 +195,55 @@ export const PlacementMatrix: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+/**
+ * Two things this story has to do that a plain `darkModeDecorator` cannot:
+ *
+ * 1. The panel is `<Teleport to="body">`d, so it lands OUTSIDE the decorator's
+ *    `data-theme="dark"` wrapper and would resolve the LIGHT tokens — a light
+ *    popover floating over a dark canvas. Setting the `theme` global puts
+ *    `data-theme="dark"` on `<html>` (`withThemeByDataAttribute`, see
+ *    `.storybook/preview.ts`), which the teleported panel does inherit.
+ * 2. A closed trigger previews nothing. `play()` opens the panel — and because
+ *    docs pages do not autoplay, the always-on focus trap this component
+ *    activates on open never steals focus from the docs page.
+ */
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  globals: { theme: 'dark' },
+  render: () => ({
+    components: { DzPopconfirm, DzButton },
+    setup() {
+      return { Trash2 }
+    },
+    template: `
+      <div class="py-16 flex justify-center">
+        <DzPopconfirm
+          :icon="Trash2"
+          title="Delete this run?"
+          description="This permanently removes the run and its artifacts. This cannot be undone."
+          confirm-text="Delete"
+          tone="danger"
+          placement="bottom"
+        >
+          <DzButton variant="outline" tone="danger">Delete run</DzButton>
+        </DzPopconfirm>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: /delete run/i }))
+    const dialog = await screen.findByRole('alertdialog')
+    await expect(dialog).toHaveTextContent(/delete this run/i)
+  },
 }
 
 // ---------------------------------------------------------------------------

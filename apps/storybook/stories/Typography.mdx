@@ -2,6 +2,7 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import { StatusBadge } from './_blocks/StatusBadge.ts'
 import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { FamilyComponents } from './_blocks/FamilyComponents.ts'
 
 <Meta title="Core/Typography/Overview" />
 
@@ -18,6 +19,10 @@ weights, and colours stay in sync with the rest of the system and respond to dar
 | **DzBlockquote** | Quoted content with a `cite` source and `#footer` attribution. | [DzBlockquote](?path=/docs/core-typography-dzblockquote--docs) |
 | **DzCaption** | Small annotations: helper text, metadata, validation messages (`<small>`). | [DzCaption](?path=/docs/core-typography-dzcaption--docs) |
 | **DzCode** | Inline or short-block code (`<code>` / `<pre><code>`). | [DzCode](?path=/docs/core-typography-dzcode--docs) |
+
+## Components
+
+<FamilyComponents family="Typography" />
 
 ## When to use which
 
@@ -60,7 +65,7 @@ Other typographic tokens in play:
   `--dz-success` / `--dz-warning` / `--dz-danger`. These are theme tokens, so every tone has
   a dark-mode value — see each component's **Dark Mode Preview** story.
 
-See [Design Tokens](?path=/docs/getting-started-design-tokens--docs) for the full scale.
+See [Design Tokens](?path=/docs/guides-design-tokens--designtokens) for the full scale.
 
 ## Semantic vs visual hierarchy
 
@@ -73,7 +78,7 @@ See [Design Tokens](?path=/docs/getting-started-design-tokens--docs) for the ful
 
 Always choose `level` from the document structure first (no skipped levels), then reach for
 `size` purely for appearance. See
-[DzHeading → Size vs Level Independence](?path=/docs/core-typography-dzheading--size-vs-level-independence).
+[DzHeading → Size vs Level Independence](?path=/story/core-typography-dzheading--size-vs-level).
 
 ## Accessibility
 

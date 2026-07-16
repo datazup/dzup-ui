@@ -7,13 +7,20 @@ import type { Connect, Plugin, ViteDevServer } from 'vite'
  * "Components" link (config.ts → STORYBOOK_BASE) resolves to a real app on the
  * same origin — no second dev server, no rebuild.
  *
- * The committed `apps/storybook/storybook-static` build references its assets
- * with relative URLs (`./sb-manager/...`), so it can be served from any
- * sub-path verbatim. We keep using that committed artifact (ADR-12); refresh it
- * with `yarn storybook:build` when components change.
+ * `apps/storybook/storybook-static` is a BUILD INPUT, not a committed artifact:
+ * it is gitignored (`.gitignore` → `storybook-static/`), so it is absent on every
+ * clean clone and every CI runner until `yarn storybook:build` runs. ADR-12
+ * covers the committed package `dist/` artifacts — it does NOT cover this one.
+ * Its assets are referenced with relative URLs (`./sb-manager/...`), so once
+ * built it can be served from any sub-path verbatim.
  *
  * - dev/preview: serve the static dir via middleware, ahead of the SPA fallback.
+ *   Missing → warn and skip; a local dev server without docs is a nuisance, not a
+ *   broken release.
  * - build: copy the static dir into `dist/storybook` for a self-contained deploy.
+ *   Missing → THROW. A production landing build whose primary call-to-action
+ *   404s is a failed build, not a smaller one. Set `LANDING_SKIP_STORYBOOK=1` to
+ *   opt out deliberately (see `scripts/README.md`).
  */
 
 const MOUNT = '/storybook'
@@ -58,8 +65,10 @@ function serveStorybookMiddleware(staticDir: string): Connect.NextHandleFunction
       return
     }
 
-    let rel = url.slice(MOUNT.length).split('?')[0].split('#')[0]
-    rel = decodeURIComponent(rel)
+    // Destructure with a default: under `noUncheckedIndexedAccess` a bare
+    // `split(...)[0]` is `string | undefined`, even though it never is here.
+    const [pathname = ''] = url.slice(MOUNT.length).split(/[?#]/)
+    let rel = decodeURIComponent(pathname)
     if (rel === '' || rel === '/') rel = '/index.html'
 
     const filePath = normalize(join(staticDir, rel))
@@ -81,6 +90,9 @@ function serveStorybookMiddleware(staticDir: string): Connect.NextHandleFunction
     createReadStream(target).pipe(res)
   }
 }
+
+/** Opt out of bundling the Storybook — the landing build then ships WITHOUT `/storybook/`. */
+const SKIP_ENV = 'LANDING_SKIP_STORYBOOK'
 
 export function serveStorybook(): Plugin {
   // apps/landing/vite/ → apps/storybook/storybook-static
@@ -110,7 +122,41 @@ export function serveStorybook(): Plugin {
     },
     closeBundle() {
       // Self-contained production output: dist/storybook/**.
-      if (!existsSync(staticDir)) return
+      //
+      // This is the site's primary call-to-action: LINKS.components, every
+      // "Built with" badge on the template pages, and all ⌘K palette rows point
+      // under /storybook/. Shipping a dist/ without it deploys a 404, so a
+      // missing input FAILS the build instead of quietly shrinking it.
+      const entry = join(staticDir, 'index.html')
+      const built = existsSync(entry) && statSync(entry).size > 0
+
+      if (!built) {
+        if (process.env[SKIP_ENV]) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            `\n${'!'.repeat(72)}\n`
+            + `[serve-storybook] ${SKIP_ENV} is set — building the landing site WITHOUT /storybook/.\n`
+            + 'Every docs link (Components, Getting Started, Theming, Design Tokens,\n'
+            + 'Accessibility, Contributing), every template "Built with" badge and every\n'
+            + 'row of the ⌘K component palette WILL 404 in this output.\n'
+            + `Do not deploy this artifact as the public site.\n${'!'.repeat(72)}\n`,
+          )
+          return
+        }
+
+        throw new Error(
+          `[serve-storybook] Storybook build not found at ${staticDir}\n\n`
+          + 'The landing site mounts it at /storybook/, which is where the "Components"\n'
+          + 'CTA, the docs links and the ⌘K palette all point — without it this build\n'
+          + 'would deploy a site whose front door 404s.\n\n'
+          + 'This directory is gitignored, so it is absent on a clean clone and in CI.\n'
+          + 'Build it first (it needs the package dists, so build those too):\n\n'
+          + '    yarn build && yarn storybook:build\n\n'
+          + `To build the landing standalone anyway, set ${SKIP_ENV}=1 — the output will\n`
+          + 'have no /storybook/ and must not be deployed as the public site.',
+        )
+      }
+
       const out = resolve(__dirname, '../dist/storybook')
       cpSync(staticDir, out, { recursive: true })
     },

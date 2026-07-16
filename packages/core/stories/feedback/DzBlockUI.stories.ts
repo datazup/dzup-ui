@@ -70,7 +70,7 @@ type Story = StoryObj<typeof meta>
 
 // A small demo panel reused across stories.
 const panelTemplate = `
-  <div style="max-width: 24rem; border border-[var(--dz-border)]: 1px solid var(--dz-border); border-radius: var(--dz-radius-md); padding: var(--dz-spacing-4); background: var(--dz-surface)">
+  <div style="max-width: 24rem; border: 1px solid var(--dz-border); border-radius: var(--dz-radius-md); padding: var(--dz-spacing-4); background: var(--dz-surface)">
     <h3 style="margin: 0 0 var(--dz-spacing-3); font-size: var(--dz-text-base); color: var(--dz-foreground)">Profile</h3>
     <label style="display: block; margin-bottom: var(--dz-spacing-2); font-size: var(--dz-text-sm); color: var(--dz-muted-foreground)">
       Name

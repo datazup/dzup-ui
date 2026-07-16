@@ -1,15 +1,27 @@
 /**
- * Static content for the landing page. Counts and facts are drawn from the spec
- * Appendix A and CLAUDE.md. The component-family counts below sum to the 147
- * headline figure; the gallery deep-links use real Storybook story ids.
+ * Static content for the landing page — the copy, and only the copy.
+ *
+ * **Every number here is derived.** The family counts, the headline component
+ * figure and the animation-catalog line all read from `generated/counts.ts`,
+ * which `scripts/build-counts.ts` globs out of the real source tree and the real
+ * registries. The hand-typed versions of these were wrong in every instance: the
+ * family rows summed to 167 (a figure matching nothing), the feature card said
+ * "147 components" against a real 139, and the animations tile said 59 effects
+ * without anything checking. Write prose here; take numbers from `COUNTS`.
  */
 
 import { storybookDocs } from './config.ts'
+import { COUNTS, FAMILY_COUNTS } from './generated/counts.ts'
 
 export interface Family {
   /** Display name. */
   label: string
-  /** Component count for this family. */
+  /**
+   * Components in this family with a Storybook page of their own — the
+   * DOCUMENTED count. These sum to `COUNTS.documentedComponents` (the headline
+   * figure), NOT to the larger catalog count, which includes compound sub-parts
+   * documented through their parent.
+   */
   count: number
   /** Storybook deep-link (representative story docs page). */
   href: string
@@ -17,20 +29,37 @@ export interface Family {
   blurb: string
 }
 
-/** 11 free families (§4.6). Counts total to 147. */
-export const FAMILIES: Family[] = [
-  { label: 'Buttons', count: 10, href: storybookDocs('core-buttons-dzbutton'), blurb: 'Buttons, groups, split, FAB, speed-dial.' },
-  { label: 'Inputs', count: 8, href: storybookDocs('core-inputs-dzinput'), blurb: 'Text, number, password, OTP, search, masks.' },
-  { label: 'Forms', count: 30, href: storybookDocs('core-forms-dzcheckbox'), blurb: 'Selects, pickers, sliders, switches, fields.' },
-  { label: 'Cards', count: 6, href: storybookDocs('core-cards-dzcard'), blurb: 'Surfaces, stat cards, image cards.' },
-  { label: 'Data', count: 32, href: storybookDocs('core-data-dztable'), blurb: 'Tables, grids, trees, timelines, lists.' },
-  { label: 'Feedback', count: 18, href: storybookDocs('core-feedback-dzalert'), blurb: 'Alerts, badges, progress, toasts, skeletons.' },
-  { label: 'Layout', count: 20, href: storybookDocs('core-layout-dzcontainer'), blurb: 'Shell, grid, flex, splitter, scroll-area.' },
-  { label: 'Navigation', count: 12, href: storybookDocs('core-navigation-dztabs'), blurb: 'Tabs, menus, breadcrumb, stepper, sidebar.' },
-  { label: 'Overlays', count: 10, href: storybookDocs('core-overlays-dzdialog'), blurb: 'Dialog, sheet, popover, tooltip, command.' },
-  { label: 'Media', count: 12, href: storybookDocs('core-media-dzavatar'), blurb: 'Avatars, image, carousel, lightbox, QR.' },
-  { label: 'Typography', count: 9, href: storybookDocs('core-typography-dzheading'), blurb: 'Headings, text, code, kbd, blockquote.' },
-]
+/**
+ * The hand-written half of a family row: where it links and how we describe it.
+ * Keyed by the family key in `FAMILY_COUNTS`, which supplies the other half —
+ * the label and the count — so a family can never be described but not counted,
+ * or counted but not described (a missing key is a type error, not a wrong page).
+ */
+const FAMILY_COPY: Record<string, { story: string, blurb: string }> = {
+  buttons: { story: 'core-buttons-dzbutton', blurb: 'Buttons, groups, split, FAB, speed-dial.' },
+  inputs: { story: 'core-inputs-dzinput', blurb: 'Text, number, password, OTP, search, masks.' },
+  forms: { story: 'core-forms-dzcheckbox', blurb: 'Selects, pickers, sliders, switches, fields.' },
+  cards: { story: 'core-cards-dzcard', blurb: 'Surfaces, stat cards, image cards.' },
+  data: { story: 'core-data-dztable', blurb: 'Tables, grids, trees, timelines, lists.' },
+  feedback: { story: 'core-feedback-dzalert', blurb: 'Alerts, badges, progress, toasts, skeletons.' },
+  layout: { story: 'core-layout-dzcontainer', blurb: 'Shell, grid, flex, splitter, scroll-area.' },
+  navigation: { story: 'core-navigation-dztabs', blurb: 'Tabs, menus, breadcrumb, stepper, sidebar.' },
+  overlays: { story: 'core-overlays-dzdialog', blurb: 'Dialog, sheet, popover, tooltip, command.' },
+  media: { story: 'core-media-dzavatar', blurb: 'Avatars, image, carousel, lightbox, QR.' },
+  typography: { story: 'core-typography-dzheading', blurb: 'Headings, text, code, kbd, blockquote.' },
+}
+
+/** The 11 free families (§4.6), counted from the source tree. */
+export const FAMILIES: Family[] = FAMILY_COUNTS.map((family) => {
+  const copy = FAMILY_COPY[family.key]
+  if (!copy) throw new Error(`data.ts: family "${family.key}" has no copy — add it to FAMILY_COPY.`)
+  return {
+    label: family.label,
+    count: family.documented,
+    href: storybookDocs(copy.story),
+    blurb: copy.blurb,
+  }
+})
 
 export interface Feature {
   /** lucide-vue-next icon name (resolved in the component). */
@@ -41,7 +70,7 @@ export interface Feature {
 
 /** Feature grid (§4.4) — drawn from real library facts. */
 export const FEATURES: Feature[] = [
-  { icon: 'Boxes', title: '147 components', body: 'Across 11 families — buttons to data grids — every one stable and documented.' },
+  { icon: 'Boxes', title: `${COUNTS.documentedComponents} components`, body: `Across ${COUNTS.families} families — buttons to data grids — every one stable and documented.` },
   { icon: 'Accessibility', title: 'Accessible by default', body: 'WCAG AA, Reka UI primitives, full keyboard and ARIA support baked in.' },
   { icon: 'Palette', title: 'OKLCH design tokens', body: 'A three-tier system — primitive → semantic → component — in a perceptual color space.' },
   { icon: 'MoonStar', title: 'Light / dark / system', body: 'A single data-theme switch, FOUC-safe before first paint (ADR-15).' },
@@ -110,7 +139,7 @@ export const ECOSYSTEM: EcosystemItem[] = [
     icon: 'Sparkles',
     title: 'Animations',
     blurb: 'Motion primitives and ready-made effects — scroll reveals, text and number transitions — that honour prefers-reduced-motion.',
-    meta: '59 effects · 11 categories',
+    meta: `${COUNTS.effects} effects · ${COUNTS.effectCategories} categories`,
     status: 'available',
     href: '/animations',
   },
@@ -143,7 +172,12 @@ export interface ProComponent {
   family: string
 }
 
-/** Pro components (§4.8, Appendix A) — shown with a "coming soon" state. */
+/**
+ * Pro components (§4.8, Appendix A) — shown with a "coming soon" state.
+ *
+ * This list IS the Pro claim. Anything the Pro page says about how many
+ * components there are must come from `PRO_FACTS` below, which counts it.
+ */
 export const PRO_COMPONENTS: ProComponent[] = [
   { label: 'Kanban', family: 'Planning' },
   { label: 'Gantt', family: 'Planning' },
@@ -159,3 +193,29 @@ export const PRO_COMPONENTS: ProComponent[] = [
   { label: 'Chat', family: 'Communication' },
   { label: 'NotificationCenter', family: 'Communication' },
 ]
+
+/**
+ * What we are allowed to say about Pro.
+ *
+ * Two kinds of number, and the difference is the whole point. `announced` and
+ * `announcedFamilies` are DERIVED from `PRO_COMPONENTS` — they describe what is
+ * named on the page, and the page renders that very list right underneath. The
+ * `planned*` figures come from the roadmap (spec §4.8) and describe a target
+ * nobody can browse yet.
+ *
+ * The Pro page used to print the roadmap's 41-across-8 in the present tense,
+ * directly above a list of 13 components in 7 families. A visitor who counted —
+ * and a prospective customer will count — found a claim overstated by 3×. So:
+ * any surface that shows a `planned*` figure must say the word "planned" (or
+ * "roadmap") next to it. Never print one as a present-tense fact.
+ */
+export const PRO_FACTS = {
+  /** Pro components named so far — `PRO_COMPONENTS.length`. Nothing has shipped. */
+  announced: PRO_COMPONENTS.length,
+  /** Distinct families across those. */
+  announcedFamilies: new Set(PRO_COMPONENTS.map(c => c.family)).size,
+  /** Roadmap target (§4.8). FORWARD-LOOKING — never render without saying so. */
+  plannedComponents: 41,
+  /** Roadmap target (§4.8). FORWARD-LOOKING — never render without saying so. */
+  plannedFamilies: 8,
+} as const

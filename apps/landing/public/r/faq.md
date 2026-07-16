@@ -4,7 +4,7 @@ Six Q&A items in a separated collapsible accordion with a section header and a c
 
 - **Category:** Marketing
 - **Components:** DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent, DzHeading, DzText
-- **Preview:** /blocks#faq
+- **Preview:** /blocks/faq
 
 ```vue
 <script setup lang="ts">

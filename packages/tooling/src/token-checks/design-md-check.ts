@@ -152,17 +152,21 @@ export function buildContrastPairs(): ContrastPair[] {
         `${intent} emphasis text on ${intent} subtle fill`,
       )
 
-      // Solid fill + its guaranteed-legible text. Since TASK-DS-10 every intent
-      // exposes the same two-state fill set, so this loops with no special case:
-      // `warning` used to need a branch here because its legible fill is a
-      // LIGHTER shade than its intent color (near-black text on `--dz-warning`
-      // measures 3.51:1 in light — below AA). Both now answer to `-solid`.
+      // Solid fill + its guaranteed-legible text. The base intent color is
+      // asserted alongside `-solid` / `-solid-hover` because `design-narrative.md`
+      // advertises `bg-[var(--dz-{intent})] text-[var(--dz-{intent}-foreground)]`
+      // as a valid solid fill. Since TASK-DS-10 this loops with no special case:
+      // `warning` used to fail here — near-black text on the old `--dz-warning`
+      // (shade 500) measured 3.51:1, below AA — so it was excluded and only the
+      // `-solid` shade was gated. Warning's intent color is now shade 400 (5.87:1),
+      // so the base pair passes for every intent and is gated for all of them,
+      // making the fix regression-proof.
       //
       // `-active` is deliberately absent: it is a pressed SURFACE color, not a
       // text-bearing fill. No component puts `{intent}-foreground` on it, and
       // `--dz-warning-active` could not carry it legibly. Asserting it would have
       // gated a pair nothing renders — the claim is scoped to what components do.
-      for (const fill of [`--dz-${intent}-solid`, `--dz-${intent}-solid-hover`]) {
+      for (const fill of [`--dz-${intent}`, `--dz-${intent}-solid`, `--dz-${intent}-solid-hover`]) {
         push(
           `--dz-${intent}-foreground`,
           fill,

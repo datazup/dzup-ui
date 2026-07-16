@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import type { DzToastContext } from '../../src/components/feedback'
+import type { DzToastContext, ToastItem } from '../../src/components/feedback'
 import { expect, screen, userEvent, waitFor } from 'storybook/test'
 import { inject } from 'vue'
 import { DzButton } from '../../src/components/buttons'
@@ -9,6 +9,7 @@ import {
   DzToastProvider,
   DzToastViewport,
 } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzToast compound sub-parts: DzToastProvider and DzToastViewport.
@@ -183,6 +184,40 @@ export const Persistent: Story = {
           <ToastTrigger />
         </div>
         <DzToastViewport position="bottom-right" />
+      </DzToastProvider>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzToastProvider, DzToast },
+    setup() {
+      // The same tones ToastTrigger raises, rendered inline under the provider
+      // rather than through the fixed viewport — the viewport pins to the
+      // browser corner, which would place the toasts outside the dark frame.
+      const toasts: ToastItem[] = [
+        { id: 'dark-success', title: 'Success Toast', description: 'This is a success toast notification.', tone: 'success' },
+        { id: 'dark-warning', title: 'Warning Toast', description: 'This is a warning toast notification.', tone: 'warning' },
+        { id: 'dark-danger', title: 'Danger Toast', description: 'This is a danger toast notification.', tone: 'danger' },
+        { id: 'dark-info', title: 'Info Toast', description: 'This is a info toast notification.', tone: 'info' },
+      ]
+      return { toasts }
+    },
+    template: `
+      <DzToastProvider>
+        <div class="space-y-3 max-w-sm">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Toast surface, border, and tone indicator against a dark background.
+          </p>
+          <DzToast v-for="t in toasts" :key="t.id" :toast="t" />
+        </div>
       </DzToastProvider>
     `,
   }),

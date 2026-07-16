@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { REGISTRY_ENABLED, installCommands, registryAddCommands } from '../../blocks/config.ts'
 import type { BlockDef } from '../../blocks/registry.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
+import { getBlockSource } from '../../blocks/sources.ts'
 import { buildImportLine } from '../../composables/useBlockCodeView.ts'
 import PmCommandTabs from './PmCommandTabs.vue'
 
@@ -23,7 +24,8 @@ import PmCommandTabs from './PmCommandTabs.vue'
  *     (PmCommandTabs); the `npx shadcn@latest add …/r/<id>.json` registry line
  *     (also per-PM) only once Task G1 has shipped (gated by `REGISTRY_ENABLED`),
  *     so it never renders a dead command before the registry exists.
- *   • Copy code — the block's SFC source verbatim (DzCopyButton over `block.source`).
+ *   • Copy code — the block's SFC source verbatim (DzCopyButton over
+ *     `getBlockSource(block.path)`).
  *
  * Each command is a DzCodeBlock with `copyable`, which copies the EXACT text via
  * DzCopyButton. Chrome is dogfooded from @dzup-ui/core; the only CSS is layout +
@@ -119,7 +121,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
     <div class="bm-group">
       <DzText size="xs" tone="muted" as="div" class="bm-label">Or copy the source</DzText>
       <DzCopyButton
-        :value="block.source"
+        :value="getBlockSource(block.path)"
         label="Copy code"
         copied-label="Copied!"
         variant="outline"

@@ -32,7 +32,7 @@
  */
 
 import { sourceDependencies } from './config.ts'
-import type { BlockDef } from './registry.ts'
+import type { BlockDef, BlockSourceLookup } from './registry.ts'
 
 /**
  * `$schema` URLs the emitted JSON is validated against — the canonical shadcn
@@ -131,8 +131,13 @@ export interface RegistryIndex {
  * the single `files[]` entry (so one fetch installs it) with an explicit
  * `target`; `registryDependencies` is empty by design (see the interface note),
  * and the composed components are preserved in `meta.components`.
+ *
+ * `source` is passed in rather than resolved here: this module is deliberately
+ * runtime-free so the bare Node generator can import it, and `blocks/sources.ts`
+ * carries an `import.meta.glob` that only Vite can evaluate. Callers pass
+ * `getBlockSource(block.path)`.
  */
-export function toRegistryItem(block: BlockDef): RegistryItem {
+export function toRegistryItem(block: BlockDef, source: string): RegistryItem {
   return {
     $schema: REGISTRY_ITEM_SCHEMA,
     name: block.id,
@@ -143,13 +148,13 @@ export function toRegistryItem(block: BlockDef): RegistryItem {
     files: [
       {
         path: `${block.id}.vue`,
-        content: block.source,
+        content: source,
         type: REGISTRY_FILE_TYPE,
         target: `${BLOCK_TARGET_DIR}/${block.id}.vue`,
       },
     ],
     registryDependencies: [],
-    dependencies: sourceDependencies(block.source),
+    dependencies: sourceDependencies(source),
     meta: { components: [...block.components] },
   }
 }
@@ -161,13 +166,14 @@ export function toRegistryItem(block: BlockDef): RegistryItem {
  */
 export function buildRegistryIndex(
   blocks: readonly BlockDef[],
+  getSource: BlockSourceLookup,
   homepage: string = REGISTRY_HOMEPAGE,
 ): RegistryIndex {
   return {
     $schema: REGISTRY_SCHEMA,
     name: REGISTRY_NAME,
     homepage,
-    items: blocks.map((block) => toRegistryIndexItem(toRegistryItem(block))),
+    items: blocks.map((block) => toRegistryIndexItem(toRegistryItem(block, getSource(block)))),
   }
 }
 

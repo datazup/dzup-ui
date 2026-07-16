@@ -3,16 +3,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzCodeBlock } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzCodeBlock renders code in a semantic `<pre><code>` structure with an
- * optional file/language header, line numbers, and a clipboard copy button
- * (reusing `DzCopyButton`).
- *
- * It does not perform syntax highlighting itself — it attaches a
- * `language-{lang}` class to the `<code>` element so a downstream highlighter
- * (Shiki/Prism) can style it, and it owns the layout, scrolling, and copy UX.
- */
-
 // ---------------------------------------------------------------------------
 // Sample snippets
 // ---------------------------------------------------------------------------
@@ -52,6 +42,15 @@ const tallSnippet = Array.from(
 // Meta
 // ---------------------------------------------------------------------------
 
+/**
+ * DzCodeBlock renders code in a semantic `<pre><code>` structure with an
+ * optional file/language header, line numbers, and a clipboard copy button
+ * (reusing `DzCopyButton`).
+ *
+ * It does not perform syntax highlighting itself — it attaches a
+ * `language-{lang}` class to the `<code>` element so a downstream highlighter
+ * (Shiki/Prism) can style it, and it owns the layout, scrolling, and copy UX.
+ */
 const meta = {
   title: 'Core/Data/DzCodeBlock',
   component: DzCodeBlock,

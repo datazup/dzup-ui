@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzList, DzListItem } from '../../src/components/data'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzListItem is a compound sub-part of DzList.
@@ -172,5 +173,41 @@ export const Disabled: Story = {
       return { args }
     },
     template: '<DzListItem v-bind="args">Disabled list item</DzListItem>',
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzList, DzListItem },
+    template: `
+      <DzList interactive variant="bordered" aria-label="Dark mode contacts">
+        <DzListItem active>
+          <template #prefix>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-xs font-medium text-[var(--dz-primary-muted-foreground)]">AJ</div>
+          </template>
+          Alice Johnson
+          <template #suffix>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)]">Online</span>
+          </template>
+        </DzListItem>
+        <DzListItem>
+          <template #prefix>
+            <div class="w-8 h-8 rounded-full bg-[var(--dz-muted)] flex items-center justify-center text-xs font-medium text-[var(--dz-muted-foreground)]">BS</div>
+          </template>
+          Bob Smith
+          <template #suffix>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)]">Offline</span>
+          </template>
+        </DzListItem>
+        <DzListItem tone="danger">Charlie Lee — account suspended</DzListItem>
+        <DzListItem disabled>Dana Wu — invite pending</DzListItem>
+      </DzList>
+    `,
   }),
 }

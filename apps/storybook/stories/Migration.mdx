@@ -1,0 +1,162 @@
+{/* Migration.mdx — migration & upgrade guide (TASK-FREE-14) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { DeprecatedComponents } from './_blocks/DeprecatedComponents.ts'
+
+<Meta title="Guides/Migration" />
+
+# Migration
+
+How to move a codebase onto a newer dzup-ui without doing it by hand.
+
+> **There has been no major release yet.** Every package is `0.1.0-alpha.x`, so
+> there is no `1.x → 2.x` upgrade to describe. This page covers the one migration
+> that does exist — **legacy `dzup-ui` → vNext (`@dzup-ui/core`)** — and the process
+> that will apply to a future major. What it does not do is invent an upgrade that
+> has not happened. See [Versioning & Deprecation](?path=/docs/guides-versioning-deprecation--docs)
+> for the promises a future major will be held to.
+
+## Currently deprecated
+
+<DeprecatedComponents />
+
+## Legacy dzup-ui → vNext
+
+vNext is a rewrite: contract-first props (ADR-02), token-only styling (ADR-04),
+`defineModel` for `v-model` (ADR-16), and a package split (`dzup-ui` became
+`@dzup-ui/core` + `@dzup-ui/tokens` + `@dzup-ui/contracts`). The API changed in
+mechanical, repetitive ways — which is exactly what a codemod is for.
+
+The shape of the change:
+
+```vue
+<!-- legacy -->
+<DzButton type="primary" size="small">Save</DzButton>
+
+<!-- vNext: `type` split into variant + tone, sizes moved to the canonical scale -->
+<DzButton variant="solid" tone="primary" size="sm">Save</DzButton>
+```
+
+### Step 1 — run the codemods
+
+`@dzup-ui/codemods` ships a CLI. **Commit first, then run it on a clean tree** so the
+diff it produces is reviewable.
+
+```bash
+npx dzup-codemod all ./src --dry-run --verbose
+```
+
+`--dry-run` prints what would change and writes nothing. Read that output before
+letting it write:
+
+```bash
+npx dzup-codemod all ./src
+```
+
+Available transforms:
+
+| Transform | Does |
+|---|---|
+| `rename-imports` | Rewrites legacy import paths to `@dzup-ui/core` / `@dzup-ui/pro`. |
+| `rename-props` | Renames props and maps their values — `visible` → `open` on overlays, `size="small"` → `size="sm"`, tone values on `DzAlert`, and so on. |
+| `rename-events` | Renames legacy events to their vNext names. |
+| `all` | The three above, in order. |
+
+Options: `--dry-run`, `--verbose`, `--extensions` (default `js,jsx,ts,tsx,vue`),
+`--parser` (`babel` | `ts` | `tsx`, default `tsx`).
+
+The size mapping is worth knowing by heart, because it is everywhere:
+`mini → xs`, `small → sm`, `medium → md`, `large → lg`, `huge → xl` — the
+`CanonicalSize` scale from `@dzup-ui/contracts`.
+
+<DoDont>
+  <Do title="Run --dry-run first, on a committed tree">
+    A codemod rewrites source in place. The only safe review is a git diff, and the
+    only way to get one is to start clean.
+  </Do>
+  <Dont title="Assume the codemod caught everything">
+    It rewrites what it can parse statically. A component name built at runtime, a
+    prop spread from an object, or a prop in a string template is invisible to it.
+    Typecheck and run your tests afterwards — that is where the remainder surfaces.
+  </Dont>
+</DoDont>
+
+### Step 2 — bridge what is left with @dzup-ui/compat
+
+For call sites the codemod cannot rewrite, or that are too risky to change in the
+same pass, `@dzup-ui/compat` ships adapters that accept the **legacy** API and render
+the vNext component:
+
+```ts
+// still speaks the old API — buys you time, does not remove the work
+import { DzButtonCompat as DzButton } from '@dzup-ui/compat'
+```
+
+Adapters exist for: `DzAccordion`, `DzAlert`, `DzButton`, `DzCheckbox`, `DzDialog`,
+`DzInput`, `DzRadio`, `DzSelect`, `DzSwitch`, `DzTabs`, `DzTooltip`.
+
+This is a bridge with an expiry. It is **never imported by stable core** — enforced
+by `yarn validate:boundaries` — and every adapter is a call site you have not
+migrated yet. Aliasing the import (`DzButtonCompat as DzButton`) is the trick that
+makes the final step a one-line import change per file.
+
+### Step 3 — finish
+
+Replace each `*Compat` import with the real component and fix the props it was
+absorbing:
+
+```ts
+import { DzButton } from '@dzup-ui/core'
+```
+
+Then delete the `@dzup-ui/compat` dependency. If it is still in your
+`package.json`, the migration is not done.
+
+### Step 4 — the pieces no codemod can do
+
+- **Styling.** vNext is token-only (ADR-04). If you styled legacy components by
+  overriding their classes or colours, that will not carry over — move to
+  `--dz-*` tokens. [Theming](?path=/docs/guides-theming--docs) covers the mechanism.
+- **The token CSS must be imported.** `@dzup-ui/tokens/dist/tokens.css` — without it
+  every `var(--dz-*)` is undefined and components render unstyled.
+- **`v-model`.** ADR-16 moved every control to `defineModel`. Most `v-model` usage is
+  unchanged, but a handful of controls bind a *named* model (`v-model:value` on
+  `DzRating`, `DzTagsInput`, `DzKnob`, `DzMention`, `DzTreeSelect`, `DzCascader`;
+  `v-model:value` + `v-model:active` on `DzInplace`). A `v-model` that appears to do
+  nothing is usually this.
+
+## Upgrading across a future major
+
+The process, when there is one:
+
+1. **Get onto the last minor of your current major first.** That is where the
+   deprecation warnings live. Upgrading `0.5 → 2.0` in one jump skips every warning
+   that was trying to tell you what to change.
+2. **Clear the console.** Every dev-mode deprecation warning names its replacement.
+   Zero warnings on the last minor means the major is mostly a version bump.
+3. **Read [Releases](?path=/docs/guides-releases--docs).** It is generated from the
+   changelog, so the breaking changes listed there are the ones that shipped.
+4. **Run the codemod** for the major, if one exists — mechanical changes get one.
+5. **Typecheck.** The contracts package is where a removed variant or renamed prop
+   surfaces first, as a type error rather than a runtime surprise.
+
+<DoDont>
+  <Do title="Migrate one family at a time">
+    A codemod run scoped to `./src/components/forms` is a reviewable diff. The whole
+    app at once is not.
+  </Do>
+  <Dont title="Skip a major">
+    Deprecation warnings are emitted by the version that deprecates. Jumping over it
+    means you never see them — you just meet the removals.
+  </Dont>
+</DoDont>
+
+## See also
+
+- [Versioning & Deprecation](?path=/docs/guides-versioning-deprecation--docs) — what a
+  version promises, and the two-minor support window
+- [Component Status](?path=/docs/guides-component-status--docs) — per-component status
+  and migration notes, generated from the stories
+- [Releases](?path=/docs/guides-releases--docs) — what actually changed
+- [Theming](?path=/docs/guides-theming--docs) — the token model, if you are coming from
+  class overrides

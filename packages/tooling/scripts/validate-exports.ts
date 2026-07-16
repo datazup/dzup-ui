@@ -11,16 +11,29 @@
  *   2. The file exports at least one symbol (non-empty barrel)
  *   3. The package.json `exports` map points to resolvable paths
  *
+ * For EVERY workspace package: validates that every target in the `exports` map
+ * exists on disk (see src/validators/export-map.ts). This covers plain-string
+ * targets like `"./styles": "./dist/core.css"` and non-JS (.css/.json) targets,
+ * which the manifest/flat checks above never looked at — `@dzup-ui/core` declared
+ * `./styles` for months while the build emitted no CSS at all, and this script
+ * happily reported "0 errors" the whole time.
+ *
  * Usage:
- *   tsx packages/tooling/scripts/validate-exports.ts
+ *   tsx packages/tooling/scripts/validate-exports.ts [--built]
+ *
+ * --built  Treat a missing `dist/` as an ERROR rather than skipping the dist
+ *          targets. Pass it in CI AFTER `yarn build`; without it an unbuilt tree
+ *          would report "0 errors", recreating the exact blind spot this guards.
  *
  * Exit code 1 if any errors found.
  */
 
-import { existsSync, readFileSync } from 'node:fs'
+import type { PackageExportsJson } from '../src/validators/export-map.ts'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { validatePackageExportMap } from '../src/validators/export-map.ts'
 
 // --- Types matching manifest JSON shape (from manifest-generator.ts) ---
 
@@ -269,9 +282,66 @@ function validateFlatExportPackage(
   return errors
 }
 
+// --- Export-map target validation (every package, every target) ---
+
+/** Every non-private workspace package under packages/. */
+function discoverPackages(): Array<{ name: string, packageDir: string, pkgJson: PackageExportsJson }> {
+  const packagesRoot = resolve(ROOT, 'packages')
+  const found: Array<{ name: string, packageDir: string, pkgJson: PackageExportsJson }> = []
+
+  for (const dir of readdirSync(packagesRoot)) {
+    const packageDir = resolve(packagesRoot, dir)
+    const pkgJsonPath = resolve(packageDir, 'package.json')
+    if (!existsSync(pkgJsonPath))
+      continue
+
+    const pkgJson = JSON.parse(readFileSync(pkgJsonPath, 'utf-8')) as PackageExportsJson
+    if (pkgJson.private === true)
+      continue
+
+    found.push({ name: pkgJson.name ?? dir, packageDir, pkgJson })
+  }
+
+  return found
+}
+
+/**
+ * Asserts every `exports` target (and main/module/types) resolves to a real file.
+ * Returns errors in the shared ValidationError shape so they print with the rest.
+ */
+function validateExportMaps(requireBuilt: boolean): ValidationError[] {
+  const errors: ValidationError[] = []
+
+  for (const { name, packageDir, pkgJson } of discoverPackages()) {
+    const result = validatePackageExportMap(packageDir, pkgJson, { requireBuilt })
+
+    if (result.skippedUnbuilt) {
+      console.warn(`  SKIP  ${name}: no dist/ — run \`yarn build\` (or pass --built) to check export targets`)
+      continue
+    }
+
+    for (const err of result.errors) {
+      const condition = err.conditions.length > 0 ? ` (${err.conditions.join('.')})` : ''
+      errors.push({
+        package: name,
+        category: 'exports',
+        entry: `${err.subpath}${condition}`,
+        filePath: err.target,
+        message: `"${err.subpath}"${condition} → ${err.target}: ${err.message}`,
+      })
+    }
+
+    const status = result.errors.length === 0 ? 'PASS' : 'FAIL'
+    console.warn(`  ${status}  ${name}: ${result.checked} export targets`)
+  }
+
+  return errors
+}
+
 // --- Main ---
 
 function main(): void {
+  const requireBuilt = process.argv.includes('--built')
   const allErrors: ValidationError[] = []
   let totalEntries = 0
   let totalExports = 0
@@ -327,6 +397,10 @@ function main(): void {
       }
     }
   }
+
+  // Export-map targets — every package, every target, including non-JS ones.
+  console.warn(`\nValidating export-map targets${requireBuilt ? ' (--built: dist required)' : ''}`)
+  allErrors.push(...validateExportMaps(requireBuilt))
 
   console.warn(`\n${'='.repeat(60)}`)
   console.warn(`Total: ${totalEntries} entries, ${totalExports} declared exports (manifest packages)`)

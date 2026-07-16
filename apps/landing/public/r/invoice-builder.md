@@ -4,7 +4,7 @@ A dynamic line-items editor — a DzInplace click-to-edit "Bill to" field over a
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFieldArray, DzInplace, DzInput, DzNumberInput, DzIconButton, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#invoice-builder
+- **Preview:** /blocks/invoice-builder
 
 ```vue
 <script setup lang="ts">

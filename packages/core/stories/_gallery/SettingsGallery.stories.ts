@@ -5,6 +5,9 @@ import FreestyleSettings from './freestyle/FreestyleSettings.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Settings',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

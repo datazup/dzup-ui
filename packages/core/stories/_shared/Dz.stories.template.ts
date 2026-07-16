@@ -36,14 +36,9 @@ const meta = {
           'One-sentence summary of what DzExample is and when to reach for it.',
       },
     },
-    // Design reference (TASK-0.15) — no Figma library exists for dzup-ui today, so
-    // no story carries this parameter. If a frame ever lands, add it here and the
-    // "Design" addon panel picks it up beside the live render:
-    //
-    //   design: { type: 'figma', url: 'https://www.figma.com/design/<key>?node-id=<id>' }
-    //
-    // Leave it out until then — an empty panel is the honest signal, and a
-    // placeholder URL renders a broken iframe. See Contributing → "Design reference".
+    // No `design:` parameter — `@storybook/addon-designs` was removed in
+    // TASK-FREE-12 because no Figma library exists to link. See
+    // Contributing → "Design reference" for how to bring it back if one lands.
   },
   argTypes: {
     // Appearance

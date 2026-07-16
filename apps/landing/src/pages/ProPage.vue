@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzCard, DzHeading, DzText } from '@dzup-ui/core'
 import { ArrowLeft, Sparkles } from 'lucide-vue-next'
-import { PRO_COMPONENTS } from '../data.ts'
-import { FACTS } from '../config.ts'
+import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
 
 // Phase 1 (spec §3.5): the /pro route exists but renders a "coming soon" state.
 // Phase 2 flips these CTAs to the published pro Storybook + pricing — no
 // structural change, only link targets and badge state.
+//
+// The headline counts the list rendered below it. It used to read "41 enterprise
+// components" — the roadmap target — directly above 13 components in 7 families,
+// so anyone who scrolled could see the page overstate itself by 3×. The roadmap
+// figure still appears, but as a roadmap: "13 named, 41 planned".
 const families = [...new Set(PRO_COMPONENTS.map((c) => c.family))]
 </script>
 
@@ -19,13 +23,15 @@ const families = [...new Set(PRO_COMPONENTS.map((c) => c.family))]
       </DzBadge>
 
       <DzHeading :level="1" size="3xl" weight="bold" class="pro-title">
-        {{ FACTS.proComponents }} enterprise components, in the works
+        {{ PRO_FACTS.announced }} enterprise components, in the works
       </DzHeading>
 
       <DzText size="lg" tone="muted" class="pro-sub">
-        dzup-ui Pro extends the free library with {{ FACTS.proComponents }} components across
-        {{ FACTS.proFamilies }} families — the heavy, business-critical pieces most apps eventually
-        need. It isn't published yet. Join the waitlist and we'll let you know the moment it ships.
+        dzup-ui Pro extends the free library with the heavy, business-critical pieces most apps
+        eventually need. {{ PRO_FACTS.announced }} are named below, across
+        {{ PRO_FACTS.announcedFamilies }} families; the roadmap targets
+        {{ PRO_FACTS.plannedComponents }} across {{ PRO_FACTS.plannedFamilies }}. None have shipped
+        yet — join the waitlist and we'll let you know the moment they do.
       </DzText>
 
       <div class="pro-actions">

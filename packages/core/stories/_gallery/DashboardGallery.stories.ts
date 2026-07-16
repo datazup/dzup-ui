@@ -5,6 +5,9 @@ import FreestyleDashboard from './freestyle/FreestyleDashboard.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Dashboard',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

@@ -27,9 +27,11 @@ import { LINKS } from '../config.ts'
             <template #prefix><Github :size="18" aria-hidden="true" /></template>
             Star on GitHub
           </DzButton>
-          <DzButton size="lg" variant="ghost" tone="primary" as="a" :href="LINKS.discord" target="_blank" rel="noreferrer noopener">
+          <!-- Issues, not Discord: no Discord server exists yet (the old invite
+               404'd — TASK-FREE-11). Bring a chat link back when one is real. -->
+          <DzButton size="lg" variant="ghost" tone="primary" as="a" :href="LINKS.issues" target="_blank" rel="noreferrer noopener">
             <template #prefix><MessageCircle :size="18" aria-hidden="true" /></template>
-            Join Discord
+            Report an issue
           </DzButton>
         </div>
       </div>

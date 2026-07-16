@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzTooltip, DzTooltipContent, DzTooltipTrigger } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzTooltipContent compound sub-parts: DzTooltipTrigger.
@@ -23,6 +23,10 @@ const meta = {
     DzTooltipTrigger,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
 } satisfies Meta<typeof DzTooltipContent>
 
 export default meta

@@ -4,7 +4,7 @@ Copy and two CTAs on the left, a framed product image on the right; stacks to on
 
 - **Category:** Marketing
 - **Components:** DzBadge, DzHeading, DzText, DzButton, DzImage, DzAspectRatio
-- **Preview:** /blocks#hero-split
+- **Preview:** /blocks/hero-split
 
 ```vue
 <script setup lang="ts">

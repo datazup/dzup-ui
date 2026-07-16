@@ -4,7 +4,7 @@ A hierarchical DzTree with per-node lucide icons, expand/collapse and selection 
 
 - **Category:** Data display
 - **Components:** DzTree, DzCard, DzBadge, DzText
-- **Preview:** /blocks#file-tree
+- **Preview:** /blocks/file-tree
 
 ```vue
 <script setup lang="ts">

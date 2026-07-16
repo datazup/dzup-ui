@@ -4,7 +4,7 @@ DzButtonGroup wiring child buttons into connected controls — a live view switc
 
 - **Category:** Buttons
 - **Components:** DzButtonGroup, DzButton, DzText
-- **Preview:** /blocks#button-groups
+- **Preview:** /blocks/button-groups
 
 ```vue
 <script setup lang="ts">

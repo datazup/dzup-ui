@@ -4,7 +4,7 @@ A horizontal band of four key metrics with icon, trend indicator, and an animate
 
 - **Category:** Marketing
 - **Components:** DzStatCard, DzAnimatedNumber
-- **Preview:** /blocks#stats-band
+- **Preview:** /blocks/stats-band
 
 ```vue
 <script setup lang="ts">

@@ -1,6 +1,7 @@
 {/* Accessibility.mdx */}
 import { Meta } from '@storybook/addon-docs/blocks'
 import { DocTable } from './_blocks/DocTable.ts'
+import { COUNTS } from './_data/counts.generated.ts'
 
 <Meta title="Guides/Accessibility" />
 
@@ -43,25 +44,27 @@ require the manual [authoring checklist](#authoring-checklist) below.
 ## Family enforcement status
 
 Counts below are **failing stories** from a full run of the audit at `'error'`
-across all 175 story files (2026-07-09, after TASK-DS-05 cleared the story token
-debt). They are the real backlog, not an estimate.
+across all {COUNTS.storyFiles} story files (re-derived 2026-07-16, after the
+Buttons/Overlays/Media flip and the `--dz-warning` shade-400 token fix). They are
+the real backlog, not an estimate.
 
 <DocTable
   head={['Family', 'Gate', 'Failing stories', 'Notes']}
   align={['left', 'left', 'right', 'left']}
   rows={[
     ['Cards', '✅ Enforced', '0', 'First family on the gate (TASK-DS-06)'],
-    ['Buttons', '🔍 Audit', '0', 'Audits clean — the next family to flip'],
-    ['Overlays', '🔍 Audit', '1', ''],
-    ['Compositions', '🔍 Audit', '3', ''],
-    ['Media', '🔍 Audit', '3', 'image-alt backlog'],
-    ['Typography', '🔍 Audit', '3', 'Was 9; the DzText/DzCaption/DzRelativeTime tone fix cleared 6. Remaining: DzCode scrollable-region-focusable ×2, DzCaption unlabelled demo inputs ×1'],
+    ['Buttons', '✅ Enforced', '0', 'Flipped clean (TASK-DS-13)'],
+    ['Overlays', '✅ Enforced', '0', 'Was 1; unlabelled demo input fixed (TASK-DS-13)'],
+    ['Media', '✅ Enforced', '0', 'Was 3; DzQRCode nested-interactive + DzCarousel dot target-size fixed in the components, one unlabelled story control fixed (TASK-DS-13)'],
+    ['Typography', '🔍 Audit', '2', 'DzCode scrollable-region-focusable ×2 — fix belongs in the component'],
+    ['Compositions', '🔍 Audit', '2', ''],
+    ['Layout', '🔍 Audit', '12', ''],
     ['Feedback', '🔍 Audit', '13', ''],
-    ['Layout', '🔍 Audit', '14', ''],
-    ['Inputs', '🔍 Audit', '26', 'Contrast + labelling backlog'],
-    ['Navigation', '🔍 Audit', '36', 'ARIA structure (tabs/menu/stepper) backlog'],
-    ['Data', '🔍 Audit', '39', 'nested-interactive + contrast backlog'],
-    ['Forms', '🔍 Audit', '82', 'Labelling / ARIA structure backlog'],
+    ['Gallery (`_gallery`)', '🔍 Audit', '19', 'Cross-family demo stories; never counted before 2026-07-16 — 7 of its story files fail'],
+    ['Inputs', '🔍 Audit', '23', 'Contrast + labelling backlog'],
+    ['Data', '🔍 Audit', '29', 'nested-interactive + contrast backlog'],
+    ['Navigation', '🔍 Audit', '33', 'ARIA structure (tabs/menu/stepper) backlog'],
+    ['Forms', '🔍 Audit', '74', 'Labelling / ARIA structure backlog'],
   ]}
 />
 
@@ -95,25 +98,29 @@ it, not a fresh investigation.
 Running the gate at `'error'` across every family surfaces the remaining
 pre-existing violations. The dominant classes:
 
-- **`color-contrast` (largest, 152 findings)** — the root cause is using
-  `--dz-{intent}` as a **text** colour. `--dz-{intent}` is shade 500: a fill and
-  border colour, measuring only 3.69–4.38:1 against `--dz-background` in light.
-  The correct text token is `--dz-{intent}-muted-foreground` (7.31–10.25:1).
-  This is stated as rule 1b in `CLAUDE.md` and enforced for the
-  intent-on-muted pair by `yarn validate:tokens`.
+- **`color-contrast` (largest: 132 of the 207 failing stories, 2026-07-16)** —
+  the root cause is using `--dz-{intent}` as a **text** colour. `--dz-{intent}`
+  is a fill and border colour, measuring only 3.69–4.38:1 against
+  `--dz-background` in light. The correct text token is
+  `--dz-{intent}-muted-foreground` (7.31–10.25:1). This is stated as rule 1b in
+  `CLAUDE.md` and enforced for the intent-on-muted pair by
+  `yarn validate:tokens`.
 - **Structural ARIA** — `aria-allowed-attr`, `aria-required-parent`,
   `aria-required-children`, `nested-interactive` in composite widgets
   (tabs, menu, listbox, tree, stepper, tables).
-- **`scrollable-region-focusable`** — a `<pre>` with `overflow-x-auto` must be
-  keyboard-reachable (`tabindex="0"`).
-- **`target-size` (WCAG 2.2 AA)** — some `xs`/`sm` controls fall below the 24×24px
-  minimum touch target.
+- **`scrollable-region-focusable` (38 stories)** — a `<pre>` with
+  `overflow-x-auto` must be keyboard-reachable (`tabindex="0"`).
+- **Labelling** — `label` (19), `button-name` (18): demo controls in stories
+  without an accessible name.
+- **`target-size` (WCAG 2.2 AA, 5 stories)** — some `xs`/`sm` controls fall below
+  the 24×24px minimum touch target.
 
-> **A token defect this audit found:** `--dz-warning-foreground` on `--dz-warning`
-> measures **3.51:1** in light — a solid fill pair that fails AA. `warning` alone
-> ships a darker `--dz-warning-solid` (8.44:1) for this purpose, which is the
-> asymmetry TASK-DS-10 exists to normalize. Until then, a solid warning fill must
-> use `--dz-warning-solid`.
+> **A token defect this audit found — now fixed:** `--dz-warning-foreground` on
+> `--dz-warning` used to measure **3.51:1** in light (warning sat at shade 500) —
+> a solid fill pair that failed AA. `--dz-warning` is now pinned to shade 400 in
+> both themes, so the pair measures **5.87:1** and the DESIGN.md contrast gate
+> asserts it. `--dz-warning-solid` (8.44:1) remains the max-contrast fill
+> components render uniformly across every intent.
 
 ## Escape hatches (use sparingly, always documented)
 

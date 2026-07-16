@@ -3,15 +3,8 @@ import type { CommandGroup, CommandItem } from '../../src/components/overlays'
 import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzCommandPalette } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
-/**
- * DzCommandPalette is a searchable command launcher built on Reka UI Dialog + Combobox (ADR-07).
- *
- * It supports items with optional icons and keyboard shortcuts, grouped categorization,
- * search filtering, a global keyboard shortcut (Ctrl+K / Cmd+K), and custom slot rendering.
- * Open state is controlled via `v-model:open` (ADR-16).
- */
 const sampleItems: CommandItem[] = [
   { id: 'new-file', label: 'New File', shortcut: 'Ctrl+N', group: 'file' },
   { id: 'open-file', label: 'Open File', shortcut: 'Ctrl+O', group: 'file' },
@@ -32,10 +25,21 @@ const sampleGroups: CommandGroup[] = [
   { id: 'app', label: 'Application' },
 ]
 
+/**
+ * DzCommandPalette is a searchable command launcher built on Reka UI Dialog + Combobox (ADR-07).
+ *
+ * It supports items with optional icons and keyboard shortcuts, grouped categorization,
+ * search filtering, a global keyboard shortcut (Ctrl+K / Cmd+K), and custom slot rendering.
+ * Open state is controlled via `v-model:open` (ADR-16).
+ */
 const meta = {
   title: 'Core/Overlays/DzCommandPalette',
   component: DzCommandPalette,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     placeholder: {

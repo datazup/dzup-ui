@@ -4,7 +4,7 @@ A document toolbar built from the Buttons family — toggle buttons for inline f
 
 - **Category:** Buttons
 - **Components:** DzToggleButton, DzIconButton, DzCopyButton, DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu, DzText
-- **Preview:** /blocks#editor-toolbar
+- **Preview:** /blocks/editor-toolbar
 
 ```vue
 <script setup lang="ts">

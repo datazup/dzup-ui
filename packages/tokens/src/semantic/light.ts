@@ -116,19 +116,30 @@ export const LIGHT_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-success-muted-foreground': 'var(--dz-colors-success-700)',
   '--dz-success-border': 'var(--dz-colors-success-200)',
 
-  /* ── Status: Warning ──
-   * The one intent whose legible solid fill is a LIGHTER shade than its intent
-   * color. `--dz-warning` stays at shade 500 so it remains a usable border/accent
-   * on light surfaces, but near-black text on shade 500 measures only 3.51:1 —
-   * below AA. A warning button therefore fills with shade 300 (8.44:1) and hovers
-   * to 400 (5.87:1). Since TASK-DS-10 those live under the same `-solid` /
-   * `-solid-hover` names every other intent uses, so nothing branches on warning.
+  /* ── Status: Warning ── (TASK-DS-10 normalization)
+   * Warning is the one intent that carries DARK foreground text — a bright yellow
+   * cannot legibly seat white text at any usable shade. Its intent color is
+   * therefore pinned to the LIGHTEST shade that still reads as a saturated amber,
+   * shade 400, so that `--dz-warning-foreground` (near-black) clears AA *on
+   * `--dz-warning` itself*: neutral-900 on warning-400 = 5.87:1 (SC 1.4.3). This
+   * matches the dark theme, which already sits at shade 400. On the previous
+   * shade 500 the same pair measured only 3.51:1 — below AA — which is the token
+   * defect this normalization closes. The advertised solid-fill pattern
+   * `bg-[var(--dz-warning)] text-[var(--dz-warning-foreground)]` now passes, and
+   * the DESIGN.md contrast gate asserts it (design-md-check.ts).
    *
-   * The ramp affords exactly two AA-passing fill steps under `--dz-warning-foreground`:
-   * there is no shade between 400 (5.87:1) and 500 (3.51:1), so a third, darker
-   * pressed step is not available at AA. `-solid-active` therefore does not exist
-   * for any intent — the uniform fill set is `-solid` + `-solid-hover`. */
-  '--dz-warning': 'var(--dz-colors-warning-500)',
+   * Trade-off, recorded honestly: as a purely DECORATIVE accent/border on the
+   * light page, `--dz-warning` now measures ~2.34:1 (was 3.92:1 at shade 500).
+   * That is a non-text use (SC 1.4.11) that this token set already does not hold
+   * to 3:1 for warning — `--dz-warning-border` ships at 1.63:1 and the contrast
+   * gate deliberately does not assert border/decorative pairs. A warning graphic
+   * that must meet 3:1 (e.g. an icon-only status dot) belongs on a muted surface
+   * with `--dz-warning-muted-foreground`, not on the bare intent color.
+   *
+   * `-solid` (300 = 8.44:1) / `-solid-hover` (400 = 5.87:1) remain the max-contrast
+   * fills components render uniformly across every intent. `-active` is a pressed
+   * SURFACE color, not a text-bearing fill; `-solid-active` exists for no intent. */
+  '--dz-warning': 'var(--dz-colors-warning-400)',
   '--dz-warning-foreground': 'var(--dz-colors-neutral-900)',
   '--dz-warning-hover': 'var(--dz-colors-warning-600)',
   '--dz-warning-active': 'var(--dz-colors-warning-500)',

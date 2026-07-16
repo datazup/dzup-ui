@@ -4,7 +4,7 @@ An order review panel — a DzDescriptions ship-to / delivery / payment grid, an
 
 - **Category:** Commerce
 - **Components:** DzDescriptions, DzDescriptionsItem, DzInput, DzButton, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#checkout-summary
+- **Preview:** /blocks/checkout-summary
 
 ```vue
 <script setup lang="ts">

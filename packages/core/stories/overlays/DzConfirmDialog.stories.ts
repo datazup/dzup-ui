@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzConfirmDialog } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzConfirmDialog is a pre-composed confirmation dialog built on top of the
@@ -21,6 +21,10 @@ const meta = {
   title: 'Core/Overlays/DzConfirmDialog',
   component: DzConfirmDialog,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     variant: {
@@ -368,8 +372,8 @@ export const RealWorldUnsavedChanges: Story = {
     template: `
       <div class="space-y-4 max-w-md">
         <div class="rounded-lg border border-[var(--dz-border)] p-4 space-y-2">
-          <label class="block text-sm font-medium">Article title</label>
-          <input type="text" value="Draft: untitled" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
+          <label for="uc-article-title" class="block text-sm font-medium">Article title</label>
+          <input id="uc-article-title" type="text" value="Draft: untitled" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
           <p class="text-xs text-[var(--dz-warning-muted-foreground)]">You have unsaved changes.</p>
         </div>
         <div class="flex gap-3 items-center">

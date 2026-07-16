@@ -4,7 +4,7 @@ Questions grouped into two labelled DzAccordion columns (separated, single + col
 
 - **Category:** Content
 - **Components:** DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent, DzHeading, DzText
-- **Preview:** /blocks#faq-2col
+- **Preview:** /blocks/faq-2col
 
 ```vue
 <script setup lang="ts">

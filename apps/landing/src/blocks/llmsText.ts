@@ -22,12 +22,18 @@
  * (docs/blocks.md §1.3), which is the whole point of the `llms.txt` convention.
  */
 
+import type { BlockCategory, BlockDef, BlockSourceLookup, CategoryMeta } from './registry.ts'
 import { REGISTRY_NAME } from './registryItem.ts'
-import type { BlockCategory, BlockDef, CategoryMeta } from './registry.ts'
 
-/** Root-relative deep link to a block on the index page (`/blocks#<id>`). */
+/**
+ * Root-relative deep link to a block — the per-block SEO page (`/blocks/<id>`),
+ * which is also the URL the block's `<link rel="canonical">` declares. The two
+ * must agree: AI crawlers are a first-class audience here, and pointing them at
+ * the `/blocks#<id>` in-page anchor while canonicalising `/blocks/<id>` split
+ * the block's identity across two URLs (TASK-FREE-08).
+ */
 export function blockDeepLink(id: string): string {
-  return `/blocks#${id}`
+  return `/blocks/${id}`
 }
 
 /** Root-relative URL of a block's standalone markdown page (`/r/<id>.md`). */
@@ -40,11 +46,11 @@ export const LLMS_TXT = 'llms.txt'
 export const LLMS_FULL_TXT = 'llms-full.txt'
 
 /** Catalog-wide one-line summary, rendered as the `>` blockquote under the H1. */
-const CATALOG_SUMMARY =
-  'Ready-made UI blocks for Vue 3, composed purely from free @dzup-ui/core ' +
-  'components and --dz-* design tokens — every block drops in already themed and ' +
-  'accessible. Each entry links to its live preview and lists the real Dz* ' +
-  'components it is built from.'
+const CATALOG_SUMMARY
+  = 'Ready-made UI blocks for Vue 3, composed purely from free @dzup-ui/core '
+    + 'components and --dz-* design tokens — every block drops in already themed and '
+    + 'accessible. Each entry links to its live preview and lists the real Dz* '
+    + 'components it is built from.'
 
 /**
  * Cross-link to the component-API index. These blocks are composed from
@@ -53,10 +59,10 @@ const CATALOG_SUMMARY =
  * served from the Storybook build at `/storybook/llms.txt`. Pointing assistants
  * at it lets them understand the primitives each block is built from.
  */
-const COMPONENT_API_NOTE =
-  'These blocks are built from the @dzup-ui/core component library, whose full ' +
-  'API (import paths, frozen variant/size/tone taxonomy, props/emits/slots) is ' +
-  'documented at [/storybook/llms.txt](/storybook/llms.txt).'
+const COMPONENT_API_NOTE
+  = 'These blocks are built from the @dzup-ui/core component library, whose full '
+    + 'API (import paths, frozen variant/size/tone taxonomy, props/emits/slots) is '
+    + 'documented at [/storybook/llms.txt](/storybook/llms.txt).'
 
 /**
  * Pick a code-fence longer than any backtick run inside `source`, so an SFC that
@@ -82,7 +88,7 @@ function heading(level: number, text: string): string {
   return `${'#'.repeat(Math.min(6, Math.max(1, level)))} ${text}`
 }
 
-/** `[Title](/blocks#id): description — built from DzA, DzB` — one index bullet. */
+/** `[Title](/blocks/id): description — built from DzA, DzB` — one index bullet. */
 export function blockIndexLine(block: BlockDef): string {
   const link = `[${block.title}](${blockDeepLink(block.id)})`
   return `- ${link}: ${block.description} — built from ${block.components.join(', ')}`
@@ -92,16 +98,17 @@ export function blockIndexLine(block: BlockDef): string {
 function groupByCategory(
   blocks: readonly BlockDef[],
   categories: readonly CategoryMeta[],
-): Array<{ meta: CategoryMeta; blocks: BlockDef[] }> {
+): Array<{ meta: CategoryMeta, blocks: BlockDef[] }> {
   const byCategory = new Map<BlockCategory, BlockDef[]>()
   for (const block of blocks) {
     const bucket = byCategory.get(block.category)
-    if (bucket) bucket.push(block)
+    if (bucket)
+      bucket.push(block)
     else byCategory.set(block.category, [block])
   }
   return categories
-    .map((meta) => ({ meta, blocks: byCategory.get(meta.id) ?? [] }))
-    .filter((group) => group.blocks.length > 0)
+    .map(meta => ({ meta, blocks: byCategory.get(meta.id) ?? [] }))
+    .filter(group => group.blocks.length > 0)
 }
 
 /**
@@ -114,6 +121,7 @@ export function renderBlockSection(
   block: BlockDef,
   categoryLabel: string,
   level: number,
+  getSource: BlockSourceLookup,
 ): string {
   return [
     heading(level, block.title),
@@ -124,7 +132,7 @@ export function renderBlockSection(
     `- **Components:** ${block.components.join(', ')}`,
     `- **Preview:** ${blockDeepLink(block.id)}`,
     '',
-    fencedSource(block.source),
+    fencedSource(getSource(block)),
   ].join('\n')
 }
 
@@ -136,9 +144,10 @@ export function renderBlockSection(
 export function blockMarkdown(
   block: BlockDef,
   categories: readonly CategoryMeta[],
+  getSource: BlockSourceLookup,
 ): string {
-  const label = categories.find((c) => c.id === block.category)?.label ?? block.category
-  return `${renderBlockSection(block, label, 1)}\n`
+  const label = categories.find(c => c.id === block.category)?.label ?? block.category
+  return `${renderBlockSection(block, label, 1, getSource)}\n`
 }
 
 /**
@@ -153,8 +162,8 @@ export function blockMarkdown(
 export function blockPrompt(block: BlockDef, llmsTxtUrl: string): string {
   const description = block.description.replace(/[.\s]+$/, '')
   return (
-    `Using dzup-ui docs at ${llmsTxtUrl}, generate this block: ` +
-    `${block.title} — ${description}. It is built from ${block.components.join(', ')}.`
+    `Using dzup-ui docs at ${llmsTxtUrl}, generate this block: `
+    + `${block.title} — ${description}. It is built from ${block.components.join(', ')}.`
   )
 }
 
@@ -174,9 +183,9 @@ export function llmsTxt(
     '',
     `> ${CATALOG_SUMMARY}`,
     '',
-    `${blocks.length} blocks across ${groups.length} categories. For each block's ` +
-      `full SFC source inline see [/${LLMS_FULL_TXT}](/${LLMS_FULL_TXT}); for a single ` +
-      `block fetch its markdown page at /r/<id>.md.`,
+    `${blocks.length} blocks across ${groups.length} categories. For each block's `
+    + `full SFC source inline see [/${LLMS_FULL_TXT}](/${LLMS_FULL_TXT}); for a single `
+    + `block fetch its markdown page at /r/<id>.md.`,
     '',
     COMPONENT_API_NOTE,
   ]
@@ -187,7 +196,7 @@ export function llmsTxt(
       '',
       meta.blurb,
       '',
-      group.map((block) => blockIndexLine(block)).join('\n'),
+      group.map(block => blockIndexLine(block)).join('\n'),
     )
   }
   return `${parts.join('\n')}\n`
@@ -202,6 +211,7 @@ export function llmsTxt(
 export function llmsFullTxt(
   blocks: readonly BlockDef[],
   categories: readonly CategoryMeta[],
+  getSource: BlockSourceLookup,
 ): string {
   const groups = groupByCategory(blocks, categories)
   const parts: string[] = [
@@ -209,15 +219,15 @@ export function llmsFullTxt(
     '',
     `> ${CATALOG_SUMMARY}`,
     '',
-    `${blocks.length} blocks across ${groups.length} categories, each with its ` +
-      `complete Vue SFC. For the index alone see [/${LLMS_TXT}](/${LLMS_TXT}).`,
+    `${blocks.length} blocks across ${groups.length} categories, each with its `
+    + `complete Vue SFC. For the index alone see [/${LLMS_TXT}](/${LLMS_TXT}).`,
     '',
     COMPONENT_API_NOTE,
   ]
   for (const { meta, blocks: group } of groups) {
     parts.push('', heading(2, meta.label), '', meta.blurb)
     for (const block of group) {
-      parts.push('', renderBlockSection(block, meta.label, 3))
+      parts.push('', renderBlockSection(block, meta.label, 3, getSource))
     }
   }
   return `${parts.join('\n')}\n`

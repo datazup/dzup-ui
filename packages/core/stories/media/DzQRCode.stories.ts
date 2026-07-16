@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzQRCode } from '../../src/components/media'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzQRCode renders a value as a token-styled QR code (SVG). It supports
@@ -20,6 +21,10 @@ const meta = {
   title: 'Core/Media/DzQRCode',
   component: DzQRCode,
   tags: ['autodocs', 'status:experimental'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     value: {
@@ -211,5 +216,48 @@ export const LoadingState: Story = {
       return { args }
     },
     template: '<DzQRCode v-bind="args" />',
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzQRCode },
+    template: `
+      <div class="space-y-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          <code>color</code> and <code>background</code> default to
+          <code>--dz-foreground</code> / <code>--dz-background</code>, so on a dark
+          surface the code <em>inverts</em> to light modules on a dark quiet zone.
+          Scanners are only required to decode dark-on-light, so pin both ends to the
+          theme-independent primitive ramp wherever the code must stay scannable.
+        </p>
+        <div class="flex flex-wrap gap-8 items-start">
+          <div class="space-y-2">
+            <p class="text-sm font-medium">Token default — inverts</p>
+            <DzQRCode
+              value="https://dzup.dev"
+              :size="160"
+              aria-label="Link to the dzup documentation, themed with the default tokens"
+            />
+          </div>
+          <div class="space-y-2">
+            <p class="text-sm font-medium">Pinned light — stays scannable</p>
+            <DzQRCode
+              value="https://dzup.dev"
+              :size="160"
+              color="var(--dz-colors-neutral-950)"
+              background="var(--dz-colors-neutral-50)"
+              aria-label="Link to the dzup documentation, pinned to a light quiet zone"
+            />
+          </div>
+        </div>
+      </div>
+    `,
   }),
 }

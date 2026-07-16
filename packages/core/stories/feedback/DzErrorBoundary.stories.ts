@@ -6,20 +6,6 @@ import { DzAlert, DzErrorBoundary, DzResult } from '../../src/components/feedbac
 import { darkModeDecorator } from '../_shared'
 
 /**
- * DzErrorBoundary catches render and lifecycle errors thrown by its descendants
- * (via Vue's `onErrorCaptured`) and renders a `#fallback` slot instead of letting
- * the error crash the whole app.
- *
- * The fallback slot receives `{ error, reset }` — call `reset()` to clear the
- * captured error and re-render the default slot. The component also exposes
- * `reset()` via a template ref, and accepts an `onError` callback for logging.
- *
- * > Note: an error boundary only catches errors thrown **below** it in the tree.
- * > If the failing child still throws after `reset()`, fix the underlying state
- * > first (the stories below toggle the failure off before resetting).
- */
-
-/**
  * A child that throws during render when `explode` is true. Used to demonstrate
  * the boundary catching a synchronous render error.
  */
@@ -35,6 +21,19 @@ const Bomb = defineComponent({
   },
 })
 
+/**
+ * DzErrorBoundary catches render and lifecycle errors thrown by its descendants
+ * (via Vue's `onErrorCaptured`) and renders a `#fallback` slot instead of letting
+ * the error crash the whole app.
+ *
+ * The fallback slot receives `{ error, reset }` — call `reset()` to clear the
+ * captured error and re-render the default slot. The component also exposes
+ * `reset()` via a template ref, and accepts an `onError` callback for logging.
+ *
+ * > Note: an error boundary only catches errors thrown **below** it in the tree.
+ * > If the failing child still throws after `reset()`, fix the underlying state
+ * > first (the stories below toggle the failure off before resetting).
+ */
 const meta = {
   title: 'Core/Feedback/DzErrorBoundary',
   component: DzErrorBoundary,

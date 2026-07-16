@@ -11,6 +11,8 @@
 
 import { describe, expect, it } from 'vitest'
 import { BLOCKS, CATEGORIES } from './registry.ts'
+import { getBlockSource } from './sources.ts'
+
 import {
   blockDeepLink,
   blockIndexLine,
@@ -19,6 +21,9 @@ import {
   llmsFullTxt,
   llmsTxt,
 } from './llmsText.ts'
+
+/** Injected source lookup — mirrors what the generator and the browser both pass. */
+const getSource = (block: { path: string }): string => getBlockSource(block.path)
 
 describe('llms.txt index', () => {
   const text = llmsTxt(BLOCKS, CATEGORIES)
@@ -29,7 +34,7 @@ describe('llms.txt index', () => {
     expect(text).toContain('\n> ')
   })
 
-  it('lists every block exactly once, linking its /blocks#<id> deep link', () => {
+  it('lists every block exactly once, linking its canonical /blocks/<id> page', () => {
     for (const block of BLOCKS) {
       const line = blockIndexLine(block)
       expect(text).toContain(line)
@@ -53,12 +58,12 @@ describe('llms.txt index', () => {
 })
 
 describe('llms-full.txt', () => {
-  const text = llmsFullTxt(BLOCKS, CATEGORIES)
+  const text = llmsFullTxt(BLOCKS, CATEGORIES, getSource)
 
   it('inlines every block title and its fenced SFC source', () => {
     for (const block of BLOCKS) {
       expect(text).toContain(`### ${block.title}`)
-      expect(text).toContain(block.source.trim())
+      expect(text).toContain(getBlockSource(block.path).trim())
     }
     // one ```vue fence opens per block (paired by a matching close).
     expect(text.split('```vue').length - 1).toBe(BLOCKS.length)
@@ -69,12 +74,12 @@ describe('per-block markdown (r/<id>.md)', () => {
   it.each(BLOCKS.map((block) => ({ block, label: block.id })))(
     'page "$label" is self-contained: title, description, components, deep link, source',
     ({ block }) => {
-      const md = blockMarkdown(block, CATEGORIES)
+      const md = blockMarkdown(block, CATEGORIES, getSource)
       expect(md).toContain(`# ${block.title}`)
       expect(md).toContain(block.description)
       expect(md).toContain(block.components.join(', '))
       expect(md).toContain(blockDeepLink(block.id))
-      expect(md).toContain(block.source.trim())
+      expect(md).toContain(getBlockSource(block.path).trim())
       expect(md.endsWith('\n')).toBe(true)
     },
   )

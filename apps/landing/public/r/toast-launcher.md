@@ -4,7 +4,7 @@ The compound toast system wired up — DzToastProvider owns a capped, auto-dismi
 
 - **Category:** Feedback
 - **Components:** DzToastProvider, DzToastViewport, DzToast, DzButton, DzHeading, DzText
-- **Preview:** /blocks#toast-launcher
+- **Preview:** /blocks/toast-launcher
 
 ```vue
 <script setup lang="ts">

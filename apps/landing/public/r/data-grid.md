@@ -4,7 +4,7 @@ A DzDataGrid of deployments with sortable columns, multi-row selection, a pagina
 
 - **Category:** Data display
 - **Components:** DzDataGrid, DzCard, DzAvatar, DzBadge, DzTag, DzText
-- **Preview:** /blocks#data-grid
+- **Preview:** /blocks/data-grid
 
 ```vue
 <script setup lang="ts">

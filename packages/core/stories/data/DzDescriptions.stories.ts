@@ -3,6 +3,15 @@ import { expect, within } from 'storybook/test'
 import { DzDescriptions, DzDescriptionsItem } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
 
+const sampleItems = [
+  { label: 'Full name', value: 'Ada Lovelace' },
+  { label: 'Role', value: 'Principal Engineer' },
+  { label: 'Email', value: 'ada@dzup.dev' },
+  { label: 'Location', value: 'London, UK' },
+  { label: 'Team', value: 'Platform' },
+  { label: 'Bio', value: 'Mathematician, writer, and pioneer of computing.', span: 2 },
+]
+
 /**
  * DzDescriptions displays read-only record detail as a responsive label/value
  * grid. It renders semantic `<dl>`/`<dt>`/`<dd>` markup, supports horizontal and
@@ -13,16 +22,6 @@ import { darkModeDecorator } from '../_shared'
  * for slot-rich values (badges, links, avatars). Children inherit size, layout,
  * and bordered density from the parent via inject (ADR-08).
  */
-
-const sampleItems = [
-  { label: 'Full name', value: 'Ada Lovelace' },
-  { label: 'Role', value: 'Principal Engineer' },
-  { label: 'Email', value: 'ada@dzup.dev' },
-  { label: 'Location', value: 'London, UK' },
-  { label: 'Team', value: 'Platform' },
-  { label: 'Bio', value: 'Mathematician, writer, and pioneer of computing.', span: 2 },
-]
-
 const meta = {
   title: 'Core/Data/DzDescriptions',
   component: DzDescriptions,
@@ -78,6 +77,29 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+// ---------------------------------------------------------------------------
+// Default — controls-driven
+// ---------------------------------------------------------------------------
+
+/**
+ * Args-bound entry point: every meta arg (`layout`, `bordered`, `size`,
+ * `columns`, `items`) is driven from the Controls panel here. The named stories
+ * below pin one of those axes each to document it in isolation.
+ */
+export const Default: Story = {
+  args: {
+    items: sampleItems,
+    ariaLabel: 'User profile',
+  },
+  render: args => ({
+    components: { DzDescriptions },
+    setup() {
+      return { args }
+    },
+    template: `<DzDescriptions v-bind="args" />`,
+  }),
+}
 
 // ---------------------------------------------------------------------------
 // Horizontal (default)

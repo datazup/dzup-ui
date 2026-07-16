@@ -4,7 +4,7 @@ A vertical DzTimeline feed of events — tone-coded dots, timestamp statuses, av
 
 - **Category:** Data display
 - **Components:** DzTimeline, DzTimelineItem, DzAvatar, DzBadge, DzTag, DzText, DzCard
-- **Preview:** /blocks#activity-timeline
+- **Preview:** /blocks/activity-timeline
 
 ```vue
 <script setup lang="ts">

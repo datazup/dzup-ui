@@ -2,15 +2,17 @@
 
 **Open-source Vue 3 component library — 147 foundational components.**
 
-![npm version](https://img.shields.io/npm/v/@dzup-ui/core?label=%40dzup-ui%2Fcore)
-![npm downloads](https://img.shields.io/npm/dw/@dzup-ui/core?label=downloads)
-![bundle size](https://img.shields.io/bundlephobia/minzip/@dzup-ui/core?label=min%2Bgzip)
+<!-- Badges must RENDER (TASK-FREE-11): npm-backed badges (version, downloads,
+     bundlephobia) show shields' "not found" placeholder while @dzup-ui/core is
+     unpublished — re-add them with the first npm publish. -->
 ![GitHub stars](https://img.shields.io/github/stars/datazup/dzup-ui?label=stars)
 ![build status](https://img.shields.io/github/actions/workflow/status/datazup/dzup-ui/ci.yml?branch=main)
 ![Core Web Vitals](https://img.shields.io/badge/Core%20Web%20Vitals-LCP%3C2.5s%20%C2%B7%20CLS%3C0.1-6366f1)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
-> Looking for enterprise components? See [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro).
+> Looking for enterprise components? **dzup-ui Pro** is in development under a
+> commercial license — see the `/pro` page on the site for what is shipped versus
+> planned. (No public Pro repository exists yet.)
 
 ## Features
 
@@ -147,7 +149,10 @@ Reference:
 ## Enterprise Components
 
 Need Kanban, Gantt, FormBuilder, DashboardBuilder, WorkflowDesigner, and more?
-See **[@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro)** — 40 enterprise components available under a commercial license.
+**dzup-ui Pro** is in development under a commercial license; the site's `/pro`
+page states what is shipped versus planned. (No public Pro repository or
+hand-countable component figure is published here on purpose — counts drift,
+and the Pro page derives its numbers from the real registry.)
 
 ## Contributing
 

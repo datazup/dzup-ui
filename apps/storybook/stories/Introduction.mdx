@@ -1,18 +1,19 @@
 {/* Introduction.mdx */}
 import { Meta } from '@storybook/addon-docs/blocks'
 import { DocTable } from './_blocks/DocTable.ts'
+import { COUNTS, FAMILY_COUNTS } from './_data/counts.generated.ts'
 
 <Meta title="Introduction" />
 
 # dzup-ui Component Library
 
-Welcome to the **dzup-ui** component library — **163 Vue 3 component files** across
-**11 families**, built with TypeScript, Tailwind CSS 4, and a three-tier design-token
-system.
+Welcome to the **dzup-ui** component library — **{COUNTS.catalogComponents} Vue 3 component
+files** across **{COUNTS.families} families**, {COUNTS.documentedComponents} of them with a docs
+page of their own. Built with TypeScript, Tailwind CSS 4, and a three-tier design-token system.
 
 > **Enterprise components** (Kanban, Gantt, FormBuilder, WorkflowDesigner, etc.) are
-> available in [@dzup-ui/pro](https://github.com/datazup/dzup-ui-pro) under a
-> commercial license.
+> planned for **dzup-ui Pro** under a commercial license — see [the Pro page](/pro)
+> for what is shipped versus planned. (No public Pro repository exists yet.)
 
 ## Start here
 
@@ -21,7 +22,7 @@ system.
 - **[Guides/Component Status](?path=/docs/guides-component-status--docs)** — live maturity, test, a11y & design matrix for every component.
 - **[Guides/Releases](?path=/docs/guides-releases--docs)** — what's new, generated from the changelog; deprecations & breaking changes up top.
 - **[Guides/Theming](?path=/docs/guides-theming--docs)** — light/dark, OKLCH, the `data-theme` switch.
-- **[Guides/Design Tokens](?path=/docs/guides-design-tokens--docs)** — the three-tier system, live swatches.
+- **[Guides/Design Tokens](?path=/docs/guides-design-tokens--designtokens)** — the three-tier system, live swatches.
 - **[Guides/Accessibility](?path=/docs/guides-accessibility--docs)** — WCAG AA, contract a11y props.
 - **[Contributing](?path=/docs/contributing--docs)** — story authoring conventions + status taxonomy.
 
@@ -36,32 +37,39 @@ system.
 
 ## Component Families
 
-<DocTable
-  head={['Family', '.vue files', 'Examples']}
-  align={['left', 'center', 'left']}
-  rows={[
-    ['**Buttons**', '8', 'DzButton, DzIconButton, DzButtonGroup, DzSplitButton, DzToggleButton'],
-    ['**Cards**', '6', 'DzCard (+parts), DzImageCard, DzStatCard'],
-    ['**Data**', '22', 'DzTable, DzDataGrid, DzAccordion, DzList, DzTree, DzTimeline, DzTag, DzChip'],
-    ['**Feedback**', '17', 'DzAlert, DzBadge, DzProgress, DzSpinner, DzSkeleton, DzToast, DzNotification'],
-    ['**Forms**', '22', 'DzSelect, DzCheckbox, DzRadio, DzSwitch, DzSlider, DzDatePicker, DzFormField'],
-    ['**Inputs**', '7', 'DzInput, DzTextarea, DzNumberInput, DzOtpInput, DzPasswordInput, DzSearchInput'],
-    ['**Layout**', '16', 'DzContainer, DzGrid, DzFlex, DzStack, DzAppShell, DzResizable, DzSplitter'],
-    ['**Media**', '10', 'DzAvatar, DzImage, DzIcon, DzCarousel, DzLightbox'],
-    ['**Navigation**', '19', 'DzTabs, DzBreadcrumb, DzPagination, DzMenu, DzSidebar, DzStepper, DzSegmented'],
-    ['**Overlays**', '31', 'DzDialog, DzSheet, DzPopover, DzTooltip, DzDropdownMenu, DzCommandPalette'],
-    ['**Typography**', '5', 'DzHeading, DzText, DzBlockquote, DzCaption, DzCode'],
-  ]}
-/>
+Two counts, because they answer different questions — the same pair
+[DESIGN.md](https://github.com/datazup/dzup-ui/blob/main/DESIGN.md) publishes:
 
-_Counts include sub-part components (e.g. `DzCardBody`, `DzTabTrigger`), which are
-documented inside their parent's `*Parts` story rather than as standalone entries._
+- **`.vue` files** — the **catalog**: every exported `.vue` component, including compound
+  sub-parts such as `DzCardBody`. Totals **{COUNTS.catalogComponents}**.
+- **Documented** — components with a **page of their own** in this Storybook. Compound
+  sub-parts are documented through their parent (on the family's `*Parts` anatomy page, or
+  inside the parent's story), so they are documented, not missing. Totals **{COUNTS.documentedComponents}**.
+
+{/*
+  The rows are GENERATED, not typed: `_data/counts.generated.ts` is globbed out of
+  `packages/core/src/components` and `packages/core/stories` by
+  `apps/landing/scripts/build-counts.ts`. The hand-typed version of this table had
+  10 of its 11 rows wrong and totalled 163 against a real 205 — while
+  Guides/Component Status, two pages away, said 205. Never type a count in here.
+*/}
+
+<DocTable
+  head={['Family', '.vue files', 'Documented', 'Examples']}
+  align={['left', 'center', 'center', 'left']}
+  rows={FAMILY_COUNTS.map((family) => [
+    `**${family.label}**`,
+    String(family.catalog),
+    String(family.documented),
+    family.examples.join(', '),
+  ])}
+/>
 
 ## Design Tokens
 
 All components consume a **three-tier** token system — **primitive → semantic →
 component** — exposed as `var(--dz-*)` CSS variables. See
-**[Design Tokens](?path=/docs/guides-design-tokens--docs)**. Use the **Theme**
+**[Design Tokens](?path=/docs/guides-design-tokens--designtokens)**. Use the **Theme**
 toolbar toggle above to switch between light and dark.
 
 ## Contract Spec

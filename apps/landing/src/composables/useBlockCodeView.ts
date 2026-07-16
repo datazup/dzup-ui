@@ -7,7 +7,7 @@ import { computed, ref, toValue } from 'vue'
  * The Code tab shows a block's verbatim `?raw` source (docs/blocks.md §3.2). A
  * best-in-class gallery lets a developer pick *Full SFC ↔ Template-only* and
  * *TS ↔ JS*, and shows the one import line a consumer needs. Crucially, EVERY
- * variant is derived deterministically from the single `BlockDef.source` at
+ * variant is derived deterministically from the single `getBlockSource(path)` at
  * runtime — there is no second copy of the code, so the snippet can never drift
  * from what renders.
  *

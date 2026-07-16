@@ -4,7 +4,7 @@ A looping, autoplaying DzCarousel of DzImage slides with gradient captions, hove
 
 - **Category:** Media
 - **Components:** DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots, DzImage, DzAspectRatio, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-carousel
+- **Preview:** /blocks/media-carousel
 
 ```vue
 <script setup lang="ts">

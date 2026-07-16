@@ -4,7 +4,7 @@ A stacked column of full-width provider buttons (Google, GitHub, Apple), a label
 
 - **Category:** Buttons
 - **Components:** DzButton, DzDivider, DzText
-- **Preview:** /blocks#social-auth-buttons
+- **Preview:** /blocks/social-auth-buttons
 
 ```vue
 <script setup lang="ts">

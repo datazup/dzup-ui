@@ -119,44 +119,56 @@ function handleRefresh(): void {
     :id="id"
     :class="rootClasses"
     :style="sizeStyle"
-    role="img"
-    :aria-label="computedAriaLabel"
-    :aria-labelledby="ariaLabelledby"
-    :aria-describedby="ariaDescribedby"
     :data-status="status"
     :data-state="matrix ? 'ready' : 'empty'"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <!-- QR matrix -->
-    <svg
-      v-if="matrix"
-      :class="styles.svg()"
-      :viewBox="`0 0 ${matrix.total} ${matrix.total}`"
-      xmlns="http://www.w3.org/2000/svg"
-      shape-rendering="crispEdges"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <rect
-        x="0"
-        y="0"
-        :width="matrix.total"
-        :height="matrix.total"
-        :fill="background"
-      />
-      <path :d="matrix.path" :fill="color" />
-    </svg>
-
-    <!-- Centered logo -->
+    <!--
+      The scannable code is the image: `role="img"` and the accessible name live
+      on THIS wrapper, never on the root. The `expired` overlay contains a focusable
+      refresh <button>, and a `role="img"` element may not have focusable
+      descendants (WCAG `nested-interactive`). Keeping the label on the graphic and
+      the overlay as a sibling below satisfies both. The wrapper fills the root
+      exactly as the bare <svg> did, so layout is unchanged.
+    -->
     <div
-      v-if="matrix && hasLogo"
-      :class="styles.logo()"
-      :style="logoStyle"
-      aria-hidden="true"
+      class="flex h-full w-full items-center justify-center"
+      role="img"
+      :aria-label="computedAriaLabel"
+      :aria-labelledby="ariaLabelledby"
+      :aria-describedby="ariaDescribedby"
     >
-      <slot name="logo">
-        <img v-if="icon" :src="icon" alt="" :class="styles.logoImg()">
-      </slot>
+      <!-- QR matrix -->
+      <svg
+        v-if="matrix"
+        :class="styles.svg()"
+        :viewBox="`0 0 ${matrix.total} ${matrix.total}`"
+        xmlns="http://www.w3.org/2000/svg"
+        shape-rendering="crispEdges"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect
+          x="0"
+          y="0"
+          :width="matrix.total"
+          :height="matrix.total"
+          :fill="background"
+        />
+        <path :d="matrix.path" :fill="color" />
+      </svg>
+
+      <!-- Centered logo -->
+      <div
+        v-if="matrix && hasLogo"
+        :class="styles.logo()"
+        :style="logoStyle"
+        aria-hidden="true"
+      >
+        <slot name="logo">
+          <img v-if="icon" :src="icon" alt="" :class="styles.logoImg()">
+        </slot>
+      </div>
     </div>
 
     <!-- Loading overlay -->

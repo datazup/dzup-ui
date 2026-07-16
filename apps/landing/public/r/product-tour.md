@@ -4,7 +4,7 @@ A spotlight onboarding walkthrough (DzTour) over a mini dashboard — "Start tou
 
 - **Category:** Overlays
 - **Components:** DzTour, DzButton, DzIconButton, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#product-tour
+- **Preview:** /blocks/product-tour
 
 ```vue
 <script setup lang="ts">

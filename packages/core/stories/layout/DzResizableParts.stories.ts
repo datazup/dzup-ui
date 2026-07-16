@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzResizable, DzResizableHandle, DzResizablePanel } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzResizable compound sub-parts: DzResizablePanel and DzResizableHandle.
@@ -209,6 +210,35 @@ export const HandleVariants: Story = {
     await expect(withGrip.querySelector('svg')).not.toBeNull()
     await expect(withoutGrip.querySelector('svg')).toBeNull()
   },
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzResizable, DzResizablePanel, DzResizableHandle },
+    template: `
+      <DzResizable class="h-48 border border-[var(--dz-border)] rounded" aria-label="Dark mode resizable panels">
+        <DzResizablePanel :default-size="30" :min-size="20">
+          <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Sidebar (30%, min 20%)</div>
+        </DzResizablePanel>
+        <DzResizableHandle with-handle />
+        <DzResizablePanel :default-size="70">
+          <div class="h-full p-4 text-sm">
+            <p class="font-medium mb-1">Main Content (70%)</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">
+              The panel border, the muted sidebar surface, and the handle grip all
+              resolve from tokens against a dark background.
+            </p>
+          </div>
+        </DzResizablePanel>
+      </DzResizable>
+    `,
+  }),
 }
 
 // ---------------------------------------------------------------------------

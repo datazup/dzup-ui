@@ -4,7 +4,7 @@ Centered card with name, email, password plus a live strength meter, terms check
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzProgress, DzCheckbox, DzButton, DzHeading, DzText
-- **Preview:** /blocks#sign-up
+- **Preview:** /blocks/sign-up
 
 ```vue
 <script setup lang="ts">

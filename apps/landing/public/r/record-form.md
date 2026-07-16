@@ -4,7 +4,7 @@ A "create issue" panel built from the selection inputs — a searchable DzCombob
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzCombobox, DzMultiSelect, DzListbox, DzInput, DzTextarea, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#record-form
+- **Preview:** /blocks/record-form
 
 ```vue
 <script setup lang="ts">

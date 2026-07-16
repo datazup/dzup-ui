@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzSplitButtonParts documents the three compound parts that make up a split
@@ -20,6 +20,10 @@ const meta = {
   component: DzSplitButtonAction,
   subcomponents: { DzSplitButtonMenu, DzSplitButton },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // DzSplitButtonAction
     ariaLabel: {

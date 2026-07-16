@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { ref } from 'vue'
 import { DzScrollProgress } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzScrollProgress is a scroll-position progress indicator — a thin bar (or
@@ -82,7 +83,7 @@ const FILLER = `
  */
 function scopedTemplate(indicator: string): string {
   return `
-    <div ref="scrollRef" style="position: relative; height: 360px; overflow-y: auto; border border-[var(--dz-border)]: 1px solid var(--dz-border); border-radius: var(--dz-radius-md);" class="dz-scroll-progress-demo">
+    <div ref="scrollRef" style="position: relative; height: 360px; overflow-y: auto; border: 1px solid var(--dz-border); border-radius: var(--dz-radius-md);" class="dz-scroll-progress-demo">
       ${indicator}
       ${FILLER}
     </div>
@@ -138,6 +139,25 @@ export const Circular: Story = {
     },
     template: scopedTemplate(
       `<DzScrollProgress variant="circular" tone="primary" size="lg" :target="scrollRef" style="position: absolute;" />`,
+    ),
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzScrollProgress },
+    setup() {
+      const scrollRef = ref<HTMLElement | null>(null)
+      return { scrollRef }
+    },
+    template: scopedTemplate(
+      `<DzScrollProgress position="top" tone="primary" :target="scrollRef" style="position: absolute;" />`,
     ),
   }),
 }

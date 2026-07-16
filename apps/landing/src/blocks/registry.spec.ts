@@ -15,6 +15,7 @@
 import { describe, expect, it } from 'vitest'
 import * as core from '@dzup-ui/core'
 import { BLOCKS, blocksByCategory, CATEGORIES } from './registry.ts'
+import { getBlockSource } from './sources.ts'
 
 /** kebab-case: lowercase words joined by single hyphens, no leading/trailing/double `-`. */
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -76,8 +77,12 @@ describe('block registry', () => {
     it('has non-empty required text fields', () => {
       expect(block.title?.trim(), 'title').not.toBe('')
       expect(block.description?.trim(), 'description').not.toBe('')
-      expect(typeof block.source).toBe('string')
-      expect(block.source.trim(), 'source (?raw import)').not.toBe('')
+    })
+
+    it('resolves a non-empty ?raw source from its path', () => {
+      const source = getBlockSource(block.path)
+      expect(typeof source).toBe('string')
+      expect(source.trim(), 'source (?raw import)').not.toBe('')
     })
 
     it('has a live component and a valid category', () => {

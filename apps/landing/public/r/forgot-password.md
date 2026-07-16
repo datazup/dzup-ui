@@ -4,7 +4,7 @@ A two-state reset-request card — a validated email field (inline error via DzF
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzFormMessage, DzInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#forgot-password
+- **Preview:** /blocks/forgot-password
 
 ```vue
 <script setup lang="ts">

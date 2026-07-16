@@ -28,28 +28,32 @@ const columns = [
     links: [
       { label: 'Blocks', href: '/blocks', external: false },
       { label: 'Compare', href: '/compare', external: false },
-      { label: 'GitHub', href: LINKS.github, external: true },
       { label: 'Changelog', href: LINKS.changelog, external: true },
-      { label: 'npm', href: LINKS.npm, external: true },
-      { label: 'Nuxt module', href: LINKS.nuxtModule, external: true },
+      // No npm / Nuxt-module links yet: the package is unpublished and the Nuxt
+      // guide does not exist — a footer link to a 404 says "unmaintained"
+      // louder than the link's absence (TASK-FREE-11). Re-add when they exist.
     ],
   },
   {
+    // Community = the surfaces that actually exist today: the repo and its
+    // issue tracker. The old Discord invite and X handle were 404s and the
+    // repo has GitHub Discussions disabled — none of them may ship as links.
     title: 'Community',
     links: [
-      { label: 'Discord', href: LINKS.discord, external: true },
-      { label: 'X / Twitter', href: LINKS.twitter, external: true },
-      { label: 'Discussions', href: LINKS.discussions, external: true },
+      { label: 'GitHub', href: LINKS.github, external: true },
+      { label: 'Issues', href: LINKS.issues, external: true },
     ],
   },
 ]
 
-const year = 2026
+/** Derived, not typed — a hardcoded 2026 would still read “© 2026” in 2028. */
+const year = new Date().getFullYear()
 
-// shields.io badges — live status images mirroring the README, so the footer and
-// repo show the same star / npm / bundle-size / license signals. Rendered as
-// linked images (each with alt text) rather than baked numbers: they refresh
-// themselves and never gate the build.
+// shields.io badges — every one must render TODAY (TASK-FREE-11): the repo is
+// public so the live stars badge resolves; npm-backed badges (version,
+// bundlephobia, npm license) rendered shields' "not found" placeholders while
+// @dzup-ui/core is unpublished, so they are gone until the package is public.
+// The license badge is static (the LICENSE file is MIT) and links to the file.
 const badges = [
   {
     alt: 'GitHub stars',
@@ -57,19 +61,9 @@ const badges = [
     href: LINKS.github,
   },
   {
-    alt: 'npm version',
-    src: 'https://img.shields.io/npm/v/@dzup-ui/core?label=npm&color=6366f1',
-    href: LINKS.npm,
-  },
-  {
-    alt: 'Minified + gzipped bundle size',
-    src: 'https://img.shields.io/bundlephobia/minzip/@dzup-ui/core?label=min%2Bgzip&color=6366f1',
-    href: 'https://bundlephobia.com/package/@dzup-ui/core',
-  },
-  {
-    alt: 'License',
-    src: 'https://img.shields.io/npm/l/@dzup-ui/core?label=license&color=6366f1',
-    href: LINKS.changelog,
+    alt: 'MIT license',
+    src: 'https://img.shields.io/badge/license-MIT-6366f1',
+    href: LINKS.license,
   },
   {
     // Core Web Vitals budget the CI `landing-perf` job enforces on every push
@@ -104,7 +98,9 @@ const badges = [
 
       <nav class="footer-cols" aria-label="Footer">
         <div v-for="col in columns" :key="col.title" class="footer-col">
-          <h3 class="footer-col-title">{{ col.title }}</h3>
+          <h3 class="footer-col-title">
+            {{ col.title }}
+          </h3>
           <ul>
             <li v-for="link in col.links" :key="link.label">
               <a
@@ -113,7 +109,9 @@ const badges = [
                 target="_blank"
                 rel="noreferrer noopener"
               >{{ link.label }}</a>
-              <router-link v-else :to="link.href">{{ link.label }}</router-link>
+              <router-link v-else :to="link.href">
+                {{ link.label }}
+              </router-link>
             </li>
           </ul>
         </div>

@@ -15,7 +15,7 @@ import {
 } from 'lucide-vue-next'
 import { expect, within } from 'storybook/test'
 import { DzIcon } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzIcon wraps icon components (e.g. from lucide-vue-next) with consistent sizing
@@ -28,6 +28,10 @@ const meta = {
   title: 'Core/Media/DzIcon',
   component: DzIcon,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     icon: {

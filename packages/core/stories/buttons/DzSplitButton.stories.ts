@@ -6,7 +6,7 @@ import {
   DzSplitButtonAction,
   DzSplitButtonMenu,
 } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzSplitButton is a compound button component combining a primary action
@@ -21,6 +21,10 @@ const meta = {
   title: 'Core/Buttons/DzSplitButton',
   component: DzSplitButton,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     variant: {
@@ -348,10 +352,6 @@ export const Interactive: Story = {
 
 export const InteractiveMenu: Story = {
   name: 'Interactive: Menu Select',
-  parameters: {
-    // The toggled menu opens on click; pair the audit with the open state.
-    a11y: { test: 'todo' },
-  },
   render: () => ({
     components: { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu },
     setup() {

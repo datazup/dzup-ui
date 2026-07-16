@@ -9,7 +9,7 @@ import HomeTestimonials from '../components/HomeTestimonials.vue'
 import ShowcaseDashboard from '../components/ShowcaseDashboard.vue'
 import SocialProof from '../components/SocialProof.vue'
 import ThemingDemo from '../components/ThemingDemo.vue'
-import { vReveal } from '../composables/useScrollReveal.ts'
+import { vReveal } from '../motion/index.ts'
 </script>
 
 <template>

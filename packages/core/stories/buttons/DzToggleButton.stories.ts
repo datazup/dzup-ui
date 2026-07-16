@@ -4,7 +4,7 @@ import { expect, userEvent, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzToggleButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzToggleButton is a button that toggles between pressed and unpressed states.
@@ -17,6 +17,10 @@ const meta = {
   title: 'Core/Buttons/DzToggleButton',
   component: DzToggleButton,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     variant: {

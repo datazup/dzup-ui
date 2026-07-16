@@ -5,20 +5,6 @@ import { DzButton } from '../../src/components/buttons'
 import { DzAlert, DzAsyncBoundary, DzResult, DzSkeleton, DzSpinner } from '../../src/components/feedback'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzAsyncBoundary wraps `<Suspense>` to coordinate the **pending → resolved →
- * error** lifecycle of an async child (a component with an `async setup()`).
- *
- * - While the child's promise is pending, the `#loading` slot renders (defaults
- *   to `DzSpinner`).
- * - On resolve, the `#default` slot renders.
- * - On rejection (or a thrown render error), the `#error` slot renders with
- *   `{ error, reset }`.
- *
- * An optional `timeout` prop emits a `timeout` event if the pending state lasts
- * too long. `reset()` is also exposed via a template ref.
- */
-
 /** Resolves after `delay` ms, then renders its content. */
 function makeAsyncChild(delay: number, label: string) {
   return defineComponent({
@@ -41,6 +27,19 @@ function makeAsyncError(delay: number, message: string) {
   })
 }
 
+/**
+ * DzAsyncBoundary wraps `<Suspense>` to coordinate the **pending → resolved →
+ * error** lifecycle of an async child (a component with an `async setup()`).
+ *
+ * - While the child's promise is pending, the `#loading` slot renders (defaults
+ *   to `DzSpinner`).
+ * - On resolve, the `#default` slot renders.
+ * - On rejection (or a thrown render error), the `#error` slot renders with
+ *   `{ error, reset }`.
+ *
+ * An optional `timeout` prop emits a `timeout` event if the pending state lasts
+ * too long. `reset()` is also exposed via a template ref.
+ */
 const meta = {
   title: 'Core/Feedback/DzAsyncBoundary',
   component: DzAsyncBoundary,

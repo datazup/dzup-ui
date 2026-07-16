@@ -4,7 +4,7 @@ A brand/theme customizer with a live preview — a DzColorPicker (presets + hex 
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzColorPicker, DzKnob, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#appearance-editor
+- **Preview:** /blocks/appearance-editor
 
 ```vue
 <script setup lang="ts">

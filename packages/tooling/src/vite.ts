@@ -26,6 +26,14 @@ export interface CreateLibConfigOptions {
   tsconfigPath?: string
   outDir?: string
   alias?: Record<string, string>
+  /**
+   * Base name for the single extracted CSS asset (no extension), e.g. `'core'`
+   * emits `dist/core.css`. Lib mode keeps `cssCodeSplit` off, so every stylesheet
+   * reachable from any entry — the base layer, any future SFC <style> — is
+   * concatenated into this one file. Without it Vite names the asset `style.css`,
+   * which no `exports` target points at.
+   */
+  cssFileName?: string
 }
 
 export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
@@ -36,6 +44,7 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
     tsconfigPath = 'tsconfig.json',
     outDir = 'dist',
     alias = {},
+    cssFileName,
   } = options
 
   const resolvedEntry
@@ -72,6 +81,7 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
       lib: {
         entry: resolvedEntry,
         formats: ['es'],
+        ...(cssFileName === undefined ? {} : { cssFileName }),
       },
       rollupOptions: {
         external: [...DEFAULT_EXTERNALS, ...external],

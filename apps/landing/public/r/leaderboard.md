@@ -4,7 +4,7 @@ A ranked DzList where each row pairs a rank badge + avatar prefix with a DzAnima
 
 - **Category:** Data display
 - **Components:** DzList, DzListItem, DzAnimatedNumber, DzAvatar, DzBadge, DzTag, DzButton, DzText, DzCard
-- **Preview:** /blocks#leaderboard
+- **Preview:** /blocks/leaderboard
 
 ```vue
 <script setup lang="ts">

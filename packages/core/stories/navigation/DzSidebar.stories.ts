@@ -8,6 +8,7 @@ import {
   DzSidebarItem,
   DzSidebarSection,
 } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * `DzSidebar` is a collapsible navigation sidebar. It paints exclusively
@@ -298,7 +299,7 @@ export const Interactive: Story = {
             <DzSidebarItem aria-label="Drafts">{{ collapsed ? '📄' : 'Drafts' }}</DzSidebarItem>
           </DzSidebarSection>
           <DzSidebarFooter>
-            <button type="button" @click="toggle" style="background:transparent;border border-[var(--dz-border)]:none;color:var(--dz-sidebar-foreground);cursor:pointer;font-size:var(--dz-text-xs);">
+            <button type="button" @click="toggle" style="background:transparent;border:none;color:var(--dz-sidebar-foreground);cursor:pointer;font-size:var(--dz-text-xs);">
               {{ collapsed ? 'Expand →' : '← Collapse' }}
             </button>
           </DzSidebarFooter>
@@ -318,4 +319,41 @@ export const Interactive: Story = {
     await waitFor(() => expect(canvas.queryByText('Dashboard')).not.toBeInTheDocument())
     await expect(canvas.getByRole('button', { name: /Expand/ })).toBeInTheDocument()
   },
+}
+
+// ---------------------------------------------------------------------------
+// DarkMode — the --dz-sidebar-* namespace re-resolved under data-theme="dark"
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter },
+    template: `
+      <div style="height:32rem;display:flex;background:var(--dz-background);">
+        <DzSidebar>
+          <DzSidebarHeader>
+            <span style="font-weight:600;color:var(--dz-sidebar-foreground-hover);">Datazup</span>
+          </DzSidebarHeader>
+          <DzSidebarSection title="Workspace">
+            <DzSidebarItem :active="true">Dashboard</DzSidebarItem>
+            <DzSidebarItem>Sessions</DzSidebarItem>
+            <DzSidebarItem>Drafts</DzSidebarItem>
+          </DzSidebarSection>
+          <DzSidebarSection title="Account">
+            <DzSidebarItem>Profile</DzSidebarItem>
+            <DzSidebarItem>Settings</DzSidebarItem>
+          </DzSidebarSection>
+          <DzSidebarFooter>
+            <span style="font-size:var(--dz-text-xs);color:var(--dz-sidebar-foreground);">v0.1.0</span>
+          </DzSidebarFooter>
+        </DzSidebar>
+        <div style="flex:1;padding:var(--dz-spacing-6);color:var(--dz-foreground);">
+          The sidebar paints exclusively from the <code>--dz-sidebar-*</code> namespace, so it
+          follows <code>data-theme="dark"</code> with no per-theme component code.
+        </div>
+      </div>
+    `,
+  }),
 }

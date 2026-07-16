@@ -6,7 +6,7 @@ import {
   DzPopoverContent,
   DzPopoverTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzPopover is a compound floating content panel built on Reka UI Popover (ADR-07).
@@ -23,6 +23,10 @@ const meta = {
     DzPopoverContent,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {

@@ -4,7 +4,7 @@ A typographic article body composed from the long-form primitives — DzHeading 
 
 - **Category:** Content
 - **Components:** DzHeading, DzText, DzBlockquote, DzCode, DzDivider
-- **Preview:** /blocks#prose
+- **Preview:** /blocks/prose
 
 ```vue
 <script setup lang="ts">

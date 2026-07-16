@@ -10,7 +10,7 @@ import {
   DzDialogTitle,
   DzDialogTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDialogContent compound sub-parts: DzDialogTitle, DzDialogDescription,
@@ -35,6 +35,10 @@ const meta = {
     DzDialogOverlay,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     size: {
       control: 'select',

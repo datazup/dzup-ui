@@ -27,6 +27,7 @@ import Section from '../components/Section.vue'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
 import BlockPreview from '../components/blocks/BlockPreview.vue'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
+import { getBlockSource } from '../blocks/sources.ts'
 import { openInStackblitz } from '../lib/stackblitz.ts'
 
 const props = defineProps<{ id: string }>()
@@ -101,7 +102,7 @@ function openStackblitz(): void {
   openInStackblitz({
     title: `${b.title} — dzup-ui block`,
     description: b.description,
-    files: { 'src/App.vue': b.source },
+    files: { 'src/App.vue': getBlockSource(b.path) },
   })
 }
 </script>
@@ -144,7 +145,7 @@ function openStackblitz(): void {
             Open in StackBlitz
           </DzButton>
           <DzCopyButton
-            :value="block.source"
+            :value="getBlockSource(block.path)"
             variant="outline"
             tone="neutral"
             size="sm"
@@ -158,7 +159,7 @@ function openStackblitz(): void {
 
     <!-- The full interactive preview (live preview / code / copy / fullscreen). -->
     <Section>
-      <BlockPreview :block="block" @select-component="showBlocksUsing" />
+      <BlockPreview :block="block" :heading-level="2" @select-component="showBlocksUsing" />
     </Section>
 
     <!-- Prev / next across the whole catalog + back to the gallery. -->

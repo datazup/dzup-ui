@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { LightboxImage } from '../../src/components/media'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzImage, DzLightbox } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzLightbox is a fullscreen image viewer overlay, built on Reka UI
@@ -16,6 +16,10 @@ const meta = {
   title: 'Core/Media/DzLightbox',
   component: DzLightbox,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     images: {

@@ -4,7 +4,7 @@ A launch banner driven by DzCountdown — its slot renders labelled day/hour/min
 
 - **Category:** Data display
 - **Components:** DzCountdown, DzAnimatedNumber, DzBadge, DzHeading, DzButton, DzText
-- **Preview:** /blocks#release-countdown
+- **Preview:** /blocks/release-countdown
 
 ```vue
 <script setup lang="ts">

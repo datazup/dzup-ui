@@ -4,7 +4,7 @@ Two DzPopover patterns side by side — a profile hover card (avatar, bio, follo
 
 - **Category:** Overlays
 - **Components:** DzPopover, DzPopoverTrigger, DzPopoverContent, DzAvatar, DzBadge, DzButton, DzDivider, DzSwitch, DzHeading, DzText
-- **Preview:** /blocks#info-popovers
+- **Preview:** /blocks/info-popovers
 
 ```vue
 <script setup lang="ts">

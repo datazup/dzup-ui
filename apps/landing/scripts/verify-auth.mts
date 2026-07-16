@@ -1,6 +1,7 @@
+import type { ChildProcess } from 'node:child_process'
 /** Throwaway verification: screenshot the C1 auth templates, light+dark, desktop+mobile. */
-import { spawn, type ChildProcess } from 'node:child_process'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
+import { mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -18,7 +19,7 @@ const VIEWPORTS = [
 
 const ANSI = /\[[0-9;]*m/g
 
-function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
+function startDevServer(): Promise<{ base: string, child: ChildProcess }> {
   const require = createRequire(import.meta.url)
   const viteBin = resolve(dirname(require.resolve('vite/package.json')), 'bin/vite.js')
   const child = spawn(process.execPath, [viteBin, '--no-open', '--clearScreen', 'false'], {
@@ -30,7 +31,7 @@ function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
     const t = setTimeout(() => rej(new Error('vite not ready')), 60_000)
     const onData = (buf: Buffer) => {
       const text = buf.toString().replace(ANSI, '')
-      const m = text.match(/(https?:\/\/localhost:\d+\S*)/i)
+      const m = text.match(/(https?:\/\/localhost:\d\S*)/i)
       if (m) {
         clearTimeout(t)
         child.stdout?.off('data', onData)
@@ -42,8 +43,10 @@ function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
 }
 
 function stop(child: ChildProcess): void {
-  if (child.pid === undefined) return
-  if (process.platform === 'win32') spawn('taskkill', ['/pid', String(child.pid), '/f', '/t'], { stdio: 'ignore' })
+  if (child.pid === undefined)
+    return
+  if (process.platform === 'win32')
+    spawn('taskkill', ['/pid', String(child.pid), '/f', '/t'], { stdio: 'ignore' })
   else child.kill('SIGTERM')
 }
 
@@ -62,10 +65,16 @@ async function main(): Promise<void> {
           colorScheme: theme,
           reducedMotion: 'reduce',
         })
-        await ctx.addInitScript((t) => { try { localStorage.setItem('dz-theme', t as string) } catch {} }, theme)
+        await ctx.addInitScript((t) => {
+          try { localStorage.setItem('dz-theme', t as string) }
+          catch {}
+        }, theme)
         const page = await ctx.newPage()
-        page.on('pageerror', (e) => errors.push(`[${theme}/${vp.name}] ${e.message}`))
-        page.on('console', (m) => { if (m.type() === 'error') errors.push(`[${theme}/${vp.name}] console: ${m.text()}`) })
+        page.on('pageerror', e => errors.push(`[${theme}/${vp.name}] ${e.message}`))
+        page.on('console', (m) => {
+          if (m.type() === 'error')
+            errors.push(`[${theme}/${vp.name}] console: ${m.text()}`)
+        })
         for (const slug of SLUGS) {
           const url = `${base}/templates/${slug}/preview?theme=${theme}`
           await page.goto(url, { waitUntil: 'networkidle', timeout: 45_000 })
@@ -81,14 +90,16 @@ async function main(): Promise<void> {
         await ctx.close()
       }
     }
-  } finally {
+  }
+  finally {
     await browser.close()
     stop(child)
   }
   if (errors.length) {
     console.log('\n=== PAGE ERRORS ===')
     for (const e of errors) console.log(e)
-  } else {
+  }
+  else {
     console.log('\nNo page/console errors.')
   }
 }

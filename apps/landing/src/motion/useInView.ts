@@ -2,8 +2,8 @@ import type { Ref } from 'vue'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 /**
- * useInView — reactive IntersectionObserver wrapper (generalises the observer in
- * `useScrollReveal.ts`).
+ * useInView — reactive IntersectionObserver wrapper (generalises the observer
+ * behind the `v-reveal` directive in `directives/reveal.ts`).
  *
  * Observers are shared per unique `(rootMargin, threshold)` signature so a page
  * full of demos attaches only a handful of `IntersectionObserver`s rather than

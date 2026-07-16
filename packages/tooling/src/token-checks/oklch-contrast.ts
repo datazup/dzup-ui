@@ -68,6 +68,43 @@ export function oklchToLinearRgb({ l, c, h }: Oklch): LinearRgb {
 }
 
 /**
+ * Gamma-encode a linear-light channel (0–1) to sRGB (0–1) — the IEC 61966-2-1
+ * transfer function. `relativeLuminance` below deliberately does NOT use this
+ * (WCAG luminance is defined over LINEAR channels); this exists for the trip back
+ * out to a displayable/serialisable color.
+ */
+function encodeGamma(channel: number): number {
+  return channel <= 0.003_130_8
+    ? 12.92 * channel
+    : 1.055 * channel ** (1 / 2.4) - 0.055
+}
+
+/**
+ * Convert an `oklch(L C H)` string to a lowercase `#rrggbb` sRGB hex, or `null`
+ * if it can't be parsed.
+ *
+ * For surfaces that CANNOT read the token CSS — the Storybook manager chrome
+ * renders outside the preview iframe — a hex literal is unavoidable. This lets a
+ * check assert those literals still equal the token they claim to mirror, so the
+ * copy is verified rather than merely commented (TASK-FREE-17).
+ *
+ * Out-of-gamut colors are clamped per-channel by `oklchToLinearRgb`, so a wide
+ * OKLCH value round-trips to the nearest displayable sRGB rather than failing.
+ */
+export function oklchToHex(value: string): string | null {
+  const oklch = parseOklch(value)
+  if (!oklch) {
+    return null
+  }
+  const { r, g, b } = oklchToLinearRgb(oklch)
+  const channel = (c: number): string =>
+    Math.round(encodeGamma(c) * 255)
+      .toString(16)
+      .padStart(2, '0')
+  return `#${channel(r)}${channel(g)}${channel(b)}`
+}
+
+/**
  * WCAG relative luminance of an OKLCH color (0 = black, 1 = white). Returns
  * `null` when the string can't be parsed as oklch().
  */

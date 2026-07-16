@@ -4,7 +4,7 @@ Styled icon illustration, heading, supporting copy and a primary call-to-action 
 
 - **Category:** Application
 - **Components:** DzEmpty, DzButton
-- **Preview:** /blocks#empty-state
+- **Preview:** /blocks/empty-state
 
 ```vue
 <script setup lang="ts">

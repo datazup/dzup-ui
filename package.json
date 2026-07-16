@@ -27,9 +27,12 @@
     "codemod:story-colors": "tsx packages/codemods/scripts/run-story-color-tokens.ts",
     "generate:exports": "tsx packages/tooling/src/manifest-generator.ts",
     "generate:exports:core": "tsx packages/tooling/src/manifest-generator.ts packages/core",
+    "check:links": "node scripts/check-external-links.mjs",
     "validate:boundaries": "tsx packages/tooling/src/validators/import-boundary.ts",
     "validate:interaction-contract": "tsx packages/tooling/src/validators/interaction-contract.ts",
-    "validate:sandbox-parity": "tsx packages/tooling/src/validators/sandbox-contract-parity.ts",
+    "validate:contract-parity": "tsx packages/tooling/src/validators/contract-parity.ts",
+    "validate:story-status": "tsx packages/tooling/src/validators/story-status.ts",
+    "validate:story-dod": "tsx packages/tooling/src/validators/story-dod.ts",
     "validate:tokens": "tsx packages/tooling/src/token-checks/color-lint.ts && tsx packages/tooling/src/token-checks/design-md-check.ts && tsx packages/tooling/src/token-checks/intent-text-contrast.ts",
     "validate:exports": "tsx packages/tooling/scripts/validate-exports.ts",
     "validate:bundle": "tsx packages/tooling/scripts/validate-bundle.ts",
@@ -38,7 +41,7 @@
     "validate:dts": "tsx packages/tooling/scripts/validate-dts.ts",
     "validate:peers": "tsx packages/tooling/scripts/validate-peers.ts",
     "validate:licenses": "tsx packages/tooling/src/license-audit.ts",
-    "validate:all": "yarn typecheck && yarn lint && yarn validate:boundaries && yarn validate:interaction-contract && yarn validate:sandbox-parity && yarn validate:tokens && yarn validate:exports && yarn validate:dts && yarn validate:changelog && yarn validate:peers && yarn validate:licenses",
+    "validate:all": "yarn typecheck && yarn lint && yarn validate:boundaries && yarn validate:interaction-contract && yarn validate:contract-parity && yarn validate:story-status && yarn validate:story-dod && yarn validate:tokens && yarn validate:exports && yarn validate:dts && yarn validate:changelog && yarn validate:peers && yarn validate:licenses",
     "validate:tree-shake": "tsx packages/tooling/src/tree-shake-check.ts",
     "design:application-plan": "tsx packages/tooling/src/design-application-plan.ts",
     "report:component-sizes": "tsx packages/tooling/src/component-size-report.ts",
@@ -91,7 +94,6 @@
     "vue": "^3.5.13"
   },
   "resolutions": {
-    "@storybook/addon-vitest": "10.3.4",
     "vitest": "3.2.6",
     "@vitest/browser": "3.2.6",
     "@vitest/coverage-v8": "3.2.6"

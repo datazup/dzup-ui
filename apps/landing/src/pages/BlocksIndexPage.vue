@@ -14,7 +14,7 @@ import type { BlockNavTarget } from '../components/blocks/BlockCommandPalette.vu
 import { BLOCKS, CATEGORIES, blocksByCategory } from '../blocks/registry.ts'
 import type { BlockDef, CategoryMeta } from '../blocks/registry.ts'
 import { useBlockSearch } from '../composables/useBlockSearch.ts'
-import { vReveal } from '../composables/useScrollReveal.ts'
+import { vReveal } from '../motion/index.ts'
 
 /**
  * /blocks — the Blocks ecosystem index (docs/blocks.md §3.1, §3.2, §4).

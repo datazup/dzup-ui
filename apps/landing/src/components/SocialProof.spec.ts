@@ -20,6 +20,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 
 import { FACTS } from '../config.ts'
+import { PRO_FACTS } from '../data.ts'
 
 /** jsdom lacks matchMedia; DzCountUp reads it through useReducedMotion. */
 if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
@@ -85,7 +86,9 @@ describe('SocialProof — accessible names', () => {
     const { getByLabelText } = await mount()
     expect(getByLabelText(`${FACTS.freeComponents} free components`)).toBeTruthy()
     expect(getByLabelText(`${FACTS.families} component families`)).toBeTruthy()
-    expect(getByLabelText(`${FACTS.proComponents} Pro components coming soon`)).toBeTruthy()
+    // The Pro tile shows a ROADMAP figure, and its name has to say so — the two
+    // tiles beside it are present-tense facts. See PRO_FACTS in data.ts.
+    expect(getByLabelText(`${PRO_FACTS.plannedComponents} Pro components planned`)).toBeTruthy()
   })
 
   it('degrades an unavailable metric to a call-to-action, never a number', async () => {

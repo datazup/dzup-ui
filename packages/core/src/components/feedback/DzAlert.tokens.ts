@@ -35,7 +35,8 @@ export const alertTokens = {
       ghost: { foreground: 'var(--dz-success-muted-foreground)' },
     },
     warning: {
-      filled: { background: 'var(--dz-warning)', foreground: 'var(--dz-warning-foreground)' },
+      // Warning fills with `-solid` (8.44:1); `--dz-warning` under the foreground is 3.51:1.
+      filled: { background: 'var(--dz-warning-solid)', foreground: 'var(--dz-warning-foreground)' },
       outline: { border: 'var(--dz-warning)', foreground: 'var(--dz-warning-muted-foreground)' },
       subtle: { background: 'var(--dz-warning-muted)', foreground: 'var(--dz-warning-muted-foreground)' },
       ghost: { foreground: 'var(--dz-warning-muted-foreground)' },

@@ -1,6 +1,6 @@
 # @dzup-ui/mcp
 
-**Use dzup-ui from your AI coding tool.** A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the whole [dzup-ui](https://dzup-ui.dev) ecosystem — **every Vue 3 component, block and full-page template, plus the `--dz-*` design tokens** — to Cursor, Claude Code, Windsurf and any other MCP client.
+**Use dzup-ui from your AI coding tool.** A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the whole [dzup-ui](https://dzup-ui.com) ecosystem — **every Vue 3 component, block and full-page template, plus the `--dz-*` design tokens** — to Cursor, Claude Code, Windsurf and any other MCP client.
 
 > Catalog sizes are deliberately not typed here. This README is not generated, so
 > any number in it would drift. The server reports live counts via `list_components`,
@@ -110,7 +110,7 @@ The server speaks MCP over **stdio**. Run `npx -y @dzup-ui/mcp` as the command w
 
 | Env var | Default | Purpose |
 | --- | --- | --- |
-| `DZUP_UI_REGISTRY_URL` | `https://dzup-ui.dev` | Origin the catalog is read from. Point it at a preview deploy, or at a **local repo checkout** during development (see below). |
+| `DZUP_UI_REGISTRY_URL` | `https://dzup-ui.com` | Origin the catalog is read from. Point it at a preview deploy, or at a **local repo checkout** during development (see below). |
 
 Against a preview deploy:
 
@@ -120,7 +120,7 @@ Against a preview deploy:
     "dzup-ui": {
       "command": "npx",
       "args": ["-y", "@dzup-ui/mcp"],
-      "env": { "DZUP_UI_REGISTRY_URL": "https://preview.dzup-ui.dev" }
+      "env": { "DZUP_UI_REGISTRY_URL": "https://preview.dzup-ui.com" }
     }
   }
 }
@@ -156,7 +156,7 @@ yarn workspace @dzup-ui/mcp inspect
 AI client (Cursor/Claude Code/Windsurf)
     │  MCP over stdio
     ▼
-@dzup-ui/mcp  ──fetch──▶  https://dzup-ui.dev
+@dzup-ui/mcp  ──fetch──▶  https://dzup-ui.com
                           ├─ /r/registry.json            (blocks index)
                           ├─ /r/<id>.json                (block source + deps)
                           ├─ /r/templates/registry.json  (templates index)

@@ -8,7 +8,7 @@ import {
   DzDropdownMenuSeparator,
   DzDropdownMenuTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDropdownMenuContent compound sub-parts: DzDropdownMenuTrigger, DzDropdownMenuItem,
@@ -30,6 +30,10 @@ const meta = {
     DzDropdownMenuSeparator,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
 } satisfies Meta<typeof DzDropdownMenuContent>
 
 export default meta

@@ -14,6 +14,15 @@
  *   - tokens.css      the --dz-* design-token stylesheet
  *   - core.css        base interaction utilities (.dz-focus-ring-*, …)
  *
+ * core.css is the stylesheet Rollup EXTRACTS from the bundle — `src/index.ts`
+ * side-effect-imports `./styles/base.css`, and components carry no `<style>` of
+ * their own (ADR-04: tv() + Tailwind), so the extracted asset is precisely the
+ * CSS this bundle needs. It is therefore not copied from packages/core/dist:
+ * extraction cannot drift from what the sandbox actually imports, and the
+ * playground no longer needs core to have been built. Keep `cssFileName` in
+ * sync with the <link> in stories/_blocks/playground.config.ts — a third name
+ * (`dzup-core.css`) was once linked and never written, 404ing on every load.
+ *
  * Tailwind utility classes used by components are generated at runtime in the
  * sandbox by the Tailwind v4 browser CDN (see DzRepl.ts headHTML), so we only
  * ship tokens + base css here, not a compiled utility sheet.
@@ -23,6 +32,7 @@
  * artifact regenerated from the current workspace source, so it always tracks
  * the current major version (requirement: "stays in sync").
  */
+import { existsSync } from 'node:fs'
 import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -33,6 +43,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const appRoot = resolve(__dirname, '..')
 const repoRoot = resolve(appRoot, '../..')
 const outDir = resolve(appRoot, 'public/playground')
+
+/** Every file the sandbox <head>/import-map references. Asserted after the build. */
+const PLAYGROUND_ASSETS = ['dzup-core.mjs', 'tokens.css', 'core.css']
 
 /** Workspace aliases — mirror .storybook/main.ts so we bundle from source. */
 const alias = [
@@ -66,9 +79,9 @@ async function run() {
         entry: resolve(repoRoot, 'packages/core/src/index.ts'),
         formats: ['es'],
         fileName: () => 'dzup-core.mjs',
-        // Deterministic name for the extracted SFC <style> output (scoped
-        // reduced-motion guards etc.) so the sandbox can link it.
-        cssFileName: 'dzup-core',
+        // Deterministic name for the extracted stylesheet (base.css, imported by
+        // src/index.ts) so the sandbox can link it. Default would be style.css.
+        cssFileName: 'core',
       },
       rollupOptions: {
         // Keep Vue external so the library and the REPL-compiled component share
@@ -81,9 +94,14 @@ async function run() {
   })
 
   await copyFile(resolve(repoRoot, 'packages/tokens/dist/tokens.css'), resolve(outDir, 'tokens.css'))
-  await copyFile(resolve(repoRoot, 'packages/core/dist/core.css'), resolve(outDir, 'core.css'))
 
-  console.log('[playground] wrote dzup-core.mjs + tokens.css + core.css to', outDir)
+  // Fail loudly rather than shipping a sandbox that links a stylesheet nobody wrote.
+  for (const asset of PLAYGROUND_ASSETS) {
+    if (!existsSync(resolve(outDir, asset)))
+      throw new Error(`expected ${asset} in ${outDir}, but the build did not produce it`)
+  }
+
+  console.log(`[playground] wrote ${PLAYGROUND_ASSETS.join(' + ')} to`, outDir)
 }
 
 run().catch((err) => {

@@ -20,7 +20,7 @@ colors:
     accent: "oklch(0.930 0.0022 260.0)"
     destructive: "oklch(0.550 0.2000 25.0)"
     success: "oklch(0.550 0.1600 145.0)"
-    warning: "oklch(0.550 0.1900 92.0)"
+    warning: "oklch(0.680 0.1558 92.0)"
     danger: "oklch(0.550 0.2000 25.0)"
     info: "oklch(0.550 0.1400 230.0)"
     card: "oklch(1 0 0)"
@@ -198,7 +198,7 @@ concrete OKLCH value so this table is self-contained.
 | `--dz-accent` | `oklch(0.930 0.0022 260.0)` | `oklch(0.310 0.0068 260.0)` | Hover / selected surfaces |
 | `--dz-destructive` | `oklch(0.550 0.2000 25.0)` | `oklch(0.680 0.1640 25.0)` | Destructive actions |
 | `--dz-success` | `oklch(0.550 0.1600 145.0)` | `oklch(0.680 0.1312 145.0)` | Success status |
-| `--dz-warning` | `oklch(0.550 0.1900 92.0)` | `oklch(0.680 0.1558 92.0)` | Warning status |
+| `--dz-warning` | `oklch(0.680 0.1558 92.0)` | `oklch(0.680 0.1558 92.0)` | Warning status |
 | `--dz-danger` | `oklch(0.550 0.2000 25.0)` | `oklch(0.680 0.1640 25.0)` | Error / danger status |
 | `--dz-info` | `oklch(0.550 0.1400 230.0)` | `oklch(0.680 0.1148 230.0)` | Informational status |
 | `--dz-card` | `oklch(1 0 0)` | `oklch(0.230 0.0052 260.0)` | Card surface |

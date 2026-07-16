@@ -4,7 +4,7 @@ A labelled specimen sheet of every DzButton variant, tone and size, plus icon an
 
 - **Category:** Buttons
 - **Components:** DzButton, DzText
-- **Preview:** /blocks#button-showcase
+- **Preview:** /blocks/button-showcase
 
 ```vue
 <script setup lang="ts">

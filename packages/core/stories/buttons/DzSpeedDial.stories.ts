@@ -3,7 +3,7 @@ import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from 'lucid
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzFab, DzSpeedDial } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * **DzSpeedDial** is a floating action button (DzFab) that fans out a set of
@@ -20,6 +20,8 @@ const meta = {
   component: DzSpeedDial,
   tags: ['autodocs', 'status:experimental'],
   parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
     layout: 'centered',
   },
   argTypes: {

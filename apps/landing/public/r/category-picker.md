@@ -4,7 +4,7 @@ A hierarchical classification panel — a filterable DzTreeSelect for a nested c
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzTreeSelect, DzCascader, DzDateRangePicker, DzFormField, DzFormLabel, DzFormDescription, DzButton, DzHeading, DzText
-- **Preview:** /blocks#category-picker
+- **Preview:** /blocks/category-picker
 
 ```vue
 <script setup lang="ts">

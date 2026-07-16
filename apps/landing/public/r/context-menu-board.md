@@ -4,7 +4,7 @@ A file canvas wrapped in a DzContextMenuTrigger — right-click (or the context-
 
 - **Category:** Overlays
 - **Components:** DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator, DzBadge, DzHeading, DzKbd, DzText
-- **Preview:** /blocks#context-menu-board
+- **Preview:** /blocks/context-menu-board
 
 ```vue
 <script setup lang="ts">

@@ -4,7 +4,7 @@ A dismissible feed of persistent DzNotifications inside an outlined panel — to
 
 - **Category:** Feedback
 - **Components:** DzNotification, DzCard, DzBadge, DzButton, DzHeading, DzText
-- **Preview:** /blocks#notification-center
+- **Preview:** /blocks/notification-center
 
 ```vue
 <script setup lang="ts">

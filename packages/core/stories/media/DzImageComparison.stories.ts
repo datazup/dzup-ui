@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzImageComparison } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 // Two deterministic, contrasting images so the reveal is obvious. picsum's
 // grayscale + blur filters give a clear "before (raw) / after (edited)" story.
@@ -22,6 +22,10 @@ const meta = {
   title: 'Core/Media/DzImageComparison',
   component: DzImageComparison,
   tags: ['autodocs', 'status:experimental'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     beforeSrc: {
       control: 'text',
@@ -196,7 +200,7 @@ export const Controlled: Story = {
       <div class="w-[32rem] max-w-full space-y-4">
         <DzImageComparison v-bind="args" v-model:position="pos" />
         <div class="flex items-center gap-3">
-          <input type="range" min="0" max="100" v-model.number="pos" class="flex-1" />
+          <input type="range" min="0" max="100" v-model.number="pos" class="flex-1" aria-label="Comparison position" />
           <span class="text-sm tabular-nums w-12 text-right">{{ Math.round(pos) }}%</span>
         </div>
         <div class="flex gap-2">

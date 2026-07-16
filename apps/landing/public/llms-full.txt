@@ -16,7 +16,7 @@ Eyebrow chip, headline, subhead and two call-to-action buttons, centered.
 
 - **Category:** Marketing
 - **Components:** DzBadge, DzHeading, DzText, DzButton
-- **Preview:** /blocks#hero-centered
+- **Preview:** /blocks/hero-centered
 
 ```vue
 <script setup lang="ts">
@@ -127,7 +127,7 @@ Copy and two CTAs on the left, a framed product image on the right; stacks to on
 
 - **Category:** Marketing
 - **Components:** DzBadge, DzHeading, DzText, DzButton, DzImage, DzAspectRatio
-- **Preview:** /blocks#hero-split
+- **Preview:** /blocks/hero-split
 
 ```vue
 <script setup lang="ts">
@@ -291,7 +291,7 @@ Responsive top bar with logo, nav links, search input, theme toggle, primary CTA
 
 - **Category:** Marketing
 - **Components:** DzButton, DzIconButton, DzSearchInput, DzColorModeToggle, DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzText
-- **Preview:** /blocks#nav-bar
+- **Preview:** /blocks/nav-bar
 
 ```vue
 <script setup lang="ts">
@@ -598,7 +598,7 @@ Six feature cards, each with a lucide icon, title, and short blurb; responsive 3
 
 - **Category:** Marketing
 - **Components:** DzCard, DzCardBody, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#feature-grid
+- **Preview:** /blocks/feature-grid
 
 ```vue
 <script setup lang="ts">
@@ -793,7 +793,7 @@ A horizontal band of four key metrics with icon, trend indicator, and an animate
 
 - **Category:** Marketing
 - **Components:** DzStatCard, DzAnimatedNumber
-- **Preview:** /blocks#stats-band
+- **Preview:** /blocks/stats-band
 
 ```vue
 <script setup lang="ts">
@@ -944,7 +944,7 @@ Free / Pro / Enterprise pricing cards with feature lists, a "Most popular" badge
 
 - **Category:** Marketing
 - **Components:** DzCard, DzBadge, DzButton, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#pricing-3
+- **Preview:** /blocks/pricing-3
 
 ```vue
 <script setup lang="ts">
@@ -1284,7 +1284,7 @@ Grid of customer quote cards each with a star rating, avatar, name/role, and quo
 
 - **Category:** Marketing
 - **Components:** DzCard, DzAvatar, DzRating, DzHeading, DzText
-- **Preview:** /blocks#testimonials
+- **Preview:** /blocks/testimonials
 
 ```vue
 <script setup lang="ts">
@@ -1542,7 +1542,7 @@ Six Q&A items in a separated collapsible accordion with a section header and a c
 
 - **Category:** Marketing
 - **Components:** DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent, DzHeading, DzText
-- **Preview:** /blocks#faq
+- **Preview:** /blocks/faq
 
 ```vue
 <script setup lang="ts">
@@ -1719,7 +1719,7 @@ Closing call-to-action with headline, subtext, and two buttons on a token gradie
 
 - **Category:** Marketing
 - **Components:** DzHeading, DzText, DzButton
-- **Preview:** /blocks#cta-band
+- **Preview:** /blocks/cta-band
 
 ```vue
 <script setup lang="ts">
@@ -1834,7 +1834,7 @@ Brand blurb, four link columns, social icon buttons, and a theme toggle; collaps
 
 - **Category:** Marketing
 - **Components:** DzText, DzDivider, DzIconButton, DzColorModeToggle
-- **Preview:** /blocks#footer
+- **Preview:** /blocks/footer
 
 ```vue
 <script setup lang="ts">
@@ -2119,7 +2119,7 @@ Collapsible sidebar nav, breadcrumb top bar and user avatar menu inside a constr
 
 - **Category:** Application
 - **Components:** DzAppShell, DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter, DzBreadcrumb, DzBreadcrumbItem, DzAvatar, DzBadge, DzButton, DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzHeading, DzText
-- **Preview:** /blocks#app-shell
+- **Preview:** /blocks/app-shell
 
 ```vue
 <script setup lang="ts">
@@ -2197,7 +2197,7 @@ const secondaryNav = [
         <DzSidebar
           :collapsed="sidebarCollapsed"
           aria-label="Primary navigation"
-          @update:collapsed="(v) => (sidebarCollapsed = v)"
+          @update:collapsed="(v) => (sidebarCollapsed = v === true)"
         >
           <DzSidebarHeader>
             <span class="brand">
@@ -2380,7 +2380,7 @@ Breadcrumb trail, page title with inline status badge, and a row of contextual a
 
 - **Category:** Application
 - **Components:** DzBreadcrumb, DzBreadcrumbItem, DzHeading, DzBadge, DzButton
-- **Preview:** /blocks#page-header
+- **Preview:** /blocks/page-header
 
 ```vue
 <script setup lang="ts">
@@ -2502,7 +2502,7 @@ Four KPI cards with up/down/neutral trend deltas in a responsive 4→2→1 colum
 
 - **Category:** Application
 - **Components:** DzStatCard
-- **Preview:** /blocks#stat-row
+- **Preview:** /blocks/stat-row
 
 ```vue
 <script setup lang="ts">
@@ -2602,7 +2602,7 @@ Outlined card with a search + segmented filter toolbar, a hoverable data table w
 
 - **Category:** Application
 - **Components:** DzCard, DzSearchInput, DzSegmented, DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell, DzAvatar, DzBadge, DzPagination, DzText
-- **Preview:** /blocks#table-card
+- **Preview:** /blocks/table-card
 
 ```vue
 <script setup lang="ts">
@@ -2621,6 +2621,7 @@ import {
   DzAvatar,
   DzBadge,
   DzCard,
+  DzHeading,
   DzPagination,
   DzSearchInput,
   DzSegmented,
@@ -2702,7 +2703,7 @@ function onFilter(value: string) {
     <DzCard variant="outlined" padding="none">
       <!-- Toolbar -->
       <div class="tc-toolbar">
-        <DzText id="tc-title" weight="semibold" as="h4" class="tc-card-title">Team members</DzText>
+        <DzHeading id="tc-title" :level="4" size="md" weight="semibold" class="tc-card-title">Team members</DzHeading>
         <div class="tc-controls">
           <DzSearchInput
             v-model="query"
@@ -2850,7 +2851,7 @@ Styled icon illustration, heading, supporting copy and a primary call-to-action 
 
 - **Category:** Application
 - **Components:** DzEmpty, DzButton
-- **Preview:** /blocks#empty-state
+- **Preview:** /blocks/empty-state
 
 ```vue
 <script setup lang="ts">
@@ -2923,7 +2924,7 @@ Horizontal tab nav over three panels — profile form fields, notification switc
 
 - **Category:** Application
 - **Components:** DzTabs, DzTabList, DzTabTrigger, DzTabContent, DzFormField, DzFormLabel, DzFormDescription, DzInput, DzSelect, DzSwitch, DzDivider, DzButton, DzText
-- **Preview:** /blocks#settings-layout
+- **Preview:** /blocks/settings-layout
 
 ```vue
 <script setup lang="ts">
@@ -2950,6 +2951,7 @@ import {
   DzFormDescription,
   DzFormField,
   DzFormLabel,
+  DzHeading,
   DzInput,
   DzSelect,
   DzSwitch,
@@ -3004,7 +3006,7 @@ const reduceMotion = ref(false)
       <DzTabContent value="profile">
         <div class="panel">
           <header class="panel-head">
-            <DzText weight="semibold" as="h4" class="panel-title">Public profile</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Public profile</DzHeading>
             <DzText size="sm" tone="muted" as="p">
               This information is visible to your teammates.
             </DzText>
@@ -3033,7 +3035,7 @@ const reduceMotion = ref(false)
       <DzTabContent value="notifications">
         <div class="panel">
           <header class="panel-head">
-            <DzText weight="semibold" as="h4" class="panel-title">Email notifications</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Email notifications</DzHeading>
             <DzText size="sm" tone="muted" as="p">
               Choose what Acme sends to your inbox.
             </DzText>
@@ -3079,7 +3081,7 @@ const reduceMotion = ref(false)
       <DzTabContent value="appearance">
         <div class="panel">
           <header class="panel-head">
-            <DzText weight="semibold" as="h4" class="panel-title">Appearance</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Appearance</DzHeading>
             <DzText size="sm" tone="muted" as="p">Customize how the app looks for you.</DzText>
           </header>
 
@@ -3191,7 +3193,7 @@ A spanning "bento box" dashboard laid out with DzGrid — a 2×2 revenue hero, a
 
 - **Category:** Layout
 - **Components:** DzGrid, DzPanel, DzAspectRatio, DzDivider, DzBadge, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#bento-grid
+- **Preview:** /blocks/bento-grid
 
 ```vue
 <script setup lang="ts">
@@ -3485,7 +3487,7 @@ An IDE-style three-pane shell built on DzResizable — a collapsible file explor
 
 - **Category:** Layout
 - **Components:** DzResizable, DzResizablePanel, DzResizableHandle, DzScrollArea, DzToolbar, DzDivider, DzBadge, DzIcon, DzText
-- **Preview:** /blocks#resizable-workspace
+- **Preview:** /blocks/resizable-workspace
 
 ```vue
 <script setup lang="ts">
@@ -3774,7 +3776,7 @@ A Pinterest-style cascading board built on DzMasonry — variable-height DzCards
 
 - **Category:** Layout
 - **Components:** DzMasonry, DzAspectRatio, DzCard, DzAvatar, DzBadge, DzTag, DzHeading, DzText
-- **Preview:** /blocks#masonry-gallery
+- **Preview:** /blocks/masonry-gallery
 
 ```vue
 <script setup lang="ts">
@@ -3979,7 +3981,7 @@ A documentation shell where the "On this page" nav pins on scroll via DzAffix �
 
 - **Category:** Layout
 - **Components:** DzAffix, DzContainer, DzFlex, DzScrollArea, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#sticky-aside
+- **Preview:** /blocks/sticky-aside
 
 ```vue
 <script setup lang="ts">
@@ -4289,7 +4291,7 @@ A design-tool shell — a DzToolbar with start/center/end regions over a vertica
 
 - **Category:** Layout
 - **Components:** DzToolbar, DzFlex, DzSpacer, DzScrollArea, DzPanel, DzDivider, DzIconButton, DzBadge, DzIcon, DzText
-- **Preview:** /blocks#toolbar-canvas
+- **Preview:** /blocks/toolbar-canvas
 
 ```vue
 <script setup lang="ts">
@@ -4642,7 +4644,7 @@ A whole landing page assembled from layout primitives only — DzContainer for m
 
 - **Category:** Layout
 - **Components:** DzContainer, DzGrid, DzFlex, DzStack, DzSpacer, DzDivider, DzButton, DzBadge, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#page-scaffold
+- **Preview:** /blocks/page-scaffold
 
 ```vue
 <script setup lang="ts">
@@ -4997,7 +4999,7 @@ A settings page of expandable DzPanels (each owning its open state via v-model:c
 
 - **Category:** Layout
 - **Components:** DzPanel, DzCollapse, DzContainer, DzStack, DzDivider, DzSwitch, DzButton, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#collapsible-sections
+- **Preview:** /blocks/collapsible-sections
 
 ```vue
 <script setup lang="ts">
@@ -5195,7 +5197,7 @@ An asymmetric image grid where every ratio-stable DzImage tile (framed by DzAspe
 
 - **Category:** Media
 - **Components:** DzImage, DzAspectRatio, DzLightbox, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-gallery
+- **Preview:** /blocks/media-gallery
 
 ```vue
 <script setup lang="ts">
@@ -5459,7 +5461,7 @@ A looping, autoplaying DzCarousel of DzImage slides with gradient captions, hove
 
 - **Category:** Media
 - **Components:** DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots, DzImage, DzAspectRatio, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-carousel
+- **Preview:** /blocks/media-carousel
 
 ```vue
 <script setup lang="ts">
@@ -5657,7 +5659,7 @@ A draggable, keyboard-operable DzImageComparison revealing a graded edit over th
 
 - **Category:** Media
 - **Components:** DzImageComparison, DzImage, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-comparison
+- **Preview:** /blocks/media-comparison
 
 ```vue
 <script setup lang="ts">
@@ -5814,7 +5816,7 @@ A stacked DzAvatarGroup with a "+N" overflow chip over a member list, each row p
 
 - **Category:** Media
 - **Components:** DzAvatarGroup, DzAvatar, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-team
+- **Preview:** /blocks/media-team
 
 ```vue
 <script setup lang="ts">
@@ -6014,7 +6016,7 @@ A "continue on mobile" card built around DzQRCode — a token-styled SVG code wi
 
 - **Category:** Media
 - **Components:** DzQRCode, DzButton, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-qr
+- **Preview:** /blocks/media-qr
 
 ```vue
 <script setup lang="ts">
@@ -6203,7 +6205,7 @@ A confidential asset draped in a tiled, rotated DzWatermark over a framed DzImag
 
 - **Category:** Media
 - **Components:** DzWatermark, DzImage, DzAspectRatio, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-watermark
+- **Preview:** /blocks/media-watermark
 
 ```vue
 <script setup lang="ts">
@@ -6351,7 +6353,7 @@ A DzDataGrid of deployments with sortable columns, multi-row selection, a pagina
 
 - **Category:** Data display
 - **Components:** DzDataGrid, DzCard, DzAvatar, DzBadge, DzTag, DzText
-- **Preview:** /blocks#data-grid
+- **Preview:** /blocks/data-grid
 
 ```vue
 <script setup lang="ts">
@@ -6539,7 +6541,7 @@ A vertical DzTimeline feed of events — tone-coded dots, timestamp statuses, av
 
 - **Category:** Data display
 - **Components:** DzTimeline, DzTimelineItem, DzAvatar, DzBadge, DzTag, DzText, DzCard
-- **Preview:** /blocks#activity-timeline
+- **Preview:** /blocks/activity-timeline
 
 ```vue
 <script setup lang="ts">
@@ -6709,7 +6711,7 @@ A read-only label/value record view built from DzDescriptions — a responsive, 
 
 - **Category:** Data display
 - **Components:** DzDescriptions, DzDescriptionsItem, DzBadge, DzTag, DzButton, DzText, DzCard
-- **Preview:** /blocks#detail-descriptions
+- **Preview:** /blocks/detail-descriptions
 
 ```vue
 <script setup lang="ts">
@@ -6835,7 +6837,7 @@ A hierarchical DzTree with per-node lucide icons, expand/collapse and selection 
 
 - **Category:** Data display
 - **Components:** DzTree, DzCard, DzBadge, DzText
-- **Preview:** /blocks#file-tree
+- **Preview:** /blocks/file-tree
 
 ```vue
 <script setup lang="ts">
@@ -7008,7 +7010,7 @@ A DzDataView template marketplace with a list/grid layout toggle, client-side so
 
 - **Category:** Data display
 - **Components:** DzDataView, DzCard, DzBadge, DzTag, DzButton, DzText
-- **Preview:** /blocks#collection-gallery
+- **Preview:** /blocks/collection-gallery
 
 ```vue
 <script setup lang="ts">
@@ -7232,7 +7234,7 @@ A ranked DzList where each row pairs a rank badge + avatar prefix with a DzAnima
 
 - **Category:** Data display
 - **Components:** DzList, DzListItem, DzAnimatedNumber, DzAvatar, DzBadge, DzTag, DzButton, DzText, DzCard
-- **Preview:** /blocks#leaderboard
+- **Preview:** /blocks/leaderboard
 
 ```vue
 <script setup lang="ts">
@@ -7403,7 +7405,7 @@ A launch banner driven by DzCountdown — its slot renders labelled day/hour/min
 
 - **Category:** Data display
 - **Components:** DzCountdown, DzAnimatedNumber, DzBadge, DzHeading, DzButton, DzText
-- **Preview:** /blocks#release-countdown
+- **Preview:** /blocks/release-countdown
 
 ```vue
 <script setup lang="ts">
@@ -7587,7 +7589,7 @@ A column of inline DzAlerts spanning the variant taxonomy and tones — info, su
 
 - **Category:** Feedback
 - **Components:** DzAlert, DzButton, DzHeading, DzText
-- **Preview:** /blocks#alert-stack
+- **Preview:** /blocks/alert-stack
 
 ```vue
 <script setup lang="ts">
@@ -7697,7 +7699,7 @@ A dismissible feed of persistent DzNotifications inside an outlined panel — to
 
 - **Category:** Feedback
 - **Components:** DzNotification, DzCard, DzBadge, DzButton, DzHeading, DzText
-- **Preview:** /blocks#notification-center
+- **Preview:** /blocks/notification-center
 
 ```vue
 <script setup lang="ts">
@@ -7846,7 +7848,7 @@ The compound toast system wired up — DzToastProvider owns a capped, auto-dismi
 
 - **Category:** Feedback
 - **Components:** DzToastProvider, DzToastViewport, DzToast, DzButton, DzHeading, DzText
-- **Preview:** /blocks#toast-launcher
+- **Preview:** /blocks/toast-launcher
 
 ```vue
 <script setup lang="ts">
@@ -7968,7 +7970,7 @@ A content card that flips between loading and loaded — an indeterminate DzProg
 
 - **Category:** Feedback
 - **Components:** DzSkeleton, DzSpinner, DzProgress, DzCard, DzAvatar, DzButton, DzHeading, DzText
-- **Preview:** /blocks#loading-states
+- **Preview:** /blocks/loading-states
 
 ```vue
 <script setup lang="ts">
@@ -8151,7 +8153,7 @@ A quota dashboard pairing a segmented DzMeterGroup storage breakdown (with legen
 
 - **Category:** Feedback
 - **Components:** DzMeterGroup, DzProgress, DzCard, DzBadge, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#usage-meters
+- **Preview:** /blocks/usage-meters
 
 ```vue
 <script setup lang="ts">
@@ -8331,7 +8333,7 @@ Full-page outcome screens from DzResult — a segmented switch across the succes
 
 - **Category:** Feedback
 - **Components:** DzResult, DzCard, DzButton
-- **Preview:** /blocks#result-states
+- **Preview:** /blocks/result-states
 
 ```vue
 <script setup lang="ts">
@@ -8439,7 +8441,7 @@ A ⌘K command palette (DzCommandPalette) — a search-field launcher with a DzK
 
 - **Category:** Overlays
 - **Components:** DzCommandPalette, DzKbd, DzHeading, DzText
-- **Preview:** /blocks#command-menu
+- **Preview:** /blocks/command-menu
 
 ```vue
 <script setup lang="ts">
@@ -8627,7 +8629,7 @@ A product top bar with a rich DzDropdownMenu account menu — avatar trigger, an
 
 - **Category:** Overlays
 - **Components:** DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzAvatar, DzBadge, DzIconButton, DzKbd, DzText
-- **Preview:** /blocks#account-menu
+- **Preview:** /blocks/account-menu
 
 ```vue
 <script setup lang="ts">
@@ -8887,7 +8889,7 @@ A file canvas wrapped in a DzContextMenuTrigger — right-click (or the context-
 
 - **Category:** Overlays
 - **Components:** DzContextMenu, DzContextMenuTrigger, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator, DzBadge, DzHeading, DzKbd, DzText
-- **Preview:** /blocks#context-menu-board
+- **Preview:** /blocks/context-menu-board
 
 ```vue
 <script setup lang="ts">
@@ -9098,7 +9100,7 @@ Two DzPopover patterns side by side — a profile hover card (avatar, bio, follo
 
 - **Category:** Overlays
 - **Components:** DzPopover, DzPopoverTrigger, DzPopoverContent, DzAvatar, DzBadge, DzButton, DzDivider, DzSwitch, DzHeading, DzText
-- **Preview:** /blocks#info-popovers
+- **Preview:** /blocks/info-popovers
 
 ```vue
 <script setup lang="ts">
@@ -9383,7 +9385,7 @@ A formatting toolbar where every DzIconButton is wrapped in a DzTooltip revealin
 
 - **Category:** Overlays
 - **Components:** DzTooltip, DzTooltipTrigger, DzTooltipContent, DzIconButton, DzKbd, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#tooltip-toolbar
+- **Preview:** /blocks/tooltip-toolbar
 
 ```vue
 <script setup lang="ts">
@@ -9563,7 +9565,7 @@ A focus-trapped modal form built from the DzDialog compound — a trigger button
 
 - **Category:** Overlays
 - **Components:** DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton, DzInput, DzTextarea, DzSelect, DzFormField, DzFormLabel, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#create-dialog
+- **Preview:** /blocks/create-dialog
 
 ```vue
 <script setup lang="ts">
@@ -9795,7 +9797,7 @@ A "danger zone" panel pairing the two confirmation patterns — heavy actions ro
 
 - **Category:** Overlays
 - **Components:** DzConfirmDialog, DzPopconfirm, DzButton, DzIconButton, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#confirm-actions
+- **Preview:** /blocks/confirm-actions
 
 ```vue
 <script setup lang="ts">
@@ -10042,7 +10044,7 @@ A slide-out record panel (DzSheet) — an orders list where each row opens a rig
 
 - **Category:** Overlays
 - **Components:** DzSheet, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzAvatar, DzBadge, DzButton, DzIconButton, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#detail-sheet
+- **Preview:** /blocks/detail-sheet
 
 ```vue
 <script setup lang="ts">
@@ -10361,7 +10363,7 @@ A spotlight onboarding walkthrough (DzTour) over a mini dashboard — "Start tou
 
 - **Category:** Overlays
 - **Components:** DzTour, DzButton, DzIconButton, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#product-tour
+- **Preview:** /blocks/product-tour
 
 ```vue
 <script setup lang="ts">
@@ -10580,7 +10582,7 @@ A labelled specimen sheet of every DzButton variant, tone and size, plus icon an
 
 - **Category:** Buttons
 - **Components:** DzButton, DzText
-- **Preview:** /blocks#button-showcase
+- **Preview:** /blocks/button-showcase
 
 ```vue
 <script setup lang="ts">
@@ -10703,7 +10705,7 @@ A document toolbar built from the Buttons family — toggle buttons for inline f
 
 - **Category:** Buttons
 - **Components:** DzToggleButton, DzIconButton, DzCopyButton, DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu, DzText
-- **Preview:** /blocks#editor-toolbar
+- **Preview:** /blocks/editor-toolbar
 
 ```vue
 <script setup lang="ts">
@@ -10925,7 +10927,7 @@ DzButtonGroup wiring child buttons into connected controls — a live view switc
 
 - **Category:** Buttons
 - **Components:** DzButtonGroup, DzButton, DzText
-- **Preview:** /blocks#button-groups
+- **Preview:** /blocks/button-groups
 
 ```vue
 <script setup lang="ts">
@@ -11060,7 +11062,7 @@ A stacked column of full-width provider buttons (Google, GitHub, Apple), a label
 
 - **Category:** Buttons
 - **Components:** DzButton, DzDivider, DzText
-- **Preview:** /blocks#social-auth-buttons
+- **Preview:** /blocks/social-auth-buttons
 
 ```vue
 <script setup lang="ts">
@@ -11188,7 +11190,7 @@ Circular elevated affordances — DzFab across tones and variants, and a DzSpeed
 
 - **Category:** Buttons
 - **Components:** DzFab, DzSpeedDial, DzText
-- **Preview:** /blocks#floating-actions
+- **Preview:** /blocks/floating-actions
 
 ```vue
 <script setup lang="ts">
@@ -11328,7 +11330,7 @@ Centered card with email, password, remember-me checkbox, forgot-password link, 
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzCheckbox, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#sign-in
+- **Preview:** /blocks/sign-in
 
 ```vue
 <script setup lang="ts">
@@ -11534,7 +11536,7 @@ Centered card with name, email, password plus a live strength meter, terms check
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzProgress, DzCheckbox, DzButton, DzHeading, DzText
-- **Preview:** /blocks#sign-up
+- **Preview:** /blocks/sign-up
 
 ```vue
 <script setup lang="ts">
@@ -11751,7 +11753,7 @@ Sign-in form left, token-gradient brand/marketing panel right; collapses to sing
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#auth-split
+- **Preview:** /blocks/auth-split
 
 ```vue
 <script setup lang="ts">
@@ -11998,7 +12000,7 @@ Three-step onboarding wizard with stepper nav, per-step form fields, Back/Contin
 
 - **Category:** Auth & Forms
 - **Components:** DzStepper, DzStepperItem, DzFormField, DzFormLabel, DzInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#wizard
+- **Preview:** /blocks/wizard
 
 ```vue
 <script setup lang="ts">
@@ -12311,7 +12313,7 @@ A one-time-code card: a 6-digit DzOtpInput, a Verify button that enables once th
 
 - **Category:** Auth & Forms
 - **Components:** DzOtpInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#otp-verify
+- **Preview:** /blocks/otp-verify
 
 ```vue
 <script setup lang="ts">
@@ -12515,7 +12517,7 @@ A two-state reset-request card — a validated email field (inline error via DzF
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzFormMessage, DzInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#forgot-password
+- **Preview:** /blocks/forgot-password
 
 ```vue
 <script setup lang="ts">
@@ -12719,7 +12721,7 @@ A focused subscribe card — an email DzInput with a mail-icon prefix and inline
 
 - **Category:** Forms & Inputs
 - **Components:** DzInput, DzCheckbox, DzButton, DzHeading, DzText
-- **Preview:** /blocks#newsletter-form
+- **Preview:** /blocks/newsletter-form
 
 ```vue
 <script setup lang="ts">
@@ -12944,7 +12946,7 @@ A labeled "get in touch" card: two-column name/email row, topic select, message 
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput, DzSelect, DzTextarea, DzCheckbox, DzButton, DzHeading, DzText
-- **Preview:** /blocks#contact-form
+- **Preview:** /blocks/contact-form
 
 ```vue
 <script setup lang="ts">
@@ -13150,7 +13152,7 @@ A checkout card showcasing masked and grouped inputs: DzInputMask formats the ca
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzInputMask, DzInputGroup, DzSelect, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#payment-form
+- **Preview:** /blocks/payment-form
 
 ```vue
 <script setup lang="ts">
@@ -13381,7 +13383,7 @@ A rating + survey card built from the scale controls — a half-step star DzRati
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzRating, DzRadioGroup, DzRadio, DzSlider, DzTextarea, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#feedback-form
+- **Preview:** /blocks/feedback-form
 
 ```vue
 <script setup lang="ts">
@@ -13579,7 +13581,7 @@ A product-listing filter rail: search input, category checkbox group, a dual-thu
 
 - **Category:** Forms & Inputs
 - **Components:** DzSearchInput, DzCheckboxGroup, DzCheckbox, DzRangeSlider, DzRadioGroup, DzRadio, DzSwitch, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#filter-panel
+- **Preview:** /blocks/filter-panel
 
 ```vue
 <script setup lang="ts">
@@ -13805,7 +13807,7 @@ A broad account panel: a file-upload avatar drop zone, name/username inputs, a r
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFileUpload, DzInput, DzTextarea, DzTagsInput, DzSelect, DzSwitch, DzFormField, DzFormLabel, DzFormDescription, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#profile-form
+- **Preview:** /blocks/profile-form
 
 ```vue
 <script setup lang="ts">
@@ -14035,7 +14037,7 @@ A reservation card pairing the date/time/number controls — a DzDatePicker day,
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzDatePicker, DzTimePicker, DzNumberInput, DzSelect, DzFormField, DzFormLabel, DzFormDescription, DzButton, DzHeading, DzText
-- **Preview:** /blocks#booking-form
+- **Preview:** /blocks/booking-form
 
 ```vue
 <script setup lang="ts">
@@ -14202,7 +14204,7 @@ A "create issue" panel built from the selection inputs — a searchable DzCombob
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzCombobox, DzMultiSelect, DzListbox, DzInput, DzTextarea, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#record-form
+- **Preview:** /blocks/record-form
 
 ```vue
 <script setup lang="ts">
@@ -14394,7 +14396,7 @@ A hierarchical classification panel — a filterable DzTreeSelect for a nested c
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzTreeSelect, DzCascader, DzDateRangePicker, DzFormField, DzFormLabel, DzFormDescription, DzButton, DzHeading, DzText
-- **Preview:** /blocks#category-picker
+- **Preview:** /blocks/category-picker
 
 ```vue
 <script setup lang="ts">
@@ -14590,7 +14592,7 @@ A brand/theme customizer with a live preview — a DzColorPicker (presets + hex 
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzColorPicker, DzKnob, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#appearance-editor
+- **Preview:** /blocks/appearance-editor
 
 ```vue
 <script setup lang="ts">
@@ -14822,7 +14824,7 @@ A dynamic line-items editor — a DzInplace click-to-edit "Bill to" field over a
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFieldArray, DzInplace, DzInput, DzNumberInput, DzIconButton, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#invoice-builder
+- **Preview:** /blocks/invoice-builder
 
 ```vue
 <script setup lang="ts">
@@ -15079,7 +15081,7 @@ A sharing / permissions panel — a searchable DzTransfer dual-list of capabilit
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzTransfer, DzPersonaSelector, DzMention, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#access-transfer
+- **Preview:** /blocks/access-transfer
 
 ```vue
 <script setup lang="ts">
@@ -15237,7 +15239,7 @@ A compact, modern contact variant — each control wrapped in a DzFloatLabel (no
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFloatLabel, DzInput, DzSelect, DzTextarea, DzButton, DzHeading, DzText
-- **Preview:** /blocks#float-label-form
+- **Preview:** /blocks/float-label-form
 
 ```vue
 <script setup lang="ts">
@@ -15372,7 +15374,7 @@ A storefront grid of product cards — image with a sale/new corner badge, name,
 
 - **Category:** Commerce
 - **Components:** DzImageCard, DzBadge, DzRating, DzButton, DzHeading, DzText
-- **Preview:** /blocks#product-grid
+- **Preview:** /blocks/product-grid
 
 ```vue
 <script setup lang="ts">
@@ -15632,7 +15634,7 @@ A two-column product page — a looping DzCarousel gallery beside a buy box with
 
 - **Category:** Commerce
 - **Components:** DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots, DzImage, DzAspectRatio, DzRating, DzButton, DzTabs, DzTabList, DzTabTrigger, DzTabContent, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#product-detail
+- **Preview:** /blocks/product-detail
 
 ```vue
 <script setup lang="ts">
@@ -15953,7 +15955,7 @@ An editable cart — a divided list of line items each with a thumbnail, a clamp
 
 - **Category:** Commerce
 - **Components:** DzList, DzListItem, DzNumberInput, DzButton, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#cart-summary
+- **Preview:** /blocks/cart-summary
 
 ```vue
 <script setup lang="ts">
@@ -16232,7 +16234,7 @@ An order review panel — a DzDescriptions ship-to / delivery / payment grid, an
 
 - **Category:** Commerce
 - **Components:** DzDescriptions, DzDescriptionsItem, DzInput, DzButton, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#checkout-summary
+- **Preview:** /blocks/checkout-summary
 
 ```vue
 <script setup lang="ts">
@@ -16518,7 +16520,7 @@ The title bar above a product listing — a breadcrumb trail, category heading w
 
 - **Category:** Commerce
 - **Components:** DzHeading, DzSelect, DzSegmented, DzBreadcrumb, DzBreadcrumbItem, DzText
-- **Preview:** /blocks#category-header
+- **Preview:** /blocks/category-header
 
 ```vue
 <script setup lang="ts">
@@ -16670,7 +16672,7 @@ A fulfilment timeline for a single order — a DzStepper rail from placed to del
 
 - **Category:** Commerce
 - **Components:** DzStepper, DzStepperItem, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#order-status
+- **Preview:** /blocks/order-status
 
 ```vue
 <script setup lang="ts">
@@ -16851,7 +16853,7 @@ A grid of editorial cards — cover image with a category badge overlay, title, 
 
 - **Category:** Content
 - **Components:** DzImageCard, DzBadge, DzAvatar, DzText
-- **Preview:** /blocks#blog-list
+- **Preview:** /blocks/blog-list
 
 ```vue
 <script setup lang="ts">
@@ -17112,7 +17114,7 @@ A long-form masthead — category eyebrow, title and standfirst, a byline pairin
 
 - **Category:** Content
 - **Components:** DzHeading, DzText, DzAvatar, DzTag, DzRelativeTime
-- **Preview:** /blocks#article-header
+- **Preview:** /blocks/article-header
 
 ```vue
 <script setup lang="ts">
@@ -17262,7 +17264,7 @@ A typographic article body composed from the long-form primitives — DzHeading 
 
 - **Category:** Content
 - **Components:** DzHeading, DzText, DzBlockquote, DzCode, DzDivider
-- **Preview:** /blocks#prose
+- **Preview:** /blocks/prose
 
 ```vue
 <script setup lang="ts">
@@ -17424,7 +17426,7 @@ A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with 
 
 - **Category:** Content
 - **Components:** DzCodeBlock, DzCopyButton, DzTabs, DzTabList, DzTabTrigger, DzTabContent
-- **Preview:** /blocks#code-showcase
+- **Preview:** /blocks/code-showcase
 
 ```vue
 <script setup lang="ts">
@@ -17568,7 +17570,7 @@ A docs layout where a sticky DzAnchor "On this page" nav scrollspy-highlights th
 
 - **Category:** Content
 - **Components:** DzAnchor, DzText
-- **Preview:** /blocks#toc-aside
+- **Preview:** /blocks/toc-aside
 
 ```vue
 <script setup lang="ts">
@@ -17751,7 +17753,7 @@ Questions grouped into two labelled DzAccordion columns (separated, single + col
 
 - **Category:** Content
 - **Components:** DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent, DzHeading, DzText
-- **Preview:** /blocks#faq-2col
+- **Preview:** /blocks/faq-2col
 
 ```vue
 <script setup lang="ts">

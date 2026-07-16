@@ -7,7 +7,7 @@ import {
   DzCarouselPrevious,
   DzCarouselSlide,
 } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzCarousel compound sub-parts: DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots.
@@ -31,6 +31,10 @@ const meta = {
     DzCarouselPrevious,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
 } satisfies Meta<typeof DzCarouselSlide>
 
 export default meta

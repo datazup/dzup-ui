@@ -4,7 +4,7 @@ A fulfilment timeline for a single order — a DzStepper rail from placed to del
 
 - **Category:** Commerce
 - **Components:** DzStepper, DzStepperItem, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#order-status
+- **Preview:** /blocks/order-status
 
 ```vue
 <script setup lang="ts">

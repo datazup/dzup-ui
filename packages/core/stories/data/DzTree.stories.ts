@@ -4,13 +4,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzTree } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzTree displays hierarchical data in an expandable/collapsible tree structure.
- * It supports node selection, checkboxes, and custom node rendering via the item slot.
- *
- * DzTree provides context to DzTreeItem children via inject (ADR-08).
- */
-
 // ---------------------------------------------------------------------------
 // Sample data
 // ---------------------------------------------------------------------------
@@ -87,6 +80,12 @@ const orgTree: TreeNode[] = [
 // Meta
 // ---------------------------------------------------------------------------
 
+/**
+ * DzTree displays hierarchical data in an expandable/collapsible tree structure.
+ * It supports node selection, checkboxes, and custom node rendering via the item slot.
+ *
+ * DzTree provides context to DzTreeItem children via inject (ADR-08).
+ */
 const meta = {
   title: 'Core/Data/DzTree',
   component: DzTree,

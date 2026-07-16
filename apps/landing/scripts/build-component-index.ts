@@ -27,7 +27,7 @@
  * Run with: `yarn build:component-index` (from apps/landing).
  */
 
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -37,7 +37,7 @@ const LANDING_ROOT = resolve(__dirname, '..')
 /** `@dzup-ui/core` stories root — the source of truth for per-component pages. */
 const STORIES_DIR = resolve(LANDING_ROOT, '..', '..', 'packages', 'core', 'stories')
 
-/** Generated module the app imports (untracked, like `generated/liveStats.ts`). */
+/** Generated module the app imports — committed; see `src/generated/README.md`. */
 const OUT_FILE = resolve(LANDING_ROOT, 'src', 'generated', 'components.ts')
 
 /**
@@ -45,7 +45,7 @@ const OUT_FILE = resolve(LANDING_ROOT, 'src', 'generated', 'components.ts')
  * stories root. Order here is the display order in the palette's Components group.
  * Labels mirror `FAMILIES` in `src/data.ts`.
  */
-const FAMILIES: { dir: string; label: string }[] = [
+const FAMILIES: { dir: string, label: string }[] = [
   { dir: 'buttons', label: 'Buttons' },
   { dir: 'inputs', label: 'Inputs' },
   { dir: 'forms', label: 'Forms' },
@@ -90,18 +90,21 @@ function toStoryId(title: string): string {
  * assumed absent (assuming they were absent silently dropped two real
  * components out of the palette).
  */
-function readComponentTitle(source: string): { name: string; title: string } | null {
+function readComponentTitle(source: string): { name: string, title: string } | null {
   const match = source.match(/title:\s*['"](Core\/(?:[A-Za-z0-9-]+\/)+?(Dz[A-Za-z0-9]+))['"]/)
-  if (!match) return null
+  if (!match)
+    return null
   const title = match[1]
   const name = match[2]
-  if (!title || !name) return null
+  if (!title || !name)
+    return null
   // Guard: skip compound sub-part bundles (their name ends in `Parts`).
-  if (name.endsWith('Parts')) return null
+  if (name.endsWith('Parts'))
+    return null
   return { name, title }
 }
 
-async function collectFamily(family: { dir: string; label: string }): Promise<ComponentRow[]> {
+async function collectFamily(family: { dir: string, label: string }): Promise<ComponentRow[]> {
   const dir = resolve(STORIES_DIR, family.dir)
   let entries: string[]
   try {
@@ -115,10 +118,12 @@ async function collectFamily(family: { dir: string; label: string }): Promise<Co
   for (const file of entries.sort()) {
     // Only per-component story modules; the "…Parts" bundles are skipped here and
     // again by name in readComponentTitle (belt and suspenders).
-    if (!file.endsWith('.stories.ts') || file.endsWith('Parts.stories.ts')) continue
+    if (!file.endsWith('.stories.ts') || file.endsWith('Parts.stories.ts'))
+      continue
     const source = await readFile(resolve(dir, file), 'utf8')
     const parsed = readComponentTitle(source)
-    if (!parsed || seen.has(parsed.name)) continue
+    if (!parsed || seen.has(parsed.name))
+      continue
     seen.add(parsed.name)
     rows.push({
       name: parsed.name,
@@ -134,7 +139,7 @@ async function collectFamily(family: { dir: string; label: string }): Promise<Co
 function render(rows: ComponentRow[]): string {
   const body = rows
     .map(
-      (r) =>
+      r =>
         `  { name: '${r.name}', family: '${r.family}', familyLabel: '${r.familyLabel}', storyId: '${r.storyId}' },`,
     )
     .join('\n')
@@ -183,7 +188,7 @@ async function main(): Promise<void> {
   await writeFile(OUT_FILE, render(rows))
 
   const perFamily = FAMILIES.map(
-    (f) => `${f.label} ${rows.filter((r) => r.family === f.dir).length}`,
+    f => `${f.label} ${rows.filter(r => r.family === f.dir).length}`,
   ).join(', ')
   console.log(`▸ Component index baked into src/generated/components.ts (${rows.length} components)`)
   console.log(`    ${perFamily}`)

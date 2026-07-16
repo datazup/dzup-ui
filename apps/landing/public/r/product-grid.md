@@ -4,7 +4,7 @@ A storefront grid of product cards — image with a sale/new corner badge, name,
 
 - **Category:** Commerce
 - **Components:** DzImageCard, DzBadge, DzRating, DzButton, DzHeading, DzText
-- **Preview:** /blocks#product-grid
+- **Preview:** /blocks/product-grid
 
 ```vue
 <script setup lang="ts">

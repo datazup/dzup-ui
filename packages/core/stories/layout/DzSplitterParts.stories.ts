@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzSplitter, DzSplitterHandle, DzSplitterPanel } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSplitter compound sub-parts: DzSplitterPanel and DzSplitterHandle.
@@ -141,6 +142,43 @@ export const Nested: Story = {
     await userEvent.keyboard('{ArrowDown}')
     await waitFor(() => expect(innerSep.getAttribute('aria-valuenow')).not.toBe(innerBefore))
   },
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
+    template: `
+      <DzSplitter class="h-64 border border-[var(--dz-border)] rounded" aria-label="Dark mode splitter">
+        <DzSplitterPanel :default-size="30" :min-size="15">
+          <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Sidebar</div>
+        </DzSplitterPanel>
+        <DzSplitterHandle with-handle />
+        <DzSplitterPanel :default-size="70">
+          <DzSplitter direction="vertical" class="h-full" aria-label="Dark mode inner splitter">
+            <DzSplitterPanel :default-size="60">
+              <div class="h-full p-4 text-sm">
+                <p class="font-medium mb-1">Editor</p>
+                <p class="text-xs text-[var(--dz-muted-foreground)]">
+                  Nested splitters: the outer handle splits left/right, the inner one
+                  top/bottom. Both grips and every panel border resolve from tokens.
+                </p>
+              </div>
+            </DzSplitterPanel>
+            <DzSplitterHandle with-handle />
+            <DzSplitterPanel :default-size="40" :min-size="20">
+              <div class="h-full p-4 text-sm bg-[var(--dz-muted)]">Terminal</div>
+            </DzSplitterPanel>
+          </DzSplitter>
+        </DzSplitterPanel>
+      </DzSplitter>
+    `,
+  }),
 }
 
 // ---------------------------------------------------------------------------

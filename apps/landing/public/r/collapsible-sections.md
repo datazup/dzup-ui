@@ -4,7 +4,7 @@ A settings page of expandable DzPanels (each owning its open state via v-model:c
 
 - **Category:** Layout
 - **Components:** DzPanel, DzCollapse, DzContainer, DzStack, DzDivider, DzSwitch, DzButton, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#collapsible-sections
+- **Preview:** /blocks/collapsible-sections
 
 ```vue
 <script setup lang="ts">

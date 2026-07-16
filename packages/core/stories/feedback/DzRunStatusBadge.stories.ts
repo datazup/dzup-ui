@@ -4,6 +4,8 @@ import { expect, within } from 'storybook/test'
 import { DzRunStatusBadge } from '../../src/components/feedback'
 import { darkModeDecorator } from '../_shared'
 
+const STATUSES: DzRunStatus[] = ['PENDING', 'RUNNING', 'PAUSED', 'COMPLETED', 'FAILED', 'CANCELLED']
+
 /**
  * DzRunStatusBadge is an **app-specific** badge that maps a canonical run status
  * (`PENDING` · `RUNNING` · `PAUSED` · `COMPLETED` · `FAILED` · `CANCELLED`) to a
@@ -15,9 +17,6 @@ import { darkModeDecorator } from '../_shared'
  * > lives under **Core/Feedback/App-Specific** rather than the public family. See
  * > [Feedback Overview](?path=/docs/core-feedback-overview--docs) and TASK-X.4.
  */
-
-const STATUSES: DzRunStatus[] = ['PENDING', 'RUNNING', 'PAUSED', 'COMPLETED', 'FAILED', 'CANCELLED']
-
 const meta = {
   title: 'Core/Feedback/App-Specific/DzRunStatusBadge',
   component: DzRunStatusBadge,

@@ -15,12 +15,17 @@ import {
   STATUS_BADGES,
   type ComponentStatus,
 } from '../../../../packages/core/stories/_shared/status.ts'
+import { STATUS_BADGE_COLORS } from '../../.storybook/brandPalette.ts'
 
+// Same ink as the sidebar badge, from the one token-backed source — this file
+// used to keep its own copy of Tailwind's amber/blue/green/red-700, a third
+// independent palette that agreed with neither the manager nor the token ramp
+// (TASK-FREE-17).
 const HEX: Record<ComponentStatus, string> = {
-  experimental: '#b45309',
-  beta: '#1d4ed8',
-  stable: '#15803d',
-  deprecated: '#b91c1c',
+  experimental: STATUS_BADGE_COLORS.experimental.hex,
+  beta: STATUS_BADGE_COLORS.beta.hex,
+  stable: STATUS_BADGE_COLORS.stable.hex,
+  deprecated: STATUS_BADGE_COLORS.deprecated.hex,
 }
 
 export function StatusBadge({ status }: { status: ComponentStatus }) {

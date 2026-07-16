@@ -2,6 +2,7 @@ import addonA11y from '@storybook/addon-a11y'
 import addonDocs from '@storybook/addon-docs'
 import { withThemeByDataAttribute } from '@storybook/addon-themes'
 import { definePreview } from '@storybook/vue3-vite'
+import { RESPONSIVE_VIEWPORTS } from '../../../packages/core/stories/_shared/options.ts'
 
 // Import Tailwind CSS 4 (processes utility classes used in component variants)
 import '../src/tailwind.css'
@@ -26,6 +27,42 @@ export default definePreview({
     docs: {
       toc: true,
     },
+    // TASK-FREE-17 — a viewport toolbar on EVERY story. Until now the set was
+    // registered per-story and only three (DzAppShell, DzContainer, DzGrid) opted
+    // in, so a responsive component library offered no way to preview 202 of its
+    // 205 components at a phone width. Registering it globally is what makes the
+    // toolbar unconditional; the layout stories' own `viewport.options` lines are
+    // now redundant but harmless (same object).
+    //
+    // Widths are DERIVED from `BREAKPOINTS` in @dzup-ui/tokens — see the note on
+    // RESPONSIVE_VIEWPORTS for why `mobile` (375) is the one deliberate non-token.
+    //
+    // No `initialGlobals.viewport` on purpose: the default stays 'responsive' (the
+    // canvas fills its frame), so this adds a capability without changing how any
+    // existing story renders.
+    viewport: {
+      options: RESPONSIVE_VIEWPORTS,
+    },
+    // TASK-FREE-17 — check a component against the real surfaces it will sit on.
+    //
+    // Each value is a `var(--dz-*)` token, not a hex: the addon sets these on the
+    // preview body, which lives INSIDE the token iframe, and `withThemeByDataAttribute`
+    // writes `data-theme` to <html> (its `parentSelector` default) — above the body.
+    // So every swatch below re-resolves when the theme toolbar flips, and one
+    // definition serves light and dark. Hardcoding hex here would have needed two
+    // sets and would drift from the ramp exactly the way manager.ts's literals do.
+    //
+    // No `initialGlobals.backgrounds`: unset means stories keep rendering on the
+    // default canvas, so this is opt-in per look rather than a global restyle.
+    backgrounds: {
+      options: {
+        surface: { name: 'Surface (--dz-background)', value: 'var(--dz-background)' },
+        raised: { name: 'Raised (--dz-surface-raised)', value: 'var(--dz-surface-raised)' },
+        sunken: { name: 'Sunken (--dz-surface-sunken)', value: 'var(--dz-surface-sunken)' },
+        muted: { name: 'Muted (--dz-muted)', value: 'var(--dz-muted)' },
+        inverse: { name: 'Inverse (--dz-foreground)', value: 'var(--dz-foreground)' },
+      },
+    },
     // TASK-0.6 / TASK-X.6 — sidebar taxonomy.
     // Top level: pin the docs/guide pages above the component families.
     // Within Core: families follow the family-sprint order, and each family
@@ -38,7 +75,25 @@ export default definePreview({
           'Introduction',
           'Getting Started',
           'Guides',
-          ['Choosing Components', 'Component Status', 'Releases', 'Theming', 'Color Palette', 'Design Tokens', 'Accessibility'],
+          [
+            // Ordered by how often a reader is blocked on it, not alphabetically:
+            // pick-a-component → build a form → ship it on a server → theme it →
+            // upgrade it. TASK-FREE-14 added SSR & Nuxt, Forms & Validation,
+            // Versioning & Deprecation and Migration; anything unlisted falls
+            // through the trailing '*'.
+            'Choosing Components',
+            'Forms & Validation',
+            'SSR & Nuxt',
+            'Component Status',
+            'Theming',
+            'Color Palette',
+            'Design Tokens',
+            'Accessibility',
+            'Versioning & Deprecation',
+            'Migration',
+            'Releases',
+            '*',
+          ],
           'Contributing',
           'Core',
           [
@@ -56,6 +111,13 @@ export default definePreview({
             'Compositions',
             '*',
           ],
+          // Cross-family gallery screens (packages/core/stories/_gallery): the
+          // raw-Tailwind vs dzup-ui comparison the token system is measured
+          // against (docs/visual-refresh/AUDIT.md). Pinned last and below `Core`
+          // on purpose — they are demo screens, not component references. Until
+          // TASK-FREE-12 this root had no entry here and fell through the
+          // trailing '*', landing in the sidebar unsorted and unexplained.
+          'Visual Refresh',
           '*',
         ],
       },

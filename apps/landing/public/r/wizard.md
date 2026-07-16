@@ -4,7 +4,7 @@ Three-step onboarding wizard with stepper nav, per-step form fields, Back/Contin
 
 - **Category:** Auth & Forms
 - **Components:** DzStepper, DzStepperItem, DzFormField, DzFormLabel, DzInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#wizard
+- **Preview:** /blocks/wizard
 
 ```vue
 <script setup lang="ts">

@@ -4,7 +4,7 @@ A documentation shell where the "On this page" nav pins on scroll via DzAffix â€
 
 - **Category:** Layout
 - **Components:** DzAffix, DzContainer, DzFlex, DzScrollArea, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#sticky-aside
+- **Preview:** /blocks/sticky-aside
 
 ```vue
 <script setup lang="ts">

@@ -22,6 +22,7 @@ import { LINKS } from '../config.ts'
       lede="A neutral, sourced summary of how dzup-ui lines up against other popular Vue 3 component libraries. Every project here is capable and actively maintained — use this to find the right fit, not a ranking."
       heading-id="compare-title"
       align="center"
+      :heading-level="1"
     >
       <p class="compare-meta">
         Figures verified against each library's official documentation · Last updated {{ COMPARE_UPDATED }}
@@ -88,7 +89,7 @@ import { LINKS } from '../config.ts'
         Component counts are approximate — libraries count sub-components differently — so read them as orders
         of magnitude. Where a library supports a spectrum (e.g. styled and unstyled), the table says so rather
         than picking a side. Spot something out of date?
-        <a :href="LINKS.discussions" target="_blank" rel="noreferrer noopener">Open a discussion</a>
+        <a :href="LINKS.issues" target="_blank" rel="noreferrer noopener">Open an issue</a>
         and we'll correct it.
       </DzText>
       <ul class="sources-list">

@@ -9,6 +9,7 @@ import {
   DzSheetTitle,
   DzSheetTrigger,
 } from '../../src/components/overlays'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzSheet compound sub-parts: DzSheetContent, DzSheetTitle, DzSheetDescription,
@@ -31,6 +32,10 @@ const meta = {
     DzSheetTrigger,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     side: {
       control: 'select',
@@ -244,6 +249,64 @@ export const Interactive: Story = {
     // Close button inside the sheet sets isOpen=false
     await userEvent.click(within(dialog).getByRole('button', { name: /close/i }))
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+/**
+ * Two things this story has to do that a plain `darkModeDecorator` cannot:
+ *
+ * 1. DzSheetContent renders through Reka's `DialogPortal`, so the panel lands
+ *    OUTSIDE the decorator's `data-theme="dark"` wrapper and would resolve the
+ *    LIGHT tokens. Setting the `theme` global puts `data-theme="dark"` on
+ *    `<html>` (`withThemeByDataAttribute`, see `.storybook/preview.ts`), which
+ *    the portaled panel does inherit.
+ * 2. A closed trigger previews none of the sub-parts. `play()` opens the sheet —
+ *    and because docs pages do not autoplay, the modal overlay and focus trap
+ *    never blanket the docs page.
+ */
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  globals: { theme: 'dark' },
+  render: () => ({
+    components: {
+      DzSheet,
+      DzSheetTrigger,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
+    template: `
+      <DzSheet>
+        <DzSheetTrigger as-child>
+          <DzButton>Open in Dark Mode</DzButton>
+        </DzSheetTrigger>
+        <DzSheetContent side="right">
+          <DzSheetTitle>Dark Mode Sheet</DzSheetTitle>
+          <DzSheetDescription>Every sub-part — title, description, and close — on the dark surface.</DzSheetDescription>
+          <div class="mt-4 space-y-3 text-sm text-[var(--dz-muted-foreground)]">
+            <p>Sheet body content goes here. This panel slides in from the right.</p>
+          </div>
+          <DzSheetClose as-child>
+            <DzButton variant="outline" tone="neutral" class="mt-4">Close</DzButton>
+          </DzSheetClose>
+        </DzSheetContent>
+      </DzSheet>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: /open in dark mode/i }))
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAccessibleName()
+    await expect(within(dialog).getByText(/every sub-part/i)).toBeVisible()
   },
 }
 

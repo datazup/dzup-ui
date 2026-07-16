@@ -87,7 +87,10 @@ export const toastTokens = {
     warning: {
       border: 'var(--dz-warning)',
       indicator: 'var(--dz-warning)',
-      actionBackground: 'var(--dz-warning)',
+      // The action button is text-bearing, so it fills with `-solid` (8.44:1);
+      // `--dz-warning-foreground` on `--dz-warning` is only 3.51:1. Border and
+      // indicator are non-text, so they keep the intent color.
+      actionBackground: 'var(--dz-warning-solid)',
       actionForeground: 'var(--dz-warning-foreground)',
     },
     danger: {

@@ -4,7 +4,7 @@ A draggable, keyboard-operable DzImageComparison revealing a graded edit over th
 
 - **Category:** Media
 - **Components:** DzImageComparison, DzImage, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-comparison
+- **Preview:** /blocks/media-comparison
 
 ```vue
 <script setup lang="ts">

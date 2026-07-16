@@ -35,11 +35,11 @@
  * nothing, rather than publishing a partial/empty registry.
  */
 
+import type { CatalogEntry } from '../src/gallery/catalog.ts'
 import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
-import type { CatalogEntry } from '../src/gallery/catalog.ts'
 import { buildRegistryIndex, toRegistryItem } from '../src/gallery/registryItem.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -73,7 +73,8 @@ async function loadCatalog(): Promise<CatalogEntry[]> {
       CATALOG: CatalogEntry[]
     }
     return mod.CATALOG
-  } finally {
+  }
+  finally {
     await server.close()
   }
 }

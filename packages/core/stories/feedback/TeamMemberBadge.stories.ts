@@ -4,6 +4,8 @@ import { expect, within } from 'storybook/test'
 import { TeamMemberBadge } from '../../src/components/feedback'
 import { darkModeDecorator } from '../_shared'
 
+const STATUSES: TeamMemberStatus[] = ['idle', 'active', 'completed', 'failed']
+
 /**
  * TeamMemberBadge renders a colored status dot + role label for a team
  * participant. The dot color is derived from the live participant status
@@ -16,9 +18,6 @@ import { darkModeDecorator } from '../_shared'
  * > **Scope:** encodes datazup multi-agent runtime vocabulary; lives under
  * > **Core/Feedback/App-Specific**. See TeamMemberBadge.types.ts.
  */
-
-const STATUSES: TeamMemberStatus[] = ['idle', 'active', 'completed', 'failed']
-
 const meta = {
   title: 'Core/Feedback/App-Specific/TeamMemberBadge',
   component: TeamMemberBadge,

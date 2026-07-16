@@ -4,7 +4,7 @@ Circular elevated affordances — DzFab across tones and variants, and a DzSpeed
 
 - **Category:** Buttons
 - **Components:** DzFab, DzSpeedDial, DzText
-- **Preview:** /blocks#floating-actions
+- **Preview:** /blocks/floating-actions
 
 ```vue
 <script setup lang="ts">

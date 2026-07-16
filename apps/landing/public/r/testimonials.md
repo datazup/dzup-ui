@@ -4,7 +4,7 @@ Grid of customer quote cards each with a star rating, avatar, name/role, and quo
 
 - **Category:** Marketing
 - **Components:** DzCard, DzAvatar, DzRating, DzHeading, DzText
-- **Preview:** /blocks#testimonials
+- **Preview:** /blocks/testimonials
 
 ```vue
 <script setup lang="ts">

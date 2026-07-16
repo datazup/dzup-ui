@@ -13,7 +13,14 @@
  *
  * To refresh: re-check each `href`, update the values + `COMPARE_UPDATED`, and
  * keep claims factual and neutral.
+ *
+ * The competitors' figures are quoted from their docs; OUR figure is derived from
+ * our own source tree (`COUNTS`) — a page whose entire premise is verifiable facts
+ * cannot be the one place we print an unverified number about ourselves, which is
+ * what "~147 (free)" was doing next to a real count of 139.
  */
+
+import { COUNTS } from '../generated/counts.ts'
 
 /** Month the figures below were last verified against each library's public docs. */
 export const COMPARE_UPDATED = 'July 2026'
@@ -72,9 +79,9 @@ export const ROWS: CompareRow[] = [
   },
   {
     feature: 'Components',
-    note: 'Approximate — counted differently per library',
+    note: 'Others approximate — counted differently per library. Ours is exact: components with a docs page of their own.',
     values: {
-      dzup: '~147 (free)',
+      dzup: `${COUNTS.documentedComponents} documented (free)`,
       primevue: '~90+',
       nuxtui: '~100+',
       vuetify: '~80+',

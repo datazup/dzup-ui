@@ -21,6 +21,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { REGISTRY_ENABLED, v0OpenUrl } from '../../blocks/config.ts'
 import type { BlockDef } from '../../blocks/registry.ts'
 import { blocksUsingComponent, CATEGORIES } from '../../blocks/registry.ts'
+import { getBlockSource } from '../../blocks/sources.ts'
 import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'
 import { useBlockCodeView } from '../../composables/useBlockCodeView.ts'
 import { useBlockTheme } from '../../composables/useBlockTheme.ts'
@@ -50,9 +51,19 @@ import BlockTrustMarks from './BlockTrustMarks.vue'
  * DzDialog. The chrome is dogfooded entirely from @dzup-ui/core; the only CSS
  * here is layout (no color literals) per the token-only rule.
  */
-const props = defineProps<{
-  block: BlockDef
-}>()
+const props = withDefaults(
+  defineProps<{
+    block: BlockDef
+    /**
+     * Semantic level for the block-title heading. 3 fits the /blocks index
+     * (page h1 → category h2 → block h3); the block DETAIL page passes 2 —
+     * its own h1 is the block title, so the preview heading is one level
+     * below it (no skipped levels, TASK-FREE-10). Visual size is unchanged.
+     */
+    headingLevel?: 2 | 3
+  }>(),
+  { headingLevel: 3 },
+)
 
 const emit = defineEmits<{
   /**
@@ -350,7 +361,7 @@ function openInV0(): void {
  * the copied text is byte-for-byte identical to the served `.md` and the two can
  * never drift. The single source of that markdown lives in `blocks/llmsText.ts`.
  */
-const markdownPayload = computed(() => blockMarkdown(props.block, CATEGORIES))
+const markdownPayload = computed(() => blockMarkdown(props.block, CATEGORIES, b => getBlockSource(b.path)))
 
 /**
  * Absolute URL of the catalog's AI-docs index, resolved against the live origin
@@ -389,12 +400,12 @@ function announceCopied(what: string): void {
 /**
  * Code-tab variants (docs/blocks.md §3.2). All four shapes — Full SFC vs
  * Template-only, TS vs JS — plus the consumer import line are derived
- * deterministically from the one canonical `block.source` (and `components[]`)
+ * deterministically from the one canonical `?raw` source (and `components[]`)
  * at runtime, so there is no second copy of the code and zero drift. The Copy
  * button copies whatever `codeView.code` currently resolves to.
  */
 const codeView = useBlockCodeView(
-  () => props.block.source,
+  () => getBlockSource(props.block.path),
   () => props.block.components,
 )
 const { code: shownCode, language: codeLanguage } = codeView
@@ -455,7 +466,7 @@ const langModel = computed<string>({
     <!-- Header: title + description, viewport control, full-screen toggle. -->
     <header class="bp-head">
       <div class="bp-head-text">
-        <DzHeading :id="titleId" :level="3" size="md" weight="semibold" class="bp-title">
+        <DzHeading :id="titleId" :level="headingLevel" size="md" weight="semibold" class="bp-title">
           {{ block.title }}
         </DzHeading>
         <DzText size="sm" tone="muted" as="p" class="bp-desc">{{ block.description }}</DzText>
@@ -615,7 +626,7 @@ const langModel = computed<string>({
       </DzTabContent>
 
       <!-- Source + copy, with Full-SFC↔Template and TS↔JS toggles. Every variant
-           derives from the one `block.source` at runtime (useBlockCodeView) — no
+           derives from the one ?raw source at runtime (useBlockCodeView) — no
            second source of truth. Copy copies the currently-shown variant. -->
       <DzTabContent value="code" class="bp-panel">
         <!-- Dependency manifest: import + install command(s). Chips are hidden

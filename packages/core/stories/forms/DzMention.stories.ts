@@ -3,19 +3,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMention } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzMention is a textarea/input that surfaces a suggestion dropdown when a
- * configured trigger character (`@`, `#`, …) is typed. It detects the active
- * trigger and the partial query at the caret, resolves options (static arrays
- * or async resolvers), and inserts the chosen option at the caret.
- *
- * - **Keyboard:** Up/Down navigate, Enter/Tab insert, Esc dismisses.
- * - **Async:** a trigger's `options` may be a `(query) => Promise<options>`
- *   resolver; a loading state shows while it is pending.
- * - **Multiple triggers:** pass several `{ char, options }` entries.
- *
- * `v-model:value` is the raw text including the inserted trigger tokens.
- */
 const users = [
   { label: 'Alice Johnson', value: 'alice', role: 'Designer' },
   { label: 'Bob Smith', value: 'bob', role: 'Engineer' },
@@ -31,6 +18,19 @@ const tags = [
   { label: 'question', value: 'question' },
 ]
 
+/**
+ * DzMention is a textarea/input that surfaces a suggestion dropdown when a
+ * configured trigger character (`@`, `#`, …) is typed. It detects the active
+ * trigger and the partial query at the caret, resolves options (static arrays
+ * or async resolvers), and inserts the chosen option at the caret.
+ *
+ * - **Keyboard:** Up/Down navigate, Enter/Tab insert, Esc dismisses.
+ * - **Async:** a trigger's `options` may be a `(query) => Promise<options>`
+ *   resolver; a loading state shows while it is pending.
+ * - **Multiple triggers:** pass several `{ char, options }` entries.
+ *
+ * `v-model:value` is the raw text including the inserted trigger tokens.
+ */
 const meta = {
   title: 'Core/Forms/DzMention',
   component: DzMention,

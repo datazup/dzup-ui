@@ -1,0 +1,32 @@
+{
+  "//": "Lighthouse CI budget for the landing site — MOBILE run (TASK-FREE-13). Twin of lighthouserc.json; same URLs, same run count. Omitting `settings.preset` is how you ask Lighthouse for mobile: its DEFAULT emulation is a mid-tier phone on a throttled 4G link with 4x CPU slowdown. Until now the site was only ever measured on the desktop preset, which applies no CPU throttling and a fast link — so nothing here had ever been checked on the device most visitors use. lighthouserc.spec.ts pins which assertions must match the desktop file and which are allowed to differ, so the LCP exception below cannot quietly spread.",
+  "//lcp": "LCP is `warn` here, not `error` as on desktop, and that is a recorded gap rather than a preference. Measured on the built site 2026-07-16, after the entry chunk was cut from 292.85 kB to 152.13 kB and the lazy-route CLS was fixed: / 3.09s, /blocks 4.15s, /templates 3.77s, /compare 3.08s, /blocks/hero-split 4.34s — every route over the 2.5s target (desktop: 0.66-1.19s, comfortably under). Arming this as `error` would paint CI permanently red on day one, which does not fix an LCP; it just teaches people to ignore the job. It stays `warn` so the number is visible in every run, and the gap is tracked as follow-up work in docs/free-apps-audit.md. CLS and accessibility ARE hard-asserted here — they pass.",
+  "ci": {
+    "collect": {
+      "startServerCommand": "yarn workspace @dzup-ui/landing preview --port 4173 --strictPort",
+      "startServerReadyPattern": "Local:",
+      "startServerReadyTimeout": 60000,
+      "url": [
+        "http://localhost:4173/",
+        "http://localhost:4173/blocks",
+        "http://localhost:4173/templates",
+        "http://localhost:4173/compare",
+        "http://localhost:4173/blocks/hero-split"
+      ],
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 1800 }],
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

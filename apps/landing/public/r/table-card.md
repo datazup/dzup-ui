@@ -4,7 +4,7 @@ Outlined card with a search + segmented filter toolbar, a hoverable data table w
 
 - **Category:** Application
 - **Components:** DzCard, DzSearchInput, DzSegmented, DzTable, DzTableHeader, DzTableBody, DzTableRow, DzTableCell, DzAvatar, DzBadge, DzPagination, DzText
-- **Preview:** /blocks#table-card
+- **Preview:** /blocks/table-card
 
 ```vue
 <script setup lang="ts">
@@ -23,6 +23,7 @@ import {
   DzAvatar,
   DzBadge,
   DzCard,
+  DzHeading,
   DzPagination,
   DzSearchInput,
   DzSegmented,
@@ -104,7 +105,7 @@ function onFilter(value: string) {
     <DzCard variant="outlined" padding="none">
       <!-- Toolbar -->
       <div class="tc-toolbar">
-        <DzText id="tc-title" weight="semibold" as="h4" class="tc-card-title">Team members</DzText>
+        <DzHeading id="tc-title" :level="4" size="md" weight="semibold" class="tc-card-title">Team members</DzHeading>
         <div class="tc-controls">
           <DzSearchInput
             v-model="query"

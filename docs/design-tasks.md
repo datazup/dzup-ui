@@ -1067,6 +1067,81 @@ and Ecosystem duplicates its own children._
 
 ---
 
+# Part E — The a11y ratchet, to the end
+
+### [~] TASK-DS-13 — Pull the a11y ratchet through every remaining family
+
+_Filed by free-apps-audit **TASK-FREE-06**, which required "a tracked, ordered
+follow-up with the per-family counts, so the ratchet has a visible finish line."
+This is that tracker. Depends on TASK-DS-06 (the recipe) and the `--dz-warning`
+token fix recorded under TASK-DS-10(a)._
+
+> **2026-07-16: Buttons, Overlays, and Media are enforced — 4 of 11 families,
+> with Cards.** What landed with this notch:
+>
+> - **The token defect is fixed at the token.** `--dz-warning` moved from shade
+>   500 to shade 400 in the light theme (dark already sat at 400), so
+>   `--dz-warning-foreground` on `--dz-warning` measures **5.87:1** in both
+>   themes (was 3.51:1). Measured with `packages/tooling/src/token-checks/
+>   oklch-contrast.ts`; asserted by the DESIGN.md contrast gate
+>   (`yarn validate:tokens`, 96 pairs ≥ AA). Trade-off recorded in
+>   `semantic/light.ts`: as a decorative accent on the light page the bare
+>   intent colour drops to ~2.34:1 — a non-text use the gate deliberately does
+>   not assert; icon-only warning graphics belong on a muted surface.
+> - **Component fixes, not story patches:** `DzQRCode` no longer puts
+>   `role="img"` on its root (the `expired` refresh button was a focusable
+>   descendant of an image — `nested-interactive`); `DzCarouselDots` wraps each
+>   dot in a ≥24×24px hit target (`target-size`, WCAG 2.2). Contract specs
+>   updated to pin both.
+> - **`a11yDisableRules` was a silent no-op and is now real.** It only emitted
+>   `config.rules` (axe.configure), but the global gate pins `options.runOnly`
+>   by WCAG tag, and axe re-selects tag-matched rules regardless of a
+>   configure-time disable. The helper now also emits the `options.rules`
+>   override, which is the only thing that beats `runOnly`. Its first use is
+>   `DzCarousel`'s vertical story (dots obscured inside the transform viewport —
+>   needs a layout redesign, disabled for `target-size` only, justified inline).
+> - The no-op `a11y: { test: 'todo' }` story override in
+>   `DzSplitButton.stories.ts` is gone.
+
+**The ordered remainder**, failing stories re-derived 2026-07-16 by flipping the
+global to `'error'` over all 176 story files in headless Chromium (the run
+`Accessibility.mdx` now reports). Flip in this order; fix root causes in
+components per the DS-06 recipe:
+
+| Order | Family | Failing stories | Dominant failure classes |
+|---|---|---|---|
+| 1 | Typography | 2 | `DzCode` `scrollable-region-focusable` ×2 — component fix |
+| 2 | Compositions | 2 | |
+| 3 | Layout | 12 | |
+| 4 | Feedback | 13 | |
+| 5 | Gallery (`stories/_gallery`) | 19 (7 files) | Cross-family demo stories — **never previously counted** in any backlog table |
+| 6 | Inputs | 23 | Contrast + labelling |
+| 7 | Data | 29 | `nested-interactive` + contrast |
+| 8 | Navigation | 33 | ARIA structure (tabs/menu/stepper) |
+| 9 | Forms | 74 | Labelling / ARIA structure |
+
+Failure classes across the 207 failing stories (a story can hit several):
+`color-contrast` 132 · `scrollable-region-focusable` 38 · `label` 19 ·
+`button-name` 18 · `nested-interactive` 16 · `aria-required-parent` 15 ·
+`aria-required-children` 13 · `aria-allowed-attr` 10 · `aria-hidden-focus` 5 ·
+`target-size` 5 · others 12.
+
+**End state:** every family enforced, then `preview.ts`'s global `a11y.test`
+flips `'todo'` → `'error'` and the per-family opt-ins are deleted.
+
+**Landing parity, stated honestly (per TASK-FREE-06):** the landing block suite
+(`apps/landing/src/blocks/a11y.spec.ts`) runs under jsdom, which has no layout,
+so axe reports `color-contrast` as *incomplete*, never *fail* — the 87 blocks
+are **not** contrast-verified by any gate today. The blocks are token-only
+(`--dz-*`), so the token-level contrast gate covers their defaults, but
+story-specific combinations are unchecked. Browser-level coverage exists in
+skeleton form: the Playwright landing run (`apps/landing/playwright.config.ts`)
+already drives real Chromium against `/blocks` and could run axe there —
+that is the right vehicle, and it is additional scope, not part of this tracker's
+per-family flips.
+
+---
+
 ## Summary — task map
 
 | # | Task | Area | Type | Priority | Closes | Depends on | Status |
@@ -1083,6 +1158,7 @@ and Ecosystem duplicates its own children._
 | 10 | Normalize `warning`; de-duplicate palettes | core | Contract | 🟠 P1 | review #6 | **01** | 🌓 (a) done · (b) declined |
 | 11 | Hero v2: product above the fold | landing | Differentiator | 🟠 P1 | review #5 | **04** | ✅ LCP −13%, decor 4→1 |
 | 12 | Trust section + TopNav regrouping | landing | Polish | 🟠 P1 | review #5, #7 | — | 🌓 nav done · trust empty by design |
+| 13 | Pull the a11y ratchet through every remaining family | storybook | Enforcement | 🟠 P1 | free-apps audit TASK-FREE-06 | **06**, 10(a) | 🌓 4/11 enforced · warning token fixed · 9 families remain (207 stories) |
 
 ### Findings for later tasks (discovered while doing 11–12)
 

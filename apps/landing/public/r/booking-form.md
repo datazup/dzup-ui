@@ -4,7 +4,7 @@ A reservation card pairing the date/time/number controls — a DzDatePicker day,
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzDatePicker, DzTimePicker, DzNumberInput, DzSelect, DzFormField, DzFormLabel, DzFormDescription, DzButton, DzHeading, DzText
-- **Preview:** /blocks#booking-form
+- **Preview:** /blocks/booking-form
 
 ```vue
 <script setup lang="ts">

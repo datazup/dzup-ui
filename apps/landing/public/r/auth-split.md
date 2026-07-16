@@ -4,7 +4,7 @@ Sign-in form left, token-gradient brand/marketing panel right; collapses to sing
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzButton, DzHeading, DzText
-- **Preview:** /blocks#auth-split
+- **Preview:** /blocks/auth-split
 
 ```vue
 <script setup lang="ts">

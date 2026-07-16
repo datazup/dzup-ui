@@ -1,4 +1,11 @@
-/** One-off structural validator for the generated llms.txt files (not shipped). */
+/**
+ * validate-llms.mjs — structural gate for the llms.txt files build-llms.mjs
+ * generates from the manifest + contracts + *.types.ts.
+ *
+ * These files are consumed by machines, so a ragged table or an unbalanced code
+ * fence silently corrupts everything downstream of it. Run as `validate:llms`
+ * right after `build:llms`; exits non-zero on any structural error.
+ */
 import { readFile } from 'node:fs/promises'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'

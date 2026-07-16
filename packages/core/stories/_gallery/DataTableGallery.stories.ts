@@ -5,6 +5,9 @@ import FreestyleDataTable from './freestyle/FreestyleDataTable.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Data Table',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

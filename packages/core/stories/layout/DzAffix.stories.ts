@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzAffix } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzAffix** pins its slotted content to the viewport once it would scroll
@@ -138,6 +139,45 @@ export const AffixBottom: Story = {
             {{ affixed ? 'Pinned to bottom' : 'Keep scrolling' }}
           </div>
         </DzAffix>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzAffix },
+    setup() {
+      const container = ref<HTMLElement | null>(null)
+      const affixed = ref(false)
+      // Same bounded panel as Affix Top — the window never scrolls inside the
+      // story iframe, so the affix measures against this container.
+      const getTarget = () => container.value
+      return { container, affixed, getTarget }
+    },
+    template: `
+      <div ref="container" class="h-64 overflow-auto border border-[var(--dz-border)] rounded-lg p-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">Scroll this panel down ↓</p>
+        <div style="height: 120px" class="bg-[var(--dz-muted)] rounded mb-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
+          spacer
+        </div>
+        <DzAffix :offset-top="16" :target="getTarget" @change="affixed = $event">
+          <div
+            class="px-4 py-2 rounded-lg shadow-md text-sm font-medium"
+            :class="affixed ? 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]' : 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]'"
+          >
+            {{ affixed ? 'Pinned to top' : 'Scroll to pin me' }}
+          </div>
+        </DzAffix>
+        <div style="height: 600px" class="bg-[var(--dz-muted)] rounded mt-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
+          long content
+        </div>
       </div>
     `,
   }),

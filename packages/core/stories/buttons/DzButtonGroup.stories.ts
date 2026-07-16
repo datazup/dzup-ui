@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, Underline } from 'lucide-vue-next'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzButton, DzButtonGroup, DzIconButton } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzButtonGroup groups buttons together with shared styling context.
@@ -14,6 +14,10 @@ const meta = {
   title: 'Core/Buttons/DzButtonGroup',
   component: DzButtonGroup,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     orientation: {

@@ -7,6 +7,7 @@
  */
 
 import type { ButtonVariant, CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
+import { BREAKPOINTS } from '@dzup-ui/tokens'
 
 /** Canonical sizes, smallest → largest. */
 export const SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly CanonicalSize[]
@@ -59,16 +60,26 @@ export const disabledArgType = {
 } as const
 
 /**
- * Named viewports for responsive stories (TASK-7.D).
+ * Named viewports for responsive stories (TASK-7.D), registered GLOBALLY by
+ * `.storybook/preview.ts` so every story gets the viewport toolbar — not only the
+ * handful that opt in via `parameters.viewport.options` (TASK-FREE-17).
  *
- * Register on a story via `parameters.viewport.options` and pick the active one
- * with story-level `globals.viewport`. The widths bracket the common Tailwind
- * breakpoints used by `DzGrid`/`DzContainer` (`sm` 640 · `md` 768 · `lg` 1024).
+ * Every width except `mobile` is read from `BREAKPOINTS` in `@dzup-ui/tokens`
+ * rather than typed here, so the docs demo the exact breakpoints the library
+ * ships: change the token and the toolbar follows.
+ *
+ * `mobile` (375px) is the deliberate exception and is NOT a token. The scale
+ * starts at `sm` 640, so nothing in it describes a phone — yet 375 is where a
+ * component library most needs to be checked, and it is the width at which the
+ * `unprefixed` base styles are what you are looking at. Naming it here is honest
+ * about that; inventing a `--dz-breakpoint-xs` to launder it would not be.
+ *
+ * The `mobile` / `tablet` / `desktop` keys are load-bearing — `DzAppShell`,
+ * `DzContainer` and `DzGrid` pin them via `globals.viewport.value`.
  *
  * ```ts
- * import { RESPONSIVE_VIEWPORTS } from '../_shared'
  * export const Mobile: Story = {
- *   parameters: { viewport: { options: RESPONSIVE_VIEWPORTS }, layout: 'fullscreen' },
+ *   parameters: { layout: 'fullscreen' },
  *   globals: { viewport: { value: 'mobile' } },
  *   render: ...,
  * }
@@ -76,8 +87,11 @@ export const disabledArgType = {
  */
 export const RESPONSIVE_VIEWPORTS = {
   mobile: { name: 'Mobile (375px)', styles: { width: '375px', height: '720px' }, type: 'mobile' },
-  tablet: { name: 'Tablet (768px)', styles: { width: '768px', height: '1024px' }, type: 'tablet' },
-  desktop: { name: 'Desktop (1280px)', styles: { width: '1280px', height: '800px' }, type: 'desktop' },
+  sm: { name: `Small (${BREAKPOINTS.sm} · sm)`, styles: { width: BREAKPOINTS.sm, height: '900px' }, type: 'mobile' },
+  tablet: { name: `Tablet (${BREAKPOINTS.md} · md)`, styles: { width: BREAKPOINTS.md, height: '1024px' }, type: 'tablet' },
+  lg: { name: `Laptop (${BREAKPOINTS.lg} · lg)`, styles: { width: BREAKPOINTS.lg, height: '800px' }, type: 'desktop' },
+  desktop: { name: `Desktop (${BREAKPOINTS.xl} · xl)`, styles: { width: BREAKPOINTS.xl, height: '800px' }, type: 'desktop' },
+  wide: { name: `Wide (${BREAKPOINTS['2xl']} · 2xl)`, styles: { width: BREAKPOINTS['2xl'], height: '900px' }, type: 'desktop' },
 } as const
 
 /** Canonical accessibility arg-types shared by every interactive component. */

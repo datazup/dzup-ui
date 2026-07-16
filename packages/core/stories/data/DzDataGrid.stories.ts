@@ -6,14 +6,6 @@ import {
 } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzDataGrid is the most complex core data component, providing
- * sortable columns, row selection, pagination, and density controls.
- *
- * It is a compound component composed of DzDataGridHeader, DzDataGridBody,
- * and DzDataGridPagination sub-parts that receive context via inject (ADR-08).
- */
-
 // ---------------------------------------------------------------------------
 // Sample data
 // ---------------------------------------------------------------------------
@@ -50,6 +42,13 @@ const columns: ColumnDef<Employee>[] = [
 // Meta
 // ---------------------------------------------------------------------------
 
+/**
+ * DzDataGrid is the most complex core data component, providing
+ * sortable columns, row selection, pagination, and density controls.
+ *
+ * It is a compound component composed of DzDataGridHeader, DzDataGridBody,
+ * and DzDataGridPagination sub-parts that receive context via inject (ADR-08).
+ */
 const meta = {
   title: 'Core/Data/DzDataGrid',
   component: DzDataGrid,

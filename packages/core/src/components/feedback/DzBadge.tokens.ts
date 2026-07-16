@@ -45,7 +45,10 @@ export const badgeTokens = {
       subtle: { background: 'var(--dz-success-muted)', foreground: 'var(--dz-success-muted-foreground)' },
     },
     warning: {
-      solid: { background: 'var(--dz-warning)', foreground: 'var(--dz-warning-foreground)' },
+      // Warning is the one intent whose legible fill is a LIGHTER shade than the
+      // intent color: `--dz-warning-foreground` on `--dz-warning` is only 3.51:1.
+      // The solid variant fills with `--dz-warning-solid` (8.44:1), as rendered.
+      solid: { background: 'var(--dz-warning-solid)', foreground: 'var(--dz-warning-foreground)' },
       outline: { border: 'var(--dz-warning)', foreground: 'var(--dz-warning-muted-foreground)' },
       subtle: { background: 'var(--dz-warning-muted)', foreground: 'var(--dz-warning-muted-foreground)' },
     },

@@ -1,14 +1,14 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
-  "name": "io.github.dzup-ui/mcp",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.datazup/mcp",
   "description": "Browse dzup-ui Vue 3 components, blocks, templates and design tokens, and fetch real block source + install commands from any AI coding tool.",
   "repository": {
-    "url": "https://github.com/dzup-ui/dzup-ui",
+    "url": "https://github.com/datazup/dzup-ui",
     "source": "github",
     "subfolder": "packages/mcp"
   },
   "version": "0.1.0",
-  "websiteUrl": "https://dzup-ui.dev/ai",
+  "websiteUrl": "https://dzup-ui.com/ai",
   "packages": [
     {
       "registryType": "npm",
@@ -19,10 +19,10 @@
       "environmentVariables": [
         {
           "name": "DZUP_UI_REGISTRY_URL",
-          "description": "Origin the catalog is read from. Defaults to https://dzup-ui.dev; override for a preview deploy or a local checkout.",
+          "description": "Origin the catalog is read from. Defaults to https://dzup-ui.com; override for a preview deploy or a local checkout.",
           "isRequired": false,
           "isSecret": false,
-          "default": "https://dzup-ui.dev"
+          "default": "https://dzup-ui.com"
         }
       ]
     }
