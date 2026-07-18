@@ -43,13 +43,13 @@ describe('parseComponentIndex', () => {
 
   it('groups components under their family and skips Conventions', () => {
     const rows = parseComponentIndex(md)
-    expect(rows.map((r) => r.name)).toEqual(['DzButton', 'DzIconButton', 'DzCard'])
-    expect(rows.find((r) => r.name === 'DzButton')?.family).toBe('Buttons')
-    expect(rows.find((r) => r.name === 'DzCard')?.family).toBe('Cards')
+    expect(rows.map(r => r.name)).toEqual(['DzButton', 'DzIconButton', 'DzCard'])
+    expect(rows.find(r => r.name === 'DzButton')?.family).toBe('Buttons')
+    expect(rows.find(r => r.name === 'DzCard')?.family).toBe('Cards')
   })
 
   it('captures the description and folds detail lines into details', () => {
-    const btn = parseComponentIndex(md).find((r) => r.name === 'DzButton')!
+    const btn = parseComponentIndex(md).find(r => r.name === 'DzButton')!
     expect(btn.description).toBe('Primary button component.')
     expect(btn.details).toContain('props: `variant`, `size`, `tone`')
     expect(btn.details).toContain('variant: `solid`')
@@ -91,7 +91,7 @@ describe('normalizeComponentName', () => {
   })
 })
 
-describe('RegistryClient against the real artifacts', () => {
+describe('registryClient against the real artifacts', () => {
   it('reads the blocks index and lists real blocks', async () => {
     const client = localClient()
     const index = await client.blocksIndex()
@@ -120,7 +120,7 @@ describe('RegistryClient against the real artifacts', () => {
     const client = localClient()
     const rows = await client.components()
     expect(rows.length).toBeGreaterThan(100)
-    expect(rows.some((r) => r.name === 'DzButton')).toBe(true)
+    expect(rows.some(r => r.name === 'DzButton')).toBe(true)
     const out = await listComponents(client, { family: 'Buttons' })
     expect(out.text).toContain('DzButton')
   })

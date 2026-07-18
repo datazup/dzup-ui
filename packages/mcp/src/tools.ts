@@ -41,9 +41,10 @@ export function shadcnAddCommand(url: string, pm: PackageManager = 'npm'): strin
 
 /** Case-insensitive substring match of `q` against any of the haystack strings. */
 function matches(q: string | undefined, ...haystack: Array<string | undefined>): boolean {
-  if (!q) return true
+  if (!q)
+    return true
   const needle = q.toLowerCase()
-  return haystack.some((h) => (h ?? '').toLowerCase().includes(needle))
+  return haystack.some(h => (h ?? '').toLowerCase().includes(needle))
 }
 
 function itemComponents(item: RegistryIndexItem): string[] {
@@ -58,9 +59,9 @@ export async function listComponents(
 ): Promise<ToolResult> {
   const all = await client.components()
   const rows = all.filter(
-    (c) =>
-      matches(args.family, c.family) &&
-      matches(args.query, c.name, c.description, c.family, c.details),
+    c =>
+      matches(args.family, c.family)
+      && matches(args.query, c.name, c.description, c.family, c.details),
   )
   if (!rows.length) {
     return { text: `No components matched (family=${args.family ?? '—'}, query=${args.query ?? '—'}). ${all.length} components total.` }
@@ -93,9 +94,9 @@ export async function getComponent(
   if (!section) {
     const all = await client.components()
     const near = all
-      .filter((c) => c.name.toLowerCase().includes(args.name.replace(/^dz/i, '').toLowerCase()))
+      .filter(c => c.name.toLowerCase().includes(args.name.replace(/^dz/i, '').toLowerCase()))
       .slice(0, 8)
-      .map((c) => c.name)
+      .map(c => c.name)
     return {
       text: `Component "${args.name}" not found.${near.length ? ` Did you mean: ${near.join(', ')}?` : ' Use list_components to browse.'}`,
       isError: true,
@@ -112,9 +113,9 @@ async function listRegistry(
   args: { category?: string, query?: string },
 ): Promise<ToolResult> {
   const rows = index.items.filter(
-    (it) =>
-      matches(args.category, ...(it.categories ?? [])) &&
-      matches(args.query, it.name, it.title, it.description, ...(itemComponents(it))),
+    it =>
+      matches(args.category, ...(it.categories ?? []))
+      && matches(args.query, it.name, it.title, it.description, ...(itemComponents(it))),
   )
   if (!rows.length) {
     return { text: `No ${kind}s matched (category=${args.category ?? '—'}, query=${args.query ?? '—'}). ${index.items.length} ${kind}s total.` }
@@ -129,9 +130,11 @@ async function listRegistry(
     const cats = (it.categories ?? []).join(', ')
     const tier = typeof it.meta?.tier === 'string' ? ` · ${it.meta.tier}` : ''
     parts.push(`- **${it.name}** — ${it.title ?? it.name}${cats ? ` _(${cats}${tier})_` : ''}`)
-    if (it.description) parts.push(`  - ${it.description}`)
+    if (it.description)
+      parts.push(`  - ${it.description}`)
     const comps = itemComponents(it)
-    if (comps.length) parts.push(`  - built from: ${comps.join(', ')}`)
+    if (comps.length)
+      parts.push(`  - built from: ${comps.join(', ')}`)
   }
   return { text: parts.join('\n') }
 }
@@ -165,9 +168,11 @@ function renderItem(
     `- **Registry item:** ${url}`,
   ]
   const deps = item.dependencies ?? []
-  if (deps.length) parts.push(`- **npm dependencies:** ${deps.join(', ')} — \`${ADD.npm} ${deps.join(' ')}\``)
+  if (deps.length)
+    parts.push(`- **npm dependencies:** ${deps.join(', ')} — \`${ADD.npm} ${deps.join(' ')}\``)
   const comps = itemComponents(item)
-  if (comps.length) parts.push(`- **Components used:** ${comps.join(', ')}`)
+  if (comps.length)
+    parts.push(`- **Components used:** ${comps.join(', ')}`)
   parts.push('')
   for (const file of item.files ?? []) {
     parts.push(`## ${file.target ?? file.path}`)
@@ -251,8 +256,10 @@ export async function getInstallCommand(
   const pm = args.packageManager ?? 'npm'
   const type = args.type ?? 'block'
   let url: string
-  if (type === 'tokens') url = client.tokensUrl()
-  else if (type === 'template') url = client.templateUrl(args.name)
+  if (type === 'tokens')
+    url = client.tokensUrl()
+  else if (type === 'template')
+    url = client.templateUrl(args.name)
   else url = client.blockUrl(args.name)
 
   const runtime = `${ADD[pm]} @dzup-ui/core @dzup-ui/tokens`
@@ -284,13 +291,13 @@ export async function search(
     client.components(),
   ])
   const q = args.query
-  const blockHits = blocks.items.filter((it) =>
+  const blockHits = blocks.items.filter(it =>
     matches(q, it.name, it.title, it.description, ...itemComponents(it)),
   )
-  const templateHits = templates.items.filter((it) =>
+  const templateHits = templates.items.filter(it =>
     matches(q, it.name, it.title, it.description, ...itemComponents(it)),
   )
-  const componentHits = components.filter((c) => matches(q, c.name, c.description, c.family))
+  const componentHits = components.filter(c => matches(q, c.name, c.description, c.family))
 
   const parts: string[] = [`# Search "${q}"`, '']
   const section = (title: string, lines: string[]) => {
@@ -298,8 +305,8 @@ export async function search(
     parts.push(...(lines.length ? lines : ['_none_']))
     parts.push('')
   }
-  section('Components', componentHits.slice(0, 25).map((c) => `- **${c.name}** (${c.family}) — ${c.description} · \`get_component\``))
-  section('Blocks', blockHits.slice(0, 25).map((it) => `- **${it.name}** — ${it.title ?? ''} · \`get_block\``))
-  section('Templates', templateHits.slice(0, 25).map((it) => `- **${it.name}** — ${it.title ?? ''} · \`get_template\``))
+  section('Components', componentHits.slice(0, 25).map(c => `- **${c.name}** (${c.family}) — ${c.description} · \`get_component\``))
+  section('Blocks', blockHits.slice(0, 25).map(it => `- **${it.name}** — ${it.title ?? ''} · \`get_block\``))
+  section('Templates', templateHits.slice(0, 25).map(it => `- **${it.name}** — ${it.title ?? ''} · \`get_template\``))
   return { text: parts.join('\n').trimEnd() }
 }

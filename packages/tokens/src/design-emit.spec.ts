@@ -6,15 +6,15 @@
  * the real token maps to guard against missing placeholders / thrown errors.
  */
 
+import type { DesignMdInput } from './design-emit.js'
 import { readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { describe, expect, it } from 'vitest'
 
+import { describe, expect, it } from 'vitest'
 import {
   BUTTON_TOKENS,
   CARD_TOKENS,
 } from './component/index.js'
-import { catalogCounts } from './design-md.js'
 import {
   buildBreakpoints,
   buildCatalog,
@@ -27,16 +27,19 @@ import {
   COMPONENT_COUNT_RULE,
   CURATED_COLOR_ROLES,
   CURATED_COMPONENT_FAMILIES,
-  type DesignMdInput,
+
   DOCUMENTED_COUNT_RULE,
   emitDesignMd,
   PLACEHOLDERS,
   resolveColor,
 } from './design-emit.js'
+import { catalogCounts } from './design-md.js'
 import { BREAKPOINTS } from './primitives/breakpoints.js'
 import { generateColorCssVars } from './primitives/colors.js'
+import { RADIUS_SCALE } from './primitives/radius.js'
+import { SHADOW_SCALE, SHADOW_SCALE_DARK } from './primitives/shadows.js'
+import { SPACING_SCALE } from './primitives/spacing.js'
 import { DURATIONS, EASINGS } from './primitives/transitions.js'
-import { Z_INDEX_SCALE } from './primitives/z-index.js'
 import {
   FONT_FAMILIES,
   FONT_SIZES,
@@ -44,9 +47,7 @@ import {
   LETTER_SPACINGS,
   LINE_HEIGHTS,
 } from './primitives/typography.js'
-import { RADIUS_SCALE } from './primitives/radius.js'
-import { SHADOW_SCALE, SHADOW_SCALE_DARK } from './primitives/shadows.js'
-import { SPACING_SCALE } from './primitives/spacing.js'
+import { Z_INDEX_SCALE } from './primitives/z-index.js'
 import { DARK_SEMANTIC_TOKENS } from './semantic/dark.js'
 import { LIGHT_SEMANTIC_TOKENS } from './semantic/light.js'
 

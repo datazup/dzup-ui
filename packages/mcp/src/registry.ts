@@ -27,6 +27,7 @@
 
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import process from 'node:process'
 
 /** Default public origin serving the generated registry (registry.json `homepage`). */
 export const DEFAULT_REGISTRY_URL = 'https://dzup-ui.com'
@@ -102,10 +103,7 @@ export function createReader(base: string): Reader {
   return async (sitePath) => {
     const rel = sitePath.replace(/^\//, '')
     const candidates = rel.startsWith('storybook/')
-      ? [
-          join(root, 'apps/storybook/public', rel.slice('storybook/'.length)),
-          join(root, sitePath),
-        ]
+      ? [join(root, 'apps/storybook/public', rel.slice('storybook/'.length)), join(root, sitePath)]
       : [join(root, 'apps/landing/public', rel), join(root, sitePath)]
     let lastErr: unknown
     for (const p of candidates) {
@@ -242,19 +240,20 @@ export function parseComponentIndex(md: string): ComponentSummary[] {
     }
   }
   for (const line of lines) {
-    const fam = /^##\s+(.+?)\s*$/.exec(line)
+    const fam = /^##\s+(\S.*)$/.exec(line)
     if (fam) {
       flush()
-      family = fam[1]!
+      family = fam[1]!.trim()
       continue
     }
     if (family === 'Conventions' || !family)
       continue
     // `- **DzName** — description`  (em dash or hyphen separator, both tolerated)
-    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*\s*(?:[—–-]\s*)?(.*)$/.exec(line)
+    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*(.*)$/.exec(line)
     if (head) {
       flush()
-      current = { name: head[1]!, family, description: head[2]!.trim(), details: '' }
+      const description = head[2]!.trim().replace(/^[—–-]\s*/, '')
+      current = { name: head[1]!, family, description, details: '' }
       continue
     }
     // Indented continuation line belongs to the component currently being read.

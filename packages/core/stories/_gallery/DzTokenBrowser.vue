@@ -14,6 +14,7 @@
  *   DzCopyButton), so it stays token-only and themable itself.
  */
 
+import type { TokenCategory, TokenEntry, TokenTier } from './tokenManifest.ts'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { DzCopyButton } from '../../src/components/buttons'
 import { DzCard } from '../../src/components/cards'
@@ -21,9 +22,7 @@ import { DzChip } from '../../src/components/data'
 import { DzInput } from '../../src/components/inputs'
 import {
   buildTokenManifest,
-  type TokenCategory,
-  type TokenEntry,
-  type TokenTier,
+
 } from './tokenManifest.ts'
 
 // ---------------------------------------------------------------------------
@@ -171,7 +170,8 @@ onMounted(() => {
   observer = new MutationObserver(() => recompute())
   const opts: MutationObserverInit = { attributes: true, attributeFilter: ['data-theme', 'class', 'style'] }
   observer.observe(document.documentElement, opts)
-  if (document.body) observer.observe(document.body, opts)
+  if (document.body)
+    observer.observe(document.body, opts)
 })
 
 onBeforeUnmount(() => {
@@ -196,9 +196,12 @@ const tiers: TokenTier[] = ['primitive', 'semantic', 'component']
 const filtered = computed<TokenEntry[]>(() => {
   const q = query.value.trim().toLowerCase()
   return tokens.value.filter((t) => {
-    if (activeTier.value !== 'all' && t.tier !== activeTier.value) return false
-    if (activeCategory.value !== 'all' && t.category !== activeCategory.value) return false
-    if (!q) return true
+    if (activeTier.value !== 'all' && t.tier !== activeTier.value)
+      return false
+    if (activeCategory.value !== 'all' && t.category !== activeCategory.value)
+      return false
+    if (!q)
+      return true
     return (
       t.name.toLowerCase().includes(q)
       || t.reference.toLowerCase().includes(q)
@@ -234,17 +237,17 @@ function showReference(t: TokenEntry): boolean {
   return d.includes('var(') && d !== live(t.name).resolved
 }
 
-type PreviewKind =
-  | 'color'
-  | 'spacing'
-  | 'radius'
-  | 'shadow'
-  | 'typo-family'
-  | 'typo-size'
-  | 'typo-weight'
-  | 'typo-lead'
-  | 'typo-track'
-  | 'plain'
+type PreviewKind
+  = | 'color'
+    | 'spacing'
+    | 'radius'
+    | 'shadow'
+    | 'typo-family'
+    | 'typo-size'
+    | 'typo-weight'
+    | 'typo-lead'
+    | 'typo-track'
+    | 'plain'
 
 function previewKind(t: TokenEntry): PreviewKind {
   switch (t.category) {
@@ -257,10 +260,14 @@ function previewKind(t: TokenEntry): PreviewKind {
     case 'shadow':
       return 'shadow'
     case 'typography':
-      if (t.name === '--dz-font-sans' || t.name === '--dz-font-mono' || t.name.includes('font-family')) return 'typo-family'
-      if (t.name.startsWith('--dz-text-') || t.name.includes('font-size')) return 'typo-size'
-      if (t.name.startsWith('--dz-leading-') || t.name.includes('line-height')) return 'typo-lead'
-      if (t.name.startsWith('--dz-tracking-') || t.name.includes('letter-spacing')) return 'typo-track'
+      if (t.name === '--dz-font-sans' || t.name === '--dz-font-mono' || t.name.includes('font-family'))
+        return 'typo-family'
+      if (t.name.startsWith('--dz-text-') || t.name.includes('font-size'))
+        return 'typo-size'
+      if (t.name.startsWith('--dz-leading-') || t.name.includes('line-height'))
+        return 'typo-lead'
+      if (t.name.startsWith('--dz-tracking-') || t.name.includes('letter-spacing'))
+        return 'typo-track'
       return 'typo-weight'
     default:
       return 'plain'
@@ -388,8 +395,12 @@ const cssVar = (name: string): string => `var(${name})`
           <!-- Meta -->
           <div class="dztb__body">
             <code class="dztb__name" :title="t.name">{{ t.name }}</code>
-            <div class="dztb__value" :title="live(t.name).resolved">{{ live(t.name).resolved || '—' }}</div>
-            <div v-if="showReference(t)" class="dztb__ref" :title="live(t.name).declared">→ {{ live(t.name).declared }}</div>
+            <div class="dztb__value" :title="live(t.name).resolved">
+              {{ live(t.name).resolved || '—' }}
+            </div>
+            <div v-if="showReference(t)" class="dztb__ref" :title="live(t.name).declared">
+              → {{ live(t.name).declared }}
+            </div>
 
             <div class="dztb__copyrow">
               <DzCopyButton
@@ -414,7 +425,9 @@ const cssVar = (name: string): string => `var(${name})`
 
             <div v-if="t.components.length" class="dztb__used" :title="t.components.join(', ')">
               <span class="dztb__usedlabel">Used by</span>
-              {{ t.components.slice(0, 4).join(', ') }}<template v-if="t.components.length > 4"> +{{ t.components.length - 4 }}</template>
+              {{ t.components.slice(0, 4).join(', ') }}<template v-if="t.components.length > 4">
+                +{{ t.components.length - 4 }}
+              </template>
             </div>
           </div>
         </DzCard>

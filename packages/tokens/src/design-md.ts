@@ -10,10 +10,11 @@
  * This module reads the narrative from disk but writes nothing.
  */
 
+import type { CatalogCounts, ScaleMap } from './design-emit.js'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 
+import { fileURLToPath } from 'node:url'
 import { APPSHELL_TOKENS } from './component/appshell.js'
 import { BADGE_TOKENS } from './component/badge.js'
 import { BUTTON_TOKENS } from './component/button.js'
@@ -23,7 +24,7 @@ import { CONTROL_TOKENS } from './component/control.js'
 import { DIALOG_TOKENS } from './component/dialog.js'
 import { INPUT_TOKENS } from './component/input.js'
 import { SIDEBAR_TOKENS } from './component/sidebar.js'
-import { type CatalogCounts, emitDesignMd, resolveColor, type ScaleMap } from './design-emit.js'
+import { emitDesignMd, resolveColor } from './design-emit.js'
 import { BREAKPOINTS, generateBreakpointCssVars } from './primitives/breakpoints.js'
 import { generateColorCssVars } from './primitives/colors.js'
 import { generateRadiusCssVars, RADIUS_SCALE } from './primitives/radius.js'
