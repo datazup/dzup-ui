@@ -7,8 +7,12 @@ import { createLibConfig } from '../tooling/src/vite.ts'
 const config = createLibConfig({
   baseDir: __dirname,
   entry: {
-    index: 'src/index.ts',
-    resolver: 'src/resolver.ts',
+    'index': 'src/index.ts',
+    'resolver': 'src/resolver.ts',
+    // Side-effect CSS entry: pulls src/styles/*.css into the extracted
+    // dist/core.css asset (exported as "@dzup-ui/core/styles"). Named
+    // "styles/index" so the emitted JS sits beside its .d.ts (validate:dts).
+    'styles/index': 'src/styles/index.ts',
   },
   alias: {
     '@dzup-ui/tokens': resolve(__dirname, '../tokens/src'),
