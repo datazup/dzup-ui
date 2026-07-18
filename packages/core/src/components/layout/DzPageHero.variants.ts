@@ -11,7 +11,7 @@ export const pageHeroVariants = tv({
     'relative isolate flex flex-wrap items-end justify-between overflow-hidden',
     'gap-[var(--dz-page-hero-gap)] rounded-[var(--dz-page-hero-radius)] p-[var(--dz-page-hero-padding)]',
     '[background:var(--dz-page-hero-bg)]',
-    "after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:content-['']",
+    'after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:content-[\'\']',
     'after:[background:var(--dz-page-hero-overlay)]',
     'after:[background-position:center] after:[background-size:auto,auto,2rem_2rem,2rem_2rem]',
     'max-sm:flex-col max-sm:items-stretch',

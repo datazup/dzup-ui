@@ -1,3 +1,4 @@
+/* eslint-disable no-console -- one-shot CLI codemod; console.log is its output */
 /**
  * One-shot codemod: opt a story family into the enforced a11y gate.
  *
@@ -14,21 +15,26 @@ import { join } from 'node:path'
 import process from 'node:process'
 
 const [family, note] = process.argv.slice(2)
-if (!family || !note) throw new Error('usage: flip-family.mjs <family> <note>')
+if (!family || !note)
+  throw new Error('usage: flip-family.mjs <family> <note>')
 
 const dir = join('packages', 'core', 'stories', family)
 
 /** Find the `const meta = { … }` span by brace-matching from its opening brace. */
 function metaSpan(src) {
   const start = src.indexOf('const meta = {')
-  if (start === -1) return null
+  if (start === -1)
+    return null
   const open = src.indexOf('{', start)
   let depth = 0
   for (let i = open; i < src.length; i++) {
-    if (src[i] === '{') depth++
+    if (src[i] === '{') {
+      depth++
+    }
     else if (src[i] === '}') {
       depth--
-      if (depth === 0) return { open, close: i }
+      if (depth === 0)
+        return { open, close: i }
     }
   }
   return null
@@ -36,11 +42,17 @@ function metaSpan(src) {
 
 for (const file of readdirSync(dir).filter(f => f.endsWith('.stories.ts'))) {
   const path = join(dir, file)
-  let src = readFileSync(path, 'utf8')
-  if (/\ba11yError\b/.test(src)) { console.log(`skip (already flipped): ${file}`); continue }
+  const src = readFileSync(path, 'utf8')
+  if (/\ba11yError\b/.test(src)) {
+    console.log(`skip (already flipped): ${file}`)
+    continue
+  }
 
   const span = metaSpan(src)
-  if (!span) { console.log(`SKIP (no meta): ${file}`); continue }
+  if (!span) {
+    console.log(`SKIP (no meta): ${file}`)
+    continue
+  }
 
   // --- 2. parameters ---------------------------------------------------------
   const meta = src.slice(span.open, span.close)
@@ -50,7 +62,8 @@ for (const file of readdirSync(dir).filter(f => f.endsWith('.stories.ts'))) {
   if (paramsRe.test(meta)) {
     const patched = meta.replace(paramsRe, m => `${m}\n    // ${note}\n    ...a11yError,`)
     next = src.slice(0, span.open) + patched + src.slice(span.close)
-  } else {
+  }
+  else {
     // Insert a fresh parameters block, keeping the family's key order
     // (title / component / tags / parameters / argTypes) — so anchor it after
     // `tags:`, falling back to `component:`, then to the top of meta.
@@ -67,7 +80,8 @@ for (const file of readdirSync(dir).filter(f => f.endsWith('.stories.ts'))) {
       const list = [...names.split(',').map(s => s.trim()).filter(Boolean), 'a11yError'].sort()
       return `import { ${list.join(', ')} } from '../_shared'`
     })
-  } else {
+  }
+  else {
     // No _shared import yet — add one after the last existing import.
     const imports = [...next.matchAll(/^import .*$/gm)]
     const last = imports.at(-1)

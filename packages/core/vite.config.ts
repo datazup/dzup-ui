@@ -30,7 +30,7 @@ const COMPONENT_FAMILIES = [
 ] as const
 
 const familyEntries = Object.fromEntries(
-  COMPONENT_FAMILIES.map((family) => [
+  COMPONENT_FAMILIES.map(family => [
     `components/${family}/index`,
     `src/components/${family}/index.ts`,
   ]),
@@ -41,8 +41,8 @@ const familyEntries = Object.fromEntries(
 const config = createLibConfig({
   baseDir: __dirname,
   entry: {
-    index: 'src/index.ts',
-    resolver: 'src/resolver.ts',
+    'index': 'src/index.ts',
+    'resolver': 'src/resolver.ts',
     'providers/index': 'src/providers/index.ts',
     ...familyEntries,
   },
