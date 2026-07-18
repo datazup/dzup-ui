@@ -29,7 +29,7 @@ export const treeSelectVariants = tv({
     chip: [
       'inline-flex items-center gap-[var(--dz-spacing-1)]',
       'rounded-[var(--dz-radius-sm)]',
-      'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]',
+      'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]',
       'px-[var(--dz-spacing-1_5)] py-[var(--dz-spacing-0-5)]',
       'text-[length:var(--dz-text-xs)]',
       'max-w-full',

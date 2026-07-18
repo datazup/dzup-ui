@@ -46,7 +46,16 @@ export function a11yDisableRules(...ruleIds: string[]) {
   return {
     a11y: {
       test: 'error',
+      // `config.rules` feeds axe.configure — but the global gate in
+      // `.storybook/preview.ts` pins `options.runOnly` by WCAG tag, and axe's
+      // rule selection (`ruleShouldRun`) re-includes any tag-matched rule
+      // regardless of its configure-time `enabled: false`. Only a rule override
+      // in the axe.run *options* (`options.rules[id].enabled`) beats `runOnly`,
+      // so both forms are emitted; dropping either silently re-arms the rule.
       config: { rules: ruleIds.map(id => ({ id, enabled: false })) },
+      options: {
+        rules: Object.fromEntries(ruleIds.map(id => [id, { enabled: false }])),
+      },
     },
   } as const
 }

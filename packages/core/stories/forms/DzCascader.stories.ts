@@ -3,19 +3,6 @@ import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzCascader } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzCascader is a cascading multi-level select for ordered, hierarchical
- * choices (country → state → city). The trigger opens a popover that reveals
- * child options column-by-column as each level is chosen.
- *
- * Selecting a leaf commits the path and closes the popover. With
- * `change-on-select`, any intermediate node also commits. `expand-trigger`
- * switches between click (default) and hover expansion, and `filter` replaces
- * the columns with a flat, searchable list of full paths.
- *
- * `v-model:value` is an array of keys describing the selected path,
- * e.g. `['cn', 'zj', 'hz']`.
- */
 const regions = [
   {
     label: 'China',
@@ -70,6 +57,19 @@ const regions = [
   },
 ]
 
+/**
+ * DzCascader is a cascading multi-level select for ordered, hierarchical
+ * choices (country → state → city). The trigger opens a popover that reveals
+ * child options column-by-column as each level is chosen.
+ *
+ * Selecting a leaf commits the path and closes the popover. With
+ * `change-on-select`, any intermediate node also commits. `expand-trigger`
+ * switches between click (default) and hover expansion, and `filter` replaces
+ * the columns with a flat, searchable list of full paths.
+ *
+ * `v-model:value` is an array of keys describing the selected path,
+ * e.g. `['cn', 'zj', 'hz']`.
+ */
 const meta = {
   title: 'Core/Forms/DzCascader',
   component: DzCascader,
@@ -208,9 +208,9 @@ export const ChangeOnSelect: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Any level commits; the popover stays open to drill deeper.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Any level commits; the popover stays open to drill deeper.</p>
         <DzCascader v-model:value="value" :options="regions" change-on-select placeholder="Select region" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -260,7 +260,7 @@ export const HoverExpand: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Hover a node to reveal its children; click to select.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Hover a node to reveal its children; click to select.</p>
         <DzCascader :options="regions" expand-trigger="hover" placeholder="Hover to expand" />
       </div>
     `,
@@ -279,9 +279,9 @@ export const Filterable: Story = {
     },
     template: `
       <div class="space-y-2 max-w-xs">
-        <p class="text-sm text-gray-500">Open and type to search across full paths (e.g. "hang").</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Open and type to search across full paths (e.g. "hang").</p>
         <DzCascader v-model:value="value" :options="regions" filter placeholder="Search regions" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>
       </div>
     `,
   }),

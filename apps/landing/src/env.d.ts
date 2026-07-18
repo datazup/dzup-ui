@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  /** Opt-in flag for the live GitHub/npm stat tiles (src/composables/useLiveStats.ts). */
+  readonly VITE_ENABLE_LIVE_STATS?: string
+}
+
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
 

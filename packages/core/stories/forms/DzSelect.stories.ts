@@ -258,7 +258,7 @@ export const WithSlots: Story = {
     template: `
       <DzSelect :items="items" placeholder="Choose fruit..." class="max-w-xs">
         <template #empty>
-          <div class="p-4 text-center text-sm text-gray-400">No fruits available</div>
+          <div class="p-4 text-center text-sm text-[var(--dz-muted-foreground)]">No fruits available</div>
         </template>
       </DzSelect>
     `,
@@ -305,7 +305,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-xs">
         <DzSelect :items="items" v-model="selected" placeholder="Pick a fruit..." />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ selected || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ selected || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -336,7 +336,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Tab to focus the select, use arrow keys to navigate, Enter to select.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus the select, use arrow keys to navigate, Enter to select.</p>
         <DzSelect :items="items" placeholder="Keyboard navigable" aria-label="Fruit selection" />
       </div>
     `,

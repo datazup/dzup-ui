@@ -83,9 +83,9 @@ export const Default: Story = {
     },
     template: `
       <DzStack v-bind="args">
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">Item A</div>
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">Item B</div>
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">Item C</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">Item A</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">Item B</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">Item C</div>
       </DzStack>
     `,
   }),
@@ -111,19 +111,19 @@ export const AllDirections: Story = {
     template: `
       <div class="space-y-8">
         <div>
-          <p class="text-xs text-gray-500 mb-2">direction="vertical" (default)</p>
-          <DzStack direction="vertical" gap="sm" class="border border-dashed border-gray-200 p-3 rounded">
-            <div class="bg-green-100 text-green-800 text-sm p-3 rounded">A</div>
-            <div class="bg-green-100 text-green-800 text-sm p-3 rounded">B</div>
-            <div class="bg-green-100 text-green-800 text-sm p-3 rounded">C</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">direction="vertical" (default)</p>
+          <DzStack direction="vertical" gap="sm" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">A</div>
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">B</div>
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">C</div>
           </DzStack>
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">direction="horizontal"</p>
-          <DzStack direction="horizontal" gap="sm" class="border border-dashed border-gray-200 p-3 rounded">
-            <div class="bg-green-100 text-green-800 text-sm p-3 rounded">A</div>
-            <div class="bg-green-100 text-green-800 text-sm p-3 rounded">B</div>
-            <div class="bg-green-100 text-green-800 text-sm p-3 rounded">C</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">direction="horizontal"</p>
+          <DzStack direction="horizontal" gap="sm" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">A</div>
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">B</div>
+            <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">C</div>
           </DzStack>
         </div>
       </div>
@@ -142,10 +142,10 @@ export const AllGaps: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="g in ['none', 'xs', 'sm', 'md', 'lg', 'xl']" :key="g">
-          <p class="text-xs text-gray-500 mb-2">gap="{{ g }}"</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">gap="{{ g }}"</p>
           <DzStack :gap="g" direction="horizontal">
             <div v-for="i in 4" :key="i"
-              class="bg-purple-100 text-purple-800 text-sm px-4 py-2 rounded">
+              class="bg-[var(--dz-colors-purple-100)] text-[var(--dz-colors-purple-800)] text-sm px-4 py-2 rounded">
               {{ i }}
             </div>
           </DzStack>
@@ -166,11 +166,11 @@ export const AllAlignments: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="a in ['start', 'center', 'end', 'stretch']" :key="a">
-          <p class="text-xs text-gray-500 mb-2">align="{{ a }}"</p>
-          <DzStack :align="a" gap="sm" class="border border-dashed border-gray-200 p-3 rounded">
-            <div class="bg-amber-100 text-amber-800 text-sm px-4 py-2 rounded w-24">Short</div>
-            <div class="bg-amber-100 text-amber-800 text-sm px-4 py-2 rounded w-40">A bit longer</div>
-            <div class="bg-amber-100 text-amber-800 text-sm px-4 py-2 rounded w-32">Medium</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">align="{{ a }}"</p>
+          <DzStack :align="a" gap="sm" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
+            <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm px-4 py-2 rounded w-24">Short</div>
+            <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm px-4 py-2 rounded w-40">A bit longer</div>
+            <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm px-4 py-2 rounded w-32">Medium</div>
           </DzStack>
         </div>
       </div>
@@ -189,9 +189,9 @@ export const DarkMode: Story = {
     components: { DzStack },
     template: `
       <DzStack gap="md">
-        <div class="bg-gray-700 text-gray-200 text-sm p-3 rounded">Item A</div>
-        <div class="bg-gray-700 text-gray-200 text-sm p-3 rounded">Item B</div>
-        <div class="bg-gray-700 text-gray-200 text-sm p-3 rounded">Item C</div>
+        <div class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm p-3 rounded">Item A</div>
+        <div class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm p-3 rounded">Item B</div>
+        <div class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm p-3 rounded">Item C</div>
       </DzStack>
     `,
   }),
@@ -209,17 +209,17 @@ export const RealWorldFormFields: Story = {
       <DzStack gap="lg" class="max-w-sm">
         <div class="space-y-1">
           <label class="text-sm font-medium">Name</label>
-          <input type="text" class="w-full border rounded px-3 py-2 text-sm" placeholder="John Doe" />
+          <input type="text" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" placeholder="John Doe" />
         </div>
         <div class="space-y-1">
           <label class="text-sm font-medium">Email</label>
-          <input type="email" class="w-full border rounded px-3 py-2 text-sm" placeholder="john@example.com" />
+          <input type="email" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" placeholder="john@example.com" />
         </div>
         <div class="space-y-1">
           <label class="text-sm font-medium">Message</label>
-          <textarea class="w-full border rounded px-3 py-2 text-sm" rows="3" placeholder="Your message..." />
+          <textarea class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" rows="3" placeholder="Your message..." />
         </div>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded text-sm">Submit</button>
+        <button class="bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] px-4 py-2 rounded text-sm">Submit</button>
       </DzStack>
     `,
   }),
@@ -235,10 +235,10 @@ export const RealWorldUserProfile: Story = {
     components: { DzStack },
     template: `
       <DzStack direction="horizontal" gap="md" align="center">
-        <div class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">JD</div>
+        <div class="w-12 h-12 rounded-full bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] flex items-center justify-center font-bold">JD</div>
         <DzStack gap="xs">
           <span class="font-semibold text-sm">Jane Doe</span>
-          <span class="text-xs text-gray-500">Senior Developer</span>
+          <span class="text-xs text-[var(--dz-muted-foreground)]">Senior Developer</span>
         </DzStack>
       </DzStack>
     `,
@@ -255,11 +255,11 @@ export const Accessibility: Story = {
     components: { DzStack },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Stack rendered as a semantic list for screen readers.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Stack rendered as a semantic list for screen readers.</p>
         <DzStack as="ul" gap="sm" aria-label="Task list">
-          <li class="bg-blue-50 p-3 rounded text-sm">Complete the design review</li>
-          <li class="bg-blue-50 p-3 rounded text-sm">Update component documentation</li>
-          <li class="bg-blue-50 p-3 rounded text-sm">Run accessibility audit</li>
+          <li class="bg-[var(--dz-primary-muted)] p-3 rounded text-sm">Complete the design review</li>
+          <li class="bg-[var(--dz-primary-muted)] p-3 rounded text-sm">Update component documentation</li>
+          <li class="bg-[var(--dz-primary-muted)] p-3 rounded text-sm">Run accessibility audit</li>
         </DzStack>
       </div>
     `,

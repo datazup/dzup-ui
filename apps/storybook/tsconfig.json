@@ -22,7 +22,6 @@
     ".storybook/**/*.ts",
     "stories/**/*.ts",
     "stories/**/*.mdx",
-    "../../packages/core/src/**/*.stories.ts",
     "../../packages/core/stories/**/*.stories.ts"
   ]
 }

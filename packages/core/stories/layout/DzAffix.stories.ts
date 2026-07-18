@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzAffix } from '../../src/components/layout'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzAffix** pins its slotted content to the viewport once it would scroll
@@ -87,20 +88,20 @@ export const AffixTop: Story = {
       return { args, container, affixed, getTarget }
     },
     template: `
-      <div ref="container" class="h-64 overflow-auto border rounded-lg p-4">
-        <p class="text-sm text-gray-500 mb-3">Scroll this panel down ↓</p>
-        <div style="height: 120px" class="bg-gray-50 rounded mb-4 flex items-center justify-center text-xs text-gray-400">
+      <div ref="container" class="h-64 overflow-auto border border-[var(--dz-border)] rounded-lg p-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">Scroll this panel down ↓</p>
+        <div style="height: 120px" class="bg-[var(--dz-muted)] rounded mb-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
           spacer
         </div>
         <DzAffix v-bind="args" :target="getTarget" @change="affixed = $event">
           <div
             class="px-4 py-2 rounded-lg shadow-md text-sm font-medium"
-            :class="affixed ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-800'"
+            :class="affixed ? 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]' : 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]'"
           >
             {{ affixed ? 'Pinned to top' : 'Scroll to pin me' }}
           </div>
         </DzAffix>
-        <div style="height: 600px" class="bg-gray-50 rounded mt-4 flex items-center justify-center text-xs text-gray-400">
+        <div style="height: 600px" class="bg-[var(--dz-muted)] rounded mt-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
           long content
         </div>
       </div>
@@ -125,19 +126,58 @@ export const AffixBottom: Story = {
       return { args, container, affixed, getTarget }
     },
     template: `
-      <div ref="container" class="h-64 overflow-auto border rounded-lg p-4">
-        <p class="text-sm text-gray-500 mb-3">A bottom-pinned CTA stays in view ↓</p>
-        <div style="height: 600px" class="bg-gray-50 rounded mb-4 flex items-center justify-center text-xs text-gray-400">
+      <div ref="container" class="h-64 overflow-auto border border-[var(--dz-border)] rounded-lg p-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">A bottom-pinned CTA stays in view ↓</p>
+        <div style="height: 600px" class="bg-[var(--dz-muted)] rounded mb-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
           long content
         </div>
         <DzAffix v-bind="args" :target="getTarget" @change="affixed = $event">
           <div
             class="px-4 py-2 rounded-lg shadow-md text-sm font-medium"
-            :class="affixed ? 'bg-green-600 text-white' : 'bg-green-50 text-green-800'"
+            :class="affixed ? 'bg-[var(--dz-success)] text-[var(--dz-success-foreground)]' : 'bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)]'"
           >
             {{ affixed ? 'Pinned to bottom' : 'Keep scrolling' }}
           </div>
         </DzAffix>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzAffix },
+    setup() {
+      const container = ref<HTMLElement | null>(null)
+      const affixed = ref(false)
+      // Same bounded panel as Affix Top — the window never scrolls inside the
+      // story iframe, so the affix measures against this container.
+      const getTarget = () => container.value
+      return { container, affixed, getTarget }
+    },
+    template: `
+      <div ref="container" class="h-64 overflow-auto border border-[var(--dz-border)] rounded-lg p-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">Scroll this panel down ↓</p>
+        <div style="height: 120px" class="bg-[var(--dz-muted)] rounded mb-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
+          spacer
+        </div>
+        <DzAffix :offset-top="16" :target="getTarget" @change="affixed = $event">
+          <div
+            class="px-4 py-2 rounded-lg shadow-md text-sm font-medium"
+            :class="affixed ? 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]' : 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]'"
+          >
+            {{ affixed ? 'Pinned to top' : 'Scroll to pin me' }}
+          </div>
+        </DzAffix>
+        <div style="height: 600px" class="bg-[var(--dz-muted)] rounded mt-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
+          long content
+        </div>
       </div>
     `,
   }),
@@ -158,20 +198,20 @@ export const WithinContainer: Story = {
       return { container, affixed, getTarget }
     },
     template: `
-      <div ref="container" class="h-64 overflow-auto border rounded-lg p-4 relative">
-        <p class="text-sm text-gray-500 mb-3">
+      <div ref="container" class="h-64 overflow-auto border border-[var(--dz-border)] rounded-lg p-4 relative">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">
           The toolbar pins to the top of <em>this</em> container, not the window.
         </p>
         <DzAffix :offset-top="8" :target="getTarget" @change="affixed = $event">
           <div
             class="px-4 py-2 rounded-lg shadow text-sm font-medium flex items-center gap-2"
-            :class="affixed ? 'bg-purple-600 text-white' : 'bg-purple-50 text-purple-800'"
+            :class="affixed ? 'bg-[var(--dz-colors-purple-600)] text-[var(--dz-colors-neutral-50)]' : 'bg-[var(--dz-colors-purple-50)] text-[var(--dz-colors-purple-800)]'"
           >
             <span>Toolbar</span>
             <span class="text-xs opacity-75">{{ affixed ? '(pinned)' : '(in flow)' }}</span>
           </div>
         </DzAffix>
-        <div style="height: 700px" class="bg-gray-50 rounded mt-4 flex items-center justify-center text-xs text-gray-400">
+        <div style="height: 700px" class="bg-[var(--dz-muted)] rounded mt-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]">
           scrollable region
         </div>
       </div>

@@ -233,6 +233,7 @@ const llmBundle = computed(() => {
     :lede="template.blurb"
     align="left"
     heading-id="template-detail-title"
+    :heading-level="1"
   >
     <div class="detail">
       <!-- Meta strip: built-with chips + source actions. -->

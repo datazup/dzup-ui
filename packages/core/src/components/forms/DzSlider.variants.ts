@@ -24,7 +24,7 @@ export const sliderVariants = tv({
     ].join(' '),
     thumb: [
       'block rounded-full',
-      'border-[length:2px] border-[var(--dz-primary)]',
+      'border-[length:2px] border-[var(--dz-primary-solid)]',
       'bg-[var(--dz-background)]',
       'shadow-[var(--dz-shadow-sm)]',
       'transition-[var(--dz-control-transition)]',
@@ -66,11 +66,11 @@ export const sliderVariants = tv({
     },
     tone: {
       neutral: { range: 'bg-[var(--dz-foreground)]' },
-      primary: { range: 'bg-[var(--dz-primary)]' },
-      success: { range: 'bg-[var(--dz-success)]' },
+      primary: { range: 'bg-[var(--dz-primary-solid)]' },
+      success: { range: 'bg-[var(--dz-success-solid)]' },
       warning: { range: 'bg-[var(--dz-warning-solid)]' },
-      danger: { range: 'bg-[var(--dz-danger)]' },
-      info: { range: 'bg-[var(--dz-info)]' },
+      danger: { range: 'bg-[var(--dz-danger-solid)]' },
+      info: { range: 'bg-[var(--dz-info-solid)]' },
     },
     orientation: {
       horizontal: {

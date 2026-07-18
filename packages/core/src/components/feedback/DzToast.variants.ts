@@ -76,14 +76,14 @@ export const toastVariants = tv({
         toneIndicator: 'bg-[var(--dz-foreground)]',
       },
       primary: {
-        root: 'border-[var(--dz-primary)]/30',
-        actionButton: 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] hover:bg-[var(--dz-primary-hover)]',
-        toneIndicator: 'bg-[var(--dz-primary)]',
+        root: 'border-[var(--dz-primary-solid)]/30',
+        actionButton: 'bg-[var(--dz-primary-solid)] text-[var(--dz-primary-foreground)] hover:bg-[var(--dz-primary-solid-hover)]',
+        toneIndicator: 'bg-[var(--dz-primary-solid)]',
       },
       success: {
-        root: 'border-[var(--dz-success)]/30',
-        actionButton: 'bg-[var(--dz-success)] text-[var(--dz-success-foreground)] hover:bg-[var(--dz-success)]/90',
-        toneIndicator: 'bg-[var(--dz-success)]',
+        root: 'border-[var(--dz-success-solid)]/30',
+        actionButton: 'bg-[var(--dz-success-solid)] text-[var(--dz-success-foreground)] hover:bg-[var(--dz-success-solid-hover)]',
+        toneIndicator: 'bg-[var(--dz-success-solid)]',
       },
       warning: {
         root: 'border-[var(--dz-warning)]/30',
@@ -91,14 +91,14 @@ export const toastVariants = tv({
         toneIndicator: 'bg-[var(--dz-warning-solid)]',
       },
       danger: {
-        root: 'border-[var(--dz-danger)]/30',
-        actionButton: 'bg-[var(--dz-danger)] text-[var(--dz-danger-foreground)] hover:bg-[var(--dz-danger)]/90',
-        toneIndicator: 'bg-[var(--dz-danger)]',
+        root: 'border-[var(--dz-danger-solid)]/30',
+        actionButton: 'bg-[var(--dz-danger-solid)] text-[var(--dz-danger-foreground)] hover:bg-[var(--dz-danger-solid-hover)]',
+        toneIndicator: 'bg-[var(--dz-danger-solid)]',
       },
       info: {
-        root: 'border-[var(--dz-info)]/30',
-        actionButton: 'bg-[var(--dz-info)] text-[var(--dz-info-foreground)] hover:bg-[var(--dz-info)]/90',
-        toneIndicator: 'bg-[var(--dz-info)]',
+        root: 'border-[var(--dz-info-solid)]/30',
+        actionButton: 'bg-[var(--dz-info-solid)] text-[var(--dz-info-foreground)] hover:bg-[var(--dz-info-solid-hover)]',
+        toneIndicator: 'bg-[var(--dz-info-solid)]',
       },
     },
     position: {

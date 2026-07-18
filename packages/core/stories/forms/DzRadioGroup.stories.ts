@@ -186,7 +186,7 @@ export const Interactive: Story = {
           <DzRadio value="express">Express (2-3 days)</DzRadio>
           <DzRadio value="overnight">Overnight (next day)</DzRadio>
         </DzRadioGroup>
-        <p class="text-sm text-gray-500">Selected: <strong>{{ selected || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ selected || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -222,7 +222,7 @@ export const Accessibility: Story = {
     components: { DzRadioGroup, DzRadio },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab to focus the group, use arrow keys to navigate between radio buttons.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus the group, use arrow keys to navigate between radio buttons.</p>
         <DzRadioGroup aria-label="Accessible group">
           <DzRadio value="a">First option</DzRadio>
           <DzRadio value="b">Second option</DzRadio>

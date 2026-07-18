@@ -3,7 +3,7 @@ import { ChevronRight, Download, Mail, Plus, Search } from 'lucide-vue-next'
 import { userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzButton is the primary interactive button component.
@@ -16,13 +16,8 @@ const meta = {
   component: DzButton,
   tags: ['autodocs', 'status:stable'],
   parameters: {
-    // Design reference (TASK-0.15) — flagship seed. Shows the Figma frame in the
-    // "Design" addon panel beside the live render. Replace node-id/file when the
-    // canonical DzButton frame lands.
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-2&t=DzButton',
-    },
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
   },
   argTypes: {
     // Appearance
@@ -431,7 +426,7 @@ export const RealWorldFormActions: Story = {
   render: () => ({
     components: { DzButton },
     template: `
-      <div class="flex justify-end gap-3 border-t pt-4">
+      <div class="flex justify-end gap-3 border-t border-t-[var(--dz-border)] pt-4">
         <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
         <DzButton variant="outline" tone="neutral">Save Draft</DzButton>
         <DzButton tone="primary">Submit</DzButton>

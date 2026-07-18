@@ -8,7 +8,7 @@ import {
   DzDropdownMenuSeparator,
   DzDropdownMenuTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDropdownMenuContent compound sub-parts: DzDropdownMenuTrigger, DzDropdownMenuItem,
@@ -30,6 +30,10 @@ const meta = {
     DzDropdownMenuSeparator,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
 } satisfies Meta<typeof DzDropdownMenuContent>
 
 export default meta
@@ -142,7 +146,7 @@ export const CompoundComposition: Story = {
 
         <!-- Anatomy map -->
         <div
-          class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
+          class="rounded border border-[var(--dz-border)] px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
           <p>&lt;DzDropdownMenu&gt;                &lt;!-- root, v-model:open --&gt;</p>

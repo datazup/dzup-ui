@@ -4,7 +4,7 @@ A "continue on mobile" card built around DzQRCode — a token-styled SVG code wi
 
 - **Category:** Media
 - **Components:** DzQRCode, DzButton, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-qr
+- **Preview:** /blocks/media-qr
 
 ```vue
 <script setup lang="ts">

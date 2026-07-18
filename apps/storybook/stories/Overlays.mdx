@@ -2,6 +2,7 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import { StatusBadge } from './_blocks/StatusBadge.ts'
 import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { FamilyComponents } from './_blocks/FamilyComponents.ts'
 
 <Meta title="Core/Overlays/Overview" />
 
@@ -23,16 +24,7 @@ float a small bit of content next to a trigger?
 
 ## Components
 
-| Component | Use it for | Docs |
-|-----------|------------|------|
-| **DzDialog** | Compound modal for focused tasks/decisions (Trigger/Content/Title/Description/Close). | [DzDialog](?path=/docs/core-overlays-dzdialog--docs) |
-| **DzConfirmDialog** | Pre-composed confirm/cancel dialog with `default`/`danger` variants + async `loading`. | [DzConfirmDialog](?path=/docs/core-overlays-dzconfirmdialog--docs) |
-| **DzSheet** | Slide-out panel (top/right/bottom/left) for nav, settings, or detail views. | [DzSheet](?path=/docs/core-overlays-dzsheet--docs) |
-| **DzPopover** | Anchored, non-modal panel for rich content next to a trigger. | [DzPopover](?path=/docs/core-overlays-dzpopover--docs) |
-| **DzTooltip** | Hover/focus hint for an element — text only, never interactive. | [DzTooltip](?path=/docs/core-overlays-dztooltip--docs) |
-| **DzDropdownMenu** | Menu of actions opened from a trigger button. | [DzDropdownMenu](?path=/docs/core-overlays-dzdropdownmenu--docs) |
-| **DzContextMenu** | Right-click (contextmenu) menu over a region. | [DzContextMenu](?path=/docs/core-overlays-dzcontextmenu--docs) |
-| **DzCommandPalette** | Searchable command launcher (Ctrl/Cmd+K), grouped items + shortcuts. | [DzCommandPalette](?path=/docs/core-overlays-dzcommandpalette--docs) |
+<FamilyComponents family="Overlays" />
 
 ## When to use which
 

@@ -3,7 +3,7 @@ import { Copy, Image, Link, Pencil, Plus, Share2, Sparkles, Trash2 } from 'lucid
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzFab, DzSpeedDial } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * **DzSpeedDial** is a floating action button (DzFab) that fans out a set of
@@ -20,6 +20,8 @@ const meta = {
   component: DzSpeedDial,
   tags: ['autodocs', 'status:experimental'],
   parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
     layout: 'centered',
   },
   argTypes: {
@@ -270,7 +272,7 @@ export const Pinned: Story = {
       return { args, open }
     },
     template: `
-      <div class="relative border rounded-lg overflow-hidden" style="height: 420px; width: 100%;">
+      <div class="relative border border-[var(--dz-border)] rounded-lg overflow-hidden" style="height: 420px; width: 100%;">
         <p class="p-4 text-sm text-[var(--dz-muted-foreground)]">Scroll-anchored content. The dial stays pinned bottom-right.</p>
         <DzSpeedDial v-bind="args" v-model:open="open" position="bottom-right" aria-label="Page actions" />
       </div>

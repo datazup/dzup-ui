@@ -206,19 +206,19 @@ export const WithSlots: Story = {
       <DzTimeline aria-label="Timeline with custom indicators">
         <DzTimelineItem status="10:00 AM">
           <template #indicator>
-            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs font-bold">1</div>
+            <div class="w-6 h-6 rounded-full bg-[var(--dz-success-muted)] flex items-center justify-center text-[var(--dz-success-muted-foreground)] text-xs font-bold">1</div>
           </template>
           Morning standup meeting.
         </DzTimelineItem>
         <DzTimelineItem status="2:00 PM">
           <template #indicator>
-            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold">2</div>
+            <div class="w-6 h-6 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-[var(--dz-primary-muted-foreground)] text-xs font-bold">2</div>
           </template>
           Sprint planning session.
         </DzTimelineItem>
         <DzTimelineItem status="4:30 PM">
           <template #indicator>
-            <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xs font-bold">3</div>
+            <div class="w-6 h-6 rounded-full bg-[var(--dz-colors-purple-100)] flex items-center justify-center text-[var(--dz-colors-purple-600)] text-xs font-bold">3</div>
           </template>
           Code review and merge.
         </DzTimelineItem>
@@ -256,7 +256,7 @@ export const Accessibility: Story = {
     components: { DzTimeline, DzTimelineItem },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzTimeline renders as a semantic list element. Each DzTimelineItem
           is a list item with status as a time element. Screen readers announce
           each item with its status and content in sequence. The indicator
@@ -295,23 +295,23 @@ export const RealWorldOrderTracking: Story = {
         <DzTimeline aria-label="Order tracking">
           <DzTimelineItem tone="success" status="Mar 15, 10:23 AM">
             <p class="font-medium text-sm">Order Confirmed</p>
-            <p class="text-xs text-gray-500">Your order has been received and is being processed.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Your order has been received and is being processed.</p>
           </DzTimelineItem>
           <DzTimelineItem tone="success" status="Mar 15, 2:45 PM">
             <p class="font-medium text-sm">Payment Verified</p>
-            <p class="text-xs text-gray-500">Payment of $129.99 processed successfully.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Payment of $129.99 processed successfully.</p>
           </DzTimelineItem>
           <DzTimelineItem tone="success" status="Mar 16, 9:00 AM">
             <p class="font-medium text-sm">Shipped</p>
-            <p class="text-xs text-gray-500">Package dispatched via FedEx. Tracking: FX789012.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Package dispatched via FedEx. Tracking: FX789012.</p>
           </DzTimelineItem>
           <DzTimelineItem tone="info" status="Mar 17, 3:15 PM">
             <p class="font-medium text-sm">In Transit</p>
-            <p class="text-xs text-gray-500">Package is at the regional distribution center.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Package is at the regional distribution center.</p>
           </DzTimelineItem>
           <DzTimelineItem tone="neutral" status="Mar 19 (est.)">
             <p class="font-medium text-sm">Delivery</p>
-            <p class="text-xs text-gray-500">Expected delivery to your address.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Expected delivery to your address.</p>
           </DzTimelineItem>
         </DzTimeline>
       </div>
@@ -333,19 +333,19 @@ export const RealWorldChangelog: Story = {
         <DzTimeline tone="primary" aria-label="Release changelog">
           <DzTimelineItem status="v1.3.0">
             <p class="font-medium text-sm">Added DzDataGrid component</p>
-            <p class="text-xs text-gray-500">Sortable columns, row selection, and pagination support.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Sortable columns, row selection, and pagination support.</p>
           </DzTimelineItem>
           <DzTimelineItem status="v1.2.0">
             <p class="font-medium text-sm">New Accordion & Tree components</p>
-            <p class="text-xs text-gray-500">Built on Reka UI primitives with full keyboard navigation.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Built on Reka UI primitives with full keyboard navigation.</p>
           </DzTimelineItem>
           <DzTimelineItem status="v1.1.0">
             <p class="font-medium text-sm">Dark mode support</p>
-            <p class="text-xs text-gray-500">FOUC-free theme switching with localStorage persistence.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">FOUC-free theme switching with localStorage persistence.</p>
           </DzTimelineItem>
           <DzTimelineItem status="v1.0.0">
             <p class="font-medium text-sm">Initial release</p>
-            <p class="text-xs text-gray-500">Core button, card, input, and layout components.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Core button, card, input, and layout components.</p>
           </DzTimelineItem>
         </DzTimeline>
       </div>
@@ -378,7 +378,7 @@ export const DataDriven: Story = {
             {{ event.text }}
           </DzTimelineItem>
         </DzTimeline>
-        <p class="text-sm text-gray-500">{{ events.length }} events: <code>{{ events.map(e => e.id).join(', ') }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">{{ events.length }} events: <code>{{ events.map(e => e.id).join(', ') }}</code></p>
       </div>
     `,
   }),

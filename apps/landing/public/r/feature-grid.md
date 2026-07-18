@@ -4,7 +4,7 @@ Six feature cards, each with a lucide icon, title, and short blurb; responsive 3
 
 - **Category:** Marketing
 - **Components:** DzCard, DzCardBody, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#feature-grid
+- **Preview:** /blocks/feature-grid
 
 ```vue
 <script setup lang="ts">

@@ -41,7 +41,7 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <DzFlex align="center" class="border border-dashed border-gray-200 p-3 rounded">
+      <DzFlex align="center" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
         <span class="text-sm font-medium">Left</span>
         <DzSpacer v-bind="args" />
         <span class="text-sm font-medium">Right</span>
@@ -70,11 +70,11 @@ export const AllSizes: Story = {
     template: `
       <div class="space-y-4">
         <div v-for="s in ['xs', 'sm', 'md', 'lg', 'xl', 'auto']" :key="s">
-          <p class="text-xs text-gray-500 mb-1">size="{{ s }}"</p>
-          <DzFlex align="center" class="border border-dashed border-gray-200 p-3 rounded">
-            <div class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded">A</div>
-            <DzSpacer :size="s" class="bg-red-50 border border-red-200 border-dashed rounded" />
-            <div class="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded">B</div>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-1">size="{{ s }}"</p>
+          <DzFlex align="center" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
+            <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-3 py-1 rounded">A</div>
+            <DzSpacer :size="s" class="bg-[var(--dz-danger-muted)] border border-[var(--dz-danger-border)] border-dashed rounded" />
+            <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-3 py-1 rounded">B</div>
           </DzFlex>
         </div>
       </div>
@@ -91,11 +91,11 @@ export const AutoInFlex: Story = {
   render: () => ({
     components: { DzSpacer, DzFlex },
     template: `
-      <DzFlex align="center" gap="sm" class="border border-gray-200 rounded-lg px-4 py-3">
+      <DzFlex align="center" gap="sm" class="border border-[var(--dz-border)] rounded-lg px-4 py-3">
         <span class="font-bold text-sm">Logo</span>
         <DzSpacer />
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-100">Settings</button>
-        <button class="text-sm px-3 py-1.5 bg-blue-500 text-white rounded">Sign In</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Settings</button>
+        <button class="text-sm px-3 py-1.5 bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded">Sign In</button>
       </DzFlex>
     `,
   }),
@@ -110,10 +110,10 @@ export const VerticalSpacer: Story = {
   render: () => ({
     components: { DzSpacer, DzStack },
     template: `
-      <DzStack gap="none" class="h-64 border border-dashed border-gray-200 p-3 rounded">
-        <div class="bg-green-100 text-green-800 text-sm p-3 rounded">Header</div>
+      <DzStack gap="none" class="h-64 border border-dashed border-[var(--dz-border)] p-3 rounded">
+        <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">Header</div>
         <DzSpacer />
-        <div class="bg-green-100 text-green-800 text-sm p-3 rounded">Footer (pushed to bottom)</div>
+        <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded">Footer (pushed to bottom)</div>
       </DzStack>
     `,
   }),
@@ -129,13 +129,13 @@ export const FixedSizesInStack: Story = {
     components: { DzSpacer, DzStack },
     template: `
       <DzStack gap="none">
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">Section A</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">Section A</div>
         <DzSpacer size="xs" />
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">xs gap</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">xs gap</div>
         <DzSpacer size="md" />
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">md gap</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">md gap</div>
         <DzSpacer size="xl" />
-        <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded">xl gap</div>
+        <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded">xl gap</div>
       </DzStack>
     `,
   }),
@@ -151,10 +151,10 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzSpacer, DzFlex },
     template: `
-      <DzFlex align="center" class="border border-gray-600 p-3 rounded">
-        <span class="text-sm text-gray-200">Left</span>
+      <DzFlex align="center" class="border border-[var(--dz-border)] p-3 rounded">
+        <span class="text-sm text-[var(--dz-foreground)]">Left</span>
         <DzSpacer />
-        <span class="text-sm text-gray-200">Right</span>
+        <span class="text-sm text-[var(--dz-foreground)]">Right</span>
       </DzFlex>
     `,
   }),
@@ -169,13 +169,13 @@ export const RealWorldCardFooter: Story = {
   render: () => ({
     components: { DzSpacer, DzFlex },
     template: `
-      <div class="border rounded-lg p-4 max-w-sm">
+      <div class="border border-[var(--dz-border)] rounded-lg p-4 max-w-sm">
         <h3 class="font-semibold mb-2">Subscription Plan</h3>
-        <p class="text-sm text-gray-500 mb-4">Your current plan renews on April 15.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-4">Your current plan renews on April 15.</p>
         <DzFlex align="center">
-          <span class="text-xs text-gray-400">$12/month</span>
+          <span class="text-xs text-[var(--dz-muted-foreground)]">$12/month</span>
           <DzSpacer />
-          <button class="text-sm px-3 py-1.5 bg-blue-500 text-white rounded">Upgrade</button>
+          <button class="text-sm px-3 py-1.5 bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] rounded">Upgrade</button>
         </DzFlex>
       </div>
     `,
@@ -192,11 +192,11 @@ export const Accessibility: Story = {
     components: { DzSpacer, DzFlex },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSpacer renders with aria-hidden="true" since it is a purely visual element
           with no semantic meaning for screen readers.
         </p>
-        <DzFlex align="center" class="border border-dashed border-gray-200 p-3 rounded">
+        <DzFlex align="center" class="border border-dashed border-[var(--dz-border)] p-3 rounded">
           <span class="text-sm">Content A</span>
           <DzSpacer />
           <span class="text-sm">Content B</span>

@@ -4,7 +4,7 @@ import { DzButton } from '../../src/components/buttons'
 import { DzCard, DzCardBody, DzCardFooter, DzCardHeader } from '../../src/components/cards'
 import { DzSkeleton } from '../../src/components/feedback'
 import { DzHeading, DzText } from '../../src/components/typography'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzCard is a surface container component supporting three visual variants
@@ -18,11 +18,8 @@ const meta = {
   component: DzCard,
   tags: ['autodocs', 'status:stable'],
   parameters: {
-    // Design reference (TASK-0.15) — flagship seed. See Contributing → "Design reference".
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/design/dzup-ui-design-system/dzup-ui?node-id=1-3&t=DzCard',
-    },
+    // Cards is the first family on the enforced a11y gate (TASK-DS-06).
+    ...a11yError,
   },
   argTypes: {
     // Appearance
@@ -290,7 +287,7 @@ export const WithAllSlots: Story = {
     template: `
       <DzCard variant="outlined" class="max-w-md">
         <template #media>
-          <div class="h-40 bg-gradient-to-r from-blue-400 to-purple-500 rounded-t-lg"></div>
+          <div class="h-40 bg-gradient-to-r from-[var(--dz-colors-blue-400)] to-[var(--dz-colors-purple-500)] rounded-t-lg"></div>
         </template>
         <template #header>
           <DzCardHeader>
@@ -332,7 +329,7 @@ export const WithMedia: Story = {
     template: `
       <DzCard variant="outlined" class="max-w-xs">
         <template #media>
-          <div class="h-48 bg-gradient-to-br from-green-300 to-teal-500"></div>
+          <div class="h-48 bg-gradient-to-br from-[var(--dz-colors-green-300)] to-[var(--dz-colors-teal-500)]"></div>
         </template>
         <DzCardBody>
           <DzHeading :level="4" size="md">Nature Walk</DzHeading>
@@ -555,7 +552,7 @@ export const RealWorldProductCard: Story = {
     template: `
       <DzCard variant="outlined" hoverable class="max-w-xs">
         <template #media>
-          <div class="h-48 bg-gradient-to-br from-amber-200 to-orange-400 flex items-center justify-center">
+          <div class="h-48 bg-gradient-to-br from-[var(--dz-colors-amber-200)] to-[var(--dz-colors-orange-400)] flex items-center justify-center">
             <span class="text-4xl">🎧</span>
           </div>
         </template>

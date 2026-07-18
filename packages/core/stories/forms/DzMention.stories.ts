@@ -3,19 +3,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMention } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzMention is a textarea/input that surfaces a suggestion dropdown when a
- * configured trigger character (`@`, `#`, …) is typed. It detects the active
- * trigger and the partial query at the caret, resolves options (static arrays
- * or async resolvers), and inserts the chosen option at the caret.
- *
- * - **Keyboard:** Up/Down navigate, Enter/Tab insert, Esc dismisses.
- * - **Async:** a trigger's `options` may be a `(query) => Promise<options>`
- *   resolver; a loading state shows while it is pending.
- * - **Multiple triggers:** pass several `{ char, options }` entries.
- *
- * `v-model:value` is the raw text including the inserted trigger tokens.
- */
 const users = [
   { label: 'Alice Johnson', value: 'alice', role: 'Designer' },
   { label: 'Bob Smith', value: 'bob', role: 'Engineer' },
@@ -31,6 +18,19 @@ const tags = [
   { label: 'question', value: 'question' },
 ]
 
+/**
+ * DzMention is a textarea/input that surfaces a suggestion dropdown when a
+ * configured trigger character (`@`, `#`, …) is typed. It detects the active
+ * trigger and the partial query at the caret, resolves options (static arrays
+ * or async resolvers), and inserts the chosen option at the caret.
+ *
+ * - **Keyboard:** Up/Down navigate, Enter/Tab insert, Esc dismisses.
+ * - **Async:** a trigger's `options` may be a `(query) => Promise<options>`
+ *   resolver; a loading state shows while it is pending.
+ * - **Multiple triggers:** pass several `{ char, options }` entries.
+ *
+ * `v-model:value` is the raw text including the inserted trigger tokens.
+ */
 const meta = {
   title: 'Core/Forms/DzMention',
   component: DzMention,
@@ -163,9 +163,9 @@ export const UserMentions: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Type <strong>@</strong> to mention a teammate.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type <strong>@</strong> to mention a teammate.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="Write a comment… (@ to mention)" aria-label="Comment" />
-        <p class="text-sm text-gray-500">Value: <code>{{ value || '—' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <code>{{ value || '—' }}</code></p>
       </div>
     `,
   }),
@@ -203,9 +203,9 @@ export const Hashtags: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Type <strong>#</strong> to add a label reference.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type <strong>#</strong> to add a label reference.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="Describe the issue… (# to tag)" aria-label="Issue body" />
-        <p class="text-sm text-gray-500">Value: <code>{{ value || '—' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <code>{{ value || '—' }}</code></p>
       </div>
     `,
   }),
@@ -285,7 +285,7 @@ export const AsyncSearch: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Type <strong>@</strong> — options resolve after a simulated network delay.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Type <strong>@</strong> — options resolve after a simulated network delay.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="@ to search people…" aria-label="Comment" />
       </div>
     `,
@@ -312,9 +312,9 @@ export const MultiTrigger: Story = {
     },
     template: `
       <div class="space-y-2 max-w-md">
-        <p class="text-sm text-gray-500">Use <strong>@</strong> for people and <strong>#</strong> for labels.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Use <strong>@</strong> for people and <strong>#</strong> for labels.</p>
         <DzMention v-model:value="value" :triggers="triggers" placeholder="@ someone or # a label…" aria-label="Comment" />
-        <p class="text-sm text-gray-500">Value: <code>{{ value || '—' }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <code>{{ value || '—' }}</code></p>
       </div>
     `,
   }),

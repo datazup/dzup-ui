@@ -21,7 +21,7 @@ yarn release
 Smoke-test the published artifact before announcing:
 
 ```sh
-npx -y @dzup-ui/mcp   # should print "dzup-ui MCP server running (registry: https://dzup-ui.dev …)" on stderr
+npx -y @dzup-ui/mcp   # should print "dzup-ui MCP server running (registry: https://dzup-ui.com …)" on stderr
 ```
 
 ## 2. Register in the public MCP registry

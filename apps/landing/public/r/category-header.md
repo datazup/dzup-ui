@@ -4,7 +4,7 @@ The title bar above a product listing — a breadcrumb trail, category heading w
 
 - **Category:** Commerce
 - **Components:** DzHeading, DzSelect, DzSegmented, DzBreadcrumb, DzBreadcrumbItem, DzText
-- **Preview:** /blocks#category-header
+- **Preview:** /blocks/category-header
 
 ```vue
 <script setup lang="ts">

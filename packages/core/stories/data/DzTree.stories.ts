@@ -4,13 +4,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzTree } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzTree displays hierarchical data in an expandable/collapsible tree structure.
- * It supports node selection, checkboxes, and custom node rendering via the item slot.
- *
- * DzTree provides context to DzTreeItem children via inject (ADR-08).
- */
-
 // ---------------------------------------------------------------------------
 // Sample data
 // ---------------------------------------------------------------------------
@@ -87,6 +80,12 @@ const orgTree: TreeNode[] = [
 // Meta
 // ---------------------------------------------------------------------------
 
+/**
+ * DzTree displays hierarchical data in an expandable/collapsible tree structure.
+ * It supports node selection, checkboxes, and custom node rendering via the item slot.
+ *
+ * DzTree provides context to DzTreeItem children via inject (ADR-08).
+ */
 const meta = {
   title: 'Core/Data/DzTree',
   component: DzTree,
@@ -234,7 +233,7 @@ export const WithSelection: Story = {
           aria-label="Selectable file tree"
           @update:selected-keys="selected = $event"
         />
-        <p class="text-sm text-gray-500">Selected: {{ selected.length ? selected.join(', ') : 'none' }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: {{ selected.length ? selected.join(', ') : 'none' }}</p>
       </div>
     `,
   }),
@@ -264,7 +263,7 @@ export const WithCheckboxes: Story = {
           aria-label="Checkable file tree"
           @update:selected-keys="selected = $event"
         />
-        <p class="text-sm text-gray-500">Checked: {{ selected.length ? selected.join(', ') : 'none' }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Checked: {{ selected.length ? selected.join(', ') : 'none' }}</p>
       </div>
     `,
   }),
@@ -356,7 +355,7 @@ export const Empty: Story = {
     template: `
       <DzTree :items="[]" aria-label="Empty tree">
         <template #empty>
-          <div class="text-center py-6 text-gray-500">
+          <div class="text-center py-6 text-[var(--dz-muted-foreground)]">
             No files found in this directory.
           </div>
         </template>
@@ -426,7 +425,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzTree implements the WAI-ARIA TreeView pattern. Tab focuses the tree.
           Arrow Up/Down moves between visible nodes. Arrow Right expands a collapsed node
           or moves to first child. Arrow Left collapses an expanded node or moves to parent.
@@ -474,8 +473,8 @@ export const RealWorldFileExplorer: Story = {
       }
     },
     template: `
-      <div class="max-w-sm border rounded-lg overflow-hidden">
-        <div class="px-3 py-2 border-b bg-gray-50 text-sm font-medium">Explorer</div>
+      <div class="max-w-sm border border-[var(--dz-border)] rounded-lg overflow-hidden">
+        <div class="px-3 py-2 border-b border-b-[var(--dz-border)] bg-[var(--dz-muted)] text-sm font-medium">Explorer</div>
         <div class="p-2">
           <DzTree
             :items="items"

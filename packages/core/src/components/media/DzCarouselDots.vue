@@ -50,13 +50,19 @@ const slideIndices = computed(() =>
       role="tab"
       :aria-selected="index === carouselContext?.activeIndex.value"
       :aria-label="`Go to slide ${index + 1}`"
-      :class="cn(
-        styles.dot(),
-        index === carouselContext?.activeIndex.value ? styles.dotActive() : '',
-      )"
+      :class="styles.dotButton()"
       @click="carouselContext?.goTo(index)"
     >
-      <slot :index="index" :active="index === carouselContext?.activeIndex.value" />
+      <!-- The button is the ≥24px touch target; the visible dot is this inner
+           span (also the default slot content, so custom dots keep the hit area). -->
+      <slot :index="index" :active="index === carouselContext?.activeIndex.value">
+        <span
+          :class="cn(
+            styles.dot(),
+            index === carouselContext?.activeIndex.value ? styles.dotActive() : '',
+          )"
+        />
+      </slot>
     </button>
   </div>
 </template>

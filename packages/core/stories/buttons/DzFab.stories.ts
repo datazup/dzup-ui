@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, fn, userEvent, within } from 'storybook/test'
 import { DzFab } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzFab is a floating action button (FAB): a circular, elevated button that
@@ -18,6 +18,10 @@ const meta = {
   title: 'Core/Buttons/DzFab',
   component: DzFab,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Accessibility
     ariaLabel: {

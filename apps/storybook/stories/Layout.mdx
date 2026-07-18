@@ -2,6 +2,7 @@
 import { Meta } from '@storybook/addon-docs/blocks'
 import { StatusBadge } from './_blocks/StatusBadge.ts'
 import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { FamilyComponents } from './_blocks/FamilyComponents.ts'
 
 <Meta title="Core/Layout/Overview" />
 
@@ -16,20 +17,7 @@ two-dimensional layout is a `DzGrid`; page width is a `DzContainer`.
 
 ## Components
 
-| Component | Use it for | Docs |
-|-----------|------------|------|
-| **DzContainer** | Center page content and cap its max-width with responsive gutters. | [DzContainer](?path=/docs/core-layout-dzcontainer--docs) |
-| **DzGrid** | Two-dimensional layouts; fixed or responsive column counts. | [DzGrid](?path=/docs/core-layout-dzgrid--docs) |
-| **DzFlex** | One-dimensional layouts with full control of align/justify/wrap. | [DzFlex](?path=/docs/core-layout-dzflex--docs) |
-| **DzStack** | Vertical/horizontal stacking — the ergonomic flex shorthand. | [DzStack](?path=/docs/core-layout-dzstack--docs) |
-| **DzSpacer** | Flexible/fixed gap filler; `auto` pushes siblings apart. | [DzSpacer](?path=/docs/core-layout-dzspacer--docs) |
-| **DzDivider** | Visual or semantic separator (horizontal / vertical). | [DzDivider](?path=/docs/core-layout-dzdivider--docs) |
-| **DzAspectRatio** | Constrain content to a fixed width/height ratio (media, maps). | [DzAspectRatio](?path=/docs/core-layout-dzaspectratio--docs) |
-| **DzScrollArea** | Custom styled scrollbars for an overflowing region. | [DzScrollArea](?path=/docs/core-layout-dzscrollarea--docs) |
-| **DzCollapse** | Animated expand/collapse of a content region (`v-model`). | [DzCollapse](?path=/docs/core-layout-dzcollapse--docs) |
-| **DzAppShell** | Application frame: sidebar + header chrome + scrollable main. | [DzAppShell](?path=/docs/core-layout-dzappshell--docs) |
-| **DzResizable** | Drag-resizable panel groups (Reka Splitter). | [DzResizable](?path=/docs/core-layout-dzresizable--docs) |
-| **DzSplitter** | Naming alias for `DzResizable` (identical API). | [DzSplitter](?path=/docs/core-layout-dzsplitter--docs) |
+<FamilyComponents family="Layout" />
 
 ## Primitive selection guide
 

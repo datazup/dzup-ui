@@ -2,288 +2,383 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dzup-ui.com/</loc>
+    <lastmod>2026-07-13</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/pro</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/animations</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/themes</loc>
+    <lastmod>2026-07-03</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/templates</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/ai</loc>
+    <lastmod>2026-07-13</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/compare</loc>
+    <lastmod>2026-07-03</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/hero-centered</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/hero-split</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/nav-bar</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/feature-grid</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/stats-band</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/pricing-3</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/testimonials</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/faq</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/cta-band</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/footer</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/app-shell</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/page-header</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/stat-row</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/table-card</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/empty-state</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/settings-layout</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/bento-grid</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/resizable-workspace</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/masonry-gallery</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/sticky-aside</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/toolbar-canvas</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/page-scaffold</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/collapsible-sections</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/media-gallery</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/media-carousel</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/media-comparison</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/media-team</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/media-qr</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/media-watermark</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/data-grid</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/activity-timeline</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/detail-descriptions</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/file-tree</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/collection-gallery</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/leaderboard</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/release-countdown</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/alert-stack</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/notification-center</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/toast-launcher</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/loading-states</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/usage-meters</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/result-states</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/command-menu</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/account-menu</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/context-menu-board</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/info-popovers</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/tooltip-toolbar</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/create-dialog</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/confirm-actions</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/detail-sheet</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/product-tour</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/button-showcase</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/editor-toolbar</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/button-groups</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/social-auth-buttons</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/floating-actions</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/sign-in</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/sign-up</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/auth-split</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/wizard</loc>
+    <lastmod>2026-06-24</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/otp-verify</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/forgot-password</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/newsletter-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/contact-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/payment-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/feedback-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/filter-panel</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/profile-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/booking-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/record-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/category-picker</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/appearance-editor</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/invoice-builder</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/access-transfer</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/float-label-form</loc>
+    <lastmod>2026-06-25</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/product-grid</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/product-detail</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/cart-summary</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/checkout-summary</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/category-header</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/order-status</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/blog-list</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/article-header</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/prose</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/code-showcase</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/toc-aside</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/faq-2col</loc>
+    <lastmod>2026-06-29</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/templates/analytics-dashboard</loc>

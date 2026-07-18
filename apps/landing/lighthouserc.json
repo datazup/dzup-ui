@@ -1,5 +1,5 @@
 {
-  "//": "Lighthouse CI budget for the landing site. Runs in ci.yml (job: landing-perf) against a production `vite preview` build. The Core Web Vitals thresholds (LCP < 2.5s, CLS < 0.1) are hard assertions; category/TBT/FCP are advisory warnings. Runs the desktop preset — the site's primary evaluation audience — three times per URL and reports the median. Reports upload to temporary public storage and as a CI artifact. Complements the payload budget in scripts/check-bundle-budget.ts.",
+  "//": "Lighthouse CI budget for the landing site — DESKTOP run. Its mobile twin is lighthouserc.mobile.json; both are executed by the landing-perf job in ci.yml against a production `vite preview` build. The two files MUST agree on `url` and `assert` — lighthouserc.spec.ts fails the build if they drift, so edit them together. The only intended difference is the form factor: this one pins `preset: desktop`, the mobile file omits it (Lighthouse emulates a mid-tier phone by default). Core Web Vitals (LCP < 2.5s, CLS < 0.1) and accessibility are hard assertions; performance score/TBT/FCP are advisory. Complements the payload budget in scripts/check-bundle-budget.ts, which asserts the bytes that produce these timings.",
   "ci": {
     "collect": {
       "startServerCommand": "yarn workspace @dzup-ui/landing preview --port 4173 --strictPort",
@@ -7,7 +7,10 @@
       "startServerReadyTimeout": 60000,
       "url": [
         "http://localhost:4173/",
-        "http://localhost:4173/compare"
+        "http://localhost:4173/blocks",
+        "http://localhost:4173/templates",
+        "http://localhost:4173/compare",
+        "http://localhost:4173/blocks/hero-split"
       ],
       "numberOfRuns": 3,
       "settings": {
@@ -21,7 +24,7 @@
         "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
         "first-contentful-paint": ["warn", { "maxNumericValue": 1800 }],
         "categories:performance": ["warn", { "minScore": 0.9 }],
-        "categories:accessibility": ["warn", { "minScore": 0.9 }]
+        "categories:accessibility": ["error", { "minScore": 0.9 }]
       }
     },
     "upload": {

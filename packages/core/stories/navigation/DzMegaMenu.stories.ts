@@ -4,16 +4,6 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMegaMenu } from '../../src/components/navigation'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzMegaMenu is a horizontal (or vertical) navigation menubar whose top-level
- * items open wide, multi-column dropdown panels.
- *
- * It is model-driven — each item may own column `items`, and each column owns
- * link `items`. It follows the WAI-ARIA menubar pattern (role="menubar" +
- * roving tabindex): Arrow keys move across triggers and into panels, hover and
- * keyboard both open, and Esc closes (returning focus to the trigger). Below
- * the `breakpoint` it collapses into a stacked accordion menu.
- */
 const items: DzMegaMenuItem[] = [
   {
     label: 'Products',
@@ -67,6 +57,16 @@ const items: DzMegaMenuItem[] = [
   { label: 'Docs', href: '#' },
 ]
 
+/**
+ * DzMegaMenu is a horizontal (or vertical) navigation menubar whose top-level
+ * items open wide, multi-column dropdown panels.
+ *
+ * It is model-driven — each item may own column `items`, and each column owns
+ * link `items`. It follows the WAI-ARIA menubar pattern (role="menubar" +
+ * roving tabindex): Arrow keys move across triggers and into panels, hover and
+ * keyboard both open, and Esc closes (returning focus to the trigger). Below
+ * the `breakpoint` it collapses into a stacked accordion menu.
+ */
 const meta = {
   title: 'Core/Navigation/DzMegaMenu',
   component: DzMegaMenu,

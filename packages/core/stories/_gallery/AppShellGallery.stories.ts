@@ -5,6 +5,9 @@ import FreestyleAppShell from './freestyle/FreestyleAppShell.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/App Shell',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

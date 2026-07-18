@@ -9,7 +9,7 @@ import {
   DzSheetTitle,
   DzSheetTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzSheet is a compound slide-out side panel built on Reka UI Dialog (ADR-07).
@@ -28,6 +28,10 @@ const meta = {
     DzSheetClose,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {
@@ -123,17 +127,17 @@ export const WithSlots: Story = {
           <DzSheetTitle>Settings</DzSheetTitle>
           <DzSheetDescription>Adjust your application preferences.</DzSheetDescription>
           <div class="space-y-4 mt-4">
-            <div class="flex items-center justify-between py-2 border-b">
+            <div class="flex items-center justify-between py-2 border-b border-b-[var(--dz-border)]">
               <span class="text-sm font-medium">Dark Mode</span>
               <input type="checkbox" />
             </div>
-            <div class="flex items-center justify-between py-2 border-b">
+            <div class="flex items-center justify-between py-2 border-b border-b-[var(--dz-border)]">
               <span class="text-sm font-medium">Notifications</span>
               <input type="checkbox" checked />
             </div>
-            <div class="flex items-center justify-between py-2 border-b">
+            <div class="flex items-center justify-between py-2 border-b border-b-[var(--dz-border)]">
               <span class="text-sm font-medium">Language</span>
-              <select class="border rounded px-2 py-1 text-sm">
+              <select class="border border-[var(--dz-border)] rounded px-2 py-1 text-sm">
                 <option>English</option>
                 <option>Spanish</option>
                 <option>French</option>
@@ -169,7 +173,7 @@ export const Interactive: Story = {
         <div class="flex gap-4 items-center">
           <DzButton @click="isOpen = true">Open Controlled Sheet</DzButton>
           <span class="text-sm">State: {{ isOpen ? 'Open' : 'Closed' }}</span>
-          <span v-if="savedCount" class="text-sm text-green-600">Saved {{ savedCount }} time(s)</span>
+          <span v-if="savedCount" class="text-sm text-[var(--dz-success-muted-foreground)]">Saved {{ savedCount }} time(s)</span>
         </div>
         <DzSheet v-model:open="isOpen">
           <DzSheetContent>
@@ -178,11 +182,11 @@ export const Interactive: Story = {
             <div class="space-y-4 mt-4">
               <div>
                 <label class="block text-sm font-medium mb-1">Name</label>
-                <input type="text" value="John Doe" class="w-full border rounded px-3 py-2 text-sm" />
+                <input type="text" value="John Doe" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
               </div>
               <div>
                 <label class="block text-sm font-medium mb-1">Email</label>
-                <input type="email" value="john@example.com" class="w-full border rounded px-3 py-2 text-sm" />
+                <input type="email" value="john@example.com" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
               </div>
             </div>
             <div class="flex gap-3 mt-4">
@@ -247,7 +251,7 @@ export const Accessibility: Story = {
     components: { DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Open the sheet, then Tab through elements. Press Escape to close.
           Focus returns to the trigger on close.
         </p>
@@ -259,9 +263,9 @@ export const Accessibility: Story = {
             <DzSheetTitle>Navigation</DzSheetTitle>
             <DzSheetDescription>Use Tab to move between links. Escape closes the sheet.</DzSheetDescription>
             <nav class="mt-4 space-y-2">
-              <a href="#" class="block text-sm px-3 py-2 rounded hover:bg-gray-100">Dashboard</a>
-              <a href="#" class="block text-sm px-3 py-2 rounded hover:bg-gray-100">Projects</a>
-              <a href="#" class="block text-sm px-3 py-2 rounded hover:bg-gray-100">Settings</a>
+              <a href="#" class="block text-sm px-3 py-2 rounded hover:bg-[var(--dz-muted)]">Dashboard</a>
+              <a href="#" class="block text-sm px-3 py-2 rounded hover:bg-[var(--dz-muted)]">Projects</a>
+              <a href="#" class="block text-sm px-3 py-2 rounded hover:bg-[var(--dz-muted)]">Settings</a>
             </nav>
             <DzSheetClose as-child>
               <DzButton variant="outline" tone="neutral" class="mt-6">Close</DzButton>
@@ -292,15 +296,15 @@ export const RealWorldMobileNav: Story = {
           <DzSheetTitle>Menu</DzSheetTitle>
           <DzSheetDescription class="sr-only">Application navigation menu</DzSheetDescription>
           <nav class="mt-6 space-y-1">
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded bg-gray-100">Home</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100">Projects</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100">Team</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100">Calendar</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100">Reports</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded bg-[var(--dz-muted)]">Home</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-[var(--dz-muted)]">Projects</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-[var(--dz-muted)]">Team</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-[var(--dz-muted)]">Calendar</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-[var(--dz-muted)]">Reports</a>
           </nav>
-          <div class="mt-auto pt-6 border-t">
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100">Settings</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-gray-100">Log Out</a>
+          <div class="mt-auto pt-6 border-t border-t-[var(--dz-border)]">
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-[var(--dz-muted)]">Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm rounded hover:bg-[var(--dz-muted)]">Log Out</a>
           </div>
         </DzSheetContent>
       </DzSheet>

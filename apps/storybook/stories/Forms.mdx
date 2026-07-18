@@ -1,23 +1,29 @@
 {/* Forms.mdx — Forms family overview (TASK-3.E) */}
 import { Meta } from '@storybook/addon-docs/blocks'
 import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { FamilyComponents } from './_blocks/FamilyComponents.ts'
 
 <Meta title="Core/Forms/Overview" />
 
 # Forms
 
-The Forms family covers every interactive data-entry control — selection
-(`DzSelect`, `DzMultiSelect`, `DzCombobox`, `DzPersonaSelector`), boolean and
-choice (`DzCheckbox(+Group)`, `DzRadio(+Group)`, `DzSwitch`), numeric
-(`DzSlider`, `DzRangeSlider`), temporal (`DzDatePicker`, `DzDateRangePicker`,
-`DzTimePicker`), `DzColorPicker`, `DzFileUpload`, `DzTransfer`, the dynamic-list
-helper `DzFieldArray`, and the field-wiring primitives
-(`DzFormField` / `DzFormLabel` / `DzFormDescription` / `DzFormMessage`).
+The Forms family covers every interactive data-entry control: selection, boolean
+and choice, numeric, temporal, colour, file upload, the dynamic-list helper
+`DzFieldArray`, and the field-wiring primitives (`DzFormField` / `DzFormLabel` /
+`DzFormDescription` / `DzFormMessage`). The full list is below.
+
+For composing these into a real, validated form — submit handling, async
+validation, an error summary — see the [**Forms & Validation**](?path=/docs/guides-forms-validation--docs)
+guide.
 
 See the flagship [**WorkspaceForm**](/docs/core-compositions-workspaceform--docs)
 composition for these controls working together with a live state preview, and the
 [**Control Gallery**](/docs/core-forms-control-gallery--docs) for an
 appearance-prop comparison.
+
+## Components
+
+<FamilyComponents family="Forms" />
 
 ## When to use which control
 

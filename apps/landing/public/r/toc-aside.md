@@ -4,7 +4,7 @@ A docs layout where a sticky DzAnchor "On this page" nav scrollspy-highlights th
 
 - **Category:** Content
 - **Components:** DzAnchor, DzText
-- **Preview:** /blocks#toc-aside
+- **Preview:** /blocks/toc-aside
 
 ```vue
 <script setup lang="ts">

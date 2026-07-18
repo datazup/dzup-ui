@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
+import { workspaceAliases } from '../../packages/tooling/src/workspace-aliases.ts'
 
 const dirname = fileURLToPath(new URL('.', import.meta.url))
 const appDir = dirname
@@ -14,30 +15,13 @@ export default defineConfig({
   plugins: [vue(), storybookTest({ configDir: `${dirname}.storybook` })],
   resolve: {
     alias: [
-      // Ensure storybook/test resolves from app-local node_modules
+      // Ensure storybook/test resolves from app-local node_modules. App-specific,
+      // so it stays here rather than in the shared list.
       {
         find: 'storybook/test',
         replacement: resolve(appDir, 'node_modules/storybook/dist/test/index.js'),
       },
-      // Workspace package aliases
-      {
-        find: '@dzup-ui/tokens/css',
-        replacement: resolve(pkgRoot, 'packages/tokens/dist/tokens.css'),
-      },
-      {
-        find: '@dzup-ui/tokens/tailwind',
-        replacement: resolve(pkgRoot, 'packages/tokens/dist/tailwind-theme.js'),
-      },
-      {
-        find: '@dzup-ui/tokens/utils',
-        replacement: resolve(pkgRoot, 'packages/tokens/src/utils/index.ts'),
-      },
-      { find: '@dzup-ui/tokens', replacement: resolve(pkgRoot, 'packages/tokens/src') },
-      {
-        find: '@dzup-ui/contracts',
-        replacement: resolve(pkgRoot, 'packages/contracts/src/index.ts'),
-      },
-      { find: '@dzup-ui/core', replacement: resolve(pkgRoot, 'packages/core/src') },
+      ...workspaceAliases(pkgRoot),
     ],
   },
   test: {

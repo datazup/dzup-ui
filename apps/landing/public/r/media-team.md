@@ -4,7 +4,7 @@ A stacked DzAvatarGroup with a "+N" overflow chip over a member list, each row p
 
 - **Category:** Media
 - **Components:** DzAvatarGroup, DzAvatar, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-team
+- **Preview:** /blocks/media-team
 
 ```vue
 <script setup lang="ts">

@@ -4,7 +4,7 @@ A confidential asset draped in a tiled, rotated DzWatermark over a framed DzImag
 
 - **Category:** Media
 - **Components:** DzWatermark, DzImage, DzAspectRatio, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-watermark
+- **Preview:** /blocks/media-watermark
 
 ```vue
 <script setup lang="ts">

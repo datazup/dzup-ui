@@ -4,7 +4,7 @@ A formatting toolbar where every DzIconButton is wrapped in a DzTooltip revealin
 
 - **Category:** Overlays
 - **Components:** DzTooltip, DzTooltipTrigger, DzTooltipContent, DzIconButton, DzKbd, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#tooltip-toolbar
+- **Preview:** /blocks/tooltip-toolbar
 
 ```vue
 <script setup lang="ts">

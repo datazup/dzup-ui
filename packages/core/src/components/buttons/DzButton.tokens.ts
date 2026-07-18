@@ -93,7 +93,9 @@ export const buttonTokens = {
       muted: 'var(--dz-success-muted)',
     },
     warning: {
-      background: 'var(--dz-warning)',
+      // `--dz-warning-foreground` on `--dz-warning` is 3.51:1 — below AA. The solid
+      // button fills with `--dz-warning-solid` (8.44:1), which is what renders.
+      background: 'var(--dz-warning-solid)',
       foreground: 'var(--dz-warning-foreground)',
       muted: 'var(--dz-warning-muted)',
     },

@@ -4,7 +4,7 @@ A focus-trapped modal form built from the DzDialog compound — a trigger button
 
 - **Category:** Overlays
 - **Components:** DzDialog, DzDialogTrigger, DzDialogContent, DzDialogTitle, DzDialogDescription, DzDialogClose, DzButton, DzInput, DzTextarea, DzSelect, DzFormField, DzFormLabel, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#create-dialog
+- **Preview:** /blocks/create-dialog
 
 ```vue
 <script setup lang="ts">

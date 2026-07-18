@@ -151,8 +151,18 @@ function generate(packageDir: string): void {
     sections.push(`// ── Utilities ──\n\n${lines.join('\n')}`)
   }
 
+  // Side-effect import of the package's base stylesheet. This is what makes Vite
+  // emit `dist/core.css` (paired with `build.lib.cssFileName` in vite.config.ts).
+  //
+  // It is emitted HERE, into the generated barrel, rather than hand-written into
+  // src/index.ts — because this generator overwrites src/index.ts wholesale. A
+  // hand-added import would survive exactly until the next `yarn generate:exports`,
+  // then vanish, and the `./styles` export would silently 404 again.
+  const stylesEntry = resolve(packageDir, 'src/styles/base.css')
+  const styleImport = existsSync(stylesEntry) ? `import './styles/base.css'\n\n` : ''
+
   const body = sections.length > 0 ? sections.join('\n\n') : 'export {}'
-  const output = `${HEADER}\n${body}\n`
+  const output = `${HEADER}\n${styleImport}${body}\n`
 
   const indexPath = resolve(packageDir, 'src/index.ts')
   const indexDir = dirname(indexPath)

@@ -315,7 +315,7 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Active tab: <code>{{ activeTab }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Active tab: <code>{{ activeTab }}</code></p>
         <DzTabs v-model="activeTab" @change="(v) => {}">
           <DzTabList>
             <DzTabTrigger value="tab1">Account</DzTabTrigger>
@@ -360,10 +360,10 @@ export const Accessibility: Story = {
     components: { DzTabs, DzTabList, DzTabTrigger, DzTabContent },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
-          Use <kbd class="px-1 py-0.5 rounded border text-xs">Arrow Left</kbd> /
-          <kbd class="px-1 py-0.5 rounded border text-xs">Arrow Right</kbd> to navigate tabs.
-          <kbd class="px-1 py-0.5 rounded border text-xs">Tab</kbd> moves focus into content.
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Use <kbd class="px-1 py-0.5 rounded border border-[var(--dz-border)] text-xs">Arrow Left</kbd> /
+          <kbd class="px-1 py-0.5 rounded border border-[var(--dz-border)] text-xs">Arrow Right</kbd> to navigate tabs.
+          <kbd class="px-1 py-0.5 rounded border border-[var(--dz-border)] text-xs">Tab</kbd> moves focus into content.
         </p>
         <DzTabs model-value="tab1" aria-label="Keyboard navigation demo">
           <DzTabList>
@@ -457,9 +457,9 @@ export const RealWorldVerticalSidebar: Story = {
   render: () => ({
     components: { DzTabs, DzTabList, DzTabTrigger, DzTabContent },
     template: `
-      <div class="max-w-3xl border rounded-lg overflow-hidden">
+      <div class="max-w-3xl border border-[var(--dz-border)] rounded-lg overflow-hidden">
         <DzTabs variant="pills" orientation="vertical" model-value="profile" class="min-h-[300px]">
-          <DzTabList class="w-48 p-4 border-r bg-[var(--dz-muted)]">
+          <DzTabList class="w-48 p-4 border-r border-r-[var(--dz-border)] bg-[var(--dz-muted)]">
             <DzTabTrigger value="profile">Profile</DzTabTrigger>
             <DzTabTrigger value="appearance">Appearance</DzTabTrigger>
             <DzTabTrigger value="notifications">Notifications</DzTabTrigger>

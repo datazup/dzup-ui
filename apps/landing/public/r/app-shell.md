@@ -4,7 +4,7 @@ Collapsible sidebar nav, breadcrumb top bar and user avatar menu inside a constr
 
 - **Category:** Application
 - **Components:** DzAppShell, DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter, DzBreadcrumb, DzBreadcrumbItem, DzAvatar, DzBadge, DzButton, DzDropdownMenu, DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuSeparator, DzHeading, DzText
-- **Preview:** /blocks#app-shell
+- **Preview:** /blocks/app-shell
 
 ```vue
 <script setup lang="ts">
@@ -82,7 +82,7 @@ const secondaryNav = [
         <DzSidebar
           :collapsed="sidebarCollapsed"
           aria-label="Primary navigation"
-          @update:collapsed="(v) => (sidebarCollapsed = v)"
+          @update:collapsed="(v) => (sidebarCollapsed = v === true)"
         >
           <DzSidebarHeader>
             <span class="brand">

@@ -2,11 +2,16 @@
 import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { Check, Sparkles } from 'lucide-vue-next'
 import Section from './Section.vue'
-import { PRO_COMPONENTS } from '../data.ts'
+import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
 import { FACTS, LINKS } from '../config.ts'
 
 // The ambient upsell fork (spec §4.8). Count contrast + a clear visual
 // distinction; the word "Pro" is reserved strictly for the paid tier.
+//
+// The free side counts what you can install today; the Pro side counts what is
+// NAMED today (PRO_FACTS.announced — the very chips rendered below it) and marks
+// the roadmap target as planned. It previously advertised the roadmap's 41 as if
+// they existed.
 const freePoints = [
   `${FACTS.freeComponents} MIT-licensed components`,
   'Full Storybook documentation',
@@ -14,8 +19,8 @@ const freePoints = [
   'WCAG AA accessibility',
 ]
 const proPoints = [
-  `${FACTS.proComponents} enterprise components`,
-  `${FACTS.proFamilies} advanced families`,
+  `${PRO_FACTS.announced} enterprise components announced`,
+  `${PRO_FACTS.plannedComponents} planned across ${PRO_FACTS.plannedFamilies} families`,
   'Priority support',
   'Commercial license',
 ]
@@ -32,7 +37,7 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
       <p class="contrast lp-balance">
         <strong>{{ FACTS.freeComponents }}</strong> free
         <span class="contrast-sep">·</span>
-        <strong class="contrast-pro">{{ FACTS.proComponents }}</strong> pro —
+        <strong class="contrast-pro">{{ PRO_FACTS.plannedComponents }}</strong> pro planned —
         the open library covers the essentials; Pro adds the enterprise-grade pieces.
       </p>
 
@@ -72,7 +77,9 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
             <li v-for="c in proPreview" :key="c.label">
               <DzBadge variant="outline" tone="primary" size="sm">{{ c.label }}</DzBadge>
             </li>
-            <li><DzBadge variant="subtle" tone="primary" size="sm">+{{ FACTS.proComponents - proPreview.length }} more</DzBadge></li>
+            <!-- The rest of the NAMED list, not the roadmap: these chips promise
+                 components a visitor can go and read about on /pro. -->
+            <li><DzBadge variant="subtle" tone="primary" size="sm">+{{ PRO_FACTS.announced - proPreview.length }} more</DzBadge></li>
           </ul>
           <DzButton variant="solid" tone="primary" :to="LINKS.pro" class="plan-cta">
             Join the waitlist

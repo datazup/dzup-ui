@@ -281,12 +281,12 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-3 max-w-xs">
-        <p class="text-sm text-gray-500">Click the eye icon to toggle password visibility.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Click the eye icon to toggle password visibility.</p>
         <DzPasswordInput v-model="password" placeholder="Type a password..." />
-        <p class="text-sm text-gray-500">
-          Value: <code class="bg-gray-100 px-1 rounded">{{ password || '(empty)' }}</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Value: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ password || '(empty)' }}</code>
         </p>
-        <p class="text-sm text-gray-500">Length: {{ password.length }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Length: {{ password.length }}</p>
       </div>
     `,
   }),
@@ -319,7 +319,7 @@ export const Accessibility: Story = {
     components: { DzPasswordInput },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The visibility toggle button has descriptive aria-label that changes between
           "Show password" and "Hide password". Error messages are linked via aria-describedby.
         </p>
@@ -392,9 +392,9 @@ export const RealWorldSignUp: Story = {
     template: `
       <div class="max-w-xs space-y-4">
         <div>
-          <label class="block text-sm font-medium mb-1">Password <span class="text-red-500">*</span></label>
+          <label class="block text-sm font-medium mb-1">Password <span class="text-[var(--dz-danger-muted-foreground)]">*</span></label>
           <DzPasswordInput placeholder="Create a strong password" required />
-          <p class="text-xs text-gray-400 mt-1">At least 8 characters with upper, lower, and a number.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">At least 8 characters with upper, lower, and a number.</p>
         </div>
       </div>
     `,

@@ -106,6 +106,14 @@ export function DzRepl({ code, height = 460, title }: DzReplProps) {
                 store,
                 editor: CodemirrorEditor,
                 theme: themeRef.value,
+                // Load-bearing: `theme` alone only themes the EDITOR chrome.
+                // @vue/repl gates the sandbox class write on previewTheme
+                // (`previewTheme ? theme : undefined` → html.className), which
+                // defaults to false — so without this the theme bridge in
+                // playground.config.ts observes a class nobody ever writes and
+                // the preview stays light forever. scripts/verify-repl.mjs
+                // asserts the live light→dark flip.
+                previewTheme: true,
                 autoResize: true,
                 clearConsole: false,
                 showCompileOutput: false,

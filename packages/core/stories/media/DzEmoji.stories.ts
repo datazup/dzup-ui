@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
 import { DzEmoji } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzEmoji renders an emoji glyph with consistent sizing and correct
@@ -16,6 +16,10 @@ const meta = {
   title: 'Core/Media/DzEmoji',
   component: DzEmoji,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     emoji: {
@@ -69,23 +73,23 @@ export const AllSizes: Story = {
       <div class="flex items-end gap-6">
         <div class="text-center">
           <DzEmoji emoji="🚀" size="xs" label="Rocket" />
-          <p class="text-xs mt-2 text-gray-500">xs</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">xs</p>
         </div>
         <div class="text-center">
           <DzEmoji emoji="🚀" size="sm" label="Rocket" />
-          <p class="text-xs mt-2 text-gray-500">sm</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">sm</p>
         </div>
         <div class="text-center">
           <DzEmoji emoji="🚀" size="md" label="Rocket" />
-          <p class="text-xs mt-2 text-gray-500">md</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">md</p>
         </div>
         <div class="text-center">
           <DzEmoji emoji="🚀" size="lg" label="Rocket" />
-          <p class="text-xs mt-2 text-gray-500">lg</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">lg</p>
         </div>
         <div class="text-center">
           <DzEmoji emoji="🚀" size="xl" label="Rocket" />
-          <p class="text-xs mt-2 text-gray-500">xl</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">xl</p>
         </div>
       </div>
     `,
@@ -121,7 +125,7 @@ export const EmojiGallery: Story = {
       <div class="grid grid-cols-6 gap-6">
         <div class="text-center" v-for="[emoji, label] in emojis" :key="label">
           <DzEmoji :emoji="emoji" :label="label" size="lg" />
-          <p class="text-xs mt-2 text-gray-500">{{ label }}</p>
+          <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">{{ label }}</p>
         </div>
       </div>
     `,
@@ -140,7 +144,7 @@ export const AccessibleEmoji: Story = {
       <div class="space-y-6">
         <div class="space-y-2">
           <p class="text-sm font-medium">Decorative (default)</p>
-          <p class="text-xs text-gray-500">aria-hidden="true", no role. Used next to visible text.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">aria-hidden="true", no role. Used next to visible text.</p>
           <p class="flex items-center gap-2">
             <DzEmoji emoji="✅" size="sm" />
             <span>Task complete</span>
@@ -148,7 +152,7 @@ export const AccessibleEmoji: Story = {
         </div>
         <div class="space-y-2">
           <p class="text-sm font-medium">Meaningful (with label)</p>
-          <p class="text-xs text-gray-500">role="img", aria-label set. Used standalone where the emoji conveys information.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">role="img", aria-label set. Used standalone where the emoji conveys information.</p>
           <DzEmoji emoji="🎉" label="Celebration" size="lg" />
         </div>
       </div>
@@ -181,15 +185,15 @@ export const RealWorldInline: Story = {
         <p>
           Deployment finished <DzEmoji emoji="🚀" /> — all checks passed <DzEmoji emoji="✅" />
         </p>
-        <div class="flex items-center gap-2 rounded-lg border border-gray-200 p-3">
+        <div class="flex items-center gap-2 rounded-lg border border-[var(--dz-border)] p-3">
           <DzEmoji emoji="⚠️" label="Warning" size="md" />
           <span>Your trial ends in 3 days.</span>
         </div>
-        <div class="flex items-center gap-2 rounded-lg bg-gray-50 p-3">
+        <div class="flex items-center gap-2 rounded-lg bg-[var(--dz-muted)] p-3">
           <DzEmoji emoji="🎁" label="Gift" size="lg" />
           <div>
             <p class="font-medium">You unlocked a reward!</p>
-            <p class="text-gray-500">Claim it before it expires.</p>
+            <p class="text-[var(--dz-muted-foreground)]">Claim it before it expires.</p>
           </div>
         </div>
       </div>

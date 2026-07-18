@@ -29,7 +29,7 @@ import { darkModeDecorator } from '../_shared'
 const meta = {
   title: 'Core/Compositions/FormComposition',
   component: undefined,
-  tags: ['autodocs', 'composition'],
+  tags: ['autodocs', 'composition', 'status:stable'],
   parameters: {
     layout: 'centered',
     docs: {
@@ -97,7 +97,7 @@ export const Default: Story = {
             Fill in the details below to invite a new team member.
           </DzDialogDescription>
 
-          <div v-if="submitted" class="mt-4 p-3 rounded bg-green-50 text-green-800 text-sm">
+          <div v-if="submitted" class="mt-4 p-3 rounded bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm">
             User created successfully! Invitation sent to {{ email }}.
           </div>
 
@@ -129,7 +129,7 @@ export const Default: Story = {
               <DzInput v-model="role" placeholder="e.g. Engineer, Designer" />
             </DzFormField>
 
-            <div class="flex justify-end gap-3 pt-2 border-t">
+            <div class="flex justify-end gap-3 pt-2 border-t border-t-[var(--dz-border)]">
               <DzDialogClose as-child>
                 <DzButton variant="ghost" tone="neutral" type="button" @click="handleReset">Cancel</DzButton>
               </DzDialogClose>
@@ -185,7 +185,7 @@ export const DarkMode: Story = {
       <DzCard variant="elevated" class="w-96">
         <DzCardHeader>
           <h2 class="text-base font-semibold">Create User</h2>
-          <p class="text-sm text-[var(--dz-colors-text-muted)]">Invite a new team member</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Invite a new team member</p>
         </DzCardHeader>
         <DzCardBody>
           <div class="space-y-4">

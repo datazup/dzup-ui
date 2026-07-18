@@ -4,7 +4,7 @@ An IDE-style three-pane shell built on DzResizable — a collapsible file explor
 
 - **Category:** Layout
 - **Components:** DzResizable, DzResizablePanel, DzResizableHandle, DzScrollArea, DzToolbar, DzDivider, DzBadge, DzIcon, DzText
-- **Preview:** /blocks#resizable-workspace
+- **Preview:** /blocks/resizable-workspace
 
 ```vue
 <script setup lang="ts">

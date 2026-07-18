@@ -7,7 +7,7 @@ import {
   DzContextMenuSeparator,
   DzContextMenuTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzContextMenuContent compound sub-parts: DzContextMenuTrigger, DzContextMenuItem,
@@ -30,6 +30,10 @@ const meta = {
     DzContextMenuSeparator,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
 } satisfies Meta<typeof DzContextMenuContent>
 
 export default meta
@@ -147,7 +151,7 @@ export const CompoundComposition: Story = {
 
         <!-- Anatomy map -->
         <div
-          class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
+          class="rounded border border-[var(--dz-border)] px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
           <p>&lt;DzContextMenu&gt;              <!-- root, manages open state --&gt;</p>

@@ -4,7 +4,7 @@ A focused subscribe card — an email DzInput with a mail-icon prefix and inline
 
 - **Category:** Forms & Inputs
 - **Components:** DzInput, DzCheckbox, DzButton, DzHeading, DzText
-- **Preview:** /blocks#newsletter-form
+- **Preview:** /blocks/newsletter-form
 
 ```vue
 <script setup lang="ts">

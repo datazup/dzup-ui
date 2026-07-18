@@ -4,7 +4,7 @@ A content card that flips between loading and loaded — an indeterminate DzProg
 
 - **Category:** Feedback
 - **Components:** DzSkeleton, DzSpinner, DzProgress, DzCard, DzAvatar, DzButton, DzHeading, DzText
-- **Preview:** /blocks#loading-states
+- **Preview:** /blocks/loading-states
 
 ```vue
 <script setup lang="ts">

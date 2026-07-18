@@ -1,3 +1,5 @@
+import type { ChildProcess } from 'node:child_process'
+import type { BlockDef } from '../src/blocks/registry.ts'
 /**
  * shoot-og — the committed Open Graph (social share) image pipeline for the
  * per-block SEO pages (docs/blocks.md §3.5, §1.2 #7, Task I4).
@@ -38,13 +40,12 @@
  * the detail pages keep falling back to the generic site OG card rather than
  * referencing blank/broken images.
  */
-import { spawn, type ChildProcess } from 'node:child_process'
+import { spawn } from 'node:child_process'
 import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
-import type { BlockDef } from '../src/blocks/registry.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
@@ -78,7 +79,8 @@ async function loadBlocks(): Promise<BlockDef[]> {
   try {
     const mod = (await server.ssrLoadModule('/src/blocks/registry.ts')) as { BLOCKS: BlockDef[] }
     return mod.BLOCKS
-  } finally {
+  }
+  finally {
     await server.close()
   }
 }
@@ -92,7 +94,8 @@ async function loadToolchain() {
   let playwright: typeof import('playwright')
   try {
     playwright = await import('playwright')
-  } catch {
+  }
+  catch {
     throw new Error(
       'Playwright is not installed. Run `yarn install` then `npx playwright install chromium`.',
     )
@@ -101,21 +104,22 @@ async function loadToolchain() {
   try {
     const mod = (await import('sharp')) as { default?: typeof import('sharp') }
     sharp = mod.default ?? (mod as unknown as typeof import('sharp'))
-  } catch {
+  }
+  catch {
     throw new Error('sharp is not installed. Run `yarn install` in the repo root.')
   }
   return { chromium: playwright.chromium, sharp }
 }
 
 /** Strip ANSI colour codes so we can regex Vite's pretty-printed URL line. */
-// eslint-disable-next-line no-control-regex
+
 const ANSI = /\[[0-9;]*m/g
 
 /**
  * Boot the landing app's Vite dev server in a child Node process and resolve its
  * local URL (parsed from the "Local:" banner). Mirrors shoot-thumbnails.mts.
  */
-function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
+function startDevServer(): Promise<{ base: string, child: ChildProcess }> {
   const require = createRequire(import.meta.url)
   const viteBin = resolve(dirname(require.resolve('vite/package.json')), 'bin/vite.js')
 
@@ -133,7 +137,7 @@ function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
     let stderr = ''
     const onData = (buf: Buffer) => {
       const text = buf.toString().replace(ANSI, '')
-      const match = text.match(/Local:\s*(https?:\/\/\S+)/i) ?? text.match(/(https?:\/\/localhost:\d+\S*)/i)
+      const match = text.match(/Local:\s*(https?:\/\/\S+)/i) ?? text.match(/(https?:\/\/localhost:\d\S*)/i)
       if (match) {
         clearTimeout(timeout)
         child.stdout?.off('data', onData)
@@ -153,10 +157,12 @@ function startDevServer(): Promise<{ base: string; child: ChildProcess }> {
 
 /** Kill the dev server and its child processes (esbuild) — tree-kill on Windows. */
 function stopDevServer(child: ChildProcess): void {
-  if (child.pid === undefined || child.killed) return
+  if (child.pid === undefined || child.killed)
+    return
   if (process.platform === 'win32') {
     spawn('taskkill', ['/pid', String(child.pid), '/f', '/t'], { stdio: 'ignore' })
-  } else {
+  }
+  else {
     child.kill('SIGTERM')
   }
 }
@@ -181,11 +187,12 @@ async function main(): Promise<void> {
   let browser: Awaited<ReturnType<typeof chromium.launch>>
   try {
     browser = await chromium.launch()
-  } catch (error) {
+  }
+  catch (error) {
     stopDevServer(child)
     throw new Error(
-      'Could not launch headless Chromium. Install it with `npx playwright install chromium`.\n' +
-        `Underlying error: ${(error as Error).message}`,
+      'Could not launch headless Chromium. Install it with `npx playwright install chromium`.\n'
+      + `Underlying error: ${(error as Error).message}`,
     )
   }
 
@@ -203,7 +210,8 @@ async function main(): Promise<void> {
     await context.addInitScript(() => {
       try {
         localStorage.setItem('dz-theme', 'light')
-      } catch {
+      }
+      catch {
         /* private mode / no storage — the ?theme query param still applies it */
       }
     })
@@ -249,7 +257,8 @@ async function main(): Promise<void> {
     }
 
     await context.close()
-  } finally {
+  }
+  finally {
     await browser.close()
     stopDevServer(child)
   }
@@ -257,9 +266,9 @@ async function main(): Promise<void> {
   const total = weights.reduce((a, b) => a + b, 0)
   const avg = total / weights.length
   console.log(
-    `\n▸ Done: ${weights.length} OG cards (1200×630)\n` +
-      `  Total ${kb(total)} · avg ${kb(avg)} · max ${kb(Math.max(...weights))} per image\n` +
-      `  Written to ${OUT_DIR}`,
+    `\n▸ Done: ${weights.length} OG cards (1200×630)\n`
+    + `  Total ${kb(total)} · avg ${kb(avg)} · max ${kb(Math.max(...weights))} per image\n`
+    + `  Written to ${OUT_DIR}`,
   )
 }
 

@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUpRight } from 'lucide-vue-next'
 import { REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
 import type { BlockDef } from '../../blocks/registry.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
+import { getBlockSource } from '../../blocks/sources.ts'
 import BlockTrustMarks from './BlockTrustMarks.vue'
 import PmCommandTabs from './PmCommandTabs.vue'
 
@@ -80,7 +81,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
     <div v-if="REGISTRY_ENABLED" class="block-card-cli">
       <PmCommandTabs :commands="registryAddCmds" :aria-label="`Add ${block.title} from the dzup-ui registry`" />
       <DzCopyButton
-        :value="block.source"
+        :value="getBlockSource(block.path)"
         label="Copy code"
         copied-label="Copied!"
         variant="ghost"

@@ -251,7 +251,7 @@ export const Interactive: Story = {
         <DzAlert v-if="!closed" tone="info" closable title="Dismissable" @close="closed = true">
           Click close to dismiss. Then click "Show again" below.
         </DzAlert>
-        <p v-if="closed" class="text-sm text-gray-500">Alert was dismissed.</p>
+        <p v-if="closed" class="text-sm text-[var(--dz-muted-foreground)]">Alert was dismissed.</p>
         <button v-if="closed" class="text-sm font-medium underline" @click="closed = false">Show again</button>
       </div>
     `,
@@ -273,7 +273,7 @@ export const Accessibility: Story = {
     components: { DzAlert },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Danger/warning alerts use role="alert" for urgent screen reader announcements.
           Other tones use aria-live="polite" for non-urgent updates.
         </p>

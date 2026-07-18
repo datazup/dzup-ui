@@ -7,6 +7,7 @@ import {
   DzFormMessage,
 } from '../../src/components/forms'
 import { DzInput } from '../../src/components/inputs'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzFormField compound sub-parts: DzFormLabel, DzFormDescription, DzFormMessage.
@@ -213,6 +214,39 @@ export const MultipleFields: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput },
+    template: `
+      <div class="space-y-6 max-w-sm">
+        <DzFormField required>
+          <DzFormLabel>Email Address</DzFormLabel>
+          <DzInput type="email" placeholder="you@example.com" />
+          <DzFormDescription>We will never share your email with anyone.</DzFormDescription>
+          <DzFormMessage />
+        </DzFormField>
+        <DzFormField invalid error="Please enter a valid email">
+          <DzFormLabel>Work Email</DzFormLabel>
+          <DzInput type="email" placeholder="alice@example.com" />
+          <DzFormDescription>Work email preferred.</DzFormDescription>
+          <DzFormMessage />
+        </DzFormField>
+        <DzFormField disabled>
+          <DzFormLabel>Locked Field</DzFormLabel>
+          <DzInput value="Cannot edit this" />
+          <DzFormDescription>This field is managed by an administrator.</DzFormDescription>
+        </DzFormField>
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
 // Accessibility
 // ---------------------------------------------------------------------------
 
@@ -222,7 +256,7 @@ export const Accessibility: Story = {
     components: { DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput },
     template: `
       <div class="space-y-4 max-w-sm">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzFormField automatically generates unique IDs and wires aria-labelledby,
           aria-describedby, and aria-errormessage across its children.
           DzFormLabel renders a label element. DzFormDescription and DzFormMessage

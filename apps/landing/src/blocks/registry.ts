@@ -7,30 +7,36 @@
  *
  * Phase A1 ships the *schema only*: the types, the ordered category metadata,
  * and an empty `BLOCKS` array. Later tasks (A5, A7, Phase B) fill `BLOCKS` with
- * one entry per block, pairing a lazily-loaded `component` with its `?raw`
- * `source` string so the Code tab never drifts from what renders.
+ * one entry per block, each pairing a lazily-loaded `component` with the `?raw`
+ * source resolved off the same `path` (see `sources.ts`), so the Code tab never
+ * drifts from what renders.
+ *
+ * This module is reachable from the ENTRY chunk (`router.ts` head resolution and
+ * the site-wide ⌘K palette both need block metadata), so keep it metadata-only —
+ * anything eager and bulky imported here is downloaded by every first-time visitor
+ * to `/`. Block source text lives in `sources.ts` for exactly this reason.
  */
 
-import { defineAsyncComponent } from 'vue'
 import type { Component } from 'vue'
+import { lazyComponent } from '../lib/lazyComponent.ts'
 
 /**
  * Top-level catalog categories. Order here is the canonical browse order used by
  * the index page and category nav. Matches docs/blocks.md §4.1–§4.5.
  */
-export type BlockCategory =
-  | 'marketing'
-  | 'application'
-  | 'layout'
-  | 'media'
-  | 'data'
-  | 'feedback'
-  | 'overlays'
-  | 'buttons'
-  | 'auth'
-  | 'forms'
-  | 'commerce'
-  | 'content'
+export type BlockCategory
+  = | 'marketing'
+    | 'application'
+    | 'layout'
+    | 'media'
+    | 'data'
+    | 'feedback'
+    | 'overlays'
+    | 'buttons'
+    | 'auth'
+    | 'forms'
+    | 'commerce'
+    | 'content'
 
 /**
  * A single ready-made block. Composed purely from free `@dzup-ui/core`
@@ -56,8 +62,18 @@ export interface BlockDef {
   components: string[]
   /** The live Vue block (loaded lazily via `defineAsyncComponent` in later tasks). */
   component: Component
-  /** Raw source string (Vite `?raw` import) shown verbatim in the Code tab. */
-  source: string
+  /**
+   * Path of the block's SFC relative to `src/blocks/` (e.g.
+   * `'./marketing/HeroCentered.vue'`) — the same string that resolves the block's
+   * `component`, and the key you pass to `getBlockSource()` for its `?raw` text.
+   * Lets build tooling (the sitemap's git-derived `<lastmod>`) locate the file on
+   * disk without a parallel path convention.
+   *
+   * There is deliberately no `source` field: it would inline all 87 blocks' source
+   * text into the entry chunk (see `sources.ts`). Call `getBlockSource(block.path)`
+   * from lazy code instead.
+   */
+  path: string
   /** Notes when a mobile variant differs from the default layout. */
   responsive?: { mobile?: boolean }
 }
@@ -68,10 +84,10 @@ export interface BlockDef {
  * Used purely to give each category its own visual identity on /blocks; carries
  * no semantic meaning (see tokens `primitives/colors.ts`).
  */
-export type CategoryAccent =
-  | 'rose' | 'red' | 'orange' | 'amber' | 'yellow' | 'lime' | 'green'
-  | 'emerald' | 'teal' | 'cyan' | 'sky' | 'blue' | 'indigo' | 'violet'
-  | 'purple' | 'fuchsia' | 'pink'
+export type CategoryAccent
+  = | 'rose' | 'red' | 'orange' | 'amber' | 'yellow' | 'lime' | 'green'
+    | 'emerald' | 'teal' | 'cyan' | 'sky' | 'blue' | 'indigo' | 'violet'
+    | 'purple' | 'fuchsia' | 'pink'
 
 /** Display metadata for a category section on the index page. */
 export interface CategoryMeta {
@@ -171,49 +187,57 @@ export const CATEGORIES: CategoryMeta[] = [
 // ---------------------------------------------------------------------------
 
 /**
- * Static import maps Vite analyses at build time. `import.meta.glob` resolves
- * every block `.vue` under `src/blocks/<category>/` twice off the *same* path:
- *   • lazily, for the live preview `component`;
- *   • eagerly as a `?raw` string, for the Code tab `source`.
- * Pairing both from one path guarantees the source shown equals the file that
- * renders — zero drift between preview and snippet.
+ * Static import map Vite analyses at build time. `import.meta.glob` resolves every
+ * block `.vue` under `src/blocks/<category>/` lazily, for the live preview
+ * `component`.
+ *
+ * The matching `?raw` source text is globbed off the *same* path pattern in
+ * `sources.ts`, so the source shown in the Code tab is always the file that renders
+ * — zero drift between preview and snippet. It lives in a separate module because it
+ * is eager, and eager source text must not reach the entry chunk; see the header of
+ * `sources.ts`.
  */
 const blockComponents = import.meta.glob<{ default: Component }>('./*/*.vue')
 
-const blockSources = import.meta.glob('./*/*.vue', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as Record<string, string>
-
 /**
- * Pairs a block's lazily-loaded component with its exact `?raw` source from a
- * single path (relative to this file, e.g. `'./marketing/HeroCentered.vue'`).
+ * Resolves a block's lazily-loaded component from its path (relative to this file,
+ * e.g. `'./marketing/HeroCentered.vue'`).
  */
-function loadBlock(path: string): Pick<BlockDef, 'component' | 'source'> {
+function loadBlock(path: string): Pick<BlockDef, 'component'> {
   const loader = blockComponents[path]
-  const source = blockSources[path]
-  if (!loader || source === undefined) {
+  if (!loader) {
     throw new Error(
-      `[blocks] No .vue found at "${path}". Paths are relative to src/blocks/ ` +
-        `and must match "./<category>/<Name>.vue".`,
+      `[blocks] No .vue found at "${path}". Paths are relative to src/blocks/ `
+      + `and must match "./<category>/<Name>.vue".`,
     )
   }
-  return { component: defineAsyncComponent(loader), source }
+  // lazyComponent (not bare defineAsyncComponent) so every block has loading /
+  // error / timeout states — a failed chunk shows a retry, never a blank hole.
+  return { component: lazyComponent(loader) }
 }
 
-/** A block's authored metadata; `path` resolves its `component` + `source`. */
-type BlockEntry = Omit<BlockDef, 'component' | 'source'> & {
-  /** Path to the block `.vue`, relative to this file (`./<category>/<Name>.vue`). */
-  path: string
-}
+/**
+ * Resolves one block's `?raw` SFC text.
+ *
+ * Injected, never imported, by the pure projection modules (`registryItem.ts`,
+ * `llmsText.ts`): those are deliberately runtime-free so the bare Node generator can
+ * import them, and `sources.ts` carries an `import.meta.glob` that only Vite can
+ * evaluate. Browser callers pass `block => getBlockSource(block.path)`; the
+ * generator passes the same after `ssrLoadModule`-ing it — the pattern the templates'
+ * `rawSources.ts` already uses. Declared here because this module is types-first and
+ * both sides already import `BlockDef` from it.
+ */
+export type BlockSourceLookup = (block: BlockDef) => string
+
+/** A block's authored metadata; `path` resolves its `component` (and its source). */
+type BlockEntry = Omit<BlockDef, 'component'>
 
 /**
  * Build a `BlockDef` from one entry — keeps per-block boilerplate to a single
  * object: author the metadata, point `path` at the `.vue`, done.
  */
-function defineBlock({ path, ...meta }: BlockEntry): BlockDef {
-  return { ...meta, ...loadBlock(path) }
+function defineBlock(meta: BlockEntry): BlockDef {
+  return { ...meta, ...loadBlock(meta.path) }
 }
 
 // ---------------------------------------------------------------------------
@@ -1062,7 +1086,7 @@ export const BLOCKS: BlockDef[] = [
 
 /** All blocks in a given category, preserving registration order. */
 export function blocksByCategory(category: BlockCategory): BlockDef[] {
-  return BLOCKS.filter((block) => block.category === category)
+  return BLOCKS.filter(block => block.category === category)
 }
 
 /**
@@ -1072,7 +1096,7 @@ export function blocksByCategory(category: BlockCategory): BlockDef[] {
  * caller can redirect rather than render a dead page.
  */
 export function getBlock(id: string): BlockDef | undefined {
-  return BLOCKS.find((block) => block.id === id)
+  return BLOCKS.find(block => block.id === id)
 }
 
 // ---------------------------------------------------------------------------
@@ -1133,7 +1157,8 @@ export function blocksUsingComponent(name: string): BlockDef[] {
     for (const block of BLOCKS) {
       for (const component of block.components) {
         const bucket = usageCache.get(component)
-        if (bucket) bucket.push(block)
+        if (bucket)
+          bucket.push(block)
         else usageCache.set(component, [block])
       }
     }

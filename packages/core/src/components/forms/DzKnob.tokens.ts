@@ -20,11 +20,11 @@ export const knobTokens = {
   /** Value arc fill color per tone */
   tone: {
     neutral: 'var(--dz-foreground)',
-    primary: 'var(--dz-primary)',
-    success: 'var(--dz-success)',
+    primary: 'var(--dz-primary-solid)',
+    success: 'var(--dz-success-solid)',
     warning: 'var(--dz-warning-solid)',
-    danger: 'var(--dz-danger)',
-    info: 'var(--dz-info)',
+    danger: 'var(--dz-danger-solid)',
+    info: 'var(--dz-info-solid)',
   },
   /** Size scale -- rendered dial diameter (px) */
   size: {

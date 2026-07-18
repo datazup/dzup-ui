@@ -21,8 +21,9 @@
  * in the rendered template — the frame is never a blank white box mid-load.
  */
 import { DzSpinner } from '@dzup-ui/core'
-import { computed, defineAsyncComponent, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { lazyComponent } from '../lib/lazyComponent.ts'
 import { getTemplate } from '../templates/registry.ts'
 import { applyDir, applyPrimaryPalette, isPreviewPalette } from '../templates/previewCustomiser.ts'
 
@@ -32,13 +33,16 @@ const router = useRouter()
 
 const template = computed(() => getTemplate(props.slug))
 
-// Defensive redirect — the router guard normally prevents an unknown slug here.
+// Defensive fallback — the route guard normally sends an unknown slug to the
+// 404 page before this component mounts; mirror it for any other entry path.
 if (!template.value) {
-  router.replace('/templates')
+  void router.replace({ name: 'not-found', params: { pathMatch: route.path.slice(1).split('/') } })
 }
 
-/** The chromeless template component, code-split per slug. */
-const TemplateComponent = template.value ? defineAsyncComponent(template.value.load) : null
+/** The chromeless template component, code-split per slug. `lazyComponent`
+ *  supplies the loading / error / timeout states, so a failed chunk shows a
+ *  retry action instead of a blank frame (TASK-FREE-09). */
+const TemplateComponent = template.value ? lazyComponent(template.value.load) : null
 
 /** Apply a `light`/`dark` theme to the document; ignore anything else. */
 function applyTheme(theme: unknown): void {

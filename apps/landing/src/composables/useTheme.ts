@@ -3,7 +3,7 @@ import { onBeforeUnmount, ref, watch } from 'vue'
 /**
  * useTheme — light/dark/system theme controller for the landing app.
  *
- * Reused from apps/sandbox (spec §6.4): drives the `data-theme` attribute on
+ * Drives the `data-theme` attribute on
  * <html>, persists the preference under the `dz-theme` localStorage key (same
  * key the FOUC IIFE in index.html reads), and tracks the OS preference while in
  * `system` mode. A module singleton keeps one source of truth across the SPA.

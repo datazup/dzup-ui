@@ -4,7 +4,7 @@ A read-only label/value record view built from DzDescriptions — a responsive, 
 
 - **Category:** Data display
 - **Components:** DzDescriptions, DzDescriptionsItem, DzBadge, DzTag, DzButton, DzText, DzCard
-- **Preview:** /blocks#detail-descriptions
+- **Preview:** /blocks/detail-descriptions
 
 ```vue
 <script setup lang="ts">

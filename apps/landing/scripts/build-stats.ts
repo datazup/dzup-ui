@@ -59,7 +59,13 @@ function render(stats: BakedLiveStats): string {
 import type { LiveStats } from '../lib/liveStats.ts'
 
 export interface BakedLiveStats extends LiveStats {
-  /** ISO timestamp of the build that last wrote this file. */
+  /**
+   * ISO timestamp of the last build at which a metric above actually CHANGED —
+   * not of the last build that ran. A build whose fetch matches the committed
+   * numbers rewrites this file byte-identically, so it stops producing an
+   * information-free diff on every run. Surfaced to visitors as the "as of"
+   * date, which is the honest reading: it is how fresh the DATA is.
+   */
   generatedAt: string
 }
 
@@ -73,8 +79,10 @@ export const LIVE_STATS: BakedLiveStats = {
 
 /** Short console note describing where each metric came from. */
 function source(fresh: number | null, previous: number | null | undefined): string {
-  if (fresh !== null) return `${fresh} (fresh)`
-  if (typeof previous === 'number') return `${previous} (kept — API unavailable)`
+  if (fresh !== null)
+    return `${fresh} (fresh)`
+  if (typeof previous === 'number')
+    return `${previous} (kept — API unavailable)`
   return 'null (unavailable)'
 }
 
@@ -82,10 +90,23 @@ async function main(): Promise<void> {
   const previous = await loadPrevious()
   const fresh = await fetchLiveStats()
 
+  const githubStars = fresh.githubStars ?? previous.githubStars ?? null
+  const npmDownloads = fresh.npmDownloads ?? previous.npmDownloads ?? null
+
+  // `generatedAt` moves only when a METRIC moves. Stamping every build made this
+  // committed file churn a diff on each run while both numbers sat unchanged (and
+  // they are `null` until the package publishes) — a permanent, information-free
+  // delta that trained reviewers to ignore it. Holding the timestamp keeps the
+  // output byte-identical for an unchanged fetch, so a real diff means real news.
+  const unchanged
+    = githubStars === previous.githubStars
+      && npmDownloads === previous.npmDownloads
+      && typeof previous.generatedAt === 'string'
+
   const stats: BakedLiveStats = {
-    githubStars: fresh.githubStars ?? previous.githubStars ?? null,
-    npmDownloads: fresh.npmDownloads ?? previous.npmDownloads ?? null,
-    generatedAt: new Date().toISOString(),
+    githubStars,
+    npmDownloads,
+    generatedAt: unchanged ? previous.generatedAt! : new Date().toISOString(),
   }
 
   await mkdir(dirname(OUT_FILE), { recursive: true })

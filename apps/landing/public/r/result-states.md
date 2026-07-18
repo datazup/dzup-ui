@@ -4,7 +4,7 @@ Full-page outcome screens from DzResult — a segmented switch across the succes
 
 - **Category:** Feedback
 - **Components:** DzResult, DzCard, DzButton
-- **Preview:** /blocks#result-states
+- **Preview:** /blocks/result-states
 
 ```vue
 <script setup lang="ts">

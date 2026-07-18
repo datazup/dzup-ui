@@ -4,7 +4,7 @@ Responsive top bar with logo, nav links, search input, theme toggle, primary CTA
 
 - **Category:** Marketing
 - **Components:** DzButton, DzIconButton, DzSearchInput, DzColorModeToggle, DzSheet, DzSheetTrigger, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzText
-- **Preview:** /blocks#nav-bar
+- **Preview:** /blocks/nav-bar
 
 ```vue
 <script setup lang="ts">

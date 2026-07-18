@@ -15,12 +15,18 @@
 import type { LiveStats } from '../lib/liveStats.ts'
 
 export interface BakedLiveStats extends LiveStats {
-  /** ISO timestamp of the build that last wrote this file. */
+  /**
+   * ISO timestamp of the last build at which a metric above actually CHANGED —
+   * not of the last build that ran. A build whose fetch matches the committed
+   * numbers rewrites this file byte-identically, so it stops producing an
+   * information-free diff on every run. Surfaced to visitors as the "as of"
+   * date, which is the honest reading: it is how fresh the DATA is.
+   */
   generatedAt: string
 }
 
 export const LIVE_STATS: BakedLiveStats = {
   githubStars: null,
   npmDownloads: null,
-  generatedAt: '2026-07-02T20:59:52.680Z',
+  generatedAt: '2026-07-16T12:55:09.560Z',
 }

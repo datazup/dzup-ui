@@ -84,7 +84,9 @@ const wrapperClasses = computed(() =>
   ),
 )
 
-const inputClasses = computed(() => inputElementVariants())
+// `dz-search-input` suppresses the browser's native clear/decoration affordances
+// so the only clear control is our own, gated on `clearable` (styles/base.css § 4c).
+const inputClasses = computed(() => cn(inputElementVariants(), 'dz-search-input'))
 
 /**
  * Spinner size mapped down from the input size so the indicator stays
@@ -256,29 +258,3 @@ defineExpose({ inputRef })
     </p>
   </div>
 </template>
-
-<style scoped>
-/*
- * Suppress the browser's native search affordances. `type="search"` renders a
- * platform clear ("x") button and decoration that appear whenever the field has
- * a value — independent of the `clearable` prop. Hiding them ensures the only
- * clear control is our own button, which is gated on `clearable`.
- */
-input[type='search']::-webkit-search-cancel-button,
-input[type='search']::-webkit-search-decoration,
-input[type='search']::-webkit-search-results-button,
-input[type='search']::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-/* Accessibility: respect user's motion preference */
-@media (prefers-reduced-motion: reduce) {
-  :deep(*),
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
 import { DzWatermark } from '../../src/components/media'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzWatermark overlays a tiled, repeating text/image mark over its slotted
@@ -22,6 +23,10 @@ const meta = {
   title: 'Core/Media/DzWatermark',
   component: DzWatermark,
   tags: ['autodocs', 'status:experimental'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     content: {
       control: 'text',
@@ -75,13 +80,13 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const SAMPLE = `
-  <div class="max-w-md rounded-lg border border-gray-200 p-6 space-y-3">
+  <div class="max-w-md rounded-lg border border-[var(--dz-border)] p-6 space-y-3">
     <h3 class="text-lg font-semibold">Q3 Revenue Forecast</h3>
-    <p class="text-sm text-gray-600">
+    <p class="text-sm text-[var(--dz-muted-foreground)]">
       Projected revenue grows 14% QoQ on the back of the new self-serve tier.
       This preview is shared under NDA and should not be redistributed.
     </p>
-    <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+    <ul class="text-sm text-[var(--dz-muted-foreground)] list-disc pl-5 space-y-1">
       <li>New logos: 128</li>
       <li>Net retention: 117%</li>
       <li>Pipeline coverage: 3.2x</li>
@@ -160,6 +165,33 @@ export const OverImage: Story = {
           class="block rounded-lg"
         />
       </DzWatermark>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzWatermark },
+    setup() {
+      return { SAMPLE }
+    },
+    template: `
+      <div class="space-y-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          <code>--dz-watermark-color</code> resolves to <code>--dz-muted-foreground</code>,
+          so the mark re-tints for the dark surface on its own — no per-theme
+          <code>color</code> override is needed.
+        </p>
+        <DzWatermark content="CONFIDENTIAL" :rotate="-22" :font-size="16">
+          <div v-html="SAMPLE" />
+        </DzWatermark>
+      </div>
     `,
   }),
 }

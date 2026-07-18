@@ -4,7 +4,7 @@ A DzDataView template marketplace with a list/grid layout toggle, client-side so
 
 - **Category:** Data display
 - **Components:** DzDataView, DzCard, DzBadge, DzTag, DzButton, DzText
-- **Preview:** /blocks#collection-gallery
+- **Preview:** /blocks/collection-gallery
 
 ```vue
 <script setup lang="ts">

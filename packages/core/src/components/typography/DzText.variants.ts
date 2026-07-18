@@ -18,9 +18,9 @@ export const textVariants = tv({
     tone: {
       default: 'text-[var(--dz-foreground)]',
       muted: 'text-[var(--dz-muted-foreground)]',
-      success: 'text-[var(--dz-success)]',
-      warning: 'text-[var(--dz-warning)]',
-      danger: 'text-[var(--dz-danger)]',
+      success: 'text-[var(--dz-success-muted-foreground)]',
+      warning: 'text-[var(--dz-warning-muted-foreground)]',
+      danger: 'text-[var(--dz-danger-muted-foreground)]',
     },
     weight: {
       light: 'font-[var(--dz-font-light)]',

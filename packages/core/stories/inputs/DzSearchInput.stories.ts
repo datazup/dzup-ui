@@ -308,9 +308,9 @@ export const Interactive: Story = {
           @search="handleSearch"
           @clear="handleClear"
         />
-        <div class="text-sm text-gray-500 space-y-1">
-          <p>Current: <code class="bg-gray-100 px-1 rounded">{{ query || '(empty)' }}</code></p>
-          <p>Last search: <code class="bg-gray-100 px-1 rounded">{{ lastSearch || '(none)' }}</code></p>
+        <div class="text-sm text-[var(--dz-muted-foreground)] space-y-1">
+          <p>Current: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ query || '(empty)' }}</code></p>
+          <p>Last search: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ lastSearch || '(none)' }}</code></p>
           <p>Clear count: {{ clearCount }}</p>
         </div>
       </div>
@@ -339,7 +339,7 @@ export const Accessibility: Story = {
     components: { DzSearchInput },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSearchInput uses type="search" and defaults aria-label to "Search".
           The clear button has aria-label="Clear search". Press Enter to submit.
         </p>
@@ -359,10 +359,10 @@ export const RealWorldNavbarSearch: Story = {
   render: () => ({
     components: { DzSearchInput },
     template: `
-      <div class="flex items-center gap-4 px-4 py-2 bg-gray-50 rounded-lg">
+      <div class="flex items-center gap-4 px-4 py-2 bg-[var(--dz-muted)] rounded-lg">
         <span class="font-semibold text-sm">MyApp</span>
         <DzSearchInput variant="filled" size="sm" placeholder="Search anything..." class="flex-1 max-w-md" />
-        <span class="text-sm text-gray-400">user@example.com</span>
+        <span class="text-sm text-[var(--dz-muted-foreground)]">user@example.com</span>
       </div>
     `,
   }),
@@ -394,10 +394,10 @@ export const RealWorldDataTableFilter: Story = {
       <div class="max-w-sm space-y-3">
         <DzSearchInput v-model="query" placeholder="Filter names..." size="sm" />
         <ul class="space-y-1">
-          <li v-for="item in filtered" :key="item" class="text-sm py-1 px-2 rounded hover:bg-gray-50">
+          <li v-for="item in filtered" :key="item" class="text-sm py-1 px-2 rounded hover:bg-[var(--dz-muted)]">
             {{ item }}
           </li>
-          <li v-if="filtered.length === 0" class="text-sm text-gray-400 py-1 px-2">
+          <li v-if="filtered.length === 0" class="text-sm text-[var(--dz-muted-foreground)] py-1 px-2">
             No results found.
           </li>
         </ul>

@@ -168,11 +168,3 @@ const rootClasses = computed(() =>
     </div>
   </div>
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  .transition-transform {
-    transition: none !important;
-  }
-}
-</style>

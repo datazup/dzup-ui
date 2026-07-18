@@ -39,7 +39,7 @@ describe('dzSplitButton — Unit Tests', () => {
     })
     const action = wrapper.findComponent(DzSplitButtonAction)
     const classStr = action.find('button').classes().join(' ')
-    expect(classStr).toContain('bg-[var(--dz-danger)]')
+    expect(classStr).toContain('bg-[var(--dz-danger-solid)]')
   })
 
   it('propagates disabled state to action child', () => {

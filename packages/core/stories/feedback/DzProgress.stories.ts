@@ -143,7 +143,7 @@ export const AllSizes: Story = {
         <p class="text-sm font-medium">Bar Variant</p>
         <div class="space-y-3">
           <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size" class="space-y-1">
-            <p class="text-xs text-gray-500 uppercase">{{ size }}</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)] uppercase">{{ size }}</p>
             <DzProgress :size="size" :value="50" />
           </div>
         </div>
@@ -151,7 +151,7 @@ export const AllSizes: Story = {
         <div class="flex items-end gap-6">
           <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size" class="flex flex-col items-center gap-1">
             <DzProgress variant="circular" :size="size" :value="50" />
-            <p class="text-xs text-gray-500 uppercase">{{ size }}</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)] uppercase">{{ size }}</p>
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export const AllTones: Story = {
     template: `
       <div class="space-y-3">
         <div v-for="tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']" :key="tone" class="space-y-1">
-          <p class="text-xs text-gray-500 capitalize">{{ tone }}</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] capitalize">{{ tone }}</p>
           <DzProgress :tone="tone" :value="70" />
         </div>
       </div>
@@ -246,7 +246,7 @@ export const Interactive: Story = {
         <div class="flex items-center gap-4">
           <button class="text-sm font-medium underline" @click="increment">+10%</button>
           <button class="text-sm font-medium underline" @click="reset">Reset</button>
-          <span class="text-sm text-gray-500">{{ progress }}%</span>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">{{ progress }}%</span>
         </div>
       </div>
     `,
@@ -263,7 +263,7 @@ export const Accessibility: Story = {
     components: { DzProgress },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzProgress uses role="progressbar" with aria-valuenow, aria-valuemin, and aria-valuemax.
           Indeterminate mode omits aria-valuenow per WAI-ARIA spec.
         </p>
@@ -315,21 +315,21 @@ export const RealWorldFileUpload: Story = {
         <div class="space-y-1">
           <div class="flex justify-between text-sm">
             <span>document.pdf</span>
-            <span class="text-gray-500">100%</span>
+            <span class="text-[var(--dz-muted-foreground)]">100%</span>
           </div>
           <DzProgress :value="100" tone="success" size="sm" />
         </div>
         <div class="space-y-1">
           <div class="flex justify-between text-sm">
             <span>photo.jpg</span>
-            <span class="text-gray-500">67%</span>
+            <span class="text-[var(--dz-muted-foreground)]">67%</span>
           </div>
           <DzProgress :value="67" tone="primary" size="sm" />
         </div>
         <div class="space-y-1">
           <div class="flex justify-between text-sm">
             <span>archive.zip</span>
-            <span class="text-gray-500">Preparing...</span>
+            <span class="text-[var(--dz-muted-foreground)]">Preparing...</span>
           </div>
           <DzProgress indeterminate size="sm" />
         </div>

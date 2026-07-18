@@ -218,14 +218,3 @@ function handleOverlayClick(): void {
     </div>
   </nav>
 </template>
-
-<style scoped>
-.dz-sidebar-overlay-enter-active,
-.dz-sidebar-overlay-leave-active {
-  transition: opacity var(--dz-transition-normal, 200ms) ease;
-}
-.dz-sidebar-overlay-enter-from,
-.dz-sidebar-overlay-leave-to {
-  opacity: 0;
-}
-</style>

@@ -33,7 +33,7 @@ describe('governanceBadge — Contract Spec v1', () => {
   it('applies pattern-specific inline style', () => {
     const wrapper = mount(GovernanceBadge, { props: { pattern: 'supervisor' } })
     const style = wrapper.attributes('style') ?? ''
-    expect(style).toContain('var(--dz-primary)')
+    expect(style).toContain('var(--dz-primary-solid)')
   })
 
   it('renders human-readable label by default', () => {

@@ -17,6 +17,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Section from '../components/Section.vue'
 import { useTheme } from '../composables/useTheme.ts'
+import { TEMPLATE_DARK_THUMB_SLUGS } from '../generated/ogImages.ts'
 import { ICONS } from '../icons.ts'
 import { TEMPLATE_CATEGORIES, TEMPLATE_TAGS, TEMPLATES, isNew } from '../templates/registry.ts'
 import type { TemplateCategory, TemplateMeta } from '../templates/registry.ts'
@@ -100,12 +101,20 @@ function darkThumb(path: string): string {
 /**
  * The thumbnail src for a card under the current theme, or `undefined` when the
  * template has no thumbnail or its image previously failed to load (so the
- * template renders its icon glyph instead). No thumbnails ship yet, so every
- * card currently resolves to `undefined` and shows its icon fallback.
+ * template renders its icon glyph instead).
+ *
+ * The dark variant is only used when one was actually shot: `yarn thumbnails` has
+ * produced 28 of the 44, and for the other 16 the derived `-dark` path is a 404.
+ * Before TASK-FREE-13 that 404 tripped `onThumbError` and the card fell back to its
+ * ICON — a template that shows a real screenshot in light mode and a glyph in dark,
+ * plus a wasted request per card. Checking the generated manifest instead means
+ * those 16 keep their light screenshot in dark mode: imperfect, but a screenshot of
+ * the template beats a generic icon, and nothing requests a file that isn't there.
  */
 function thumbFor(t: TemplateMeta): string | undefined {
   if (!t.thumbnail || failedThumbs.value.has(t.slug)) return undefined
-  return resolved.value === 'dark' ? darkThumb(t.thumbnail) : t.thumbnail
+  const wantsDark = resolved.value === 'dark' && TEMPLATE_DARK_THUMB_SLUGS.has(t.slug)
+  return wantsDark ? darkThumb(t.thumbnail) : t.thumbnail
 }
 
 /** On a thumbnail load error, fall back to the icon glyph for that card. */
@@ -311,6 +320,7 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
     surface
     bordered
     heading-id="templates-title"
+    :heading-level="1"
   >
     <div class="templates-toolbar">
       <!-- Search + quick-find + sort -->

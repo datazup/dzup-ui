@@ -111,11 +111,3 @@ function handleKeydown(event: KeyboardEvent): void {
     <slot name="footer" />
   </div>
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  div {
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>

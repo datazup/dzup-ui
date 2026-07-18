@@ -91,15 +91,15 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <DzSplitter v-bind="args" class="h-48 border rounded-lg" aria-label="Splitter demo">
+      <DzSplitter v-bind="args" class="h-48 border border-[var(--dz-border)] rounded-lg" aria-label="Splitter demo">
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-blue-50 text-blue-800 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4">
             Panel A (50%)
           </div>
         </DzSplitterPanel>
         <DzSplitterHandle with-handle />
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-green-50 text-green-800 text-sm p-4">
+          <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-4">
             Panel B (50%)
           </div>
         </DzSplitterPanel>
@@ -117,13 +117,13 @@ export const VerticalSplitter: Story = {
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
-      <DzSplitter direction="vertical" class="h-64 border rounded-lg">
+      <DzSplitter direction="vertical" class="h-64 border border-[var(--dz-border)] rounded-lg">
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-amber-50 text-amber-800 text-sm">Top</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm">Top</div>
         </DzSplitterPanel>
         <DzSplitterHandle with-handle />
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-purple-50 text-purple-800 text-sm">Bottom</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-colors-purple-50)] text-[var(--dz-colors-purple-800)] text-sm">Bottom</div>
         </DzSplitterPanel>
       </DzSplitter>
     `,
@@ -144,13 +144,13 @@ export const Disabled: Story = {
       return { args }
     },
     template: `
-      <DzSplitter v-bind="args" class="h-40 border rounded-lg">
+      <DzSplitter v-bind="args" class="h-40 border border-[var(--dz-border)] rounded-lg">
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-50 text-gray-400 text-sm">Locked</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm">Locked</div>
         </DzSplitterPanel>
         <DzSplitterHandle />
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-50 text-gray-400 text-sm">Locked</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-muted)] text-[var(--dz-muted-foreground)] text-sm">Locked</div>
         </DzSplitterPanel>
       </DzSplitter>
     `,
@@ -169,13 +169,13 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
-      <DzSplitter direction="horizontal" class="h-48 border border-gray-700 rounded-lg">
+      <DzSplitter direction="horizontal" class="h-48 border border-[var(--dz-colors-neutral-700)] rounded-lg">
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-800 text-gray-200 text-sm p-4">Left</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-colors-neutral-800)] text-[var(--dz-colors-neutral-200)] text-sm p-4">Left</div>
         </DzSplitterPanel>
         <DzSplitterHandle with-handle />
         <DzSplitterPanel :default-size="50">
-          <div class="h-full flex items-center justify-center bg-gray-800 text-gray-200 text-sm p-4">Right</div>
+          <div class="h-full flex items-center justify-center bg-[var(--dz-colors-neutral-800)] text-[var(--dz-colors-neutral-200)] text-sm p-4">Right</div>
         </DzSplitterPanel>
       </DzSplitter>
     `,
@@ -191,30 +191,30 @@ export const RealWorldEmailClient: Story = {
   render: () => ({
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
-      <DzSplitter direction="horizontal" class="h-80 border rounded-lg">
+      <DzSplitter direction="horizontal" class="h-80 border border-[var(--dz-border)] rounded-lg">
         <DzSplitterPanel :default-size="25" :min-size="15">
-          <div class="h-full bg-gray-50 p-3">
-            <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Folders</p>
+          <div class="h-full bg-[var(--dz-muted)] p-3">
+            <p class="text-xs font-semibold text-[var(--dz-muted-foreground)] uppercase mb-2">Folders</p>
             <div class="space-y-1 text-sm">
-              <div class="px-2 py-1 bg-blue-100 rounded text-blue-800">Inbox (3)</div>
-              <div class="px-2 py-1 hover:bg-gray-100 rounded">Sent</div>
-              <div class="px-2 py-1 hover:bg-gray-100 rounded">Drafts</div>
-              <div class="px-2 py-1 hover:bg-gray-100 rounded">Trash</div>
+              <div class="px-2 py-1 bg-[var(--dz-primary-muted)] rounded text-[var(--dz-primary-muted-foreground)]">Inbox (3)</div>
+              <div class="px-2 py-1 hover:bg-[var(--dz-muted)] rounded">Sent</div>
+              <div class="px-2 py-1 hover:bg-[var(--dz-muted)] rounded">Drafts</div>
+              <div class="px-2 py-1 hover:bg-[var(--dz-muted)] rounded">Trash</div>
             </div>
           </div>
         </DzSplitterPanel>
         <DzSplitterHandle with-handle />
         <DzSplitterPanel :default-size="35" :min-size="20">
-          <div class="h-full p-3 border-r">
-            <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Messages</p>
+          <div class="h-full p-3 border-r border-r-[var(--dz-border)]">
+            <p class="text-xs font-semibold text-[var(--dz-muted-foreground)] uppercase mb-2">Messages</p>
             <div class="space-y-2 text-sm">
-              <div class="p-2 bg-blue-50 rounded border-l-2 border-blue-500">
+              <div class="p-2 bg-[var(--dz-primary-muted)] rounded border-l-2 border-[var(--dz-primary-border)]">
                 <p class="font-medium">Meeting reminder</p>
-                <p class="text-xs text-gray-500">Today at 3:00 PM</p>
+                <p class="text-xs text-[var(--dz-muted-foreground)]">Today at 3:00 PM</p>
               </div>
-              <div class="p-2 hover:bg-gray-50 rounded">
+              <div class="p-2 hover:bg-[var(--dz-muted)] rounded">
                 <p class="font-medium">Project update</p>
-                <p class="text-xs text-gray-500">Yesterday</p>
+                <p class="text-xs text-[var(--dz-muted-foreground)]">Yesterday</p>
               </div>
             </div>
           </div>
@@ -223,8 +223,8 @@ export const RealWorldEmailClient: Story = {
         <DzSplitterPanel :default-size="40" :min-size="25">
           <div class="h-full p-4">
             <h3 class="font-semibold mb-1">Meeting reminder</h3>
-            <p class="text-xs text-gray-500 mb-3">From: team@company.com</p>
-            <p class="text-sm text-gray-600">Don't forget the standup meeting at 3:00 PM.</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)] mb-3">From: team@company.com</p>
+            <p class="text-sm text-[var(--dz-muted-foreground)]">Don't forget the standup meeting at 3:00 PM.</p>
           </div>
         </DzSplitterPanel>
       </DzSplitter>
@@ -245,18 +245,18 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Sizes: {{ sizes.map(s => Math.round(s) + '%').join(' | ') }}
         </p>
-        <DzSplitter direction="horizontal" class="h-40 border rounded-lg" @layout-change="sizes = $event">
+        <DzSplitter direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg" @layout-change="sizes = $event">
           <DzSplitterPanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm p-2" data-testid="panel-a">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm p-2" data-testid="panel-a">
               {{ Math.round(sizes[0]) }}%
             </div>
           </DzSplitterPanel>
           <DzSplitterHandle with-handle />
           <DzSplitterPanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm p-2" data-testid="panel-b">
+            <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm p-2" data-testid="panel-b">
               {{ Math.round(sizes[1]) }}%
             </div>
           </DzSplitterPanel>
@@ -292,17 +292,17 @@ export const Accessibility: Story = {
     components: { DzSplitter, DzSplitterPanel, DzSplitterHandle },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSplitter is functionally identical to DzResizable.
           Focus the handle (Tab) and use Arrow keys to resize.
         </p>
-        <DzSplitter direction="horizontal" class="h-40 border rounded-lg" aria-label="Keyboard splitter demo">
+        <DzSplitter direction="horizontal" class="h-40 border border-[var(--dz-border)] rounded-lg" aria-label="Keyboard splitter demo">
           <DzSplitterPanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-blue-50 text-sm">Left</div>
+            <div class="h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm">Left</div>
           </DzSplitterPanel>
           <DzSplitterHandle with-handle />
           <DzSplitterPanel :default-size="50">
-            <div class="h-full flex items-center justify-center bg-green-50 text-sm">Right</div>
+            <div class="h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm">Right</div>
           </DzSplitterPanel>
         </DzSplitter>
       </div>

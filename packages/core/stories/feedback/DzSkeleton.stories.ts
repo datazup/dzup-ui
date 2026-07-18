@@ -161,7 +161,7 @@ export const NoAnimation: Story = {
     components: { DzSkeleton },
     template: `
       <div class="space-y-4 max-w-md">
-        <p class="text-sm text-gray-500">Animation can be disabled for static placeholders or users with reduced motion preferences.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Animation can be disabled for static placeholders or users with reduced motion preferences.</p>
         <DzSkeleton variant="text" :lines="3" :animate="false" />
         <DzSkeleton variant="rectangular" width="100%" height="80px" :animate="false" />
       </div>
@@ -193,10 +193,10 @@ export const Interactive: Story = {
             </div>
           </template>
           <template v-else>
-            <div class="w-10 h-10 rounded-full bg-blue-500 shrink-0" />
+            <div class="w-10 h-10 rounded-full bg-[var(--dz-primary)] shrink-0" />
             <div>
               <p class="font-medium text-sm">Jane Doe</p>
-              <p class="text-sm text-gray-500">Software engineer at Acme Corp. Loves building component libraries and writing documentation.</p>
+              <p class="text-sm text-[var(--dz-muted-foreground)]">Software engineer at Acme Corp. Loves building component libraries and writing documentation.</p>
             </div>
           </template>
         </div>
@@ -215,7 +215,7 @@ export const Accessibility: Story = {
     components: { DzSkeleton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSkeleton sets aria-hidden="true" on all skeleton elements, since they
           are purely decorative placeholders. Screen readers skip them entirely.
           Use role="status" on a parent container with a loading message for
@@ -269,7 +269,7 @@ export const RealWorldCardSkeleton: Story = {
     components: { DzSkeleton },
     template: `
       <div class="grid grid-cols-3 gap-4 max-w-2xl">
-        <div v-for="i in 3" :key="i" class="border rounded-lg p-4 space-y-3">
+        <div v-for="i in 3" :key="i" class="border border-[var(--dz-border)] rounded-lg p-4 space-y-3">
           <DzSkeleton variant="rectangular" width="100%" height="120px" />
           <DzSkeleton variant="text" width="70%" />
           <DzSkeleton variant="text" :lines="2" />
@@ -293,7 +293,7 @@ export const RealWorldListSkeleton: Story = {
     components: { DzSkeleton },
     template: `
       <div class="space-y-4 max-w-md">
-        <div v-for="i in 4" :key="i" class="flex gap-3 items-center p-3 border rounded">
+        <div v-for="i in 4" :key="i" class="flex gap-3 items-center p-3 border border-[var(--dz-border)] rounded">
           <DzSkeleton variant="circular" width="36px" height="36px" />
           <div class="flex-1 space-y-1.5">
             <DzSkeleton variant="text" width="40%" />

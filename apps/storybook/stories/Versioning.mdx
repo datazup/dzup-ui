@@ -1,0 +1,156 @@
+{/* Versioning.mdx — versioning & deprecation policy (TASK-FREE-14) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { StatusBadge } from './_blocks/StatusBadge.ts'
+
+<Meta title="Guides/Versioning & Deprecation" />
+
+# Versioning & Deprecation
+
+What a version number here promises you, what a deprecation obliges us to, and how
+long you have to act on one.
+
+> **Pre-1.0.** Every `@dzup-ui/*` package is currently `0.1.0-alpha.x`. Under semver,
+> `0.x` grants no compatibility guarantee at all. The policy below is what we hold
+> ourselves to anyway, and what becomes binding at 1.0 — it is not a claim that the
+> API is frozen today.
+
+## Semver
+
+The packages version together and follow semver:
+
+| Bump      | Means                                                                 |
+|-----------|-----------------------------------------------------------------------|
+| **major** | A breaking change. Something that used to work no longer does.         |
+| **minor** | New components, new props, new tokens. Additive — your code still runs.|
+| **patch** | Bug fixes. No new API.                                                 |
+
+### What counts as breaking
+
+Breaking (major only):
+
+- Removing or renaming a component, prop, emit, slot, or exported type.
+- Changing a prop's default in a way that changes rendered output.
+- Removing a value from a variant taxonomy (`ButtonVariant`, `CardVariant`, …).
+- Removing a `--dz-*` token that was documented as public.
+- Raising the minimum Vue or Node version.
+
+Not breaking (minor or patch):
+
+- **Adding** a value to a taxonomy — additive for consumers, though it will widen a
+  type you may have been exhaustively switching on.
+- Adding an optional prop, slot, or token.
+- Visual changes that fix an accessibility failure. If a token fails WCAG AA, fixing
+  it is a **patch**, not a major. Contrast compliance is a bug fix, and we would
+  rather change a colour than ship a known failure until the next major.
+- Internal refactors with no API surface change.
+
+### What is not covered
+
+Anything not documented is not API, and may change in any release:
+
+- The internals of `.variants.ts` / the exact Tailwind classes a component emits.
+- DOM structure and class names — style through tokens and the documented props,
+  not by reaching into the markup with a descendant selector.
+- Anything imported from a deep path rather than the package's export map.
+- `@dzup-ui/compat` and `@dzup-ui/codemods` — migration tooling, versioned with the
+  library but not a stable API of their own.
+
+## Component status
+
+Semver covers the package. **Status covers the component**, and the two are
+independent: a `0.4.0` release can contain a component that is still experimental.
+Each component declares its own maturity as a `status:*` tag on its story, which is
+what the sidebar badge and the
+[Component Status](?path=/docs/guides-component-status--docs) matrix read.
+
+| Status | Promise |
+|---|---|
+| <StatusBadge status="experimental" /> | The API is being worked out. It can change or be removed in a **minor**. Use it, tell us how it goes, pin your version. |
+| <StatusBadge status="beta" /> | The API is close to settled. Breaking changes are possible in a minor but will carry a changelog note and a migration path. |
+| <StatusBadge status="stable" /> | Covered by everything on this page. Breaking changes only in a major, and only after a deprecation. |
+| <StatusBadge status="deprecated" /> | Still works, still supported for the window below, but it is going away. A replacement is named on its docs page. |
+
+`experimental` and `beta` are the honest escape hatch that keeps `stable` meaningful.
+A component only earns `stable` once we are prepared to hold its API for a major
+cycle — see [Contributing](?path=/docs/contributing--docs) for the ladder.
+
+## The deprecation policy
+
+When something stable is going away, this is what you are owed.
+
+### The support window
+
+**A deprecated API keeps working for at least two minor releases, and is only
+removed in a major.**
+
+Deprecate in `0.4.0` and the earliest removal is whichever comes later:
+`0.6.0`-and-a-major, in practice the next major after `0.6.0`. It never disappears in
+a patch, and it never disappears in the same release that announced it. Two minors is
+the floor, not a countdown — something widely used can stay deprecated far longer.
+
+### What a deprecation must ship with
+
+A `status:deprecated` tag is not a deprecation on its own. All four of these:
+
+1. **A named replacement.** "Deprecated" without "use X instead" is not actionable.
+   The replacement is recorded in the story's `migration` parameter, which is what
+   [Component Status](?path=/docs/guides-component-status--docs) renders as the
+   built-in upgrade guide — so the migration note lives next to the code, not in a
+   changelog nobody re-reads.
+2. **A dev-mode console warning** on use, naming the replacement. Silent deprecations
+   are discovered at removal, which is the worst possible time.
+3. **A changeset**, so it appears in the changelog and on
+   [Releases](?path=/docs/guides-releases--docs).
+4. **A working migration path** — a codemod in `@dzup-ui/codemods` where the change is
+   mechanical, written instructions where it is not.
+
+### What you should do
+
+<DoDont>
+  <Do title="Treat a deprecation warning as work, not noise">
+    You have two minors and a major. That is time to plan, not time to ignore — the
+    warning exists so the removal is never a surprise.
+  </Do>
+  <Do title="Read the changelog on every minor">
+    Deprecations are announced in minors. If you only read major release notes, you
+    will meet each one as a breakage.
+  </Do>
+  <Dont title="Depend on a deprecated API in new code">
+    It has a removal date. Writing new call sites against it is buying debt at a
+    known price.
+  </Dont>
+  <Dont title="Pin to a major to avoid migrating">
+    An old major stops receiving fixes, including accessibility and security ones.
+    Migrating on the window is cheaper than migrating under pressure later.
+  </Dont>
+</DoDont>
+
+## How releases are made
+
+Releases are driven by [Changesets](https://github.com/changesets/changesets). Every
+PR with a user-visible change carries a changeset declaring its bump; CI enforces
+this (`yarn validate:changelog`). The changesets are what produce the version numbers
+and the changelog — nobody hand-writes either.
+
+The [Releases](?path=/docs/guides-releases--docs) page is generated from
+`CHANGELOG.md` and the pending changesets, so what you read there is what shipped.
+
+## @dzup-ui/compat
+
+`@dzup-ui/compat` carries shims for APIs that have been removed from core, for
+codebases that cannot migrate on the window. It is a bridge with an expiry, not a
+long-term home:
+
+- It is **never imported by stable core** — that boundary is enforced by
+  `yarn validate:boundaries`, so a shim can never quietly become a dependency of the
+  thing it is shimming.
+- Importing from it means you are running on borrowed time. Prefer the codemod.
+
+## See also
+
+- [Component Status](?path=/docs/guides-component-status--docs) — every component's
+  current status, and the migration note for anything deprecated
+- [Migration](?path=/docs/guides-migration--docs) — how to actually perform an upgrade
+- [Releases](?path=/docs/guides-releases--docs) — what changed, generated from the changelog
+- [Contributing](?path=/docs/contributing--docs) — the status ladder from the inside

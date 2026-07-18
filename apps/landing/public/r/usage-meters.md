@@ -4,7 +4,7 @@ A quota dashboard pairing a segmented DzMeterGroup storage breakdown (with legen
 
 - **Category:** Feedback
 - **Components:** DzMeterGroup, DzProgress, DzCard, DzBadge, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#usage-meters
+- **Preview:** /blocks/usage-meters
 
 ```vue
 <script setup lang="ts">

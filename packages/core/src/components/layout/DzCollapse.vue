@@ -61,11 +61,3 @@ const classes = computed(() =>
     <slot />
   </div>
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  div {
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>

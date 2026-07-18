@@ -253,7 +253,7 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Current page: <code>{{ page }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Current page: <code>{{ page }}</code></p>
         <DzPagination v-model="page" :total="200" :page-size="10" show-edges />
       </div>
     `,
@@ -297,7 +297,7 @@ export const Accessibility: Story = {
     components: { DzPagination },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The pagination renders inside a <code>&lt;nav&gt;</code> with <code>aria-label="Pagination"</code>.
           Each page button uses <code>aria-current="page"</code> for the active page.
           First/last/prev/next buttons have descriptive aria-labels.
@@ -326,11 +326,11 @@ export const RealWorldTablePagination: Story = {
     },
     template: `
       <div class="space-y-4">
-        <div class="border rounded p-4 text-sm text-gray-500">
+        <div class="border border-[var(--dz-border)] rounded p-4 text-sm text-[var(--dz-muted-foreground)]">
           Showing {{ (page - 1) * pageSize + 1 }}-{{ Math.min(page * pageSize, total) }} of {{ total }} results
         </div>
         <div class="flex justify-between items-center">
-          <p class="text-sm text-gray-500">{{ Math.ceil(total / pageSize) }} pages</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">{{ Math.ceil(total / pageSize) }} pages</p>
           <DzPagination v-model="page" :total="total" :page-size="pageSize" show-edges />
         </div>
       </div>
@@ -352,7 +352,7 @@ export const RealWorldBlogNavigation: Story = {
     template: `
       <div class="max-w-md mx-auto text-center space-y-4">
         <h3 class="text-lg font-semibold">Latest Articles</h3>
-        <p class="text-sm text-gray-500">Page {{ page }} of 12</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Page {{ page }} of 12</p>
         <DzPagination v-model="page" :total="120" :page-size="10" size="sm" />
       </div>
     `,

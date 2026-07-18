@@ -133,7 +133,7 @@ export const Default: Story = {
     template: `
       <div class="flex flex-col items-center gap-3">
         <DzKnob v-bind="args" v-model:value="level" aria-label="Level" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ level }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ level }}</strong></p>
       </div>
     `,
   }),
@@ -157,7 +157,7 @@ export const Stepped: Story = {
     template: `
       <div class="flex flex-col items-center gap-3">
         <DzKnob v-bind="args" v-model:value="level" aria-label="Steps" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ level }}</strong> (step 5)</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ level }}</strong> (step 5)</p>
       </div>
     `,
   }),
@@ -280,7 +280,7 @@ export const Interactive: Story = {
     template: `
       <div class="flex flex-col items-center gap-3">
         <DzKnob v-model:value="level" value-template="{value}%" aria-label="Level" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ level }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ level }}</strong></p>
       </div>
     `,
   }),

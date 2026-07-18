@@ -47,7 +47,7 @@ export const Default: Story = {
     template: `
       <div class="max-w-sm">
         <DzAspectRatio v-bind="args">
-          <div class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center text-white font-medium">
+          <div class="w-full h-full bg-gradient-to-br from-[var(--dz-colors-blue-400)] to-[var(--dz-colors-purple-500)] rounded-lg flex items-center justify-center text-[var(--dz-colors-neutral-50)] font-medium">
             16:9
           </div>
         </DzAspectRatio>
@@ -74,9 +74,9 @@ export const AllRatios: Story = {
           { label: '3:4 (Portrait)', value: 3/4 },
           { label: '2:3', value: 2/3 },
         ]" :key="label">
-          <p class="text-xs text-gray-500 mb-2">{{ label }} ({{ value.toFixed(2) }})</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">{{ label }} ({{ value.toFixed(2) }})</p>
           <DzAspectRatio :ratio="value">
-            <div class="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center text-blue-800 text-sm font-medium border border-blue-200">
+            <div class="w-full h-full bg-gradient-to-br from-[var(--dz-colors-blue-100)] to-[var(--dz-colors-blue-200)] rounded-lg flex items-center justify-center text-[var(--dz-primary-muted-foreground)] text-sm font-medium border border-[var(--dz-primary-border)]">
               {{ label }}
             </div>
           </DzAspectRatio>
@@ -119,14 +119,14 @@ export const VideoEmbed: Story = {
     template: `
       <div class="max-w-lg">
         <DzAspectRatio :ratio="16/9">
-          <div class="w-full h-full bg-gray-900 rounded-lg flex items-center justify-center">
+          <div class="w-full h-full bg-[var(--dz-colors-neutral-900)] rounded-lg flex items-center justify-center">
             <div class="text-center">
-              <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mb-2 mx-auto">
-                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              <div class="w-16 h-16 rounded-full bg-[var(--dz-colors-neutral-700)] flex items-center justify-center mb-2 mx-auto">
+                <svg class="w-8 h-8 text-[var(--dz-colors-neutral-50)] ml-1" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
-              <p class="text-white/60 text-sm">Video placeholder (16:9)</p>
+              <p class="text-[var(--dz-colors-neutral-400)] text-sm">Video placeholder (16:9)</p>
             </div>
           </div>
         </DzAspectRatio>
@@ -146,7 +146,7 @@ export const SquareAspect: Story = {
     template: `
       <div class="w-32">
         <DzAspectRatio :ratio="1">
-          <div class="w-full h-full bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+          <div class="w-full h-full bg-gradient-to-br from-[var(--dz-colors-green-400)] to-[var(--dz-colors-emerald-500)] rounded-full flex items-center justify-center text-[var(--dz-colors-neutral-50)] text-xl font-bold">
             JD
           </div>
         </DzAspectRatio>
@@ -169,7 +169,7 @@ export const DarkMode: Story = {
     template: `
       <div class="max-w-sm">
         <DzAspectRatio :ratio="16/9">
-          <div class="w-full h-full bg-gray-700 rounded-lg flex items-center justify-center text-gray-300 text-sm">
+          <div class="w-full h-full bg-[var(--dz-colors-neutral-700)] rounded-lg flex items-center justify-center text-[var(--dz-colors-neutral-300)] text-sm">
             16:9 in dark mode
           </div>
         </DzAspectRatio>
@@ -188,24 +188,24 @@ export const RealWorldImageCardGrid: Story = {
     components: { DzAspectRatio },
     template: `
       <div class="grid grid-cols-3 gap-4 max-w-2xl">
-        <div v-for="i in 6" :key="i" class="border rounded-lg overflow-hidden">
+        <div v-for="i in 6" :key="i" class="border border-[var(--dz-border)] rounded-lg overflow-hidden">
           <DzAspectRatio :ratio="4/3">
             <div class="w-full h-full bg-gradient-to-br"
               :class="[
-                'from-blue-200 to-blue-300',
-                'from-green-200 to-green-300',
-                'from-amber-200 to-amber-300',
-                'from-purple-200 to-purple-300',
-                'from-pink-200 to-pink-300',
-                'from-cyan-200 to-cyan-300',
+                'from-[var(--dz-colors-blue-200)] to-[var(--dz-colors-blue-300)]',
+                'from-[var(--dz-colors-green-200)] to-[var(--dz-colors-green-300)]',
+                'from-[var(--dz-colors-amber-200)] to-[var(--dz-colors-amber-300)]',
+                'from-[var(--dz-colors-purple-200)] to-[var(--dz-colors-purple-300)]',
+                'from-[var(--dz-colors-pink-200)] to-[var(--dz-colors-pink-300)]',
+                'from-[var(--dz-colors-cyan-200)] to-[var(--dz-colors-cyan-300)]',
               ][i - 1]"
               :style="{ display: 'flex', alignItems: 'center', justifyContent: 'center' }">
-              <span class="text-sm font-medium text-gray-700">Photo {{ i }}</span>
+              <span class="text-sm font-medium text-[var(--dz-foreground)]">Photo {{ i }}</span>
             </div>
           </DzAspectRatio>
           <div class="p-3">
             <p class="text-sm font-medium">Image Title {{ i }}</p>
-            <p class="text-xs text-gray-500">Description text</p>
+            <p class="text-xs text-[var(--dz-muted-foreground)]">Description text</p>
           </div>
         </div>
       </div>
@@ -224,13 +224,13 @@ export const RealWorldMapContainer: Story = {
     template: `
       <div class="max-w-lg">
         <DzAspectRatio :ratio="2">
-          <div class="w-full h-full bg-green-100 border-2 border-green-200 rounded-lg flex items-center justify-center">
+          <div class="w-full h-full bg-[var(--dz-success-muted)] border-2 border-[var(--dz-success-border)] rounded-lg flex items-center justify-center">
             <div class="text-center">
-              <svg class="w-8 h-8 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-8 h-8 text-[var(--dz-success-muted-foreground)] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <p class="text-sm text-green-700">Map placeholder (2:1 ratio)</p>
+              <p class="text-sm text-[var(--dz-success-muted-foreground)]">Map placeholder (2:1 ratio)</p>
             </div>
           </div>
         </DzAspectRatio>
@@ -249,7 +249,7 @@ export const Accessibility: Story = {
     components: { DzAspectRatio },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzAspectRatio is a layout wrapper. It does not add semantic
           meaning -- ensure the content inside has appropriate alt text,
           ARIA labels, or roles.

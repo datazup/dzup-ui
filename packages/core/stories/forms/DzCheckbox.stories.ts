@@ -216,7 +216,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4">
         <DzCheckbox v-model="checked">Toggle me</DzCheckbox>
-        <p class="text-sm text-gray-500">Checked: <strong>{{ checked }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Checked: <strong>{{ checked }}</strong></p>
       </div>
     `,
   }),
@@ -237,7 +237,7 @@ export const Accessibility: Story = {
     components: { DzCheckbox },
     template: `
       <div class="space-y-5">
-        <p class="text-sm text-gray-500">Tab through checkboxes, press Space to toggle.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab through checkboxes, press Space to toggle.</p>
         <div class="flex flex-col items-start gap-4">
           <DzCheckbox aria-label="Option A">Option A</DzCheckbox>
           <DzCheckbox aria-label="Option B">Option B</DzCheckbox>
@@ -262,12 +262,12 @@ export const RealWorldTerms: Story = {
     template: `
       <div class="flex max-w-md flex-col items-start gap-5">
         <DzCheckbox v-model="agreed" required>
-          I agree to the <a href="#" class="underline text-blue-600">Terms of Service</a>
-          and <a href="#" class="underline text-blue-600">Privacy Policy</a>
+          I agree to the <a href="#" class="underline text-[var(--dz-primary-muted-foreground)]">Terms of Service</a>
+          and <a href="#" class="underline text-[var(--dz-primary-muted-foreground)]">Privacy Policy</a>
         </DzCheckbox>
         <button
           :disabled="!agreed"
-          class="px-4 py-2 rounded text-sm font-medium bg-blue-600 text-white disabled:opacity-50"
+          class="px-4 py-2 rounded text-sm font-medium bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] disabled:opacity-50"
         >
           Continue
         </button>

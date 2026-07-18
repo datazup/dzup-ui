@@ -171,7 +171,7 @@ export const Closable: Story = {
             @close="categories = categories.filter(c => c !== cat)"
           >{{ cat }}</DzTag>
         </div>
-        <p class="text-sm text-gray-500">{{ categories.length }} tags remaining</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">{{ categories.length }} tags remaining</p>
       </div>
     `,
   }),
@@ -284,7 +284,7 @@ export const Accessibility: Story = {
     components: { DzTag },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Closable tags include a dismiss button in the tab order.
           Press Enter or Space on the close button to remove the tag.
           Disabled tags are excluded from the tab order.
@@ -310,11 +310,11 @@ export const RealWorldIssueLabels: Story = {
     components: { DzTag },
     template: `
       <div class="max-w-lg space-y-4">
-        <div class="border rounded-lg p-4 space-y-3">
+        <div class="border border-[var(--dz-border)] rounded-lg p-4 space-y-3">
           <div class="flex items-start justify-between">
             <div>
               <p class="font-medium">Fix accordion animation glitch</p>
-              <p class="text-sm text-gray-500">#342 opened 2 hours ago by alice</p>
+              <p class="text-sm text-[var(--dz-muted-foreground)]">#342 opened 2 hours ago by alice</p>
             </div>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -323,11 +323,11 @@ export const RealWorldIssueLabels: Story = {
             <DzTag tone="warning" variant="subtle" size="sm">priority: high</DzTag>
           </div>
         </div>
-        <div class="border rounded-lg p-4 space-y-3">
+        <div class="border border-[var(--dz-border)] rounded-lg p-4 space-y-3">
           <div class="flex items-start justify-between">
             <div>
               <p class="font-medium">Add keyboard shortcut support to DzTree</p>
-              <p class="text-sm text-gray-500">#338 opened 1 day ago by bob</p>
+              <p class="text-sm text-[var(--dz-muted-foreground)]">#338 opened 1 day ago by bob</p>
             </div>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -353,7 +353,7 @@ export const RealWorldCategories: Story = {
       <div class="max-w-sm space-y-4">
         <div class="space-y-2">
           <h3 class="font-semibold">Building a Design System in 2026</h3>
-          <p class="text-sm text-gray-600">A guide to modern component architecture with Vue 3 and Tailwind CSS 4.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">A guide to modern component architecture with Vue 3 and Tailwind CSS 4.</p>
           <div class="flex flex-wrap gap-2">
             <DzTag size="sm" variant="outline" tone="neutral">Design Systems</DzTag>
             <DzTag size="sm" variant="outline" tone="neutral">Vue.js</DzTag>

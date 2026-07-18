@@ -153,7 +153,7 @@ export const WithCiteAttribute: Story = {
     components: { DzBlockquote },
     template: `
       <div class="space-y-4 max-w-lg">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The cite attribute provides a machine-readable source URL
           (not visually rendered by browsers, but useful for SEO and
           assistive technology).
@@ -201,7 +201,7 @@ export const Accessibility: Story = {
     components: { DzBlockquote },
     template: `
       <div class="space-y-4 max-w-lg">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzBlockquote renders a native &lt;blockquote&gt; element, which is
           recognized by screen readers as quoted content. The cite attribute
           provides the source URL. The footer slot renders inside a

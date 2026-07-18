@@ -4,7 +4,7 @@ A labeled "get in touch" card: two-column name/email row, topic select, message 
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFormField, DzFormLabel, DzFormDescription, DzFormMessage, DzInput, DzSelect, DzTextarea, DzCheckbox, DzButton, DzHeading, DzText
-- **Preview:** /blocks#contact-form
+- **Preview:** /blocks/contact-form
 
 ```vue
 <script setup lang="ts">

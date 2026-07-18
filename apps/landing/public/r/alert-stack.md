@@ -4,7 +4,7 @@ A column of inline DzAlerts spanning the variant taxonomy and tones — info, su
 
 - **Category:** Feedback
 - **Components:** DzAlert, DzButton, DzHeading, DzText
-- **Preview:** /blocks#alert-stack
+- **Preview:** /blocks/alert-stack
 
 ```vue
 <script setup lang="ts">

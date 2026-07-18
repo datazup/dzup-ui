@@ -5,6 +5,9 @@ import FreestyleSidebar from './freestyle/FreestyleSidebar.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Sidebar',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

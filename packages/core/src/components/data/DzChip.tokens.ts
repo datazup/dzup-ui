@@ -38,7 +38,8 @@ export const chipTokens = {
     primary: { background: 'var(--dz-primary)', foreground: 'var(--dz-primary-foreground)', muted: 'var(--dz-primary-muted)' },
     neutral: { background: 'var(--dz-foreground)', foreground: 'var(--dz-background)', muted: 'var(--dz-muted)' },
     success: { background: 'var(--dz-success)', foreground: 'var(--dz-success-foreground)', muted: 'var(--dz-success-muted)' },
-    warning: { background: 'var(--dz-warning)', foreground: 'var(--dz-warning-foreground)', muted: 'var(--dz-warning-muted)' },
+    // Warning fills with `-solid` (8.44:1); `--dz-warning` under the foreground is 3.51:1.
+    warning: { background: 'var(--dz-warning-solid)', foreground: 'var(--dz-warning-foreground)', muted: 'var(--dz-warning-muted)' },
     danger: { background: 'var(--dz-danger)', foreground: 'var(--dz-danger-foreground)', muted: 'var(--dz-danger-muted)' },
     info: { background: 'var(--dz-info)', foreground: 'var(--dz-info-foreground)', muted: 'var(--dz-info-muted)' },
   },

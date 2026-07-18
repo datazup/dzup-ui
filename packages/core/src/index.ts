@@ -4,6 +4,8 @@
  * Run: tsx packages/tooling/src/manifest-generator.ts <package-dir>
  */
 
+import './styles/base.css'
+
 // ── Components ──
 
 // Buttons family

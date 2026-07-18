@@ -6,14 +6,6 @@ import {
 } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
 
-/**
- * DzDataGrid is the most complex core data component, providing
- * sortable columns, row selection, pagination, and density controls.
- *
- * It is a compound component composed of DzDataGridHeader, DzDataGridBody,
- * and DzDataGridPagination sub-parts that receive context via inject (ADR-08).
- */
-
 // ---------------------------------------------------------------------------
 // Sample data
 // ---------------------------------------------------------------------------
@@ -50,6 +42,13 @@ const columns: ColumnDef<Employee>[] = [
 // Meta
 // ---------------------------------------------------------------------------
 
+/**
+ * DzDataGrid is the most complex core data component, providing
+ * sortable columns, row selection, pagination, and density controls.
+ *
+ * It is a compound component composed of DzDataGridHeader, DzDataGridBody,
+ * and DzDataGridPagination sub-parts that receive context via inject (ADR-08).
+ */
 const meta = {
   title: 'Core/Data/DzDataGrid',
   component: DzDataGrid,
@@ -231,7 +230,7 @@ export const WithSelection: Story = {
           aria-label="Selectable employee list"
           @update:selected-rows="selected = $event"
         />
-        <p class="text-sm text-gray-500">Selected: {{ selected.length }} row(s)</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: {{ selected.length }} row(s)</p>
       </div>
     `,
   }),
@@ -315,7 +314,7 @@ export const Empty: Story = {
     template: `
       <DzDataGrid :data="[]" :columns="columns" aria-label="Empty employee list">
         <template #empty>
-          <div class="text-center py-8 text-gray-500">
+          <div class="text-center py-8 text-[var(--dz-muted-foreground)]">
             No employees found. Try adjusting your filters.
           </div>
         </template>
@@ -357,7 +356,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Use Tab to navigate into the grid. Arrow keys move between cells.
           Enter or Space activates sort headers. Sortable columns are announced to screen readers.
         </p>
@@ -389,7 +388,7 @@ export const RealWorldTeamDashboard: Story = {
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-lg font-semibold">Team Members</h2>
-          <span class="text-sm text-gray-500">{{ data.length }} employees</span>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">{{ data.length }} employees</span>
         </div>
         <DzDataGrid
           :data="data"
@@ -478,7 +477,7 @@ export const PerformanceLargeDataset: Story = {
     },
     template: `
       <div class="space-y-3">
-        <p class="text-sm text-gray-500">{{ data.length.toLocaleString() }} rows · sortable · paginated</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">{{ data.length.toLocaleString() }} rows · sortable · paginated</p>
         <DzDataGrid
           :data="data"
           :columns="columns"

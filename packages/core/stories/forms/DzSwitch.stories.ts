@@ -157,7 +157,7 @@ export const Interactive: Story = {
     template: `
       <div class="flex flex-col items-start gap-4">
         <DzSwitch v-model="enabled">Dark mode</DzSwitch>
-        <p class="text-sm text-gray-500">State: <strong>{{ enabled ? 'ON' : 'OFF' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">State: <strong>{{ enabled ? 'ON' : 'OFF' }}</strong></p>
       </div>
     `,
   }),
@@ -190,7 +190,7 @@ export const Accessibility: Story = {
     components: { DzSwitch },
     template: `
       <div class="flex flex-col items-start gap-4">
-        <p class="text-sm text-gray-500">Tab to focus, Space or Enter to toggle.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus, Space or Enter to toggle.</p>
         <DzSwitch aria-label="Wi-Fi toggle">Wi-Fi</DzSwitch>
         <DzSwitch aria-label="Bluetooth toggle">Bluetooth</DzSwitch>
         <DzSwitch aria-label="Airplane mode toggle">Airplane Mode</DzSwitch>

@@ -175,7 +175,7 @@ export const DisabledItems: Story = {
     },
     template: `
       <div>
-        <p class="text-sm text-gray-500 mb-3">C# is disabled and cannot be transferred.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">C# is disabled and cannot be transferred.</p>
         <DzTransfer :source="source" />
       </div>
     `,
@@ -269,7 +269,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4">
         <DzTransfer :source="source" v-model="selected" searchable searchPlaceholder="Search..." />
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Selected keys: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong>
         </p>
       </div>
@@ -290,7 +290,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab to navigate between lists and transfer buttons. Space/Enter to select items and trigger transfers.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to navigate between lists and transfer buttons. Space/Enter to select items and trigger transfers.</p>
         <DzTransfer :source="source" aria-label="Language selection transfer" />
       </div>
     `,
@@ -344,7 +344,7 @@ export const MoveBothDirections: Story = {
     template: `
       <div class="space-y-4">
         <DzTransfer :source="source" v-model="selected" aria-label="Languages" />
-        <p class="text-sm text-gray-500">Target keys: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Target keys: <strong>{{ selected.length ? selected.join(', ') : 'none' }}</strong></p>
       </div>
     `,
   }),

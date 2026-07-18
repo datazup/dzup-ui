@@ -105,8 +105,8 @@ export const WithActions: Story = {
     template: `
       <DzEmpty title="No results found" description="Try adjusting your search criteria." :icon="Search">
         <template #actions>
-          <button class="px-4 py-2 text-sm font-medium border rounded">Clear Filters</button>
-          <button class="px-4 py-2 text-sm font-medium border rounded">Browse All</button>
+          <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Clear Filters</button>
+          <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Browse All</button>
         </template>
       </DzEmpty>
     `,
@@ -128,10 +128,10 @@ export const WithSlots: Story = {
         </template>
         <div class="space-y-2 text-center">
           <h3 class="text-lg font-semibold">Custom slot content</h3>
-          <p class="text-sm text-gray-500">The default slot overrides title/description/icon entirely.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">The default slot overrides title/description/icon entirely.</p>
         </div>
         <template #actions>
-          <button class="px-4 py-2 text-sm font-medium border rounded">Action</button>
+          <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Action</button>
         </template>
       </DzEmpty>
     `,
@@ -154,12 +154,12 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-md">
         <div class="flex gap-3">
-          <button class="px-3 py-1.5 text-sm border rounded" @click="items.push('Item ' + (items.length + 1))">Add Item</button>
-          <button class="px-3 py-1.5 text-sm border rounded" @click="items = []">Clear All</button>
+          <button class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded" @click="items.push('Item ' + (items.length + 1))">Add Item</button>
+          <button class="px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded" @click="items = []">Clear All</button>
         </div>
-        <div class="border rounded p-4 min-h-[200px]">
+        <div class="border border-[var(--dz-border)] rounded p-4 min-h-[200px]">
           <ul v-if="items.length" class="space-y-2">
-            <li v-for="item in items" :key="item" class="text-sm p-2 border rounded">{{ item }}</li>
+            <li v-for="item in items" :key="item" class="text-sm p-2 border border-[var(--dz-border)] rounded">{{ item }}</li>
           </ul>
           <DzEmpty
             v-else
@@ -186,7 +186,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzEmpty uses role="status" to announce the empty state to screen readers.
           This ensures dynamic changes (e.g., filtering to zero results) are
           communicated to assistive technology.
@@ -212,7 +212,7 @@ export const DarkMode: Story = {
     template: `
       <DzEmpty title="No results" description="Try a different search term." :icon="Search">
         <template #actions>
-          <button class="px-4 py-2 text-sm font-medium border rounded">Clear Search</button>
+          <button class="px-4 py-2 text-sm font-medium border border-[var(--dz-border)] rounded">Clear Search</button>
         </template>
       </DzEmpty>
     `,
@@ -231,8 +231,8 @@ export const RealWorldEmptyTable: Story = {
       return { FileX }
     },
     template: `
-      <div class="border rounded max-w-lg">
-        <div class="flex items-center justify-between p-3 border-b bg-gray-50 text-sm font-medium">
+      <div class="border border-[var(--dz-border)] rounded max-w-lg">
+        <div class="flex items-center justify-between p-3 border-b border-b-[var(--dz-border)] bg-[var(--dz-muted)] text-sm font-medium">
           <span>Name</span>
           <span>Status</span>
           <span>Date</span>
@@ -244,7 +244,7 @@ export const RealWorldEmptyTable: Story = {
             :icon="FileX"
           >
             <template #actions>
-              <button class="px-3 py-1.5 text-sm font-medium border rounded">Create New</button>
+              <button class="px-3 py-1.5 text-sm font-medium border border-[var(--dz-border)] rounded">Create New</button>
             </template>
           </DzEmpty>
         </div>

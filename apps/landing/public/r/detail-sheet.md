@@ -4,7 +4,7 @@ A slide-out record panel (DzSheet) — an orders list where each row opens a rig
 
 - **Category:** Overlays
 - **Components:** DzSheet, DzSheetContent, DzSheetTitle, DzSheetDescription, DzSheetClose, DzAvatar, DzBadge, DzButton, DzIconButton, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#detail-sheet
+- **Preview:** /blocks/detail-sheet
 
 ```vue
 <script setup lang="ts">

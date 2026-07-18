@@ -4,7 +4,7 @@ A Pinterest-style cascading board built on DzMasonry — variable-height DzCards
 
 - **Category:** Layout
 - **Components:** DzMasonry, DzAspectRatio, DzCard, DzAvatar, DzBadge, DzTag, DzHeading, DzText
-- **Preview:** /blocks#masonry-gallery
+- **Preview:** /blocks/masonry-gallery
 
 ```vue
 <script setup lang="ts">

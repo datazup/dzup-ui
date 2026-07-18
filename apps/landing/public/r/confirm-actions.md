@@ -4,7 +4,7 @@ A "danger zone" panel pairing the two confirmation patterns — heavy actions ro
 
 - **Category:** Overlays
 - **Components:** DzConfirmDialog, DzPopconfirm, DzButton, DzIconButton, DzDivider, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#confirm-actions
+- **Preview:** /blocks/confirm-actions
 
 ```vue
 <script setup lang="ts">

@@ -50,6 +50,8 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-primary-foreground': 'var(--dz-colors-primary-950)',
   '--dz-primary-hover': 'var(--dz-colors-primary-300)',
   '--dz-primary-active': 'var(--dz-colors-primary-200)',
+  '--dz-primary-solid': 'var(--dz-colors-primary-400)',
+  '--dz-primary-solid-hover': 'var(--dz-colors-primary-300)',
   '--dz-primary-muted': 'var(--dz-colors-primary-900)',
   '--dz-primary-muted-foreground': 'var(--dz-colors-primary-300)',
   '--dz-primary-border': 'var(--dz-colors-primary-800)',
@@ -59,6 +61,8 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-secondary-foreground': 'var(--dz-colors-secondary-950)',
   '--dz-secondary-hover': 'var(--dz-colors-secondary-300)',
   '--dz-secondary-active': 'var(--dz-colors-secondary-200)',
+  '--dz-secondary-solid': 'var(--dz-colors-secondary-400)',
+  '--dz-secondary-solid-hover': 'var(--dz-colors-secondary-300)',
   '--dz-secondary-muted': 'var(--dz-colors-secondary-900)',
   '--dz-secondary-muted-foreground': 'var(--dz-colors-secondary-300)',
   '--dz-secondary-border': 'var(--dz-colors-secondary-800)',
@@ -76,19 +80,24 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-success-foreground': 'var(--dz-colors-success-950)',
   '--dz-success-hover': 'var(--dz-colors-success-300)',
   '--dz-success-active': 'var(--dz-colors-success-200)',
+  '--dz-success-solid': 'var(--dz-colors-success-400)',
+  '--dz-success-solid-hover': 'var(--dz-colors-success-300)',
   '--dz-success-muted': 'var(--dz-colors-success-900)',
   '--dz-success-muted-foreground': 'var(--dz-colors-success-300)',
   '--dz-success-border': 'var(--dz-colors-success-800)',
 
   /* ── Status: Warning ──
    * Solid fills stay a bright yellow with dark text in dark mode too — a yellow
-   * warning button reads the same regardless of theme. `--dz-warning` (shade
-   * 400) remains the legible accent/text color on dark surfaces. */
+   * warning button reads the same regardless of theme, so `-solid` / `-solid-hover`
+   * carry the SAME shades here as in the light theme. `--dz-warning` (shade 400)
+   * remains the legible accent/text color on dark surfaces. See semantic/light.ts
+   * for why warning's solid fill set has two states rather than three. */
   '--dz-warning': 'var(--dz-colors-warning-400)',
   '--dz-warning-foreground': 'var(--dz-colors-neutral-900)',
+  '--dz-warning-hover': 'var(--dz-colors-warning-300)',
+  '--dz-warning-active': 'var(--dz-colors-warning-200)',
   '--dz-warning-solid': 'var(--dz-colors-warning-300)',
   '--dz-warning-solid-hover': 'var(--dz-colors-warning-400)',
-  '--dz-warning-active': 'var(--dz-colors-warning-200)',
   '--dz-warning-muted': 'var(--dz-colors-warning-900)',
   '--dz-warning-muted-foreground': 'var(--dz-colors-warning-300)',
   '--dz-warning-border': 'var(--dz-colors-warning-800)',
@@ -98,6 +107,8 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-danger-foreground': 'var(--dz-colors-danger-950)',
   '--dz-danger-hover': 'var(--dz-colors-danger-300)',
   '--dz-danger-active': 'var(--dz-colors-danger-200)',
+  '--dz-danger-solid': 'var(--dz-colors-danger-400)',
+  '--dz-danger-solid-hover': 'var(--dz-colors-danger-300)',
   '--dz-danger-muted': 'var(--dz-colors-danger-900)',
   '--dz-danger-muted-foreground': 'var(--dz-colors-danger-300)',
   '--dz-danger-border': 'var(--dz-colors-danger-800)',
@@ -107,6 +118,8 @@ export const DARK_SEMANTIC_TOKENS: Record<string, string> = {
   '--dz-info-foreground': 'var(--dz-colors-info-950)',
   '--dz-info-hover': 'var(--dz-colors-info-300)',
   '--dz-info-active': 'var(--dz-colors-info-200)',
+  '--dz-info-solid': 'var(--dz-colors-info-400)',
+  '--dz-info-solid-hover': 'var(--dz-colors-info-300)',
   '--dz-info-muted': 'var(--dz-colors-info-900)',
   '--dz-info-muted-foreground': 'var(--dz-colors-info-300)',
   '--dz-info-border': 'var(--dz-colors-info-800)',

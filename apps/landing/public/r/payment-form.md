@@ -4,7 +4,7 @@ A checkout card showcasing masked and grouped inputs: DzInputMask formats the ca
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzInputMask, DzInputGroup, DzSelect, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#payment-form
+- **Preview:** /blocks/payment-form
 
 ```vue
 <script setup lang="ts">

@@ -4,7 +4,7 @@ Brand blurb, four link columns, social icon buttons, and a theme toggle; collaps
 
 - **Category:** Marketing
 - **Components:** DzText, DzDivider, DzIconButton, DzColorModeToggle
-- **Preview:** /blocks#footer
+- **Preview:** /blocks/footer
 
 ```vue
 <script setup lang="ts">

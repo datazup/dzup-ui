@@ -4,7 +4,7 @@ Closing call-to-action with headline, subtext, and two buttons on a token gradie
 
 - **Category:** Marketing
 - **Components:** DzHeading, DzText, DzButton
-- **Preview:** /blocks#cta-band
+- **Preview:** /blocks/cta-band
 
 ```vue
 <script setup lang="ts">

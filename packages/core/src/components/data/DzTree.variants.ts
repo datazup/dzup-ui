@@ -20,7 +20,7 @@ export const treeVariants = tv({
       'hover:bg-[var(--dz-muted)]',
       'dz-focus-ring-control dz-disabled-control',
     ].join(' '),
-    itemSelected: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary)]',
+    itemSelected: 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]',
     expandIcon: [
       'shrink-0 transition-transform duration-200',
       'text-[var(--dz-muted-foreground)]',

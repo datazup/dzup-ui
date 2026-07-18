@@ -82,16 +82,26 @@ type Story = StoryObj<typeof meta>
 // ---------------------------------------------------------------------------
 
 const HEIGHTS = [80, 140, 200, 110, 170, 90, 230, 130, 160, 100, 190, 120]
-const HUES = [210, 280, 160, 30, 340, 190, 95, 260, 10, 130, 300, 50]
+
+/**
+ * Decorative tile fills, cycled deterministically. These are swatches with no
+ * semantic meaning, so they come from the primitive ramp rather than an intent
+ * token — a semantic fill would invert with the theme and break the demo.
+ * Shade 600 keeps `--dz-colors-neutral-50` legible on every one.
+ */
+const TILE_FILLS = [
+  'blue', 'purple', 'emerald', 'orange', 'pink', 'cyan',
+  'lime', 'indigo', 'rose', 'green', 'fuchsia', 'amber',
+].map(palette => `var(--dz-colors-${palette}-600)`)
 
 function tiles(count: number): string {
   return Array.from({ length: count }, (_, i) => {
     const h = HEIGHTS[i % HEIGHTS.length]
-    const hue = HUES[i % HUES.length]
+    const fill = TILE_FILLS[i % TILE_FILLS.length]
     return `
       <div
-        class="rounded-lg flex items-center justify-center text-white text-sm font-medium"
-        style="height: ${h}px; background: hsl(${hue} 70% 55%)"
+        class="rounded-lg flex items-center justify-center text-[var(--dz-colors-neutral-50)] text-sm font-medium"
+        style="height: ${h}px; background: ${fill}"
       >
         ${i + 1}
       </div>`
@@ -180,11 +190,11 @@ export const CardFeed: Story = {
         <article
           v-for="card in cards"
           :key="card.id"
-          class="border border-gray-200 rounded-lg p-5 space-y-2 bg-white"
+          class="border border-[var(--dz-border)] rounded-lg p-5 space-y-2 bg-[var(--dz-card)]"
         >
-          <div class="h-24 bg-gray-100 rounded" />
+          <div class="h-24 bg-[var(--dz-muted)] rounded" />
           <h3 class="font-semibold">Card {{ card.id }}</h3>
-          <p v-for="l in card.lines" :key="l" class="text-sm text-gray-500">
+          <p v-for="l in card.lines" :key="l" class="text-sm text-[var(--dz-muted-foreground)]">
             A line of descriptive copy that makes cards differ in height.
           </p>
         </article>
@@ -203,7 +213,7 @@ export const ResponsiveColumns: Story = {
     components: { DzMasonry },
     template: `
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Resize the viewport: 1 column on mobile, 2 from sm, 3 from md, 4 from lg.
         </p>
         <DzMasonry :columns="{ xs: 1, sm: 2, md: 3, lg: 4 }" gap="md" aria-label="Responsive masonry">
@@ -225,7 +235,7 @@ export const WithGap: Story = {
     template: `
       <div class="space-y-8">
         <div v-for="g in ['none', 'sm', 'md', 'xl']" :key="g">
-          <p class="text-xs text-gray-500 mb-2">gap="{{ g }}"</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">gap="{{ g }}"</p>
           <DzMasonry :columns="3" :gap="g">
             ${tiles(9)}
           </DzMasonry>

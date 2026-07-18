@@ -174,7 +174,7 @@ export const MaxFileSize: Story = {
     template: `
       <div class="max-w-md">
         <DzFileUpload v-bind="args" />
-        <p class="text-xs text-gray-400 mt-1">Maximum file size: 5MB</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Maximum file size: 5MB</p>
       </div>
     `,
   }),
@@ -266,7 +266,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-md">
         <DzFileUpload v-model="files" multiple :maxFiles="3" />
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Files: <strong>{{ files.length ? files.map(f => f.name).join(', ') : 'none' }}</strong>
         </p>
       </div>
@@ -303,7 +303,7 @@ export const Accessibility: Story = {
     components: { DzFileUpload },
     template: `
       <div class="space-y-4 max-w-md">
-        <p class="text-sm text-gray-500">Tab to focus the drop zone, Enter or Space to open the file picker, or drag and drop files.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus the drop zone, Enter or Space to open the file picker, or drag and drop files.</p>
         <DzFileUpload aria-label="Document upload" />
       </div>
     `,
@@ -327,7 +327,7 @@ export const RealWorldAvatarUpload: Story = {
           name="avatar"
           aria-label="Profile photo upload"
         />
-        <p class="text-xs text-gray-400 mt-1">PNG, JPG, or WebP. Max 2MB.</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">PNG, JPG, or WebP. Max 2MB.</p>
       </div>
     `,
   }),

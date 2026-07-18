@@ -4,7 +4,7 @@ Four KPI cards with up/down/neutral trend deltas in a responsive 4→2→1 colum
 
 - **Category:** Application
 - **Components:** DzStatCard
-- **Preview:** /blocks#stat-row
+- **Preview:** /blocks/stat-row
 
 ```vue
 <script setup lang="ts">

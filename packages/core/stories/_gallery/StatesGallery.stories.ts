@@ -5,6 +5,9 @@ import FreestyleStates from './freestyle/FreestyleStates.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/States',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

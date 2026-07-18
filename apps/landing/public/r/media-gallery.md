@@ -4,7 +4,7 @@ An asymmetric image grid where every ratio-stable DzImage tile (framed by DzAspe
 
 - **Category:** Media
 - **Components:** DzImage, DzAspectRatio, DzLightbox, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#media-gallery
+- **Preview:** /blocks/media-gallery
 
 ```vue
 <script setup lang="ts">

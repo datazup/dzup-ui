@@ -27,7 +27,6 @@ const reduced = useReducedMotion()
 <template>
   <div class="stage">
     <DzMorph
-      class="morph"
       size="md"
       aria-label="Project Atlas details"
       :disabled="reduced"

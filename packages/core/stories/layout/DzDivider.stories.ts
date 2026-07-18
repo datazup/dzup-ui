@@ -96,7 +96,7 @@ export const AllOrientations: Story = {
     template: `
       <div class="space-y-8">
         <div>
-          <p class="text-xs text-gray-500 mb-2">orientation="horizontal"</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">orientation="horizontal"</p>
           <div class="space-y-3">
             <p class="text-sm">Above</p>
             <DzDivider orientation="horizontal" />
@@ -104,7 +104,7 @@ export const AllOrientations: Story = {
           </div>
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">orientation="vertical"</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">orientation="vertical"</p>
           <DzFlex gap="md" align="center" class="h-12">
             <span class="text-sm">Left</span>
             <DzDivider orientation="vertical" />
@@ -127,7 +127,7 @@ export const DecorativeVsSemantic: Story = {
     template: `
       <div class="space-y-6">
         <div>
-          <p class="text-xs text-gray-500 mb-2">Semantic (role="separator") -- announced by screen readers</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">Semantic (role="separator") -- announced by screen readers</p>
           <div class="space-y-3">
             <p class="text-sm">Section A</p>
             <DzDivider />
@@ -135,7 +135,7 @@ export const DecorativeVsSemantic: Story = {
           </div>
         </div>
         <div>
-          <p class="text-xs text-gray-500 mb-2">Decorative (role="none") -- hidden from screen readers</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">Decorative (role="none") -- hidden from screen readers</p>
           <div class="space-y-3">
             <p class="text-sm">Section A</p>
             <DzDivider decorative />
@@ -156,13 +156,13 @@ export const VerticalInToolbar: Story = {
   render: () => ({
     components: { DzDivider, DzFlex },
     template: `
-      <DzFlex gap="sm" align="center" class="bg-gray-50 border rounded-lg px-3 py-2">
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Cut</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Copy</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Paste</button>
+      <DzFlex gap="sm" align="center" class="bg-[var(--dz-muted)] border border-[var(--dz-border)] rounded-lg px-3 py-2">
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Cut</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Copy</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Paste</button>
         <DzDivider orientation="vertical" class="h-5" />
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Undo</button>
-        <button class="text-sm px-3 py-1.5 rounded hover:bg-gray-200">Redo</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Undo</button>
+        <button class="text-sm px-3 py-1.5 rounded hover:bg-[var(--dz-muted)]">Redo</button>
       </DzFlex>
     `,
   }),
@@ -179,9 +179,9 @@ export const DarkMode: Story = {
     components: { DzDivider },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-300">Content above</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Content above</p>
         <DzDivider />
-        <p class="text-sm text-gray-300">Content below</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Content below</p>
       </div>
     `,
   }),
@@ -199,17 +199,17 @@ export const RealWorldSettingsSections: Story = {
       <DzStack gap="lg" class="max-w-md">
         <div>
           <h3 class="font-semibold text-sm mb-1">Profile</h3>
-          <p class="text-xs text-gray-500">Manage your profile information.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Manage your profile information.</p>
         </div>
         <DzDivider />
         <div>
           <h3 class="font-semibold text-sm mb-1">Notifications</h3>
-          <p class="text-xs text-gray-500">Configure notification preferences.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Configure notification preferences.</p>
         </div>
         <DzDivider />
         <div>
           <h3 class="font-semibold text-sm mb-1">Security</h3>
-          <p class="text-xs text-gray-500">Update your password and 2FA settings.</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Update your password and 2FA settings.</p>
         </div>
       </DzStack>
     `,
@@ -226,7 +226,7 @@ export const Accessibility: Story = {
     components: { DzDivider, DzFlex },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The horizontal divider uses role="separator" with aria-orientation.
           Decorative dividers use role="none" and are invisible to assistive technology.
         </p>

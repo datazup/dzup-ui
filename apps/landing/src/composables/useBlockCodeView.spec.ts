@@ -12,6 +12,7 @@
 import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 import { BLOCKS } from '../blocks/registry.ts'
+import { getBlockSource } from '../blocks/sources.ts'
 import {
   buildImportLine,
   extractTemplate,
@@ -154,7 +155,7 @@ describe('toJavaScript', () => {
   // real top-of-file `<script setup lang="ts">` — because some blocks (e.g. the
   // IDE preview) legitimately embed the literal text `<script … lang="ts">` as
   // editor content, which no regex can distinguish from a real tag.
-  it.each(BLOCKS.map((b) => [b.id, b.source] as const))(
+  it.each(BLOCKS.map((b) => [b.id, getBlockSource(b.path)] as const))(
     'strips %s safely (script lang gone, template preserved)',
     (_id, source) => {
       const js = toJavaScript(source)

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { LightboxImage } from '../../src/components/media'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzImage, DzLightbox } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzLightbox is a fullscreen image viewer overlay, built on Reka UI
@@ -16,6 +16,10 @@ const meta = {
   title: 'Core/Media/DzLightbox',
   component: DzLightbox,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     images: {
@@ -79,7 +83,7 @@ export const Default: Story = {
     template: `
       <div>
         <DzLightbox v-model="isOpen" v-bind="args">
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             Open Lightbox
           </button>
         </DzLightbox>
@@ -129,11 +133,11 @@ export const SingleImage: Story = {
     },
     template: `
       <div>
-        <p class="text-sm text-gray-500 mb-3">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">
           With a single image, navigation arrows and counter are hidden.
         </p>
         <DzLightbox v-model="isOpen" v-bind="args">
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             View Photo
           </button>
         </DzLightbox>
@@ -166,7 +170,7 @@ export const ManyImages: Story = {
     template: `
       <div>
         <DzLightbox v-model="isOpen" v-bind="args">
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             View Gallery (8 photos)
           </button>
         </DzLightbox>
@@ -200,9 +204,9 @@ export const StartAtIndex: Story = {
     },
     template: `
       <div>
-        <p class="text-sm text-gray-500 mb-3">Opens at the third image (index 2).</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-3">Opens at the third image (index 2).</p>
         <DzLightbox v-model="isOpen" v-bind="args">
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             Open at Third Photo
           </button>
         </DzLightbox>
@@ -232,13 +236,13 @@ export const WithSlots: Story = {
     template: `
       <div>
         <DzLightbox v-model="isOpen" :images="images">
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             Open with Custom Captions
           </button>
           <template #caption="{ image, index }">
             <div class="text-center">
-              <p class="text-white font-medium">{{ image.caption }}</p>
-              <p class="text-gray-400 text-xs mt-1">Taken on March {{ 15 + index }}, 2026</p>
+              <p class="text-[var(--dz-colors-neutral-50)] font-medium">{{ image.caption }}</p>
+              <p class="text-[var(--dz-muted-foreground)] text-xs mt-1">Taken on March {{ 15 + index }}, 2026</p>
             </div>
           </template>
         </DzLightbox>
@@ -269,7 +273,7 @@ export const DarkMode: Story = {
     },
     template: `
       <DzLightbox v-model="isOpen" :images="images">
-        <button class="px-4 py-2 text-sm rounded border border-gray-600 text-gray-200" @click="isOpen = true">
+        <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)] text-[var(--dz-foreground)]" @click="isOpen = true">
           Open Lightbox (Dark)
         </button>
       </DzLightbox>
@@ -306,13 +310,13 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4">
         <DzLightbox v-model="isOpen" :images="images" @change="handleChange">
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             Open Lightbox
           </button>
         </DzLightbox>
-        <p class="text-sm text-gray-500">Open: <strong>{{ isOpen }}</strong></p>
-        <p class="text-sm text-gray-500">Last viewed index: <strong>{{ currentIndex }}</strong></p>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Open: <strong>{{ isOpen }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Last viewed index: <strong>{{ currentIndex }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Change log: <code>{{ changeLog.length ? changeLog.join(' -> ') : '(empty)' }}</code>
         </p>
       </div>
@@ -339,10 +343,10 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The lightbox is built on Reka UI Dialog, providing:
         </p>
-        <ul class="text-sm text-gray-500 list-disc pl-5 space-y-1">
+        <ul class="text-sm text-[var(--dz-muted-foreground)] list-disc pl-5 space-y-1">
           <li>Focus trap within the overlay</li>
           <li><kbd>Escape</kbd> closes the lightbox</li>
           <li><kbd>ArrowLeft</kbd> / <kbd>ArrowRight</kbd> navigate images</li>
@@ -354,7 +358,7 @@ export const Accessibility: Story = {
           :images="images"
           aria-label="Accessible image gallery"
         >
-          <button class="px-4 py-2 text-sm rounded border" @click="isOpen = true">
+          <button class="px-4 py-2 text-sm rounded border border-[var(--dz-border)]" @click="isOpen = true">
             Open Accessible Lightbox
           </button>
         </DzLightbox>
@@ -443,7 +447,7 @@ export const RealWorldProductViewer: Story = {
             :key="idx"
             :src="img.src"
             :alt="img.alt"
-            class="w-16 h-16 object-cover rounded border cursor-pointer hover:border-blue-400"
+            class="w-16 h-16 object-cover rounded border cursor-pointer hover:border-[var(--dz-primary-border)]"
             @click="isOpen = true"
           />
         </div>

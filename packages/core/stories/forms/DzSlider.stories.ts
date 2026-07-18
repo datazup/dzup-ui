@@ -157,7 +157,7 @@ export const WithSteps: Story = {
     template: `
       <div class="space-y-4 w-[480px]">
         <DzSlider v-model="value" :min="0" :max="100" :step="10" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ value }}</strong> (step: 10)</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ value }}</strong> (step: 10)</p>
       </div>
     `,
   }),
@@ -278,7 +278,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 w-[480px]">
         <DzSlider v-model="volume" :min="0" :max="100" aria-label="Volume" />
-        <p class="text-sm text-gray-500">Volume: <strong>{{ volume }}%</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Volume: <strong>{{ volume }}%</strong></p>
       </div>
     `,
   }),
@@ -304,7 +304,7 @@ export const Accessibility: Story = {
     components: { DzSlider },
     template: `
       <div class="space-y-4 w-[480px]">
-        <p class="text-sm text-gray-500">Tab to focus the thumb, arrow keys to adjust value.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus the thumb, arrow keys to adjust value.</p>
         <DzSlider aria-label="Brightness" :model-value="50" />
       </div>
     `,
@@ -326,7 +326,7 @@ export const RealWorldVolume: Story = {
       <div class="w-[480px]">
         <label class="block text-sm font-medium mb-2">Volume</label>
         <DzSlider v-model="volume" :min="0" :max="100" tone="primary" aria-label="Volume" />
-        <div class="flex justify-between text-xs text-gray-400 mt-1">
+        <div class="flex justify-between text-xs text-[var(--dz-muted-foreground)] mt-1">
           <span>0%</span>
           <span>{{ volume }}%</span>
           <span>100%</span>

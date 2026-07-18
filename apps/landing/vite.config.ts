@@ -2,25 +2,21 @@ import { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
+import { workspaceAliases } from '../../packages/tooling/src/workspace-aliases.ts'
 import { serveStorybook } from './vite/serve-storybook.ts'
 
 export default defineConfig({
   plugins: [tailwindcss(), vue(), serveStorybook()],
   resolve: {
-    alias: [
-      // Token sub-path exports must come before the base alias
-      { find: '@dzup-ui/tokens/css', replacement: resolve(__dirname, '../../packages/tokens/dist/tokens.css') },
-      { find: '@dzup-ui/tokens/tailwind', replacement: resolve(__dirname, '../../packages/tokens/dist/tailwind-theme.js') },
-      { find: '@dzup-ui/tokens/utils', replacement: resolve(__dirname, '../../packages/tokens/src/utils/index.ts') },
-      { find: '@dzup-ui/tokens', replacement: resolve(__dirname, '../../packages/tokens/src') },
-      // Other workspace packages
-      { find: '@dzup-ui/core/styles', replacement: resolve(__dirname, '../../packages/core/src/styles/base.css') },
-      { find: '@dzup-ui/contracts', replacement: resolve(__dirname, '../../packages/contracts/src/index.ts') },
-      { find: '@dzup-ui/core', replacement: resolve(__dirname, '../../packages/core/src') },
-    ],
+    alias: workspaceAliases(resolve(__dirname, '../..')),
   },
   server: {
     port: 3001,
+    // Fail loudly when 3001 is taken instead of drifting to the next free port.
+    // Without this Vite serves on 3002+ while `open` and any bookmarked tab still
+    // point at 3001 — which then shows a stale server (or nothing) and reads as
+    // "the app doesn't render". Override the port with `vite --port <n>`.
+    strictPort: true,
     open: true,
   },
   build: {

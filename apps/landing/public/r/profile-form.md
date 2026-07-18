@@ -4,7 +4,7 @@ A broad account panel: a file-upload avatar drop zone, name/username inputs, a r
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzFileUpload, DzInput, DzTextarea, DzTagsInput, DzSelect, DzSwitch, DzFormField, DzFormLabel, DzFormDescription, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#profile-form
+- **Preview:** /blocks/profile-form
 
 ```vue
 <script setup lang="ts">

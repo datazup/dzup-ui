@@ -17,6 +17,8 @@
 import { describe, expect, it } from 'vitest'
 import { BLOCK_DEPENDENCIES, sourceDependencies } from './config.ts'
 import { BLOCKS } from './registry.ts'
+import { getBlockSource } from './sources.ts'
+
 import {
   BLOCK_TARGET_DIR,
   buildRegistryIndex,
@@ -26,6 +28,9 @@ import {
   REGISTRY_SCHEMA,
   toRegistryItem,
 } from './registryItem.ts'
+
+/** Injected source lookup — mirrors what the generator and the browser both pass. */
+const getSource = (block: { path: string }): string => getBlockSource(block.path)
 
 /** Label `it.each`/`describe.each` rows by block id. */
 const labelled = BLOCKS.map((block) => ({ block, label: block.id }))
@@ -37,7 +42,7 @@ describe('shadcn registry', () => {
   })
 
   it('emits exactly one index item per block (counts match BLOCKS)', () => {
-    const index = buildRegistryIndex(BLOCKS)
+    const index = buildRegistryIndex(BLOCKS, getSource)
     expect(index.$schema).toBe(REGISTRY_SCHEMA)
     expect(index.items).toHaveLength(BLOCKS.length)
     // ids line up 1:1 and in order with the catalog.
@@ -45,7 +50,7 @@ describe('shadcn registry', () => {
   })
 
   it('index items omit inlined source (the per-item <id>.json carries it)', () => {
-    const index = buildRegistryIndex(BLOCKS)
+    const index = buildRegistryIndex(BLOCKS, getSource)
     for (const item of index.items) {
       for (const file of 'files' in item ? item.files : []) {
         expect(file).not.toHaveProperty('content')
@@ -55,7 +60,7 @@ describe('shadcn registry', () => {
   })
 
   describe.each(labelled)('item "$label"', ({ block }) => {
-    const item = toRegistryItem(block)
+    const item = toRegistryItem(block, getBlockSource(block.path))
 
     it('has the canonical shadcn registry-item shape', () => {
       expect(item.$schema).toBe(REGISTRY_ITEM_SCHEMA)
@@ -68,7 +73,7 @@ describe('shadcn registry', () => {
       // Base packages always lead; optional imports (lucide, …) are appended when
       // the SFC actually uses them, so a copied block builds in a fresh project.
       expect(item.dependencies.slice(0, 2)).toEqual([...BLOCK_DEPENDENCIES])
-      expect(item.dependencies).toEqual(sourceDependencies(block.source))
+      expect(item.dependencies).toEqual(sourceDependencies(getBlockSource(block.path)))
     })
 
     it('inlines the block SFC as a targeted registry:file entry', () => {
@@ -79,7 +84,7 @@ describe('shadcn registry', () => {
       expect(file.type).toBe('registry:file')
       // `registry:file` requires an explicit destination.
       expect(file.target).toBe(`${BLOCK_TARGET_DIR}/${block.id}.vue`)
-      expect(file.content).toBe(block.source)
+      expect(file.content).toBe(getBlockSource(block.path))
       expect(file.content?.trim()).not.toBe('')
     })
 
@@ -96,7 +101,7 @@ describe('shadcn registry', () => {
     it('is JSON-serialisable with no functions or cycles', () => {
       const round = JSON.parse(JSON.stringify(item))
       expect(round.name).toBe(block.id)
-      expect(round.files[0].content).toBe(block.source)
+      expect(round.files[0].content).toBe(getBlockSource(block.path))
     })
   })
 })

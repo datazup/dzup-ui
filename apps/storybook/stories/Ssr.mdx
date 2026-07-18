@@ -1,0 +1,184 @@
+{/* Ssr.mdx — SSR & Nuxt guide (TASK-FREE-14) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { SsrCoverage, SsrCoverageSummary } from './_blocks/SsrCoverage.ts'
+
+<Meta title="Guides/SSR & Nuxt" />
+
+# SSR & Nuxt
+
+Every dzup-ui component renders on the server. This page says exactly what that
+claim is backed by, where the sharp edges are, and how to install the Nuxt module.
+
+> **Read the coverage section before you rely on this.** "Renders on the server"
+> is a narrower promise than "works under SSR", and the difference is measured
+> below rather than glossed.
+
+## Nuxt
+
+`@dzup-ui/nuxt` is a Nuxt 3 module. It is published from this repo and versioned
+with the rest of the library.
+
+```bash
+npm install @dzup-ui/core @dzup-ui/tokens @dzup-ui/nuxt
+```
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@dzup-ui/nuxt'],
+})
+```
+
+That is the whole setup. The module does four things, and you do not have to do
+any of them yourself:
+
+1. **Adds the stylesheets** — `@dzup-ui/tokens/dist/tokens.css` and
+   `@dzup-ui/core/styles` are pushed onto `nuxt.options.css`. The token CSS is what
+   every `var(--dz-*)` resolves against; without it components render unstyled.
+2. **Transpiles** `@dzup-ui/core` and `@dzup-ui/tokens`.
+3. **Auto-imports the components** — use `<DzButton />` in any template with no
+   import statement.
+4. **Prevents the theme flash** — injects a tiny blocking head script that reads
+   `localStorage['dz-theme']` (falling back to `prefers-color-scheme`) and sets
+   `data-theme` on `<html>` *before* first paint. This is ADR-15: without it, a
+   dark-mode user gets a white flash on every cold load, because the server has no
+   way to know their theme.
+
+### Options
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@dzup-ui/nuxt'],
+  dzupUi: {
+    // Prefix the auto-imported names: 'Acme' turns DzButton into AcmeButton.
+    // Default '' (keep the Dz prefix).
+    prefix: '',
+
+    // Also auto-import @dzup-ui/pro components. See the note below.
+    includePro: false,
+  },
+})
+```
+
+<DoDont>
+  <Dont title="Set includePro: true today">
+    `@dzup-ui/pro` is **not published** — there is no such package to install. The
+    option exists for the commercial tier and turning it on now makes the build
+    fail on an unresolvable import. Leave it `false` until Pro ships.
+  </Dont>
+  <Do title="Use prefix if Dz collides with your own components">
+    `prefix: 'Acme'` registers `AcmeButton` instead of `DzButton`. It rewrites only
+    the auto-import name; explicit `import { DzButton } from '@dzup-ui/core'` is
+    unaffected.
+  </Do>
+</DoDont>
+
+### A known gap in the module
+
+The module registers components from a **hand-maintained list** of names in
+`packages/nuxt/src/module.ts`, not from the core export map. The list currently
+holds 138 names while core exports considerably more, so **a component can ship in
+`@dzup-ui/core` and not be auto-imported in Nuxt**. Nothing checks the two agree.
+
+This is a real limitation, not a caveat about edge cases. If auto-import does not
+find a component, it is not broken — just unlisted. Import it explicitly and it
+works normally:
+
+```vue
+<script setup lang="ts">
+import { DzKnob } from '@dzup-ui/core'
+</script>
+```
+
+## Any other SSR framework
+
+There is nothing Nuxt-specific about the components. For Vite SSR, Astro, or a
+hand-rolled `renderToString`, do what the module does:
+
+```ts
+// 1. The token CSS must load, or every var(--dz-*) is undefined.
+import '@dzup-ui/tokens/dist/tokens.css'
+import '@dzup-ui/core/styles'
+```
+
+```html
+<!-- 2. Set data-theme before first paint to avoid the flash (ADR-15). -->
+<script>
+  (function () {
+    try {
+      var s = localStorage.getItem('dz-theme')
+      var t = s === 'light' || s === 'dark'
+        ? s
+        : window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'
+      document.documentElement.setAttribute('data-theme', t)
+    } catch (e) {}
+  })()
+</script>
+```
+
+The library ships ESM only (ADR-11) and has no `window`/`document` access at module
+scope, so importing it on the server is safe.
+
+## What "renders on the server" is actually backed by
+
+<SsrCoverageSummary />
+
+The suite is `packages/core/tests/ssr/ssr-smoke.spec.ts`, run by `yarn test:ssr` in
+CI on every push. Each test mounts one component with `createSSRApp` and asserts
+`renderToString` resolves to non-empty markup.
+
+**These are smoke tests, and the name is meant literally.** They prove a component
+does not *throw* on the server. They do not assert what it renders, and — this is
+the important one — **there is no hydration testing at all.** Nothing in this repo
+mounts the server HTML in a client and checks for a hydration mismatch. A component
+that renders different markup on server and client would pass every test below.
+
+So the honest claim is: *no dzup-ui component crashes your SSR render.* Treat
+anything stronger as untested.
+
+### Components covered
+
+<SsrCoverage />
+
+### Known gaps
+
+- **`DzAccordion` is skipped**, not passing. Reka UI's `AccordionRoot` stalls
+  `renderToString` under jsdom, so the test is `it.skip`. The component is not known
+  to be broken in a real SSR runtime — it is *unverified*, which is why it is called
+  out here rather than left to look green.
+- **Coverage is a subset.** The components not in the list above are not asserted to
+  render on the server. Notable absences in Forms: `DzMultiSelect`, `DzCombobox`,
+  `DzDatePicker`, `DzColorPicker`, `DzFileUpload`, `DzTransfer`, `DzFieldArray`.
+- **No hydration mismatch detection**, as above.
+
+<DoDont>
+  <Do title="Guard browser-only work in onMounted">
+    `window`, `document`, `localStorage` and `matchMedia` do not exist during the
+    server render. Read them in `onMounted`, which only ever runs on the client.
+  </Do>
+  <Dont title="Assume a passing smoke test means hydration-safe">
+    It means the render did not throw. If your component's markup depends on
+    anything the server cannot know — a random id, `Date.now()`, viewport width —
+    it can still mismatch on hydration.
+  </Dont>
+</DoDont>
+
+## Contributing an SSR test
+
+Add a case to `packages/core/tests/ssr/ssr-smoke.spec.ts` in your component's
+family block. The list on this page is generated from that file, so a new test
+appears here automatically:
+
+```ts
+it('DzYourComponent renders in SSR', async () => {
+  const app = createSSRApp({
+    components: { DzYourComponent },
+    template: '<DzYourComponent />',
+  })
+  expect(await renderToString(app)).toBeTruthy()
+})
+```
+
+Closing the hydration gap would be worth more than adding smoke tests — it is the
+class of bug this suite cannot see.

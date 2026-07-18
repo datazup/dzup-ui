@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { BarChart3, Home, LogOut, Settings, Shield, Users } from 'lucide-vue-next'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzMenu, DzMenuItem, DzMenuSeparator } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzMenu compound sub-parts: DzMenuItem and DzMenuSeparator.
@@ -121,7 +122,7 @@ export const Interactive: Story = {
             Sign Out
           </DzMenuItem>
         </DzMenu>
-        <p class="text-sm text-gray-500">Active: {{ active }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Active: {{ active }}</p>
       </div>
     `,
   }),
@@ -210,6 +211,39 @@ export const SeparatorUsage: Story = {
         <DzMenuSeparator />
         <DzMenuItem>Help</DzMenuItem>
         <DzMenuItem>About</DzMenuItem>
+      </DzMenu>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzMenu, DzMenuItem, DzMenuSeparator, Home, Users, Shield, Settings },
+    template: `
+      <DzMenu class="w-56" aria-label="Dark mode navigation">
+        <DzMenuItem active>
+          <template #icon><Home class="w-4 h-4" /></template>
+          Dashboard
+        </DzMenuItem>
+        <DzMenuItem>
+          <template #icon><Users class="w-4 h-4" /></template>
+          Team
+        </DzMenuItem>
+        <DzMenuSeparator />
+        <DzMenuItem>
+          <template #icon><Shield class="w-4 h-4" /></template>
+          Security
+        </DzMenuItem>
+        <DzMenuItem disabled>
+          <template #icon><Settings class="w-4 h-4" /></template>
+          Settings
+        </DzMenuItem>
       </DzMenu>
     `,
   }),

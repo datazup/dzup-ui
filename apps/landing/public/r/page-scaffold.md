@@ -4,7 +4,7 @@ A whole landing page assembled from layout primitives only — DzContainer for m
 
 - **Category:** Layout
 - **Components:** DzContainer, DzGrid, DzFlex, DzStack, DzSpacer, DzDivider, DzButton, DzBadge, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#page-scaffold
+- **Preview:** /blocks/page-scaffold
 
 ```vue
 <script setup lang="ts">

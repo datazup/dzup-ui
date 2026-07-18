@@ -4,7 +4,7 @@ A two-column product page — a looping DzCarousel gallery beside a buy box with
 
 - **Category:** Commerce
 - **Components:** DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots, DzImage, DzAspectRatio, DzRating, DzButton, DzTabs, DzTabList, DzTabTrigger, DzTabContent, DzBadge, DzHeading, DzText
-- **Preview:** /blocks#product-detail
+- **Preview:** /blocks/product-detail
 
 ```vue
 <script setup lang="ts">

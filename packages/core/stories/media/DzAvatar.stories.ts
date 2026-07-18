@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { User } from 'lucide-vue-next'
 import { expect, waitFor, within } from 'storybook/test'
 import { DzAvatar } from '../../src/components/media'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 // A deterministic, offline-safe broken image (invalid base64) used by the
 // fallback play() test so it never depends on the network.
@@ -20,6 +20,10 @@ const meta = {
   title: 'Core/Media/DzAvatar',
   component: DzAvatar,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Media enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     src: {
@@ -259,7 +263,7 @@ export const Interactive: Story = {
           alt="Error demo"
           @error="errorCount++"
         />
-        <p class="text-sm text-gray-500">Image error events fired: {{ errorCount }}</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Image error events fired: {{ errorCount }}</p>
       </div>
     `,
   }),
@@ -275,7 +279,7 @@ export const Accessibility: Story = {
     components: { DzAvatar },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Avatars use <code>role="img"</code> and support <code>aria-label</code>.
           The fallback text has <code>aria-hidden="true"</code> to avoid duplicate announcements.
         </p>
@@ -301,7 +305,7 @@ export const RealWorldProfileHeader: Story = {
         <DzAvatar src="https://i.pravatar.cc/150?u=profile" alt="Jane Doe" size="lg" />
         <div>
           <p class="font-medium text-sm">Jane Doe</p>
-          <p class="text-xs text-gray-500">jane.doe@example.com</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)]">jane.doe@example.com</p>
         </div>
       </div>
     `,

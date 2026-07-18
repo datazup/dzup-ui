@@ -15,7 +15,7 @@ to turn an interactive one into a test.
 ## Where things live
 
 - **Stories** — `packages/core/stories/{family}/Dz*.stories.ts` (not colocated with
-  components — see [CLAUDE.md](../../CLAUDE.md)).
+  components — see [CLAUDE.md](https://github.com/datazup/dzup-ui/blob/main/CLAUDE.md)).
 - **Shared utilities** — `packages/core/stories/_shared/` (option arrays,
   decorators, `DemoGrid`/`DemoRow`, status taxonomy). Import from `'../_shared'`.
 - **Doc blocks** — `apps/storybook/stories/_blocks/` (`StatusBadge`, `DoDont`).
@@ -41,13 +41,72 @@ import {
 
 Every component story must include:
 
-1. **`Default`** — controls-driven, `v-bind="args"`.
+1. **An entry story bound to `args`** — its template uses `v-bind="args"`, so the
+   Controls panel actually drives it. Call it `Default` unless a more specific name
+   reads better on the page (`DzCalendar` opens with `Month`, `DzSpeedDial` with
+   `Fab`). Not applicable to anatomy pages that declare no `args`/`argTypes`.
 2. A **gallery/matrix** — `*Gallery` (variant × tone / sizes), laid out with `DemoRow`/`DemoGrid`.
-3. **`States`** — disabled / loading / readonly / invalid as applicable.
-4. **`DarkMode`** — via `darkModeDecorator`.
+3. **`States`** — disabled / loading / readonly / invalid, **when the component
+   declares one of those props**. A component with no state props (`DzVisuallyHidden`)
+   needs no `States` story.
+4. **A dark-mode preview** — any story carrying `darkModeDecorator`. Conventionally
+   `DarkMode`, but the decorator is what matters, not the export name.
 5. **`Accessibility`** — focus-ring / ARIA demonstration.
-6. At least one **`RealWorld*`** — ported/derived from the sandbox.
+6. At least one **`RealWorld*`** — the component in a realistic composition.
 7. ≥1 **`play()`** interaction test where interactive — **await every** `userEvent`/`expect`.
+8. **A component description** — a JSDoc block **directly above `const meta`**. It must
+   say what the component is for and when to reach for it.
+
+### This is machine-checked
+
+`yarn validate:story-dod` runs the list above against every story and fails CI on the
+**enforced** checks. The rest print their counts, so the remaining distance is always
+visible:
+
+<DocTable
+  head={['Check', 'Status', 'Notes']}
+  align={['left', 'left', 'left']}
+  rows={[
+    ['`controls-driven` (1)', '**enforced**', 'Applies where `meta` declares `args`/`argTypes`.'],
+    ['`dark-mode` (4)', '**enforced**', 'Any story with `darkModeDecorator`.'],
+    ['`description` (8)', '**enforced**', 'Must sit directly above `const meta` — see below.'],
+    ['`controls-live` (1)', 'reported', 'The declared controls actually drive something.'],
+    ['`gallery` (2)', 'reported', ''],
+    ['`states` (3)', 'reported', 'Applicability derived from the component’s own props.'],
+    ['`accessibility` (5)', 'reported', ''],
+    ['`real-world` (6)', 'reported', ''],
+    ['`play` (7)', 'reported', '“Where interactive” is a judgement, not a regex.'],
+  ]}
+/>
+
+Promote a reported check to enforced by changing its `level` in
+`packages/tooling/src/validators/story-dod.ts`, once its straggler list is empty.
+Never add an exemption to make a check pass.
+
+### Why the description must sit directly above `const meta`
+
+Storybook's `enrichCsfMeta` reads only the Babel `leadingComments` of the `const meta`
+statement. Babel attaches a comment to the statement that **follows** it — so a doc
+comment separated from `const meta` by fixture data attaches to the fixture, and your
+docs page renders no description at all. Intervening `//` comments are fine.
+
+```ts
+// ✓ Do — the comment attaches to `meta`, and the docs page renders it.
+/** DzTable is a semantic table wrapper. Use DzDataGrid for sorting/pagination. */
+const meta = { title: 'Core/Data/DzTable' } satisfies Meta<typeof DzTable>
+
+// ✕ Don't — the comment attaches to `sampleData`. The docs page renders nothing.
+/** DzDataGrid is the most complex core data component. */
+
+const sampleData = [/* … */]
+
+const meta = { title: 'Core/Data/DzDataGrid' } satisfies Meta<typeof DzDataGrid>
+```
+
+<DoDont>
+  <Do>Put the description immediately above `const meta`, below the imports.</Do>
+  <Dont>Leave it at the top of the file with fixture data between — it renders nowhere.</Dont>
+</DoDont>
 
 ## `argTypes` categories
 
@@ -110,10 +169,17 @@ const meta = {
 
 ## Design reference <a id="design-reference" />
 
-Link each component to its Figma frame so the **Design** addon panel shows the
-source-of-truth beside the live render (feeds the maturity dashboard's *Design*
-column). Set `parameters.design` on the `meta` — **required whenever a frame
-exists**:
+**There is no Figma library for dzup-ui today.** The code is the source of truth: a
+component's specification is its `*.variants.ts`, its tokens, and its stories.
+
+`@storybook/addon-designs` is **not installed**. It was, for a while — registered in
+`main.ts`, adding an empty *Design* panel to every story and weight to every build,
+while not one story carried a `design` parameter to fill it. An addon that renders
+nothing is a claim that a design source exists, so it was removed (TASK-FREE-12).
+
+The day a real Figma library lands, re-adding it is a two-line change — add
+`@storybook/addon-designs` back to `apps/storybook/package.json` and to the `addons`
+array in `.storybook/main.ts` — plus a `design` parameter per component:
 
 ```ts
 const meta = {
@@ -126,16 +192,14 @@ const meta = {
 }
 ```
 
-- **No frame yet?** Omit the parameter entirely — the Design panel then shows a
-  friendly "design link coming soon" placeholder rather than an error. Do **not**
-  point it at a placeholder file; an empty panel is the honest signal.
-- Use the frame's deep link (**Copy link to selection** in Figma, which carries a
-  `node-id`) so the panel opens on the exact component, not the whole file.
-- To embed a frame inside a family **Overview** MDX page, import the `Figma` block
-  from `@storybook/addon-designs/blocks` and pass the same URL — see `Buttons.mdx`.
+Two things worth knowing when that day comes: use the frame's deep link (**Copy link
+to selection** in Figma, which carries a `node-id`) so the panel opens on the exact
+component rather than the whole file, and never point the parameter at a placeholder
+— the addon only accepts a real 22-character file key, so a made-up URL renders a
+broken iframe.
 
-The story template (`_shared/Dz.stories.template.ts`) seeds this parameter with a
-`REPLACE_ME` URL as a reminder; swap it for the real frame or delete it.
+See [storybook-decisions.md](https://github.com/datazup/dzup-ui/blob/main/docs/storybook-decisions.md)
+TASK-0.15 for the original decision and TASK-FREE-12 for its removal.
 
 ## Do / Don't
 

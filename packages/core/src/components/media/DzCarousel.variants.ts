@@ -29,12 +29,21 @@ export const carouselVariants = tv({
     ].join(' '),
     navPrev: '',
     navNext: '',
-    dots: 'flex items-center justify-center gap-[var(--dz-spacing-1-5)]',
+    dots: 'flex shrink-0 items-center justify-center gap-[var(--dz-spacing-1-5)]',
+    // The clickable target is a ≥24×24px hit area (WCAG 2.2 SC 2.5.8 target-size);
+    // the visible dot is the inner `dot` span, so the indicator stays small while
+    // the tappable region meets the minimum. The button grows past 24px only when
+    // the active dot is wider.
+    dotButton: [
+      'inline-flex shrink-0 items-center justify-center',
+      'min-h-[24px] min-w-[24px]',
+      'rounded-full cursor-pointer',
+      'dz-focus-ring-button',
+    ].join(' '),
     dot: [
       'rounded-full',
       'bg-[var(--dz-muted-foreground)]/30',
       'transition-all duration-200',
-      'cursor-pointer',
       'hover:bg-[var(--dz-muted-foreground)]/50',
     ].join(' '),
     dotActive: 'bg-[var(--dz-primary)] hover:bg-[var(--dz-primary)]',

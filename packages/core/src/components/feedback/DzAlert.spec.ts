@@ -34,7 +34,7 @@ describe('dzAlert — Unit Tests', () => {
       slots: { default: 'msg' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('bg-[var(--dz-primary)]')
+    expect(classStr).toContain('bg-[var(--dz-primary-solid)]')
     expect(classStr).toContain('text-[var(--dz-primary-foreground)]')
   })
 
@@ -44,7 +44,7 @@ describe('dzAlert — Unit Tests', () => {
       slots: { default: 'msg' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('border-[var(--dz-danger)]')
+    expect(classStr).toContain('border-[var(--dz-danger-solid)]')
   })
 
   it('applies subtle variant classes for subtle+success', () => {
@@ -54,7 +54,10 @@ describe('dzAlert — Unit Tests', () => {
     })
     const classStr = wrapper.classes().join(' ')
     expect(classStr).toContain('bg-[var(--dz-success-muted)]')
-    expect(classStr).toContain('text-[var(--dz-success)]')
+    // `--dz-success` (shade 500) on `--dz-success-muted` measures 3.74:1 — under
+    // AA. `--dz-success-muted-foreground` is the token designed for text on the
+    // subtle fill, and clears it at 7.44:1.
+    expect(classStr).toContain('text-[var(--dz-success-muted-foreground)]')
   })
 
   it('applies ghost variant classes for ghost+warning', () => {
@@ -63,7 +66,7 @@ describe('dzAlert — Unit Tests', () => {
       slots: { default: 'msg' },
     })
     const classStr = wrapper.classes().join(' ')
-    expect(classStr).toContain('text-[var(--dz-warning)]')
+    expect(classStr).toContain('text-[var(--dz-warning-muted-foreground)]')
   })
 
   it('title slot takes priority over title prop', () => {

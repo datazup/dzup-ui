@@ -24,6 +24,8 @@ import { DIALOG_TOKENS } from './component/dialog.js'
 import { INPUT_TOKENS } from './component/input.js'
 import { PAGE_HERO_TOKENS } from './component/pagehero.js'
 import { SIDEBAR_TOKENS } from './component/sidebar.js'
+// DESIGN.md assembly (co-generated with tokens.css from the same maps)
+import { buildDesignMd, DESIGN_MD_PATH } from './design-md.js'
 import { generateBreakpointCssVars } from './primitives/breakpoints.js'
 // Primitives
 import { generateColorCssVars } from './primitives/colors.js'
@@ -445,11 +447,13 @@ function main(): void {
   const types = generateTypes()
   const tailwindTheme = generateTailwindTheme()
   const tailwindThemeTypes = generateTailwindThemeTypes()
+  const designMd = buildDesignMd()
 
   writeFileSync(resolve(DIST_DIR, 'tokens.css'), css, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tokens.d.ts'), types, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tailwind-theme.js'), tailwindTheme, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tailwind-theme.d.ts'), tailwindThemeTypes, 'utf-8')
+  writeFileSync(DESIGN_MD_PATH, designMd, 'utf-8')
 
   const lineCount = css.split('\n').length
   const tokenCount = css.match(/--dz-/g)?.length ?? 0
@@ -463,6 +467,7 @@ function main(): void {
   console.log('[tokens] Generated dist/tokens.d.ts')
   console.log('[tokens] Generated dist/tailwind-theme.js')
   console.log('[tokens] Generated dist/tailwind-theme.d.ts')
+  console.log('[tokens] Generated DESIGN.md')
   /* eslint-enable no-console */
 }
 

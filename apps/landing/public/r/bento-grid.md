@@ -4,7 +4,7 @@ A spanning "bento box" dashboard laid out with DzGrid — a 2×2 revenue hero, a
 
 - **Category:** Layout
 - **Components:** DzGrid, DzPanel, DzAspectRatio, DzDivider, DzBadge, DzHeading, DzText, DzIcon
-- **Preview:** /blocks#bento-grid
+- **Preview:** /blocks/bento-grid
 
 ```vue
 <script setup lang="ts">

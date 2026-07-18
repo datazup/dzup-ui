@@ -62,7 +62,7 @@ function articleTemplate(): string {
       s => `
         <section id="${s.id}" class="min-h-[60vh] scroll-mt-4">
           <h2 class="text-xl font-semibold mb-2">${s.label}</h2>
-          <p class="text-sm text-gray-500 max-w-prose">
+          <p class="text-sm text-[var(--dz-muted-foreground)] max-w-prose">
             Placeholder content for the ${s.label} section. Scroll the page and
             watch the anchor on the left highlight the section in view.
           </p>
@@ -196,7 +196,7 @@ export const Controlled: Story = {
       <div class="flex gap-8">
         <div class="w-48 shrink-0 space-y-3">
           <DzAnchor v-model:active="active" :items="items" />
-          <p class="text-sm text-gray-500">Active: <strong>{{ active || 'none' }}</strong></p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Active: <strong>{{ active || 'none' }}</strong></p>
         </div>
         <div class="flex-1 space-y-8" v-html="article" />
       </div>

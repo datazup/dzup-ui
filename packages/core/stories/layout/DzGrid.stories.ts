@@ -72,7 +72,7 @@ type Story = StoryObj<typeof meta>
 
 /** Reusable grid item helper */
 function gridItem(n: number) {
-  return `<div class="bg-blue-100 text-blue-800 text-sm p-4 rounded text-center font-medium">${n}</div>`
+  return `<div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center font-medium">${n}</div>`
 }
 
 function gridItems(count: number) {
@@ -117,10 +117,10 @@ export const AllColumns: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="c in [1, 2, 3, 4, 6, 12]" :key="c">
-          <p class="text-xs text-gray-500 mb-2">cols={{ c }}</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">cols={{ c }}</p>
           <DzGrid :cols="c" gap="sm">
             <div v-for="i in c" :key="i"
-              class="bg-blue-100 text-blue-800 text-sm p-3 rounded text-center">
+              class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded text-center">
               {{ i }}
             </div>
           </DzGrid>
@@ -141,10 +141,10 @@ export const AllGaps: Story = {
     template: `
       <div class="space-y-6">
         <div v-for="g in ['none', 'xs', 'sm', 'md', 'lg', 'xl']" :key="g">
-          <p class="text-xs text-gray-500 mb-2">gap="{{ g }}"</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-2">gap="{{ g }}"</p>
           <DzGrid :cols="4" :gap="g">
             <div v-for="i in 4" :key="i"
-              class="bg-green-100 text-green-800 text-sm p-3 rounded text-center">
+              class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded text-center">
               {{ i }}
             </div>
           </DzGrid>
@@ -164,12 +164,12 @@ export const ResponsiveColumns: Story = {
     components: { DzGrid },
     template: `
       <div class="space-y-2">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Resize the viewport: 1 col on mobile, 2 on sm, 3 on md, 4 on lg.
         </p>
         <DzGrid :cols="{ sm: 2, md: 3, lg: 4 }" gap="md">
           <div v-for="i in 8" :key="i"
-            class="bg-purple-100 text-purple-800 text-sm p-4 rounded text-center">
+            class="bg-[var(--dz-colors-purple-100)] text-[var(--dz-colors-purple-800)] text-sm p-4 rounded text-center">
             Item {{ i }}
           </div>
         </DzGrid>
@@ -214,7 +214,7 @@ export const DarkMode: Story = {
     template: `
       <DzGrid :cols="3" gap="md">
         <div v-for="i in 6" :key="i"
-          class="bg-gray-700 text-gray-200 text-sm p-4 rounded text-center">
+          class="bg-[var(--dz-colors-neutral-700)] text-[var(--dz-colors-neutral-200)] text-sm p-4 rounded text-center">
           Item {{ i }}
         </div>
       </DzGrid>
@@ -233,10 +233,10 @@ export const RealWorldCardGrid: Story = {
     template: `
       <DzGrid :cols="{ sm: 1, md: 2, lg: 3 }" gap="lg">
         <div v-for="i in 6" :key="i"
-          class="border border-gray-200 rounded-lg p-5 space-y-2">
-          <div class="h-32 bg-gray-100 rounded" />
+          class="border border-[var(--dz-border)] rounded-lg p-5 space-y-2">
+          <div class="h-32 bg-[var(--dz-muted)] rounded" />
           <h3 class="font-semibold">Card Title {{ i }}</h3>
-          <p class="text-sm text-gray-500">Brief description of the card content goes here.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Brief description of the card content goes here.</p>
         </div>
       </DzGrid>
     `,
@@ -253,21 +253,21 @@ export const RealWorldDashboardStats: Story = {
     components: { DzGrid },
     template: `
       <DzGrid :cols="4" gap="md">
-        <div class="bg-white border rounded-lg p-4">
-          <p class="text-sm text-gray-500">Revenue</p>
+        <div class="bg-[var(--dz-card)] border border-[var(--dz-border)] rounded-lg p-4">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Revenue</p>
           <p class="text-2xl font-bold">$24,500</p>
         </div>
-        <div class="bg-white border rounded-lg p-4">
-          <p class="text-sm text-gray-500">Users</p>
+        <div class="bg-[var(--dz-card)] border border-[var(--dz-border)] rounded-lg p-4">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Users</p>
           <p class="text-2xl font-bold">1,234</p>
         </div>
-        <div class="bg-white border rounded-lg p-4">
-          <p class="text-sm text-gray-500">Orders</p>
+        <div class="bg-[var(--dz-card)] border border-[var(--dz-border)] rounded-lg p-4">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Orders</p>
           <p class="text-2xl font-bold">567</p>
         </div>
-        <div class="bg-white border rounded-lg p-4">
-          <p class="text-sm text-gray-500">Growth</p>
-          <p class="text-2xl font-bold text-green-600">+12.5%</p>
+        <div class="bg-[var(--dz-card)] border border-[var(--dz-border)] rounded-lg p-4">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Growth</p>
+          <p class="text-2xl font-bold text-[var(--dz-success-muted-foreground)]">+12.5%</p>
         </div>
       </DzGrid>
     `,
@@ -284,12 +284,12 @@ function responsiveGrid() {
     components: { DzGrid },
     template: `
       <div class="space-y-2">
-        <p class="text-xs text-gray-500">
+        <p class="text-xs text-[var(--dz-muted-foreground)]">
           cols={ sm: 2, md: 3, lg: 4 } — 1 column on mobile, 2 from sm, 3 from md, 4 from lg.
         </p>
         <DzGrid :cols="{ sm: 2, md: 3, lg: 4 }" gap="md">
           <div v-for="i in 8" :key="i"
-            class="bg-blue-100 text-blue-800 text-sm p-4 rounded text-center">
+            class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-4 rounded text-center">
             Item {{ i }}
           </div>
         </DzGrid>
@@ -334,11 +334,11 @@ export const Accessibility: Story = {
     components: { DzGrid },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Grid can render as a list element for semantic markup.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Grid can render as a list element for semantic markup.</p>
         <DzGrid as="ul" :cols="3" gap="md" aria-label="Feature list">
-          <li class="bg-blue-50 p-4 rounded text-sm">Feature A</li>
-          <li class="bg-blue-50 p-4 rounded text-sm">Feature B</li>
-          <li class="bg-blue-50 p-4 rounded text-sm">Feature C</li>
+          <li class="bg-[var(--dz-primary-muted)] p-4 rounded text-sm">Feature A</li>
+          <li class="bg-[var(--dz-primary-muted)] p-4 rounded text-sm">Feature B</li>
+          <li class="bg-[var(--dz-primary-muted)] p-4 rounded text-sm">Feature C</li>
         </DzGrid>
       </div>
     `,

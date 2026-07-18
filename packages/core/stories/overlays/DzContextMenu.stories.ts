@@ -7,7 +7,7 @@ import {
   DzContextMenuSeparator,
   DzContextMenuTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzContextMenu is a compound right-click menu built on Reka UI ContextMenu (ADR-07).
@@ -26,6 +26,10 @@ const meta = {
     DzContextMenuSeparator,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {
@@ -61,7 +65,7 @@ export const Default: Story = {
     template: `
       <DzContextMenu v-bind="args">
         <DzContextMenuTrigger>
-          <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-gray-500 select-none">
+          <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none">
             Right-click anywhere in this area
           </div>
         </DzContextMenuTrigger>
@@ -94,7 +98,7 @@ export const WithDisabledItems: Story = {
     template: `
       <DzContextMenu>
         <DzContextMenuTrigger>
-          <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-gray-500 select-none">
+          <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none">
             Right-click to see disabled items
           </div>
         </DzContextMenuTrigger>
@@ -128,7 +132,7 @@ export const WithSeparatorGroups: Story = {
     template: `
       <DzContextMenu>
         <DzContextMenuTrigger>
-          <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-gray-500 select-none">
+          <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none">
             Right-click for grouped menu
           </div>
         </DzContextMenuTrigger>
@@ -170,7 +174,7 @@ export const Interactive: Story = {
         <p class="text-sm">Last action: <strong>{{ lastAction }}</strong> ({{ actionCount }} total)</p>
         <DzContextMenu>
           <DzContextMenuTrigger>
-            <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-gray-500 select-none">
+            <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none">
               Right-click to select an action
             </div>
           </DzContextMenuTrigger>
@@ -205,7 +209,7 @@ export const DarkMode: Story = {
     template: `
       <DzContextMenu>
         <DzContextMenuTrigger>
-          <div class="border-2 border-dashed border-gray-600 rounded-lg p-12 text-center text-sm text-gray-400 select-none">
+          <div class="border-2 border-dashed border-[var(--dz-border)] rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none">
             Right-click in dark mode
           </div>
         </DzContextMenuTrigger>
@@ -236,13 +240,13 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Right-click the area to open. Use ArrowUp/ArrowDown to navigate items.
           Press Enter to select, Escape to close. Disabled items are skipped.
         </p>
         <DzContextMenu>
           <DzContextMenuTrigger>
-            <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-gray-500 select-none">
+            <div class="border-2 border-dashed rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none">
               Right-click for accessible menu
             </div>
           </DzContextMenuTrigger>
@@ -304,7 +308,7 @@ export const RealWorldFileExplorer: Story = {
       <div class="space-y-1 max-w-sm">
         <DzContextMenu v-for="file in files" :key="file.name">
           <DzContextMenuTrigger>
-            <div class="flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-50 cursor-default select-none text-sm">
+            <div class="flex items-center gap-3 px-3 py-2 rounded hover:bg-[var(--dz-muted)] cursor-default select-none text-sm">
               <span>{{ file.type === 'folder' ? '&#128193;' : '&#128196;' }}</span>
               <span>{{ file.name }}</span>
             </div>

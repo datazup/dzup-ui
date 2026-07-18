@@ -24,9 +24,12 @@ export type DropdownAlign = 'start' | 'center' | 'end'
 
 /** Props for the DzDropdownMenu root component */
 export interface DzDropdownMenuProps {
-  /** Default open state (uncontrolled) */
+  /** Initial open state when uncontrolled. For controlled use, bind `v-model:open`. */
   defaultOpen?: boolean
-  /** Controlled open state — use v-model:open */
+  /**
+   * Whether the menu traps focus and blocks interaction with the page behind it.
+   * Set `false` for menus layered over live page chrome, such as a site nav.
+   */
   modal?: boolean
 }
 

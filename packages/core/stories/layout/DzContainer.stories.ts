@@ -82,7 +82,7 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <DzContainer v-bind="args" class="border border-dashed border-gray-300 p-4">
+      <DzContainer v-bind="args" class="border border-dashed border-[var(--dz-border)] p-4">
         <p>Content inside a default DzContainer.</p>
       </DzContainer>
     `,
@@ -108,9 +108,9 @@ export const AllMaxWidths: Story = {
     template: `
       <div class="space-y-4">
         <div v-for="mw in ['sm', 'md', 'lg', 'xl', '2xl', 'full']" :key="mw">
-          <p class="text-xs text-gray-500 mb-1 px-4">maxWidth="{{ mw }}"</p>
-          <DzContainer :max-width="mw" class="border border-dashed border-gray-300 p-4">
-            <div class="bg-blue-100 text-blue-800 text-sm p-2 rounded">
+          <p class="text-xs text-[var(--dz-muted-foreground)] mb-1 px-4">maxWidth="{{ mw }}"</p>
+          <DzContainer :max-width="mw" class="border border-dashed border-[var(--dz-border)] p-4">
+            <div class="bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-2 rounded">
               Container with maxWidth="{{ mw }}"
             </div>
           </DzContainer>
@@ -135,8 +135,8 @@ export const NoPadding: Story = {
       return { args }
     },
     template: `
-      <DzContainer v-bind="args" class="border border-dashed border-gray-300">
-        <div class="bg-amber-100 text-amber-800 text-sm p-4">
+      <DzContainer v-bind="args" class="border border-dashed border-[var(--dz-border)]">
+        <div class="bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm p-4">
           This container has no horizontal padding -- content touches the edges.
         </div>
       </DzContainer>
@@ -160,8 +160,8 @@ export const NotCentered: Story = {
       return { args }
     },
     template: `
-      <DzContainer v-bind="args" class="border border-dashed border-gray-300 p-4">
-        <div class="bg-green-100 text-green-800 text-sm p-2 rounded">
+      <DzContainer v-bind="args" class="border border-dashed border-[var(--dz-border)] p-4">
+        <div class="bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-2 rounded">
           Not centered -- aligned to the start.
         </div>
       </DzContainer>
@@ -179,13 +179,13 @@ export const PolymorphicAs: Story = {
     components: { DzContainer },
     template: `
       <div class="space-y-4">
-        <DzContainer as="main" aria-label="Main content" class="border border-dashed border-gray-300 p-4">
+        <DzContainer as="main" aria-label="Main content" class="border border-dashed border-[var(--dz-border)] p-4">
           <p class="text-sm">Rendered as <code>&lt;main&gt;</code></p>
         </DzContainer>
-        <DzContainer as="section" aria-label="Section content" class="border border-dashed border-gray-300 p-4">
+        <DzContainer as="section" aria-label="Section content" class="border border-dashed border-[var(--dz-border)] p-4">
           <p class="text-sm">Rendered as <code>&lt;section&gt;</code></p>
         </DzContainer>
-        <DzContainer as="article" class="border border-dashed border-gray-300 p-4">
+        <DzContainer as="article" class="border border-dashed border-[var(--dz-border)] p-4">
           <p class="text-sm">Rendered as <code>&lt;article&gt;</code></p>
         </DzContainer>
       </div>
@@ -203,8 +203,8 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzContainer },
     template: `
-      <DzContainer max-width="lg" class="border border-dashed border-gray-600 p-4">
-        <div class="text-sm text-gray-300">Container in dark mode context.</div>
+      <DzContainer max-width="lg" class="border border-dashed border-[var(--dz-border)] p-4">
+        <div class="text-sm text-[var(--dz-muted-foreground)]">Container in dark mode context.</div>
       </DzContainer>
     `,
   }),
@@ -220,14 +220,14 @@ export const RealWorldPageLayout: Story = {
     components: { DzContainer },
     template: `
       <div class="space-y-0">
-        <header class="bg-gray-100 py-4">
+        <header class="bg-[var(--dz-muted)] py-4">
           <DzContainer max-width="xl">
             <div class="flex justify-between items-center">
               <span class="font-bold text-lg">App Logo</span>
               <nav class="flex gap-4 text-sm">
-                <a href="#" class="text-blue-600">Home</a>
-                <a href="#" class="text-gray-600">About</a>
-                <a href="#" class="text-gray-600">Contact</a>
+                <a href="#" class="text-[var(--dz-primary-muted-foreground)]">Home</a>
+                <a href="#" class="text-[var(--dz-muted-foreground)]">About</a>
+                <a href="#" class="text-[var(--dz-muted-foreground)]">Contact</a>
               </nav>
             </div>
           </DzContainer>
@@ -235,12 +235,12 @@ export const RealWorldPageLayout: Story = {
         <main class="py-8">
           <DzContainer max-width="lg">
             <h1 class="text-2xl font-bold mb-4">Page Title</h1>
-            <p class="text-gray-600">Page content sits inside a responsive container that constrains its max-width and adds consistent padding.</p>
+            <p class="text-[var(--dz-muted-foreground)]">Page content sits inside a responsive container that constrains its max-width and adds consistent padding.</p>
           </DzContainer>
         </main>
-        <footer class="bg-gray-50 py-4 border-t">
+        <footer class="bg-[var(--dz-muted)] py-4 border-t border-t-[var(--dz-border)]">
           <DzContainer max-width="xl">
-            <p class="text-sm text-gray-500 text-center">Footer content</p>
+            <p class="text-sm text-[var(--dz-muted-foreground)] text-center">Footer content</p>
           </DzContainer>
         </footer>
       </div>
@@ -303,11 +303,11 @@ export const Accessibility: Story = {
     components: { DzContainer },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Containers render as semantic HTML elements with ARIA attributes for screen readers.</p>
-        <DzContainer as="main" aria-label="Main content area" class="border border-dashed border-blue-300 p-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Containers render as semantic HTML elements with ARIA attributes for screen readers.</p>
+        <DzContainer as="main" aria-label="Main content area" class="border border-dashed border-[var(--dz-primary-border)] p-4">
           <p class="text-sm">main with aria-label="Main content area"</p>
         </DzContainer>
-        <DzContainer as="aside" aria-label="Sidebar" class="border border-dashed border-green-300 p-4">
+        <DzContainer as="aside" aria-label="Sidebar" class="border border-dashed border-[var(--dz-success-border)] p-4">
           <p class="text-sm">aside with aria-label="Sidebar"</p>
         </DzContainer>
       </div>

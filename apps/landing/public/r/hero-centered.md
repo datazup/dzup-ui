@@ -4,7 +4,7 @@ Eyebrow chip, headline, subhead and two call-to-action buttons, centered.
 
 - **Category:** Marketing
 - **Components:** DzBadge, DzHeading, DzText, DzButton
-- **Preview:** /blocks#hero-centered
+- **Preview:** /blocks/hero-centered
 
 ```vue
 <script setup lang="ts">

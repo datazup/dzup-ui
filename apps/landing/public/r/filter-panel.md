@@ -4,7 +4,7 @@ A product-listing filter rail: search input, category checkbox group, a dual-thu
 
 - **Category:** Forms & Inputs
 - **Components:** DzSearchInput, DzCheckboxGroup, DzCheckbox, DzRangeSlider, DzRadioGroup, DzRadio, DzSwitch, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#filter-panel
+- **Preview:** /blocks/filter-panel
 
 ```vue
 <script setup lang="ts">

@@ -9,7 +9,7 @@ import {
   DzDialogTitle,
   DzDialogTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDialog is a compound modal overlay component built on Reka UI Dialog (ADR-07).
@@ -31,6 +31,10 @@ const meta = {
     DzDialogClose,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     modal: {
@@ -197,8 +201,8 @@ export const WithSlots: Story = {
         </DzDialogTrigger>
         <DzDialogContent size="sm">
           <div class="text-center space-y-3">
-            <div class="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-              <span class="text-red-600 text-xl">!</span>
+            <div class="mx-auto w-12 h-12 rounded-full bg-[var(--dz-danger-muted)] flex items-center justify-center">
+              <span class="text-[var(--dz-danger-muted-foreground)] text-xl">!</span>
             </div>
             <DzDialogTitle>Delete Account?</DzDialogTitle>
             <DzDialogDescription>
@@ -243,7 +247,7 @@ export const Interactive: Story = {
         <div class="flex gap-4 items-center">
           <DzButton @click="isOpen = true">Open Controlled Dialog</DzButton>
           <span class="text-sm">State: {{ isOpen ? 'Open' : 'Closed' }}</span>
-          <span v-if="confirmed" class="text-sm text-green-600">Confirmed!</span>
+          <span v-if="confirmed" class="text-sm text-[var(--dz-success-muted-foreground)]">Confirmed!</span>
         </div>
         <DzDialog v-model:open="isOpen">
           <DzDialogContent>
@@ -330,7 +334,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Open the dialog, then use Tab to navigate between buttons. Press Escape to close.
           Focus returns to the trigger after closing.
         </p>
@@ -395,7 +399,7 @@ export const CompoundComposition: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500 max-w-md">
+        <p class="text-sm text-[var(--dz-muted-foreground)] max-w-md">
           DzDialog is a compound component. All five sub-parts are shown here:
           <code>DzDialogTrigger</code>, <code>DzDialogContent</code>,
           <code>DzDialogTitle</code>, <code>DzDialogDescription</code>, and
@@ -421,7 +425,7 @@ export const CompoundComposition: Story = {
               context (ADR-07) and provides scoped IDs automatically.
             </DzDialogDescription>
 
-            <div class="mt-4 rounded border p-3 text-xs font-mono space-y-1">
+            <div class="mt-4 rounded border border-[var(--dz-border)] p-3 text-xs font-mono space-y-1">
               <p>&lt;DzDialog&gt;</p>
               <p class="pl-4">&lt;DzDialogTrigger /&gt;</p>
               <p class="pl-4">&lt;DzDialogContent&gt;</p>
@@ -474,13 +478,13 @@ export const RealWorldFormDialog: Story = {
           <form class="space-y-4 mt-4" @submit.prevent>
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
-              <input type="text" placeholder="Item name" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="text" placeholder="Item name" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Description</label>
-              <textarea placeholder="Describe the item..." class="w-full border rounded px-3 py-2 text-sm" rows="3" />
+              <textarea placeholder="Describe the item..." class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" rows="3" />
             </div>
-            <div class="flex justify-end gap-3 pt-2 border-t">
+            <div class="flex justify-end gap-3 pt-2 border-t border-t-[var(--dz-border)]">
               <DzDialogClose as-child>
                 <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
               </DzDialogClose>

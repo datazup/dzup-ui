@@ -29,7 +29,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 /** Default public origin serving the generated registry (registry.json `homepage`). */
-export const DEFAULT_REGISTRY_URL = 'https://dzup-ui.dev'
+export const DEFAULT_REGISTRY_URL = 'https://dzup-ui.com'
 
 /** A single item as it appears in a shadcn `registry.json` index. */
 export interface RegistryIndexItem {
@@ -92,7 +92,8 @@ export function createReader(base: string): Reader {
     return async (sitePath) => {
       const url = `${origin}${sitePath}`
       const res = await fetch(url)
-      if (!res.ok) throw new Error(`GET ${url} → ${res.status} ${res.statusText}`)
+      if (!res.ok)
+        throw new Error(`GET ${url} → ${res.status} ${res.statusText}`)
       return res.text()
     }
   }
@@ -247,9 +248,10 @@ export function parseComponentIndex(md: string): ComponentSummary[] {
       family = fam[1]!
       continue
     }
-    if (family === 'Conventions' || !family) continue
+    if (family === 'Conventions' || !family)
+      continue
     // `- **DzName** — description`  (em dash or hyphen separator, both tolerated)
-    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*\s*[—–-]?\s*(.*)$/.exec(line)
+    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*\s*(?:[—–-]\s*)?(.*)$/.exec(line)
     if (head) {
       flush()
       current = { name: head[1]!, family, description: head[2]!.trim(), details: '' }
@@ -280,7 +282,8 @@ export function extractComponentSection(md: string, name: string): string | null
       break
     }
   }
-  if (start === -1) return null
+  if (start === -1)
+    return null
   let end = lines.length
   for (let i = start + 1; i < lines.length; i++) {
     if (/^###?\s+/.test(lines[i]!)) {

@@ -160,28 +160,3 @@ const toneColorVar = computed(() => {
     <slot :value="value" :max="max" :percentage="percentage" />
   </div>
 </template>
-
-<style scoped>
-@keyframes progress-indeterminate {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(200%);
-  }
-}
-
-.animate-progress-indeterminate {
-  animation: progress-indeterminate 1.5s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-progress-indeterminate {
-    animation: none;
-  }
-
-  .animate-spin {
-    animation: none;
-  }
-}
-</style>

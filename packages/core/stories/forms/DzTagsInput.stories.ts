@@ -159,14 +159,14 @@ export const EmailValidation: Story = {
     },
     template: `
       <div class="space-y-2 max-w-sm">
-        <p class="text-sm text-gray-500">Only valid email addresses are accepted — try an invalid one to see the danger flash.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Only valid email addresses are accepted — try an invalid one to see the danger flash.</p>
         <DzTagsInput
           v-model:value="emails"
           :validate="isEmail"
           placeholder="recipient@example.com"
           add-on-blur
         />
-        <p class="text-sm text-gray-500">Recipients: <strong>{{ emails.length ? emails.join(', ') : 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Recipients: <strong>{{ emails.length ? emails.join(', ') : 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -185,7 +185,7 @@ export const MaxTags: Story = {
     },
     template: `
       <div class="space-y-2 max-w-sm">
-        <p class="text-sm text-gray-500">Capped at 3 tokens.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Capped at 3 tokens.</p>
         <DzTagsInput v-model:value="value" :max="3" placeholder="Up to 3 tags" />
       </div>
     `,

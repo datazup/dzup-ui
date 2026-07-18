@@ -3,10 +3,16 @@
  *
  * The maturity taxonomy already exists in `_shared/status.ts` and is applied per
  * component as a `status:*` Storybook tag on each story `meta`. The other trust
- * signals — a `play()` interaction test, per-family a11y enforcement (TASK-APP-02),
- * and a Figma `design` parameter (TASK-APP-05) — are likewise declared inline in
- * the story files. This helper aggregates all four into a single matrix so the
- * `ComponentStatus.mdx` dashboard never drifts from the real stories.
+ * signals — a `play()` interaction test and per-family a11y enforcement
+ * (TASK-APP-02) — are likewise declared inline in the story files. This helper
+ * aggregates all three into a single matrix so the `ComponentStatus.mdx` dashboard
+ * never drifts from the real stories.
+ *
+ * A fourth signal, a Figma `design` parameter (TASK-APP-05), was read here until
+ * TASK-FREE-12: no Figma library exists, so it resolved to `undefined` for every
+ * component and rendered a column of dashes. It went out with
+ * `@storybook/addon-designs`, which had been mounting an empty Design panel on all
+ * 1,393 stories to display it.
  *
  * **Why parse raw source instead of importing the modules?** Executing all ~165
  * story modules into one docs chunk would pull in every component + icon import
@@ -14,25 +20,31 @@
  * (same pattern as `apps/landing/src/templates/rawSources.ts`) hands us each file
  * as *text*, eagerly, so the matrix builds synchronously at render with no runtime
  * component cost. The signals we read are simple, stable literals (`title`,
- * `status:*` tag, `play:`, `design: {`, `a11yError`), so a targeted scan is robust.
+ * `status:*` tag, `play:`, `a11yError`), so a targeted scan is robust.
  */
 import {
   STATUS_BADGES,
   type ComponentStatus,
 } from '../../../../packages/core/stories/_shared/status.ts'
 
-// Vite injects `import.meta.glob`; the Storybook tsconfig doesn't pull in
-// `vite/client` types, so narrow `import.meta` to just the shape we use.
-const viteMeta = import.meta as unknown as {
-  glob: (pattern: string, opts: { query: string, import: string, eager: true }) => Record<string, string>
-}
-
-/** Every core story file as raw text, keyed by its glob-relative path. */
-const RAW_SOURCES = viteMeta.glob('../../../../packages/core/stories/**/*.stories.ts', {
+/**
+ * Every core story file as raw text, keyed by its glob-relative path.
+ *
+ * `import.meta.glob` MUST be called directly on `import.meta`: it is a
+ * compile-time transform Vite matches syntactically, not a real runtime method.
+ * This file used to narrow `import.meta` into a `viteMeta` local first (to dodge
+ * the missing `vite/client` types) and call `.glob` off that — which type-checked,
+ * built without a warning, and shipped a literal `.glob()` call into the bundle.
+ * The result: **this dashboard threw "glob is not a function" and rendered
+ * Storybook's "No Preview" error card in every built Storybook**, while
+ * `ComponentStatus.mdx` advertised itself as the live matrix. Found and fixed in
+ * TASK-FREE-14. Cast the RESULT, never the meta object.
+ */
+const RAW_SOURCES = import.meta.glob('../../../../packages/core/stories/**/*.stories.ts', {
   query: '?raw',
   import: 'default',
   eager: true,
-})
+}) as Record<string, string>
 
 /** One component's row in the status matrix. */
 export interface StatusRow {
@@ -46,8 +58,6 @@ export interface StatusRow {
   hasPlay: boolean
   /** True when the file opts its stories into a11y CI-gating (`a11yError`). */
   a11yEnforced: boolean
-  /** Figma URL from a `design` parameter, if one is wired. */
-  design?: string
   /** Migration guidance — only populated for `deprecated` components. */
   migration?: string
 }
@@ -89,9 +99,6 @@ function parseRow(source: string): StatusRow | null {
   const a11yEnforced = /\ba11yError\b/.test(source)
     || /a11y:\s*\{[^}]*test:\s*['"]error['"]/.test(source)
 
-  // Figma link via the design addon convention: `design: { type: 'figma', url }`.
-  const design = match1(source, /design:\s*\{[^}]*url:\s*['"]([^'"]+)['"]/)
-
   // Migration path for a deprecated component: a `migration:` parameter string,
   // else the text after an `@deprecated` JSDoc tag, else a generic pointer.
   let migration: string | undefined
@@ -101,7 +108,7 @@ function parseRow(source: string): StatusRow | null {
       ?? 'See the component docs page for the replacement.'
   }
 
-  return { component, family, status, hasPlay, a11yEnforced, design, migration }
+  return { component, family, status, hasPlay, a11yEnforced, migration }
 }
 
 /** The full matrix, sorted by canonical family then component name. */

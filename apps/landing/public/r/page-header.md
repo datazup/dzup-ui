@@ -4,7 +4,7 @@ Breadcrumb trail, page title with inline status badge, and a row of contextual a
 
 - **Category:** Application
 - **Components:** DzBreadcrumb, DzBreadcrumbItem, DzHeading, DzBadge, DzButton
-- **Preview:** /blocks#page-header
+- **Preview:** /blocks/page-header
 
 ```vue
 <script setup lang="ts">

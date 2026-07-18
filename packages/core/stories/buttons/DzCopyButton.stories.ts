@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzCopyButton } from '../../src/components/buttons'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzCopyButton copies a value to the clipboard and shows visual feedback.
@@ -15,12 +15,16 @@ const meta = {
   title: 'Core/Buttons/DzCopyButton',
   component: DzCopyButton,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Buttons audits clean at 0 findings — enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Appearance
     variant: {
       control: 'select',
       options: ['solid', 'outline', 'ghost', 'text', 'link'],
-      description: 'Visual style variant (fill / border treatment)',
+      description: 'Visual style variant (fill / border border-[var(--dz-border)] treatment)',
       table: { category: 'Appearance', defaultValue: { summary: 'outline' } },
     },
     tone: {

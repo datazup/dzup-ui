@@ -1,14 +1,16 @@
+import type { RouteLocationNormalized } from 'vue-router'
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteLocationNormalized } from 'vue-router'
-import { startViewTransition, supportsViewTransitions } from './motion/useViewTransition.ts'
-import HomePage from './pages/HomePage.vue'
-import ProPage from './pages/ProPage.vue'
-import BlocksIndexPage from './pages/BlocksIndexPage.vue'
-import AnimationsPage from './pages/AnimationsPage.vue'
-import { getTemplate } from './templates/registry.ts'
 import { getBlock } from './blocks/registry.ts'
 import { SITE_ORIGIN } from './config.ts'
+import { BLOCK_OG_IDS, TEMPLATE_OG_SLUGS } from './generated/ogImages.ts'
+import { startViewTransition, supportsViewTransitions } from './motion/useViewTransition.ts'
+// `/` is the only eagerly-imported route: it is the first paint for most visitors,
+// so code-splitting it would just add a round trip before the LCP element. Every
+// other route is `() => import()` — see the note on /pro, /blocks and /animations
+// below (TASK-FREE-13).
+import HomePage from './pages/HomePage.vue'
+import { getTemplate } from './templates/registry.ts'
 
 /**
  * Per-route document head. A route opts in via `meta.head`; routes without it
@@ -68,15 +70,15 @@ interface RouteHead {
  * (`SITE_ORIGIN`-prefixed) as the vocabulary expects, and match each hop's
  * canonical so the trail agrees with the indexed URLs.
  */
-function breadcrumbList(trail: Array<{ name: string; path: string }>): Record<string, unknown> {
+function breadcrumbList(trail: Array<{ name: string, path: string }>): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: trail.map((hop, index) => ({
+    'itemListElement': trail.map((hop, index) => ({
       '@type': 'ListItem',
-      position: index + 1,
-      name: hop.name,
-      item: `${SITE_ORIGIN}${hop.path}`,
+      'position': index + 1,
+      'name': hop.name,
+      'item': `${SITE_ORIGIN}${hop.path}`,
     })),
   }
 }
@@ -91,27 +93,44 @@ declare module 'vue-router' {
 }
 
 /**
- * Guard for the template detail/preview routes: an unknown `slug` (one not in
- * the registry) redirects to the gallery rather than rendering a dead page
- * (docs/templates.md §3). The registry is empty during the foundation phase, so
- * every slug currently resolves here until the catalogue rows land.
+ * Route an unknown catalog slug to the 404 page WITHOUT changing the address
+ * bar: the not-found route re-matches the same path via its `pathMatch`
+ * catch-all param, so the visitor (and any error reporting) still sees the URL
+ * that failed. The 404 page reads the path to say specifically that the
+ * block/template does not exist — a removed item and a mistyped URL both get
+ * an explanation instead of the old silent redirect to the gallery
+ * (TASK-FREE-09).
  */
-function resolveTemplateSlug(to: RouteLocationNormalized) {
-  const slug = to.params.slug
-  if (typeof slug === 'string' && getTemplate(slug)) return true
-  return { path: '/templates' }
+function toNotFound(to: RouteLocationNormalized) {
+  return {
+    name: 'not-found' as const,
+    params: { pathMatch: to.path.slice(1).split('/') },
+    query: to.query,
+    hash: to.hash,
+  }
 }
 
 /**
- * Guard for the standalone block-preview route: an unknown `id` (one not in the
- * registry) redirects to the gallery rather than rendering a dead/blank preview
- * (docs/blocks.md §3.5). The page repeats this check defensively for any other
- * entry path (e.g. a hand-typed iframe src).
+ * Guard for the template detail/preview routes: an unknown `slug` (one not in
+ *  the registry) lands on the 404 page (docs/templates.md §3).
+ */
+function resolveTemplateSlug(to: RouteLocationNormalized) {
+  const slug = to.params.slug
+  if (typeof slug === 'string' && getTemplate(slug))
+    return true
+  return toNotFound(to)
+}
+
+/**
+ * Guard for the block detail/preview routes: an unknown `id` (one not in the
+ *  registry) lands on the 404 page (docs/blocks.md §3.5). The preview page
+ *  repeats this check defensively for any other entry path.
  */
 function resolveBlockId(to: RouteLocationNormalized) {
   const id = to.params.id
-  if (typeof id === 'string' && getBlock(id)) return true
-  return { path: '/blocks' }
+  if (typeof id === 'string' && getBlock(id))
+    return true
+  return toNotFound(to)
 }
 
 const router = createRouter({
@@ -120,15 +139,33 @@ const router = createRouter({
     { path: '/', name: 'home', component: HomePage },
     // Phase 1: renders a "coming soon" / waitlist state. Phase 2 flips the
     // CTAs that point here to the published pro Storybook + pricing page.
-    { path: '/pro', name: 'pro', component: ProPage },
+    // Carries its own head — a primary marketing surface must not inherit the
+    // home title, and without a self-canonical it would tell crawlers it IS
+    // the home page (the index.html default canonical).
+    {
+      path: '/pro',
+      name: 'pro',
+      component: () => import('./pages/ProPage.vue'),
+      meta: {
+        head: {
+          title: 'dzup-ui Pro — enterprise Vue 3 components | dzup-ui',
+          description:
+            'The commercial tier of dzup-ui: enterprise-grade Vue 3 components built on the same token system and accessibility bar as the free core. Join the waitlist to hear when it ships.',
+          canonical: '/pro',
+        },
+      },
+    },
     // Blocks — the first shipped Ecosystem offering (docs/blocks.md §3.1). The
-    // index page is a placeholder until the catalog lands (Task A3). Carries its
-    // own SEO head (title + description) — /blocks is a primary marketing surface
-    // (docs/landing.md §8), so it must not inherit the generic home title.
+    // index renders the full catalogue, sourced from blocks/registry.ts. Carries
+    // its own SEO head (title + description) — /blocks is a primary marketing
+    // surface (docs/landing.md §8), so it must not inherit the generic home title.
     {
       path: '/blocks',
       name: 'blocks',
-      component: BlocksIndexPage,
+      // Lazy: 653 lines that pull in LazyBlockPreview, BlockCard,
+      // BlockCommandPalette, BlockSearchBar, BlockCategoryNav and BlockAiCallout.
+      // None of it is on the critical path for a visitor landing on `/`.
+      component: () => import('./pages/BlocksIndexPage.vue'),
       meta: {
         head: {
           title: 'Blocks — pre-composed Vue 3 UI sections | dzup-ui',
@@ -143,8 +180,8 @@ const router = createRouter({
     // Standalone, chrome-free render of a single block (docs/blocks.md §3.5) —
     // the "Open in new tab" target, the iframe src for full-section isolation
     // (Tasks F1–F3) and the OG render source (Task I4). Param-driven via
-    // ?theme/?dir/?w; unknown ids redirect to the gallery. Marked noindex — it is
-    // a bare duplicate of the indexable per-block page (Task I4).
+    // ?theme/?dir/?w; unknown ids land on the 404 via the shared guard. Marked
+    // noindex — it is a bare duplicate of the indexable per-block page (Task I4).
     {
       path: '/blocks/preview/:id',
       name: 'block-preview',
@@ -155,7 +192,8 @@ const router = createRouter({
         head: (to) => {
           const id = to.params.id
           const block = typeof id === 'string' ? getBlock(id) : undefined
-          if (!block) return undefined
+          if (!block)
+            return undefined
           return {
             title: `${block.title} — block preview | dzup-ui`,
             description: block.description,
@@ -170,8 +208,8 @@ const router = createRouter({
     // full site chrome, and carries its own title/description/OG share card +
     // self-referential canonical. The /blocks index stays the PRIMARY browse
     // surface (the in-page `#<id>` anchors keep working); this route is the
-    // canonical destination crawlers index for the block. Unknown ids redirect to
-    // the gallery via the shared guard. Registered after /blocks/preview/:id so the
+    // canonical destination crawlers index for the block. Unknown ids land on the
+    // 404 via the shared guard. Registered after /blocks/preview/:id so the
     // more specific 3-segment preview route always wins for that path.
     {
       path: '/blocks/:id',
@@ -183,13 +221,15 @@ const router = createRouter({
         head: (to) => {
           const id = to.params.id
           const block = typeof id === 'string' ? getBlock(id) : undefined
-          if (!block) return undefined
+          if (!block)
+            return undefined
           return {
             title: `${block.title} — dzup-ui Blocks`,
             description: block.description,
-            // The OG share card is generated per block from the chrome-free
-            // /blocks/preview/:id render (scripts/shoot-og.mts → public/og/<id>.png).
-            image: `/og/${block.id}.png`,
+            // Per-block OG card, advertised ONLY when the file exists (yarn og is
+            // an optional, heavy Playwright step — build-og-images.ts inventories
+            // its committed output). Absent ⇒ the site-wide default card applies.
+            image: BLOCK_OG_IDS.has(block.id) ? `/og/${block.id}.png` : undefined,
             // Self-referential canonical so this page — not the /blocks#<id> anchor
             // — is the indexed source for the block (avoids duplicate content).
             canonical: `/blocks/${block.id}`,
@@ -203,9 +243,22 @@ const router = createRouter({
         },
       },
     },
-    // Animations — the live motion gallery (docs/animations.md §4). Placeholder
-    // page until the gallery shell + catalog land (Task 2).
-    { path: '/animations', name: 'animations', component: AnimationsPage },
+    // Animations — the live motion gallery (docs/animations.md §4). Carries its
+    // own head + self-canonical like the other primary marketing surfaces.
+    {
+      path: '/animations',
+      name: 'animations',
+      // Lazy: 671 lines importing the whole 60-effect CATALOG.
+      component: () => import('./pages/AnimationsPage.vue'),
+      meta: {
+        head: {
+          title: 'Animations — the dzup-ui motion gallery | dzup-ui',
+          description:
+            'A live gallery of copy-paste Vue 3 motion effects built on the dzup-ui motion tokens — entrances, scroll-driven reveals, hover states, transitions and more, every one honouring prefers-reduced-motion.',
+          canonical: '/animations',
+        },
+      },
+    },
     // Themes — the visual token editor (the "Themes" Ecosystem offering). Lazy
     // like /pro & /templates. Carries its own SEO head — it's a primary
     // marketing surface and must not inherit the generic home title. The optional
@@ -224,9 +277,20 @@ const router = createRouter({
       },
     },
     // Templates — the free, full-page starters gallery (docs/templates.md §3).
-    // Lazy-loaded like /pro; detail/preview resolve their slug against the
-    // registry and redirect unknown slugs back to the gallery.
-    { path: '/templates', name: 'templates', component: () => import('./pages/TemplatesPage.vue') },
+    // Lazy-loaded like /pro; carries its own head + self-canonical.
+    {
+      path: '/templates',
+      name: 'templates',
+      component: () => import('./pages/TemplatesPage.vue'),
+      meta: {
+        head: {
+          title: 'Templates — free full-page Vue 3 starters | dzup-ui',
+          description:
+            'Free full-page and full-app starter templates composed entirely from @dzup-ui/core components — dashboards, auth flows, marketing pages, editorial layouts and more, themed, accessible and responsive out of the box.',
+          canonical: '/templates',
+        },
+      },
+    },
     {
       path: '/templates/:slug',
       name: 'template-detail',
@@ -240,11 +304,17 @@ const router = createRouter({
         head: (to) => {
           const slug = to.params.slug
           const template = typeof slug === 'string' ? getTemplate(slug) : undefined
-          if (!template) return undefined
+          if (!template)
+            return undefined
           return {
             title: `${template.name} — dzup-ui Templates`,
             description: template.blurb,
-            image: template.thumbnail,
+            // Share cards must be PNG/JPEG — X and LinkedIn do not reliably render
+            // WebP og:images. build-og-images.ts derives a 1200×630 PNG from each
+            // committed WebP thumbnail; the WebP stays the on-page rendering.
+            image: TEMPLATE_OG_SLUGS.has(template.slug)
+              ? `/og-templates/${template.slug}.png`
+              : undefined,
             // Self-canonical so this page — not the /templates gallery card — is the
             // indexed source for the template (parity with /blocks/:id).
             canonical: `/templates/${template.slug}`,
@@ -264,6 +334,22 @@ const router = createRouter({
       component: () => import('./pages/TemplatePreviewPage.vue'),
       props: true,
       beforeEnter: resolveTemplateSlug,
+      // Chrome-free duplicate of the canonical /templates/:slug page — noindex,
+      // matching /blocks/preview/:id, so 44 preview URLs stop inheriting the
+      // home page's head (and its canonical) and never enter the index.
+      meta: {
+        head: (to) => {
+          const slug = to.params.slug
+          const template = typeof slug === 'string' ? getTemplate(slug) : undefined
+          if (!template)
+            return undefined
+          return {
+            title: `${template.name} — template preview | dzup-ui`,
+            description: template.blurb,
+            robots: 'noindex',
+          }
+        },
+      },
     },
     // AI IDE — "Use dzup-ui with your AI IDE" (Task G5). Copy-paste MCP config +
     // docs for the free @dzup-ui/mcp server. Lazy like the other secondary pages;
@@ -298,10 +384,28 @@ const router = createRouter({
         },
       },
     },
-    { path: '/:pathMatch(.*)*', redirect: '/' },
+    // The real 404 (TASK-FREE-09) — replaces the old silent `redirect: '/'`,
+    // which explained nothing and told crawlers every dead URL was the home
+    // page. Renders an explanation + search + navigation; noindex so error
+    // pages never enter the index. (The HTTP status stays 200 until a host
+    // with SPA-404 support is configured — no deploy exists yet; see
+    // docs/free-apps-audit.md TASK-FREE-09 note.)
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('./pages/NotFoundPage.vue'),
+      meta: {
+        head: to => ({
+          title: 'Page not found | dzup-ui',
+          description: `No page exists at ${to.path} on dzup-ui.com.`,
+          robots: 'noindex',
+        }),
+      },
+    },
   ],
   scrollBehavior(to) {
-    if (to.hash) return { el: to.hash, behavior: 'smooth' }
+    if (to.hash)
+      return { el: to.hash, behavior: 'smooth' }
     return { top: 0 }
   },
 })
@@ -316,9 +420,9 @@ const router = createRouter({
  */
 function prefersReducedMotion(): boolean {
   return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined'
+    && typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   )
 }
 
@@ -335,8 +439,10 @@ function prefersReducedMotion(): boolean {
  * existing `<Transition name="route">` fallback in App.vue with no visual break.
  */
 router.beforeResolve((to, from) => {
-  if (!from.name || to.path === from.path) return
-  if (!supportsViewTransitions() || prefersReducedMotion()) return
+  if (!from.name || to.path === from.path)
+    return
+  if (!supportsViewTransitions() || prefersReducedMotion())
+    return
   return new Promise<void>((proceed) => {
     void startViewTransition(async () => {
       // Let the navigation finalise (route ref updates → Vue re-renders), then
@@ -397,8 +503,10 @@ function setMeta(selector: string, attr: 'name' | 'property', key: string, conte
   el.setAttribute('content', content)
 }
 
-/** Remove a `<meta>` if present — used to clear a stale share image on routes
- *  that declare none (so a template's og:image never bleeds onto the home page). */
+/**
+ * Remove a `<meta>` if present — used to clear a stale share image on routes
+ *  that declare none (so a template's og:image never bleeds onto the home page).
+ */
 function removeMeta(selector: string): void {
   document.head.querySelector(selector)?.remove()
 }
@@ -431,8 +539,10 @@ function setJsonLd(data: Record<string, unknown> | Record<string, unknown>[]): v
   el.textContent = JSON.stringify(data)
 }
 
-/** Remove the route-managed JSON-LD script — used on routes that declare none, so
- *  a detail page's breadcrumb never lingers on the next route. */
+/**
+ * Remove the route-managed JSON-LD script — used on routes that declare none, so
+ *  a detail page's breadcrumb never lingers on the next route.
+ */
 function removeJsonLd(): void {
   document.head.querySelector('script[data-dz-jsonld]')?.remove()
 }
@@ -442,10 +552,12 @@ function removeJsonLd(): void {
  * require an absolute og:image. Already-absolute URLs pass through unchanged.
  */
 function absoluteImage(src: string): string {
-  if (!src) return ''
+  if (!src)
+    return ''
   try {
     return new URL(src, window.location.origin).href
-  } catch {
+  }
+  catch {
     return src
   }
 }
@@ -476,13 +588,16 @@ function applyHead(head?: RouteHead): void {
   // Canonical + og:url: a per-block page points both at its own URL so it (not the
   // /blocks#<id> anchor) is the indexed source; other routes restore the default
   // (home) canonical so a stale per-block URL never bleeds onto another page.
-  if (snapshot.canonical) setLink('canonical', snapshot.canonical)
-  if (snapshot.ogUrl) setMeta('meta[property="og:url"]', 'property', 'og:url', snapshot.ogUrl)
+  if (snapshot.canonical)
+    setLink('canonical', snapshot.canonical)
+  if (snapshot.ogUrl)
+    setMeta('meta[property="og:url"]', 'property', 'og:url', snapshot.ogUrl)
   // Share image: write it when present, otherwise clear any tag a prior route set.
   if (snapshot.image) {
     setMeta('meta[property="og:image"]', 'property', 'og:image', snapshot.image)
     setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', snapshot.image)
-  } else {
+  }
+  else {
     removeMeta('meta[property="og:image"]')
     removeMeta('meta[name="twitter:image"]')
   }
@@ -490,7 +605,8 @@ function applyHead(head?: RouteHead): void {
   // otherwise clear any tag a prior route set so other routes stay indexable.
   if (snapshot.robots) {
     setMeta('meta[name="robots"]', 'name', 'robots', snapshot.robots)
-  } else {
+  }
+  else {
     removeMeta('meta[name="robots"]')
   }
   // JSON-LD: write the route's structured data (BreadcrumbList on detail pages),
@@ -499,7 +615,8 @@ function applyHead(head?: RouteHead): void {
   // like robots/image, resets to none when a route declares no head.
   if (head?.jsonLd) {
     setJsonLd(head.jsonLd)
-  } else {
+  }
+  else {
     removeJsonLd()
   }
 }

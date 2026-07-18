@@ -4,7 +4,7 @@ A rating + survey card built from the scale controls — a half-step star DzRati
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzRating, DzRadioGroup, DzRadio, DzSlider, DzTextarea, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#feedback-form
+- **Preview:** /blocks/feedback-form
 
 ```vue
 <script setup lang="ts">

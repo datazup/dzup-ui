@@ -4,7 +4,7 @@ A grid of editorial cards — cover image with a category badge overlay, title, 
 
 - **Category:** Content
 - **Components:** DzImageCard, DzBadge, DzAvatar, DzText
-- **Preview:** /blocks#blog-list
+- **Preview:** /blocks/blog-list
 
 ```vue
 <script setup lang="ts">

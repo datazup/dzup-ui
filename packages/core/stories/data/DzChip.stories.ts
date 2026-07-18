@@ -169,7 +169,7 @@ export const Closable: Story = {
             @close="tags = tags.filter(t => t !== tag)"
           >{{ tag }}</DzChip>
         </div>
-        <p class="text-sm text-gray-500">{{ tags.length }} chips remaining</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">{{ tags.length }} chips remaining</p>
       </div>
     `,
   }),
@@ -224,25 +224,25 @@ export const WithSlots: Story = {
       <div class="flex flex-wrap gap-3">
         <DzChip tone="success" variant="subtle">
           <template #prefix>
-            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+            <div class="w-2 h-2 rounded-full bg-[var(--dz-success)]"></div>
           </template>
           Online
         </DzChip>
         <DzChip tone="warning" variant="subtle">
           <template #prefix>
-            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+            <div class="w-2 h-2 rounded-full bg-[var(--dz-warning-solid)]"></div>
           </template>
           Away
         </DzChip>
         <DzChip tone="danger" variant="subtle">
           <template #prefix>
-            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+            <div class="w-2 h-2 rounded-full bg-[var(--dz-danger)]"></div>
           </template>
           Offline
         </DzChip>
         <DzChip tone="neutral" variant="outline">
           <template #prefix>
-            <div class="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center text-[8px] font-bold text-blue-700">A</div>
+            <div class="w-4 h-4 rounded-full bg-[var(--dz-primary-muted)] flex items-center justify-center text-[8px] font-bold text-[var(--dz-primary-muted-foreground)]">A</div>
           </template>
           Alice
         </DzChip>
@@ -287,7 +287,7 @@ export const Accessibility: Story = {
     components: { DzChip },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tab to focus each chip. Closable chips have a dismiss button focusable via Tab.
           Press Enter or Space on the close button to remove the chip. Disabled chips
           are excluded from the tab order.
@@ -337,7 +337,7 @@ export const RealWorldFilters: Story = {
         </div>
         <button
           v-if="filters.length"
-          class="text-xs text-blue-600 hover:underline"
+          class="text-xs text-[var(--dz-primary-muted-foreground)] hover:underline"
           @click="filters = []"
         >Clear all filters</button>
       </div>
@@ -371,7 +371,7 @@ export const RealWorldInputTags: Story = {
     template: `
       <div class="max-w-sm space-y-2">
         <label class="text-sm font-medium">Tags</label>
-        <div class="flex flex-wrap gap-2 p-2 border rounded-lg min-h-[42px]">
+        <div class="flex flex-wrap gap-2 p-2 border border-[var(--dz-border)] rounded-lg min-h-[42px]">
           <DzChip
             v-for="tag in tags"
             :key="tag"

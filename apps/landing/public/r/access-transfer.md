@@ -4,7 +4,7 @@ A sharing / permissions panel — a searchable DzTransfer dual-list of capabilit
 
 - **Category:** Forms & Inputs
 - **Components:** DzCard, DzTransfer, DzPersonaSelector, DzMention, DzFormField, DzFormLabel, DzButton, DzHeading, DzText
-- **Preview:** /blocks#access-transfer
+- **Preview:** /blocks/access-transfer
 
 ```vue
 <script setup lang="ts">

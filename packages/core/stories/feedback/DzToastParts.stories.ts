@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import type { DzToastContext } from '../../src/components/feedback'
+import type { DzToastContext, ToastItem } from '../../src/components/feedback'
 import { expect, screen, userEvent, waitFor } from 'storybook/test'
 import { inject } from 'vue'
 import { DzButton } from '../../src/components/buttons'
@@ -9,6 +9,7 @@ import {
   DzToastProvider,
   DzToastViewport,
 } from '../../src/components/feedback'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzToast compound sub-parts: DzToastProvider and DzToastViewport.
@@ -84,7 +85,7 @@ export const Default: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">Click a button to add a toast notification.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Click a button to add a toast notification.</p>
           <ToastTrigger />
         </div>
         <DzToastViewport position="bottom-right" />
@@ -129,12 +130,12 @@ export const ViewportPositions: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             DzToastViewport supports six positions: top-right, top-left, bottom-right,
             bottom-left, top-center, and bottom-center. The viewport anchor point
             determines where toasts stack.
           </p>
-          <p class="text-xs text-gray-400">
+          <p class="text-xs text-[var(--dz-muted-foreground)]">
             Positions: {{ positions.join(', ') }}
           </p>
         </div>
@@ -155,7 +156,7 @@ export const WithAction: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             Toasts can include an action button via the actionLabel and onAction properties.
           </p>
           <ToastTrigger />
@@ -177,12 +178,46 @@ export const Persistent: Story = {
     template: `
       <DzToastProvider :duration="0">
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             With duration=0 on the provider, toasts persist until manually dismissed.
           </p>
           <ToastTrigger />
         </div>
         <DzToastViewport position="bottom-right" />
+      </DzToastProvider>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzToastProvider, DzToast },
+    setup() {
+      // The same tones ToastTrigger raises, rendered inline under the provider
+      // rather than through the fixed viewport — the viewport pins to the
+      // browser corner, which would place the toasts outside the dark frame.
+      const toasts: ToastItem[] = [
+        { id: 'dark-success', title: 'Success Toast', description: 'This is a success toast notification.', tone: 'success' },
+        { id: 'dark-warning', title: 'Warning Toast', description: 'This is a warning toast notification.', tone: 'warning' },
+        { id: 'dark-danger', title: 'Danger Toast', description: 'This is a danger toast notification.', tone: 'danger' },
+        { id: 'dark-info', title: 'Info Toast', description: 'This is a info toast notification.', tone: 'info' },
+      ]
+      return { toasts }
+    },
+    template: `
+      <DzToastProvider>
+        <div class="space-y-3 max-w-sm">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Toast surface, border, and tone indicator against a dark background.
+          </p>
+          <DzToast v-for="t in toasts" :key="t.id" :toast="t" />
+        </div>
       </DzToastProvider>
     `,
   }),
@@ -199,7 +234,7 @@ export const Accessibility: Story = {
     template: `
       <DzToastProvider>
         <div class="space-y-4">
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
             DzToastViewport renders as a Reka UI ToastViewport with role="region"
             and aria-live="polite". New toasts are announced to screen readers
             as they appear. Each toast has role="status" and includes its title

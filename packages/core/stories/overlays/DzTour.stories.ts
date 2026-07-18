@@ -3,17 +3,8 @@ import type { DzTourStep } from '../../src/components/overlays'
 import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzTour } from '../../src/components/overlays'
+import { a11yError, darkModeDecorator } from '../_shared'
 
-/**
- * DzTour is a step-by-step product walkthrough that spotlights target elements
- * and shows an anchored popover with title/description/controls. It is built on
- * the shared `useFloating` positioning primitive (ADR-07) so anchoring and
- * collision handling match DzPopover/DzTooltip.
- *
- * Open state and the active step are controlled via `v-model:open` and
- * `v-model:current` (ADR-16). A spotlight mask dims everything except the active
- * target, focus is trapped in the popover, and Escape dismisses the tour.
- */
 const steps: DzTourStep[] = [
   {
     target: '#tour-create',
@@ -44,10 +35,24 @@ const demoToolbar = `
   </div>
 `
 
+/**
+ * DzTour is a step-by-step product walkthrough that spotlights target elements
+ * and shows an anchored popover with title/description/controls. It is built on
+ * the shared `useFloating` positioning primitive (ADR-07) so anchoring and
+ * collision handling match DzPopover/DzTooltip.
+ *
+ * Open state and the active step are controlled via `v-model:open` and
+ * `v-model:current` (ADR-16). A spotlight mask dims everything except the active
+ * target, focus is trapped in the popover, and Escape dismisses the tour.
+ */
 const meta = {
   title: 'Core/Overlays/DzTour',
   component: DzTour,
   tags: ['autodocs', 'status:experimental'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     mask: {
       control: 'boolean',
@@ -206,6 +211,55 @@ export const ControlledStep: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+/**
+ * Two things this story has to do that a plain `darkModeDecorator` cannot:
+ *
+ * 1. The spotlight popover is `<Teleport to="body">`d, so it lands OUTSIDE the
+ *    decorator's `data-theme="dark"` wrapper and would resolve the LIGHT tokens.
+ *    Setting the `theme` global puts `data-theme="dark"` on `<html>`
+ *    (`withThemeByDataAttribute`, see `.storybook/preview.ts`), which the
+ *    teleported popover does inherit.
+ * 2. A closed tour previews nothing. `play()` starts it — and because docs pages
+ *    do not autoplay, the spotlight mask and focus trap never blanket the docs
+ *    page.
+ */
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  globals: { theme: 'dark' },
+  render: () => ({
+    components: { DzTour, DzButton },
+    setup() {
+      return { steps }
+    },
+    data() {
+      return { open: false, current: 0 }
+    },
+    template: `
+      <div>
+        ${demoToolbar}
+        <DzButton @click="open = true; current = 0">Start tour in dark mode</DzButton>
+        <DzTour
+          v-model:open="open"
+          v-model:current="current"
+          :steps="steps"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: /start tour in dark mode/i }))
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveTextContent(/create a project/i)
+  },
 }
 
 // ---------------------------------------------------------------------------

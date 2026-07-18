@@ -110,13 +110,3 @@ const rootStateProps = computed(() => ({
     </ToastClose>
   </ToastRoot>
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  [data-state='open'],
-  [data-state='closed'] {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-</style>

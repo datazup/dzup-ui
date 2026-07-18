@@ -5,7 +5,7 @@
  * Ported from docs-app's `.docs-prose` (docs-theme.css); all values key off
  * `--dz-*` tokens so the active theme preset drives the look.
  *
- * Shipped in dist/core.css via the `styles` build entry (see vite.config.ts).
+ * Inlined into dist/core.css via the @import in base.css.
  */
 
 .dz-prose {

@@ -190,8 +190,8 @@ export const WithSlots: Story = {
         <DzNotification tone="primary" title="New message" closable :icon="Bell">
           You have a new message from the support team regarding your recent ticket.
           <template #actions>
-            <button class="px-3 py-1 text-sm font-medium border rounded">View</button>
-            <button class="px-3 py-1 text-sm font-medium border rounded">Dismiss</button>
+            <button class="px-3 py-1 text-sm font-medium border border-[var(--dz-border)] rounded">View</button>
+            <button class="px-3 py-1 text-sm font-medium border border-[var(--dz-border)] rounded">Dismiss</button>
           </template>
         </DzNotification>
       </div>
@@ -251,7 +251,7 @@ export const Interactive: Story = {
           @close="closed = true"
         />
         <div v-if="closed" class="space-y-2">
-          <p class="text-sm text-gray-500">Notification was dismissed.</p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Notification was dismissed.</p>
           <button class="text-sm font-medium underline" @click="closed = false; key++">Show again</button>
         </div>
       </div>
@@ -284,7 +284,7 @@ export const Accessibility: Story = {
     components: { DzNotification },
     template: `
       <div class="space-y-4 max-w-md">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Danger/warning notifications use role="alert" with aria-live="assertive"
           for immediate announcement. Other tones use role="status" with
           aria-live="polite" for non-intrusive updates.
@@ -362,7 +362,7 @@ export const RealWorldNotificationStack: Story = {
           closable
         >
           <template #actions>
-            <button class="px-3 py-1 text-sm font-medium border rounded">Renew Now</button>
+            <button class="px-3 py-1 text-sm font-medium border border-[var(--dz-border)] rounded">Renew Now</button>
           </template>
         </DzNotification>
         <DzNotification

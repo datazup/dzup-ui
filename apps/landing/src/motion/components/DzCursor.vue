@@ -169,7 +169,14 @@ onBeforeUnmount(detach)
   transition: opacity var(--dz-duration-fast, 120ms) var(--dz-ease-out, ease-out);
 }
 
-:global([data-theme='dark']) .dz-cursor__blob {
+/* Dark surfaces need `screen` rather than `multiply` for the blob to read.
+   NOTE: do not wrap the ancestor in `:global(...)` here. `:global([data-theme='dark'])
+   .dz-cursor__blob` compiles down to a bare `[data-theme='dark']` rule, which lands
+   `mix-blend-mode: screen` on <html> itself — screen-blending the whole document
+   against the white canvas paints every pixel white (blank page in dark mode).
+   A plain ancestor selector is already global: scoping only attaches to the last
+   compound selector, so this matches <html data-theme="dark"> as intended. */
+[data-theme='dark'] .dz-cursor__blob {
   mix-blend-mode: screen;
 }
 

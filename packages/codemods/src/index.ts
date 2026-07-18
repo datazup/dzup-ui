@@ -24,6 +24,16 @@ export { default as renameEvents } from './transforms/rename-events.js'
 export { default as renameImports } from './transforms/rename-imports.js'
 export { default as renameProps } from './transforms/rename-props.js'
 export { default as renameSlots } from './transforms/rename-slots.js'
+export {
+  resolveClassList,
+  resolveUtility,
+  default as storyColorTokens,
+  transformStoryColors,
+} from './transforms/story-color-tokens.js'
+export type {
+  TransformStoryColorsResult,
+  UnclassifiedLiteral,
+} from './transforms/story-color-tokens.js'
 
 // Utilities
 export { CodemodLogger } from './utils/logger.js'

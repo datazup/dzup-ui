@@ -12,6 +12,16 @@ playwright-report/
 test-results/
 a11y-report/
 
+# derived on every landing build from the committed WebP thumbnails (build-og-images.ts)
+apps/landing/public/og-templates/
+
+# Storybook's copy of the derived counts — `storybook build` runs build:counts
+# itself, so this is always regenerated before anything reads it. The LANDING
+# copy (apps/landing/src/generated/counts.ts) is deliberately COMMITTED instead:
+# specs import it under a bare `yarn test`, with no build step to write it first.
+# See apps/landing/src/generated/README.md.
+apps/storybook/stories/_data/counts.generated.ts
+
 # source-adjacent TypeScript emit
 packages/core/src/providers/*.js
 packages/core/src/providers/*.js.map
@@ -19,6 +29,10 @@ packages/core/src/providers/*.d.ts
 
 # caches
 *.tsbuildinfo
+
+# debug logs — a 0-byte apps/storybook/debug-storybook.log rode along in the repo
+# for months because nothing ignored this (TASK-FREE-12)
+*.log
 
 # env
 .env

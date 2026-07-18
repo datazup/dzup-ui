@@ -73,7 +73,7 @@ const secondaryNav = [
         <DzSidebar
           :collapsed="sidebarCollapsed"
           aria-label="Primary navigation"
-          @update:collapsed="(v) => (sidebarCollapsed = v)"
+          @update:collapsed="(v) => (sidebarCollapsed = v === true)"
         >
           <DzSidebarHeader>
             <span class="brand">

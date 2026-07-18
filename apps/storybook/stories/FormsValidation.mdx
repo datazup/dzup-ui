@@ -1,0 +1,290 @@
+{/* FormsValidation.mdx — Forms & validation patterns guide (TASK-FREE-14) */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
+import { DzRepl } from './_blocks/DzRepl.ts'
+import { OpenInStackblitz } from './_blocks/OpenInStackblitz.ts'
+
+export const validatedForm = `<script setup lang="ts">
+import { reactive, ref } from 'vue'
+import {
+  DzButton, DzFormDescription, DzFormField, DzFormLabel, DzFormMessage,
+  DzInput, DzAlert, DzHeading,
+} from '@dzup-ui/core'
+
+const values = reactive({ name: '', email: '' })
+const errors = reactive<Record<string, string>>({})
+const submitting = ref(false)
+const submitted = ref(false)
+
+// One validator per field, keyed by field name. Returns an error string or ''.
+const rules = {
+  name: (v: string) => (v.trim() ? '' : 'Name is required.'),
+  email: (v: string) =>
+    !v.trim() ? 'Email is required.'
+    : !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(v) ? 'Enter a valid email address.'
+    : '',
+}
+
+function validateField(name: keyof typeof rules) {
+  errors[name] = rules[name](values[name])
+}
+
+function validateAll() {
+  for (const name of Object.keys(rules) as (keyof typeof rules)[]) validateField(name)
+  return Object.values(errors).every((e) => !e)
+}
+
+async function onSubmit() {
+  submitted.value = false
+  if (!validateAll()) return
+  submitting.value = true
+  await new Promise((r) => setTimeout(r, 600))
+  submitting.value = false
+  submitted.value = true
+}
+</script>
+
+<template>
+  <form novalidate style="display: grid; gap: 16px; max-width: 420px;" @submit.prevent="onSubmit">
+    <DzHeading :level="3" size="lg">Create an account</DzHeading>
+
+    <DzAlert v-if="submitted" tone="success" variant="subtle">Submitted.</DzAlert>
+
+    <DzFormField required :invalid="!!errors.name" :error="errors.name">
+      <DzFormLabel>Name</DzFormLabel>
+      <DzInput v-model="values.name" @blur="validateField('name')" />
+      <DzFormMessage />
+    </DzFormField>
+
+    <DzFormField required :invalid="!!errors.email" :error="errors.email">
+      <DzFormLabel>Email</DzFormLabel>
+      <DzInput v-model="values.email" type="email" @blur="validateField('email')" />
+      <DzFormDescription>We'll send an invite here.</DzFormDescription>
+      <DzFormMessage />
+    </DzFormField>
+
+    <DzButton type="submit" :loading="submitting">Create account</DzButton>
+  </form>
+</template>
+`
+
+<Meta title="Guides/Forms & Validation" />
+
+# Forms & Validation
+
+The [Forms family](?path=/docs/core-forms-overview--docs) documents 30 individual
+controls. This page is about the part that is not any one control: wiring them into
+a form that validates, submits, and stays accessible while it does.
+
+dzup-ui deliberately ships **no form library and no validation engine**. There is no
+`<DzForm>`, no schema prop, no resolver. The library owns the field anatomy —
+labelling, description, error messaging, ARIA wiring — and leaves state and rules to
+you or to the validation library you already use. Everything below is a pattern, not
+an API you have to adopt.
+
+## The unit: DzFormField
+
+Every control goes inside a `DzFormField`. The field owns the ids and the ARIA
+relationships, so you never hand-wire `for`/`id`/`aria-describedby`:
+
+```vue
+<DzFormField required :invalid="!!errors.email" :error="errors.email">
+  <DzFormLabel>Email</DzFormLabel>
+  <DzInput v-model="email" type="email" />
+  <DzFormDescription>We'll send an invite here.</DzFormDescription>
+  <DzFormMessage />
+</DzFormField>
+```
+
+`DzFormField` takes `disabled`, `required`, `invalid`, `error` and an optional `id`
+prefix, and provides that context to its sub-parts (ADR-08):
+
+- `DzFormLabel` associates itself with the control through the field id.
+- `DzFormDescription` is linked via `aria-describedby`.
+- `DzFormMessage` renders `error` in an `aria-live` region, so a screen reader
+  announces a validation change instead of silently re-rendering.
+
+**`invalid` and `error` are separate on purpose.** `invalid` drives the *visual and
+ARIA* state; `error` is the *text*. You almost always set both from the same source,
+but a field can be invalid with no message (a group where the message lives
+elsewhere), and passing a message without `invalid` renders text that assistive tech
+is never told is an error.
+
+## A complete validated form
+
+Nothing here is dzup-ui-specific except the components: plain `reactive` state, a
+validator per field, validate on blur and again on submit, `novalidate` so the
+browser's own bubbles stay out of the way.
+
+<DzRepl code={validatedForm} height={560} />
+
+<div style={{ margin: '8px 0 4px' }}>
+  <OpenInStackblitz code={validatedForm} title="dzup-ui — Validated form" />
+</div>
+
+The shape worth copying:
+
+1. **Validate on blur, not on every keystroke.** Erroring at the first character of
+   an email nobody has finished typing is hostile.
+2. **Re-validate everything on submit** — a field the user never focused was never
+   blurred, so it was never checked.
+3. **`novalidate` on the `<form>`** — you are rendering the messages, so turn off
+   the browser's competing UI. Keep `type="email"` for the keyboard, not the bubble.
+4. **`:loading` on the submit button** — `DzButton` disables itself while loading,
+   which is the double-submit guard.
+
+## With a schema library
+
+The same wiring works with vee-validate, zod, valibot or yup: they own the rules and
+the error bag, `DzFormField` owns the presentation. There is no adapter to install
+because there is nothing to adapt — `invalid` and `error` are just props.
+
+```vue
+<script setup lang="ts">
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
+
+const { errors, defineField, handleSubmit } = useForm({
+  validationSchema: toTypedSchema(z.object({
+    email: z.string().email('Enter a valid email address.'),
+  })),
+})
+const [email, emailAttrs] = defineField('email')
+const onSubmit = handleSubmit(async (values) => { await api.createAccount(values) })
+</script>
+
+<template>
+  <form novalidate @submit="onSubmit">
+    <DzFormField required :invalid="!!errors.email" :error="errors.email">
+      <DzFormLabel>Email</DzFormLabel>
+      <DzInput v-model="email" v-bind="emailAttrs" type="email" />
+      <DzFormMessage />
+    </DzFormField>
+  </form>
+</template>
+```
+
+> These snippets are illustrative and not runnable here — the docs playground bundles
+> `@dzup-ui/core` and Vue only, not vee-validate or zod. The runnable example above
+> uses no dependencies for that reason.
+
+## Async and server-side validation
+
+Server errors arrive after submit and belong on the same fields:
+
+```ts
+async function onSubmit() {
+  if (!validateAll()) return
+  submitting.value = true
+  try {
+    await api.createAccount(values)
+  }
+  catch (e) {
+    // Map the server's field errors onto the same bag the client rules write to,
+    // so a 422 renders identically to a local rule failing.
+    if (e.status === 422) Object.assign(errors, e.fieldErrors)
+    else formError.value = 'Something went wrong. Please try again.'
+  }
+  finally {
+    submitting.value = false
+  }
+}
+```
+
+Keep one error bag. Two — "client errors" and "server errors" — is how a field ends
+up showing both at once, or clearing one and leaving the other.
+
+## Error summary
+
+For a long form, a message next to a field the user cannot see is not feedback. Put
+a summary at the top, move focus to it on a failed submit, and link each entry to
+its field:
+
+```vue
+<DzAlert v-if="failed" ref="summary" tone="danger" variant="subtle" tabindex="-1">
+  <template #title>{{ Object.keys(errors).length }} fields need attention</template>
+  <ul>
+    <li v-for="(message, field) in errors" :key="field">
+      <a :href="`#${fieldIds[field]}`">{{ message }}</a>
+    </li>
+  </ul>
+</DzAlert>
+```
+
+```ts
+async function onSubmit() {
+  if (!validateAll()) {
+    failed.value = true
+    await nextTick()
+    summary.value?.$el?.focus() // move focus so the failure is announced
+    return
+  }
+  // …
+}
+```
+
+Pass an explicit `id` to each `DzFormField` when you do this — the anchor targets
+need ids you know, not generated ones.
+
+## Repeating fields: DzFieldArray
+
+`DzFieldArray` manages add/remove/reorder for a list of rows. It owns the array
+operations; each row is still your own `DzFormField`s.
+
+See [`DzFieldArray`](?path=/docs/core-forms-dzfieldarray--docs) for the slot API —
+it exposes the row, its index, and the mutation helpers.
+
+## v-model
+
+Every control uses `defineModel` (ADR-16), so `v-model` behaves exactly as it does
+on a native input. A handful of controls bind a **named** model instead of the
+default:
+
+- `v-model:value` — `DzRating`, `DzTagsInput`, `DzKnob`, `DzMention`, `DzTreeSelect`,
+  `DzCascader`
+- `v-model:value` **and** `v-model:active` — `DzInplace`
+
+Reach for the component's own docs page when `v-model` appears to do nothing; a
+named model is the usual reason.
+
+<DoDont>
+  <Do title="Let DzFormField own the ids">
+    It wires `for`, `aria-describedby` and `aria-invalid` from one place. Hand-wiring
+    them is how they drift apart.
+  </Do>
+  <Dont title="Use placeholder as the label">
+    It vanishes on input, fails contrast, and is not an accessible name. Use
+    `DzFormLabel`; if you need the floating look, that is `DzFloatLabel`.
+  </Dont>
+  <Do title="Announce errors with DzFormMessage">
+    It renders into an `aria-live` region. A bare `<span>` of red text updates
+    silently for a screen-reader user.
+  </Do>
+  <Dont title="Validate on every keystroke">
+    Blur-then-submit is the pattern users expect. Live validation is appropriate for
+    a strength meter, not for "this is not a valid email" at character three.
+  </Dont>
+</DoDont>
+
+## Accessibility
+
+The family's [Overview](?path=/docs/core-forms-overview--docs) covers per-control
+behaviour; the form-level rules:
+
+- Errors must be **announced**, not merely shown — that is what `DzFormMessage` is.
+- `required` on `DzFormField` sets the ARIA state; do not fake it with an asterisk
+  in the label text alone.
+- A failed submit should move focus somewhere that explains the failure — the
+  summary above, or the first invalid field.
+- `DzSelect`/`DzCombobox` need an explicit accessible name: `role="combobox"` ignores
+  inner placeholder text, so wire `DzFormLabel` (or `aria-label`) every time.
+
+## See also
+
+- [Forms Overview](?path=/docs/core-forms-overview--docs) — every control in the family
+- [Choosing Components](?path=/docs/guides-choosing-components--docs) — Switch vs
+  Checkbox, Select vs Combobox vs Listbox
+- [Accessibility](?path=/docs/guides-accessibility--docs) — the library-wide bar
+- [WorkspaceForm](?path=/docs/core-compositions-workspaceform--docs) — the flagship
+  composition, these controls working together with a live state preview

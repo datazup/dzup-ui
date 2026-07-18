@@ -9,6 +9,7 @@ import {
   DzSheetTitle,
   DzSheetTrigger,
 } from '../../src/components/overlays'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzSheet compound sub-parts: DzSheetContent, DzSheetTitle, DzSheetDescription,
@@ -31,6 +32,10 @@ const meta = {
     DzSheetTrigger,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     side: {
       control: 'select',
@@ -156,17 +161,17 @@ export const WithFormContent: Story = {
           <form class="space-y-4 mt-4" @submit.prevent>
             <div>
               <label class="block text-sm font-medium mb-1">Name</label>
-              <input type="text" value="Alice Johnson" placeholder="Full name" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="text" value="Alice Johnson" placeholder="Full name" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Email</label>
-              <input type="email" value="alice@example.com" placeholder="Email address" class="w-full border rounded px-3 py-2 text-sm" />
+              <input type="email" value="alice@example.com" placeholder="Email address" class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">Bio</label>
-              <textarea class="w-full border rounded px-3 py-2 text-sm" rows="3">Software engineer at Acme Inc.</textarea>
+              <textarea class="w-full border border-[var(--dz-border)] rounded px-3 py-2 text-sm" rows="3">Software engineer at Acme Inc.</textarea>
             </div>
-            <div class="flex gap-3 pt-2 border-t">
+            <div class="flex gap-3 pt-2 border-t border-t-[var(--dz-border)]">
               <DzSheetClose as-child>
                 <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
               </DzSheetClose>
@@ -219,7 +224,7 @@ export const Interactive: Story = {
       <div class="space-y-4">
         <div class="flex gap-4 items-center">
           <DzButton @click="isOpen = true">Open Programmatically</DzButton>
-          <span class="text-sm text-gray-500">State: {{ isOpen ? 'Open' : 'Closed' }}</span>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">State: {{ isOpen ? 'Open' : 'Closed' }}</span>
         </div>
         <DzSheet v-model:open="isOpen">
           <DzSheetContent side="right">
@@ -248,6 +253,64 @@ export const Interactive: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+/**
+ * Two things this story has to do that a plain `darkModeDecorator` cannot:
+ *
+ * 1. DzSheetContent renders through Reka's `DialogPortal`, so the panel lands
+ *    OUTSIDE the decorator's `data-theme="dark"` wrapper and would resolve the
+ *    LIGHT tokens. Setting the `theme` global puts `data-theme="dark"` on
+ *    `<html>` (`withThemeByDataAttribute`, see `.storybook/preview.ts`), which
+ *    the portaled panel does inherit.
+ * 2. A closed trigger previews none of the sub-parts. `play()` opens the sheet —
+ *    and because docs pages do not autoplay, the modal overlay and focus trap
+ *    never blanket the docs page.
+ */
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  globals: { theme: 'dark' },
+  render: () => ({
+    components: {
+      DzSheet,
+      DzSheetTrigger,
+      DzSheetContent,
+      DzSheetTitle,
+      DzSheetDescription,
+      DzSheetClose,
+      DzButton,
+    },
+    template: `
+      <DzSheet>
+        <DzSheetTrigger as-child>
+          <DzButton>Open in Dark Mode</DzButton>
+        </DzSheetTrigger>
+        <DzSheetContent side="right">
+          <DzSheetTitle>Dark Mode Sheet</DzSheetTitle>
+          <DzSheetDescription>Every sub-part — title, description, and close — on the dark surface.</DzSheetDescription>
+          <div class="mt-4 space-y-3 text-sm text-[var(--dz-muted-foreground)]">
+            <p>Sheet body content goes here. This panel slides in from the right.</p>
+          </div>
+          <DzSheetClose as-child>
+            <DzButton variant="outline" tone="neutral" class="mt-4">Close</DzButton>
+          </DzSheetClose>
+        </DzSheetContent>
+      </DzSheet>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: /open in dark mode/i }))
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveAccessibleName()
+    await expect(within(dialog).getByText(/every sub-part/i)).toBeVisible()
+  },
+}
+
+// ---------------------------------------------------------------------------
 // Accessibility
 // ---------------------------------------------------------------------------
 
@@ -265,7 +328,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           DzSheet uses Reka UI Dialog for focus management. Focus is trapped inside
           the sheet when open. Pressing Escape closes the sheet. Focus returns to
           the trigger on close. DzSheetTitle and DzSheetDescription provide

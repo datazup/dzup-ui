@@ -1,4 +1,4 @@
-{/* ComponentStatus.mdx — live maturity/test/a11y/design matrix (TASK-APP-06). */}
+{/* ComponentStatus.mdx — live maturity/test/a11y matrix (TASK-APP-06). */}
 import { Meta } from '@storybook/addon-docs/blocks'
 import { createElement as h } from 'react'
 import { DocTable } from './_blocks/DocTable.ts'
@@ -13,10 +13,9 @@ import {
   FAMILY_SUMMARIES,
   DEPRECATED_ROWS,
 } from './_data/componentStatus.ts'
+import { COUNTS } from './_data/counts.generated.ts'
 
 <Meta title="Guides/Component Status" />
-
-export const link = (href, label) => h('a', { href, target: '_blank', rel: 'noreferrer' }, label)
 
 export const summaryLine = STATUS_ORDER
   .map(s => `${STATUS_COUNTS[s]} ${s}`)
@@ -26,6 +25,12 @@ export const statusSummaryRows = STATUS_ORDER.map(s => [
   h(StatusBadge, { status: s, key: s }),
   String(STATUS_COUNTS[s]),
   STATUS_BADGES[s].description,
+])
+
+export const ladderRows = STATUS_ORDER.map(s => [
+  h(StatusBadge, { status: s, key: s }),
+  STATUS_BADGES[s].entry,
+  STATUS_BADGES[s].exit,
 ])
 
 export const familyRows = FAMILY_SUMMARIES.map(f => [
@@ -44,7 +49,6 @@ export const matrixRows = STATUS_ROWS.map(r => [
   r.status ? h(StatusBadge, { status: r.status, key: 'badge' }) : '—',
   r.hasPlay ? 'play ✓' : '—',
   r.a11yEnforced ? '✅ enforced' : '🔍 audit',
-  r.design ? link(r.design, 'Figma ↗') : '—',
 ])
 
 export const deprecatedRows = DEPRECATED_ROWS.map(r => [
@@ -58,10 +62,21 @@ export const deprecatedRows = DEPRECATED_ROWS.map(r => [
 A **live** maturity dashboard for every component in `@dzup-ui/core`. Nothing here
 is hand-maintained: the rows are built at render time from the real story files —
 the `status:*` tag on each `meta`, whether the file ships a `play()` interaction
-test, whether its family is a11y-enforced, and whether a Figma `design` link is
-wired. When a story changes, this page changes with it.
+test, and whether its family is a11y-enforced. When a story changes, this page
+changes with it.
 
 **{TOTAL_COUNT} components** — {summaryLine}.
+
+**Why this is smaller than the `.vue` file count.** `@dzup-ui/core` ships {COUNTS.catalogComponents} `.vue`
+files, but many are compound sub-parts — `DzCardBody`, `DzAccordionTrigger`,
+`DzDialogOverlay` — which have no independent API and are documented **through their
+parent**: either on that family's `*Parts` anatomy page, or inside the parent's own
+story. **A sub-part without a story of its own is documented, not missing**, and the
+matrix below counts parents and anatomy pages rather than individual sub-parts.
+
+`packages/tooling/src/validators/story-status.ts` holds the line: every entry in this
+matrix carries exactly one `status:*` tag, so a component can never quietly drop off
+the roadmap.
 
 ## By status
 
@@ -79,6 +94,25 @@ wired. When a story changes, this page changes with it.
   </p>
 )}
 
+### Entry and exit criteria
+
+The ladder is **experimental → beta → stable**, with **deprecated** reachable from any
+tier. A tier that nobody can apply consistently is noise, so each one states what must
+be true to enter it and to leave it.
+
+<DocTable
+  head={['Status', 'To enter', 'To leave']}
+  align={['left', 'left', 'left']}
+  rows={ladderRows}
+/>
+
+These criteria are **applied by reviewers, not derived by a machine.** What CI enforces
+is narrower, and worth stating exactly: `packages/tooling/src/validators/story-status.ts`
+asserts that every `Core/<Family>/<Component>` story carries exactly one `status:*` tag
+and that a `deprecated` component names its replacement. No check can decide whether a
+`stable` component *deserves* to be stable — writing the criteria down makes that
+judgment reviewable, which is the most a taxonomy can honestly promise.
+
 ## By family
 
 Each family rolls up its component counts by status, plus its a11y gate. **✅ enforced**
@@ -95,13 +129,19 @@ family works down its backlog (see
 
 ## Full matrix
 
-Every component and its four trust signals. **Tests** = at least one `play()`
-interaction test in the story; **A11y** = family gate level; **Design** = a linked
-Figma frame via the story's `design` parameter.
+Every component and its three trust signals. **Tests** = at least one `play()`
+interaction test in the story; **A11y** = family gate level.
+
+**There is no *Design* column, and that is deliberate.** No Figma library exists for
+dzup-ui, so a column sourced from a `design` parameter would read `—` for all
+{TOTAL_COUNT} rows — a table of dashes reporting the absence of a thing rather than
+the state of one. It was removed along with `@storybook/addon-designs`, whose empty
+panel made the same claim (TASK-FREE-12). The code is the specification; see
+[Contributing → Design reference](?path=/docs/contributing--docs#design-reference).
 
 <DocTable
-  head={['Component', 'Family', 'Status', 'Tests', 'A11y', 'Design']}
-  align={['left', 'left', 'left', 'left', 'left', 'left']}
+  head={['Component', 'Family', 'Status', 'Tests', 'A11y']}
+  align={['left', 'left', 'left', 'left', 'left']}
   rows={matrixRows}
 />
 

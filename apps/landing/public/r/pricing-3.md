@@ -4,7 +4,7 @@ Free / Pro / Enterprise pricing cards with feature lists, a "Most popular" badge
 
 - **Category:** Marketing
 - **Components:** DzCard, DzBadge, DzButton, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#pricing-3
+- **Preview:** /blocks/pricing-3
 
 ```vue
 <script setup lang="ts">

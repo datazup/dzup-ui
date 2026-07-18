@@ -7,6 +7,7 @@ import {
   DzSidebarItem,
   DzSidebarSection,
 } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzSidebar compound sub-parts: DzSidebarItem, DzSidebarHeader, DzSidebarFooter,
@@ -80,7 +81,7 @@ export const Default: Story = {
               <template #default="{ collapsed }">
                 <div class="flex items-center gap-2 px-4 py-3">
                   <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0" />
-                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-header-text)]">
+                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">
                     Datazup
                   </span>
                 </div>
@@ -132,7 +133,7 @@ export const Default: Story = {
               <template #default="{ collapsed }">
                 <div class="flex items-center gap-2 px-4 py-3">
                   <div class="w-7 h-7 rounded-full bg-[var(--dz-muted)] shrink-0" />
-                  <span v-if="!collapsed" class="text-sm text-[var(--dz-sidebar-footer-text)]">
+                  <span v-if="!collapsed" class="text-sm text-[var(--dz-sidebar-foreground)]">
                     ninel@datazup.com
                   </span>
                 </div>
@@ -179,7 +180,7 @@ export const CompoundComposition: Story = {
                 <template #default="{ collapsed }">
                   <div class="flex items-center gap-2 px-4 py-3">
                     <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0" />
-                    <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-header-text)]">App</span>
+                    <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">App</span>
                   </div>
                 </template>
               </DzSidebarHeader>
@@ -202,7 +203,7 @@ export const CompoundComposition: Story = {
                 <template #default="{ collapsed }">
                   <div class="flex items-center gap-2 px-4 py-3">
                     <div class="w-6 h-6 rounded-full bg-[var(--dz-muted)] shrink-0" />
-                    <span v-if="!collapsed" class="text-xs text-[var(--dz-sidebar-footer-text)]">User</span>
+                    <span v-if="!collapsed" class="text-xs text-[var(--dz-sidebar-foreground)]">User</span>
                   </div>
                 </template>
               </DzSidebarFooter>
@@ -259,7 +260,7 @@ export const RealWorld: Story = {
                   <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0 flex items-center justify-center text-[var(--dz-primary-foreground)] font-bold text-xs">
                     D
                   </div>
-                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-header-text)]">
+                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">
                     Datazup
                   </span>
                 </div>
@@ -321,7 +322,7 @@ export const RealWorld: Story = {
                     N
                   </div>
                   <div v-if="!collapsed" class="min-w-0">
-                    <p class="text-xs font-medium text-[var(--dz-sidebar-footer-text)] truncate">Ninel Hodzic</p>
+                    <p class="text-xs font-medium text-[var(--dz-sidebar-foreground)] truncate">Ninel Hodzic</p>
                     <p class="text-xs text-[var(--dz-muted-foreground)] truncate">ninel@datazup.com</p>
                   </div>
                 </div>
@@ -350,4 +351,71 @@ export const RealWorld: Story = {
     await waitFor(() => expect(projects).toHaveAttribute('aria-current', 'page'))
     await expect(dashboard).not.toHaveAttribute('aria-current')
   },
+}
+
+// ---------------------------------------------------------------------------
+// DarkMode: all four subparts previewed on a forced-dark surface
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzSidebar, DzSidebarHeader, DzSidebarSection, DzSidebarItem, DzSidebarFooter },
+    template: `
+      <div class="h-[400px] flex">
+        <DzSidebar aria-label="Dark mode app navigation">
+          <template #default>
+            <DzSidebarHeader>
+              <template #default="{ collapsed }">
+                <div class="flex items-center gap-2 px-4 py-3">
+                  <div class="w-7 h-7 rounded-md bg-[var(--dz-primary)] shrink-0" />
+                  <span v-if="!collapsed" class="font-semibold text-sm text-[var(--dz-sidebar-foreground)]">
+                    Datazup
+                  </span>
+                </div>
+              </template>
+            </DzSidebarHeader>
+
+            <DzSidebarSection title="Main">
+              <DzSidebarItem active>
+                <template #icon>
+                  <span class="w-4 h-4 flex items-center justify-center text-xs">H</span>
+                </template>
+                Home
+              </DzSidebarItem>
+              <DzSidebarItem>
+                <template #icon>
+                  <span class="w-4 h-4 flex items-center justify-center text-xs">U</span>
+                </template>
+                Users
+                <template #badge>
+                  <span class="text-xs px-1.5 py-0.5 rounded-full bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]">
+                    3
+                  </span>
+                </template>
+              </DzSidebarItem>
+              <DzSidebarItem disabled>
+                <template #icon>
+                  <span class="w-4 h-4 flex items-center justify-center text-xs">X</span>
+                </template>
+                Admin (No Access)
+              </DzSidebarItem>
+            </DzSidebarSection>
+
+            <DzSidebarFooter>
+              <template #default="{ collapsed }">
+                <div class="flex items-center gap-2 px-4 py-3">
+                  <div class="w-7 h-7 rounded-full bg-[var(--dz-muted)] shrink-0" />
+                  <span v-if="!collapsed" class="text-sm text-[var(--dz-sidebar-foreground)]">
+                    ninel@datazup.com
+                  </span>
+                </div>
+              </template>
+            </DzSidebarFooter>
+          </template>
+        </DzSidebar>
+      </div>
+    `,
+  }),
 }

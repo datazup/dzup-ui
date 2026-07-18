@@ -5,6 +5,9 @@ import FreestyleDetail from './freestyle/FreestyleDetail.vue'
 
 const meta: Meta = {
   title: 'Visual Refresh/Detail',
+  // Demo screen, not a component reference — deliberately no status:* tag.
+  // See ./README.md.
+  tags: ['gallery'],
   parameters: { layout: 'fullscreen' },
 }
 

@@ -10,7 +10,7 @@ import {
   DzDialogTitle,
   DzDialogTrigger,
 } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDialogContent compound sub-parts: DzDialogTitle, DzDialogDescription,
@@ -35,6 +35,10 @@ const meta = {
     DzDialogOverlay,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     size: {
       control: 'select',
@@ -191,7 +195,7 @@ export const CompoundComposition: Story = {
 
             <!-- Anatomy map -->
             <div
-              class="mt-4 rounded border px-3 py-2 text-xs font-mono space-y-0.5"
+              class="mt-4 rounded border border-[var(--dz-border)] px-3 py-2 text-xs font-mono space-y-0.5"
               style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
             >
               <p>&lt;DzDialog&gt;                  <!-- root, manages open state --&gt;</p>

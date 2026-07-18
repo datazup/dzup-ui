@@ -300,7 +300,7 @@ export const Interactive: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Selected: <code>{{ value }}</code></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <code>{{ value }}</code></p>
         <DzSegmented v-model="value" :items="items" @change="(v) => {}" />
       </div>
     `,
@@ -325,7 +325,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The segmented control uses Reka UI ToggleGroup, providing
           <code>role="group"</code> semantics. Each item has an <code>aria-label</code>
           matching its label. Use arrow keys to navigate between items.
@@ -370,7 +370,7 @@ export const RealWorldViewSwitcher: Story = {
             </template>
           </DzSegmented>
         </div>
-        <div class="border rounded p-6 text-center text-sm text-gray-500">
+        <div class="border border-[var(--dz-border)] rounded p-6 text-center text-sm text-[var(--dz-muted-foreground)]">
           Showing {{ view }} view
         </div>
       </div>
@@ -406,7 +406,7 @@ export const RealWorldCalendarRange: Story = {
           <h3 class="font-semibold">Revenue</h3>
           <DzSegmented v-model="range" :items="items" size="sm" aria-label="Time range" />
         </div>
-        <div class="border rounded p-12 text-center text-sm text-gray-500">
+        <div class="border border-[var(--dz-border)] rounded p-12 text-center text-sm text-[var(--dz-muted-foreground)]">
           Chart for {{ range }} range
         </div>
       </div>
@@ -442,7 +442,7 @@ export const RealWorldTextAlignment: Story = {
             <AlignRight v-if="item.value === 'right'" class="h-4 w-4" />
           </template>
         </DzSegmented>
-        <p :style="{ textAlign: align }" class="border rounded p-4 text-sm">
+        <p :style="{ textAlign: align }" class="border border-[var(--dz-border)] rounded p-4 text-sm">
           This paragraph aligns to the selected direction.
         </p>
       </div>

@@ -1,16 +1,45 @@
 <script setup lang="ts">
-import { DzButton } from '@dzup-ui/core'
-import { Github, Menu, Star, X } from 'lucide-vue-next'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { DzButton, DzDropdownMenu, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuTrigger } from '@dzup-ui/core'
+import { ChevronDown, Github, Menu, Star, X } from 'lucide-vue-next'
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import { useLiveStats } from '../composables/useLiveStats.ts'
+import { LINKS } from '../config.ts'
+import { isGroup, NAV, navLeaves } from '../nav.ts'
 import ThemeToggle from './ThemeToggle.vue'
-import { FACTS, LINKS } from '../config.ts'
 
-const router = useRouter()
+/**
+ * TopNav (TASK-DS-12) — nine flat items regrouped into five.
+ *
+ * The old bar had two real defects, both fixed here:
+ *
+ * - **"Components" and "Docs" both dumped you into Storybook.** They are now
+ *   distinct menus: Components lists things you drop into an app (the component
+ *   index, Blocks, Templates, Animations); Docs lists guides you read.
+ * - **"Ecosystem" duplicated its own children.** It linked to the `#ecosystem`
+ *   section whose tiles are Blocks / Templates / Animations / Themes — three of
+ *   which sat beside it as top-level siblings. The nav entry is gone; its
+ *   children are now real destinations, and the home-page section stays put.
+ *
+ * `/templates` also joins the nav for the first time — it had a route and an
+ * Ecosystem tile, but no way to reach it from the header.
+ *
+ * Menus are Reka-backed `DzDropdownMenu` (roving focus, Escape, arrow keys,
+ * aria-haspopup/aria-expanded) rather than hand-rolled, and non-modal so the
+ * page behind them stays scrollable and interactive.
+ */
+
+const route = useRoute()
+
+// The star pill shows the real count once `dzup-ui/dzup-ui` is public; until
+// then the GitHub API 404s, `githubStars` stays null, and the pill reads "Star"
+// as a call to action rather than a fabricated figure.
+const { githubStars } = useLiveStats()
 
 // Sticky nav grows a blurred background + border once the user scrolls (§4.1).
 const scrolled = ref(false)
 const mobileOpen = ref(false)
+const menuButton = useTemplateRef<HTMLButtonElement>('menuButton')
 
 function onScroll(): void {
   scrolled.value = window.scrollY > 8
@@ -22,49 +51,96 @@ onMounted(() => {
 })
 onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
-// External Storybook links. "Themes" now points to the in-app /themes editor
-// (a router-link below), so it's no longer duplicated here.
-const navLinks = [
-  { label: 'Components', href: LINKS.components, external: true },
-  { label: 'Docs', href: LINKS.gettingStarted, external: true },
-]
-
-function goPro(): void {
+// A drawer that survives navigation is a trap: close it whenever the route lands.
+watch(() => route.fullPath, () => {
   mobileOpen.value = false
-  void router.push(LINKS.pro)
+})
+
+function closeMobile(): void {
+  if (!mobileOpen.value)
+    return
+  mobileOpen.value = false
+  // Escape must return focus to the control that opened the drawer, or the user
+  // is dropped at the top of the document.
+  menuButton.value?.focus()
 }
+
+function onKeydown(event: KeyboardEvent): void {
+  if (event.key === 'Escape')
+    closeMobile()
+}
+
+/**
+ * A group's trigger is not a link, so it cannot be `aria-current="page"`. It can
+ * still say "the current page lives in here" — `aria-current="true"` marks the
+ * current item within a set. The leaf itself gets `page` for free from RouterLink.
+ */
+const activeGroups = computed(() =>
+  new Set(
+    NAV.filter(isGroup)
+      .filter(group => group.items.some(item => !item.external && item.href === route.path))
+      .map(group => group.label),
+  ),
+)
+
+/** Top-level entries that are plain links — the flat tail of the mobile drawer. */
+const leaves = navLeaves()
 </script>
 
 <template>
-  <header class="nav" :class="{ scrolled }">
+  <header class="nav" :class="{ scrolled }" @keydown="onKeydown">
     <div class="nav-inner">
-      <router-link to="/" class="brand" aria-label="dzup-ui home">
+      <RouterLink to="/" class="brand" aria-label="dzup-ui home">
         <span class="brand-mark" aria-hidden="true">dz</span>
         <span class="brand-word">dzup-ui</span>
-      </router-link>
+      </RouterLink>
 
       <nav class="nav-links" aria-label="Primary">
-        <a
-          v-for="link in navLinks"
-          :key="link.label"
-          :href="link.href"
-          class="nav-link"
-        >{{ link.label }}</a>
-        <router-link :to="{ path: '/', hash: '#ecosystem' }" class="nav-link">Ecosystem</router-link>
-        <router-link to="/blocks" class="nav-link">Blocks</router-link>
-        <router-link to="/animations" class="nav-link">Animations</router-link>
-        <router-link to="/themes" class="nav-link">Themes</router-link>
-        <router-link to="/ai" class="nav-link">AI IDE</router-link>
-        <router-link to="/compare" class="nav-link">Compare</router-link>
-        <router-link to="/pro" class="nav-link">Pro</router-link>
+        <template v-for="entry in NAV" :key="entry.label">
+          <DzDropdownMenu v-if="isGroup(entry)" :modal="false">
+            <DzDropdownMenuTrigger>
+              <button
+                type="button"
+                class="nav-link nav-trigger"
+                :aria-current="activeGroups.has(entry.label) ? 'true' : undefined"
+              >
+                {{ entry.label }}
+                <ChevronDown :size="14" aria-hidden="true" class="nav-chevron" />
+              </button>
+            </DzDropdownMenuTrigger>
+            <DzDropdownMenuContent align="start" :side-offset="8" class="nav-menu">
+              <template v-for="item in entry.items" :key="item.href">
+                <DzDropdownMenuItem v-if="item.external" as="a" :href="item.href" class="lp-menu-item">
+                  {{ item.label }}
+                </DzDropdownMenuItem>
+                <DzDropdownMenuItem v-else as-child>
+                  <RouterLink :to="item.href" class="lp-menu-item">
+                    {{ item.label }}
+                  </RouterLink>
+                </DzDropdownMenuItem>
+              </template>
+            </DzDropdownMenuContent>
+          </DzDropdownMenu>
+
+          <a v-else-if="entry.external" :href="entry.href" class="nav-link">{{ entry.label }}</a>
+          <RouterLink v-else :to="entry.href" class="nav-link">
+            {{ entry.label }}
+          </RouterLink>
+        </template>
       </nav>
 
       <div class="nav-utils">
-        <a class="star-btn" :href="LINKS.github" target="_blank" rel="noreferrer noopener">
+        <a
+          class="star-btn"
+          :href="LINKS.github"
+          target="_blank"
+          rel="noreferrer noopener"
+          :aria-label="githubStars !== null ? `${githubStars} GitHub stars` : 'Star dzup-ui on GitHub'"
+        >
           <Github :size="16" aria-hidden="true" />
           <span class="star-label">
             <Star :size="13" aria-hidden="true" />
-            {{ FACTS.githubStars ?? 'Star' }}
+            {{ githubStars ?? 'Star' }}
           </span>
         </a>
         <ThemeToggle />
@@ -72,9 +148,11 @@ function goPro(): void {
           Browse components
         </DzButton>
         <button
+          ref="menuButton"
           type="button"
           class="menu-btn"
           :aria-expanded="mobileOpen"
+          aria-controls="mobile-nav"
           aria-label="Toggle menu"
           @click="mobileOpen = !mobileOpen"
         >
@@ -84,23 +162,37 @@ function goPro(): void {
       </div>
     </div>
 
-    <div v-if="mobileOpen" class="mobile-sheet">
-      <a
-        v-for="link in navLinks"
-        :key="link.label"
-        :href="link.href"
-        class="mobile-link"
-        @click="mobileOpen = false"
-      >{{ link.label }}</a>
-      <router-link :to="{ path: '/', hash: '#ecosystem' }" class="mobile-link" @click="mobileOpen = false">Ecosystem</router-link>
-      <router-link to="/blocks" class="mobile-link" @click="mobileOpen = false">Blocks</router-link>
-      <router-link to="/animations" class="mobile-link" @click="mobileOpen = false">Animations</router-link>
-      <router-link to="/themes" class="mobile-link" @click="mobileOpen = false">Themes</router-link>
-      <router-link to="/ai" class="mobile-link" @click="mobileOpen = false">AI IDE</router-link>
-      <router-link to="/compare" class="mobile-link" @click="mobileOpen = false">Compare</router-link>
-      <button type="button" class="mobile-link" @click="goPro">Pro</button>
-      <a class="mobile-link" :href="LINKS.github" target="_blank" rel="noreferrer noopener">GitHub</a>
-    </div>
+    <!-- The drawer mirrors the desktop grouping: labelled sections, not a flat
+         list, so the same information architecture reads on a phone. -->
+    <nav v-if="mobileOpen" id="mobile-nav" class="mobile-sheet" aria-label="Primary (mobile)">
+      <template v-for="entry in NAV" :key="entry.label">
+        <div v-if="isGroup(entry)" class="mobile-group">
+          <p :id="`mobile-group-${entry.label}`" class="mobile-group-label">
+            {{ entry.label }}
+          </p>
+          <ul class="mobile-list" :aria-labelledby="`mobile-group-${entry.label}`">
+            <li v-for="item in entry.items" :key="item.href">
+              <a v-if="item.external" :href="item.href" class="mobile-link">{{ item.label }}</a>
+              <RouterLink v-else :to="item.href" class="mobile-link">
+                {{ item.label }}
+              </RouterLink>
+            </li>
+          </ul>
+        </div>
+      </template>
+
+      <ul class="mobile-list mobile-list--flat">
+        <li v-for="entry in leaves" :key="entry.label">
+          <a v-if="entry.external" :href="entry.href" class="mobile-link">{{ entry.label }}</a>
+          <RouterLink v-else :to="entry.href" class="mobile-link">
+            {{ entry.label }}
+          </RouterLink>
+        </li>
+        <li>
+          <a class="mobile-link" :href="LINKS.github" target="_blank" rel="noreferrer noopener">GitHub</a>
+        </li>
+      </ul>
+    </nav>
   </header>
 </template>
 
@@ -137,6 +229,7 @@ function goPro(): void {
   color: var(--dz-foreground, #1a202c);
   font-weight: 700;
   font-size: var(--dz-text-lg, 1.125rem);
+  border-radius: var(--dz-radius-md, 6px);
 }
 
 .brand-mark {
@@ -163,6 +256,9 @@ function goPro(): void {
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 8px 12px;
   border-radius: var(--dz-radius-md, 6px);
   text-decoration: none;
@@ -178,6 +274,34 @@ function goPro(): void {
 .nav-link:hover {
   color: var(--dz-foreground, #1a202c);
   background: var(--dz-muted, #f1f5f9);
+}
+
+/* The active route — and the group that contains it — read as current. */
+.nav-link[aria-current] {
+  color: var(--dz-foreground, #1a202c);
+  font-weight: 600;
+}
+
+.brand:focus-visible,
+.nav-link:focus-visible,
+.star-btn:focus-visible,
+.menu-btn:focus-visible,
+.mobile-link:focus-visible {
+  outline: 2px solid var(--dz-ring);
+  outline-offset: 2px;
+}
+
+.nav-chevron {
+  opacity: 0.65;
+  transition: transform var(--dz-duration-fast, 150ms);
+}
+
+.nav-trigger[data-state="open"] .nav-chevron {
+  transform: rotate(180deg);
+}
+
+.nav-menu {
+  min-width: 200px;
 }
 
 .nav-utils {
@@ -231,12 +355,38 @@ function goPro(): void {
   display: none;
   flex-direction: column;
   padding: 8px 16px 16px;
-  gap: 2px;
+  gap: 10px;
   background: var(--dz-surface, #fff);
   border-bottom: 1px solid var(--dz-border, #e2e8f0);
 }
 
+.mobile-group-label {
+  margin: 8px 0 2px;
+  padding: 0 12px;
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dz-muted-foreground, #64748b);
+}
+
+.mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobile-list--flat {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--dz-border, #e2e8f0);
+}
+
 .mobile-link {
+  display: block;
   padding: 12px;
   border-radius: var(--dz-radius-md, 6px);
   text-decoration: none;
@@ -253,7 +403,12 @@ function goPro(): void {
   background: var(--dz-muted, #f1f5f9);
 }
 
-@media (max-width: 860px) {
+.mobile-link[aria-current="page"] {
+  font-weight: 700;
+  color: var(--dz-primary-muted-foreground);
+}
+
+@media (max-width: 980px) {
   .nav-links,
   .star-label,
   .nav-cta {

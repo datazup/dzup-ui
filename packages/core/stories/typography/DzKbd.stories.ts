@@ -113,7 +113,7 @@ export const PlatformAware: Story = {
     components: { DzKbd },
     template: `
       <div class="space-y-3 max-w-lg">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           The same markup adapts to the host OS. On macOS the modifier renders as
           ⌘; on Windows/Linux it renders as Ctrl. Set <code>:platform-aware="false"</code>
           to display the literal tokens instead.
@@ -140,7 +140,7 @@ export const Sizes: Story = {
       <div class="flex items-center gap-4">
         <div v-for="s in sizes" :key="s" class="flex flex-col items-center gap-2">
           <DzKbd :keys="['mod', 'k']" :size="s" />
-          <span class="text-xs text-gray-500">{{ s }}</span>
+          <span class="text-xs text-[var(--dz-muted-foreground)]">{{ s }}</span>
         </div>
       </div>
     `,

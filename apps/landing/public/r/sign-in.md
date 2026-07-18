@@ -4,7 +4,7 @@ Centered card with email, password, remember-me checkbox, forgot-password link, 
 
 - **Category:** Auth & Forms
 - **Components:** DzCard, DzFormField, DzFormLabel, DzInput, DzPasswordInput, DzCheckbox, DzDivider, DzButton, DzHeading, DzText
-- **Preview:** /blocks#sign-in
+- **Preview:** /blocks/sign-in
 
 ```vue
 <script setup lang="ts">

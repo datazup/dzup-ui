@@ -87,11 +87,3 @@ function lineWidth(index: number): string {
     v-bind="{ ...$attrs, class: undefined }"
   />
 </template>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  .animate-pulse {
-    animation: none;
-  }
-}
-</style>

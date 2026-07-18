@@ -201,7 +201,7 @@ export const Accessibility: Story = {
     components: { DzBadge },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Badges render as &lt;span&gt; elements. Use aria-label on a parent when
           the badge conveys important status information.
         </p>
@@ -250,19 +250,19 @@ export const RealWorldStatusLabels: Story = {
     components: { DzBadge },
     template: `
       <div class="space-y-3 max-w-md">
-        <div class="flex justify-between items-center p-3 border rounded">
+        <div class="flex justify-between items-center p-3 border border-[var(--dz-border)] rounded">
           <span class="text-sm">Payment #1234</span>
           <DzBadge tone="success" size="sm">Paid</DzBadge>
         </div>
-        <div class="flex justify-between items-center p-3 border rounded">
+        <div class="flex justify-between items-center p-3 border border-[var(--dz-border)] rounded">
           <span class="text-sm">Payment #1235</span>
           <DzBadge tone="warning" size="sm">Pending</DzBadge>
         </div>
-        <div class="flex justify-between items-center p-3 border rounded">
+        <div class="flex justify-between items-center p-3 border border-[var(--dz-border)] rounded">
           <span class="text-sm">Payment #1236</span>
           <DzBadge tone="danger" size="sm">Failed</DzBadge>
         </div>
-        <div class="flex justify-between items-center p-3 border rounded">
+        <div class="flex justify-between items-center p-3 border border-[var(--dz-border)] rounded">
           <span class="text-sm">Payment #1237</span>
           <DzBadge tone="info" size="sm" variant="outline">Refunded</DzBadge>
         </div>

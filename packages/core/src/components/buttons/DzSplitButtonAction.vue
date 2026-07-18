@@ -91,15 +91,3 @@ function handleClick(event: MouseEvent): void {
     <slot v-else />
   </button>
 </template>
-
-<style scoped>
-/* Accessibility: respect user's motion preference */
-@media (prefers-reduced-motion: reduce) {
-  :deep(*),
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>

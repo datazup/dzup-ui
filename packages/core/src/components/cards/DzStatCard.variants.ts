@@ -52,8 +52,8 @@ export const statCardVariants = tv({
       },
     },
     trendDirection: {
-      up: { trend: 'text-[var(--dz-success)]' },
-      down: { trend: 'text-[var(--dz-danger)]' },
+      up: { trend: 'text-[var(--dz-success-muted-foreground)]' },
+      down: { trend: 'text-[var(--dz-danger-muted-foreground)]' },
       neutral: { trend: 'text-[var(--dz-muted-foreground)]' },
     },
   },

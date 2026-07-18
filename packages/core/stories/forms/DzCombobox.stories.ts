@@ -192,10 +192,10 @@ export const AllowCustomValue: Story = {
     template: `
       <div class="space-y-3 max-w-xs">
         <DzCombobox v-bind="args" v-model="value" />
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Bound value: <strong>{{ value || 'none' }}</strong>
         </p>
-        <p class="text-xs text-gray-400">
+        <p class="text-xs text-[var(--dz-muted-foreground)]">
           Type a city that is not in the list (e.g. "Boston") and the typed text
           becomes the value. With <code>allowCustomValue: false</code> the typed
           text only filters and is discarded unless you pick an option.
@@ -306,7 +306,7 @@ export const WithSlots: Story = {
     template: `
       <DzCombobox :items="items" placeholder="Search cities..." class="max-w-xs">
         <template #empty>
-          <div class="p-4 text-center text-sm text-gray-400">No cities found. Try a different search.</div>
+          <div class="p-4 text-center text-sm text-[var(--dz-muted-foreground)]">No cities found. Try a different search.</div>
         </template>
       </DzCombobox>
     `,
@@ -339,20 +339,20 @@ export const RichObjects: Story = {
         >
           <template #item="{ item, selected }">
             <div class="flex items-start gap-3 pl-6">
-              <span class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-700">
+              <span class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--dz-muted)] text-xs font-semibold text-[var(--dz-foreground)]">
                 {{ item.label.charAt(0) }}
               </span>
               <span class="flex flex-col">
-                <span class="text-sm font-medium text-slate-900">
+                <span class="text-sm font-medium text-[var(--dz-foreground)]">
                   {{ item.label }}
-                  <span v-if="selected" class="ml-1 text-xs text-sky-600">(selected)</span>
+                  <span v-if="selected" class="ml-1 text-xs text-[var(--dz-info-muted-foreground)]">(selected)</span>
                 </span>
-                <span class="text-xs text-slate-500">{{ item.raw.role }} · {{ item.raw.summary }}</span>
+                <span class="text-xs text-[var(--dz-muted-foreground)]">{{ item.raw.role }} · {{ item.raw.summary }}</span>
               </span>
             </div>
           </template>
         </DzCombobox>
-        <p class="text-sm text-gray-500">Selected: <strong>{{ selected || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ selected || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -397,7 +397,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-4 max-w-xs">
         <DzCombobox :items="items" v-model="selected" placeholder="Search cities..." />
-        <p class="text-sm text-gray-500">Selected: <strong>{{ selected || 'none' }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ selected || 'none' }}</strong></p>
       </div>
     `,
   }),
@@ -430,7 +430,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">Tab to focus, type to filter, arrow keys to navigate results, Enter to select.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus, type to filter, arrow keys to navigate results, Enter to select.</p>
         <DzCombobox :items="items" placeholder="Keyboard navigable" aria-label="City search" />
       </div>
     `,

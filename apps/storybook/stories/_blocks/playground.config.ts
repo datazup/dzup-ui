@@ -64,12 +64,16 @@ const count = ref(0)
 
 /**
  * HTML injected into the REPL sandbox <head>. Loads Tailwind (browser JIT), the
- * design tokens, base interaction utilities and the components' scoped styles,
- * and wires the sandbox to dzup's dark-mode contract.
+ * design tokens and the base interaction utilities, and wires the sandbox to
+ * dzup's dark-mode contract. Components have no stylesheet of their own — their
+ * styling is `tv()`-generated Tailwind utilities over `--dz-*` tokens (ADR-04),
+ * which the browser JIT above produces at runtime.
  *
  * dzup dark mode keys off `[data-theme="dark"]`, but @vue/repl expresses its
- * `theme` prop by writing `html.className = 'dark'|'light'` (see
- * switchPreviewTheme). So we seed the initial theme and install a tiny observer
+ * `theme` prop by writing `html.className = 'dark'|'light'` — and ONLY when the
+ * Repl is given `previewTheme: true` (DzRepl.ts), which is what makes the
+ * observer below have anything to observe. So we seed the initial theme and
+ * install a tiny observer
  * that mirrors that className onto `data-theme` — this makes Storybook's Theme
  * toolbar toggle re-theme the live preview WITHOUT reloading the sandbox (which
  * would otherwise wipe the visitor's edits).
@@ -83,8 +87,11 @@ export function replSandboxHeadHTML(theme: 'light' | 'dark'): string {
   return [
     `<script src="${TAILWIND_BROWSER_CDN}"></script>`,
     `<link rel="stylesheet" href="${base}tokens.css">`,
+    // Exactly the two stylesheets build-playground.mjs writes — nothing else.
+    // A third link (`dzup-core.css`) used to sit here for an SFC-<style> bundle
+    // that ADR-04 means never exists, so every sandbox load 404'd. scripts/
+    // verify-repl.mjs now fails CI on any 404 from this iframe.
     `<link rel="stylesheet" href="${base}core.css">`,
-    `<link rel="stylesheet" href="${base}dzup-core.css">`,
     `<style>html,body{margin:0;padding:16px;background:var(--dz-background, transparent);color:var(--dz-foreground, inherit);font-family:system-ui,-apple-system,sans-serif;}</style>`,
     `<script>${themeBridge}</script>`,
   ].join('\n')

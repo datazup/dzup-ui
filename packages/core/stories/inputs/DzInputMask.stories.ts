@@ -137,11 +137,11 @@ export const Phone: Story = {
           aria-label="Phone number"
           @update:unmasked="raw = $event"
         />
-        <p class="text-sm text-gray-500">
-          Masked: <code class="bg-gray-100 px-1 rounded">{{ masked || '(empty)' }}</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Masked: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ masked || '(empty)' }}</code>
         </p>
-        <p class="text-sm text-gray-500">
-          Unmasked: <code class="bg-gray-100 px-1 rounded">{{ raw || '(empty)' }}</code>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Unmasked: <code class="bg-[var(--dz-muted)] px-1 rounded">{{ raw || '(empty)' }}</code>
         </p>
       </div>
     `,
@@ -315,7 +315,7 @@ export const Accessibility: Story = {
     components: { DzInputMask },
     template: `
       <div class="space-y-4 max-w-xs">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tab to focus, type digits — literals are skipped automatically.
           Backspace erases one user-entered character at a time.
         </p>

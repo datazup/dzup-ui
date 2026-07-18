@@ -2,6 +2,7 @@ import type { Decorator, Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, userEvent, within } from 'storybook/test'
 import { DzColorModeToggle } from '../../src/components/navigation'
 import { DzThemeProvider } from '../../src/providers'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * **DzColorModeToggle** is a ready-made light / dark / system theme switch. It
@@ -141,6 +142,35 @@ export const WithoutSystem: Story = {
       <div class="flex flex-col gap-4">
         <DzColorModeToggle v-bind="args" />
         <DzColorModeToggle variant="icon" :show-system="false" />
+      </div>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// DarkMode — every variant previewed on a forced-dark surface
+// ---------------------------------------------------------------------------
+
+// `darkModeDecorator` is listed last so it wraps the provider: DzThemeProvider
+// renders no element of its own (it writes `data-theme` to <html>), so the
+// decorator's local `data-theme="dark"` wrapper keeps this preview dark no
+// matter which mode the toggle then selects.
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [withThemeProvider, darkModeDecorator],
+  render: () => ({
+    components: { DzColorModeToggle },
+    template: `
+      <div class="flex flex-col gap-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          This preview is pinned to <code>data-theme="dark"</code>, so the surface stays
+          dark while the toggle writes the selected mode to <code>&lt;html&gt;</code>.
+        </p>
+        <div class="flex items-center gap-6">
+          <DzColorModeToggle variant="icon" />
+          <DzColorModeToggle variant="switch" />
+        </div>
+        <DzColorModeToggle variant="segmented" />
       </div>
     `,
   }),

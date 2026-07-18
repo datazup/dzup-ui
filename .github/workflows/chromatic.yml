@@ -47,6 +47,12 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
+      # `buildScriptName: build` runs the storybook app's build, which copies
+      # packages/core/dist/core.css into the playground and resolves @dzup-ui/core
+      # from dist. This job previously built NOTHING first, and `packages/*/dist` is
+      # gitignored — so the Storybook build could never succeed here.
+      - name: Build packages
+        run: yarn build
       - name: Run Chromatic
         id: chromatic
         uses: chromaui/action@latest

@@ -3,15 +3,8 @@ import type { CommandGroup, CommandItem } from '../../src/components/overlays'
 import { expect, screen, userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzCommandPalette } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
-/**
- * DzCommandPalette is a searchable command launcher built on Reka UI Dialog + Combobox (ADR-07).
- *
- * It supports items with optional icons and keyboard shortcuts, grouped categorization,
- * search filtering, a global keyboard shortcut (Ctrl+K / Cmd+K), and custom slot rendering.
- * Open state is controlled via `v-model:open` (ADR-16).
- */
 const sampleItems: CommandItem[] = [
   { id: 'new-file', label: 'New File', shortcut: 'Ctrl+N', group: 'file' },
   { id: 'open-file', label: 'Open File', shortcut: 'Ctrl+O', group: 'file' },
@@ -32,10 +25,21 @@ const sampleGroups: CommandGroup[] = [
   { id: 'app', label: 'Application' },
 ]
 
+/**
+ * DzCommandPalette is a searchable command launcher built on Reka UI Dialog + Combobox (ADR-07).
+ *
+ * It supports items with optional icons and keyboard shortcuts, grouped categorization,
+ * search filtering, a global keyboard shortcut (Ctrl+K / Cmd+K), and custom slot rendering.
+ * Open state is controlled via `v-model:open` (ADR-16).
+ */
 const meta = {
   title: 'Core/Overlays/DzCommandPalette',
   component: DzCommandPalette,
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     placeholder: {
@@ -274,13 +278,13 @@ export const WithSlots: Story = {
             <div class="flex items-center gap-3 w-full">
               <span class="text-base">{{ item.group === 'file' ? '&#128196;' : item.group === 'edit' ? '&#9999;' : item.group === 'view' ? '&#128065;' : '&#9881;' }}</span>
               <span class="flex-1 text-sm">{{ item.label }}</span>
-              <span v-if="item.shortcut" class="text-xs text-gray-400 font-mono">{{ item.shortcut }}</span>
+              <span v-if="item.shortcut" class="text-xs text-[var(--dz-muted-foreground)] font-mono">{{ item.shortcut }}</span>
             </div>
           </template>
           <template #empty>
             <div class="text-center py-6">
-              <p class="text-sm text-gray-500">No commands match your search.</p>
-              <p class="text-xs text-gray-400 mt-1">Try a different query.</p>
+              <p class="text-sm text-[var(--dz-muted-foreground)]">No commands match your search.</p>
+              <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Try a different query.</p>
             </div>
           </template>
         </DzCommandPalette>
@@ -318,7 +322,7 @@ export const Interactive: Story = {
         <div class="flex gap-4 items-center">
           <DzButton @click="isOpen = true">Open Palette</DzButton>
           <span v-if="lastSelected" class="text-sm">Selected: <strong>{{ lastSelected.label }}</strong></span>
-          <span v-if="lastSearch" class="text-sm text-gray-500">Search: "{{ lastSearch }}"</span>
+          <span v-if="lastSearch" class="text-sm text-[var(--dz-muted-foreground)]">Search: "{{ lastSearch }}"</span>
         </div>
         <DzCommandPalette
           v-model:open="isOpen"
@@ -398,7 +402,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Open the palette and type to filter. Use ArrowUp/ArrowDown to navigate items.
           Press Enter to select an item, Escape to close. The search input auto-focuses on open.
           Disabled items are skipped during keyboard navigation.
@@ -451,7 +455,7 @@ export const RealWorldIDE: Story = {
     },
     template: `
       <div>
-        <p class="text-sm text-gray-500 mb-4">
+        <p class="text-sm text-[var(--dz-muted-foreground)] mb-4">
           A full IDE-style command palette. Click the button or press Ctrl+K (disabled in story) to open.
         </p>
         <DzButton @click="isOpen = true">Open Command Palette</DzButton>

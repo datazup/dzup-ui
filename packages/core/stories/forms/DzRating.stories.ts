@@ -115,7 +115,7 @@ export const Default: Story = {
     template: `
       <div class="space-y-3">
         <DzRating v-bind="args" v-model:value="score" aria-label="Rating" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ score }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ score }}</strong></p>
       </div>
     `,
   }),
@@ -139,7 +139,7 @@ export const HalfStars: Story = {
     template: `
       <div class="space-y-3">
         <DzRating v-bind="args" v-model:value="score" aria-label="Rating" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ score }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ score }}</strong></p>
       </div>
     `,
   }),
@@ -220,7 +220,7 @@ export const CustomIcon: Story = {
     template: `
       <div class="space-y-3">
         <DzRating v-model:value="score" :icon="Heart" tone="danger" aria-label="Favorites" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ score }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ score }}</strong></p>
       </div>
     `,
   }),
@@ -285,7 +285,7 @@ export const Interactive: Story = {
     template: `
       <div class="space-y-3">
         <DzRating v-model:value="score" aria-label="Quality" />
-        <p class="text-sm text-gray-500">Value: <strong>{{ score }}</strong></p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ score }}</strong></p>
       </div>
     `,
   }),

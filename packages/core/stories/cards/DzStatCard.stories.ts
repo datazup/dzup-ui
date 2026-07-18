@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { Activity, DollarSign, Package, ShoppingCart, TrendingUp, Users } from 'lucide-vue-next'
 import { expect, within } from 'storybook/test'
 import { DzStatCard } from '../../src/components/cards'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzStatCard displays a key statistic or metric with an icon, value,
@@ -13,6 +13,8 @@ const meta = {
   title: 'Core/Cards/DzStatCard',
   component: DzStatCard,
   tags: ['autodocs', 'status:stable'],
+  // Cards is the first family on the enforced a11y gate (TASK-DS-06).
+  parameters: { ...a11yError },
   argTypes: {
     // Appearance
     variant: {
@@ -156,17 +158,17 @@ export const WithSlots: Story = {
       <div class="max-w-xs">
         <DzStatCard title="Conversion Rate" value="4.6%">
           <template #icon>
-            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-green-100 text-green-600">
+            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)]">
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
           </template>
           <template #value>
-            <span class="text-3xl font-bold text-green-600">4.6%</span>
+            <span class="text-3xl font-bold text-[var(--dz-success-muted-foreground)]">4.6%</span>
           </template>
           <template #footer>
-            <span class="text-green-600 font-medium">+0.8%</span>
+            <span class="text-[var(--dz-success-muted-foreground)] font-medium">+0.8%</span>
             <span> from last quarter</span>
           </template>
         </DzStatCard>
@@ -210,7 +212,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Icons use aria-hidden="true". Values and trend indicators are
           readable by screen readers. Each card can receive a unique ID.
         </p>

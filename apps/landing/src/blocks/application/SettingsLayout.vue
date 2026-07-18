@@ -22,6 +22,7 @@ import {
   DzFormDescription,
   DzFormField,
   DzFormLabel,
+  DzHeading,
   DzInput,
   DzSelect,
   DzSwitch,
@@ -76,7 +77,7 @@ const reduceMotion = ref(false)
       <DzTabContent value="profile">
         <div class="panel">
           <header class="panel-head">
-            <DzText weight="semibold" as="h4" class="panel-title">Public profile</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Public profile</DzHeading>
             <DzText size="sm" tone="muted" as="p">
               This information is visible to your teammates.
             </DzText>
@@ -105,7 +106,7 @@ const reduceMotion = ref(false)
       <DzTabContent value="notifications">
         <div class="panel">
           <header class="panel-head">
-            <DzText weight="semibold" as="h4" class="panel-title">Email notifications</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Email notifications</DzHeading>
             <DzText size="sm" tone="muted" as="p">
               Choose what Acme sends to your inbox.
             </DzText>
@@ -151,7 +152,7 @@ const reduceMotion = ref(false)
       <DzTabContent value="appearance">
         <div class="panel">
           <header class="panel-head">
-            <DzText weight="semibold" as="h4" class="panel-title">Appearance</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Appearance</DzHeading>
             <DzText size="sm" tone="muted" as="p">Customize how the app looks for you.</DzText>
           </header>
 

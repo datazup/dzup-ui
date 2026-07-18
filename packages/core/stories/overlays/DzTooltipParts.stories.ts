@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzTooltip, DzTooltipContent, DzTooltipTrigger } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzTooltipContent compound sub-parts: DzTooltipTrigger.
@@ -23,6 +23,10 @@ const meta = {
     DzTooltipTrigger,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
 } satisfies Meta<typeof DzTooltipContent>
 
 export default meta
@@ -112,7 +116,7 @@ export const CompoundComposition: Story = {
 
         <!-- Anatomy map -->
         <div
-          class="rounded border px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
+          class="rounded border border-[var(--dz-border)] px-3 py-2 text-xs font-mono space-y-0.5 max-w-lg"
           style="border-color: var(--dz-border); color: var(--dz-muted-foreground);"
         >
           <p>&lt;DzTooltip&gt;              &lt;!-- root, manages delay + open state --&gt;</p>

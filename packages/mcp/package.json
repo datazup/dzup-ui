@@ -17,10 +17,10 @@
     "windsurf"
   ],
   "license": "MIT",
-  "homepage": "https://dzup-ui.dev",
+  "homepage": "https://dzup-ui.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dzup-ui/dzup-ui.git",
+    "url": "https://github.com/datazup/dzup-ui.git",
     "directory": "packages/mcp"
   },
   "bin": {

@@ -4,7 +4,7 @@ A design-tool shell — a DzToolbar with start/center/end regions over a vertica
 
 - **Category:** Layout
 - **Components:** DzToolbar, DzFlex, DzSpacer, DzScrollArea, DzPanel, DzDivider, DzIconButton, DzBadge, DzIcon, DzText
-- **Preview:** /blocks#toolbar-canvas
+- **Preview:** /blocks/toolbar-canvas
 
 ```vue
 <script setup lang="ts">

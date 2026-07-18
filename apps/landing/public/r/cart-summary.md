@@ -4,7 +4,7 @@ An editable cart — a divided list of line items each with a thumbnail, a clamp
 
 - **Category:** Commerce
 - **Components:** DzList, DzListItem, DzNumberInput, DzButton, DzDivider, DzHeading, DzText
-- **Preview:** /blocks#cart-summary
+- **Preview:** /blocks/cart-summary
 
 ```vue
 <script setup lang="ts">

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzStepper, DzStepperItem } from '../../src/components/navigation'
+import { darkModeDecorator } from '../_shared'
 
 /**
  * DzStepperItem is a compound sub-part of DzStepper.
@@ -140,13 +141,13 @@ export const WithContent: Story = {
       <div class="max-w-lg space-y-4">
         <DzStepper v-model="step" aria-label="Wizard steps">
           <DzStepperItem title="Details" description="Enter your details">
-            <div class="p-4 border rounded mt-4">
+            <div class="p-4 border border-[var(--dz-border)] rounded mt-4">
               <p class="text-sm">Step 1: Enter your name and email address.</p>
               <DzButton class="mt-3" size="sm" @click="step = 1">Next</DzButton>
             </div>
           </DzStepperItem>
           <DzStepperItem title="Preferences" description="Set preferences">
-            <div class="p-4 border rounded mt-4">
+            <div class="p-4 border border-[var(--dz-border)] rounded mt-4">
               <p class="text-sm">Step 2: Choose your notification preferences.</p>
               <div class="flex gap-2 mt-3">
                 <DzButton size="sm" variant="outline" @click="step = 0">Back</DzButton>
@@ -155,7 +156,7 @@ export const WithContent: Story = {
             </div>
           </DzStepperItem>
           <DzStepperItem title="Confirm" description="Review and submit">
-            <div class="p-4 border rounded mt-4">
+            <div class="p-4 border border-[var(--dz-border)] rounded mt-4">
               <p class="text-sm">Step 3: Review your information and submit.</p>
               <div class="flex gap-2 mt-3">
                 <DzButton size="sm" variant="outline" @click="step = 1">Back</DzButton>
@@ -225,6 +226,32 @@ export const Vertical: Story = {
         <DzStepperItem title="Development" description="Build the application" />
         <DzStepperItem title="Testing" description="QA and user acceptance" />
       </DzStepper>
+    `,
+  }),
+}
+
+// ---------------------------------------------------------------------------
+// Dark Mode
+// ---------------------------------------------------------------------------
+
+export const DarkMode: Story = {
+  name: 'Dark Mode Preview',
+  decorators: [darkModeDecorator],
+  render: () => ({
+    components: { DzStepper, DzStepperItem },
+    template: `
+      <div class="space-y-8">
+        <DzStepper :model-value="1" aria-label="Dark mode registration steps">
+          <DzStepperItem title="Account" description="Create your account" />
+          <DzStepperItem title="Profile" description="Fill in your profile" />
+          <DzStepperItem title="Review" description="Review and submit" />
+        </DzStepper>
+        <DzStepper :model-value="1" orientation="vertical" aria-label="Dark mode vertical steps">
+          <DzStepperItem title="Requirements" description="Gather project requirements" />
+          <DzStepperItem title="Design" description="Create mockups and prototypes" />
+          <DzStepperItem title="Development" description="Build the application" optional />
+        </DzStepper>
+      </div>
     `,
   }),
 }

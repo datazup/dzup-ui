@@ -37,24 +37,3 @@ const overlayClasses = computed(() =>
     />
   </Transition>
 </template>
-
-<style scoped>
-/* Overlay fade transition */
-.dz-dialog-overlay-enter-active,
-.dz-dialog-overlay-leave-active {
-  transition: opacity var(--dz-transition-fast, 150ms) ease;
-}
-
-.dz-dialog-overlay-enter-from,
-.dz-dialog-overlay-leave-to {
-  opacity: 0;
-}
-
-/* Respect reduced motion preference (MANDATORY per CLAUDE.md) */
-@media (prefers-reduced-motion: reduce) {
-  .dz-dialog-overlay-enter-active,
-  .dz-dialog-overlay-leave-active {
-    transition: none;
-  }
-}
-</style>

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzTooltip, DzTooltipContent, DzTooltipTrigger } from '../../src/components/overlays'
-import { darkModeDecorator } from '../_shared'
+import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzTooltip is a compound tooltip component built on Reka UI Tooltip (ADR-07).
@@ -19,6 +19,10 @@ const meta = {
     DzTooltipContent,
   },
   tags: ['autodocs', 'status:stable'],
+  parameters: {
+    // Overlays enforced (TASK-DS-13).
+    ...a11yError,
+  },
   argTypes: {
     // Behavior
     delayDuration: {
@@ -254,7 +258,7 @@ export const Accessibility: Story = {
     components: { DzTooltip, DzTooltipTrigger, DzTooltipContent, DzButton },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
           Tooltips appear on hover and focus. Tab to the button to trigger the tooltip
           via keyboard. The tooltip content is announced to screen readers.
         </p>
