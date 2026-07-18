@@ -45,6 +45,8 @@ export { DIALOG_TOKENS } from './component/index.js'
 
 export { INPUT_TOKENS } from './component/index.js'
 
+export { PAGE_HERO_TOKENS } from './component/index.js'
+
 export { SIDEBAR_TOKENS } from './component/index.js'
 
 // Re-export primitives
@@ -59,10 +61,7 @@ export {
   SHADE_STEPS,
 } from './primitives/index.js'
 
-export {
-  SPACING_SCALE,
-  type SpacingStep,
-} from './primitives/index.js'
+export { SPACING_SCALE, type SpacingStep } from './primitives/index.js'
 
 export {
   FONT_FAMILIES,
@@ -72,30 +71,12 @@ export {
   LINE_HEIGHTS,
 } from './primitives/index.js'
 
-export {
-  RADIUS_SCALE,
-  type RadiusStep,
-} from './primitives/index.js'
-export {
-  SHADOW_SCALE,
-  SHADOW_SCALE_DARK,
-  type ShadowStep,
-} from './primitives/index.js'
+export { RADIUS_SCALE, type RadiusStep } from './primitives/index.js'
+export { SHADOW_SCALE, SHADOW_SCALE_DARK, type ShadowStep } from './primitives/index.js'
 
-export {
-  DURATIONS,
-  type DurationStep,
-  EASINGS,
-  type EasingStep,
-} from './primitives/index.js'
-export {
-  Z_INDEX_SCALE,
-  type ZIndexStep,
-} from './primitives/index.js'
-export {
-  BREAKPOINTS,
-  type BreakpointStep,
-} from './primitives/index.js'
+export { DURATIONS, type DurationStep, EASINGS, type EasingStep } from './primitives/index.js'
+export { Z_INDEX_SCALE, type ZIndexStep } from './primitives/index.js'
+export { BREAKPOINTS, type BreakpointStep } from './primitives/index.js'
 // Re-export semantic
 export { LIGHT_SEMANTIC_TOKENS } from './semantic/index.js'
 export { DARK_SEMANTIC_TOKENS } from './semantic/index.js'
