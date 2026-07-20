@@ -42,8 +42,8 @@ import { DzSpotlight } from '../../motion/index.ts'
   min-height: 150px;
   padding: 24px;
   text-align: center;
-  border: 1px solid var(--lp-hairline, var(--dz-border, #e2e8f0));
+  border: 1px solid var(--lp-hairline, var(--dz-border, #b5b7bb));
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 </style>

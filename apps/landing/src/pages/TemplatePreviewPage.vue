@@ -88,7 +88,7 @@ watch(
 <style scoped>
 .preview-root {
   min-height: 100vh;
-  background: var(--dz-background, #ffffff);
+  background: var(--dz-background, #e7e8e9);
 }
 
 /* Centered loading state shown while the per-slug template bundle resolves. */

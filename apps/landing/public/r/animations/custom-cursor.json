@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "custom-cursor",
   "type": "registry:block",
   "title": "Custom cursor",
   "description": "A soft blob trails the pointer inside a region; native cursor returns on leave.",
+  "categories": [
+    "hover"
+  ],
   "files": [
     {
       "path": "custom-cursor.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzCursor, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- The blob eases toward the pointer each frame (transform only, rAF) and is\n       non-interactive, so it never traps the pointer — links inside stay\n       clickable. Touch/keyboard keep the native cursor; off under reduced motion. -->\n  <DzCursor :disabled=\"reduced\" :size=\"36\">\n    <!-- …any surface / content… -->\n  </DzCursor>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/custom-cursor.vue"
+    },
+    {
+      "path": "motion/components/DzCursor.vue",
+      "content": "<script setup lang=\"ts\">\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * DzCursor — a smooth trailing cursor/blob confined to a host region\n * (docs/animations.md §5.5, effect 49).\n *\n * Wraps any surface; a soft blob eases toward the pointer inside the host with a\n * little lag (a lerp toward the live pointer position each frame), so it trails\n * rather than snaps. `transform: translate3d()` only — one write per frame via\n * `requestAnimationFrame`. The native cursor is hidden inside the host while the\n * blob is live and restored the instant the pointer leaves.\n *\n * Accessibility / touch guarantees (§5.5, §7):\n * - **Pointer-only.** Engages only on fine-pointer, hover-capable devices; touch\n *   pointer events are ignored. Touch users keep the native cursor, no blob.\n * - **Reduced-motion.** Off when the OS sets `prefers-reduced-motion` OR the\n *   caller passes `disabled: true` (wire to the page-level toggle). Off ⇒ native\n *   cursor, no blob, no rAF loop.\n * - **Never traps the pointer.** The blob is `pointer-events: none` and purely\n *   decorative (`aria-hidden`); every control inside the host stays clickable and\n *   keyboard-focusable. Keyboard users never see the blob (it only follows a\n *   moving pointer) and the native cursor returns on leave.\n */\n\nconst props = withDefaults(\n  defineProps<{\n    /** Blob diameter in px (default `28`). */\n    size?: number\n    /** Trailing smoothness, 0–1 (higher ⇒ snappier; default `0.18`). */\n    ease?: number\n    /** Force the native-cursor-only state (page-level reduced motion). */\n    disabled?: boolean\n  }>(),\n  { size: 28, ease: 0.18, disabled: false },\n)\n\nconst root = ref<HTMLElement | null>(null)\nconst blob = ref<HTMLElement | null>(null)\nconst active = ref(false)\n\nlet frame = 0\nlet inside = false\nlet attached = false\n// Live pointer target and the blob's eased current position.\nlet targetX = 0\nlet targetY = 0\nlet curX = 0\nlet curY = 0\nlet primed = false\n\n/** Whether the device has a fine, hover-capable pointer (SSR-safe). */\nfunction canHover(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(hover: hover) and (pointer: fine)').matches\n}\n\nfunction loop(): void {\n  curX += (targetX - curX) * props.ease\n  curY += (targetY - curY) * props.ease\n  if (blob.value) {\n    blob.value.style.transform = `translate3d(${curX.toFixed(2)}px, ${curY.toFixed(2)}px, 0) translate(-50%, -50%)`\n  }\n  const settled = Math.abs(targetX - curX) < 0.1 && Math.abs(targetY - curY) < 0.1\n  if (inside || !settled) {\n    frame = requestAnimationFrame(loop)\n  }\n  else {\n    frame = 0\n  }\n}\n\nfunction onMove(event: PointerEvent): void {\n  if (event.pointerType === 'touch' || !root.value)\n    return\n  const rect = root.value.getBoundingClientRect()\n  targetX = event.clientX - rect.left\n  targetY = event.clientY - rect.top\n  if (!primed) {\n    // First move: place the blob under the pointer so it doesn't fly in from 0,0.\n    curX = targetX\n    curY = targetY\n    primed = true\n  }\n  if (!inside) {\n    inside = true\n    active.value = true\n  }\n  if (!frame)\n    frame = requestAnimationFrame(loop)\n}\n\nfunction onLeave(event: PointerEvent): void {\n  if (event.pointerType === 'touch')\n    return\n  inside = false\n  active.value = false\n  primed = false\n}\n\nfunction attach(): void {\n  if (attached || !root.value)\n    return\n  root.value.addEventListener('pointermove', onMove)\n  root.value.addEventListener('pointerleave', onLeave)\n  attached = true\n}\n\nfunction detach(): void {\n  if (!attached || !root.value)\n    return\n  root.value.removeEventListener('pointermove', onMove)\n  root.value.removeEventListener('pointerleave', onLeave)\n  if (frame) {\n    cancelAnimationFrame(frame)\n    frame = 0\n  }\n  inside = false\n  active.value = false\n  primed = false\n  attached = false\n}\n\nfunction sync(): void {\n  if (!props.disabled && canHover())\n    attach()\n  else detach()\n}\n\nwatch(() => props.disabled, sync)\nonMounted(sync)\nonBeforeUnmount(detach)\n</script>\n\n<template>\n  <div\n    ref=\"root\"\n    class=\"dz-cursor-host\"\n    :class=\"{ 'dz-cursor-host--active': active }\"\n    :style=\"{ '--dz-cursor-size': `${size}px` }\"\n  >\n    <slot />\n    <span ref=\"blob\" class=\"dz-cursor__blob\" :class=\"{ 'dz-cursor__blob--on': active }\" aria-hidden=\"true\" />\n  </div>\n</template>\n\n<style scoped>\n.dz-cursor-host {\n  position: relative;\n}\n\n/* Hide the native cursor only while the blob is live; restored on leave and for\n   touch/keyboard/reduced (the blob never activates there). */\n.dz-cursor-host--active {\n  cursor: none;\n}\n\n.dz-cursor__blob {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: var(--dz-cursor-size, 28px);\n  height: var(--dz-cursor-size, 28px);\n  border-radius: var(--dz-radius-full, 9999px);\n  pointer-events: none;\n  z-index: 2;\n  opacity: 0;\n  /* Soft brand blob with a mix-blend so it reads over light + dark surfaces. */\n  background: radial-gradient(\n    circle at center,\n    color-mix(in oklch, var(--dz-primary, #0766ee) 70%, transparent),\n    color-mix(in oklch, var(--dz-primary, #0766ee) 20%, transparent) 70%,\n    transparent 72%\n  );\n  mix-blend-mode: multiply;\n  transition: opacity var(--dz-duration-fast, 120ms) var(--dz-ease-out, ease-out);\n}\n\n/* Dark surfaces need `screen` rather than `multiply` for the blob to read.\n   NOTE: do not wrap the ancestor in `:global(...)` here. `:global([data-theme='dark'])\n   .dz-cursor__blob` compiles down to a bare `[data-theme='dark']` rule, which lands\n   `mix-blend-mode: screen` on <html> itself — screen-blending the whole document\n   against the white canvas paints every pixel white (blank page in dark mode).\n   A plain ancestor selector is already global: scoping only attaches to the last\n   compound selector, so this matches <html data-theme=\"dark\"> as intended. */\n[data-theme='dark'] .dz-cursor__blob {\n  mix-blend-mode: screen;\n}\n\n.dz-cursor__blob--on {\n  opacity: 1;\n}\n\n/* Forced-colors: a blend-mode blob would vanish — fall back to an outline ring. */\n@media (forced-colors: active) {\n  .dz-cursor__blob {\n    background: none;\n    border: 2px solid CanvasText;\n    mix-blend-mode: normal;\n  }\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzCursor.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzCursor } from './components/DzCursor.vue'\nexport { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzCard"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard"
+    ],
+    "motionPrimitives": [
+      "DzCursor",
+      "useReducedMotion"
+    ]
+  }
 }

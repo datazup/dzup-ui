@@ -111,8 +111,8 @@ const stickyClass = computed(() => ({
   height: var(--stick-h);
   overflow-y: auto;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  border: 1px solid var(--lp-hairline, var(--dz-border, #e2e8f0));
-  background: var(--dz-surface, #fff);
+  border: 1px solid var(--lp-hairline, var(--dz-border, #b5b7bb));
+  background: var(--dz-surface, #ffffff);
 }
 
 /* Tall track creates the scroll distance the pinned panel advances through. */
@@ -144,8 +144,8 @@ const stickyClass = computed(() => ({
   min-width: 1.6em;
   height: 1.6em;
   border-radius: var(--dz-radius-sm, 0.25rem);
-  background: color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 14%, transparent);
-  color: var(--dz-colors-primary-600, #4f46e5);
+  background: color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 14%, transparent);
+  color: var(--dz-colors-primary-600, #004ecb);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   font-size: var(--dz-text-xs, 0.75rem);
@@ -157,7 +157,7 @@ const stickyClass = computed(() => ({
   height: auto;
   padding: 0;
   background: none;
-  color: var(--dz-colors-primary-500, #6366f1);
+  color: var(--dz-colors-primary-500, #0766ee);
 }
 
 .body {
@@ -169,7 +169,7 @@ const stickyClass = computed(() => ({
   margin-top: auto;
   height: 4px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 16%, transparent);
+  background: color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 16%, transparent);
   overflow: hidden;
 }
 
@@ -180,8 +180,8 @@ const stickyClass = computed(() => ({
   border-radius: inherit;
   background: linear-gradient(
     90deg,
-    var(--dz-colors-primary-500, #6366f1),
-    var(--dz-colors-secondary-500, #a855f7)
+    var(--dz-colors-primary-500, #0766ee),
+    var(--dz-colors-secondary-500, #7260bd)
   );
 }
 
@@ -195,12 +195,12 @@ const stickyClass = computed(() => ({
   width: 7px;
   height: 7px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 22%, transparent);
+  background: color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 22%, transparent);
   transition: background-color var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out);
 }
 
 .dot--on {
-  background: var(--dz-colors-primary-500, #6366f1);
+  background: var(--dz-colors-primary-500, #0766ee);
 }
 
 .hint {
@@ -222,7 +222,7 @@ const stickyClass = computed(() => ({
   gap: 10px;
   padding: 12px 14px;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  border: 1px solid var(--lp-hairline, var(--dz-border, #e2e8f0));
-  background: var(--dz-surface, #fff);
+  border: 1px solid var(--lp-hairline, var(--dz-border, #b5b7bb));
+  background: var(--dz-surface, #ffffff);
 }
 </style>

@@ -13,25 +13,25 @@
 :root {
   /* Soft, layered elevation — a tight contact shadow + a wide ambient one. */
   --lp-shadow-sm:
-    0 1px 2px color-mix(in oklch, var(--dz-foreground, #000) 6%, transparent),
-    0 1px 1px color-mix(in oklch, var(--dz-foreground, #000) 4%, transparent);
+    0 1px 2px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 6%, transparent),
+    0 1px 1px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 4%, transparent);
   --lp-shadow:
-    0 1px 2px color-mix(in oklch, var(--dz-foreground, #000) 5%, transparent),
-    0 12px 28px -12px color-mix(in oklch, var(--dz-foreground, #000) 18%, transparent);
+    0 1px 2px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 5%, transparent),
+    0 12px 28px -12px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 18%, transparent);
   --lp-shadow-lg:
-    0 1px 2px color-mix(in oklch, var(--dz-foreground, #000) 5%, transparent),
-    0 18px 40px -20px color-mix(in oklch, var(--dz-foreground, #000) 22%, transparent),
-    0 40px 80px -32px color-mix(in oklch, var(--dz-foreground, #000) 30%, transparent);
+    0 1px 2px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 5%, transparent),
+    0 18px 40px -20px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 22%, transparent),
+    0 40px 80px -32px color-mix(in oklch, var(--dz-foreground, #1b1d1f) 30%, transparent);
 
   /* Hairline border — slightly translucent so it reads as a fine line. */
-  --lp-hairline: color-mix(in oklch, var(--dz-border, #e2e8f0) 75%, transparent);
+  --lp-hairline: color-mix(in oklch, var(--dz-border, #b5b7bb) 75%, transparent);
 
   /* Crisp top highlight that gives surfaces a faint glassy lift. */
   --lp-highlight: inset 0 1px 0 color-mix(in oklch, #fff 60%, transparent);
 
   /* Brand wash used for hero/CTA auroras and accents. */
-  --lp-brand: var(--dz-colors-primary-500, #6366f1);
-  --lp-brand-2: var(--dz-colors-secondary-500, #a855f7);
+  --lp-brand: var(--dz-colors-primary-500, #0766ee);
+  --lp-brand-2: var(--dz-colors-secondary-500, #7260bd);
 
   /* Fine self-tiling grain — a premium, near-subliminal texture (spec §6). */
   --lp-grain:
@@ -74,7 +74,7 @@
 /* Dark mode deepens the glass highlight and shadow so depth survives the flip. */
 [data-theme="dark"] {
   --lp-highlight: inset 0 1px 0 color-mix(in oklch, #fff 8%, transparent);
-  --lp-hairline: color-mix(in oklch, var(--dz-border, #2a2a35) 80%, transparent);
+  --lp-hairline: color-mix(in oklch, var(--dz-border, #b5b7bb) 80%, transparent);
 }
 
 html {
@@ -91,9 +91,9 @@ html {
 /* Brand gradient applied to text — refined primary → secondary sheen. */
 .lp-gradient-text {
   background: linear-gradient(100deg,
-    var(--dz-colors-primary-600, #4f46e5) 0%,
-    var(--dz-colors-secondary-500, #a855f7) 55%,
-    var(--dz-colors-primary-500, #6366f1) 100%);
+    var(--dz-colors-primary-600, #004ecb) 0%,
+    var(--dz-colors-secondary-500, #7260bd) 55%,
+    var(--dz-colors-primary-500, #0766ee) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -105,14 +105,14 @@ html {
   align-items: center;
   gap: 8px;
   padding: 5px 12px 5px 11px;
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 22%, transparent);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 22%, transparent);
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 9%, transparent);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 9%, transparent);
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 .lp-eyebrow::before {
@@ -131,7 +131,7 @@ html {
   background: linear-gradient(to right,
     transparent,
     var(--lp-hairline) 18%,
-    color-mix(in oklch, var(--dz-primary, #6366f1) 30%, var(--lp-hairline)) 50%,
+    color-mix(in oklch, var(--dz-primary, #0766ee) 30%, var(--lp-hairline)) 50%,
     var(--lp-hairline) 82%,
     transparent);
 }
@@ -206,7 +206,7 @@ html {
 .lp-card {
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
   transition:
     transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
@@ -217,7 +217,7 @@ html {
 .lp-card--hover:hover {
   transform: translateY(-3px);
   box-shadow: var(--lp-shadow), var(--lp-highlight);
-  border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 32%, var(--lp-hairline));
+  border-color: color-mix(in oklch, var(--dz-primary, #0766ee) 32%, var(--lp-hairline));
 }
 
 /* =========================================================================

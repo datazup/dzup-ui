@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "circular-text",
   "type": "registry:block",
   "title": "Circular text",
   "description": "Lays a string around a ring that slowly rotates, like a rotating seal.",
+  "categories": [
+    "text"
+  ],
   "files": [
     {
       "path": "circular-text.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\nimport { DzCircularText } from '../motion'\n</script>\n\n<template>\n  <!-- The curved glyphs are aria-hidden; the full string stays in the DOM (sr-only)\n       and is announced once. Reduced motion → static curved text. -->\n  <div style=\"position: relative; display: grid; place-items: center\">\n    <DzCircularText text=\"· DESIGN TOKENS · ACCESSIBLE MOTION \" :radius=\"74\" />\n    <DzText size=\"sm\" weight=\"semibold\" aria-hidden=\"true\">dzup</DzText>\n  </div>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/circular-text.vue"
+    },
+    {
+      "path": "motion/components/DzCircularText.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzCircularText — lays a string of characters around a circular path and slowly\n * rotates the whole ring (docs/animations.md §5.2, effect 39). Pairs with a badge\n * or seal-style label.\n *\n * Each glyph rides a thin radial spoke pivoting at the circle centre, so the text\n * curves along the rim with no per-character width maths. Transform-only — the\n * ring spins via a single GPU-cheap `rotate` loop.\n *\n * Accessibility & layout (§7):\n * - The curved glyphs are decorative duplicates, so the spokes are `aria-hidden`;\n *   the real text is kept in the DOM once via a visually-hidden `.dz-sr-only`\n *   string so assistive tech announces one clean, stable string.\n * - The ring is a fixed-size box (radius-derived), so the spin never reflows\n *   surrounding content.\n * - Under reduced motion (OS or the page-level toggle, via {@link\n *   useReducedMotion}) the ring freezes to static curved text — its accessible\n *   fallback — and the compositor hint is dropped.\n *\n * The looping ring carries `will-change: transform` while animating; the shared\n * off-screen loop cap (`.dz-stage-idle`, tokens.css) pauses it and clears the hint\n * when the card scrolls away. Extraction-ready: no landing-only imports.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** The text to lay around the ring (announced as one string). */\n    text: string\n    /** Ring radius (centre → glyph), in px. */\n    radius?: number\n    /** One full revolution duration (any CSS time). */\n    speed?: string\n    /** Flip the spin direction. */\n    reverse?: boolean\n  }>(),\n  {\n    radius: 80,\n    speed: 'var(--dz-anim-circular-duration, 18s)',\n    reverse: false,\n  },\n)\n\nconst reduced = useReducedMotion()\n\n/** The visible glyphs, paired with their angular placement around the ring. */\nconst glyphs = computed(() => {\n  const chars = [...props.text]\n  const step = 360 / Math.max(1, chars.length)\n  return chars.map((char, i) => ({\n    // Non-breaking space keeps gaps from collapsing in the inline-block spoke.\n    char: char === ' ' ? ' ' : char,\n    angle: i * step,\n  }))\n})\n\n/** Box is sized to the ring diameter so the spin reserves stable space. */\nconst ringStyle = computed(() => ({\n  width: `${props.radius * 2}px`,\n  height: `${props.radius * 2}px`,\n  animationDuration: props.speed,\n  animationDirection: props.reverse ? 'reverse' : 'normal',\n}))\n\nconst rootClass = computed(() => ({\n  'dz-circular': true,\n  'dz-circular--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <span :class=\"rootClass\">\n    <!-- The real, readable string — announced once as one clean string. -->\n    <span class=\"dz-sr-only\">{{ props.text }}</span>\n\n    <!-- Decorative curved copy: a spinning ring of radial spokes. -->\n    <span class=\"dz-circular__ring\" :style=\"ringStyle\" aria-hidden=\"true\">\n      <span\n        v-for=\"(g, i) in glyphs\"\n        :key=\"`g-${i}`\"\n        class=\"dz-circular__char\"\n        :style=\"{ height: `${props.radius}px`, transform: `translateX(-50%) rotate(${g.angle}deg)` }\"\n      >{{ g.char }}</span>\n    </span>\n  </span>\n</template>\n\n<style scoped>\n.dz-circular {\n  position: relative;\n  display: inline-flex;\n  vertical-align: middle;\n}\n\n/* The rotating ring: a square box that turns a full revolution per loop. */\n.dz-circular__ring {\n  position: relative;\n  display: block;\n  transform-origin: center center;\n  animation-name: dz-circular-spin;\n  animation-timing-function: linear;\n  animation-iteration-count: infinite;\n  will-change: transform;\n}\n\n/* Each glyph rides a thin spoke from the rim to the centre, pivoting at the\n * centre, so rotating the spoke parks the glyph (at the top) around the circle. */\n.dz-circular__char {\n  position: absolute;\n  top: 0;\n  left: 50%;\n  display: inline-block;\n  transform-origin: bottom center;\n  font: inherit;\n  line-height: 1;\n  white-space: pre;\n}\n\n@keyframes dz-circular-spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n\n/* Reduced motion (OS or page toggle) → static curved text, no spin, no hint.\n * The per-glyph placement transforms stay so the curve is preserved. */\n.dz-circular--reduced .dz-circular__ring {\n  animation: none;\n  will-change: auto;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzCircularText.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzCircularText } from './components/DzCircularText.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzText"
+    ],
+    "motionPrimitives": [
+      "DzCircularText"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

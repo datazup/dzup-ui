@@ -111,15 +111,15 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
   text-align: center;
   font-size: var(--dz-text-lg, 1.125rem);
   line-height: 1.6;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .contrast strong {
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .contrast-pro {
-  color: var(--dz-primary, #4f46e5) !important;
+  color: var(--dz-primary, #0766ee) !important;
 }
 
 .contrast-sep {
@@ -146,9 +146,9 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
 
 .plan--pro {
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 9%, transparent), transparent 55%),
-    var(--dz-surface, #fff);
-  border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 32%, var(--lp-hairline));
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 9%, transparent), transparent 55%),
+    var(--dz-surface, #ffffff);
+  border-color: color-mix(in oklch, var(--dz-primary, #0766ee) 32%, var(--lp-hairline));
 }
 
 /* Subtle gradient ring on the Pro card top edge. */
@@ -158,7 +158,7 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
   border-radius: inherit;
   padding: 1px;
   background: linear-gradient(180deg,
-    color-mix(in oklch, var(--dz-primary, #6366f1) 45%, transparent), transparent 40%);
+    color-mix(in oklch, var(--dz-primary, #0766ee) 45%, transparent), transparent 40%);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -186,16 +186,16 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
   align-items: center;
   gap: 10px;
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .plan-points svg {
-  color: var(--dz-success, #22c55e);
+  color: var(--dz-success, #1c882d);
   flex-shrink: 0;
 }
 
 .plan--pro .plan-points svg {
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 .plan-chips {

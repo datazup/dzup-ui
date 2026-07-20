@@ -1,23 +1,45 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tabs-indicator-slide",
   "type": "registry:block",
   "title": "Tabs indicator slide",
   "description": "The active-tab underline glides between tabs; instant move under reduced motion.",
+  "categories": [
+    "transitions"
+  ],
   "files": [
     {
       "path": "tabs-indicator-slide.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzTabs, DzTabList, DzTabTrigger, DzTabContent } from '@dzup-ui/core'\nimport { computed, nextTick, onMounted, ref, watch } from 'vue'\nimport { useReducedMotion } from '../motion'\n\nconst tabs = ['Overview', 'Pricing', 'Docs', 'Support']\nconst active = ref('Overview')\nconst reduced = useReducedMotion()\n\nconst rail = ref<HTMLElement | null>(null)\nconst bar = ref({ left: 0, width: 0 })\n\n// Measure the active trigger relative to the tablist so the bar tracks any width.\nfunction measure() {\n  const list = rail.value?.querySelector<HTMLElement>('[role=\"tablist\"]')\n  const tab = rail.value?.querySelector<HTMLElement>('[role=\"tab\"][data-state=\"active\"]')\n  if (!list || !tab) return\n  const l = list.getBoundingClientRect()\n  const t = tab.getBoundingClientRect()\n  bar.value = { left: t.left - l.left, width: t.width }\n}\n\nconst barStyle = computed(() => ({\n  transform: `translateX(${bar.value.left}px)`,\n  width: `${bar.value.width}px`,\n  transition: reduced.value\n    ? 'none'\n    : 'transform var(--dz-duration-normal) var(--dz-ease-default), width var(--dz-duration-normal) var(--dz-ease-default)',\n}))\n\nwatch(active, () => nextTick(measure), { flush: 'post' })\nonMounted(() => nextTick(measure))\n</script>\n\n<template>\n  <DzTabs v-model=\"active\" variant=\"line\" tone=\"primary\">\n    <div ref=\"rail\" style=\"position: relative\">\n      <DzTabList aria-label=\"Sections\">\n        <DzTabTrigger v-for=\"t in tabs\" :key=\"t\" :value=\"t\">{{ t }}</DzTabTrigger>\n      </DzTabList>\n      <span :style=\"barStyle\" aria-hidden=\"true\" class=\"indicator\" />\n    </div>\n  </DzTabs>\n</template>\n\n<style scoped>\n/* Hide the built-in snapping underline; the single bar is the indicator. */\n:deep([role=\"tab\"]) { border-bottom-color: transparent !important; }\n.indicator {\n  position: absolute;\n  bottom: 0;\n  left: 0;\n  height: 2px;\n  border-radius: var(--dz-radius-full);\n  background: var(--dz-primary);\n}\n</style>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/tabs-indicator-slide.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzTabs",
-    "DzTabList",
-    "DzTabTrigger"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzTabs",
+      "DzTabList",
+      "DzTabTrigger"
+    ],
+    "motionPrimitives": [
+      "useReducedMotion"
+    ]
+  }
 }

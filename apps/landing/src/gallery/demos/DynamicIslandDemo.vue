@@ -87,8 +87,8 @@ const playing = ref(true)
 /* The island is a deliberately dark chrome (like the iOS original) — legible in
    both themes. The DzIsland root owns the radius + overflow + size morph. */
 .island {
-  color: var(--dz-colors-neutral-50, #f8fafc);
-  background: var(--dz-colors-neutral-900, #0f172a);
+  color: var(--dz-colors-neutral-50, #f5f5f6);
+  background: var(--dz-colors-neutral-900, #1b1d1f);
   box-shadow: var(--dz-shadow-xl, 0 18px 40px -12px rgb(15 23 42 / 0.45));
   max-width: 100%;
 }
@@ -109,15 +109,15 @@ const playing = ref(true)
 
 .pill-hint {
   font-size: var(--dz-text-xs, 0.75rem);
-  color: color-mix(in oklch, var(--dz-colors-neutral-50, #f8fafc) 60%, transparent);
+  color: color-mix(in oklch, var(--dz-colors-neutral-50, #f5f5f6) 60%, transparent);
 }
 
 .pulse {
   width: 8px;
   height: 8px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-colors-success-400, #4ade80);
-  box-shadow: 0 0 0 0 color-mix(in oklch, var(--dz-colors-success-400, #4ade80) 70%, transparent);
+  background: var(--dz-colors-success-400, #60ad64);
+  box-shadow: 0 0 0 0 color-mix(in oklch, var(--dz-colors-success-400, #60ad64) 70%, transparent);
   animation: dz-island-pulse 1.6s var(--dz-ease-out, ease-out) infinite;
 }
 .pulse--still {
@@ -135,7 +135,7 @@ const playing = ref(true)
   width: 3px;
   height: 100%;
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f8fafc) 78%, transparent);
+  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f5f5f6) 78%, transparent);
   transform-origin: bottom;
   animation: dz-island-eq 0.9s var(--dz-ease-in-out, ease-in-out) infinite;
 }
@@ -173,19 +173,19 @@ const playing = ref(true)
   flex-shrink: 0;
   border-radius: var(--dz-radius-md, 0.5rem);
   font-size: 20px;
-  color: var(--dz-colors-neutral-900, #0f172a);
+  color: var(--dz-colors-neutral-900, #1b1d1f);
   background: linear-gradient(
     135deg,
-    var(--dz-colors-primary-400, #818cf8),
-    var(--dz-colors-secondary-400, #c084fc)
+    var(--dz-colors-primary-400, #5195ff),
+    var(--dz-colors-secondary-400, #978bda)
   );
 }
 
 .track-title {
-  color: var(--dz-colors-neutral-50, #f8fafc);
+  color: var(--dz-colors-neutral-50, #f5f5f6);
 }
 .track-artist {
-  color: color-mix(in oklch, var(--dz-colors-neutral-50, #f8fafc) 64%, transparent);
+  color: color-mix(in oklch, var(--dz-colors-neutral-50, #f5f5f6) 64%, transparent);
 }
 
 .controls {
@@ -202,31 +202,31 @@ const playing = ref(true)
   height: 38px;
   border: 0;
   border-radius: var(--dz-radius-full, 9999px);
-  color: var(--dz-colors-neutral-50, #f8fafc);
-  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f8fafc) 10%, transparent);
+  color: var(--dz-colors-neutral-50, #f5f5f6);
+  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f5f5f6) 10%, transparent);
   cursor: pointer;
   transition: background var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 .ctl:hover {
-  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f8fafc) 18%, transparent);
+  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f5f5f6) 18%, transparent);
 }
 .ctl--primary {
   width: 46px;
   height: 46px;
-  color: var(--dz-colors-neutral-900, #0f172a);
-  background: var(--dz-colors-neutral-50, #f8fafc);
+  color: var(--dz-colors-neutral-900, #1b1d1f);
+  background: var(--dz-colors-neutral-50, #f5f5f6);
 }
 .ctl--primary:hover {
-  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f8fafc) 88%, var(--dz-colors-primary-300, #a5b4fc));
+  background: color-mix(in oklch, var(--dz-colors-neutral-50, #f5f5f6) 88%, var(--dz-colors-primary-300, #83b8ff));
 }
 .ctl:focus-visible {
-  outline: 2px solid var(--dz-colors-primary-300, #a5b4fc);
+  outline: 2px solid var(--dz-colors-primary-300, #83b8ff);
   outline-offset: 2px;
 }
 
 @keyframes dz-island-pulse {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--dz-colors-success-400, #4ade80) 60%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--dz-colors-success-400, #60ad64) 60%, transparent);
   }
   70%,
   100% {

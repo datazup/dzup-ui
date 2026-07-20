@@ -157,12 +157,31 @@ jobs:
       # `build:stats` is excluded deliberately: liveStats.ts depends on the live
       # GitHub/npm APIs, so a legitimate refresh would fail this check. It is the
       # one generated file here that is not a pure function of the source tree.
+      #
+      # `build:sitemap` joined this list in TASK-FREE3-05. It runs in every build
+      # (package.json) and its output declares itself "GENERATED, NEVER HAND-EDITED",
+      # yet sitemap.xml/robots.txt were never diffed — a route added without
+      # rebuilding shipped a stale committed sitemap silently. Making it guardable
+      # required first making it deterministic: the old git-derived `<lastmod>` was
+      # re-dated wholesale by any merge commit and unknowable in a shallow clone
+      # (see the determinism note in scripts/build-sitemap.ts). Template `createdAt`
+      # — declared, committed registry data — is the only lastmod left.
+      #
+      # The three screenshot/asset generators (`yarn og`, `yarn thumbnails`,
+      # `yarn brand-assets`) are NOT in this list, and that is now a written
+      # decision rather than an oversight: re-shooting Chromium screenshots on a
+      # runner diffs on font hinting and GPU rasterisation, not on content. Their
+      # COUNT is checked instead — build:og bakes THUMBNAIL_COVERAGE into
+      # ogImages.ts (diffed below) and src/templates/thumbnailCoverage.spec.ts
+      # fails if coverage drops. Rationale: apps/landing/scripts/README.md
+      # § "Committed screenshot assets".
       - name: Landing generated artifacts unchanged
         run: |
           yarn workspace @dzup-ui/landing build:registry
           yarn workspace @dzup-ui/landing build:animations-registry
           yarn workspace @dzup-ui/landing build:component-index
           yarn workspace @dzup-ui/landing build:counts
+          yarn workspace @dzup-ui/landing build:sitemap
           yarn workspace @dzup-ui/landing build:og
           yarn workspace @dzup-ui/landing build:releases
           git diff --exit-code \
@@ -170,11 +189,28 @@ jobs:
             apps/landing/public/llms.txt \
             apps/landing/public/llms-full.txt \
             apps/landing/public/feed.xml \
+            apps/landing/public/sitemap.xml \
+            apps/landing/public/robots.txt \
             apps/landing/index.html \
             apps/landing/src/generated/components.ts \
             apps/landing/src/generated/counts.ts \
             apps/landing/src/generated/ogImages.ts \
             apps/landing/src/generated/releases.ts
+          # `git diff` is blind to UNTRACKED files, so a generator that starts
+          # emitting a NEW artifact passes the check above while that artifact
+          # never ships — it regenerates on the runner, is never committed, and
+          # 404s in production. Found in TASK-FREE3-02: the animations registry
+          # began emitting a shared `motion-tokens.css` that every item's
+          # `meta.stylesheet` points at, and the diff above saw nothing.
+          untracked="$(git ls-files --others --exclude-standard \
+            apps/landing/public/r/ \
+            apps/landing/public/ \
+            apps/landing/src/generated/)"
+          if [ -n "$untracked" ]; then
+            echo "::error::Generated artifacts were emitted but never committed:"
+            echo "$untracked"
+            exit 1
+          fi
       - name: Changelog validation
         run: yarn validate:changelog
       - name: Peer dependency validation

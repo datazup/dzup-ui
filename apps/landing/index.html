@@ -11,7 +11,26 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0766ee" />
+    <!--
+      Paired theme-color, so the browser/OS chrome follows the page (TASK-FREE3-08).
+      A single static value left the address bar and task-switcher card painted in
+      the LIGHT brand blue while the site itself rendered dark.
+
+      Light stays `#0766ee` (`--dz-colors-primary-500`) — the value
+      `site.webmanifest` and `favicon.svg` already agree on, and changing it would
+      break that agreement for no gain. Dark is `#004ecb`
+      (`--dz-colors-primary-600`), the ramp's own darker step: still unmistakably
+      the brand, but a surface that belongs beside a dark page rather than glowing
+      against it. Both are recomputed from tokens.css by
+      `landing-token-fallbacks.spec.ts`.
+
+      Media-query metas cover the OS preference. They cannot see the site's MANUAL
+      override (the `dz-theme` localStorage choice a visitor makes with the toggle)
+      — no CSS media query can. `src/composables/useTheme.ts` keeps that case
+      honest by rewriting the active tag whenever it writes `data-theme`.
+    -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#0766ee" data-scheme="light" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#004ecb" data-scheme="dark" />
 
     <!-- Atom feed autodiscovery — the /changelog history as a subscribable feed.
          A fixed URL (cannot drift); scripts/build-releases.ts fails the build if

@@ -1,22 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "flip-on-change",
   "type": "registry:block",
   "title": "Flip on change",
   "description": "A badge value flips with a half-turn whenever the underlying data updates.",
+  "categories": [
+    "lists"
+  ],
   "files": [
     {
       "path": "flip-on-change.vue",
       "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue'\nimport { DzBadge } from '@dzup-ui/core'\nimport { DzFlip } from '../motion'\n\nconst states = [\n  { label: 'Queued', tone: 'neutral' },\n  { label: 'Running', tone: 'info' },\n  { label: 'Passed', tone: 'success' },\n]\nconst i = ref(0)\nconst current = computed(() => states[i.value])\n</script>\n\n<template>\n  <!-- Pass the changing value to DzFlip; it remounts + flips the face on each update. -->\n  <DzFlip :value=\"current.label\">\n    <DzBadge variant=\"solid\" :tone=\"current.tone\">{{ current.label }}</DzBadge>\n  </DzFlip>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/flip-on-change.vue"
+    },
+    {
+      "path": "motion/components/DzFlip.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, watch } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzFlip — flips its content with a half-turn on the X axis whenever the bound\n * `value` changes (docs/animations.md §6.6, effect 26). Wrap a DzBadge / DzTag\n * (or any value) and pass the same reactive value to `value`; on each update the\n * face is remounted (a bumped `:key`) so the `.dz-flip__face` keyframe in\n * `tokens.css` re-runs. Transform/opacity only.\n *\n * Under reduced motion (OS or the page-level toggle) the value swaps instantly\n * with no turn — bound here via {@link useReducedMotion} for the live toggle; the\n * OS setting is also handled centrally in `tokens.css`.\n */\nconst props = defineProps<{\n  /** The value to watch — when it changes, the content flips to the new state. */\n  value: string | number\n}>()\n\nconst reduced = useReducedMotion()\n\n// Bumped on every value change so the face remounts and the flip keyframe replays.\nconst flipKey = ref(0)\nwatch(\n  () => props.value,\n  () => {\n    flipKey.value += 1\n  },\n)\n</script>\n\n<template>\n  <span class=\"dz-flip\" :class=\"{ 'dz-flip--reduced': reduced }\">\n    <span :key=\"flipKey\" class=\"dz-flip__face\">\n      <slot />\n    </span>\n  </span>\n</template>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzFlip.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzFlip } from './components/DzFlip.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzBadge",
-    "DzTag"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzBadge",
+      "DzTag"
+    ],
+    "motionPrimitives": [
+      "DzFlip"
+    ]
+  }
 }

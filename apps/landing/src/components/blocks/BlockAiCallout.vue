@@ -184,7 +184,7 @@ const discovery = computed(() => registryDiscoveryCommands())
   font-size: 0.92em;
   padding: 1px 5px;
   border-radius: var(--dz-radius-sm, 4px);
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 11%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 11%, var(--dz-surface, #ffffff));
 }
 
 .ai-code {

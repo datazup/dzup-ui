@@ -16,7 +16,10 @@
  *     comes back *incomplete*, not *fail*, and is NOT claimed here);
  *   • the SPA focus-move: after client-side navigation, focus sits on the new
  *     page's <h1> (or <main>), and the aria-live route announcer carries the
- *     new page title.
+ *     new page title;
+ *   • the skip link's target is focusable on the FIRST painted route
+ *     (TASK-FREE3-07) — it used to become focusable only once the router's
+ *     afterEach had fired, i.e. never on arrival.
  *
  * The two chromeless preview routes (/blocks/preview/:id,
  * /templates/:slug/preview) are exempt from the heading assertions BY DECISION:
@@ -178,6 +181,50 @@ describe.sequential('landing pages — accessibility', () => {
       // The one that exists is the skip link's target, not some other element
       // that merely happens to be the only main left.
       expect(mains[0]!.id, `route ${path}: the page <main> is not the skip-link target`).toBe('main')
+    })
+  })
+
+  /**
+   * The skip link's target must be focusable on the FIRST painted route
+   * (TASK-FREE3-07).
+   *
+   * `tabindex="-1"` used to arrive only from the router's `afterEach` guard, which
+   * by definition has not run before the first navigation — so on arrival, the one
+   * moment the skip link exists to serve, `<main id="main">` could not take focus
+   * and moving focus to it was left to browser discretion. It is now in the
+   * template, asserted here before any `router.push`.
+   *
+   * WHAT THIS DOES NOT CLAIM: jsdom does not implement fragment navigation, so
+   * clicking the anchor cannot move focus here no matter how the app is written —
+   * a test that "clicked" it would be testing its own simulation. This asserts the
+   * app-side precondition the browser behaviour depends on (target exists, is
+   * reachable from the link's href, and accepts focus). Real activation in a real
+   * browser is TASK-FREE3-06's e2e flow.
+   */
+  describe('skip link', () => {
+    it('has a focusable target on a fresh mount, before any navigation', async () => {
+      render(App, { global: { plugins: [router] } })
+      await router.isReady()
+      await flushPromises()
+
+      const link = document.querySelector<HTMLAnchorElement>('a.skip-link')
+      expect(link, 'the skip link is not rendered').toBeTruthy()
+
+      // Resolve the target the way a browser does — from the link's own href —
+      // so the two cannot drift apart silently.
+      const targetId = link!.getAttribute('href')!.replace(/^#/, '')
+      const target = document.getElementById(targetId)
+      expect(target, `the skip link points at #${targetId}, which does not exist`).toBeTruthy()
+
+      expect(
+        target!.getAttribute('tabindex'),
+        `#${targetId} must carry tabindex="-1" in the template — without it, focus movement `
+        + 'on fragment activation is browser-dependent, and the router guard that used to '
+        + 'supply it has not run on the first painted route',
+      ).toBe('-1')
+
+      target!.focus()
+      expect(document.activeElement, `focusing #${targetId} did not move activeElement`).toBe(target)
     })
   })
 

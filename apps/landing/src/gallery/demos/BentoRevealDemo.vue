@@ -76,7 +76,7 @@ const cells = [
 
 @media (hover: hover) {
   .cell:hover {
-    border-color: color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 48%, var(--dz-border, #e2e8f0));
+    border-color: color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 48%, var(--dz-border, #b5b7bb));
   }
 }
 
@@ -86,7 +86,7 @@ const cells = [
 }
 
 .cell-icon {
-  color: var(--dz-colors-primary-500, #6366f1);
+  color: var(--dz-colors-primary-500, #0766ee);
 }
 
 .hint {

@@ -167,7 +167,7 @@ defineExpose({ toggle, collapse })
 }
 
 .dz-island__pill:focus-visible {
-  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-ring, var(--dz-primary, #6366f1));
+  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-ring, var(--dz-primary, #0766ee));
   outline-offset: 2px;
 }
 

@@ -43,6 +43,6 @@ const phrases = [
 }
 
 .accent {
-  color: var(--dz-colors-primary-600, #4f46e5);
+  color: var(--dz-colors-primary-600, #004ecb);
 }
 </style>

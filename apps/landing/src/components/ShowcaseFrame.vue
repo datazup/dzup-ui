@@ -277,7 +277,7 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
   overflow: hidden;
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-lg), var(--lp-highlight);
   transition: var(--dz-landing-theme-transition);
 }
@@ -287,7 +287,7 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: color-mix(in oklch, var(--dz-muted, #f1f5f9) 60%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--dz-muted, #d3d4d7) 60%, var(--dz-surface, #ffffff));
   border-bottom: 1px solid var(--lp-hairline);
 }
 
@@ -302,18 +302,18 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
   border-radius: var(--dz-radius-full, 9999px);
   opacity: 0.85;
 }
-.dot-r { background: var(--dz-danger, #ef4444); }
-.dot-y { background: var(--dz-warning, #f59e0b); }
-.dot-g { background: var(--dz-success, #22c55e); }
+.dot-r { background: var(--dz-danger, #cc272e); }
+.dot-y { background: var(--dz-warning, #bb9300); }
+.dot-g { background: var(--dz-success, #1c882d); }
 
 .window-url {
   flex: 1;
   text-align: center;
   font-size: var(--dz-text-xs, 0.75rem);
   font-family: var(--dz-font-mono, monospace);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   padding: 4px 12px;
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-full, 9999px);
   max-width: 280px;
@@ -327,8 +327,8 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
 .window-body {
   padding: clamp(16px, 2.4cqw, 26px);
   background:
-    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 4%, transparent), transparent 38%),
-    var(--dz-background, #fff);
+    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 4%, transparent), transparent 38%),
+    var(--dz-background, #e7e8e9);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -402,8 +402,8 @@ const bars = [38, 52, 44, 66, 58, 74, 63, 81, 70, 88, 79, 96]
   flex: 1;
   border-radius: var(--dz-radius-sm, 4px) var(--dz-radius-sm, 4px) 0 0;
   background: linear-gradient(to top,
-    color-mix(in oklch, var(--dz-primary, #6366f1) 28%, transparent),
-    var(--dz-primary, #6366f1));
+    color-mix(in oklch, var(--dz-primary, #0766ee) 28%, transparent),
+    var(--dz-primary, #0766ee));
   min-height: 6px;
 }
 

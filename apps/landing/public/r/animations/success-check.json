@@ -1,21 +1,49 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "success-check",
   "type": "registry:block",
   "title": "Success check",
   "description": "An SVG ring and tick draw themselves in with a small pop to confirm a completed action.",
+  "categories": [
+    "feedback"
+  ],
   "files": [
     {
       "path": "success-check.vue",
       "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzButton } from '@dzup-ui/core'\nimport { DzSuccessCheck } from '../motion'\n\n// Flip `active` once the action resolves; the ring + tick draw via stroke-dashoffset.\nconst done = ref(false)\n</script>\n\n<template>\n  <DzSuccessCheck v-if=\"done\" :active=\"true\" tone=\"success\" label=\"Payment confirmed\" />\n  <DzButton v-else variant=\"solid\" tone=\"primary\" @click=\"done = true\">\n    Confirm payment\n  </DzButton>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/success-check.vue"
+    },
+    {
+      "path": "motion/components/DzSuccessCheck.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzSuccessCheck — draws an SVG ring then a tick (stroke-dashoffset) with a small\n * scale pop to confirm a completed action (docs/animations.md §6.9, effect 33).\n * Flip `active` to `true` once the action resolves (e.g. after a form submit) and\n * the mark draws itself in; the `.dz-check` class system in `tokens.css` owns the\n * motion, so this component only renders the geometry and toggles `--in`.\n *\n * Tone defaults to `success`; any canonical tone token works. Under reduced motion\n * (OS or the page-level toggle) the mark appears fully drawn instantly with no\n * sweep or pop — bound here via {@link useReducedMotion} for the live toggle; the\n * OS setting is also handled centrally in `tokens.css`.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** When `true`, the mark draws in; while `false` it stays hidden. */\n    active?: boolean\n    /** Diameter of the mark in pixels. */\n    size?: number\n    /** Semantic tone token used for the stroke (default `success`). */\n    tone?: 'success' | 'primary' | 'info' | 'warning' | 'danger'\n    /** Accessible label announced for the mark. */\n    label?: string\n  }>(),\n  { active: false, size: 64, tone: 'success', label: 'Done' },\n)\n\nconst reduced = useReducedMotion()\n\nconst rootStyle = computed(() => ({\n  width: `${props.size}px`,\n  height: `${props.size}px`,\n  color: `var(--dz-${props.tone}, #16a34a)`,\n}))\n</script>\n\n<template>\n  <span\n    class=\"dz-check\"\n    :class=\"{ 'dz-check--in': active, 'dz-check--reduced': reduced }\"\n    :style=\"rootStyle\"\n    :role=\"active ? 'img' : undefined\"\n    :aria-label=\"active ? label : undefined\"\n    :aria-hidden=\"active ? undefined : 'true'\"\n  >\n    <svg viewBox=\"0 0 52 52\" width=\"100%\" height=\"100%\" aria-hidden=\"true\">\n      <g class=\"dz-check__ring\">\n        <circle class=\"dz-check__circle\" cx=\"26\" cy=\"26\" r=\"24\" stroke-width=\"2.5\" />\n        <path class=\"dz-check__tick\" d=\"M16 27 l7.5 7.5 L38 18\" stroke-width=\"3.2\" />\n      </g>\n    </svg>\n  </span>\n</template>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzSuccessCheck.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzSuccessCheck } from './components/DzSuccessCheck.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzButton"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzButton"
+    ],
+    "motionPrimitives": [
+      "DzSuccessCheck"
+    ]
+  }
 }

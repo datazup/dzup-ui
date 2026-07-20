@@ -27,6 +27,16 @@
  * and per-template PNGs exist; `src/router.ts` reads it to decide each route's
  * `og:image`.
  *
+ *   3. Count the committed template thumbnails per theme and bake the totals into
+ *      the same generated module as `THUMBNAIL_COVERAGE` (TASK-FREE3-05). The
+ *      screenshot generators (`yarn og` / `yarn thumbnails` / `yarn brand-assets`)
+ *      are deliberately EXEMPT from CI's byte-diff drift guard — re-shooting them
+ *      on a runner would diff on machine noise, not on content (see
+ *      `scripts/README.md` § "Committed screenshot assets"). Pixels therefore go
+ *      unchecked, but their COUNT does not: `src/templates/thumbnailCoverage.spec.ts`
+ *      fails when coverage falls below this committed manifest, so the next batch
+ *      of templates cannot quietly ship with half its thumbnails missing.
+ *
  * Run with `yarn build:og` (from apps/landing); wired ahead of `vite build`.
  */
 
@@ -36,6 +46,7 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
+import { COUNTS } from '../src/generated/counts.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
@@ -88,6 +99,21 @@ async function convertTemplates(): Promise<{ slugs: string[], converted: number 
   return { slugs, converted }
 }
 
+/**
+ * Committed template thumbnails per theme (`yarn thumbnails`). The denominator is
+ * `COUNTS.templates` — itself derived from `TEMPLATES.length` by `build-counts.ts`,
+ * which the build chain and CI's drift step both run BEFORE this script — so the
+ * ratio is never a typed number.
+ */
+function thumbnailCoverage(): { light: number, dark: number, templates: number } {
+  const names = existsSync(THUMBS_DIR) ? readdirSync(THUMBS_DIR).filter(name => name.endsWith('.webp')) : []
+  return {
+    light: names.filter(name => !name.endsWith('-dark.webp')).length,
+    dark: names.filter(name => name.endsWith('-dark.webp')).length,
+    templates: COUNTS.templates,
+  }
+}
+
 /** Block ids with a committed OG card (`public/og/<id>.png`, from `yarn og`). */
 function blockOgIds(): string[] {
   if (!existsSync(BLOCK_OG_DIR))
@@ -98,7 +124,11 @@ function blockOgIds(): string[] {
     .sort()
 }
 
-function renderModule(blocks: string[], templates: string[]): string {
+function renderModule(
+  blocks: string[],
+  templates: string[],
+  coverage: { light: number, dark: number, templates: number },
+): string {
   const list = (items: string[]) =>
     items.length === 0 ? '' : `\n  ${items.map(item => `'${item}'`).join(',\n  ')},\n`
   return `/**
@@ -117,16 +147,37 @@ export const BLOCK_OG_IDS: ReadonlySet<string> = new Set([${list(blocks)}])
 
 /** Template slugs with a derived 1200×630 PNG at \`/og-templates/<slug>.png\`. */
 export const TEMPLATE_OG_SLUGS: ReadonlySet<string> = new Set([${list(templates)}])
+
+/**
+ * Committed template screenshot coverage at the last \`yarn build:og\` — the
+ * high-water mark \`src/templates/thumbnailCoverage.spec.ts\` asserts against.
+ * The screenshot generators are exempt from CI's byte-diff drift guard (machine
+ * noise); this COUNT is the part CI can honestly check. \`templates\` is
+ * \`COUNTS.templates\`, i.e. \`TEMPLATES.length\`.
+ */
+export const THUMBNAIL_COVERAGE = {
+  templates: ${coverage.templates},
+  light: ${coverage.light},
+  dark: ${coverage.dark},
+} as const
 `
 }
 
 async function main(): Promise<void> {
   const { slugs, converted } = await convertTemplates()
   const blocks = blockOgIds()
-  await writeFile(OUT_MODULE, renderModule(blocks, slugs))
+  const coverage = thumbnailCoverage()
+  await writeFile(OUT_MODULE, renderModule(blocks, slugs, coverage))
   console.log(
     `✓ build-og-images: ${slugs.length} template cards (${converted} converted, ${slugs.length - converted} current), `
     + `${blocks.length} block cards → src/generated/ogImages.ts`,
+  )
+  // Per-kind coverage line (TASK-FREE3-05): the screenshots themselves are not
+  // diffed in CI, so make their presence a number somebody can read in the log.
+  console.log(
+    `  coverage — templates: ${coverage.light}/${coverage.templates} light, `
+    + `${coverage.dark}/${coverage.templates} dark thumbs; `
+    + `blocks: ${blocks.length}/${COUNTS.blocks} OG cards (optional, \`yarn og\`)`,
   )
 }
 

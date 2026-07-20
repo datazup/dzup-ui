@@ -1,22 +1,52 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "dock",
   "type": "registry:block",
   "title": "Dock magnification",
   "description": "A row of icons scales by pointer proximity, neighbours easing — the macOS dock.",
+  "categories": [
+    "hover"
+  ],
   "files": [
     {
       "path": "dock.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzIconButton } from '@dzup-ui/core'\nimport { Compass, Settings, Sparkles, Users } from 'lucide-vue-next'\nimport { DzDock, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\nconst items = [\n  { icon: Compass, label: 'Explore' },\n  { icon: Sparkles, label: 'Highlights' },\n  { icon: Users, label: 'Team' },\n  { icon: Settings, label: 'Settings' },\n]\n</script>\n\n<template>\n  <!-- rAF pointer; each item scales about its own centre so clicks never move.\n       Flat static row on touch/keyboard and under reduced motion (via disabled). -->\n  <DzDock :disabled=\"reduced\" aria-label=\"Workspace dock\">\n    <DzIconButton\n      v-for=\"item in items\"\n      :key=\"item.label\"\n      :icon=\"item.icon\"\n      :ariaLabel=\"item.label\"\n      variant=\"ghost\"\n      tone=\"primary\"\n      size=\"lg\"\n    />\n  </DzDock>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/dock.vue"
+    },
+    {
+      "path": "motion/components/DzDock.vue",
+      "content": "<script setup lang=\"ts\">\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * DzDock — macOS-style dock magnification (docs/animations.md §5.5, effect 46).\n *\n * A row of items (DzIconButton / DzAvatar / anything) where each item scales by\n * its proximity to the pointer, with the neighbours easing up too on a smooth\n * cosine falloff. Pure `transform: scale()` about each item's own centre, so the\n * magnified item grows in place — its click/focus target never moves out from\n * under the user. One `transform` write per item per frame via `requestAnimation\n * Frame`, regardless of pointer-event rate.\n *\n * Accessibility / touch guarantees (§5.5, §7):\n * - **Pointer-only.** The magnification engages only on fine-pointer, hover-\n *   capable devices; touch pointer events are ignored. Touch users get a flat,\n *   static row.\n * - **Reduced-motion.** Disabled when the OS sets `prefers-reduced-motion` OR the\n *   caller passes `disabled: true` (wire to the page-level toggle via\n *   `useReducedMotion`). Import-free of landing internals so it stays extractable.\n * - **Keyboard-safe.** Magnification is pointer-driven only — Tabbing through the\n *   items never scales them, and because each item scales about its own centre,\n *   the focus ring lands exactly where the static layout put it.\n *\n * `will-change: transform` is set on the items while engaged and cleared on\n * leave/unmount.\n *\n * Usage:\n *   <DzDock :disabled=\"reduced\">\n *     <DzIconButton v-for=\"i in items\" :key=\"i.id\" :icon=\"i.icon\" :aria-label=\"i.label\" />\n *   </DzDock>\n */\n\nconst props = withDefaults(\n  defineProps<{\n    /** Peak scale for the item directly under the pointer (default `1.5`). */\n    maxScale?: number\n    /** Horizontal influence radius in px either side of an item (default `120`). */\n    radius?: number\n    /** Upward lift in px applied to the most-magnified item (default `8`). */\n    lift?: number\n    /** Force the flat, un-magnified row (page-level reduced motion). */\n    disabled?: boolean\n    /** Accessible label for the dock landmark. */\n    ariaLabel?: string\n  }>(),\n  { maxScale: 1.5, radius: 120, lift: 8, disabled: false },\n)\n\nconst root = ref<HTMLElement | null>(null)\nlet frame = 0\nlet pointerX = 0\nlet attached = false\n\n/** Whether the device has a fine, hover-capable pointer (SSR-safe). */\nfunction canHover(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(hover: hover) and (pointer: fine)').matches\n}\n\n/** The direct element children — each is one dock item. */\nfunction items(): HTMLElement[] {\n  if (!root.value)\n    return []\n  return Array.from(root.value.children).filter((c): c is HTMLElement => c instanceof HTMLElement)\n}\n\nfunction applyFrame(): void {\n  frame = 0\n  const { maxScale, radius, lift } = props\n  for (const item of items()) {\n    const rect = item.getBoundingClientRect()\n    const center = rect.left + rect.width / 2\n    const dist = Math.abs(pointerX - center)\n    // Cosine falloff: 1 at the pointer, easing smoothly to 0 at the radius edge.\n    const t = Math.min(dist / radius, 1)\n    const influence = Math.cos((t * Math.PI) / 2)\n    const scale = 1 + (maxScale - 1) * influence\n    const y = -lift * influence\n    item.style.transform = `translateY(${y.toFixed(2)}px) scale(${scale.toFixed(3)})`\n  }\n}\n\nfunction reset(): void {\n  for (const item of items()) {\n    // Spring each item back to rest with an eased transition, then drop the hint.\n    item.style.transition = 'transform var(--dz-duration-normal, 200ms) var(--dz-ease-out, ease-out)'\n    item.style.transform = ''\n    const done = (): void => {\n      item.style.willChange = ''\n      item.removeEventListener('transitionend', done)\n    }\n    item.addEventListener('transitionend', done)\n  }\n}\n\nfunction onMove(event: PointerEvent): void {\n  if (event.pointerType === 'touch')\n    return\n  pointerX = event.clientX\n  if (!frame) {\n    for (const item of items()) {\n      item.style.transition = 'none'\n      item.style.willChange = 'transform'\n    }\n    frame = requestAnimationFrame(applyFrame)\n  }\n}\n\nfunction onLeave(): void {\n  if (frame) {\n    cancelAnimationFrame(frame)\n    frame = 0\n  }\n  reset()\n}\n\nfunction attach(): void {\n  if (attached || !root.value)\n    return\n  root.value.addEventListener('pointermove', onMove)\n  root.value.addEventListener('pointerleave', onLeave)\n  attached = true\n}\n\nfunction detach(): void {\n  if (!attached || !root.value)\n    return\n  root.value.removeEventListener('pointermove', onMove)\n  root.value.removeEventListener('pointerleave', onLeave)\n  if (frame) {\n    cancelAnimationFrame(frame)\n    frame = 0\n  }\n  // Clear any inline transforms so the row is flat for touch/reduced users.\n  for (const item of items()) {\n    item.style.transform = ''\n    item.style.transition = ''\n    item.style.willChange = ''\n  }\n  attached = false\n}\n\nfunction sync(): void {\n  if (!props.disabled && canHover())\n    attach()\n  else detach()\n}\n\nwatch(() => props.disabled, sync)\nonMounted(sync)\nonBeforeUnmount(detach)\n</script>\n\n<template>\n  <div ref=\"root\" class=\"dz-dock\" role=\"toolbar\" :aria-label=\"ariaLabel\">\n    <slot />\n  </div>\n</template>\n\n<style scoped>\n.dz-dock {\n  display: inline-flex;\n  align-items: flex-end;\n  gap: var(--dz-spacing-3, 0.75rem);\n  /* Each item scales about its own bottom-centre so it grows up out of the dock\n     without shifting its click target horizontally. */\n}\n\n.dz-dock > :deep(*) {\n  transform-origin: center bottom;\n  /* Keep the items square to the baseline as they scale. */\n  flex: 0 0 auto;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzDock.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzDock } from './components/DzDock.vue'\nexport { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzIconButton",
-    "DzAvatar"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzIconButton",
+      "DzAvatar"
+    ],
+    "motionPrimitives": [
+      "DzDock",
+      "useReducedMotion"
+    ]
+  }
 }

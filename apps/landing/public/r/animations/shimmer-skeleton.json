@@ -1,21 +1,49 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "shimmer-skeleton",
   "type": "registry:block",
   "title": "Shimmer skeleton",
   "description": "A soft highlight sweeps across loading placeholders to signal progress.",
+  "categories": [
+    "attention"
+  ],
   "files": [
     {
       "path": "shimmer-skeleton.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzSkeleton } from '@dzup-ui/core'\nimport { DzShimmer } from '../motion'\n</script>\n\n<template>\n  <!-- Wrap placeholders; pass :animate=\"false\" so the sweep is the only motion. -->\n  <DzShimmer>\n    <DzSkeleton variant=\"circular\" width=\"44px\" height=\"44px\" :animate=\"false\" />\n    <DzSkeleton variant=\"text\" :lines=\"3\" :animate=\"false\" />\n  </DzShimmer>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/shimmer-skeleton.vue"
+    },
+    {
+      "path": "motion/components/DzShimmer.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzShimmer — a sweeping highlight over loading placeholders\n * (docs/animations.md §6.7, effect 28). Wrap a cluster of DzSkeleton elements;\n * the shared `.dz-shimmer` utility in `tokens.css` rides a soft highlight band\n * across the masked area via a translated ::after (transform only, GPU-cheap).\n * Pair with `:animate=\"false\"` skeletons so the sweep is the only motion.\n *\n * Under reduced motion (OS or the page-level toggle) the sweep is removed and the\n * placeholders sit static — bound here via {@link useReducedMotion} for the live\n * toggle; the OS setting is also handled centrally in `tokens.css`.\n */\nconst reduced = useReducedMotion()\n\nconst classes = computed(() => ({\n  'dz-shimmer': true,\n  'dz-shimmer--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <div :class=\"classes\" aria-hidden=\"true\">\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzShimmer.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzShimmer } from './components/DzShimmer.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzSkeleton"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzSkeleton"
+    ],
+    "motionPrimitives": [
+      "DzShimmer"
+    ]
+  }
 }

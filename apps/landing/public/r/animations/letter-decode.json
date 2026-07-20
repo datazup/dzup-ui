@@ -1,21 +1,61 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "letter-decode",
   "type": "registry:block",
   "title": "Letter decode",
   "description": "Scrambles then resolves characters left-to-right when scrolled into view.",
+  "categories": [
+    "text"
+  ],
   "files": [
     {
       "path": "letter-decode.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\nimport { DzTextDecode } from '../motion'\n</script>\n\n<template>\n  <DzText size=\"sm\" weight=\"semibold\">\n    <DzTextDecode text=\"ECOSYSTEM · ANIMATIONS\" />\n  </DzText>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/letter-decode.vue"
+    },
+    {
+      "path": "motion/components/DzTextDecode.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, watch } from 'vue'\nimport { useInView } from '../useInView.ts'\nimport { useReducedMotion } from '../useReducedMotion.ts'\nimport { useTextDecode } from '../useTextDecode.ts'\n\n/**\n * DzTextDecode — scrambles then resolves its text when it scrolls into view\n * (docs/animations.md §6.2, effect 10). Pairs with eyebrows/labels.\n *\n * Built on {@link useTextDecode} + {@link useInView}. The scrambling glyphs are\n * decorative gibberish, so they are `aria-hidden`; the real label is kept in the\n * DOM once via a visually-hidden `.dz-sr-only` string and stays selectable. A\n * hidden sizer reserves the resolved text's box so the scramble never shifts\n * layout (§7).\n *\n * Reduced motion (OS or page-level toggle) skips the scramble entirely and shows\n * the plain text — its accessible fallback.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** The final text to resolve to. */\n    text: string\n    /** Element to render as the root. */\n    as?: string\n  }>(),\n  { as: 'span' },\n)\n\nconst root = ref<HTMLElement | null>(null)\nconst isInView = useInView(root, { once: false })\nconst reduced = useReducedMotion()\nconst { display, run, resolve } = useTextDecode(() => props.text)\n\nfunction trigger(): void {\n  if (reduced.value)\n    resolve()\n  else run()\n}\n\n// Decode each time the label enters view (so Replay re-triggers it); under\n// reduced motion just snap to the resolved text.\nwatch([isInView, reduced], ([inView]) => {\n  if (inView)\n    trigger()\n}, { immediate: true })\n</script>\n\n<template>\n  <component :is=\"props.as\" ref=\"root\" class=\"dz-text-decode\">\n    <span class=\"dz-sr-only\">{{ props.text }}</span>\n    <span aria-hidden=\"true\" class=\"dz-text-decode__sizer\">{{ props.text }}</span>\n    <span aria-hidden=\"true\" class=\"dz-text-decode__live\">{{ display }}</span>\n  </component>\n</template>\n\n<style scoped>\n.dz-text-decode {\n  position: relative;\n  display: inline-block;\n}\n\n.dz-text-decode__sizer {\n  visibility: hidden;\n  white-space: pre;\n}\n\n.dz-text-decode__live {\n  position: absolute;\n  inset: 0;\n  white-space: pre;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzTextDecode.vue"
+    },
+    {
+      "path": "motion/useInView.ts",
+      "content": "import type { Ref } from 'vue'\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * useInView — reactive IntersectionObserver wrapper (generalises the observer\n * behind the `v-reveal` directive in `directives/reveal.ts`).\n *\n * Observers are shared per unique `(rootMargin, threshold)` signature so a page\n * full of demos attaches only a handful of `IntersectionObserver`s rather than\n * one per element. By default it fires once and unobserves on first intersect\n * (the scroll-reveal pattern). When `IntersectionObserver` is unavailable\n * (SSR / very old browsers) the element is treated as in view immediately so\n * content is never blocked.\n */\n\n/** Options accepted by {@link useInView}. */\nexport interface UseInViewOptions {\n  /** Margin around the root, e.g. `'0px 0px -10% 0px'`. */\n  rootMargin?: string\n  /** Visibility ratio(s) that trigger a callback. */\n  threshold?: number | number[]\n  /** Reveal once then stop observing (default `true`). */\n  once?: boolean\n}\n\n/** Per-element callback registry, keyed weakly so detached nodes are collectable. */\nconst callbacks = new WeakMap<Element, (isInView: boolean) => void>()\n\n/** Shared observers keyed by their serialized option signature. */\nconst observers = new Map<string, IntersectionObserver>()\n\nfunction optionsKey(rootMargin: string, threshold: number | number[]): string {\n  return `${rootMargin}|${JSON.stringify(threshold)}`\n}\n\nfunction getObserver(rootMargin: string, threshold: number | number[]): IntersectionObserver | null {\n  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')\n    return null\n\n  const key = optionsKey(rootMargin, threshold)\n  let observer = observers.get(key)\n  if (!observer) {\n    observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) {\n          callbacks.get(entry.target)?.(entry.isIntersecting)\n        }\n      },\n      { rootMargin, threshold },\n    )\n    observers.set(key, observer)\n  }\n  return observer\n}\n\n/**\n * Observe `elRef`'s element and report whether it is in view.\n *\n * @param elRef - template ref to the element to observe.\n * @param options - see {@link UseInViewOptions}.\n * @returns a reactive `isInView` ref.\n */\nexport function useInView(\n  elRef: Ref<HTMLElement | null | undefined>,\n  options: UseInViewOptions = {},\n): Ref<boolean> {\n  const { rootMargin = '0px 0px -10% 0px', threshold = 0.05, once = true } = options\n  const isInView = ref(false)\n\n  let observed: Element | null = null\n  let observer: IntersectionObserver | null = null\n\n  function unobserve(): void {\n    if (observed) {\n      observer?.unobserve(observed)\n      callbacks.delete(observed)\n      observed = null\n    }\n  }\n\n  function observe(el: HTMLElement): void {\n    unobserve()\n    observer = getObserver(rootMargin, threshold)\n    if (!observer) {\n      // No IntersectionObserver → treat as in view immediately.\n      isInView.value = true\n      return\n    }\n    callbacks.set(el, (inView) => {\n      isInView.value = inView\n      if (inView && once)\n        unobserve()\n    })\n    observer.observe(el)\n    observed = el\n  }\n\n  onMounted(() => {\n    if (elRef.value)\n      observe(elRef.value)\n  })\n\n  watch(elRef, (el) => {\n    if (el)\n      observe(el)\n    else unobserve()\n  })\n\n  onBeforeUnmount(unobserve)\n\n  return isInView\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useInView.ts"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/useTextDecode.ts",
+      "content": "import type { MaybeRefOrGetter, Ref } from 'vue'\nimport { onBeforeUnmount, ref, toValue } from 'vue'\n\n/** Options for {@link useTextDecode}. */\nexport interface UseTextDecodeOptions {\n  /** Frame interval in ms (default `45`). */\n  frameMs?: number\n  /** Frames each character scrambles before it locks in (default `2`). */\n  framesPerChar?: number\n  /** Pool of glyphs used while scrambling. */\n  charset?: string\n}\n\n/** Reactive state returned by {@link useTextDecode}. */\nexport interface UseTextDecodeReturn {\n  /** The currently displayed (scrambling/resolving) string. */\n  display: Ref<string>\n  /** Start (or restart) the decode from scratch. */\n  run: () => void\n  /** Stop any running animation and show the final, resolved text. */\n  resolve: () => void\n}\n\nconst DEFAULT_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#%&$*'\n\n/**\n * useTextDecode — scramble→resolve a string left-to-right (docs/animations.md\n * §6.2, effect 10).\n *\n * On {@link UseTextDecodeReturn.run} the text appears scrambled and resolves one\n * character at a time from the left; whitespace is never scrambled, so the word\n * shape (and box width) stays stable — no layout shift (§7). SSR-safe (work only\n * happens once a browser timer fires) and self-cleaning on unmount.\n *\n * This composable is motion-agnostic: the caller decides when to {@link run}\n * (e.g. on in-view) and should call {@link resolve} instead under reduced motion\n * to show the plain text with no animation.\n *\n * @param target - the final text (ref/getter/string).\n * @param options - timing + charset, see {@link UseTextDecodeOptions}.\n */\nexport function useTextDecode(\n  target: MaybeRefOrGetter<string>,\n  options: UseTextDecodeOptions = {},\n): UseTextDecodeReturn {\n  const { frameMs = 45, framesPerChar = 2, charset = DEFAULT_CHARSET } = options\n\n  const display = ref(toValue(target))\n  let timer: ReturnType<typeof setInterval> | null = null\n  let frame = 0\n  // Deterministic-enough pseudo-random index (Math.random is unavailable in some\n  // sandboxes; a small LCG keyed off the frame keeps the scramble lively).\n  let seed = 1\n\n  function randIndex(max: number): number {\n    seed = (seed * 1103515245 + 12345) & 0x7FFFFFFF\n    return seed % max\n  }\n\n  function clear(): void {\n    if (timer !== null) {\n      clearInterval(timer)\n      timer = null\n    }\n  }\n\n  function render(text: string, revealed: number): string {\n    let out = ''\n    for (let i = 0; i < text.length; i += 1) {\n      const ch = text[i]\n      if (i < revealed || ch === ' ' || ch === '\\n' || ch === '\\t')\n        out += ch\n      else out += charset[randIndex(charset.length)]\n    }\n    return out\n  }\n\n  function resolve(): void {\n    clear()\n    display.value = toValue(target)\n  }\n\n  function run(): void {\n    clear()\n    const text = toValue(target)\n    frame = 0\n    seed = text.length + 1\n    display.value = render(text, 0)\n    timer = setInterval(() => {\n      frame += 1\n      const revealed = Math.floor(frame / framesPerChar)\n      display.value = render(text, revealed)\n      if (revealed >= text.length)\n        resolve()\n    }, frameMs)\n  }\n\n  onBeforeUnmount(clear)\n\n  return { display, run, resolve }\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useTextDecode.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzTextDecode } from './components/DzTextDecode.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzText"
+    ],
+    "motionPrimitives": [
+      "DzTextDecode"
+    ]
+  }
 }

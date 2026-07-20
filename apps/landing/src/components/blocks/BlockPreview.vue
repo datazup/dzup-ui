@@ -722,7 +722,7 @@ const langModel = computed<string>({
   scroll-margin-top: 124px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
   overflow: hidden;
 }
@@ -777,17 +777,17 @@ const langModel = computed<string>({
   cursor: pointer;
   /* Same category-accent tint as BlockCard's chips (`--lp-cat-500` inherited
      from the panel), legible in light and dark; primary is the fallback. */
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%, var(--dz-surface, #fff));
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 13%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
   transition: background-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
 .bp-chip:hover {
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 22%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 22%, var(--dz-surface, #ffffff));
 }
 
 .bp-chip:focus-visible {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
 }
 
@@ -824,7 +824,7 @@ const langModel = computed<string>({
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--dz-foreground-muted, var(--dz-foreground, #1a202c));
+  color: var(--dz-foreground-muted, var(--dz-foreground, #1b1d1f));
 }
 
 .bp-tabs {
@@ -847,8 +847,8 @@ const langModel = computed<string>({
   /* A faint corner wash in the category accent so each preview's stage hints at
      its group's colour without competing with the live block on top. */
   background:
-    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #6366f1)) 6%, transparent), transparent 42%),
-    var(--dz-background, #fff);
+    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 6%, transparent), transparent 42%),
+    var(--dz-background, #e7e8e9);
 }
 
 /* The resizable container — width driven by the presets + drag handle. */
@@ -886,7 +886,7 @@ const langModel = computed<string>({
   margin-right: -8px;
   cursor: ew-resize;
   touch-action: none;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 /* The visible grab bar. */
@@ -900,7 +900,7 @@ const langModel = computed<string>({
 
 .bp-resize-handle:hover .bp-resize-grip,
 .bp-resize-handle[data-dragging] .bp-resize-grip {
-  background: var(--dz-primary, #4f46e5);
+  background: var(--dz-primary, #0766ee);
 }
 
 .bp-resize-handle:focus-visible {
@@ -908,8 +908,8 @@ const langModel = computed<string>({
 }
 
 .bp-resize-handle:focus-visible .bp-resize-grip {
-  background: var(--dz-primary, #4f46e5);
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  background: var(--dz-primary, #0766ee);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
 }
 
@@ -920,13 +920,13 @@ const langModel = computed<string>({
   right: 0;
   padding: 2px 6px;
   border-radius: var(--dz-radius-sm, 0.375rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   border: 1px solid var(--lp-hairline);
   box-shadow: var(--lp-shadow-sm);
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: var(--dz-foreground-muted, var(--dz-foreground, #1a202c));
+  color: var(--dz-foreground-muted, var(--dz-foreground, #1b1d1f));
   white-space: nowrap;
   opacity: 0;
   transition: opacity var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
@@ -936,7 +936,7 @@ const langModel = computed<string>({
 .bp-resize-handle:focus-visible .bp-resize-readout,
 .bp-resize-handle[data-dragging] .bp-resize-readout {
   opacity: 1;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 @media (prefers-reduced-motion: reduce) {

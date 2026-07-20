@@ -28,7 +28,7 @@ import { getBlockSource } from '../blocks/sources.ts'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
 import BlockPreview from '../components/blocks/BlockPreview.vue'
 import Section from '../components/Section.vue'
-import { openInStackblitz } from '../lib/stackblitz.ts'
+import { openInStackblitz, stackblitzEnabled, UNPUBLISHED_NOTE } from '../lib/stackblitz.ts'
 
 const props = defineProps<{ id: string }>()
 const router = useRouter()
@@ -96,6 +96,14 @@ function showBlocksUsing(name: string): void {
  * Vite + Vue 3 + @dzup-ui/core starter, so a visitor goes from "I like this" to
  * "it runs in my editor" in one click.
  */
+/**
+ * Whether the StackBlitz fork can install its `@dzup-ui/*` deps yet. Read once
+ * at setup — it's a build-time flag, not reactive state. While it's false the
+ * button is replaced by {@link UNPUBLISHED_NOTE}, so the page never offers a
+ * one-click flow that dies on `npm install` (TASK-FREE3-03).
+ */
+const canFork = stackblitzEnabled()
+
 function openStackblitz(): void {
   const b = block.value
   if (!b)
@@ -138,6 +146,7 @@ function openStackblitz(): void {
              copy its exact source. Both reuse the block's `?raw` `source`. -->
         <div class="bd-actions">
           <DzButton
+            v-if="canFork"
             variant="solid"
             tone="primary"
             size="sm"
@@ -159,6 +168,11 @@ function openStackblitz(): void {
             :aria-label="`Copy the full source of ${block.title}`"
           />
         </div>
+        <!-- Honest stand-in for the fork button while @dzup-ui/* is unpublished
+             — the same standard the npm badges and live stats already hold. -->
+        <DzText v-if="!canFork" size="sm" tone="muted" as="p" class="bd-unpublished">
+          {{ UNPUBLISHED_NOTE }}
+        </DzText>
       </div>
     </Section>
 
@@ -223,7 +237,7 @@ function openStackblitz(): void {
   gap: 6px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
   text-decoration: none;
 }
 
@@ -232,7 +246,7 @@ function openStackblitz(): void {
 }
 
 .bd-back:focus-visible {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
   border-radius: var(--dz-radius-sm, 0.375rem);
 }
@@ -269,6 +283,12 @@ function openStackblitz(): void {
   margin-top: 4px;
 }
 
+.bd-unpublished {
+  margin: 8px 0 0;
+  max-width: 62ch;
+  line-height: 1.5;
+}
+
 /* ── Pager ────────────────────────────────────────────────────── */
 .bd-pager {
   display: flex;
@@ -285,18 +305,18 @@ function openStackblitz(): void {
   padding: 12px 16px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-foreground, #1b1d1f);
   text-decoration: none;
   transition: border-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
 .bd-pager-link:hover {
-  border-color: var(--lp-cat-500, var(--dz-primary, #4f46e5));
+  border-color: var(--lp-cat-500, var(--dz-primary, #0766ee));
 }
 
 .bd-pager-link:focus-visible {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
 }
 
@@ -315,7 +335,7 @@ function openStackblitz(): void {
   font-size: var(--dz-text-xs, 0.75rem);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .bd-pager-name {

@@ -451,7 +451,7 @@ onBeforeUnmount(() => {
   top: 64px;
   z-index: 40;
   margin-top: 8px;
-  background: color-mix(in oklch, var(--dz-background, #fff) 72%, transparent);
+  background: color-mix(in oklch, var(--dz-background, #e7e8e9) 72%, transparent);
   backdrop-filter: blur(16px) saturate(1.2);
   border-top: 1px solid var(--lp-hairline);
   border-bottom: 1px solid var(--lp-hairline);
@@ -516,8 +516,8 @@ onBeforeUnmount(() => {
   padding: 6px 14px;
   border-radius: var(--dz-radius-full, 9999px);
   border: 1px solid var(--lp-hairline);
-  background: color-mix(in oklch, var(--dz-surface, #fff) 60%, transparent);
-  color: var(--dz-muted-foreground, #64748b);
+  background: color-mix(in oklch, var(--dz-surface, #ffffff) 60%, transparent);
+  color: var(--dz-muted-foreground, #585b60);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
   cursor: pointer;
@@ -534,22 +534,22 @@ onBeforeUnmount(() => {
 }
 
 .chip:hover {
-  color: var(--dz-foreground, #0f172a);
-  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 45%, var(--lp-hairline));
+  color: var(--dz-foreground, #1b1d1f);
+  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 45%, var(--lp-hairline));
 }
 
 /* Active chip fills with its category accent. Use the -600 (strong) shade so
  * white text clears WCAG AA on the lighter hues (orange, cyan, …); falls back to
  * the brand primary for the "All" chip and the type row. */
 .chip.is-active {
-  color: var(--dz-primary-foreground, #fff);
-  background: var(--accent-strong, var(--dz-primary, #4f46e5));
+  color: var(--dz-primary-foreground, #ffffff);
+  background: var(--accent-strong, var(--dz-primary, #0766ee));
   border-color: transparent;
-  box-shadow: 0 6px 16px -8px color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 70%, transparent);
+  box-shadow: 0 6px 16px -8px color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 70%, transparent);
 }
 
 .chip:focus-visible {
-  outline: 2px solid var(--accent, var(--dz-ring, #6366f1));
+  outline: 2px solid var(--accent, var(--dz-ring, #0766ee));
   outline-offset: 2px;
 }
 
@@ -633,9 +633,9 @@ onBeforeUnmount(() => {
   height: 56px;
   margin-bottom: 4px;
   border-radius: var(--dz-radius-full, 9999px);
-  color: var(--dz-primary, #6366f1);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 10%, transparent);
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 22%, transparent);
+  color: var(--dz-primary, #0766ee);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 22%, transparent);
 }
 
 .empty-title {

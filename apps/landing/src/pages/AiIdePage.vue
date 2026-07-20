@@ -9,6 +9,7 @@ import {
 } from '../blocks/config.ts'
 import { BLOCKS } from '../blocks/registry.ts'
 import { FACTS, LINKS } from '../config.ts'
+import { packagesPublished } from '../lib/publishState.ts'
 import { TEMPLATES } from '../templates/registry.ts'
 
 /**
@@ -22,7 +23,19 @@ import { TEMPLATES } from '../templates/registry.ts'
  *
  * The snippets are host-independent (an `npx` package, no origin to resolve), so
  * they're computed once as plain strings rather than reactive refs.
+ *
+ * ── Gated until publish (TASK-FREE3-03) ─────────────────────────────────────
+ * Every snippet here runs `npx -y @dzup-ui/mcp`, and that package is not on npm
+ * yet: a visitor who pasted the config got a client that fails to start its
+ * server. Copy-paste instructions ARE a CTA, so they are feature-flagged behind
+ * `packagesPublished()` exactly like the StackBlitz fork, the npm badges and the
+ * live-stats refresh — with an inline note saying what's true instead. The
+ * capability list below stays: `packages/mcp` is real, linked source, and the
+ * page is honest about it not being installable yet.
  */
+
+/** Build-time publish flag — read once at setup, not reactive. */
+const mcpPublished = packagesPublished()
 
 const canonicalConfig = dzupMcpConfig()
 const vscodeConfig = dzupMcpVscodeConfig()
@@ -62,8 +75,10 @@ const clients: Array<{ id: string, name: string, where: string, cli?: string, co
 ]
 
 // Counts are derived from the registries, never typed. A hand-maintained
-// literal here drifted to "158 components / 88 blocks" while the real figures
-// were 139 and 87.
+// literal here drifted to "158 components / 88 blocks", neither of which matched
+// the source tree. The corrected figures are deliberately not written down here
+// either — they move with the catalog; `FACTS`/`BLOCKS`/`TEMPLATES` below carry
+// the live ones.
 const tools = [
   { icon: Boxes, name: 'list_components / get_component', blurb: `${FACTS.freeComponents} components — families, props, emits, slots, taxonomy and a usage snippet.` },
   { icon: LayoutTemplate, name: 'list_blocks / get_block', blurb: `${BLOCKS.length} pre-composed blocks — fetch the real .vue source and install command.` },
@@ -87,7 +102,8 @@ const prompts = [
     <main id="main"> that the skip link targets, so a <main> here nested one
     inside the other and gave /ai two main landmarks — invalid HTML, and an
     ambiguous page map for anything that navigates by landmark. Every other page
-    root is a div/section for this reason; `pageLandmarks.spec.ts` enforces it.
+    root is a div/section for this reason; the "landmark structure" describe in
+    `src/pages.a11y.spec.ts` enforces it.
     (The <main>s under src/templates/** are correct and out of scope — a template
     renders standalone in an iframe.)
   -->
@@ -99,25 +115,37 @@ const prompts = [
         Use dzup-ui with your AI IDE
       </DzHeading>
       <DzText size="lg" tone="muted" class="ai-hero-lede lp-balance">
-        Connect the free <code>{{ DZUP_MCP_PACKAGE }}</code> MCP server and your assistant can browse
+        The free <code>{{ DZUP_MCP_PACKAGE }}</code> MCP server lets your assistant browse
         every component, block, template and design token — and drop in the real source on request.
         Say <em>"add a dzup-ui pricing block"</em> and it fetches the code and the install command.
       </DzText>
 
       <div class="ai-hero-config">
-        <DzText size="xs" tone="muted" as="div" class="ai-label">
-          <Terminal :size="13" aria-hidden="true" /> One config — works in every MCP client
-        </DzText>
-        <DzCodeBlock
-          :code="canonicalConfig"
-          language="json"
-          copyable
-          aria-label="dzup-ui MCP server config"
-          class="ai-code"
-        />
-        <DzText size="sm" tone="muted" class="ai-note">
-          No install, no API key. <code>npx</code> fetches and runs the server on demand; it reads the
-          same public registry the site ships, so it's always in sync.
+        <template v-if="mcpPublished">
+          <DzText size="xs" tone="muted" as="div" class="ai-label">
+            <Terminal :size="13" aria-hidden="true" /> One config — works in every MCP client
+          </DzText>
+          <DzCodeBlock
+            :code="canonicalConfig"
+            language="json"
+            copyable
+            aria-label="dzup-ui MCP server config"
+            class="ai-code"
+          />
+          <DzText size="sm" tone="muted" class="ai-note">
+            No install, no API key. <code>npx</code> fetches and runs the server on demand; it reads the
+            same public registry the site ships, so it's always in sync.
+          </DzText>
+        </template>
+
+        <!-- Honest stand-in for the copy-paste configs: `npx @dzup-ui/mcp` 404s
+             until the package publishes, and a config that can't start its
+             server is a broken CTA, not a preview. -->
+        <DzText v-else size="sm" tone="muted" as="p" class="ai-note ai-pending">
+          <strong>Setup instructions land at the v0.1 publish.</strong>
+          <code>{{ DZUP_MCP_PACKAGE }}</code> isn’t on npm yet, so <code>npx</code> can’t fetch it and
+          any config here would fail to start. The server itself is written and open source — read it
+          in the repo below — and this page turns on the per-client snippets the day it ships.
         </DzText>
       </div>
 
@@ -137,8 +165,9 @@ const prompts = [
       </div>
     </section>
 
-    <!-- Per-client setup -->
-    <section class="ai-section" aria-labelledby="ai-clients-title">
+    <!-- Per-client setup. Hidden wholesale until publish: every snippet in it
+         runs the unpublished npx package. -->
+    <section v-if="mcpPublished" class="ai-section" aria-labelledby="ai-clients-title">
       <DzHeading id="ai-clients-title" :level="2" size="lg" weight="semibold">
         Connect your client
       </DzHeading>
@@ -239,7 +268,7 @@ const prompts = [
   font-size: 0.9em;
   padding: 1px 5px;
   border-radius: var(--dz-radius-sm, 4px);
-  background: color-mix(in oklch, var(--dz-primary, #4f46e5) 11%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 11%, var(--dz-surface, #ffffff));
 }
 
 .ai-hero-config {
@@ -259,6 +288,21 @@ const prompts = [
 .ai-note {
   margin: 0;
   line-height: 1.5;
+}
+
+/* The pre-publish stand-in for the config snippets — same visual weight as the
+   code block it replaces, so the page doesn't look like something is missing. */
+.ai-pending {
+  padding: 12px 14px;
+  border: 1px solid var(--dz-border);
+  border-radius: var(--dz-radius-md);
+  background: var(--dz-muted);
+}
+
+.ai-pending strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--dz-foreground);
 }
 
 .ai-code {
@@ -289,9 +333,9 @@ const prompts = [
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-lg, 12px);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .ai-client-name {
@@ -313,14 +357,14 @@ const prompts = [
   display: flex;
   gap: 12px;
   padding: 16px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 8px);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .ai-tool-icon {
   flex-shrink: 0;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
   margin-top: 2px;
 }
 
@@ -343,13 +387,13 @@ const prompts = [
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 8px);
-  background: var(--dz-muted, #f8fafc);
+  background: var(--dz-muted, #d3d4d7);
 }
 
 .ai-prompt-icon {
   flex-shrink: 0;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 </style>

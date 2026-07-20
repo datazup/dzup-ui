@@ -596,7 +596,7 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
 }
 
 .tag-chip:focus-visible {
-  outline: 2px solid var(--dz-primary, #4f46e5);
+  outline: 2px solid var(--dz-primary, #0766ee);
   outline-offset: 2px;
 }
 
@@ -629,12 +629,12 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
      `tileStyle()` sets inline. The 600 shade carries enough contrast on the
      light surface; the fallback keeps the brand tint if no accent was emitted.
      (Inline props only set the *sources*, so the dark rule below can win.) */
-  --tile-accent: var(--tile-accent-light, var(--dz-primary, #4f46e5));
+  --tile-accent: var(--tile-accent-light, var(--dz-primary, #0766ee));
 }
 
 /* Dark surfaces want the lighter 400 shade so the accent stays legible. */
 [data-theme="dark"] .tile {
-  --tile-accent: var(--tile-accent-dark, var(--dz-primary, #818cf8));
+  --tile-accent: var(--tile-accent-dark, var(--dz-primary, #0766ee));
 }
 
 /* Tint the card's hover border with its own accent (overrides the global
@@ -682,9 +682,9 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
   /* Decorative accent wash — a soft diagonal tint in the card's hue so the
      preview reads as colour-coded to its category, not a flat panel. */
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--tile-accent-wash, var(--dz-primary, #6366f1)) 12%, transparent), transparent 62%),
-    radial-gradient(circle at 0% 100%, color-mix(in oklch, var(--tile-accent-wash, var(--dz-primary, #6366f1)) 7%, transparent), transparent 55%),
-    var(--dz-background, #fff);
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--tile-accent-wash, var(--dz-primary, #0766ee)) 12%, transparent), transparent 62%),
+    radial-gradient(circle at 0% 100%, color-mix(in oklch, var(--tile-accent-wash, var(--dz-primary, #0766ee)) 7%, transparent), transparent 55%),
+    var(--dz-background, #e7e8e9);
   /* Decorative only — the card cover link owns the interaction. */
   pointer-events: none;
   display: flex;

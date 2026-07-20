@@ -362,7 +362,7 @@ const router = createRouter({
         head: {
           title: 'Use dzup-ui with your AI IDE — MCP server | dzup-ui',
           description:
-            'Connect the free @dzup-ui/mcp server to Cursor, Claude Code, Windsurf or VS Code and your assistant can browse every dzup-ui component, block, template and design token — and fetch the real source + install command on request.',
+            'The free @dzup-ui/mcp server lets Cursor, Claude Code, Windsurf or VS Code browse every dzup-ui component, block, template and design token — and fetch the real source + install command on request.',
           canonical: '/ai',
         },
       },

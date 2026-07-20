@@ -106,7 +106,18 @@ router.afterEach((to, from, failure) => {
            preview routes (iframe / new-tab render targets), like the nav/footer. -->
         <AnnouncementBanner v-if="!isPreview" />
         <TopNav v-if="!isPreview" />
-        <main id="main" class="landing-main">
+        <!-- `tabindex="-1"` is PERMANENT, not something the router adds later
+             (TASK-FREE3-07). The skip link above targets `#main`, and moving focus
+             on fragment activation is only guaranteed for a focusable target —
+             browsers vary on what they do when the target cannot take focus, some
+             moving the viewport without moving focus at all. The afterEach guard
+             below also sets it, but that fires on NAVIGATION: on the first painted
+             route no navigation has happened yet, so the very first use of the skip
+             link — the one a keyboard user hits within seconds of arriving — was
+             the one case with no tabindex on the target. -1 keeps it unreachable by
+             Tab; the unscoped rule below suppresses the ring for this programmatic
+             focus alone. -->
+        <main id="main" tabindex="-1" class="landing-main">
           <!-- The library's own error boundary around the routed view: a throw in
              any page renders this recoverable fallback, never a blank screen. -->
           <DzErrorBoundary :on-error="logRouteError">
@@ -179,8 +190,8 @@ router.afterEach((to, from, failure) => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--dz-background, #ffffff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-background, #e7e8e9);
+  color: var(--dz-foreground, #1b1d1f);
   transition: var(--dz-landing-theme-transition);
 }
 
@@ -272,7 +283,7 @@ router.afterEach((to, from, failure) => {
   z-index: 100;
   padding: 8px 14px;
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-primary, #4f46e5);
+  background: var(--dz-primary, #0766ee);
   color: var(--dz-primary-foreground, #ffffff);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;

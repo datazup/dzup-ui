@@ -44,9 +44,9 @@ const classes = computed(() => ({
   display: inline-block;
   background-image: linear-gradient(
     100deg,
-    var(--dz-colors-primary-600, #4f46e5),
-    var(--dz-colors-secondary-500, #a855f7) 55%,
-    var(--dz-colors-primary-500, #6366f1)
+    var(--dz-colors-primary-600, #004ecb),
+    var(--dz-colors-secondary-500, #7260bd) 55%,
+    var(--dz-colors-primary-500, #0766ee)
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;

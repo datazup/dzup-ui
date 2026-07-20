@@ -179,17 +179,17 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   /* Tinted with the active category's decorative accent (`--lp-cat-500`, set on
      the panel), mixed against surface/foreground so it stays legible in both
      light and dark; falls back to the brand primary when no accent is in scope. */
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%, var(--dz-surface, #fff));
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 13%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
   transition: background-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
 .block-card-chip:hover {
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 22%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 22%, var(--dz-surface, #ffffff));
 }
 
 .block-card-chip:focus-visible {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
 }
 
@@ -228,7 +228,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   gap: 5px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
   text-decoration: none;
 }
 
@@ -242,17 +242,17 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   gap: 4px;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
   white-space: nowrap;
 }
 
 .block-card-permalink:hover {
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
 }
 
 .block-card-permalink:focus-visible {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
   border-radius: var(--dz-radius-sm, 0.375rem);
 }
@@ -265,7 +265,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 }
 
 .block-card-link:focus-visible .block-card-cover {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: -2px;
   border-radius: var(--dz-radius-xl, 0.875rem);
 }

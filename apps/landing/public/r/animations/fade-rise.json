@@ -1,32 +1,71 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "fade-rise",
   "type": "registry:block",
   "title": "Fade & rise",
   "description": "Content fades in and lifts gently into place as it scrolls into view.",
+  "categories": [
+    "scroll"
+  ],
   "files": [
     {
       "path": "fade-rise.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { vReveal } from '../motion'\n</script>\n\n<template>\n  <!-- The v-reveal directive owns the IntersectionObserver + reduced-motion guard. -->\n  <DzCard v-reveal variant=\"elevated\" padding=\"lg\">\n    <DzText weight=\"semibold\">Fade & rise</DzText>\n    <DzText size=\"sm\" tone=\"muted\">Opacity 0 → 1, lifts into place.</DzText>\n  </DzCard>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/fade-rise.vue"
     },
     {
       "path": "fade-rise.ts",
       "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { DzCard, DzText } from '@dzup-ui/core'\nimport { useInView, useReducedMotion } from '../motion'\n\nconst root = ref<HTMLElement | null>(null)\nconst inView = useInView(root, { once: true })\nconst reduced = useReducedMotion()\n// Drive the entrance from state — fully visible when reduced or once seen.\nconst shown = computed(() => reduced.value || inView.value)\n</script>\n\n<template>\n  <DzCard\n    ref=\"root\"\n    variant=\"elevated\"\n    padding=\"lg\"\n    :style=\"{\n      opacity: shown ? 1 : 0,\n      transform: shown ? 'none' : 'translateY(16px)',\n      transition: 'opacity .5s var(--dz-ease-out), transform .5s var(--dz-ease-out)',\n    }\"\n  >\n    <DzText weight=\"semibold\">Fade & rise</DzText>\n  </DzCard>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/fade-rise.ts"
     },
     {
       "path": "fade-rise.css",
       "content": "<template>\n  <!-- The .dz-animate-in utility runs the reveal on the compositor via\n       animation-timeline: view() where supported; static (visible) otherwise. -->\n  <div class=\"dz-animate-in dz-animate-in--rise\">\n    <slot />\n  </div>\n</template>\n\n<style>\n/* tokens.css ships .dz-animate-in; this is the gist of what it expands to. */\n@supports (animation-timeline: view()) {\n  @media (prefers-reduced-motion: no-preference) {\n    .dz-animate-in--rise {\n      animation: dz-rise linear both;\n      animation-timeline: view();\n      animation-range: entry 0% cover 30%;\n    }\n    @keyframes dz-rise {\n      from { opacity: 0; transform: translateY(16px); }\n    }\n  }\n}\n</style>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/fade-rise.css"
+    },
+    {
+      "path": "motion/directives/reveal.ts",
+      "content": "import type { Directive, DirectiveBinding } from 'vue'\n\n/**\n * v-reveal — scroll-reveal directive (docs/animations.md §6.1, effects 1, 3–5).\n *\n * Adds the `dz-reveal` class immediately (so the element starts in its hidden\n * pre-animation state) and toggles `dz-reveal--in` via a single shared\n * `IntersectionObserver` when the element scrolls into view. The shared class\n * system lives in `motion/tokens.css`; this directive only orchestrates classes\n * and `will-change` so it stays free of landing-only imports (extractable).\n *\n * Modifiers (compose freely):\n * - `.up` / `.down` / `.left` / `.right` — directional slide-in (effect 3)\n * - `.blur` — blur-in (effect 4)\n * - `.scale` — scale-in (effect 5)\n *\n * Value: an optional numeric stagger delay in ms, exposed to CSS as\n * `--reveal-delay` (preserves the original directive's behaviour).\n *\n * Transform/opacity/filter only — no layout thrash. Reduced motion is handled\n * centrally by the `@media (prefers-reduced-motion: reduce)` block in\n * `tokens.css`, which degrades the reveal to an opacity-only fade. Content is\n * never blocked: when `IntersectionObserver` is unavailable we reveal at once.\n *\n * Usage: `<section v-reveal>`, `<div v-reveal=\"80\">` (80ms delay),\n * `<img v-reveal.left.blur>`.\n */\n\nconst MODIFIER_CLASSES: Record<string, string> = {\n  up: 'dz-reveal--up',\n  down: 'dz-reveal--down',\n  left: 'dz-reveal--left',\n  right: 'dz-reveal--right',\n  blur: 'dz-reveal--blur',\n  scale: 'dz-reveal--scale',\n}\n\nlet observer: IntersectionObserver | null = null\n\n/** Clear `will-change` once the reveal transition has played, to free GPU layers. */\nfunction clearWillChangeAfterTransition(el: HTMLElement): void {\n  const done = (): void => {\n    el.style.willChange = ''\n    el.removeEventListener('transitionend', done)\n  }\n  el.addEventListener('transitionend', done)\n}\n\nfunction reveal(el: HTMLElement): void {\n  // will-change is set on entrance and cleared after (perf budget §5.3).\n  el.style.willChange = 'opacity, transform, filter'\n  el.classList.add('dz-reveal--in')\n  clearWillChangeAfterTransition(el)\n}\n\nfunction getObserver(): IntersectionObserver | null {\n  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')\n    return null\n  if (!observer) {\n    observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) {\n          if (entry.isIntersecting) {\n            reveal(entry.target as HTMLElement)\n            observer?.unobserve(entry.target)\n          }\n        }\n      },\n      { rootMargin: '0px 0px -10% 0px', threshold: 0.05 },\n    )\n  }\n  return observer\n}\n\nfunction applyModifiers(el: HTMLElement, binding: DirectiveBinding): void {\n  for (const key of Object.keys(binding.modifiers)) {\n    const cls = MODIFIER_CLASSES[key]\n    if (cls)\n      el.classList.add(cls)\n  }\n}\n\nexport const vReveal: Directive<HTMLElement, number | undefined> = {\n  mounted(el, binding) {\n    if (typeof binding.value === 'number' && binding.value > 0) {\n      el.style.setProperty('--reveal-delay', `${binding.value}ms`)\n    }\n    el.classList.add('dz-reveal')\n    applyModifiers(el, binding)\n\n    const io = getObserver()\n    if (!io) {\n      // No IntersectionObserver → reveal immediately so content is never hidden.\n      reveal(el)\n      return\n    }\n    io.observe(el)\n  },\n  unmounted(el) {\n    observer?.unobserve(el)\n  },\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/directives/reveal.ts"
+    },
+    {
+      "path": "motion/useInView.ts",
+      "content": "import type { Ref } from 'vue'\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * useInView — reactive IntersectionObserver wrapper (generalises the observer\n * behind the `v-reveal` directive in `directives/reveal.ts`).\n *\n * Observers are shared per unique `(rootMargin, threshold)` signature so a page\n * full of demos attaches only a handful of `IntersectionObserver`s rather than\n * one per element. By default it fires once and unobserves on first intersect\n * (the scroll-reveal pattern). When `IntersectionObserver` is unavailable\n * (SSR / very old browsers) the element is treated as in view immediately so\n * content is never blocked.\n */\n\n/** Options accepted by {@link useInView}. */\nexport interface UseInViewOptions {\n  /** Margin around the root, e.g. `'0px 0px -10% 0px'`. */\n  rootMargin?: string\n  /** Visibility ratio(s) that trigger a callback. */\n  threshold?: number | number[]\n  /** Reveal once then stop observing (default `true`). */\n  once?: boolean\n}\n\n/** Per-element callback registry, keyed weakly so detached nodes are collectable. */\nconst callbacks = new WeakMap<Element, (isInView: boolean) => void>()\n\n/** Shared observers keyed by their serialized option signature. */\nconst observers = new Map<string, IntersectionObserver>()\n\nfunction optionsKey(rootMargin: string, threshold: number | number[]): string {\n  return `${rootMargin}|${JSON.stringify(threshold)}`\n}\n\nfunction getObserver(rootMargin: string, threshold: number | number[]): IntersectionObserver | null {\n  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')\n    return null\n\n  const key = optionsKey(rootMargin, threshold)\n  let observer = observers.get(key)\n  if (!observer) {\n    observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) {\n          callbacks.get(entry.target)?.(entry.isIntersecting)\n        }\n      },\n      { rootMargin, threshold },\n    )\n    observers.set(key, observer)\n  }\n  return observer\n}\n\n/**\n * Observe `elRef`'s element and report whether it is in view.\n *\n * @param elRef - template ref to the element to observe.\n * @param options - see {@link UseInViewOptions}.\n * @returns a reactive `isInView` ref.\n */\nexport function useInView(\n  elRef: Ref<HTMLElement | null | undefined>,\n  options: UseInViewOptions = {},\n): Ref<boolean> {\n  const { rootMargin = '0px 0px -10% 0px', threshold = 0.05, once = true } = options\n  const isInView = ref(false)\n\n  let observed: Element | null = null\n  let observer: IntersectionObserver | null = null\n\n  function unobserve(): void {\n    if (observed) {\n      observer?.unobserve(observed)\n      callbacks.delete(observed)\n      observed = null\n    }\n  }\n\n  function observe(el: HTMLElement): void {\n    unobserve()\n    observer = getObserver(rootMargin, threshold)\n    if (!observer) {\n      // No IntersectionObserver → treat as in view immediately.\n      isInView.value = true\n      return\n    }\n    callbacks.set(el, (inView) => {\n      isInView.value = inView\n      if (inView && once)\n        unobserve()\n    })\n    observer.observe(el)\n    observed = el\n  }\n\n  onMounted(() => {\n    if (elRef.value)\n      observe(elRef.value)\n  })\n\n  watch(elRef, (el) => {\n    if (el)\n      observe(el)\n    else unobserve()\n  })\n\n  onBeforeUnmount(unobserve)\n\n  return isInView\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useInView.ts"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { vReveal } from './directives/reveal.ts'\nexport { useInView } from './useInView.ts'\nexport { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzCard",
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard",
+      "DzText"
+    ],
+    "motionPrimitives": [
+      "useInView",
+      "useReducedMotion",
+      "vReveal"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

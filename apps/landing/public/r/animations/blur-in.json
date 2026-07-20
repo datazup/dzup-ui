@@ -1,21 +1,43 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "blur-in",
   "type": "registry:block",
   "title": "Blur-in",
   "description": "Resolves from a soft blur to sharp while fading in — great for media.",
+  "categories": [
+    "scroll"
+  ],
   "files": [
     {
       "path": "blur-in.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzImage } from '@dzup-ui/core'\nimport { vReveal } from '../motion'\n</script>\n\n<template>\n  <DzImage v-reveal.blur :src=\"src\" alt=\"…\" fit=\"cover\" aspect-ratio=\"16/9\" />\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/blur-in.vue"
+    },
+    {
+      "path": "motion/directives/reveal.ts",
+      "content": "import type { Directive, DirectiveBinding } from 'vue'\n\n/**\n * v-reveal — scroll-reveal directive (docs/animations.md §6.1, effects 1, 3–5).\n *\n * Adds the `dz-reveal` class immediately (so the element starts in its hidden\n * pre-animation state) and toggles `dz-reveal--in` via a single shared\n * `IntersectionObserver` when the element scrolls into view. The shared class\n * system lives in `motion/tokens.css`; this directive only orchestrates classes\n * and `will-change` so it stays free of landing-only imports (extractable).\n *\n * Modifiers (compose freely):\n * - `.up` / `.down` / `.left` / `.right` — directional slide-in (effect 3)\n * - `.blur` — blur-in (effect 4)\n * - `.scale` — scale-in (effect 5)\n *\n * Value: an optional numeric stagger delay in ms, exposed to CSS as\n * `--reveal-delay` (preserves the original directive's behaviour).\n *\n * Transform/opacity/filter only — no layout thrash. Reduced motion is handled\n * centrally by the `@media (prefers-reduced-motion: reduce)` block in\n * `tokens.css`, which degrades the reveal to an opacity-only fade. Content is\n * never blocked: when `IntersectionObserver` is unavailable we reveal at once.\n *\n * Usage: `<section v-reveal>`, `<div v-reveal=\"80\">` (80ms delay),\n * `<img v-reveal.left.blur>`.\n */\n\nconst MODIFIER_CLASSES: Record<string, string> = {\n  up: 'dz-reveal--up',\n  down: 'dz-reveal--down',\n  left: 'dz-reveal--left',\n  right: 'dz-reveal--right',\n  blur: 'dz-reveal--blur',\n  scale: 'dz-reveal--scale',\n}\n\nlet observer: IntersectionObserver | null = null\n\n/** Clear `will-change` once the reveal transition has played, to free GPU layers. */\nfunction clearWillChangeAfterTransition(el: HTMLElement): void {\n  const done = (): void => {\n    el.style.willChange = ''\n    el.removeEventListener('transitionend', done)\n  }\n  el.addEventListener('transitionend', done)\n}\n\nfunction reveal(el: HTMLElement): void {\n  // will-change is set on entrance and cleared after (perf budget §5.3).\n  el.style.willChange = 'opacity, transform, filter'\n  el.classList.add('dz-reveal--in')\n  clearWillChangeAfterTransition(el)\n}\n\nfunction getObserver(): IntersectionObserver | null {\n  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')\n    return null\n  if (!observer) {\n    observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) {\n          if (entry.isIntersecting) {\n            reveal(entry.target as HTMLElement)\n            observer?.unobserve(entry.target)\n          }\n        }\n      },\n      { rootMargin: '0px 0px -10% 0px', threshold: 0.05 },\n    )\n  }\n  return observer\n}\n\nfunction applyModifiers(el: HTMLElement, binding: DirectiveBinding): void {\n  for (const key of Object.keys(binding.modifiers)) {\n    const cls = MODIFIER_CLASSES[key]\n    if (cls)\n      el.classList.add(cls)\n  }\n}\n\nexport const vReveal: Directive<HTMLElement, number | undefined> = {\n  mounted(el, binding) {\n    if (typeof binding.value === 'number' && binding.value > 0) {\n      el.style.setProperty('--reveal-delay', `${binding.value}ms`)\n    }\n    el.classList.add('dz-reveal')\n    applyModifiers(el, binding)\n\n    const io = getObserver()\n    if (!io) {\n      // No IntersectionObserver → reveal immediately so content is never hidden.\n      reveal(el)\n      return\n    }\n    io.observe(el)\n  },\n  unmounted(el) {\n    observer?.unobserve(el)\n  },\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/directives/reveal.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { vReveal } from './directives/reveal.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzImage"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzImage"
+    ],
+    "motionPrimitives": [
+      "vReveal"
+    ]
+  }
 }

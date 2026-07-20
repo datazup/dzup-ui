@@ -1,5 +1,5 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry.json",
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "dzup-ui-animations",
   "homepage": "https://dzup-ui.com",
   "items": [
@@ -8,26 +8,61 @@
       "type": "registry:block",
       "title": "Fade & rise",
       "description": "Content fades in and lifts gently into place as it scrolls into view.",
-      "registryDependencies": [
-        "DzCard",
-        "DzText"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "useInView",
+          "useReducedMotion",
+          "vReveal"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "fade-rise.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/fade-rise.vue"
         },
         {
           "path": "fade-rise.ts",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/fade-rise.ts"
         },
         {
           "path": "fade-rise.css",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/fade-rise.css"
+        },
+        {
+          "path": "motion/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/reveal.ts"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -36,18 +71,49 @@
       "type": "registry:block",
       "title": "Stagger children",
       "description": "Cascades a grid or list of children into view with a per-index delay.",
-      "registryDependencies": [
-        "DzCard",
-        "DzText"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "DzStagger"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "stagger-children.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/stagger-children.vue"
+        },
+        {
+          "path": "motion/components/DzStagger.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzStagger.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -56,18 +122,38 @@
       "type": "registry:block",
       "title": "Directional slide-in",
       "description": "Enters from the left, right, up or down — pair with feature rows.",
-      "registryDependencies": [
-        "DzCard",
-        "DzText"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "vReveal"
+        ]
+      },
       "files": [
         {
           "path": "directional-slide.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/directional-slide.vue"
+        },
+        {
+          "path": "motion/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/reveal.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -76,17 +162,37 @@
       "type": "registry:block",
       "title": "Blur-in",
       "description": "Resolves from a soft blur to sharp while fading in — great for media.",
-      "registryDependencies": [
-        "DzImage"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzImage"
+        ],
+        "motionPrimitives": [
+          "vReveal"
+        ]
+      },
       "files": [
         {
           "path": "blur-in.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/blur-in.vue"
+        },
+        {
+          "path": "motion/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/reveal.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -95,17 +201,37 @@
       "type": "registry:block",
       "title": "Scale-in",
       "description": "Scales up from 0.96 to full size while fading in — pair with stat cards.",
-      "registryDependencies": [
-        "DzStatCard"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzStatCard"
+        ],
+        "motionPrimitives": [
+          "vReveal"
+        ]
+      },
       "files": [
         {
           "path": "scale-in.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/scale-in.vue"
+        },
+        {
+          "path": "motion/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/reveal.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -114,17 +240,43 @@
       "type": "registry:block",
       "title": "Scroll parallax drift",
       "description": "A background layer drifts at a fraction of the scroll speed, travel capped.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion",
+          "useScrollProgress"
+        ]
+      },
       "files": [
         {
           "path": "parallax-drift.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/parallax-drift.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useScrollProgress.ts",
+          "type": "registry:file",
+          "target": "components/motion/useScrollProgress.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -133,17 +285,53 @@
       "type": "registry:block",
       "title": "Bento reveal",
       "description": "A bento grid reveals with a shared spotlight and per-cell stagger as it enters view.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzBentoReveal"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "bento-reveal.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/bento-reveal.vue"
+        },
+        {
+          "path": "motion/components/DzBentoReveal.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzBentoReveal.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -152,17 +340,49 @@
       "type": "registry:block",
       "title": "Sticky / pinned scroll",
       "description": "A panel pins while its content advances through steps; the progress bar tracks the scroll.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "supportsScrollTimeline",
+          "useReducedMotion",
+          "useSticky"
+        ]
+      },
       "files": [
         {
           "path": "sticky-scroll.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/sticky-scroll.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useSticky.ts",
+          "type": "registry:file",
+          "target": "components/motion/useSticky.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -171,17 +391,50 @@
       "type": "registry:block",
       "title": "Scroll-linked transforms",
       "description": "Two layers’ transform and opacity are bound to scroll position — modernised parallax.",
-      "registryDependencies": [
-        "DzAurora"
+      "categories": [
+        "scroll"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzAurora"
+        ],
+        "motionPrimitives": [
+          "supportsScrollTimeline",
+          "useReducedMotion",
+          "useScrollProgress"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "scroll-linked.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/scroll-linked.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useScrollProgress.ts",
+          "type": "registry:file",
+          "target": "components/motion/useScrollProgress.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -190,17 +443,43 @@
       "type": "registry:block",
       "title": "Gradient sweep",
       "description": "An animated brand gradient sweeps continuously across a heading.",
-      "registryDependencies": [
-        "DzHeading"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzHeading"
+        ],
+        "motionPrimitives": [
+          "DzGradientText"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "gradient-sweep.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/gradient-sweep.vue"
+        },
+        {
+          "path": "motion/components/DzGradientText.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzGradientText.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -209,17 +488,48 @@
       "type": "registry:block",
       "title": "Typewriter",
       "description": "Types and erases a rotating list of phrases, with a blinking caret.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "DzTypewriter"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "typewriter.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/typewriter.vue"
+        },
+        {
+          "path": "motion/components/DzTypewriter.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzTypewriter.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useTypewriter.ts",
+          "type": "registry:file",
+          "target": "components/motion/useTypewriter.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -228,17 +538,53 @@
       "type": "registry:block",
       "title": "Word stagger",
       "description": "Splits a line into words and reveals each one in sequence as it enters.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "DzWordReveal"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "word-stagger.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/word-stagger.vue"
+        },
+        {
+          "path": "motion/components/DzStagger.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzStagger.vue"
+        },
+        {
+          "path": "motion/components/DzWordReveal.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzWordReveal.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -247,17 +593,52 @@
       "type": "registry:block",
       "title": "Letter decode",
       "description": "Scrambles then resolves characters left-to-right when scrolled into view.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "DzTextDecode"
+        ]
+      },
       "files": [
         {
           "path": "letter-decode.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/letter-decode.vue"
+        },
+        {
+          "path": "motion/components/DzTextDecode.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzTextDecode.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useTextDecode.ts",
+          "type": "registry:file",
+          "target": "components/motion/useTextDecode.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -266,17 +647,43 @@
       "type": "registry:block",
       "title": "Highlight sweep",
       "description": "A marker grows behind an emphasised word as the line scrolls into view.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "useInView",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "highlight-sweep.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/highlight-sweep.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -285,17 +692,43 @@
       "type": "registry:block",
       "title": "Circular text",
       "description": "Lays a string around a ring that slowly rotates, like a rotating seal.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "DzCircularText"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "circular-text.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/circular-text.vue"
+        },
+        {
+          "path": "motion/components/DzCircularText.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzCircularText.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -304,17 +737,48 @@
       "type": "registry:block",
       "title": "Text flip",
       "description": "Cycles a list of words, each flipping vertically (rotateX) in and out.",
-      "registryDependencies": [
-        "DzHeading"
+      "categories": [
+        "text"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzHeading"
+        ],
+        "motionPrimitives": [
+          "DzTextFlip"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "text-flip.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/text-flip.vue"
+        },
+        {
+          "path": "motion/components/DzTextFlip.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzTextFlip.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -323,17 +787,47 @@
       "type": "registry:block",
       "title": "Count-up",
       "description": "Figures tween from 0 to their target when scrolled into view, with formatting.",
-      "registryDependencies": [
-        "DzAnimatedNumber"
+      "categories": [
+        "numbers"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzAnimatedNumber"
+        ],
+        "motionPrimitives": [
+          "DzCountUp"
+        ]
+      },
       "files": [
         {
           "path": "count-up.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/count-up.vue"
+        },
+        {
+          "path": "motion/components/DzCountUp.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzCountUp.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -342,17 +836,48 @@
       "type": "registry:block",
       "title": "Sliding number",
       "description": "Each digit rolls vertically to its target like a mechanical odometer when in view.",
-      "registryDependencies": [
-        "DzStatCard"
+      "categories": [
+        "numbers"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzStatCard"
+        ],
+        "motionPrimitives": [
+          "DzOdometer"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "odometer.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/odometer.vue"
+        },
+        {
+          "path": "motion/components/DzOdometer.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzOdometer.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -361,17 +886,43 @@
       "type": "registry:block",
       "title": "Progress fill",
       "description": "A DzProgress bar fills from 0 to its value the moment it scrolls into view.",
-      "registryDependencies": [
-        "DzProgress"
+      "categories": [
+        "numbers"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzProgress"
+        ],
+        "motionPrimitives": [
+          "useInView",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "progress-fill.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/progress-fill.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -380,17 +931,43 @@
       "type": "registry:block",
       "title": "Rating fill",
       "description": "A DzRating fills star-by-star when scrolled into view; final value under reduced motion.",
-      "registryDependencies": [
-        "DzRating"
+      "categories": [
+        "numbers"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzRating"
+        ],
+        "motionPrimitives": [
+          "useInView",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "rating-fill.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/rating-fill.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -399,17 +976,43 @@
       "type": "registry:block",
       "title": "Aurora drift",
       "description": "Soft brand blobs drift on slow, offset loops behind a hero or CTA surface.",
-      "registryDependencies": [
-        "DzAurora"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzAurora"
+        ],
+        "motionPrimitives": [
+          "DzAurora"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "aurora-drift.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/aurora-drift.vue"
+        },
+        {
+          "path": "motion/components/DzAurora.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzAurora.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -418,17 +1021,38 @@
       "type": "registry:block",
       "title": "Animated grid/dots",
       "description": "A subtle line or dot pattern pans slowly behind a section as an ambient backdrop.",
-      "registryDependencies": [
-        "DzText"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzText"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "animated-grid.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/animated-grid.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -437,17 +1061,43 @@
       "type": "registry:block",
       "title": "Spotlight follow",
       "description": "A radial light tracks the cursor across a surface; static glow under reduced motion.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzSpotlight"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "spotlight-follow.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/spotlight-follow.vue"
+        },
+        {
+          "path": "motion/components/DzSpotlight.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzSpotlight.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -456,17 +1106,38 @@
       "type": "registry:block",
       "title": "Gradient border glow",
       "description": "An animated conic-gradient ring glows around a card; static brand border when reduced.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "gradient-border-glow.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/gradient-border-glow.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -475,17 +1146,37 @@
       "type": "registry:block",
       "title": "Meteors",
       "description": "Diagonal shooting-star streaks cross a hero or card on offset loops; static when reduced.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "meteors.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/meteors.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -494,17 +1185,47 @@
       "type": "registry:block",
       "title": "Particle field",
       "description": "A constellation of dots drifts, links near neighbours and eases aside under the pointer.",
-      "registryDependencies": [
-        "DzParticles"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzParticles"
+        ],
+        "motionPrimitives": [
+          "DzParticles"
+        ]
+      },
       "files": [
         {
           "path": "particle-field.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/particle-field.vue"
+        },
+        {
+          "path": "motion/components/DzParticles.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzParticles.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -513,17 +1234,25 @@
       "type": "registry:block",
       "title": "Progressive blur",
       "description": "Layered backdrop-filter stops fade a scroll edge; opaque surface fade under reduced transparency.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": []
+      },
       "files": [
         {
           "path": "progressive-blur.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/progressive-blur.vue"
         }
       ]
     },
@@ -532,18 +1261,39 @@
       "type": "registry:block",
       "title": "Glass surface",
       "description": "A frosted panel over a busy backdrop; opaque raised surface when transparency is reduced.",
-      "registryDependencies": [
-        "DzGlass",
-        "DzCard"
+      "categories": [
+        "backgrounds"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzGlass",
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzGlass"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "glass-surface.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/glass-surface.vue"
+        },
+        {
+          "path": "motion/components/DzGlass.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzGlass.vue"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -552,17 +1302,37 @@
       "type": "registry:block",
       "title": "Card lift + glow",
       "description": "A card rises with a soft shadow and a brand-tinted border on hover.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "card-lift.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/card-lift.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -571,18 +1341,45 @@
       "type": "registry:block",
       "title": "3D tilt",
       "description": "A card tilts toward the pointer with depth and an optional glare highlight.",
-      "registryDependencies": [
-        "DzImageCard",
-        "DzCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzImageCard",
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion",
+          "vTilt"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "tilt.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/tilt.vue"
+        },
+        {
+          "path": "motion/directives/tilt.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/tilt.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -591,18 +1388,38 @@
       "type": "registry:block",
       "title": "Sheen sweep",
       "description": "A diagonal light streak sweeps across a button or card on hover.",
-      "registryDependencies": [
-        "DzButton",
-        "DzCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzButton",
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "sheen-sweep.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/sheen-sweep.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -611,17 +1428,43 @@
       "type": "registry:block",
       "title": "Magnetic button",
       "description": "A CTA eases toward the cursor within a small radius and springs back on leave.",
-      "registryDependencies": [
-        "DzButton"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzButton"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion",
+          "vMagnetic"
+        ]
+      },
       "files": [
         {
           "path": "magnetic-button.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/magnetic-button.vue"
+        },
+        {
+          "path": "motion/directives/magnetic.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/magnetic.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -630,17 +1473,42 @@
       "type": "registry:block",
       "title": "Border beam",
       "description": "A light beam travels continuously around a card’s border on a loop.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzBorderBeam"
+        ]
+      },
       "files": [
         {
           "path": "border-beam.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/border-beam.vue"
+        },
+        {
+          "path": "motion/components/DzBorderBeam.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzBorderBeam.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -649,18 +1517,45 @@
       "type": "registry:block",
       "title": "Dock magnification",
       "description": "A row of icons scales by pointer proximity, neighbours easing — the macOS dock.",
-      "registryDependencies": [
-        "DzIconButton",
-        "DzAvatar"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
       ],
+      "meta": {
+        "components": [
+          "DzIconButton",
+          "DzAvatar"
+        ],
+        "motionPrimitives": [
+          "DzDock",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "dock.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/dock.vue"
+        },
+        {
+          "path": "motion/components/DzDock.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzDock.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -669,17 +1564,48 @@
       "type": "registry:block",
       "title": "Card stack / swap",
       "description": "Stacked cards cycle the front card to the back — morphs via View Transitions, FLIPs otherwise.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzCardStack",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "card-stack.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/card-stack.vue"
+        },
+        {
+          "path": "motion/components/DzCardStack.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzCardStack.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -688,18 +1614,44 @@
       "type": "registry:block",
       "title": "Glare card",
       "description": "A glossy specular highlight tracks the pointer across a card — the gloss, no tilt.",
-      "registryDependencies": [
-        "DzCard",
-        "DzImageCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzImageCard"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion",
+          "vGlare"
+        ]
+      },
       "files": [
         {
           "path": "glare.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/glare.vue"
+        },
+        {
+          "path": "motion/directives/glare.ts",
+          "type": "registry:file",
+          "target": "components/motion/directives/glare.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -708,17 +1660,43 @@
       "type": "registry:block",
       "title": "Custom cursor",
       "description": "A soft blob trails the pointer inside a region; native cursor returns on leave.",
-      "registryDependencies": [
-        "DzCard"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzCursor",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "custom-cursor.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/custom-cursor.vue"
+        },
+        {
+          "path": "motion/components/DzCursor.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzCursor.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -727,17 +1705,43 @@
       "type": "registry:block",
       "title": "Image comparison",
       "description": "Drag — or arrow-key — a handle to wipe between a before and after image.",
-      "registryDependencies": [
-        "DzImage"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzImage"
+        ],
+        "motionPrimitives": [
+          "DzCompare",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "image-compare.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/image-compare.vue"
+        },
+        {
+          "path": "motion/components/DzCompare.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzCompare.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -746,17 +1750,43 @@
       "type": "registry:block",
       "title": "Lens / magnifier",
       "description": "A magnified circle follows the pointer over an image, locking onto what is under it.",
-      "registryDependencies": [
-        "DzImage"
+      "categories": [
+        "hover"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzImage"
+        ],
+        "motionPrimitives": [
+          "DzLens",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "lens.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/lens.vue"
+        },
+        {
+          "path": "motion/components/DzLens.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzLens.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -765,19 +1795,50 @@
       "type": "registry:block",
       "title": "Stagger list-in",
       "description": "List items enter one-by-one on view — pair with avatars, lists or menus.",
-      "registryDependencies": [
-        "DzList",
-        "DzAvatar",
-        "DzBadge"
+      "categories": [
+        "lists"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzList",
+          "DzAvatar",
+          "DzBadge"
+        ],
+        "motionPrimitives": [
+          "DzStagger"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "stagger-list-in.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/stagger-list-in.vue"
+        },
+        {
+          "path": "motion/components/DzStagger.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzStagger.vue"
+        },
+        {
+          "path": "motion/useInView.ts",
+          "type": "registry:file",
+          "target": "components/motion/useInView.ts"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -786,17 +1847,43 @@
       "type": "registry:block",
       "title": "Marquee strip",
       "description": "A logo/badge strip scrolls infinitely and seamlessly; hover to pause.",
-      "registryDependencies": [
-        "DzBadge"
+      "categories": [
+        "lists"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzBadge"
+        ],
+        "motionPrimitives": [
+          "DzMarquee"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "marquee-strip.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/marquee-strip.vue"
+        },
+        {
+          "path": "motion/components/DzMarquee.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzMarquee.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -805,18 +1892,43 @@
       "type": "registry:block",
       "title": "Flip on change",
       "description": "A badge value flips with a half-turn whenever the underlying data updates.",
-      "registryDependencies": [
-        "DzBadge",
-        "DzTag"
+      "categories": [
+        "lists"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzBadge",
+          "DzTag"
+        ],
+        "motionPrimitives": [
+          "DzFlip"
+        ]
+      },
       "files": [
         {
           "path": "flip-on-change.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/flip-on-change.vue"
+        },
+        {
+          "path": "motion/components/DzFlip.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzFlip.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -825,19 +1937,41 @@
       "type": "registry:block",
       "title": "Auto-animate list",
       "description": "Add, remove and reorder list items animate in one line via AutoAnimate; snaps when reduced.",
-      "registryDependencies": [
-        "DzListItem",
-        "DzAvatar",
-        "DzBadge"
+      "categories": [
+        "lists"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "@formkit/auto-animate"
       ],
+      "meta": {
+        "components": [
+          "DzListItem",
+          "DzAvatar",
+          "DzBadge"
+        ],
+        "motionPrimitives": [
+          "useAutoAnimate",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "auto-animate-list.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/auto-animate-list.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -846,17 +1980,37 @@
       "type": "registry:block",
       "title": "Pulse / ping",
       "description": "An expanding ring radiates from a status dot to draw the eye to live updates.",
-      "registryDependencies": [
-        "DzNotification"
+      "categories": [
+        "attention"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzNotification"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "pulse-ping.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/pulse-ping.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -865,17 +2019,42 @@
       "type": "registry:block",
       "title": "Shimmer skeleton",
       "description": "A soft highlight sweeps across loading placeholders to signal progress.",
-      "registryDependencies": [
-        "DzSkeleton"
+      "categories": [
+        "attention"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzSkeleton"
+        ],
+        "motionPrimitives": [
+          "DzShimmer"
+        ]
+      },
       "files": [
         {
           "path": "shimmer-skeleton.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/shimmer-skeleton.vue"
+        },
+        {
+          "path": "motion/components/DzShimmer.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzShimmer.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -884,18 +2063,26 @@
       "type": "registry:block",
       "title": "Toast slide-in",
       "description": "Toasts enter and stack with a slide + fade; appear instantly when reduced.",
-      "registryDependencies": [
-        "DzToast",
-        "DzToastProvider"
+      "categories": [
+        "attention"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzToast",
+          "DzToastProvider"
+        ],
+        "motionPrimitives": []
+      },
       "files": [
         {
           "path": "toast-slide-in.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/toast-slide-in.vue"
         }
       ]
     },
@@ -904,17 +2091,42 @@
       "type": "registry:block",
       "title": "Success check",
       "description": "An SVG ring and tick draw themselves in with a small pop to confirm a completed action.",
-      "registryDependencies": [
-        "DzButton"
+      "categories": [
+        "feedback"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzButton"
+        ],
+        "motionPrimitives": [
+          "DzSuccessCheck"
+        ]
+      },
       "files": [
         {
           "path": "success-check.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/success-check.vue"
+        },
+        {
+          "path": "motion/components/DzSuccessCheck.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzSuccessCheck.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -923,17 +2135,42 @@
       "type": "registry:block",
       "title": "Confetti burst",
       "description": "A celebratory multi-colour particle pop fires on a milestone action; a no-op when reduced.",
-      "registryDependencies": [
-        "DzButton"
+      "categories": [
+        "feedback"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzButton"
+        ],
+        "motionPrimitives": [
+          "DzConfetti"
+        ]
+      },
       "files": [
         {
           "path": "confetti-burst.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/confetti-burst.vue"
+        },
+        {
+          "path": "motion/components/DzConfetti.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzConfetti.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -942,18 +2179,38 @@
       "type": "registry:block",
       "title": "Error shake",
       "description": "A field rejects invalid input with a damped horizontal shake plus the red invalid state.",
-      "registryDependencies": [
-        "DzInput",
-        "DzButton"
+      "categories": [
+        "feedback"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzInput",
+          "DzButton"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "error-shake.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/error-shake.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -962,17 +2219,43 @@
       "type": "registry:block",
       "title": "Like pop",
       "description": "A like toggle pops in scale and radiates a ring of colour sparks on the rising edge.",
-      "registryDependencies": [
-        "DzToggleButton"
+      "categories": [
+        "feedback"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
-        "@dzup-ui/tokens"
+        "@dzup-ui/tokens",
+        "lucide-vue-next"
       ],
+      "meta": {
+        "components": [
+          "DzToggleButton"
+        ],
+        "motionPrimitives": [
+          "DzBurst"
+        ]
+      },
       "files": [
         {
           "path": "like-pop.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/like-pop.vue"
+        },
+        {
+          "path": "motion/components/DzBurst.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzBurst.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -981,17 +2264,25 @@
       "type": "registry:block",
       "title": "Route transition",
       "description": "Pages fade and slide as you navigate between routes; instant under reduced motion.",
-      "registryDependencies": [
-        "router-view"
+      "categories": [
+        "transitions"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "router-view"
+        ],
+        "motionPrimitives": []
+      },
       "files": [
         {
           "path": "route-transition.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/route-transition.vue"
         }
       ]
     },
@@ -1000,19 +2291,39 @@
       "type": "registry:block",
       "title": "Tabs indicator slide",
       "description": "The active-tab underline glides between tabs; instant move under reduced motion.",
-      "registryDependencies": [
-        "DzTabs",
-        "DzTabList",
-        "DzTabTrigger"
+      "categories": [
+        "transitions"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzTabs",
+          "DzTabList",
+          "DzTabTrigger"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "tabs-indicator-slide.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/tabs-indicator-slide.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1021,19 +2332,39 @@
       "type": "registry:block",
       "title": "Accordion height",
       "description": "Panels expand and collapse on a smooth height transition; instant under reduced motion.",
-      "registryDependencies": [
-        "DzAccordion",
-        "DzAccordionItem",
-        "DzAccordionContent"
+      "categories": [
+        "transitions"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzAccordion",
+          "DzAccordionItem",
+          "DzAccordionContent"
+        ],
+        "motionPrimitives": [
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "accordion-height.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/accordion-height.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1042,17 +2373,43 @@
       "type": "registry:block",
       "title": "Presence exit",
       "description": "A closing element stays mounted so a pure-CSS leave animation plays before unmount; instant when reduced.",
-      "registryDependencies": [
-        "DzPresence"
+      "categories": [
+        "transitions"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzPresence"
+        ],
+        "motionPrimitives": [
+          "DzPresence"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "presence-exit.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/presence-exit.vue"
+        },
+        {
+          "path": "motion/components/DzPresence.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzPresence.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1061,18 +2418,44 @@
       "type": "registry:block",
       "title": "Animated beam",
       "description": "A light gradient travels an SVG path connecting two referenced elements.",
-      "registryDependencies": [
-        "DzCard",
-        "DzAvatar"
+      "categories": [
+        "connections"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzCard",
+          "DzAvatar"
+        ],
+        "motionPrimitives": [
+          "DzBeam"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "animated-beam.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/animated-beam.vue"
+        },
+        {
+          "path": "motion/components/DzBeam.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzBeam.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1081,18 +2464,44 @@
       "type": "registry:block",
       "title": "Orbiting icons",
       "description": "Avatars and badges orbit a central hub on one or more slow-spinning rings.",
-      "registryDependencies": [
-        "DzAvatar",
-        "DzBadge"
+      "categories": [
+        "connections"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzAvatar",
+          "DzBadge"
+        ],
+        "motionPrimitives": [
+          "DzOrbit"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "orbiting-icons.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/orbiting-icons.vue"
+        },
+        {
+          "path": "motion/components/DzOrbit.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzOrbit.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1101,27 +2510,62 @@
       "type": "registry:block",
       "title": "Morphing dialog",
       "description": "A card expands into a dialog sharing its box — morphs via View Transitions, FLIPs otherwise.",
-      "registryDependencies": [
-        "DzMorph",
-        "DzCard",
-        "DzDialog"
+      "categories": [
+        "surfaces"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzMorph",
+          "DzCard",
+          "DzDialog"
+        ],
+        "motionPrimitives": [
+          "DzMorph",
+          "startViewTransition",
+          "supportsViewTransitions",
+          "useReducedMotion"
+        ]
+      },
       "files": [
         {
           "path": "morphing-dialog.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/morphing-dialog.vue"
         },
         {
           "path": "morphing-dialog.ts",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/morphing-dialog.ts"
         },
         {
           "path": "morphing-dialog.css",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/morphing-dialog.css"
+        },
+        {
+          "path": "motion/components/DzMorph.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzMorph.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1130,19 +2574,51 @@
       "type": "registry:block",
       "title": "Dynamic island",
       "description": "A compact pill morphs to reveal expanded content and back; sizes via interpolate-size, FLIPs otherwise.",
-      "registryDependencies": [
-        "DzIsland",
-        "DzBadge",
-        "DzCard"
+      "categories": [
+        "surfaces"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzIsland",
+          "DzBadge",
+          "DzCard"
+        ],
+        "motionPrimitives": [
+          "DzIsland",
+          "useReducedMotion"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "dynamic-island.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/dynamic-island.vue"
+        },
+        {
+          "path": "motion/components/DzIsland.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzIsland.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     },
@@ -1151,19 +2627,51 @@
       "type": "registry:block",
       "title": "Native popover entrance",
       "description": "A menu/tooltip opens via the Popover API, animating in from @starting-style; <Transition> fallback.",
-      "registryDependencies": [
-        "DzNativePopover",
-        "DzMenu",
-        "DzTooltip"
+      "categories": [
+        "surfaces"
       ],
+      "registryDependencies": [],
       "dependencies": [
         "@dzup-ui/core",
         "@dzup-ui/tokens"
       ],
+      "meta": {
+        "components": [
+          "DzNativePopover",
+          "DzMenu",
+          "DzTooltip"
+        ],
+        "motionPrimitives": [
+          "DzNativePopover",
+          "useReducedMotion"
+        ],
+        "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+      },
       "files": [
         {
           "path": "native-popover-entrance.vue",
-          "type": "registry:block"
+          "type": "registry:file",
+          "target": "components/animations/native-popover-entrance.vue"
+        },
+        {
+          "path": "motion/components/DzNativePopover.vue",
+          "type": "registry:file",
+          "target": "components/motion/components/DzNativePopover.vue"
+        },
+        {
+          "path": "motion/useReducedMotion.ts",
+          "type": "registry:file",
+          "target": "components/motion/useReducedMotion.ts"
+        },
+        {
+          "path": "motion/useViewTransition.ts",
+          "type": "registry:file",
+          "target": "components/motion/useViewTransition.ts"
+        },
+        {
+          "path": "motion/index.ts",
+          "type": "registry:file",
+          "target": "components/motion/index.ts"
         }
       ]
     }

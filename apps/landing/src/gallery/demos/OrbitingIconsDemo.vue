@@ -48,6 +48,6 @@ import { DzOrbit } from '../../motion/index.ts'
 }
 
 .hub {
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 </style>

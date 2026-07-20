@@ -36,7 +36,7 @@ import { DzParticles } from '../../motion/index.ts'
   min-height: 168px;
   overflow: hidden;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .content {

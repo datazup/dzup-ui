@@ -130,8 +130,8 @@ const freshness = `As of the last site build, ${asOf}`
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-2xl, 1.25rem);
   background:
-    radial-gradient(ellipse 70% 140% at 50% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 7%, transparent), transparent 70%),
-    var(--dz-surface, #fff);
+    radial-gradient(ellipse 70% 140% at 50% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 7%, transparent), transparent 70%),
+    var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow), var(--lp-highlight);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -167,7 +167,7 @@ const freshness = `As of the last site build, ${asOf}`
   font-weight: 750;
   letter-spacing: -0.035em;
   line-height: 1;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   /* Hold the figure's final width for the whole count-up so nothing reflows:
      `--reserve` is set inline from the formatted value's glyph count, and
      tabular figures give every digit the same advance. Guards the CLS < 0.1

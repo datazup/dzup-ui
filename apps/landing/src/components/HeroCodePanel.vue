@@ -90,11 +90,11 @@ import { DzButton } from '@dzup-ui/core'
   margin-top: 1px;
   border-radius: var(--dz-radius-full, 9999px);
   border: 1px solid var(--lp-hairline);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .step-body {
@@ -108,7 +108,7 @@ import { DzButton } from '@dzup-ui/core'
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* The snippet is nine short lines; let it breathe without scrolling. */

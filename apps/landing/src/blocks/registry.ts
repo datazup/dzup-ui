@@ -70,8 +70,9 @@ export interface BlockDef {
    * Path of the block's SFC relative to `src/blocks/` (e.g.
    * `'./marketing/HeroCentered.vue'`) — the same string that resolves the block's
    * `component`, and the key you pass to `getBlockSource()` for its `?raw` text.
-   * Lets build tooling (the sitemap's git-derived `<lastmod>`) locate the file on
-   * disk without a parallel path convention.
+   * Lets build tooling locate the SFC on disk without a parallel path convention.
+   * (It used to date the sitemap's `<lastmod>` from git as well; that lastmod is
+   * gone — see the determinism note in `scripts/build-sitemap.ts`.)
    *
    * There is deliberately no `source` field: it would inline all 87 blocks' source
    * text into the entry chunk (see `sources.ts`). Call `getBlockSource(block.path)`

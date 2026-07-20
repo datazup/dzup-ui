@@ -59,3 +59,16 @@ export const TEMPLATE_OG_SLUGS: ReadonlySet<string> = new Set([
   'user-profile',
   'verify-otp',
 ])
+
+/**
+ * Committed template screenshot coverage at the last `yarn build:og` — the
+ * high-water mark `src/templates/thumbnailCoverage.spec.ts` asserts against.
+ * The screenshot generators are exempt from CI's byte-diff drift guard (machine
+ * noise); this COUNT is the part CI can honestly check. `templates` is
+ * `COUNTS.templates`, i.e. `TEMPLATES.length`.
+ */
+export const THUMBNAIL_COVERAGE = {
+  templates: 44,
+  light: 44,
+  dark: 44,
+} as const

@@ -183,17 +183,17 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   cursor: pointer;
   /* Category-accent tint (`--lp-cat-500` inherited from the panel), legible in
      light and dark; brand primary is the fallback. */
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%, var(--dz-surface, #fff));
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 13%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
   transition: background-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
 .bm-chip:hover {
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 22%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 22%, var(--dz-surface, #ffffff));
 }
 
 .bm-chip:focus-visible {
-  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
 }
 

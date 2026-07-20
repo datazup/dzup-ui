@@ -193,10 +193,10 @@ function clearComponent(): void {
   align-items: center;
   gap: 5px;
   padding: 5px 11px;
-  border: 1px solid var(--dz-border, #e5e7eb);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-muted-foreground, #64748b);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-muted-foreground, #585b60);
   font-family: inherit;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
@@ -207,12 +207,12 @@ function clearComponent(): void {
 }
 
 .block-search-clear:hover {
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   border-color: var(--dz-border-strong, #d1d5db);
 }
 
 .block-search-clear:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
 }
 
@@ -233,8 +233,8 @@ function clearComponent(): void {
   border-radius: var(--dz-radius-full, 9999px);
   /* Filled with the brand primary — the bar spans all categories, so there is no
      single accent in scope (mirrors the active tag chip treatment). */
-  background: color-mix(in oklch, var(--dz-primary, #4f46e5) 16%, var(--dz-surface, #fff));
-  color: color-mix(in oklch, var(--dz-primary, #4f46e5) 70%, var(--dz-foreground, #1a202c));
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 16%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--dz-primary, #0766ee) 70%, var(--dz-foreground, #1b1d1f));
   font-family: inherit;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
@@ -243,11 +243,11 @@ function clearComponent(): void {
 }
 
 .block-search-facet-chip:hover {
-  background: color-mix(in oklch, var(--dz-primary, #4f46e5) 24%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 24%, var(--dz-surface, #ffffff));
 }
 
 .block-search-facet-chip:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
 }
 
@@ -278,10 +278,10 @@ function clearComponent(): void {
   display: inline-flex;
   align-items: center;
   padding: 3px 11px;
-  border: 1px solid var(--dz-border, #e5e7eb);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-full, 9999px);
   background: transparent;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   font-family: inherit;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
@@ -294,7 +294,7 @@ function clearComponent(): void {
 }
 
 .block-search-tag:hover {
-  color: color-mix(in oklch, var(--dz-primary, #4f46e5) 60%, var(--dz-foreground, #1a202c));
+  color: color-mix(in oklch, var(--dz-primary, #0766ee) 60%, var(--dz-foreground, #1b1d1f));
   border-color: var(--dz-border-strong, #d1d5db);
 }
 
@@ -302,12 +302,12 @@ function clearComponent(): void {
   /* Filled with the brand primary — the bar spans all categories, so there is no
      single accent in scope (mirrors BlockCard's chip mix against the surface). */
   border-color: transparent;
-  background: color-mix(in oklch, var(--dz-primary, #4f46e5) 16%, var(--dz-surface, #fff));
-  color: color-mix(in oklch, var(--dz-primary, #4f46e5) 70%, var(--dz-foreground, #1a202c));
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 16%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--dz-primary, #0766ee) 70%, var(--dz-foreground, #1b1d1f));
 }
 
 .block-search-tag:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
 }
 
@@ -315,7 +315,7 @@ function clearComponent(): void {
   border: 0;
   background: transparent;
   padding: 2px 0;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
   font-family: inherit;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
@@ -323,7 +323,7 @@ function clearComponent(): void {
 }
 
 .block-search-tags-toggle:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
   border-radius: var(--dz-radius-sm, 0.25rem);
 }

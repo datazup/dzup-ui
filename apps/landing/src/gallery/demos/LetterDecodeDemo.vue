@@ -33,7 +33,7 @@ import { DzTextDecode } from '../../motion/index.ts'
 
 .eyebrow {
   letter-spacing: 0.14em;
-  color: var(--dz-colors-primary-600, #4f46e5);
+  color: var(--dz-colors-primary-600, #004ecb);
   font-family: var(--dz-font-mono, monospace);
 }
 </style>

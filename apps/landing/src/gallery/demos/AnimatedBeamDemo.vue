@@ -93,6 +93,6 @@ const nodeC = ref<HTMLElement | null>(null)
 }
 
 .hub-card {
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 </style>

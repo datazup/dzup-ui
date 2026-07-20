@@ -85,9 +85,9 @@ onBeforeUnmount(() => {
   height: 48px;
   margin-bottom: 2px;
   border-radius: var(--dz-radius-full, 9999px);
-  color: var(--dz-primary, #6366f1);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 12%, transparent);
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 24%, transparent);
+  color: var(--dz-primary, #0766ee);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 12%, transparent);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 24%, transparent);
 }
 
 .title {

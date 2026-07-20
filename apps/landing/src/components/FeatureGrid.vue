@@ -98,8 +98,8 @@ const demoSwitch = ref(true)
   justify-content: space-between;
   gap: 24px;
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 7%, transparent), transparent 55%),
-    var(--dz-surface, #fff);
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 7%, transparent), transparent 55%),
+    var(--dz-surface, #ffffff);
 }
 
 .tile-body {
@@ -115,9 +115,9 @@ const demoSwitch = ref(true)
   height: 42px;
   margin-bottom: 16px;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-primary-muted, #eef2ff);
-  color: var(--dz-primary, #4f46e5);
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 14%, transparent);
+  background: var(--dz-primary-muted, #d5e9ff);
+  color: var(--dz-primary, #0766ee);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 14%, transparent);
 }
 
 .tile--featured .tile-icon {
@@ -141,7 +141,7 @@ const demoSwitch = ref(true)
   padding: 16px;
   border-radius: var(--dz-radius-lg, 0.625rem);
   border: 1px solid var(--lp-hairline);
-  background: var(--dz-background, #fff);
+  background: var(--dz-background, #e7e8e9);
 }
 
 .demo-row {

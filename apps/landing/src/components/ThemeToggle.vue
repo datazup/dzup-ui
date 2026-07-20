@@ -56,10 +56,10 @@ const title = computed(() =>
 .theme-toggle :deep(button) {
   width: 38px;
   height: 38px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 6px);
   background: var(--dz-surface, #ffffff);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   transition:
     background var(--dz-duration-fast, 150ms) var(--dz-ease-default, ease),
     color var(--dz-duration-fast, 150ms) var(--dz-ease-default, ease),
@@ -67,8 +67,8 @@ const title = computed(() =>
 }
 
 .theme-toggle :deep(button:hover) {
-  background: var(--dz-muted, #f1f5f9);
-  color: var(--dz-foreground, #1a202c);
-  border-color: var(--dz-border-hover, #cbd5e1);
+  background: var(--dz-muted, #d3d4d7);
+  color: var(--dz-foreground, #1b1d1f);
+  border-color: var(--dz-border-hover, #b5b7bb);
 }
 </style>

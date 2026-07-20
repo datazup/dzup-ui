@@ -43,12 +43,12 @@ const next = computed(() => (resolved.value === 'dark' ? 'light' : 'dark'))
   align-items: center;
   gap: 10px;
   padding: 10px 12px 10px 14px;
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 32%, var(--lp-hairline));
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 32%, var(--lp-hairline));
   border-radius: var(--dz-radius-full, 9999px);
-  background: color-mix(in oklch, var(--dz-surface, #fff) 76%, transparent);
+  background: color-mix(in oklch, var(--dz-surface, #ffffff) 76%, transparent);
   backdrop-filter: blur(8px);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
   cursor: pointer;
@@ -77,7 +77,7 @@ const next = computed(() => (resolved.value === 'dark' ? 'light' : 'dark'))
 
 .retheme:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 55%, transparent);
+  border-color: color-mix(in oklch, var(--dz-primary, #0766ee) 55%, transparent);
   box-shadow: var(--lp-shadow), var(--lp-highlight);
 }
 
@@ -87,7 +87,7 @@ const next = computed(() => (resolved.value === 'dark' ? 'light' : 'dark'))
 }
 
 .retheme:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
 }
 
@@ -105,8 +105,8 @@ const next = computed(() => (resolved.value === 'dark' ? 'light' : 'dark'))
 .retheme-mode {
   padding: 3px 9px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-muted, #f1f5f9);
-  color: var(--dz-muted-foreground, #64748b);
+  background: var(--dz-muted, #d3d4d7);
+  color: var(--dz-muted-foreground, #585b60);
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   letter-spacing: 0.04em;

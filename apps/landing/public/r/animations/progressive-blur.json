@@ -1,21 +1,29 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "progressive-blur",
   "type": "registry:block",
   "title": "Progressive blur",
   "description": "Layered backdrop-filter stops fade a scroll edge; opaque surface fade under reduced transparency.",
+  "categories": [
+    "backgrounds"
+  ],
   "files": [
     {
       "path": "progressive-blur.vue",
       "content": "<template>\n  <!-- Host must be positioned + clip overflow. .dz-progressive-blur pins to the\n       bottom edge and ramps three masked backdrop-filter stops over it. It is\n       static (no motion); under prefers-reduced-transparency the blur is swapped\n       for an opaque surface fade so the rows stay legible. -->\n  <div class=\"scroll-region\">\n    <div class=\"scroller\"><!-- …scrolling content… --></div>\n    <div class=\"dz-progressive-blur\" aria-hidden=\"true\" />\n  </div>\n</template>\n\n<style scoped>\n.scroll-region { position: relative; overflow: hidden; }\n.scroller { overflow-y: auto; }\n/* Optional: fade a different edge / depth via the utility's custom props. */\n.dz-progressive-blur { --dz-progressive-blur-height: 32%; }\n</style>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/progressive-blur.vue"
     }
   ],
-  "registryDependencies": [
-    "DzCard"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard"
+    ],
+    "motionPrimitives": []
+  }
 }

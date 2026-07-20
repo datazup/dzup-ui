@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Shade } from '@dzup-ui/tokens'
 import type { DesignerIntent } from '../composables/useThemeDesigner.ts'
-import { DzBadge, DzButton, DzHeading, DzSegmented, DzSelect, DzText } from '@dzup-ui/core'
+import { DzBadge, DzButton, DzHeading, DzSegmented, DzSelect, DzText, DzVisuallyHidden } from '@dzup-ui/core'
 import { SHADE_STEPS } from '@dzup-ui/tokens'
-import { Check, Copy, Download, Link2, RotateCcw, Sparkles, Upload } from 'lucide-vue-next'
+import { AlertCircle, Check, Copy, Download, Link2, RotateCcw, Sparkles, Upload } from 'lucide-vue-next'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import ThemePreviewCluster from '../components/themes/ThemePreviewCluster.vue'
@@ -105,22 +105,79 @@ const densityItems = [
 const fontItems = FONT_CHOICES.map(f => ({ value: f.key, label: f.label }))
 
 // ── Copy / download plumbing ────────────────────────────────────────────────
+
+/** How long the success flash sits before reverting to the idle label. */
+const COPY_FLASH_MS = 1600
+/**
+ * Failure sits FOUR times longer than success (TASK-FREE3-07). Both decay — a
+ * permanent error banner over a transient action would be worse — but the two
+ * messages ask different things of the reader: "Copied" is a receipt for
+ * something already done, while the failure tells the user to go and select the
+ * export text by hand. A 1.6s window is not long enough to read an instruction,
+ * decide, and act on it.
+ */
+const COPY_ERROR_MS = 6000
+
+/** Key of the affordance currently flashing success — '' when none is. */
 const copied = ref<string>('')
+/** Key of the affordance currently showing a failure — '' when none is. */
+const copyFailed = ref<string>('')
+/**
+ * Spoken by the aria-live region below, for BOTH outcomes.
+ *
+ * The success flash was already silent to assistive tech: it swaps an icon and
+ * rewrites the label of a button the user has just pressed, and a live label
+ * change on the focused control is not reliably re-announced. The failure had no
+ * representation at all — in a non-secure context (`navigator.clipboard` is
+ * undefined off HTTPS/localhost) pressing Copy CSS did precisely nothing, with
+ * nothing said and nothing shown.
+ */
+const copyStatus = ref<string>('')
+
 function flashCopied(key: string): void {
   copied.value = key
+  copyFailed.value = ''
+  copyStatus.value = 'Copied to clipboard.'
   window.setTimeout(() => {
-    if (copied.value === key)
+    if (copied.value === key) {
       copied.value = ''
-  }, 1600)
+      copyStatus.value = ''
+    }
+  }, COPY_FLASH_MS)
 }
+
+function flashCopyFailed(key: string): void {
+  copyFailed.value = key
+  copied.value = ''
+  copyStatus.value = 'Copy failed — select the export text and copy it manually.'
+  window.setTimeout(() => {
+    if (copyFailed.value === key) {
+      copyFailed.value = ''
+      copyStatus.value = ''
+    }
+  }, COPY_ERROR_MS)
+}
+
 async function copyText(text: string, key: string): Promise<void> {
   try {
+    // The `navigator.clipboard` PROPERTY ACCESS is itself inside the try on
+    // purpose: the API is undefined outside a secure context, so the throw can
+    // come from the lookup rather than from the rejected write.
     await navigator.clipboard.writeText(text)
     flashCopied(key)
   }
   catch {
-    /* clipboard unavailable */
+    flashCopyFailed(key)
   }
+}
+
+/** Label for a copy button, resolving idle / success / failure in one place. */
+function copyLabel(key: string, idle: string, done: string): string {
+  if (copied.value === key)
+    return done
+  if (copyFailed.value === key)
+    return 'Copy failed'
+  return idle
 }
 function download(text: string, filename: string, mime: string): void {
   const blob = new Blob([text], { type: mime })
@@ -237,9 +294,10 @@ function applyImagePalette(img: HTMLImageElement): void {
           <DzButton size="md" variant="solid" tone="primary" @click="copyText(shareUrl, 'share')">
             <template #prefix>
               <Check v-if="copied === 'share'" :size="16" aria-hidden="true" />
+              <AlertCircle v-else-if="copyFailed === 'share'" :size="16" aria-hidden="true" />
               <Link2 v-else :size="16" aria-hidden="true" />
             </template>
-            {{ copied === 'share' ? 'Link copied!' : 'Copy share link' }}
+            {{ copyLabel('share', 'Copy share link', 'Link copied!') }}
           </DzButton>
           <DzButton size="md" variant="outline" tone="neutral" @click="reset">
             <template #prefix>
@@ -487,9 +545,10 @@ function applyImagePalette(img: HTMLImageElement): void {
               <DzButton size="sm" variant="outline" tone="neutral" @click="copyText(cssText, 'css')">
                 <template #prefix>
                   <Check v-if="copied === 'css'" :size="14" aria-hidden="true" />
+                  <AlertCircle v-else-if="copyFailed === 'css'" :size="14" aria-hidden="true" />
                   <Copy v-else :size="14" aria-hidden="true" />
                 </template>
-                {{ copied === 'css' ? 'Copied' : 'Copy CSS' }}
+                {{ copyLabel('css', 'Copy CSS', 'Copied') }}
               </DzButton>
               <DzButton size="sm" variant="outline" tone="neutral" @click="download(cssText, 'dzup-theme.css', 'text/css')">
                 <template #prefix>
@@ -500,9 +559,10 @@ function applyImagePalette(img: HTMLImageElement): void {
               <DzButton size="sm" variant="outline" tone="neutral" @click="copyText(jsonText, 'json')">
                 <template #prefix>
                   <Check v-if="copied === 'json'" :size="14" aria-hidden="true" />
+                  <AlertCircle v-else-if="copyFailed === 'json'" :size="14" aria-hidden="true" />
                   <Copy v-else :size="14" aria-hidden="true" />
                 </template>
-                {{ copied === 'json' ? 'Copied' : 'Copy JSON' }}
+                {{ copyLabel('json', 'Copy JSON', 'Copied') }}
               </DzButton>
               <DzButton size="sm" variant="outline" tone="neutral" @click="download(jsonText, 'dzup-theme.json', 'application/json')">
                 <template #prefix>
@@ -512,10 +572,27 @@ function applyImagePalette(img: HTMLImageElement): void {
               </DzButton>
             </div>
           </div>
+          <!-- Visible failure note, next to the very text the message tells the
+               user to select. The button label ("Copy failed") is the feedback on
+               the affordance itself; this carries the instruction. Success needs
+               no equivalent — the label flip is a sufficient receipt. -->
+          <p v-if="copyFailed !== ''" class="export-error" role="alert">
+            Copy failed — your browser blocked clipboard access. Select the text below and copy it
+            manually.
+          </p>
           <pre class="export-code"><code>{{ cssText }}</code></pre>
         </section>
       </div>
     </div>
+
+    <!-- Copy outcome, spoken once per action (TASK-FREE3-07). Covers BOTH
+         outcomes: the share button sits in the hero, far from the export block's
+         visible note, and a label change on the button the user just pressed is
+         not reliably re-announced. `polite` so it waits for a pause rather than
+         cutting across whatever is being read. -->
+    <DzVisuallyHidden aria-live="polite" role="status">
+      {{ copyStatus }}
+    </DzVisuallyHidden>
   </div>
 </template>
 
@@ -550,7 +627,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   font-size: 0.9em;
   padding: 1px 5px;
   border-radius: var(--dz-radius-sm, 4px);
-  background: var(--dz-muted, #f1f5f9);
+  background: var(--dz-muted, #d3d4d7);
 }
 .themes-hero-actions {
   display: flex;
@@ -578,7 +655,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   padding: 20px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   scrollbar-width: thin;
 }
 
@@ -597,7 +674,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Presets */
@@ -613,8 +690,8 @@ function applyImagePalette(img: HTMLImageElement): void {
   padding: 8px 10px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-background, #fff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-background, #e7e8e9);
+  color: var(--dz-foreground, #1b1d1f);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
   cursor: pointer;
@@ -622,7 +699,7 @@ function applyImagePalette(img: HTMLImageElement): void {
 }
 .preset:hover {
   border-color: color-mix(in oklch, var(--sw) 55%, var(--lp-hairline));
-  background: color-mix(in oklch, var(--sw) 7%, var(--dz-background, #fff));
+  background: color-mix(in oklch, var(--sw) 7%, var(--dz-background, #e7e8e9));
 }
 .preset-dot {
   width: 13px;
@@ -640,7 +717,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   padding: 12px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-background, #fff);
+  background: var(--dz-background, #e7e8e9);
 }
 .palette-head {
   display: flex;
@@ -657,7 +734,7 @@ function applyImagePalette(img: HTMLImageElement): void {
 .palette-label {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .slider {
@@ -670,12 +747,12 @@ function applyImagePalette(img: HTMLImageElement): void {
   justify-content: space-between;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 .slider-cap em {
   font-style: normal;
   font-family: var(--dz-font-mono, monospace);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Slider with a coloured track (hue/chroma) */
@@ -685,14 +762,14 @@ function applyImagePalette(img: HTMLImageElement): void {
   -webkit-appearance: none;
   appearance: none;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--track, var(--dz-muted, #f1f5f9));
+  background: var(--track, var(--dz-muted, #d3d4d7));
   cursor: pointer;
   outline-offset: 3px;
 }
 .range--plain {
   height: 6px;
-  accent-color: var(--dz-primary, #4f46e5);
-  background: var(--dz-muted, #f1f5f9);
+  accent-color: var(--dz-primary, #0766ee);
+  background: var(--dz-muted, #d3d4d7);
 }
 .range::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -701,7 +778,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   height: 16px;
   border-radius: var(--dz-radius-full, 9999px);
   background: #fff;
-  border: 2px solid var(--dz-foreground, #1a202c);
+  border: 2px solid var(--dz-foreground, #1b1d1f);
   box-shadow: 0 1px 3px oklch(0 0 0 / 0.3);
 }
 .range::-moz-range-thumb {
@@ -709,13 +786,13 @@ function applyImagePalette(img: HTMLImageElement): void {
   height: 16px;
   border-radius: var(--dz-radius-full, 9999px);
   background: #fff;
-  border: 2px solid var(--dz-foreground, #1a202c);
+  border: 2px solid var(--dz-foreground, #1b1d1f);
 }
 .range--plain::-webkit-slider-thumb {
-  border-color: var(--dz-primary, #4f46e5);
+  border-color: var(--dz-primary, #0766ee);
 }
 .range--plain::-moz-range-thumb {
-  border-color: var(--dz-primary, #4f46e5);
+  border-color: var(--dz-primary, #0766ee);
 }
 
 /* Ramp strip */
@@ -740,7 +817,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   padding: 8px 0;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 .advanced[open] {
   padding-bottom: 12px;
@@ -757,7 +834,7 @@ function applyImagePalette(img: HTMLImageElement): void {
 .field-cap {
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .upload {
@@ -765,17 +842,17 @@ function applyImagePalette(img: HTMLImageElement): void {
   align-items: center;
   gap: 8px;
   padding: 9px 12px;
-  border: 1px dashed var(--dz-border, #cbd5e1);
+  border: 1px dashed var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-background, #fff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-background, #e7e8e9);
+  color: var(--dz-foreground, #1b1d1f);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
   cursor: pointer;
   transition: border-color var(--dz-duration-fast, 150ms);
 }
 .upload:hover {
-  border-color: var(--dz-primary, #4f46e5);
+  border-color: var(--dz-primary, #0766ee);
 }
 .upload-input {
   display: none;
@@ -794,7 +871,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   padding: 16px 18px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 .a11y-head {
   display: flex;
@@ -812,7 +889,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   margin-bottom: 8px;
 }
 .a11y-list {
@@ -832,7 +909,7 @@ function applyImagePalette(img: HTMLImageElement): void {
   font-size: var(--dz-text-sm, 0.875rem);
 }
 .a11y-label {
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -840,7 +917,7 @@ function applyImagePalette(img: HTMLImageElement): void {
 .a11y-ratio {
   font-family: var(--dz-font-mono, monospace);
   font-size: var(--dz-text-xs, 0.75rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 .a11y-note {
   margin: 14px 0 0;
@@ -856,12 +933,12 @@ function applyImagePalette(img: HTMLImageElement): void {
 .preview-panel {
   position: relative;
   padding: 20px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-xl, 0.875rem);
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 8%, transparent), transparent 55%),
-    var(--dz-background, #fff);
-  color: var(--dz-foreground, #1a202c);
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 8%, transparent), transparent 55%),
+    var(--dz-background, #e7e8e9);
+  color: var(--dz-foreground, #1b1d1f);
   overflow: hidden;
 }
 .preview-panel-label {
@@ -873,13 +950,13 @@ function applyImagePalette(img: HTMLImageElement): void {
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 .pp-dot {
   width: 10px;
   height: 10px;
   border-radius: var(--dz-radius-full, 9999px);
-  border: 1px solid var(--dz-border, #cbd5e1);
+  border: 1px solid var(--dz-border, #b5b7bb);
 }
 .pp-dot--light {
   background: oklch(1 0 0);
@@ -892,7 +969,7 @@ function applyImagePalette(img: HTMLImageElement): void {
 .export {
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   overflow: hidden;
 }
 .export-head {
@@ -909,13 +986,25 @@ function applyImagePalette(img: HTMLImageElement): void {
   flex-wrap: wrap;
   gap: 8px;
 }
+/* `--dz-danger-muted-foreground`, never `--dz-danger`: the intent token is a
+   fill/border colour and fails WCAG AA as text on this surface (CLAUDE.md §1b,
+   enforced by `yarn validate:tokens`). */
+.export-error {
+  margin: 0;
+  padding: 10px 16px;
+  background: var(--dz-danger-muted, #ffddd9);
+  color: var(--dz-danger-muted-foreground, #88000e);
+  font-size: var(--dz-text-xs, 0.75rem);
+  line-height: 1.6;
+}
+
 .export-code {
   margin: 0;
   padding: 16px;
   max-height: 320px;
   overflow: auto;
-  background: var(--dz-codeblock-bg, #0f172a);
-  color: var(--dz-codeblock-text, #e2e8f0);
+  background: var(--dz-codeblock-bg, #1b1d1f);
+  color: var(--dz-codeblock-text, #e7e8e9);
   font-family: var(--dz-font-mono, monospace);
   font-size: var(--dz-text-xs, 0.75rem);
   line-height: 1.65;

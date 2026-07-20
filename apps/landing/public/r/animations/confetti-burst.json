@@ -1,21 +1,49 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "confetti-burst",
   "type": "registry:block",
   "title": "Confetti burst",
   "description": "A celebratory multi-colour particle pop fires on a milestone action; a no-op when reduced.",
+  "categories": [
+    "feedback"
+  ],
   "files": [
     {
       "path": "confetti-burst.vue",
       "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzButton } from '@dzup-ui/core'\nimport { DzConfetti } from '../motion'\n\n// Call the exposed burst() on a key action; the overlay fills the positioned host.\nconst confetti = ref<InstanceType<typeof DzConfetti> | null>(null)\n</script>\n\n<template>\n  <div style=\"position: relative\">\n    <DzConfetti ref=\"confetti\" />\n    <DzButton variant=\"solid\" tone=\"primary\" @click=\"confetti?.burst()\">\n      Ship it\n    </DzButton>\n  </div>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/confetti-burst.vue"
+    },
+    {
+      "path": "motion/components/DzConfetti.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CSSProperties } from 'vue'\nimport { onBeforeUnmount, ref } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzConfetti — a celebratory particle burst for milestone moments (docs/animations.md\n * §6.9, effect 34). Drop it inside a positioned host (it fills the host as a\n * non-interactive overlay) and call its exposed `burst()` on a key action; it\n * spawns a short-lived fan of randomised, multi-colour pieces that fly outward,\n * spin and fade. The `.dz-confetti__piece` flight is owned by `tokens.css`; this\n * component generates the per-piece vectors/colours and cleans pieces up after\n * they land.\n *\n * Under reduced motion (OS or the page-level toggle) `burst()` is a no-op — a\n * particle storm is exactly the kind of non-essential motion reduced-motion users\n * opt out of; the triggering control's own state change carries the confirmation.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** Number of pieces per burst. */\n    count?: number\n  }>(),\n  { count: 28 },\n)\n\nconst reduced = useReducedMotion()\n\ninterface Piece {\n  id: number\n  style: CSSProperties\n}\n\nconst pieces = ref<Piece[]>([])\nconst timers = new Set<ReturnType<typeof setTimeout>>()\nlet seq = 0\n\n// Brand-forward palette so the burst reads as celebratory, not monochrome.\nconst PALETTE = [\n  'var(--dz-primary, #0766ee)',\n  'var(--dz-colors-secondary-500, #7260bd)',\n  'var(--dz-success, #1c882d)',\n  'var(--dz-warning, #bb9300)',\n  'var(--dz-info, #007eb3)',\n  'var(--dz-danger, #cc272e)',\n]\n\nfunction burst(): void {\n  if (reduced.value)\n    return\n\n  const batch: Piece[] = []\n  for (let i = 0; i < props.count; i += 1) {\n    // Bias slightly upward (−110°..−70° plus full spread) so it arcs like a popper.\n    const angle = Math.random() * Math.PI * 2\n    const distance = 70 + Math.random() * 90\n    const tx = Math.cos(angle) * distance\n    const ty = Math.sin(angle) * distance\n    const spin = (Math.random() < 0.5 ? -1 : 1) * (240 + Math.random() * 480)\n    const dim = 7 + Math.round(Math.random() * 5)\n    const round = Math.random() < 0.4\n\n    batch.push({\n      id: (seq += 1),\n      style: {\n        '--tx': `${tx.toFixed(1)}px`,\n        '--ty': `${ty.toFixed(1)}px`,\n        '--r': `${spin.toFixed(0)}deg`,\n        '--c': PALETTE[i % PALETTE.length],\n        'width': `${dim}px`,\n        'height': `${dim}px`,\n        'borderRadius': round ? '9999px' : 'var(--dz-radius-xs, 2px)',\n        'animationDelay': `${(Math.random() * 60).toFixed(0)}ms`,\n      } as CSSProperties,\n    })\n  }\n\n  pieces.value.push(...batch)\n  const ids = new Set(batch.map(p => p.id))\n  const timer = setTimeout(() => {\n    pieces.value = pieces.value.filter(p => !ids.has(p.id))\n    timers.delete(timer)\n  }, 1100)\n  timers.add(timer)\n}\n\nonBeforeUnmount(() => {\n  timers.forEach(t => clearTimeout(t))\n  timers.clear()\n})\n\ndefineExpose({ burst })\n</script>\n\n<template>\n  <span class=\"dz-confetti\" :class=\"{ 'dz-confetti--reduced': reduced }\" aria-hidden=\"true\">\n    <span\n      v-for=\"piece in pieces\"\n      :key=\"piece.id\"\n      class=\"dz-confetti__piece\"\n      :style=\"piece.style\"\n    />\n  </span>\n</template>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzConfetti.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzConfetti } from './components/DzConfetti.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzButton"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzButton"
+    ],
+    "motionPrimitives": [
+      "DzConfetti"
+    ]
+  }
 }

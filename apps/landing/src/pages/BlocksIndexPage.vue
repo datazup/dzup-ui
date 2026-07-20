@@ -573,7 +573,7 @@ onMounted(async () => {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   line-height: 1.2;
 }
 

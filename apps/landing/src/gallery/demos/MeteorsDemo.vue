@@ -59,8 +59,8 @@ const field = computed(() => ({
   border-radius: var(--dz-radius-lg, 0.625rem);
   /* A deep night surface (same in light + dark) so the streaks read. */
   background:
-    radial-gradient(circle at 50% 130%, color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 30%, transparent), transparent 62%),
-    var(--dz-colors-primary-950, #1e1b3a);
+    radial-gradient(circle at 50% 130%, color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 30%, transparent), transparent 62%),
+    var(--dz-colors-primary-950, #00062b);
 }
 
 .content {

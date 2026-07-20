@@ -332,7 +332,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
   /* Translucent glass so the page's drifting aurora glows faintly through. */
-  background: color-mix(in oklch, var(--dz-surface, #fff) 80%, transparent);
+  background: color-mix(in oklch, var(--dz-surface, #ffffff) 80%, transparent);
   backdrop-filter: blur(10px) saturate(1.1);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
   overflow: hidden;
@@ -353,10 +353,10 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 /* Permalink target pulse — when the page deep-links to this card, ring + lift it
    briefly so the reader can spot it. Token-only; calmed under reduced motion. */
 .anim-card.is-highlighted {
-  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 60%, var(--lp-hairline));
+  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 60%, var(--lp-hairline));
   box-shadow:
     var(--lp-shadow-lg),
-    0 0 0 3px color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 40%, transparent);
+    0 0 0 3px color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 40%, transparent);
   animation: card-highlight 1.6s var(--dz-ease-out, ease-out) 1;
 }
 
@@ -364,19 +364,19 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   0% {
     box-shadow:
       var(--lp-shadow-sm),
-      0 0 0 0 color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 65%, transparent);
+      0 0 0 0 color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 65%, transparent);
   }
   30% {
     box-shadow:
       var(--lp-shadow-lg),
-      0 0 0 5px color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 45%, transparent);
+      0 0 0 5px color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 45%, transparent);
   }
 }
 
 .anim-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--lp-shadow-lg), var(--lp-highlight);
-  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 40%, var(--lp-hairline));
+  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 40%, var(--lp-hairline));
 }
 
 /* Preview stage — tinted, layered backdrop so previews read in light + dark. */
@@ -395,7 +395,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   background:
     radial-gradient(circle at 85% 0%, color-mix(in oklch, var(--accent-2, var(--lp-brand-2, #a855f7)) 16%, transparent), transparent 55%),
     radial-gradient(circle at 0% 100%, color-mix(in oklch, var(--accent, var(--lp-brand, #6366f1)) 16%, transparent), transparent 55%),
-    color-mix(in oklch, var(--dz-muted, #f8fafc) 88%, transparent);
+    color-mix(in oklch, var(--dz-muted, #d3d4d7) 88%, transparent);
   border-bottom: 1px solid var(--lp-hairline);
   overflow: hidden;
 }
@@ -413,7 +413,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   opacity: 0;
   background: radial-gradient(
     120% 90% at 50% 120%,
-    color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 24%, transparent),
+    color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 24%, transparent),
     transparent 70%
   );
   transition: opacity var(--dz-duration-slow, 320ms) var(--dz-ease-out, ease-out);
@@ -430,7 +430,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   z-index: 3;
   opacity: 0;
   transform: translateY(-4px);
-  background: color-mix(in oklch, var(--dz-surface, #fff) 72%, transparent);
+  background: color-mix(in oklch, var(--dz-surface, #ffffff) 72%, transparent);
   backdrop-filter: blur(6px);
   transition:
     opacity var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out),
@@ -478,9 +478,9 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   gap: 4px;
   padding: 2px 8px;
   border-radius: var(--dz-radius-full, 9999px);
-  border: 1px solid color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 40%, transparent);
-  background: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 12%, transparent);
-  color: var(--accent-strong, var(--dz-primary, #4f46e5));
+  border: 1px solid color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 40%, transparent);
+  background: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 12%, transparent);
+  color: var(--accent-strong, var(--dz-primary, #0766ee));
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   white-space: nowrap;
@@ -502,7 +502,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   border: none;
   border-radius: var(--dz-radius-md, 6px);
   background: transparent;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   cursor: pointer;
   opacity: 0.55;
   transition:
@@ -517,8 +517,8 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 }
 
 .link-btn:hover {
-  color: var(--dz-foreground, #0f172a);
-  background: color-mix(in oklch, var(--accent, var(--dz-primary, #6366f1)) 12%, transparent);
+  color: var(--dz-foreground, #1b1d1f);
+  background: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 12%, transparent);
 }
 
 .link-btn:focus-visible {
@@ -532,7 +532,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   gap: 2px;
   padding: 3px;
   border-radius: var(--dz-radius-md, 6px);
-  background: color-mix(in oklch, var(--dz-muted, #f1f5f9) 70%, transparent);
+  background: color-mix(in oklch, var(--dz-muted, #d3d4d7) 70%, transparent);
   border: 1px solid var(--lp-hairline);
   align-self: flex-start;
 }
@@ -543,7 +543,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   padding: 5px 12px;
   border-radius: var(--dz-radius-sm, 4px);
   background: transparent;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   cursor: pointer;
@@ -553,12 +553,12 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 }
 
 .code-tab:hover {
-  color: var(--dz-foreground, #0f172a);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .code-tab.is-active {
-  color: var(--dz-foreground, #0f172a);
-  background: var(--dz-surface, #fff);
+  color: var(--dz-foreground, #1b1d1f);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-sm);
 }
 
@@ -600,7 +600,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   margin: 0;
   padding: 16px;
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-colors-primary-900, #1e1b3a);
+  background: var(--dz-colors-primary-900, #001551);
   color: oklch(0.92 0.03 260);
   font-family: var(--dz-font-mono, monospace);
   font-size: var(--dz-text-xs, 0.75rem);

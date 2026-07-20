@@ -40,7 +40,7 @@ import { DzGlass } from '../../motion/index.ts'
   min-height: 168px;
   overflow: hidden;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .backdrop {
@@ -61,13 +61,13 @@ import { DzGlass } from '../../motion/index.ts'
 .blob--1 {
   top: -18%;
   left: -6%;
-  background: var(--dz-colors-primary-500, #6366f1);
+  background: var(--dz-colors-primary-500, #0766ee);
 }
 
 .blob--2 {
   bottom: -22%;
   right: -4%;
-  background: var(--dz-colors-secondary-500, #a855f7);
+  background: var(--dz-colors-secondary-500, #7260bd);
 }
 
 .blob--3 {
@@ -75,7 +75,7 @@ import { DzGlass } from '../../motion/index.ts'
   left: 42%;
   width: 34%;
   height: 48%;
-  background: var(--dz-colors-fuchsia-500, #d946ef);
+  background: var(--dz-colors-fuchsia-500, #b02bb0);
 }
 
 .panel {

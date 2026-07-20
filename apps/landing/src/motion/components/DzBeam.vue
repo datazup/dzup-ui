@@ -47,8 +47,8 @@ const props = withDefaults(
     curvature: 44,
     duration: 'var(--dz-anim-beam-duration, 4s)',
     reverse: false,
-    fromColor: 'var(--dz-colors-primary-400, #818cf8)',
-    toColor: 'var(--dz-colors-secondary-400, #c084fc)',
+    fromColor: 'var(--dz-colors-primary-400, #5195ff)',
+    toColor: 'var(--dz-colors-secondary-400, #978bda)',
   },
 )
 
@@ -202,7 +202,7 @@ const pulseStyle = computed(() => ({ '--dz-beam-duration': props.duration }))
  * fallback under reduced motion. */
 .dz-beam__line {
   fill: none;
-  stroke: color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 24%, transparent);
+  stroke: color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 24%, transparent);
   stroke-width: 1.5;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;

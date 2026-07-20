@@ -67,7 +67,7 @@ import Section from './Section.vue'
   gap: 6px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
   text-decoration: none;
 }
 
@@ -103,8 +103,8 @@ import Section from './Section.vue'
   font-weight: 700;
   padding: 2px 9px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-primary-muted, #eef2ff);
-  color: var(--dz-primary, #4f46e5);
+  background: var(--dz-primary-muted, #d5e9ff);
+  color: var(--dz-primary, #0766ee);
 }
 
 .tile-preview {
@@ -115,8 +115,8 @@ import Section from './Section.vue'
   border-radius: var(--dz-radius-lg, 0.625rem);
   border: 1px solid var(--lp-hairline);
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 4%, transparent), transparent 60%),
-    var(--dz-background, #fff);
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 4%, transparent), transparent 60%),
+    var(--dz-background, #e7e8e9);
   /* Decorative only — controls inside are not interactive. */
   pointer-events: none;
   display: flex;
@@ -132,7 +132,7 @@ import Section from './Section.vue'
   gap: 5px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
   text-decoration: none;
 }
 
@@ -144,7 +144,7 @@ import Section from './Section.vue'
 }
 
 .tile-link:focus-visible .tile-link-cover {
-  outline: 2px solid var(--dz-ring, #4f46e5);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: -2px;
   border-radius: var(--dz-radius-xl, 0.875rem);
 }

@@ -127,7 +127,7 @@ function kindOf(item: CommandItem): SearchKind {
 .gcp-item-icon {
   flex-shrink: 0;
   margin-right: var(--dz-space-2, 0.5rem);
-  color: var(--dz-muted-foreground, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .gcp-item-body {
@@ -149,6 +149,6 @@ function kindOf(item: CommandItem): SearchKind {
   padding-left: var(--dz-space-3, 0.75rem);
   flex-shrink: 0;
   font-size: var(--dz-text-xs, 0.75rem);
-  color: var(--dz-muted-foreground, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 </style>

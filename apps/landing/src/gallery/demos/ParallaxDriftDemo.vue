@@ -53,7 +53,7 @@ const layerStyle = computed(() => {
   min-height: 140px;
   overflow: hidden;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 /* Oversized so it never reveals an edge as it drifts within the capped range. */
@@ -61,8 +61,8 @@ const layerStyle = computed(() => {
   position: absolute;
   inset: -30% -10%;
   background:
-    radial-gradient(circle at 25% 30%, color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 45%, transparent), transparent 55%),
-    radial-gradient(circle at 75% 70%, color-mix(in oklch, var(--dz-colors-secondary-500, #a855f7) 45%, transparent), transparent 55%);
+    radial-gradient(circle at 25% 30%, color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 45%, transparent), transparent 55%),
+    radial-gradient(circle at 75% 70%, color-mix(in oklch, var(--dz-colors-secondary-500, #7260bd) 45%, transparent), transparent 55%);
   filter: blur(4px);
 }
 

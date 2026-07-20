@@ -57,7 +57,7 @@ const classes = computed(() => ({
   left: 8%;
   background: radial-gradient(
     circle,
-    color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 42%, transparent),
+    color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 42%, transparent),
     transparent 68%
   );
   animation: dz-anim-aurora-1 var(--dz-anim-aurora-1-duration, 16s) var(--dz-ease-in-out, ease-in-out) infinite;
@@ -71,7 +71,7 @@ const classes = computed(() => ({
   right: 4%;
   background: radial-gradient(
     circle,
-    color-mix(in oklch, var(--dz-colors-secondary-500, #a855f7) 38%, transparent),
+    color-mix(in oklch, var(--dz-colors-secondary-500, #7260bd) 38%, transparent),
     transparent 68%
   );
   animation: dz-anim-aurora-2 var(--dz-anim-aurora-2-duration, 20s) var(--dz-ease-in-out, ease-in-out) infinite;

@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "aurora-drift",
   "type": "registry:block",
   "title": "Aurora drift",
   "description": "Soft brand blobs drift on slow, offset loops behind a hero or CTA surface.",
+  "categories": [
+    "backgrounds"
+  ],
   "files": [
     {
       "path": "aurora-drift.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzHeading } from '@dzup-ui/core'\nimport { DzAurora } from '../motion'\n</script>\n\n<template>\n  <!-- Parent must be positioned; DzAurora fills it, aria-hidden + non-interactive. -->\n  <section class=\"hero\">\n    <DzAurora />\n    <DzHeading :level=\"1\" size=\"3xl\" weight=\"bold\">Motion, ready to drop in</DzHeading>\n  </section>\n</template>\n\n<style scoped>\n.hero { position: relative; overflow: hidden; }\n</style>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/aurora-drift.vue"
+    },
+    {
+      "path": "motion/components/DzAurora.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzAurora — a drifting brand-blob background (docs/animations.md §6.4, effect\n * 15). The animated counterpart to the static `.lp-aurora` wash in\n * `tailwind.css`: two soft, blurred primary/secondary blobs translate and scale\n * on slow, offset loops so a hero/CTA backdrop feels alive without reading as a\n * rigid animation.\n *\n * Purely decorative — rendered `aria-hidden`, `pointer-events: none`, and\n * absolutely positioned to fill its (positioned) container. Animates transform\n * only (GPU-cheap, no layout thrash). Under reduced motion (OS or the\n * page-level toggle) the loops stop and the blobs sit at their rest position —\n * the current static look. The two blobs run at different durations\n * (`--dz-anim-aurora-1/2-duration`) so the wash never visibly repeats in sync.\n */\nconst reduced = useReducedMotion()\n\nconst classes = computed(() => ({\n  'dz-aurora': true,\n  'dz-aurora--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <div :class=\"classes\" aria-hidden=\"true\">\n    <span class=\"dz-aurora__blob dz-aurora__blob--1\" />\n    <span class=\"dz-aurora__blob dz-aurora__blob--2\" />\n  </div>\n</template>\n\n<style scoped>\n.dz-aurora {\n  position: absolute;\n  inset: 0;\n  z-index: 0;\n  overflow: hidden;\n  pointer-events: none;\n}\n\n.dz-aurora__blob {\n  position: absolute;\n  border-radius: 50%;\n  filter: blur(72px);\n  opacity: 0.7;\n  /* Hint the compositor only while looping; cleared with the animation below. */\n  will-change: transform;\n}\n\n/* Mirrors the .lp-aurora::before geometry — top-left primary wash. */\n.dz-aurora__blob--1 {\n  width: 52%;\n  height: 60%;\n  top: -22%;\n  left: 8%;\n  background: radial-gradient(\n    circle,\n    color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 42%, transparent),\n    transparent 68%\n  );\n  animation: dz-anim-aurora-1 var(--dz-anim-aurora-1-duration, 16s) var(--dz-ease-in-out, ease-in-out) infinite;\n}\n\n/* Mirrors the .lp-aurora::after geometry — top-right secondary wash. */\n.dz-aurora__blob--2 {\n  width: 46%;\n  height: 56%;\n  top: -16%;\n  right: 4%;\n  background: radial-gradient(\n    circle,\n    color-mix(in oklch, var(--dz-colors-secondary-500, #7260bd) 38%, transparent),\n    transparent 68%\n  );\n  animation: dz-anim-aurora-2 var(--dz-anim-aurora-2-duration, 20s) var(--dz-ease-in-out, ease-in-out) infinite;\n}\n\n[data-theme=\"dark\"] .dz-aurora__blob {\n  opacity: 0.45;\n}\n\n/* Reduced motion (OS or page toggle) → static blobs at rest, no will-change. */\n.dz-aurora--reduced .dz-aurora__blob {\n  animation: none;\n  will-change: auto;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzAurora.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzAurora } from './components/DzAurora.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzAurora"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzAurora"
+    ],
+    "motionPrimitives": [
+      "DzAurora"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

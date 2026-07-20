@@ -1,22 +1,51 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "glare",
   "type": "registry:block",
   "title": "Glare card",
   "description": "A glossy specular highlight tracks the pointer across a card — the gloss, no tilt.",
+  "categories": [
+    "hover"
+  ],
   "files": [
     {
       "path": "glare.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzCard, DzHeading } from '@dzup-ui/core'\nimport { vGlare, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- rAF pointer; opacity/background-position only. The glare is an aria-hidden,\n       pointer-events:none overlay so the card's click target never moves. Flat\n       surface on touch/keyboard and under reduced motion (via disabled). -->\n  <DzCard v-glare=\"{ disabled: reduced }\" variant=\"elevated\" padding=\"lg\">\n    <DzHeading :level=\"4\" size=\"lg\" weight=\"bold\">Membership card</DzHeading>\n  </DzCard>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/glare.vue"
+    },
+    {
+      "path": "motion/directives/glare.ts",
+      "content": "import type { Directive, DirectiveBinding } from 'vue'\n\n/**\n * v-glare — pointer-tracked specular highlight directive (docs/animations.md\n * §5.5, effect 48). A glossy reflection follows the pointer across the host's\n * surface via an `aria-hidden`, non-interactive overlay. This is the standalone\n * counterpart to `v-tilt`'s `glare` option — the gloss with no rotation — so it\n * can dress a flat `DzCard` / `DzImageCard` on its own.\n *\n * Opacity/`background-position` only — the pointer position collapses to one\n * write per frame via `requestAnimationFrame`, regardless of pointer-event rate.\n *\n * Accessibility / touch guarantees (§5.5, §7):\n * - **Pointer-only.** Listeners attach only on fine-pointer, hover-capable\n *   devices; touch pointer events are ignored. Touch users get a flat surface.\n * - **Reduced-motion.** Off when the OS sets `prefers-reduced-motion` OR the\n *   caller passes `disabled: true` (wire to the page-level toggle via\n *   `useReducedMotion`). Import-free so it stays extractable.\n * - **Never moves the click/focus target.** The glare is an absolutely-positioned\n *   overlay with `pointer-events: none`; the host box is untouched, so clicks and\n *   keyboard focus land exactly as before.\n *\n * Usage:\n *   <DzCard v-glare>…</DzCard>\n *   <DzImageCard v-glare=\"{ disabled: reduced }\" :src=\"…\" alt=\"…\" />\n */\n\n/** Options for {@link vGlare}; all optional. */\nexport interface GlareOptions {\n  /** Force the flat, un-glared state (e.g. page-level reduced motion). */\n  disabled?: boolean\n}\n\ninterface GlareState {\n  glare: HTMLElement | null\n  frame: number\n  nextX: number\n  nextY: number\n  attached: boolean\n  onMove: (event: PointerEvent) => void\n  onLeave: () => void\n}\n\nconst states = new WeakMap<HTMLElement, GlareState>()\n\n/** Whether the OS currently requests reduced motion (SSR-safe). */\nfunction prefersReduced(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(prefers-reduced-motion: reduce)').matches\n}\n\n/** Whether the device has a fine, hover-capable pointer (SSR-safe). */\nfunction canHover(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(hover: hover) and (pointer: fine)').matches\n}\n\nfunction shouldRun(binding: DirectiveBinding<GlareOptions | undefined>): boolean {\n  return !binding.value?.disabled && !prefersReduced() && canHover()\n}\n\nfunction applyFrame(el: HTMLElement, state: GlareState): void {\n  state.frame = 0\n  if (!state.glare)\n    return\n  const rect = el.getBoundingClientRect()\n  if (!rect.width || !rect.height)\n    return\n  const px = (state.nextX - rect.left) / rect.width\n  const py = (state.nextY - rect.top) / rect.height\n  state.glare.style.setProperty('--dz-glare-x', `${(px * 100).toFixed(2)}%`)\n  state.glare.style.setProperty('--dz-glare-y', `${(py * 100).toFixed(2)}%`)\n}\n\nfunction createGlare(el: HTMLElement): HTMLElement {\n  // Host must establish a positioning context for the absolute overlay.\n  if (getComputedStyle(el).position === 'static')\n    el.style.position = 'relative'\n  const glare = document.createElement('span')\n  glare.className = 'dz-glare'\n  glare.setAttribute('aria-hidden', 'true')\n  el.appendChild(glare)\n  return glare\n}\n\nfunction attach(el: HTMLElement, state: GlareState): void {\n  if (state.attached)\n    return\n  if (!state.glare)\n    state.glare = createGlare(el)\n\n  state.onMove = (event: PointerEvent): void => {\n    if (event.pointerType === 'touch')\n      return\n    state.nextX = event.clientX\n    state.nextY = event.clientY\n    state.glare?.classList.add('dz-glare--active')\n    if (!state.frame)\n      state.frame = requestAnimationFrame(() => applyFrame(el, state))\n  }\n\n  state.onLeave = (): void => {\n    if (state.frame) {\n      cancelAnimationFrame(state.frame)\n      state.frame = 0\n    }\n    state.glare?.classList.remove('dz-glare--active')\n  }\n\n  el.addEventListener('pointermove', state.onMove)\n  el.addEventListener('pointerleave', state.onLeave)\n  state.attached = true\n}\n\nfunction detach(el: HTMLElement, state: GlareState): void {\n  if (!state.attached)\n    return\n  el.removeEventListener('pointermove', state.onMove)\n  el.removeEventListener('pointerleave', state.onLeave)\n  if (state.frame) {\n    cancelAnimationFrame(state.frame)\n    state.frame = 0\n  }\n  state.glare?.classList.remove('dz-glare--active')\n  state.attached = false\n}\n\nexport const vGlare: Directive<HTMLElement, GlareOptions | undefined> = {\n  mounted(el, binding) {\n    const state: GlareState = {\n      glare: null,\n      frame: 0,\n      nextX: 0,\n      nextY: 0,\n      attached: false,\n      onMove: () => {},\n      onLeave: () => {},\n    }\n    states.set(el, state)\n    if (shouldRun(binding))\n      attach(el, state)\n  },\n  updated(el, binding) {\n    const state = states.get(el)\n    if (!state)\n      return\n    // React to the page-level reduced-motion toggle flipping `disabled`.\n    if (shouldRun(binding))\n      attach(el, state)\n    else detach(el, state)\n  },\n  unmounted(el) {\n    const state = states.get(el)\n    if (!state)\n      return\n    detach(el, state)\n    state.glare?.remove()\n    states.delete(el)\n  },\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/directives/glare.ts"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { vGlare } from './directives/glare.ts'\nexport { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzCard",
-    "DzImageCard"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard",
+      "DzImageCard"
+    ],
+    "motionPrimitives": [
+      "useReducedMotion",
+      "vGlare"
+    ]
+  }
 }

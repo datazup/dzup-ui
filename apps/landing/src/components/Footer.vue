@@ -46,9 +46,48 @@ const columns = [
   },
 ]
 
+/**
+ * `external: true` means "not a router route" — it does NOT mean "open in a new
+ * tab" (TASK-FREE3-07).
+ *
+ * The Contact entry is a `mailto:`, and it was rendered through the same branch
+ * as the https docs links: `target="_blank"`. Several browsers handle that by
+ * opening a blank tab, handing the URL to the mail client, and leaving the empty
+ * tab behind — the user hands off to their mail app and comes back to a stray
+ * about:blank. A `mailto:` has no document to put in a tab, so there is nothing
+ * for `_blank` to be right about.
+ *
+ * Scheme is the discriminator rather than another hand-set flag on each entry:
+ * a flag has to be remembered, `mailto:` is self-evident from the href, and the
+ * next `tel:`/`sms:` link gets the correct behaviour without anyone noticing it
+ * needed a decision.
+ */
+const NON_DOCUMENT_SCHEME = /^(?:mailto|tel|sms):/i
+
+/** `_blank` for real external documents; default navigation for handoff schemes. */
+function linkTarget(href: string): string | undefined {
+  return NON_DOCUMENT_SCHEME.test(href) ? undefined : '_blank'
+}
+
+/**
+ * `rel` hygiene belongs with `target="_blank"` and only there — it exists to
+ * sever `window.opener` and referrer leakage for a newly opened document, and a
+ * mail handoff opens no document to sever.
+ */
+function linkRel(href: string): string | undefined {
+  return NON_DOCUMENT_SCHEME.test(href) ? undefined : 'noreferrer noopener'
+}
+
 /** Derived, not typed — a hardcoded 2026 would still read “© 2026” in 2028. */
 const year = new Date().getFullYear()
 
+// The badge colour is `0766ee` — `--dz-colors-primary-500`, the brand blue the
+// favicon, manifest and theme-color all use (TASK-FREE3-08). It was `6366f1`, a
+// generic indigo. Unlike a `var(--dz-*, #hex)` fallback this is not a
+// degradation path: a shields.io query string cannot reference a CSS variable,
+// so the literal is what every visitor sees on every load. Keep it in step with
+// the ramp — `landing-token-fallbacks.spec.ts` recomputes it from tokens.css.
+//
 // shields.io badges — every one must render TODAY (TASK-FREE-11): the repo is
 // public so the live stars badge resolves; npm-backed badges (version,
 // bundlephobia, npm license) rendered shields' "not found" placeholders while
@@ -57,12 +96,12 @@ const year = new Date().getFullYear()
 const badges = [
   {
     alt: 'GitHub stars',
-    src: 'https://img.shields.io/github/stars/datazup/dzup-ui?label=stars&color=6366f1',
+    src: 'https://img.shields.io/github/stars/datazup/dzup-ui?label=stars&color=0766ee',
     href: LINKS.github,
   },
   {
     alt: 'MIT license',
-    src: 'https://img.shields.io/badge/license-MIT-6366f1',
+    src: 'https://img.shields.io/badge/license-MIT-0766ee',
     href: LINKS.license,
   },
   {
@@ -70,7 +109,7 @@ const badges = [
     // (Lighthouse: LCP < 2.5s, CLS < 0.1). A static badge stating the enforced
     // budget — links to the CI workflow where the live run + report artifact live.
     alt: 'Core Web Vitals budget — LCP under 2.5s, CLS under 0.1, enforced in CI',
-    src: 'https://img.shields.io/badge/Core%20Web%20Vitals-LCP%3C2.5s%20%C2%B7%20CLS%3C0.1-6366f1',
+    src: 'https://img.shields.io/badge/Core%20Web%20Vitals-LCP%3C2.5s%20%C2%B7%20CLS%3C0.1-0766ee',
     href: 'https://github.com/datazup/dzup-ui/actions/workflows/ci.yml',
   },
 ]
@@ -106,8 +145,8 @@ const badges = [
               <a
                 v-if="link.external"
                 :href="link.href"
-                target="_blank"
-                rel="noreferrer noopener"
+                :target="linkTarget(link.href)"
+                :rel="linkRel(link.href)"
               >{{ link.label }}</a>
               <router-link v-else :to="link.href">
                 {{ link.label }}
@@ -127,8 +166,8 @@ const badges = [
 
 <style scoped>
 .footer {
-  border-top: 1px solid var(--dz-border, #e2e8f0);
-  background: var(--dz-surface, #fff);
+  border-top: 1px solid var(--dz-border, #b5b7bb);
+  background: var(--dz-surface, #ffffff);
   transition: var(--dz-landing-theme-transition);
 }
 
@@ -147,7 +186,7 @@ const badges = [
   gap: 9px;
   font-weight: 700;
   font-size: var(--dz-text-lg, 1.125rem);
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .brand-mark {
@@ -157,7 +196,7 @@ const badges = [
   width: 28px;
   height: 28px;
   border-radius: var(--dz-radius-md, 6px);
-  background: linear-gradient(135deg, var(--dz-colors-primary-500, #6366f1), var(--dz-colors-secondary-500, #a855f7));
+  background: linear-gradient(135deg, var(--dz-colors-primary-500, #0766ee), var(--dz-colors-secondary-500, #7260bd));
   color: #fff;
   font-size: 13px;
   font-weight: 800;
@@ -167,7 +206,7 @@ const badges = [
   margin: 14px 0 0;
   max-width: 32ch;
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   line-height: 1.6;
 }
 
@@ -196,7 +235,7 @@ const badges = [
   margin: 0 0 12px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 700;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .footer-col ul {
@@ -210,36 +249,36 @@ const badges = [
 
 .footer-col a {
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
   transition: color var(--dz-duration-fast, 150ms);
 }
 
 .footer-col a:hover {
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 .footer-bottom {
   max-width: 1200px;
   margin: 0 auto;
   padding: 18px 24px;
-  border-top: 1px solid var(--dz-border, #e2e8f0);
+  border-top: 1px solid var(--dz-border, #b5b7bb);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   font-size: var(--dz-text-xs, 0.75rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .footer-bottom a {
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
 }
 
 .footer-bottom a:hover {
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 @media (max-width: 860px) {

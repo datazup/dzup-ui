@@ -169,8 +169,8 @@ onBeforeUnmount(detach)
   /* Soft brand blob with a mix-blend so it reads over light + dark surfaces. */
   background: radial-gradient(
     circle at center,
-    color-mix(in oklch, var(--dz-primary, #6366f1) 70%, transparent),
-    color-mix(in oklch, var(--dz-primary, #6366f1) 20%, transparent) 70%,
+    color-mix(in oklch, var(--dz-primary, #0766ee) 70%, transparent),
+    color-mix(in oklch, var(--dz-primary, #0766ee) 20%, transparent) 70%,
     transparent 72%
   );
   mix-blend-mode: multiply;

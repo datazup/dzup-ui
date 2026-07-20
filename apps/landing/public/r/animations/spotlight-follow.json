@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "spotlight-follow",
   "type": "registry:block",
   "title": "Spotlight follow",
   "description": "A radial light tracks the cursor across a surface; static glow under reduced motion.",
+  "categories": [
+    "backgrounds"
+  ],
   "files": [
     {
       "path": "spotlight-follow.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzCard, DzHeading } from '@dzup-ui/core'\nimport { DzSpotlight } from '../motion'\n</script>\n\n<template>\n  <DzSpotlight>\n    <DzCard variant=\"elevated\" padding=\"lg\">\n      <DzHeading :level=\"2\" size=\"lg\">Follow the light</DzHeading>\n    </DzCard>\n  </DzSpotlight>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/spotlight-follow.vue"
+    },
+    {
+      "path": "motion/components/DzSpotlight.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, onBeforeUnmount, ref, watch } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzSpotlight — a radial light that follows the pointer over a surface\n * (docs/animations.md §6.4, effect 17). Wrap any content; a soft brand-tinted\n * glow tracks the cursor across the surface, fading in on enter and out on\n * leave.\n *\n * Performance & a11y guarantees:\n * - Pointer position is applied via `transform: translate3d` on a single layer,\n *   rAF-throttled (one paint per frame regardless of pointer event rate). No\n *   layout properties animate.\n * - `will-change: transform` is set only while the pointer is engaged and\n *   cleared on leave/unmount, so an off-screen surface holds no compositor layer.\n * - Pointer-driven only: touch (`pointerType === 'touch'`) is ignored, and the\n *   glow never sits under a keyboard focus path — it is decorative\n *   (`aria-hidden`) and `pointer-events: none`, so it can't steal clicks.\n * - Under reduced motion (OS or the page-level toggle) tracking is disabled and\n *   a gentle static glow is shown instead.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** Spotlight diameter; falls back to `--dz-anim-spotlight-size` (320px). */\n    size?: string\n  }>(),\n  { size: 'var(--dz-anim-spotlight-size, 320px)' },\n)\n\nconst reduced = useReducedMotion()\n\nconst root = ref<HTMLElement | null>(null)\nconst glow = ref<HTMLElement | null>(null)\n\n/** Whether a fine pointer is currently engaged (drives the glow opacity). */\nconst active = ref(false)\n\n// Latest pointer coords (relative to the surface) + a single queued rAF so a\n// burst of pointermove events collapses to one transform write per frame.\nlet nextX = 0\nlet nextY = 0\nlet frame = 0\n\nfunction applyFrame(): void {\n  frame = 0\n  const el = glow.value\n  if (!el)\n    return\n  // Center the glow on the pointer (translate by half its own size).\n  el.style.transform = `translate3d(calc(${nextX}px - 50%), calc(${nextY}px - 50%), 0)`\n}\n\nfunction onPointerMove(event: PointerEvent): void {\n  // Pointer-driven only — touch gets the static fallback (no tracking).\n  if (event.pointerType === 'touch')\n    return\n  const el = root.value\n  if (!el)\n    return\n  const rect = el.getBoundingClientRect()\n  nextX = event.clientX - rect.left\n  nextY = event.clientY - rect.top\n  if (!active.value) {\n    active.value = true\n    glow.value?.style.setProperty('will-change', 'transform')\n  }\n  if (!frame)\n    frame = requestAnimationFrame(applyFrame)\n}\n\nfunction onPointerLeave(): void {\n  active.value = false\n  if (frame) {\n    cancelAnimationFrame(frame)\n    frame = 0\n  }\n  // Drop the compositor hint once the surface is idle.\n  glow.value?.style.removeProperty('will-change')\n}\n\nfunction attach(el: HTMLElement): void {\n  el.addEventListener('pointermove', onPointerMove)\n  el.addEventListener('pointerleave', onPointerLeave)\n}\n\nfunction detach(el: HTMLElement): void {\n  el.removeEventListener('pointermove', onPointerMove)\n  el.removeEventListener('pointerleave', onPointerLeave)\n  onPointerLeave()\n  // Drop any JS-applied position so the reduced-motion static glow can center.\n  glow.value?.style.removeProperty('transform')\n}\n\n// Bind listeners only when motion is allowed; rebind reactively if the\n// reduced-motion preference flips (e.g. the page-level toggle).\nwatch(\n  [root, reduced],\n  ([el, isReduced], _prev, onCleanup) => {\n    if (!el || isReduced)\n      return\n    attach(el)\n    onCleanup(() => detach(el))\n  },\n  { immediate: true },\n)\n\nonBeforeUnmount(() => {\n  if (frame)\n    cancelAnimationFrame(frame)\n})\n\nconst glowStyle = computed(() => ({\n  width: props.size,\n  height: props.size,\n}))\n</script>\n\n<template>\n  <div ref=\"root\" class=\"dz-spotlight\">\n    <div\n      ref=\"glow\"\n      class=\"dz-spotlight__glow\"\n      :class=\"{ 'dz-spotlight__glow--active': active, 'dz-spotlight__glow--reduced': reduced }\"\n      :style=\"glowStyle\"\n      aria-hidden=\"true\"\n    />\n    <div class=\"dz-spotlight__content\">\n      <slot />\n    </div>\n  </div>\n</template>\n\n<style scoped>\n.dz-spotlight {\n  position: relative;\n  overflow: hidden;\n  isolation: isolate;\n}\n\n.dz-spotlight__glow {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 0;\n  border-radius: 50%;\n  pointer-events: none;\n  opacity: 0;\n  transition: opacity var(--dz-duration-slow, 300ms) var(--dz-ease-out, ease-out);\n  background: radial-gradient(\n    circle closest-side,\n    color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 32%, transparent),\n    transparent 100%\n  );\n}\n\n/* Fade in while a fine pointer is engaged. */\n.dz-spotlight__glow--active {\n  opacity: 1;\n}\n\n/* Reduced motion (OS or page toggle) → a gentle, centered static glow. */\n.dz-spotlight__glow--reduced {\n  opacity: 0.55;\n  inset: 0;\n  margin: auto;\n}\n\n.dz-spotlight__content {\n  position: relative;\n  z-index: 1;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzSpotlight.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzSpotlight } from './components/DzSpotlight.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzCard"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzCard"
+    ],
+    "motionPrimitives": [
+      "DzSpotlight"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

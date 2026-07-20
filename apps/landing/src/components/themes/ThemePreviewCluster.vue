@@ -257,8 +257,8 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
   border-radius: var(--dz-radius-sm, 4px) var(--dz-radius-sm, 4px) 0 0;
   background: linear-gradient(
     to top,
-    color-mix(in oklch, var(--dz-primary, #6366f1) 26%, transparent),
-    var(--dz-primary, #6366f1)
+    color-mix(in oklch, var(--dz-primary, #0766ee) 26%, transparent),
+    var(--dz-primary, #0766ee)
   );
   min-height: 6px;
 }

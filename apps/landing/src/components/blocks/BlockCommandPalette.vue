@@ -243,9 +243,9 @@ function chipsOf(item: CommandItem): string[] {
   min-width: min(22rem, 100%);
   padding: var(--dz-space-2, 0.5rem) var(--dz-space-3, 0.75rem);
   border-radius: var(--dz-radius-lg, 0.5rem);
-  border: 1px solid var(--dz-border, #e5e7eb);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-muted-foreground, #6b7280);
+  border: 1px solid var(--dz-border, #b5b7bb);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-muted-foreground, #585b60);
   cursor: text;
   text-align: left;
   transition:
@@ -259,7 +259,7 @@ function chipsOf(item: CommandItem): string[] {
 
 .bcp-launcher:focus-visible {
   outline: none;
-  border-color: var(--dz-primary, #6366f1);
+  border-color: var(--dz-primary, #0766ee);
   box-shadow: 0 0 0 3px var(--dz-ring, rgba(99, 102, 241, 0.35));
 }
 
@@ -284,7 +284,7 @@ function chipsOf(item: CommandItem): string[] {
 .bcp-item-icon {
   flex-shrink: 0;
   margin-right: var(--dz-space-2, 0.5rem);
-  color: var(--dz-muted-foreground, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .bcp-item-body {
@@ -311,7 +311,7 @@ function chipsOf(item: CommandItem): string[] {
 .bcp-item-cat {
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
-  color: var(--dz-primary, #6366f1);
+  color: var(--dz-primary, #0766ee);
   margin-right: 2px;
 }
 
@@ -320,8 +320,8 @@ function chipsOf(item: CommandItem): string[] {
   font-weight: 500;
   padding: 1px 7px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-muted, #f3f4f6);
-  color: var(--dz-muted-foreground, #6b7280);
+  background: var(--dz-muted, #d3d4d7);
+  color: var(--dz-muted-foreground, #585b60);
   white-space: nowrap;
 }
 
@@ -334,6 +334,6 @@ function chipsOf(item: CommandItem): string[] {
   padding-left: var(--dz-space-3, 0.75rem);
   flex-shrink: 0;
   font-size: var(--dz-text-xs, 0.75rem);
-  color: var(--dz-muted-foreground, #6b7280);
+  color: var(--dz-muted-foreground, #585b60);
 }
 </style>

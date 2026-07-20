@@ -1,21 +1,55 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "count-up",
   "type": "registry:block",
   "title": "Count-up",
   "description": "Figures tween from 0 to their target when scrolled into view, with formatting.",
+  "categories": [
+    "numbers"
+  ],
   "files": [
     {
       "path": "count-up.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzCountUp } from '../motion'\n</script>\n\n<template>\n  <!-- Thousands separators on by default; static prefix/suffix via slots. -->\n  <DzCountUp :value=\"48200\" tone=\"primary\" />\n  <DzCountUp :value=\"12\" suffix=\"k\" />\n  <DzCountUp :value=\"99\" suffix=\"+\" />\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/count-up.vue"
+    },
+    {
+      "path": "motion/components/DzCountUp.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'\nimport type { AnimatedNumberEasing } from '@dzup-ui/core'\nimport { DzAnimatedNumber } from '@dzup-ui/core'\nimport { computed, ref, watch } from 'vue'\nimport { useInView } from '../useInView.ts'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzCountUp — in-view count-up (docs/animations.md §6.3, effect 12).\n *\n * A thin wrapper over core's {@link DzAnimatedNumber} that does NOT re-implement\n * number tweening (the constraint): it only owns *when* the tween fires and\n * whether* it runs. The figure holds at `from` until the element scrolls into\n * view (via the gallery's shared {@link useInView}), then tweens to `value`.\n *\n * Reduced motion (OS setting OR the page-level \"Reduce motion\" toggle, read\n * through {@link useReducedMotion}) shows the final number instantly — we drive\n * the target straight to `value` and set the duration to `0` so core snaps.\n *\n * Number formatting (thousands separators, currency, percent…) is delegated to\n * `DzAnimatedNumber`'s `Intl.NumberFormat` `format`/`locale` props; grouping\n * separators are on by default. Static `prefix`/`suffix` strings (e.g. \"$\", \"k\",\n * \"+\") render via the corresponding affix slots.\n */\ninterface DzCountUpProps {\n  /** The target value counted up to once in view. */\n  value: number\n  /** Value the count-up starts from. @default 0 */\n  from?: number\n  /** Tween duration in ms (ignored under reduced motion). @default 1600 */\n  duration?: number\n  /** Easing curve — mirrors the `--dz-ease-*` tokens. @default 'ease-out' */\n  easing?: AnimatedNumberEasing\n  /** `Intl.NumberFormat` options (currency, percent, decimals…). */\n  format?: Intl.NumberFormatOptions\n  /** BCP-47 locale(s) for formatting (defaults to the runtime locale). */\n  locale?: string | string[]\n  /** Static text rendered before the figure (e.g. \"$\"). */\n  prefix?: string\n  /** Static text rendered after the figure (e.g. \"k\", \"+\"). */\n  suffix?: string\n  /** Figure size. @default 'md' */\n  size?: CanonicalSize\n  /** Semantic colour tone of the figure. @default 'neutral' */\n  tone?: CanonicalTone\n  /** Accessible label, forwarded to the SR announcement. */\n  ariaLabel?: string\n}\n\nconst props = withDefaults(defineProps<DzCountUpProps>(), {\n  from: 0,\n  duration: 1600,\n  easing: 'ease-out',\n  format: undefined,\n  locale: undefined,\n  prefix: undefined,\n  suffix: undefined,\n  size: 'md',\n  tone: 'neutral',\n  ariaLabel: undefined,\n})\n\nconst root = ref<HTMLElement | null>(null)\nconst inView = useInView(root)\nconst reduced = useReducedMotion()\n\n/**\n * The value handed to `DzAnimatedNumber`. Held at `from` until the element is in\n * view, then flipped to the target so core tweens between the two. Under reduced\n * motion we flip immediately so the final number is shown at once.\n */\nconst target = ref(props.from)\n\nwatch(\n  [inView, reduced],\n  ([visible, isReduced]) => {\n    if (isReduced || visible)\n      target.value = props.value\n  },\n  { immediate: true },\n)\n\n/** Snap (duration 0) under reduced motion; otherwise tween normally. */\nconst effectiveDuration = computed(() => (reduced.value ? 0 : props.duration))\n</script>\n\n<template>\n  <span ref=\"root\" class=\"dz-count-up\">\n    <DzAnimatedNumber\n      :value=\"target\"\n      :from=\"from\"\n      :duration=\"effectiveDuration\"\n      :easing=\"easing\"\n      :format=\"format\"\n      :locale=\"locale\"\n      :size=\"size\"\n      :tone=\"tone\"\n      :aria-label=\"ariaLabel\"\n      :start-on-view=\"false\"\n    >\n      <template v-if=\"prefix\" #prefix>{{ prefix }}</template>\n      <template v-if=\"suffix\" #suffix>{{ suffix }}</template>\n    </DzAnimatedNumber>\n  </span>\n</template>\n\n<style scoped>\n.dz-count-up {\n  display: inline-flex;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzCountUp.vue"
+    },
+    {
+      "path": "motion/useInView.ts",
+      "content": "import type { Ref } from 'vue'\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * useInView — reactive IntersectionObserver wrapper (generalises the observer\n * behind the `v-reveal` directive in `directives/reveal.ts`).\n *\n * Observers are shared per unique `(rootMargin, threshold)` signature so a page\n * full of demos attaches only a handful of `IntersectionObserver`s rather than\n * one per element. By default it fires once and unobserves on first intersect\n * (the scroll-reveal pattern). When `IntersectionObserver` is unavailable\n * (SSR / very old browsers) the element is treated as in view immediately so\n * content is never blocked.\n */\n\n/** Options accepted by {@link useInView}. */\nexport interface UseInViewOptions {\n  /** Margin around the root, e.g. `'0px 0px -10% 0px'`. */\n  rootMargin?: string\n  /** Visibility ratio(s) that trigger a callback. */\n  threshold?: number | number[]\n  /** Reveal once then stop observing (default `true`). */\n  once?: boolean\n}\n\n/** Per-element callback registry, keyed weakly so detached nodes are collectable. */\nconst callbacks = new WeakMap<Element, (isInView: boolean) => void>()\n\n/** Shared observers keyed by their serialized option signature. */\nconst observers = new Map<string, IntersectionObserver>()\n\nfunction optionsKey(rootMargin: string, threshold: number | number[]): string {\n  return `${rootMargin}|${JSON.stringify(threshold)}`\n}\n\nfunction getObserver(rootMargin: string, threshold: number | number[]): IntersectionObserver | null {\n  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')\n    return null\n\n  const key = optionsKey(rootMargin, threshold)\n  let observer = observers.get(key)\n  if (!observer) {\n    observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) {\n          callbacks.get(entry.target)?.(entry.isIntersecting)\n        }\n      },\n      { rootMargin, threshold },\n    )\n    observers.set(key, observer)\n  }\n  return observer\n}\n\n/**\n * Observe `elRef`'s element and report whether it is in view.\n *\n * @param elRef - template ref to the element to observe.\n * @param options - see {@link UseInViewOptions}.\n * @returns a reactive `isInView` ref.\n */\nexport function useInView(\n  elRef: Ref<HTMLElement | null | undefined>,\n  options: UseInViewOptions = {},\n): Ref<boolean> {\n  const { rootMargin = '0px 0px -10% 0px', threshold = 0.05, once = true } = options\n  const isInView = ref(false)\n\n  let observed: Element | null = null\n  let observer: IntersectionObserver | null = null\n\n  function unobserve(): void {\n    if (observed) {\n      observer?.unobserve(observed)\n      callbacks.delete(observed)\n      observed = null\n    }\n  }\n\n  function observe(el: HTMLElement): void {\n    unobserve()\n    observer = getObserver(rootMargin, threshold)\n    if (!observer) {\n      // No IntersectionObserver → treat as in view immediately.\n      isInView.value = true\n      return\n    }\n    callbacks.set(el, (inView) => {\n      isInView.value = inView\n      if (inView && once)\n        unobserve()\n    })\n    observer.observe(el)\n    observed = el\n  }\n\n  onMounted(() => {\n    if (elRef.value)\n      observe(elRef.value)\n  })\n\n  watch(elRef, (el) => {\n    if (el)\n      observe(el)\n    else unobserve()\n  })\n\n  onBeforeUnmount(unobserve)\n\n  return isInView\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useInView.ts"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzCountUp } from './components/DzCountUp.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzAnimatedNumber"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzAnimatedNumber"
+    ],
+    "motionPrimitives": [
+      "DzCountUp"
+    ]
+  }
 }

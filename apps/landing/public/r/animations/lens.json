@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "lens",
   "type": "registry:block",
   "title": "Lens / magnifier",
   "description": "A magnified circle follows the pointer over an image, locking onto what is under it.",
+  "categories": [
+    "hover"
+  ],
   "files": [
     {
       "path": "lens.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzLens, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- rAF pointer; transform + background-position. Pointer-only: touch/keyboard\n       get the plain image, and there is no lens under reduced motion (via disabled). -->\n  <DzLens :src=\"src\" alt=\"…\" :zoom=\"2.4\" :size=\"132\" aspect-ratio=\"4/3\" :disabled=\"reduced\" />\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/lens.vue"
+    },
+    {
+      "path": "motion/components/DzLens.vue",
+      "content": "<script setup lang=\"ts\">\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * DzLens — a magnifier circle that follows the pointer over an image\n * (docs/animations.md §5.5, effect 51).\n *\n * The lens is a circular overlay whose `background-image` is the same source at\n * `zoom`× scale; its `background-position` tracks the pointer so the magnified\n * region stays locked to whatever sits under the cursor. `transform: translate()`\n * for the lens position + a `background-position` write, collapsed to one frame\n * via `requestAnimationFrame`.\n *\n * Accessibility / touch guarantees (§5.5, §7):\n * - **Pointer-only.** Engages only on fine-pointer, hover-capable devices; touch\n *   pointer events are ignored. Touch users get the plain image, no lens.\n * - **Reduced-motion.** Off when the OS sets `prefers-reduced-motion` OR\n *   `disabled: true` (wire to the page-level toggle) ⇒ plain image, no rAF loop.\n * - **Non-interactive overlay.** The lens is `aria-hidden` + `pointer-events:\n *   none`; the underlying `<img>` keeps its real `alt`. Keyboard users see the\n *   plain image (the lens only follows a moving pointer).\n *\n * Renders a plain `<img>` (not core's DzImage) so the lens can mirror the exact\n * same `src` as a `background-image` without reaching into a wrapper's internals.\n */\n\nconst props = withDefaults(\n  defineProps<{\n    /** Image source. */\n    src: string\n    /** Alt text (required for accessibility). */\n    alt: string\n    /** Magnification factor (default `2`). */\n    zoom?: number\n    /** Lens diameter in px (default `140`). */\n    size?: number\n    /** Aspect ratio for the image frame (e.g. '4/3'). */\n    aspectRatio?: string\n    /** Force the plain-image state (page-level reduced motion). */\n    disabled?: boolean\n  }>(),\n  { zoom: 2, size: 140, aspectRatio: '4/3', disabled: false },\n)\n\nconst root = ref<HTMLElement | null>(null)\nconst lens = ref<HTMLElement | null>(null)\nconst active = ref(false)\n\nlet frame = 0\nlet nextX = 0\nlet nextY = 0\nlet attached = false\n\n/** Whether the device has a fine, hover-capable pointer (SSR-safe). */\nfunction canHover(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(hover: hover) and (pointer: fine)').matches\n}\n\nfunction applyFrame(): void {\n  frame = 0\n  const el = lens.value\n  const rect = root.value?.getBoundingClientRect()\n  if (!el || !rect || !rect.width || !rect.height)\n    return\n  const x = nextX - rect.left\n  const y = nextY - rect.top\n  // Position the lens centred on the pointer (transform only).\n  el.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) translate(-50%, -50%)`\n  // Magnified backdrop: scale the source up and offset so the point under the\n  // pointer sits at the lens centre.\n  const bgW = rect.width * props.zoom\n  const bgH = rect.height * props.zoom\n  el.style.backgroundSize = `${bgW.toFixed(2)}px ${bgH.toFixed(2)}px`\n  el.style.backgroundPosition = `${(-(x * props.zoom) + props.size / 2).toFixed(2)}px ${(-(y * props.zoom) + props.size / 2).toFixed(2)}px`\n}\n\nfunction onMove(event: PointerEvent): void {\n  if (event.pointerType === 'touch')\n    return\n  nextX = event.clientX\n  nextY = event.clientY\n  if (!active.value)\n    active.value = true\n  if (!frame)\n    frame = requestAnimationFrame(applyFrame)\n}\n\nfunction onLeave(event: PointerEvent): void {\n  if (event.pointerType === 'touch')\n    return\n  if (frame) {\n    cancelAnimationFrame(frame)\n    frame = 0\n  }\n  active.value = false\n}\n\nfunction attach(): void {\n  if (attached || !root.value)\n    return\n  root.value.addEventListener('pointermove', onMove)\n  root.value.addEventListener('pointerleave', onLeave)\n  attached = true\n}\n\nfunction detach(): void {\n  if (!attached || !root.value)\n    return\n  root.value.removeEventListener('pointermove', onMove)\n  root.value.removeEventListener('pointerleave', onLeave)\n  if (frame) {\n    cancelAnimationFrame(frame)\n    frame = 0\n  }\n  active.value = false\n  attached = false\n}\n\nfunction sync(): void {\n  if (!props.disabled && canHover())\n    attach()\n  else detach()\n}\n\nwatch(() => props.disabled, sync)\nonMounted(sync)\nonBeforeUnmount(detach)\n</script>\n\n<template>\n  <div\n    ref=\"root\"\n    class=\"dz-lens\"\n    :class=\"{ 'dz-lens--active': active }\"\n    :style=\"{ aspectRatio }\"\n  >\n    <img class=\"dz-lens__img\" :src=\"src\" :alt=\"alt\" draggable=\"false\">\n    <div\n      ref=\"lens\"\n      class=\"dz-lens__glass\"\n      :class=\"{ 'dz-lens__glass--on': active }\"\n      :style=\"{\n        width: `${size}px`,\n        height: `${size}px`,\n        backgroundImage: `url('${src}')`,\n      }\"\n      aria-hidden=\"true\"\n    />\n  </div>\n</template>\n\n<style scoped>\n.dz-lens {\n  position: relative;\n  width: 100%;\n  overflow: hidden;\n  border-radius: var(--dz-radius-lg, 0.75rem);\n}\n\n.dz-lens--active {\n  cursor: none;\n}\n\n.dz-lens__img {\n  display: block;\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  user-select: none;\n}\n\n.dz-lens__glass {\n  position: absolute;\n  top: 0;\n  left: 0;\n  border-radius: var(--dz-radius-full, 9999px);\n  pointer-events: none;\n  z-index: 2;\n  opacity: 0;\n  background-repeat: no-repeat;\n  box-shadow:\n    0 0 0 2px color-mix(in oklch, var(--dz-colors-base-white, #fff) 70%, transparent),\n    var(--dz-shadow-md, 0 4px 12px rgb(15 23 42 / 0.2));\n  transition: opacity var(--dz-duration-fast, 120ms) var(--dz-ease-out, ease-out);\n}\n\n.dz-lens__glass--on {\n  opacity: 1;\n}\n\n@media (forced-colors: active) {\n  .dz-lens__glass {\n    box-shadow: none;\n    border: 2px solid CanvasText;\n  }\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzLens.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzLens } from './components/DzLens.vue'\nexport { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzImage"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzImage"
+    ],
+    "motionPrimitives": [
+      "DzLens",
+      "useReducedMotion"
+    ]
+  }
 }

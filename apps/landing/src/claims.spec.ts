@@ -3,8 +3,8 @@
  * claims to count.
  *
  * `config.ts` has stated the rule since the day `FACTS.freeComponents` was fixed:
- * "Hand-maintained counts drift — this one used to read 147 while the real figure
- * was 139. Never replace it with a literal."* Nine other places ignored it. The
+ * "Hand-maintained counts drift — this one used to read 147, which matched
+ * nothing. Never replace it with a literal."* Nine other places ignored it. The
  * meta description, the OpenGraph card and the JSON-LD all told Google, X and
  * every AI crawler that dzup-ui has 147 components; the announcement bar promised
  * 90+ blocks over a registry of 87; the Pro page promised 41 components directly
@@ -171,7 +171,8 @@ describe('the landing copy', () => {
   it('the family tiles sum to the documented count they sit under', () => {
     // `ComponentGallery` renders these under a "{freeComponents} components,
     // {families} families" heading. They used to sum to 167 — matching neither
-    // the headline (147), the real documented count (139), nor the catalog (205).
+    // the headline (147), the real documented count, nor the catalog. The two
+    // real figures are asserted below rather than quoted here; both move.
     const total = FAMILIES.reduce((sum, family) => sum + family.count, 0)
     expect(total).toBe(FACTS.freeComponents)
     expect(total).toBe(COUNTS.documentedComponents)

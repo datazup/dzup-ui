@@ -127,7 +127,7 @@ function resultTo(doc: { blockId?: string, slug?: string }): string | undefined 
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 .nf-title {
@@ -150,9 +150,9 @@ function resultTo(doc: { blockId?: string, slug?: string }): string | undefined 
   list-style: none;
   margin: 8px 0 0;
   padding: 4px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 8px);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   display: flex;
   flex-direction: column;
 }
@@ -165,12 +165,12 @@ function resultTo(doc: { blockId?: string, slug?: string }): string | undefined 
   padding: 8px 10px;
   border-radius: var(--dz-radius-sm, 6px);
   text-decoration: none;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .nf-results a:hover,
 .nf-results a:focus-visible {
-  background: var(--dz-muted, #f1f5f9);
+  background: var(--dz-muted, #d3d4d7);
 }
 
 .nf-result-title {
@@ -180,7 +180,7 @@ function resultTo(doc: { blockId?: string, slug?: string }): string | undefined 
 
 .nf-result-meta {
   font-size: var(--dz-text-xs, 0.75rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .nf-actions {

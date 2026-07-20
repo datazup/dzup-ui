@@ -45,7 +45,7 @@ import { DzShimmer } from '../../motion/index.ts'
   padding: 16px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .head {

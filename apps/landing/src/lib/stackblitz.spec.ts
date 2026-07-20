@@ -6,8 +6,13 @@
  *      just the injected file, and
  *   2. the `@dzup-ui/*` deps are pinned to the published range (the workspace
  *      `workspace:*` specifiers can't resolve inside StackBlitz).
+ *
+ * …and the gate that keeps it honest until then: the project installs from npm,
+ * so while the packages are unpublished the fork is a no-op rather than a boot
+ * that dies on `npm install` (TASK-FREE3-03). Every "it works" case therefore
+ * runs with the publish flag stubbed ON; the OFF case is asserted explicitly.
  */
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DZUP_VERSION, openInStackblitz } from './stackblitz.ts'
 
 /** Read a hidden field's value from a submitted form by its `name`. */
@@ -17,7 +22,24 @@ function field(form: HTMLFormElement, name: string): string | null {
 }
 
 describe('openInStackblitz', () => {
-  afterEach(() => vi.restoreAllMocks())
+  beforeEach(() => vi.stubEnv('VITE_PACKAGES_PUBLISHED', 'true'))
+  afterEach(() => {
+    vi.restoreAllMocks()
+    vi.unstubAllEnvs()
+  })
+
+  it('is a no-op until the packages are published — no fork that fails npm install', () => {
+    vi.stubEnv('VITE_PACKAGES_PUBLISHED', '')
+    const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {})
+
+    openInStackblitz({
+      title: 'Split hero — dzup-ui block',
+      description: 'Copy left, media right.',
+      files: { 'src/App.vue': '<template />' },
+    })
+
+    expect(submit).not.toHaveBeenCalled()
+  })
 
   it('submits a StackBlitz form that boots the full starter with the source injected', () => {
     // `submit()` is called on the transient form, so the spy's recorded `this` IS

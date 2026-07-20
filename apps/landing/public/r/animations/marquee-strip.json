@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "marquee-strip",
   "type": "registry:block",
   "title": "Marquee strip",
   "description": "A logo/badge strip scrolls infinitely and seamlessly; hover to pause.",
+  "categories": [
+    "lists"
+  ],
   "files": [
     {
       "path": "marquee-strip.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzBadge } from '@dzup-ui/core'\nimport { DzMarquee } from '../motion'\n\nconst logos = ['Acme', 'Globex', 'Initech', 'Umbrella', 'Soylent', 'Hooli']\n</script>\n\n<template>\n  <!-- Content is duplicated internally for a seamless loop; static row when reduced. -->\n  <DzMarquee aria-label=\"Trusted by teams\">\n    <DzBadge v-for=\"logo in logos\" :key=\"logo\" variant=\"outline\" tone=\"neutral\" size=\"md\">\n      {{ logo }}\n    </DzBadge>\n  </DzMarquee>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/marquee-strip.vue"
+    },
+    {
+      "path": "motion/components/DzMarquee.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzMarquee — an infinite horizontal scroll of a logo/badge strip\n * (docs/animations.md §6.6, effect 25). The default slot is rendered twice into\n * a single track; the shared `.dz-marquee` utility in `tokens.css` translates the\n * track by exactly -50% so one full run scrolls past before snapping back\n * invisibly — a seamless, jump-free loop. Transform translate only (GPU-cheap).\n *\n * Pauses on hover (and focus-within) so visitors can read an item. Under reduced\n * motion (OS or the page-level toggle) it degrades to a single, static\n * `flex-wrap` row — no duplicated copy and no animation — bound here via\n * {@link useReducedMotion} for the live toggle; the OS setting is also handled\n * centrally in `tokens.css`.\n *\n * The second run is `aria-hidden` so assistive tech announces the content once.\n */\nconst reduced = useReducedMotion()\n\nconst classes = computed(() => ({\n  'dz-marquee': true,\n  'dz-marquee--reduced': reduced.value,\n}))\n</script>\n\n<template>\n  <!-- Reduced motion: a calm, static wrapped row (no loop, no duplicate copy). -->\n  <div v-if=\"reduced\" class=\"marquee-static\">\n    <slot />\n  </div>\n\n  <!-- Default: a duplicated run scrolls on a seamless transform loop. -->\n  <div v-else :class=\"classes\">\n    <div class=\"dz-marquee__track\">\n      <div class=\"dz-marquee__run\">\n        <slot />\n      </div>\n      <div class=\"dz-marquee__run\" aria-hidden=\"true\">\n        <slot />\n      </div>\n    </div>\n  </div>\n</template>\n\n<style scoped>\n.marquee-static {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--dz-anim-marquee-gap, 2rem);\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzMarquee.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzMarquee } from './components/DzMarquee.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzBadge"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzBadge"
+    ],
+    "motionPrimitives": [
+      "DzMarquee"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

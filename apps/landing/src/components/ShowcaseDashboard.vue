@@ -128,7 +128,7 @@ const themeItems = [
   gap: 7px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* The scoped container carries its own theme's background/hairline so each side
@@ -137,7 +137,7 @@ const themeItems = [
   padding: clamp(12px, 2vw, 20px);
   border-radius: var(--dz-radius-xl, 0.875rem);
   border: 1px solid var(--lp-hairline);
-  background: var(--dz-background, #fff);
+  background: var(--dz-background, #e7e8e9);
   transition: var(--dz-landing-theme-transition);
 }
 
@@ -148,7 +148,7 @@ const themeItems = [
   width: 100%;
   aspect-ratio: 0.43;
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   border: 1px solid var(--lp-hairline);
 }
 

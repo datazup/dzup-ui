@@ -53,7 +53,7 @@ const team = [
   padding: 8px 12px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .name {

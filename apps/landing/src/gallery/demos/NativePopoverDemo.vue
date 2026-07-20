@@ -117,9 +117,9 @@ function pick(action: string): void {
   gap: 6px;
   padding: 9px 16px;
   border-radius: var(--dz-radius-md, 0.5rem);
-  border: 1px solid var(--dz-border, #e2e8f0);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-foreground, #0f172a);
+  border: 1px solid var(--dz-border, #b5b7bb);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-foreground, #1b1d1f);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
   transition:
@@ -128,18 +128,18 @@ function pick(action: string): void {
 }
 .trigger--icon {
   padding: 9px;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 /* Make the wrapper button's focus ring read on the visible trigger chrome. */
 .pop :deep(.dz-native-pop__trigger:hover) .trigger {
-  border-color: color-mix(in oklch, var(--dz-primary, #6366f1) 45%, var(--dz-border, #e2e8f0));
+  border-color: color-mix(in oklch, var(--dz-primary, #0766ee) 45%, var(--dz-border, #b5b7bb));
 }
 .pop :deep(.dz-native-pop__trigger:focus-visible) {
   outline: none;
 }
 .pop :deep(.dz-native-pop__trigger:focus-visible) .trigger {
-  outline: 2px solid var(--dz-ring, var(--dz-primary, #6366f1));
+  outline: 2px solid var(--dz-ring, var(--dz-primary, #0766ee));
   outline-offset: 2px;
 }
 
@@ -148,8 +148,8 @@ function pick(action: string): void {
   min-width: 188px;
   padding: 6px;
   border-radius: var(--dz-radius-lg, 0.75rem);
-  border: 1px solid var(--dz-border, #e2e8f0);
-  background: var(--dz-surface, #fff);
+  border: 1px solid var(--dz-border, #b5b7bb);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--dz-shadow-xl, 0 18px 40px -12px rgb(15 23 42 / 0.35));
 }
 
@@ -162,7 +162,7 @@ function pick(action: string): void {
 .tip-copy {
   margin: 0;
   line-height: 1.5;
-  color: var(--dz-foreground, #0f172a);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .readout {

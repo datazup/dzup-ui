@@ -1,21 +1,56 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "typewriter",
   "type": "registry:block",
   "title": "Typewriter",
   "description": "Types and erases a rotating list of phrases, with a blinking caret.",
+  "categories": [
+    "text"
+  ],
   "files": [
     {
       "path": "typewriter.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\nimport { DzTypewriter } from '../motion'\n\nconst phrases = ['design tokens.', 'accessible motion.', 'copy-paste demos.']\n</script>\n\n<template>\n  <DzText size=\"lg\" weight=\"medium\">\n    Built on <DzTypewriter :phrases=\"phrases\" />\n  </DzText>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/typewriter.vue"
+    },
+    {
+      "path": "motion/components/DzTypewriter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\nimport { useTypewriter } from '../useTypewriter.ts'\n\n/**\n * DzTypewriter — thin wrapper around {@link useTypewriter} (docs/animations.md\n * §6.2, effect 8). Types/erases a rotating list of phrases with a blinking\n * caret, pairs with a hero subhead.\n *\n * Accessibility & layout:\n * - The animated glyphs are `aria-hidden` (a typing caret would otherwise spam\n *   a screen reader); the full phrase list is exposed once via a visually-hidden\n *   `.dz-sr-only` string so assistive tech announces clean, stable text.\n * - A hidden sizer reserves the box of the longest phrase, so typing/erasing\n *   never shifts surrounding layout (§7).\n * - Under reduced motion the first phrase is shown instantly and the caret does\n *   not blink.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** Phrases to rotate through. */\n    phrases: string[]\n    /** Element to render as the root. */\n    as?: string\n    /** Milliseconds per character while typing. */\n    typeSpeed?: number\n    /** Milliseconds per character while erasing. */\n    eraseSpeed?: number\n    /** Milliseconds to hold a fully-typed phrase before erasing. */\n    holdDelay?: number\n  }>(),\n  { as: 'span', typeSpeed: 55, eraseSpeed: 30, holdDelay: 1600 },\n)\n\nconst reduced = useReducedMotion()\n\nconst { text, longest } = useTypewriter(\n  () => props.phrases,\n  {\n    typeSpeed: props.typeSpeed,\n    eraseSpeed: props.eraseSpeed,\n    holdDelay: props.holdDelay,\n  },\n)\n\n/** Screen-reader copy: announce the phrases as one stable string. */\nconst srText = computed(() => props.phrases.join(', '))\n</script>\n\n<template>\n  <component :is=\"props.as\" class=\"dz-typewriter\">\n    <span class=\"dz-sr-only\">{{ srText }}</span>\n    <!-- Reserves the longest phrase's box so typing never shifts layout. -->\n    <span aria-hidden=\"true\" class=\"dz-typewriter__sizer\">{{ longest }}</span>\n    <span aria-hidden=\"true\" class=\"dz-typewriter__live\">\n      <span class=\"dz-typewriter__text\">{{ text }}</span>\n      <span class=\"dz-typewriter__caret\" :class=\"{ 'is-reduced': reduced }\" />\n    </span>\n  </component>\n</template>\n\n<style scoped>\n.dz-typewriter {\n  position: relative;\n  display: inline-block;\n}\n\n.dz-typewriter__sizer {\n  visibility: hidden;\n  white-space: pre;\n}\n\n.dz-typewriter__live {\n  position: absolute;\n  inset: 0;\n  display: inline-flex;\n  align-items: baseline;\n  white-space: pre;\n}\n\n.dz-typewriter__caret {\n  display: inline-block;\n  width: 0.08em;\n  align-self: stretch;\n  margin-inline-start: 0.04em;\n  background: currentColor;\n  animation: dz-anim-caret-blink var(--dz-anim-caret-duration, 1s) step-end infinite;\n}\n\n/* Reduced motion: steady, non-blinking caret. */\n.dz-typewriter__caret.is-reduced {\n  animation: none;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzTypewriter.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/useTypewriter.ts",
+      "content": "import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue'\nimport { computed, onBeforeUnmount, ref, toValue, watch } from 'vue'\nimport { useReducedMotion } from './useReducedMotion.ts'\n\n/** Options for {@link useTypewriter}. */\nexport interface UseTypewriterOptions {\n  /** Milliseconds per character while typing (default `55`). */\n  typeSpeed?: number\n  /** Milliseconds per character while erasing (default `30`). */\n  eraseSpeed?: number\n  /** Milliseconds to hold a fully-typed phrase before erasing (default `1600`). */\n  holdDelay?: number\n  /** Milliseconds to pause after erasing before the next phrase (default `400`). */\n  pauseDelay?: number\n  /** Loop back to the first phrase after the last (default `true`). */\n  loop?: boolean\n}\n\n/** Reactive state returned by {@link useTypewriter}. */\nexport interface UseTypewriterReturn {\n  /** The currently visible substring (reactive). */\n  text: Ref<string>\n  /** Whether the caret is currently typing (vs. holding/erasing). */\n  isTyping: Ref<boolean>\n  /** The longest phrase — use it to reserve width/height (no layout shift). */\n  longest: ComputedRef<string>\n}\n\n/**\n * useTypewriter — types and erases a rotating list of phrases (docs/animations.md\n * §6.2, effect 8).\n *\n * Drives a single `text` ref one character at a time via `setTimeout`, cycling\n * through `phrases` (type → hold → erase → next). SSR-safe (no work until a\n * browser timer fires) and self-cleaning (clears its timer on unmount).\n *\n * Reduced motion (OS setting or the page-level toggle, via\n * {@link useReducedMotion}) shows the first phrase instantly and runs no\n * animation — the accessible, motion-free fallback. The caller is responsible\n * for reserving space from {@link UseTypewriterReturn.longest} so the typing\n * never shifts layout (§7).\n *\n * @param phrases - the phrases to rotate through (ref/getter/array).\n * @param options - timing + loop behaviour, see {@link UseTypewriterOptions}.\n */\nexport function useTypewriter(\n  phrases: MaybeRefOrGetter<string[]>,\n  options: UseTypewriterOptions = {},\n): UseTypewriterReturn {\n  const { typeSpeed = 55, eraseSpeed = 30, holdDelay = 1600, pauseDelay = 400, loop = true } = options\n\n  const text = ref('')\n  const isTyping = ref(true)\n  const reduced = useReducedMotion()\n\n  const list = computed(() => {\n    const value = toValue(phrases)\n    return value.length > 0 ? value : ['']\n  })\n  const longest = computed(() =>\n    list.value.reduce((a, b) => (b.length > a.length ? b : a), ''),\n  )\n\n  let timer: ReturnType<typeof setTimeout> | null = null\n  let phraseIndex = 0\n  let charIndex = 0\n  let erasing = false\n\n  function clear(): void {\n    if (timer !== null) {\n      clearTimeout(timer)\n      timer = null\n    }\n  }\n\n  function schedule(fn: () => void, delay: number): void {\n    clear()\n    timer = setTimeout(fn, delay)\n  }\n\n  function tick(): void {\n    const phrase = list.value[phraseIndex] ?? ''\n\n    if (!erasing) {\n      // Typing forward.\n      charIndex += 1\n      text.value = phrase.slice(0, charIndex)\n      if (charIndex >= phrase.length) {\n        // Fully typed: hold, then (if more phrases) start erasing.\n        const atEnd = phraseIndex === list.value.length - 1\n        if (atEnd && !loop) {\n          isTyping.value = false\n          return\n        }\n        isTyping.value = false\n        erasing = true\n        schedule(tick, holdDelay)\n        return\n      }\n      isTyping.value = true\n      schedule(tick, typeSpeed)\n      return\n    }\n\n    // Erasing backward.\n    charIndex -= 1\n    text.value = phrase.slice(0, Math.max(charIndex, 0))\n    if (charIndex <= 0) {\n      erasing = false\n      phraseIndex = (phraseIndex + 1) % list.value.length\n      schedule(tick, pauseDelay)\n      return\n    }\n    schedule(tick, eraseSpeed)\n  }\n\n  function start(): void {\n    clear()\n    if (reduced.value) {\n      // Reduced motion: show the first phrase instantly, no animation.\n      phraseIndex = 0\n      charIndex = list.value[0]?.length ?? 0\n      erasing = false\n      isTyping.value = false\n      text.value = list.value[0] ?? ''\n      return\n    }\n    phraseIndex = 0\n    charIndex = 0\n    erasing = false\n    isTyping.value = true\n    text.value = ''\n    schedule(tick, typeSpeed)\n  }\n\n  // (Re)start when the reduced-motion preference or the phrase list changes.\n  watch([reduced, list], start, { immediate: true })\n\n  onBeforeUnmount(clear)\n\n  return { text, isTyping, longest }\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useTypewriter.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzTypewriter } from './components/DzTypewriter.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzText"
+    ],
+    "motionPrimitives": [
+      "DzTypewriter"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

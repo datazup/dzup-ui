@@ -131,7 +131,7 @@ const lede = computed<string>(() => {
 }
 
 .tile--link:focus-visible {
-  outline: 2px solid var(--dz-ring, #6366f1);
+  outline: 2px solid var(--dz-ring, #0766ee);
   outline-offset: 2px;
 }
 
@@ -142,7 +142,7 @@ const lede = computed<string>(() => {
   margin-top: 16px;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 /* Arrow slides forward on hover/focus as the navigational affordance. */
@@ -175,9 +175,9 @@ const lede = computed<string>(() => {
   width: 42px;
   height: 42px;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-primary-muted, #eef2ff);
-  color: var(--dz-primary, #4f46e5);
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 14%, transparent);
+  background: var(--dz-primary-muted, #d5e9ff);
+  color: var(--dz-primary, #0766ee);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 14%, transparent);
 }
 
 .tile-title {

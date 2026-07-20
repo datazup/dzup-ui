@@ -8,6 +8,7 @@
  */
 import { cleanup, fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from './TopNav.vue'
 
@@ -141,6 +142,45 @@ describe('topNav — mobile drawer', () => {
       const label = document.getElementById(list.getAttribute('aria-labelledby')!)
       expect(label?.textContent?.trim()).toBeTruthy()
     }
+  })
+
+  /**
+   * Opening the drawer moves focus into it (TASK-FREE3-07).
+   *
+   * The toggle is the LAST control in the utility cluster and the drawer renders
+   * after it, so before this the keyboard user who opened the menu was left
+   * standing on the button — Tab took them onward through the document, not into
+   * the thing they had just opened. The complement of the Escape restore below.
+   */
+  it('moves focus to the first link inside the drawer when it opens', async () => {
+    const { getByLabelText } = await mountAt('/')
+    await fireEvent.click(getByLabelText('Toggle menu'))
+    // The focus move is queued on nextTick — the drawer is v-if, so it does not
+    // exist in the DOM at the moment `mobileOpen` flips.
+    await nextTick()
+
+    const drawer = document.getElementById('mobile-nav')!
+    const first = drawer.querySelector<HTMLElement>('a[href]')
+    expect(first, 'the drawer rendered with no focusable link').toBeTruthy()
+    expect(
+      document.activeElement,
+      `focus stayed on <${(document.activeElement as HTMLElement)?.tagName?.toLowerCase()}> `
+      + 'instead of entering the drawer',
+    ).toBe(first)
+  })
+
+  /**
+   * Non-modal by design: the page behind stays interactive, so Tab must be free
+   * to leave the drawer. Asserted so nobody "improves" this into a focus trap.
+   */
+  it('does not trap focus — the drawer holds no tab guards', async () => {
+    const { getByLabelText } = await mountAt('/')
+    await fireEvent.click(getByLabelText('Toggle menu'))
+    await nextTick()
+
+    const drawer = document.getElementById('mobile-nav')!
+    expect(drawer.querySelectorAll('[data-focus-guard], [aria-hidden="true"][tabindex]').length).toBe(0)
+    expect(drawer.getAttribute('aria-modal')).toBeNull()
   })
 
   it('closes on Escape and returns focus to the toggle', async () => {

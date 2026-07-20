@@ -55,7 +55,7 @@ const reduced = useReducedMotion()
   height: 10px;
   margin-top: 4px;
   border-radius: 9999px;
-  color: var(--dz-info, #0ea5e9);
+  color: var(--dz-info, #007eb3);
 }
 
 .dot {

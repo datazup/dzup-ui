@@ -247,9 +247,9 @@ onBeforeUnmount(stopAuto)
 
 .dz-card-stack__next {
   appearance: none;
-  border: 1px solid var(--dz-border, #e2e8f0);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-foreground, #0f172a);
+  border: 1px solid var(--dz-border, #b5b7bb);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-foreground, #1b1d1f);
   border-radius: var(--dz-radius-md, 0.5rem);
   padding: var(--dz-spacing-2, 0.5rem) var(--dz-spacing-4, 1rem);
   font: inherit;
@@ -258,10 +258,10 @@ onBeforeUnmount(stopAuto)
   transition: border-color var(--dz-duration-fast, 120ms) var(--dz-ease-out, ease-out);
 }
 .dz-card-stack__next:hover {
-  border-color: var(--dz-primary, #6366f1);
+  border-color: var(--dz-primary, #0766ee);
 }
 .dz-card-stack__next:focus-visible {
-  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #6366f1);
+  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
   outline-offset: 2px;
 }
 

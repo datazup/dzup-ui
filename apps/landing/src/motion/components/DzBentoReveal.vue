@@ -205,7 +205,7 @@ const rootClass = computed(() => ({
   transition: opacity var(--dz-duration-slow, 300ms) var(--dz-ease-out, ease-out);
   background: radial-gradient(
     circle closest-side,
-    color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 24%, transparent),
+    color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 24%, transparent),
     transparent 100%
   );
 }

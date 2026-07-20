@@ -17,7 +17,9 @@
  * The competitors' figures are quoted from their docs; OUR figure is derived from
  * our own source tree (`COUNTS`) — a page whose entire premise is verifiable facts
  * cannot be the one place we print an unverified number about ourselves, which is
- * what "~147 (free)" was doing next to a real count of 139.
+ * what a hand-typed "~147 (free)" was doing next to a real count nowhere near it.
+ * The real count is not restated here on purpose: see `COUNTS` for the live
+ * value, never a literal in a comment.
  */
 
 import { COUNTS } from '../generated/counts.ts'

@@ -1,21 +1,62 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "word-stagger",
   "type": "registry:block",
   "title": "Word stagger",
   "description": "Splits a line into words and reveals each one in sequence as it enters.",
+  "categories": [
+    "text"
+  ],
   "files": [
     {
       "path": "word-stagger.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzWordReveal } from '../motion'\n</script>\n\n<template>\n  <DzWordReveal as=\"p\" text=\"Ship motion that respects everyone\" />\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/word-stagger.vue"
+    },
+    {
+      "path": "motion/components/DzStagger.vue",
+      "content": "<script setup lang=\"ts\">\nimport { nextTick, onMounted, ref, watch } from 'vue'\nimport { useInView } from '../useInView.ts'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzStagger — cascades its direct children into view with a per-index delay\n * (docs/animations.md §6.1, effect 2). Generalises the inline `--reveal-delay`\n * stagger used in EcosystemGrid: each child is given the scroll-reveal classes\n * and an incremental `--reveal-delay`, then they settle together when the\n * container scrolls into view, producing the cascade.\n *\n * Children opt into the same fade & rise / directional / blur / scale variants\n * as {@link DzReveal}. Reduced motion (OS or the page-level toggle) collapses\n * the stagger to an instant, opacity-only appearance. Transform/opacity/filter\n * only; `will-change` is set per child on entrance and cleared after.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** Element to render as the stagger container. */\n    as?: string\n    /** Per-child delay step in ms (mirrors `--dz-anim-stagger-step`). */\n    step?: number\n    /** Directional slide-in for children; omit for the default fade & rise. */\n    direction?: 'up' | 'down' | 'left' | 'right'\n    /** Add a blur-in to each child. */\n    blur?: boolean\n    /** Scale each child up instead of translating. */\n    scale?: boolean\n    /** Reveal once then stop observing (default `true`). */\n    once?: boolean\n  }>(),\n  { as: 'div', step: 80, once: true },\n)\n\nconst root = ref<HTMLElement | null>(null)\nconst isInView = useInView(root, { once: props.once })\nconst reduced = useReducedMotion()\n\nfunction children(): HTMLElement[] {\n  return root.value ? (Array.from(root.value.children) as HTMLElement[]) : []\n}\n\nfunction setupChildren(): void {\n  children().forEach((child, i) => {\n    child.classList.add('dz-reveal')\n    if (props.direction)\n      child.classList.add(`dz-reveal--${props.direction}`)\n    if (props.blur)\n      child.classList.add('dz-reveal--blur')\n    if (props.scale)\n      child.classList.add('dz-reveal--scale')\n    child.style.setProperty('--reveal-delay', `${props.step * i}ms`)\n  })\n}\n\nfunction revealChildren(): void {\n  for (const child of children()) {\n    child.style.willChange = 'opacity, transform, filter'\n    child.classList.add('dz-reveal--in')\n    const done = (): void => {\n      child.style.willChange = ''\n      child.removeEventListener('transitionend', done)\n    }\n    child.addEventListener('transitionend', done)\n  }\n}\n\nfunction applyReduced(on: boolean): void {\n  for (const child of children()) child.classList.toggle('dz-reveal--reduced', on)\n}\n\nonMounted(async () => {\n  await nextTick()\n  setupChildren()\n  applyReduced(reduced.value)\n  if (isInView.value)\n    revealChildren()\n})\n\nwatch(isInView, (inView) => {\n  if (inView)\n    revealChildren()\n})\n\nwatch(reduced, on => applyReduced(on))\n</script>\n\n<template>\n  <component :is=\"as\" ref=\"root\">\n    <slot />\n  </component>\n</template>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzStagger.vue"
+    },
+    {
+      "path": "motion/components/DzWordReveal.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport DzStagger from './DzStagger.vue'\n\n/**\n * DzWordReveal — reveals a line of text word-by-word in sequence\n * (docs/animations.md §6.2, effect 9). Built on {@link DzStagger}: the line is\n * split into per-word spans that cascade in with an incremental delay.\n *\n * Accessibility: splitting by *words* (not letters) keeps the line readable —\n * real space text nodes sit between the spans, so the text stays selectable as\n * one sentence and screen readers announce it as a single, natural string\n * (per-letter spans, which break SR reading, are deliberately avoided, §6.2/§7).\n * Each word rises via transform/opacity only, so nothing shifts layout.\n *\n * Reduced motion (OS or page-level toggle) collapses the cascade to an instant,\n * opacity-only appearance — handled centrally by {@link DzStagger}.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** The line to reveal, split on whitespace into words. */\n    text: string\n    /** Element to render as the container. */\n    as?: string\n    /** Per-word delay step in ms. */\n    step?: number\n    /** Direction each word enters from; omit for the default rise. */\n    direction?: 'up' | 'down' | 'left' | 'right'\n  }>(),\n  { as: 'div', step: 60, direction: 'up' },\n)\n\nconst words = computed(() => props.text.split(/\\s+/).filter(Boolean))\n</script>\n\n<template>\n  <DzStagger :as=\"props.as\" :step=\"props.step\" :direction=\"props.direction\" class=\"dz-word-reveal\">\n    <template v-for=\"(word, i) in words\" :key=\"`${word}-${i}`\">\n      <span class=\"dz-word-reveal__word\">{{ word }}</span>{{ ' ' }}\n    </template>\n  </DzStagger>\n</template>\n\n<style scoped>\n.dz-word-reveal__word {\n  display: inline-block;\n}\n</style>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzWordReveal.vue"
+    },
+    {
+      "path": "motion/useInView.ts",
+      "content": "import type { Ref } from 'vue'\nimport { onBeforeUnmount, onMounted, ref, watch } from 'vue'\n\n/**\n * useInView — reactive IntersectionObserver wrapper (generalises the observer\n * behind the `v-reveal` directive in `directives/reveal.ts`).\n *\n * Observers are shared per unique `(rootMargin, threshold)` signature so a page\n * full of demos attaches only a handful of `IntersectionObserver`s rather than\n * one per element. By default it fires once and unobserves on first intersect\n * (the scroll-reveal pattern). When `IntersectionObserver` is unavailable\n * (SSR / very old browsers) the element is treated as in view immediately so\n * content is never blocked.\n */\n\n/** Options accepted by {@link useInView}. */\nexport interface UseInViewOptions {\n  /** Margin around the root, e.g. `'0px 0px -10% 0px'`. */\n  rootMargin?: string\n  /** Visibility ratio(s) that trigger a callback. */\n  threshold?: number | number[]\n  /** Reveal once then stop observing (default `true`). */\n  once?: boolean\n}\n\n/** Per-element callback registry, keyed weakly so detached nodes are collectable. */\nconst callbacks = new WeakMap<Element, (isInView: boolean) => void>()\n\n/** Shared observers keyed by their serialized option signature. */\nconst observers = new Map<string, IntersectionObserver>()\n\nfunction optionsKey(rootMargin: string, threshold: number | number[]): string {\n  return `${rootMargin}|${JSON.stringify(threshold)}`\n}\n\nfunction getObserver(rootMargin: string, threshold: number | number[]): IntersectionObserver | null {\n  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')\n    return null\n\n  const key = optionsKey(rootMargin, threshold)\n  let observer = observers.get(key)\n  if (!observer) {\n    observer = new IntersectionObserver(\n      (entries) => {\n        for (const entry of entries) {\n          callbacks.get(entry.target)?.(entry.isIntersecting)\n        }\n      },\n      { rootMargin, threshold },\n    )\n    observers.set(key, observer)\n  }\n  return observer\n}\n\n/**\n * Observe `elRef`'s element and report whether it is in view.\n *\n * @param elRef - template ref to the element to observe.\n * @param options - see {@link UseInViewOptions}.\n * @returns a reactive `isInView` ref.\n */\nexport function useInView(\n  elRef: Ref<HTMLElement | null | undefined>,\n  options: UseInViewOptions = {},\n): Ref<boolean> {\n  const { rootMargin = '0px 0px -10% 0px', threshold = 0.05, once = true } = options\n  const isInView = ref(false)\n\n  let observed: Element | null = null\n  let observer: IntersectionObserver | null = null\n\n  function unobserve(): void {\n    if (observed) {\n      observer?.unobserve(observed)\n      callbacks.delete(observed)\n      observed = null\n    }\n  }\n\n  function observe(el: HTMLElement): void {\n    unobserve()\n    observer = getObserver(rootMargin, threshold)\n    if (!observer) {\n      // No IntersectionObserver → treat as in view immediately.\n      isInView.value = true\n      return\n    }\n    callbacks.set(el, (inView) => {\n      isInView.value = inView\n      if (inView && once)\n        unobserve()\n    })\n    observer.observe(el)\n    observed = el\n  }\n\n  onMounted(() => {\n    if (elRef.value)\n      observe(elRef.value)\n  })\n\n  watch(elRef, (el) => {\n    if (el)\n      observe(el)\n    else unobserve()\n  })\n\n  onBeforeUnmount(unobserve)\n\n  return isInView\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useInView.ts"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzWordReveal } from './components/DzWordReveal.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzText"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzText"
+    ],
+    "motionPrimitives": [
+      "DzWordReveal"
+    ],
+    "stylesheet": "https://dzup-ui.com/r/animations/motion-tokens.css"
+  }
 }

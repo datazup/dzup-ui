@@ -17,15 +17,17 @@
 > (Review #2, TASK-FREE2-01…12) and [`free-apps-audit.md`](./free-apps-audit.md)
 > (TASK-FREE-01…18). Review #2 found the gate declared done at 90% and the two-domain identity
 > crisis; **its defect tier is now fixed and verified below.** This review finds what is left:
-> the site still has **no path to production**, one of the three registries breaks the
+> one of the three registries breaks the
 > `shadcn add` contract the other two document, the live-stats fetcher targets a GitHub repo
 > that doesn't exist, and the prose makes one capability claim the code disproves. It then
 > adds the improvement tier. [`design-tasks.md`](./design-tasks.md) (TASK-DS-\*) and
 > [`new-features.md`](./new-features.md) remain separate backlogs.
 >
 > **Status legend:** `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
-> **Priority:** 🔴 P0 (no production / broken contract) · 🟠 P1 (user-visible defects & false claims) · 🟢 P2 (consistency, coverage & new capability)
+> **Priority:** 🟠 P1 (user-visible defects & false claims) · 🟢 P2 (consistency, coverage & new capability)
 > **Numbering:** `TASK-FREE3-*`, distinct from `TASK-FREE-*`, `TASK-FREE2-*`, `TASK-DS-*`, `TASK-APP-*`.
+> Numbering starts at `-02`; the IDs of the remaining tasks are left unchanged from the
+> original draft so existing references stay valid.
 
 ---
 
@@ -68,24 +70,23 @@ Part 3 so this document is a complete picture of the backlog.
 
 | # | Severity | Finding | Evidence |
 |---|---|---|---|
-| 1 | 🔴 | **Still no path to production.** No deploy workflow, no `netlify.toml`/`vercel.json` anywhere; `dzup-ui.com` serves nothing — while `SITE_ORIGIN` is baked into the canonical/OG/JSON-LD head, `sitemap.xml`, `robots.txt`, and the `homepage` of every **distributed** registry artifact under `public/r/**`. The link checker permanently allowlists its own dead canonical host ("deploy pending"), so the gap is invisible to every gate, forever | `.github/workflows/` = ci/chromatic/publish-prerelease/release only; `check-external-links.mjs:43-50`; `origin.ts:32`; `build-sitemap.ts:174` |
-| 2 | 🟠 | **The animations registry breaks the `shadcn add` contract the blocks registry documents as fatal.** `registryDependencies` carries bare `Dz*` component names (`["DzCard","DzAvatar"]`, even landing-local `DzAurora`), the schema pins the shadcn-vue *fork* instead of canonical `ui.shadcn.com`, and `files[].type` is the item-type `registry:block` with no `target` — three divergences from `blocks/registryItem.ts`'s own rules, and the spec **asserts the divergence as intended** | `gallery/registryItem.ts:33-34,70,118,123,139` vs `blocks/registryItem.ts:24-31,43-44,154-160`; `gallery/registryItem.spec.ts:97-98`; live artifacts `public/r/animations/*.json` |
-| 3 | 🟠 | **Live-stats fetcher targets a GitHub repo that doesn't exist**: `GITHUB_REPO = 'dzup-ui/dzup-ui'` vs the real `datazup/dzup-ui` everywhere else — and `orgConsistency.spec.ts` only matches full `github.com/<org>/` URLs, so the bare `owner/repo` slug slips the gate. Once `VITE_ENABLE_LIVE_STATS=true`, the star pill 404s while the footer badge (correct slug) works | `lib/liveStats.ts:26,59` vs `config.ts:129`, `Footer.vue:60`; `orgConsistency.spec.ts:70` |
-| 4 | 🟠 | **Feature grid claims a "first-party Nuxt module available"** — `packages/nuxt` exists in-repo but is unpublished (npm 404), the Nuxt guide doesn't exist, and the compare table's own Framework cell says plain `'Vue 3'`. The Hero trust row lists `'Nuxt'` too. Round numbers were made honest by the counts machinery; this is the same failure in prose | `data.ts:80`, `Hero.vue:62` vs `Footer.vue:32-34`, `data/compare.ts:75` |
-| 5 | 🟠 | **StackBlitz and MCP flows depend on npm packages that 404 today**: generated StackBlitz projects pin `@dzup-ui/*@^0.1.0` (unpublished → `npm install` fails), `/ai` instructs `npx @dzup-ui/mcp` — while the rest of the site scrupulously disables anything unpublished (live stats, npm badges). Inconsistent honesty bar | `lib/stackblitz.ts:28`, `AiIdePage.vue` vs `useLiveStats.ts:48-51`, `Footer.vue:52-56` |
-| 6 | 🟠 | **Mobile LCP fails the 2.5 s budget on every measured route (3.08–4.34 s) but is warn-gated** — a change pushing mobile LCP to 8 s passes CI. Desktop is `error`; mobile (the majority device) is advisory, and the exception is pinned in both directions by a spec | `lighthouserc.mobile.json:3,20` vs `lighthouserc.json:22`; `lighthouserc.spec.ts:76-85` |
-| 7 | 🟢 | `sitemap.xml`/`robots.txt` are generated in `build` but are the **one committed artifact family missing from the CI drift guard** — the guard rebuilds registry/animations/component-index/counts/og and diffs them, but never runs `build:sitemap`. A block added without a rebuild ships a stale committed sitemap undetected. (`build:stats` is excluded *on purpose* — live APIs; sitemap is a pure projection and could be guarded) | `ci.yml:160-174` vs `package.json:17`; `build-sitemap.ts:26,187-188` |
-| 8 | 🟢 | Three manual-only generators commit visual/identity assets with no drift story: `yarn og` (`shoot-og.mts` → `public/og/*.png`), `yarn thumbnails`, `yarn brand-assets`. `build-og-images.ts` only *inventories* what exists — if a block's visuals change, its committed OG card stays stale and the manifest keeps saying "fine" | `package.json` scripts; `build-og-images.ts:19-24` |
-| 9 | 🟢 | **The CI `e2e` job never exercises the landing app** — it runs the Storybook suites. The landing's only browser test in CI is the light+dark pixel guard, which runs against the **dev server**, not `dist`; the hero snapshot test only has win32 snapshots so it silently skips on ubuntu; there is no mobile-viewport or functional (nav/palette/404/theme) browser coverage at all — those live only in jsdom | `ci.yml:422-429,490`; root `package.json:54-57`; `playwright.config.ts:39,44`; `e2e/visual.spec.ts:98-133` |
-| 10 | 🟢 | Unit a11y suites gate **serious/critical only** — moderate rules (`landmark-no-duplicate-main`, `landmark-unique`) pass silently; the `/ai` double-`<main>` shipped past this exact suite and was patched with a one-off structural assertion rather than closing the class | `blocks/a11y.spec.ts:84`, `pages.a11y.spec.ts:66,146-181` |
-| 11 | 🟢 | Skip-link target `<main id="main">` has no `tabindex` — the `tabindex="-1"` is added only in the router `afterEach`, so on **first load** (no navigation yet) skip-link focus movement is browser-dependent | `App.vue:70-74,103,109` |
-| 12 | 🟢 | CSS token fallbacks paint the **wrong brand**: indigo/violet (`#6366f1`, `#4f46e5`, `#a855f7`) where brand primary-500 is `#0766ee`; `theme-color` meta is one static value, never dark | `TopNav.vue:242,247`, `Footer.vue:160,219`, `AnnouncementBanner.vue:103-106`, `App.vue:276`, `NotFoundPage.vue:130`, `RethemeButton.vue:91` vs `public/favicon.svg:4`, `index.html:14` |
-| 13 | 🟢 | 16 of 44 templates (the 2026-06-25 batch) ship **no dark-mode thumbnail** — dark visitors get the light screenshot (graceful, manifest-gated, but the newest cards look off) | `public/templates/thumbnails/` 44 light vs 28 dark; `TemplatesPage.vue:114-118`; `generated/ogImages.ts:68` |
-| 14 | 🟢 | Copy-paste consistency drift in 3 content blocks: raw `<h4>/<h5>/<h6>` instead of `DzHeading :level="n"` (levels are correct, so a11y is fine — but consumers copy the exception) | `TocAside.vue:37-92`, `CodeShowcase.vue:71`, `BlogList.vue:97,125` |
-| 15 | 🟢 | Interaction polish: clipboard failures on `/themes` are swallowed with no "copy failed" affordance; the mobile drawer never moves focus on open; the `mailto:` contact link opens with `target="_blank"` (orphan blank tab) | `ThemesPage.vue:116-123`; `TopNav.vue:59,157`; `Footer.vue:23,106-111` |
-| 16 | 🟢 | Stale-comment debt: `AiIdePage.vue:90` cites a `pageLandmarks.spec.ts` that doesn't exist (the invariant lives in `pages.a11y.spec.ts`); three comments quote the historical documented-count as 139 while `generated/counts.ts:12` says 137; `scripts/verify-auth.mts` is a self-labelled "throwaway" wired to nothing | `AiIdePage.vue:90`; `lib/seo.ts:10`, `data.ts:9`, `data/compare.ts:20` vs `generated/counts.ts:12`; `verify-auth.mts:3` |
-| 17 | 🟢 | Landing coverage `functions` floor is 65% (measured 65.52%) against the repo's stated 80% bar — a real, documented gap in handler/composable coverage | `vitest.config.ts:74-79` |
-| 18 | 🟢 | No i18n/RTL seam at the app shell: static `lang="en"`, no `dir` handling in the chrome (block previews accept `?dir`, the shell doesn't). Recorded as a capability gap, not a defect | `index.html:2`, `router.ts:183` |
+| 1 | 🟠 | **The animations registry breaks the `shadcn add` contract the blocks registry documents as fatal.** `registryDependencies` carries bare `Dz*` component names (`["DzCard","DzAvatar"]`, even landing-local `DzAurora`), the schema pins the shadcn-vue *fork* instead of canonical `ui.shadcn.com`, and `files[].type` is the item-type `registry:block` with no `target` — three divergences from `blocks/registryItem.ts`'s own rules, and the spec **asserts the divergence as intended** | `gallery/registryItem.ts:33-34,70,118,123,139` vs `blocks/registryItem.ts:24-31,43-44,154-160`; `gallery/registryItem.spec.ts:97-98`; live artifacts `public/r/animations/*.json` |
+| 2 | 🟠 | **Live-stats fetcher targets a GitHub repo that doesn't exist**: `GITHUB_REPO = 'dzup-ui/dzup-ui'` vs the real `datazup/dzup-ui` everywhere else — and `orgConsistency.spec.ts` only matches full `github.com/<org>/` URLs, so the bare `owner/repo` slug slips the gate. Once `VITE_ENABLE_LIVE_STATS=true`, the star pill 404s while the footer badge (correct slug) works | `lib/liveStats.ts:26,59` vs `config.ts:129`, `Footer.vue:60`; `orgConsistency.spec.ts:70` |
+| 3 | 🟠 | **Feature grid claims a "first-party Nuxt module available"** — `packages/nuxt` exists in-repo but is unpublished (npm 404), the Nuxt guide doesn't exist, and the compare table's own Framework cell says plain `'Vue 3'`. The Hero trust row lists `'Nuxt'` too. Round numbers were made honest by the counts machinery; this is the same failure in prose | `data.ts:80`, `Hero.vue:62` vs `Footer.vue:32-34`, `data/compare.ts:75` |
+| 4 | 🟠 | **StackBlitz and MCP flows depend on npm packages that 404 today**: generated StackBlitz projects pin `@dzup-ui/*@^0.1.0` (unpublished → `npm install` fails), `/ai` instructs `npx @dzup-ui/mcp` — while the rest of the site scrupulously disables anything unpublished (live stats, npm badges). Inconsistent honesty bar | `lib/stackblitz.ts:28`, `AiIdePage.vue` vs `useLiveStats.ts:48-51`, `Footer.vue:52-56` |
+| 5 | 🟠 | **Mobile LCP fails the 2.5 s budget on every measured route (3.08–4.34 s) but is warn-gated** — a change pushing mobile LCP to 8 s passes CI. Desktop is `error`; mobile (the majority device) is advisory, and the exception is pinned in both directions by a spec | `lighthouserc.mobile.json:3,20` vs `lighthouserc.json:22`; `lighthouserc.spec.ts:76-85` |
+| 6 | 🟢 | `sitemap.xml`/`robots.txt` are generated in `build` but are the **one committed artifact family missing from the CI drift guard** — the guard rebuilds registry/animations/component-index/counts/og and diffs them, but never runs `build:sitemap`. A block added without a rebuild ships a stale committed sitemap undetected. (`build:stats` is excluded *on purpose* — live APIs; sitemap is a pure projection and could be guarded) | `ci.yml:160-174` vs `package.json:17`; `build-sitemap.ts:26,187-188` |
+| 7 | 🟢 | Three manual-only generators commit visual/identity assets with no drift story: `yarn og` (`shoot-og.mts` → `public/og/*.png`), `yarn thumbnails`, `yarn brand-assets`. `build-og-images.ts` only *inventories* what exists — if a block's visuals change, its committed OG card stays stale and the manifest keeps saying "fine" | `package.json` scripts; `build-og-images.ts:19-24` |
+| 8 | 🟢 | **The CI `e2e` job never exercises the landing app** — it runs the Storybook suites. The landing's only browser test in CI is the light+dark pixel guard, which runs against the **dev server**, not `dist`; the hero snapshot test only has win32 snapshots so it silently skips on ubuntu; there is no mobile-viewport or functional (nav/palette/404/theme) browser coverage at all — those live only in jsdom | `ci.yml:422-429,490`; root `package.json:54-57`; `playwright.config.ts:39,44`; `e2e/visual.spec.ts:98-133` |
+| 9 | 🟢 | Unit a11y suites gate **serious/critical only** — moderate rules (`landmark-no-duplicate-main`, `landmark-unique`) pass silently; the `/ai` double-`<main>` shipped past this exact suite and was patched with a one-off structural assertion rather than closing the class | `blocks/a11y.spec.ts:84`, `pages.a11y.spec.ts:66,146-181` |
+| 10 | 🟢 | Skip-link target `<main id="main">` has no `tabindex` — the `tabindex="-1"` is added only in the router `afterEach`, so on **first load** (no navigation yet) skip-link focus movement is browser-dependent | `App.vue:70-74,103,109` |
+| 11 | 🟢 | CSS token fallbacks paint the **wrong brand**: indigo/violet (`#6366f1`, `#4f46e5`, `#a855f7`) where brand primary-500 is `#0766ee`; `theme-color` meta is one static value, never dark | `TopNav.vue:242,247`, `Footer.vue:160,219`, `AnnouncementBanner.vue:103-106`, `App.vue:276`, `NotFoundPage.vue:130`, `RethemeButton.vue:91` vs `public/favicon.svg:4`, `index.html:14` |
+| 12 | ✅ | ~~16 of 44 templates ship **no dark-mode thumbnail**~~ — **closed 2026-07-20 by TASK-FREE2-09**, which regenerated the full set (44 light + 44 dark). See TASK-FREE3-09 | was `public/templates/thumbnails/` 44 light vs 28 dark; now 44/44 |
+| 13 | 🟢 | Copy-paste consistency drift in 3 content blocks: raw `<h4>/<h5>/<h6>` instead of `DzHeading :level="n"` (levels are correct, so a11y is fine — but consumers copy the exception) | `TocAside.vue:37-92`, `CodeShowcase.vue:71`, `BlogList.vue:97,125` |
+| 14 | 🟢 | Interaction polish: clipboard failures on `/themes` are swallowed with no "copy failed" affordance; the mobile drawer never moves focus on open; the `mailto:` contact link opens with `target="_blank"` (orphan blank tab) | `ThemesPage.vue:116-123`; `TopNav.vue:59,157`; `Footer.vue:23,106-111` |
+| 15 | 🟢 | Stale-comment debt: `AiIdePage.vue:90` cites a `pageLandmarks.spec.ts` that doesn't exist (the invariant lives in `pages.a11y.spec.ts`); three comments quote the historical documented-count as 139 while `generated/counts.ts:12` says 137; `scripts/verify-auth.mts` is a self-labelled "throwaway" wired to nothing | `AiIdePage.vue:90`; `lib/seo.ts:10`, `data.ts:9`, `data/compare.ts:20` vs `generated/counts.ts:12`; `verify-auth.mts:3` |
+| 16 | 🟢 | Landing coverage `functions` floor is 65% (measured 65.52%) against the repo's stated 80% bar — a real, documented gap in handler/composable coverage | `vitest.config.ts:74-79` |
+| 17 | 🟢 | No i18n/RTL seam at the app shell: static `lang="en"`, no `dir` handling in the chrome (block previews accept `?dir`, the shell doesn't). Recorded as a capability gap, not a defect | `index.html:2`, `router.ts:183` |
 
 **Reviewed and accepted (no task):** the `#fff` caption colours over image scrims in
 `media/CarouselShowcase.vue:162,183,189` and `media/Gallery.vue:216` (commented, legibility
@@ -110,17 +111,22 @@ one sweep claimed otherwise and was wrong.
 
 ---
 
-## Part 3 — Carried forward, not re-specified
+## Part 3 — Carried forward — **all four landed 2026-07-18/19, after this review was drafted**
 
-Still-open improvement tasks that stay owned by [`free-apps-review.md`](./free-apps-review.md):
+The improvement tier owned by [`free-apps-review.md`](./free-apps-review.md) has since
+shipped. Verified on this tree 2026-07-20:
 
-- **TASK-FREE2-09** — live template previews (parity with blocks). Templates still sell
-  themselves with static thumbnails; finding 13 (missing dark thumbnails) is subsumed the
-  day this lands, but gets an interim task below because 09 is large.
-- **TASK-FREE2-10** — on-site What's New + RSS.
-- **TASK-FREE2-11** — Storybook global toolbars. Viewport shipped via TASK-FREE-17; the
-  RTL `dir` global, density probe, and keyboard-shortcuts guide remain.
-- **TASK-FREE2-12** — per-component "Open in playground".
+- **TASK-FREE2-09** ✅ live template previews — the build guard + `--missing` thumbnail mode
+  retired the `onerror` icon fallback (`TemplatesPage.vue:102`). **This closes finding 12 and
+  TASK-FREE3-09 below**: `public/templates/thumbnails/` now holds 44 light **and** 44 dark.
+- **TASK-FREE2-10** ✅ on-site What's New + Atom feed — `/changelog` route (`router.ts:392`)
+  and `public/feed.xml`, generated from a shared release parser in `packages/tooling`.
+- **TASK-FREE2-11** ✅ Storybook global RTL toolbar (`preview.ts:31-33`, `globalTypes.direction`).
+  Density was deliberately deferred — there is no `--dz-spacing` scalar to drive it.
+- **TASK-FREE2-12** ✅ per-component "Open in playground" on every autodocs page, with
+  snippets generated from `@example` and compile-validated.
+
+Nothing from Review #2 remains open. This document is now the whole free-tier backlog.
 
 ---
 
@@ -173,90 +179,6 @@ together with the conventions block below.
     not published and verifiable (the Nuxt-module lesson). Never leave a comment that
     describes shipped code as unbuilt — or unbuilt code as shipped.</honesty>
 </repo_conventions>
-```
-
----
-
-# 🔴 P0 — There is still no production
-
----
-
-## [ ] TASK-FREE3-01 — Ship the deploy: make `dzup-ui.com` serve the site, then un-blind the link checker
-
-```xml
-<role>
-You are a release engineer who inherited a site where every artifact — the canonical URL,
-the sitemap, the robots.txt, and the homepage field inside registry JSON that third parties
-copy into their repos with `npx shadcn add` — advertises an origin that has never served a
-byte. Two audits in a row (TASK-FREE-07, then Review #2) recorded "deploy pending". You know
-that every week this stays true, more artifacts bake the dead host in deeper, and the link
-checker has been taught to look away from exactly this host.
-</role>
-
-<task>
-Create the deploy pipeline that publishes apps/landing/dist (which embeds the built
-Storybook at /storybook/) to the dzup-ui.com origin on every push to main, smoke-verify it,
-and then remove the dzup-ui.com allowlist entry from the external-link checker so the gate
-finally watches the canonical host.
-</task>
-
-<motivation>
-Measured on this checkout, 2026-07-17:
-  • .github/workflows/ contains only ci.yml, chromatic.yml, publish-prerelease.yml,
-    release.yml — the last two are npm publish flows. No netlify.toml, no vercel.json,
-    no deploy.yml anywhere in the repo.
-  • scripts/check-external-links.mjs:43-50 allowlists dzup-ui.com with the reason string
-    'canonical origin, deploy pending' — the checker will never notice the host is dead.
-  • origin.ts:32 SITE_ORIGIN = 'https://dzup-ui.com' is baked into index.html
-    canonical/OG/JSON-LD, public/sitemap.xml + robots.txt (build-sitemap.ts:174), and the
-    homepage of every registry index under public/r/** (asserted by claims.spec.ts:322-329).
-    Registry artifacts are DISTRIBUTED — consumers fetch them into other repos; a dead
-    homepage ships beyond our control.
-  • An earlier attempt settled platform choice: Netlify (GitHub Pages was rejected because
-    its 404.html returns HTTP 404, so SPA fallback routes cannot smoke-200 —
-    see docs memory "Landing deploy"). That work is NOT in the repo; treat it as design
-    input, not existing artifacts.
-</motivation>
-
-<requirements>
-  <workflow>A .github/workflows/deploy.yml triggered on push to main (plus
-    workflow_dispatch), building in the proven CI order: contracts → tokens → core →
-    storybook → landing. Reuse the exact steps ci.yml's landing-perf job already runs —
-    do not invent a second build recipe that can drift.</workflow>
-  <platform>Netlify (or an equivalent that serves SPA fallback with HTTP 200). netlify.toml
-    lives in apps/landing/, publishes dist/, with the SPA redirect (/* → /index.html 200)
-    and long-cache headers for hashed assets. Secrets: NETLIFY_AUTH_TOKEN,
-    NETLIFY_SITE_ID — document in the workflow header comment that these must be added to
-    repo settings, and make the job fail loudly (not skip silently) when they are absent.</platform>
-  <smoke>After deploy, the workflow curls the live origin and asserts HTTP 200 + non-empty
-    body for: /, /blocks, /templates, a deep SPA route (/blocks/hero-centered),
-    /storybook/, /r/registry.json, /sitemap.xml. A failed smoke fails the workflow.</smoke>
-  <unblind>Once the first deploy is green, delete the dzup-ui.com entry from
-    check-external-links.mjs's allowlist (and its 'deploy pending' comment) in the same PR
-    series, so check:links starts asserting the canonical host resolves. Update
-    docs/free-apps-audit.md's TASK-FREE-07 entry to [x] with the deploy date.</unblind>
-  <no_fake_green>If you cannot obtain the Netlify secrets, stop and hand back a PR with
-    the workflow + netlify.toml + a README note — do NOT mark the task done, do NOT stub
-    the smoke test to pass.</no_fake_green>
-</requirements>
-
-<steps>
-  1. Read ci.yml's landing-perf job (build order, check:storybook, check:bundle) — your
-     workflow reuses these steps verbatim.
-  2. Author netlify.toml (SPA redirect returning 200, asset cache headers) and deploy.yml.
-  3. Deploy once via workflow_dispatch; run the smoke list by hand first, then wire it
-     into the workflow.
-  4. Remove the allowlist entry; run yarn check:links against the live origin.
-  5. Flip TASK-FREE-07 to [x] in free-apps-audit.md with the date and the deploy URL.
-</steps>
-
-<success_criteria>
-  - https://dzup-ui.com/ serves the landing app; /storybook/ serves the Storybook;
-    /r/registry.json serves the registry index — all HTTP 200.
-  - deploy.yml is green on main and fails (not skips) without secrets.
-  - check-external-links.mjs no longer allowlists dzup-ui.com and check:links passes.
-  - A deep SPA route refreshes to HTTP 200, not 404.
-</success_criteria>
 ```
 
 ---
@@ -557,6 +479,12 @@ robots.txt), write down the drift policy for the three manual screenshot/asset g
     change; thumbnails: same; brand-assets: on brand change), and the explicit statement
     that they are exempt from the CI drift guard and why. The exemption becomes a
     decision, not an accident.</asset_policy>
+  <coverage_report>Inherited from the retired TASK-FREE3-09: emit a per-kind coverage line
+    ("templates: 44/44 light, 44/44 dark thumbs") from build-og-images.ts or the counts
+    spec, and assert in claims.spec.ts (or a sibling) that thumbnail coverage does not
+    DECREASE from the committed manifest. Pixel-diffing screenshots in CI is NOT wanted
+    (machine drift) — counting them is. FREE2-09 closed today's gap; this keeps the next
+    template batch from silently reopening it.</coverage_report>
   <delete>verify-auth.mts is deleted. If any doc references it as a live tool, fix the
     reference (docs/free-apps-*.md mention it historically — leave history intact,
     that's what it is).</delete>
@@ -574,6 +502,7 @@ robots.txt), write down the drift policy for the three manual screenshot/asset g
   - A stale committed sitemap.xml fails CI's drift step.
   - scripts/README.md documents the screenshot-asset policy and every file in scripts/
     is either wired or explained.
+  - A new template lacking a dark thumbnail fails the non-decrease assertion.
   - verify-auth.mts is gone; lint/typecheck/test baselines hold.
 </success_criteria>
 ```
@@ -586,8 +515,8 @@ robots.txt), write down the drift policy for the three manual screenshot/asset g
 <role>
 You are a quality engineer who noticed the site's excellent-looking test wall has a
 specific hole: 1,953 unit tests run in jsdom, but the only real browser that touches the
-landing in CI is one pixel-histogram spec — pointed at the dev server, not the artifact
-that deploys. Nav, palette, 404, and theme flows have never run in a real browser in CI,
+landing in CI is one pixel-histogram spec — pointed at the dev server, not the built
+artifact that ships. Nav, palette, 404, and theme flows have never run in a real browser in CI,
 the hero snapshot silently skips on ubuntu (win32-only snapshots), and no mobile viewport
 is ever driven.
 </role>
@@ -604,7 +533,7 @@ drawer and one block page.
     resolve (root package.json:54-55) to the STORYBOOK e2e dirs. Zero landing coverage.
   • The landing pixel guard runs once in landing-perf (ci.yml:490,
     --grep "renders real pixels") against playwright.config.ts:44's DEV server — the
-    deployed artifact (dist/) is never driven by a browser.
+    built artifact (dist/) is never driven by a browser.
   • e2e/visual.spec.ts-snapshots/ holds only *-win32.png; visual.spec.ts:98-133
     documents that the hero test skips on other platforms — green CI is not evidence
     the hero renders.
@@ -659,7 +588,21 @@ drawer and one block page.
 
 ---
 
-## [ ] TASK-FREE3-07 — App-shell interaction polish: skip-link focus, drawer focus, copy feedback, mailto
+## [x] TASK-FREE3-07 — App-shell interaction polish: skip-link focus, drawer focus, copy feedback, mailto
+
+> **Landed 2026-07-20.** `tabindex="-1"` is now in App.vue's template (asserted on a fresh
+> mount *before* any navigation — jsdom cannot do fragment navigation, so the unit test pins
+> the app-side precondition and leaves real activation to FREE3-06's e2e flow). Drawer entry
+> focus uses a template ref, not `getElementById`, so a second mounted nav can't steal it;
+> non-modal is asserted so nobody upgrades it to a focus trap. `copyText` failure gets a
+> button-label flip, a visible `role="alert"` beside the export text, and a polite live region
+> that now announces the SUCCESS path too (it was silent before). **Deliberate deviation:** the
+> failure state decays over 6s, not the success flash's 1.6s — the requirement said "same
+> decay", but 1.6s is not long enough to read "select and copy manually", decide, and act.
+> Footer discriminates on URL scheme (`mailto:`/`tel:`/`sms:`) rather than a per-entry flag.
+> Comment sweep found **6** stale sites, not the 3 catalogued (`config.ts`, `AiIdePage.vue`,
+> `claims.spec.ts` ×2 also carried them); the rule applied was to keep the *historical wrong*
+> literal (it's a stable fact) and drop the *"real figure is N"* literal (it drifts).
 
 ```xml
 <role>
@@ -736,7 +679,36 @@ tab — plus sweep the three stale comments this review catalogued.
 
 ---
 
-## [ ] TASK-FREE3-08 — Brand-correct the CSS fallback colours and the theme-color meta
+## [x] TASK-FREE3-08 — Brand-correct the CSS fallback colours and the theme-color meta
+
+> **Landed 2026-07-20 — scope was much larger than this task states.** The `<motivation>`
+> below names 6 chrome files. The real footprint was **503 fallback sites across 88 files**:
+> the indigo-fallback convention had spread through `pages/`, `gallery/demos/`,
+> `motion/components/`, `tailwind.css` and `motion/tokens.css`. Fixing only the 6 named files
+> would have satisfied the wording while leaving the success criterion false everywhere else.
+> Swept all of `apps/landing/src` except `blocks/` + `templates/` (visitor copy-paste source,
+> exempt per this task — 377 sites, counted and reported by the guard rather than silently
+> skipped). Confirmed with the user before widening.
+>
+> The sweep was a **resolver, not a find/replace**: each token is resolved through
+> `tokens.css` (following `var()` chains into the primitive ramp) and converted with the same
+> `oklchToHex` the manager-palette guard uses. A blind indigo→blue replace would have put
+> primary-500's hex behind `--dz-colors-primary-600`, which is new drift wearing the old
+> drift's clothes. Correcting *every* `--dz-*` fallback (not just brand ones) also fixed
+> neutral/border/surface fallbacks that were Tailwind-slate guesses — `--dz-background` was
+> `#ffffff` against a real light value of `#e7e8e9`.
+>
+> **Two findings this surfaced.** (1) `theme-color` cannot be handled by media queries alone:
+> no CSS media query can see the app's manual `dz-theme` override, so `useTheme` now switches
+> which meta *applies* (`media="all"`/`"none"`) rather than rewriting a colour — that keeps
+> both brand literals in the HTML where the guard can still recompute them. (2) **Three
+> phantom tokens** — `--dz-colors-base-white`, `--dz-colors-base-black`, `--dz-border-strong`
+> — are referenced at 12 sites but defined nowhere in `tokens.css`, so their fallback is the
+> only value that ever renders and is permanently unguardable. Left as-is (picking a real
+> token for each is a design call, not a sweep) but the guard now asserts the phantom list
+> explicitly, so a new one cannot be added silently.
+>
+> Guard: `packages/tooling/src/token-checks/landing-token-fallbacks.spec.ts` (9 tests).
 
 ```xml
 <role>
@@ -802,7 +774,16 @@ Replace every indigo/violet literal fallback in apps/landing with the real brand
 
 ---
 
-## [ ] TASK-FREE3-09 — Dark thumbnails for the 16 uncovered templates, and a completeness check
+## [x] TASK-FREE3-09 — Dark thumbnails for the 16 uncovered templates, and a completeness check
+
+> **Closed 2026-07-20 without being run — superseded by TASK-FREE2-09.** That task's
+> template-preview work regenerated the full thumbnail set as a side effect: measured on this
+> tree, `public/templates/thumbnails/` holds **44 light + 44 dark** `.webp` (was 44 + 28), so
+> the 16-slug gap below no longer exists and the light-fallback path is unreachable for
+> dark visitors. **Do not run this task.** The one requirement it carried that FREE2-09 did
+> *not* deliver — a coverage report + non-decrease assertion so a future template can't
+> silently ship half-covered — is folded into TASK-FREE3-05's `<asset_policy>` clause.
+> The block below is retained only as the record of what was found.
 
 ```xml
 <role>
@@ -1057,7 +1038,7 @@ measured new floor — landing at or as close to 80 as the code honestly support
 
 ## Appendix — findings intentionally left without a task
 
-- **i18n/RTL seam (finding 18):** a single-locale marketing site is a defensible scope;
+- **i18n/RTL seam (finding 17):** a single-locale marketing site is a defensible scope;
   recording the absence is the deliverable. If/when a locale is added, the seam order is:
   `<html lang>` from route meta → `dir` propagation in the shell (block previews already
   accept `?dir`) → string extraction. Do not build speculative infrastructure now.
@@ -1066,4 +1047,55 @@ measured new floor — landing at or as close to 80 as the code honestly support
 - **`STATIC_ROUTE_FILES` hand-map in `build-sitemap.ts:64-73`:** covered by the header
   comment required in TASK-FREE3-05; not worth its own automation until it bites.
 - **Storybook-side carryovers** (RTL/density toolbars, playground affordance, What's New):
-  live as TASK-FREE2-10/11/12 in [`free-apps-review.md`](./free-apps-review.md) — see Part 3.
+  shipped as TASK-FREE2-10/11/12 — see Part 3. Density stays unbuilt by decision: there is
+  no `--dz-spacing` scalar to drive a density toggle, and inventing one is a tokens-package
+  change, not a Storybook one.
+
+---
+
+## Suggested execution order
+
+**Start with the truth tasks, finish with the gates that measure them.** Nothing in this
+document blocks on a human, so the order below is chosen for dependency and merge-conflict
+cost, not for approvals. Six waves; waves 1 and 5 parallelize, the rest are serial by
+dependency.
+
+1. **TASK-FREE3-03 + 02 + 05 in parallel** — the honesty pass, the registry contract, and the
+   drift guards. Disjoint files, contained diffs, and each installs a gate that prevents
+   recurrence (the bare-slug scan, the registry spec, the sitemap diff). Run 03 first among
+   equals if you must pick: it is the one that stops the site claiming a Nuxt module that
+   isn't published, and false capability claims are the costliest thing here to leave standing.
+   Note 02 regenerates `public/r/animations/**`, which the CI drift guard diffs — that agent
+   must commit the regenerated artifacts or CI goes red on an otherwise-correct change.
+2. **TASK-FREE3-07 → 08, serially** — interaction polish then brand fallbacks. Both edit
+   `Footer.vue` (07 the mailto branch at `:23,106-111`; 08 the colour fallbacks at
+   `:160,219`), so run them in sequence or fold them into one agent. 07 first: its skip-link
+   fix is a precondition for one of TASK-FREE3-06's e2e flows.
+3. **TASK-FREE3-04 alone** — mobile LCP. Measurement-heavy, long-running, and it owns the
+   `landing-perf` CI job; giving it a clean tree avoids re-measuring on top of someone else's
+   diff. Its A/B harness is drift-sensitive — interleave preview ports, never trust
+   sequential before/after on a dev machine.
+4. **TASK-FREE3-06 alone** — browser e2e. Sequenced after 04 because both modify the same CI
+   job, and after 07 because it tests that fix. This is the largest task in the document; wire
+   the CI pipe with one trivial spec first, then grow the flow set.
+5. **TASK-FREE3-10 + 11 in parallel** — the DzHeading stragglers and the axe moderate-impact
+   ratchet. Small, independent, and 11 closes the class of bug that let a duplicate `<main>`
+   ship past a green suite.
+6. **TASK-FREE3-12 last** — the coverage floor. Tasks 03, 07 and 11 all add tests; running
+   12 after them means the measured floor has already risen and the ratchet is cheaper to set.
+
+**Shortest path to visible value:** if you only have capacity for one wave, take wave 1.
+It removes every false claim the site currently makes and leaves three gates behind that
+stop the same class from returning — the highest ratio of credibility repaired to diff size
+in the document.
+
+**Parallelism note:** the wave-1 and wave-5 tasks write to genuinely disjoint files, so run
+those agents with `isolation: "worktree"` and merge. Waves 2–4 are serial by dependency, not
+by caution — don't parallelize them to save wall-clock; you will pay it back in rebases.
+
+**Copy discipline:** each task is a self-contained agent prompt. Paste the
+`<role>`…`<success_criteria>` block **together with** the `repo_conventions` block from
+[How these tasks are written](#how-these-tasks-are-written) — the conventions carry the
+validation commands and the zero-error baseline. Agents given the task without the
+conventions reliably rediscover the `eslint --fix` type-regression trap documented in
+TASK-FREE2-01's notes.

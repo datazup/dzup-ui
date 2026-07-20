@@ -5,9 +5,15 @@
  * figure and the animation-catalog line all read from `generated/counts.ts`,
  * which `scripts/build-counts.ts` globs out of the real source tree and the real
  * registries. The hand-typed versions of these were wrong in every instance: the
- * family rows summed to 167 (a figure matching nothing), the feature card said
- * "147 components" against a real 139, and the animations tile said 59 effects
- * without anything checking. Write prose here; take numbers from `COUNTS`.
+ * family rows summed to a figure matching nothing, the feature card claimed "147
+ * components" against a real count nowhere near it, and the animations tile
+ * stated an effect count with nothing checking it. Write prose here; take
+ * numbers from `COUNTS`.
+ *
+ * That rule binds THIS COMMENT too: the corrected figures are not quoted above,
+ * because a number written into a comment drifts exactly as fast as one written
+ * into copy — and the versions that used to sit here had already fallen out of
+ * step with `generated/counts.ts` and with each other.
  */
 
 import { storybookDocs } from './config.ts'
@@ -77,7 +83,11 @@ export const FEATURES: Feature[] = [
   { icon: 'MoonStar', title: 'Light / dark / system', body: 'A single data-theme switch, FOUC-safe before first paint (ADR-15).' },
   { icon: 'Braces', title: 'TypeScript-first', body: 'Strict mode, full inference, and contract-typed props across every component.' },
   { icon: 'Wind', title: 'Tailwind CSS 4', body: 'Styled with tailwind-variants and design tokens — never raw colors.' },
-  { icon: 'PackageCheck', title: 'SSR-safe, ESM-only', body: 'Tree-shakeable ESM with a first-party Nuxt module available.' },
+  // Scoped to what ships today. This read "…with a first-party Nuxt module
+  // available": `packages/nuxt` exists in-repo but is UNPUBLISHED and has no
+  // guide, so "available" was a claim a visitor could not act on. The module
+  // ships when it ships — say so then. (TASK-FREE3-03)
+  { icon: 'PackageCheck', title: 'SSR-safe, ESM-only', body: 'Tree-shakeable ESM with no browser globals at module scope — renders on the server unchanged.' },
   { icon: 'SwatchBook', title: 'Themeable', body: 'Swap tokens, not component code. Re-skin the whole library from one file.' },
 ]
 

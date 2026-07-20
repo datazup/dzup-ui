@@ -1,23 +1,45 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "accordion-height",
   "type": "registry:block",
   "title": "Accordion height",
   "description": "Panels expand and collapse on a smooth height transition; instant under reduced motion.",
+  "categories": [
+    "transitions"
+  ],
   "files": [
     {
       "path": "accordion-height.vue",
       "content": "<script setup lang=\"ts\">\nimport {\n  DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent,\n} from '@dzup-ui/core'\nimport { ref } from 'vue'\nimport { useReducedMotion } from '../motion'\n\n// DzAccordionContent already animates height 0 → --reka-accordion-content-height\n// (never to 'auto') via core's accordion-down/up keyframes — reuse it directly.\nconst open = ref('tokens')\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <div :class=\"{ reduced }\">\n    <DzAccordion v-model=\"open\" type=\"single\" collapsible variant=\"separated\">\n      <DzAccordionItem value=\"tokens\">\n        <DzAccordionTrigger>Is everything token-driven?</DzAccordionTrigger>\n        <DzAccordionContent class=\"acc-content\">Yes — every effect uses --dz-* tokens.</DzAccordionContent>\n      </DzAccordionItem>\n      <!-- …more items… -->\n    </DzAccordion>\n  </div>\n</template>\n\n<style scoped>\n/* OS reduced motion is zeroed globally by the tokens rule; mirror the page-level\n   toggle here so the height sweep collapses to an instant open/close. The\n   !important wins over the native-path animation set below too. */\n.reduced :deep(.acc-content) { animation-duration: 0.01ms !important; }\n\n/* Native path — only where interpolate-size is supported (Chromium) AND motion\n   is allowed: swap core's measured-var keyframes for true height: 0 → auto.\n   Reka still unmounts on animationend, so the swap is transparent; every other\n   browser keeps the accordion-down/up floor. */\n@media (prefers-reduced-motion: no-preference) {\n  @supports (interpolate-size: allow-keywords) {\n    .reduced-host { interpolate-size: allow-keywords; }\n    :deep(.acc-content[data-state='open']) {\n      animation: dz-acc-open var(--dz-duration-normal) var(--dz-ease-out);\n    }\n    :deep(.acc-content[data-state='closed']) {\n      animation: dz-acc-close var(--dz-duration-normal) var(--dz-ease-out);\n    }\n  }\n}\n@keyframes dz-acc-open { from { height: 0; } to { height: auto; } }\n@keyframes dz-acc-close { from { height: auto; } to { height: 0; } }\n</style>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/accordion-height.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzAccordion",
-    "DzAccordionItem",
-    "DzAccordionContent"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzAccordion",
+      "DzAccordionItem",
+      "DzAccordionContent"
+    ],
+    "motionPrimitives": [
+      "useReducedMotion"
+    ]
+  }
 }

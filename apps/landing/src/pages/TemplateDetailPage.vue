@@ -33,7 +33,7 @@ import { computed, ref, watch } from 'vue'
 import Section from '../components/Section.vue'
 import { useTheme } from '../composables/useTheme.ts'
 import { componentDocs, LINKS } from '../config.ts'
-import { openInStackblitz } from '../lib/stackblitz.ts'
+import { openInStackblitz, stackblitzEnabled, UNPUBLISHED_NOTE } from '../lib/stackblitz.ts'
 import { paletteSwatchColor, PREVIEW_PALETTES } from '../templates/previewCustomiser.ts'
 import { resolveTemplateSources } from '../templates/rawSources.ts'
 import { getTemplate, TEMPLATES } from '../templates/registry.ts'
@@ -196,8 +196,14 @@ const mainSource = computed(() => sources.value[0]?.code ?? '')
  * Fork this template into a live StackBlitz project (docs/templates.md §2). The
  * `.vue` becomes `src/App.vue`; a co-located `data.ts` (which the template imports
  * via `./data.ts`) is injected next to it as `src/data.ts` so the relative import
- * resolves. Disabled until the source has loaded (see `:disabled` below).
+ * resolves. Disabled until the source has loaded (see `:disabled` below), and
+ * hidden entirely until `@dzup-ui/*` is on npm — the fork installs from there,
+ * so before publish it would boot straight into a failed `npm install`
+ * (TASK-FREE3-03). "Copy code" is unaffected: the source is real today.
  */
+/** Build-time publish flag — read once, not reactive. */
+const canFork = stackblitzEnabled()
+
 function openStackblitz(): void {
   const t = template.value
   if (!t || !mainSource.value)
@@ -269,6 +275,7 @@ const llmBundle = computed(() => {
 
         <div class="source-actions">
           <DzButton
+            v-if="canFork"
             variant="solid"
             tone="primary"
             size="sm"
@@ -314,6 +321,10 @@ const llmBundle = computed(() => {
             :aria-label="`Copy the source path for ${template.name}`"
           />
         </div>
+        <!-- Stands in for the fork button while @dzup-ui/* is unpublished. -->
+        <DzText v-if="!canFork" size="sm" tone="muted" as="p" class="detail-unpublished">
+          {{ UNPUBLISHED_NOTE }}
+        </DzText>
       </div>
 
       <!-- Preview / Code (docs/templates.md §2 #7). -->
@@ -565,6 +576,12 @@ const llmBundle = computed(() => {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.detail-unpublished {
+  margin: 8px 0 0;
+  max-width: 62ch;
+  line-height: 1.5;
 }
 
 /* ── Tabs ─────────────────────────────────────────────────────── */

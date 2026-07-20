@@ -116,7 +116,7 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
   margin: -24px 0 28px;
   text-align: center;
   font-size: var(--dz-text-xs, 0.75rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .compare-card {
@@ -130,7 +130,7 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
 }
 
 .compare-scroll:focus-visible {
-  outline: 2px solid var(--dz-primary, #4f46e5);
+  outline: 2px solid var(--dz-primary, #0766ee);
   outline-offset: -2px;
 }
 
@@ -141,7 +141,7 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
 .feature-label {
   display: block;
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .feature-note {
@@ -149,7 +149,7 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
   margin-top: 2px;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 400;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   white-space: normal;
   max-width: 22ch;
 }
@@ -157,20 +157,20 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
 /* The dzup-ui column, gently tinted so the reader's own library stands out
    without disparaging the rest. Tokens only — correct in light + dark. */
 .col-self {
-  background: color-mix(in oklch, var(--dz-primary, #4f46e5) 7%, transparent);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 7%, transparent);
 }
 
 .lib-head {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   text-decoration: none;
   font-weight: 700;
 }
 
 .lib-head:hover {
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
 }
 
 .compare-actions {
@@ -193,7 +193,7 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
 
 .sources-lede a,
 .source-link {
-  color: var(--dz-primary, #4f46e5);
+  color: var(--dz-primary, #0766ee);
   text-decoration: none;
 }
 

@@ -228,7 +228,7 @@ const segItems = [
   padding: 10px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .mini-card > div {
@@ -245,8 +245,8 @@ const segItems = [
 .ls-side {
   width: 30%;
   border-radius: var(--dz-radius-sm, 4px);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 22%, transparent);
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 28%, transparent);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 22%, transparent);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 28%, transparent);
 }
 
 .ls-main {
@@ -259,11 +259,11 @@ const segItems = [
 .ls-bar {
   height: 16px;
   border-radius: var(--dz-radius-sm, 4px);
-  background: color-mix(in oklch, var(--dz-foreground, #000) 12%, transparent);
+  background: color-mix(in oklch, var(--dz-foreground, #1b1d1f) 12%, transparent);
 }
 
 .ls-bar:first-child {
-  background: color-mix(in oklch, var(--dz-foreground, #000) 18%, transparent);
+  background: color-mix(in oklch, var(--dz-foreground, #1b1d1f) 18%, transparent);
 }
 
 .ls-bar--short {
@@ -277,7 +277,7 @@ const segItems = [
 }
 
 .crumb-sep {
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   font-size: var(--dz-text-xs, 0.75rem);
 }
 
@@ -285,7 +285,7 @@ const segItems = [
   padding: 8px 10px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-sm);
 }
 </style>

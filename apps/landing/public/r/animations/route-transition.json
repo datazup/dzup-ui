@@ -1,21 +1,29 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "route-transition",
   "type": "registry:block",
   "title": "Route transition",
   "description": "Pages fade and slide as you navigate between routes; instant under reduced motion.",
+  "categories": [
+    "transitions"
+  ],
   "files": [
     {
       "path": "route-transition.vue",
       "content": "// router.ts — native path: drive the swap through the View Transitions API\n// when supported and motion is allowed; the browser morphs the `root` snapshot.\nimport { nextTick } from 'vue'\nimport { startViewTransition, supportsViewTransitions } from './motion'\n\nconst reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches\n\nrouter.beforeResolve((to, from) => {\n  if (!from.name || to.path === from.path) return        // first paint / hash nav\n  if (!supportsViewTransitions() || reduced()) return    // → <Transition> fallback\n  return new Promise<void>((proceed) => {\n    void startViewTransition(async () => { proceed(); await nextTick() })\n  })\n})\n\n// App.vue — render bare on the native path (no Vue <Transition>, whose out-in\n// would defer the mount past the snapshot); keep <Transition> as the fallback.\n// <template>\n//   <router-view v-slot=\"{ Component, route: current }\">\n//     <div v-if=\"useNativeRoute\" :key=\"current.path\"><component :is=\"Component\" /></div>\n//     <Transition v-else name=\"route\" mode=\"out-in\">\n//       <div :key=\"current.path\"><component :is=\"Component\" /></div>\n//     </Transition>\n//   </router-view>\n// </template>\n\n/* App.vue (UNSCOPED) — the ::view-transition-* pseudos live on :root. Gated in\n   @media no-preference so the custom morph never runs under reduced motion. */\n@media (prefers-reduced-motion: no-preference) {\n  ::view-transition-old(root) {\n    animation: dz-route-vt-out var(--dz-duration-normal) var(--dz-ease-in) both;\n  }\n  ::view-transition-new(root) {\n    animation: dz-route-vt-in var(--dz-duration-normal) var(--dz-ease-out) both;\n  }\n  @keyframes dz-route-vt-out { to { opacity: 0; transform: translateY(-8px); } }\n  @keyframes dz-route-vt-in { from { opacity: 0; transform: translateY(8px); } }\n}\n\n/* Fallback (unsupported / reduced) — the Vue <Transition name=\"route\"> CSS. */\n.route-enter-active, .route-leave-active {\n  transition:\n    opacity var(--dz-duration-normal) var(--dz-ease-default),\n    transform var(--dz-duration-normal) var(--dz-ease-default);\n}\n.route-enter-from { opacity: 0; transform: translateY(8px); }\n.route-leave-to { opacity: 0; transform: translateY(-8px); }\n@media (prefers-reduced-motion: reduce) {\n  .route-enter-active, .route-leave-active { transition-duration: 0.01ms; }\n  .route-enter-from, .route-leave-to { transform: none; }\n}",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/route-transition.vue"
     }
   ],
-  "registryDependencies": [
-    "router-view"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "router-view"
+    ],
+    "motionPrimitives": []
+  }
 }

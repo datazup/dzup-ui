@@ -63,7 +63,7 @@ const reduced = useReducedMotion()
   padding: 12px 16px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--dz-shadow-md, 0 4px 12px rgb(15 23 42 / 0.08));
 }
 
@@ -73,8 +73,8 @@ const reduced = useReducedMotion()
   width: 32px;
   height: 32px;
   border-radius: var(--dz-radius-full, 9999px);
-  color: var(--dz-primary, #6366f1);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 12%, transparent);
+  color: var(--dz-primary, #0766ee);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 12%, transparent);
 }
 
 .copy {

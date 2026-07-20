@@ -17,7 +17,19 @@
  * `https://stackblitz.com/run` with `project[...]` fields creates and opens the
  * project. We build that form on demand and submit it to a new tab, so nothing
  * weighs on the app bundle and there's no extra package to install/keep in sync.
+ *
+ * ── Gated until publish (TASK-FREE3-03) ─────────────────────────────────────
+ * The forked project installs `@dzup-ui/*` FROM NPM, so until the packages are
+ * published the WebContainer boots and `npm install` 404s — a primary CTA whose
+ * whole promise ("it runs in your editor") fails in front of the visitor. The
+ * button is therefore feature-flagged behind `packagesPublished()`, the same
+ * standard the npm badges and the live-stats refresh already hold, and
+ * {@link openInStackblitz} is a no-op while the flag is off so no caller can
+ * route around the UI. "Copy code" stays available throughout: the source is
+ * real today.
  */
+
+import { packagesPublished } from './publishState.ts'
 
 /**
  * Published `@dzup-ui/*` version the StackBlitz starter installs from npm. Single
@@ -26,6 +38,13 @@
  * inside StackBlitz, so the forked project pins the published range instead.
  */
 export const DZUP_VERSION = '^0.1.0'
+
+/**
+ * Whether the "Open in StackBlitz" action can produce a project that actually
+ * installs. Re-exported so the detail pages import one name for the button's
+ * visibility and its explanatory note.
+ */
+export { packagesPublished as stackblitzEnabled, UNPUBLISHED_NOTE } from './publishState.ts'
 
 /** The StackBlitz "create project from an HTTP POST" endpoint. */
 const STACKBLITZ_RUN_URL = 'https://stackblitz.com/run'
@@ -107,6 +126,11 @@ export interface OpenInStackblitzOptions {
  */
 export function openInStackblitz(options: OpenInStackblitzOptions): void {
   if (typeof document === 'undefined')
+    return
+
+  // Belt and braces with the button's own `v-if`: a fork that can't resolve its
+  // dependencies is worse than no fork, so the flag is enforced here too.
+  if (!packagesPublished())
     return
 
   const openFile = options.openFile ?? 'src/App.vue'

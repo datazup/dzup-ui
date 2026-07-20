@@ -74,7 +74,7 @@ const live = computed(() => props.forceMount || shouldRender.value)
 .lbp-skeleton {
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
   overflow: hidden;
 }

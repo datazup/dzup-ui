@@ -7,11 +7,11 @@
  *      CLS < 0.1).
  *   2. Honesty: a live metric whose API is unavailable renders a call-to-action,
  *      never a fabricated number, and never a bare glyph with no accessible name.
- *   3. A11y: each tile's accessible name is a full phrase ("139 free
+ *   3. A11y: each tile's accessible name is a full phrase ("<n> free
  *      components"), not a bare number read out of context.
  *
- * `githubStars` / `npmDownloads` are `null` in this repo today — `dzup-ui/dzup-ui`
- * and `@dzup-ui/core` are unpublished, so both APIs 404. The null-path assertions
+ * `githubStars` / `npmDownloads` are `null` in this repo today — the repo and
+ * `@dzup-ui/core` are unpublished, so both APIs 404. The null-path assertions
  * below are therefore the *live* path, and the number-path is exercised by
  * stubbing the composable.
  */

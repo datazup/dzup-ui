@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "magnetic-button",
   "type": "registry:block",
   "title": "Magnetic button",
   "description": "A CTA eases toward the cursor within a small radius and springs back on leave.",
+  "categories": [
+    "hover"
+  ],
   "files": [
     {
       "path": "magnetic-button.vue",
       "content": "<script setup lang=\"ts\">\nimport { DzButton } from '@dzup-ui/core'\nimport { vMagnetic, useReducedMotion } from '../motion'\n\nconst reduced = useReducedMotion()\n</script>\n\n<template>\n  <!-- Offset clamped to a few px so the click target never breaks. -->\n  <DzButton\n    v-magnetic=\"{ strength: 0.45, radius: 16, disabled: reduced }\"\n    variant=\"solid\"\n    tone=\"primary\"\n    size=\"lg\"\n  >\n    Pull me closer\n  </DzButton>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/magnetic-button.vue"
+    },
+    {
+      "path": "motion/directives/magnetic.ts",
+      "content": "import type { Directive, DirectiveBinding } from 'vue'\n\n/**\n * v-magnetic — pointer-driven magnetic directive (docs/animations.md §6.5,\n * effect 22). While a fine pointer hovers the host, the element eases toward the\n * cursor by a fraction of the offset from its centre (clamped to a small radius),\n * then springs back to rest on leave.\n *\n * Transform/opacity only — the offset collapses to one `translate3d` write per\n * frame via `requestAnimationFrame`. The return uses an eased (bouncy) transition.\n *\n * Accessibility / touch guarantees (§6.5, §7):\n * - **Pointer-only.** Attached only on fine-pointer, hover-capable devices; touch\n *   pointer events are ignored. Touch users get the static element.\n * - **Reduced-motion.** Off when the OS sets `prefers-reduced-motion` OR the caller\n *   passes `disabled: true` (wire to the page-level toggle via `useReducedMotion`).\n *   Import-free so it stays extractable; the gallery drives the live toggle.\n * - **Never breaks the click target.** The offset is clamped to a few px and the\n *   element stays under the pointer, so clicks land normally; it eases back to its\n *   exact original box on leave. Keyboard focus is untouched (pointer-only).\n *\n * `will-change: transform` is set while engaged and cleared on leave/unmount.\n *\n * Usage:\n *   `<DzButton v-magnetic>` — defaults (0.4 strength, 18px clamp)\n *   `<DzButton v-magnetic=\"{ strength: 0.5, radius: 24 }\">`\n *   `<DzButton v-magnetic=\"{ disabled: reduced }\">` — reactive reduced-motion\n */\n\n/** Options for {@link vMagnetic}; all optional. */\nexport interface MagneticOptions {\n  /** Fraction of the pointer offset the element follows (default `0.4`). */\n  strength?: number\n  /** Maximum offset from rest in px on each axis (default `18`). */\n  radius?: number\n  /** Force the static, un-magnetised state (e.g. page-level reduced motion). */\n  disabled?: boolean\n}\n\ninterface MagneticState {\n  options: Required<Omit<MagneticOptions, 'disabled'>>\n  frame: number\n  nextX: number\n  nextY: number\n  engaged: boolean\n  attached: boolean\n  onMove: (event: PointerEvent) => void\n  onLeave: () => void\n}\n\nconst DEFAULTS: Required<Omit<MagneticOptions, 'disabled'>> = {\n  strength: 0.4,\n  radius: 18,\n}\n\nconst states = new WeakMap<HTMLElement, MagneticState>()\n\n/** Whether the OS currently requests reduced motion (SSR-safe). */\nfunction prefersReduced(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(prefers-reduced-motion: reduce)').matches\n}\n\n/** Whether the device has a fine, hover-capable pointer (SSR-safe). */\nfunction canHover(): boolean {\n  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')\n    return false\n  return window.matchMedia('(hover: hover) and (pointer: fine)').matches\n}\n\nfunction parseOptions(value: MagneticOptions | undefined): Required<Omit<MagneticOptions, 'disabled'>> {\n  return {\n    strength: value?.strength ?? DEFAULTS.strength,\n    radius: value?.radius ?? DEFAULTS.radius,\n  }\n}\n\nfunction clamp(value: number, limit: number): number {\n  return Math.max(-limit, Math.min(limit, value))\n}\n\nfunction shouldRun(binding: DirectiveBinding<MagneticOptions | undefined>): boolean {\n  return !binding.value?.disabled && !prefersReduced() && canHover()\n}\n\nfunction applyFrame(el: HTMLElement, state: MagneticState): void {\n  state.frame = 0\n  const rect = el.getBoundingClientRect()\n  const cx = rect.left + rect.width / 2\n  const cy = rect.top + rect.height / 2\n  const { strength, radius } = state.options\n  const dx = clamp((state.nextX - cx) * strength, radius)\n  const dy = clamp((state.nextY - cy) * strength, radius)\n  el.style.transform = `translate3d(${dx}px, ${dy}px, 0)`\n}\n\nfunction attach(el: HTMLElement, state: MagneticState): void {\n  if (state.attached)\n    return\n\n  state.onMove = (event: PointerEvent): void => {\n    if (event.pointerType === 'touch')\n      return\n    state.nextX = event.clientX\n    state.nextY = event.clientY\n    if (!state.engaged) {\n      state.engaged = true\n      // Kill the spring-back transition while tracking for a crisp follow.\n      el.style.transition = 'none'\n      el.style.willChange = 'transform'\n    }\n    if (!state.frame)\n      state.frame = requestAnimationFrame(() => applyFrame(el, state))\n  }\n\n  state.onLeave = (): void => {\n    state.engaged = false\n    if (state.frame) {\n      cancelAnimationFrame(state.frame)\n      state.frame = 0\n    }\n    // Spring back to the exact rest position with a bouncy ease.\n    el.style.transition = `transform var(--dz-duration-normal, 200ms) var(--dz-ease-bounce, cubic-bezier(0.68, -0.55, 0.27, 1.55))`\n    el.style.transform = 'translate3d(0, 0, 0)'\n    const done = (): void => {\n      el.style.willChange = ''\n      el.removeEventListener('transitionend', done)\n    }\n    el.addEventListener('transitionend', done)\n  }\n\n  el.addEventListener('pointermove', state.onMove)\n  el.addEventListener('pointerleave', state.onLeave)\n  state.attached = true\n}\n\nfunction detach(el: HTMLElement, state: MagneticState): void {\n  if (!state.attached)\n    return\n  el.removeEventListener('pointermove', state.onMove)\n  el.removeEventListener('pointerleave', state.onLeave)\n  if (state.frame) {\n    cancelAnimationFrame(state.frame)\n    state.frame = 0\n  }\n  state.engaged = false\n  el.style.transform = ''\n  el.style.transition = ''\n  el.style.willChange = ''\n  state.attached = false\n}\n\nexport const vMagnetic: Directive<HTMLElement, MagneticOptions | undefined> = {\n  mounted(el, binding) {\n    const state: MagneticState = {\n      options: parseOptions(binding.value),\n      frame: 0,\n      nextX: 0,\n      nextY: 0,\n      engaged: false,\n      attached: false,\n      onMove: () => {},\n      onLeave: () => {},\n    }\n    states.set(el, state)\n    if (shouldRun(binding))\n      attach(el, state)\n  },\n  updated(el, binding) {\n    const state = states.get(el)\n    if (!state)\n      return\n    state.options = parseOptions(binding.value)\n    if (shouldRun(binding))\n      attach(el, state)\n    else detach(el, state)\n  },\n  unmounted(el) {\n    const state = states.get(el)\n    if (!state)\n      return\n    detach(el, state)\n    states.delete(el)\n  },\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/directives/magnetic.ts"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { vMagnetic } from './directives/magnetic.ts'\nexport { useReducedMotion } from './useReducedMotion.ts'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzButton"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
     "@dzup-ui/tokens"
-  ]
+  ],
+  "meta": {
+    "components": [
+      "DzButton"
+    ],
+    "motionPrimitives": [
+      "useReducedMotion",
+      "vMagnetic"
+    ]
+  }
 }

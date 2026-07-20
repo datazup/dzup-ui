@@ -90,7 +90,7 @@ const rootClass = computed(() => ({
   min-height: 150px;
   overflow: hidden;
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 /* Back layer — oversized so the capped drift never reveals an edge. */
@@ -98,8 +98,8 @@ const rootClass = computed(() => ({
   position: absolute;
   inset: -28% -10%;
   background:
-    radial-gradient(circle at 28% 30%, color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 42%, transparent), transparent 56%),
-    radial-gradient(circle at 74% 72%, color-mix(in oklch, var(--dz-colors-secondary-500, #a855f7) 42%, transparent), transparent 56%);
+    radial-gradient(circle at 28% 30%, color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 42%, transparent), transparent 56%),
+    radial-gradient(circle at 74% 72%, color-mix(in oklch, var(--dz-colors-secondary-500, #7260bd) 42%, transparent), transparent 56%);
   filter: blur(6px);
 }
 

@@ -14,6 +14,8 @@
  * failure degrades gracefully instead of breaking a build or blanking the UI.
  */
 
+import { GITHUB_SLUG } from '../origin.ts'
+
 /** Live metrics fetched from public APIs. `null` = currently unknown. */
 export interface LiveStats {
   /** GitHub repository star count. */
@@ -22,8 +24,16 @@ export interface LiveStats {
   npmDownloads: number | null
 }
 
-/** `owner/repo` for the GitHub stars endpoint (mirrors config `LINKS.github`). */
-export const GITHUB_REPO = 'dzup-ui/dzup-ui'
+/**
+ * `owner/repo` for the GitHub stars endpoint.
+ *
+ * Re-exported from `../origin.ts`, which owns it — the same module that owns
+ * `SITE_ORIGIN`, and for the same reason. This was a second, hand-typed slug
+ * naming the project as its own org, which disagreed with `LINKS.github` and the
+ * footer badge, so every stars fetch — build-time and runtime — asked GitHub for
+ * a repository that does not exist. Derive it; never retype it.
+ */
+export const GITHUB_REPO = GITHUB_SLUG
 
 /** npm package whose weekly downloads stand in for adoption (`LINKS.npm`). */
 export const NPM_PACKAGE = '@dzup-ui/core'

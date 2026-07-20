@@ -48,7 +48,7 @@ import { DzCircularText } from '../../motion/index.ts'
 }
 
 .ring {
-  color: var(--dz-colors-primary-600, #4f46e5);
+  color: var(--dz-colors-primary-600, #004ecb);
   font-size: var(--dz-font-size-sm, 0.875rem);
   font-weight: var(--dz-font-weight-semibold, 600);
   letter-spacing: 0.04em;
@@ -62,12 +62,12 @@ import { DzCircularText } from '../../motion/index.ts'
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--dz-shadow-sm);
-  border: 1px solid color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 18%, transparent);
 }
 
 .hub-label {
-  color: var(--dz-colors-primary-600, #4f46e5);
+  color: var(--dz-colors-primary-600, #004ecb);
 }
 </style>

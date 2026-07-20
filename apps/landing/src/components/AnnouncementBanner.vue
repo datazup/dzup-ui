@@ -101,8 +101,8 @@ function dismiss(): void {
   padding: 8px 48px;
   background: linear-gradient(
     90deg,
-    var(--dz-colors-primary-500, #6366f1),
-    var(--dz-colors-secondary-500, #a855f7)
+    var(--dz-colors-primary-500, #0766ee),
+    var(--dz-colors-secondary-500, #7260bd)
   );
   color: #fff;
   font-size: var(--dz-text-sm, 0.875rem);

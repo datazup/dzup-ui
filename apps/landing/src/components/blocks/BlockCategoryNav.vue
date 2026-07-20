@@ -186,7 +186,7 @@ onBeforeUnmount(() => {
   /* Sit directly beneath the 64px sticky TopNav. */
   top: 64px;
   z-index: 40;
-  background: color-mix(in oklch, var(--dz-background, #fff) 82%, transparent);
+  background: color-mix(in oklch, var(--dz-background, #e7e8e9) 82%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--lp-hairline);
 }
@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
   border-radius: var(--dz-radius-full, 9999px);
   /* Soft tint of the active group's accent — adapts to light/dark by mixing
      against the surface, so the active tab's label stays readable on top. */
-  background: color-mix(in oklch, var(--pill-accent, var(--dz-primary, #4f46e5)) 15%, var(--dz-surface, #fff));
+  background: color-mix(in oklch, var(--pill-accent, var(--dz-primary, #0766ee)) 15%, var(--dz-surface, #ffffff));
   /* Hidden until measured so it never flashes at 0,0 on first paint. */
   opacity: 0;
   transform: translateX(0);
@@ -247,7 +247,7 @@ onBeforeUnmount(() => {
   font-family: inherit;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   white-space: nowrap;
   cursor: pointer;
   transition: color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
@@ -256,16 +256,16 @@ onBeforeUnmount(() => {
 .cat-nav-tab:hover {
   /* Preview the tab's own hue on hover (mixed toward the foreground for
      legibility against the bar). */
-  color: color-mix(in oklch, var(--tab-accent, var(--dz-primary, #4f46e5)) 55%, var(--dz-foreground, #1a202c));
+  color: color-mix(in oklch, var(--tab-accent, var(--dz-primary, #0766ee)) 55%, var(--dz-foreground, #1b1d1f));
 }
 
 .cat-nav-tab.is-active {
   /* Active label tints to the group accent that the pill behind it carries. */
-  color: color-mix(in oklch, var(--pill-accent, var(--dz-primary, #4f46e5)) 70%, var(--dz-foreground, #1a202c));
+  color: color-mix(in oklch, var(--pill-accent, var(--dz-primary, #0766ee)) 70%, var(--dz-foreground, #1b1d1f));
 }
 
 .cat-nav-tab:focus-visible {
-  outline: 2px solid var(--tab-accent, var(--dz-ring, #4f46e5));
+  outline: 2px solid var(--tab-accent, var(--dz-ring, #0766ee));
   outline-offset: 2px;
 }
 

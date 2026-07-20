@@ -189,7 +189,7 @@ const VNodeRenderer = (p: { node: VNode }): VNode => p.node
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 1px solid color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 18%, transparent);
   pointer-events: none;
 }
 

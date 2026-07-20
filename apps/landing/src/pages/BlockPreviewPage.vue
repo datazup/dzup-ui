@@ -93,8 +93,8 @@ watch(() => [route.query.theme, route.query.dir], applyParams)
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  background: var(--dz-background, #ffffff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-background, #e7e8e9);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 /* Width is driven entirely by ?w (max-width); the block stays responsive within

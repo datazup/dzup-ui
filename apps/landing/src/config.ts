@@ -6,6 +6,7 @@
 
 import { COMPONENTS } from './generated/components.ts'
 import { COUNTS } from './generated/counts.ts'
+import { GITHUB_URL } from './origin.ts'
 
 /**
  * Canonical production origin (no trailing slash). The single source of truth for
@@ -20,6 +21,15 @@ import { COUNTS } from './generated/counts.ts'
  * a plain tsx process. Edit it there; read it from either.
  */
 export { SITE_ORIGIN } from './origin.ts'
+
+/**
+ * Canonical GitHub `owner/repo` slug and repository URL. Owned by `./origin.ts`
+ * for the same reason `SITE_ORIGIN` is: build scripts and the live-stats fetcher
+ * need them without pulling this module's generated imports into a tsx process.
+ * Every `github.com` target below is composed from `GITHUB_URL` — the slug is
+ * authored exactly once.
+ */
+export { GITHUB_SLUG, GITHUB_URL } from './origin.ts'
 
 /** Where the free component docs (Storybook) are mounted in production (§3.4). */
 export const STORYBOOK_BASE = '/storybook/'
@@ -122,33 +132,39 @@ export const LINKS = {
   /**
    * External community / source links (TASK-FREE-11). The GitHub org is
    * `datazup` — the git remote, verified live. Every link here must RESOLVE:
-   * the old Discord invite, X handle and a `dzup-ui/dzup-ui` org variant were
-   * all 404s and have been removed/corrected (`orgConsistency.spec.ts` keeps
-   * the org unique; re-add social links only once the destinations exist).
+   * the old Discord invite, X handle and a duplicated org variant were all 404s
+   * and have been removed/corrected (`orgConsistency.spec.ts` keeps the org
+   * unique — including bare `owner/repo` slugs with no host in front of them;
+   * re-add social links only once the destinations exist).
+   *
+   * Composed from `GITHUB_URL`, never retyped.
    */
-  github: 'https://github.com/datazup/dzup-ui',
+  github: GITHUB_URL,
   npm: 'https://www.npmjs.com/package/@dzup-ui/core',
-  license: 'https://github.com/datazup/dzup-ui/blob/main/LICENSE',
+  license: `${GITHUB_URL}/blob/main/LICENSE`,
   /**
    * The on-site release feed (FREE2-10) — build-derived from CHANGELOG.md, so it
    * no longer outsources the highest-intent page to a raw GitHub file. The full
    * git history lives at `changelogHistory` for the long tail.
    */
   changelog: '/changelog',
-  changelogHistory: 'https://github.com/datazup/dzup-ui/blob/main/CHANGELOG.md',
+  changelogHistory: `${GITHUB_URL}/blob/main/CHANGELOG.md`,
   /**
    * Issue tracker — the repo has GitHub Discussions disabled, so this is the
    *  one live "talk to us" surface.
    */
-  issues: 'https://github.com/datazup/dzup-ui/issues',
+  issues: `${GITHUB_URL}/issues`,
 } as const
 
 /**
  * Headline library facts (Appendix A). Surfaced as social proof + breadth.
  *
  * Every field is **derived**, never typed. Hand-maintained counts drift —
- * `freeComponents` used to read `147` while the real figure was `139`, and it was
- * the only count in either app that wasn't a literal. Now they all come from
+ * `freeComponents` used to read `147` against a real figure nowhere near it, and
+ * it was the only count in either app that wasn't a literal. (The real figure is
+ * not quoted here: it moves whenever the catalog does, which is the whole reason
+ * this file stopped carrying one. `generated/counts.ts` holds the live value.)
+ * Now they all come from
  * `generated/counts.ts`, globbed out of the source tree and the real registries
  * by `scripts/build-counts.ts`. Add a component and every number follows.
  *

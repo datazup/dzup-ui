@@ -37,12 +37,12 @@ let seq = 0
 
 // Brand-forward palette so the burst reads as celebratory, not monochrome.
 const PALETTE = [
-  'var(--dz-primary, #6366f1)',
-  'var(--dz-colors-secondary-500, #a855f7)',
-  'var(--dz-success, #16a34a)',
-  'var(--dz-warning, #f59e0b)',
-  'var(--dz-info, #0ea5e9)',
-  'var(--dz-danger, #ef4444)',
+  'var(--dz-primary, #0766ee)',
+  'var(--dz-colors-secondary-500, #7260bd)',
+  'var(--dz-success, #1c882d)',
+  'var(--dz-warning, #bb9300)',
+  'var(--dz-info, #007eb3)',
+  'var(--dz-danger, #cc272e)',
 ]
 
 function burst(): void {

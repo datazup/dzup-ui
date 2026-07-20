@@ -46,9 +46,9 @@ const rows = [
   width: min(280px, 100%);
   height: 188px;
   overflow: hidden;
-  border: 1px solid var(--lp-hairline, var(--dz-border, #e2e8f0));
+  border: 1px solid var(--lp-hairline, var(--dz-border, #b5b7bb));
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .scroller {
@@ -63,7 +63,7 @@ const rows = [
 .row {
   padding: 10px 12px;
   border-radius: var(--dz-radius-md, 6px);
-  background: color-mix(in oklch, var(--dz-colors-primary-500, #6366f1) 10%, var(--dz-muted, #f8fafc));
+  background: color-mix(in oklch, var(--dz-colors-primary-500, #0766ee) 10%, var(--dz-muted, #d3d4d7));
 }
 
 .label {

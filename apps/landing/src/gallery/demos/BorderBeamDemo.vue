@@ -43,7 +43,7 @@ import { DzBorderBeam } from '../../motion/index.ts'
 /* Match the inner card radius to the ring so the band hugs the corners. */
 .inner {
   border-radius: var(--dz-radius-xl, 0.875rem);
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .copy {

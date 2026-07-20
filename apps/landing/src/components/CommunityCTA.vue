@@ -58,8 +58,8 @@ import { LINKS } from '../config.ts'
   overflow: hidden;
   padding: clamp(48px, 8vw, 104px) 24px;
   border-radius: var(--dz-radius-2xl, 1.25rem);
-  border: 1px solid color-mix(in oklch, var(--dz-primary, #6366f1) 22%, var(--lp-hairline));
-  background: var(--dz-surface, #fff);
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 22%, var(--lp-hairline));
+  background: var(--dz-surface, #ffffff);
   box-shadow: var(--lp-shadow-lg), var(--lp-highlight);
   transition: var(--dz-landing-theme-transition);
 }

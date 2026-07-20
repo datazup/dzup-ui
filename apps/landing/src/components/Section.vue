@@ -57,7 +57,7 @@ withDefaults(
 }
 
 .section--surface {
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .section--bordered {

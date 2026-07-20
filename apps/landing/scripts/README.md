@@ -1,5 +1,76 @@
 # apps/landing build scripts
 
+## Every script in this directory
+
+Nothing lives here unexplained. Each row is either wired into a `package.json`
+script or called by CI; a file that is neither belongs in neither the repo nor this
+table (`verify-auth.mts`, a self-labelled "throwaway verification" referenced by
+nothing, was deleted for exactly that reason — TASK-FREE3-05).
+
+| Script | Command | Runs in | Output guarded by |
+|---|---|---|---|
+| `build-registry.ts` | `build:registry` | `build` chain | CI drift diff |
+| `build-animations-registry.ts` | `build:animations-registry` | `build` chain | CI drift diff |
+| `build-component-index.ts` | `build:component-index` | `build` chain | CI drift diff |
+| `build-counts.ts` | `build:counts` | `build` chain | CI drift diff + `claims.spec.ts` |
+| `build-releases.ts` | `build:releases` | `build` chain | CI drift diff |
+| `build-sitemap.ts` | `build:sitemap` | `build` chain | CI drift diff |
+| `build-og-images.ts` | `build:og` | `build` chain | CI drift diff |
+| `build-stats.ts` | `build:stats` | `build` chain | **exempt** — live GitHub/npm APIs |
+| `check-template-previews.ts` | `check:previews` | `build` chain | fails the build itself |
+| `check-bundle-budget.ts` | `check:bundle` | `landing-perf` CI job | fails the job itself |
+| `check-storybook-mounted.ts` | `check:storybook` | `landing-perf` CI job | fails the job itself |
+| `shoot-thumbnails.mts` | `thumbnails` | manual | **exempt** — see below |
+| `shoot-og.mts` | `og` | manual | **exempt** — see below |
+| `build-brand-assets.mts` | `brand-assets` | manual | **exempt** — see below |
+
+"CI drift diff" is the `validate` job's **Landing generated artifacts unchanged**
+step (`.github/workflows/ci.yml`): it re-runs the generator on the runner and
+`git diff --exit-code`s the committed output. Those artifacts are committed on
+purpose (specs import them under a bare `yarn test`, with no build step to write
+them first — see `../src/generated/README.md`), and the guard exists because they
+once shipped stale: 91 registry files still advertised pre-404 anchors.
+
+## Committed screenshot assets — the drift-guard exemption
+
+Three generators commit **binary** artifacts, and all three are deliberately
+**exempt** from the CI drift diff above.
+
+| Generator | Command | Commits | Re-run when |
+|---|---|---|---|
+| `shoot-og.mts` | `yarn og` | `public/og/<id>.png` | a **block's** appearance changes — its SFC, or a shared component/token it renders |
+| `shoot-thumbnails.mts` | `yarn thumbnails` | `public/templates/thumbnails/<slug>{,-dark}.webp` | a **template** is added, or its layout/content/colourway changes (`--missing` fills only the gaps) |
+| `build-brand-assets.mts` | `yarn brand-assets` | `favicon.svg`, `apple-touch-icon.png`, `icon-192/512.png`, `site.webmanifest`, `og-default.png` | the **brand** changes — logo, mark, or primary colour |
+
+**Why they are exempt.** The other generators emit text that is a pure function of
+the source tree, so re-running them on a runner is a fair comparison. These three
+drive Playwright/Chromium: the same source renders to different bytes on a
+different machine (font hinting, GPU rasterisation, libvips build). A byte diff
+would fail on machine noise rather than on content, and a **pixel** diff needs
+per-platform baselines and a tolerance budget that nobody would keep honest. A
+gate that fails for reasons unrelated to the change is a gate people learn to
+ignore, so we do not add one. This is a **decision, not an oversight** — the point
+of writing it down.
+
+**What that costs, and what is checked instead.** The cost is real: a block whose
+visuals changed keeps serving its old OG card and nothing notices. Re-running the
+right generator is a **human step in the PR that changes the visuals** — the table
+above is the checklist. What machines *can* check without pixels is **presence and
+count**, and they do:
+
+- `check-template-previews.ts` (`yarn check:previews`, in the `build` chain) fails
+  the build unless **every** template has both a light and a dark thumbnail;
+- `build-og-images.ts` bakes per-theme totals into `src/generated/ogImages.ts` as
+  `THUMBNAIL_COVERAGE` and prints a coverage line
+  (`templates: 44/44 light, 44/44 dark thumbs`) — that module *is* in the CI drift
+  diff, so the numbers cannot be edited by hand;
+- `src/templates/thumbnailCoverage.spec.ts` asserts coverage never falls **below**
+  that committed high-water mark and that light and dark stay paired — so the next
+  batch of templates cannot quietly ship with half its screenshots missing.
+
+Missing files are still a graceful gap at runtime (a block with no OG card falls
+back to `/og-default.png`), never a broken page.
+
 ## shadcn registry (`build-registry.ts`)
 
 [`build-registry.ts`](./build-registry.ts) generates a **shadcn-CLI-compatible
@@ -82,8 +153,9 @@ with the other.
 
 [`build-animations-registry.ts`](./build-animations-registry.ts) is the **registry
 groundwork for the `/animations` gallery** (docs/animations.md §3.2, §5; Task N10,
-Open Decision D2-3). It projects the `CATALOG` array into the **same shadcn-vue
-registry shape** as the Blocks registry above, emitting into `public/r/animations/`
+Open Decision D2-3). It projects the `CATALOG` array into the **same canonical
+`ui.shadcn.com` registry shape** as the Blocks registry above (TASK-FREE3-02 — not
+the `shadcn-vue.com` fork), emitting into `public/r/animations/`
 — `registry.json` (the index) plus one `<id>.json` per effect. The shaping lives in
 [`src/gallery/registryItem.ts`](../src/gallery/registryItem.ts) (shared with the
 `registryItem.spec.ts` Vitest guard, which also pins that every effect `id` is
@@ -172,6 +244,45 @@ call-to-action for it rather than a fabricated figure. This is covered by
 [`src/lib/liveStats.spec.ts`](../src/lib/liveStats.ts), which drives every failure
 mode (rejection, non-2xx, malformed body) through the helpers.
 
+## Sitemap + robots.txt (`build-sitemap.ts`)
+
+[`build-sitemap.ts`](./build-sitemap.ts) (`yarn build:sitemap`, in the `build`
+chain) writes `public/sitemap.xml` and `public/robots.txt` — one `<url>` per
+indexable route: the static marketing pages plus every `/blocks/<id>` and
+`/templates/<slug>`. The 90-odd detail pages are reachable only via in-page
+anchors/JS, so without this a crawler never finds them. Preview surfaces
+(`/blocks/preview/:id`, `/templates/:slug/preview`) are excluded from the sitemap
+and disallowed in `robots.txt`. Both files are committed and, since TASK-FREE3-05,
+in the CI drift diff.
+
+### Why there is barely any `<lastmod>`
+
+Only the 44 template URLs carry one, from `TemplateMeta.createdAt`. Static routes
+and block pages carry none, on purpose.
+
+The generator used to derive `<lastmod>` for every URL from
+`git log --format=%cs --name-only`. That is not reproducible, which the drift guard
+made intolerable — and it failed three separate ways:
+
+- a **merge commit** lists every file under the pathspec, so one `git merge`
+  re-dated all 140 URLs (measured: 185 changed lines on a tree with no landing
+  source edits at all);
+- `%cs` is the **committer** date, which a rebase rewrites — the same commit is
+  dated differently in two clones;
+- CI clones **shallow** (`fetch-depth: 1`), where `git log` knows almost nothing.
+
+A PR adding a block could not have passed either: the author generates the sitemap
+while the new SFC is still untracked (no lastmod), commits, and CI regenerates it
+*with* one. `<lastmod>` is optional in the sitemap protocol and search engines
+discount an unreliable one, so no signal beats a signal that changes on every
+merge. `createdAt` is declared, committed registry data — stable everywhere.
+
+Removing it also retired the hand-maintained `STATIC_ROUTE_FILES` map (the
+route → page-file table that fed the dates), which would otherwise have needed
+updating on every page rename. `STATIC_ROUTES` itself is still by hand — it changes
+far less often than the registries, and enumerating router internals from a script
+would be more fragile than one visible list.
+
 ## MCP — agent-callable registry (Task G5)
 
 The same generated `registry.json` doubles as an **MCP** endpoint: an MCP-capable
@@ -253,9 +364,10 @@ Re-run `yarn thumbnails` whenever a screenshot would visibly change:
 - a shared component or token the templates use is restyled.
 
 Then commit the updated `public/templates/thumbnails/*.webp` alongside the code
-change. A template with no generated file simply falls back to its registry icon
-in the gallery (the `<img onerror>` handler), so a missing thumbnail is a
-graceful gap, never a broken card.
+change. A missing thumbnail is **not** a graceful gap here: the gallery's old
+`<img onerror>` → registry-icon fallback was retired by FREE2-09, and
+`check-template-previews.ts` now fails the build unless every template has both a
+light and a dark file. `yarn thumbnails --missing` fills only the gaps.
 
 ## What it does
 

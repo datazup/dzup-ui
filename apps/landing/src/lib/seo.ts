@@ -7,7 +7,11 @@
  * `scripts/build-counts.ts` from the templates below. Edit the copy here; never
  * hand-edit the strings in `index.html`. `src/claims.spec.ts` reads the file back
  * off disk and fails if the two disagree — which is how it was caught publishing
- * "147 components" against a real figure of 139.
+ * a hand-typed "147 components" against a real figure that was nothing like it.
+ * (The real figure is deliberately NOT quoted here: a number in a comment drifts
+ * the moment the catalog moves, and three comments in this app had already
+ * drifted apart from each other and from the generated value. See
+ * `COUNTS.documentedComponents` in `generated/counts.ts` for the live one.)
  *
  * Which count goes in the head: the DOCUMENTED one (`COUNTS.documentedComponents`
  * — components with a Storybook page of their own), because that is what a person

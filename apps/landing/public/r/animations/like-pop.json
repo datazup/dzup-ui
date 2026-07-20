@@ -1,21 +1,50 @@
 {
-  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "like-pop",
   "type": "registry:block",
   "title": "Like pop",
   "description": "A like toggle pops in scale and radiates a ring of colour sparks on the rising edge.",
+  "categories": [
+    "feedback"
+  ],
   "files": [
     {
       "path": "like-pop.vue",
       "content": "<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { DzToggleButton } from '@dzup-ui/core'\nimport { Heart } from 'lucide-vue-next'\nimport { DzBurst } from '../motion'\n\nconst liked = ref(false)\n</script>\n\n<template>\n  <!-- Burst fires when active goes false → true; the wrapped toggle owns the press state. -->\n  <DzBurst :active=\"liked\">\n    <DzToggleButton v-model=\"liked\" variant=\"outline\" :tone=\"liked ? 'danger' : 'neutral'\">\n      <template #prefix>\n        <Heart :size=\"18\" :fill=\"liked ? 'currentColor' : 'none'\" />\n      </template>\n      Like\n    </DzToggleButton>\n  </DzBurst>\n</template>",
-      "type": "registry:block"
+      "type": "registry:file",
+      "target": "components/animations/like-pop.vue"
+    },
+    {
+      "path": "motion/components/DzBurst.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CSSProperties } from 'vue'\nimport { onBeforeUnmount, ref, watch } from 'vue'\nimport { useReducedMotion } from '../useReducedMotion.ts'\n\n/**\n * DzBurst — a tactile \"pop + spark\" for affordance toggles like a like/favourite\n * (docs/animations.md §6.9, effect 36). Wrap the toggle control in the default\n * slot and pass the toggle's boolean to `active`; on the rising edge (false → true)\n * the slot overshoots in scale while a ring of colour spokes radiates outward and\n * fades. The `.dz-burst` motion is owned by `tokens.css`; this component drives the\n * pop window and spawns/cleans the spark spokes.\n *\n * Under reduced motion (OS or the page-level toggle) the pop and sparks are skipped\n * — the wrapped control's own pressed/colour state carries the change.\n */\nconst props = withDefaults(\n  defineProps<{\n    /** The toggle's state — a false → true transition fires the burst. */\n    active: boolean\n    /** Number of spark spokes. */\n    spokes?: number\n  }>(),\n  { spokes: 8 },\n)\n\nconst reduced = useReducedMotion()\n\ninterface Spark {\n  id: number\n  style: CSSProperties\n}\n\nconst popping = ref(false)\nconst sparks = ref<Spark[]>([])\nconst timers = new Set<ReturnType<typeof setTimeout>>()\nlet seq = 0\n\n// Warm spark palette (rose + amber) so the spokes read distinctly from the core.\nconst SPARK_COLORS = ['var(--dz-danger, #cc272e)', 'var(--dz-warning, #bb9300)']\n\nfunction fire(): void {\n  if (reduced.value)\n    return\n\n  popping.value = true\n  const batch: Spark[] = []\n  for (let i = 0; i < props.spokes; i += 1) {\n    const angle = (i / props.spokes) * Math.PI * 2 + (Math.random() - 0.5) * 0.3\n    const distance = 22 + Math.random() * 10\n    batch.push({\n      id: (seq += 1),\n      style: {\n        '--tx': `${(Math.cos(angle) * distance).toFixed(1)}px`,\n        '--ty': `${(Math.sin(angle) * distance).toFixed(1)}px`,\n        '--c': SPARK_COLORS[i % SPARK_COLORS.length],\n      } as CSSProperties,\n    })\n  }\n  sparks.value = batch\n\n  const timer = setTimeout(() => {\n    popping.value = false\n    sparks.value = []\n    timers.delete(timer)\n  }, 600)\n  timers.add(timer)\n}\n\nwatch(\n  () => props.active,\n  (now, prev) => {\n    if (now && !prev)\n      fire()\n  },\n)\n\nonBeforeUnmount(() => {\n  timers.forEach(t => clearTimeout(t))\n  timers.clear()\n})\n</script>\n\n<template>\n  <span\n    class=\"dz-burst\"\n    :class=\"{ 'dz-burst--pop': popping, 'dz-burst--reduced': reduced }\"\n  >\n    <span class=\"dz-burst__core\">\n      <slot />\n    </span>\n    <span\n      v-for=\"spark in sparks\"\n      :key=\"spark.id\"\n      class=\"dz-burst__spark\"\n      :style=\"spark.style\"\n      aria-hidden=\"true\"\n    />\n  </span>\n</template>\n",
+      "type": "registry:file",
+      "target": "components/motion/components/DzBurst.vue"
+    },
+    {
+      "path": "motion/useReducedMotion.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport { computed, inject, provide, ref } from 'vue'\n\n/**\n * useReducedMotion — central reduced-motion preference for the animations gallery.\n *\n * Resolves to `true` when EITHER the OS exposes\n * `(prefers-reduced-motion: reduce)` OR a page-level override has been turned on\n * via {@link provideMotionPreference}. This lets the gallery honour the user's\n * system setting while also letting `AnimationsPage` force \"reduced\" live for the\n * demo toggle. SSR-safe (guards `window`/`matchMedia`) and reactive to OS changes.\n */\n\nconst REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'\n\n/** Injection key carrying the page-level reduced-motion override flag. */\nconst MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override')\n\n/**\n * Module-singleton ref tracking the OS `prefers-reduced-motion` setting. One\n * `matchMedia` listener is attached for the whole app lifetime so every consumer\n * shares a single source of truth.\n */\nlet osPreference: Ref<boolean> | null = null\n\nfunction useOsReducedMotion(): Ref<boolean> {\n  if (osPreference)\n    return osPreference\n\n  const state = ref(false)\n  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {\n    const mql = window.matchMedia(REDUCED_MOTION_QUERY)\n    state.value = mql.matches\n    mql.addEventListener('change', (event: MediaQueryListEvent) => {\n      state.value = event.matches\n    })\n  }\n\n  osPreference = state\n  return state\n}\n\n/**\n * provideMotionPreference — install the page-level override that callers of\n * {@link useReducedMotion} downstream will read.\n *\n * Returns the writable override ref so the provider (e.g. `AnimationsPage`) can\n * bind it to a \"Reduce motion\" toggle. When `true`, every descendant resolves\n * reduced motion regardless of the OS setting.\n *\n * @param initial - initial override value (default `false`).\n */\nexport function provideMotionPreference(initial = false): Ref<boolean> {\n  const override = ref(initial)\n  provide(MotionOverrideKey, override)\n  return override\n}\n\n/**\n * useReducedMotion — reactive boolean, `true` when motion should be reduced.\n *\n * Combines the OS setting with any page-level override installed by\n * {@link provideMotionPreference}. Read-only; mutate the override via the ref\n * returned from `provideMotionPreference`.\n */\nexport function useReducedMotion(): Readonly<Ref<boolean>> {\n  const os = useOsReducedMotion()\n  const override = inject(MotionOverrideKey, null)\n  return computed(() => os.value || (override?.value ?? false))\n}\n",
+      "type": "registry:file",
+      "target": "components/motion/useReducedMotion.ts"
+    },
+    {
+      "path": "motion/index.ts",
+      "content": "export { default as DzBurst } from './components/DzBurst.vue'\n",
+      "type": "registry:file",
+      "target": "components/motion/index.ts"
     }
   ],
-  "registryDependencies": [
-    "DzToggleButton"
-  ],
+  "registryDependencies": [],
   "dependencies": [
     "@dzup-ui/core",
-    "@dzup-ui/tokens"
-  ]
+    "@dzup-ui/tokens",
+    "lucide-vue-next"
+  ],
+  "meta": {
+    "components": [
+      "DzToggleButton"
+    ],
+    "motionPrimitives": [
+      "DzBurst"
+    ]
+  }
 }

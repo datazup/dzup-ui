@@ -24,7 +24,30 @@
  * (the lazy component loaders are never invoked).
  *
  * GENERATED, NEVER HAND-EDITED — a pure projection of the route table + registries.
- * Run with `yarn build:sitemap` (from apps/landing); wired ahead of `vite build`.
+ * Run with `yarn build:sitemap` (from apps/landing); wired ahead of `vite build`,
+ * and re-run + `git diff --exit-code`d by the "Landing generated artifacts
+ * unchanged" step in CI (TASK-FREE3-05) — a route added without rebuilding used to
+ * ship a stale committed sitemap silently.
+ *
+ * DETERMINISM IS A HARD REQUIREMENT, because of that guard: the same source tree
+ * must produce the same bytes on any machine, in any checkout. This file used to
+ * emit a `<lastmod>` per URL derived from `git log --format=%cs --name-only`, and
+ * that failed all three ways at once:
+ *   • a MERGE commit lists every file under the pathspec, so one `git merge`
+ *     re-dated all 140 URLs to the merge date (measured: 185 changed lines on a
+ *     tree with no landing source edits at all);
+ *   • `%cs` is the COMMITTER date, which a rebase rewrites — the same commit is
+ *     dated differently in two clones;
+ *   • CI clones shallow (`fetch-depth: 1`), where `git log` knows almost nothing.
+ * A PR adding a block could not have passed either: the dev generates the sitemap
+ * while the new SFC is still untracked (no lastmod), commits, and CI regenerates it
+ * with a lastmod. So the git-derived lastmod — and the STATIC_ROUTE_FILES map that
+ * fed it — are gone.
+ *
+ * What remains is `TemplateMeta.createdAt`: declared, committed registry data, and
+ * therefore stable. Static routes and block pages carry NO `<lastmod>` — the spec
+ * makes it optional, and Google explicitly discounts an unreliable one, so no
+ * signal beats a signal that changes on every merge.
  *
  * FAIL-LOUD: an empty catalog or a load failure exits non-zero and writes nothing,
  * rather than publishing a partial sitemap that hides pages from crawlers.
@@ -32,7 +55,6 @@
 
 import type { BlockDef } from '../src/blocks/registry.ts'
 import type { TemplateMeta } from '../src/templates/registry.ts'
-import { execFileSync } from 'node:child_process'
 import { writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import process from 'node:process'
@@ -55,55 +77,6 @@ const PUBLIC_DIR = resolve(LANDING_ROOT, 'public')
  * would be more fragile than one visible list.
  */
 const STATIC_ROUTES = ['/', '/pro', '/blocks', '/animations', '/themes', '/templates', '/ai', '/compare', '/changelog']
-
-/**
- * The page component behind each static route (relative to the repo root) — the
- * file whose last commit dates the route's `<lastmod>`. Kept beside
- * `STATIC_ROUTES` so the two lists change together.
- */
-const STATIC_ROUTE_FILES: Record<string, string> = {
-  '/': 'apps/landing/src/pages/HomePage.vue',
-  '/pro': 'apps/landing/src/pages/ProPage.vue',
-  '/blocks': 'apps/landing/src/pages/BlocksIndexPage.vue',
-  '/animations': 'apps/landing/src/pages/AnimationsPage.vue',
-  '/themes': 'apps/landing/src/pages/ThemesPage.vue',
-  '/templates': 'apps/landing/src/pages/TemplatesPage.vue',
-  '/ai': 'apps/landing/src/pages/AiIdePage.vue',
-  '/compare': 'apps/landing/src/pages/ComparePage.vue',
-  '/changelog': 'apps/landing/src/pages/ChangelogPage.vue',
-}
-
-/**
- * Last-commit date ('YYYY-MM-DD') per repo-relative file, from ONE git pass:
- * `git log --format=%cs --name-only` prints each commit's date followed by its
- * files, so the first date a file appears under is its most recent change.
- * Derived, never typed — a hand-maintained lastmod is exactly the drift this
- * repo keeps re-learning to avoid. Files git does not know (uncommitted) simply
- * get no `<lastmod>`, which is honest: the sitemap spec makes it optional.
- */
-function gitLastModified(scope: string): Map<string, string> {
-  const dates = new Map<string, string>()
-  let output: string
-  try {
-    output = execFileSync('git', ['log', '--format=%cs', '--name-only', '--', scope], {
-      cwd: resolve(LANDING_ROOT, '..', '..'),
-      encoding: 'utf8',
-      maxBuffer: 64 * 1024 * 1024,
-    })
-  }
-  catch {
-    // Not a git checkout (e.g. an exported tarball) — emit no lastmod at all.
-    return dates
-  }
-  let current = ''
-  for (const line of output.split('\n')) {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(line))
-      current = line
-    else if (line !== '' && !dates.has(line))
-      dates.set(line, current)
-  }
-  return dates
-}
 
 /** Load the real registries via a throwaway Vite SSR server (see file header). */
 async function loadRegistries(): Promise<{ blocks: BlockDef[], templates: TemplateMeta[] }> {
@@ -145,18 +118,14 @@ function urlEntry(path: string, lastmod?: string): string {
 }
 
 function buildSitemap(blocks: BlockDef[], templates: TemplateMeta[]): string {
-  // One git pass dates every landing source file; routes map to their files.
-  const modified = gitLastModified('apps/landing/src')
   const entries = [
-    ...STATIC_ROUTES.map(path => urlEntry(path, modified.get(STATIC_ROUTE_FILES[path] ?? ''))),
-    // Blocks are dated by their SFC's last commit (BlockDef.path is relative to src/blocks/).
-    ...blocks.map(block =>
-      urlEntry(`/blocks/${block.id}`, modified.get(`apps/landing/src/blocks/${block.path.replace(/^\.\//, '')}`)),
-    ),
-    // Templates expose `createdAt` (ISO ship date); fall back to the SFC's last commit.
-    ...templates.map(template =>
-      urlEntry(`/templates/${template.slug}`, template.createdAt ?? modified.get(template.source)),
-    ),
+    // No `<lastmod>` for static routes or blocks — see the determinism note in the
+    // file header. Nothing declared and committed dates them.
+    ...STATIC_ROUTES.map(path => urlEntry(path)),
+    ...blocks.map(block => urlEntry(`/blocks/${block.id}`)),
+    // Templates declare `createdAt` (ISO ship date) in the registry: committed data,
+    // stable across clones, so it is the one lastmod worth emitting.
+    ...templates.map(template => urlEntry(`/templates/${template.slug}`, template.createdAt)),
   ]
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.join('\n')}\n</urlset>\n`
 }

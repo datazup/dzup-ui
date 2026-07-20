@@ -37,7 +37,7 @@ const timers = new Set<ReturnType<typeof setTimeout>>()
 let seq = 0
 
 // Warm spark palette (rose + amber) so the spokes read distinctly from the core.
-const SPARK_COLORS = ['var(--dz-danger, #ef4444)', 'var(--dz-warning, #f59e0b)']
+const SPARK_COLORS = ['var(--dz-danger, #cc272e)', 'var(--dz-warning, #bb9300)']
 
 function fire(): void {
   if (reduced.value)

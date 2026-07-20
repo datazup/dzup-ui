@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DzButton, DzDropdownMenu, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuTrigger } from '@dzup-ui/core'
 import { ChevronDown, Github, Menu, Star, X } from 'lucide-vue-next'
-import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useLiveStats } from '../composables/useLiveStats.ts'
 import { LINKS } from '../config.ts'
@@ -31,7 +31,7 @@ import ThemeToggle from './ThemeToggle.vue'
 
 const route = useRoute()
 
-// The star pill shows the real count once `dzup-ui/dzup-ui` is public; until
+// The star pill shows the real count once the repo is public; until
 // then the GitHub API 404s, `githubStars` stays null, and the pill reads "Star"
 // as a call to action rather than a fabricated figure.
 const { githubStars } = useLiveStats()
@@ -40,6 +40,7 @@ const { githubStars } = useLiveStats()
 const scrolled = ref(false)
 const mobileOpen = ref(false)
 const menuButton = useTemplateRef<HTMLButtonElement>('menuButton')
+const mobileNav = useTemplateRef<HTMLElement>('mobileNav')
 
 function onScroll(): void {
   scrolled.value = window.scrollY > 8
@@ -54,6 +55,39 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 // A drawer that survives navigation is a trap: close it whenever the route lands.
 watch(() => route.fullPath, () => {
   mobileOpen.value = false
+})
+
+/**
+ * Selector for what counts as the drawer's first stop. The drawer holds links
+ * only, but naming the whole focusable set keeps this correct if a control is
+ * ever added — and `:not([tabindex="-1"])` skips anything deliberately taken out
+ * of the tab order.
+ */
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+/**
+ * Opening the drawer moves focus into it (TASK-FREE3-07).
+ *
+ * The toggle sits at the END of the utility cluster, and the drawer renders after
+ * it in the DOM — so without this, a keyboard user who opens the menu is still
+ * standing on the button, and Tab walks them through whatever follows before it
+ * reaches the menu they just asked for. `closeMobile` already returns focus to the
+ * toggle; this is the matching half of that contract.
+ *
+ * `nextTick` because the drawer is `v-if` — it does not exist in the DOM at the
+ * moment `mobileOpen` flips. Deliberately NOT a focus trap: the drawer is
+ * non-modal (the page behind it stays scrollable and interactive), so Tab must be
+ * free to leave it. This is an entry move, nothing more.
+ */
+watch(mobileOpen, (open) => {
+  if (!open)
+    return
+  void nextTick(() => {
+    // Template ref, not getElementById: scoped to THIS instance's drawer, so a
+    // second mounted nav (as in a test file, or a preview embed) cannot be the
+    // one that receives focus.
+    mobileNav.value?.querySelector<HTMLElement>(FOCUSABLE)?.focus()
+  })
 })
 
 function closeMobile(): void {
@@ -164,7 +198,13 @@ const leaves = navLeaves()
 
     <!-- The drawer mirrors the desktop grouping: labelled sections, not a flat
          list, so the same information architecture reads on a phone. -->
-    <nav v-if="mobileOpen" id="mobile-nav" class="mobile-sheet" aria-label="Primary (mobile)">
+    <nav
+      v-if="mobileOpen"
+      id="mobile-nav"
+      ref="mobileNav"
+      class="mobile-sheet"
+      aria-label="Primary (mobile)"
+    >
       <template v-for="entry in NAV" :key="entry.label">
         <div v-if="isGroup(entry)" class="mobile-group">
           <p :id="`mobile-group-${entry.label}`" class="mobile-group-label">
@@ -206,9 +246,9 @@ const leaves = navLeaves()
 }
 
 .nav.scrolled {
-  background: color-mix(in oklch, var(--dz-background, #fff) 80%, transparent);
+  background: color-mix(in oklch, var(--dz-background, #e7e8e9) 80%, transparent);
   backdrop-filter: blur(12px);
-  border-bottom-color: var(--dz-border, #e2e8f0);
+  border-bottom-color: var(--dz-border, #b5b7bb);
 }
 
 .nav-inner {
@@ -226,7 +266,7 @@ const leaves = navLeaves()
   align-items: center;
   gap: 9px;
   text-decoration: none;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   font-weight: 700;
   font-size: var(--dz-text-lg, 1.125rem);
   border-radius: var(--dz-radius-md, 6px);
@@ -239,12 +279,12 @@ const leaves = navLeaves()
   width: 28px;
   height: 28px;
   border-radius: var(--dz-radius-md, 6px);
-  background: linear-gradient(135deg, var(--dz-colors-primary-500, #6366f1), var(--dz-colors-secondary-500, #a855f7));
+  background: linear-gradient(135deg, var(--dz-colors-primary-500, #0766ee), var(--dz-colors-secondary-500, #7260bd));
   color: #fff;
   font-size: 13px;
   font-weight: 800;
   box-shadow:
-    0 2px 8px -2px color-mix(in oklch, var(--dz-primary, #6366f1) 60%, transparent),
+    0 2px 8px -2px color-mix(in oklch, var(--dz-primary, #0766ee) 60%, transparent),
     inset 0 1px 0 color-mix(in oklch, #fff 35%, transparent);
 }
 
@@ -264,7 +304,7 @@ const leaves = navLeaves()
   text-decoration: none;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   background: none;
   border: none;
   cursor: pointer;
@@ -272,13 +312,13 @@ const leaves = navLeaves()
 }
 
 .nav-link:hover {
-  color: var(--dz-foreground, #1a202c);
-  background: var(--dz-muted, #f1f5f9);
+  color: var(--dz-foreground, #1b1d1f);
+  background: var(--dz-muted, #d3d4d7);
 }
 
 /* The active route — and the group that contains it — read as current. */
 .nav-link[aria-current] {
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   font-weight: 600;
 }
 
@@ -316,10 +356,10 @@ const leaves = navLeaves()
   gap: 8px;
   height: 38px;
   padding: 0 12px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-foreground, #1b1d1f);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
   text-decoration: none;
@@ -327,15 +367,15 @@ const leaves = navLeaves()
 }
 
 .star-btn:hover {
-  border-color: var(--dz-border-hover, #cbd5e1);
-  background: var(--dz-muted, #f1f5f9);
+  border-color: var(--dz-border-hover, #b5b7bb);
+  background: var(--dz-muted, #d3d4d7);
 }
 
 .star-label {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .menu-btn {
@@ -344,10 +384,10 @@ const leaves = navLeaves()
   justify-content: center;
   width: 38px;
   height: 38px;
-  border: 1px solid var(--dz-border, #e2e8f0);
+  border: 1px solid var(--dz-border, #b5b7bb);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-surface, #fff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-surface, #ffffff);
+  color: var(--dz-foreground, #1b1d1f);
   cursor: pointer;
 }
 
@@ -356,8 +396,8 @@ const leaves = navLeaves()
   flex-direction: column;
   padding: 8px 16px 16px;
   gap: 10px;
-  background: var(--dz-surface, #fff);
-  border-bottom: 1px solid var(--dz-border, #e2e8f0);
+  background: var(--dz-surface, #ffffff);
+  border-bottom: 1px solid var(--dz-border, #b5b7bb);
 }
 
 .mobile-group-label {
@@ -367,7 +407,7 @@ const leaves = navLeaves()
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .mobile-list {
@@ -382,7 +422,7 @@ const leaves = navLeaves()
 .mobile-list--flat {
   margin-top: 6px;
   padding-top: 10px;
-  border-top: 1px solid var(--dz-border, #e2e8f0);
+  border-top: 1px solid var(--dz-border, #b5b7bb);
 }
 
 .mobile-link {
@@ -392,7 +432,7 @@ const leaves = navLeaves()
   text-decoration: none;
   font-size: var(--dz-text-base, 1rem);
   font-weight: 500;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
   background: none;
   border: none;
   text-align: left;
@@ -400,7 +440,7 @@ const leaves = navLeaves()
 }
 
 .mobile-link:hover {
-  background: var(--dz-muted, #f1f5f9);
+  background: var(--dz-muted, #d3d4d7);
 }
 
 .mobile-link[aria-current="page"] {

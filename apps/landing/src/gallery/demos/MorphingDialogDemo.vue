@@ -146,8 +146,8 @@ const reduced = useReducedMotion()
   height: 36px;
   flex-shrink: 0;
   border-radius: var(--dz-radius-md, 0.5rem);
-  color: var(--dz-primary, #6366f1);
-  background: color-mix(in oklch, var(--dz-primary, #6366f1) 12%, transparent);
+  color: var(--dz-primary, #0766ee);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 12%, transparent);
 }
 
 .glyph--lg {
@@ -157,7 +157,7 @@ const reduced = useReducedMotion()
 }
 
 .card-cue {
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   flex-shrink: 0;
 }
 
@@ -179,13 +179,13 @@ const reduced = useReducedMotion()
   margin: 0;
   font-size: var(--dz-text-lg, 1.125rem);
   font-weight: 600;
-  color: var(--dz-foreground, #0f172a);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .dialog-sub {
   margin: 2px 0 0;
   font-size: var(--dz-text-sm, 0.875rem);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .close-btn {

@@ -92,7 +92,7 @@ function resolveColor(): void {
   if (!host)
     return
   const probe = document.createElement('span')
-  probe.style.color = 'var(--dz-colors-primary-500, #6366f1)'
+  probe.style.color = 'var(--dz-colors-primary-500, #0766ee)'
   probe.style.display = 'none'
   host.appendChild(probe)
   const resolved = getComputedStyle(probe).color

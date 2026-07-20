@@ -207,3 +207,122 @@ describe('useTheme: persistence', () => {
     expect(useTheme().mode.value).toBe('system')
   })
 })
+
+// ---------------------------------------------------------------------------
+// Browser-chrome colour (TASK-FREE3-08)
+// ---------------------------------------------------------------------------
+
+/**
+ * `index.html` ships two `<meta name="theme-color">` tags with
+ * `prefers-color-scheme` media. Those handle the OS preference by themselves —
+ * what they cannot see is this app's MANUAL override, so a visitor on a light OS
+ * who picks dark got a dark page framed in light-blue browser chrome.
+ *
+ * The controller resolves that by switching which tag APPLIES (`media="all"` vs
+ * `media="none"`) rather than by rewriting a colour, which keeps the two brand
+ * literals in the HTML where the drift guard in `@dzup-ui/tooling`
+ * (`landing-token-fallbacks.spec.ts`) can still recompute them from the ramp.
+ */
+describe('useTheme: theme-color meta', () => {
+  /** Rebuild the pair of metas the way index.html ships them. */
+  function installMetas(): void {
+    for (const scheme of ['light', 'dark'] as const) {
+      const meta = document.createElement('meta')
+      meta.name = 'theme-color'
+      meta.media = `(prefers-color-scheme: ${scheme})`
+      meta.dataset.scheme = scheme
+      meta.content = scheme === 'light' ? '#0766ee' : '#004ecb'
+      document.head.appendChild(meta)
+    }
+  }
+
+  function metaFor(scheme: 'light' | 'dark'): HTMLMetaElement {
+    return document.head.querySelector<HTMLMetaElement>(
+      `meta[name="theme-color"][data-scheme="${scheme}"]`,
+    )!
+  }
+
+  beforeEach(() => {
+    document.head.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove())
+    installMetas()
+  })
+
+  it('leaves both metas on their media query in system mode', async () => {
+    const { useTheme } = await freshUseTheme()
+    useTheme()
+
+    // The OS owns the choice here, which is exactly what the media queries express.
+    expect(metaFor('light').media).toBe('(prefers-color-scheme: light)')
+    expect(metaFor('dark').media).toBe('(prefers-color-scheme: dark)')
+  })
+
+  it('forces the dark meta when the user overrides a light OS', async () => {
+    setOsPrefersDark(false)
+    const { useTheme } = await freshUseTheme()
+    const { setMode } = useTheme()
+
+    setMode('dark')
+    await nextTick()
+
+    expect(theme()).toBe('dark')
+    expect(metaFor('dark').media, 'the dark meta must apply unconditionally').toBe('all')
+    expect(
+      metaFor('light').media,
+      'the light meta must stop matching, or the chrome stays light-branded',
+    ).toBe('none')
+  })
+
+  it('forces the light meta when the user overrides a dark OS', async () => {
+    setOsPrefersDark(true)
+    const { useTheme } = await freshUseTheme()
+    const { setMode } = useTheme()
+
+    setMode('light')
+    await nextTick()
+
+    expect(theme()).toBe('light')
+    expect(metaFor('light').media).toBe('all')
+    expect(metaFor('dark').media).toBe('none')
+  })
+
+  it('hands control back to the OS when the user returns to system', async () => {
+    setOsPrefersDark(false)
+    const { useTheme } = await freshUseTheme()
+    const { setMode } = useTheme()
+
+    setMode('dark')
+    await nextTick()
+    setMode('system')
+    await nextTick()
+
+    expect(metaFor('light').media).toBe('(prefers-color-scheme: light)')
+    expect(metaFor('dark').media).toBe('(prefers-color-scheme: dark)')
+  })
+
+  it('never rewrites the brand literals — only which tag applies', async () => {
+    const { useTheme } = await freshUseTheme()
+    const { setMode } = useTheme()
+
+    setMode('dark')
+    await nextTick()
+    setMode('light')
+    await nextTick()
+
+    // The guard recomputes these from tokens.css; the runtime must not touch them.
+    expect(metaFor('light').content).toBe('#0766ee')
+    expect(metaFor('dark').content).toBe('#004ecb')
+  })
+
+  it('tracks an OS flip while in system mode', async () => {
+    setOsPrefersDark(false)
+    const { useTheme } = await freshUseTheme()
+    useTheme()
+
+    setOsPrefersDark(true)
+    await nextTick()
+
+    expect(theme()).toBe('dark')
+    // Still media-driven: system mode must not pin a tag.
+    expect(metaFor('dark').media).toBe('(prefers-color-scheme: dark)')
+  })
+})

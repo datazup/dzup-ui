@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
   left: 0;
   height: 2px;
   border-radius: var(--dz-radius-full, 9999px);
-  background: var(--dz-primary, #4f46e5);
+  background: var(--dz-primary, #0766ee);
   pointer-events: none;
 }
 

@@ -211,7 +211,7 @@ onBeforeUnmount(cancelIntro)
   border-radius: var(--dz-radius-lg, 0.75rem);
   user-select: none;
   touch-action: pan-y;
-  background: var(--dz-surface, #fff);
+  background: var(--dz-surface, #ffffff);
 }
 
 .dz-compare__img {
@@ -271,8 +271,8 @@ onBeforeUnmount(cancelIntro)
   content: '';
   width: 6px;
   height: 6px;
-  border-top: 2px solid var(--dz-colors-neutral-600, #475569);
-  border-left: 2px solid var(--dz-colors-neutral-600, #475569);
+  border-top: 2px solid var(--dz-colors-neutral-600, #585b60);
+  border-left: 2px solid var(--dz-colors-neutral-600, #585b60);
   position: absolute;
 }
 .dz-compare__grip::before {
@@ -284,7 +284,7 @@ onBeforeUnmount(cancelIntro)
 
 /* Visible focus ring on the grip for keyboard users. */
 .dz-compare__handle:focus-visible .dz-compare__grip {
-  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #6366f1);
+  outline: var(--dz-focus-ring-width, 2px) solid var(--dz-primary, #0766ee);
   outline-offset: 2px;
 }
 

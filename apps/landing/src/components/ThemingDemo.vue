@@ -188,8 +188,8 @@ async function copyVars(): Promise<void> {
   padding: 8px 10px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-background, #fff);
-  color: var(--dz-foreground, #1a202c);
+  background: var(--dz-background, #e7e8e9);
+  color: var(--dz-foreground, #1b1d1f);
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 500;
   cursor: pointer;
@@ -202,7 +202,7 @@ async function copyVars(): Promise<void> {
 
 .swatch.active {
   border-color: var(--swatch);
-  background: color-mix(in oklch, var(--swatch) 8%, var(--dz-background, #fff));
+  background: color-mix(in oklch, var(--swatch) 8%, var(--dz-background, #e7e8e9));
 }
 
 .swatch-dot {
@@ -223,25 +223,25 @@ async function copyVars(): Promise<void> {
   justify-content: space-between;
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 .control-label em {
   font-style: normal;
   font-family: var(--dz-font-mono, monospace);
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .range {
   width: 100%;
-  accent-color: var(--dz-primary, #4f46e5);
+  accent-color: var(--dz-primary, #0766ee);
 }
 
 .css-out {
   margin: 0;
   padding: 16px;
   border-radius: var(--dz-radius-md, 6px);
-  background: var(--dz-colors-primary-900, #1e1b3a);
+  background: var(--dz-colors-primary-900, #001551);
   color: oklch(0.92 0.03 260);
   font-family: var(--dz-font-mono, monospace);
   font-size: var(--dz-text-xs, 0.75rem);
@@ -262,8 +262,8 @@ async function copyVars(): Promise<void> {
   min-height: 100%;
   padding: clamp(24px, 4vw, 48px);
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #6366f1) 9%, transparent), transparent 55%),
-    var(--dz-surface, #fff);
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--dz-primary, #0766ee) 9%, transparent), transparent 55%),
+    var(--dz-surface, #ffffff);
 }
 
 .preview-cluster {

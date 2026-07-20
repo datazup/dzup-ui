@@ -49,8 +49,8 @@ const reduced = useReducedMotion()
   /* A subtle gradient surface so the specular sweep has something to catch. */
   background: linear-gradient(
     135deg,
-    color-mix(in oklch, var(--dz-primary, #6366f1) 12%, var(--dz-surface, #fff)),
-    var(--dz-surface, #fff)
+    color-mix(in oklch, var(--dz-primary, #0766ee) 12%, var(--dz-surface, #ffffff)),
+    var(--dz-surface, #ffffff)
   );
 }
 
@@ -58,6 +58,6 @@ const reduced = useReducedMotion()
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--dz-primary, #6366f1);
+  color: var(--dz-primary, #0766ee);
 }
 </style>

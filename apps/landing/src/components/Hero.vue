@@ -59,7 +59,11 @@ onMounted(() => {
 
 onBeforeUnmount(() => mql?.removeEventListener('change', onChange))
 
-const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt']
+// What the library is BUILT WITH — every chip is a fact a visitor can verify
+// from package.json or the token files. 'Nuxt' was here and is not one of those:
+// `@dzup-ui/nuxt` is unpublished and its guide does not exist, so the chip read
+// as an integration claim we can't back. Re-add it at publish. (TASK-FREE3-03)
+const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript']
 </script>
 
 <template>
@@ -166,7 +170,7 @@ const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt'
   letter-spacing: -0.04em;
   line-height: 1.05;
   font-size: clamp(2.4rem, 4vw, 3.1rem);
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 /* v1 ran the second line through `lp-gradient-text`. A gradient headline is the
@@ -175,7 +179,7 @@ const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt'
    ours and paints as plain text. */
 .hero-accent {
   display: block;
-  color: var(--dz-primary-muted-foreground, #4338ca);
+  color: var(--dz-primary-muted-foreground, #0039a3);
 }
 
 .hero-lede {
@@ -183,7 +187,7 @@ const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt'
   max-width: 56ch;
   font-size: clamp(1rem, 1.2vw, 1.15rem);
   line-height: 1.6;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .hero-ctas {
@@ -212,7 +216,7 @@ const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt'
 .hero-visual-hint {
   font-size: var(--dz-text-sm, 0.875rem);
   line-height: 1.45;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   text-wrap: balance;
 }
 
@@ -235,7 +239,7 @@ const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt'
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
 }
 
 .hero-trust-list {
@@ -257,12 +261,12 @@ const trust = ['Tailwind CSS 4', 'Reka UI', 'OKLCH tokens', 'TypeScript', 'Nuxt'
 .hero-trust-list li {
   font-size: var(--dz-text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--dz-muted-foreground, #64748b);
+  color: var(--dz-muted-foreground, #585b60);
   transition: color var(--dz-duration-fast, 150ms);
 }
 
 .hero-trust-list li:hover {
-  color: var(--dz-foreground, #1a202c);
+  color: var(--dz-foreground, #1b1d1f);
 }
 
 /* Two columns only where the frame has room to be legible — the same 1024px
