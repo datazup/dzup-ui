@@ -31,7 +31,8 @@ import { buildHeroShot, FAQS, FEATURES, LOGOS, NAV_LINKS, TESTIMONIALS } from '.
 
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -82,8 +83,12 @@ const planFeatures = [
           <a v-for="link in NAV_LINKS" :key="link.href" :href="link.href">{{ link.label }}</a>
         </nav>
         <div class="nav-cta">
-          <DzButton variant="ghost" tone="neutral" size="sm">Sign in</DzButton>
-          <DzButton variant="solid" tone="primary" size="sm">Start free</DzButton>
+          <DzButton variant="ghost" tone="neutral" size="sm">
+            Sign in
+          </DzButton>
+          <DzButton variant="solid" tone="primary" size="sm">
+            Start free
+          </DzButton>
         </div>
       </div>
     </header>
@@ -92,8 +97,12 @@ const planFeatures = [
       <!-- ── Hero ─────────────────────────────────────────────── -->
       <section class="hero">
         <div class="hero-copy">
-          <DzBadge variant="subtle" tone="primary" size="sm">New · Automated insights</DzBadge>
-          <h1 class="hero-title">Analytics your whole team will actually use</h1>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            New · Automated insights
+          </DzBadge>
+          <h1 class="hero-title">
+            Analytics your whole team will actually use
+          </h1>
           <DzText size="lg" tone="muted" as="p" class="hero-lede">
             Connect a source and ship a live dashboard in minutes. Northwind turns
             raw data into decisions — no pipelines, no analysts in the loop.
@@ -101,10 +110,14 @@ const planFeatures = [
           <div class="hero-actions">
             <DzButton variant="solid" tone="primary" size="lg">
               Start free
-              <template #suffix><ArrowRight :size="18" aria-hidden="true" /></template>
+              <template #suffix>
+                <ArrowRight :size="18" aria-hidden="true" />
+              </template>
             </DzButton>
             <DzButton variant="outline" tone="neutral" size="lg">
-              <template #prefix><Github :size="18" aria-hidden="true" /></template>
+              <template #prefix>
+                <Github :size="18" aria-hidden="true" />
+              </template>
               View on GitHub
             </DzButton>
           </div>
@@ -128,17 +141,25 @@ const planFeatures = [
 
       <!-- ── Logo strip ───────────────────────────────────────── -->
       <section class="logos" aria-label="Trusted by">
-        <DzText size="sm" tone="muted" class="logos-label">Trusted by fast-moving teams</DzText>
+        <DzText size="sm" tone="muted" class="logos-label">
+          Trusted by fast-moving teams
+        </DzText>
         <ul class="logos-row">
-          <li v-for="logo in LOGOS" :key="logo">{{ logo }}</li>
+          <li v-for="logo in LOGOS" :key="logo">
+            {{ logo }}
+          </li>
         </ul>
       </section>
 
       <!-- ── Features ─────────────────────────────────────────── -->
       <section id="features" class="features">
         <div class="section-head">
-          <DzBadge variant="subtle" tone="primary" size="sm">Features</DzBadge>
-          <h2 class="section-title">Everything you need to ship insight</h2>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            Features
+          </DzBadge>
+          <h2 class="section-title">
+            Everything you need to ship insight
+          </h2>
           <DzText size="lg" tone="muted" as="p" class="section-lede">
             Built for the whole company — not just the data team.
           </DzText>
@@ -152,7 +173,9 @@ const planFeatures = [
               <DzHeading :level="3" size="md" weight="semibold" class="feature-title">
                 {{ feature.title }}
               </DzHeading>
-              <DzText size="sm" tone="muted" as="p">{{ feature.body }}</DzText>
+              <DzText size="sm" tone="muted" as="p">
+                {{ feature.body }}
+              </DzText>
             </DzCard>
           </li>
         </ul>
@@ -161,8 +184,12 @@ const planFeatures = [
       <!-- ── Testimonials ─────────────────────────────────────── -->
       <section id="testimonials" class="testimonials">
         <div class="section-head">
-          <DzBadge variant="subtle" tone="primary" size="sm">Loved by teams</DzBadge>
-          <h2 class="section-title">Don’t take our word for it</h2>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            Loved by teams
+          </DzBadge>
+          <h2 class="section-title">
+            Don’t take our word for it
+          </h2>
         </div>
         <DzCarousel :loop="true" aria-label="Customer testimonials" class="quote-carousel">
           <DzCarouselSlide v-for="t in TESTIMONIALS" :key="t.name">
@@ -170,7 +197,9 @@ const planFeatures = [
               <div class="quote-stars" aria-label="Five out of five stars">
                 <Star v-for="n in 5" :key="n" :size="18" fill="currentColor" />
               </div>
-              <blockquote class="quote-body">{{ t.quote }}</blockquote>
+              <blockquote class="quote-body">
+                {{ t.quote }}
+              </blockquote>
               <figcaption class="quote-author">
                 <DzAvatar :fallback="t.initials" size="md" />
                 <span class="quote-meta">
@@ -188,13 +217,19 @@ const planFeatures = [
       <section id="pricing" class="pricing">
         <DzCard variant="elevated" padding="lg" class="pricing-card">
           <div class="pricing-head">
-            <DzBadge variant="solid" tone="primary" size="sm">Most popular</DzBadge>
-            <DzHeading :level="2" size="lg" weight="semibold">Team</DzHeading>
+            <DzBadge variant="solid" tone="primary" size="sm">
+              Most popular
+            </DzBadge>
+            <DzHeading :level="2" size="lg" weight="semibold">
+              Team
+            </DzHeading>
             <p class="price">
               <span class="price-amount">$49</span>
               <span class="price-period">/ month</span>
             </p>
-            <DzText size="sm" tone="muted" as="p">Billed annually · per workspace</DzText>
+            <DzText size="sm" tone="muted" as="p">
+              Billed annually · per workspace
+            </DzText>
           </div>
           <ul class="plan-list">
             <li v-for="f in planFeatures" :key="f">
@@ -210,15 +245,21 @@ const planFeatures = [
       <!-- ── FAQ ──────────────────────────────────────────────── -->
       <section id="faq" class="faq">
         <div class="section-head">
-          <DzBadge variant="subtle" tone="primary" size="sm">FAQ</DzBadge>
-          <h2 class="section-title">Questions, answered</h2>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            FAQ
+          </DzBadge>
+          <h2 class="section-title">
+            Questions, answered
+          </h2>
         </div>
         <div class="faq-wrap">
           <DzAccordion type="single" collapsible variant="separated">
             <DzAccordionItem v-for="f in FAQS" :key="f.value" :value="f.value">
               <DzAccordionTrigger>{{ f.q }}</DzAccordionTrigger>
               <DzAccordionContent>
-                <DzText size="sm" tone="muted" as="p">{{ f.a }}</DzText>
+                <DzText size="sm" tone="muted" as="p">
+                  {{ f.a }}
+                </DzText>
               </DzAccordionContent>
             </DzAccordionItem>
           </DzAccordion>
@@ -228,13 +269,19 @@ const planFeatures = [
       <!-- ── Closing CTA ──────────────────────────────────────── -->
       <section class="cta">
         <div class="cta-inner">
-          <h2 class="cta-title">Ship your first dashboard today</h2>
+          <h2 class="cta-title">
+            Ship your first dashboard today
+          </h2>
           <DzText size="lg" as="p" class="cta-lede">
             Join thousands of teams making faster decisions on live data.
           </DzText>
           <div class="cta-actions">
-            <DzButton variant="solid" tone="neutral" size="lg">Start free</DzButton>
-            <DzButton variant="outline" tone="neutral" size="lg">Book a demo</DzButton>
+            <DzButton variant="solid" tone="neutral" size="lg">
+              Start free
+            </DzButton>
+            <DzButton variant="outline" tone="neutral" size="lg">
+              Book a demo
+            </DzButton>
           </div>
         </div>
       </section>
@@ -245,7 +292,9 @@ const planFeatures = [
         <span class="brand-mark" aria-hidden="true"><Boxes :size="16" /></span>
         <span class="brand-name">Northwind</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Northwind Analytics, Inc. All rights reserved.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Northwind Analytics, Inc. All rights reserved.
+      </DzText>
     </footer>
   </div>
 </template>

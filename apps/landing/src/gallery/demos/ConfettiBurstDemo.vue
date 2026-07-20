@@ -27,7 +27,8 @@ onMounted(() => {
   timer = setTimeout(ship, 520)
 })
 onBeforeUnmount(() => {
-  if (timer !== null) clearTimeout(timer)
+  if (timer !== null)
+    clearTimeout(timer)
 })
 </script>
 
@@ -39,7 +40,9 @@ onBeforeUnmount(() => {
       <span class="badge" aria-hidden="true">
         <PartyPopper :size="22" />
       </span>
-      <DzText weight="semibold" as="p" class="title">Release shipped</DzText>
+      <DzText weight="semibold" as="p" class="title">
+        Release shipped
+      </DzText>
       <DzText size="sm" tone="muted" as="p">
         {{ ships }} deploy{{ ships === 1 ? '' : 's' }} celebrated{{ reduced ? ' · motion reduced' : '' }}
       </DzText>

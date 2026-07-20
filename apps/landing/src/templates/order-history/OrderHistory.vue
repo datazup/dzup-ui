@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DataViewSortOption } from '@dzup-ui/core'
+import type { Order, OrderStatus } from './data.ts'
 /**
  * Order History — Commerce template (docs/templates.md §6.5).
  *
@@ -28,16 +30,15 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import type { DataViewSortOption } from '@dzup-ui/core'
 import { Eye, Leaf, Receipt, RotateCcw } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import {
   ACCOUNT,
+
   ORDERS,
+
   STATUS_FILTERS,
   STATUS_META,
-  type Order,
-  type OrderStatus,
 } from './data.ts'
 
 // ── Filter + search + sort state ─────────────────────────────────
@@ -57,10 +58,10 @@ const filtered = computed<Order[]>(() => {
   const q = query.value.trim().toLowerCase()
   return ORDERS.filter((order) => {
     const inStatus = status.value === 'all' || order.status === status.value
-    const inQuery =
-      !q ||
-      order.id.toLowerCase().includes(q) ||
-      order.items.some((item) => item.name.toLowerCase().includes(q))
+    const inQuery
+      = !q
+        || order.id.toLowerCase().includes(q)
+        || order.items.some(item => item.name.toLowerCase().includes(q))
     return inStatus && inQuery
   })
 })
@@ -79,7 +80,7 @@ function resetFilters(): void {
 // ── Account summary stats ────────────────────────────────────────
 const totalOrders = computed(() => ORDERS.length)
 const totalSpent = computed(() =>
-  ORDERS.filter((o) => o.status !== 'cancelled').reduce((sum, o) => sum + o.total, 0),
+  ORDERS.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + o.total, 0),
 )
 
 // ── Reorder (live "added to cart" confirmation) ──────────────────
@@ -127,23 +128,37 @@ function initial(name: string): string {
       <!-- ── Header + stats ───────────────────────────────────── -->
       <section class="head">
         <div class="head-copy">
-          <DzHeading :level="1" size="2xl" weight="bold">Order history</DzHeading>
+          <DzHeading :level="1" size="2xl" weight="bold">
+            Order history
+          </DzHeading>
           <DzText size="sm" tone="muted" as="p">
             Every order you've placed with us — search, re-order favourites or track a recent one.
           </DzText>
         </div>
         <div class="stats">
           <div class="stat">
-            <DzText size="xs" tone="muted" as="span" class="stat-label">Orders</DzText>
-            <DzText size="lg" weight="bold" as="span">{{ totalOrders }}</DzText>
+            <DzText size="xs" tone="muted" as="span" class="stat-label">
+              Orders
+            </DzText>
+            <DzText size="lg" weight="bold" as="span">
+              {{ totalOrders }}
+            </DzText>
           </div>
           <div class="stat">
-            <DzText size="xs" tone="muted" as="span" class="stat-label">Total spent</DzText>
-            <DzText size="lg" weight="bold" as="span">{{ money(totalSpent) }}</DzText>
+            <DzText size="xs" tone="muted" as="span" class="stat-label">
+              Total spent
+            </DzText>
+            <DzText size="lg" weight="bold" as="span">
+              {{ money(totalSpent) }}
+            </DzText>
           </div>
           <div class="stat">
-            <DzText size="xs" tone="muted" as="span" class="stat-label">Member since</DzText>
-            <DzText size="lg" weight="bold" as="span">{{ ACCOUNT.memberSince }}</DzText>
+            <DzText size="xs" tone="muted" as="span" class="stat-label">
+              Member since
+            </DzText>
+            <DzText size="lg" weight="bold" as="span">
+              {{ ACCOUNT.memberSince }}
+            </DzText>
           </div>
         </div>
       </section>
@@ -179,11 +194,11 @@ function initial(name: string): string {
 
       <!-- ── Orders ───────────────────────────────────────────── -->
       <DzDataView
+        v-model:first="first"
         :items="filtered"
         data-key="id"
         paginator
         :rows="4"
-        v-model:first="first"
         :sort-options="SORT_OPTIONS"
         empty-title="No orders found"
         empty-description="Try a different search term or clear the status filter."
@@ -196,8 +211,12 @@ function initial(name: string): string {
               <div class="order-id">
                 <span class="order-icon" aria-hidden="true"><Receipt :size="18" /></span>
                 <div class="order-id-text">
-                  <DzText weight="semibold" as="span">Order {{ item.id }}</DzText>
-                  <DzText size="sm" tone="muted" as="span">Placed {{ item.date }}</DzText>
+                  <DzText weight="semibold" as="span">
+                    Order {{ item.id }}
+                  </DzText>
+                  <DzText size="sm" tone="muted" as="span">
+                    Placed {{ item.date }}
+                  </DzText>
                 </div>
               </div>
               <DzBadge :tone="STATUS_META[item.status].tone" variant="subtle" size="md">
@@ -211,16 +230,24 @@ function initial(name: string): string {
                   <span class="oi-tile" :style="{ filter: `hue-rotate(${it.hue}deg)` }" aria-hidden="true">
                     {{ initial(it.name) }}
                   </span>
-                  <DzText size="sm" weight="medium" as="span" class="oi-name">{{ it.name }}</DzText>
-                  <DzBadge variant="subtle" tone="neutral" size="sm">×{{ it.qty }}</DzBadge>
+                  <DzText size="sm" weight="medium" as="span" class="oi-name">
+                    {{ it.name }}
+                  </DzText>
+                  <DzBadge variant="subtle" tone="neutral" size="sm">
+                    ×{{ it.qty }}
+                  </DzBadge>
                 </div>
               </DzListItem>
             </DzList>
 
             <div class="order-foot">
               <div class="order-total">
-                <DzText size="sm" tone="muted" as="span">Order total</DzText>
-                <DzText size="lg" weight="bold" as="span">{{ money(item.total) }}</DzText>
+                <DzText size="sm" tone="muted" as="span">
+                  Order total
+                </DzText>
+                <DzText size="lg" weight="bold" as="span">
+                  {{ money(item.total) }}
+                </DzText>
               </div>
               <div class="order-actions">
                 <DzBadge
@@ -233,7 +260,9 @@ function initial(name: string): string {
                   Added to cart
                 </DzBadge>
                 <DzButton variant="outline" tone="neutral" size="sm">
-                  <template #prefix><Eye :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Eye :size="15" aria-hidden="true" />
+                  </template>
                   View order
                 </DzButton>
                 <DzButton
@@ -243,7 +272,9 @@ function initial(name: string): string {
                   :disabled="item.status === 'cancelled'"
                   @click="reorder(item.id)"
                 >
-                  <template #prefix><RotateCcw :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <RotateCcw :size="15" aria-hidden="true" />
+                  </template>
                   Reorder
                 </DzButton>
               </div>
@@ -253,8 +284,12 @@ function initial(name: string): string {
 
         <template #empty>
           <div class="no-results">
-            <DzText tone="muted" as="p">No orders match your search.</DzText>
-            <DzButton variant="outline" size="sm" @click="resetFilters">Clear filters</DzButton>
+            <DzText tone="muted" as="p">
+              No orders match your search.
+            </DzText>
+            <DzButton variant="outline" size="sm" @click="resetFilters">
+              Clear filters
+            </DzButton>
           </div>
         </template>
       </DzDataView>
@@ -265,7 +300,9 @@ function initial(name: string): string {
         <span class="brand-mark" aria-hidden="true"><Leaf :size="16" /></span>
         <span class="brand-name">Verdant Market</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Verdant Market. Good food, sourced well.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Verdant Market. Good food, sourced well.
+      </DzText>
     </footer>
   </div>
 </template>

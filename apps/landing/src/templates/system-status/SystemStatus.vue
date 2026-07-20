@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { Component } from 'vue'
 /**
  * System Status — Utility template (docs/templates.md §6.6).
  *
@@ -23,7 +25,6 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 import {
   Activity,
   Bell,
@@ -34,7 +35,6 @@ import {
   Server,
   Webhook,
 } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 type ServiceStatus = 'operational' | 'degraded' | 'maintenance'
 
@@ -47,7 +47,7 @@ interface Service {
   uptime: number
 }
 
-const STATUS_META: Record<ServiceStatus, { label: string; tone: CanonicalTone }> = {
+const STATUS_META: Record<ServiceStatus, { label: string, tone: CanonicalTone }> = {
   operational: { label: 'Operational', tone: 'success' },
   degraded: { label: 'Degraded', tone: 'warning' },
   maintenance: { label: 'Maintenance', tone: 'info' },
@@ -141,11 +141,15 @@ const INCIDENTS: Incident[] = [
             <span class="brand-name">Northwind</span>
           </span>
           <DzButton variant="outline" tone="neutral" size="sm">
-            <template #prefix><Bell :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Bell :size="15" aria-hidden="true" />
+            </template>
             Subscribe to updates
           </DzButton>
         </div>
-        <DzHeading :level="1" size="2xl" weight="semibold">System status</DzHeading>
+        <DzHeading :level="1" size="2xl" weight="semibold">
+          System status
+        </DzHeading>
       </header>
 
       <!-- ── Overall summary ─────────────────────────────────────── -->
@@ -210,7 +214,9 @@ const INCIDENTS: Incident[] = [
               :tone="incident.tone"
               :status="incident.when"
             >
-              <DzText weight="medium" as="div">{{ incident.title }}</DzText>
+              <DzText weight="medium" as="div">
+                {{ incident.title }}
+              </DzText>
               <DzText size="sm" tone="muted" as="div" class="incident-detail">
                 {{ incident.detail }}
               </DzText>

@@ -16,6 +16,8 @@
  *   DZUP_UI_REGISTRY_URL=http://localhost:4173 npx -y @dzup-ui/mcp
  */
 
+import type { ToolResult } from './tools.js'
+import process from 'node:process'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
@@ -31,16 +33,16 @@ import {
   listTokens,
   PACKAGE_MANAGERS,
   search,
-  type ToolResult,
+
 } from './tools.js'
 
 export const VERSION = '0.1.0'
 
-const INSTRUCTIONS =
-  'dzup-ui is a free, Vue 3, token-driven component library (@dzup-ui/core) plus a shadcn-compatible catalog of copy-paste blocks, full-page templates and design tokens. '
-  + 'Use list_components / get_component to learn a component\'s API before writing markup. '
-  + 'Use list_blocks / list_templates to browse pre-composed sections, then get_block / get_template to fetch the REAL .vue source and the `shadcn add` install command. '
-  + 'Prefer composing from these blocks over hand-rolling UI. All styling is via --dz-* tokens (list_tokens); never hardcode colors.'
+const INSTRUCTIONS
+  = 'dzup-ui is a free, Vue 3, token-driven component library (@dzup-ui/core) plus a shadcn-compatible catalog of copy-paste blocks, full-page templates and design tokens. '
+    + 'Use list_components / get_component to learn a component\'s API before writing markup. '
+    + 'Use list_blocks / list_templates to browse pre-composed sections, then get_block / get_template to fetch the REAL .vue source and the `shadcn add` install command. '
+    + 'Prefer composing from these blocks over hand-rolling UI. All styling is via --dz-* tokens (list_tokens); never hardcode colors.'
 
 /** Register every dzup-ui tool on a server, reading through `client`. */
 export function registerTools(server: McpServer, client: RegistryClient): void {

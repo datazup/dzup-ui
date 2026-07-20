@@ -30,7 +30,9 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
     <div class="rc-bg" aria-hidden="true" />
 
     <div class="rc-inner">
-      <DzBadge variant="subtle" tone="primary" size="sm">Early access</DzBadge>
+      <DzBadge variant="subtle" tone="primary" size="sm">
+        Early access
+      </DzBadge>
 
       <DzHeading id="rc-title" :level="4" size="2xl" weight="bold" align="center" class="rc-title">
         Pro blocks launch in
@@ -73,7 +75,9 @@ const deadline = new Date(Date.now() + (9 * 24 * 60 * 60 + 7 * 60 * 60 + 42 * 60
         of 2,000 early-access spots claimed
       </DzText>
 
-      <DzButton variant="solid" tone="primary" size="lg">Reserve your spot</DzButton>
+      <DzButton variant="solid" tone="primary" size="lg">
+        Reserve your spot
+      </DzButton>
     </div>
   </section>
 </template>

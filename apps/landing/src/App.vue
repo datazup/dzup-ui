@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import AnnouncementBanner from './components/AnnouncementBanner.vue'
 import AppFooter from './components/Footer.vue'
 import GlobalCommandPalette from './components/GlobalCommandPalette.vue'
+import ThemeSync from './components/ThemeSync.ts'
 import TopNav from './components/TopNav.vue'
 import { useTheme } from './composables/useTheme.ts'
 import { supportsViewTransitions, useReducedMotion } from './motion/index.ts'
@@ -79,11 +80,25 @@ router.afterEach((to, from, failure) => {
 
 <template>
   <!-- DzThemeProvider supplies the core theme context (the `dz-theme` injection)
-       so theme-bound components like DzColorModeToggle — used by the nav-bar and
-       footer blocks — resolve and function. It shares the landing useTheme()
-       storage key ('dz-theme') and `data-theme` attribute, so the two stay in
-       sync rather than conflicting. -->
+       so theme-bound components resolve: the nav's own DzColorModeToggle, and the
+       ones inside the nav-bar / footer block previews.
+
+       It shares the landing useTheme() storage key ('dz-theme') and `data-theme`
+       attribute — but sharing a key is NOT synchronisation. The provider keeps its
+       own preference and only reads that key once, at mount, so from then on the
+       two are independent state machines. This comment used to claim they "stay in
+       sync rather than conflicting"; they did not. A visitor who picked light
+       explicitly, then flipped their OS to dark, had the provider — still holding
+       the `system` preference it read at mount — overwrite data-theme back to dark.
+
+       AUTHORITY: the landing useTheme() singleton owns the preference. ThemeSync
+       below makes the provider mirror it (both ways, so a DzColorModeToggle inside
+       a block preview is adopted rather than lost), which leaves the provider's
+       internal attribute write unable to say anything the singleton did not.
+       Rationale and the failing case: composables/useProviderThemeSync.ts, pinned
+       by composables/themeSync.spec.ts. -->
   <DzThemeProvider>
+    <ThemeSync />
     <DzToastProvider>
       <a class="skip-link" href="#main">Skip to content</a>
       <div class="landing-shell">

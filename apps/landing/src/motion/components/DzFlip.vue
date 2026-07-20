@@ -31,7 +31,7 @@ watch(
 </script>
 
 <template>
-  <span :class="{ 'dz-flip': true, 'dz-flip--reduced': reduced }">
+  <span class="dz-flip" :class="{ 'dz-flip--reduced': reduced }">
     <span :key="flipKey" class="dz-flip__face">
       <slot />
     </span>

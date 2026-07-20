@@ -34,9 +34,12 @@ export default defineConfig({
           // them cache across deploys without over-including anything route-specific.
           // Everything else (reka-ui, date-fns, …) is left to Rollup so a route only
           // pays for the primitives it actually imports, keeping the home entry lean.
-          if (!id.includes('node_modules')) return undefined
-          if (id.includes('lucide')) return 'vendor-icons'
-          if (id.includes('@vue') || /node_modules[/\\]vue[/\\]/.test(id)) return 'vendor-vue'
+          if (!id.includes('node_modules'))
+            return undefined
+          if (id.includes('lucide'))
+            return 'vendor-icons'
+          if (id.includes('@vue') || /node_modules[/\\]vue[/\\]/.test(id))
+            return 'vendor-vue'
           return undefined
         },
       },

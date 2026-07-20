@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * 404 — Page Not Found — Utility template (docs/templates.md §6.6).
  *
@@ -10,7 +11,6 @@
  */
 import { DzButton, DzCard, DzDivider, DzResult, DzText } from '@dzup-ui/core'
 import { ArrowRight, Boxes, Compass, Home, LifeBuoy, Search } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 interface QuickLink {
   icon: Component
@@ -49,7 +49,9 @@ const LINKS: QuickLink[] = [
         <span class="brand-name">Northwind</span>
       </span>
 
-      <p class="nf-code" aria-hidden="true">404</p>
+      <p class="nf-code" aria-hidden="true">
+        404
+      </p>
 
       <DzResult
         status="info"
@@ -58,10 +60,14 @@ const LINKS: QuickLink[] = [
       >
         <template #actions>
           <DzButton variant="solid" tone="primary" href="#">
-            <template #prefix><Home :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <Home :size="16" aria-hidden="true" />
+            </template>
             Back to home
           </DzButton>
-          <DzButton variant="outline" tone="neutral" href="#">Contact support</DzButton>
+          <DzButton variant="outline" tone="neutral" href="#">
+            Contact support
+          </DzButton>
         </template>
       </DzResult>
 

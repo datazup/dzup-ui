@@ -9,7 +9,7 @@
  *
  * Hand-typed counts drift: this module exists because "147 components" was in the
  * meta description, the OpenGraph card AND the JSON-LD while the real figure was
- * 139. `src/generated/counts.ts` is regenerated from the filesystem and the real
+ * 137. `src/generated/counts.ts` is regenerated from the filesystem and the real
  * registries, and `apps/landing/src/claims.spec.ts` reads the shipped files back
  * off disk and fails the build if any published claim disagrees with it.
  */
@@ -51,7 +51,7 @@ export const FAMILY_COUNTS: FamilyCount[] = [
   { key: 'forms', label: 'Forms', catalog: 31, documented: 28, examples: ['DzCascader', 'DzCheckbox', 'DzCheckboxGroup', 'DzColorPicker', 'DzCombobox'] },
   { key: 'cards', label: 'Cards', catalog: 6, documented: 3, examples: ['DzCard', 'DzImageCard', 'DzStatCard'] },
   { key: 'data', label: 'Data', catalog: 31, documented: 19, examples: ['DzAccordion', 'DzAnimatedNumber', 'DzCalendar', 'DzChip', 'DzCodeBlock'] },
-  { key: 'feedback', label: 'Feedback', catalog: 20, documented: 16, examples: ['DzAlert', 'DzAsyncBoundary', 'DzBadge', 'DzBlockUI', 'DzEmpty'] },
+  { key: 'feedback', label: 'Feedback', catalog: 20, documented: 14, examples: ['DzAlert', 'DzAsyncBoundary', 'DzBadge', 'DzBlockUI', 'DzEmpty'] },
   { key: 'layout', label: 'Layout', catalog: 21, documented: 17, examples: ['DzAffix', 'DzAppShell', 'DzAspectRatio', 'DzCollapse', 'DzContainer'] },
   { key: 'navigation', label: 'Navigation', catalog: 23, documented: 12, examples: ['DzAnchor', 'DzBackTop', 'DzBreadcrumb', 'DzColorModeToggle', 'DzMegaMenu'] },
   { key: 'overlays', label: 'Overlays', catalog: 33, documented: 10, examples: ['DzCommandPalette', 'DzConfirmDialog', 'DzContextMenu', 'DzDialog', 'DzDropdownMenu'] },
@@ -64,7 +64,7 @@ export const COUNTS = {
   /** Every exported `.vue` under `packages/core/src/components`. @see CATALOG_COUNT_RULE */
   catalogComponents: 205,
   /** Components with a dedicated Storybook page. @see DOCUMENTED_COUNT_RULE */
-  documentedComponents: 139,
+  documentedComponents: 137,
   /** Component families. */
   families: 11,
   /** Copy-paste blocks — `BLOCKS.length` in `src/blocks/registry.ts`. */

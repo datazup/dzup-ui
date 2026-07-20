@@ -2,10 +2,10 @@
 import { DzButton, DzHeading, DzSearchInput, DzSwitch, DzText } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, SearchX, Sparkles } from 'lucide-vue-next'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { LINKS } from '../config.ts'
 import AnimationCard from '../gallery/AnimationCard.vue'
 import { CATALOG, CATEGORIES, categoryAccentStyle } from '../gallery/catalog.ts'
 import { DzAurora, provideMotionPreference, vAutoAnimate } from '../motion/index.ts'
-import { LINKS } from '../config.ts'
 
 /**
  * /animations — the live motion gallery (docs/animations.md §4.3–4.4).
@@ -44,11 +44,11 @@ const activeType = ref('all')
 // Only offer categories that actually have effects, so there are no dead chips
 // while the catalog fills in.
 const populatedCategories = computed(() =>
-  CATEGORIES.filter((cat) => CATALOG.some((entry) => entry.category === cat.id)),
+  CATEGORIES.filter(cat => CATALOG.some(entry => entry.category === cat.id)),
 )
 const categoryChips = computed(() => [{ id: 'all', label: 'All' }, ...populatedCategories.value])
 
-const CATEGORY_LABEL = new Map(CATEGORIES.map((c) => [c.id, c.label]))
+const CATEGORY_LABEL = new Map(CATEGORIES.map(c => [c.id, c.label]))
 
 // Type chips, limited to the types present in the catalog.
 const TYPE_LABELS: Record<string, string> = {
@@ -58,12 +58,12 @@ const TYPE_LABELS: Record<string, string> = {
   css: 'CSS',
 }
 const typeChips = computed(() => {
-  const present = new Set(CATALOG.map((e) => e.type))
+  const present = new Set(CATALOG.map(e => e.type))
   return [
     { id: 'all', label: 'All types' },
     ...(['directive', 'composable', 'component', 'css'] as const)
-      .filter((t) => present.has(t))
-      .map((t) => ({ id: t, label: TYPE_LABELS[t] })),
+      .filter(t => present.has(t))
+      .map(t => ({ id: t, label: TYPE_LABELS[t] })),
   ]
 })
 
@@ -95,9 +95,12 @@ function chipAccent(id: string): Record<string, string> | undefined {
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
   return CATALOG.filter((entry) => {
-    if (activeCategory.value !== 'all' && entry.category !== activeCategory.value) return false
-    if (activeType.value !== 'all' && entry.type !== activeType.value) return false
-    if (!q) return true
+    if (activeCategory.value !== 'all' && entry.category !== activeCategory.value)
+      return false
+    if (activeType.value !== 'all' && entry.type !== activeType.value)
+      return false
+    if (!q)
+      return true
     const haystack = [
       entry.title,
       entry.blurb,
@@ -152,13 +155,14 @@ const EFFECT_HASH_PREFIX = 'effect-'
 // here; onMounted resolves it to a card below.
 if (typeof window !== 'undefined') {
   const initial = window.location.hash.slice(1)
-  if (initial && populatedCategories.value.some((c) => c.id === initial)) {
+  if (initial && populatedCategories.value.some(c => c.id === initial)) {
     activeCategory.value = initial
   }
 }
 
 watch(activeCategory, (id) => {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   const hash = id === 'all' ? '' : `#${id}`
   window.history.replaceState(
     window.history.state,
@@ -175,27 +179,33 @@ let highlightTimer: number | null = null
 // (so a shared link always lands on a visible card), then scroll it into view
 // and trigger the highlight pulse.
 function focusEffectFromHash(): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   const hash = window.location.hash.slice(1)
-  if (!hash.startsWith(EFFECT_HASH_PREFIX)) return
+  if (!hash.startsWith(EFFECT_HASH_PREFIX))
+    return
   const id = hash.slice(EFFECT_HASH_PREFIX.length)
-  const entry = CATALOG.find((e) => e.id === id)
-  if (!entry) return
+  const entry = CATALOG.find(e => e.id === id)
+  if (!entry)
+    return
 
-  if (!filtered.value.some((e) => e.id === id)) {
+  if (!filtered.value.some(e => e.id === id)) {
     query.value = ''
     activeType.value = 'all'
-    if (entry.category !== activeCategory.value) activeCategory.value = 'all'
+    if (entry.category !== activeCategory.value)
+      activeCategory.value = 'all'
   }
 
   nextTick(() => {
     const el = document.getElementById(`effect-${id}`)
-    if (!el) return
+    if (!el)
+      return
     const reduce
       = reduceMotion.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches
     el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })
     highlightedId.value = id
-    if (highlightTimer) window.clearTimeout(highlightTimer)
+    if (highlightTimer)
+      window.clearTimeout(highlightTimer)
     highlightTimer = window.setTimeout(() => (highlightedId.value = null), 2200)
   })
 }
@@ -207,7 +217,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('hashchange', focusEffectFromHash)
-  if (highlightTimer) window.clearTimeout(highlightTimer)
+  if (highlightTimer)
+    window.clearTimeout(highlightTimer)
 })
 </script>
 
@@ -239,10 +250,14 @@ onBeforeUnmount(() => {
       <div class="hero-actions">
         <DzButton variant="solid" tone="primary" as="a" :href="LINKS.components">
           Browse components
-          <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+          <template #suffix>
+            <ArrowRight :size="16" aria-hidden="true" />
+          </template>
         </DzButton>
-        <DzButton variant="outline" tone="neutral" :to="'/'">
-          <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+        <DzButton variant="outline" tone="neutral" to="/">
+          <template #prefix>
+            <ArrowLeft :size="16" aria-hidden="true" />
+          </template>
           Back to home
         </DzButton>
       </div>
@@ -356,9 +371,15 @@ onBeforeUnmount(() => {
 
       <!-- Empty state -->
       <div v-else class="empty">
-        <div class="empty-icon" aria-hidden="true"><SearchX :size="28" /></div>
-        <DzText weight="semibold" as="p" class="empty-title">No animations match those filters</DzText>
-        <DzText size="sm" tone="muted" as="p">Try a different category, type, or search term.</DzText>
+        <div class="empty-icon" aria-hidden="true">
+          <SearchX :size="28" />
+        </div>
+        <DzText weight="semibold" as="p" class="empty-title">
+          No animations match those filters
+        </DzText>
+        <DzText size="sm" tone="muted" as="p">
+          Try a different category, type, or search term.
+        </DzText>
         <DzButton variant="outline" tone="neutral" size="sm" @click="clearFilters">
           Clear filters
         </DzButton>

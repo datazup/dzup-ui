@@ -52,7 +52,8 @@ const FAMILY_COPY: Record<string, { story: string, blurb: string }> = {
 /** The 11 free families (§4.6), counted from the source tree. */
 export const FAMILIES: Family[] = FAMILY_COUNTS.map((family) => {
   const copy = FAMILY_COPY[family.key]
-  if (!copy) throw new Error(`data.ts: family "${family.key}" has no copy — add it to FAMILY_COPY.`)
+  if (!copy)
+    throw new Error(`data.ts: family "${family.key}" has no copy — add it to FAMILY_COPY.`)
   return {
     label: family.label,
     count: family.documented,

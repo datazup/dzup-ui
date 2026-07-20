@@ -8,6 +8,8 @@ The title bar above a product listing — a breadcrumb trail, category heading w
 
 ```vue
 <script setup lang="ts">
+import type { DzSelectItem, SegmentedItem } from '@dzup-ui/core'
+import { DzBreadcrumb, DzBreadcrumbItem, DzHeading, DzSegmented, DzSelect, DzText } from '@dzup-ui/core'
 /**
  * Category header — the title + controls bar above a product listing.
  *
@@ -20,8 +22,6 @@ The title bar above a product listing — a breadcrumb trail, category heading w
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { ref } from 'vue'
-import { DzBreadcrumb, DzBreadcrumbItem, DzHeading, DzSegmented, DzSelect, DzText } from '@dzup-ui/core'
-import type { DzSelectItem, SegmentedItem } from '@dzup-ui/core'
 
 const sortOptions: DzSelectItem[] = [
   { label: 'Featured', value: 'featured' },
@@ -44,15 +44,25 @@ const resultCount = 248
 <template>
   <section class="ch-wrap" aria-labelledby="ch-title">
     <DzBreadcrumb aria-label="Category" class="ch-crumbs">
-      <DzBreadcrumbItem href="#">Home</DzBreadcrumbItem>
-      <DzBreadcrumbItem href="#">Clothing</DzBreadcrumbItem>
-      <DzBreadcrumbItem :current="true">T-Shirts</DzBreadcrumbItem>
+      <DzBreadcrumbItem href="#">
+        Home
+      </DzBreadcrumbItem>
+      <DzBreadcrumbItem href="#">
+        Clothing
+      </DzBreadcrumbItem>
+      <DzBreadcrumbItem :current="true">
+        T-Shirts
+      </DzBreadcrumbItem>
     </DzBreadcrumb>
 
     <div class="ch-title-row">
       <div class="ch-title-group">
-        <DzHeading id="ch-title" :level="4" size="2xl" weight="bold" class="ch-heading">Men’s T-Shirts</DzHeading>
-        <DzText size="sm" tone="muted" as="span">{{ resultCount }} products</DzText>
+        <DzHeading id="ch-title" :level="4" size="2xl" weight="bold" class="ch-heading">
+          Men’s T-Shirts
+        </DzHeading>
+        <DzText size="sm" tone="muted" as="span">
+          {{ resultCount }} products
+        </DzText>
       </div>
 
       <div class="ch-controls">

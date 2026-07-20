@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { DzSkeleton } from '@dzup-ui/core'
-import BlockPreview from './BlockPreview.vue'
 import type { BlockDef } from '../../blocks/registry.ts'
+import { DzSkeleton } from '@dzup-ui/core'
+import { computed } from 'vue'
 import { useLazyMount } from '../../composables/useLazyMount.ts'
+import BlockPreview from './BlockPreview.vue'
 
 /**
  * LazyBlockPreview — viewport-gated wrapper around BlockPreview (Task E5).
@@ -32,7 +32,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'select-component': [name: string]
+  selectComponent: [name: string]
 }>()
 
 const { setEl, shouldRender } = useLazyMount({ eager: props.forceMount })
@@ -43,7 +43,7 @@ const live = computed(() => props.forceMount || shouldRender.value)
 
 <template>
   <div :ref="setEl" class="lazy-block-preview">
-    <BlockPreview v-if="live" :block="block" @select-component="emit('select-component', $event)" />
+    <BlockPreview v-if="live" :block="block" @select-component="emit('selectComponent', $event)" />
 
     <!-- Placeholder: echoes BlockPreview's frame so the swap doesn't shift the page. -->
     <div v-else class="lbp-skeleton" aria-hidden="true">

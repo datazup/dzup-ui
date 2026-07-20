@@ -100,6 +100,31 @@ describe('color-lint: escape hatches', () => {
     expect(story(src)).toEqual([])
   })
 
+  describe('token-check-allow-raw-values', () => {
+    const marker = '// token-check-allow-raw-values — presets are data\n'
+
+    it('exempts raw hex/rgb/hsl values', () => {
+      expect(story(`${marker}const presets = ['#ef4444', 'rgb(0 0 0)', 'hsl(0 0% 0%)']`)).toEqual([])
+    })
+
+    it('still flags a palette class — the raw-values exception never covers one', () => {
+      // The regression this marker exists to prevent: DzColorPicker.stories.ts
+      // asked for an exemption to carry hex presets, and `token-check-disable-file`
+      // handed it a blanket one that hid six `text-gray-*` captions for months
+      // (TASK-FREE2-07). A colour picker has no special claim to a raw gray.
+      expect(story(`${marker}const c = \`<p class="text-gray-400">Default</p>\``)).toEqual(['text-gray-400'])
+    })
+
+    it('still flags an untokenized border', () => {
+      expect(story(`${marker}const c = \`<div class="rounded border"></div>\``)).toEqual(['border'])
+    })
+
+    it('exempts the hex but not the class when a line carries both', () => {
+      const src = `${marker}const c = \`<p class="text-gray-500" style="color:#ef4444"></p>\``
+      expect(story(src)).toEqual(['text-gray-500'])
+    })
+  })
+
   it('honours token-check-disable-next-line', () => {
     const src = '// token-check-disable-next-line — code sample\nconst snippet = `primary: "#3b82f6"`'
     expect(story(src)).toEqual([])

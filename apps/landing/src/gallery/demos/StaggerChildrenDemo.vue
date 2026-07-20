@@ -26,8 +26,12 @@ const cells = [
       padding="md"
       class="cell"
     >
-      <DzText weight="semibold" size="sm" as="div">{{ cell.title }}</DzText>
-      <DzText size="xs" tone="muted" as="div">{{ cell.body }}</DzText>
+      <DzText weight="semibold" size="sm" as="div">
+        {{ cell.title }}
+      </DzText>
+      <DzText size="xs" tone="muted" as="div">
+        {{ cell.body }}
+      </DzText>
     </DzCard>
   </DzStagger>
 </template>

@@ -56,13 +56,19 @@ export const STRENGTH_LEVELS: StrengthLevel[] = [
  * to drive a believable demo meter.
  */
 export function scorePassword(value: string): number {
-  if (!value) return 0
+  if (!value)
+    return 0
   let score = 0
-  if (value.length >= 8) score++
-  if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score++
-  if (/\d/.test(value)) score++
-  if (/[^A-Za-z0-9]/.test(value)) score++
+  if (value.length >= 8)
+    score++
+  if (/[a-z]/.test(value) && /[A-Z]/.test(value))
+    score++
+  if (/\d/.test(value))
+    score++
+  if (/[^A-Z0-9]/i.test(value))
+    score++
   // A very short password can never read as strong, regardless of variety.
-  if (value.length < 6) return Math.min(score, 1)
+  if (value.length < 6)
+    return Math.min(score, 1)
   return score
 }

@@ -47,7 +47,7 @@ export function buildShot(p: ShotPalette): string {
   <circle cx="170" cy="340" r="13" fill="${p.accent}"/>
   <circle cx="430" cy="340" r="13" fill="${p.accent}"/>
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
 // ---------------------------------------------------------------------------
@@ -70,7 +70,7 @@ export const COLOURS: ColourFacet[] = [
 ]
 
 /** Feature facets used by the checkbox filter. */
-export const FEATURES: { value: string; label: string }[] = [
+export const FEATURES: { value: string, label: string }[] = [
   { value: 'anc', label: 'Noise cancelling' },
   { value: 'wireless', label: 'Wireless' },
   { value: 'hires', label: 'Hi-Res audio' },
@@ -78,7 +78,7 @@ export const FEATURES: { value: string; label: string }[] = [
 ]
 
 /** Sort options for the DzSelect. */
-export const SORTS: { value: string; label: string }[] = [
+export const SORTS: { value: string, label: string }[] = [
   { value: 'featured', label: 'Featured' },
   { value: 'price-asc', label: 'Price: low to high' },
   { value: 'price-desc', label: 'Price: high to low' },
@@ -128,12 +128,12 @@ export const PRODUCTS: Product[] = [
 
 /** Resolve a colour value to its token custom-property name. */
 export function colourToken(value: string): string {
-  return COLOURS.find((c) => c.value === value)?.token ?? '--dz-primary'
+  return COLOURS.find(c => c.value === value)?.token ?? '--dz-primary'
 }
 
 /** Resolve a colour value to its display label. */
 export function colourLabel(value: string): string {
-  return COLOURS.find((c) => c.value === value)?.label ?? value
+  return COLOURS.find(c => c.value === value)?.label ?? value
 }
 
 export const BADGE_LABEL: Record<ProductBadge, string> = {

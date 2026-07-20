@@ -20,7 +20,9 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
   <section class="pp" aria-labelledby="media-watermark-title">
     <header class="pp-head">
       <div class="pp-head-text">
-        <DzBadge variant="subtle" tone="warning" size="sm">Confidential</DzBadge>
+        <DzBadge variant="subtle" tone="warning" size="sm">
+          Confidential
+        </DzBadge>
         <DzHeading id="media-watermark-title" :level="4" size="xl" weight="semibold" class="pp-title">
           Shared preview
         </DzHeading>
@@ -28,7 +30,9 @@ const MARK = ['DZUP UI', 'CONFIDENTIAL']
           Marked for the recipient — every export carries an ownership stamp.
         </DzText>
       </div>
-      <DzBadge variant="outline" tone="neutral" size="sm">Read-only</DzBadge>
+      <DzBadge variant="outline" tone="neutral" size="sm">
+        Read-only
+      </DzBadge>
     </header>
 
     <!-- The asset, draped in a tiled, rotated watermark. -->

@@ -36,7 +36,9 @@ import { FolderOpen, Plus } from 'lucide-vue-next'
 
       <template #actions>
         <DzButton variant="solid" tone="primary" size="md">
-          <template #prefix><Plus :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <Plus :size="16" aria-hidden="true" />
+          </template>
           Create project
         </DzButton>
         <DzButton variant="ghost" tone="neutral" size="md">

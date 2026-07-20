@@ -18,7 +18,7 @@ import {
   DzPasswordInput,
   DzText,
 } from '@dzup-ui/core'
-import { ShieldCheck, Zap, Globe } from 'lucide-vue-next'
+import { Globe, ShieldCheck, Zap } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 /**
@@ -58,7 +58,7 @@ const features = [
           </DzText>
         </div>
 
-        <form class="as-form" @submit.prevent aria-labelledby="as-form-title">
+        <form class="as-form" aria-labelledby="as-form-title" @submit.prevent>
           <DzFormField>
             <DzFormLabel>Email</DzFormLabel>
             <DzInput

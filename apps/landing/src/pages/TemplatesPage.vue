@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import type { CommandGroup, CommandItem } from '@dzup-ui/core'
+import type { Component } from 'vue'
+import type { TemplateCategory, TemplateMeta } from '../templates/registry.ts'
 import {
   DzBadge,
   DzButton,
@@ -10,17 +13,13 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 import { ArrowUpRight, Command, LayoutTemplate, X } from 'lucide-vue-next'
-import type { Component } from 'vue'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Section from '../components/Section.vue'
 import { useTheme } from '../composables/useTheme.ts'
-import { TEMPLATE_DARK_THUMB_SLUGS } from '../generated/ogImages.ts'
 import { ICONS } from '../icons.ts'
-import { TEMPLATE_CATEGORIES, TEMPLATE_TAGS, TEMPLATES, isNew } from '../templates/registry.ts'
-import type { TemplateCategory, TemplateMeta } from '../templates/registry.ts'
+import { isNew, TEMPLATE_CATEGORIES, TEMPLATE_TAGS, TEMPLATES, THUMBNAIL_DIR } from '../templates/registry.ts'
 
 /**
  * Templates gallery (/templates) — the marketing-grade index for the free,
@@ -41,24 +40,24 @@ const router = useRouter()
 const count = TEMPLATES.length
 
 /** Slug → template, for O(1) lookups from palette items (keyed by slug). */
-const bySlug = new Map<string, TemplateMeta>(TEMPLATES.map((t) => [t.slug, t]))
+const bySlug = new Map<string, TemplateMeta>(TEMPLATES.map(t => [t.slug, t]))
 
 /** Category key → display label, for the per-card category caption + palette. */
 const categoryLabels = new Map<TemplateCategory, string>(
-  TEMPLATE_CATEGORIES.map((c) => [c.key, c.label]),
+  TEMPLATE_CATEGORIES.map(c => [c.key, c.label]),
 )
 
 /** Category key → decorative palette name, for the per-card accent tint. */
 const categoryAccents = new Map<TemplateCategory, string>(
-  TEMPLATE_CATEGORIES.map((c) => [c.key, c.accent]),
+  TEMPLATE_CATEGORIES.map(c => [c.key, c.accent]),
 )
 
 /** Tag key → display label, so search can match the human label as well as the key. */
-const tagLabelByKey = new Map<string, string>(TEMPLATE_TAGS.map((t) => [t.key, t.label]))
+const tagLabelByKey = new Map<string, string>(TEMPLATE_TAGS.map(t => [t.key, t.label]))
 
 /** Only the tags actually used by a template, in vocabulary order — no dead chips. */
-const tagFilterItems = TEMPLATE_TAGS.filter((tag) =>
-  TEMPLATES.some((t) => t.tags?.includes(tag.key)),
+const tagFilterItems = TEMPLATE_TAGS.filter(tag =>
+  TEMPLATES.some(t => t.tags?.includes(tag.key)),
 )
 
 /**
@@ -90,36 +89,24 @@ function iconFor(key: string): Component {
  */
 const { resolved } = useTheme()
 
-/** Slugs whose thumbnail failed to load — they fall back to the icon glyph. */
-const failedThumbs = ref(new Set<string>())
-
 /** Derive the dark-variant path: `foo/bar.webp` → `foo/bar-dark.webp`. */
 function darkThumb(path: string): string {
   return path.replace(/(\.[a-z0-9]+)$/i, '-dark$1')
 }
 
 /**
- * The thumbnail src for a card under the current theme, or `undefined` when the
- * template has no thumbnail or its image previously failed to load (so the
- * template renders its icon glyph instead).
+ * The thumbnail src for a card under the current theme — always a real screenshot.
  *
- * The dark variant is only used when one was actually shot: `yarn thumbnails` has
- * produced 28 of the 44, and for the other 16 the derived `-dark` path is a 404.
- * Before TASK-FREE-13 that 404 tripped `onThumbError` and the card fell back to its
- * ICON — a template that shows a real screenshot in light mode and a glyph in dark,
- * plus a wasted request per card. Checking the generated manifest instead means
- * those 16 keep their light screenshot in dark mode: imperfect, but a screenshot of
- * the template beats a generic icon, and nothing requests a file that isn't there.
+ * Every registry template is GUARANTEED a light AND dark WebP:
+ * `scripts/check-template-previews.ts` fails the build when either is missing
+ * (FREE2-09). That guarantee retired the old `onerror` → icon-glyph fallback: a
+ * missing preview is now a loud build failure, not a card that silently collapses
+ * to a Lucide glyph (which is what an unfinished template used to render). So this
+ * never returns undefined, and the dark variant always exists in dark mode.
  */
-function thumbFor(t: TemplateMeta): string | undefined {
-  if (!t.thumbnail || failedThumbs.value.has(t.slug)) return undefined
-  const wantsDark = resolved.value === 'dark' && TEMPLATE_DARK_THUMB_SLUGS.has(t.slug)
-  return wantsDark ? darkThumb(t.thumbnail) : t.thumbnail
-}
-
-/** On a thumbnail load error, fall back to the icon glyph for that card. */
-function onThumbError(slug: string): void {
-  failedThumbs.value = new Set(failedThumbs.value).add(slug)
+function thumbFor(t: TemplateMeta): string {
+  const light = t.thumbnail ?? `${THUMBNAIL_DIR}/${t.slug}.webp`
+  return resolved.value === 'dark' ? darkThumb(light) : light
 }
 
 // ---------------------------------------------------------------------------
@@ -134,7 +121,7 @@ function onThumbError(slug: string): void {
  * identical results.
  */
 function haystack(t: TemplateMeta): string {
-  const tagText = (t.tags ?? []).map((k) => tagLabelByKey.get(k) ?? k).join(' ')
+  const tagText = (t.tags ?? []).map(k => tagLabelByKey.get(k) ?? k).join(' ')
   return `${t.name} ${t.blurb} ${(t.tags ?? []).join(' ')} ${tagText}`.toLowerCase()
 }
 
@@ -143,7 +130,8 @@ function haystack(t: TemplateMeta): string {
  * expected pre-normalized (trimmed + lowercased) by the caller; empty matches all.
  */
 function matchesQuery(t: TemplateMeta, q: string): boolean {
-  if (!q) return true
+  if (!q)
+    return true
   return haystack(t).includes(q)
 }
 
@@ -158,13 +146,15 @@ const query = ref('')
 
 let debounceTimer: ReturnType<typeof setTimeout> | undefined
 watch(searchRaw, (value) => {
-  if (debounceTimer !== undefined) clearTimeout(debounceTimer)
+  if (debounceTimer !== undefined)
+    clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
     query.value = value.trim().toLowerCase()
   }, 180)
 })
 onBeforeUnmount(() => {
-  if (debounceTimer !== undefined) clearTimeout(debounceTimer)
+  if (debounceTimer !== undefined)
+    clearTimeout(debounceTimer)
 })
 
 /** Active category; 'all' shows every category. */
@@ -182,8 +172,9 @@ const sortItems = [
 
 function toggleTag(key: string): void {
   const i = activeTags.value.indexOf(key)
-  if (i === -1) activeTags.value = [...activeTags.value, key]
-  else activeTags.value = activeTags.value.filter((k) => k !== key)
+  if (i === -1)
+    activeTags.value = [...activeTags.value, key]
+  else activeTags.value = activeTags.value.filter(k => k !== key)
 }
 
 const hasActiveFilters = computed(
@@ -202,9 +193,11 @@ function clearFilters(): void {
 // ---------------------------------------------------------------------------
 
 function matchesTags(t: TemplateMeta): boolean {
-  // `activeTags` is a plain string[]; compare by value so a row's typed
-  // `TemplateTag[]` doesn't reject the comparison.
-  return activeTags.value.every((tag) => (t.tags ?? []).some((x) => x === tag))
+  // Widen the row's `TemplateTag[]` to string[] for the comparison: `activeTags`
+  // is a plain string[] (filter state is stringly-typed for v-model), and
+  // `TemplateTag[].includes(string)` would not typecheck against the closed union.
+  const tags: string[] = t.tags ?? []
+  return activeTags.value.every(tag => tags.includes(tag))
 }
 
 /**
@@ -213,18 +206,19 @@ function matchesTags(t: TemplateMeta): boolean {
  * it would hold under the current search/tags.
  */
 const queryTagFiltered = computed<TemplateMeta[]>(() =>
-  TEMPLATES.filter((t) => matchesQuery(t, query.value) && matchesTags(t)),
+  TEMPLATES.filter(t => matchesQuery(t, query.value) && matchesTags(t)),
 )
 
 function countFor(key: string): number {
-  if (key === 'all') return queryTagFiltered.value.length
-  return queryTagFiltered.value.filter((t) => t.category === key).length
+  if (key === 'all')
+    return queryTagFiltered.value.length
+  return queryTagFiltered.value.filter(t => t.category === key).length
 }
 
 /** 'all' plus one segment per category, each label carrying its live count. */
 const categoryItems = computed(() => [
   { value: 'all', label: `All (${countFor('all')})` },
-  ...TEMPLATE_CATEGORIES.map((c) => ({ value: c.key, label: `${c.label} (${countFor(c.key)})` })),
+  ...TEMPLATE_CATEGORIES.map(c => ({ value: c.key, label: `${c.label} (${countFor(c.key)})` })),
 ])
 
 function sortTemplates(list: TemplateMeta[], mode: string): TemplateMeta[] {
@@ -240,10 +234,10 @@ function sortTemplates(list: TemplateMeta[], mode: string): TemplateMeta[] {
 }
 
 const visibleTemplates = computed<TemplateMeta[]>(() => {
-  const inCategory =
-    activeCategory.value === 'all'
+  const inCategory
+    = activeCategory.value === 'all'
       ? queryTagFiltered.value
-      : queryTagFiltered.value.filter((t) => t.category === activeCategory.value)
+      : queryTagFiltered.value.filter(t => t.category === activeCategory.value)
   return sortTemplates(inCategory, sortMode.value)
 })
 
@@ -278,13 +272,13 @@ const paletteOpen = ref(false)
 /** Mirrors the palette's own search box (via @search), so its items reuse `matchesQuery`. */
 const paletteQuery = ref('')
 
-const paletteGroups: CommandGroup[] = TEMPLATE_CATEGORIES.map((c) => ({ id: c.key, label: c.label }))
+const paletteGroups: CommandGroup[] = TEMPLATE_CATEGORIES.map(c => ({ id: c.key, label: c.label }))
 
 const paletteItems = computed<CommandItem[]>(() => {
   const q = paletteQuery.value.trim().toLowerCase()
-  return TEMPLATES.filter((t) => matchesQuery(t, q))
+  return TEMPLATES.filter(t => matchesQuery(t, q))
     .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || a.name.localeCompare(b.name))
-    .map((t) => ({
+    .map(t => ({
       id: t.slug,
       // The label is the same haystack `matchesQuery` reads, so the palette's
       // built-in substring filter agrees with our predicate. Display is the
@@ -307,8 +301,8 @@ function onPaletteSelect(item: CommandItem): void {
 }
 
 /** Platform-aware hint on the quick-find button (⌘K on mac, Ctrl K elsewhere). */
-const isMac =
-  typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform ?? '')
+const isMac
+  = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform ?? '')
 const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
 </script>
 
@@ -363,7 +357,9 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
             aria-label="Filter templates by category"
           />
         </div>
-        <DzText size="sm" tone="muted" class="templates-note">Free · MIT</DzText>
+        <DzText size="sm" tone="muted" class="templates-note">
+          Free · MIT
+        </DzText>
       </div>
 
       <!-- Tag chips -->
@@ -411,7 +407,9 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
         :style="tileStyle(template, i)"
       >
         <div class="tile-head">
-          <DzText weight="semibold" as="span">{{ template.name }}</DzText>
+          <DzText weight="semibold" as="span">
+            {{ template.name }}
+          </DzText>
           <div v-if="template.featured || isNewTemplate(template)" class="tile-badges">
             <DzBadge v-if="template.featured" variant="solid" tone="primary" size="sm">
               Featured
@@ -425,8 +423,9 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
         <span class="tile-category">{{ categoryLabels.get(template.category) }}</span>
 
         <div class="tile-preview" aria-hidden="true">
+          <!-- Always a real screenshot: check-template-previews.ts guarantees a
+               light + dark WebP per template, so there is no icon-glyph fallback. -->
           <img
-            v-if="thumbFor(template)"
             class="tile-thumb"
             :src="thumbFor(template)"
             alt=""
@@ -434,9 +433,7 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
             decoding="async"
             width="1600"
             height="1000"
-            @error="onThumbError(template.slug)"
-          />
-          <component :is="iconFor(template.icon)" v-else :size="40" class="tile-icon" />
+          >
         </div>
 
         <DzText size="xs" tone="muted" class="tile-stack" truncate>
@@ -459,7 +456,9 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
       description="Nothing matches this combination of search, category and tags — try loosening one."
     >
       <template #actions>
-        <DzButton variant="outline" size="sm" @click="clearFilters">Clear filters</DzButton>
+        <DzButton variant="outline" size="sm" @click="clearFilters">
+          Clear filters
+        </DzButton>
       </template>
     </DzEmpty>
 
@@ -504,7 +503,9 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
           New
         </DzBadge>
       </template>
-      <template #empty>No templates match your search.</template>
+      <template #empty>
+        No templates match your search.
+      </template>
     </DzCommandPalette>
   </Section>
 </template>
@@ -689,10 +690,6 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tile-icon {
-  color: var(--tile-accent);
 }
 
 .tile-thumb {

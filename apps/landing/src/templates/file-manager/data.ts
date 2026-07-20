@@ -1,3 +1,5 @@
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { Component } from 'vue'
 /**
  * File Manager — co-located sample data (docs/templates.md §6.4).
  *
@@ -17,8 +19,6 @@ import {
   FileVideo,
   Folder,
 } from 'lucide-vue-next'
-import type { Component } from 'vue'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 /** A folder node for the sidebar DzTree (structurally a `TreeNode`). */
 export interface FolderNode {
@@ -103,7 +103,8 @@ export const FOLDER_INDEX: Record<string, FolderInfo> = {}
 function indexTree(nodes: FolderNode[], parent: string | null): void {
   for (const node of nodes) {
     FOLDER_INDEX[node.key] = { label: node.label, parent }
-    if (node.children) indexTree(node.children, node.key)
+    if (node.children)
+      indexTree(node.children, node.key)
   }
 }
 indexTree(FOLDER_TREE, null)
@@ -121,7 +122,7 @@ const FILE_TYPES = {
   code: { type: 'Code', icon: FileCode, tone: 'info' as const },
   archive: { type: 'Archive', icon: FileArchive, tone: 'neutral' as const },
   text: { type: 'Text', icon: File, tone: 'neutral' as const },
-} satisfies Record<string, { type: string; icon: Component; tone: CanonicalTone }>
+} satisfies Record<string, { type: string, icon: Component, tone: CanonicalTone }>
 
 /** Build a file entry from a known type. */
 function file(name: string, kind: keyof typeof FILE_TYPES, size: string, modified: string): FileEntry {

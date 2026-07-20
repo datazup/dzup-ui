@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { Component } from 'vue'
+import { DzBadge, DzButton, DzCard, DzHeading, DzNotification, DzText } from '@dzup-ui/core'
+import { BellOff, GitPullRequestArrow, MessageSquare, TriangleAlert, UserPlus } from 'lucide-vue-next'
 /**
  * Notification center — a dismissible feed of persistent DzNotifications.
  *
@@ -12,10 +16,6 @@
  * components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { computed, ref } from 'vue'
-import type { Component } from 'vue'
-import { BellOff, GitPullRequestArrow, MessageSquare, TriangleAlert, UserPlus } from 'lucide-vue-next'
-import { DzBadge, DzButton, DzCard, DzHeading, DzNotification, DzText } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface Note {
   id: number
@@ -37,7 +37,7 @@ const notes = ref<Note[]>([...SEED])
 const count = computed(() => notes.value.length)
 
 function dismiss(id: number) {
-  notes.value = notes.value.filter((note) => note.id !== id)
+  notes.value = notes.value.filter(note => note.id !== id)
 }
 function clearAll() {
   notes.value = []
@@ -52,10 +52,16 @@ function restore() {
     <DzCard variant="outlined" padding="none">
       <header class="nc-head">
         <div class="nc-head-text">
-          <DzHeading id="nc-title" :level="4" size="md" weight="semibold" class="nc-title">Notifications</DzHeading>
-          <DzBadge v-if="count" variant="subtle" tone="primary" size="sm">{{ count }} new</DzBadge>
+          <DzHeading id="nc-title" :level="4" size="md" weight="semibold" class="nc-title">
+            Notifications
+          </DzHeading>
+          <DzBadge v-if="count" variant="subtle" tone="primary" size="sm">
+            {{ count }} new
+          </DzBadge>
         </div>
-        <DzButton v-if="count" size="sm" variant="ghost" tone="neutral" @click="clearAll">Clear all</DzButton>
+        <DzButton v-if="count" size="sm" variant="ghost" tone="neutral" @click="clearAll">
+          Clear all
+        </DzButton>
       </header>
 
       <div v-if="count" class="nc-list">
@@ -70,15 +76,21 @@ function restore() {
           @close="dismiss(note.id)"
         >
           <template v-if="note.action" #actions>
-            <DzButton size="sm" variant="outline" :tone="note.tone">{{ note.action }}</DzButton>
+            <DzButton size="sm" variant="outline" :tone="note.tone">
+              {{ note.action }}
+            </DzButton>
           </template>
         </DzNotification>
       </div>
 
       <div v-else class="nc-empty">
         <BellOff class="nc-empty-icon" aria-hidden="true" />
-        <DzText size="sm" tone="muted" as="p" class="nc-empty-text">You're all caught up.</DzText>
-        <DzButton size="sm" variant="outline" tone="neutral" @click="restore">Restore notifications</DzButton>
+        <DzText size="sm" tone="muted" as="p" class="nc-empty-text">
+          You're all caught up.
+        </DzText>
+        <DzButton size="sm" variant="outline" tone="neutral" @click="restore">
+          Restore notifications
+        </DzButton>
       </div>
     </DzCard>
   </section>

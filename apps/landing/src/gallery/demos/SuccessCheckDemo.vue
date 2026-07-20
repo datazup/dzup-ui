@@ -18,7 +18,8 @@ const phase = ref<Phase>('idle')
 let timer: ReturnType<typeof setTimeout> | null = null
 
 function submit(): void {
-  if (phase.value === 'submitting') return
+  if (phase.value === 'submitting')
+    return
   phase.value = 'submitting'
   timer = setTimeout(() => {
     phase.value = 'done'
@@ -27,7 +28,8 @@ function submit(): void {
 
 function reset(): void {
   phase.value = 'idle'
-  if (timer !== null) clearTimeout(timer)
+  if (timer !== null)
+    clearTimeout(timer)
   // Defer so DzSuccessCheck unmounts before the next draw re-triggers cleanly.
   timer = setTimeout(submit, 360)
 }
@@ -36,7 +38,8 @@ onMounted(() => {
   timer = setTimeout(submit, 500)
 })
 onBeforeUnmount(() => {
-  if (timer !== null) clearTimeout(timer)
+  if (timer !== null)
+    clearTimeout(timer)
 })
 </script>
 
@@ -46,14 +49,22 @@ onBeforeUnmount(() => {
       <!-- Resolved state: the drawn check + confirmation copy. -->
       <div v-if="phase === 'done'" key="done" class="result">
         <DzSuccessCheck :active="true" :size="68" tone="success" label="Payment confirmed" />
-        <DzText weight="semibold" as="p" class="result-title">Payment confirmed</DzText>
-        <DzText size="sm" tone="muted" as="p">$29.00 · Pro plan, billed monthly</DzText>
-        <DzButton size="sm" variant="text" tone="neutral" @click="reset">Run again</DzButton>
+        <DzText weight="semibold" as="p" class="result-title">
+          Payment confirmed
+        </DzText>
+        <DzText size="sm" tone="muted" as="p">
+          $29.00 · Pro plan, billed monthly
+        </DzText>
+        <DzButton size="sm" variant="text" tone="neutral" @click="reset">
+          Run again
+        </DzButton>
       </div>
 
       <!-- Pre-submit: the confirm button. -->
       <div v-else key="form" class="form">
-        <DzText size="sm" tone="muted" as="p" class="form-lede">Upgrade to Pro · $29/mo</DzText>
+        <DzText size="sm" tone="muted" as="p" class="form-lede">
+          Upgrade to Pro · $29/mo
+        </DzText>
         <DzButton
           variant="solid"
           tone="primary"

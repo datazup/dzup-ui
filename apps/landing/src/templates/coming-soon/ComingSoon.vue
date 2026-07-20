@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * Coming Soon — Utility template (docs/templates.md §6.3).
  *
@@ -14,7 +15,6 @@
  */
 import { DzBadge, DzButton, DzCard, DzCountdown, DzDivider, DzHeading, DzInput, DzText } from '@dzup-ui/core'
 import { ArrowRight, Boxes, CheckCircle2, Github, Linkedin, Rocket, Twitter } from 'lucide-vue-next'
-import type { Component } from 'vue'
 import { ref } from 'vue'
 
 /**
@@ -40,7 +40,8 @@ const SOCIALS: Social[] = [
 const email = ref('')
 const subscribed = ref(false)
 function subscribe(): void {
-  if (!email.value.trim()) return
+  if (!email.value.trim())
+    return
   subscribed.value = true
 }
 </script>
@@ -121,14 +122,18 @@ function subscribe(): void {
             />
             <DzButton type="submit" variant="solid" tone="primary">
               Notify me
-              <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+              <template #suffix>
+                <ArrowRight :size="16" aria-hidden="true" />
+              </template>
             </DzButton>
           </form>
         </template>
         <div v-else class="notify-done">
           <span class="notify-done-icon" aria-hidden="true"><CheckCircle2 :size="22" /></span>
           <div class="notify-done-meta">
-            <DzText weight="semibold" as="div">You’re on the list</DzText>
+            <DzText weight="semibold" as="div">
+              You’re on the list
+            </DzText>
             <DzText size="sm" tone="muted" as="p">
               We’ll email <strong>{{ email }}</strong> the moment we launch.
             </DzText>

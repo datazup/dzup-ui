@@ -137,5 +137,5 @@ export function buildThumb(p: ThumbPalette, hue: number): string {
     <circle cx="112" cy="104" r="14" fill="${p.primary}" opacity="0.75"/>
   </g>
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }

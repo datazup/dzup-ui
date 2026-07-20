@@ -26,7 +26,9 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
     <div class="hs-inner">
       <!-- Left: copy column -->
       <div class="hs-copy">
-        <DzBadge variant="subtle" tone="primary" size="sm">Product · v2.0</DzBadge>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          Product · v2.0
+        </DzBadge>
 
         <DzHeading id="hero-split-title" :level="4" size="3xl" weight="bold" class="hs-title">
           Your data, beautifully organised
@@ -38,8 +40,12 @@ import { DzAspectRatio, DzBadge, DzButton, DzHeading, DzImage, DzText } from '@d
         </DzText>
 
         <div class="hs-actions">
-          <DzButton variant="solid" tone="primary" size="lg">Start for free</DzButton>
-          <DzButton variant="outline" tone="neutral" size="lg">See a demo</DzButton>
+          <DzButton variant="solid" tone="primary" size="lg">
+            Start for free
+          </DzButton>
+          <DzButton variant="outline" tone="neutral" size="lg">
+            See a demo
+          </DzButton>
         </div>
       </div>
 

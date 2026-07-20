@@ -1,6 +1,5 @@
 <script lang="ts">
 // Module-scoped counter for per-instance view-transition-name uniqueness.
-let morphUid = 0
 </script>
 
 <script setup lang="ts">
@@ -53,6 +52,8 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:open': [open: boolean] }>()
 
+let morphUid = 0
+
 // Stable, unique view-transition-name per instance so two morphs on a page never
 // pair their snapshots with each other.
 const uid = ++morphUid
@@ -73,24 +74,28 @@ const canVt = computed(() => supportsViewTransitions() && !reduced.value)
 // `vtName` box in each of the before/after snapshots → a clean morph, no clash.
 const triggerStyle = computed<Record<string, string>>(() => {
   const style: Record<string, string> = {}
-  if (canVt.value && !open.value) style.viewTransitionName = vtName
+  if (canVt.value && !open.value)
+    style.viewTransitionName = vtName
   return style
 })
 const panelStyle = computed<Record<string, string>>(() => {
   const style: Record<string, string> = {}
-  if (canVt.value) style.viewTransitionName = vtName
+  if (canVt.value)
+    style.viewTransitionName = vtName
   return style
 })
 
 function findPanel(): HTMLElement | null {
-  if (typeof document === 'undefined') return null
+  if (typeof document === 'undefined')
+    return null
   return document.querySelector<HTMLElement>(`.${panelClass}`)
 }
 
 /** Invert `el` from its current box back to `from`, then play to rest (FLIP). */
 function flip(el: HTMLElement, from: DOMRect, reverse = false): Promise<void> {
   const to = el.getBoundingClientRect()
-  if (!to.width || !to.height) return Promise.resolve()
+  if (!to.width || !to.height)
+    return Promise.resolve()
   const dx = from.left + from.width / 2 - (to.left + to.width / 2)
   const dy = from.top + from.height / 2 - (to.top + to.height / 2)
   const sx = from.width / to.width
@@ -109,7 +114,8 @@ function flip(el: HTMLElement, from: DOMRect, reverse = false): Promise<void> {
 
 /** Expand the trigger card into the dialog. */
 function expand(): void {
-  if (open.value) return
+  if (open.value)
+    return
 
   if (canVt.value) {
     void startViewTransition(async () => {
@@ -126,7 +132,8 @@ function expand(): void {
     emit('update:open', true)
     void nextTick(() => {
       const panel = findPanel()
-      if (panel && from) void flip(panel, from)
+      if (panel && from)
+        void flip(panel, from)
     })
     return
   }
@@ -137,7 +144,8 @@ function expand(): void {
 
 /** Collapse the dialog back to the trigger card. Runs the morph-out, then closes. */
 function collapse(): void {
-  if (!open.value) return
+  if (!open.value)
+    return
 
   if (canVt.value) {
     void startViewTransition(async () => {
@@ -168,8 +176,10 @@ function collapse(): void {
 // the morph-out plays before the panel unmounts; opening only ever happens via
 // our own trigger (expand), so a true here is a no-op safeguard.
 function onDialogUpdate(value: boolean): void {
-  if (!value && open.value) collapse()
-  else if (value && !open.value) expand()
+  if (!value && open.value)
+    collapse()
+  else if (value && !open.value)
+    expand()
 }
 
 defineExpose({ expand, collapse })

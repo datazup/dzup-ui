@@ -19,13 +19,15 @@ const sent = ref(false)
 /** Mask the local part for the confirmation copy: "a••@northwind.io". */
 const maskedEmail = computed(() => {
   const [local, domain] = email.value.split('@')
-  if (!domain || !local) return email.value
+  if (!domain || !local)
+    return email.value
   const head = local.slice(0, 1)
   return `${head}${'•'.repeat(Math.max(2, local.length - 1))}@${domain}`
 })
 
 function submit(): void {
-  if (!email.value.includes('@')) return
+  if (!email.value.includes('@'))
+    return
   sent.value = true
 }
 
@@ -45,7 +47,9 @@ function resend(): void {
 
       <!-- State 1: request a reset link. -->
       <DzCard v-if="!sent" variant="elevated" padding="lg" class="rp-card">
-        <div class="rp-icon" aria-hidden="true"><KeyRound :size="22" /></div>
+        <div class="rp-icon" aria-hidden="true">
+          <KeyRound :size="22" />
+        </div>
 
         <header class="rp-head">
           <DzHeading :level="1" size="xl" weight="semibold" align="center">
@@ -84,8 +88,12 @@ function resend(): void {
             <span class="rp-result-icon"><MailCheck :size="28" /></span>
           </template>
           <template #actions>
-            <DzButton variant="solid" tone="primary" href="#">Open email app</DzButton>
-            <DzButton variant="outline" tone="neutral" @click="resend">Resend link</DzButton>
+            <DzButton variant="solid" tone="primary" href="#">
+              Open email app
+            </DzButton>
+            <DzButton variant="outline" tone="neutral" @click="resend">
+              Resend link
+            </DzButton>
           </template>
         </DzResult>
 

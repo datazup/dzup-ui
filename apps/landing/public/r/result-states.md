@@ -8,6 +8,8 @@ Full-page outcome screens from DzResult — a segmented switch across the succes
 
 ```vue
 <script setup lang="ts">
+import type { ResultStatus } from '@dzup-ui/core'
+import { DzButton, DzCard, DzResult } from '@dzup-ui/core'
 /**
  * Result states — full-page outcome screens from DzResult.
  *
@@ -20,8 +22,6 @@ Full-page outcome screens from DzResult — a segmented switch across the succes
  * components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { computed, ref } from 'vue'
-import { DzButton, DzCard, DzResult } from '@dzup-ui/core'
-import type { ResultStatus } from '@dzup-ui/core'
 
 interface ResultContent {
   status: ResultStatus
@@ -40,7 +40,7 @@ const RESULTS: ResultContent[] = [
 const [fallback] = RESULTS as [ResultContent, ...ResultContent[]]
 const active = ref<ResultStatus>('success')
 const current = computed<ResultContent>(
-  () => RESULTS.find((result) => result.status === active.value) ?? fallback,
+  () => RESULTS.find(result => result.status === active.value) ?? fallback,
 )
 </script>
 
@@ -69,11 +69,21 @@ const current = computed<ResultContent>(
         :description="current.description"
       >
         <template #actions>
-          <DzButton v-if="current.status === 'success'" tone="primary">View order</DzButton>
-          <DzButton v-else-if="current.status === 'error'" tone="primary">Try again</DzButton>
-          <DzButton v-else-if="current.status === 'warning'" tone="primary">Stay signed in</DzButton>
-          <DzButton v-else tone="primary">View status page</DzButton>
-          <DzButton variant="outline" tone="neutral">Back to home</DzButton>
+          <DzButton v-if="current.status === 'success'" tone="primary">
+            View order
+          </DzButton>
+          <DzButton v-else-if="current.status === 'error'" tone="primary">
+            Try again
+          </DzButton>
+          <DzButton v-else-if="current.status === 'warning'" tone="primary">
+            Stay signed in
+          </DzButton>
+          <DzButton v-else tone="primary">
+            View status page
+          </DzButton>
+          <DzButton variant="outline" tone="neutral">
+            Back to home
+          </DzButton>
         </template>
       </DzResult>
     </DzCard>

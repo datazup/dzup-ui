@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import autoAnimate from '@formkit/auto-animate'
 import type { AnimationController } from '@formkit/auto-animate'
 import { DzAvatar, DzBadge, DzButton, DzListItem } from '@dzup-ui/core'
+import autoAnimate from '@formkit/auto-animate'
 import { Plus, Shuffle, X } from 'lucide-vue-next'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useReducedMotion } from '../../motion/index.ts'
@@ -51,23 +51,27 @@ const reduced = useReducedMotion()
 let controller: AnimationController | undefined
 
 onMounted(() => {
-  if (!listRef.value) return
+  if (!listRef.value)
+    return
   controller = autoAnimate(listRef.value)
-  if (reduced.value) controller.disable()
+  if (reduced.value)
+    controller.disable()
 })
 
-watch(reduced, (r) => (r ? controller?.disable() : controller?.enable()))
+watch(reduced, r => (r ? controller?.disable() : controller?.enable()))
 onBeforeUnmount(() => controller?.disable())
 
 function add(): void {
-  if (members.value.length >= POOL.length) return
-  const taken = new Set(members.value.map((m) => m.name))
-  const next = POOL.find((m) => !taken.has(m.name))
-  if (next) members.value.splice(0, 0, { ...next, id: nextId++ })
+  if (members.value.length >= POOL.length)
+    return
+  const taken = new Set(members.value.map(m => m.name))
+  const next = POOL.find(m => !taken.has(m.name))
+  if (next)
+    members.value.splice(0, 0, { ...next, id: nextId++ })
 }
 
 function remove(id: number): void {
-  members.value = members.value.filter((m) => m.id !== id)
+  members.value = members.value.filter(m => m.id !== id)
 }
 
 function shuffle(): void {
@@ -79,11 +83,15 @@ function shuffle(): void {
   <div class="wrap">
     <div class="controls">
       <DzButton size="sm" variant="outline" tone="primary" :disabled="members.length >= POOL.length" @click="add">
-        <template #prefix><Plus :size="14" aria-hidden="true" /></template>
+        <template #prefix>
+          <Plus :size="14" aria-hidden="true" />
+        </template>
         Add
       </DzButton>
       <DzButton size="sm" variant="outline" tone="neutral" :disabled="members.length < 2" @click="shuffle">
-        <template #prefix><Shuffle :size="14" aria-hidden="true" /></template>
+        <template #prefix>
+          <Shuffle :size="14" aria-hidden="true" />
+        </template>
         Reorder
       </DzButton>
     </div>

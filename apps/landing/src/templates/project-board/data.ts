@@ -3,6 +3,7 @@
  * is self-contained and copy-pasteable (docs/templates.md §7). Plausible product
  * delivery work — never lorem ipsum (§7 "realistic content").
  */
+import type { CanonicalTone } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 import {
   CalendarClock,
@@ -12,7 +13,6 @@ import {
   Settings,
   Users,
 } from 'lucide-vue-next'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 /** A sidebar navigation entry. */
 export interface NavItem {

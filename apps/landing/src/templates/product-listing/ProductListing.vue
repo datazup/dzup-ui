@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ShotPalette } from './data.ts'
 /**
  * Product Listing — Commerce template (docs/templates.md §6.4).
  *
@@ -29,13 +30,13 @@ import {
   BADGE_LABEL,
   buildShot,
   colourLabel,
-  colourToken,
   COLOURS,
+  colourToken,
   FEATURES,
   PRICE_MAX,
   PRICE_MIN,
   PRODUCTS,
-  type ShotPalette,
+
   SORTS,
 } from './data.ts'
 
@@ -43,7 +44,8 @@ const PAGE_SIZE = 6
 
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -60,7 +62,8 @@ watch([colours, features, price, sort], () => (page.value = 1), { deep: true })
 
 const activeFilterCount = computed(() => {
   let n = colours.value.length + features.value.length
-  if (price.value[0] > PRICE_MIN || price.value[1] < PRICE_MAX) n += 1
+  if (price.value[0] > PRICE_MIN || price.value[1] < PRICE_MAX)
+    n += 1
   return n
 })
 
@@ -74,9 +77,12 @@ function clearFilters(): void {
 // ── Filter → sort → page pipeline ────────────────────────────────
 const filtered = computed(() =>
   PRODUCTS.filter((p) => {
-    if (colours.value.length && !colours.value.includes(p.colour)) return false
-    if (features.value.length && !features.value.every((f) => p.features.includes(f))) return false
-    if (p.price < price.value[0] || p.price > price.value[1]) return false
+    if (colours.value.length && !colours.value.includes(p.colour))
+      return false
+    if (features.value.length && !features.value.every(f => p.features.includes(f)))
+      return false
+    if (p.price < price.value[0] || p.price > price.value[1])
+      return false
     return true
   }),
 )
@@ -123,7 +129,7 @@ const basePalette = computed<Omit<ShotPalette, 'accent'>>(() => {
 })
 
 const cards = computed(() =>
-  paged.value.map((p) => ({
+  paged.value.map(p => ({
     ...p,
     src: buildShot({ ...basePalette.value, accent: token(colourToken(p.colour), '#6366f1') }),
   })),
@@ -146,7 +152,9 @@ const cards = computed(() =>
           <a href="#">Support</a>
         </nav>
         <DzButton variant="ghost" tone="neutral" size="sm" aria-label="Cart (0 items)">
-          <template #prefix><ShoppingBag :size="18" aria-hidden="true" /></template>
+          <template #prefix>
+            <ShoppingBag :size="18" aria-hidden="true" />
+          </template>
           0
         </DzButton>
       </div>
@@ -156,8 +164,12 @@ const cards = computed(() =>
       <!-- ── Header ────────────────────────────────────────────── -->
       <div class="head">
         <div class="head-copy">
-          <DzText size="sm" weight="semibold" as="span" class="eyebrow">Headphones</DzText>
-          <DzHeading :level="1" size="2xl" weight="bold" class="head-title">Built for the way you listen</DzHeading>
+          <DzText size="sm" weight="semibold" as="span" class="eyebrow">
+            Headphones
+          </DzText>
+          <DzHeading :level="1" size="2xl" weight="bold" class="head-title">
+            Built for the way you listen
+          </DzHeading>
           <DzText size="lg" tone="muted" as="p" class="head-lede">
             Reference tuning, adaptive noise cancelling and battery that outlasts the week —
             in a colourway for every desk.
@@ -196,7 +208,9 @@ const cards = computed(() =>
           </div>
 
           <fieldset class="group">
-            <legend class="group-title">Colour</legend>
+            <legend class="group-title">
+              Colour
+            </legend>
             <DzCheckboxGroup v-model="colours" aria-label="Filter by colour">
               <DzCheckbox v-for="c in COLOURS" :key="c.value" :value="c.value">
                 <span class="opt">
@@ -208,7 +222,9 @@ const cards = computed(() =>
           </fieldset>
 
           <fieldset class="group">
-            <legend class="group-title">Features</legend>
+            <legend class="group-title">
+              Features
+            </legend>
             <DzCheckboxGroup v-model="features" aria-label="Filter by feature">
               <DzCheckbox v-for="f in FEATURES" :key="f.value" :value="f.value">
                 {{ f.label }}
@@ -217,7 +233,9 @@ const cards = computed(() =>
           </fieldset>
 
           <fieldset class="group">
-            <legend class="group-title">Price</legend>
+            <legend class="group-title">
+              Price
+            </legend>
             <DzRangeSlider
               v-model="price"
               :min="PRICE_MIN"
@@ -256,14 +274,20 @@ const cards = computed(() =>
 
                 <div class="card-body">
                   <div class="card-line">
-                    <DzText weight="semibold" as="span">{{ p.name }}</DzText>
+                    <DzText weight="semibold" as="span">
+                      {{ p.name }}
+                    </DzText>
                     <span class="card-dot" :style="{ background: `var(${colourToken(p.colour)})` }" :title="colourLabel(p.colour)" />
                   </div>
-                  <DzText size="sm" tone="muted" as="span">{{ p.kind }}</DzText>
+                  <DzText size="sm" tone="muted" as="span">
+                    {{ p.kind }}
+                  </DzText>
 
                   <div class="card-rating">
                     <DzRating :value="p.rating" allow-half readonly size="sm" :aria-label="`${p.rating} out of 5`" />
-                    <DzText size="xs" tone="muted" as="span">{{ p.rating.toFixed(1) }} ({{ p.reviewCount.toLocaleString('en-US') }})</DzText>
+                    <DzText size="xs" tone="muted" as="span">
+                      {{ p.rating.toFixed(1) }} ({{ p.reviewCount.toLocaleString('en-US') }})
+                    </DzText>
                   </div>
 
                   <div class="card-foot">
@@ -272,7 +296,9 @@ const cards = computed(() =>
                       <span v-if="p.compareAt" class="was">${{ p.compareAt }}</span>
                     </span>
                     <DzButton variant="solid" tone="primary" size="sm" :aria-label="`Add ${p.name} to cart`">
-                      <template #prefix><ShoppingBag :size="15" aria-hidden="true" /></template>
+                      <template #prefix>
+                        <ShoppingBag :size="15" aria-hidden="true" />
+                      </template>
                       Add
                     </DzButton>
                   </div>
@@ -312,7 +338,9 @@ const cards = computed(() =>
         <span class="brand-mark" aria-hidden="true"><Headphones :size="16" /></span>
         <span class="brand-name">Lumen Audio</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Lumen Audio. Sound, considered.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Lumen Audio. Sound, considered.
+      </DzText>
     </footer>
   </div>
 </template>

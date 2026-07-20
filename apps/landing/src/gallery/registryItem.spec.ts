@@ -25,7 +25,7 @@ import {
 } from './registryItem.ts'
 
 /** Label `describe.each` rows by entry id. */
-const labelled = CATALOG.map((entry) => ({ entry, label: entry.id }))
+const labelled = CATALOG.map(entry => ({ entry, label: entry.id }))
 
 describe('animation catalog ids', () => {
   it('are URL-safe (lowercase kebab — safe in #effect-<id> and <id>.json)', () => {
@@ -37,7 +37,7 @@ describe('animation catalog ids', () => {
   })
 
   it('are unique across the catalog', () => {
-    const ids = CATALOG.map((entry) => entry.id)
+    const ids = CATALOG.map(entry => entry.id)
     expect(new Set(ids).size).toBe(ids.length)
   })
 })
@@ -47,7 +47,7 @@ describe('shadcn-style animation registry', () => {
     const index = buildRegistryIndex(CATALOG)
     expect(index.$schema).toBe(REGISTRY_SCHEMA)
     expect(index.items).toHaveLength(CATALOG.length)
-    expect(index.items.map((item) => item.name)).toEqual(CATALOG.map((entry) => entry.id))
+    expect(index.items.map(item => item.name)).toEqual(CATALOG.map(entry => entry.id))
   })
 
   it('index items omit inlined source (the per-item <id>.json carries it)', () => {
@@ -84,9 +84,10 @@ describe('shadcn-style animation registry', () => {
 
     it('emits one file per variant when a variant matrix is present, else the code floor', () => {
       if (entry.variants) {
-        const present = (['sfc', 'composable', 'css'] as const).filter((k) => entry.variants?.[k])
+        const present = (['sfc', 'composable', 'css'] as const).filter(k => entry.variants?.[k])
         expect(item.files).toHaveLength(present.length)
-      } else {
+      }
+      else {
         expect(item.files).toHaveLength(1)
         expect(item.files[0]!.path).toBe(`${entry.id}.vue`)
         expect(item.files[0]!.content).toBe(entry.code)

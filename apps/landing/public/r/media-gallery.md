@@ -8,8 +8,8 @@ An asymmetric image grid where every ratio-stable DzImage tile (framed by DzAspe
 
 ```vue
 <script setup lang="ts">
-import { DzAspectRatio, DzBadge, DzHeading, DzImage, DzLightbox, DzText } from '@dzup-ui/core'
 import type { LightboxImage } from '@dzup-ui/core'
+import { DzAspectRatio, DzBadge, DzHeading, DzImage, DzLightbox, DzText } from '@dzup-ui/core'
 import { ref } from 'vue'
 
 /**
@@ -77,7 +77,9 @@ function openAt(index: number): void {
   <section class="gallery" aria-labelledby="media-gallery-title">
     <header class="g-head">
       <div>
-        <DzBadge variant="subtle" tone="primary" size="sm">Gallery</DzBadge>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          Gallery
+        </DzBadge>
         <DzHeading id="media-gallery-title" :level="4" size="xl" weight="semibold" class="g-title">
           Field notebook
         </DzHeading>

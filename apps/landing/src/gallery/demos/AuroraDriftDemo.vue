@@ -15,8 +15,12 @@ import { DzAurora } from '../../motion/index.ts'
   <div class="stage">
     <DzAurora />
     <div class="content">
-      <DzHeading :level="3" size="lg" weight="bold" class="lp-balance">Living backdrop</DzHeading>
-      <DzText size="xs" tone="muted" as="div">Soft blobs drift on slow, offset loops.</DzText>
+      <DzHeading :level="3" size="lg" weight="bold" class="lp-balance">
+        Living backdrop
+      </DzHeading>
+      <DzText size="xs" tone="muted" as="div">
+        Soft blobs drift on slow, offset loops.
+      </DzText>
     </div>
   </div>
 </template>

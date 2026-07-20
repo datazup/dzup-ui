@@ -40,9 +40,13 @@ onBeforeUnmount(() => {
 <template>
   <div class="stage">
     <div class="status">
-      <DzText size="sm" tone="muted" as="span">Build status</DzText>
+      <DzText size="sm" tone="muted" as="span">
+        Build status
+      </DzText>
       <DzFlip :value="current.label">
-        <DzBadge variant="solid" :tone="current.tone" size="md">{{ current.label }}</DzBadge>
+        <DzBadge variant="solid" :tone="current.tone" size="md">
+          {{ current.label }}
+        </DzBadge>
       </DzFlip>
     </div>
 

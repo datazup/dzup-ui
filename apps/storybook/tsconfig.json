@@ -1,22 +1,22 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "jsx": "preserve",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "strict": true,
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
     "paths": {
       "@dzup-ui/tokens": ["../../packages/tokens/src"],
       "@dzup-ui/tokens/*": ["../../packages/tokens/*"],
       "@dzup-ui/contracts": ["../../packages/contracts/src"],
       "@dzup-ui/core": ["../../packages/core/src"]
-    }
+    },
+    "resolveJsonModule": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
   },
   "include": [
     ".storybook/**/*.ts",

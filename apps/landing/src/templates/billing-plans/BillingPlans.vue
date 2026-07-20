@@ -43,12 +43,14 @@ const cycleItems = [
 
 // Yearly bills 12 months at a 20% discount, shown as an effective per-month price.
 function priceFor(monthly: number): string {
-  if (monthly === 0) return '$0'
-  if (cycle.value === 'yearly') return `$${Math.round(monthly * 0.8)}`
+  if (monthly === 0)
+    return '$0'
+  if (cycle.value === 'yearly')
+    return `$${Math.round(monthly * 0.8)}`
   return `$${monthly}`
 }
 
-const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
+const seatsUsed = USAGE_SEGMENTS.filter(s => s.label !== 'Available').reduce(
   (sum, s) => sum + s.value,
   0,
 )
@@ -58,14 +60,20 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
   <div class="bill-page">
     <div class="bill-wrap">
       <header class="bill-head">
-        <DzHeading :level="1" size="xl" weight="semibold">Billing & plans</DzHeading>
-        <DzText tone="muted" as="p">Manage your subscription, usage and invoices.</DzText>
+        <DzHeading :level="1" size="xl" weight="semibold">
+          Billing & plans
+        </DzHeading>
+        <DzText tone="muted" as="p">
+          Manage your subscription, usage and invoices.
+        </DzText>
       </header>
 
       <DzAlert tone="info" variant="subtle" :icon="Clock" title="Your Team trial ends in 9 days">
         Add a payment method to keep advanced analytics and priority support.
         <template #actions>
-          <DzButton size="sm" variant="solid" tone="primary">Add payment method</DzButton>
+          <DzButton size="sm" variant="solid" tone="primary">
+            Add payment method
+          </DzButton>
         </template>
       </DzAlert>
 
@@ -83,8 +91,12 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
           :class="{ 'plan--popular': plan.popular }"
         >
           <div class="plan-head">
-            <DzText weight="semibold" as="div" class="plan-name">{{ plan.name }}</DzText>
-            <DzBadge v-if="plan.current" variant="subtle" tone="success" size="sm">Current</DzBadge>
+            <DzText weight="semibold" as="div" class="plan-name">
+              {{ plan.name }}
+            </DzText>
+            <DzBadge v-if="plan.current" variant="subtle" tone="success" size="sm">
+              Current
+            </DzBadge>
             <DzBadge v-else-if="plan.popular" variant="solid" tone="primary" size="sm">
               Popular
             </DzBadge>
@@ -92,9 +104,13 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
 
           <div class="plan-price">
             <span class="price-value">{{ priceFor(plan.monthly) }}</span>
-            <DzText v-if="plan.monthly > 0" size="sm" tone="muted" as="span">/mo per seat</DzText>
+            <DzText v-if="plan.monthly > 0" size="sm" tone="muted" as="span">
+              /mo per seat
+            </DzText>
           </div>
-          <DzText size="sm" tone="muted" as="p" class="plan-blurb">{{ plan.blurb }}</DzText>
+          <DzText size="sm" tone="muted" as="p" class="plan-blurb">
+            {{ plan.blurb }}
+          </DzText>
 
           <ul class="feat-list">
             <li v-for="f in plan.features" :key="f">
@@ -116,8 +132,12 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
       <div class="usage-grid">
         <DzCard variant="outlined" padding="md">
           <div class="card-head-row">
-            <DzText weight="semibold" as="div">Seats</DzText>
-            <DzText size="sm" tone="muted">{{ seatsUsed }} of {{ SEAT_LIMIT }} used</DzText>
+            <DzText weight="semibold" as="div">
+              Seats
+            </DzText>
+            <DzText size="sm" tone="muted">
+              {{ seatsUsed }} of {{ SEAT_LIMIT }} used
+            </DzText>
           </div>
           <DzMeterGroup
             :values="USAGE_SEGMENTS"
@@ -128,12 +148,18 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
         </DzCard>
 
         <DzCard variant="outlined" padding="md">
-          <DzText weight="semibold" as="div" class="usage-title">Resource usage</DzText>
+          <DzText weight="semibold" as="div" class="usage-title">
+            Resource usage
+          </DzText>
           <ul class="resource-list">
             <li v-for="r in RESOURCE_USAGE" :key="r.label" class="resource-row">
               <div class="resource-head">
-                <DzText size="sm">{{ r.label }}</DzText>
-                <DzText size="sm" tone="muted">{{ r.used }} / {{ r.total }} {{ r.unit }}</DzText>
+                <DzText size="sm">
+                  {{ r.label }}
+                </DzText>
+                <DzText size="sm" tone="muted">
+                  {{ r.used }} / {{ r.total }} {{ r.unit }}
+                </DzText>
               </div>
               <DzProgress
                 :value="Math.round((r.used / r.total) * 100)"
@@ -148,27 +174,45 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
 
       <DzCard variant="outlined" padding="none" class="invoice-card">
         <div class="invoice-head">
-          <DzText weight="semibold">Invoices</DzText>
-          <DzButton variant="link" tone="primary" size="sm">View all</DzButton>
+          <DzText weight="semibold">
+            Invoices
+          </DzText>
+          <DzButton variant="link" tone="primary" size="sm">
+            View all
+          </DzButton>
         </div>
         <div class="table-scroll">
           <DzTable hoverable>
             <DzTableHeader>
               <DzTableRow>
-                <DzTableCell header>Invoice</DzTableCell>
-                <DzTableCell header>Date</DzTableCell>
-                <DzTableCell header>Amount</DzTableCell>
-                <DzTableCell header>Status</DzTableCell>
-                <DzTableCell header align="right"><span class="sr-only">Download</span></DzTableCell>
+                <DzTableCell header>
+                  Invoice
+                </DzTableCell>
+                <DzTableCell header>
+                  Date
+                </DzTableCell>
+                <DzTableCell header>
+                  Amount
+                </DzTableCell>
+                <DzTableCell header>
+                  Status
+                </DzTableCell>
+                <DzTableCell header align="right">
+                  <span class="sr-only">Download</span>
+                </DzTableCell>
               </DzTableRow>
             </DzTableHeader>
             <DzTableBody>
               <DzTableRow v-for="inv in INVOICES" :key="inv.id">
                 <DzTableCell>
-                  <DzText size="sm" weight="medium">{{ inv.id }}</DzText>
+                  <DzText size="sm" weight="medium">
+                    {{ inv.id }}
+                  </DzText>
                 </DzTableCell>
                 <DzTableCell>
-                  <DzText size="sm" tone="muted">{{ inv.date }}</DzText>
+                  <DzText size="sm" tone="muted">
+                    {{ inv.date }}
+                  </DzText>
                 </DzTableCell>
                 <DzTableCell>
                   <span class="amount">{{ inv.amount }}</span>
@@ -180,7 +224,9 @@ const seatsUsed = USAGE_SEGMENTS.filter((s) => s.label !== 'Available').reduce(
                 </DzTableCell>
                 <DzTableCell align="right">
                   <DzButton variant="ghost" tone="neutral" size="sm">
-                    <template #prefix><Download :size="15" aria-hidden="true" /></template>
+                    <template #prefix>
+                      <Download :size="15" aria-hidden="true" />
+                    </template>
                     PDF
                   </DzButton>
                 </DzTableCell>

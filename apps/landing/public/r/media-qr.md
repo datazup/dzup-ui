@@ -23,7 +23,11 @@ import { ref } from 'vue'
  * Only free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 
-const LINK = 'https://app.dzup-ui.dev/handoff'
+// Demo payload. `example.com` is IANA-reserved for exactly this: it is obviously
+// fictional AND it resolves, so a visitor who actually scans the demo code lands
+// on a "reserved for documentation" page rather than a DNS error or, worse, some
+// unowned domain a typo away from ours.
+const LINK = 'https://app.example.com/handoff'
 const PAIR_CODE = 'DZ-4F9K-2QX'
 
 /** Lifecycle of the code; flips to 'expired' to demo the refresh overlay. */
@@ -42,7 +46,9 @@ function refresh(): void {
   <section class="qr" aria-labelledby="media-qr-title">
     <div class="qr-card">
       <header class="qr-head">
-        <DzBadge variant="subtle" tone="primary" size="sm">Handoff</DzBadge>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          Handoff
+        </DzBadge>
         <DzHeading id="media-qr-title" :level="4" size="lg" weight="semibold" class="qr-title">
           Continue on your phone
         </DzHeading>
@@ -67,14 +73,18 @@ function refresh(): void {
       </div>
 
       <div class="qr-pair">
-        <DzText size="xs" tone="muted" as="div" class="qr-pair-label">Or enter the pairing code</DzText>
+        <DzText size="xs" tone="muted" as="div" class="qr-pair-label">
+          Or enter the pairing code
+        </DzText>
         <code class="qr-pair-code">{{ PAIR_CODE }}</code>
       </div>
 
       <DzDivider class="qr-divider" />
 
       <div class="qr-actions">
-        <DzButton variant="solid" tone="primary" size="md" class="qr-action">Copy link</DzButton>
+        <DzButton variant="solid" tone="primary" size="md" class="qr-action">
+          Copy link
+        </DzButton>
         <DzButton variant="outline" tone="neutral" size="md" @click="expire">
           {{ status === 'active' ? 'Expire code' : 'Expired' }}
         </DzButton>

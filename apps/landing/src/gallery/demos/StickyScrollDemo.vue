@@ -52,8 +52,12 @@ const stickyClass = computed(() => ({
     <div v-for="step in steps" :key="step.n" class="stacked-step">
       <span class="num">{{ step.n }}</span>
       <div>
-        <DzText weight="semibold" size="sm" as="div">{{ step.title }}</DzText>
-        <DzText size="xs" tone="muted" as="div">{{ step.body }}</DzText>
+        <DzText weight="semibold" size="sm" as="div">
+          {{ step.title }}
+        </DzText>
+        <DzText size="xs" tone="muted" as="div">
+          {{ step.body }}
+        </DzText>
       </div>
     </div>
   </div>
@@ -66,9 +70,15 @@ const stickyClass = computed(() => ({
           <DzText size="xs" tone="muted" as="div" class="eyebrow">
             Step {{ active + 1 }} / {{ steps.length }}
           </DzText>
-          <div class="num num--lg">{{ current.n }}</div>
-          <DzText weight="semibold" as="div">{{ current.title }}</DzText>
-          <DzText size="xs" tone="muted" as="p" class="body">{{ current.body }}</DzText>
+          <div class="num num--lg">
+            {{ current.n }}
+          </div>
+          <DzText weight="semibold" as="div">
+            {{ current.title }}
+          </DzText>
+          <DzText size="xs" tone="muted" as="p" class="body">
+            {{ current.body }}
+          </DzText>
 
           <div class="bar-track" aria-hidden="true">
             <div class="dz-sticky__bar bar" :style="barStyle" />
@@ -85,7 +95,9 @@ const stickyClass = computed(() => ({
         </div>
       </div>
     </div>
-    <DzText size="xs" tone="muted" as="div" class="hint">Scroll inside the panel ↑↓</DzText>
+    <DzText size="xs" tone="muted" as="div" class="hint">
+      Scroll inside the panel ↑↓
+    </DzText>
   </div>
 </template>
 

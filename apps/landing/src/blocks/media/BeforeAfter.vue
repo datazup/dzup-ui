@@ -24,7 +24,9 @@ const position = ref(50)
 <template>
   <section class="cmp" aria-labelledby="media-comparison-title">
     <header class="cmp-head">
-      <DzBadge variant="subtle" tone="primary" size="sm">Compare</DzBadge>
+      <DzBadge variant="subtle" tone="primary" size="sm">
+        Compare
+      </DzBadge>
       <DzHeading id="media-comparison-title" :level="4" size="xl" weight="semibold" class="cmp-title">
         Before &amp; after
       </DzHeading>

@@ -10,11 +10,16 @@ import { COUNTS } from './generated/counts.ts'
 /**
  * Canonical production origin (no trailing slash). The single source of truth for
  * absolute URLs the client can't derive from `window.location` at build time:
- * the generated `sitemap.xml`/`robots.txt` (scripts/build-sitemap.ts) and the
- * absolute BreadcrumbList item URLs in the per-route JSON-LD. Kept in lockstep
- * with the `<link rel="canonical">`/`og:url` origin authored in index.html.
+ * the generated `sitemap.xml`/`robots.txt` (scripts/build-sitemap.ts), the
+ * absolute BreadcrumbList item URLs in the per-route JSON-LD, and the `homepage`
+ * field of every published registry index. Kept in lockstep with the
+ * `<link rel="canonical">`/`og:url` origin authored in index.html.
+ *
+ * Re-exported from `./origin.ts`, which owns it: the runtime-free registry
+ * shapers need the origin but must not pull this module's generated imports into
+ * a plain tsx process. Edit it there; read it from either.
  */
-export const SITE_ORIGIN = 'https://dzup-ui.com'
+export { SITE_ORIGIN } from './origin.ts'
 
 /** Where the free component docs (Storybook) are mounted in production (§3.4). */
 export const STORYBOOK_BASE = '/storybook/'
@@ -124,9 +129,17 @@ export const LINKS = {
   github: 'https://github.com/datazup/dzup-ui',
   npm: 'https://www.npmjs.com/package/@dzup-ui/core',
   license: 'https://github.com/datazup/dzup-ui/blob/main/LICENSE',
-  changelog: 'https://github.com/datazup/dzup-ui/blob/main/CHANGELOG.md',
-  /** Issue tracker — the repo has GitHub Discussions disabled, so this is the
-   *  one live "talk to us" surface. */
+  /**
+   * The on-site release feed (FREE2-10) — build-derived from CHANGELOG.md, so it
+   * no longer outsources the highest-intent page to a raw GitHub file. The full
+   * git history lives at `changelogHistory` for the long tail.
+   */
+  changelog: '/changelog',
+  changelogHistory: 'https://github.com/datazup/dzup-ui/blob/main/CHANGELOG.md',
+  /**
+   * Issue tracker — the repo has GitHub Discussions disabled, so this is the
+   *  one live "talk to us" surface.
+   */
   issues: 'https://github.com/datazup/dzup-ui/issues',
 } as const
 

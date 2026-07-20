@@ -29,13 +29,15 @@ const PARALLAX = 40
 // allowed. Native path: the CSS animation owns it (return {}). Reduced motion:
 // static end-state (return {}).
 const backStyle = computed(() => {
-  if (native || reduced.value) return {}
+  if (native || reduced.value)
+    return {}
   const y = (progress.value - 0.5) * 2 * PARALLAX
   return { transform: `translate3d(0, ${y.toFixed(1)}px, 0)`, willChange: 'transform' }
 })
 
 const foreStyle = computed(() => {
-  if (native || reduced.value) return {}
+  if (native || reduced.value)
+    return {}
   const eased = Math.min(1, progress.value / 0.5)
   const y = (1 - eased) * 24
   return {
@@ -57,11 +59,17 @@ const rootClass = computed(() => ({
     <div ref="root" :class="rootClass" class="stage">
       <div class="dz-scroll-linked__back" :style="backStyle" aria-hidden="true" />
       <div class="dz-scroll-linked__fore fore" :style="foreStyle">
-        <DzText weight="semibold" as="div">Scroll-linked</DzText>
-        <DzText size="xs" tone="muted" as="div">Transform &amp; opacity bound to scroll.</DzText>
+        <DzText weight="semibold" as="div">
+          Scroll-linked
+        </DzText>
+        <DzText size="xs" tone="muted" as="div">
+          Transform &amp; opacity bound to scroll.
+        </DzText>
       </div>
     </div>
-    <DzText size="xs" tone="muted" as="div" class="hint">Scroll the page — layers track your position.</DzText>
+    <DzText size="xs" tone="muted" as="div" class="hint">
+      Scroll the page — layers track your position.
+    </DzText>
   </div>
 </template>
 

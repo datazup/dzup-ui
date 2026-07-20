@@ -10,9 +10,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { BLOCKS, CATEGORIES } from './registry.ts'
-import { getBlockSource } from './sources.ts'
-
+import { SITE_ORIGIN } from '../origin.ts'
 import {
   blockDeepLink,
   blockIndexLine,
@@ -21,6 +19,9 @@ import {
   llmsFullTxt,
   llmsTxt,
 } from './llmsText.ts'
+import { BLOCKS, CATEGORIES } from './registry.ts'
+
+import { getBlockSource } from './sources.ts'
 
 /** Injected source lookup — mirrors what the generator and the browser both pass. */
 const getSource = (block: { path: string }): string => getBlockSource(block.path)
@@ -46,9 +47,10 @@ describe('llms.txt index', () => {
   })
 
   it('names each block category as a section heading', () => {
-    const used = new Set(BLOCKS.map((b) => b.category))
+    const used = new Set(BLOCKS.map(b => b.category))
     for (const category of CATEGORIES) {
-      if (used.has(category.id)) expect(text).toContain(`## ${category.label}`)
+      if (used.has(category.id))
+        expect(text).toContain(`## ${category.label}`)
     }
   })
 
@@ -71,7 +73,7 @@ describe('llms-full.txt', () => {
 })
 
 describe('per-block markdown (r/<id>.md)', () => {
-  it.each(BLOCKS.map((block) => ({ block, label: block.id })))(
+  it.each(BLOCKS.map(block => ({ block, label: block.id })))(
     'page "$label" is self-contained: title, description, components, deep link, source',
     ({ block }) => {
       const md = blockMarkdown(block, CATEGORIES, getSource)
@@ -86,9 +88,9 @@ describe('per-block markdown (r/<id>.md)', () => {
 })
 
 describe('block prompt (copy as prompt, Task G3)', () => {
-  const url = 'https://dzup-ui.dev/llms.txt'
+  const url = `${SITE_ORIGIN}/llms.txt`
 
-  it.each(BLOCKS.map((block) => ({ block, label: block.id })))(
+  it.each(BLOCKS.map(block => ({ block, label: block.id })))(
     'prompt "$label" references llms.txt and restates title, description, components',
     ({ block }) => {
       const prompt = blockPrompt(block, url)

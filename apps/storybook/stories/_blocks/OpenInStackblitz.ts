@@ -32,8 +32,10 @@ const RAW_TEMPLATE = import.meta.glob('../../playground-template/**/*', {
 
 const TEMPLATE_MARKER = 'playground-template/'
 
-/** Build the StackBlitz project files from the in-repo template, injecting the
- *  example source and pinning the published dependency versions. */
+/**
+ * Build the StackBlitz project files from the in-repo template, injecting the
+ *  example source and pinning the published dependency versions.
+ */
 function buildFiles(code: string): Record<string, string> {
   const files: Record<string, string> = {}
   for (const [path, contents] of Object.entries(RAW_TEMPLATE)) {
@@ -98,11 +100,11 @@ export function OpenInStackblitz({ code, title }: OpenInStackblitzProps) {
   return h(
     'button',
     {
-      type: 'button',
-      onClick: open,
-      disabled: busy,
+      'type': 'button',
+      'onClick': open,
+      'disabled': busy,
       'aria-label': 'Open this example in StackBlitz (opens a new tab)',
-      style: {
+      'style': {
         display: 'inline-flex',
         alignItems: 'center',
         gap: 6,
@@ -121,11 +123,11 @@ export function OpenInStackblitz({ code, title }: OpenInStackblitzProps) {
       h(
         'svg',
         {
-          key: 'i',
-          width: 14,
-          height: 14,
-          viewBox: '0 0 28 28',
-          fill: 'currentColor',
+          'key': 'i',
+          'width': 14,
+          'height': 14,
+          'viewBox': '0 0 28 28',
+          'fill': 'currentColor',
           'aria-hidden': true,
         },
         h('path', { d: 'M12.747 16.273H4L18.573 1.4l-3.32 10.327H24L9.427 26.6l3.32-10.327z' }),

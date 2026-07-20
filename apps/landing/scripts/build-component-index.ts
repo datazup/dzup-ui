@@ -29,7 +29,8 @@
 
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import process from 'node:process'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
@@ -89,8 +90,14 @@ function toStoryId(title: string): string {
  * LAST segment, so intermediate groups are matched non-greedily rather than
  * assumed absent (assuming they were absent silently dropped two real
  * components out of the palette).
+ *
+ * No SHIPPED story nests a sub-group today — the App-Specific group stopped
+ * publishing in TASK-FREE2-06 — so nothing in the tree exercises that path. Keep
+ * it anyway, and keep it tested: the drop was silent the first time precisely
+ * because a title shape nobody was looking for met a regex nobody re-read.
+ * `src/generated/componentIndex.spec.ts` asserts it against synthetic titles.
  */
-function readComponentTitle(source: string): { name: string, title: string } | null {
+export function readComponentTitle(source: string): { name: string, title: string } | null {
   const match = source.match(/title:\s*['"](Core\/(?:[A-Za-z0-9-]+\/)+?(Dz[A-Za-z0-9]+))['"]/)
   if (!match)
     return null
@@ -194,8 +201,14 @@ async function main(): Promise<void> {
   console.log(`    ${perFamily}`)
 }
 
-main().catch((error: unknown) => {
-  // FAIL-LOUD: a missing catalog must not silently ship an empty palette.
-  console.error(`✗ build-component-index: ${(error as Error).message}`)
-  process.exit(1)
-})
+// Run only as a script, never on import — `readComponentTitle` is exported for
+// `src/generated/componentIndex.spec.ts`, and importing it must not regenerate the
+// index as a side effect (a spec that rewrites the artifact it asserts against
+// cannot fail).
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((error: unknown) => {
+    // FAIL-LOUD: a missing catalog must not silently ship an empty palette.
+    console.error(`✗ build-component-index: ${(error as Error).message}`)
+    process.exit(1)
+  })
+}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ChangeType } from './data.ts'
 /**
  * Changelog / Release Notes — Content template (docs/templates.md §6.5).
  *
@@ -26,16 +27,16 @@ import {
 import { GitMerge, Rss } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 import { CHANGE_TONE, FILTERS, RELEASES } from './data.ts'
-import type { ChangeType } from './data.ts'
 
 const activeFilter = ref<ChangeType | 'All'>('All')
 
 /** Releases narrowed so only changes of the active type remain (drop empties). */
 const visibleReleases = computed(() => {
-  if (activeFilter.value === 'All') return RELEASES
+  if (activeFilter.value === 'All')
+    return RELEASES
   return RELEASES
-    .map((r) => ({ ...r, changes: r.changes.filter((c) => c.type === activeFilter.value) }))
-    .filter((r) => r.changes.length > 0)
+    .map(r => ({ ...r, changes: r.changes.filter(c => c.type === activeFilter.value) }))
+    .filter(r => r.changes.length > 0)
 })
 </script>
 
@@ -49,7 +50,9 @@ const visibleReleases = computed(() => {
           <span class="brand-name">Northwind</span>
         </span>
         <DzButton variant="outline" tone="success" size="sm">
-          <template #prefix><Rss :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Rss :size="15" aria-hidden="true" />
+          </template>
           Subscribe
         </DzButton>
       </div>
@@ -58,7 +61,9 @@ const visibleReleases = computed(() => {
     <main class="wrap">
       <!-- ── Header ───────────────────────────────────────────── -->
       <header class="head">
-        <DzTag variant="subtle" tone="success" size="sm">Product updates</DzTag>
+        <DzTag variant="subtle" tone="success" size="sm">
+          Product updates
+        </DzTag>
         <DzHeading :level="1" size="3xl" weight="bold" class="head-title">
           Changelog
         </DzHeading>
@@ -121,7 +126,9 @@ const visibleReleases = computed(() => {
                 >
                   {{ change.type }}
                 </DzTag>
-                <DzText size="sm" as="span" class="change-text">{{ change.text }}</DzText>
+                <DzText size="sm" as="span" class="change-text">
+                  {{ change.text }}
+                </DzText>
               </li>
             </ul>
 
@@ -140,14 +147,18 @@ const visibleReleases = computed(() => {
       </DzTimeline>
 
       <div v-else class="empty">
-        <DzText tone="muted" as="p">No “{{ activeFilter }}” changes in this window.</DzText>
+        <DzText tone="muted" as="p">
+          No “{{ activeFilter }}” changes in this window.
+        </DzText>
         <DzButton variant="outline" tone="success" size="sm" @click="activeFilter = 'All'">
           Show all changes
         </DzButton>
       </div>
 
       <div class="more">
-        <DzButton variant="ghost" tone="neutral" size="sm">Older releases →</DzButton>
+        <DzButton variant="ghost" tone="neutral" size="sm">
+          Older releases →
+        </DzButton>
       </div>
     </main>
 
@@ -156,7 +167,9 @@ const visibleReleases = computed(() => {
         <span class="brand-mark" aria-hidden="true"><GitMerge :size="16" /></span>
         <span class="brand-name">Northwind</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Northwind. Built with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Northwind. Built with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

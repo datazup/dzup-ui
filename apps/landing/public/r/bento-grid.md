@@ -65,8 +65,12 @@ const channels: Channel[] = [
 <template>
   <section class="bento" aria-labelledby="bento-title">
     <header class="bento-head">
-      <DzHeading id="bento-title" :level="4" size="lg" weight="bold">Workspace overview</DzHeading>
-      <DzText size="sm" tone="muted">Composed with DzGrid · spanning bento tiles</DzText>
+      <DzHeading id="bento-title" :level="4" size="lg" weight="bold">
+        Workspace overview
+      </DzHeading>
+      <DzText size="sm" tone="muted">
+        Composed with DzGrid · spanning bento tiles
+      </DzText>
     </header>
 
     <DzGrid :cols="{ sm: 2, lg: 4 }" gap="md" class="bento-grid" :style="{ gridAutoRows: 'minmax(8rem, auto)' }">
@@ -74,19 +78,27 @@ const channels: Channel[] = [
       <div class="bento-cell bento-cell--2 bento-cell--row2">
         <DzPanel header="Monthly revenue" variant="elevated" class="bento-panel">
           <div class="bento-revenue">
-            <DzHeading :level="5" size="2xl" weight="bold" class="bento-figure">$48.2k</DzHeading>
+            <DzHeading :level="5" size="2xl" weight="bold" class="bento-figure">
+              $48.2k
+            </DzHeading>
             <DzBadge variant="subtle" tone="success" size="sm">
               <DzIcon :icon="ArrowUpRight" size="xs" /> 12.5%
             </DzBadge>
           </div>
-          <DzText size="sm" tone="muted" class="bento-revenue-sub">vs. $42.8k last month</DzText>
+          <DzText size="sm" tone="muted" class="bento-revenue-sub">
+            vs. $42.8k last month
+          </DzText>
 
           <DzDivider class="bento-rule" />
 
           <ul class="bento-list" role="list">
             <li v-for="channel in channels" :key="channel.name" class="bento-list-row">
-              <DzText size="sm" as="span">{{ channel.name }}</DzText>
-              <DzText size="sm" weight="semibold" as="span">{{ channel.share }}</DzText>
+              <DzText size="sm" as="span">
+                {{ channel.name }}
+              </DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                {{ channel.share }}
+              </DzText>
             </li>
           </ul>
         </DzPanel>
@@ -102,7 +114,9 @@ const channels: Channel[] = [
             <DzHeading :level="5" size="md" weight="semibold" class="bento-media-title">
               AI insights, live
             </DzHeading>
-            <DzText size="sm" class="bento-media-text">Surface anomalies the moment they happen.</DzText>
+            <DzText size="sm" class="bento-media-text">
+              Surface anomalies the moment they happen.
+            </DzText>
           </div>
         </DzAspectRatio>
       </div>
@@ -110,8 +124,12 @@ const channels: Channel[] = [
       <!-- Two compact stat tiles -->
       <div v-for="metric in metrics" :key="metric.label" class="bento-cell">
         <DzPanel variant="outlined" class="bento-panel bento-panel--stat">
-          <DzText size="xs" tone="muted" class="bento-stat-label">{{ metric.label }}</DzText>
-          <DzHeading :level="5" size="xl" weight="bold" class="bento-stat-value">{{ metric.value }}</DzHeading>
+          <DzText size="xs" tone="muted" class="bento-stat-label">
+            {{ metric.label }}
+          </DzText>
+          <DzHeading :level="5" size="xl" weight="bold" class="bento-stat-value">
+            {{ metric.value }}
+          </DzHeading>
           <DzBadge :tone="metric.up ? 'success' : 'danger'" variant="subtle" size="sm">
             <DzIcon :icon="metric.up ? ArrowUpRight : ArrowDownRight" size="xs" /> {{ metric.delta }}
           </DzBadge>
@@ -123,8 +141,12 @@ const channels: Channel[] = [
         <DzPanel variant="outlined" class="bento-panel bento-panel--cta">
           <div class="bento-cta">
             <div>
-              <DzHeading :level="5" size="sm" weight="semibold">Storage</DzHeading>
-              <DzText size="sm" tone="muted">68.4 GB of 100 GB used</DzText>
+              <DzHeading :level="5" size="sm" weight="semibold">
+                Storage
+              </DzHeading>
+              <DzText size="sm" tone="muted">
+                68.4 GB of 100 GB used
+              </DzText>
             </div>
             <div class="bento-cta-track" aria-hidden="true">
               <span class="bento-cta-fill" />

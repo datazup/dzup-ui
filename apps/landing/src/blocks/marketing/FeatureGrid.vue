@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import { DzCard, DzCardBody, DzHeading, DzIcon, DzText } from '@dzup-ui/core'
 import {
   BarChart3,
@@ -8,7 +9,6 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 /**
  * Feature grid — six feature cards, each with an icon, title, and short blurb.

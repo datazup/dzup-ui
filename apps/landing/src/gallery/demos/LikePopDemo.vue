@@ -24,13 +24,16 @@ onMounted(() => {
   }, 560)
 })
 onBeforeUnmount(() => {
-  if (timer !== null) clearTimeout(timer)
+  if (timer !== null)
+    clearTimeout(timer)
 })
 </script>
 
 <template>
   <div class="stage">
-    <DzText size="sm" tone="muted" as="p" class="prompt">Was this effect helpful?</DzText>
+    <DzText size="sm" tone="muted" as="p" class="prompt">
+      Was this effect helpful?
+    </DzText>
 
     <DzBurst :active="liked">
       <DzToggleButton

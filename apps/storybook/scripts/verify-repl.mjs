@@ -28,6 +28,7 @@ import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { extname, join, normalize } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 
@@ -45,6 +46,19 @@ function fail(msg) {
   console.log(`❌ ${msg}`)
 }
 const pass = msg => console.log(`✅ ${msg}`)
+
+// TASK-FREE2-12 — the per-component "Open in playground" affordance. Its snippets
+// are DERIVED (build-playground-snippets.mjs) and only compile-validated at build
+// time; compile-validation proves a snippet parses, not that it mounts. So a
+// cross-family sample is driven in the real browser REPL here: navigate to the
+// component's docs page, expand the collapsed playground, and assert the seeded
+// component actually renders in the sandbox. One simple, one compound, one form
+// control — the three shapes most likely to expose a bad auto-conversion.
+const PLAYGROUND_SAMPLES = [
+  { id: 'core-buttons-dzbutton--docs', label: 'DzButton (simple)', find: f => f.locator('button', { hasText: 'Save' }) },
+  { id: 'core-data-dztable--docs', label: 'DzTable (compound)', find: f => f.locator('table') },
+  { id: 'core-forms-dzselect--docs', label: 'DzSelect (form control)', find: f => f.locator('[role="combobox"]') },
+]
 
 const server = createServer(async (req, res) => {
   try {
@@ -155,6 +169,69 @@ try {
   }
   else {
     pass('zero failed requests (no 404s) from the docs page or the sandbox iframe')
+  }
+
+  // ── TASK-FREE2-12: per-component "Open in playground" deep links ────────────
+  for (const sample of PLAYGROUND_SAMPLES) {
+    const p = await browser.newPage()
+    const bad = []
+    p.on('response', (r) => {
+      if (r.status() >= 400)
+        bad.push(`${r.status()} ${r.url().replace(origin, '')}`)
+    })
+    p.on('requestfailed', (r) => {
+      const err = r.failure()?.errorText ?? 'failed'
+      if (!err.includes('ERR_ABORTED'))
+        bad.push(`${err} ${r.url().replace(origin, '')}`)
+    })
+    try {
+      await p.goto(`${origin}/iframe.html?id=${sample.id}&viewMode=docs`, { waitUntil: 'load', timeout: 60000 })
+
+      // The playground is collapsed by default (booting @vue/repl on all 139 pages
+      // would be a real perf regression) — expand it, then poll for the component.
+      // The docs app hydrates asynchronously, so wait for the affordance to attach
+      // rather than reading its count the instant the page's `load` event fires.
+      const toggle = p.getByRole('button', { name: /try it live/i }).first()
+      try {
+        await toggle.waitFor({ state: 'attached', timeout: 30000 })
+      }
+      catch {
+        fail(`${sample.label}: no "Try it live" button on ${sample.id} — the per-component playground affordance did not render`)
+        continue
+      }
+      await toggle.click()
+
+      const deadline = Date.now() + 60000
+      let el = null
+      while (Date.now() < deadline && !el) {
+        for (const frame of p.frames()) {
+          try {
+            const cand = sample.find(frame).first()
+            if (await cand.count()) {
+              el = cand
+              break
+            }
+          }
+          catch { /* frame detached mid-poll */ }
+        }
+        if (!el)
+          await p.waitForTimeout(500)
+      }
+
+      if (!el)
+        fail(`${sample.label}: the ${sample.id} playground never mounted its seeded component — the derived snippet failed to compile or run`)
+      else
+        pass(`${sample.label}: ${sample.id} playground compiled and mounted its seeded component`)
+
+      if (bad.length) {
+        fail(`${sample.label}: ${bad.length} failed request(s) on ${sample.id}:`)
+        for (const r of [...new Set(bad)])
+          console.log(`     ${r}`)
+      }
+    }
+    finally {
+      await p.close()
+    }
   }
 }
 catch (e) {

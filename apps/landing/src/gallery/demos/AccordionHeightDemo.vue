@@ -57,7 +57,9 @@ const reduced = useReducedMotion()
       <DzAccordionItem v-for="item in items" :key="item.value" :value="item.value">
         <DzAccordionTrigger>{{ item.q }}</DzAccordionTrigger>
         <DzAccordionContent class="acc-content">
-          <DzText size="sm" tone="muted" as="p" class="answer">{{ item.a }}</DzText>
+          <DzText size="sm" tone="muted" as="p" class="answer">
+            {{ item.a }}
+          </DzText>
         </DzAccordionContent>
       </DzAccordionItem>
     </DzAccordion>

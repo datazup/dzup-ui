@@ -59,7 +59,8 @@ export function buildShot(p: ShotPalette, variant: ShotVariant): string {
       <rect x="48" y="196" width="160" height="12" rx="6" fill="${p.line}"/>
       <polyline points="300,400 356,360 412,380 468,300 524,330 580,250 636,280 700,210" fill="none" stroke="${p.accentSoft}" stroke-width="3"/>
       <g>${rects}</g>`
-  } else if (variant === 'collaborate') {
+  }
+  else if (variant === 'collaborate') {
     const lane = (x: number, n: number) => {
       let cards = ''
       for (let i = 0; i < n; i++) {
@@ -72,7 +73,8 @@ export function buildShot(p: ShotPalette, variant: ShotVariant): string {
       <rect x="${x + 12}" y="84" width="100" height="10" rx="5" fill="${p.line}"/>${cards}`
     }
     body = `${lane(24, 3)}${lane(284, 2)}${lane(544, 3)}`
-  } else if (variant === 'automate') {
+  }
+  else if (variant === 'automate') {
     const node = (x: number, y: number, fill: string) =>
       `<rect x="${x}" y="${y}" width="150" height="64" rx="12" fill="${fill}" stroke="${p.line}"/>
        <rect x="${x + 18}" y="${y + 18}" width="80" height="10" rx="5" fill="${p.line}"/>
@@ -87,7 +89,8 @@ export function buildShot(p: ShotPalette, variant: ShotVariant): string {
       ${node(560, 324, p.panel)}
       <circle cx="640" cy="120" r="40" fill="${p.accentSoft}"/>
       <rect x="24" y="420" width="752" height="56" rx="12" fill="${p.panel}" stroke="${p.line}"/>`
-  } else if (variant === 'before') {
+  }
+  else if (variant === 'before') {
     // Cluttered, low-contrast "before" — dense uneven blocks, muted accent.
     let blocks = ''
     for (let r = 0; r < 5; r++) {
@@ -98,7 +101,8 @@ export function buildShot(p: ShotPalette, variant: ShotVariant): string {
       }
     }
     body = blocks
-  } else {
+  }
+  else {
     // Clean, confident "after" — generous spacing, clear hierarchy, accent.
     body = `
       <rect x="40" y="64" width="220" height="404" rx="12" fill="${p.panelAlt}"/>
@@ -121,7 +125,7 @@ export function buildShot(p: ShotPalette, variant: ShotVariant): string {
   ${chrome(p)}
   ${body}
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
 /** An alternating deep-dive feature row. */

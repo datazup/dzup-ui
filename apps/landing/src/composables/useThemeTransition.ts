@@ -22,8 +22,10 @@ import { useTheme } from './useTheme.ts'
  */
 
 const THEMING_CLASS = 'dz-theming'
-/** Slightly longer than the `--dz-duration-slower` (500ms) cross-fade so the
- *  marker class outlives the animation before it's cleared. */
+/**
+ * Slightly longer than the `--dz-duration-slower` (500ms) cross-fade so the
+ *  marker class outlives the animation before it's cleared.
+ */
 const CLEANUP_MS = 700
 
 export function useThemeTransition() {
@@ -38,7 +40,8 @@ export function useThemeTransition() {
 
     if (!skip && root) {
       root.classList.add(THEMING_CLASS)
-      if (cleanupTimer !== undefined) window.clearTimeout(cleanupTimer)
+      if (cleanupTimer !== undefined)
+        window.clearTimeout(cleanupTimer)
       cleanupTimer = window.setTimeout(() => root.classList.remove(THEMING_CLASS), CLEANUP_MS)
     }
 

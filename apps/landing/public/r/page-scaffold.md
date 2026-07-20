@@ -8,6 +8,7 @@ A whole landing page assembled from layout primitives only — DzContainer for m
 
 ```vue
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * Page scaffold — a whole responsive page assembled from layout primitives.
  *
@@ -38,7 +39,6 @@ import {
   DzText,
 } from '@dzup-ui/core'
 import { Boxes, Gauge, Layers, ShieldCheck } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 const nav: string[] = ['Product', 'Pricing', 'Docs']
 
@@ -69,7 +69,9 @@ const footerCols: { title: string, links: string[] }[] = [
         <DzFlex direction="row" align="center" gap="md" class="ps-bar">
           <DzFlex direction="row" align="center" gap="sm" class="ps-brand">
             <span class="ps-logo" aria-hidden="true"><DzIcon :icon="Boxes" size="sm" /></span>
-            <DzText size="md" weight="bold" as="span">Stratus</DzText>
+            <DzText size="md" weight="bold" as="span">
+              Stratus
+            </DzText>
           </DzFlex>
 
           <DzSpacer size="auto" />
@@ -79,8 +81,12 @@ const footerCols: { title: string, links: string[] }[] = [
           </nav>
 
           <DzFlex direction="row" align="center" gap="sm" class="ps-header-cta">
-            <DzButton variant="ghost" tone="neutral" size="sm">Sign in</DzButton>
-            <DzButton variant="solid" tone="primary" size="sm">Get started</DzButton>
+            <DzButton variant="ghost" tone="neutral" size="sm">
+              Sign in
+            </DzButton>
+            <DzButton variant="solid" tone="primary" size="sm">
+              Get started
+            </DzButton>
           </DzFlex>
         </DzFlex>
       </DzContainer>
@@ -90,7 +96,9 @@ const footerCols: { title: string, links: string[] }[] = [
     <div class="ps-hero">
       <DzContainer max-width="md">
         <DzStack direction="vertical" align="center" gap="md" class="ps-hero-stack">
-          <DzBadge variant="subtle" tone="primary" size="sm">v2.0 is here</DzBadge>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            v2.0 is here
+          </DzBadge>
           <DzHeading id="ps-title" :level="4" size="2xl" weight="bold" align="center" class="ps-hero-title">
             Ship product UI, not plumbing
           </DzHeading>
@@ -99,8 +107,12 @@ const footerCols: { title: string, links: string[] }[] = [
             structure you can read at a glance.
           </DzText>
           <DzFlex direction="row" gap="sm" justify="center" wrap class="ps-hero-actions">
-            <DzButton variant="solid" tone="primary">Start building</DzButton>
-            <DzButton variant="outline" tone="neutral">View on GitHub</DzButton>
+            <DzButton variant="solid" tone="primary">
+              Start building
+            </DzButton>
+            <DzButton variant="outline" tone="neutral">
+              View on GitHub
+            </DzButton>
           </DzFlex>
         </DzStack>
       </DzContainer>
@@ -117,8 +129,12 @@ const footerCols: { title: string, links: string[] }[] = [
           class="ps-feature"
         >
           <span class="ps-feature-icon" aria-hidden="true"><DzIcon :icon="feature.icon" size="md" /></span>
-          <DzHeading :level="5" size="sm" weight="semibold">{{ feature.title }}</DzHeading>
-          <DzText size="sm" tone="muted">{{ feature.body }}</DzText>
+          <DzHeading :level="5" size="sm" weight="semibold">
+            {{ feature.title }}
+          </DzHeading>
+          <DzText size="sm" tone="muted">
+            {{ feature.body }}
+          </DzText>
         </DzStack>
       </DzGrid>
     </DzContainer>
@@ -127,35 +143,57 @@ const footerCols: { title: string, links: string[] }[] = [
     <DzContainer max-width="lg" class="ps-section">
       <DzFlex direction="row" gap="xl" align="start" class="ps-split">
         <div class="ps-split-main">
-          <DzHeading :level="5" size="lg" weight="bold">Why teams switch</DzHeading>
+          <DzHeading :level="5" size="lg" weight="bold">
+            Why teams switch
+          </DzHeading>
           <DzText size="sm" tone="muted" class="ps-split-body">
             A primitive-first layout system means fewer one-off wrappers, a smaller stylesheet,
             and pages that stay consistent as they grow. Every value resolves from the same
             token scale, so spacing rhythm and theming come for free.
           </DzText>
           <DzFlex direction="row" gap="sm" wrap class="ps-chiprow">
-            <DzBadge variant="outline" tone="neutral" size="sm">No utility soup</DzBadge>
-            <DzBadge variant="outline" tone="neutral" size="sm">Tree-shakeable</DzBadge>
-            <DzBadge variant="outline" tone="neutral" size="sm">SSR-safe</DzBadge>
+            <DzBadge variant="outline" tone="neutral" size="sm">
+              No utility soup
+            </DzBadge>
+            <DzBadge variant="outline" tone="neutral" size="sm">
+              Tree-shakeable
+            </DzBadge>
+            <DzBadge variant="outline" tone="neutral" size="sm">
+              SSR-safe
+            </DzBadge>
           </DzFlex>
         </div>
 
         <aside class="ps-split-aside">
           <DzStack direction="vertical" gap="sm">
-            <DzText size="xs" tone="muted" weight="semibold" class="ps-aside-head">AT A GLANCE</DzText>
+            <DzText size="xs" tone="muted" weight="semibold" class="ps-aside-head">
+              AT A GLANCE
+            </DzText>
             <DzFlex direction="row" align="baseline" gap="sm">
-              <DzHeading :level="6" size="xl" weight="bold">14</DzHeading>
-              <DzText size="sm" tone="muted">primitives</DzText>
+              <DzHeading :level="6" size="xl" weight="bold">
+                14
+              </DzHeading>
+              <DzText size="sm" tone="muted">
+                primitives
+              </DzText>
             </DzFlex>
             <DzDivider />
             <DzFlex direction="row" align="baseline" gap="sm">
-              <DzHeading :level="6" size="xl" weight="bold">0</DzHeading>
-              <DzText size="sm" tone="muted">runtime deps</DzText>
+              <DzHeading :level="6" size="xl" weight="bold">
+                0
+              </DzHeading>
+              <DzText size="sm" tone="muted">
+                runtime deps
+              </DzText>
             </DzFlex>
             <DzDivider />
             <DzFlex direction="row" align="baseline" gap="sm">
-              <DzHeading :level="6" size="xl" weight="bold">AA</DzHeading>
-              <DzText size="sm" tone="muted">contrast</DzText>
+              <DzHeading :level="6" size="xl" weight="bold">
+                AA
+              </DzHeading>
+              <DzText size="sm" tone="muted">
+                contrast
+              </DzText>
             </DzFlex>
           </DzStack>
         </aside>
@@ -170,16 +208,22 @@ const footerCols: { title: string, links: string[] }[] = [
           <DzStack direction="vertical" gap="sm" class="ps-footer-brand">
             <DzFlex direction="row" align="center" gap="sm">
               <span class="ps-logo" aria-hidden="true"><DzIcon :icon="Boxes" size="sm" /></span>
-              <DzText size="md" weight="bold" as="span">Stratus</DzText>
+              <DzText size="md" weight="bold" as="span">
+                Stratus
+              </DzText>
             </DzFlex>
-            <DzText size="sm" tone="muted">Layout primitives for product teams.</DzText>
+            <DzText size="sm" tone="muted">
+              Layout primitives for product teams.
+            </DzText>
           </DzStack>
 
           <DzSpacer size="auto" />
 
           <DzFlex direction="row" gap="xl" wrap class="ps-footer-cols">
             <DzStack v-for="col in footerCols" :key="col.title" direction="vertical" gap="sm">
-              <DzText size="sm" weight="semibold" as="span">{{ col.title }}</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                {{ col.title }}
+              </DzText>
               <a v-for="link in col.links" :key="link" href="#" class="ps-footer-link">{{ link }}</a>
             </DzStack>
           </DzFlex>

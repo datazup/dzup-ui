@@ -50,7 +50,8 @@ let revealed = false
 
 /** The slotted cells — every direct child except the spotlight overlay. */
 function cells(): HTMLElement[] {
-  if (!root.value) return []
+  if (!root.value)
+    return []
   return (Array.from(root.value.children) as HTMLElement[]).filter(
     el => !el.classList.contains('dz-bento__spotlight'),
   )
@@ -66,7 +67,8 @@ function setupCells(): void {
 
 /** JS floor: cascade the cells in with the N0 parametric entrance. */
 function maybeReveal(): void {
-  if (native.value || reduced.value || revealed || !inView.value) return
+  if (native.value || reduced.value || revealed || !inView.value)
+    return
   revealed = true
   cells().forEach((cell, i) => {
     cell.style.animationDelay = `${i * props.step}ms`
@@ -98,14 +100,17 @@ let frame = 0
 function applySpot(): void {
   frame = 0
   const el = spot.value
-  if (!el) return
+  if (!el)
+    return
   el.style.transform = `translate3d(calc(${nx}px - 50%), calc(${ny}px - 50%), 0)`
 }
 
 function onMove(event: PointerEvent): void {
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch')
+    return
   const el = root.value
-  if (!el) return
+  if (!el)
+    return
   const rect = el.getBoundingClientRect()
   nx = event.clientX - rect.left
   ny = event.clientY - rect.top
@@ -113,7 +118,8 @@ function onMove(event: PointerEvent): void {
     active.value = true
     spot.value?.style.setProperty('will-change', 'transform')
   }
-  if (!frame) frame = requestAnimationFrame(applySpot)
+  if (!frame)
+    frame = requestAnimationFrame(applySpot)
 }
 
 function onLeave(): void {
@@ -142,7 +148,8 @@ function detach(el: HTMLElement): void {
 watch(
   [root, reduced],
   ([el, isReduced], _prev, onCleanup) => {
-    if (!el || isReduced || !props.spotlight) return
+    if (!el || isReduced || !props.spotlight)
+      return
     attach(el)
     onCleanup(() => detach(el))
   },
@@ -150,7 +157,8 @@ watch(
 )
 
 onBeforeUnmount(() => {
-  if (frame) cancelAnimationFrame(frame)
+  if (frame)
+    cancelAnimationFrame(frame)
 })
 
 const rootClass = computed(() => ({

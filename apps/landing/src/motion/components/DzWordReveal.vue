@@ -35,7 +35,9 @@ const words = computed(() => props.text.split(/\s+/).filter(Boolean))
 
 <template>
   <DzStagger :as="props.as" :step="props.step" :direction="props.direction" class="dz-word-reveal">
-    <template v-for="(word, i) in words" :key="`${word}-${i}`"><span class="dz-word-reveal__word">{{ word }}</span>{{ ' ' }}</template>
+    <template v-for="(word, i) in words" :key="`${word}-${i}`">
+      <span class="dz-word-reveal__word">{{ word }}</span>{{ ' ' }}
+    </template>
   </DzStagger>
 </template>
 

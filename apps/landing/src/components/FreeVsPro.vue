@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { Check, Sparkles } from 'lucide-vue-next'
-import Section from './Section.vue'
-import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
 import { FACTS, LINKS } from '../config.ts'
+import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
+import Section from './Section.vue'
 
 // The ambient upsell fork (spec §4.8). Count contrast + a clear visual
 // distinction; the word "Pro" is reserved strictly for the paid tier.
@@ -43,9 +43,15 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
 
       <div class="fork-grid">
         <article class="lp-card plan">
-          <DzBadge variant="subtle" tone="neutral">Open source</DzBadge>
-          <DzHeading :level="3" size="lg" weight="semibold" class="plan-title">Start free</DzHeading>
-          <DzText size="sm" tone="muted">Everything you need to ship a polished product today.</DzText>
+          <DzBadge variant="subtle" tone="neutral">
+            Open source
+          </DzBadge>
+          <DzHeading :level="3" size="lg" weight="semibold" class="plan-title">
+            Start free
+          </DzHeading>
+          <DzText size="sm" tone="muted">
+            Everything you need to ship a polished product today.
+          </DzText>
           <ul class="plan-points">
             <li v-for="p in freePoints" :key="p">
               <Check :size="16" aria-hidden="true" />
@@ -63,7 +69,9 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
             <Sparkles :size="13" aria-hidden="true" />
             Pro · Coming soon
           </DzBadge>
-          <DzHeading :level="3" size="lg" weight="semibold" class="plan-title">Go Pro</DzHeading>
+          <DzHeading :level="3" size="lg" weight="semibold" class="plan-title">
+            Go Pro
+          </DzHeading>
           <DzText size="sm" tone="muted">
             The heavy, business-critical components — built on the same tokens and a11y bar.
           </DzText>
@@ -75,11 +83,17 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
           </ul>
           <ul class="plan-chips">
             <li v-for="c in proPreview" :key="c.label">
-              <DzBadge variant="outline" tone="primary" size="sm">{{ c.label }}</DzBadge>
+              <DzBadge variant="outline" tone="primary" size="sm">
+                {{ c.label }}
+              </DzBadge>
             </li>
             <!-- The rest of the NAMED list, not the roadmap: these chips promise
                  components a visitor can go and read about on /pro. -->
-            <li><DzBadge variant="subtle" tone="primary" size="sm">+{{ PRO_FACTS.announced - proPreview.length }} more</DzBadge></li>
+            <li>
+              <DzBadge variant="subtle" tone="primary" size="sm">
+                +{{ PRO_FACTS.announced - proPreview.length }} more
+              </DzBadge>
+            </li>
           </ul>
           <DzButton variant="solid" tone="primary" :to="LINKS.pro" class="plan-cta">
             Join the waitlist

@@ -25,10 +25,12 @@ const isInternal = !!ANNOUNCEMENT?.href && /^\/(?!\/)/.test(ANNOUNCEMENT.href)
 
 /** Read the persisted dismissal — SSR/prerender-safe (no window ⇒ show). */
 function isDismissed(): boolean {
-  if (!ANNOUNCEMENT || typeof localStorage === 'undefined') return false
+  if (!ANNOUNCEMENT || typeof localStorage === 'undefined')
+    return false
   try {
     return localStorage.getItem(storageKey) === '1'
-  } catch {
+  }
+  catch {
     // Private-mode / blocked storage: fail open (show the bar) rather than throw.
     return false
   }
@@ -40,10 +42,12 @@ const visible = ref(!!ANNOUNCEMENT && !isDismissed())
 
 function dismiss(): void {
   visible.value = false
-  if (typeof localStorage === 'undefined') return
+  if (typeof localStorage === 'undefined')
+    return
   try {
     localStorage.setItem(storageKey, '1')
-  } catch {
+  }
+  catch {
     // Ignore write failures — the bar still closes for this session.
   }
 }

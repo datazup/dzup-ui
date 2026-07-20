@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TaskItem } from './data.ts'
 /**
  * Tasks / To-Do — full-page app template (docs/templates.md §6.4).
  *
@@ -36,19 +37,19 @@ import {
 } from '@dzup-ui/core'
 import { Boxes, MoreHorizontal, Plus, Star } from 'lucide-vue-next'
 import { computed, reactive, ref } from 'vue'
-import { NAV, PRIORITY_TONE, TASKS, TODAY_LABEL, type TaskItem } from './data.ts'
+import { NAV, PRIORITY_TONE, TASKS, TODAY_LABEL } from './data.ts'
 
 // Local, mutable copy so every interaction feels live in the preview.
-const tasks = reactive<TaskItem[]>(TASKS.map((t) => ({ ...t })))
+const tasks = reactive<TaskItem[]>(TASKS.map(t => ({ ...t })))
 
 const view = ref<'today' | 'upcoming' | 'done'>('today')
 const draft = ref('')
 let seq = 100
 
 const counts = computed(() => ({
-  today: tasks.filter((t) => !t.done && t.when === 'today').length,
-  upcoming: tasks.filter((t) => !t.done && t.when === 'upcoming').length,
-  done: tasks.filter((t) => t.done).length,
+  today: tasks.filter(t => !t.done && t.when === 'today').length,
+  upcoming: tasks.filter(t => !t.done && t.when === 'upcoming').length,
+  done: tasks.filter(t => t.done).length,
 }))
 
 const views = computed(() => [
@@ -58,13 +59,15 @@ const views = computed(() => [
 ])
 
 const filtered = computed(() => {
-  if (view.value === 'done') return tasks.filter((t) => t.done)
-  return tasks.filter((t) => !t.done && t.when === view.value)
+  if (view.value === 'done')
+    return tasks.filter(t => t.done)
+  return tasks.filter(t => !t.done && t.when === view.value)
 })
 
 function addTask(): void {
   const title = draft.value.trim()
-  if (!title) return
+  if (!title)
+    return
   const when = view.value === 'upcoming' ? 'upcoming' : 'today'
   tasks.unshift({
     id: `new-${seq++}`,
@@ -90,8 +93,9 @@ function move(task: TaskItem): void {
 }
 
 function remove(task: TaskItem): void {
-  const i = tasks.findIndex((t) => t.id === task.id)
-  if (i !== -1) tasks.splice(i, 1)
+  const i = tasks.findIndex(t => t.id === task.id)
+  if (i !== -1)
+    tasks.splice(i, 1)
 }
 </script>
 
@@ -108,7 +112,9 @@ function remove(task: TaskItem): void {
 
         <DzSidebarSection title="Lists">
           <DzSidebarItem v-for="item in NAV" :key="item.key" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template #badge>
               <DzBadge variant="subtle" :tone="item.active ? 'primary' : 'neutral'" size="sm">
@@ -132,8 +138,12 @@ function remove(task: TaskItem): void {
 
     <template #header>
       <div class="td-title">
-        <DzHeading :level="1" size="lg" weight="semibold">My Day</DzHeading>
-        <DzText size="sm" tone="muted" as="span">{{ TODAY_LABEL }}</DzText>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          My Day
+        </DzHeading>
+        <DzText size="sm" tone="muted" as="span">
+          {{ TODAY_LABEL }}
+        </DzText>
       </div>
     </template>
 
@@ -153,7 +163,9 @@ function remove(task: TaskItem): void {
           class="quick-add-input"
         />
         <DzButton type="submit" variant="solid" tone="primary" :disabled="!draft.trim()">
-          <template #prefix><Plus :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <Plus :size="16" aria-hidden="true" />
+          </template>
           Add
         </DzButton>
       </form>
@@ -170,15 +182,21 @@ function remove(task: TaskItem): void {
 
           <div class="task" :class="{ 'task--done': task.done }">
             <div class="task-head">
-              <DzText size="sm" weight="medium" as="span" class="task-title">{{ task.title }}</DzText>
+              <DzText size="sm" weight="medium" as="span" class="task-title">
+                {{ task.title }}
+              </DzText>
               <Star v-if="task.starred" :size="14" class="task-star" aria-label="Starred" />
             </div>
             <div class="task-meta">
               <DzBadge variant="outline" :tone="PRIORITY_TONE[task.priority]" size="sm">
                 {{ task.priority }}
               </DzBadge>
-              <DzTag variant="subtle" :tone="task.labelTone" size="sm">{{ task.label }}</DzTag>
-              <DzText size="xs" tone="muted" as="span" class="task-due">{{ task.due }}</DzText>
+              <DzTag variant="subtle" :tone="task.labelTone" size="sm">
+                {{ task.label }}
+              </DzTag>
+              <DzText size="xs" tone="muted" as="span" class="task-due">
+                {{ task.due }}
+              </DzText>
             </div>
           </div>
 
@@ -204,7 +222,9 @@ function remove(task: TaskItem): void {
                 </DzDropdownMenuItem>
                 <DzDropdownMenuItem>Edit</DzDropdownMenuItem>
                 <DzDropdownMenuSeparator />
-                <DzDropdownMenuItem @select="remove(task)">Delete</DzDropdownMenuItem>
+                <DzDropdownMenuItem @select="remove(task)">
+                  Delete
+                </DzDropdownMenuItem>
               </DzDropdownMenuContent>
             </DzDropdownMenu>
           </template>

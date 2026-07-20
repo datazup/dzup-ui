@@ -31,8 +31,9 @@
  * source-vendor the Dz* components. See `scripts/README.md` for the full write-up.
  */
 
-import { sourceDependencies } from './config.ts'
 import type { BlockDef, BlockSourceLookup } from './registry.ts'
+import { SITE_ORIGIN } from '../origin.ts'
+import { sourceDependencies } from './config.ts'
 
 /**
  * `$schema` URLs the emitted JSON is validated against — the canonical shadcn
@@ -56,9 +57,14 @@ export const REGISTRY_FILE_TYPE = 'registry:file'
 /** Project-relative directory the CLI writes each block SFC into. */
 export const BLOCK_TARGET_DIR = 'components/blocks'
 
-/** Registry name + canonical homepage stamped into the `registry.json` index. */
+/**
+ * Registry name + canonical homepage stamped into the `registry.json` index.
+ * The homepage is derived from `SITE_ORIGIN`, never retyped: it is published into
+ * a distributed artifact consumers fetch, so a stale host here is a 404 in
+ * someone else's project.
+ */
 export const REGISTRY_NAME = 'dzup-ui'
-export const REGISTRY_HOMEPAGE = 'https://dzup-ui.dev'
+export const REGISTRY_HOMEPAGE = SITE_ORIGIN
 
 /** One file entry inside a registry item (`files[]`). */
 export interface RegistryFile {
@@ -173,7 +179,7 @@ export function buildRegistryIndex(
     $schema: REGISTRY_SCHEMA,
     name: REGISTRY_NAME,
     homepage,
-    items: blocks.map((block) => toRegistryIndexItem(toRegistryItem(block, getSource(block)))),
+    items: blocks.map(block => toRegistryIndexItem(toRegistryItem(block, getSource(block)))),
   }
 }
 

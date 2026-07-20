@@ -1,6 +1,7 @@
+import type { Connect, Plugin, ViteDevServer } from 'vite'
 import { cpSync, createReadStream, existsSync, statSync } from 'node:fs'
 import { join, normalize, resolve, sep } from 'node:path'
-import type { Connect, Plugin, ViteDevServer } from 'vite'
+import process from 'node:process'
 
 /**
  * Mounts the free Storybook build under `/storybook/` so the landing page's
@@ -69,7 +70,8 @@ function serveStorybookMiddleware(staticDir: string): Connect.NextHandleFunction
     // `split(...)[0]` is `string | undefined`, even though it never is here.
     const [pathname = ''] = url.slice(MOUNT.length).split(/[?#]/)
     let rel = decodeURIComponent(pathname)
-    if (rel === '' || rel === '/') rel = '/index.html'
+    if (rel === '' || rel === '/')
+      rel = '/index.html'
 
     const filePath = normalize(join(staticDir, rel))
     // Block path traversal outside the static root.
@@ -100,7 +102,6 @@ export function serveStorybook(): Plugin {
 
   const attach = (server: ViteDevServer | { middlewares: Connect.Server }): void => {
     if (!existsSync(staticDir)) {
-      // eslint-disable-next-line no-console
       console.warn(
         `[serve-storybook] ${staticDir} not found — run \`yarn storybook:build\`. `
         + 'The "Components" link will 404 until then.',
@@ -132,7 +133,6 @@ export function serveStorybook(): Plugin {
 
       if (!built) {
         if (process.env[SKIP_ENV]) {
-          // eslint-disable-next-line no-console
           console.warn(
             `\n${'!'.repeat(72)}\n`
             + `[serve-storybook] ${SKIP_ENV} is set — building the landing site WITHOUT /storybook/.\n`

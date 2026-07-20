@@ -23,10 +23,12 @@
  */
 export const DZUP_VERSION = '^0.1.0'
 
-/** Tailwind v4 browser JIT — generates the utility classes dzup components use
+/**
+ * Tailwind v4 browser JIT — generates the utility classes dzup components use
  *  (`inline-flex`, `h-[var(--dz-…)]`, …) live inside the sandbox, so we don't
  *  have to ship a precompiled utility sheet. Same CDN pattern the REPL already
- *  uses to load Vue. */
+ *  uses to load Vue.
+ */
 export const TAILWIND_BROWSER_CDN = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4'
 
 /**
@@ -97,16 +99,20 @@ export function replSandboxHeadHTML(theme: 'light' | 'dark'): string {
   ].join('\n')
 }
 
-/** Import-map entries that make bare `@dzup-ui/*` specifiers resolve to the
+/**
+ * Import-map entries that make bare `@dzup-ui/*` specifiers resolve to the
  *  self-contained local bundle inside the sandbox. Merged on top of the REPL's
- *  built-in Vue map so Vue stays a shared singleton. */
+ *  built-in Vue map so Vue stays a shared singleton.
+ */
 export function dzupImportMap(): Record<string, string> {
   const base = playgroundAssetBase()
   return { '@dzup-ui/core': `${base}dzup-core.mjs` }
 }
 
-/** Read the current Storybook theme from the documented `data-theme` attribute
- *  the Theme toolbar sets on <html>; falls back to the OS preference. */
+/**
+ * Read the current Storybook theme from the documented `data-theme` attribute
+ *  the Theme toolbar sets on <html>; falls back to the OS preference.
+ */
 export function currentStorybookTheme(): 'light' | 'dark' {
   if (typeof document === 'undefined')
     return 'light'

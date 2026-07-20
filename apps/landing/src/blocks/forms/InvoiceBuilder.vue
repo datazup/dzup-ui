@@ -42,8 +42,9 @@ const total = computed(() =>
   items.value.reduce((sum, it) => sum + (it.qty ?? 0) * (it.rate ?? 0), 0),
 )
 
-const money = (n: number) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+function money(n: number) {
+  return n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+}
 </script>
 
 <template>
@@ -54,7 +55,9 @@ const money = (n: number) =>
           New invoice
         </DzHeading>
         <div class="ib-billto">
-          <DzText size="sm" tone="muted" as="span">Bill to</DzText>
+          <DzText size="sm" tone="muted" as="span">
+            Bill to
+          </DzText>
           <DzInplace v-model:value="billTo" save-on="both" aria-label="Bill to" class="ib-inplace">
             <template #display="{ value, activate }">
               <span class="ib-billto-name" @click="activate">{{ value }}</span>
@@ -65,10 +68,18 @@ const money = (n: number) =>
 
       <!-- Column headings -->
       <div class="ib-row ib-row--head">
-        <DzText size="xs" tone="muted" weight="medium" as="span">Description</DzText>
-        <DzText size="xs" tone="muted" weight="medium" as="span" class="ib-col-num">Qty</DzText>
-        <DzText size="xs" tone="muted" weight="medium" as="span" class="ib-col-num">Rate</DzText>
-        <DzText size="xs" tone="muted" weight="medium" as="span" class="ib-col-num">Amount</DzText>
+        <DzText size="xs" tone="muted" weight="medium" as="span">
+          Description
+        </DzText>
+        <DzText size="xs" tone="muted" weight="medium" as="span" class="ib-col-num">
+          Qty
+        </DzText>
+        <DzText size="xs" tone="muted" weight="medium" as="span" class="ib-col-num">
+          Rate
+        </DzText>
+        <DzText size="xs" tone="muted" weight="medium" as="span" class="ib-col-num">
+          Amount
+        </DzText>
         <span class="ib-col-act" aria-hidden="true" />
       </div>
 
@@ -95,7 +106,7 @@ const money = (n: number) =>
             <span class="ib-amount ib-col-num">{{ money((field.qty ?? 0) * (field.rate ?? 0)) }}</span>
             <DzIconButton
               :icon="Trash2"
-              ariaLabel="Remove line item"
+              aria-label="Remove line item"
               variant="ghost"
               tone="danger"
               size="sm"
@@ -125,13 +136,21 @@ const money = (n: number) =>
       <DzDivider decorative class="ib-rule" />
 
       <div class="ib-total">
-        <DzText size="sm" tone="muted" as="span">Total due</DzText>
-        <DzText size="xl" weight="bold" as="span" class="ib-total-amt">{{ money(total) }}</DzText>
+        <DzText size="sm" tone="muted" as="span">
+          Total due
+        </DzText>
+        <DzText size="xl" weight="bold" as="span" class="ib-total-amt">
+          {{ money(total) }}
+        </DzText>
       </div>
 
       <div class="ib-actions">
-        <DzButton variant="ghost" tone="neutral">Save draft</DzButton>
-        <DzButton variant="solid" tone="primary">Send invoice</DzButton>
+        <DzButton variant="ghost" tone="neutral">
+          Save draft
+        </DzButton>
+        <DzButton variant="solid" tone="primary">
+          Send invoice
+        </DzButton>
       </div>
     </DzCard>
   </section>

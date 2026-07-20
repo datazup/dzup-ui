@@ -37,9 +37,15 @@ function swap(): void {
     <div class="frame">
       <Transition :name="transitionName" mode="out-in">
         <div :key="current.name" class="page">
-          <DzText size="xs" tone="muted" as="div" class="eyebrow">{{ current.eyebrow }}</DzText>
-          <DzHeading :level="4" size="lg" weight="bold">{{ current.name }}</DzHeading>
-          <DzText size="sm" tone="muted" as="p" class="body">{{ current.body }}</DzText>
+          <DzText size="xs" tone="muted" as="div" class="eyebrow">
+            {{ current.eyebrow }}
+          </DzText>
+          <DzHeading :level="4" size="lg" weight="bold">
+            {{ current.name }}
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p" class="body">
+            {{ current.body }}
+          </DzText>
         </div>
       </Transition>
     </div>

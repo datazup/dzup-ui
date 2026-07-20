@@ -28,7 +28,7 @@ const columns = [
     links: [
       { label: 'Blocks', href: '/blocks', external: false },
       { label: 'Compare', href: '/compare', external: false },
-      { label: 'Changelog', href: LINKS.changelog, external: true },
+      { label: 'Changelog', href: LINKS.changelog, external: false },
       // No npm / Nuxt-module links yet: the package is unpublished and the Nuxt
       // guide does not exist — a footer link to a 404 says "unmaintained"
       // louder than the link's absence (TASK-FREE-11). Re-add when they exist.

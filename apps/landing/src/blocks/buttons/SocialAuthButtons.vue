@@ -32,24 +32,32 @@ import { Apple, Github, Mail } from 'lucide-vue-next'
       </DzButton>
 
       <DzButton variant="outline" tone="neutral" size="lg" class="sab-btn">
-        <template #prefix><Github :size="18" aria-hidden="true" /></template>
+        <template #prefix>
+          <Github :size="18" aria-hidden="true" />
+        </template>
         Continue with GitHub
       </DzButton>
 
       <DzButton variant="outline" tone="neutral" size="lg" class="sab-btn">
-        <template #prefix><Apple :size="18" aria-hidden="true" /></template>
+        <template #prefix>
+          <Apple :size="18" aria-hidden="true" />
+        </template>
         Continue with Apple
       </DzButton>
     </div>
 
     <div class="sab-or" role="separator" aria-label="or">
       <DzDivider decorative class="sab-or-line" />
-      <DzText size="xs" tone="muted" as="span" class="sab-or-text">or</DzText>
+      <DzText size="xs" tone="muted" as="span" class="sab-or-text">
+        or
+      </DzText>
       <DzDivider decorative class="sab-or-line" />
     </div>
 
     <DzButton variant="solid" tone="primary" size="lg" class="sab-btn">
-      <template #prefix><Mail :size="18" aria-hidden="true" /></template>
+      <template #prefix>
+        <Mail :size="18" aria-hidden="true" />
+      </template>
       Continue with email
     </DzButton>
 

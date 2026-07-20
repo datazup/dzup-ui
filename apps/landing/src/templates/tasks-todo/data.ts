@@ -1,3 +1,5 @@
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { Component } from 'vue'
 /**
  * Tasks / To-Do — co-located sample data (docs/templates.md §6.4).
  *
@@ -7,8 +9,6 @@
  * deleting feel live in the preview.
  */
 import { CalendarDays, ListTodo, Star, Sun, UserRoundCheck } from 'lucide-vue-next'
-import type { Component } from 'vue'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 /** One to-do row. */
 export interface TaskItem {

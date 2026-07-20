@@ -99,7 +99,7 @@ export function buildCover(p: CoverPalette): string {
   </g>
   <circle cx="690" cy="300" r="92" fill="none" stroke="${p.accent}" stroke-width="14" opacity="0.8"/>
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
 /**
@@ -117,5 +117,5 @@ export function buildFigure(p: CoverPalette): string {
   <rect x="190" y="222" width="140" height="16" rx="8" fill="${p.panel}"/>
   <rect x="670" y="222" width="140" height="16" rx="8" fill="${p.panel}"/>
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import type { CatalogEntry, CatalogType } from './catalog.ts'
 import { DzBadge, DzButton, DzText } from '@dzup-ui/core'
 import { Check, Code2, Copy, Link2, RotateCcw, Zap } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 import { useInView } from '../motion/index.ts'
 import { categoryAccentStyle } from './catalog.ts'
-import type { CatalogEntry, CatalogType } from './catalog.ts'
 
 /**
  * AnimationCard — the gallery's atomic unit (docs/animations.md §4.4).
@@ -68,7 +68,7 @@ const VARIANT_LABELS: Record<VariantKey, string> = {
 }
 const variantTabs = computed<VariantKey[]>(() => {
   const v = props.entry.variants
-  return v ? VARIANT_ORDER.filter((k) => v[k]) : []
+  return v ? VARIANT_ORDER.filter(k => v[k]) : []
 })
 const hasVariants = computed(() => variantTabs.value.length > 0)
 
@@ -76,7 +76,8 @@ const hasVariants = computed(() => variantTabs.value.length > 0)
 // (and thus its tab set) changes under the same card slot.
 const activeTab = ref<VariantKey | null>(null)
 const currentTab = computed<VariantKey | null>(() => {
-  if (!hasVariants.value) return null
+  if (!hasVariants.value)
+    return null
   const active = activeTab.value
   return active && variantTabs.value.includes(active) ? active : variantTabs.value[0]!
 })
@@ -99,10 +100,14 @@ function selectTab(key: VariantKey): void {
 function onTabKeydown(event: KeyboardEvent, index: number): void {
   const tabs = variantTabs.value
   let next = index
-  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length
-  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + tabs.length) % tabs.length
-  else if (event.key === 'Home') next = 0
-  else if (event.key === 'End') next = tabs.length - 1
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown')
+    next = (index + 1) % tabs.length
+  else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp')
+    next = (index - 1 + tabs.length) % tabs.length
+  else if (event.key === 'Home')
+    next = 0
+  else if (event.key === 'End')
+    next = tabs.length - 1
   else return
   event.preventDefault()
   selectTab(tabs[next]!)
@@ -127,7 +132,8 @@ const anchorId = computed(() => `effect-${props.entry.id}`)
 const linkCopied = ref(false)
 
 async function copyLink(): Promise<void> {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   const url = `${window.location.origin}${window.location.pathname}#${anchorId.value}`
   try {
     await navigator.clipboard.writeText(url)
@@ -196,7 +202,9 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
     <!-- Quiet metadata beneath the stage. -->
     <div class="body">
       <div class="title-row">
-        <DzText weight="semibold" as="div" class="card-title">{{ entry.title }}</DzText>
+        <DzText weight="semibold" as="div" class="card-title">
+          {{ entry.title }}
+        </DzText>
 
         <div class="title-meta">
           <!-- Native-API badge: names the platform API the effect upgrades to,
@@ -213,7 +221,9 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
             {{ entry.native.api }}
           </span>
 
-          <DzBadge variant="subtle" :tone="typeTone" size="sm">{{ entry.type }}</DzBadge>
+          <DzBadge variant="subtle" :tone="typeTone" size="sm">
+            {{ entry.type }}
+          </DzBadge>
 
           <button
             type="button"
@@ -227,7 +237,9 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
         </div>
       </div>
 
-      <DzText size="sm" tone="muted" as="p" class="blurb">{{ entry.blurb }}</DzText>
+      <DzText size="sm" tone="muted" as="p" class="blurb">
+        {{ entry.blurb }}
+      </DzText>
 
       <div class="actions">
         <DzButton
@@ -261,7 +273,9 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
       <!-- Disclosure: built-with chips + the copy-pasteable snippet. -->
       <div v-if="showCode" class="disclosure">
         <div v-if="entry.components.length" class="built-with">
-          <DzText size="xs" tone="muted" as="span" class="built-label">Built with</DzText>
+          <DzText size="xs" tone="muted" as="span" class="built-label">
+            Built with
+          </DzText>
           <DzBadge
             v-for="name in entry.components"
             :key="name"

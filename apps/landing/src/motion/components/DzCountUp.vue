@@ -11,7 +11,7 @@ import { useReducedMotion } from '../useReducedMotion.ts'
  *
  * A thin wrapper over core's {@link DzAnimatedNumber} that does NOT re-implement
  * number tweening (the constraint): it only owns *when* the tween fires and
- * *whether* it runs. The figure holds at `from` until the element scrolls into
+ * whether* it runs. The figure holds at `from` until the element scrolls into
  * view (via the gallery's shared {@link useInView}), then tweens to `value`.
  *
  * Reduced motion (OS setting OR the page-level "Reduce motion" toggle, read
@@ -75,7 +75,8 @@ const target = ref(props.from)
 watch(
   [inView, reduced],
   ([visible, isReduced]) => {
-    if (isReduced || visible) target.value = props.value
+    if (isReduced || visible)
+      target.value = props.value
   },
   { immediate: true },
 )

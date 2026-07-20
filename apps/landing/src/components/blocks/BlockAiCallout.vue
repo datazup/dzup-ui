@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { DzButton, DzCodeBlock, DzHeading, DzText } from '@dzup-ui/core'
 import { ExternalLink, FileText, Package, Terminal } from 'lucide-vue-next'
+import { computed } from 'vue'
 import {
   llmsTxtUrl,
   mcpServerConfig,
@@ -65,9 +65,13 @@ const discovery = computed(() => registryDiscoveryCommands())
         tone="neutral"
         size="sm"
       >
-        <template #prefix><FileText :size="16" aria-hidden="true" /></template>
+        <template #prefix>
+          <FileText :size="16" aria-hidden="true" />
+        </template>
         llms.txt
-        <template #suffix><ExternalLink :size="14" aria-hidden="true" /></template>
+        <template #suffix>
+          <ExternalLink :size="14" aria-hidden="true" />
+        </template>
       </DzButton>
       <DzButton
         v-if="registryHref"
@@ -79,9 +83,13 @@ const discovery = computed(() => registryDiscoveryCommands())
         tone="neutral"
         size="sm"
       >
-        <template #prefix><Package :size="16" aria-hidden="true" /></template>
+        <template #prefix>
+          <Package :size="16" aria-hidden="true" />
+        </template>
         registry.json
-        <template #suffix><ExternalLink :size="14" aria-hidden="true" /></template>
+        <template #suffix>
+          <ExternalLink :size="14" aria-hidden="true" />
+        </template>
       </DzButton>
     </div>
 

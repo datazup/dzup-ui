@@ -40,7 +40,9 @@ const nodeC = ref<HTMLElement | null>(null)
 
       <div ref="hub" class="hub">
         <DzCard variant="elevated" padding="sm" class="hub-card">
-          <DzText size="sm" weight="semibold">Core</DzText>
+          <DzText size="sm" weight="semibold">
+            Core
+          </DzText>
         </DzCard>
       </div>
     </div>

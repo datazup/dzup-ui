@@ -8,6 +8,16 @@ An order review panel — a DzDescriptions ship-to / delivery / payment grid, an
 
 ```vue
 <script setup lang="ts">
+import {
+  DzBadge,
+  DzButton,
+  DzDescriptions,
+  DzDescriptionsItem,
+  DzDivider,
+  DzHeading,
+  DzInput,
+  DzText,
+} from '@dzup-ui/core'
 /**
  * Checkout order summary — a review panel with a promo-code field.
  *
@@ -21,16 +31,6 @@ An order review panel — a DzDescriptions ship-to / delivery / payment grid, an
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { computed, ref } from 'vue'
-import {
-  DzBadge,
-  DzButton,
-  DzDescriptions,
-  DzDescriptionsItem,
-  DzDivider,
-  DzHeading,
-  DzInput,
-  DzText,
-} from '@dzup-ui/core'
 
 interface OrderLine {
   id: number
@@ -65,7 +65,8 @@ function applyPromo() {
   if (promo.value.trim().toUpperCase() === PROMO_CODE) {
     applied.value = true
     promoError.value = false
-  } else {
+  }
+  else {
     applied.value = false
     promoError.value = true
   }
@@ -76,19 +77,29 @@ function applyPromo() {
   <section class="ck-wrap" aria-labelledby="ck-title">
     <div class="ck-card">
       <header class="ck-head">
-        <DzHeading id="ck-title" :level="4" size="md" weight="semibold" class="ck-heading">Order summary</DzHeading>
-        <DzBadge variant="subtle" tone="neutral" size="sm">{{ lines.length }} items</DzBadge>
+        <DzHeading id="ck-title" :level="4" size="md" weight="semibold" class="ck-heading">
+          Order summary
+        </DzHeading>
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          {{ lines.length }} items
+        </DzBadge>
       </header>
 
       <DzDescriptions :columns="1" layout="horizontal" bordered size="sm" class="ck-review">
         <DzDescriptionsItem label="Ship to">
-          <DzText size="sm" as="span">Ada Lovelace · 12 Analytical Ave, London EC1</DzText>
+          <DzText size="sm" as="span">
+            Ada Lovelace · 12 Analytical Ave, London EC1
+          </DzText>
         </DzDescriptionsItem>
         <DzDescriptionsItem label="Delivery">
-          <DzText size="sm" as="span">Standard · 3–5 business days</DzText>
+          <DzText size="sm" as="span">
+            Standard · 3–5 business days
+          </DzText>
         </DzDescriptionsItem>
         <DzDescriptionsItem label="Payment">
-          <DzText size="sm" as="span" class="ck-mono">Visa •••• 4242</DzText>
+          <DzText size="sm" as="span" class="ck-mono">
+            Visa •••• 4242
+          </DzText>
         </DzDescriptionsItem>
       </DzDescriptions>
 
@@ -98,9 +109,13 @@ function applyPromo() {
         <li v-for="line in lines" :key="line.id" class="ck-line">
           <DzText size="sm" as="span" class="ck-line-name">
             {{ line.name }}
-            <DzText size="xs" tone="muted" as="span">× {{ line.qty }}</DzText>
+            <DzText size="xs" tone="muted" as="span">
+              × {{ line.qty }}
+            </DzText>
           </DzText>
-          <DzText size="sm" as="span" class="ck-line-price">{{ money(line.price * line.qty) }}</DzText>
+          <DzText size="sm" as="span" class="ck-line-price">
+            {{ money(line.price * line.qty) }}
+          </DzText>
         </li>
       </ul>
 
@@ -116,7 +131,9 @@ function applyPromo() {
           :invalid="promoError"
           class="ck-promo-input"
         />
-        <DzButton type="submit" variant="outline" tone="neutral">Apply</DzButton>
+        <DzButton type="submit" variant="outline" tone="neutral">
+          Apply
+        </DzButton>
       </form>
       <DzText v-if="applied" size="xs" tone="success" as="p" class="ck-promo-msg">
         Code “{{ PROMO_CODE }}” applied — 10% off.
@@ -129,34 +146,72 @@ function applyPromo() {
 
       <dl class="ck-totals">
         <div class="ck-row">
-          <dt><DzText size="sm" tone="muted" as="span">Subtotal</DzText></dt>
-          <dd><DzText size="sm" as="span">{{ money(subtotal) }}</DzText></dd>
+          <dt>
+            <DzText size="sm" tone="muted" as="span">
+              Subtotal
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" as="span">
+              {{ money(subtotal) }}
+            </DzText>
+          </dd>
         </div>
         <div v-if="applied" class="ck-row">
           <dt>
-            <DzText size="sm" tone="muted" as="span">Discount</DzText>
-            <DzBadge variant="subtle" tone="success" size="sm" class="ck-disc-badge">{{ PROMO_CODE }}</DzBadge>
+            <DzText size="sm" tone="muted" as="span">
+              Discount
+            </DzText>
+            <DzBadge variant="subtle" tone="success" size="sm" class="ck-disc-badge">
+              {{ PROMO_CODE }}
+            </DzBadge>
           </dt>
-          <dd><DzText size="sm" tone="success" as="span">−{{ money(discount) }}</DzText></dd>
+          <dd>
+            <DzText size="sm" tone="success" as="span">
+              −{{ money(discount) }}
+            </DzText>
+          </dd>
         </div>
         <div class="ck-row">
-          <dt><DzText size="sm" tone="muted" as="span">Shipping</DzText></dt>
-          <dd><DzText size="sm" as="span">Free</DzText></dd>
+          <dt>
+            <DzText size="sm" tone="muted" as="span">
+              Shipping
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" as="span">
+              Free
+            </DzText>
+          </dd>
         </div>
         <div class="ck-row">
-          <dt><DzText size="sm" tone="muted" as="span">Estimated tax</DzText></dt>
-          <dd><DzText size="sm" as="span">{{ money(tax) }}</DzText></dd>
+          <dt>
+            <DzText size="sm" tone="muted" as="span">
+              Estimated tax
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" as="span">
+              {{ money(tax) }}
+            </DzText>
+          </dd>
         </div>
       </dl>
 
       <DzDivider class="ck-rule" />
 
       <div class="ck-row ck-row--total">
-        <DzText size="md" weight="semibold" as="span">Total</DzText>
-        <DzText size="lg" weight="bold" as="span">{{ money(total) }}</DzText>
+        <DzText size="md" weight="semibold" as="span">
+          Total
+        </DzText>
+        <DzText size="lg" weight="bold" as="span">
+          {{ money(total) }}
+        </DzText>
       </div>
 
-      <DzButton variant="solid" tone="primary" size="lg" class="ck-place">Place order</DzButton>
+      <DzButton variant="solid" tone="primary" size="lg" class="ck-place">
+        Place order
+      </DzButton>
       <DzText size="xs" tone="muted" align="center" as="p" class="ck-secure">
         Secured by 256-bit TLS encryption.
       </DzText>

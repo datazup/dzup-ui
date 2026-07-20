@@ -22,6 +22,7 @@
  */
 
 import type { CatalogEntry } from './catalog.ts'
+import { SITE_ORIGIN } from '../origin.ts'
 
 /**
  * `$schema` URLs the emitted JSON is validated against — the shadcn-vue mirror
@@ -37,7 +38,7 @@ export const REGISTRY_ITEM_TYPE = 'registry:block'
 
 /** Registry name + canonical homepage stamped into the `registry.json` index. */
 export const REGISTRY_NAME = 'dzup-ui-animations'
-export const REGISTRY_HOMEPAGE = 'https://dzup-ui.dev'
+export const REGISTRY_HOMEPAGE = SITE_ORIGIN
 
 /**
  * The runtime packages every effect snippet needs: the components
@@ -110,13 +111,14 @@ export interface RegistryIndex {
 export function registryFiles(entry: CatalogEntry): RegistryFile[] {
   if (entry.variants) {
     const files = (Object.keys(VARIANT_EXTENSION) as Array<keyof typeof VARIANT_EXTENSION>)
-      .filter((key) => entry.variants?.[key])
+      .filter(key => entry.variants?.[key])
       .map((key): RegistryFile => ({
         path: `${entry.id}.${VARIANT_EXTENSION[key]}`,
         content: entry.variants![key]!,
         type: REGISTRY_ITEM_TYPE,
       }))
-    if (files.length) return files
+    if (files.length)
+      return files
   }
   return [{ path: `${entry.id}.vue`, content: entry.code, type: REGISTRY_ITEM_TYPE }]
 }

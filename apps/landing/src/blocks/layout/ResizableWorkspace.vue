@@ -45,7 +45,7 @@ const tree: TreeRow[] = [
 
 const code: string[] = [
   '<script setup lang="ts">',
-  "import { ref } from 'vue'",
+  'import { ref } from \'vue\'',
   '',
   'const count = ref(0)',
   '<\/script>',
@@ -60,13 +60,19 @@ const code: string[] = [
 
 <template>
   <section class="rw" aria-labelledby="rw-title">
-    <DzText id="rw-title" class="dz-sr-only">Resizable code workspace</DzText>
+    <DzText id="rw-title" class="dz-sr-only">
+      Resizable code workspace
+    </DzText>
 
     <DzToolbar variant="outlined" size="sm" class="rw-toolbar">
       <template #start>
         <DzIcon :icon="FileCode" size="sm" />
-        <DzText size="sm" weight="semibold" as="span">App.vue</DzText>
-        <DzBadge variant="subtle" tone="warning" size="sm">Unsaved</DzBadge>
+        <DzText size="sm" weight="semibold" as="span">
+          App.vue
+        </DzText>
+        <DzBadge variant="subtle" tone="warning" size="sm">
+          Unsaved
+        </DzBadge>
       </template>
       <template #end>
         <button type="button" class="rw-tbtn">
@@ -82,7 +88,9 @@ const code: string[] = [
       <!-- Explorer (collapsible) -->
       <DzResizablePanel :default-size="26" :min-size="16" collapsible :collapsed-size="0" class="rw-pane">
         <DzScrollArea class="rw-scroll">
-          <DzText size="xs" tone="muted" weight="semibold" class="rw-pane-head">EXPLORER</DzText>
+          <DzText size="xs" tone="muted" weight="semibold" class="rw-pane-head">
+            EXPLORER
+          </DzText>
           <ul class="rw-tree" role="list">
             <li
               v-for="row in tree"
@@ -92,7 +100,9 @@ const code: string[] = [
               :style="{ paddingLeft: `calc(${row.depth} * 0.85rem + 0.5rem)` }"
             >
               <DzIcon :icon="row.dir ? Folder : FileText" size="xs" />
-              <DzText size="sm" as="span">{{ row.label }}</DzText>
+              <DzText size="sm" as="span">
+                {{ row.label }}
+              </DzText>
             </li>
           </ul>
         </DzScrollArea>
@@ -112,14 +122,20 @@ const code: string[] = [
       <!-- Preview -->
       <DzResizablePanel :default-size="26" :min-size="18" class="rw-pane">
         <DzScrollArea class="rw-scroll">
-          <DzText size="xs" tone="muted" weight="semibold" class="rw-pane-head">PREVIEW</DzText>
+          <DzText size="xs" tone="muted" weight="semibold" class="rw-pane-head">
+            PREVIEW
+          </DzText>
           <div class="rw-preview">
-            <button type="button" class="rw-preview-btn">Clicked 3 times</button>
+            <button type="button" class="rw-preview-btn">
+              Clicked 3 times
+            </button>
           </div>
           <DzDivider class="rw-preview-rule" />
           <div class="rw-status">
             <DzIcon :icon="Circle" size="xs" class="rw-status-dot" />
-            <DzText size="xs" tone="muted">Live · port 5173</DzText>
+            <DzText size="xs" tone="muted">
+              Live · port 5173
+            </DzText>
           </div>
         </DzScrollArea>
       </DzResizablePanel>

@@ -69,9 +69,9 @@ const cardCvc = ref('')
 const billingSame = ref(true)
 
 // ── Cart lines (quantities are live) ─────────────────────────────
-const lines = ref(LINE_ITEMS.map((l) => ({ ...l })))
+const lines = ref(LINE_ITEMS.map(l => ({ ...l })))
 function removeLine(id: string): void {
-  lines.value = lines.value.filter((l) => l.id !== id)
+  lines.value = lines.value.filter(l => l.id !== id)
 }
 
 // ── Promo code ───────────────────────────────────────────────────
@@ -82,7 +82,8 @@ function applyPromo(): void {
   if (promo.value.trim().toUpperCase() === PROMO_CODE) {
     promoApplied.value = true
     promoError.value = false
-  } else {
+  }
+  else {
     promoApplied.value = false
     promoError.value = true
   }
@@ -95,10 +96,11 @@ const freeShipping = computed(() => subtotal.value >= FREE_SHIPPING_THRESHOLD)
 const amountToFree = computed(() => Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal.value))
 
 const activeMethod = computed(
-  () => DELIVERY_METHODS.find((m) => m.value === delivery.value) ?? DELIVERY_METHODS[0]!,
+  () => DELIVERY_METHODS.find(m => m.value === delivery.value) ?? DELIVERY_METHODS[0]!,
 )
 const shippingCost = computed(() => {
-  if (activeMethod.value.value === 'standard') return freeShipping.value ? 0 : STANDARD_SHIPPING
+  if (activeMethod.value.value === 'standard')
+    return freeShipping.value ? 0 : STANDARD_SHIPPING
   return activeMethod.value.price
 })
 
@@ -143,8 +145,12 @@ function money(n: number): string {
           <!-- Contact -->
           <section class="block">
             <div class="block-head">
-              <DzHeading :level="2" size="md" weight="semibold">Contact</DzHeading>
-              <DzText size="sm" tone="muted" as="span">Step 1 of 3</DzText>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Contact
+              </DzHeading>
+              <DzText size="sm" tone="muted" as="span">
+                Step 1 of 3
+              </DzText>
             </div>
             <DzFormField>
               <DzFormLabel>Email</DzFormLabel>
@@ -158,8 +164,12 @@ function money(n: number): string {
           <!-- Shipping address -->
           <section class="block">
             <div class="block-head">
-              <DzHeading :level="2" size="md" weight="semibold">Shipping address</DzHeading>
-              <DzText size="sm" tone="muted" as="span">Step 2 of 3</DzText>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Shipping address
+              </DzHeading>
+              <DzText size="sm" tone="muted" as="span">
+                Step 2 of 3
+              </DzText>
             </div>
             <div class="grid-2">
               <DzFormField>
@@ -196,7 +206,9 @@ function money(n: number): string {
           <!-- Delivery -->
           <section class="block">
             <div class="block-head">
-              <DzHeading :level="2" size="md" weight="semibold">Delivery</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Delivery
+              </DzHeading>
             </div>
             <DzRadioGroup v-model="delivery" aria-label="Delivery method" class="methods">
               <div
@@ -223,7 +235,9 @@ function money(n: number): string {
           <!-- Payment -->
           <section class="block">
             <div class="block-head">
-              <DzHeading :level="2" size="md" weight="semibold">Payment</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Payment
+              </DzHeading>
               <span class="secure">
                 <Lock :size="14" aria-hidden="true" />
                 <DzText size="sm" tone="muted" as="span">Encrypted</DzText>
@@ -290,7 +304,9 @@ function money(n: number): string {
                 <span class="line-price">{{ money(l.price * l.qty) }}</span>
               </li>
             </ul>
-            <DzText v-else tone="muted" as="p" class="lines-empty">Your bag is empty.</DzText>
+            <DzText v-else tone="muted" as="p" class="lines-empty">
+              Your bag is empty.
+            </DzText>
 
             <!-- Promo code -->
             <div class="promo">
@@ -302,7 +318,9 @@ function money(n: number): string {
                   aria-label="Promo code"
                   class="promo-input"
                 >
-                  <template #prefix><Tag :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Tag :size="15" aria-hidden="true" />
+                  </template>
                 </DzInput>
                 <DzButton variant="outline" tone="neutral" size="sm" @click="applyPromo">
                   Apply
@@ -349,8 +367,12 @@ function money(n: number): string {
               :icon="Truck"
               class="ship-nudge"
             >
-              <template v-if="freeShipping">You've unlocked free standard shipping.</template>
-              <template v-else>Add {{ money(amountToFree) }} more for free standard shipping.</template>
+              <template v-if="freeShipping">
+                You've unlocked free standard shipping.
+              </template>
+              <template v-else>
+                Add {{ money(amountToFree) }} more for free standard shipping.
+              </template>
             </DzAlert>
 
             <DzButton
@@ -360,7 +382,9 @@ function money(n: number): string {
               class="place-order"
               :disabled="!lines.length"
             >
-              <template #prefix><ShoppingBag :size="18" aria-hidden="true" /></template>
+              <template #prefix>
+                <ShoppingBag :size="18" aria-hidden="true" />
+              </template>
               Place order · {{ money(total) }}
             </DzButton>
 
@@ -385,7 +409,9 @@ function money(n: number): string {
         <span class="brand-mark" aria-hidden="true"><Leaf :size="16" /></span>
         <span class="brand-name">Verdant Market</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Verdant Market. Good food, sourced well.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Verdant Market. Good food, sourced well.
+      </DzText>
     </footer>
   </div>
 </template>

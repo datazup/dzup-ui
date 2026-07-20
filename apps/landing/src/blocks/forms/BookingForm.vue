@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -12,7 +13,6 @@ import {
   DzText,
   DzTimePicker,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { CalendarCheck, Users } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -52,7 +52,9 @@ const SEATING: DzSelectItem[] = [
           <DzHeading id="bk-title" :level="4" size="xl" weight="semibold">
             Reserve a table
           </DzHeading>
-          <DzText tone="muted" size="sm" as="p">Book in a few seconds — confirmation is instant.</DzText>
+          <DzText tone="muted" size="sm" as="p">
+            Book in a few seconds — confirmation is instant.
+          </DzText>
         </div>
       </header>
 

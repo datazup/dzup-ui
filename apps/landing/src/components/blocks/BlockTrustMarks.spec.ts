@@ -11,13 +11,13 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import BlockTrustMarks from './BlockTrustMarks.vue'
 import { CERTIFICATIONS, KNOWN_A11Y_DEBT } from '../../blocks/certifications.ts'
+import BlockTrustMarks from './BlockTrustMarks.vue'
 
 /** A block known to carry a11y debt (uncertified) — there is at least one. */
 const DEBT_ID = Object.keys(KNOWN_A11Y_DEBT)[0]!
 
-describe('BlockTrustMarks', () => {
+describe('blockTrustMarks', () => {
   it('renders one labelled badge per certification for a certified block', () => {
     const { getByRole } = render(BlockTrustMarks, { props: { blockId: 'hero-centered' } })
     const group = getByRole('list', { name: /verified in ci/i })
@@ -33,7 +33,7 @@ describe('BlockTrustMarks', () => {
 
   it('exposes what each mark certifies via the badge title (sighted hover)', () => {
     const { container } = render(BlockTrustMarks, { props: { blockId: 'hero-centered' } })
-    const titles = [...container.querySelectorAll('[title]')].map((el) => el.getAttribute('title'))
+    const titles = [...container.querySelectorAll('[title]')].map(el => el.getAttribute('title'))
     for (const mark of CERTIFICATIONS) {
       expect(titles).toContain(mark.certifies)
     }

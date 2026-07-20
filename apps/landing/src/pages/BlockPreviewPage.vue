@@ -44,13 +44,15 @@ const MAX_WIDTH = 3840
 const frameMaxWidth = computed<string>(() => {
   const raw = route.query.w
   const px = typeof raw === 'string' ? Number.parseInt(raw, 10) : Number.NaN
-  if (!Number.isFinite(px)) return '100%'
+  if (!Number.isFinite(px))
+    return '100%'
   return `${Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, px))}px`
 })
 
 /** Apply a `light`/`dark` theme to <html>; ignore anything else (keep current). */
 function applyTheme(theme: unknown): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   if (theme === 'light' || theme === 'dark') {
     document.documentElement.setAttribute('data-theme', theme)
   }
@@ -58,7 +60,8 @@ function applyTheme(theme: unknown): void {
 
 /** Apply `rtl`/`ltr` to <html>; default to `ltr` for any other value. */
 function applyDir(dir: unknown): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   document.documentElement.setAttribute('dir', dir === 'rtl' ? 'rtl' : 'ltr')
 }
 

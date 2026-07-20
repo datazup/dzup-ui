@@ -19,14 +19,20 @@ import { DzOrbit } from '../../motion/index.ts'
     <DzOrbit :radius="52" :ring-gap="38" :rings="2" speed="26s">
       <template #center>
         <DzCard variant="elevated" padding="sm" class="hub">
-          <DzText size="sm" weight="semibold">dzup</DzText>
+          <DzText size="sm" weight="semibold">
+            dzup
+          </DzText>
         </DzCard>
       </template>
 
       <DzAvatar fallback="AL" alt="Ada Lovelace" size="sm" />
-      <DzBadge variant="solid" tone="primary">UI</DzBadge>
+      <DzBadge variant="solid" tone="primary">
+        UI
+      </DzBadge>
       <DzAvatar fallback="GH" alt="Grace Hopper" size="sm" />
-      <DzBadge variant="subtle" tone="info">API</DzBadge>
+      <DzBadge variant="subtle" tone="info">
+        API
+      </DzBadge>
       <DzAvatar fallback="AT" alt="Alan Turing" size="sm" />
       <DzAvatar fallback="KJ" alt="Katherine Johnson" size="sm" />
     </DzOrbit>

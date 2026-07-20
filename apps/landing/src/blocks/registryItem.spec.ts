@@ -17,8 +17,6 @@
 import { describe, expect, it } from 'vitest'
 import { BLOCK_DEPENDENCIES, sourceDependencies } from './config.ts'
 import { BLOCKS } from './registry.ts'
-import { getBlockSource } from './sources.ts'
-
 import {
   BLOCK_TARGET_DIR,
   buildRegistryIndex,
@@ -29,11 +27,13 @@ import {
   toRegistryItem,
 } from './registryItem.ts'
 
+import { getBlockSource } from './sources.ts'
+
 /** Injected source lookup — mirrors what the generator and the browser both pass. */
 const getSource = (block: { path: string }): string => getBlockSource(block.path)
 
 /** Label `it.each`/`describe.each` rows by block id. */
-const labelled = BLOCKS.map((block) => ({ block, label: block.id }))
+const labelled = BLOCKS.map(block => ({ block, label: block.id }))
 
 describe('shadcn registry', () => {
   it('pins the canonical (ui.shadcn.com) schema URLs, not the shadcn-vue fork', () => {
@@ -46,7 +46,7 @@ describe('shadcn registry', () => {
     expect(index.$schema).toBe(REGISTRY_SCHEMA)
     expect(index.items).toHaveLength(BLOCKS.length)
     // ids line up 1:1 and in order with the catalog.
-    expect(index.items.map((item) => item.name)).toEqual(BLOCKS.map((block) => block.id))
+    expect(index.items.map(item => item.name)).toEqual(BLOCKS.map(block => block.id))
   })
 
   it('index items omit inlined source (the per-item <id>.json carries it)', () => {

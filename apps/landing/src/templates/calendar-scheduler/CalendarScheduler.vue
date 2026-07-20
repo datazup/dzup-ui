@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CalendarEvent, EventPreset } from './data.ts'
 /**
  * Calendar / Scheduler — app template (docs/templates.md §6.4).
  *
@@ -40,17 +41,17 @@ import { computed, reactive, ref } from 'vue'
 import {
   APP_NAV,
   APP_NAV_SECONDARY,
+
   CATEGORIES,
-  EVENTS,
   EVENT_PRESETS,
+
+  EVENTS,
   TEAM,
   TIME_SLOTS,
-  type CalendarEvent,
-  type EventPreset,
 } from './data.ts'
 
 // Local, mutable copy so creating / deleting events feels live in the preview.
-const events = reactive<CalendarEvent[]>(EVENTS.map((e) => ({ ...e, attendees: [...e.attendees] })))
+const events = reactive<CalendarEvent[]>(EVENTS.map(e => ({ ...e, attendees: [...e.attendees] })))
 
 const view = ref<'month' | 'week'>('month')
 const viewItems = [
@@ -63,10 +64,10 @@ const focusedDate = ref('2026-06-25')
 
 // Legend toggles — each calendar can be shown/hidden, like a real client.
 const categoryVisible = reactive<Record<string, boolean>>(
-  Object.fromEntries(CATEGORIES.map((c) => [c.key, true])),
+  Object.fromEntries(CATEGORIES.map(c => [c.key, true])),
 )
 
-const categoryByKey = computed(() => Object.fromEntries(CATEGORIES.map((c) => [c.key, c])))
+const categoryByKey = computed(() => Object.fromEntries(CATEGORIES.map(c => [c.key, c])))
 
 /** ISO 'YYYY-MM-DD' key for a native Date (matches the event `date` field). */
 function iso(d: Date): string {
@@ -79,12 +80,12 @@ function eventColor(categoryKey: string): Record<string, string> {
   return { '--evt': `var(--dz-colors-${palette}-500)` }
 }
 
-const visibleEvents = computed(() => events.filter((e) => categoryVisible[e.category]))
+const visibleEvents = computed(() => events.filter(e => categoryVisible[e.category]))
 
 /** Visible events for a given ISO day, sorted by start time. */
 function dayEvents(dayIso: string): CalendarEvent[] {
   return visibleEvents.value
-    .filter((e) => e.date === dayIso)
+    .filter(e => e.date === dayIso)
     .sort((a, b) => a.start.localeCompare(b.start))
 }
 
@@ -100,7 +101,8 @@ const monthLabel = computed(() =>
 )
 
 const selectedLabel = computed(() => {
-  if (!selectedDate.value) return 'No date selected'
+  if (!selectedDate.value)
+    return 'No date selected'
   return new Date(`${selectedDate.value}T00:00:00`).toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
@@ -115,7 +117,7 @@ const pickedSlot = ref(TIME_SLOTS[0]!.value)
 let createdCount = 0
 
 function createEvent() {
-  const slot = TIME_SLOTS.find((s) => s.value === pickedSlot.value) ?? TIME_SLOTS[0]!
+  const slot = TIME_SLOTS.find(s => s.value === pickedSlot.value) ?? TIME_SLOTS[0]!
   createdCount += 1
   events.push({
     id: `e-new-${createdCount}`,
@@ -132,8 +134,9 @@ function createEvent() {
 }
 
 function deleteEvent(id: string) {
-  const index = events.findIndex((e) => e.id === id)
-  if (index !== -1) events.splice(index, 1)
+  const index = events.findIndex(e => e.id === id)
+  if (index !== -1)
+    events.splice(index, 1)
 }
 </script>
 
@@ -150,10 +153,14 @@ function deleteEvent(id: string) {
 
         <DzSidebarSection title="Workspace">
           <DzSidebarItem v-for="item in APP_NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
@@ -169,13 +176,17 @@ function deleteEvent(id: string) {
             @click="categoryVisible[cat.key] = !categoryVisible[cat.key]"
           >
             <span class="legend-dot" :style="eventColor(cat.key)" aria-hidden="true" />
-            <DzText size="sm" as="span">{{ cat.label }}</DzText>
+            <DzText size="sm" as="span">
+              {{ cat.label }}
+            </DzText>
           </button>
         </DzSidebarSection>
 
         <DzSidebarSection title="Account">
           <DzSidebarItem v-for="item in APP_NAV_SECONDARY" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -194,8 +205,12 @@ function deleteEvent(id: string) {
 
     <template #header>
       <div class="cs-title">
-        <DzHeading :level="1" size="lg" weight="semibold">{{ monthLabel }}</DzHeading>
-        <DzBadge variant="subtle" tone="primary" size="sm">{{ visibleEvents.length }} events</DzBadge>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          {{ monthLabel }}
+        </DzHeading>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          {{ visibleEvents.length }} events
+        </DzBadge>
       </div>
     </template>
 
@@ -208,7 +223,9 @@ function deleteEvent(id: string) {
       <DzDialog v-model:open="dialogOpen">
         <DzDialogTrigger as-child>
           <DzButton size="sm" variant="solid" tone="primary">
-            <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Plus :size="15" aria-hidden="true" />
+            </template>
             New event
           </DzButton>
         </DzDialogTrigger>
@@ -220,7 +237,9 @@ function deleteEvent(id: string) {
 
           <div class="dialog-body">
             <div class="field">
-              <DzText size="sm" weight="medium" as="div" class="field-label">Event type</DzText>
+              <DzText size="sm" weight="medium" as="div" class="field-label">
+                Event type
+              </DzText>
               <div class="preset-grid">
                 <button
                   v-for="preset in EVENT_PRESETS"
@@ -242,12 +261,16 @@ function deleteEvent(id: string) {
             </div>
 
             <div class="field">
-              <DzText size="sm" weight="medium" as="div" class="field-label">Start time</DzText>
+              <DzText size="sm" weight="medium" as="div" class="field-label">
+                Start time
+              </DzText>
               <DzSegmented v-model="pickedSlot" :items="TIME_SLOTS" size="sm" aria-label="Start time" />
             </div>
 
             <div class="field">
-              <DzText size="sm" weight="medium" as="div" class="field-label">Attendees</DzText>
+              <DzText size="sm" weight="medium" as="div" class="field-label">
+                Attendees
+              </DzText>
               <DzAvatarGroup :max="5" size="sm" aria-label="Default attendees">
                 <DzAvatar v-for="initials in TEAM" :key="initials" :fallback="initials" />
               </DzAvatarGroup>
@@ -257,10 +280,14 @@ function deleteEvent(id: string) {
           <template #footer>
             <div class="dialog-actions">
               <DzDialogClose as-child>
-                <DzButton size="sm" variant="outline" tone="neutral">Cancel</DzButton>
+                <DzButton size="sm" variant="outline" tone="neutral">
+                  Cancel
+                </DzButton>
               </DzDialogClose>
               <DzButton size="sm" variant="solid" tone="primary" @click="createEvent">
-                <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Plus :size="15" aria-hidden="true" />
+                </template>
                 Add event
               </DzButton>
             </div>
@@ -302,8 +329,12 @@ function deleteEvent(id: string) {
       <aside class="agenda" aria-label="Schedule for the selected day">
         <header class="agenda-head">
           <div>
-            <DzText size="xs" tone="muted" as="div">Schedule</DzText>
-            <DzHeading :level="2" size="sm" weight="semibold">{{ selectedLabel }}</DzHeading>
+            <DzText size="xs" tone="muted" as="div">
+              Schedule
+            </DzText>
+            <DzHeading :level="2" size="sm" weight="semibold">
+              {{ selectedLabel }}
+            </DzHeading>
           </div>
           <DzBadge variant="subtle" tone="neutral" size="sm">
             {{ selectedDayEvents.length }}
@@ -326,10 +357,12 @@ function deleteEvent(id: string) {
               </button>
             </DzPopoverTrigger>
 
-            <DzPopoverContent side="left" :size="'md'" class="event-pop">
+            <DzPopoverContent side="left" size="md" class="event-pop">
               <div class="pop-head">
                 <span class="pop-dot" :style="eventColor(ev.category)" aria-hidden="true" />
-                <DzText size="sm" weight="semibold" as="div">{{ ev.title }}</DzText>
+                <DzText size="sm" weight="semibold" as="div">
+                  {{ ev.title }}
+                </DzText>
               </div>
               <DzBadge variant="subtle" tone="neutral" size="sm" class="pop-cat">
                 {{ categoryByKey[ev.category]?.label }}
@@ -339,12 +372,16 @@ function deleteEvent(id: string) {
                 <li>
                   <Clock :size="14" aria-hidden="true" />
                   <DzText size="sm" as="span">
-                    {{ ev.startLabel }}<template v-if="ev.endLabel"> – {{ ev.endLabel }}</template>
+                    {{ ev.startLabel }}<template v-if="ev.endLabel">
+                      – {{ ev.endLabel }}
+                    </template>
                   </DzText>
                 </li>
                 <li v-if="ev.location">
                   <MapPin :size="14" aria-hidden="true" />
-                  <DzText size="sm" as="span">{{ ev.location }}</DzText>
+                  <DzText size="sm" as="span">
+                    {{ ev.location }}
+                  </DzText>
                 </li>
               </ul>
 
@@ -356,16 +393,22 @@ function deleteEvent(id: string) {
                 <DzAvatarGroup :max="5" size="sm" aria-label="Attendees">
                   <DzAvatar v-for="initials in ev.attendees" :key="initials" :fallback="initials" />
                 </DzAvatarGroup>
-                <DzText size="xs" tone="muted" as="span">{{ ev.attendees.length }} attending</DzText>
+                <DzText size="xs" tone="muted" as="span">
+                  {{ ev.attendees.length }} attending
+                </DzText>
               </div>
 
               <div class="pop-actions">
                 <DzButton size="sm" variant="outline" tone="neutral">
-                  <template #prefix><Pencil :size="14" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Pencil :size="14" aria-hidden="true" />
+                  </template>
                   Edit
                 </DzButton>
                 <DzButton size="sm" variant="ghost" tone="danger" @click="deleteEvent(ev.id)">
-                  <template #prefix><Trash2 :size="14" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Trash2 :size="14" aria-hidden="true" />
+                  </template>
                   Delete
                 </DzButton>
               </div>
@@ -374,7 +417,9 @@ function deleteEvent(id: string) {
         </div>
 
         <div v-else class="agenda-empty">
-          <DzText size="sm" tone="muted">Nothing scheduled. Pick a day or add an event.</DzText>
+          <DzText size="sm" tone="muted">
+            Nothing scheduled. Pick a day or add an event.
+          </DzText>
         </div>
       </aside>
     </div>

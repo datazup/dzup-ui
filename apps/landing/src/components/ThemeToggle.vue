@@ -1,51 +1,74 @@
 <script setup lang="ts">
-import { Moon, Sun } from 'lucide-vue-next'
-import { useThemeTransition } from '../composables/useThemeTransition.ts'
+import { DzColorModeToggle } from '@dzup-ui/core'
+import { computed } from 'vue'
+import { useTheme } from '../composables/useTheme.ts'
 
-// Share the re-theme behaviour with the hero control: a smooth cross-fade swap
-// (instant under reduced motion), driven off the same theme singleton.
-const { resolved, retheme } = useThemeTransition()
+/**
+ * The nav theme control — light / dark / system (TASK-FREE2-08).
+ *
+ * This is `DzColorModeToggle` from our own library, not a hand-rolled button.
+ * The site that markets the component should use it, and its icon variant
+ * already does everything this control needs: it cycles all three modes, shows
+ * the active preference as its glyph (sun / moon / monitor), labels the action
+ * it will perform, and announces `System theme (Dark)` through a live region —
+ * so the "following system" state and the resolved theme both reach assistive
+ * tech. It is a DzIconButton underneath, so it is keyboard operable and themed.
+ *
+ * It binds to the `DzThemeProvider` context rather than to the landing's
+ * `useTheme` singleton. That is only correct because `useProviderThemeSync`
+ * (mounted in App.vue) makes the provider mirror the singleton — before that
+ * bridge existed, adopting this component here would have split the site's
+ * theme state in two. See that composable for the authority design.
+ *
+ * The binary flip this replaced could reach `light` and `dark` only: one click
+ * pinned an explicit mode and `system` became unreachable without clearing
+ * localStorage.
+ *
+ * Trade-off, deliberate: a change made here cross-fades via the CSS
+ * `--dz-landing-theme-transition` on major surfaces, not the full-page View
+ * Transition snapshot that `useThemeTransition` drives. The component has no
+ * knowledge of that landing-only flourish, and the hero's RethemeButton — where
+ * the effect is the point — still uses it.
+ */
+
+const { mode, resolved } = useTheme()
+
+// Hover affordance for the state the glyph alone cannot show: while following
+// the OS, which theme that currently resolves to.
+const title = computed(() =>
+  mode.value === 'system' ? `Theme: system (${resolved.value})` : `Theme: ${mode.value}`,
+)
 </script>
 
 <template>
-  <button
-    type="button"
+  <DzColorModeToggle
+    variant="icon"
+    size="md"
+    :show-system="true"
     class="theme-toggle"
-    :aria-label="`Switch to ${resolved === 'dark' ? 'light' : 'dark'} mode`"
-    :title="`Theme: ${resolved}`"
-    @click="retheme"
-  >
-    <Sun v-if="resolved === 'dark'" :size="18" aria-hidden="true" />
-    <Moon v-else :size="18" aria-hidden="true" />
-  </button>
+    :title="title"
+  />
 </template>
 
 <style scoped>
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* The control is a DzIconButton (already tokenised and focus-ringed); this only
+   matches it to the neighbouring nav affordances, which are bordered boxes. */
+.theme-toggle :deep(button) {
   width: 38px;
   height: 38px;
   border: 1px solid var(--dz-border, #e2e8f0);
   border-radius: var(--dz-radius-md, 6px);
   background: var(--dz-surface, #ffffff);
   color: var(--dz-muted-foreground, #64748b);
-  cursor: pointer;
   transition:
     background var(--dz-duration-fast, 150ms) var(--dz-ease-default, ease),
     color var(--dz-duration-fast, 150ms) var(--dz-ease-default, ease),
     border-color var(--dz-duration-fast, 150ms) var(--dz-ease-default, ease);
 }
 
-.theme-toggle:hover {
+.theme-toggle :deep(button:hover) {
   background: var(--dz-muted, #f1f5f9);
   color: var(--dz-foreground, #1a202c);
   border-color: var(--dz-border-hover, #cbd5e1);
-}
-
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--dz-ring, #4f46e5);
-  outline-offset: 2px;
 }
 </style>

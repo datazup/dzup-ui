@@ -72,7 +72,9 @@ const navLinks = [
         aria-label="Site search"
       />
       <DzColorModeToggle variant="icon" size="sm" />
-      <DzButton variant="solid" tone="primary" size="sm">Get started</DzButton>
+      <DzButton variant="solid" tone="primary" size="sm">
+        Get started
+      </DzButton>
     </div>
 
     <!-- Mobile menu trigger ------------------------------------------------->
@@ -82,7 +84,7 @@ const navLinks = [
         <DzSheetTrigger as-child>
           <DzIconButton
             :icon="Menu"
-            ariaLabel="Open navigation menu"
+            aria-label="Open navigation menu"
             variant="ghost"
             tone="neutral"
             size="sm"
@@ -98,7 +100,7 @@ const navLinks = [
             <DzSheetClose as-child>
               <DzIconButton
                 :icon="X"
-                ariaLabel="Close navigation menu"
+                aria-label="Close navigation menu"
                 variant="ghost"
                 tone="neutral"
                 size="sm"

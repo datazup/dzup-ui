@@ -65,13 +65,15 @@ const states = new WeakMap<HTMLElement, TiltState>()
 
 /** Whether the OS currently requests reduced motion (SSR-safe). */
 function prefersReduced(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 /** Whether the device has a fine, hover-capable pointer (SSR-safe). */
 function canHover(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
@@ -96,7 +98,8 @@ function shouldRun(binding: DirectiveBinding<TiltOptions | undefined>): boolean 
 function applyFrame(el: HTMLElement, state: TiltState): void {
   state.frame = 0
   const rect = el.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
+  if (!rect.width || !rect.height)
+    return
   // Pointer position normalised to 0–1 across the host.
   const px = (state.nextX - rect.left) / rect.width
   const py = (state.nextY - rect.top) / rect.height
@@ -112,7 +115,8 @@ function applyFrame(el: HTMLElement, state: TiltState): void {
 
 function createGlare(el: HTMLElement): HTMLElement {
   // Host must establish a stacking/positioning context for the absolute overlay.
-  if (getComputedStyle(el).position === 'static') el.style.position = 'relative'
+  if (getComputedStyle(el).position === 'static')
+    el.style.position = 'relative'
   const glare = document.createElement('span')
   glare.className = 'dz-tilt__glare'
   glare.setAttribute('aria-hidden', 'true')
@@ -121,12 +125,15 @@ function createGlare(el: HTMLElement): HTMLElement {
 }
 
 function attach(el: HTMLElement, state: TiltState): void {
-  if (state.attached) return
+  if (state.attached)
+    return
   el.classList.add('dz-tilt')
-  if (state.options.glare && !state.glare) state.glare = createGlare(el)
+  if (state.options.glare && !state.glare)
+    state.glare = createGlare(el)
 
   state.onMove = (event: PointerEvent): void => {
-    if (event.pointerType === 'touch') return
+    if (event.pointerType === 'touch')
+      return
     state.nextX = event.clientX
     state.nextY = event.clientY
     if (!state.frame) {
@@ -135,7 +142,8 @@ function attach(el: HTMLElement, state: TiltState): void {
       el.style.willChange = 'transform'
       state.glare?.classList.add('dz-tilt__glare--active')
     }
-    if (!state.frame) state.frame = requestAnimationFrame(() => applyFrame(el, state))
+    if (!state.frame)
+      state.frame = requestAnimationFrame(() => applyFrame(el, state))
   }
 
   state.onLeave = (): void => {
@@ -160,7 +168,8 @@ function attach(el: HTMLElement, state: TiltState): void {
 }
 
 function detach(el: HTMLElement, state: TiltState): void {
-  if (!state.attached) return
+  if (!state.attached)
+    return
   el.removeEventListener('pointermove', state.onMove)
   el.removeEventListener('pointerleave', state.onLeave)
   if (state.frame) {
@@ -188,19 +197,23 @@ export const vTilt: Directive<HTMLElement, TiltOptions | undefined> = {
       onLeave: () => {},
     }
     states.set(el, state)
-    if (shouldRun(binding)) attach(el, state)
+    if (shouldRun(binding))
+      attach(el, state)
   },
   updated(el, binding) {
     const state = states.get(el)
-    if (!state) return
+    if (!state)
+      return
     state.options = parseOptions(binding.value)
     // React to the page-level reduced-motion toggle flipping `disabled`.
-    if (shouldRun(binding)) attach(el, state)
+    if (shouldRun(binding))
+      attach(el, state)
     else detach(el, state)
   },
   unmounted(el) {
     const state = states.get(el)
-    if (!state) return
+    if (!state)
+      return
     detach(el, state)
     state.glare?.remove()
     states.delete(el)

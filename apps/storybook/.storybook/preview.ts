@@ -3,6 +3,7 @@ import addonDocs from '@storybook/addon-docs'
 import { withThemeByDataAttribute } from '@storybook/addon-themes'
 import { definePreview } from '@storybook/vue3-vite'
 import { RESPONSIVE_VIEWPORTS } from '../../../packages/core/stories/_shared/options.ts'
+import { AutodocsPage } from '../stories/_blocks/AutodocsPage.ts'
 
 // Import Tailwind CSS 4 (processes utility classes used in component variants)
 import '../src/tailwind.css'
@@ -14,8 +15,36 @@ import '@dzup-ui/tokens/css'
 import '../../../packages/core/src/styles/base.css'
 
 export default definePreview({
-  // Keep in sync with main.ts `addons` (TASK-0.1).
+  // PREVIEW-side addon registration: decorators, parameters, and anything that runs
+  // inside the story iframe. This is deliberately NOT a mirror of main.ts `addons`
+  // (which registers presets, Vite config and manager-side panels) — see the note
+  // there. Only addon-docs needs both sides. addon-themes contributes its behavior
+  // through `withThemeByDataAttribute` in `decorators` below rather than an entry
+  // here, and addon-vitest is build-time only.
   addons: [addonDocs(), addonA11y()],
+  // FREE2-11 — a global text-direction toolbar, bringing the Storybook to parity
+  // with the landing's template preview (which already offers LTR/RTL). Reviewers
+  // can now check any component under RTL without cloning. Default LTR via
+  // `initialGlobals` so no existing story changes how it renders; the `direction`
+  // decorator (below) applies it. This ships the TOGGLE — RTL layout bugs it
+  // surfaces are tracked as follow-up (see docs/storybook-decisions.md).
+  globalTypes: {
+    direction: {
+      description: 'Text direction (LTR / RTL)',
+      toolbar: {
+        title: 'Direction',
+        icon: 'transfer',
+        items: [
+          { value: 'ltr', title: 'Left-to-right', right: 'LTR' },
+          { value: 'rtl', title: 'Right-to-left', right: 'RTL' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    direction: 'ltr',
+  },
   parameters: {
     controls: {
       matchers: {
@@ -26,6 +55,12 @@ export default definePreview({
     layout: 'centered',
     docs: {
       toc: true,
+      // TASK-FREE2-12 — a per-component "Open in playground" on EVERY component
+      // docs page. `page` sets the autodocs template; AutodocsPage mirrors SB's
+      // default and injects the playground after the primary demo. It applies to
+      // autodocs (tag) pages only — MDX guide pages supply their own page and are
+      // untouched, so this needs no page-type guard. See AutodocsPage.ts.
+      page: AutodocsPage,
     },
     // TASK-FREE-17 — a viewport toolbar on EVERY story. Until now the set was
     // registered per-story and only three (DzAppShell, DzContainer, DzGrid) opted
@@ -97,26 +132,43 @@ export default definePreview({
           'Contributing',
           'Core',
           [
-            'Buttons', ['Overview', '*'],
-            'Inputs', ['Overview', '*'],
-            'Forms', ['Overview', '*'],
-            'Cards', ['Overview', '*'],
-            'Data', ['Overview', '*'],
-            'Feedback', ['Overview', '*'],
-            'Layout', ['Overview', '*'],
-            'Navigation', ['Overview', '*'],
-            'Overlays', ['Overview', '*'],
-            'Media', ['Overview', '*'],
-            'Typography', ['Overview', '*'],
+            'Buttons',
+            ['Overview', '*'],
+            'Inputs',
+            ['Overview', '*'],
+            'Forms',
+            ['Overview', '*'],
+            'Cards',
+            ['Overview', '*'],
+            'Data',
+            ['Overview', '*'],
+            'Feedback',
+            ['Overview', '*'],
+            'Layout',
+            ['Overview', '*'],
+            'Navigation',
+            ['Overview', '*'],
+            'Overlays',
+            ['Overview', '*'],
+            'Media',
+            ['Overview', '*'],
+            'Typography',
+            ['Overview', '*'],
             'Compositions',
             '*',
           ],
           // Cross-family gallery screens (packages/core/stories/_gallery): the
           // raw-Tailwind vs dzup-ui comparison the token system is measured
-          // against (docs/visual-refresh/AUDIT.md). Pinned last and below `Core`
-          // on purpose — they are demo screens, not component references. Until
-          // TASK-FREE-12 this root had no entry here and fell through the
-          // trailing '*', landing in the sidebar unsorted and unexplained.
+          // against (docs/visual-refresh/AUDIT.md).
+          //
+          // NOT in the public build since TASK-FREE2-02 — main.ts only globs them
+          // in under DZUP_GALLERY=1, because a demo screen full of raw `indigo-600`
+          // classes is an instrument, not documentation. This entry is therefore
+          // inert in a public build and load-bearing only in a DZUP_GALLERY=1 one,
+          // where it keeps the root pinned last, below `Core`. Kept for that reason:
+          // sorting an absent root costs nothing, and dropping it would put the
+          // gallery back in the unsorted trailing '*' the moment anyone flips the
+          // flag (which is exactly where TASK-FREE-12 found it).
           'Visual Refresh',
           '*',
         ],
@@ -170,6 +222,20 @@ export default definePreview({
     // adds breathing room inside the canvas without changing the layout mode.
     () => ({
       template: '<div class="p-6"><story /></div>',
+    }),
+    // FREE2-11 — apply the `direction` global. Written to <html> (like the theme
+    // decorator's `data-theme`) so Reka overlays teleported to <body> inherit it
+    // too, not just the in-canvas wrapper; the wrapper also carries `dir` so the
+    // story root is correct even in isolation. Always writes the CURRENT value
+    // (never leaves a stale `rtl` when you switch back to LTR), so no teardown.
+    (_story, context) => ({
+      setup() {
+        const dir = context.globals.direction === 'rtl' ? 'rtl' : 'ltr'
+        if (typeof document !== 'undefined')
+          document.documentElement.setAttribute('dir', dir)
+        return { dir }
+      },
+      template: '<div :dir="dir"><story /></div>',
     }),
     withThemeByDataAttribute({
       themes: { light: 'light', dark: 'dark' },

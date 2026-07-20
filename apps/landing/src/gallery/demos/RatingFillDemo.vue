@@ -58,7 +58,9 @@ onBeforeUnmount(clearTimer)
 
 <template>
   <div ref="root" class="stage">
-    <DzText size="xs" tone="muted" as="div">Customer rating</DzText>
+    <DzText size="xs" tone="muted" as="div">
+      Customer rating
+    </DzText>
     <DzRating
       v-model:value="rating"
       :count="5"
@@ -68,7 +70,9 @@ onBeforeUnmount(clearTimer)
       tone="warning"
       aria-label="Customer rating"
     />
-    <DzText size="sm" weight="medium" as="div">{{ rating.toFixed(1) }} of 5</DzText>
+    <DzText size="sm" weight="medium" as="div">
+      {{ rating.toFixed(1) }} of 5
+    </DzText>
   </div>
 </template>
 

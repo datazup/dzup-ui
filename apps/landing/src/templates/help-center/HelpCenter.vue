@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * Help Center / FAQ — Content template (docs/templates.md §6.5).
  *
@@ -26,7 +27,6 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import type { Component } from 'vue'
 import { ArrowRight, LifeBuoy, MessageCircle, Search } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 import { ICONS } from '../../icons.ts'
@@ -42,9 +42,10 @@ function iconFor(key: string): Component {
 /** FAQs narrowed by the hero search query (matches question + answer). */
 const visibleFaqs = computed(() => {
   const q = query.value.trim().toLowerCase()
-  if (!q) return FAQS
+  if (!q)
+    return FAQS
   return FAQS.filter(
-    (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q),
+    f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q),
   )
 })
 </script>
@@ -59,7 +60,9 @@ const visibleFaqs = computed(() => {
           <span class="brand-name">Beacon Support</span>
         </span>
         <DzButton variant="solid" tone="info" size="sm">
-          <template #prefix><MessageCircle :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <MessageCircle :size="15" aria-hidden="true" />
+          </template>
           Contact support
         </DzButton>
       </div>
@@ -68,7 +71,9 @@ const visibleFaqs = computed(() => {
     <main>
       <!-- ── Search hero ──────────────────────────────────────── -->
       <section class="hero">
-        <DzTag variant="subtle" tone="info" size="sm">Help Center</DzTag>
+        <DzTag variant="subtle" tone="info" size="sm">
+          Help Center
+        </DzTag>
         <DzHeading :level="1" size="3xl" weight="bold" class="hero-title">
           How can we help?
         </DzHeading>
@@ -88,7 +93,9 @@ const visibleFaqs = computed(() => {
         </div>
 
         <div class="suggests">
-          <DzText size="sm" tone="muted" as="span" class="suggests-label">Popular:</DzText>
+          <DzText size="sm" tone="muted" as="span" class="suggests-label">
+            Popular:
+          </DzText>
           <DzTag
             v-for="term in POPULAR_SEARCHES"
             :key="term"
@@ -116,8 +123,12 @@ const visibleFaqs = computed(() => {
                 <component :is="iconFor(cat.icon)" :size="22" />
               </span>
               <div class="topic-head">
-                <DzText weight="semibold" as="span">{{ cat.title }}</DzText>
-                <DzBadge variant="subtle" tone="info" size="sm">{{ cat.articles }}</DzBadge>
+                <DzText weight="semibold" as="span">
+                  {{ cat.title }}
+                </DzText>
+                <DzBadge variant="subtle" tone="info" size="sm">
+                  {{ cat.articles }}
+                </DzBadge>
               </div>
               <DzText size="sm" tone="muted" as="p" class="topic-desc">
                 {{ cat.description }}
@@ -133,7 +144,9 @@ const visibleFaqs = computed(() => {
       <!-- ── FAQ ──────────────────────────────────────────────── -->
       <section class="faq" aria-label="Frequently asked questions">
         <div class="faq-head">
-          <DzHeading :level="2" size="xl" weight="semibold">Frequently asked</DzHeading>
+          <DzHeading :level="2" size="xl" weight="semibold">
+            Frequently asked
+          </DzHeading>
           <DzText size="sm" tone="muted" as="p">
             The quick answers people reach for most.
           </DzText>
@@ -149,14 +162,18 @@ const visibleFaqs = computed(() => {
           <DzAccordionItem v-for="f in visibleFaqs" :key="f.value" :value="f.value">
             <DzAccordionTrigger>{{ f.q }}</DzAccordionTrigger>
             <DzAccordionContent>
-              <DzText size="sm" tone="muted" as="p" class="faq-answer">{{ f.a }}</DzText>
+              <DzText size="sm" tone="muted" as="p" class="faq-answer">
+                {{ f.a }}
+              </DzText>
             </DzAccordionContent>
           </DzAccordionItem>
         </DzAccordion>
 
         <div v-else class="faq-empty">
           <span class="faq-empty-icon" aria-hidden="true"><Search :size="22" /></span>
-          <DzText tone="muted" as="p">No articles match “{{ query }}”.</DzText>
+          <DzText tone="muted" as="p">
+            No articles match “{{ query }}”.
+          </DzText>
           <DzButton variant="outline" tone="info" size="sm" @click="query = ''">
             Clear search
           </DzButton>
@@ -183,7 +200,9 @@ const visibleFaqs = computed(() => {
                 <DzAvatar fallback="LN" size="sm" class="team-avatar" />
               </div>
               <DzButton variant="solid" tone="info" size="sm">
-                <template #prefix><MessageCircle :size="15" aria-hidden="true" /></template>
+                <template #prefix>
+                  <MessageCircle :size="15" aria-hidden="true" />
+                </template>
                 Message the team
               </DzButton>
             </div>
@@ -197,7 +216,9 @@ const visibleFaqs = computed(() => {
         <span class="brand-mark" aria-hidden="true"><LifeBuoy :size="16" /></span>
         <span class="brand-name">Beacon Support</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Beacon. Built with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Beacon. Built with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

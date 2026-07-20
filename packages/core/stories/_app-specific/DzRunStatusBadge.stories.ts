@@ -13,9 +13,12 @@ const STATUSES: DzRunStatus[] = ['PENDING', 'RUNNING', 'PAUSED', 'COMPLETED', 'F
  * `DzBadge` and renders `role="status"` with an `aria-label` of
  * `"Run status: <Label>"`.
  *
- * > **Scope:** this component encodes datazup run-orchestration vocabulary, so it
- * > lives under **Core/Feedback/App-Specific** rather than the public family. See
- * > [Feedback Overview](?path=/docs/core-feedback-overview--docs) and TASK-X.4.
+ * > **Scope:** this component encodes datazup run-orchestration vocabulary, so it is
+ * > **not part of the public catalog** and this page does not ship — you are reading
+ * > it because someone ran with `DZUP_APP_SPECIFIC=1`. It remains exported from
+ * > `@dzup-ui/core` for the internal consumer. For a general-purpose status pill, use
+ * > [DzBadge](?path=/docs/core-feedback-dzbadge--docs). Rationale: TASK-FREE2-06 in
+ * > `docs/storybook-decisions.md` (supersedes TASK-X.4, which is stale).
  */
 const meta = {
   title: 'Core/Feedback/App-Specific/DzRunStatusBadge',

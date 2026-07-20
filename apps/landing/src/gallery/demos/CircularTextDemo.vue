@@ -23,7 +23,9 @@ import { DzCircularText } from '../../motion/index.ts'
         class="ring"
       />
       <div class="hub" aria-hidden="true">
-        <DzText size="sm" weight="semibold" class="hub-label">dzup</DzText>
+        <DzText size="sm" weight="semibold" class="hub-label">
+          dzup
+        </DzText>
       </div>
     </div>
   </div>

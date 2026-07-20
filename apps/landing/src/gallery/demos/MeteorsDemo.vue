@@ -37,8 +37,12 @@ const field = computed(() => ({
       <span v-for="s in streaks" :key="s.id" class="dz-meteors__streak" :style="s.style" />
     </div>
     <div class="content">
-      <DzHeading :level="3" size="lg" weight="bold" class="lp-balance">Meteor shower</DzHeading>
-      <DzText size="xs" tone="muted" as="div">Diagonal streaks cross on offset loops.</DzText>
+      <DzHeading :level="3" size="lg" weight="bold" class="lp-balance">
+        Meteor shower
+      </DzHeading>
+      <DzText size="xs" tone="muted" as="div">
+        Diagonal streaks cross on offset loops.
+      </DzText>
     </div>
   </div>
 </template>

@@ -8,6 +8,16 @@ A DzDataView template marketplace with a list/grid layout toggle, client-side so
 
 ```vue
 <script setup lang="ts">
+import type { DataViewLayout, DataViewSortOption } from '@dzup-ui/core'
+import {
+  DzBadge,
+  DzButton,
+  DzCard,
+  DzDataView,
+  DzHeading,
+  DzTag,
+  DzText,
+} from '@dzup-ui/core'
 /**
  * Collection gallery — DzDataView with a list/grid toggle, sort, and paging.
  *
@@ -21,16 +31,6 @@ A DzDataView template marketplace with a list/grid layout toggle, client-side so
  * components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { ref } from 'vue'
-import {
-  DzBadge,
-  DzButton,
-  DzCard,
-  DzDataView,
-  DzHeading,
-  DzTag,
-  DzText,
-} from '@dzup-ui/core'
-import type { DataViewLayout, DataViewSortOption } from '@dzup-ui/core'
 
 /** Index signature lets the typed record flow through DzDataView's generic default. */
 interface Template {
@@ -83,7 +83,9 @@ function price(value: number): string {
       aria-labelledby="dv-title"
     >
       <template #header>
-        <DzHeading id="dv-title" :level="4" size="md" weight="semibold" class="dv-title">Template marketplace</DzHeading>
+        <DzHeading id="dv-title" :level="4" size="md" weight="semibold" class="dv-title">
+          Template marketplace
+        </DzHeading>
       </template>
 
       <template #item="{ item, layout: mode }">
@@ -100,13 +102,23 @@ function price(value: number): string {
           />
           <div class="dv-card-body">
             <div class="dv-card-top">
-              <DzTag variant="subtle" tone="neutral" size="sm">{{ (item as Template).category }}</DzTag>
-              <DzBadge variant="subtle" tone="warning" size="sm">★ {{ (item as Template).rating }}</DzBadge>
+              <DzTag variant="subtle" tone="neutral" size="sm">
+                {{ (item as Template).category }}
+              </DzTag>
+              <DzBadge variant="subtle" tone="warning" size="sm">
+                ★ {{ (item as Template).rating }}
+              </DzBadge>
             </div>
-            <DzHeading :level="5" size="md" weight="semibold" class="dv-name">{{ (item as Template).name }}</DzHeading>
+            <DzHeading :level="5" size="md" weight="semibold" class="dv-name">
+              {{ (item as Template).name }}
+            </DzHeading>
             <div class="dv-card-foot">
-              <DzText weight="semibold" as="span">{{ price((item as Template).price) }}</DzText>
-              <DzButton variant="solid" tone="primary" size="sm">Get</DzButton>
+              <DzText weight="semibold" as="span">
+                {{ price((item as Template).price) }}
+              </DzText>
+              <DzButton variant="solid" tone="primary" size="sm">
+                Get
+              </DzButton>
             </div>
           </div>
         </DzCard>
@@ -118,11 +130,19 @@ function price(value: number): string {
             aria-hidden="true"
           />
           <div class="dv-row-meta">
-            <DzHeading :level="5" size="sm" weight="semibold" class="dv-name">{{ (item as Template).name }}</DzHeading>
-            <DzText size="sm" tone="muted" as="span">{{ (item as Template).category }} · ★ {{ (item as Template).rating }}</DzText>
+            <DzHeading :level="5" size="sm" weight="semibold" class="dv-name">
+              {{ (item as Template).name }}
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="span">
+              {{ (item as Template).category }} · ★ {{ (item as Template).rating }}
+            </DzText>
           </div>
-          <DzText weight="semibold" as="span" class="dv-row-price">{{ price((item as Template).price) }}</DzText>
-          <DzButton variant="outline" tone="neutral" size="sm">Get</DzButton>
+          <DzText weight="semibold" as="span" class="dv-row-price">
+            {{ price((item as Template).price) }}
+          </DzText>
+          <DzButton variant="outline" tone="neutral" size="sm">
+            Get
+          </DzButton>
         </div>
       </template>
     </DzDataView>

@@ -139,10 +139,11 @@ From `packages/tokens/src/primitives/transitions.ts` (emitted as CSS vars):
 > constants stay landing-local as `--dz-anim-*` for now (D-2); promotion to
 > `@dzup-ui/tokens` is Open Decision D2-1.
 
-> **Local-env note (carry from `landing.md` §9 / memory `dzup-ui-local-env`):**
-> ESLint cannot run locally. Validate every change with
-> **`yarn workspace @dzup-ui/landing build`** (Vite); for any `packages/*` change,
-> `yarn typecheck` + Vitest. **Do not** rely on `yarn lint`.
+> **Validation note (updated by TASK-FREE2-01):** this section used to say ESLint
+> could not run locally and must not be relied on. It runs. Validate every change
+> with **`yarn workspace @dzup-ui/landing build`** (Vite) **and `yarn lint`** — the
+> landing is inside the lint gate now, at a 0-error / 0-warning baseline. For any
+> `packages/*` change, also `yarn typecheck` + Vitest.
 
 ---
 
@@ -457,9 +458,8 @@ Every v2 effect must pass the v1 bar (`animations-old.md` §7) **plus**:
   `--dz-*` tokens** (raw hex only as `var(..., #fallback)`), per `landing.md` §6.1 /
   ADR-04. Motion durations/easings from §2.4 tokens; net-new constants as
   `--dz-anim-*` in `src/motion/tokens.css`.
-- **Validation:** `yarn workspace @dzup-ui/landing build`. **Do not run
-  `yarn lint`** (broken locally — memory `dzup-ui-local-env`). For any `packages/*`
-  change: `yarn typecheck` + Vitest.
+- **Validation:** `yarn workspace @dzup-ui/landing build` + `yarn lint`. For any
+  `packages/*` change: `yarn typecheck` + Vitest.
 - **A11y/perf:** §7 of this doc applies to every task. TypeScript strict, no `any`,
   concise JSDoc on every export.
 - **Catalog discipline:** adding an effect = appending a `CatalogEntry` + a demo

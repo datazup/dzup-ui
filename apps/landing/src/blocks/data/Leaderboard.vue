@@ -1,16 +1,5 @@
 <script setup lang="ts">
-/**
- * Leaderboard — a ranked DzList with animated score figures.
- *
- * DzList (divided variant) stacks DzListItem rows; each row uses the `#prefix`
- * slot for a rank badge + DzAvatar and the `#suffix` slot for a DzAnimatedNumber
- * score (count-up on scroll-into-view) beside a DzTag delta. A "Refresh scores"
- * button mutates the values so the figures re-animate live.
- *
- * Self-contained: local reactive data. Composed only from free @dzup-ui/core
- * components and `--dz-*` tokens (docs/blocks.md §3.6).
- */
-import { ref } from 'vue'
+import type { CanonicalTone } from '@dzup-ui/contracts'
 import {
   DzAnimatedNumber,
   DzAvatar,
@@ -23,7 +12,18 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
+/**
+ * Leaderboard — a ranked DzList with animated score figures.
+ *
+ * DzList (divided variant) stacks DzListItem rows; each row uses the `#prefix`
+ * slot for a rank badge + DzAvatar and the `#suffix` slot for a DzAnimatedNumber
+ * score (count-up on scroll-into-view) beside a DzTag delta. A "Refresh scores"
+ * button mutates the values so the figures re-animate live.
+ *
+ * Self-contained: local reactive data. Composed only from free @dzup-ui/core
+ * components and `--dz-*` tokens (docs/blocks.md §3.6).
+ */
+import { ref } from 'vue'
 
 interface Player {
   id: number
@@ -55,8 +55,10 @@ function refresh() {
 }
 
 function deltaTone(delta: number): CanonicalTone {
-  if (delta > 0) return 'success'
-  if (delta < 0) return 'danger'
+  if (delta > 0)
+    return 'success'
+  if (delta < 0)
+    return 'danger'
   return 'neutral'
 }
 </script>
@@ -66,10 +68,16 @@ function deltaTone(delta: number): CanonicalTone {
     <DzCard variant="outlined" padding="lg">
       <header class="lb-head">
         <div>
-          <DzHeading id="lb-title" :level="4" size="md" weight="semibold" class="lb-title">Weekly leaderboard</DzHeading>
-          <DzText size="sm" tone="muted" as="p" class="lb-sub">Points earned this week</DzText>
+          <DzHeading id="lb-title" :level="4" size="md" weight="semibold" class="lb-title">
+            Weekly leaderboard
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p" class="lb-sub">
+            Points earned this week
+          </DzText>
         </div>
-        <DzButton variant="outline" tone="neutral" size="sm" @click="refresh">Refresh scores</DzButton>
+        <DzButton variant="outline" tone="neutral" size="sm" @click="refresh">
+          Refresh scores
+        </DzButton>
       </header>
 
       <DzList variant="divided" size="md">
@@ -88,7 +96,9 @@ function deltaTone(delta: number): CanonicalTone {
             </span>
           </template>
 
-          <DzText weight="medium" as="span">{{ player.name }}</DzText>
+          <DzText weight="medium" as="span">
+            {{ player.name }}
+          </DzText>
 
           <template #suffix>
             <span class="lb-suffix">

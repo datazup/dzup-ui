@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { SegmentedItem } from '@dzup-ui/core'
+import type { BlockDef } from '../../blocks/registry.ts'
 import {
   DzCodeBlock,
   DzCopyButton,
@@ -15,14 +17,12 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import type { SegmentedItem } from '@dzup-ui/core'
 import { Check, ExternalLink, FileText, Maximize2, Sparkles, Wand2 } from 'lucide-vue-next'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { REGISTRY_ENABLED, v0OpenUrl } from '../../blocks/config.ts'
-import type { BlockDef } from '../../blocks/registry.ts'
+import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'
 import { blocksUsingComponent, CATEGORIES } from '../../blocks/registry.ts'
 import { getBlockSource } from '../../blocks/sources.ts'
-import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'
 import { useBlockCodeView } from '../../composables/useBlockCodeView.ts'
 import { useBlockTheme } from '../../composables/useBlockTheme.ts'
 import { useTheme } from '../../composables/useTheme.ts'
@@ -71,7 +71,7 @@ const emit = defineEmits<{
    * owns the single `useBlockSearch` filtering path (Task E3/E4); the preview
    * only surfaces the chips as a reverse-lookup affordance.
    */
-  'select-component': [name: string]
+  selectComponent: [name: string]
 }>()
 
 /** How many catalog blocks use `name` (memoized reverse index, Task E1). */
@@ -107,9 +107,12 @@ const PRESET_WIDTHS = { mobile: 390, tablet: 768 } as const
  */
 const viewport = computed<string>({
   get: () => {
-    if (width.value === 'full') return 'desktop'
-    if (width.value === PRESET_WIDTHS.mobile) return 'mobile'
-    if (width.value === PRESET_WIDTHS.tablet) return 'tablet'
+    if (width.value === 'full')
+      return 'desktop'
+    if (width.value === PRESET_WIDTHS.mobile)
+      return 'mobile'
+    if (width.value === PRESET_WIDTHS.tablet)
+      return 'tablet'
     return ''
   },
   set: (value) => {
@@ -200,7 +203,8 @@ const frameStyle = computed(() => ({
 /** Measure the stage's content-box width (clientWidth minus horizontal padding). */
 function availableWidth(): number {
   const el = stageEl.value
-  if (!el) return MIN_WIDTH
+  if (!el)
+    return MIN_WIDTH
   const styles = getComputedStyle(el)
   const padX = Number.parseFloat(styles.paddingLeft) + Number.parseFloat(styles.paddingRight)
   return Math.max(MIN_WIDTH, el.clientWidth - padX)
@@ -230,7 +234,8 @@ let dragOffset = 0
  */
 function widthFromPointer(clientX: number): number {
   const el = stageEl.value
-  if (!el) return MIN_WIDTH
+  if (!el)
+    return MIN_WIDTH
   const rect = el.getBoundingClientRect()
   const centerX = rect.left + rect.width / 2
   return 2 * (clientX - dragOffset - centerX)
@@ -238,7 +243,8 @@ function widthFromPointer(clientX: number): number {
 
 function onPointerMove(event: PointerEvent): void {
   pendingX = event.clientX
-  if (rafId) return
+  if (rafId)
+    return
   rafId = requestAnimationFrame(() => {
     rafId = 0
     setWidth(widthFromPointer(pendingX))
@@ -259,7 +265,8 @@ function onPointerUp(event: PointerEvent): void {
 }
 
 function onPointerDown(event: PointerEvent): void {
-  if (event.pointerType === 'mouse' && event.button !== 0) return
+  if (event.pointerType === 'mouse' && event.button !== 0)
+    return
   dragging.value = true
   const right = frameEl.value?.getBoundingClientRect().right
   dragOffset = right === undefined ? 0 : event.clientX - right
@@ -298,6 +305,8 @@ function onKeydown(event: KeyboardEvent): void {
   setWidth(next)
 }
 
+/** Set by `announceCopied` below; cleared here on unmount. */
+let copyStatusTimer: ReturnType<typeof setTimeout> | undefined
 let resizeObserver: ResizeObserver | null = null
 onMounted(() => {
   containerWidth.value = availableWidth()
@@ -310,8 +319,10 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   resizeObserver?.disconnect()
-  if (rafId) cancelAnimationFrame(rafId)
-  if (copyStatusTimer !== undefined) clearTimeout(copyStatusTimer)
+  if (rafId)
+    cancelAnimationFrame(rafId)
+  if (copyStatusTimer !== undefined)
+    clearTimeout(copyStatusTimer)
 })
 
 /** Stable ids so the regions/dialog have accessible names. */
@@ -329,13 +340,15 @@ const dialogTitleId = computed(() => `block-${props.block.id}-fs-title`)
  */
 const previewUrl = computed(() => {
   const params = new URLSearchParams({ theme: previewTheme.value, dir: previewDir.value })
-  if (width.value !== 'full') params.set('w', String(width.value))
+  if (width.value !== 'full')
+    params.set('w', String(width.value))
   return `/blocks/preview/${props.block.id}?${params.toString()}`
 })
 
 /** Open the standalone preview in a new tab; `noopener` severs the opener ref. */
 function openInNewTab(): void {
-  if (typeof window !== 'undefined') window.open(previewUrl.value, '_blank', 'noopener')
+  if (typeof window !== 'undefined')
+    window.open(previewUrl.value, '_blank', 'noopener')
 }
 
 /**
@@ -351,7 +364,8 @@ const v0Url = computed(() => v0OpenUrl(props.block.id))
 
 /** Hand the block's registry item to v0 in a new tab; `noopener` severs the opener ref. */
 function openInV0(): void {
-  if (typeof window !== 'undefined' && v0Url.value) window.open(v0Url.value, '_blank', 'noopener')
+  if (typeof window !== 'undefined' && v0Url.value)
+    window.open(v0Url.value, '_blank', 'noopener')
 }
 
 /**
@@ -388,10 +402,10 @@ const promptPayload = computed(() => blockPrompt(props.block, llmsTxtUrl.value))
  * sound identical. Cleared shortly after so the region can re-announce a repeat.
  */
 const copyStatus = ref('')
-let copyStatusTimer: ReturnType<typeof setTimeout> | undefined
 function announceCopied(what: string): void {
   copyStatus.value = `Copied ${what} to clipboard`
-  if (copyStatusTimer !== undefined) clearTimeout(copyStatusTimer)
+  if (copyStatusTimer !== undefined)
+    clearTimeout(copyStatusTimer)
   copyStatusTimer = setTimeout(() => {
     copyStatus.value = ''
   }, 2000)
@@ -469,7 +483,9 @@ const langModel = computed<string>({
         <DzHeading :id="titleId" :level="headingLevel" size="md" weight="semibold" class="bp-title">
           {{ block.title }}
         </DzHeading>
-        <DzText size="sm" tone="muted" as="p" class="bp-desc">{{ block.description }}</DzText>
+        <DzText size="sm" tone="muted" as="p" class="bp-desc">
+          {{ block.description }}
+        </DzText>
         <ul
           class="bp-chips"
           :aria-label="`Built from ${block.components.length} ${block.components.length === 1 ? 'component' : 'components'}`"
@@ -479,7 +495,7 @@ const langModel = computed<string>({
               type="button"
               class="bp-chip"
               :aria-label="`Show ${usageCount(name)} ${usageCount(name) === 1 ? 'block' : 'blocks'} using ${name}`"
-              @click="emit('select-component', name)"
+              @click="emit('selectComponent', name)"
             >
               <span class="bp-chip-name">{{ name }}</span>
               <span class="bp-chip-count" aria-hidden="true">{{ usageCount(name) }}</span>
@@ -563,7 +579,7 @@ const langModel = computed<string>({
         <DzIconButton
           v-if="REGISTRY_ENABLED && v0Url"
           :icon="Wand2"
-          ariaLabel="Open in v0"
+          aria-label="Open in v0"
           variant="outline"
           tone="neutral"
           size="sm"
@@ -571,7 +587,7 @@ const langModel = computed<string>({
         />
         <DzIconButton
           :icon="ExternalLink"
-          ariaLabel="Open preview in new tab"
+          aria-label="Open preview in new tab"
           variant="outline"
           tone="neutral"
           size="sm"
@@ -579,7 +595,7 @@ const langModel = computed<string>({
         />
         <DzIconButton
           :icon="Maximize2"
-          ariaLabel="Open preview full screen"
+          aria-label="Open preview full screen"
           variant="outline"
           tone="neutral"
           size="sm"
@@ -591,8 +607,12 @@ const langModel = computed<string>({
     <!-- Preview / Code tabs. -->
     <DzTabs v-model="tab" variant="line" class="bp-tabs">
       <DzTabList class="bp-tablist">
-        <DzTabTrigger value="preview">Preview</DzTabTrigger>
-        <DzTabTrigger value="code">Code</DzTabTrigger>
+        <DzTabTrigger value="preview">
+          Preview
+        </DzTabTrigger>
+        <DzTabTrigger value="code">
+          Code
+        </DzTabTrigger>
       </DzTabList>
 
       <!-- Live, interactive, resizable preview. -->
@@ -636,7 +656,7 @@ const langModel = computed<string>({
           :block="block"
           :show-components="false"
           class="bp-manifest"
-          @select-component="emit('select-component', $event)"
+          @select-component="emit('selectComponent', $event)"
         />
         <div class="bp-code-toolbar">
           <div class="bp-code-toggles">
@@ -681,7 +701,9 @@ const langModel = computed<string>({
     <DzDialog v-model:open="fullscreen">
       <DzDialogContent size="full" scrollable :aria-labelledby="dialogTitleId">
         <template #header>
-          <DzDialogTitle :id="dialogTitleId">{{ block.title }}</DzDialogTitle>
+          <DzDialogTitle :id="dialogTitleId">
+            {{ block.title }}
+          </DzDialogTitle>
           <DzDialogClose />
         </template>
         <!-- Fullscreen honours the same per-preview override so the blown-up

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import BrandScope from './BrandScope.vue'
 import DzupAppShell from './dzup/DzupAppShell.vue'
 import FreestyleAppShell from './freestyle/FreestyleAppShell.vue'

@@ -27,7 +27,9 @@ const team = [
       </template>
       <span class="name">{{ member.name }}</span>
       <template #suffix>
-        <DzBadge variant="subtle" :tone="member.tone" size="sm">{{ member.role }}</DzBadge>
+        <DzBadge variant="subtle" :tone="member.tone" size="sm">
+          {{ member.role }}
+        </DzBadge>
       </template>
     </DzListItem>
   </DzStagger>

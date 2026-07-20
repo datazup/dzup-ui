@@ -18,57 +18,107 @@ import { ArrowRight, Download, Trash2 } from 'lucide-vue-next'
   <section class="bg-wrap" aria-label="Button gallery">
     <!-- Variants -->
     <div class="bg-group">
-      <DzText size="xs" tone="muted" as="p" class="bg-label">Variants</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bg-label">
+        Variants
+      </DzText>
       <div class="bg-row">
-        <DzButton variant="solid" tone="primary">Solid</DzButton>
-        <DzButton variant="outline" tone="primary">Outline</DzButton>
-        <DzButton variant="ghost" tone="primary">Ghost</DzButton>
-        <DzButton variant="text" tone="primary">Text</DzButton>
-        <DzButton variant="link" tone="primary">Link</DzButton>
+        <DzButton variant="solid" tone="primary">
+          Solid
+        </DzButton>
+        <DzButton variant="outline" tone="primary">
+          Outline
+        </DzButton>
+        <DzButton variant="ghost" tone="primary">
+          Ghost
+        </DzButton>
+        <DzButton variant="text" tone="primary">
+          Text
+        </DzButton>
+        <DzButton variant="link" tone="primary">
+          Link
+        </DzButton>
       </div>
     </div>
 
     <!-- Tones -->
     <div class="bg-group">
-      <DzText size="xs" tone="muted" as="p" class="bg-label">Tones</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bg-label">
+        Tones
+      </DzText>
       <div class="bg-row">
-        <DzButton variant="solid" tone="neutral">Neutral</DzButton>
-        <DzButton variant="solid" tone="primary">Primary</DzButton>
-        <DzButton variant="solid" tone="success">Success</DzButton>
-        <DzButton variant="solid" tone="warning">Warning</DzButton>
-        <DzButton variant="solid" tone="danger">Danger</DzButton>
-        <DzButton variant="solid" tone="info">Info</DzButton>
+        <DzButton variant="solid" tone="neutral">
+          Neutral
+        </DzButton>
+        <DzButton variant="solid" tone="primary">
+          Primary
+        </DzButton>
+        <DzButton variant="solid" tone="success">
+          Success
+        </DzButton>
+        <DzButton variant="solid" tone="warning">
+          Warning
+        </DzButton>
+        <DzButton variant="solid" tone="danger">
+          Danger
+        </DzButton>
+        <DzButton variant="solid" tone="info">
+          Info
+        </DzButton>
       </div>
     </div>
 
     <!-- Sizes -->
     <div class="bg-group">
-      <DzText size="xs" tone="muted" as="p" class="bg-label">Sizes</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bg-label">
+        Sizes
+      </DzText>
       <div class="bg-row bg-row-baseline">
-        <DzButton variant="outline" tone="neutral" size="xs">Extra small</DzButton>
-        <DzButton variant="outline" tone="neutral" size="sm">Small</DzButton>
-        <DzButton variant="outline" tone="neutral" size="md">Medium</DzButton>
-        <DzButton variant="outline" tone="neutral" size="lg">Large</DzButton>
-        <DzButton variant="outline" tone="neutral" size="xl">Extra large</DzButton>
+        <DzButton variant="outline" tone="neutral" size="xs">
+          Extra small
+        </DzButton>
+        <DzButton variant="outline" tone="neutral" size="sm">
+          Small
+        </DzButton>
+        <DzButton variant="outline" tone="neutral" size="md">
+          Medium
+        </DzButton>
+        <DzButton variant="outline" tone="neutral" size="lg">
+          Large
+        </DzButton>
+        <DzButton variant="outline" tone="neutral" size="xl">
+          Extra large
+        </DzButton>
       </div>
     </div>
 
     <!-- Icons & states -->
     <div class="bg-group">
-      <DzText size="xs" tone="muted" as="p" class="bg-label">Icons &amp; states</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bg-label">
+        Icons &amp; states
+      </DzText>
       <div class="bg-row">
         <DzButton variant="solid" tone="primary">
-          <template #prefix><Download :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <Download :size="16" aria-hidden="true" />
+          </template>
           Download
         </DzButton>
         <DzButton variant="outline" tone="neutral">
           Continue
-          <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+          <template #suffix>
+            <ArrowRight :size="16" aria-hidden="true" />
+          </template>
         </DzButton>
-        <DzButton variant="solid" tone="primary" loading>Saving…</DzButton>
-        <DzButton variant="solid" tone="primary" disabled>Disabled</DzButton>
+        <DzButton variant="solid" tone="primary" loading>
+          Saving…
+        </DzButton>
+        <DzButton variant="solid" tone="primary" disabled>
+          Disabled
+        </DzButton>
         <DzButton variant="outline" tone="danger">
-          <template #prefix><Trash2 :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <Trash2 :size="16" aria-hidden="true" />
+          </template>
           Delete
         </DzButton>
       </div>

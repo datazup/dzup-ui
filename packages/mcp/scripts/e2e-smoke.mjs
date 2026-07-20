@@ -10,6 +10,7 @@
  */
 import { spawn } from 'node:child_process'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
@@ -25,11 +26,12 @@ let buf = ''
 const pending = new Map()
 child.stdout.on('data', (chunk) => {
   buf += chunk.toString()
-  let nl
-  while ((nl = buf.indexOf('\n')) !== -1) {
+  let nl = buf.indexOf('\n')
+  for (; nl !== -1; nl = buf.indexOf('\n')) {
     const line = buf.slice(0, nl).trim()
     buf = buf.slice(nl + 1)
-    if (!line) continue
+    if (!line)
+      continue
     const msg = JSON.parse(line)
     if (msg.id && pending.has(msg.id)) {
       pending.get(msg.id)(msg)
@@ -50,7 +52,7 @@ function notify(method, params) {
   child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', method, params })}\n`)
 }
 
-const assert = (cond, label) => {
+function assert(cond, label) {
   if (!cond) {
     console.error(`✗ ${label}`)
     child.kill()
@@ -68,7 +70,7 @@ assert(init.result?.serverInfo?.name === 'dzup-ui', `initialize → serverInfo.n
 notify('notifications/initialized', {})
 
 const tools = await rpc('tools/list', {})
-const names = (tools.result?.tools ?? []).map((t) => t.name).sort()
+const names = (tools.result?.tools ?? []).map(t => t.name).sort()
 assert(names.length >= 9, `tools/list → ${names.length} tools: ${names.join(', ')}`)
 for (const expected of ['list_components', 'get_component', 'list_blocks', 'get_block', 'list_templates', 'get_template', 'list_tokens', 'get_install_command', 'search']) {
   assert(names.includes(expected), `  exposes ${expected}`)

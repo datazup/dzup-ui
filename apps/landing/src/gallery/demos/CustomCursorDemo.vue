@@ -17,8 +17,12 @@ const reduced = useReducedMotion()
 <template>
   <div class="stage">
     <DzCursor :disabled="reduced" :size="36" class="region">
-      <DzHeading :level="4" size="lg" weight="bold">Move inside</DzHeading>
-      <DzText size="sm" tone="muted">A blob trails the pointer; native cursor returns on leave.</DzText>
+      <DzHeading :level="4" size="lg" weight="bold">
+        Move inside
+      </DzHeading>
+      <DzText size="sm" tone="muted">
+        A blob trails the pointer; native cursor returns on leave.
+      </DzText>
       <a class="region__link" href="#" @click.prevent>Links stay clickable</a>
     </DzCursor>
   </div>

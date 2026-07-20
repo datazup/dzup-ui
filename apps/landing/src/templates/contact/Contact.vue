@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * Contact — Marketing template (docs/templates.md §6.2).
  *
@@ -23,7 +24,6 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import type { Component } from 'vue'
 import {
   ArrowLeft,
   Boxes,
@@ -58,7 +58,7 @@ const attempted = ref(false)
 /** Set when a valid form is submitted — swaps the form for the success alert. */
 const sent = ref(false)
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const EMAIL_RE = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/
 
 /** Per-field validation messages; empty string = valid. Pure, recomputed live. */
 const errors = computed(() => ({
@@ -74,7 +74,7 @@ const errors = computed(() => ({
     : 'A line or two of detail helps us route you.',
 }))
 
-const isValid = computed(() => Object.values(errors.value).every((e) => !e))
+const isValid = computed(() => Object.values(errors.value).every(e => !e))
 
 /** Show a field's error only once it's been touched or a submit was attempted. */
 function shownError(field: keyof typeof form): string {
@@ -83,7 +83,8 @@ function shownError(field: keyof typeof form): string {
 
 function submit(): void {
   attempted.value = true
-  if (!isValid.value) return
+  if (!isValid.value)
+    return
   sent.value = true
 }
 
@@ -109,7 +110,9 @@ function reset(): void {
           <span class="brand-name">Northwind</span>
         </span>
         <DzButton variant="outline" tone="neutral" size="sm">
-          <template #prefix><CalendarClock :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <CalendarClock :size="15" aria-hidden="true" />
+          </template>
           Book a demo
         </DzButton>
       </div>
@@ -139,7 +142,9 @@ function reset(): void {
             <ul class="promises" :hidden="sent">
               <li v-for="promise in PROMISES" :key="promise">
                 <span class="promise-tick" aria-hidden="true"><Check :size="13" /></span>
-                <DzText size="sm" tone="muted" as="span">{{ promise }}</DzText>
+                <DzText size="sm" tone="muted" as="span">
+                  {{ promise }}
+                </DzText>
               </li>
             </ul>
 
@@ -159,7 +164,9 @@ function reset(): void {
               </DzText>
               <template #actions>
                 <DzButton variant="outline" tone="success" size="sm" @click="reset">
-                  <template #prefix><ArrowLeft :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <ArrowLeft :size="15" aria-hidden="true" />
+                  </template>
                   Send another
                 </DzButton>
               </template>
@@ -235,7 +242,9 @@ function reset(): void {
               </DzFormField>
 
               <DzButton type="submit" variant="solid" tone="primary" class="submit">
-                <template #prefix><Send :size="16" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Send :size="16" aria-hidden="true" />
+                </template>
                 Send message
               </DzButton>
             </form>
@@ -245,7 +254,9 @@ function reset(): void {
         <!-- Aside column -->
         <aside class="aside" aria-label="Other ways to reach us">
           <DzCard variant="outlined" padding="lg" class="aside-card">
-            <DzHeading :level="2" size="md" weight="semibold">Reach us directly</DzHeading>
+            <DzHeading :level="2" size="md" weight="semibold">
+              Reach us directly
+            </DzHeading>
             <ul class="details">
               <li v-for="detail in DETAILS" :key="detail.label" class="detail">
                 <span class="detail-icon" aria-hidden="true">
@@ -275,7 +286,9 @@ function reset(): void {
 
           <DzCard variant="outlined" padding="lg" class="aside-card">
             <div class="hours-head">
-              <DzHeading :level="2" size="md" weight="semibold">Office hours</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Office hours
+              </DzHeading>
               <span class="open-now">
                 <span class="open-dot" aria-hidden="true" />
                 Open now
@@ -319,7 +332,9 @@ function reset(): void {
         <span class="brand-mark" aria-hidden="true"><Boxes :size="16" /></span>
         <span class="brand-name">Northwind</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Northwind. Built with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Northwind. Built with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

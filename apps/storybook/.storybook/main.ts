@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/vue3-vite/node'
 import tailwindcss from '@tailwindcss/vite'
@@ -9,11 +10,48 @@ import { workspaceAliases } from '../../../packages/tooling/src/workspace-aliase
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const require = createRequire(import.meta.url)
 
+// TASK-FREE2-02 — the `Visual Refresh/*` screens are an internal instrument, not
+// documentation. They render `freestyle/*.vue` mockups in raw Tailwind palette
+// classes with zero dzup-ui components — deliberately untokenized, because they are
+// the comparison TARGET that docs/visual-refresh/AUDIT.md scores the token system
+// against (see packages/core/stories/_gallery/README.md). Shipped in the public
+// sidebar they read as documentation exhibiting the exact style ADR-04 forbids.
+//
+// So: excluded from every build by default, and brought back for the team with
+//   DZUP_GALLERY=1 yarn workspace @dzup-ui/storybook dev
+// The rationale and the local-run path are recorded in docs/storybook-decisions.md.
+//
+// This is an INCLUSION flag rather than a glob negation on purpose: `stories`
+// entries are globbed independently, so a trailing `!…` pattern is not guaranteed
+// to subtract from an earlier entry. Naming what ships is verifiable; naming what
+// doesn't is a hope. `check-mdx-links.mjs` asserts the built index.json carries no
+// `visual-refresh-*` id, so this can never silently leak back.
+const INCLUDE_GALLERY = process.env.DZUP_GALLERY === '1'
+
+// TASK-FREE2-06 — the `Core/Feedback/App-Specific/*` badges encode datazup product
+// vocabulary (agent-coordination patterns, team-run participants, LLM token budgets),
+// not design-system semantics. A catalog is a promise of general-purpose reuse, and
+// four entries no consumer can use blur it. They stay exported from @dzup-ui/core for
+// the internal consumer and stay covered by every stories-tree validator — they just
+// don't publish. Brought back with:
+//   DZUP_APP_SPECIFIC=1 yarn workspace @dzup-ui/storybook dev
+// Same inclusion-flag reasoning as INCLUDE_GALLERY above: a negation fails open. The
+// files live in their own directory so a fifth one cannot quietly land in `feedback/`
+// and ship. `check-mdx-links.mjs` asserts no `core-feedback-app-specific` id in a
+// public index.json. Rationale in docs/storybook-decisions.md (supersedes TASK-X.4).
+const INCLUDE_APP_SPECIFIC = process.env.DZUP_APP_SPECIFIC === '1'
+
 export default defineMain({
-  // Keep this list in sync with the `addons` registered in preview.ts (TASK-0.1).
-  // Docs is the only addon that must be listed here for its manager UI; a11y and
-  // themes register their preview behavior in preview.ts, but listing them here
-  // guarantees the A11y panel and Theme toolbar mount on a fresh `storybook dev`.
+  // Addon registration is split across two files and the rule is NOT "keep the two
+  // lists identical" — they answer different questions:
+  //   • main.ts `addons`  — build-time: presets, Vite config, and MANAGER UI panels.
+  //   • preview.ts `addons` — runtime: preview-side behavior (decorators, parameters).
+  // Only addon-docs strictly needs an entry on both sides (manager UI here, doc
+  // rendering there). a11y and themes wire their preview behavior in preview.ts;
+  // they are listed here so the A11y panel and Theme toolbar mount on a fresh
+  // `storybook dev`. addon-vitest is build-time only — it has no preview entry.
+  // Adding an addon to one list does not imply adding it to the other; ask which
+  // side needs it.
   addons: [
     // GitHub-flavoured markdown, for TABLES above all (TASK-FREE-14). MDX2+ ships
     // CommonMark only, which has no table syntax — so every `| a | b |` block in
@@ -36,8 +74,16 @@ export default defineMain({
     '@storybook/addon-vitest',
   ],
   stories: [
-    // Standalone stories directories
-    '../../../packages/core/stories/**/*.stories.ts',
+    // Component families (buttons, cards, …). `_gallery` is excluded here and its
+    // two halves re-added explicitly below — see INCLUDE_GALLERY above. `_app-specific`
+    // is excluded outright unless flagged in — see INCLUDE_APP_SPECIFIC.
+    '../../../packages/core/stories/!(_gallery|_app-specific)/**/*.stories.ts',
+    // `_gallery/` holds two unrelated things. DzTokenBrowser IS public docs — it is
+    // the `Guides/Design Tokens` page — so it is named explicitly rather than left
+    // to a directory-wide glob that would drag the demo screens back in with it.
+    '../../../packages/core/stories/_gallery/DzTokenBrowser.stories.ts',
+    ...(INCLUDE_GALLERY ? ['../../../packages/core/stories/_gallery/*Gallery.stories.ts'] : []),
+    ...(INCLUDE_APP_SPECIFIC ? ['../../../packages/core/stories/_app-specific/*.stories.ts'] : []),
     // Local app stories (intro, etc.)
     '../stories/**/*.mdx',
   ],

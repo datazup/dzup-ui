@@ -34,7 +34,8 @@ function optionsKey(rootMargin: string, threshold: number | number[]): string {
 }
 
 function getObserver(rootMargin: string, threshold: number | number[]): IntersectionObserver | null {
-  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') return null
+  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')
+    return null
 
   const key = optionsKey(rootMargin, threshold)
   let observer = observers.get(key)
@@ -87,18 +88,21 @@ export function useInView(
     }
     callbacks.set(el, (inView) => {
       isInView.value = inView
-      if (inView && once) unobserve()
+      if (inView && once)
+        unobserve()
     })
     observer.observe(el)
     observed = el
   }
 
   onMounted(() => {
-    if (elRef.value) observe(elRef.value)
+    if (elRef.value)
+      observe(elRef.value)
   })
 
   watch(elRef, (el) => {
-    if (el) observe(el)
+    if (el)
+      observe(el)
     else unobserve()
   })
 

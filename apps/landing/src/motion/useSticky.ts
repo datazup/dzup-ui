@@ -24,7 +24,8 @@ export function useSticky(scrollerRef: Ref<HTMLElement | null | undefined>): Ref
   function compute(): void {
     frame = 0
     const el = target
-    if (!el) return
+    if (!el)
+      return
     const max = el.scrollHeight - el.clientHeight
     if (max <= 0) {
       progress.value = 0
@@ -35,35 +36,41 @@ export function useSticky(scrollerRef: Ref<HTMLElement | null | undefined>): Ref
   }
 
   function onScroll(): void {
-    if (frame) return
+    if (frame)
+      return
     frame = window.requestAnimationFrame(compute)
   }
 
   function start(el: HTMLElement): void {
     target = el
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined')
+      return
     el.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
     compute()
   }
 
   function stop(): void {
-    if (target) target.removeEventListener('scroll', onScroll)
+    if (target)
+      target.removeEventListener('scroll', onScroll)
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', onScroll)
-      if (frame) window.cancelAnimationFrame(frame)
+      if (frame)
+        window.cancelAnimationFrame(frame)
     }
     frame = 0
     target = null
   }
 
   onMounted(() => {
-    if (scrollerRef.value) start(scrollerRef.value)
+    if (scrollerRef.value)
+      start(scrollerRef.value)
   })
 
   watch(scrollerRef, (el) => {
     stop()
-    if (el) start(el)
+    if (el)
+      start(el)
   })
 
   onBeforeUnmount(stop)

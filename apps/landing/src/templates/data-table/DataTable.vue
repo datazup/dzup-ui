@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ColumnDef } from '@dzup-ui/core'
+import type { CustomerPlan, CustomerRow, CustomerStatus } from './data.ts'
 /**
  * Data Table (CRUD list) — full-page dashboard template (docs/templates.md §6.5).
  *
@@ -48,11 +50,12 @@ import {
   DzSidebarSection,
   DzText,
 } from '@dzup-ui/core'
-import type { ColumnDef } from '@dzup-ui/core'
 import { Boxes, Download, MoreHorizontal, Plus, Trash2, X } from 'lucide-vue-next'
 import { computed, reactive, ref, watch } from 'vue'
 import {
+
   CUSTOMERS,
+
   PLAN_OPTIONS,
   PLAN_SELECT,
   PLAN_TONE,
@@ -61,9 +64,6 @@ import {
   STATUS_OPTIONS,
   STATUS_SELECT,
   STATUS_TONE,
-  type CustomerPlan,
-  type CustomerRow,
-  type CustomerStatus,
 } from './data.ts'
 
 // The ledger is owned reactively so New / Delete actually mutate the table.
@@ -79,9 +79,12 @@ const statusFacet = ref<string[]>([])
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
   return records.value.filter((c) => {
-    if (planFacet.value.length && !planFacet.value.includes(c.plan)) return false
-    if (statusFacet.value.length && !statusFacet.value.includes(c.status)) return false
-    if (q && !`${c.name} ${c.email} ${c.company}`.toLowerCase().includes(q)) return false
+    if (planFacet.value.length && !planFacet.value.includes(c.plan))
+      return false
+    if (statusFacet.value.length && !statusFacet.value.includes(c.status))
+      return false
+    if (q && !`${c.name} ${c.email} ${c.company}`.toLowerCase().includes(q))
+      return false
     return true
   })
 })
@@ -116,14 +119,14 @@ function clearSelection() {
 }
 
 function deleteSelected() {
-  const ids = new Set(selected.value.map((r) => r.id))
-  records.value = records.value.filter((r) => !ids.has(r.id))
+  const ids = new Set(selected.value.map(r => r.id))
+  records.value = records.value.filter(r => !ids.has(r.id))
   selected.value = []
 }
 
 function deleteRow(id: string) {
-  records.value = records.value.filter((r) => r.id !== id)
-  selected.value = selected.value.filter((r) => r.id !== id)
+  records.value = records.value.filter(r => r.id !== id)
+  selected.value = selected.value.filter(r => r.id !== id)
 }
 
 // ── Grid columns ──────────────────────────────────────────────────────────
@@ -175,7 +178,8 @@ function resetDraft() {
 }
 
 function createCustomer() {
-  if (!canCreate.value) return
+  if (!canCreate.value)
+    return
   const today = new Date().toISOString().slice(0, 10)
   records.value = [
     {
@@ -208,17 +212,23 @@ function createCustomer() {
 
         <DzSidebarSection title="Manage">
           <DzSidebarItem v-for="item in PRIMARY_NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="subtle" tone="neutral" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="subtle" tone="neutral" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
 
         <DzSidebarSection title="Workspace">
           <DzSidebarItem v-for="item in SECONDARY_NAV" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -237,8 +247,12 @@ function createCustomer() {
 
     <template #header>
       <div class="dt-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Customers</DzHeading>
-        <DzBadge variant="subtle" tone="neutral" size="sm">{{ records.length }}</DzBadge>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Customers
+        </DzHeading>
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          {{ records.length }}
+        </DzBadge>
       </div>
     </template>
 
@@ -246,7 +260,9 @@ function createCustomer() {
       <DzDialog v-model:open="createOpen">
         <DzDialogTrigger as-child>
           <DzButton size="sm" variant="solid" tone="primary">
-            <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Plus :size="15" aria-hidden="true" />
+            </template>
             New customer
           </DzButton>
         </DzDialogTrigger>
@@ -291,7 +307,9 @@ function createCustomer() {
 
           <div class="create-foot">
             <DzDialogClose as-child>
-              <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
+              <DzButton variant="ghost" tone="neutral">
+                Cancel
+              </DzButton>
             </DzDialogClose>
             <DzButton variant="solid" tone="primary" :disabled="!canCreate" @click="createCustomer">
               Create customer
@@ -335,7 +353,9 @@ function createCustomer() {
           class="filter-clear"
           @click="clearFilters"
         >
-          <template #prefix><X :size="14" aria-hidden="true" /></template>
+          <template #prefix>
+            <X :size="14" aria-hidden="true" />
+          </template>
           Clear
         </DzButton>
       </div>
@@ -347,14 +367,20 @@ function createCustomer() {
         </DzText>
         <div class="bulk-actions">
           <DzButton variant="outline" tone="neutral" size="sm">
-            <template #prefix><Download :size="14" aria-hidden="true" /></template>
+            <template #prefix>
+              <Download :size="14" aria-hidden="true" />
+            </template>
             Export
           </DzButton>
           <DzButton variant="outline" tone="danger" size="sm" @click="deleteSelected">
-            <template #prefix><Trash2 :size="14" aria-hidden="true" /></template>
+            <template #prefix>
+              <Trash2 :size="14" aria-hidden="true" />
+            </template>
             Delete
           </DzButton>
-          <DzButton variant="ghost" tone="neutral" size="sm" @click="clearSelection">Clear</DzButton>
+          <DzButton variant="ghost" tone="neutral" size="sm" @click="clearSelection">
+            Clear
+          </DzButton>
         </div>
       </div>
 
@@ -378,8 +404,12 @@ function createCustomer() {
               <div class="cust-cell">
                 <DzAvatar :fallback="(row as CustomerRow).name.slice(0, 1)" size="sm" />
                 <div class="cust-meta">
-                  <DzText size="sm" weight="medium" as="div">{{ (row as CustomerRow).name }}</DzText>
-                  <DzText size="xs" tone="muted" as="div">{{ (row as CustomerRow).email }}</DzText>
+                  <DzText size="sm" weight="medium" as="div">
+                    {{ (row as CustomerRow).name }}
+                  </DzText>
+                  <DzText size="xs" tone="muted" as="div">
+                    {{ (row as CustomerRow).email }}
+                  </DzText>
                 </div>
               </div>
             </template>
@@ -399,14 +429,16 @@ function createCustomer() {
               </span>
             </template>
             <template v-else-if="column.field === 'created'">
-              <DzText size="sm" tone="muted">{{ formatDate((row as CustomerRow).created) }}</DzText>
+              <DzText size="sm" tone="muted">
+                {{ formatDate((row as CustomerRow).created) }}
+              </DzText>
             </template>
             <template v-else-if="column.field === 'id'">
               <DzDropdownMenu>
                 <DzDropdownMenuTrigger as-child>
                   <DzIconButton
                     :icon="MoreHorizontal"
-                    ariaLabel="Customer actions"
+                    aria-label="Customer actions"
                     variant="ghost"
                     tone="neutral"
                     size="sm"
@@ -423,12 +455,16 @@ function createCustomer() {
                 </DzDropdownMenuContent>
               </DzDropdownMenu>
             </template>
-            <template v-else>{{ value }}</template>
+            <template v-else>
+              {{ value }}
+            </template>
           </template>
 
           <template #empty>
             <div class="dt-empty">
-              <DzText weight="medium" as="div">No customers match your filters</DzText>
+              <DzText weight="medium" as="div">
+                No customers match your filters
+              </DzText>
               <DzText size="sm" tone="muted" as="div">
                 Try a different search or clear the filters.
               </DzText>

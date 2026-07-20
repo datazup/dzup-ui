@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CartLine, SuggestedProduct, ThumbPalette } from './data.ts'
 /**
  * Shopping Cart — Commerce template (docs/templates.md §6.5).
  *
@@ -36,21 +37,22 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   buildThumb,
   CART_LINES,
+
   FREE_SHIPPING_THRESHOLD,
   PROMO_CODE,
   PROMO_RATE,
   STANDARD_SHIPPING,
   SUGGESTED,
+
   TAX_RATE,
-  type CartLine,
-  type SuggestedProduct,
-  type ThumbPalette,
+
 } from './data.ts'
 
 // ── Token-painted thumbnails ─────────────────────────────────────
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -87,14 +89,14 @@ onMounted(() => {
 onBeforeUnmount(() => observer?.disconnect())
 
 // ── Cart lines (quantities are live) ─────────────────────────────
-const lines = ref<CartLine[]>(CART_LINES.map((l) => ({ ...l })))
+const lines = ref<CartLine[]>(CART_LINES.map(l => ({ ...l })))
 
 function removeLine(id: string): void {
-  lines.value = lines.value.filter((l) => l.id !== id)
+  lines.value = lines.value.filter(l => l.id !== id)
 }
 
 function addSuggested(product: SuggestedProduct): void {
-  const existing = lines.value.find((l) => l.id === product.id)
+  const existing = lines.value.find(l => l.id === product.id)
   if (existing) {
     existing.qty = Math.min(existing.max, existing.qty + 1)
     return
@@ -121,7 +123,8 @@ function applyPromo(): void {
   if (promo.value.trim().toUpperCase() === PROMO_CODE) {
     promoApplied.value = true
     promoError.value = false
-  } else {
+  }
+  else {
     promoApplied.value = false
     promoError.value = true
   }
@@ -167,13 +170,17 @@ function money(n: number): string {
     <main class="wrap">
       <div class="page-head">
         <div>
-          <DzHeading :level="1" size="2xl" weight="bold">Your cart</DzHeading>
+          <DzHeading :level="1" size="2xl" weight="bold">
+            Your cart
+          </DzHeading>
           <DzText size="sm" tone="muted" as="p">
             {{ count === 0 ? 'Nothing here yet.' : `${count} ${count === 1 ? 'item' : 'items'} ready to check out.` }}
           </DzText>
         </div>
         <DzButton variant="ghost" tone="neutral" size="sm" class="continue" href="#">
-          <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <ArrowLeft :size="16" aria-hidden="true" />
+          </template>
           Continue shopping
         </DzButton>
       </div>
@@ -195,8 +202,12 @@ function money(n: number): string {
                   <div class="line-body">
                     <div class="line-top">
                       <div class="line-id">
-                        <DzText weight="semibold" as="span">{{ l.name }}</DzText>
-                        <DzText size="sm" tone="muted" as="span">{{ l.variant }}</DzText>
+                        <DzText weight="semibold" as="span">
+                          {{ l.name }}
+                        </DzText>
+                        <DzText size="sm" tone="muted" as="span">
+                          {{ l.variant }}
+                        </DzText>
                         <DzText
                           v-if="l.note"
                           size="xs"
@@ -231,7 +242,9 @@ function money(n: number): string {
                         :aria-label="`Remove ${l.name}`"
                         @click="removeLine(l.id)"
                       >
-                        <template #prefix><Trash2 :size="15" aria-hidden="true" /></template>
+                        <template #prefix>
+                          <Trash2 :size="15" aria-hidden="true" />
+                        </template>
                         Remove
                       </DzButton>
                     </div>
@@ -244,12 +257,16 @@ function money(n: number): string {
           <!-- Empty cart -->
           <DzCard v-else variant="outlined" padding="lg" class="empty">
             <span class="empty-mark" aria-hidden="true"><ShoppingBag :size="30" /></span>
-            <DzHeading :level="2" size="lg" weight="semibold">Your cart is empty</DzHeading>
+            <DzHeading :level="2" size="lg" weight="semibold">
+              Your cart is empty
+            </DzHeading>
             <DzText tone="muted" as="p" class="empty-copy">
               Browse the market and your picks will show up here, ready to check out.
             </DzText>
             <DzButton variant="solid" tone="primary" href="#">
-              <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <ArrowLeft :size="16" aria-hidden="true" />
+              </template>
               Start shopping
             </DzButton>
           </DzCard>
@@ -291,7 +308,9 @@ function money(n: number): string {
                   aria-label="Promo code"
                   class="promo-input"
                 >
-                  <template #prefix><Tag :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Tag :size="15" aria-hidden="true" />
+                  </template>
                 </DzInput>
                 <DzButton variant="outline" tone="neutral" size="sm" @click="applyPromo">
                   Apply
@@ -332,7 +351,9 @@ function money(n: number): string {
             </dl>
 
             <DzButton variant="solid" tone="primary" size="lg" class="checkout-btn">
-              <template #prefix><Lock :size="17" aria-hidden="true" /></template>
+              <template #prefix>
+                <Lock :size="17" aria-hidden="true" />
+              </template>
               Checkout · {{ money(total) }}
             </DzButton>
 
@@ -366,11 +387,17 @@ function money(n: number): string {
                 class="suggest-thumb"
               />
               <div class="suggest-meta">
-                <DzText weight="medium" as="span">{{ s.name }}</DzText>
-                <DzText size="sm" tone="muted" as="span">{{ s.variant }}</DzText>
+                <DzText weight="medium" as="span">
+                  {{ s.name }}
+                </DzText>
+                <DzText size="sm" tone="muted" as="span">
+                  {{ s.variant }}
+                </DzText>
               </div>
               <div class="suggest-foot">
-                <DzText weight="semibold" as="span">{{ money(s.price) }}</DzText>
+                <DzText weight="semibold" as="span">
+                  {{ money(s.price) }}
+                </DzText>
                 <DzButton
                   variant="outline"
                   tone="primary"
@@ -378,7 +405,9 @@ function money(n: number): string {
                   :aria-label="`Add ${s.name} to cart`"
                   @click="addSuggested(s)"
                 >
-                  <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Plus :size="15" aria-hidden="true" />
+                  </template>
                   Add
                 </DzButton>
               </div>
@@ -393,7 +422,9 @@ function money(n: number): string {
         <span class="brand-mark" aria-hidden="true"><Leaf :size="16" /></span>
         <span class="brand-name">Verdant Market</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Verdant Market. Good food, sourced well.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Verdant Market. Good food, sourced well.
+      </DzText>
     </footer>
   </div>
 </template>

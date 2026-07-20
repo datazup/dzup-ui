@@ -8,6 +8,7 @@
  */
 import { existsSync, statSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const dist = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')

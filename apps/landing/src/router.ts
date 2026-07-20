@@ -384,6 +384,23 @@ const router = createRouter({
         },
       },
     },
+    // Changelog — the on-site release feed (FREE2-10). Build-derived from
+    // CHANGELOG.md via the shared release parser; replaces the old off-site
+    // GitHub deep-link as the highest-intent retention surface. Carries its own
+    // SEO head + self-canonical like the other primary marketing pages.
+    {
+      path: '/changelog',
+      name: 'changelog',
+      component: () => import('./pages/ChangelogPage.vue'),
+      meta: {
+        head: {
+          title: 'Changelog — what\'s new in dzup-ui | dzup-ui',
+          description:
+            'Every shipped change to dzup-ui — new components, refinements and fixes, newest first. Generated from the repository changelog and available as an Atom feed.',
+          canonical: '/changelog',
+        },
+      },
+    },
     // The real 404 (TASK-FREE-09) — replaces the old silent `redirect: '/'`,
     // which explained nothing and told crawlers every dead URL was the home
     // page. Renders an explanation + search + navigation; noindex so error

@@ -8,6 +8,7 @@ A storefront grid of product cards — image with a sale/new corner badge, name,
 
 ```vue
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Product card grid — a storefront listing of products.
  *
@@ -20,7 +21,6 @@ A storefront grid of product cards — image with a sale/new corner badge, name,
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { DzBadge, DzButton, DzHeading, DzImageCard, DzRating, DzText } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface Product {
   id: number
@@ -114,7 +114,9 @@ const money = (value: number) => `$${value.toFixed(2)}`
       <DzHeading id="pg-title" :level="4" size="lg" weight="semibold" class="pg-heading">
         Featured products
       </DzHeading>
-      <DzText size="sm" tone="muted" as="p" class="pg-sub">Free shipping on orders over $75</DzText>
+      <DzText size="sm" tone="muted" as="p" class="pg-sub">
+        Free shipping on orders over $75
+      </DzText>
     </header>
 
     <ul class="pg-grid">
@@ -133,8 +135,12 @@ const money = (value: number) => `$${value.toFixed(2)}`
           </template>
 
           <div class="pg-body">
-            <DzText size="xs" tone="muted" as="p" class="pg-eyebrow">{{ product.category }}</DzText>
-            <DzHeading :level="5" size="md" weight="semibold" class="pg-name">{{ product.name }}</DzHeading>
+            <DzText size="xs" tone="muted" as="p" class="pg-eyebrow">
+              {{ product.category }}
+            </DzText>
+            <DzHeading :level="5" size="md" weight="semibold" class="pg-name">
+              {{ product.name }}
+            </DzHeading>
 
             <div class="pg-rating">
               <DzRating
@@ -144,11 +150,15 @@ const money = (value: number) => `$${value.toFixed(2)}`
                 size="sm"
                 :aria-label="`Rated ${product.rating} out of 5`"
               />
-              <DzText size="xs" tone="muted" as="span">({{ product.reviews }})</DzText>
+              <DzText size="xs" tone="muted" as="span">
+                ({{ product.reviews }})
+              </DzText>
             </div>
 
             <p class="pg-price">
-              <DzText size="md" weight="bold" as="span">{{ money(product.price) }}</DzText>
+              <DzText size="md" weight="bold" as="span">
+                {{ money(product.price) }}
+              </DzText>
               <DzText v-if="product.was" size="sm" tone="muted" as="span" class="pg-was">
                 {{ money(product.was) }}
               </DzText>
@@ -156,7 +166,9 @@ const money = (value: number) => `$${value.toFixed(2)}`
           </div>
 
           <template #footer>
-            <DzButton variant="solid" tone="primary" size="sm" class="pg-add">Add to cart</DzButton>
+            <DzButton variant="solid" tone="primary" size="sm" class="pg-add">
+              Add to cart
+            </DzButton>
           </template>
         </DzImageCard>
       </li>

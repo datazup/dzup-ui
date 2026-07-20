@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
+import type { CertificationId } from '../../blocks/certifications.ts'
 import { DzBadge } from '@dzup-ui/core'
 import { ShieldCheck, SunMoon } from 'lucide-vue-next'
-import type { Component } from 'vue'
 import { CERTIFICATIONS, isCertified } from '../../blocks/certifications.ts'
-import type { CertificationId } from '../../blocks/certifications.ts'
 
 /**
  * BlockTrustMarks — the *earned* trust badges shown on BlockCard / BlockPreview

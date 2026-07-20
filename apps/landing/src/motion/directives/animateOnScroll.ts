@@ -78,7 +78,8 @@ const rootObservers = new WeakMap<Element, Map<number, IntersectionObserver>>()
 
 /** Whether the OS currently requests reduced motion (SSR-safe, like v-tilt). */
 function prefersReduced(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
@@ -89,7 +90,8 @@ function toClassList(value: string | undefined): string[] {
 
 /** Resolve (or create) the shared observer for a `(root, threshold)` signature. */
 function getObserver(root: Element | undefined, threshold: number): IntersectionObserver | null {
-  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') return null
+  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')
+    return null
 
   const pool = root
     ? (rootObservers.get(root) ?? rootObservers.set(root, new Map()).get(root)!)
@@ -119,7 +121,8 @@ function clearWillChangeAfter(el: HTMLElement): void {
 
 /** Play the entrance: drop any leave classes, set the GPU hint, add enter classes. */
 function enter(el: HTMLElement, state: ScrollState): void {
-  if (state.leave.length) el.classList.remove(...state.leave)
+  if (state.leave.length)
+    el.classList.remove(...state.leave)
   el.style.willChange = 'opacity, transform'
   el.classList.add(...state.enter)
   clearWillChangeAfter(el)
@@ -127,7 +130,8 @@ function enter(el: HTMLElement, state: ScrollState): void {
 
 /** Play the exit: drop the enter classes, add leave classes (once === false only). */
 function leave(el: HTMLElement, state: ScrollState): void {
-  if (state.enter.length) el.classList.remove(...state.enter)
+  if (state.enter.length)
+    el.classList.remove(...state.enter)
   el.style.willChange = 'opacity, transform'
   el.classList.add(...state.leave)
   clearWillChangeAfter(el)

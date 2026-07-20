@@ -16,7 +16,9 @@ import { DzGradientText } from '../../motion/index.ts'
 <template>
   <div class="stage">
     <DzGradientText>
-      <DzHeading :level="3" size="2xl" weight="bold">Motion, on brand</DzHeading>
+      <DzHeading :level="3" size="2xl" weight="bold">
+        Motion, on brand
+      </DzHeading>
     </DzGradientText>
   </div>
 </template>

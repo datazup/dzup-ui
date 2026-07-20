@@ -65,9 +65,13 @@ export**. No rendering / a11y / visual tests.
 **Routing & SEO** — `/blocks` route in `src/router.ts` with per-route `meta.head` (title + description →
 `<title>`, description, OG, Twitter). No per-block routes, no OG images.
 
-**Validation in this repo:** `yarn typecheck` + the landing `vite build` + Vitest. **ESLint is broken
-locally** (`MEMORY.md` → "Lint config broken"; sibling `eslint.config.shared.js` absent) — **never gate on
-it.** Bake `typecheck` + `vite build` (+ Vitest where a guard exists) into every task's acceptance criteria.
+**Validation in this repo:** `yarn typecheck` + `yarn lint` + the landing `vite build` + Vitest.
+Bake all of them into every task's acceptance criteria.
+
+> **`yarn lint` is a real, blocking gate again (TASK-FREE2-01).** This doc used to say ESLint was
+> broken locally and must never be gated on. That is no longer true: the config runs, `yarn lint`
+> covers `packages/` **and** both apps, and its baseline is 0 errors / 0 warnings, enforced in CI
+> with `--max-warnings 0`. Lint what you touch.
 
 ---
 
@@ -233,7 +237,7 @@ Every block and every new gallery surface obeys the library's gates (`CLAUDE.md`
 - **Responsive** — sensible reflow at the app breakpoints (`900px`, `560px`/`520px`).
 - **Light + dark verified.**
 - **TypeScript-strict, `<script setup lang="ts">`, `.ts` import extensions.**
-- **Validate with `yarn typecheck` + landing `vite build` (+ Vitest where a guard exists). Never ESLint.**
+- **Validate with `yarn typecheck` + `yarn lint` + landing `vite build` (+ Vitest where a guard exists).**
 
 ---
 
@@ -1091,7 +1095,7 @@ components listed in blocks-old.md §4.4:
 - ONLY the listed real components (verify each exists). No bespoke re-implementations.
 - WCAG AA, labelled controls, keyboard reachable, visible focus, both themes; honor prefers-reduced-motion.
 - `<script setup lang="ts">`, `.ts` extensions; zero required props. Validate with `yarn typecheck` +
-  `vite build` + Vitest (ESLint is broken locally — never rely on it).
+  `yarn lint` + `vite build` + Vitest.
 </constraints>
 
 <acceptance_criteria>
@@ -1178,7 +1182,7 @@ BlockCard/BlockPreview that reflects the check's coverage.
 </steps>
 
 <constraints>
-- Vitest only (ESLint broken locally). The a11y suite must fail when a block has a critical violation.
+- Vitest + `yarn lint`. The a11y suite must fail when a block has a critical violation.
 - Token-only marks; reuse DzBadge/chip styling; accessible (the mark itself must be labelled, not color-only).
 - Add the test dep (axe-core/vitest-axe) as a dev dependency only.
 </constraints>
@@ -1312,6 +1316,6 @@ the highest-signal sources:
 - **Library scope:** 147–155 free components across 11 families (`CLAUDE.md`). Verified core inventory in
   `blocks-old.md` Appendix A; verified Pro inventory in `blocks-old.md` Appendix C.
 - **Quality benchmark block:** `apps/landing/src/components/ShowcaseDashboard.vue`.
-- **Validation:** `yarn typecheck` + landing `vite build` + Vitest. **ESLint is broken locally** — never gate on it.
+- **Validation:** `yarn typecheck` + `yarn lint` + landing `vite build` + Vitest.
 - **Hard rules:** token-only styling (ADR-04), real components only, contracts-first, `.ts` import extensions,
   `<script setup lang="ts">` (`CLAUDE.md` "Quick Rules").

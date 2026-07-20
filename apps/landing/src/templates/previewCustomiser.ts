@@ -49,7 +49,7 @@ export const PREVIEW_PALETTES: readonly PreviewPalette[] = [
   { value: 'fuchsia', label: 'Fuchsia' },
 ] as const
 
-const PALETTE_VALUES = new Set(PREVIEW_PALETTES.map((p) => p.value))
+const PALETTE_VALUES = new Set(PREVIEW_PALETTES.map(p => p.value))
 
 /** Narrow an unknown query value to a supported palette key. */
 export function isPreviewPalette(value: unknown): value is string {
@@ -67,14 +67,16 @@ export function paletteSwatchColor(value: string): string {
  * back to its own `--dz-colors-primary-*` (the native colour, exactly as today).
  */
 export function applyPrimaryPalette(palette: string | null): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   const { style } = document.documentElement
   const remap = palette !== null && PALETTE_VALUES.has(palette)
   for (const shade of SHADE_STEPS) {
     const prop = `--dz-colors-primary-${shade}`
     if (remap) {
       style.setProperty(prop, `var(--dz-colors-${palette}-${shade})`)
-    } else {
+    }
+    else {
       style.removeProperty(prop)
     }
   }
@@ -82,6 +84,7 @@ export function applyPrimaryPalette(palette: string | null): void {
 
 /** Apply text direction to <html>; anything but `rtl` resets to native LTR. */
 export function applyDir(dir: unknown): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   document.documentElement.setAttribute('dir', dir === 'rtl' ? 'rtl' : 'ltr')
 }

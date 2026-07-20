@@ -28,7 +28,8 @@ const resendKey = ref(0)
 const verifyDisabled = computed(() => code.value.length < 6 || status.value === 'success')
 
 function verify(): void {
-  if (code.value.length < 6) return
+  if (code.value.length < 6)
+    return
   status.value = code.value === VALID_CODE ? 'success' : 'error'
 }
 
@@ -38,11 +39,13 @@ function onComplete(value: string): void {
 }
 
 function clearError(): void {
-  if (status.value === 'error') status.value = 'idle'
+  if (status.value === 'error')
+    status.value = 'idle'
 }
 
 function resend(): void {
-  if (!canResend.value) return
+  if (!canResend.value)
+    return
   canResend.value = false
   resendKey.value += 1
 }
@@ -58,7 +61,9 @@ function resend(): void {
 
       <!-- Verification state. -->
       <DzCard v-if="status !== 'success'" variant="elevated" padding="lg" class="otp-card">
-        <div class="otp-icon" aria-hidden="true"><ShieldCheck :size="22" /></div>
+        <div class="otp-icon" aria-hidden="true">
+          <ShieldCheck :size="22" />
+        </div>
 
         <header class="otp-head">
           <DzHeading :level="1" size="xl" weight="semibold" align="center">
@@ -124,7 +129,9 @@ function resend(): void {
 
       <!-- Success state. -->
       <DzCard v-else variant="elevated" padding="lg" class="otp-card otp-card--center">
-        <div class="otp-success-icon" aria-hidden="true"><CheckCircle2 :size="32" /></div>
+        <div class="otp-success-icon" aria-hidden="true">
+          <CheckCircle2 :size="32" />
+        </div>
         <DzHeading :level="1" size="xl" weight="semibold" align="center">
           You're verified
         </DzHeading>

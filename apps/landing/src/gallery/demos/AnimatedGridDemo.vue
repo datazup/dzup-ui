@@ -23,8 +23,12 @@ const gridClass = computed(() => ({
   <div class="stage">
     <div :class="gridClass" />
     <div class="content">
-      <DzText weight="semibold" as="div">Animated grid</DzText>
-      <DzText size="xs" tone="muted" as="div">A subtle, panning section backdrop.</DzText>
+      <DzText weight="semibold" as="div">
+        Animated grid
+      </DzText>
+      <DzText size="xs" tone="muted" as="div">
+        A subtle, panning section backdrop.
+      </DzText>
     </div>
   </div>
 </template>

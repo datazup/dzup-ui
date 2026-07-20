@@ -120,7 +120,7 @@ snapshot for tools that can't run the MCP; for full component APIs, use the
 depth channel below.
 
 - **Components:** 205 across 11 families — counted as every exported `.vue` component, including compound sub-parts such as `DzCardBody`
-- **Documented:** 139 — components with a dedicated Storybook page (compound sub-parts are documented through their parent)
+- **Documented:** 137 — components with a dedicated Storybook page (compound sub-parts are documented through their parent)
 - **Blocks:** 87 · **templates:** 44
 - **Color palettes:** 27 (OKLCH), 11 shades each
 - **Semantic roles:** 115 (light + dark)
@@ -157,7 +157,7 @@ fallback supply the dark ramp.
 
 ## Depth channel — `@dzup-ui/mcp`
 
-This file is deliberately **high-level**. For the full catalog — 205 components (139 with a dedicated docs page), 87 blocks, 44 full-page templates,
+This file is deliberately **high-level**. For the full catalog — 205 components (137 with a dedicated docs page), 87 blocks, 44 full-page templates,
 and every prop, slot, and token — connect the `@dzup-ui/mcp` server in an
 MCP-capable tool (Cursor, Claude Code, Windsurf). Prefer the MCP for production
 work; use this DESIGN.md when no server is available (Stitch, Figma Make, quick

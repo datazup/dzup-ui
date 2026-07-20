@@ -33,7 +33,9 @@ const members: Member[] = [
   <section class="team" aria-labelledby="media-team-title">
     <header class="t-head">
       <div class="t-head-text">
-        <DzBadge variant="subtle" tone="primary" size="sm">Team</DzBadge>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          Team
+        </DzBadge>
         <DzHeading id="media-team-title" :level="4" size="xl" weight="semibold" class="t-title">
           Working on this release
         </DzHeading>

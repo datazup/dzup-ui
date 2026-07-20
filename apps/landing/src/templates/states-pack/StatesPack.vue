@@ -40,7 +40,9 @@ import {
           <span class="brand-mark" aria-hidden="true"><Boxes :size="18" /></span>
           <span class="brand-name">Northwind</span>
         </span>
-        <DzHeading :level="1" size="2xl" weight="semibold">Empty &amp; error states</DzHeading>
+        <DzHeading :level="1" size="2xl" weight="semibold">
+          Empty &amp; error states
+        </DzHeading>
         <DzText tone="muted" as="p" class="states-lede">
           The friendly dead-ends of a real product — placeholders, results and
           recoveries, each with a clear next step. Drop these in wherever a list
@@ -63,7 +65,9 @@ import {
             >
               <template #actions>
                 <DzButton variant="solid" tone="primary" size="sm">
-                  <template #prefix><Plus :size="16" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Plus :size="16" aria-hidden="true" />
+                  </template>
                   New project
                 </DzButton>
               </template>
@@ -78,7 +82,9 @@ import {
             >
               <template #actions>
                 <DzButton variant="outline" tone="neutral" size="sm">
-                  <template #prefix><SlidersHorizontal :size="16" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <SlidersHorizontal :size="16" aria-hidden="true" />
+                  </template>
                   Clear filters
                 </DzButton>
               </template>
@@ -92,7 +98,9 @@ import {
               description="No new notifications. We'll let you know the moment something needs you."
             >
               <template #actions>
-                <DzButton variant="ghost" tone="neutral" size="sm">View archive</DzButton>
+                <DzButton variant="ghost" tone="neutral" size="sm">
+                  View archive
+                </DzButton>
               </template>
             </DzEmpty>
           </DzCard>
@@ -113,8 +121,12 @@ import {
               description="Your Pro plan is active. A receipt is on its way to your inbox."
             >
               <template #actions>
-                <DzButton variant="solid" tone="primary" size="sm">View receipt</DzButton>
-                <DzButton variant="ghost" tone="neutral" size="sm">Back to billing</DzButton>
+                <DzButton variant="solid" tone="primary" size="sm">
+                  View receipt
+                </DzButton>
+                <DzButton variant="ghost" tone="neutral" size="sm">
+                  Back to billing
+                </DzButton>
               </template>
             </DzResult>
           </DzCard>
@@ -127,10 +139,14 @@ import {
             >
               <template #actions>
                 <DzButton variant="solid" tone="danger" size="sm">
-                  <template #prefix><RefreshCw :size="16" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <RefreshCw :size="16" aria-hidden="true" />
+                  </template>
                   Try again
                 </DzButton>
-                <DzButton variant="ghost" tone="neutral" size="sm">Contact support</DzButton>
+                <DzButton variant="ghost" tone="neutral" size="sm">
+                  Contact support
+                </DzButton>
               </template>
             </DzResult>
           </DzCard>
@@ -142,8 +158,12 @@ import {
               description="You've used 92% of your workspace storage. Free up space to keep syncing."
             >
               <template #actions>
-                <DzButton variant="solid" tone="warning" size="sm">Manage storage</DzButton>
-                <DzButton variant="ghost" tone="neutral" size="sm">Upgrade plan</DzButton>
+                <DzButton variant="solid" tone="warning" size="sm">
+                  Manage storage
+                </DzButton>
+                <DzButton variant="ghost" tone="neutral" size="sm">
+                  Upgrade plan
+                </DzButton>
               </template>
             </DzResult>
           </DzCard>
@@ -155,8 +175,12 @@ import {
               description="We emailed an invitation to mara@lumenlabs.io. It expires in 7 days."
             >
               <template #actions>
-                <DzButton variant="outline" tone="neutral" size="sm">Resend</DzButton>
-                <DzButton variant="ghost" tone="neutral" size="sm">Copy link</DzButton>
+                <DzButton variant="outline" tone="neutral" size="sm">
+                  Resend
+                </DzButton>
+                <DzButton variant="ghost" tone="neutral" size="sm">
+                  Copy link
+                </DzButton>
               </template>
             </DzResult>
           </DzCard>

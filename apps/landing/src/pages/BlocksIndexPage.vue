@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+import type { BlockDef, CategoryMeta } from '../blocks/registry.ts'
+import type { BlockNavTarget } from '../components/blocks/BlockCommandPalette.vue'
 import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
-import Section from '../components/Section.vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { BLOCKS, blocksByCategory, CATEGORIES } from '../blocks/registry.ts'
 import BlockAiCallout from '../components/blocks/BlockAiCallout.vue'
 import BlockCard from '../components/blocks/BlockCard.vue'
 import BlockCategoryNav from '../components/blocks/BlockCategoryNav.vue'
@@ -10,9 +12,7 @@ import BlockCommandPalette from '../components/blocks/BlockCommandPalette.vue'
 import BlockSearchBar from '../components/blocks/BlockSearchBar.vue'
 import BlockThemeToolbar from '../components/blocks/BlockThemeToolbar.vue'
 import LazyBlockPreview from '../components/blocks/LazyBlockPreview.vue'
-import type { BlockNavTarget } from '../components/blocks/BlockCommandPalette.vue'
-import { BLOCKS, CATEGORIES, blocksByCategory } from '../blocks/registry.ts'
-import type { BlockDef, CategoryMeta } from '../blocks/registry.ts'
+import Section from '../components/Section.vue'
 import { useBlockSearch } from '../composables/useBlockSearch.ts'
 import { vReveal } from '../motion/index.ts'
 
@@ -43,8 +43,8 @@ interface CategorySection extends CategoryMeta {
 
 /** Only categories that actually have registered blocks, in browse order. */
 const sections = computed<CategorySection[]>(() =>
-  CATEGORIES.map((category) => ({ ...category, blocks: blocksByCategory(category.id) })).filter(
-    (section) => section.blocks.length > 0,
+  CATEGORIES.map(category => ({ ...category, blocks: blocksByCategory(category.id) })).filter(
+    section => section.blocks.length > 0,
   ),
 )
 
@@ -86,7 +86,8 @@ function showBlocksUsing(name: string): void {
   search.query.value = ''
   search.activeTags.value = []
   search.activeComponent.value = name
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   requestAnimationFrame(() => {
     document.querySelector('.block-search')?.scrollIntoView({
       behavior: prefersReducedMotion() ? 'auto' : 'smooth',
@@ -98,12 +99,13 @@ function showBlocksUsing(name: string): void {
 /** Live, count-aware lede for the results section heading. */
 const resultsLede = computed(() => {
   const n = results.value.length
-  if (n === 0) return 'No blocks match your search and tag filters. Clear them to browse by category.'
+  if (n === 0)
+    return 'No blocks match your search and tag filters. Clear them to browse by category.'
   return `${n} ${n === 1 ? 'block' : 'blocks'} across all categories match your filters.`
 })
 
 /** Category id → decorative accent, so each cross-category card/preview keeps its group's hue. */
-const accentByCategory = new Map(CATEGORIES.map((c) => [c.id, c.accent] as const))
+const accentByCategory = new Map(CATEGORIES.map(c => [c.id, c.accent] as const))
 
 /**
  * Per-block accent custom property for results mode. In the deck the accent is
@@ -118,14 +120,18 @@ function itemAccentStyle(block: BlockDef) {
 /** Resolve the category to open on load from the URL hash, if any. */
 function initialCategory(): string {
   const fallback = sections.value[0]?.id ?? ''
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const hash = window.location.hash.slice(1)
-  if (!hash) return fallback
+  if (!hash)
+    return fallback
   // Direct category deep link (#marketing).
-  if (sections.value.some((s) => s.id === hash)) return hash
+  if (sections.value.some(s => s.id === hash))
+    return hash
   // Legacy block deep link (#hero-centered) → open the block's category.
-  const block = BLOCKS.find((b) => b.id === hash)
-  if (block && sections.value.some((s) => s.id === block.category)) return block.category
+  const block = BLOCKS.find(b => b.id === hash)
+  if (block && sections.value.some(s => s.id === block.category))
+    return block.category
   return fallback
 }
 
@@ -134,7 +140,7 @@ const active = ref<string>(initialCategory())
 
 /** The section object for the active category. */
 const activeSection = computed<CategorySection | undefined>(() =>
-  sections.value.find((s) => s.id === active.value),
+  sections.value.find(s => s.id === active.value),
 )
 
 /**
@@ -150,7 +156,7 @@ const accentStyle = computed(() =>
 )
 
 /** Index of the active category among the visible sections. */
-const activeIndex = computed(() => sections.value.findIndex((s) => s.id === active.value))
+const activeIndex = computed(() => sections.value.findIndex(s => s.id === active.value))
 
 /** Adjacent groups for the pager (undefined at the ends). */
 const prevSection = computed(() => sections.value[activeIndex.value - 1])
@@ -172,17 +178,18 @@ function tabId(id: string): string {
 
 function prefersReducedMotion(): boolean {
   return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined'
+    && typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   )
 }
 
 /** Switch to a category, recording the direction so the deck slides the right way. */
 function goTo(id: string) {
-  if (id === active.value) return
+  if (id === active.value)
+    return
   const from = activeIndex.value
-  const to = sections.value.findIndex((s) => s.id === id)
+  const to = sections.value.findIndex(s => s.id === id)
   direction.value = to >= from ? 'fwd' : 'back'
   active.value = id
 }
@@ -193,9 +200,11 @@ function goTo(id: string) {
  * The sticky stack above the panels is TopNav (64px) + the tab bar (~52px).
  */
 function scrollToPanelTop() {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   const deck = document.getElementById('blocks-deck')
-  if (!deck) return
+  if (!deck)
+    return
   const top = deck.getBoundingClientRect().top + window.scrollY - 116
   // Only pull the page up when the panel top is above the fold; never scroll down
   // past content the reader can already see.
@@ -220,7 +229,8 @@ const forcedBlockIds = reactive(new Set<string>())
 // scroll, even when the block sits below the fold.
 if (typeof window !== 'undefined') {
   const initialHash = window.location.hash.slice(1)
-  if (initialHash && BLOCKS.some((b) => b.id === initialHash)) forcedBlockIds.add(initialHash)
+  if (initialHash && BLOCKS.some(b => b.id === initialHash))
+    forcedBlockIds.add(initialHash)
 }
 
 /** Whether a block should skip the lazy gate and render its preview now. */
@@ -236,7 +246,8 @@ function isForced(id: string): boolean {
  * then waits a tick + rAF so the scroll fires after the preview has painted.
  */
 async function scrollToBlock(id: string) {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   forcedBlockIds.add(id)
   await nextTick()
   requestAnimationFrame(() => {
@@ -255,12 +266,14 @@ const pendingBlockId = ref<string | null>(null)
 
 /** When the palette navigates to a block, open its deck then scroll to it. */
 function openBlock(blockId: string) {
-  const block = BLOCKS.find((b) => b.id === blockId)
-  if (!block) return
+  const block = BLOCKS.find(b => b.id === blockId)
+  if (!block)
+    return
   if (block.category === active.value) {
     // Deck already showing this group — just scroll the preview into view.
     scrollToBlock(blockId)
-  } else {
+  }
+  else {
     // Switch decks first; the scroll waits for the enter transition (after-enter).
     pendingBlockId.value = blockId
     goTo(block.category)
@@ -269,7 +282,8 @@ function openBlock(blockId: string) {
 
 /** Handle a ⌘K palette selection: open the target block or category deck. */
 function onPaletteNavigate(target: BlockNavTarget) {
-  if (target.blockId) openBlock(target.blockId)
+  if (target.blockId)
+    openBlock(target.blockId)
   else goTo(target.category)
 }
 
@@ -288,7 +302,8 @@ watch(active, async (id) => {
   if (typeof window !== 'undefined') {
     window.history.replaceState(window.history.state, '', `#${id}`)
   }
-  if (!isMounted) return
+  if (!isMounted)
+    return
   await nextTick()
   scrollToPanelTop()
   panelEl.value?.focus({ preventScroll: true })
@@ -300,7 +315,7 @@ onMounted(async () => {
   // the (async) panel has had a chance to mount.
   if (typeof window !== 'undefined') {
     const hash = window.location.hash.slice(1)
-    const block = hash ? BLOCKS.find((b) => b.id === hash) : undefined
+    const block = hash ? BLOCKS.find(b => b.id === hash) : undefined
     if (block) {
       await nextTick()
       scrollToBlock(block.id)
@@ -354,8 +369,8 @@ onMounted(async () => {
               <li
                 v-for="(block, i) in results"
                 :key="block.id"
-                :style="itemAccentStyle(block)"
                 v-reveal="i * 45"
+                :style="itemAccentStyle(block)"
               >
                 <BlockCard :block="block" @select-component="showBlocksUsing" />
               </li>
@@ -369,9 +384,9 @@ onMounted(async () => {
                 :style="itemAccentStyle(block)"
               >
                 <LazyBlockPreview
+                  v-reveal
                   :block="block"
                   :force-mount="isForced(block.id)"
-                  v-reveal
                   @select-component="showBlocksUsing"
                 />
               </div>
@@ -392,82 +407,86 @@ onMounted(async () => {
 
         <!-- The deck: one animated group at a time. -->
         <div id="blocks-deck" class="blocks-deck">
-      <Transition :name="transitionName" mode="out-in" @after-enter="onPanelEntered">
-        <section
-          v-if="activeSection"
-          :key="activeSection.id"
-          ref="panelEl"
-          class="blocks-panel"
-          role="tabpanel"
-          tabindex="-1"
-          :id="panelId(activeSection.id)"
-          :aria-labelledby="tabId(activeSection.id)"
-          :style="accentStyle"
-        >
-          <Section
-            :title="activeSection.label"
-            :lede="activeSection.blurb"
-            :heading-id="`blocks-cat-${activeSection.id}`"
-            align="left"
-          >
-            <!-- Index: a card per block, scrolling to its preview within the panel. -->
-            <ul class="block-grid">
-              <li
-                v-for="(block, i) in activeSection.blocks"
-                :key="block.id"
-                v-reveal="i * 45"
+          <Transition :name="transitionName" mode="out-in" @after-enter="onPanelEntered">
+            <section
+              v-if="activeSection"
+              :id="panelId(activeSection.id)"
+              :key="activeSection.id"
+              ref="panelEl"
+              class="blocks-panel"
+              role="tabpanel"
+              tabindex="-1"
+              :aria-labelledby="tabId(activeSection.id)"
+              :style="accentStyle"
+            >
+              <Section
+                :title="activeSection.label"
+                :lede="activeSection.blurb"
+                :heading-id="`blocks-cat-${activeSection.id}`"
+                align="left"
               >
-                <BlockCard :block="block" @select-component="showBlocksUsing" />
-              </li>
-            </ul>
+                <!-- Index: a card per block, scrolling to its preview within the panel. -->
+                <ul class="block-grid">
+                  <li
+                    v-for="(block, i) in activeSection.blocks"
+                    :key="block.id"
+                    v-reveal="i * 45"
+                  >
+                    <BlockCard :block="block" @select-component="showBlocksUsing" />
+                  </li>
+                </ul>
 
-            <!-- Live previews: each block's full chrome (tabs / viewport / copy),
+                <!-- Live previews: each block's full chrome (tabs / viewport / copy),
                  lazily mounted as it nears the viewport (Task E5). -->
-            <div class="block-previews">
-              <LazyBlockPreview
-                v-for="block in activeSection.blocks"
-                :key="block.id"
-                :block="block"
-                :force-mount="isForced(block.id)"
-                v-reveal
-                @select-component="showBlocksUsing"
-              />
-            </div>
-          </Section>
-        </section>
-      </Transition>
+                <div class="block-previews">
+                  <LazyBlockPreview
+                    v-for="block in activeSection.blocks"
+                    :key="block.id"
+                    v-reveal
+                    :block="block"
+                    :force-mount="isForced(block.id)"
+                    @select-component="showBlocksUsing"
+                  />
+                </div>
+              </Section>
+            </section>
+          </Transition>
 
-      <!-- Pager: flip to the previous / next group like turning a page. -->
-      <nav v-if="sections.length > 1" class="blocks-pager" aria-label="Browse block groups">
-        <DzButton
-          variant="outline"
-          tone="neutral"
-          :disabled="!prevSection"
-          class="blocks-pager-btn"
-          @click="prevSection && goTo(prevSection.id)"
-        >
-          <template #prefix><ChevronLeft :size="16" aria-hidden="true" /></template>
-          <span class="blocks-pager-edge">Previous</span>
-          <span class="blocks-pager-name">{{ prevSection?.label ?? 'Start' }}</span>
-        </DzButton>
+          <!-- Pager: flip to the previous / next group like turning a page. -->
+          <nav v-if="sections.length > 1" class="blocks-pager" aria-label="Browse block groups">
+            <DzButton
+              variant="outline"
+              tone="neutral"
+              :disabled="!prevSection"
+              class="blocks-pager-btn"
+              @click="prevSection && goTo(prevSection.id)"
+            >
+              <template #prefix>
+                <ChevronLeft :size="16" aria-hidden="true" />
+              </template>
+              <span class="blocks-pager-edge">Previous</span>
+              <span class="blocks-pager-name">{{ prevSection?.label ?? 'Start' }}</span>
+            </DzButton>
 
-        <DzText size="sm" tone="muted" class="blocks-pager-count">
-          {{ activeIndex + 1 }} / {{ sections.length }}
-        </DzText>
+            <DzText size="sm" tone="muted" class="blocks-pager-count">
+              {{ activeIndex + 1 }} / {{ sections.length }}
+            </DzText>
 
-        <DzButton
-          variant="outline"
-          tone="neutral"
-          :disabled="!nextSection"
-          class="blocks-pager-btn blocks-pager-btn--next"
-          @click="nextSection && goTo(nextSection.id)"
-        >
-          <template #suffix><ChevronRight :size="16" aria-hidden="true" /></template>
-          <span class="blocks-pager-edge">Next</span>
-          <span class="blocks-pager-name">{{ nextSection?.label ?? 'End' }}</span>
-        </DzButton>
-      </nav>
-      </div>
+            <DzButton
+              variant="outline"
+              tone="neutral"
+              :disabled="!nextSection"
+              class="blocks-pager-btn blocks-pager-btn--next"
+              @click="nextSection && goTo(nextSection.id)"
+            >
+              <template #suffix>
+                <ChevronRight :size="16" aria-hidden="true" />
+              </template>
+              <span class="blocks-pager-edge">Next</span>
+              <span class="blocks-pager-name">{{ nextSection?.label ?? 'End' }}</span>
+            </DzButton>
+          </nav>
+        </div>
       </div>
     </Transition>
 

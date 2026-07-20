@@ -5,11 +5,15 @@
  * search/filtering, the live `BlockPreview`, and a CI completeness test.
  * See docs/blocks.md §3.3 (data model) and §4 (the catalog).
  *
- * Phase A1 ships the *schema only*: the types, the ordered category metadata,
- * and an empty `BLOCKS` array. Later tasks (A5, A7, Phase B) fill `BLOCKS` with
- * one entry per block, each pairing a lazily-loaded `component` with the `?raw`
- * source resolved off the same `path` (see `sources.ts`), so the Code tab never
- * drifts from what renders.
+ * The file holds the types, the ordered category metadata, and `BLOCKS` itself —
+ * one entry per shipped block, discovered by a module-level `import.meta.glob`
+ * rather than hand-listed. Each entry pairs a lazily-loaded `component` with the
+ * `?raw` source resolved off the same `path` (see `sources.ts`), so the Code tab
+ * never drifts from what renders.
+ *
+ * Because the glob is evaluated at module scope, this module only loads under a
+ * bundler: Node scripts (`scripts/build-registry.ts`) must pull `BLOCKS` through
+ * Vite's `ssrLoadModule`, never a plain `import`.
  *
  * This module is reachable from the ENTRY chunk (`router.ts` head resolution and
  * the site-wide ⌘K palette both need block metadata), so keep it metadata-only —

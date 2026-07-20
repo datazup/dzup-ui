@@ -38,7 +38,8 @@ async function fetchJson(url: string): Promise<unknown> {
       headers: { accept: 'application/json' },
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     })
-    if (!res.ok) return null
+    if (!res.ok)
+      return null
     return (await res.json()) as unknown
   }
   catch {

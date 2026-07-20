@@ -45,29 +45,41 @@ const terms = ref(false)
  */
 const passwordStrength = computed<number>(() => {
   const p = password.value
-  if (!p) return 0
+  if (!p)
+    return 0
   let score = 0
-  if (p.length >= 8) score += 25
-  if (/[A-Z]/.test(p)) score += 25
-  if (/\d/.test(p)) score += 25
-  if (/[^A-Za-z0-9]/.test(p)) score += 25
+  if (p.length >= 8)
+    score += 25
+  if (/[A-Z]/.test(p))
+    score += 25
+  if (/\d/.test(p))
+    score += 25
+  if (/[^A-Z0-9]/i.test(p))
+    score += 25
   return score
 })
 
 const strengthTone = computed(() => {
   const s = passwordStrength.value
-  if (s <= 25) return 'danger' as const
-  if (s <= 50) return 'warning' as const
-  if (s <= 75) return 'info' as const
+  if (s <= 25)
+    return 'danger' as const
+  if (s <= 50)
+    return 'warning' as const
+  if (s <= 75)
+    return 'info' as const
   return 'success' as const
 })
 
 const strengthLabel = computed(() => {
   const s = passwordStrength.value
-  if (s === 0) return ''
-  if (s <= 25) return 'Weak'
-  if (s <= 50) return 'Fair'
-  if (s <= 75) return 'Good'
+  if (s === 0)
+    return ''
+  if (s <= 25)
+    return 'Weak'
+  if (s <= 50)
+    return 'Fair'
+  if (s <= 75)
+    return 'Good'
   return 'Strong'
 })
 </script>

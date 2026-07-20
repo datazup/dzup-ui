@@ -54,7 +54,7 @@ const PUBLIC_DIR = resolve(LANDING_ROOT, 'public')
  * less often than the registries, and enumerating router internals from a script
  * would be more fragile than one visible list.
  */
-const STATIC_ROUTES = ['/', '/pro', '/blocks', '/animations', '/themes', '/templates', '/ai', '/compare']
+const STATIC_ROUTES = ['/', '/pro', '/blocks', '/animations', '/themes', '/templates', '/ai', '/compare', '/changelog']
 
 /**
  * The page component behind each static route (relative to the repo root) — the
@@ -70,6 +70,7 @@ const STATIC_ROUTE_FILES: Record<string, string> = {
   '/templates': 'apps/landing/src/pages/TemplatesPage.vue',
   '/ai': 'apps/landing/src/pages/AiIdePage.vue',
   '/compare': 'apps/landing/src/pages/ComparePage.vue',
+  '/changelog': 'apps/landing/src/pages/ChangelogPage.vue',
 }
 
 /**

@@ -50,15 +50,15 @@ import {
 export type TokenTier = 'primitive' | 'semantic' | 'component'
 
 /** Filterable family used for the category chips + previews. */
-export type TokenCategory =
-  | 'color'
-  | 'spacing'
-  | 'radius'
-  | 'shadow'
-  | 'typography'
-  | 'motion'
-  | 'zindex'
-  | 'other'
+export type TokenCategory
+  = | 'color'
+    | 'spacing'
+    | 'radius'
+    | 'shadow'
+    | 'typography'
+    | 'motion'
+    | 'zindex'
+    | 'other'
 
 /** One design token, fully classified. */
 export interface TokenEntry {
@@ -94,7 +94,7 @@ const COMPONENT_PREFIXES = [
 export function tierOfToken(name: string): TokenTier {
   const body = name.replace(/^--dz-/, '')
   if (
-    /^(colors-|spacing-|radius-|shadow-|text-|font-|leading-|tracking-|duration-|ease-|transition-|z-|breakpoint-)/.test(
+    /^(?:colors-|spacing-|radius-|shadow-|text-|font-|leading-|tracking-|duration-|ease-|transition-|z-|breakpoint-)/.test(
       body,
     )
   ) {
@@ -107,26 +107,32 @@ export function tierOfToken(name: string): TokenTier {
 /** Assign a token to a family for filtering + choosing its preview. */
 export function categorizeToken(name: string, tier: TokenTier): TokenCategory {
   const n = name
-  if (n.includes('radius')) return 'radius'
-  if (n.includes('shadow')) return 'shadow'
-  if (/(duration|ease|transition)/.test(n)) return 'motion'
-  if (/z-index/.test(n) || /^--dz-z-/.test(n)) return 'zindex'
+  if (n.includes('radius'))
+    return 'radius'
+  if (n.includes('shadow'))
+    return 'shadow'
+  if (/duration|ease|transition/.test(n))
+    return 'motion'
+  if (/z-index/.test(n) || n.startsWith('--dz-z-'))
+    return 'zindex'
   if (
-    /^--dz-font-/.test(n)
-    || /^--dz-text-/.test(n)
-    || /(leading|tracking|font-size|font-family|font-weight|line-height|letter-spacing)/.test(n)
+    n.startsWith('--dz-font-')
+    || n.startsWith('--dz-text-')
+    || /leading|tracking|font-size|font-family|font-weight|line-height|letter-spacing/.test(n)
   ) {
     return 'typography'
   }
-  if (/(height|width|padding|gap|spacing|offset|inset)/.test(n)) return 'spacing'
+  if (/height|width|padding|gap|spacing|offset|inset/.test(n))
+    return 'spacing'
   if (
-    /(colors-|background|foreground|-border($|-)|-color($|-)|-bg($|-)|-text($|-)|placeholder|overlay|scrim|ring|chart|status|link|highlight|disabled|divider|muted|accent|primary|secondary|success|warning|danger|info|surface|popover|card|destructive|input-bg|progress)/.test(
+    /colors-|background|foreground|-border(?:$|-)|-color(?:$|-)|-bg(?:$|-)|-text(?:$|-)|placeholder|overlay|scrim|ring|chart|status|link|highlight|disabled|divider|muted|accent|primary|secondary|success|warning|danger|info|surface|popover|card|destructive|input-bg|progress/.test(
       n,
     )
   ) {
     return 'color'
   }
-  if (n.includes('breakpoint')) return 'other'
+  if (n.includes('breakpoint'))
+    return 'other'
   return tier === 'semantic' ? 'color' : 'other'
 }
 
@@ -220,7 +226,7 @@ function buildComponentUsage(): Record<string, string[]> {
     for (const [path, source] of Object.entries(raw)) {
       const file = path.split('/').pop() ?? ''
       const component = file.replace(/\.tokens\.ts$/, '')
-      const matches = source.match(/--dz-[a-z0-9_-]+/gi) ?? []
+      const matches = source.match(/--dz-[\w-]+/gi) ?? []
       for (const token of matches) {
         (sets[token] ??= new Set<string>()).add(component)
       }
@@ -247,21 +253,25 @@ function buildComponentUsage(): Record<string, string[]> {
  * color spectrum).
  */
 export function discoverCssTokenNames(): string[] {
-  if (typeof document === 'undefined') return []
+  if (typeof document === 'undefined')
+    return []
   const names = new Set<string>()
 
   const visit = (rules?: CSSRuleList): void => {
-    if (!rules) return
+    if (!rules)
+      return
     for (const rule of Array.from(rules)) {
       const style = (rule as CSSStyleRule).style
       if (style && typeof style.length === 'number') {
         for (let i = 0; i < style.length; i++) {
           const prop = style.item(i)
-          if (prop.startsWith('--dz-')) names.add(prop)
+          if (prop.startsWith('--dz-'))
+            names.add(prop)
         }
       }
       const nested = (rule as CSSGroupingRule).cssRules
-      if (nested) visit(nested)
+      if (nested)
+        visit(nested)
     }
   }
 
@@ -298,7 +308,8 @@ export function buildTokenManifest(): TokenEntry[] {
   }
 
   for (const name of discoverCssTokenNames()) {
-    if (byName.has(name)) continue
+    if (byName.has(name))
+      continue
     const tier = tierOfToken(name)
     byName.set(name, {
       name,

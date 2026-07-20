@@ -98,17 +98,23 @@ const secondaryNav = [
               :active="item.active"
               href="#"
             >
-              <template #icon><component :is="item.icon" :size="18" /></template>
+              <template #icon>
+                <component :is="item.icon" :size="18" />
+              </template>
               {{ item.label }}
               <template v-if="item.badge" #badge>
-                <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+                <DzBadge variant="solid" tone="primary" size="sm">
+                  {{ item.badge }}
+                </DzBadge>
               </template>
             </DzSidebarItem>
           </DzSidebarSection>
 
           <DzSidebarSection title="System">
             <DzSidebarItem v-for="item in secondaryNav" :key="item.label" href="#">
-              <template #icon><component :is="item.icon" :size="18" /></template>
+              <template #icon>
+                <component :is="item.icon" :size="18" />
+              </template>
               {{ item.label }}
             </DzSidebarItem>
           </DzSidebarSection>
@@ -140,9 +146,15 @@ const secondaryNav = [
 
       <template #header>
         <DzBreadcrumb aria-label="Page location">
-          <DzBreadcrumbItem href="#">Home</DzBreadcrumbItem>
-          <DzBreadcrumbItem href="#">Projects</DzBreadcrumbItem>
-          <DzBreadcrumbItem :current="true">Dashboard</DzBreadcrumbItem>
+          <DzBreadcrumbItem href="#">
+            Home
+          </DzBreadcrumbItem>
+          <DzBreadcrumbItem href="#">
+            Projects
+          </DzBreadcrumbItem>
+          <DzBreadcrumbItem :current="true">
+            Dashboard
+          </DzBreadcrumbItem>
         </DzBreadcrumb>
       </template>
 

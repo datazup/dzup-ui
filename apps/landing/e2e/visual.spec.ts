@@ -1,3 +1,4 @@
+import type { Buffer } from 'node:buffer'
 import { expect, test } from '@playwright/test'
 import sharp from 'sharp'
 
@@ -88,7 +89,8 @@ for (const theme of THEMES) {
       // precise failure this suite was written for.
       if (theme === 'dark') {
         expect(px.dominantLuma, 'dark theme must not paint a light background').toBeLessThan(90)
-      } else {
+      }
+      else {
         expect(px.dominantLuma, 'light theme must not paint a dark background').toBeGreaterThan(160)
       }
     })

@@ -66,26 +66,48 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
     <div class="cluster-toolbar">
       <DzSegmented v-model="range" :items="rangeItems" size="sm" aria-label="Date range" />
       <DzInput v-model="query" placeholder="Search…" size="sm" clearable class="cluster-search">
-        <template #prefix><Search :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <Search :size="15" aria-hidden="true" />
+        </template>
       </DzInput>
-      <DzButton size="sm" variant="solid" tone="primary">New report</DzButton>
+      <DzButton size="sm" variant="solid" tone="primary">
+        New report
+      </DzButton>
     </div>
 
     <!-- Button variant matrix -->
     <div class="cluster-row">
-      <DzButton size="sm" variant="solid" tone="primary">Solid</DzButton>
-      <DzButton size="sm" variant="outline" tone="primary">Outline</DzButton>
-      <DzButton size="sm" variant="ghost" tone="primary">Ghost</DzButton>
-      <DzButton size="sm" variant="solid" tone="success">Success</DzButton>
-      <DzButton size="sm" variant="solid" tone="danger">Danger</DzButton>
+      <DzButton size="sm" variant="solid" tone="primary">
+        Solid
+      </DzButton>
+      <DzButton size="sm" variant="outline" tone="primary">
+        Outline
+      </DzButton>
+      <DzButton size="sm" variant="ghost" tone="primary">
+        Ghost
+      </DzButton>
+      <DzButton size="sm" variant="solid" tone="success">
+        Success
+      </DzButton>
+      <DzButton size="sm" variant="solid" tone="danger">
+        Danger
+      </DzButton>
     </div>
 
     <!-- Badges + controls -->
     <div class="cluster-row">
-      <DzBadge variant="solid" tone="primary" size="sm">Primary</DzBadge>
-      <DzBadge variant="subtle" tone="success" size="sm">Success</DzBadge>
-      <DzBadge variant="subtle" tone="warning" size="sm">Warning</DzBadge>
-      <DzBadge variant="outline" tone="info" size="sm">Info</DzBadge>
+      <DzBadge variant="solid" tone="primary" size="sm">
+        Primary
+      </DzBadge>
+      <DzBadge variant="subtle" tone="success" size="sm">
+        Success
+      </DzBadge>
+      <DzBadge variant="subtle" tone="warning" size="sm">
+        Warning
+      </DzBadge>
+      <DzBadge variant="outline" tone="info" size="sm">
+        Info
+      </DzBadge>
       <DzSwitch v-model="notifications" size="sm" aria-label="Notifications" />
       <DzRating v-model="rating" :count="5" />
     </div>
@@ -94,10 +116,16 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
     <DzCard variant="outlined" padding="md" class="cluster-chart-card">
       <div class="cluster-card-head">
         <div>
-          <DzText size="sm" tone="muted" as="div">Revenue</DzText>
-          <DzText weight="semibold" as="div" class="cluster-figure">$48,210</DzText>
+          <DzText size="sm" tone="muted" as="div">
+            Revenue
+          </DzText>
+          <DzText weight="semibold" as="div" class="cluster-figure">
+            $48,210
+          </DzText>
         </div>
-        <DzBadge variant="subtle" tone="success" size="sm">+12.4%</DzBadge>
+        <DzBadge variant="subtle" tone="success" size="sm">
+          +12.4%
+        </DzBadge>
       </div>
       <div class="cluster-chart" aria-hidden="true">
         <span v-for="(b, i) in bars" :key="i" class="cluster-bar" :style="{ height: `${b}%` }" />
@@ -108,17 +136,29 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
     <DzCard variant="outlined" padding="none" class="cluster-table-card">
       <DzCardHeader>
         <div class="cluster-card-head">
-          <DzText weight="semibold">Members</DzText>
-          <DzBadge variant="subtle" tone="primary" size="sm">{{ rows.length }} seats</DzBadge>
+          <DzText weight="semibold">
+            Members
+          </DzText>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            {{ rows.length }} seats
+          </DzBadge>
         </div>
       </DzCardHeader>
       <DzTable size="sm" hoverable>
         <DzTableHeader>
           <DzTableRow>
-            <DzTableCell header>Member</DzTableCell>
-            <DzTableCell header>Plan</DzTableCell>
-            <DzTableCell header>Usage</DzTableCell>
-            <DzTableCell header>Status</DzTableCell>
+            <DzTableCell header>
+              Member
+            </DzTableCell>
+            <DzTableCell header>
+              Plan
+            </DzTableCell>
+            <DzTableCell header>
+              Usage
+            </DzTableCell>
+            <DzTableCell header>
+              Status
+            </DzTableCell>
           </DzTableRow>
         </DzTableHeader>
         <DzTableBody>
@@ -126,20 +166,28 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
             <DzTableCell>
               <div class="cluster-member">
                 <DzAvatar :fallback="r.name.slice(0, 1)" size="sm" />
-                <DzText size="sm" weight="medium">{{ r.name }}</DzText>
+                <DzText size="sm" weight="medium">
+                  {{ r.name }}
+                </DzText>
               </div>
             </DzTableCell>
             <DzTableCell>
-              <DzBadge variant="outline" tone="neutral" size="sm">{{ r.plan }}</DzBadge>
+              <DzBadge variant="outline" tone="neutral" size="sm">
+                {{ r.plan }}
+              </DzBadge>
             </DzTableCell>
             <DzTableCell>
               <div class="cluster-usage">
                 <DzProgress :value="r.usage" size="sm" tone="primary" class="cluster-usage-bar" />
-                <DzText size="xs" tone="muted">{{ r.usage }}%</DzText>
+                <DzText size="xs" tone="muted">
+                  {{ r.usage }}%
+                </DzText>
               </div>
             </DzTableCell>
             <DzTableCell>
-              <DzBadge variant="subtle" :tone="statusTone[r.status]" size="sm">{{ r.status }}</DzBadge>
+              <DzBadge variant="subtle" :tone="statusTone[r.status]" size="sm">
+                {{ r.status }}
+              </DzBadge>
             </DzTableCell>
           </DzTableRow>
         </DzTableBody>
@@ -151,7 +199,9 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
       <DzAlert tone="primary" variant="subtle" title="Theme applied">
         Every component here reads your token overrides live.
       </DzAlert>
-      <DzAlert tone="warning" variant="subtle" title="Heads up">Trial ends in 3 days.</DzAlert>
+      <DzAlert tone="warning" variant="subtle" title="Heads up">
+        Trial ends in 3 days.
+      </DzAlert>
     </div>
   </div>
 </template>

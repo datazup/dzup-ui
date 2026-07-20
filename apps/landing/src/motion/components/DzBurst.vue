@@ -40,7 +40,8 @@ let seq = 0
 const SPARK_COLORS = ['var(--dz-danger, #ef4444)', 'var(--dz-warning, #f59e0b)']
 
 function fire(): void {
-  if (reduced.value) return
+  if (reduced.value)
+    return
 
   popping.value = true
   const batch: Spark[] = []
@@ -69,12 +70,13 @@ function fire(): void {
 watch(
   () => props.active,
   (now, prev) => {
-    if (now && !prev) fire()
+    if (now && !prev)
+      fire()
   },
 )
 
 onBeforeUnmount(() => {
-  timers.forEach((t) => clearTimeout(t))
+  timers.forEach(t => clearTimeout(t))
   timers.clear()
 })
 </script>

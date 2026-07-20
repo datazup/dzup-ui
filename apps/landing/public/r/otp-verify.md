@@ -35,24 +35,28 @@ const canResend = computed(() => seconds.value === 0)
 const canVerify = computed(() => code.value.length === LENGTH)
 
 function tick() {
-  if (seconds.value > 0) seconds.value -= 1
+  if (seconds.value > 0)
+    seconds.value -= 1
 }
 
 function resend() {
-  if (!canResend.value) return
+  if (!canResend.value)
+    return
   seconds.value = 30
   code.value = ''
 }
 
 function verify() {
-  if (canVerify.value) verified.value = true
+  if (canVerify.value)
+    verified.value = true
 }
 
 onMounted(() => {
   timer = setInterval(tick, 1000)
 })
 onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
+  if (timer)
+    clearInterval(timer)
 })
 </script>
 
@@ -106,7 +110,9 @@ onBeforeUnmount(() => {
           </DzButton>
 
           <div class="otp-resend">
-            <DzText size="sm" tone="muted" as="span">Didn't get a code?</DzText>
+            <DzText size="sm" tone="muted" as="span">
+              Didn't get a code?
+            </DzText>
             <DzButton variant="text" tone="primary" size="sm" :disabled="!canResend" @click="resend">
               {{ canResend ? 'Resend code' : `Resend in ${seconds}s` }}
             </DzButton>

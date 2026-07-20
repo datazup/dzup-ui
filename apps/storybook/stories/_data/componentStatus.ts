@@ -22,10 +22,8 @@
  * component cost. The signals we read are simple, stable literals (`title`,
  * `status:*` tag, `play:`, `a11yError`), so a targeted scan is robust.
  */
-import {
-  STATUS_BADGES,
-  type ComponentStatus,
-} from '../../../../packages/core/stories/_shared/status.ts'
+import type { ComponentStatus } from '../../../../packages/core/stories/_shared/status.ts'
+import { STATUS_BADGES } from '../../../../packages/core/stories/_shared/status.ts'
 
 /**
  * Every core story file as raw text, keyed by its glob-relative path.
@@ -64,8 +62,18 @@ export interface StatusRow {
 
 /** Canonical family order — mirrors `preview.ts` storySort. Unknowns append. */
 const FAMILY_ORDER = [
-  'Buttons', 'Inputs', 'Forms', 'Cards', 'Data', 'Feedback',
-  'Layout', 'Navigation', 'Overlays', 'Media', 'Typography', 'Compositions',
+  'Buttons',
+  'Inputs',
+  'Forms',
+  'Cards',
+  'Data',
+  'Feedback',
+  'Layout',
+  'Navigation',
+  'Overlays',
+  'Media',
+  'Typography',
+  'Compositions',
 ]
 
 function match1(source: string, re: RegExp): string | undefined {
@@ -104,7 +112,7 @@ function parseRow(source: string): StatusRow | null {
   let migration: string | undefined
   if (status === 'deprecated') {
     migration = match1(source, /migration:\s*['"]([^'"]+)['"]/)
-      ?? match1(source, /@deprecated\s+([^\n*]+?)\s*(?:\n|\*\/)/)?.trim()
+      ?? match1(source, /@deprecated\s+(\S[^\n*]*)/)?.trim()
       ?? 'See the component docs page for the replacement.'
   }
 

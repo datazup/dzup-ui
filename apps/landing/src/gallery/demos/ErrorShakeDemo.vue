@@ -44,14 +44,16 @@ function onShakeEnd(): void {
 
 // Typing clears the rejection so the field feels responsive.
 watch(value, (v) => {
-  if (v.trim()) invalid.value = false
+  if (v.trim())
+    invalid.value = false
 })
 
 onMounted(() => {
   timer = setTimeout(submit, 600)
 })
 onBeforeUnmount(() => {
-  if (timer !== null) clearTimeout(timer)
+  if (timer !== null)
+    clearTimeout(timer)
 })
 </script>
 

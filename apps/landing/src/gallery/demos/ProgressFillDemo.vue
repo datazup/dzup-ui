@@ -31,8 +31,12 @@ const metrics: { label: string, target: number, tone: 'primary' | 'success' | 'i
   <div ref="root" class="stage">
     <div v-for="m in metrics" :key="m.label" class="row">
       <div class="label">
-        <DzText size="xs" tone="muted" as="span">{{ m.label }}</DzText>
-        <DzText size="xs" weight="medium" as="span">{{ filled ? m.target : 0 }}%</DzText>
+        <DzText size="xs" tone="muted" as="span">
+          {{ m.label }}
+        </DzText>
+        <DzText size="xs" weight="medium" as="span">
+          {{ filled ? m.target : 0 }}%
+        </DzText>
       </div>
       <DzProgress
         :value="filled ? m.target : 0"

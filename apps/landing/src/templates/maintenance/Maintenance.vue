@@ -49,8 +49,12 @@ const email = ref('')
       <!-- ── Progress ────────────────────────────────────────────── -->
       <div class="mnt-progress">
         <div class="progress-head">
-          <DzText size="sm" weight="medium" as="span">Upgrade progress</DzText>
-          <DzText size="sm" tone="muted" as="span">{{ progress }}% · ~25 min remaining</DzText>
+          <DzText size="sm" weight="medium" as="span">
+            Upgrade progress
+          </DzText>
+          <DzText size="sm" tone="muted" as="span">
+            {{ progress }}% · ~25 min remaining
+          </DzText>
         </div>
         <DzProgress
           :value="progress"
@@ -78,7 +82,9 @@ const email = ref('')
           />
           <DzButton type="submit" variant="solid" tone="warning">
             Notify me
-            <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+            <template #suffix>
+              <ArrowRight :size="16" aria-hidden="true" />
+            </template>
           </DzButton>
         </form>
       </DzCard>

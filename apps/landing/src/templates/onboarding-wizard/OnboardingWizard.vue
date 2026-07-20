@@ -61,11 +61,13 @@ const progress = computed(() => Math.round((activeStep.value / LAST_STEP) * 100)
 const nextLabel = computed(() => (activeStep.value === LAST_STEP - 1 ? 'Finish setup' : 'Next'))
 
 function next(): void {
-  if (activeStep.value < LAST_STEP) activeStep.value += 1
+  if (activeStep.value < LAST_STEP)
+    activeStep.value += 1
 }
 
 function prev(): void {
-  if (activeStep.value > 0) activeStep.value -= 1
+  if (activeStep.value > 0)
+    activeStep.value -= 1
 }
 </script>
 
@@ -78,8 +80,12 @@ function prev(): void {
       </span>
 
       <header class="ob-head">
-        <DzHeading :level="1" size="xl" weight="semibold">Set up your workspace</DzHeading>
-        <DzText tone="muted" as="p">A few quick steps and you're ready to go.</DzText>
+        <DzHeading :level="1" size="xl" weight="semibold">
+          Set up your workspace
+        </DzHeading>
+        <DzText tone="muted" as="p">
+          A few quick steps and you're ready to go.
+        </DzText>
       </header>
 
       <DzCard variant="elevated" padding="lg" class="ob-card">
@@ -99,7 +105,9 @@ function prev(): void {
             size="xs"
             :aria-label="`Setup ${progress}% complete`"
           />
-          <DzText size="xs" tone="muted" as="span">{{ progress }}% complete</DzText>
+          <DzText size="xs" tone="muted" as="span">
+            {{ progress }}% complete
+          </DzText>
         </div>
 
         <!-- Step 1: Profile. -->
@@ -153,7 +161,9 @@ function prev(): void {
           <DzFormField>
             <DzFormLabel>Invite teammates</DzFormLabel>
             <DzInput v-model="invites" type="text" placeholder="name@company.com, …" />
-            <DzText size="xs" tone="muted" as="span">Comma-separated — we'll email them an invite.</DzText>
+            <DzText size="xs" tone="muted" as="span">
+              Comma-separated — we'll email them an invite.
+            </DzText>
           </DzFormField>
           <DzFormField>
             <DzFormLabel>Set these up for me</DzFormLabel>
@@ -177,7 +187,9 @@ function prev(): void {
 
         <!-- Step 4: Done. -->
         <section v-show="activeStep === 3" class="ob-panel ob-done" aria-label="Done">
-          <div class="ob-done-icon" aria-hidden="true"><PartyPopper :size="32" /></div>
+          <div class="ob-done-icon" aria-hidden="true">
+            <PartyPopper :size="32" />
+          </div>
           <DzHeading :level="2" size="lg" weight="semibold" align="center">
             {{ workspaceName }} is ready
           </DzHeading>
@@ -192,12 +204,16 @@ function prev(): void {
         <!-- Wizard controls (hidden on the success step). -->
         <div v-if="activeStep < LAST_STEP" class="ob-actions">
           <DzButton variant="outline" tone="neutral" :disabled="activeStep === 0" @click="prev">
-            <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <ArrowLeft :size="16" aria-hidden="true" />
+            </template>
             Back
           </DzButton>
           <DzButton variant="solid" tone="primary" @click="next">
             {{ nextLabel }}
-            <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+            <template #suffix>
+              <ArrowRight :size="16" aria-hidden="true" />
+            </template>
           </DzButton>
         </div>
       </DzCard>

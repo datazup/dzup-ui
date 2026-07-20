@@ -57,29 +57,6 @@ function templateThumbs(): string[] {
     .sort()
 }
 
-/**
- * Template slugs that actually have a committed `<slug>-dark.webp` (TASK-FREE-13).
- *
- * The gallery derives the dark path by convention (`<slug>.webp` →
- * `<slug>-dark.webp`), but `yarn thumbnails` has only ever produced 28 of the 44
- * dark variants. For the other 16, dark mode requested a file that does not exist:
- * a 404 per card, then an `onerror` fallback to the row's ICON — so those templates
- * silently showed a glyph in dark mode and a real screenshot in light. Inventorying
- * them here lets the page fall back to the LIGHT thumbnail instead, which is a far
- * better answer than an icon, and never requests the missing file at all.
- *
- * Same principle as BLOCK_OG_IDS above: the app only advertises an image the disk
- * actually has.
- */
-function darkThumbSlugs(): string[] {
-  if (!existsSync(THUMBS_DIR))
-    return []
-  return readdirSync(THUMBS_DIR)
-    .filter(name => name.endsWith('-dark.webp'))
-    .map(name => name.replace(/-dark\.webp$/, ''))
-    .sort()
-}
-
 /** True when `out` is missing or older than `src` — i.e. needs (re)converting. */
 function stale(src: string, out: string): boolean {
   if (!existsSync(out))
@@ -121,16 +98,18 @@ function blockOgIds(): string[] {
     .sort()
 }
 
-function renderModule(blocks: string[], templates: string[], darkThumbs: string[]): string {
+function renderModule(blocks: string[], templates: string[]): string {
   const list = (items: string[]) =>
     items.length === 0 ? '' : `\n  ${items.map(item => `'${item}'`).join(',\n  ')},\n`
   return `/**
  * GENERATED FILE — do not edit by hand. Written by \`scripts/build-og-images.ts\`
  * (runs from the landing \`build\` script ahead of the bundler).
  *
- * Lists exactly which images exist on disk, so the app never advertises one that
- * would 404 — \`src/router.ts\` for share cards, \`TemplatesPage\` for dark-mode
- * gallery thumbnails.
+ * Lists exactly which share-card images exist on disk, so \`src/router.ts\` never
+ * advertises an \`og:image\` that would 404. (Dark gallery thumbnails are no longer
+ * inventoried here: \`scripts/check-template-previews.ts\` fails the build unless
+ * EVERY template has both a light and a dark thumbnail, so the gallery derives the
+ * dark path unconditionally — FREE2-09.)
  */
 
 /** Block ids with a committed 1200×630 OG card at \`/og/<id>.png\` (\`yarn og\`). */
@@ -138,36 +117,17 @@ export const BLOCK_OG_IDS: ReadonlySet<string> = new Set([${list(blocks)}])
 
 /** Template slugs with a derived 1200×630 PNG at \`/og-templates/<slug>.png\`. */
 export const TEMPLATE_OG_SLUGS: ReadonlySet<string> = new Set([${list(templates)}])
-
-/**
- * Template slugs with a committed dark thumbnail at
- * \`/templates/thumbnails/<slug>-dark.webp\`. A slug missing here has no dark
- * screenshot, so the gallery keeps showing its LIGHT thumbnail in dark mode rather
- * than requesting a file that 404s and collapsing to an icon. Regenerate with
- * \`yarn thumbnails\`.
- */
-export const TEMPLATE_DARK_THUMB_SLUGS: ReadonlySet<string> = new Set([${list(darkThumbs)}])
 `
 }
 
 async function main(): Promise<void> {
   const { slugs, converted } = await convertTemplates()
   const blocks = blockOgIds()
-  const darkThumbs = darkThumbSlugs()
-  await writeFile(OUT_MODULE, renderModule(blocks, slugs, darkThumbs))
-  const missingDark = slugs.length - darkThumbs.length
+  await writeFile(OUT_MODULE, renderModule(blocks, slugs))
   console.log(
     `✓ build-og-images: ${slugs.length} template cards (${converted} converted, ${slugs.length - converted} current), `
     + `${blocks.length} block cards → src/generated/ogImages.ts`,
   )
-  // Surface the gap rather than letting it sit behind a graceful fallback: a
-  // silently-degraded dark gallery is exactly the kind of thing that stays broken.
-  if (missingDark > 0) {
-    console.warn(
-      `  ⚠ ${missingDark} of ${slugs.length} templates have no dark thumbnail — those cards `
-      + `show their light screenshot in dark mode. Run \`yarn thumbnails\` to fill the gap.`,
-    )
-  }
 }
 
 main().catch((error: unknown) => {

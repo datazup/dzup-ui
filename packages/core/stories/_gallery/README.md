@@ -1,5 +1,22 @@
 # `_gallery` — the `Visual Refresh/*` screens
 
+> **These do not ship.** They are excluded from every Storybook build by default
+> (TASK-FREE2-02). To run them:
+>
+> ```bash
+> DZUP_GALLERY=1 yarn workspace @dzup-ui/storybook dev
+> ```
+>
+> The mechanism is an inclusion flag in `.storybook/main.ts` (`INCLUDE_GALLERY`); the
+> rationale is in [`docs/storybook-decisions.md`](../../../../docs/storybook-decisions.md).
+> A CI sentinel in `check-mdx-links.mjs` fails the build if a `visual-refresh-*` id
+> ever appears in a public `index.json`.
+>
+> **`DzTokenBrowser.stories.ts` in this directory is different — it IS public.** It is
+> the `Guides/Design Tokens` page (and `DesignTokens.mdx` attaches to it via
+> `<Meta of={…} />`). Never widen the exclusion to the whole directory; `main.ts` names
+> it explicitly, and a second sentinel asserts it still builds.
+
 These eight stories are the instrument the design system is **measured with**, not a
 reference for using it. Each page renders the same screen three ways:
 
@@ -29,10 +46,16 @@ that taxonomy skip this namespace on purpose:
   screens never enter the maturity matrix.
 
 They do carry a `gallery` tag, which makes the set filterable in the sidebar and
-marks them as demo screens. Before TASK-FREE-12 they had no tag and no `storySort`
-entry, so they fell through the trailing `'*'` in `preview.ts` and surfaced in the
-public sidebar as an unexplained root — an instrument that read as leftover
-scaffolding. They are now pinned last in the sort order, below `Core`.
+marks them as demo screens.
+
+**History.** Before TASK-FREE-12 they had no tag and no `storySort` entry, so they
+fell through the trailing `'*'` in `preview.ts` and surfaced in the public sidebar as
+an unexplained root — an instrument that read as leftover scaffolding. TASK-FREE-12
+pinned them last, below `Core`, on the theory that ordering the root made it legible.
+It didn't: the problem was that a screen of raw `indigo-600` Tailwind was published as
+documentation at all, next to the rules forbidding it. TASK-FREE2-02 unshipped them.
+The `'Visual Refresh'` entry still sits last in `preview.ts`'s sort order, where it is
+inert in a public build and keeps the root pinned in a `DZUP_GALLERY=1` one.
 
 ## A11y
 

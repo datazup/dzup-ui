@@ -35,8 +35,12 @@ const cards = [
           }"
         >
           <span class="card__chip" aria-hidden="true" />
-          <DzHeading :level="4" size="lg" weight="bold">{{ item.title }}</DzHeading>
-          <DzText size="sm" tone="muted">{{ item.body }}</DzText>
+          <DzHeading :level="4" size="lg" weight="bold">
+            {{ item.title }}
+          </DzHeading>
+          <DzText size="sm" tone="muted">
+            {{ item.body }}
+          </DzText>
         </DzCard>
       </template>
     </DzCardStack>

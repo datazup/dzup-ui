@@ -90,8 +90,18 @@ const HEIGHTS = [80, 140, 200, 110, 170, 90, 230, 130, 160, 100, 190, 120]
  * Shade 600 keeps `--dz-colors-neutral-50` legible on every one.
  */
 const TILE_FILLS = [
-  'blue', 'purple', 'emerald', 'orange', 'pink', 'cyan',
-  'lime', 'indigo', 'rose', 'green', 'fuchsia', 'amber',
+  'blue',
+  'purple',
+  'emerald',
+  'orange',
+  'pink',
+  'cyan',
+  'lime',
+  'indigo',
+  'rose',
+  'green',
+  'fuchsia',
+  'amber',
 ].map(palette => `var(--dz-colors-${palette}-600)`)
 
 function tiles(count: number): string {

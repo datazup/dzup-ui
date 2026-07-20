@@ -1,3 +1,5 @@
+import type { UseLazyMountOptions } from './useLazyMount.ts'
+import { mount } from '@vue/test-utils'
 /**
  * useLazyMount — viewport-gated mount gate (docs/blocks.md §1.3, Task E5).
  *
@@ -8,9 +10,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
 import { useLazyMount } from './useLazyMount.ts'
-import type { UseLazyMountOptions } from './useLazyMount.ts'
 
 /** A controllable IntersectionObserver fake: tests drive `trigger()` manually. */
 class FakeIntersectionObserver {
@@ -21,6 +21,7 @@ class FakeIntersectionObserver {
   constructor(public cb: (entries: { isIntersecting: boolean }[]) => void) {
     FakeIntersectionObserver.instances.push(this)
   }
+
   trigger(isIntersecting: boolean): void {
     this.cb([{ isIntersecting }])
   }

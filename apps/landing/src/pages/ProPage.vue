@@ -11,7 +11,7 @@ import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
 // components" — the roadmap target — directly above 13 components in 7 families,
 // so anyone who scrolled could see the page overstate itself by 3×. The roadmap
 // figure still appears, but as a roadmap: "13 named, 41 planned".
-const families = [...new Set(PRO_COMPONENTS.map((c) => c.family))]
+const families = [...new Set(PRO_COMPONENTS.map(c => c.family))]
 </script>
 
 <template>
@@ -38,14 +38,18 @@ const families = [...new Set(PRO_COMPONENTS.map((c) => c.family))]
         <DzButton variant="solid" tone="primary" as="a" href="mailto:hello@dzup-ui.com?subject=dzup-ui%20Pro%20waitlist">
           Join the waitlist
         </DzButton>
-        <DzButton variant="outline" tone="neutral" :to="'/'">
-          <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+        <DzButton variant="outline" tone="neutral" to="/">
+          <template #prefix>
+            <ArrowLeft :size="16" aria-hidden="true" />
+          </template>
           Back to home
         </DzButton>
       </div>
 
       <DzCard variant="outlined" padding="lg" class="pro-list">
-        <DzText size="sm" weight="semibold" class="pro-list-title">What's coming</DzText>
+        <DzText size="sm" weight="semibold" class="pro-list-title">
+          What's coming
+        </DzText>
         <div class="pro-grid">
           <div v-for="family in families" :key="family" class="pro-family">
             <DzText size="xs" tone="muted" weight="semibold" as="div" class="pro-family-name">
@@ -53,7 +57,9 @@ const families = [...new Set(PRO_COMPONENTS.map((c) => c.family))]
             </DzText>
             <ul class="pro-items">
               <li v-for="c in PRO_COMPONENTS.filter((x) => x.family === family)" :key="c.label">
-                <DzBadge variant="outline" tone="neutral" size="sm">{{ c.label }}</DzBadge>
+                <DzBadge variant="outline" tone="neutral" size="sm">
+                  {{ c.label }}
+                </DzBadge>
               </li>
             </ul>
           </div>

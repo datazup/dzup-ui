@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { BillingCycle, MatrixCell, Plan } from './data.ts'
 /**
  * Pricing Page — featured Marketing reference template (docs/templates.md §6.2).
  *
@@ -36,33 +37,36 @@ import { computed, ref } from 'vue'
 import {
   ANNUAL_DISCOUNT,
   BILLING_CYCLES,
+
   COMPARISON,
-  type BillingCycle,
-  type MatrixCell,
-  type Plan,
+
   PLANS,
   PRICING_FAQS,
 } from './data.ts'
 
 const cycle = ref<BillingCycle>('monthly')
-const cycleItems = BILLING_CYCLES.map((c) => ({ value: c.value, label: c.label }))
+const cycleItems = BILLING_CYCLES.map(c => ({ value: c.value, label: c.label }))
 
 /** Effective per-month price for the active cycle, rounded to a whole dollar. */
 function perMonth(monthly: number): number {
-  if (cycle.value === 'annual') return Math.round(monthly * (1 - ANNUAL_DISCOUNT))
+  if (cycle.value === 'annual')
+    return Math.round(monthly * (1 - ANNUAL_DISCOUNT))
   return monthly
 }
 
 /** Large headline figure for a plan card ("$0", "$24" or "Custom"). */
 function priceLabel(plan: Plan): string {
-  if (plan.monthly === null) return 'Custom'
+  if (plan.monthly === null)
+    return 'Custom'
   return `$${perMonth(plan.monthly)}`
 }
 
 /** Sub-line under the price explaining the billing basis. */
 function billingNote(plan: Plan): string {
-  if (plan.monthly === null) return 'Tailored to your team'
-  if (plan.monthly === 0) return 'Free forever'
+  if (plan.monthly === null)
+    return 'Tailored to your team'
+  if (plan.monthly === 0)
+    return 'Free forever'
   if (cycle.value === 'annual') {
     return `$${perMonth(plan.monthly) * 12} billed annually`
   }
@@ -72,7 +76,7 @@ function billingNote(plan: Plan): string {
 const annualActive = computed(() => cycle.value === 'annual')
 
 /** Per-plan column metadata, kept in PLANS order for the table header. */
-const planColumns = computed(() => PLANS.map((p) => ({ id: p.id, name: p.name, popular: !!p.popular })))
+const planColumns = computed(() => PLANS.map(p => ({ id: p.id, name: p.name, popular: !!p.popular })))
 
 /** True when a matrix cell is a boolean include/exclude flag. */
 function isFlag(cell: MatrixCell): cell is boolean {
@@ -95,8 +99,12 @@ function isFlag(cell: MatrixCell): cell is boolean {
           <a href="#faq">FAQ</a>
         </nav>
         <div class="nav-cta">
-          <DzButton variant="ghost" tone="neutral" size="sm">Sign in</DzButton>
-          <DzButton variant="solid" tone="primary" size="sm">Start free</DzButton>
+          <DzButton variant="ghost" tone="neutral" size="sm">
+            Sign in
+          </DzButton>
+          <DzButton variant="solid" tone="primary" size="sm">
+            Start free
+          </DzButton>
         </div>
       </div>
     </header>
@@ -104,8 +112,12 @@ function isFlag(cell: MatrixCell): cell is boolean {
     <main>
       <!-- ── Hero + cycle toggle ──────────────────────────────── -->
       <section class="hero">
-        <DzBadge variant="subtle" tone="primary" size="sm">Pricing</DzBadge>
-        <h1 class="hero-title">Pricing that scales with your team</h1>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          Pricing
+        </DzBadge>
+        <h1 class="hero-title">
+          Pricing that scales with your team
+        </h1>
         <DzText size="lg" tone="muted" as="p" class="hero-lede">
           Start free, upgrade when you grow. Every plan includes the full editor,
           unlimited viewers and a 14-day trial of Pro — no credit card required.
@@ -144,12 +156,16 @@ function isFlag(cell: MatrixCell): cell is boolean {
           :class="{ 'plan--popular': plan.popular }"
         >
           <div class="plan-head">
-            <DzHeading :level="2" size="md" weight="semibold">{{ plan.name }}</DzHeading>
+            <DzHeading :level="2" size="md" weight="semibold">
+              {{ plan.name }}
+            </DzHeading>
             <DzBadge v-if="plan.popular" variant="solid" tone="primary" size="sm">
               Most popular
             </DzBadge>
           </div>
-          <DzText size="sm" tone="muted" as="p" class="plan-blurb">{{ plan.blurb }}</DzText>
+          <DzText size="sm" tone="muted" as="p" class="plan-blurb">
+            {{ plan.blurb }}
+          </DzText>
 
           <p class="price">
             <span class="price-amount">{{ priceLabel(plan) }}</span>
@@ -157,7 +173,9 @@ function isFlag(cell: MatrixCell): cell is boolean {
               / mo per seat
             </span>
           </p>
-          <DzText size="sm" tone="muted" as="p" class="price-note">{{ billingNote(plan) }}</DzText>
+          <DzText size="sm" tone="muted" as="p" class="price-note">
+            {{ billingNote(plan) }}
+          </DzText>
 
           <DzButton
             :variant="plan.popular ? 'solid' : 'outline'"
@@ -166,7 +184,9 @@ function isFlag(cell: MatrixCell): cell is boolean {
             class="plan-cta"
           >
             {{ plan.cta }}
-            <template #suffix><ArrowRight :size="17" aria-hidden="true" /></template>
+            <template #suffix>
+              <ArrowRight :size="17" aria-hidden="true" />
+            </template>
           </DzButton>
 
           <DzDivider class="plan-rule" />
@@ -182,7 +202,9 @@ function isFlag(cell: MatrixCell): cell is boolean {
       <!-- ── Comparison matrix ────────────────────────────────── -->
       <section id="compare" class="compare">
         <div class="section-head">
-          <h2 class="section-title">Compare every plan</h2>
+          <h2 class="section-title">
+            Compare every plan
+          </h2>
           <DzText size="lg" tone="muted" as="p">
             All the detail, side by side. Hover a
             <HelpCircle :size="15" class="inline-help" aria-hidden="true" /> for what it means.
@@ -193,7 +215,9 @@ function isFlag(cell: MatrixCell): cell is boolean {
           <DzTable class="compare-table">
             <DzTableHeader>
               <DzTableRow>
-                <DzTableCell header class="feat-col">Features</DzTableCell>
+                <DzTableCell header class="feat-col">
+                  Features
+                </DzTableCell>
                 <DzTableCell
                   v-for="col in planColumns"
                   :key="col.id"
@@ -258,12 +282,18 @@ function isFlag(cell: MatrixCell): cell is boolean {
       <!-- ── FAQ teaser ───────────────────────────────────────── -->
       <section id="faq" class="faq">
         <div class="section-head">
-          <h2 class="section-title">Frequently asked</h2>
+          <h2 class="section-title">
+            Frequently asked
+          </h2>
         </div>
         <ul class="faq-grid">
           <li v-for="f in PRICING_FAQS" :key="f.q">
-            <DzHeading :level="3" size="sm" weight="semibold" class="faq-q">{{ f.q }}</DzHeading>
-            <DzText size="sm" tone="muted" as="p">{{ f.a }}</DzText>
+            <DzHeading :level="3" size="sm" weight="semibold" class="faq-q">
+              {{ f.q }}
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="p">
+              {{ f.a }}
+            </DzText>
           </li>
         </ul>
       </section>
@@ -271,13 +301,19 @@ function isFlag(cell: MatrixCell): cell is boolean {
       <!-- ── Closing CTA ──────────────────────────────────────── -->
       <section class="cta">
         <div class="cta-inner">
-          <h2 class="cta-title">Ready to ship faster?</h2>
+          <h2 class="cta-title">
+            Ready to ship faster?
+          </h2>
           <DzText size="lg" as="p" class="cta-lede">
             Join 12,000+ teams building on Halcyon. Free to start, no card required.
           </DzText>
           <div class="cta-actions">
-            <DzButton variant="solid" tone="neutral" size="lg">Start free</DzButton>
-            <DzButton variant="outline" tone="neutral" size="lg">Talk to sales</DzButton>
+            <DzButton variant="solid" tone="neutral" size="lg">
+              Start free
+            </DzButton>
+            <DzButton variant="outline" tone="neutral" size="lg">
+              Talk to sales
+            </DzButton>
           </div>
         </div>
       </section>
@@ -288,7 +324,9 @@ function isFlag(cell: MatrixCell): cell is boolean {
         <span class="brand-mark" aria-hidden="true"><Boxes :size="16" /></span>
         <span class="brand-name">Halcyon</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Halcyon, Inc. Pricing in USD.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Halcyon, Inc. Pricing in USD.
+      </DzText>
     </footer>
   </div>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ShotPalette, ShotVariant } from './data.ts'
 /**
  * Feature / Product — Marketing deep-dive template (docs/templates.md §6.2).
  *
@@ -34,14 +35,14 @@ import {
   FEATURE_ROWS,
   FEATURE_TABS,
   HERO_SPECS,
-  type ShotPalette,
-  type ShotVariant,
+
   STATS,
 } from './data.ts'
 
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -78,7 +79,7 @@ function shot(variant: ShotVariant): string {
 }
 
 const heroSrc = computed(() => shot('analyze'))
-const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value) ?? FEATURE_TABS[0]!)
+const activeTab = computed(() => FEATURE_TABS.find(t => t.value === tab.value) ?? FEATURE_TABS[0]!)
 </script>
 
 <template>
@@ -96,8 +97,12 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
           <a href="#compare">Compare</a>
         </nav>
         <div class="nav-cta">
-          <DzButton variant="ghost" tone="neutral" size="sm">Sign in</DzButton>
-          <DzButton variant="solid" tone="primary" size="sm">Get started</DzButton>
+          <DzButton variant="ghost" tone="neutral" size="sm">
+            Sign in
+          </DzButton>
+          <DzButton variant="solid" tone="primary" size="sm">
+            Get started
+          </DzButton>
         </div>
       </div>
     </header>
@@ -106,8 +111,12 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
       <!-- ── Hero ─────────────────────────────────────────────── -->
       <section class="hero">
         <div class="hero-copy">
-          <DzBadge variant="subtle" tone="primary" size="sm">Platform · v4</DzBadge>
-          <h1 class="hero-title">One workspace for data, work and automation</h1>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            Platform · v4
+          </DzBadge>
+          <h1 class="hero-title">
+            One workspace for data, work and automation
+          </h1>
           <DzText size="lg" tone="muted" as="p" class="hero-lede">
             Northwind brings your dashboards, boards and flows under one roof — so
             insight, action and follow-through never leave the same tab.
@@ -115,9 +124,13 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
           <div class="hero-actions">
             <DzButton variant="solid" tone="primary" size="lg">
               Start free
-              <template #suffix><ArrowRight :size="18" aria-hidden="true" /></template>
+              <template #suffix>
+                <ArrowRight :size="18" aria-hidden="true" />
+              </template>
             </DzButton>
-            <DzButton variant="outline" tone="neutral" size="lg">Watch the tour</DzButton>
+            <DzButton variant="outline" tone="neutral" size="lg">
+              Watch the tour
+            </DzButton>
           </div>
           <ul class="hero-specs">
             <li v-for="s in HERO_SPECS" :key="s">
@@ -157,10 +170,14 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
             <DzHeading :level="2" size="xl" weight="semibold" class="feature-title">
               {{ row.title }}
             </DzHeading>
-            <DzText size="lg" tone="muted" as="p" class="feature-body">{{ row.body }}</DzText>
+            <DzText size="lg" tone="muted" as="p" class="feature-body">
+              {{ row.body }}
+            </DzText>
             <ul class="feature-specs">
               <li v-for="spec in row.specs" :key="spec">
-                <DzBadge variant="subtle" tone="primary" size="sm">{{ spec }}</DzBadge>
+                <DzBadge variant="subtle" tone="primary" size="sm">
+                  {{ spec }}
+                </DzBadge>
               </li>
             </ul>
           </div>
@@ -179,8 +196,12 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
       <!-- ── Feature explorer (tabs) ──────────────────────────── -->
       <section id="explore" class="explore">
         <div class="section-head">
-          <DzBadge variant="subtle" tone="primary" size="sm">Explore</DzBadge>
-          <h2 class="section-title">Three surfaces, one platform</h2>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            Explore
+          </DzBadge>
+          <h2 class="section-title">
+            Three surfaces, one platform
+          </h2>
         </div>
         <DzTabs v-model="tab" variant="pills" aria-label="Feature explorer" class="explore-tabs">
           <DzTabList class="explore-tablist">
@@ -192,11 +213,17 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
             <DzCard variant="outlined" padding="lg" class="explore-card">
               <div class="explore-grid">
                 <div class="explore-text">
-                  <DzHeading :level="3" size="lg" weight="semibold">{{ activeTab.title }}</DzHeading>
-                  <DzText tone="muted" as="p">{{ activeTab.body }}</DzText>
+                  <DzHeading :level="3" size="lg" weight="semibold">
+                    {{ activeTab.title }}
+                  </DzHeading>
+                  <DzText tone="muted" as="p">
+                    {{ activeTab.body }}
+                  </DzText>
                   <DzButton variant="text" tone="primary" class="explore-link">
                     Learn more
-                    <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+                    <template #suffix>
+                      <ArrowRight :size="16" aria-hidden="true" />
+                    </template>
                   </DzButton>
                 </div>
                 <div class="explore-media">
@@ -220,7 +247,9 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
           <DzBadge variant="subtle" tone="primary" size="sm">
             <span class="badge-row"><Sparkles :size="13" aria-hidden="true" />The redesign</span>
           </DzBadge>
-          <h2 class="section-title">From cluttered to clear</h2>
+          <h2 class="section-title">
+            From cluttered to clear
+          </h2>
           <DzText size="lg" tone="muted" as="p">
             Drag the handle to see what v4 did to the old reporting view.
           </DzText>
@@ -246,7 +275,9 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
         <ul class="stats-grid">
           <li v-for="s in STATS" :key="s.label">
             <span class="stat-value">{{ s.value }}</span>
-            <DzText size="sm" tone="muted" as="span">{{ s.label }}</DzText>
+            <DzText size="sm" tone="muted" as="span">
+              {{ s.label }}
+            </DzText>
           </li>
         </ul>
         <DzDivider class="stats-rule" />
@@ -255,13 +286,19 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
       <!-- ── Closing CTA ──────────────────────────────────────── -->
       <section class="cta">
         <div class="cta-inner">
-          <h2 class="cta-title">Bring it all together</h2>
+          <h2 class="cta-title">
+            Bring it all together
+          </h2>
           <DzText size="lg" as="p" class="cta-lede">
             Spin up your workspace in minutes. Free to start, no credit card required.
           </DzText>
           <div class="cta-actions">
-            <DzButton variant="solid" tone="neutral" size="lg">Start free</DzButton>
-            <DzButton variant="outline" tone="neutral" size="lg">Book a demo</DzButton>
+            <DzButton variant="solid" tone="neutral" size="lg">
+              Start free
+            </DzButton>
+            <DzButton variant="outline" tone="neutral" size="lg">
+              Book a demo
+            </DzButton>
           </div>
         </div>
       </section>
@@ -272,7 +309,9 @@ const activeTab = computed(() => FEATURE_TABS.find((t) => t.value === tab.value)
         <span class="brand-mark" aria-hidden="true"><Boxes :size="16" /></span>
         <span class="brand-name">Northwind</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Northwind, Inc. All rights reserved.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Northwind, Inc. All rights reserved.
+      </DzText>
     </footer>
   </div>
 </template>

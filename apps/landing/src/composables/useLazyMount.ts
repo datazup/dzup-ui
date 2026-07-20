@@ -1,5 +1,5 @@
-import { onBeforeUnmount, onMounted, ref } from 'vue'
 import type { ComponentPublicInstance, Ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 /**
  * useLazyMount — gate a heavy subtree on proximity to the viewport.
@@ -51,12 +51,13 @@ export function useLazyMount(options: UseLazyMountOptions = {}): UseLazyMount {
   const el = ref<HTMLElement | null>(null)
   const shouldRender = ref(false)
 
+  let observer: IntersectionObserver | null = null
+
   function setEl(node: Element | ComponentPublicInstance | null): void {
     el.value = node instanceof HTMLElement ? node : null
-    if (observer && el.value) observer.observe(el.value)
+    if (observer && el.value)
+      observer.observe(el.value)
   }
-
-  let observer: IntersectionObserver | null = null
 
   function disconnect(): void {
     observer?.disconnect()
@@ -76,11 +77,13 @@ export function useLazyMount(options: UseLazyMountOptions = {}): UseLazyMount {
     }
     observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) mountNow()
+        if (entries.some(entry => entry.isIntersecting))
+          mountNow()
       },
       { rootMargin, threshold },
     )
-    if (el.value) observer.observe(el.value)
+    if (el.value)
+      observer.observe(el.value)
   })
 
   onBeforeUnmount(disconnect)

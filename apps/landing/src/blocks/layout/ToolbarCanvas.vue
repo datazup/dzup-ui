@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * Toolbar canvas — a design-tool shell: a DzToolbar over a tool rail, an
  * artboard, and a properties panel.
@@ -36,7 +37,6 @@ import {
   Type,
   Undo2,
 } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 interface Tool {
   icon: Component
@@ -69,21 +69,29 @@ const position: Field[] = [
 
 <template>
   <section class="tc" aria-labelledby="tc-title">
-    <DzText id="tc-title" class="dz-sr-only">Design canvas workspace</DzText>
+    <DzText id="tc-title" class="dz-sr-only">
+      Design canvas workspace
+    </DzText>
 
     <!-- Top chrome -->
     <DzToolbar variant="elevated" size="sm" class="tc-toolbar">
       <template #start>
-        <DzBadge variant="solid" tone="primary" size="sm">Untitled</DzBadge>
-        <DzIconButton :icon="Undo2" ariaLabel="Undo" variant="ghost" tone="neutral" size="sm" />
-        <DzIconButton :icon="Redo2" ariaLabel="Redo" variant="ghost" tone="neutral" size="sm" />
+        <DzBadge variant="solid" tone="primary" size="sm">
+          Untitled
+        </DzBadge>
+        <DzIconButton :icon="Undo2" aria-label="Undo" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton :icon="Redo2" aria-label="Redo" variant="ghost" tone="neutral" size="sm" />
       </template>
       <template #center>
-        <DzText size="sm" weight="semibold">Landing redesign</DzText>
+        <DzText size="sm" weight="semibold">
+          Landing redesign
+        </DzText>
       </template>
       <template #end>
-        <DzBadge variant="subtle" tone="neutral" size="sm">100%</DzBadge>
-        <DzIconButton :icon="Share2" ariaLabel="Share" variant="outline" tone="primary" size="sm" />
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          100%
+        </DzBadge>
+        <DzIconButton :icon="Share2" aria-label="Share" variant="outline" tone="primary" size="sm" />
       </template>
     </DzToolbar>
 
@@ -94,13 +102,13 @@ const position: Field[] = [
           v-for="tool in tools"
           :key="tool.label"
           :icon="tool.icon"
-          :ariaLabel="tool.label"
+          :aria-label="tool.label"
           :variant="tool.active ? 'solid' : 'ghost'"
           :tone="tool.active ? 'primary' : 'neutral'"
           size="sm"
         />
         <DzSpacer size="auto" />
-        <DzIconButton :icon="Settings" ariaLabel="Settings" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton :icon="Settings" aria-label="Settings" variant="ghost" tone="neutral" size="sm" />
       </DzFlex>
 
       <!-- Scrollable canvas -->
@@ -115,13 +123,17 @@ const position: Field[] = [
               <span class="tc-shape tc-shape--tile" />
             </div>
           </div>
-          <DzText size="xs" tone="muted" align="center" class="tc-artboard-label">Home / Desktop · 1440</DzText>
+          <DzText size="xs" tone="muted" align="center" class="tc-artboard-label">
+            Home / Desktop · 1440
+          </DzText>
         </div>
       </DzScrollArea>
 
       <!-- Inspector -->
       <DzPanel header="Properties" variant="outlined" class="tc-inspector">
-        <DzText size="xs" tone="muted" weight="semibold" class="tc-group-label">POSITION</DzText>
+        <DzText size="xs" tone="muted" weight="semibold" class="tc-group-label">
+          POSITION
+        </DzText>
         <div class="tc-grid">
           <label v-for="field in position" :key="field.label" class="tc-field">
             <span class="tc-field-key">{{ field.label }}</span>
@@ -131,17 +143,27 @@ const position: Field[] = [
 
         <DzDivider class="tc-rule" />
 
-        <DzText size="xs" tone="muted" weight="semibold" class="tc-group-label">APPEARANCE</DzText>
+        <DzText size="xs" tone="muted" weight="semibold" class="tc-group-label">
+          APPEARANCE
+        </DzText>
         <div class="tc-appearance">
           <div class="tc-swatch-row">
             <span class="tc-swatch tc-swatch--fill" />
-            <DzText size="sm" as="span">Fill</DzText>
-            <DzText size="sm" tone="muted" as="span" class="tc-swatch-hex">Primary</DzText>
+            <DzText size="sm" as="span">
+              Fill
+            </DzText>
+            <DzText size="sm" tone="muted" as="span" class="tc-swatch-hex">
+              Primary
+            </DzText>
           </div>
           <div class="tc-swatch-row">
             <span class="tc-swatch tc-swatch--stroke" />
-            <DzText size="sm" as="span">Stroke</DzText>
-            <DzText size="sm" tone="muted" as="span" class="tc-swatch-hex">Border · 1</DzText>
+            <DzText size="sm" as="span">
+              Stroke
+            </DzText>
+            <DzText size="sm" tone="muted" as="span" class="tc-swatch-hex">
+              Border · 1
+            </DzText>
           </div>
         </div>
       </DzPanel>

@@ -111,7 +111,7 @@ export const EVENT_PRESETS: EventPreset[] = [
 ]
 
 /** Selectable start times for the new-event dialog. */
-export const TIME_SLOTS: { value: string; label: string }[] = [
+export const TIME_SLOTS: { value: string, label: string }[] = [
   { value: '09:00', label: '9:00 AM' },
   { value: '11:00', label: '11:00 AM' },
   { value: '14:00', label: '2:00 PM' },

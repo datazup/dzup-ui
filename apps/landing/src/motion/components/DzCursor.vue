@@ -51,7 +51,8 @@ let primed = false
 
 /** Whether the device has a fine, hover-capable pointer (SSR-safe). */
 function canHover(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
@@ -64,13 +65,15 @@ function loop(): void {
   const settled = Math.abs(targetX - curX) < 0.1 && Math.abs(targetY - curY) < 0.1
   if (inside || !settled) {
     frame = requestAnimationFrame(loop)
-  } else {
+  }
+  else {
     frame = 0
   }
 }
 
 function onMove(event: PointerEvent): void {
-  if (event.pointerType === 'touch' || !root.value) return
+  if (event.pointerType === 'touch' || !root.value)
+    return
   const rect = root.value.getBoundingClientRect()
   targetX = event.clientX - rect.left
   targetY = event.clientY - rect.top
@@ -84,25 +87,29 @@ function onMove(event: PointerEvent): void {
     inside = true
     active.value = true
   }
-  if (!frame) frame = requestAnimationFrame(loop)
+  if (!frame)
+    frame = requestAnimationFrame(loop)
 }
 
 function onLeave(event: PointerEvent): void {
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch')
+    return
   inside = false
   active.value = false
   primed = false
 }
 
 function attach(): void {
-  if (attached || !root.value) return
+  if (attached || !root.value)
+    return
   root.value.addEventListener('pointermove', onMove)
   root.value.addEventListener('pointerleave', onLeave)
   attached = true
 }
 
 function detach(): void {
-  if (!attached || !root.value) return
+  if (!attached || !root.value)
+    return
   root.value.removeEventListener('pointermove', onMove)
   root.value.removeEventListener('pointerleave', onLeave)
   if (frame) {
@@ -116,7 +123,8 @@ function detach(): void {
 }
 
 function sync(): void {
-  if (!props.disabled && canHover()) attach()
+  if (!props.disabled && canHover())
+    attach()
   else detach()
 }
 

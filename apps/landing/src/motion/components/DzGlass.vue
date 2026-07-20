@@ -36,8 +36,8 @@ const props = withDefaults(
 
 const style = computed(() => ({
   '--dz-glass-blur': props.blur,
-  borderRadius: props.radius,
-  padding: props.padding,
+  'borderRadius': props.radius,
+  'padding': props.padding,
 }))
 </script>
 

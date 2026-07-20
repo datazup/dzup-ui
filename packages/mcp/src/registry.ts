@@ -27,6 +27,7 @@
 
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import process from 'node:process'
 
 /** Default public origin serving the generated registry (registry.json `homepage`). */
 export const DEFAULT_REGISTRY_URL = 'https://dzup-ui.com'
@@ -242,19 +243,19 @@ export function parseComponentIndex(md: string): ComponentSummary[] {
     }
   }
   for (const line of lines) {
-    const fam = /^##\s+(.+?)\s*$/.exec(line)
-    if (fam) {
+    if (/^##\s/.test(line)) {
       flush()
-      family = fam[1]!
+      family = line.slice(2).trim()
       continue
     }
     if (family === 'Conventions' || !family)
       continue
     // `- **DzName** — description`  (em dash or hyphen separator, both tolerated)
-    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*\s*(?:[—–-]\s*)?(.*)$/.exec(line)
+    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*/.exec(line)
     if (head) {
       flush()
-      current = { name: head[1]!, family, description: head[2]!.trim(), details: '' }
+      const description = line.slice(head[0].length).trim().replace(/^[—–-]/, '').trim()
+      current = { name: head[1]!, family, description, details: '' }
       continue
     }
     // Indented continuation line belongs to the component currently being read.

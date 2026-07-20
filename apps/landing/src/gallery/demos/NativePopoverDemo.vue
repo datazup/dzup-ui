@@ -39,20 +39,28 @@ function pick(action: string): void {
           <div class="surface">
             <DzMenu aria-label="Document actions" size="sm">
               <DzMenuItem @click="pick('Edit'); close()">
-                <template #icon><Pencil :size="16" /></template>
+                <template #icon>
+                  <Pencil :size="16" />
+                </template>
                 Edit
               </DzMenuItem>
               <DzMenuItem @click="pick('Share'); close()">
-                <template #icon><Share2 :size="16" /></template>
+                <template #icon>
+                  <Share2 :size="16" />
+                </template>
                 Share
               </DzMenuItem>
               <DzMenuItem @click="pick('Archive'); close()">
-                <template #icon><Archive :size="16" /></template>
+                <template #icon>
+                  <Archive :size="16" />
+                </template>
                 Archive
               </DzMenuItem>
               <DzMenuSeparator />
               <DzMenuItem @click="pick('Delete'); close()">
-                <template #icon><Trash2 :size="16" /></template>
+                <template #icon>
+                  <Trash2 :size="16" />
+                </template>
                 Delete
               </DzMenuItem>
             </DzMenu>

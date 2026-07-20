@@ -53,7 +53,7 @@ function choose(label: string): void {
       <div class="am-actions">
         <DzIconButton
           :icon="Bell"
-          ariaLabel="Notifications"
+          aria-label="Notifications"
           variant="ghost"
           tone="neutral"
           size="sm"
@@ -83,40 +83,60 @@ function choose(label: string): void {
             <DzDropdownMenuSeparator />
 
             <DzDropdownMenuItem @select="choose('Profile')">
-              <template #prefix><User :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <User :size="16" aria-hidden="true" />
+              </template>
               Profile
-              <template #suffix><DzKbd :keys="['mod', 'p']" size="sm" /></template>
+              <template #suffix>
+                <DzKbd :keys="['mod', 'p']" size="sm" />
+              </template>
             </DzDropdownMenuItem>
             <DzDropdownMenuItem @select="choose('Billing')">
-              <template #prefix><CreditCard :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <CreditCard :size="16" aria-hidden="true" />
+              </template>
               Billing
             </DzDropdownMenuItem>
             <DzDropdownMenuItem @select="choose('Settings')">
-              <template #prefix><Settings :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <Settings :size="16" aria-hidden="true" />
+              </template>
               Settings
-              <template #suffix><DzKbd :keys="[',']" size="sm" :platform-aware="false" /></template>
+              <template #suffix>
+                <DzKbd :keys="[',']" size="sm" :platform-aware="false" />
+              </template>
             </DzDropdownMenuItem>
 
             <DzDropdownMenuSeparator />
 
             <DzDropdownMenuItem @select="choose('Team')">
-              <template #prefix><Users :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <Users :size="16" aria-hidden="true" />
+              </template>
               Invite team
             </DzDropdownMenuItem>
             <DzDropdownMenuItem @select="choose('Shortcuts')">
-              <template #prefix><Keyboard :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <Keyboard :size="16" aria-hidden="true" />
+              </template>
               Keyboard shortcuts
-              <template #suffix><DzKbd :keys="['mod', '/']" size="sm" /></template>
+              <template #suffix>
+                <DzKbd :keys="['mod', '/']" size="sm" />
+              </template>
             </DzDropdownMenuItem>
             <DzDropdownMenuItem @select="choose('Support')">
-              <template #prefix><LifeBuoy :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <LifeBuoy :size="16" aria-hidden="true" />
+              </template>
               Support
             </DzDropdownMenuItem>
 
             <DzDropdownMenuSeparator />
 
             <DzDropdownMenuItem @select="choose('Sign out')">
-              <template #prefix><LogOut :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <LogOut :size="16" aria-hidden="true" />
+              </template>
               <span class="am-danger">Sign out</span>
             </DzDropdownMenuItem>
           </DzDropdownMenuContent>

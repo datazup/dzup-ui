@@ -31,7 +31,9 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
     <div class="hc-bg" aria-hidden="true" />
 
     <div class="hc-inner">
-      <DzBadge variant="subtle" tone="primary" size="sm">New · v2.0</DzBadge>
+      <DzBadge variant="subtle" tone="primary" size="sm">
+        New · v2.0
+      </DzBadge>
 
       <DzHeading id="hero-centered-title" :level="4" size="3xl" weight="bold" align="center" class="hc-title">
         Build your product UI in minutes, not weeks
@@ -43,8 +45,12 @@ import { DzBadge, DzButton, DzHeading, DzText } from '@dzup-ui/core'
       </DzText>
 
       <div class="hc-actions">
-        <DzButton variant="solid" tone="primary" size="lg">Get started</DzButton>
-        <DzButton variant="outline" tone="neutral" size="lg">View components</DzButton>
+        <DzButton variant="solid" tone="primary" size="lg">
+          Get started
+        </DzButton>
+        <DzButton variant="outline" tone="neutral" size="lg">
+          View components
+        </DzButton>
       </div>
     </div>
   </section>

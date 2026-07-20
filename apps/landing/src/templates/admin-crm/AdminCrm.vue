@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ColumnDef } from '@dzup-ui/core'
+import type { ContactRow } from './data.ts'
 /**
  * Admin / CRM — full-page dashboard template (docs/templates.md §6.1).
  *
@@ -33,16 +35,15 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import type { ColumnDef } from '@dzup-ui/core'
 import { Boxes, MoreHorizontal, UserPlus } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 import {
-  CONTACTS,
   CONTACT_TABS,
+
+  CONTACTS,
   PRIMARY_NAV,
   SECONDARY_NAV,
   STATUS_TONE,
-  type ContactRow,
 } from './data.ts'
 
 const query = ref('')
@@ -66,11 +67,13 @@ const dollars = new Intl.NumberFormat('en-US', {
 
 // Compose the tab + search filters, then reset to page one whenever they change.
 const filtered = computed(() => {
-  const active = CONTACT_TABS.find((t) => t.value === tab.value)
+  const active = CONTACT_TABS.find(t => t.value === tab.value)
   const q = query.value.trim().toLowerCase()
   return CONTACTS.filter((c) => {
-    if (active?.match && c.status !== active.match) return false
-    if (q && !`${c.name} ${c.email} ${c.company}`.toLowerCase().includes(q)) return false
+    if (active?.match && c.status !== active.match)
+      return false
+    if (q && !`${c.name} ${c.email} ${c.company}`.toLowerCase().includes(q))
+      return false
     return true
   })
 })
@@ -99,17 +102,23 @@ function selectTab(value: string) {
 
         <DzSidebarSection title="Sales">
           <DzSidebarItem v-for="item in PRIMARY_NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
 
         <DzSidebarSection title="Workspace">
           <DzSidebarItem v-for="item in SECONDARY_NAV" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -128,8 +137,12 @@ function selectTab(value: string) {
 
     <template #header>
       <div class="crm-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Contacts</DzHeading>
-        <DzBadge variant="subtle" tone="neutral" size="sm">{{ CONTACTS.length }}</DzBadge>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Contacts
+        </DzHeading>
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          {{ CONTACTS.length }}
+        </DzBadge>
       </div>
     </template>
 
@@ -142,7 +155,9 @@ function selectTab(value: string) {
         aria-label="Search contacts"
       />
       <DzButton size="sm" variant="solid" tone="primary">
-        <template #prefix><UserPlus :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <UserPlus :size="15" aria-hidden="true" />
+        </template>
         Add contact
       </DzButton>
     </template>
@@ -168,8 +183,12 @@ function selectTab(value: string) {
               <div class="contact-cell">
                 <DzAvatar :fallback="(row as ContactRow).name.slice(0, 1)" size="sm" />
                 <div class="contact-meta">
-                  <DzText size="sm" weight="medium" as="div">{{ (row as ContactRow).name }}</DzText>
-                  <DzText size="xs" tone="muted" as="div">{{ (row as ContactRow).email }}</DzText>
+                  <DzText size="sm" weight="medium" as="div">
+                    {{ (row as ContactRow).name }}
+                  </DzText>
+                  <DzText size="xs" tone="muted" as="div">
+                    {{ (row as ContactRow).email }}
+                  </DzText>
                 </div>
               </div>
             </template>
@@ -188,7 +207,7 @@ function selectTab(value: string) {
                 <DzDropdownMenuTrigger as-child>
                   <DzIconButton
                     :icon="MoreHorizontal"
-                    ariaLabel="Contact actions"
+                    aria-label="Contact actions"
                     variant="ghost"
                     tone="neutral"
                     size="sm"
@@ -203,7 +222,9 @@ function selectTab(value: string) {
                 </DzDropdownMenuContent>
               </DzDropdownMenu>
             </template>
-            <template v-else>{{ value }}</template>
+            <template v-else>
+              {{ value }}
+            </template>
           </template>
         </DzDataGrid>
       </div>

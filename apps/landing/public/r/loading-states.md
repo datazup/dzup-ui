@@ -8,6 +8,7 @@ A content card that flips between loading and loaded — an indeterminate DzProg
 
 ```vue
 <script setup lang="ts">
+import { DzAvatar, DzButton, DzCard, DzHeading, DzProgress, DzSkeleton, DzSpinner, DzText } from '@dzup-ui/core'
 /**
  * Loading states — skeleton placeholders, spinner and indeterminate progress.
  *
@@ -21,7 +22,6 @@ A content card that flips between loading and loaded — an indeterminate DzProg
  * @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { DzAvatar, DzButton, DzCard, DzHeading, DzProgress, DzSkeleton, DzSpinner, DzText } from '@dzup-ui/core'
 
 const loading = ref(true)
 let timer: ReturnType<typeof setTimeout> | null = null
@@ -47,8 +47,12 @@ onBeforeUnmount(() => {
     <DzCard variant="outlined" padding="lg">
       <header class="ls-head">
         <div>
-          <DzHeading id="ls-title" :level="4" size="md" weight="semibold" class="ls-title">Latest report</DzHeading>
-          <DzText size="sm" tone="muted" as="p" class="ls-sub">Generated from your most recent run.</DzText>
+          <DzHeading id="ls-title" :level="4" size="md" weight="semibold" class="ls-title">
+            Latest report
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p" class="ls-sub">
+            Generated from your most recent run.
+          </DzText>
         </div>
         <DzButton size="sm" variant="outline" tone="neutral" :disabled="loading" @click="reload">
           {{ loading ? 'Loading…' : 'Reload' }}
@@ -60,7 +64,9 @@ onBeforeUnmount(() => {
         <DzProgress indeterminate tone="primary" size="sm" aria-label="Loading report" />
         <div class="ls-spin-row">
           <DzSpinner size="sm" tone="primary" label="Loading report" />
-          <DzText size="sm" tone="muted" as="span">Crunching the numbers…</DzText>
+          <DzText size="sm" tone="muted" as="span">
+            Crunching the numbers…
+          </DzText>
         </div>
       </div>
 
@@ -82,8 +88,12 @@ onBeforeUnmount(() => {
         <div class="ls-person">
           <DzAvatar fallback="AR" alt="Ava Restić" size="md" />
           <div class="ls-person-lines">
-            <DzText weight="medium" as="p" class="ls-line">Ava Restić</DzText>
-            <DzText size="sm" tone="muted" as="p" class="ls-line">Updated just now</DzText>
+            <DzText weight="medium" as="p" class="ls-line">
+              Ava Restić
+            </DzText>
+            <DzText size="sm" tone="muted" as="p" class="ls-line">
+              Updated just now
+            </DzText>
           </div>
         </div>
         <div class="ls-chart" aria-hidden="true">

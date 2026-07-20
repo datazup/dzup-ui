@@ -2,8 +2,8 @@
 import { DzAlert, DzBadge, DzButton, DzInput, DzProgress, DzRating, DzSwitch } from '@dzup-ui/core'
 import { Check, Copy } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
-import Section from './Section.vue'
 import { LINKS } from '../config.ts'
+import Section from './Section.vue'
 
 // Interactive re-theming (spec §4.5): presets + sliders override --dz-* tokens
 // on a scoped preview wrapper, so a cluster of real components updates live.
@@ -126,14 +126,26 @@ async function copyVars(): Promise<void> {
       <div class="preview lp-card" :style="previewVars">
         <div class="preview-cluster">
           <div class="cluster-row">
-            <DzButton variant="solid" tone="primary">Primary</DzButton>
-            <DzButton variant="outline" tone="primary">Outline</DzButton>
-            <DzButton variant="ghost" tone="primary">Ghost</DzButton>
+            <DzButton variant="solid" tone="primary">
+              Primary
+            </DzButton>
+            <DzButton variant="outline" tone="primary">
+              Outline
+            </DzButton>
+            <DzButton variant="ghost" tone="primary">
+              Ghost
+            </DzButton>
           </div>
           <div class="cluster-row">
-            <DzBadge variant="solid" tone="primary">Solid</DzBadge>
-            <DzBadge variant="subtle" tone="primary">Subtle</DzBadge>
-            <DzBadge variant="outline" tone="primary">Outline</DzBadge>
+            <DzBadge variant="solid" tone="primary">
+              Solid
+            </DzBadge>
+            <DzBadge variant="subtle" tone="primary">
+              Subtle
+            </DzBadge>
+            <DzBadge variant="outline" tone="primary">
+              Outline
+            </DzBadge>
             <DzSwitch v-model="toggle" aria-label="Preview toggle" />
             <DzRating v-model="rating" :count="5" />
           </div>

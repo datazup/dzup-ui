@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { DzButton } from '@dzup-ui/core'
+import { ref } from 'vue'
 
 // This file is replaced with the block/template source when you open one from
 // dzup-ui.com — edit freely, it's a real Vite + Vue 3 project.
@@ -12,6 +12,8 @@ const count = ref(0)
     <DzButton variant="solid" tone="primary" @click="count++">
       Clicked {{ count }} times
     </DzButton>
-    <DzButton variant="outline" tone="neutral">Outline</DzButton>
+    <DzButton variant="outline" tone="neutral">
+      Outline
+    </DzButton>
   </main>
 </template>

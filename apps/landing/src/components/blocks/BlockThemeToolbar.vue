@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { DzButton, DzColorPicker, DzSegmented, DzSlider, DzText } from '@dzup-ui/core'
 import type { SegmentedItem } from '@dzup-ui/core'
-import { Palette, RotateCcw, TriangleAlert } from 'lucide-vue-next'
-import { useBlockTheme } from '../../composables/useBlockTheme.ts'
 import type { Density } from '../../composables/useBlockTheme.ts'
-import { RADIUS_MAX, RADIUS_MIN, RADIUS_STEP } from '../../composables/useBlockTheme.ts'
+import { DzButton, DzColorPicker, DzSegmented, DzSlider, DzText } from '@dzup-ui/core'
+import { Palette, RotateCcw, TriangleAlert } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { RADIUS_MAX, RADIUS_MIN, RADIUS_STEP, useBlockTheme } from '../../composables/useBlockTheme.ts'
 
 /**
  * BlockThemeToolbar — the global /blocks token editor (docs/blocks.md §3.4;
@@ -76,7 +75,7 @@ const radiusLabel = computed(() => `${radiusScale.value.toFixed(2)}×`)
       <div class="bt-controls">
         <!-- Brand colour: writes `--dz-primary` (+ ring/link/hover) on every preview. -->
         <div class="bt-field">
-          <DzText size="xs" weight="medium" as="span" id="bt-brand-label" class="bt-label">
+          <DzText id="bt-brand-label" size="xs" weight="medium" as="span" class="bt-label">
             Brand
           </DzText>
           <DzColorPicker
@@ -89,7 +88,7 @@ const radiusLabel = computed(() => `${radiusScale.value.toFixed(2)}×`)
 
         <!-- Radius scale: multiplies the named radius tokens. -->
         <div class="bt-field bt-field--slider">
-          <DzText size="xs" weight="medium" as="span" id="bt-radius-label" class="bt-label">
+          <DzText id="bt-radius-label" size="xs" weight="medium" as="span" class="bt-label">
             Radius
             <span class="bt-readout" aria-hidden="true">{{ radiusLabel }}</span>
           </DzText>
@@ -106,7 +105,7 @@ const radiusLabel = computed(() => `${radiusScale.value.toFixed(2)}×`)
 
         <!-- Density: multiplies the spacing scale (component heights/paddings). -->
         <div class="bt-field">
-          <DzText size="xs" weight="medium" as="span" id="bt-density-label" class="bt-label">
+          <DzText id="bt-density-label" size="xs" weight="medium" as="span" class="bt-label">
             Density
           </DzText>
           <DzSegmented
@@ -126,7 +125,9 @@ const radiusLabel = computed(() => `${radiusScale.value.toFixed(2)}×`)
           class="bt-reset"
           @click="reset"
         >
-          <template #prefix><RotateCcw :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <RotateCcw :size="15" aria-hidden="true" />
+          </template>
           Reset
         </DzButton>
       </div>

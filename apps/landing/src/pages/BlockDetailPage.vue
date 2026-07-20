@@ -23,11 +23,11 @@ import { DzButton, DzCopyButton, DzHeading, DzText } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import Section from '../components/Section.vue'
-import BlockManifest from '../components/blocks/BlockManifest.vue'
-import BlockPreview from '../components/blocks/BlockPreview.vue'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
 import { getBlockSource } from '../blocks/sources.ts'
+import BlockManifest from '../components/blocks/BlockManifest.vue'
+import BlockPreview from '../components/blocks/BlockPreview.vue'
+import Section from '../components/Section.vue'
 import { openInStackblitz } from '../lib/stackblitz.ts'
 
 const props = defineProps<{ id: string }>()
@@ -41,7 +41,7 @@ if (!block.value) {
 }
 
 /** The block's category metadata, for the eyebrow + intro copy. */
-const category = computed(() => CATEGORIES.find((c) => c.id === block.value?.category))
+const category = computed(() => CATEGORIES.find(c => c.id === block.value?.category))
 
 /**
  * The category's decorative accent as a `--lp-cat-500` custom property, set on
@@ -63,14 +63,14 @@ const whenToUse = computed(() => {
     ? ' It reflows to a single column on narrow viewports.'
     : ''
   return (
-    `A ${label.toLowerCase()} block composed entirely from free @dzup-ui/core ` +
-    `components and design tokens, so it drops in already themed, accessible ` +
-    `and light/dark-ready.${responsive}`
+    `A ${label.toLowerCase()} block composed entirely from free @dzup-ui/core `
+    + `components and design tokens, so it drops in already themed, accessible `
+    + `and light/dark-ready.${responsive}`
   )
 })
 
 /** Index of the current block within the catalog, for prev/next (wraps around). */
-const index = computed(() => BLOCKS.findIndex((b) => b.id === props.id))
+const index = computed(() => BLOCKS.findIndex(b => b.id === props.id))
 const prevBlock = computed(() => {
   const i = index.value
   return i < 0 ? undefined : BLOCKS[(i - 1 + BLOCKS.length) % BLOCKS.length]
@@ -98,7 +98,8 @@ function showBlocksUsing(name: string): void {
  */
 function openStackblitz(): void {
   const b = block.value
-  if (!b) return
+  if (!b)
+    return
   openInStackblitz({
     title: `${b.title} — dzup-ui block`,
     description: b.description,
@@ -124,7 +125,9 @@ function openStackblitz(): void {
         <DzText size="lg" tone="muted" as="p" class="bd-lede lp-balance">
           {{ block.description }}
         </DzText>
-        <DzText size="md" tone="muted" as="p" class="bd-when">{{ whenToUse }}</DzText>
+        <DzText size="md" tone="muted" as="p" class="bd-when">
+          {{ whenToUse }}
+        </DzText>
 
         <!-- Dependency manifest at a glance: the one import + install command(s)
              + "Built from" chips, so the install path is visible without opening
@@ -141,7 +144,9 @@ function openStackblitz(): void {
             :aria-label="`Open ${block.title} in a live StackBlitz project`"
             @click="openStackblitz"
           >
-            <template #prefix><Zap :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <Zap :size="16" aria-hidden="true" />
+            </template>
             Open in StackBlitz
           </DzButton>
           <DzCopyButton

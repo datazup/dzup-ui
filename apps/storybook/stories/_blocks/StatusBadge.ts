@@ -10,10 +10,11 @@
  * # DzButton <StatusBadge status="stable" />
  * ```
  */
+import type { ComponentStatus } from '../../../../packages/core/stories/_shared/status.ts'
 import { createElement as h } from 'react'
 import {
+
   STATUS_BADGES,
-  type ComponentStatus,
 } from '../../../../packages/core/stories/_shared/status.ts'
 import { STATUS_BADGE_COLORS } from '../../.storybook/brandPalette.ts'
 
@@ -30,7 +31,8 @@ const HEX: Record<ComponentStatus, string> = {
 
 export function StatusBadge({ status }: { status: ComponentStatus }) {
   const meta = STATUS_BADGES[status]
-  if (!meta) return null
+  if (!meta)
+    return null
   return h(
     'span',
     {

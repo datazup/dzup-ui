@@ -19,13 +19,13 @@
  * matches across every kind, which the palette groups by `kind` for display.
  */
 
-import { computed, ref } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
+import type { WeightedField } from '../lib/searchScore.ts'
+import { computed, ref } from 'vue'
 import { BLOCKS, CATEGORIES } from '../blocks/registry.ts'
-import { TEMPLATES, TEMPLATE_CATEGORIES } from '../templates/registry.ts'
 import { COMPONENTS } from '../generated/components.ts'
 import { rankBySearch } from '../lib/searchScore.ts'
-import type { WeightedField } from '../lib/searchScore.ts'
+import { TEMPLATE_CATEGORIES, TEMPLATES } from '../templates/registry.ts'
 
 /** Which catalog a result came from — also the palette group it renders under. */
 export type SearchKind = 'component' | 'block' | 'template'
@@ -67,8 +67,8 @@ const WEIGHT = {
   description: 1,
 } as const
 
-const blockCategoryLabel = new Map(CATEGORIES.map((c) => [c.id, c.label]))
-const templateCategoryLabel = new Map(TEMPLATE_CATEGORIES.map((c) => [c.key, c.label]))
+const blockCategoryLabel = new Map(CATEGORIES.map(c => [c.id, c.label]))
+const templateCategoryLabel = new Map(TEMPLATE_CATEGORIES.map(c => [c.key, c.label]))
 
 /** Build the component docs. */
 function componentDocs(): SearchDoc[] {
@@ -93,8 +93,8 @@ function componentDocs(): SearchDoc[] {
 function blockDocs(): SearchDoc[] {
   return BLOCKS.map((b) => {
     const categoryLabel = blockCategoryLabel.get(b.category) ?? b.category
-    const haystack =
-      `${b.title} ${b.id} ${b.tags.join(' ')} ${b.components.join(' ')} ${b.description} ${categoryLabel}`.toLowerCase()
+    const haystack
+      = `${b.title} ${b.id} ${b.tags.join(' ')} ${b.components.join(' ')} ${b.description} ${categoryLabel}`.toLowerCase()
     return {
       kind: 'block' as const,
       id: `block:${b.id}`,
@@ -119,8 +119,8 @@ function templateDocs(): SearchDoc[] {
   return TEMPLATES.map((t) => {
     const categoryLabel = templateCategoryLabel.get(t.category) ?? t.category
     const tags = t.tags?.join(' ') ?? ''
-    const haystack =
-      `${t.name} ${t.slug} ${tags} ${t.stack.join(' ')} ${t.blurb} ${categoryLabel}`.toLowerCase()
+    const haystack
+      = `${t.name} ${t.slug} ${tags} ${t.stack.join(' ')} ${t.blurb} ${categoryLabel}`.toLowerCase()
     return {
       kind: 'template' as const,
       id: `template:${t.slug}`,
@@ -148,7 +148,7 @@ function templateDocs(): SearchDoc[] {
 const INDEX: SearchDoc[] = [...componentDocs(), ...blockDocs(), ...templateDocs()]
 
 /** Fast id → doc lookup for assembling the curated empty-state default. */
-const BY_ID = new Map(INDEX.map((doc) => [doc.id, doc]))
+const BY_ID = new Map(INDEX.map(doc => [doc.id, doc]))
 
 /**
  * Curated "most-popular" defaults shown when the query is empty — the components,
@@ -182,7 +182,8 @@ const POPULAR: SearchDoc[] = (() => {
     }
   }
   for (const t of TEMPLATES) {
-    if (!t.featured) continue
+    if (!t.featured)
+      continue
     const doc = BY_ID.get(`template:${t.slug}`)
     if (doc && !seen.has(doc.id)) {
       seen.add(doc.id)
@@ -217,8 +218,9 @@ export function useGlobalSearch(): UseGlobalSearch {
 
   const results = computed<SearchDoc[]>(() => {
     const q = query.value.trim().toLowerCase()
-    if (q === '') return POPULAR
-    return rankBySearch(INDEX, q, (doc) => doc.fields)
+    if (q === '')
+      return POPULAR
+    return rankBySearch(INDEX, q, doc => doc.fields)
   })
 
   return { query, isEmpty, results }

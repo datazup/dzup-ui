@@ -20,8 +20,12 @@ import { DzGlass } from '../../motion/index.ts'
       <span class="blob blob--3" />
     </div>
     <DzGlass class="panel">
-      <DzHeading :level="3" size="md" weight="semibold">Frosted panel</DzHeading>
-      <DzText size="xs" tone="muted" as="div">Legible over a busy, colourful backdrop.</DzText>
+      <DzHeading :level="3" size="md" weight="semibold">
+        Frosted panel
+      </DzHeading>
+      <DzText size="xs" tone="muted" as="div">
+        Legible over a busy, colourful backdrop.
+      </DzText>
     </DzGlass>
   </div>
 </template>

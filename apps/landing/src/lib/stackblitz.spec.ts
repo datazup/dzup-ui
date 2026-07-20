@@ -20,12 +20,9 @@ describe('openInStackblitz', () => {
   afterEach(() => vi.restoreAllMocks())
 
   it('submits a StackBlitz form that boots the full starter with the source injected', () => {
-    let submitted: HTMLFormElement | undefined
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (
-      this: HTMLFormElement,
-    ) {
-      submitted = this
-    })
+    // `submit()` is called on the transient form, so the spy's recorded `this` IS
+    // the form under test.
+    const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {})
 
     const source = '<template>\n  <DzButton>Hi</DzButton>\n</template>\n'
     openInStackblitz({
@@ -34,8 +31,8 @@ describe('openInStackblitz', () => {
       files: { 'src/App.vue': source },
     })
 
-    expect(submitted).toBeDefined()
-    const form = submitted!
+    const form = submit.mock.contexts[0] as HTMLFormElement
+    expect(form).toBeDefined()
 
     // Posts to the documented create-project endpoint, opening the item's file.
     expect(form.method.toLowerCase()).toBe('post')
@@ -64,12 +61,7 @@ describe('openInStackblitz', () => {
   })
 
   it('injects a template data module alongside App.vue when provided', () => {
-    let submitted: HTMLFormElement | undefined
-    vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function (
-      this: HTMLFormElement,
-    ) {
-      submitted = this
-    })
+    const submit = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {})
 
     openInStackblitz({
       title: 'Analytics Dashboard — dzup-ui template',
@@ -80,7 +72,7 @@ describe('openInStackblitz', () => {
       },
     })
 
-    const form = submitted!
+    const form = submit.mock.contexts[0] as HTMLFormElement
     expect(field(form, 'project[files][src/data.ts]')).toContain('export const rows')
   })
 })

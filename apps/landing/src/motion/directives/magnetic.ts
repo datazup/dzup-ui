@@ -57,13 +57,15 @@ const states = new WeakMap<HTMLElement, MagneticState>()
 
 /** Whether the OS currently requests reduced motion (SSR-safe). */
 function prefersReduced(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 /** Whether the device has a fine, hover-capable pointer (SSR-safe). */
 function canHover(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
@@ -94,10 +96,12 @@ function applyFrame(el: HTMLElement, state: MagneticState): void {
 }
 
 function attach(el: HTMLElement, state: MagneticState): void {
-  if (state.attached) return
+  if (state.attached)
+    return
 
   state.onMove = (event: PointerEvent): void => {
-    if (event.pointerType === 'touch') return
+    if (event.pointerType === 'touch')
+      return
     state.nextX = event.clientX
     state.nextY = event.clientY
     if (!state.engaged) {
@@ -106,7 +110,8 @@ function attach(el: HTMLElement, state: MagneticState): void {
       el.style.transition = 'none'
       el.style.willChange = 'transform'
     }
-    if (!state.frame) state.frame = requestAnimationFrame(() => applyFrame(el, state))
+    if (!state.frame)
+      state.frame = requestAnimationFrame(() => applyFrame(el, state))
   }
 
   state.onLeave = (): void => {
@@ -131,7 +136,8 @@ function attach(el: HTMLElement, state: MagneticState): void {
 }
 
 function detach(el: HTMLElement, state: MagneticState): void {
-  if (!state.attached) return
+  if (!state.attached)
+    return
   el.removeEventListener('pointermove', state.onMove)
   el.removeEventListener('pointerleave', state.onLeave)
   if (state.frame) {
@@ -158,18 +164,22 @@ export const vMagnetic: Directive<HTMLElement, MagneticOptions | undefined> = {
       onLeave: () => {},
     }
     states.set(el, state)
-    if (shouldRun(binding)) attach(el, state)
+    if (shouldRun(binding))
+      attach(el, state)
   },
   updated(el, binding) {
     const state = states.get(el)
-    if (!state) return
+    if (!state)
+      return
     state.options = parseOptions(binding.value)
-    if (shouldRun(binding)) attach(el, state)
+    if (shouldRun(binding))
+      attach(el, state)
     else detach(el, state)
   },
   unmounted(el) {
     const state = states.get(el)
-    if (!state) return
+    if (!state)
+      return
     detach(el, state)
     states.delete(el)
   },

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Conversation, Message } from './data.ts'
 /**
  * Chat / Messages — featured app template (docs/templates.md §6.4, C5 reference).
  *
@@ -30,8 +31,8 @@ import {
   DzSidebarHeader,
   DzSidebarItem,
   DzSidebarSection,
-  DzTextarea,
   DzText,
+  DzTextarea,
 } from '@dzup-ui/core'
 import {
   ArrowLeft,
@@ -50,16 +51,16 @@ import {
   APP_NAV,
   APP_NAV_SECONDARY,
   ATTACH_OPTIONS,
+
   CONVERSATIONS,
+
   THREADS,
-  type Conversation,
-  type Message,
 } from './data.ts'
 
 // Local, mutable copies so the preview feels live (selecting, searching, sending).
-const conversations = reactive<Conversation[]>(CONVERSATIONS.map((c) => ({ ...c })))
+const conversations = reactive<Conversation[]>(CONVERSATIONS.map(c => ({ ...c })))
 const threads = reactive<Record<string, Message[]>>(
-  Object.fromEntries(Object.entries(THREADS).map(([id, msgs]) => [id, msgs.map((m) => ({ ...m }))])),
+  Object.fromEntries(Object.entries(THREADS).map(([id, msgs]) => [id, msgs.map(m => ({ ...m }))])),
 )
 
 const activeId = ref('c-01')
@@ -69,13 +70,14 @@ const draft = ref('')
 /** On mobile the list and thread share one column; this picks which is visible. */
 const mobilePane = ref<'list' | 'thread'>('list')
 
-const activeConversation = computed(() => conversations.find((c) => c.id === activeId.value))
+const activeConversation = computed(() => conversations.find(c => c.id === activeId.value))
 
 const filteredConversations = computed(() => {
   const q = listQuery.value.trim().toLowerCase()
-  if (!q) return conversations
+  if (!q)
+    return conversations
   return conversations.filter(
-    (c) => c.name.toLowerCase().includes(q) || c.snippet.toLowerCase().includes(q),
+    c => c.name.toLowerCase().includes(q) || c.snippet.toLowerCase().includes(q),
   )
 })
 
@@ -87,11 +89,12 @@ const totalUnread = computed(() => conversations.reduce((sum, c) => sum + c.unre
  * Messages grouped into day buckets for the separators. When the in-thread search
  * is active we skip grouping and show a flat, filtered result list instead.
  */
-const messageGroups = computed<{ day: string; messages: Message[] }[]>(() => {
-  const groups: { day: string; messages: Message[] }[] = []
+const messageGroups = computed<{ day: string, messages: Message[] }[]>(() => {
+  const groups: { day: string, messages: Message[] }[] = []
   for (const message of activeMessages.value) {
     const last = groups[groups.length - 1]
-    if (last && last.day === message.day) last.messages.push(message)
+    if (last && last.day === message.day)
+      last.messages.push(message)
     else groups.push({ day: message.day, messages: [message] })
   }
   return groups
@@ -99,8 +102,9 @@ const messageGroups = computed<{ day: string; messages: Message[] }[]>(() => {
 
 const searchHits = computed<Message[]>(() => {
   const q = threadQuery.value.trim().toLowerCase()
-  if (!q) return []
-  return activeMessages.value.filter((m) => m.text.toLowerCase().includes(q))
+  if (!q)
+    return []
+  return activeMessages.value.filter(m => m.text.toLowerCase().includes(q))
 })
 
 const threadEnd = ref<HTMLElement | null>(null)
@@ -109,8 +113,9 @@ function selectConversation(id: string) {
   activeId.value = id
   threadQuery.value = ''
   mobilePane.value = 'thread'
-  const convo = conversations.find((c) => c.id === id)
-  if (convo) convo.unread = 0
+  const convo = conversations.find(c => c.id === id)
+  if (convo)
+    convo.unread = 0
   scrollToEnd()
 }
 
@@ -120,7 +125,8 @@ function scrollToEnd() {
 
 function send() {
   const text = draft.value.trim()
-  if (!text || !activeConversation.value) return
+  if (!text || !activeConversation.value)
+    return
   threads[activeId.value]?.push({
     id: `m-${activeId.value}-${activeMessages.value.length + 1}`,
     author: 'me',
@@ -157,17 +163,23 @@ function onComposerKeydown(event: KeyboardEvent) {
 
         <DzSidebarSection title="Messaging">
           <DzSidebarItem v-for="item in APP_NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
 
         <DzSidebarSection title="Account">
           <DzSidebarItem v-for="item in APP_NAV_SECONDARY" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -186,7 +198,9 @@ function onComposerKeydown(event: KeyboardEvent) {
 
     <template #header>
       <div class="cm-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Messages</DzHeading>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Messages
+        </DzHeading>
         <DzBadge v-if="totalUnread" variant="subtle" tone="primary" size="sm">
           {{ totalUnread }} unread
         </DzBadge>
@@ -195,7 +209,9 @@ function onComposerKeydown(event: KeyboardEvent) {
 
     <template #header-end>
       <DzButton size="sm" variant="solid" tone="primary">
-        <template #prefix><MessagesSquare :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <MessagesSquare :size="15" aria-hidden="true" />
+        </template>
         New message
       </DzButton>
     </template>
@@ -230,12 +246,20 @@ function onComposerKeydown(event: KeyboardEvent) {
 
               <div class="convo-main">
                 <div class="convo-row">
-                  <DzText size="sm" weight="semibold" as="span" class="convo-name">{{ c.name }}</DzText>
-                  <DzText size="xs" tone="muted" as="span" class="convo-time">{{ c.time }}</DzText>
+                  <DzText size="sm" weight="semibold" as="span" class="convo-name">
+                    {{ c.name }}
+                  </DzText>
+                  <DzText size="xs" tone="muted" as="span" class="convo-time">
+                    {{ c.time }}
+                  </DzText>
                 </div>
                 <div class="convo-row">
-                  <DzText size="sm" tone="muted" as="span" class="convo-snippet">{{ c.snippet }}</DzText>
-                  <DzBadge v-if="c.unread" variant="solid" tone="primary" size="sm">{{ c.unread }}</DzBadge>
+                  <DzText size="sm" tone="muted" as="span" class="convo-snippet">
+                    {{ c.snippet }}
+                  </DzText>
+                  <DzBadge v-if="c.unread" variant="solid" tone="primary" size="sm">
+                    {{ c.unread }}
+                  </DzBadge>
                 </div>
               </div>
             </DzListItem>
@@ -254,7 +278,9 @@ function onComposerKeydown(event: KeyboardEvent) {
             aria-label="Back to conversations"
             @click="mobilePane = 'list'"
           >
-            <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <ArrowLeft :size="16" aria-hidden="true" />
+            </template>
           </DzButton>
 
           <span class="avatar-wrap">
@@ -263,8 +289,12 @@ function onComposerKeydown(event: KeyboardEvent) {
           </span>
 
           <div class="thread-id">
-            <DzText size="sm" weight="semibold" as="div">{{ activeConversation.name }}</DzText>
-            <DzText size="xs" tone="muted" as="div">{{ activeConversation.presence }}</DzText>
+            <DzText size="sm" weight="semibold" as="div">
+              {{ activeConversation.name }}
+            </DzText>
+            <DzText size="xs" tone="muted" as="div">
+              {{ activeConversation.presence }}
+            </DzText>
           </div>
 
           <div class="thread-search">
@@ -274,21 +304,29 @@ function onComposerKeydown(event: KeyboardEvent) {
               size="sm"
               aria-label="Search in this conversation"
             >
-              <template #prefix><Search :size="15" aria-hidden="true" /></template>
+              <template #prefix>
+                <Search :size="15" aria-hidden="true" />
+              </template>
             </DzInput>
           </div>
 
           <div class="thread-actions">
             <DzButton size="sm" variant="ghost" tone="neutral" aria-label="Start a call">
-              <template #prefix><Phone :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <Phone :size="16" aria-hidden="true" />
+              </template>
             </DzButton>
             <DzButton size="sm" variant="ghost" tone="neutral" aria-label="Start a video call">
-              <template #prefix><Video :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <Video :size="16" aria-hidden="true" />
+              </template>
             </DzButton>
             <DzDropdownMenu>
               <DzDropdownMenuTrigger>
                 <DzButton size="sm" variant="ghost" tone="neutral" aria-label="Conversation options">
-                  <template #prefix><MoreVertical :size="16" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <MoreVertical :size="16" aria-hidden="true" />
+                  </template>
                 </DzButton>
               </DzDropdownMenuTrigger>
               <DzDropdownMenuContent align="end">
@@ -315,7 +353,9 @@ function onComposerKeydown(event: KeyboardEvent) {
                 :class="m.author === 'me' ? 'is-me' : 'is-them'"
               >
                 <div class="bubble">
-                  <DzText size="sm" as="p" class="bubble-text">{{ m.text }}</DzText>
+                  <DzText size="sm" as="p" class="bubble-text">
+                    {{ m.text }}
+                  </DzText>
                   <span class="bubble-meta">
                     <DzText size="xs" tone="muted" as="span">{{ m.day }} · {{ m.time }}</DzText>
                   </span>
@@ -345,7 +385,9 @@ function onComposerKeydown(event: KeyboardEvent) {
                     >
                       {{ m.sender }}
                     </DzText>
-                    <DzText size="sm" as="p" class="bubble-text">{{ m.text }}</DzText>
+                    <DzText size="sm" as="p" class="bubble-text">
+                      {{ m.text }}
+                    </DzText>
                     <span class="bubble-meta">
                       <DzText size="xs" tone="muted" as="span">{{ m.time }}</DzText>
                       <span v-if="m.author === 'me'" class="receipt" :class="`is-${m.status}`">
@@ -366,14 +408,18 @@ function onComposerKeydown(event: KeyboardEvent) {
           <DzDropdownMenu>
             <DzDropdownMenuTrigger>
               <DzButton size="sm" variant="ghost" tone="neutral" aria-label="Add attachment">
-                <template #prefix><Paperclip :size="18" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Paperclip :size="18" aria-hidden="true" />
+                </template>
               </DzButton>
             </DzDropdownMenuTrigger>
             <DzDropdownMenuContent side="top" align="start">
               <DzDropdownMenuItem v-for="opt in ATTACH_OPTIONS" :key="opt.label">
                 {{ opt.label }}
                 <template #suffix>
-                  <DzText size="xs" tone="muted" as="span">{{ opt.hint }}</DzText>
+                  <DzText size="xs" tone="muted" as="span">
+                    {{ opt.hint }}
+                  </DzText>
                 </template>
               </DzDropdownMenuItem>
             </DzDropdownMenuContent>
@@ -398,7 +444,9 @@ function onComposerKeydown(event: KeyboardEvent) {
             aria-label="Send message"
             @click="send"
           >
-            <template #prefix><Send :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <Send :size="16" aria-hidden="true" />
+            </template>
           </DzButton>
         </footer>
       </section>

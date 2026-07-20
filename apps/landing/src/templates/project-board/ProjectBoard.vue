@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Task } from './data.ts'
 /**
  * Project / Task Board — full-page dashboard template (docs/templates.md §6.1).
  *
@@ -38,26 +39,27 @@ import {
   PRIMARY_NAV,
   PRIORITY_TONE,
   SECONDARY_NAV,
+
   TASKS,
-  type Task,
 } from './data.ts'
 
 const view = ref('board')
 // Local, mutable copy so the DzCheckbox toggles feel live in the preview.
-const tasks = reactive<Task[]>(TASKS.map((t) => ({ ...t })))
+const tasks = reactive<Task[]>(TASKS.map(t => ({ ...t })))
 
 function tasksFor(columnKey: string) {
-  return tasks.filter((t) => t.column === columnKey)
+  return tasks.filter(t => t.column === columnKey)
 }
 
 function laneProgress(columnKey: string): number {
   const rows = tasksFor(columnKey)
-  if (!rows.length) return 0
-  return Math.round((rows.filter((t) => t.done).length / rows.length) * 100)
+  if (!rows.length)
+    return 0
+  return Math.round((rows.filter(t => t.done).length / rows.length) * 100)
 }
 
 const completion = computed(() =>
-  Math.round((tasks.filter((t) => t.done).length / tasks.length) * 100),
+  Math.round((tasks.filter(t => t.done).length / tasks.length) * 100),
 )
 </script>
 
@@ -74,17 +76,23 @@ const completion = computed(() =>
 
         <DzSidebarSection title="Workspace">
           <DzSidebarItem v-for="item in PRIMARY_NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
 
         <DzSidebarSection title="Account">
           <DzSidebarItem v-for="item in SECONDARY_NAV" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -103,8 +111,12 @@ const completion = computed(() =>
 
     <template #header>
       <div class="board-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Platform Q3</DzHeading>
-        <DzBadge variant="subtle" tone="success" size="sm">{{ completion }}% done</DzBadge>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Platform Q3
+        </DzHeading>
+        <DzBadge variant="subtle" tone="success" size="sm">
+          {{ completion }}% done
+        </DzBadge>
       </div>
     </template>
 
@@ -124,8 +136,12 @@ const completion = computed(() =>
 
       <DzTabs v-model="view" variant="pills" size="sm" aria-label="Board view">
         <DzTabList>
-          <DzTabTrigger value="board">Board</DzTabTrigger>
-          <DzTabTrigger value="list">List</DzTabTrigger>
+          <DzTabTrigger value="board">
+            Board
+          </DzTabTrigger>
+          <DzTabTrigger value="list">
+            List
+          </DzTabTrigger>
         </DzTabList>
 
         <DzTabContent value="board">
@@ -133,7 +149,9 @@ const completion = computed(() =>
             <section v-for="col in COLUMNS" :key="col.key" class="lane">
               <header class="lane-head">
                 <div class="lane-head-row">
-                  <DzText weight="semibold" size="sm">{{ col.title }}</DzText>
+                  <DzText weight="semibold" size="sm">
+                    {{ col.title }}
+                  </DzText>
                   <DzBadge variant="subtle" :tone="col.tone" size="sm">
                     {{ tasksFor(col.key).length }}
                   </DzBadge>
@@ -189,7 +207,9 @@ const completion = computed(() =>
                     {{ task.title }}
                   </DzText>
                   <div class="task-meta">
-                    <DzTag variant="subtle" :tone="task.labelTone" size="sm">{{ task.label }}</DzTag>
+                    <DzTag variant="subtle" :tone="task.labelTone" size="sm">
+                      {{ task.label }}
+                    </DzTag>
                     <DzBadge variant="outline" :tone="PRIORITY_TONE[task.priority]" size="sm">
                       {{ task.priority }}
                     </DzBadge>

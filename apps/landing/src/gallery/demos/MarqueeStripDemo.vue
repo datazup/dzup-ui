@@ -11,7 +11,14 @@ import { DzMarquee } from '../../motion/index.ts'
  * static wrapped row instead — no loop, no duplicated copy.
  */
 const logos = [
-  'Acme', 'Globex', 'Initech', 'Umbrella', 'Soylent', 'Hooli', 'Vandelay', 'Stark',
+  'Acme',
+  'Globex',
+  'Initech',
+  'Umbrella',
+  'Soylent',
+  'Hooli',
+  'Vandelay',
+  'Stark',
 ] as const
 </script>
 

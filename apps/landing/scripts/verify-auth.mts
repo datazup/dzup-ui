@@ -1,9 +1,11 @@
+import type { Buffer } from 'node:buffer'
 import type { ChildProcess } from 'node:child_process'
 /** Throwaway verification: screenshot the C1 auth templates, light+dark, desktop+mobile. */
 import { spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -66,7 +68,9 @@ async function main(): Promise<void> {
           reducedMotion: 'reduce',
         })
         await ctx.addInitScript((t) => {
-          try { localStorage.setItem('dz-theme', t as string) }
+          try {
+            localStorage.setItem('dz-theme', t as string)
+          }
           catch {}
         }, theme)
         const page = await ctx.newPage()
@@ -104,4 +108,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((e) => { console.error(e); process.exitCode = 1 })
+main().catch((e) => {
+  console.error(e)
+  process.exitCode = 1
+})

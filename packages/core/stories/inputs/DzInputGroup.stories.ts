@@ -232,7 +232,7 @@ export const WithButtonAddon: Story = {
     template: `
       <div class="flex flex-col gap-4 max-w-md">
         <DzInputGroup>
-          <DzInput model-value="https://dzup-ui.dev/share/abc123" readonly />
+          <DzInput model-value="https://dzup-ui.com/share/abc123" readonly />
           <template #suffix>
             <DzButton size="sm" variant="ghost" tone="neutral">
               <DzIcon :icon="Copy" size="sm" />

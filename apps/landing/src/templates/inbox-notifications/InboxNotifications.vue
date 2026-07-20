@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Notification } from './data.ts'
 /**
  * Inbox / Notifications — full-page template (docs/templates.md §6.1).
  *
@@ -31,23 +32,25 @@ import { Boxes, CheckCheck, Inbox as InboxIcon } from 'lucide-vue-next'
 import { computed, reactive, ref } from 'vue'
 import {
   INBOX_TABS,
+
   NOTIFICATIONS,
   PRIMARY_NAV,
   SECONDARY_NAV,
-  type Notification,
 } from './data.ts'
 
 const tab = ref('all')
 // Local, mutable copy so "Mark all read" feels live in the preview.
-const items = reactive<Notification[]>(NOTIFICATIONS.map((n) => ({ ...n })))
+const items = reactive<Notification[]>(NOTIFICATIONS.map(n => ({ ...n })))
 
 const filtered = computed(() => {
-  if (tab.value === 'unread') return items.filter((n) => n.unread)
-  if (tab.value === 'mentions') return items.filter((n) => n.mention)
+  if (tab.value === 'unread')
+    return items.filter(n => n.unread)
+  if (tab.value === 'mentions')
+    return items.filter(n => n.mention)
   return items
 })
 
-const unreadCount = computed(() => items.filter((n) => n.unread).length)
+const unreadCount = computed(() => items.filter(n => n.unread).length)
 
 function markAllRead() {
   items.forEach((n) => {
@@ -73,17 +76,23 @@ function open(n: Notification) {
 
         <DzSidebarSection title="Notifications">
           <DzSidebarItem v-for="item in PRIMARY_NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
 
         <DzSidebarSection title="Account">
           <DzSidebarItem v-for="item in SECONDARY_NAV" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -102,7 +111,9 @@ function open(n: Notification) {
 
     <template #header>
       <div class="inbox-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Notifications</DzHeading>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Notifications
+        </DzHeading>
         <DzBadge v-if="unreadCount" variant="subtle" tone="primary" size="sm">
           {{ unreadCount }} unread
         </DzBadge>
@@ -111,7 +122,9 @@ function open(n: Notification) {
 
     <template #header-end>
       <DzButton size="sm" variant="outline" tone="neutral" :disabled="!unreadCount" @click="markAllRead">
-        <template #prefix><CheckCheck :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <CheckCheck :size="15" aria-hidden="true" />
+        </template>
         Mark all read
       </DzButton>
     </template>
@@ -147,13 +160,19 @@ function open(n: Notification) {
               <span class="note-target">{{ n.target }}</span>
             </DzText>
             <div class="note-meta">
-              <DzText size="xs" tone="muted" as="span">{{ n.when }}</DzText>
-              <DzBadge v-if="n.mention" variant="subtle" tone="warning" size="sm">Mention</DzBadge>
+              <DzText size="xs" tone="muted" as="span">
+                {{ n.when }}
+              </DzText>
+              <DzBadge v-if="n.mention" variant="subtle" tone="warning" size="sm">
+                Mention
+              </DzBadge>
             </div>
           </div>
 
           <template #suffix>
-            <DzButton size="sm" variant="ghost" tone="neutral" @click="open(n)">View</DzButton>
+            <DzButton size="sm" variant="ghost" tone="neutral" @click="open(n)">
+              View
+            </DzButton>
           </template>
         </DzListItem>
       </DzList>

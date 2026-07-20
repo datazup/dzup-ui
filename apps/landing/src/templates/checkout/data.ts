@@ -8,9 +8,9 @@
  * thumbnail tile — no shipped image assets, no raw hex, theme-correct in both
  * light and dark.
  */
+import type { DzSelectItem } from '@dzup-ui/core'
 import type { Component } from 'vue'
 import { Citrus, Coffee, Croissant } from 'lucide-vue-next'
-import type { DzSelectItem } from '@dzup-ui/core'
 
 // ---------------------------------------------------------------------------
 // Cart line items

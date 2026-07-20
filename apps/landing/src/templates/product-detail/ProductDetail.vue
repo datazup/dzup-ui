@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ShotPalette, ShotView } from './data.ts'
 /**
  * Product Detail — Commerce template (docs/templates.md §6.4).
  *
@@ -46,14 +47,14 @@ import {
   RATING_BREAKDOWN,
   RELATED,
   REVIEWS,
+
   SPECS,
-  type ShotPalette,
-  type ShotView,
 } from './data.ts'
 
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -90,7 +91,7 @@ const palette = computed<ShotPalette>(() => {
 
 /** Thumbnail strip — one shot per framing. */
 const thumbs = computed(() =>
-  GALLERY_VIEWS.map((v) => ({ ...v, src: buildShot(palette.value, v.id) })),
+  GALLERY_VIEWS.map(v => ({ ...v, src: buildShot(palette.value, v.id) })),
 )
 /** The large gallery image, following the active framing + colourway. */
 const mainSrc = computed(() => buildShot(palette.value, activeView.value))
@@ -103,7 +104,7 @@ const reviewCountLabel = computed(() => PRODUCT.reviewCount.toLocaleString('en-U
 
 /** Painted shots for the "pairs well with" cards (theme-aware). */
 const relatedShots = computed(() =>
-  RELATED.map((r) => ({
+  RELATED.map(r => ({
     ...r,
     src: buildShot({ ...palette.value, accent: token(r.accentToken, '#6366f1') }, r.view),
   })),
@@ -126,7 +127,9 @@ const relatedShots = computed(() =>
           <a href="#">Support</a>
         </nav>
         <DzButton variant="ghost" tone="neutral" size="sm" aria-label="Cart (1 item)">
-          <template #prefix><ShoppingBag :size="18" aria-hidden="true" /></template>
+          <template #prefix>
+            <ShoppingBag :size="18" aria-hidden="true" />
+          </template>
           1
         </DzButton>
       </div>
@@ -134,9 +137,15 @@ const relatedShots = computed(() =>
 
     <main class="wrap">
       <DzBreadcrumb separator="/" aria-label="Breadcrumb" class="crumbs">
-        <DzBreadcrumbItem href="#">Home</DzBreadcrumbItem>
-        <DzBreadcrumbItem href="#">Headphones</DzBreadcrumbItem>
-        <DzBreadcrumbItem current>{{ PRODUCT.name }}</DzBreadcrumbItem>
+        <DzBreadcrumbItem href="#">
+          Home
+        </DzBreadcrumbItem>
+        <DzBreadcrumbItem href="#">
+          Headphones
+        </DzBreadcrumbItem>
+        <DzBreadcrumbItem current>
+          {{ PRODUCT.name }}
+        </DzBreadcrumbItem>
       </DzBreadcrumb>
 
       <!-- ── Product: gallery + buy box ───────────────────────── -->
@@ -177,11 +186,15 @@ const relatedShots = computed(() =>
           <DzHeading :level="1" size="2xl" weight="bold" class="buy-title">
             {{ PRODUCT.name }}
           </DzHeading>
-          <DzText size="lg" tone="muted" as="p" class="buy-tagline">{{ PRODUCT.tagline }}</DzText>
+          <DzText size="lg" tone="muted" as="p" class="buy-tagline">
+            {{ PRODUCT.tagline }}
+          </DzText>
 
           <div class="rating-row">
             <DzRating :value="PRODUCT.rating" allow-half readonly size="sm" aria-label="Average rating" />
-            <DzText size="sm" weight="semibold" as="span">{{ PRODUCT.rating.toFixed(1) }}</DzText>
+            <DzText size="sm" weight="semibold" as="span">
+              {{ PRODUCT.rating.toFixed(1) }}
+            </DzText>
             <a href="#reviews" class="rating-link">{{ reviewCountLabel }} reviews</a>
           </div>
 
@@ -193,12 +206,16 @@ const relatedShots = computed(() =>
             </DzBadge>
           </div>
 
-          <DzText as="p" tone="muted" class="buy-blurb">{{ PRODUCT.blurb }}</DzText>
+          <DzText as="p" tone="muted" class="buy-blurb">
+            {{ PRODUCT.blurb }}
+          </DzText>
 
           <ul class="highlights">
             <li v-for="h in PRODUCT.highlights" :key="h">
               <DzTag variant="subtle" tone="neutral" size="sm">
-                <template #prefix><Check :size="13" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Check :size="13" aria-hidden="true" />
+                </template>
                 {{ h }}
               </DzTag>
             </li>
@@ -238,7 +255,9 @@ const relatedShots = computed(() =>
                 aria-label="Quantity"
               />
               <DzButton variant="solid" tone="primary" size="lg" class="add-btn">
-                <template #prefix><ShoppingBag :size="18" aria-hidden="true" /></template>
+                <template #prefix>
+                  <ShoppingBag :size="18" aria-hidden="true" />
+                </template>
                 Add to cart · ${{ PRODUCT.price * qty }}
               </DzButton>
               <DzButton variant="outline" tone="neutral" size="lg" aria-label="Save to wishlist">
@@ -258,7 +277,9 @@ const relatedShots = computed(() =>
             <DzAccordionItem v-for="p in INFO_PANELS" :key="p.value" :value="p.value">
               <DzAccordionTrigger>{{ p.q }}</DzAccordionTrigger>
               <DzAccordionContent>
-                <DzText size="sm" tone="muted" as="p">{{ p.a }}</DzText>
+                <DzText size="sm" tone="muted" as="p">
+                  {{ p.a }}
+                </DzText>
               </DzAccordionContent>
             </DzAccordionItem>
           </DzAccordion>
@@ -269,9 +290,15 @@ const relatedShots = computed(() =>
       <section id="reviews" class="details">
         <DzTabs v-model="tab" variant="line" aria-label="Product details" class="detail-tabs">
           <DzTabList>
-            <DzTabTrigger value="description">Description</DzTabTrigger>
-            <DzTabTrigger value="specs">Specifications</DzTabTrigger>
-            <DzTabTrigger value="reviews">Reviews</DzTabTrigger>
+            <DzTabTrigger value="description">
+              Description
+            </DzTabTrigger>
+            <DzTabTrigger value="specs">
+              Specifications
+            </DzTabTrigger>
+            <DzTabTrigger value="reviews">
+              Reviews
+            </DzTabTrigger>
           </DzTabList>
 
           <DzTabContent value="description" class="tab-pane">
@@ -310,7 +337,9 @@ const relatedShots = computed(() =>
                   <div class="summary-score">
                     <span class="summary-num">{{ PRODUCT.rating.toFixed(1) }}</span>
                     <DzRating :value="PRODUCT.rating" allow-half readonly size="sm" aria-label="Average rating" />
-                    <DzText size="sm" tone="muted" as="span">{{ reviewCountLabel }} reviews</DzText>
+                    <DzText size="sm" tone="muted" as="span">
+                      {{ reviewCountLabel }} reviews
+                    </DzText>
                   </div>
                   <ul class="breakdown">
                     <li v-for="b in RATING_BREAKDOWN" :key="b.stars">
@@ -342,7 +371,9 @@ const relatedShots = computed(() =>
                     <DzHeading :level="3" size="sm" weight="semibold" class="review-title">
                       {{ r.title }}
                     </DzHeading>
-                    <DzText size="sm" tone="muted" as="p">{{ r.body }}</DzText>
+                    <DzText size="sm" tone="muted" as="p">
+                      {{ r.body }}
+                    </DzText>
                   </DzCard>
                 </li>
               </ul>
@@ -354,7 +385,9 @@ const relatedShots = computed(() =>
       <!-- ── Related ──────────────────────────────────────────── -->
       <section class="related">
         <div class="related-head">
-          <DzHeading :level="2" size="lg" weight="semibold">Pairs well with</DzHeading>
+          <DzHeading :level="2" size="lg" weight="semibold">
+            Pairs well with
+          </DzHeading>
           <a href="#" class="related-all">View all</a>
         </div>
         <ul class="related-grid">
@@ -364,11 +397,17 @@ const relatedShots = computed(() =>
                 <DzImage :src="r.src" :alt="r.name" fit="contain" aspect-ratio="4 / 3" />
               </div>
               <div class="rel-body">
-                <DzText weight="semibold" as="span">{{ r.name }}</DzText>
-                <DzText size="sm" tone="muted" as="span">{{ r.tagline }}</DzText>
+                <DzText weight="semibold" as="span">
+                  {{ r.name }}
+                </DzText>
+                <DzText size="sm" tone="muted" as="span">
+                  {{ r.tagline }}
+                </DzText>
                 <div class="rel-foot">
                   <span class="rel-price">${{ r.price }}</span>
-                  <DzButton variant="outline" tone="neutral" size="sm">View</DzButton>
+                  <DzButton variant="outline" tone="neutral" size="sm">
+                    View
+                  </DzButton>
                 </div>
               </div>
             </DzCard>
@@ -382,7 +421,9 @@ const relatedShots = computed(() =>
         <span class="brand-mark" aria-hidden="true"><Headphones :size="16" /></span>
         <span class="brand-name">Lumen Audio</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Lumen Audio. Sound, considered.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Lumen Audio. Sound, considered.
+      </DzText>
     </footer>
   </div>
 </template>

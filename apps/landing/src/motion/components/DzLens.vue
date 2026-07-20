@@ -53,7 +53,8 @@ let attached = false
 
 /** Whether the device has a fine, hover-capable pointer (SSR-safe). */
 function canHover(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
@@ -61,7 +62,8 @@ function applyFrame(): void {
   frame = 0
   const el = lens.value
   const rect = root.value?.getBoundingClientRect()
-  if (!el || !rect || !rect.width || !rect.height) return
+  if (!el || !rect || !rect.width || !rect.height)
+    return
   const x = nextX - rect.left
   const y = nextY - rect.top
   // Position the lens centred on the pointer (transform only).
@@ -75,15 +77,19 @@ function applyFrame(): void {
 }
 
 function onMove(event: PointerEvent): void {
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch')
+    return
   nextX = event.clientX
   nextY = event.clientY
-  if (!active.value) active.value = true
-  if (!frame) frame = requestAnimationFrame(applyFrame)
+  if (!active.value)
+    active.value = true
+  if (!frame)
+    frame = requestAnimationFrame(applyFrame)
 }
 
 function onLeave(event: PointerEvent): void {
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch')
+    return
   if (frame) {
     cancelAnimationFrame(frame)
     frame = 0
@@ -92,14 +98,16 @@ function onLeave(event: PointerEvent): void {
 }
 
 function attach(): void {
-  if (attached || !root.value) return
+  if (attached || !root.value)
+    return
   root.value.addEventListener('pointermove', onMove)
   root.value.addEventListener('pointerleave', onLeave)
   attached = true
 }
 
 function detach(): void {
-  if (!attached || !root.value) return
+  if (!attached || !root.value)
+    return
   root.value.removeEventListener('pointermove', onMove)
   root.value.removeEventListener('pointerleave', onLeave)
   if (frame) {
@@ -111,7 +119,8 @@ function detach(): void {
 }
 
 function sync(): void {
-  if (!props.disabled && canHover()) attach()
+  if (!props.disabled && canHover())
+    attach()
   else detach()
 }
 
@@ -127,7 +136,7 @@ onBeforeUnmount(detach)
     :class="{ 'dz-lens--active': active }"
     :style="{ aspectRatio }"
   >
-    <img class="dz-lens__img" :src="src" :alt="alt" draggable="false" />
+    <img class="dz-lens__img" :src="src" :alt="alt" draggable="false">
     <div
       ref="lens"
       class="dz-lens__glass"

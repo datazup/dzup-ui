@@ -61,7 +61,7 @@ afterEach(() => {
   vi.doUnmock('../composables/useLiveStats.ts')
 })
 
-describe('SocialProof — layout stability', () => {
+describe('socialProof — layout stability', () => {
   it('reserves each figure\'s final width so the count-up cannot reflow', async () => {
     const { container } = await mount()
     const figures = [...container.querySelectorAll('.stat-value')]
@@ -81,7 +81,7 @@ describe('SocialProof — layout stability', () => {
   })
 })
 
-describe('SocialProof — accessible names', () => {
+describe('socialProof — accessible names', () => {
   it('names each static tile with a full phrase, not a bare number', async () => {
     const { getByLabelText } = await mount()
     expect(getByLabelText(`${FACTS.freeComponents} free components`)).toBeTruthy()
@@ -101,7 +101,7 @@ describe('SocialProof — accessible names', () => {
   })
 })
 
-describe('SocialProof — freshness', () => {
+describe('socialProof — freshness', () => {
   it('dates a real number so a static figure is never read as live', async () => {
     // Must be real refs: `<script setup>` template auto-unwrapping only applies
     // to refs, so a plain `{ value }` object would reach the label helpers whole.

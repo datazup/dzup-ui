@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>dzup-ui — Changelog</title>
+  <subtitle>Every shipped change to dzup-ui — new components, refinements and fixes, newest first.</subtitle>
+  <id>https://dzup-ui.com/changelog</id>
+  <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog"/>
+  <link rel="self" type="application/atom+xml" href="https://dzup-ui.com/feed.xml"/>
+  <updated>2026-06-27T00:00:00Z</updated>
+  <author>
+    <name>dzup-ui</name>
+    <uri>https://dzup-ui.com</uri>
+  </author>
+  <generator uri="https://dzup-ui.com/">dzup-ui build-releases</generator>
+  <entry>
+    <title>Changes on 2026-06-27</title>
+    <id>https://dzup-ui.com/changelog#2026-06-27</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-27"/>
+    <updated>2026-06-27T00:00:00Z</updated>
+    <summary>1 change on 2026-06-27.</summary>
+    <content type="html">&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix use avatar fallback as accessible label. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-26</title>
+    <id>https://dzup-ui.com/changelog#2026-06-26</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-26"/>
+    <updated>2026-06-26T00:00:00Z</updated>
+    <summary>11 changes on 2026-06-26.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add play assertions across component stories. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Enable Vitest addon. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add make table variant gallery hoverable. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix storybook test assertions for remaining 16 story files. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix remaining 17 storybook test assertion failures. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix 9 remaining storybook test failures. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix use canvaselement.ownerdocument.body for portalled calendar queries. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix simplify datepicker/daterangepicker play functions. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix resolve vitest browser test setup. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix expose menu and resize handle aria states. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix resolve 28 residual lint errors + restore typecheck. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-25</title>
+    <id>https://dzup-ui.com/changelog#2026-06-25</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-25"/>
+    <updated>2026-06-25T00:00:00Z</updated>
+    <summary>22 changes on 2026-06-25.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add graduate governancebadge and teammemberbadge from stubs to full components. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add Storybook stories for GovernanceBadge and TeamMemberBadge. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add compound-parts and standalone stories for 7 component families. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add play() assertions to DzDropdownMenu and DzContextMenu. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add play() assertions to Parts, form-input, and overlay stories. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add input accessibility play assertions. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add contract specs for DzAccordionItem, DzListItem, DzTreeItem; bump packages to 0.1.0. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add play() for tagsinput/listbox/segmented/colormodetoggle/inplace; toast contract specs. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add play() assertions to Notification, ToastParts, SpeedDial, Chip, Tag, Calendar, List, DataView. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add form and panel play assertions. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add navigation play assertions. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add blocks, templates, and animation showcase. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Harden FormField/Panel play selectors. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix use baseformcontrolprops&amp;lt;never&amp;gt; for variant-less form controls. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix centralise orientation type; component aliases re-export from contracts. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix commit formatter-normalised dzknob/dzpanel files from review session. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix remove extra dzknob wrapper. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix remove redundant toolbarvariant/panelvariant re-exports from component files. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix alias orientation union in 6 remaining components. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix alias orientation in dztimeline + usetabs; document scrollorientation. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix replace incorrect contain:layout assertions with real component invariants. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix add icon size variant to governancebadge and teammemberbadge. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-24</title>
+    <id>https://dzup-ui.com/changelog#2026-06-24</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-24"/>
+    <updated>2026-06-24T00:00:00Z</updated>
+    <summary>1 change on 2026-06-24.</summary>
+    <content type="html">&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add specification and task-backlog docs for the three landing-page ecosystem offerings (apps/landing), each covering the investigation, display design, free-tier (@dzup-ui/core) catalog. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-23</title>
+    <id>https://dzup-ui.com/changelog#2026-06-23</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-23"/>
+    <updated>2026-06-23T00:00:00Z</updated>
+    <summary>1 change on 2026-06-23.</summary>
+    <content type="html">&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix expose password visibility toggle state. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-22</title>
+    <id>https://dzup-ui.com/changelog#2026-06-22</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-22"/>
+    <updated>2026-06-22T00:00:00Z</updated>
+    <summary>3 changes on 2026-06-22.</summary>
+    <content type="html">&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Address all findings from docs/bugs.md and docs/bugs-1.md, surfaced by. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix annotate dzmasonry item ref param to avoid excessive stack depth. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix make dzmasonry item ref portable across consumer vue copies. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-19</title>
+    <id>https://dzup-ui.com/changelog#2026-06-19</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-19"/>
+    <updated>2026-06-19T00:00:00Z</updated>
+    <summary>1 change on 2026-06-19.</summary>
+    <content type="html">&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix align masonry slot typing with vue. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-18</title>
+    <id>https://dzup-ui.com/changelog#2026-06-18</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-18"/>
+    <updated>2026-06-18T00:00:00Z</updated>
+    <summary>2 changes on 2026-06-18.</summary>
+    <content type="html">&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Implement the 14 free-tier components from docs/new-features.md, each with the. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-17</title>
+    <id>https://dzup-ui.com/changelog#2026-06-17</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-17"/>
+    <updated>2026-06-17T00:00:00Z</updated>
+    <summary>2 changes on 2026-06-17.</summary>
+    <content type="html">&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix align component props and type imports. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix wrap function refs for vue type compatibility. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-16</title>
+    <id>https://dzup-ui.com/changelog#2026-06-16</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-16"/>
+    <updated>2026-06-16T00:00:00Z</updated>
+    <summary>2 changes on 2026-06-16.</summary>
+    <content type="html">&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix simplify collapse content ref typing. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix use tsc for contracts typecheck. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-12</title>
+    <id>https://dzup-ui.com/changelog#2026-06-12</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-12"/>
+    <updated>2026-06-12T00:00:00Z</updated>
+    <summary>1 change on 2026-06-12.</summary>
+    <content type="html">&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Added new features and components. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-10</title>
+    <id>https://dzup-ui.com/changelog#2026-06-10</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-10"/>
+    <updated>2026-06-10T00:00:00Z</updated>
+    <summary>1 change on 2026-06-10.</summary>
+    <content type="html">&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix bugs. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-09</title>
+    <id>https://dzup-ui.com/changelog#2026-06-09</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-09"/>
+    <updated>2026-06-09T00:00:00Z</updated>
+    <summary>1 change on 2026-06-09.</summary>
+    <content type="html">&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fixed components with list. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-08</title>
+    <id>https://dzup-ui.com/changelog#2026-06-08</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-08"/>
+    <updated>2026-06-08T00:00:00Z</updated>
+    <summary>3 changes on 2026-06-08.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add neutralize password autofill background. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Changed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix bugs and added new component. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix value for date picker. &lt;em&gt;— Esmir Isić&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-06-03</title>
+    <id>https://dzup-ui.com/changelog#2026-06-03</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-06-03"/>
+    <updated>2026-06-03T00:00:00Z</updated>
+    <summary>2 changes on 2026-06-03.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add update packages. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add update apps. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-05-31</title>
+    <id>https://dzup-ui.com/changelog#2026-05-31</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-05-31"/>
+    <updated>2026-05-31T00:00:00Z</updated>
+    <summary>2 changes on 2026-05-31.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Support date type in DzInput props. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix make compat typecheck use workspace vue-tsc. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-05-30</title>
+    <id>https://dzup-ui.com/changelog#2026-05-30</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-05-30"/>
+    <updated>2026-05-30T00:00:00Z</updated>
+    <summary>1 change on 2026-05-30.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add align sidebar section padding for collapsed state. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-05-29</title>
+    <id>https://dzup-ui.com/changelog#2026-05-29</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-05-29"/>
+    <updated>2026-05-29T00:00:00Z</updated>
+    <summary>15 changes on 2026-05-29.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add deepen light and dark shadow token scales. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add refine light theme contrast and radius scale. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add strengthen component emphasis and focus styling. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add refine badge/tag sizing and dzup gallery layout. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add enrich dzup gallery dashboard, table, and form. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add datazup brand variants to visual refresh galleries. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add stabilize dzup dashboard chart and goal ring. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add polish dzup gallery table density and avatar alignment. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add improve dzup table tab count spacing. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add refine dzup form and dashboard layout spacing. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add apply kpi card spacing polish and dztext margin wrapper. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add Detail, Settings, and States gallery story files with dzup fixtures. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add align dashboard card stories with updated props. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add stories source glob to Tailwind CSS scan. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add freestyle reference stories for visual refresh. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-05-28</title>
+    <id>https://dzup-ui.com/changelog#2026-05-28</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-05-28"/>
+    <updated>2026-05-28T00:00:00Z</updated>
+    <summary>5 changes on 2026-05-28.</summary>
+    <content type="html">&lt;h3&gt;Added&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Add freestyle dashboard gallery story. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add free-styled reference screens (visual target). &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Add a/b gallery stories (freestyle vs dzup-ui). &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix keep canonical fouc theme preload script. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix preserve accordion model type in model-value binding. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Changes on 2026-05-27</title>
+    <id>https://dzup-ui.com/changelog#2026-05-27</id>
+    <link rel="alternate" type="text/html" href="https://dzup-ui.com/changelog#2026-05-27"/>
+    <updated>2026-05-27T00:00:00Z</updated>
+    <summary>2 changes on 2026-05-27.</summary>
+    <content type="html">&lt;h3&gt;Fixed&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;Fix resolve merge conflicts in dzaccordion, dzsidebar, dzdialogclose, dzstepperitem, feedback/index. &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;li&gt;Fix resolve merge conflict markers in app.vue — take esmir side (dztoastprovider + devdrawer + sandboxroutes). &lt;em&gt;— ninel.hodzic&lt;/em&gt;&lt;/li&gt;&lt;/ul&gt;</content>
+  </entry>
+</feed>

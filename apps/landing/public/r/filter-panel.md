@@ -55,9 +55,12 @@ const priceLabel = computed(() => `$${price.value[0]} – $${price.value[1]}`)
 
 const activeCount = computed(() => {
   let n = categories.value.length
-  if (price.value[0] > 0 || price.value[1] < 250) n += 1
-  if (minRating.value !== 'any') n += 1
-  if (inStock.value) n += 1
+  if (price.value[0] > 0 || price.value[1] < 250)
+    n += 1
+  if (minRating.value !== 'any')
+    n += 1
+  if (inStock.value)
+    n += 1
   return n
 })
 
@@ -73,7 +76,9 @@ function reset() {
 <template>
   <section class="fp-panel" aria-label="Filters">
     <header class="fp-head">
-      <DzHeading :level="4" size="md" weight="semibold" class="fp-title">Filters</DzHeading>
+      <DzHeading :level="4" size="md" weight="semibold" class="fp-title">
+        Filters
+      </DzHeading>
       <DzButton
         v-if="activeCount > 0"
         variant="text"
@@ -96,7 +101,9 @@ function reset() {
 
     <!-- Category -->
     <div class="fp-group">
-      <DzText size="sm" weight="medium" as="div" class="fp-group-title">Category</DzText>
+      <DzText size="sm" weight="medium" as="div" class="fp-group-title">
+        Category
+      </DzText>
       <DzCheckboxGroup v-model="categories" orientation="vertical" aria-label="Category">
         <DzCheckbox
           v-for="cat in CATEGORIES"
@@ -114,7 +121,9 @@ function reset() {
     <!-- Price -->
     <div class="fp-group">
       <div class="fp-group-row">
-        <DzText size="sm" weight="medium" as="div" class="fp-group-title">Price</DzText>
+        <DzText size="sm" weight="medium" as="div" class="fp-group-title">
+          Price
+        </DzText>
         <span class="fp-readout">{{ priceLabel }}</span>
       </div>
       <DzRangeSlider
@@ -131,11 +140,19 @@ function reset() {
 
     <!-- Rating -->
     <div class="fp-group">
-      <DzText size="sm" weight="medium" as="div" class="fp-group-title">Minimum rating</DzText>
+      <DzText size="sm" weight="medium" as="div" class="fp-group-title">
+        Minimum rating
+      </DzText>
       <DzRadioGroup v-model="minRating" orientation="vertical" aria-label="Minimum rating">
-        <DzRadio value="any" size="sm">Any rating</DzRadio>
-        <DzRadio value="4" size="sm">4 stars &amp; up</DzRadio>
-        <DzRadio value="3" size="sm">3 stars &amp; up</DzRadio>
+        <DzRadio value="any" size="sm">
+          Any rating
+        </DzRadio>
+        <DzRadio value="4" size="sm">
+          4 stars &amp; up
+        </DzRadio>
+        <DzRadio value="3" size="sm">
+          3 stars &amp; up
+        </DzRadio>
       </DzRadioGroup>
     </div>
 
@@ -144,8 +161,12 @@ function reset() {
     <!-- Availability -->
     <div class="fp-switch-row">
       <div class="fp-switch-copy">
-        <DzText size="sm" weight="medium" as="div">In stock only</DzText>
-        <DzText size="xs" tone="muted" as="div">Hide sold-out items</DzText>
+        <DzText size="sm" weight="medium" as="div">
+          In stock only
+        </DzText>
+        <DzText size="xs" tone="muted" as="div">
+          Hide sold-out items
+        </DzText>
       </div>
       <DzSwitch v-model="inStock" aria-label="In stock only" />
     </div>

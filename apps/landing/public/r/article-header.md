@@ -51,7 +51,9 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
           size="md"
         />
         <div class="ah-byline">
-          <DzText size="sm" weight="semibold" as="span">Mara Lindqvist</DzText>
+          <DzText size="sm" weight="semibold" as="span">
+            Mara Lindqvist
+          </DzText>
           <DzText size="sm" tone="muted" as="span" class="ah-byline-row">
             <span>Staff Engineer</span>
             <span aria-hidden="true" class="ah-dot">·</span>
@@ -62,7 +64,9 @@ const tags = ['Design systems', 'Accessibility', 'Vue 3', 'Tokens']
 
       <ul class="ah-tags" aria-label="Article topics">
         <li v-for="tag in tags" :key="tag">
-          <DzTag variant="subtle" tone="primary" size="sm">{{ tag }}</DzTag>
+          <DzTag variant="subtle" tone="primary" size="sm">
+            {{ tag }}
+          </DzTag>
         </li>
       </ul>
     </header>

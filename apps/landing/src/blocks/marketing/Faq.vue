@@ -105,7 +105,9 @@ const faqs: FaqItem[] = [
       >
         <DzAccordionTrigger>{{ item.question }}</DzAccordionTrigger>
         <DzAccordionContent>
-          <DzText size="sm" tone="muted" class="faq-answer">{{ item.answer }}</DzText>
+          <DzText size="sm" tone="muted" class="faq-answer">
+            {{ item.answer }}
+          </DzText>
         </DzAccordionContent>
       </DzAccordionItem>
     </DzAccordion>

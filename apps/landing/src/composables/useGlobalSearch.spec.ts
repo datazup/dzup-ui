@@ -8,11 +8,11 @@
  * catalogs grow — they assert behaviour, not a frozen snapshot.
  */
 
+import type { SearchKind } from './useGlobalSearch.ts'
 import { describe, expect, it } from 'vitest'
 import { useGlobalSearch } from './useGlobalSearch.ts'
-import type { SearchKind } from './useGlobalSearch.ts'
 
-const kinds = (docs: { kind: SearchKind }[]): SearchKind[] => docs.map((d) => d.kind)
+const kinds = (docs: { kind: SearchKind }[]): SearchKind[] => docs.map(d => d.kind)
 
 describe('useGlobalSearch', () => {
   it('exposes the documented reactive surface', () => {
@@ -49,7 +49,7 @@ describe('useGlobalSearch', () => {
     expect(present.has('component')).toBe(true)
     expect(present.has('block')).toBe(true)
     // The DzButton component is a title hit, so it must appear.
-    expect(results.value.some((d) => d.kind === 'component' && d.title === 'DzButton')).toBe(true)
+    expect(results.value.some(d => d.kind === 'component' && d.title === 'DzButton')).toBe(true)
   })
 
   it('ranks a title hit above a description-only hit', () => {
@@ -57,18 +57,19 @@ describe('useGlobalSearch', () => {
     query.value = 'pricing'
     // A block/template whose title contains "pricing" outranks one that only
     // mentions it in its blurb/description.
-    const titleHit = results.value.findIndex((d) => d.title.toLowerCase().includes('pricing'))
+    const titleHit = results.value.findIndex(d => d.title.toLowerCase().includes('pricing'))
     const descOnly = results.value.findIndex(
-      (d) => !d.title.toLowerCase().includes('pricing') && d.haystack.includes('pricing'),
+      d => !d.title.toLowerCase().includes('pricing') && d.haystack.includes('pricing'),
     )
     expect(titleHit).toBeGreaterThanOrEqual(0)
-    if (descOnly !== -1) expect(titleHit).toBeLessThan(descOnly)
+    if (descOnly !== -1)
+      expect(titleHit).toBeLessThan(descOnly)
   })
 
   it('routes component results into Storybook by story id', () => {
     const { query, results } = useGlobalSearch()
     query.value = 'dztable'
-    const table = results.value.find((d) => d.kind === 'component' && d.title === 'DzTable')
+    const table = results.value.find(d => d.kind === 'component' && d.title === 'DzTable')
     expect(table?.storyId).toBe('core-data-dztable')
   })
 

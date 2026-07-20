@@ -8,6 +8,7 @@ A fulfilment timeline for a single order — a DzStepper rail from placed to del
 
 ```vue
 <script setup lang="ts">
+import { DzBadge, DzHeading, DzStepper, DzStepperItem, DzText } from '@dzup-ui/core'
 /**
  * Order status tracker — a fulfilment timeline for a single order.
  *
@@ -21,7 +22,6 @@ A fulfilment timeline for a single order — a DzStepper rail from placed to del
  * @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { DzBadge, DzHeading, DzStepper, DzStepperItem, DzText } from '@dzup-ui/core'
 
 interface Stage {
   title: string
@@ -48,7 +48,8 @@ function sync(event: MediaQueryList | MediaQueryListEvent) {
 }
 
 onMounted(() => {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined')
+    return
   media = window.matchMedia('(max-width: 640px)')
   sync(media)
   media.addEventListener('change', sync)
@@ -64,10 +65,16 @@ onBeforeUnmount(() => {
     <div class="os-card">
       <header class="os-head">
         <div class="os-head-text">
-          <DzHeading id="os-title" :level="4" size="md" weight="semibold" class="os-heading">Order #DZ-90417</DzHeading>
-          <DzText size="sm" tone="muted" as="p" class="os-sub">Placed 16 June · 3 items</DzText>
+          <DzHeading id="os-title" :level="4" size="md" weight="semibold" class="os-heading">
+            Order #DZ-90417
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p" class="os-sub">
+            Placed 16 June · 3 items
+          </DzText>
         </div>
-        <DzBadge variant="subtle" tone="info" size="md">Out for delivery</DzBadge>
+        <DzBadge variant="subtle" tone="info" size="md">
+          Out for delivery
+        </DzBadge>
       </header>
 
       <DzStepper
@@ -86,16 +93,40 @@ onBeforeUnmount(() => {
 
       <dl class="os-details">
         <div class="os-detail">
-          <dt><DzText size="xs" tone="muted" as="span">Carrier</DzText></dt>
-          <dd><DzText size="sm" weight="medium" as="span">DZ Express</DzText></dd>
+          <dt>
+            <DzText size="xs" tone="muted" as="span">
+              Carrier
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" weight="medium" as="span">
+              DZ Express
+            </DzText>
+          </dd>
         </div>
         <div class="os-detail">
-          <dt><DzText size="xs" tone="muted" as="span">Tracking</DzText></dt>
-          <dd><DzText size="sm" weight="medium" as="span" class="os-mono">1Z-DZ-88204613</DzText></dd>
+          <dt>
+            <DzText size="xs" tone="muted" as="span">
+              Tracking
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" weight="medium" as="span" class="os-mono">
+              1Z-DZ-88204613
+            </DzText>
+          </dd>
         </div>
         <div class="os-detail">
-          <dt><DzText size="xs" tone="muted" as="span">Estimated delivery</DzText></dt>
-          <dd><DzText size="sm" weight="medium" as="span">Today by 6:00 PM</DzText></dd>
+          <dt>
+            <DzText size="xs" tone="muted" as="span">
+              Estimated delivery
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" weight="medium" as="span">
+              Today by 6:00 PM
+            </DzText>
+          </dd>
         </div>
       </dl>
     </div>

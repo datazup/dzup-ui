@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -15,7 +16,6 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { ref } from 'vue'
 
 /**
@@ -127,15 +127,23 @@ const ROLES: DzSelectItem[] = [
 
         <div class="pr-switch-row">
           <div class="pr-switch-copy">
-            <DzText size="sm" weight="medium" as="div">Public profile</DzText>
-            <DzText size="xs" tone="muted" as="div">Anyone with the link can view it.</DzText>
+            <DzText size="sm" weight="medium" as="div">
+              Public profile
+            </DzText>
+            <DzText size="xs" tone="muted" as="div">
+              Anyone with the link can view it.
+            </DzText>
           </div>
           <DzSwitch v-model="publicProfile" aria-label="Public profile" />
         </div>
 
         <div class="pr-actions">
-          <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
-          <DzButton type="submit" variant="solid" tone="primary">Save changes</DzButton>
+          <DzButton variant="ghost" tone="neutral">
+            Cancel
+          </DzButton>
+          <DzButton type="submit" variant="solid" tone="primary">
+            Save changes
+          </DzButton>
         </div>
       </form>
     </DzCard>

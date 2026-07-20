@@ -56,7 +56,7 @@ export const ACTIVITY: ActivityEvent[] = [
 ]
 
 /** Headline stats shown as a small row under the name. */
-export const STATS: { label: string; value: string }[] = [
+export const STATS: { label: string, value: string }[] = [
   { label: 'Projects', value: '14' },
   { label: 'Tasks done', value: '329' },
   { label: 'Reviews', value: '87' },

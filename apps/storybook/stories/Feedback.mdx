@@ -54,30 +54,14 @@ flow until acknowledged?
   (assertive) and `aria-live="polite"` otherwise; `DzToast`/`DzNotification` rely
   on Reka UI's managed live regions. `DzEmpty` and `DzResult` use `role="status"`
   so dynamic appearance is announced.
-- **Progress** — `DzProgress` and `DzTokenProgressBar` expose
-  `role="progressbar"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax`;
-  indeterminate progress omits `aria-valuenow` per WAI-ARIA.
+- **Progress** — `DzProgress` exposes `role="progressbar"` with `aria-valuenow` /
+  `aria-valuemin` / `aria-valuemax`; indeterminate progress omits `aria-valuenow`
+  per WAI-ARIA.
 - **Busy regions** — wrap async content in a container with `aria-busy` bound to
   the pending state and label the loading region (`role="status"`), as shown in
   the `DzAsyncBoundary` Accessibility story.
 - Never rely on color alone — every tone is paired with a title, icon, or text
   label.
-
-## App-specific components
-
-Some feedback components encode **datazup product vocabulary** rather than generic
-design-system semantics. They are grouped under **Core/Feedback/App-Specific** so
-consumers can tell them apart from the portable primitives (TASK-X.4):
-
-| Component | Status | Notes |
-|-----------|--------|-------|
-| **DzRunStatusBadge** | <StatusBadge status="experimental" /> | Run-orchestration status pill (`PENDING`…`CANCELLED`). [Docs](?path=/docs/core-feedback-app-specific-dzrunstatusbadge--docs) |
-| **DzTokenProgressBar** | <StatusBadge status="experimental" /> | LLM token-budget bar with 70%/90% thresholds. [Docs](?path=/docs/core-feedback-app-specific-dztokenprogressbar--docs) |
-
-`GovernanceBadge` and `TeamMemberBadge` are **unimplemented stubs** (placeholder
-`<span>`s, not exported from `@dzup-ui/core`). They are intentionally **excluded**
-from this Storybook until they graduate to Contract Spec v1. See
-[`storybook-decisions.md`](https://github.com/) (TASK-X.4) for the rationale.
 
 ## Do / Don't
 

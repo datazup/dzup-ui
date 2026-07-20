@@ -3,6 +3,13 @@
   "type": "module",
   "version": "0.1.0",
   "description": "Model Context Protocol server for dzup-ui — browse components, blocks, templates and design tokens, and fetch real block source + install commands from any AI coding tool (Cursor, Claude Code, Windsurf).",
+  "license": "MIT",
+  "homepage": "https://dzup-ui.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datazup/dzup-ui.git",
+    "directory": "packages/mcp"
+  },
   "keywords": [
     "mcp",
     "model-context-protocol",
@@ -16,16 +23,6 @@
     "claude",
     "windsurf"
   ],
-  "license": "MIT",
-  "homepage": "https://dzup-ui.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/datazup/dzup-ui.git",
-    "directory": "packages/mcp"
-  },
-  "bin": {
-    "dzup-ui-mcp": "./dist/index.js"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -36,11 +33,17 @@
       "import": "./dist/registry.js"
     }
   },
+  "bin": {
+    "dzup-ui-mcp": "./dist/index.js"
+  },
   "files": [
+    "README.md",
     "dist",
-    "server.json",
-    "README.md"
+    "server.json"
   ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
@@ -57,9 +60,6 @@
     "tsx": "4.21.0",
     "typescript": "^5.7.0",
     "vitest": "^3.2.4"
-  },
-  "engines": {
-    "node": ">=20.0.0"
   },
   "publishConfig": {
     "access": "public"

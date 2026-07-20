@@ -30,10 +30,10 @@ import { ACTIVITY, FACTS, STATS } from './data.ts'
 
 const tab = ref('overview')
 
-const about =
-  'Product designer turned design-systems lead. I work at the seam between ' +
-  'engineering and design — shipping accessible components, refining tokens, ' +
-  'and keeping the gap between Figma and production as small as possible.'
+const about
+  = 'Product designer turned design-systems lead. I work at the seam between '
+    + 'engineering and design — shipping accessible components, refining tokens, '
+    + 'and keeping the gap between Figma and production as small as possible.'
 </script>
 
 <template>
@@ -47,7 +47,9 @@ const about =
             <div class="banner-head">
               <div class="banner-id">
                 <div class="name-row">
-                  <DzHeading :level="1" size="xl" weight="semibold">Ava Restić</DzHeading>
+                  <DzHeading :level="1" size="xl" weight="semibold">
+                    Ava Restić
+                  </DzHeading>
                   <DzBadge variant="subtle" tone="primary" size="sm">
                     <template #default>
                       <span class="badge-inline">
@@ -56,7 +58,9 @@ const about =
                     </template>
                   </DzBadge>
                 </div>
-                <DzText tone="muted" as="p" class="role">Design Systems Lead · Northwind</DzText>
+                <DzText tone="muted" as="p" class="role">
+                  Design Systems Lead · Northwind
+                </DzText>
                 <DzText size="sm" tone="muted" as="p" class="loc">
                   <MapPin :size="14" aria-hidden="true" /> Berlin, Germany
                 </DzText>
@@ -64,11 +68,15 @@ const about =
 
               <div class="banner-actions">
                 <DzButton variant="outline" tone="neutral" size="sm">
-                  <template #prefix><MessageSquare :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <MessageSquare :size="15" aria-hidden="true" />
+                  </template>
                   Message
                 </DzButton>
                 <DzButton variant="solid" tone="primary" size="sm">
-                  <template #prefix><Pencil :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Pencil :size="15" aria-hidden="true" />
+                  </template>
                   Edit profile
                 </DzButton>
               </div>
@@ -76,8 +84,12 @@ const about =
 
             <ul class="stat-row">
               <li v-for="s in STATS" :key="s.label" class="stat">
-                <DzText weight="semibold" as="div" class="stat-value">{{ s.value }}</DzText>
-                <DzText size="xs" tone="muted" as="div">{{ s.label }}</DzText>
+                <DzText weight="semibold" as="div" class="stat-value">
+                  {{ s.value }}
+                </DzText>
+                <DzText size="xs" tone="muted" as="div">
+                  {{ s.label }}
+                </DzText>
               </li>
             </ul>
           </div>
@@ -86,19 +98,29 @@ const about =
 
       <DzTabs v-model="tab" variant="line" aria-label="Profile sections" class="profile-tabs">
         <DzTabList>
-          <DzTabTrigger value="overview">Overview</DzTabTrigger>
-          <DzTabTrigger value="activity">Activity</DzTabTrigger>
+          <DzTabTrigger value="overview">
+            Overview
+          </DzTabTrigger>
+          <DzTabTrigger value="activity">
+            Activity
+          </DzTabTrigger>
         </DzTabList>
 
         <DzTabContent value="overview">
           <div class="overview">
             <DzCard variant="outlined" padding="md">
-              <DzText weight="semibold" as="div" class="card-title">About</DzText>
-              <DzText tone="muted" as="p" class="about">{{ about }}</DzText>
+              <DzText weight="semibold" as="div" class="card-title">
+                About
+              </DzText>
+              <DzText tone="muted" as="p" class="about">
+                {{ about }}
+              </DzText>
             </DzCard>
 
             <DzCard variant="outlined" padding="md">
-              <DzText weight="semibold" as="div" class="card-title">Details</DzText>
+              <DzText weight="semibold" as="div" class="card-title">
+                Details
+              </DzText>
               <DzDescriptions :columns="{ base: 1, sm: 2 }" layout="vertical" size="sm">
                 <DzDescriptionsItem v-for="f in FACTS" :key="f.label" :label="f.label">
                   {{ f.value }}
@@ -110,7 +132,9 @@ const about =
 
         <DzTabContent value="activity">
           <DzCard variant="outlined" padding="md">
-            <DzText weight="semibold" as="div" class="card-title">Recent activity</DzText>
+            <DzText weight="semibold" as="div" class="card-title">
+              Recent activity
+            </DzText>
             <DzTimeline>
               <DzTimelineItem
                 v-for="(event, i) in ACTIVITY"
@@ -118,8 +142,12 @@ const about =
                 :tone="event.tone"
                 :status="event.when"
               >
-                <DzText weight="medium" as="div">{{ event.title }}</DzText>
-                <DzText size="sm" tone="muted" as="div">{{ event.detail }}</DzText>
+                <DzText weight="medium" as="div">
+                  {{ event.title }}
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  {{ event.detail }}
+                </DzText>
               </DzTimelineItem>
             </DzTimeline>
           </DzCard>

@@ -14,8 +14,12 @@ import { DzSpotlight } from '../../motion/index.ts'
 <template>
   <div class="stage">
     <DzSpotlight class="surface">
-      <DzHeading :level="3" size="md" weight="semibold">Follow the light</DzHeading>
-      <DzText size="xs" tone="muted" as="div">Move your cursor across the card.</DzText>
+      <DzHeading :level="3" size="md" weight="semibold">
+        Follow the light
+      </DzHeading>
+      <DzText size="xs" tone="muted" as="div">
+        Move your cursor across the card.
+      </DzText>
     </DzSpotlight>
   </div>
 </template>

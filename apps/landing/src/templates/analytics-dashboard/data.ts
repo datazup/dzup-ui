@@ -54,7 +54,7 @@ export const STATS: Stat[] = [
 ]
 
 /** Monthly revenue series (in $k) for the faux chart panel. */
-export const REVENUE_SERIES: { month: string; value: number }[] = [
+export const REVENUE_SERIES: { month: string, value: number }[] = [
   { month: 'Jan', value: 28 },
   { month: 'Feb', value: 35 },
   { month: 'Mar', value: 31 },
@@ -93,7 +93,7 @@ export const STATUS_TONE: Record<Member['status'], 'success' | 'warning' | 'info
 }
 
 /** Acquisition channels for the side breakdown. */
-export const CHANNELS: { label: string; share: number }[] = [
+export const CHANNELS: { label: string, share: number }[] = [
   { label: 'Organic search', share: 46 },
   { label: 'Direct', share: 28 },
   { label: 'Referral', share: 17 },

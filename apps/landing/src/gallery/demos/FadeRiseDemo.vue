@@ -16,8 +16,12 @@ import { DzReveal } from '../../motion/index.ts'
   <div class="stage">
     <DzReveal>
       <DzCard variant="elevated" padding="lg" class="card">
-        <DzText weight="semibold" as="div">Fade &amp; rise</DzText>
-        <DzText size="sm" tone="muted" as="div">Opacity 0 → 1, lifts into place.</DzText>
+        <DzText weight="semibold" as="div">
+          Fade &amp; rise
+        </DzText>
+        <DzText size="sm" tone="muted" as="div">
+          Opacity 0 → 1, lifts into place.
+        </DzText>
       </DzCard>
     </DzReveal>
   </div>

@@ -64,7 +64,8 @@ export function buildShot(p: ShotPalette, view: ShotView): string {
       <ellipse cx="580" cy="418" rx="30" ry="44" fill="${p.panelAlt}"/>
       <circle cx="220" cy="418" r="17" fill="${p.accent}"/>
       <circle cx="580" cy="418" r="17" fill="${p.accent}"/>`
-  } else if (view === 'side') {
+  }
+  else if (view === 'side') {
     body = `
       ${pedestal}
       <path d="M392 150 C 612 168 632 430 452 484" fill="none" stroke="${p.ink}"
@@ -73,7 +74,8 @@ export function buildShot(p: ShotPalette, view: ShotView): string {
       <ellipse cx="356" cy="332" rx="98" ry="112" fill="${p.panelAlt}"/>
       <ellipse cx="356" cy="332" rx="54" ry="64" fill="${p.accent}"/>
       <circle cx="356" cy="332" r="16" fill="${p.surface}" opacity="0.7"/>`
-  } else {
+  }
+  else {
     body = `
       <rect x="118" y="78" width="564" height="444" rx="64" fill="${p.panel}" stroke="${p.line}" stroke-width="2"/>
       <ellipse cx="400" cy="300" rx="214" ry="208" fill="${p.panelAlt}"/>
@@ -85,7 +87,7 @@ export function buildShot(p: ShotPalette, view: ShotView): string {
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img"
        aria-label="Lumen One headphones studio photo">${glow}${body}</svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }
 
 // ---------------------------------------------------------------------------
@@ -111,7 +113,7 @@ export const COLORWAYS: Colorway[] = [
 ]
 
 /** Gallery framings, in display order. */
-export const GALLERY_VIEWS: { id: ShotView; label: string }[] = [
+export const GALLERY_VIEWS: { id: ShotView, label: string }[] = [
   { id: 'front', label: 'Front' },
   { id: 'side', label: 'Profile' },
   { id: 'detail', label: 'Cushion' },
@@ -196,7 +198,7 @@ export const REVIEWS: Review[] = [
 ]
 
 /** Star buckets for the rating breakdown bars (5★ → 1★). */
-export const RATING_BREAKDOWN: { stars: number; pct: number }[] = [
+export const RATING_BREAKDOWN: { stars: number, pct: number }[] = [
   { stars: 5, pct: 82 },
   { stars: 4, pct: 12 },
   { stars: 3, pct: 4 },
@@ -227,7 +229,7 @@ export const INFO_PANELS: InfoPanel[] = [
   },
   {
     value: 'box',
-    q: "What's in the box",
+    q: 'What\'s in the box',
     a: 'Lumen One headphones, hardshell travel case, USB-C charge cable, 3.5 mm audio cable and a quick-start guide. No single-use plastics.',
   },
 ]

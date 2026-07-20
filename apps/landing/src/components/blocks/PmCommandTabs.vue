@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { PackageManager } from '../../blocks/config.ts'
 import { DzCodeBlock, DzTabContent, DzTabList, DzTabs, DzTabTrigger } from '@dzup-ui/core'
 import { ref } from 'vue'
-import { PACKAGE_MANAGERS, type PackageManager } from '../../blocks/config.ts'
+import { PACKAGE_MANAGERS } from '../../blocks/config.ts'
 
 /**
  * PmCommandTabs — a package-manager tab set (npm / pnpm / yarn / bun) over a

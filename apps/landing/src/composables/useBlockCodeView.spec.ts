@@ -86,12 +86,12 @@ describe('extractTemplate', () => {
 describe('buildImportLine', () => {
   it('joins components into a single @dzup-ui/core import in authored order', () => {
     expect(buildImportLine(['DzBadge', 'DzHeading', 'DzText', 'DzButton'])).toBe(
-      "import { DzBadge, DzHeading, DzText, DzButton } from '@dzup-ui/core'",
+      'import { DzBadge, DzHeading, DzText, DzButton } from \'@dzup-ui/core\'',
     )
   })
 
   it('handles a single component', () => {
-    expect(buildImportLine(['DzButton'])).toBe("import { DzButton } from '@dzup-ui/core'")
+    expect(buildImportLine(['DzButton'])).toBe('import { DzButton } from \'@dzup-ui/core\'')
   })
 
   it('returns an empty string for no components', () => {
@@ -110,11 +110,11 @@ describe('toJavaScript', () => {
   it('removes type-only imports but keeps value imports', () => {
     expect(js).not.toContain('import type')
     expect(js).not.toContain('SegmentedItem')
-    expect(js).toContain("import { computed, ref } from 'vue'")
+    expect(js).toContain('import { computed, ref } from \'vue\'')
   })
 
   it('strips generic type arguments on known callees', () => {
-    expect(js).toContain("ref('')")
+    expect(js).toContain('ref(\'\')')
     expect(js).toContain('computed(() =>')
     expect(js).not.toContain('ref<string>')
     expect(js).not.toContain('computed<number>')
@@ -130,7 +130,7 @@ describe('toJavaScript', () => {
 
   it('does NOT touch object-literal keys that look like annotations', () => {
     // `value:`/`label:` are data, not types — they must survive verbatim.
-    expect(js).toContain("{ value: 'light', label: 'Light' }")
+    expect(js).toContain('{ value: \'light\', label: \'Light\' }')
   })
 
   it('leaves the template and style blocks byte-for-byte unchanged', () => {
@@ -155,7 +155,7 @@ describe('toJavaScript', () => {
   // real top-of-file `<script setup lang="ts">` — because some blocks (e.g. the
   // IDE preview) legitimately embed the literal text `<script … lang="ts">` as
   // editor content, which no regex can distinguish from a real tag.
-  it.each(BLOCKS.map((b) => [b.id, getBlockSource(b.path)] as const))(
+  it.each(BLOCKS.map(b => [b.id, getBlockSource(b.path)] as const))(
     'strips %s safely (script lang gone, template preserved)',
     (_id, source) => {
       const js = toJavaScript(source)
@@ -200,19 +200,19 @@ describe('useBlockCodeView', () => {
 
   it('derives the import line from components[]', () => {
     const view = useBlockCodeView(SAMPLE_SFC, ['DzBadge', 'DzButton'])
-    expect(view.importLine.value).toBe("import { DzBadge, DzButton } from '@dzup-ui/core'")
+    expect(view.importLine.value).toBe('import { DzBadge, DzButton } from \'@dzup-ui/core\'')
   })
 
   it('reacts when the source/components refs change', async () => {
     const source = ref('<script setup lang="ts">const a = 1</script>')
     const components = ref<string[]>(['DzButton'])
     const view = useBlockCodeView(source, components)
-    expect(view.importLine.value).toBe("import { DzButton } from '@dzup-ui/core'")
+    expect(view.importLine.value).toBe('import { DzButton } from \'@dzup-ui/core\'')
 
     source.value = SAMPLE_SFC
     components.value = ['DzHeading', 'DzText']
     await nextTick()
     expect(view.code.value).toBe(SAMPLE_SFC)
-    expect(view.importLine.value).toBe("import { DzHeading, DzText } from '@dzup-ui/core'")
+    expect(view.importLine.value).toBe('import { DzHeading, DzText } from \'@dzup-ui/core\'')
   })
 })
