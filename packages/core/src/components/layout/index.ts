@@ -89,6 +89,11 @@ export {
 } from './DzMasonry.variants.ts'
 // ── DzMasonry ──
 export { default as DzMasonry } from './DzMasonry.vue'
+export type { DzPageHeroProps, DzPageHeroSlots } from './DzPageHero.types.ts'
+
+export { type PageHeroVariantProps, pageHeroVariants } from './DzPageHero.variants.ts'
+// ── DzPageHero ──
+export { default as DzPageHero } from './DzPageHero.vue'
 export type { DzPanelEmits, DzPanelProps, DzPanelSlots } from './DzPanel.types.ts'
 
 export { type PanelVariantProps, panelVariants } from './DzPanel.variants.ts'

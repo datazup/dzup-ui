@@ -22,6 +22,7 @@ import { CARD_TOKENS } from './component/card.js'
 import { CONTROL_TOKENS } from './component/control.js'
 import { DIALOG_TOKENS } from './component/dialog.js'
 import { INPUT_TOKENS } from './component/input.js'
+import { PAGE_HERO_TOKENS } from './component/pagehero.js'
 import { SIDEBAR_TOKENS } from './component/sidebar.js'
 // DESIGN.md assembly (co-generated with tokens.css from the same maps)
 import { buildDesignMd, DESIGN_MD_PATH } from './design-md.js'
@@ -81,6 +82,7 @@ function generateCss(): string {
     ...DIALOG_TOKENS,
     ...SIDEBAR_TOKENS,
     ...APPSHELL_TOKENS,
+    ...PAGE_HERO_TOKENS,
   }
 
   return `/**
@@ -221,6 +223,7 @@ function generateTypes(): string {
     ...DIALOG_TOKENS,
     ...SIDEBAR_TOKENS,
     ...APPSHELL_TOKENS,
+    ...PAGE_HERO_TOKENS,
   }
 
   const primitiveNames = extractTokenNames(allPrimitiveVars)
@@ -456,7 +459,11 @@ function main(): void {
   const tokenCount = css.match(/--dz-/g)?.length ?? 0
 
   /* eslint-disable no-console */
-  console.log('[tokens] Generated dist/tokens.css (%d lines, %d token declarations)', lineCount, tokenCount)
+  console.log(
+    '[tokens] Generated dist/tokens.css (%d lines, %d token declarations)',
+    lineCount,
+    tokenCount,
+  )
   console.log('[tokens] Generated dist/tokens.d.ts')
   console.log('[tokens] Generated dist/tailwind-theme.js')
   console.log('[tokens] Generated dist/tailwind-theme.d.ts')

@@ -11,7 +11,13 @@
  *   4. Focus ring utility
  *   5. Reduced motion
  *   6. Print styles
+ *
+ * Companion sheets inlined at build time (must precede the layer statement):
+ *   prose.css — .dz-prose rich-content typography (unlayered, like consumer
+ *   utilities, so it wins over layered component styles).
  */
+
+@import './prose.css';
 
 /* ==========================================================================
    1. Layer Order Declaration

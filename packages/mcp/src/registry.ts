@@ -103,10 +103,7 @@ export function createReader(base: string): Reader {
   return async (sitePath) => {
     const rel = sitePath.replace(/^\//, '')
     const candidates = rel.startsWith('storybook/')
-      ? [
-          join(root, 'apps/storybook/public', rel.slice('storybook/'.length)),
-          join(root, sitePath),
-        ]
+      ? [join(root, 'apps/storybook/public', rel.slice('storybook/'.length)), join(root, sitePath)]
       : [join(root, 'apps/landing/public', rel), join(root, sitePath)]
     let lastErr: unknown
     for (const p of candidates) {
@@ -243,18 +240,19 @@ export function parseComponentIndex(md: string): ComponentSummary[] {
     }
   }
   for (const line of lines) {
-    if (/^##\s/.test(line)) {
+    const fam = /^##\s+(\S.*)$/.exec(line)
+    if (fam) {
       flush()
-      family = line.slice(2).trim()
+      family = fam[1]!.trim()
       continue
     }
     if (family === 'Conventions' || !family)
       continue
     // `- **DzName** — description`  (em dash or hyphen separator, both tolerated)
-    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*/.exec(line)
+    const head = /^-\s+\*\*(Dz[A-Za-z0-9]+)\*\*(.*)$/.exec(line)
     if (head) {
       flush()
-      const description = line.slice(head[0].length).trim().replace(/^[—–-]/, '').trim()
+      const description = head[2]!.trim().replace(/^[—–-]\s*/, '')
       current = { name: head[1]!, family, description, details: '' }
       continue
     }

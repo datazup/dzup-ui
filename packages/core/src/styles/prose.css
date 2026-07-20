@@ -1,0 +1,142 @@
+/**
+ * @dzup-ui/core — .dz-prose
+ *
+ * Typography for rendered rich content (markdown → sanitized HTML).
+ * Ported from docs-app's `.docs-prose` (docs-theme.css); all values key off
+ * `--dz-*` tokens so the active theme preset drives the look.
+ *
+ * Inlined into dist/core.css via the @import in base.css.
+ */
+
+.dz-prose {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.dz-prose h1,
+.dz-prose h2,
+.dz-prose h3,
+.dz-prose h4 {
+  margin: 1.6em 0 0.6em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.dz-prose h1:first-child,
+.dz-prose h2:first-child,
+.dz-prose h3:first-child {
+  margin-block-start: 0;
+}
+
+.dz-prose h1 {
+  font-size: 1.5rem;
+}
+
+.dz-prose h2 {
+  padding-block-end: 0.3em;
+  border-block-end: 1px solid
+    color-mix(in srgb, var(--dz-primary) 14%, var(--dz-border));
+  font-size: 1.25rem;
+}
+
+.dz-prose h3 {
+  font-size: 1.0625rem;
+}
+
+.dz-prose h4 {
+  font-size: 0.9375rem;
+}
+
+.dz-prose p,
+.dz-prose ul,
+.dz-prose ol {
+  margin: 0 0 0.9em;
+}
+
+.dz-prose ul,
+.dz-prose ol {
+  padding-inline-start: 1.4em;
+}
+
+.dz-prose ul {
+  list-style: disc;
+}
+
+.dz-prose ol {
+  list-style: decimal;
+}
+
+.dz-prose li {
+  margin-block-end: 0.25em;
+}
+
+.dz-prose a {
+  color: var(--dz-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.dz-prose code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--dz-radius-sm);
+  background: color-mix(in srgb, var(--dz-primary) 8%, var(--dz-muted));
+  font-size: 0.875em;
+}
+
+.dz-prose pre {
+  margin: 0 0 1em;
+  padding: var(--dz-spacing-4);
+  border-radius: var(--dz-radius-md);
+  background: var(--dz-muted);
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.dz-prose pre code {
+  padding: 0;
+  background: transparent;
+  font-size: 0.8125rem;
+}
+
+.dz-prose blockquote {
+  margin: 0 0 1em;
+  padding: var(--dz-spacing-2) var(--dz-spacing-4);
+  border-inline-start: 3px solid
+    color-mix(in srgb, var(--dz-primary) 40%, var(--dz-border));
+  background: color-mix(in srgb, var(--dz-primary) 5%, transparent);
+  border-radius: 0 var(--dz-radius-sm) var(--dz-radius-sm) 0;
+  color: var(--dz-muted-foreground);
+}
+
+.dz-prose hr {
+  margin: 1.5em 0;
+  border: 0;
+  border-block-start: 1px solid var(--dz-border);
+}
+
+.dz-prose table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  font-size: 0.875em;
+}
+
+.dz-prose th,
+.dz-prose td {
+  padding: 0.4em 0.75em;
+  border: 1px solid var(--dz-border);
+  text-align: left;
+}
+
+.dz-prose th {
+  background: color-mix(in srgb, var(--dz-primary) 6%, var(--dz-muted));
+  font-weight: 600;
+}
+
+.dz-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--dz-radius-md);
+}

@@ -27,9 +27,10 @@ const pending = new Map()
 child.stdout.on('data', (chunk) => {
   buf += chunk.toString()
   let nl = buf.indexOf('\n')
-  for (; nl !== -1; nl = buf.indexOf('\n')) {
+  while (nl !== -1) {
     const line = buf.slice(0, nl).trim()
     buf = buf.slice(nl + 1)
+    nl = buf.indexOf('\n')
     if (!line)
       continue
     const msg = JSON.parse(line)

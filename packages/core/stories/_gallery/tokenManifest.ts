@@ -228,7 +228,7 @@ function buildComponentUsage(): Record<string, string[]> {
       const component = file.replace(/\.tokens\.ts$/, '')
       const matches = source.match(/--dz-[\w-]+/gi) ?? []
       for (const token of matches) {
-        (sets[token] ??= new Set<string>()).add(component)
+        ;(sets[token] ??= new Set<string>()).add(component)
       }
     }
   }

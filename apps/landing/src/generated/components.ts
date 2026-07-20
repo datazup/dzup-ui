@@ -114,6 +114,7 @@ export const COMPONENTS: ComponentEntry[] = [
   { name: 'DzFlex', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzflex' },
   { name: 'DzGrid', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzgrid' },
   { name: 'DzMasonry', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzmasonry' },
+  { name: 'DzPageHero', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzpagehero' },
   { name: 'DzPanel', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzpanel' },
   { name: 'DzResizable', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzresizable' },
   { name: 'DzScrollArea', family: 'layout', familyLabel: 'Layout', storyId: 'core-layout-dzscrollarea' },
