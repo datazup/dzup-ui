@@ -47,8 +47,8 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
     cssFileName,
   } = options
 
-  const resolvedEntry
-    = typeof entry === 'string'
+  const resolvedEntry =
+    typeof entry === 'string'
       ? { index: resolve(baseDir, entry) }
       : Object.fromEntries(Object.entries(entry).map(([k, v]) => [k, resolve(baseDir, v)]))
 
