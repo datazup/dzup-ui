@@ -45,16 +45,19 @@ let frame = 0
 function applyFrame(): void {
   frame = 0
   const el = glow.value
-  if (!el) return
+  if (!el)
+    return
   // Center the glow on the pointer (translate by half its own size).
   el.style.transform = `translate3d(calc(${nextX}px - 50%), calc(${nextY}px - 50%), 0)`
 }
 
 function onPointerMove(event: PointerEvent): void {
   // Pointer-driven only — touch gets the static fallback (no tracking).
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch')
+    return
   const el = root.value
-  if (!el) return
+  if (!el)
+    return
   const rect = el.getBoundingClientRect()
   nextX = event.clientX - rect.left
   nextY = event.clientY - rect.top
@@ -62,7 +65,8 @@ function onPointerMove(event: PointerEvent): void {
     active.value = true
     glow.value?.style.setProperty('will-change', 'transform')
   }
-  if (!frame) frame = requestAnimationFrame(applyFrame)
+  if (!frame)
+    frame = requestAnimationFrame(applyFrame)
 }
 
 function onPointerLeave(): void {
@@ -93,7 +97,8 @@ function detach(el: HTMLElement): void {
 watch(
   [root, reduced],
   ([el, isReduced], _prev, onCleanup) => {
-    if (!el || isReduced) return
+    if (!el || isReduced)
+      return
     attach(el)
     onCleanup(() => detach(el))
   },
@@ -101,7 +106,8 @@ watch(
 )
 
 onBeforeUnmount(() => {
-  if (frame) cancelAnimationFrame(frame)
+  if (frame)
+    cancelAnimationFrame(frame)
 })
 
 const glowStyle = computed(() => ({

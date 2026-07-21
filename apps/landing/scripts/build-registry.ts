@@ -51,6 +51,7 @@ import type { resolveTemplateSources } from '../src/templates/rawSources.ts'
 import type { TemplateMeta } from '../src/templates/registry.ts'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
 import { REGISTRY_PATH } from '../src/blocks/config.ts'
@@ -68,6 +69,7 @@ import {
   toTemplateItem,
 } from '../src/blocks/templatesItem.ts'
 import { tokensDirectoryEntry, toTokensItem } from '../src/blocks/tokensItem.ts'
+import { SITE_ORIGIN } from '../src/origin.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
@@ -219,10 +221,12 @@ async function main(): Promise<void> {
     `▸ Registry: wrote registry.json + ${blocks.length} block(s), tokens.json, and `
     + `${templateItems.length} template(s) under ${OUT_DIR}\n`
     + `▸ AI docs: wrote ${LLMS_TXT} + ${LLMS_FULL_TXT} to ${PUBLIC_DIR}\n`
-    + `  Install a block:    npx shadcn@latest add https://<landing-host>${REGISTRY_PATH}/<id>.json\n`
-    + `  Install the tokens: npx shadcn@latest add https://<landing-host>${REGISTRY_PATH}/tokens.json\n`
-    + `  Install a template: npx shadcn@latest add https://<landing-host>${REGISTRY_PATH}/templates/<slug>.json\n`
-    + `  Point an assistant at it: @docs https://<landing-host>/${LLMS_TXT}`,
+    // The host is no longer a placeholder: REGISTRY_HOST is pinned to the
+    // canonical origin, so these are the real commands a consumer will run.
+    + `  Install a block:    npx shadcn@latest add ${SITE_ORIGIN}${REGISTRY_PATH}/<id>.json\n`
+    + `  Install the tokens: npx shadcn@latest add ${SITE_ORIGIN}${REGISTRY_PATH}/tokens.json\n`
+    + `  Install a template: npx shadcn@latest add ${SITE_ORIGIN}${REGISTRY_PATH}/templates/<slug>.json\n`
+    + `  Point an assistant at it: @docs ${SITE_ORIGIN}/${LLMS_TXT}`,
   )
 }
 

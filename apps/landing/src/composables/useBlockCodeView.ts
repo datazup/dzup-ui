@@ -6,7 +6,7 @@ import { computed, ref, toValue } from 'vue'
  *
  * The Code tab shows a block's verbatim `?raw` source (docs/blocks.md §3.2). A
  * best-in-class gallery lets a developer pick *Full SFC ↔ Template-only* and
- * *TS ↔ JS*, and shows the one import line a consumer needs. Crucially, EVERY
+ * TS ↔ JS*, and shows the one import line a consumer needs. Crucially, EVERY
  * variant is derived deterministically from the single `getBlockSource(path)` at
  * runtime — there is no second copy of the code, so the snippet can never drift
  * from what renders.
@@ -69,7 +69,8 @@ export function extractTemplate(source: string): string {
  * line reads identically to the registry entry. Returns '' for an empty list.
  */
 export function buildImportLine(components: readonly string[]): string {
-  if (components.length === 0) return ''
+  if (components.length === 0)
+    return ''
   return `import { ${components.join(', ')} } from '@dzup-ui/core'`
 }
 
@@ -110,9 +111,21 @@ export function toJavaScript(source: string): string {
 
 /** Vue/runtime callees whose generic type argument is purely a type (safe to drop). */
 const GENERIC_CALLEES = [
-  'ref', 'shallowRef', 'computed', 'reactive', 'shallowReactive', 'customRef',
-  'defineModel', 'defineProps', 'defineEmits', 'withDefaults',
-  'inject', 'provide', 'toRef', 'toRefs', 'useTemplateRef',
+  'ref',
+  'shallowRef',
+  'computed',
+  'reactive',
+  'shallowReactive',
+  'customRef',
+  'defineModel',
+  'defineProps',
+  'defineEmits',
+  'withDefaults',
+  'inject',
+  'provide',
+  'toRef',
+  'toRefs',
+  'useTemplateRef',
 ]
 
 function stripTypesFromScript(body: string): string {
@@ -134,7 +147,15 @@ function stripTypesFromScript(body: string): string {
 
   // A type token: identifier with members/generics/arrays/unions, but NO ':' —
   // excluding ':' is what stops a match from spanning into the next annotation.
-  const typeToken = '[A-Za-z_$][\\w$.<>\\[\\], |&]*'
+  // It must not END in whitespace: the callers below follow it with `\s*`, and a
+  // token that could absorb that space would let the two trade characters, which
+  // is polynomial backtracking on a pathological line (regexp/no-super-linear-backtracking).
+  // An identifier: a leading word char that is not a digit, then word chars/`$`.
+  const idStart = '(?!\\d)[\\w$]'
+  const ident = '(?!\\d)[\\w$]+'
+  const typeBody = '[\\w$.<>[\\], |&]'
+  const typeEnd = '[\\w$.<>[\\]|&]'
+  const typeToken = `${idStart}(?:${typeBody}*${typeEnd})?`
 
   // 5. Return-type annotations: `): T {` or `): T =>` → `) {` / `) =>`.
   //    (`\s*` is consumed around the type, so a single space is re-inserted.)
@@ -143,10 +164,10 @@ function stripTypesFromScript(body: string): string {
   // 6. Parameter annotations: `(event: KeyboardEvent` / `, x: number`.
   //    Anchored to `(`/`,` before and a `,`/`)` after so object literals (which
   //    close with `}`) and ternaries are left untouched.
-  out = out.replace(new RegExp(`([(,])\\s*([A-Za-z_$][\\w$]*)\\s*:\\s*${typeToken}(?=\\s*[,)])`, 'g'), '$1$2')
+  out = out.replace(new RegExp(`([(,])\\s*(${ident})\\s*:\\s*${typeToken}(?=\\s*[,)])`, 'g'), '$1$2')
 
   // 7. Variable annotations: `const x: Type = …` → `const x = …`.
-  out = out.replace(new RegExp(`\\b(const|let|var)\\s+([A-Za-z_$][\\w$]*)\\s*:\\s*${typeToken}\\s*=`, 'g'), '$1 $2 =')
+  out = out.replace(new RegExp(`\\b(const|let|var)\\s+(${ident})\\s*:\\s*${typeToken}\\s*=`, 'g'), '$1 $2 =')
 
   // 8. `as const` assertions (the only cast idiom our blocks use).
   out = out.replace(/\s+as\s+const\b/g, '')
@@ -177,7 +198,8 @@ export function useBlockCodeView(
   const code = computed(() => {
     const src = toValue(source)
     // Template-only is language-agnostic — markup is identical in TS and JS.
-    if (format.value === 'template') return extractTemplate(src)
+    if (format.value === 'template')
+      return extractTemplate(src)
     return lang.value === 'js' ? toJavaScript(src) : src
   })
 

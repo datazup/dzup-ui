@@ -1,13 +1,14 @@
 <script lang="ts">
 // Module-scoped counter so each island's content region gets a unique id for
 // aria-controls.
-let islandUid = 0
 </script>
 
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 import { useReducedMotion } from '../useReducedMotion.ts'
 import { supportsInterpolateSize } from '../useViewTransition.ts'
+
+const expanded = defineModel<boolean>('expanded', { default: false })
 
 /**
  * DzIsland — a compact pill that morphs to reveal expanded content and back
@@ -43,7 +44,7 @@ const props = withDefaults(
   { announce: 'Expanded', disabled: false },
 )
 
-const expanded = defineModel<boolean>('expanded', { default: false })
+let islandUid = 0
 
 const uid = ++islandUid
 const contentId = `dz-island-content-${uid}`
@@ -59,12 +60,15 @@ const canInterpolate = computed(() => supportsInterpolateSize() && !reduced.valu
 /** Invert the container from its current box back to `from`, then play to rest. */
 function flipResize(from: DOMRect): void {
   const el = islandEl.value
-  if (!el) return
+  if (!el)
+    return
   const to = el.getBoundingClientRect()
-  if (!to.width || !to.height) return
+  if (!to.width || !to.height)
+    return
   const sx = from.width / to.width
   const sy = from.height / to.height
-  if (Math.abs(sx - 1) < 0.001 && Math.abs(sy - 1) < 0.001) return
+  if (Math.abs(sx - 1) < 0.001 && Math.abs(sy - 1) < 0.001)
+    return
   el.animate(
     [
       { transform: `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})` },
@@ -84,12 +88,14 @@ function toggle(): void {
   const from = islandEl.value?.getBoundingClientRect()
   expanded.value = !expanded.value
   void nextTick(() => {
-    if (from) flipResize(from)
+    if (from)
+      flipResize(from)
   })
 }
 
 function collapse(): void {
-  if (!expanded.value) return
+  if (!expanded.value)
+    return
   if (reduced.value || canInterpolate.value) {
     expanded.value = false
     return
@@ -97,7 +103,8 @@ function collapse(): void {
   const from = islandEl.value?.getBoundingClientRect()
   expanded.value = false
   void nextTick(() => {
-    if (from) flipResize(from)
+    if (from)
+      flipResize(from)
   })
 }
 
@@ -126,7 +133,9 @@ defineExpose({ toggle, collapse })
 
     <!-- Persistent polite live region: present before the content mounts so the
          expansion is announced to assistive tech. -->
-    <p class="dz-sr-only" aria-live="polite">{{ expanded ? announce : '' }}</p>
+    <p class="dz-sr-only" aria-live="polite">
+      {{ expanded ? announce : '' }}
+    </p>
   </div>
 </template>
 

@@ -46,7 +46,8 @@ const PALETTE = [
 ]
 
 function burst(): void {
-  if (reduced.value) return
+  if (reduced.value)
+    return
 
   const batch: Piece[] = []
   for (let i = 0; i < props.count; i += 1) {
@@ -66,25 +67,25 @@ function burst(): void {
         '--ty': `${ty.toFixed(1)}px`,
         '--r': `${spin.toFixed(0)}deg`,
         '--c': PALETTE[i % PALETTE.length],
-        width: `${dim}px`,
-        height: `${dim}px`,
-        borderRadius: round ? '9999px' : 'var(--dz-radius-xs, 2px)',
-        animationDelay: `${(Math.random() * 60).toFixed(0)}ms`,
+        'width': `${dim}px`,
+        'height': `${dim}px`,
+        'borderRadius': round ? '9999px' : 'var(--dz-radius-xs, 2px)',
+        'animationDelay': `${(Math.random() * 60).toFixed(0)}ms`,
       } as CSSProperties,
     })
   }
 
   pieces.value.push(...batch)
-  const ids = new Set(batch.map((p) => p.id))
+  const ids = new Set(batch.map(p => p.id))
   const timer = setTimeout(() => {
-    pieces.value = pieces.value.filter((p) => !ids.has(p.id))
+    pieces.value = pieces.value.filter(p => !ids.has(p.id))
     timers.delete(timer)
   }, 1100)
   timers.add(timer)
 }
 
 onBeforeUnmount(() => {
-  timers.forEach((t) => clearTimeout(t))
+  timers.forEach(t => clearTimeout(t))
   timers.clear()
 })
 

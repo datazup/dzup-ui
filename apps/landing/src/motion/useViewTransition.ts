@@ -19,8 +19,10 @@ interface ViewTransitionLike {
   readonly updateCallbackDone: Promise<void>
 }
 
-/** Signature of `document.startViewTransition` (typed locally so this compiles
- *  whether or not the DOM lib ships View Transitions types — Firefox configs). */
+/**
+ * Signature of `document.startViewTransition` (typed locally so this compiles
+ *  whether or not the DOM lib ships View Transitions types — Firefox configs).
+ */
 type StartViewTransitionFn = (callback: () => void | Promise<void>) => ViewTransitionLike
 
 /**
@@ -29,7 +31,8 @@ type StartViewTransitionFn = (callback: () => void | Promise<void>) => ViewTrans
  * typings, and bind it so `this` stays `document`. SSR-safe.
  */
 function resolveStartViewTransition(): StartViewTransitionFn | undefined {
-  if (typeof document === 'undefined') return undefined
+  if (typeof document === 'undefined')
+    return undefined
   const doc = document as unknown as { startViewTransition?: StartViewTransitionFn }
   return typeof doc.startViewTransition === 'function'
     ? (doc.startViewTransition.bind(document) as StartViewTransitionFn)
@@ -61,9 +64,9 @@ export function supportsViewTransitions(): boolean {
  */
 export function supportsStartingStyle(): boolean {
   return (
-    typeof CSS !== 'undefined' &&
-    typeof CSS.supports === 'function' &&
-    CSS.supports('transition-behavior', 'allow-discrete')
+    typeof CSS !== 'undefined'
+    && typeof CSS.supports === 'function'
+    && CSS.supports('transition-behavior', 'allow-discrete')
   )
 }
 
@@ -74,9 +77,9 @@ export function supportsStartingStyle(): boolean {
  */
 export function supportsScrollTimeline(): boolean {
   return (
-    typeof CSS !== 'undefined' &&
-    typeof CSS.supports === 'function' &&
-    CSS.supports('animation-timeline', 'scroll()')
+    typeof CSS !== 'undefined'
+    && typeof CSS.supports === 'function'
+    && CSS.supports('animation-timeline', 'scroll()')
   )
 }
 
@@ -87,9 +90,9 @@ export function supportsScrollTimeline(): boolean {
  */
 export function supportsInterpolateSize(): boolean {
   return (
-    typeof CSS !== 'undefined' &&
-    typeof CSS.supports === 'function' &&
-    CSS.supports('interpolate-size', 'allow-keywords')
+    typeof CSS !== 'undefined'
+    && typeof CSS.supports === 'function'
+    && CSS.supports('interpolate-size', 'allow-keywords')
   )
 }
 
@@ -101,9 +104,9 @@ export function supportsInterpolateSize(): boolean {
  */
 export function supportsPopover(): boolean {
   return (
-    typeof HTMLElement !== 'undefined' &&
-    typeof HTMLElement.prototype === 'object' &&
-    'popover' in HTMLElement.prototype
+    typeof HTMLElement !== 'undefined'
+    && typeof HTMLElement.prototype === 'object'
+    && 'popover' in HTMLElement.prototype
   )
 }
 

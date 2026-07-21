@@ -24,8 +24,8 @@ import { DzSpinner } from '@dzup-ui/core'
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { lazyComponent } from '../lib/lazyComponent.ts'
-import { getTemplate } from '../templates/registry.ts'
 import { applyDir, applyPrimaryPalette, isPreviewPalette } from '../templates/previewCustomiser.ts'
+import { getTemplate } from '../templates/registry.ts'
 
 const props = defineProps<{ slug: string }>()
 const route = useRoute()
@@ -39,14 +39,17 @@ if (!template.value) {
   void router.replace({ name: 'not-found', params: { pathMatch: route.path.slice(1).split('/') } })
 }
 
-/** The chromeless template component, code-split per slug. `lazyComponent`
+/**
+ * The chromeless template component, code-split per slug. `lazyComponent`
  *  supplies the loading / error / timeout states, so a failed chunk shows a
- *  retry action instead of a blank frame (TASK-FREE-09). */
+ *  retry action instead of a blank frame (TASK-FREE-09).
+ */
 const TemplateComponent = template.value ? lazyComponent(template.value.load) : null
 
 /** Apply a `light`/`dark` theme to the document; ignore anything else. */
 function applyTheme(theme: unknown): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   if (theme === 'light' || theme === 'dark') {
     document.documentElement.setAttribute('data-theme', theme)
   }

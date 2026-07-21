@@ -8,6 +8,7 @@ A spotlight onboarding walkthrough (DzTour) over a mini dashboard — "Start tou
 
 ```vue
 <script setup lang="ts">
+import type { DzTourStep } from '@dzup-ui/core'
 /**
  * Product tour — a spotlight onboarding walkthrough (DzTour).
  *
@@ -28,7 +29,6 @@ import {
   DzText,
   DzTour,
 } from '@dzup-ui/core'
-import type { DzTourStep } from '@dzup-ui/core'
 import { Bell, Plus, Search, Sparkles } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -78,7 +78,8 @@ function onFinish(): void {
 }
 
 function onClose(): void {
-  if (!status.value.startsWith('Tour complete')) status.value = 'Tour skipped'
+  if (!status.value.startsWith('Tour complete'))
+    status.value = 'Tour skipped'
 }
 </script>
 
@@ -94,34 +95,56 @@ function onClose(): void {
           <span class="pt-search-text">Search…</span>
         </span>
         <DzButton id="ovt-new" variant="solid" tone="primary" size="sm">
-          <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Plus :size="15" aria-hidden="true" />
+          </template>
           New
         </DzButton>
-        <DzIconButton id="ovt-help" :icon="Bell" ariaLabel="Notifications" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton id="ovt-help" :icon="Bell" aria-label="Notifications" variant="ghost" tone="neutral" size="sm" />
       </div>
     </div>
 
     <div id="ovt-stats" class="pt-stats">
       <div class="pt-stat">
-        <DzText size="xs" tone="muted" as="span">Revenue</DzText>
-        <DzText size="lg" weight="bold" as="span">$48.2k</DzText>
-        <DzBadge variant="subtle" tone="success" size="sm">+12%</DzBadge>
+        <DzText size="xs" tone="muted" as="span">
+          Revenue
+        </DzText>
+        <DzText size="lg" weight="bold" as="span">
+          $48.2k
+        </DzText>
+        <DzBadge variant="subtle" tone="success" size="sm">
+          +12%
+        </DzBadge>
       </div>
       <div class="pt-stat">
-        <DzText size="xs" tone="muted" as="span">Active users</DzText>
-        <DzText size="lg" weight="bold" as="span">2,910</DzText>
-        <DzBadge variant="subtle" tone="success" size="sm">+4%</DzBadge>
+        <DzText size="xs" tone="muted" as="span">
+          Active users
+        </DzText>
+        <DzText size="lg" weight="bold" as="span">
+          2,910
+        </DzText>
+        <DzBadge variant="subtle" tone="success" size="sm">
+          +4%
+        </DzBadge>
       </div>
       <div class="pt-stat">
-        <DzText size="xs" tone="muted" as="span">Churn</DzText>
-        <DzText size="lg" weight="bold" as="span">1.8%</DzText>
-        <DzBadge variant="subtle" tone="danger" size="sm">+0.3%</DzBadge>
+        <DzText size="xs" tone="muted" as="span">
+          Churn
+        </DzText>
+        <DzText size="lg" weight="bold" as="span">
+          1.8%
+        </DzText>
+        <DzBadge variant="subtle" tone="danger" size="sm">
+          +0.3%
+        </DzBadge>
       </div>
     </div>
 
     <div class="pt-foot">
       <DzButton variant="outline" tone="primary" size="sm" @click="start">
-        <template #prefix><Sparkles :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <Sparkles :size="15" aria-hidden="true" />
+        </template>
         Start tour
       </DzButton>
       <DzText v-if="status" size="sm" tone="muted" as="span" role="status" aria-live="polite">

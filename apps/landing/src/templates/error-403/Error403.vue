@@ -36,7 +36,9 @@ function requestAccess(): void {
         <span class="brand-name">Northwind</span>
       </span>
 
-      <p class="err-code" aria-hidden="true">403</p>
+      <p class="err-code" aria-hidden="true">
+        403
+      </p>
 
       <DzResult
         status="warning"
@@ -50,11 +52,15 @@ function requestAccess(): void {
             :disabled="requested"
             @click="requestAccess"
           >
-            <template #prefix><ShieldCheck :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <ShieldCheck :size="16" aria-hidden="true" />
+            </template>
             {{ requested ? 'Request sent' : 'Request access' }}
           </DzButton>
           <DzButton variant="outline" tone="neutral" href="#">
-            <template #prefix><LogIn :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <LogIn :size="16" aria-hidden="true" />
+            </template>
             Use a different account
           </DzButton>
         </template>

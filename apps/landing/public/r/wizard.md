@@ -47,11 +47,13 @@ const jobTitle = ref('')
 // Step 3 — Confirmation (read-only summary, no additional inputs)
 
 function next() {
-  if (currentStep.value < TOTAL_STEPS - 1) currentStep.value++
+  if (currentStep.value < TOTAL_STEPS - 1)
+    currentStep.value++
 }
 
 function back() {
-  if (currentStep.value > 0) currentStep.value--
+  if (currentStep.value > 0)
+    currentStep.value--
 }
 </script>
 
@@ -166,7 +168,7 @@ function back() {
           </DzHeading>
           <DzText tone="muted" size="sm" align="center" as="p">
             Your account has been created.
-            <br />
+            <br>
             Welcome, {{ firstName || 'there' }}.
           </DzText>
         </div>

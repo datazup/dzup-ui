@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { BlockDef } from '../../blocks/registry.ts'
 import { DzCodeBlock, DzCopyButton, DzText } from '@dzup-ui/core'
 import { computed } from 'vue'
-import { REGISTRY_ENABLED, installCommands, registryAddCommands } from '../../blocks/config.ts'
-import type { BlockDef } from '../../blocks/registry.ts'
+import { installCommands, REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
 import { getBlockSource } from '../../blocks/sources.ts'
 import { buildImportLine } from '../../composables/useBlockCodeView.ts'
@@ -17,7 +17,7 @@ import PmCommandTabs from './PmCommandTabs.vue'
  * `id`) — there is no per-block hand-authored manifest data, so it can never
  * drift from the catalog:
  *   • "Built from" chips — same reverse-lookup affordance (Task E4) as the card
- *     and preview header; each emits `select-component` to filter the index.
+ *     and preview header; each emits `selectComponent` to filter the index.
  *   • Import line — `buildImportLine(components[])` (Task F5), the single source
  *     of truth shared with the Code tab.
  *   • Install — `@dzup-ui/core @dzup-ui/tokens` across npm/pnpm/yarn/bun tabs
@@ -46,7 +46,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   /** Request the index filter to all blocks using this `Dz*` component (Task E4). */
-  'select-component': [name: string]
+  selectComponent: [name: string]
 }>()
 
 /** How many catalog blocks use `name` (memoized reverse index, Task E1). */
@@ -81,7 +81,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
             type="button"
             class="bm-chip"
             :aria-label="`Show ${usageCount(name)} ${usageCount(name) === 1 ? 'block' : 'blocks'} using ${name}`"
-            @click="emit('select-component', name)"
+            @click="emit('selectComponent', name)"
           >
             <span class="bm-chip-name">{{ name }}</span>
             <span class="bm-chip-count" aria-hidden="true">{{ usageCount(name) }}</span>
@@ -92,7 +92,9 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 
     <!-- Import + copy-paste install command(s). -->
     <div v-if="importLine" class="bm-group">
-      <DzText size="xs" tone="muted" as="div" class="bm-label">Import</DzText>
+      <DzText size="xs" tone="muted" as="div" class="bm-label">
+        Import
+      </DzText>
       <DzCodeBlock
         :code="importLine"
         language="ts"
@@ -103,14 +105,18 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
     </div>
 
     <div class="bm-group">
-      <DzText size="xs" tone="muted" as="div" class="bm-label">Install packages</DzText>
+      <DzText size="xs" tone="muted" as="div" class="bm-label">
+        Install packages
+      </DzText>
       <PmCommandTabs :commands="installCmds" aria-label="Install the dzup-ui packages" />
     </div>
 
     <!-- One-command install straight from the registry via the canonical shadcn
          CLI — only once the registry has shipped public/r/<id>.json (Task G1). -->
     <div v-if="REGISTRY_ENABLED" class="bm-group">
-      <DzText size="xs" tone="muted" as="div" class="bm-label">Add with the shadcn CLI</DzText>
+      <DzText size="xs" tone="muted" as="div" class="bm-label">
+        Add with the shadcn CLI
+      </DzText>
       <PmCommandTabs
         :commands="registryAddCmds"
         :aria-label="`Add ${block.title} from the dzup-ui registry`"
@@ -119,7 +125,9 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 
     <!-- Copy the block's SFC source verbatim (the ?raw string on the BlockDef). -->
     <div class="bm-group">
-      <DzText size="xs" tone="muted" as="div" class="bm-label">Or copy the source</DzText>
+      <DzText size="xs" tone="muted" as="div" class="bm-label">
+        Or copy the source
+      </DzText>
       <DzCopyButton
         :value="getBlockSource(block.path)"
         label="Copy code"

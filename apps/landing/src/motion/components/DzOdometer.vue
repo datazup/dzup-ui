@@ -77,9 +77,9 @@ const inView = useInView(root)
 const reduced = useReducedMotion()
 
 /** A rolling digit column, or a static separator character. */
-type Segment =
-  | { kind: 'digit'; start: number; target: number; order: number }
-  | { kind: 'sep'; char: string }
+type Segment
+  = | { kind: 'digit', start: number, target: number, order: number }
+    | { kind: 'sep', char: string }
 
 const formatter = computed(() => new Intl.NumberFormat(props.locale, props.format))
 const targetStr = computed(() => formatter.value.format(props.value))
@@ -98,7 +98,8 @@ const segments = computed<Segment[]>(() => {
   const digitTotal = chars.reduce((n, c) => (/\d/.test(c) ? n + 1 : n), 0)
   let seen = 0
   return chars.map((ch) => {
-    if (!/\d/.test(ch)) return { kind: 'sep', char: ch }
+    if (!/\d/.test(ch))
+      return { kind: 'sep', char: ch }
     const fromRight = digitTotal - 1 - seen
     const startChar = fromDigits[fromDigits.length - 1 - fromRight] ?? '0'
     const seg: Segment = {
@@ -117,14 +118,16 @@ const rolled = ref(false)
 watch(
   [inView, reduced],
   ([visible, isReduced]) => {
-    if (isReduced || visible) rolled.value = true
+    if (isReduced || visible)
+      rolled.value = true
   },
   { immediate: true },
 )
 
 /** Per-column inline timing: the digit offset (transform), duration and stagger. */
 function ribbonStyle(seg: Segment): Record<string, string> {
-  if (seg.kind !== 'digit') return {}
+  if (seg.kind !== 'digit')
+    return {}
   const digit = rolled.value ? seg.target : seg.start
   return {
     transform: `translateY(calc(-1em * ${digit}))`,

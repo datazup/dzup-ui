@@ -15,7 +15,7 @@ import { Armchair, Lamp, Package } from 'lucide-vue-next'
 // ---------------------------------------------------------------------------
 
 /** Coarse shipment stages shown in the horizontal progress tracker. */
-export const DELIVERY_STAGES: { title: string; description: string }[] = [
+export const DELIVERY_STAGES: { title: string, description: string }[] = [
   { title: 'Ordered', description: 'Jun 22' },
   { title: 'Packed', description: 'Jun 22' },
   { title: 'Shipped', description: 'Jun 23' },

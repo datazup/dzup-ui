@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dzup-ui.com/</loc>
-    <lastmod>2026-07-13</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/pro</loc>
-    <lastmod>2026-06-24</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/animations</loc>
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://dzup-ui.com/templates</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/ai</loc>
@@ -30,7 +30,10 @@
   </url>
   <url>
     <loc>https://dzup-ui.com/compare</loc>
-    <lastmod>2026-07-03</lastmod>
+    <lastmod>2026-07-16</lastmod>
+  </url>
+  <url>
+    <loc>https://dzup-ui.com/changelog</loc>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/hero-centered</loc>
@@ -74,7 +77,7 @@
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/app-shell</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/page-header</loc>
@@ -86,7 +89,7 @@
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/table-card</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/empty-state</loc>
@@ -94,7 +97,7 @@
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/settings-layout</loc>
-    <lastmod>2026-06-24</lastmod>
+    <lastmod>2026-07-16</lastmod>
   </url>
   <url>
     <loc>https://dzup-ui.com/blocks/bento-grid</loc>

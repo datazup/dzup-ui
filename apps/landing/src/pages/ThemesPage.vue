@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import type { Shade } from '@dzup-ui/tokens'
+import type { DesignerIntent } from '../composables/useThemeDesigner.ts'
 import { DzBadge, DzButton, DzHeading, DzSegmented, DzSelect, DzText } from '@dzup-ui/core'
 import { SHADE_STEPS } from '@dzup-ui/tokens'
-import type { Shade } from '@dzup-ui/tokens'
 import { Check, Copy, Download, Link2, RotateCcw, Sparkles, Upload } from 'lucide-vue-next'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -13,14 +14,13 @@ import {
   RADIUS_MAX,
   RADIUS_MIN,
   RADIUS_STEP,
+  shadeCss,
   SHADOW_MAX,
   SHADOW_MIN,
   SHADOW_STEP,
-  shadeCss,
   srgbToOklch,
   useThemeDesigner,
 } from '../composables/useThemeDesigner.ts'
-import type { DesignerIntent } from '../composables/useThemeDesigner.ts'
 
 /**
  * Theme Designer (/themes) — the "Themes" ecosystem offering. The home
@@ -59,7 +59,8 @@ const darkVars = computed(() => designer.varsFor('dark'))
 // ── Restore a shared design from the URL on first load ──────────────────────
 onMounted(() => {
   const token = route.query.theme
-  if (typeof token === 'string' && token) deserialize(token)
+  if (typeof token === 'string' && token)
+    deserialize(token)
 })
 
 // ── Palette control metadata ────────────────────────────────────────────────
@@ -81,14 +82,14 @@ const INTENT_CONTROLS: PaletteMeta[] = [
 
 /** The 11-shade ramp for a palette (for the preview strip under each control). */
 function ramp(intent: DesignerIntent): { shade: Shade, css: string }[] {
-  return SHADE_STEPS.map((shade) => ({ shade, css: shadeCss(intent, shade) }))
+  return SHADE_STEPS.map(shade => ({ shade, css: shadeCss(intent, shade) }))
 }
 
 /** A hue-wheel gradient for a slider track (constant L/C, hue sweeping 0→360). */
-const HUE_TRACK =
-  'linear-gradient(to right,' +
-  Array.from({ length: 13 }, (_, i) => `oklch(0.65 0.16 ${i * 30})`).join(',') +
-  ')'
+const HUE_TRACK
+  = `linear-gradient(to right,${
+    Array.from({ length: 13 }, (_, i) => `oklch(0.65 0.16 ${i * 30})`).join(',')
+  })`
 
 /** A chroma track for a palette: gray → its own hue at full chroma. */
 function chromaTrack(intent: DesignerIntent): string {
@@ -101,21 +102,23 @@ const densityItems = [
   { value: 'comfortable', label: 'Cozy' },
   { value: 'spacious', label: 'Spacious' },
 ]
-const fontItems = FONT_CHOICES.map((f) => ({ value: f.key, label: f.label }))
+const fontItems = FONT_CHOICES.map(f => ({ value: f.key, label: f.label }))
 
 // ── Copy / download plumbing ────────────────────────────────────────────────
 const copied = ref<string>('')
 function flashCopied(key: string): void {
   copied.value = key
   window.setTimeout(() => {
-    if (copied.value === key) copied.value = ''
+    if (copied.value === key)
+      copied.value = ''
   }, 1600)
 }
 async function copyText(text: string, key: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(text)
     flashCopied(key)
-  } catch {
+  }
+  catch {
     /* clipboard unavailable */
   }
 }
@@ -140,16 +143,19 @@ function onImagePick(event: Event): void {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
   input.value = '' // allow re-picking the same file
-  if (!file) return
+  if (!file)
+    return
   imageStatus.value = 'Reading image…'
   const img = new Image()
   const objectUrl = URL.createObjectURL(file)
   img.onload = () => {
     try {
       applyImagePalette(img)
-    } catch {
+    }
+    catch {
       imageStatus.value = 'Could not read that image.'
-    } finally {
+    }
+    finally {
       URL.revokeObjectURL(objectUrl)
     }
   }
@@ -175,14 +181,16 @@ function applyImagePalette(img: HTMLImageElement): void {
 
   // Bucket chromatic pixels by hue (24 bins) and pick the most-represented hue.
   const BINS = 24
-  const count = new Array<number>(BINS).fill(0)
-  const hueSum = new Array<number>(BINS).fill(0)
-  const chromaSum = new Array<number>(BINS).fill(0)
+  const count = Array.from({ length: BINS }, () => 0)
+  const hueSum = Array.from({ length: BINS }, () => 0)
+  const chromaSum = Array.from({ length: BINS }, () => 0)
   for (let i = 0; i < data.length; i += 4) {
     const alpha = data[i + 3] ?? 0
-    if (alpha < 128) continue
+    if (alpha < 128)
+      continue
     const { lightness, chroma, hue } = srgbToOklch(data[i] ?? 0, data[i + 1] ?? 0, data[i + 2] ?? 0)
-    if (chroma < 0.04 || lightness < 0.2 || lightness > 0.9) continue // skip near-gray / extremes
+    if (chroma < 0.04 || lightness < 0.2 || lightness > 0.9)
+      continue // skip near-gray / extremes
     const bin = Math.min(BINS - 1, Math.floor((hue / 360) * BINS))
     count[bin] = (count[bin] ?? 0) + 1
     hueSum[bin] = (hueSum[bin] ?? 0) + hue
@@ -234,7 +242,9 @@ function applyImagePalette(img: HTMLImageElement): void {
             {{ copied === 'share' ? 'Link copied!' : 'Copy share link' }}
           </DzButton>
           <DzButton size="md" variant="outline" tone="neutral" @click="reset">
-            <template #prefix><RotateCcw :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <RotateCcw :size="15" aria-hidden="true" />
+            </template>
             Reset
           </DzButton>
         </div>
@@ -246,7 +256,9 @@ function applyImagePalette(img: HTMLImageElement): void {
       <aside class="themes-controls" aria-label="Theme controls">
         <!-- Presets -->
         <section class="control-group">
-          <h2 class="control-h">Presets</h2>
+          <h2 class="control-h">
+            Presets
+          </h2>
           <div class="preset-row">
             <button
               v-for="preset in PRESETS"
@@ -264,7 +276,9 @@ function applyImagePalette(img: HTMLImageElement): void {
 
         <!-- Colour palettes -->
         <section class="control-group">
-          <h2 class="control-h">Colour</h2>
+          <h2 class="control-h">
+            Colour
+          </h2>
           <div
             v-for="meta in PRIMARY_CONTROLS"
             :key="meta.intent"
@@ -353,7 +367,9 @@ function applyImagePalette(img: HTMLImageElement): void {
 
         <!-- Shape & type -->
         <section class="control-group">
-          <h2 class="control-h">Shape &amp; type</h2>
+          <h2 class="control-h">
+            Shape &amp; type
+          </h2>
           <label class="slider">
             <span class="slider-cap">Radius <em>×{{ radiusScale.toFixed(2) }}</em></span>
             <input
@@ -384,7 +400,9 @@ function applyImagePalette(img: HTMLImageElement): void {
         <section class="control-group">
           <h2 class="control-h">
             From image
-            <DzBadge variant="subtle" tone="warning" size="sm">Experimental</DzBadge>
+            <DzBadge variant="subtle" tone="warning" size="sm">
+              Experimental
+            </DzBadge>
           </h2>
           <DzText size="sm" tone="muted">
             Derive a primary hue from an image's dominant colour — client-side, nothing uploaded.
@@ -394,7 +412,9 @@ function applyImagePalette(img: HTMLImageElement): void {
             <span>Choose image…</span>
             <input type="file" accept="image/*" class="upload-input" @change="onImagePick">
           </label>
-          <DzText v-if="imageStatus" size="xs" tone="muted">{{ imageStatus }}</DzText>
+          <DzText v-if="imageStatus" size="xs" tone="muted">
+            {{ imageStatus }}
+          </DzText>
         </section>
       </aside>
 
@@ -404,7 +424,9 @@ function applyImagePalette(img: HTMLImageElement): void {
         <section class="a11y-bar" aria-label="Contrast check">
           <div class="a11y-head">
             <Sparkles :size="16" aria-hidden="true" />
-            <DzText weight="semibold" as="span">Accessibility</DzText>
+            <DzText weight="semibold" as="span">
+              Accessibility
+            </DzText>
             <DzBadge
               :variant="failingCount === 0 ? 'subtle' : 'solid'"
               :tone="failingCount === 0 ? 'success' : 'danger'"
@@ -415,7 +437,9 @@ function applyImagePalette(img: HTMLImageElement): void {
           </div>
           <div class="a11y-cols">
             <div v-for="col in [{ label: 'Light', pairs: contrastLight }, { label: 'Dark', pairs: contrastDark }]" :key="col.label" class="a11y-col">
-              <div class="a11y-col-h">{{ col.label }}</div>
+              <div class="a11y-col-h">
+                {{ col.label }}
+              </div>
               <ul class="a11y-list">
                 <li v-for="pair in col.pairs" :key="pair.label" class="a11y-item">
                   <span class="a11y-label">{{ pair.label }}</span>
@@ -456,7 +480,9 @@ function applyImagePalette(img: HTMLImageElement): void {
         <!-- Export -->
         <section class="export" aria-label="Export theme">
           <div class="export-head">
-            <DzText weight="semibold" as="span">Export</DzText>
+            <DzText weight="semibold" as="span">
+              Export
+            </DzText>
             <div class="export-actions">
               <DzButton size="sm" variant="outline" tone="neutral" @click="copyText(cssText, 'css')">
                 <template #prefix>
@@ -466,7 +492,9 @@ function applyImagePalette(img: HTMLImageElement): void {
                 {{ copied === 'css' ? 'Copied' : 'Copy CSS' }}
               </DzButton>
               <DzButton size="sm" variant="outline" tone="neutral" @click="download(cssText, 'dzup-theme.css', 'text/css')">
-                <template #prefix><Download :size="14" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Download :size="14" aria-hidden="true" />
+                </template>
                 .css
               </DzButton>
               <DzButton size="sm" variant="outline" tone="neutral" @click="copyText(jsonText, 'json')">
@@ -477,7 +505,9 @@ function applyImagePalette(img: HTMLImageElement): void {
                 {{ copied === 'json' ? 'Copied' : 'Copy JSON' }}
               </DzButton>
               <DzButton size="sm" variant="outline" tone="neutral" @click="download(jsonText, 'dzup-theme.json', 'application/json')">
-                <template #prefix><Download :size="14" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Download :size="14" aria-hidden="true" />
+                </template>
                 .json
               </DzButton>
             </div>

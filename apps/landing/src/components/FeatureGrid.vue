@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzProgress, DzSwitch, DzText } from '@dzup-ui/core'
 import { ref } from 'vue'
-import Section from './Section.vue'
 import { FEATURES } from '../data.ts'
 import { ICONS } from '../icons.ts'
+import Section from './Section.vue'
 
 // First feature is the "hero" tile (spans wide, carries a live mini cluster);
 // the rest are uniform. Quiet bento rhythm rather than a flat 4×2 grid.
@@ -27,17 +27,29 @@ const demoSwitch = ref(true)
           <span class="tile-icon" aria-hidden="true">
             <component :is="ICONS[featured.icon]" :size="22" />
           </span>
-          <DzText weight="semibold" as="div" class="tile-title">{{ featured.title }}</DzText>
-          <DzText size="sm" tone="muted" as="div">{{ featured.body }}</DzText>
+          <DzText weight="semibold" as="div" class="tile-title">
+            {{ featured.title }}
+          </DzText>
+          <DzText size="sm" tone="muted" as="div">
+            {{ featured.body }}
+          </DzText>
         </div>
         <div class="tile-demo" aria-hidden="true">
           <div class="demo-row">
-            <DzButton size="sm" variant="solid" tone="primary">Primary</DzButton>
-            <DzButton size="sm" variant="outline" tone="neutral">Outline</DzButton>
-            <DzBadge variant="subtle" tone="success" size="sm">Stable</DzBadge>
+            <DzButton size="sm" variant="solid" tone="primary">
+              Primary
+            </DzButton>
+            <DzButton size="sm" variant="outline" tone="neutral">
+              Outline
+            </DzButton>
+            <DzBadge variant="subtle" tone="success" size="sm">
+              Stable
+            </DzBadge>
           </div>
           <div class="demo-row demo-row--between">
-            <DzText size="sm" tone="muted">Notifications</DzText>
+            <DzText size="sm" tone="muted">
+              Notifications
+            </DzText>
             <DzSwitch v-model="demoSwitch" size="sm" aria-label="Demo toggle" />
           </div>
           <DzProgress :value="72" size="sm" tone="primary" />
@@ -53,8 +65,12 @@ const demoSwitch = ref(true)
         <span class="tile-icon" aria-hidden="true">
           <component :is="ICONS[f.icon]" :size="20" />
         </span>
-        <DzText weight="semibold" as="div" class="tile-title">{{ f.title }}</DzText>
-        <DzText size="sm" tone="muted" as="div">{{ f.body }}</DzText>
+        <DzText weight="semibold" as="div" class="tile-title">
+          {{ f.title }}
+        </DzText>
+        <DzText size="sm" tone="muted" as="div">
+          {{ f.body }}
+        </DzText>
       </li>
     </ul>
   </Section>

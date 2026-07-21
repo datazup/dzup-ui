@@ -83,7 +83,9 @@ onBeforeUnmount(() => {
       </div>
 
       <DzTabContent v-for="tab in tabs" :key="tab.value" :value="tab.value">
-        <DzText size="sm" tone="muted" as="p" class="panel">{{ tab.body }}</DzText>
+        <DzText size="sm" tone="muted" as="p" class="panel">
+          {{ tab.body }}
+        </DzText>
       </DzTabContent>
     </DzTabs>
   </div>

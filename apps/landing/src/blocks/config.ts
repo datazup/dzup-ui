@@ -8,6 +8,8 @@
  * so those surfaces now show the install one-liner. One flag, no per-surface
  * edits (docs/blocks.md §3.3).
  */
+import { SITE_ORIGIN } from '../origin.ts'
+
 export const REGISTRY_ENABLED = true
 
 /**
@@ -21,23 +23,40 @@ export const REGISTRY_PATH = '/r'
 /**
  * The stable, public host that serves the generated registry items
  * (`<host>/r/<id>.json`). External consumers that fetch the registry from THEIR
- * side — the shadcn-vue CLI and v0's "Open in v0" handoff (Task G4) — need an
- * absolute, publicly-reachable URL, not a root-relative path. Left empty until
- * the production host is confirmed (docs/blocks.md §10, open decision #3); set it
- * to the canonical origin (e.g. `'https://ui.dzup.dev'`) once chosen. While
- * empty we fall back to the live `window.location.origin`, so local/preview
- * deployments still resolve a working URL.
+ * side — the shadcn CLI and v0's "Open in v0" handoff (Task G4) — need an
+ * absolute, publicly-reachable URL, not a root-relative path.
+ *
+ * ── Decision: pinned to the canonical origin (was `''`) ─────────────────────
+ * docs/blocks.md §10 open decision #3 is hereby closed: the host is `SITE_ORIGIN`.
+ * This used to be empty, which meant "resolve from `window.location.origin` at
+ * runtime". That is right exactly once — on production — and wrong everywhere
+ * else, because these URLs are not for us: every one of them is COPIED OUT of the
+ * page and pasted into someone else's terminal or handed to v0's servers. A
+ * visitor reading the gallery on a Netlify deploy-preview copied
+ * `npx shadcn@latest add https://deploy-preview-42--dzup-ui.netlify.app/r/hero-centered.json`,
+ * which rots the moment the preview is torn down; on localhost they copied a URL
+ * only their own machine could ever resolve, and v0 — which fetches the item from
+ * ITS side — could never resolve either. The registry is a published artifact
+ * with one canonical address, so the command that installs it names that address
+ * regardless of which host happens to be rendering the page.
+ *
+ * The runtime fallback in `registryHost()` below is kept, not dead: blanking this
+ * constant is still how a fork points the copy-paste commands at its own origin.
  */
-export const REGISTRY_HOST = ''
+export const REGISTRY_HOST = SITE_ORIGIN
 
 /**
  * Resolve the absolute origin that serves the registry: the explicitly
  * configured `REGISTRY_HOST` when set, otherwise the live page origin. Empty
  * only when neither is available (SSR/prerender with no configured host) — a
  * sentinel callers treat as "no host configured" and hide host-dependent links.
+ * With `REGISTRY_HOST` pinned above, the fallback and the empty sentinel are
+ * unreachable in this repo's configuration; they remain the contract for a fork
+ * that blanks it.
  */
 export function registryHost(): string {
-  if (REGISTRY_HOST) return REGISTRY_HOST
+  if (REGISTRY_HOST)
+    return REGISTRY_HOST
   return typeof window === 'undefined' ? '' : window.location.origin
 }
 
@@ -229,7 +248,7 @@ export const OPTIONAL_DEPENDENCIES = ['lucide-vue-next', '@formkit/auto-animate'
  */
 export function sourceDependencies(source: string): string[] {
   const extra = OPTIONAL_DEPENDENCIES.filter(
-    (pkg) => source.includes(`'${pkg}'`) || source.includes(`"${pkg}"`),
+    pkg => source.includes(`'${pkg}'`) || source.includes(`"${pkg}"`),
   )
   return [...BLOCK_DEPENDENCIES, ...extra]
 }
@@ -304,7 +323,7 @@ export function registryAddUrlCommand(url: string, pm: PackageManager = 'npm'): 
 
 /** All four PMs mapped to their value produced by `fn` — the shape `PmCommandTabs` renders. */
 function byPackageManager(fn: (pm: PackageManager) => string): Record<PackageManager, string> {
-  return Object.fromEntries(PACKAGE_MANAGERS.map((pm) => [pm, fn(pm)])) as Record<
+  return Object.fromEntries(PACKAGE_MANAGERS.map(pm => [pm, fn(pm)])) as Record<
     PackageManager,
     string
   >
@@ -317,5 +336,5 @@ export function installCommands(): Record<PackageManager, string> {
 
 /** Per-PM `shadcn add <block>` commands (`{ npm, pnpm, yarn, bun }`) for the CLI tab set. */
 export function registryAddCommands(id: string): Record<PackageManager, string> {
-  return byPackageManager((pm) => registryAddCommand(id, pm))
+  return byPackageManager(pm => registryAddCommand(id, pm))
 }

@@ -94,8 +94,8 @@ export const DISCOUNT_RATE = 0.05
 /** VAT applied to the discounted subtotal (20%). */
 export const TAX_RATE = 0.2
 
-export const NOTES =
-  'Payment is due within 30 days by bank transfer to the account on file. ' +
-  'Please quote invoice ' +
-  INVOICE_META.number +
-  ' as the reference. Thank you for working with us.'
+export const NOTES
+  = `Payment is due within 30 days by bank transfer to the account on file. `
+    + `Please quote invoice ${
+      INVOICE_META.number
+    } as the reference. Thank you for working with us.`

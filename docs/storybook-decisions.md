@@ -225,6 +225,30 @@ follows. The Sprint-3 half (`DzPersonaSelector`) was resolved earlier (public).
 or if the design system decides to fully exclude product-specific components from
 the published Storybook (then move the App-Specific group behind a build flag).
 
+> ### ⚠ SUPERSEDED by TASK-FREE2-06 (2026-07-17) — and stale long before that
+>
+> **Both halves of the "Revisit when" above happened, and nobody came back.** The two
+> stubs were implemented (`GovernanceBadge` and `TeamMemberBadge` gained types,
+> tokens, variants, contract specs, stories, and barrel exports), which per this
+> record's own terms meant they "likely also belong under App-Specific" — the table
+> above still calls them unimplemented, unexported, and story-less. All four rows are
+> now wrong.
+>
+> How far it drifted, in one number: the two components this table calls
+> **"unimplemented stubs"** ship `tags: ['autodocs', 'status:stable']` — the TOP of
+> the maturity ladder in `stories/_shared/status.ts`, which is a support promise. They
+> did not merely graduate past this record; they graduated two tiers past the ones it
+> *did* keep (`DzRunStatusBadge` / `DzTokenProgressBar` are still `experimental`).
+>
+> See TASK-FREE2-06 for the measured state and the replacement decision: the
+> App-Specific group moves behind a build flag, which is the second branch this record
+> named.
+>
+> Kept rather than deleted because the reasoning is the input to TASK-FREE2-06, and
+> because the failure mode is the point: a decision record whose revisit conditions
+> are prose is a reminder nobody receives. TASK-FREE2-06 replaces this one's
+> revisit clause with a CI sentinel.
+
 ---
 
 ## Sprint 12 — Cross-Cutting & Hardening
@@ -344,6 +368,227 @@ and `showRoots: true` in `manager.ts`.
 
 ---
 
+## TASK-FREE2-01 — How `apps/storybook` is typechecked
+
+**Decision: the Storybook build is the typecheck gate for this app. Do not add
+`apps/storybook` to `yarn typecheck:apps`.**
+
+`typecheck:apps` runs `vue-tsc` against `apps/landing` only. Running it against
+`apps/storybook/tsconfig.json` is not a stricter gate — it is the wrong tool, and
+measures as such (2026-07-16, on a green build):
+
+| Code   | Count | What it is |
+|--------|-------|------------|
+| TS5097 | 699   | `.ts` import extensions — *mandated* by CLAUDE.md rule 5 |
+| TS2307 | 341   | bundler-only modules (`@vue/repl/style.css`, `?raw` globs) |
+| TS7006 / TS7031 | 563 | implicit `any` in MDX/story callbacks vue-tsc types as `unknown` |
+| other  | 68    | |
+| **total** | **1,671** | |
+
+The two largest buckets are not defects: the repo *requires* `.ts` specifiers, and
+Vite resolves the CSS/`?raw` imports that bare `tsc` cannot. That tsconfig exists to
+describe the app **to the Vite builder**, which is what `yarn storybook:build`
+exercises — and that build does fail on real type errors in `.storybook/**` and
+`stories/**`. Reaching 0 under standalone `vue-tsc` would mean turning on
+`allowImportingTsExtensions`, hand-writing ambient module declarations for the
+bundler imports, and typing every MDX callback — a large change that would gate on
+an environment the app never actually runs in.
+
+`yarn storybook:build` is therefore a **blocking** step of the CI `storybook` job
+(`.github/workflows/ci.yml`) — no `continue-on-error`. That job, not `vue-tsc`, is
+what catches a type error in this app.
+
+## TASK-FREE2-02 — `Visual Refresh/*` is internal; it does not ship
+
+**Decision: exclude the eight `_gallery/*Gallery.stories.ts` screens from every
+build by default, and gate them back in behind `DZUP_GALLERY=1`.**
+
+```bash
+# The team's local-run path — the comparison is unchanged, just not published.
+DZUP_GALLERY=1 yarn workspace @dzup-ui/storybook dev
+DZUP_GALLERY=1 yarn storybook:build     # if you need it as a static build
+```
+
+**Why they had to leave the sidebar.** Every top-level sidebar root is a claim that
+"this is for you, the consumer." `Visual Refresh` was a root beside `Core` and
+`Guides` whose `FreeStyled` stories render `freestyle/*.vue` — hand-rolled markup in
+raw `indigo`/`slate` Tailwind classes with zero dzup-ui components. That is correct
+for what those files ARE (the untokenized comparison target that
+`docs/visual-refresh/AUDIT.md` scores the token system against — `color-lint.ts`
+exempts them for exactly this reason), and indefensible as something a user browses
+next to the rules forbidding it. TASK-FREE-12 had already pinned the root last in
+`storySort` on the theory that ordering it made it legible; it didn't. The problem
+was never the position — it was publication.
+
+**Why an inclusion flag, not a glob negation.** `stories` entries are globbed
+independently, so a trailing `!…` pattern is not guaranteed to subtract from an
+earlier entry — and a silently-ineffective negation fails open, i.e. it ships the
+scratch. `main.ts` therefore names what DOES build:
+
+```ts
+'../../../packages/core/stories/!(_gallery)/**/*.stories.ts',      // families
+'../../../packages/core/stories/_gallery/DzTokenBrowser.stories.ts', // public docs
+...(INCLUDE_GALLERY ? ['…/_gallery/*Gallery.stories.ts'] : []),      // internal
+```
+
+**The `_gallery/` split is the trap here.** The directory holds two unrelated things:
+the eight internal screens, and `DzTokenBrowser.stories.ts` — which is the **public
+`Guides/Design Tokens` page**, and is also what `DesignTokens.mdx` attaches to via
+`<Meta of={…} />`. A directory-wide exclusion would have taken a shipped guide out
+with the scratch, and the build would have stayed green while doing it. Hence the
+explicit re-include, and hence the sentinels below.
+
+**Enforcement.** `scripts/check-mdx-links.mjs` (already in the `storybook` CI job,
+run against the built `storybook-static/index.json`) asserts both halves:
+
+- no id starts with `visual-refresh` — scratch cannot leak back;
+- `guides-design-tokens--designtokens` + `--browser` exist — the exclusion did not
+  overshoot.
+
+Both were proved to fail before passing: a `DZUP_GALLERY=1` build trips the first
+(24 ids), and the token-browser ids come from a real build, not from assumption.
+Note the id is `--designtokens`, **not** `--docs`: an `of`-attached MDX docs entry is
+named after the MDX file. Don't "correct" it.
+
+**Also fixed here:** all 8 files imported types from `@storybook/vue3` — a package in
+no `package.json`, resolving only transitively. They now use `@storybook/vue3-vite`
+like the other 168 story files. Repo-wide, zero files import `@storybook/vue3`.
+
+**Revisit if** the visual-refresh comparison is ever retired (delete the directory and
+the flag together), or if it acquires a genuine consumer-facing story — in which case
+it needs to be rebuilt from dzup-ui components first, which is the whole point of the
+instrument.
+
+## TASK-FREE2-06 — `App-Specific` is another product's domain vocabulary; it does not ship
+
+**Decision: option (b) — exclude the four `Core/Feedback/App-Specific/*` stories from
+the public build, gated back in behind `DZUP_APP_SPECIFIC=1`. The components stay
+exported from `@dzup-ui/core` for the internal consumer.** Supersedes TASK-X.4.
+
+```bash
+# The internal-consumer path — the pages are unchanged, just not published.
+DZUP_APP_SPECIFIC=1 yarn workspace @dzup-ui/storybook dev
+DZUP_APP_SPECIFIC=1 yarn storybook:build   # if you need it as a static build
+```
+
+**The state this replaces was not "kept but under-documented" — it was three
+mutually contradictory claims.** Measured 2026-07-17:
+
+| Surface | Said | Truth |
+|---|---|---|
+| `Feedback.mdx` | the two badges are "unimplemented stubs (placeholder `<span>`s)" | implemented — 78 and 61 lines, each with `.tokens.ts`, `.variants.ts`, `.contract.spec.ts` |
+| `Feedback.mdx` | "not exported from `@dzup-ui/core`" | both exported (`components/feedback/index.ts:184,197`) |
+| `Feedback.mdx` | "intentionally **excluded** from this Storybook" | both ship a public page in the sidebar |
+| `build-counts.ts` / ⌘K palette | — | filter on the `Dz` prefix, so both are invisible to every count and to search **while publishing a page** |
+
+So the docs told readers two components did not exist, the sidebar showed them, and
+the counts disagreed with both. That is the "current state is neither" the task
+names, and no amount of documenting the tier fixes the third row.
+
+**Why (b) and not (a) — document the tier.** The vocabulary is not
+design-system-flavoured, it is one product's domain model:
+
+- `GovernanceBadge.pattern` is `supervisor | contract_net | blackboard | peer_to_peer | council` — datazup's agent-coordination taxonomy.
+- `TeamMemberBadge.participantId` is documented as the id "within the team run (not the team-definition ID)" — a distinction meaningless outside the runtime that mints both.
+- `DzTokenProgressBar` is an LLM token-budget bar with 70%/90% thresholds.
+- `DzRunStatusBadge` is `PENDING…CANCELLED` mapped onto `DzBadge`.
+
+A catalog is a promise of general-purpose reuse. Option (a)'s best case — a reader
+understands why these are here and is told to use `DzBadge`/`DzProgress` instead — is
+a paragraph explaining that four of the catalog's entries are not for them. That is
+the cost of (a) forever, paid on every read, in exchange for zero reuse.
+
+And (a)'s bill is not just prose: it requires renaming `TeamMemberBadge` →
+`DzTeamMemberBadge` and `GovernanceBadge` → `DzGovernanceBadge` (public catalog
+entries carry the prefix) through `packages/compat` + a codemod entry + a changeset —
+i.e. permanently widening the public API surface, and adding a compat shim we
+maintain indefinitely, so that a domain widget can be spelled consistently in a
+catalog it should not be in. The rename becomes **internal debt** instead, noted
+below.
+
+**This does not conflict with the free-tier scope rule** ("never gate a demo"). These
+are not demos of general-purpose components — they are another product's widgets. The
+rule protects the reader's ability to evaluate dzup-ui; removing these serves it.
+
+**Mechanism — the TASK-FREE2-02 inclusion flag, extended.** The four story files move
+`packages/core/stories/feedback/` → `packages/core/stories/_app-specific/`, and
+`main.ts` keeps naming what ships:
+
+```ts
+'../../../packages/core/stories/!(_gallery|_app-specific)/**/*.stories.ts',
+...(INCLUDE_APP_SPECIFIC ? ['…/_app-specific/*.stories.ts'] : []),
+```
+
+An inclusion flag, not a glob negation, for the reason TASK-FREE2-02 gives: `stories`
+entries are globbed independently, so a trailing `!…` fails **open** — it ships the
+thing it was meant to hide. A directory is used rather than four named files so the
+exclusion cannot rot: a fifth app-specific story lands in the right place or it is
+visibly in the wrong one.
+
+**Why a directory move rather than leaving them in `feedback/`.** The four files were
+inside the family directory that every family-wide glob walks — the same glob that
+feeds the counts and the component index. Moving them makes the exclusion structural
+rather than a list to maintain, and it is what makes the counts self-correct (below).
+The story files keep their `Core/Feedback/App-Specific/*` titles: under the flag the
+sidebar reads exactly as it does today.
+
+**What the four keep.** All of it, except publication. They are still exported, still
+built into `@dzup-ui/core`, and still covered by their unit + contract specs (which
+live in `packages/core/src/`, untouched). Every validator that walks the stories tree
+— `contract-parity`, `story-status`, `story-dod`, `color-lint` — recurses from
+`packages/core/stories` with only a `node_modules` skip, so `_app-specific/` stays
+gated by all four. Verified, not assumed: injecting a bogus `status:*` tag into
+`GovernanceBadge.stories.ts` trips `validate:story-status` from its new home.
+
+**The one thing that did NOT come for free — and the fix.** `apps/storybook/vitest.config.ts`
+runs `storybookTest({ configDir })`, which takes its story list from `main.ts` — the
+same glob this decision narrows. So the naive version of (b) would have dropped the
+four out of the `storybook-test` job's `play()` + a11y audit **silently**: unpublishing
+would have quietly become untesting, which is not what was decided and is exactly the
+kind of drift TASK-X.4 died of. The `storybook-test` CI step therefore runs with
+`DZUP_APP_SPECIFIC: '1'` (`.github/workflows/ci.yml`) — the four are tested like every
+other story, while the `storybook` job builds the published artifact **without** the
+flag and asserts their ids are absent. Test everything; publish a subset.
+
+> **If you add another excluded group, do the same audit.** The question is not "does
+> the sidebar still look right" — it is "which tool reads `main.ts` as its source of
+> truth?" Today that is the builder AND the test runner. Only the first should shrink.
+
+**Counts — derived, and they move on their own.** `build-counts.ts` reads
+`documentedNames()` per family from `Dz*.stories.ts` under `stories/<family>`, so the
+move drops `DzRunStatusBadge` + `DzTokenProgressBar` from the Feedback family's
+`documented` count (**139 → 137**) and the four files from `storyFiles`. `catalog`
+stays **205**: it globs `.vue` files under `src/components`, and the components are
+still there — which is exactly right, since (b) does not remove them from the library.
+The two unprefixed badges were never in `documented` at all (the `Dz` filter), so the
+number does not move for them. Nothing was hand-edited; `claims.spec.ts` reads the
+shipped artifacts back off disk and would fail if it were.
+
+**Enforcement — the sentinel replaces the "revisit when" clause.**
+`check-mdx-links.mjs` already asserts the public `index.json` carries no
+`visual-refresh` id; its `absentPrefix` is now a **list**, and
+`core-feedback-app-specific` is the second entry. This is deliberate: TASK-X.4 went
+stale precisely because its revisit conditions were prose in a file nobody re-read.
+Proved in both directions on real builds (2026-07-17): a default build serves **0**
+such ids and `check:mdx-links` passes (with the two `guides-design-tokens--*` ids
+still present, so the exclusion did not overshoot); a `DZUP_APP_SPECIFIC=1` build
+serves **38** (4 components × their full story sets — the pages are unchanged, not
+degraded) and the sentinel exits 1.
+
+**Internal debt (accepted, not fixed here).** `TeamMemberBadge` and `GovernanceBadge`
+still lack the `Dz` prefix that every other export carries. Under (b) they are not
+catalog entries, so the prefix rule does not bind them and the rename does not earn a
+compat shim + codemod + changeset. It is real debt — they are still exported from a
+package whose every other symbol is prefixed. Fix it **if** they are ever promoted to
+public (in which case the rename is a precondition, not a follow-up), or fold it into
+an unrelated breaking change if one comes along.
+
+**Revisit if** one of these turns out to be general-purpose after all — the honest
+signal is a second, unrelated consumer asking for it, not a hunch. At that point it
+gets the `Dz` prefix, a generic vocabulary (a status badge whose statuses are the
+caller's, not `PENDING…CANCELLED`), and moves back into `feedback/`, where the counts
+pick it up automatically.
+
 ## Deferred infrastructure — follow-up notes
 
 These Sprint 0 tasks are **scaffolded in-repo** but need a one-time network install
@@ -377,3 +622,131 @@ barometer, **not** a 100% gate.
 
 The `storybook` build job already existed; Sprint 0 adds the `storybook-test` job
 (play() + a11y + coverage). Both publish artifacts.
+
+## FREE2-11 — Global toolbars: viewport, direction (RTL), density
+
+Bringing the Storybook to parity with the landing's own template-preview toolbar,
+which already answers device-width and direction. Three globals were in scope.
+
+### Viewport — already shipped (FREE-17)
+
+A global viewport toolbar was wired under FREE-17: `.storybook/preview.ts` sets
+`parameters.viewport.options = RESPONSIVE_VIEWPORTS` (imported from the single
+`packages/core/stories/_shared/options.ts` definition), so every story offers the
+mobile/sm/tablet/lg/desktop/wide widths. No `initialGlobals.viewport`, so the
+default stays `responsive` (canvas fills its frame) and no existing story changed
+how it renders. The three layout stories that predate it (DzGrid, DzContainer,
+DzAppShell) keep their per-story `viewport.options` — same object, now redundant
+but harmless.
+
+### Direction (LTR / RTL) — shipped
+
+A global `direction` toolbar (`globalTypes.direction`, default `ltr` via
+`initialGlobals`) plus a decorator that writes `dir` to **`<html>`** — not just the
+in-canvas wrapper — so Reka overlays teleported to `<body>` inherit it too. The
+decorator always writes the current value, so switching back to LTR never leaves a
+stale `rtl`. This ships the **toggle**; fixing the RTL layout bugs it surfaces is
+follow-up work (below), deliberately out of scope.
+
+**RTL spot-check (static analysis of the 5 named components — not yet visually
+confirmed in a built Storybook; each is a physical-direction usage that will not
+mirror under `dir="rtl"`):**
+
+- **DzTabs** — `DzTabs.variants.ts` uses physical `border-r`, `mr-px` and
+  `rounded-l` in the `enclosed` variant; under RTL the segment borders/radii sit on
+  the wrong edge. Fix: logical `border-e` / `me-px` / `rounded-s`.
+- **DzSlider** — `DzSlider.variants.ts` uses `mr-3` for the value label gap; under
+  RTL the gap lands on the wrong side. Fix: `me-3`.
+- **DzPagination** — prev/next/first/last render `ChevronLeft`/`ChevronRight`/
+  `ChevronsLeft`/`ChevronsRight`; icon glyphs do **not** auto-flip, so in RTL "next"
+  visually points the wrong way. Fix: swap the glyph (or rotate) when `dir=rtl`.
+- **DzBreadcrumb** — default separator is a direction-neutral `/`, but the documented
+  `ChevronRight` separator (and any caller passing one) does not flip in RTL.
+- **DzDrawer** — no physical CSS in its variants, but its slide side is driven through
+  Reka without a `ConfigProvider dir` (none exists in the repo), so a `side="start"`-
+  style drawer will not mirror. Adopting Reka's `ConfigProvider` with the `dir` global
+  is the idiomatic fix and would fix teleported overlays project-wide at once.
+
+These are the entry points for a future "RTL support" task; the toggle makes them
+observable.
+
+### Density (comfortable / compact) — DEFERRED, blocker documented
+
+**Not shipped.** A density global would scale spacing, but the token system has **no
+single `--dz-spacing` scalar to turn**: `packages/tokens/src/primitives/spacing.ts`
+defines ~34 independent literal steps (`--dz-spacing-0` … `--dz-spacing-96`), none
+expressed against a shared multiplier. The only way to scale them at once today is to
+emit an override for *every* step — which is exactly what the landing blocks theme
+editor does (`useBlockTheme.ts` loops `SPACING_SCALE` × a density factor).
+
+Porting that into a Storybook decorator would stand up a **parallel spacing mechanism**
+in the docs — the thing this task was told not to invent — and, applied on the story
+wrapper, it would not reach Reka overlays teleported to `<body>` (the same escape the
+`dir` decorator dodges only because it writes to `<html>`; CSS-var overrides on a
+wrapper do not cascade to a portal outside it). So density is **deferred until the
+tokens generator expresses each step as `calc(var(--dz-spacing-unit) * n)`** — a
+one-scalar refactor in `@dzup-ui/tokens`. Once that lands, a density toolbar becomes a
+genuine one-decorator win (set `--dz-spacing-unit`) and should ship comfortable/compact
+then. Tracked here rather than built, per the task's explicit guardrail.
+
+### Keyboard shortcuts — documented
+
+`manager.ts` enables `enableShortcuts: true`; the shortcuts that matter are now
+listed in a "Keyboard shortcuts" section of `stories/Accessibility.mdx`.
+
+---
+
+## TASK-FREE2-12 — "Open in playground" on every component docs page
+
+**Decision: inject one generated, per-component playground affordance into the
+autodocs template globally — no per-page authoring.** The REPL (`DzRepl`) and
+StackBlitz launcher (`OpenInStackblitz`) already existed but surfaced only on
+`GettingStarted` and the family Overview MDX pages; every one of the 139+ component
+docs pages — where "let me try this with my own props" actually fires — was a
+navigation hop away from a sandbox with that component loaded.
+
+**Mechanism — a custom `docs.page`, not a `docs.container`.** `.storybook/preview.ts`
+sets `parameters.docs.page` to `stories/_blocks/AutodocsPage.ts`, a byte-for-byte
+mirror of Storybook 10.5's built-in `DocsPage` (Title / Subtitle / Description /
+Primary / Controls / Stories) with an `<OpenInPlayground/>` block injected right after
+the primary demo. `docs.page` applies to **autodocs (tag-generated) pages only** — MDX
+guide pages (Introduction, the family Overviews, Contributing) supply their own page
+and are untouched — so the affordance is scoped to component pages with no page-type
+sniffing. Verified on the real static build: the four MDX pages checked carry **0**
+playground panels; `core-buttons-dzbutton--docs` carries **1**. A `docs.container`
+wrapper was rejected because it wraps *every* docs page (guides included) and would
+have needed a `filterByAutodocs` guard to do what `docs.page` does for free.
+
+Because `AutodocsPage` mirrors an arrangement that is not itself contractual (the
+blocks it composes are stable public API; their order is not), a future Storybook
+major could drift it. `verify-repl.mjs` asserts the playground renders on real
+component pages, so a drift that drops the injection fails CI.
+
+**Payload — derived, never hand-added.** `scripts/build-playground-snippets.mjs`
+turns each component's `@example` (`.vue` header — the same source `build-llms.mjs`
+mines) into a self-contained SFC: it imports the `Dz*` components the fragment uses,
+declares the refs/handlers its bindings reference, and replaces unknown placeholder
+tags (`<SearchIcon/>`, `<UserIcon/>` — unresolvable in the sandbox) with a neutral
+glyph. Every wrapped SFC is **compile-validated with `@vue/compiler-sfc`** (the REPL's
+own compiler); anything that fails converts to a fallback. Measured on this tree: of
+159 components, **114 ship their own converted example**, 42 a compound subpart falls
+back to its **parent's** example (so `DzTableRow` opens the full `DzTable` example, in
+context), and 3 (`DzIcon`, `DzEmoji`, `DzTransfer`) fall back to their **family
+starter** — never a broken or empty preload.
+
+**Why the generated file is committed** (unlike the gitignored `_data/*.generated.ts`
+siblings): the docs block that reads `playgroundSnippets.generated.ts` is reachable
+from `.storybook/preview.ts`, which the Vitest `storybook-test` CI job loads with **no
+generation step**. A gitignored import there would make that job structurally red —
+the exact trap the landing's untracked generated files hit. So the file is committed
+and a CI drift-guard (`build:playground-snippets` + `git diff --exit-code`) keeps it a
+pure function of the component sources.
+
+**Performance.** The inline `DzRepl` is collapsed behind a "Try it live" toggle and
+lazy-mounts only on click — booting `@vue/repl` eagerly on all 139 pages would be a
+real regression. The StackBlitz launcher already loads its SDK on click.
+
+**CI.** `verify-repl.mjs` gained a cross-family sample — one simple (`DzButton`), one
+compound (`DzTable`), one form control (`DzSelect`): it opens each docs page, expands
+the playground, and asserts the derived snippet actually mounts in the sandbox
+(compile-validation proves a snippet parses; this proves it runs).

@@ -101,7 +101,9 @@ const related: string[] = [
       <DzFlex direction="row" gap="xl" align="start" class="sa-row">
         <!-- Article -->
         <article class="sa-main">
-          <DzBadge variant="subtle" tone="primary" size="sm">Guide</DzBadge>
+          <DzBadge variant="subtle" tone="primary" size="sm">
+            Guide
+          </DzBadge>
           <DzHeading id="sa-title" :level="4" size="xl" weight="bold" class="sa-main-title">
             Building with layout primitives
           </DzHeading>
@@ -135,7 +137,9 @@ const related: string[] = [
           <DzAffix :offset-top="16">
             <template #default="{ affixed }">
               <div class="sa-aside-inner" :class="{ 'sa-aside-inner--pinned': affixed }">
-                <DzText size="xs" tone="muted" weight="semibold" class="sa-aside-head">ON THIS PAGE</DzText>
+                <DzText size="xs" tone="muted" weight="semibold" class="sa-aside-head">
+                  ON THIS PAGE
+                </DzText>
                 <nav aria-label="Table of contents">
                   <ul class="sa-toc" role="list">
                     <li v-for="item in toc" :key="item.id">
@@ -151,11 +155,15 @@ const related: string[] = [
 
                 <DzDivider class="sa-aside-rule" />
 
-                <DzText size="xs" tone="muted" weight="semibold" class="sa-aside-head">RELATED</DzText>
+                <DzText size="xs" tone="muted" weight="semibold" class="sa-aside-head">
+                  RELATED
+                </DzText>
                 <DzScrollArea class="sa-related">
                   <ul class="sa-related-list" role="list">
                     <li v-for="(link, i) in related" :key="i" class="sa-related-item">
-                      <DzText size="sm" as="span">{{ link }}</DzText>
+                      <DzText size="sm" as="span">
+                        {{ link }}
+                      </DzText>
                     </li>
                   </ul>
                 </DzScrollArea>

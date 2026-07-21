@@ -60,12 +60,14 @@ export function resolveTemplateSources(source: string): TemplateRawFile[] {
   const files: TemplateRawFile[] = []
 
   const vue = BY_SOURCE[source]
-  if (vue) files.push({ filename: basename(source), language: 'vue', load: vue })
+  if (vue)
+    files.push({ filename: basename(source), language: 'vue', load: vue })
 
   // Sibling data file: swap the final path segment for `data.ts`.
   const dataPath = source.replace(/[^/]+$/, 'data.ts')
   const data = BY_SOURCE[dataPath]
-  if (data) files.push({ filename: 'data.ts', language: 'typescript', load: data })
+  if (data)
+    files.push({ filename: 'data.ts', language: 'typescript', load: data })
 
   return files
 }

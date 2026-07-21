@@ -8,6 +8,7 @@ Outlined card with a search + segmented filter toolbar, a hoverable data table w
 
 ```vue
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Data table card — search toolbar, segmented filter, data table, pagination.
  *
@@ -34,7 +35,6 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 import { computed, ref } from 'vue'
 
 type StatusKey = 'active' | 'inactive' | 'pending'
@@ -79,8 +79,10 @@ const pageSize = 5
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
   return ALL_MEMBERS.filter((m) => {
-    if (filter.value !== 'all' && m.status !== filter.value) return false
-    if (q && !`${m.name} ${m.email} ${m.role}`.toLowerCase().includes(q)) return false
+    if (filter.value !== 'all' && m.status !== filter.value)
+      return false
+    if (q && !`${m.name} ${m.email} ${m.role}`.toLowerCase().includes(q))
+      return false
     return true
   })
 })
@@ -105,7 +107,9 @@ function onFilter(value: string) {
     <DzCard variant="outlined" padding="none">
       <!-- Toolbar -->
       <div class="tc-toolbar">
-        <DzHeading id="tc-title" :level="4" size="md" weight="semibold" class="tc-card-title">Team members</DzHeading>
+        <DzHeading id="tc-title" :level="4" size="md" weight="semibold" class="tc-card-title">
+          Team members
+        </DzHeading>
         <div class="tc-controls">
           <DzSearchInput
             v-model="query"
@@ -131,10 +135,18 @@ function onFilter(value: string) {
         <DzTable hoverable size="sm" aria-label="Team members table">
           <DzTableHeader>
             <DzTableRow>
-              <DzTableCell header>Member</DzTableCell>
-              <DzTableCell header>Role</DzTableCell>
-              <DzTableCell header>Status</DzTableCell>
-              <DzTableCell header align="right">Joined</DzTableCell>
+              <DzTableCell header>
+                Member
+              </DzTableCell>
+              <DzTableCell header>
+                Role
+              </DzTableCell>
+              <DzTableCell header>
+                Status
+              </DzTableCell>
+              <DzTableCell header align="right">
+                Joined
+              </DzTableCell>
             </DzTableRow>
           </DzTableHeader>
           <DzTableBody>
@@ -143,13 +155,19 @@ function onFilter(value: string) {
                 <div class="member-cell">
                   <DzAvatar :fallback="row.name.slice(0, 1)" :alt="row.name" size="sm" />
                   <div class="member-meta">
-                    <DzText size="sm" weight="medium" as="div">{{ row.name }}</DzText>
-                    <DzText size="xs" tone="muted" as="div">{{ row.email }}</DzText>
+                    <DzText size="sm" weight="medium" as="div">
+                      {{ row.name }}
+                    </DzText>
+                    <DzText size="xs" tone="muted" as="div">
+                      {{ row.email }}
+                    </DzText>
                   </div>
                 </div>
               </DzTableCell>
               <DzTableCell>
-                <DzText size="sm" as="span">{{ row.role }}</DzText>
+                <DzText size="sm" as="span">
+                  {{ row.role }}
+                </DzText>
               </DzTableCell>
               <DzTableCell>
                 <DzBadge variant="subtle" :tone="STATUS_TONE[row.status]" size="sm">
@@ -157,7 +175,9 @@ function onFilter(value: string) {
                 </DzBadge>
               </DzTableCell>
               <DzTableCell align="right">
-                <DzText size="sm" tone="muted" as="span">{{ row.joined }}</DzText>
+                <DzText size="sm" tone="muted" as="span">
+                  {{ row.joined }}
+                </DzText>
               </DzTableCell>
             </DzTableRow>
           </DzTableBody>

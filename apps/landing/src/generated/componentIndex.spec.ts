@@ -23,6 +23,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
+import { readComponentTitle } from '../../scripts/build-component-index.ts'
 import { COMPONENTS } from './components.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -70,15 +71,44 @@ describe('documented-component count', () => {
     expect(fromIndex).toEqual(fromGlob)
   })
 
-  it('includes components filed under a nested title group', () => {
-    // `Core/Feedback/App-Specific/DzRunStatusBadge` — these were silently dropped
-    // by a `Core/<Family>/<Dz…>` regex that assumed exactly one group segment.
-    const names = COMPONENTS.map(c => c.name)
-    expect(names).toContain('DzRunStatusBadge')
-    expect(names).toContain('DzTokenProgressBar')
-  })
-
   it('excludes compound sub-part bundles', () => {
     expect(COMPONENTS.filter(c => c.name.endsWith('Parts'))).toEqual([])
+  })
+})
+
+describe('readComponentTitle', () => {
+  // This guards a regex, not a fixture. It used to assert that the two real
+  // `Core/Feedback/App-Specific/*` components appeared in COMPONENTS — they were
+  // the live proof that a `Core/<Family>/<Dz…>` regex assuming exactly ONE group
+  // segment silently dropped nested-title stories out of the palette. TASK-FREE2-06
+  // unpublished those four (docs/storybook-decisions.md), so today no shipped story
+  // nests a sub-group and that assertion had no fixture left.
+  //
+  // Asserting against the parser directly is what the guard always should have been:
+  // the bug lives in the regex, so the test belongs on the regex. It now holds even
+  // though nothing published exercises the nested path — which is exactly when a
+  // silent-drop bug would come back unnoticed.
+  it('reads a component filed under a nested title group', () => {
+    expect(readComponentTitle(`title: 'Core/Feedback/App-Specific/DzRunStatusBadge',`))
+      .toEqual({ name: 'DzRunStatusBadge', title: 'Core/Feedback/App-Specific/DzRunStatusBadge' })
+  })
+
+  it('reads a component filed directly under its family', () => {
+    expect(readComponentTitle(`title: 'Core/Buttons/DzButton',`))
+      .toEqual({ name: 'DzButton', title: 'Core/Buttons/DzButton' })
+  })
+
+  it('takes the LAST segment as the component, however deep the nesting', () => {
+    expect(readComponentTitle(`title: 'Core/Feedback/Group/Sub/DzThing',`)?.name)
+      .toBe('DzThing')
+  })
+
+  it('skips compound sub-part bundles', () => {
+    expect(readComponentTitle(`title: 'Core/Cards/DzCardParts',`)).toBeNull()
+  })
+
+  it('skips non-component stories', () => {
+    expect(readComponentTitle(`title: 'Visual Refresh/Dashboard',`)).toBeNull()
+    expect(readComponentTitle(`title: 'Core/Compositions/SettingsPage',`)).toBeNull()
   })
 })

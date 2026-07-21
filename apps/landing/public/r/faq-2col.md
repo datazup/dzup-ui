@@ -98,7 +98,7 @@ const groups: FaqGroup[] = [
 
 /** One open item per column, keyed by group id (empty = all collapsed). */
 const open = ref<Record<string, string>>(
-  Object.fromEntries(groups.map((group) => [group.id, ''])),
+  Object.fromEntries(groups.map(group => [group.id, ''])),
 )
 </script>
 
@@ -132,7 +132,9 @@ const open = ref<Record<string, string>>(
           >
             <DzAccordionTrigger>{{ item.question }}</DzAccordionTrigger>
             <DzAccordionContent>
-              <DzText size="sm" tone="muted" class="fq-answer">{{ item.answer }}</DzText>
+              <DzText size="sm" tone="muted" class="fq-answer">
+                {{ item.answer }}
+              </DzText>
             </DzAccordionContent>
           </DzAccordionItem>
         </DzAccordion>

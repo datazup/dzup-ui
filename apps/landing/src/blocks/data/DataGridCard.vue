@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { ColumnDef } from '@dzup-ui/core'
 /**
  * Data grid card — sortable, selectable, paginated DzDataGrid.
  *
@@ -21,8 +23,6 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import type { ColumnDef } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 type StatusKey = 'live' | 'building' | 'failed' | 'queued'
 
@@ -80,12 +80,16 @@ const columns: ColumnDef<Deployment>[] = [
     <DzCard variant="outlined" padding="none">
       <header class="dg-head">
         <div>
-          <DzHeading id="dg-title" :level="4" size="md" weight="semibold" class="dg-card-title">Deployments</DzHeading>
+          <DzHeading id="dg-title" :level="4" size="md" weight="semibold" class="dg-card-title">
+            Deployments
+          </DzHeading>
           <DzText size="sm" tone="muted" as="p" class="dg-sub">
             Sort columns, select rows, page through results.
           </DzText>
         </div>
-        <DzBadge variant="subtle" tone="success" size="sm">{{ rows.filter((r) => r.status === 'live').length }} live</DzBadge>
+        <DzBadge variant="subtle" tone="success" size="sm">
+          {{ rows.filter((r) => r.status === 'live').length }} live
+        </DzBadge>
       </header>
 
       <div class="dg-scroll">
@@ -130,12 +134,16 @@ const columns: ColumnDef<Deployment>[] = [
             </template>
 
             <template v-else>
-              <DzText size="sm" tone="muted" as="span">{{ value }}</DzText>
+              <DzText size="sm" tone="muted" as="span">
+                {{ value }}
+              </DzText>
             </template>
           </template>
 
           <template #empty>
-            <DzText size="sm" tone="muted">No deployments to show.</DzText>
+            <DzText size="sm" tone="muted">
+              No deployments to show.
+            </DzText>
           </template>
         </DzDataGrid>
       </div>

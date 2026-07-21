@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzMentionTrigger, Persona, TransferItem } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -10,7 +11,6 @@ import {
   DzText,
   DzTransfer,
 } from '@dzup-ui/core'
-import type { DzMentionTrigger, Persona, TransferItem } from '@dzup-ui/core'
 import { ref } from 'vue'
 
 /**
@@ -103,8 +103,12 @@ const MENTION_TRIGGERS: DzMentionTrigger[] = [
         </DzFormField>
 
         <div class="at-actions">
-          <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
-          <DzButton variant="solid" tone="primary">Share</DzButton>
+          <DzButton variant="ghost" tone="neutral">
+            Cancel
+          </DzButton>
+          <DzButton variant="solid" tone="primary">
+            Share
+          </DzButton>
         </div>
       </div>
     </DzCard>

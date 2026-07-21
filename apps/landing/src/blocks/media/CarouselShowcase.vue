@@ -64,7 +64,9 @@ const active = ref(0)
 <template>
   <section class="cshow" aria-labelledby="media-carousel-title">
     <header class="cs-head">
-      <DzBadge variant="subtle" tone="primary" size="sm">Showcase</DzBadge>
+      <DzBadge variant="subtle" tone="primary" size="sm">
+        Showcase
+      </DzBadge>
       <DzHeading id="media-carousel-title" :level="4" size="xl" weight="semibold" class="cs-title">
         Product highlights
       </DzHeading>
@@ -93,7 +95,9 @@ const active = ref(0)
             <DzHeading :level="5" size="lg" weight="semibold" class="cs-caption-title">
               {{ slide.title }}
             </DzHeading>
-            <DzText size="sm" class="cs-caption-copy">{{ slide.copy }}</DzText>
+            <DzText size="sm" class="cs-caption-copy">
+              {{ slide.copy }}
+            </DzText>
           </figcaption>
         </figure>
       </DzCarouselSlide>

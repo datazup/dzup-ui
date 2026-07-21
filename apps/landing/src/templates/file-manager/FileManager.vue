@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { FileEntry, FolderInfo } from './data.ts'
 /**
  * File Manager — full-page app template (docs/templates.md §6.4).
  *
@@ -37,23 +39,22 @@ import {
   DzText,
   DzTree,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 import { Boxes, FolderPlus, MoreHorizontal, Upload } from 'lucide-vue-next'
 import { computed, reactive, ref } from 'vue'
 import {
   CONTENTS,
   DEFAULT_EXPANDED,
+
   FOLDER_INDEX,
   FOLDER_TREE,
+
   STORAGE,
-  type FileEntry,
-  type FolderInfo,
 } from './data.ts'
 
 // Working copy of the contents so delete feels live in the preview (spread each
 // entry; the icon Component is shared by reference, which is fine).
 const contents = reactive<Record<string, FileEntry[]>>(
-  Object.fromEntries(Object.entries(CONTENTS).map(([key, rows]) => [key, rows.map((e) => ({ ...e }))])),
+  Object.fromEntries(Object.entries(CONTENTS).map(([key, rows]) => [key, rows.map(e => ({ ...e }))])),
 )
 
 const current = ref('root')
@@ -65,11 +66,12 @@ const currentLabel = computed(() => FOLDER_INDEX[current.value]?.label ?? 'My Dr
 
 // Resolve the breadcrumb trail by walking parents from the current folder.
 const trail = computed(() => {
-  const out: { key: string; label: string }[] = []
+  const out: { key: string, label: string }[] = []
   let cursor: string | null = current.value
   while (cursor) {
     const meta: FolderInfo | undefined = FOLDER_INDEX[cursor]
-    if (!meta) break
+    if (!meta)
+      break
     out.unshift({ key: cursor, label: meta.label })
     cursor = meta.parent
   }
@@ -79,8 +81,9 @@ const trail = computed(() => {
 const visibleEntries = computed(() => {
   const rows = contents[current.value] ?? []
   const q = query.value.trim().toLowerCase()
-  if (!q) return rows
-  return rows.filter((e) => e.name.toLowerCase().includes(q))
+  if (!q)
+    return rows
+  return rows.filter(e => e.name.toLowerCase().includes(q))
 })
 
 function goTo(key: string): void {
@@ -88,24 +91,29 @@ function goTo(key: string): void {
   query.value = ''
   // Make sure the destination's ancestors are visible in the tree.
   for (let k: string | null = key; k; k = FOLDER_INDEX[k]?.parent ?? null) {
-    if (!expanded.value.includes(k)) expanded.value = [...expanded.value, k]
+    if (!expanded.value.includes(k))
+      expanded.value = [...expanded.value, k]
   }
 }
 
 function onSelect(keys: string[]): void {
   const key = keys[keys.length - 1]
-  if (key) goTo(key)
+  if (key)
+    goTo(key)
 }
 
 function open(entry: FileEntry): void {
-  if (entry.kind === 'folder' && entry.target) goTo(entry.target)
+  if (entry.kind === 'folder' && entry.target)
+    goTo(entry.target)
 }
 
 function removeEntry(entry: FileEntry): void {
   const rows = contents[current.value]
-  if (!rows) return
-  const i = rows.findIndex((e) => e.id === entry.id)
-  if (i !== -1) rows.splice(i, 1)
+  if (!rows)
+    return
+  const i = rows.findIndex(e => e.id === entry.id)
+  if (i !== -1)
+    rows.splice(i, 1)
 }
 
 // Tone → semantic token, used to tint each entry's type glyph.
@@ -150,8 +158,12 @@ function iconStyle(tone: CanonicalTone): Record<string, string> {
         <DzSidebarFooter>
           <div class="storage">
             <div class="storage-head">
-              <DzText size="sm" weight="medium" as="span">Storage</DzText>
-              <DzBadge variant="subtle" tone="primary" size="sm">{{ STORAGE.percent }}%</DzBadge>
+              <DzText size="sm" weight="medium" as="span">
+                Storage
+              </DzText>
+              <DzBadge variant="subtle" tone="primary" size="sm">
+                {{ STORAGE.percent }}%
+              </DzBadge>
             </div>
             <div
               class="storage-track"
@@ -173,7 +185,9 @@ function iconStyle(tone: CanonicalTone): Record<string, string> {
 
     <template #header>
       <div class="fm-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Files</DzHeading>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Files
+        </DzHeading>
         <DzBreadcrumb separator="/" aria-label="Folder path" class="fm-crumbs">
           <DzBreadcrumbItem
             v-for="(crumb, i) in trail"
@@ -197,11 +211,15 @@ function iconStyle(tone: CanonicalTone): Record<string, string> {
         aria-label="Search files"
       />
       <DzButton size="sm" variant="outline" tone="neutral" class="fm-upload">
-        <template #prefix><Upload :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <Upload :size="15" aria-hidden="true" />
+        </template>
         Upload
       </DzButton>
       <DzButton size="sm" variant="solid" tone="primary">
-        <template #prefix><FolderPlus :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <FolderPlus :size="15" aria-hidden="true" />
+        </template>
         New
       </DzButton>
     </template>
@@ -223,7 +241,9 @@ function iconStyle(tone: CanonicalTone): Record<string, string> {
             >
               <template #header>
                 <div class="dv-head">
-                  <DzText weight="semibold">{{ currentLabel }}</DzText>
+                  <DzText weight="semibold">
+                    {{ currentLabel }}
+                  </DzText>
                   <DzBadge variant="subtle" tone="neutral" size="sm">
                     {{ visibleEntries.length }} {{ visibleEntries.length === 1 ? 'item' : 'items' }}
                   </DzBadge>
@@ -248,7 +268,9 @@ function iconStyle(tone: CanonicalTone): Record<string, string> {
                   </button>
 
                   <div class="entry-side">
-                    <DzBadge variant="subtle" :tone="item.tone" size="sm">{{ item.type }}</DzBadge>
+                    <DzBadge variant="subtle" :tone="item.tone" size="sm">
+                      {{ item.type }}
+                    </DzBadge>
                     <DzDropdownMenu>
                       <DzDropdownMenuTrigger as-child>
                         <DzButton
@@ -269,7 +291,9 @@ function iconStyle(tone: CanonicalTone): Record<string, string> {
                         <DzDropdownMenuItem>Move to…</DzDropdownMenuItem>
                         <DzDropdownMenuItem>Download</DzDropdownMenuItem>
                         <DzDropdownMenuSeparator />
-                        <DzDropdownMenuItem @select="removeEntry(item)">Delete</DzDropdownMenuItem>
+                        <DzDropdownMenuItem @select="removeEntry(item)">
+                          Delete
+                        </DzDropdownMenuItem>
                       </DzDropdownMenuContent>
                     </DzDropdownMenu>
                   </div>

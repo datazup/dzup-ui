@@ -46,8 +46,12 @@ const reduced = useReducedMotion()
           <div class="card-head">
             <span class="glyph" aria-hidden="true"><Users :size="18" /></span>
             <div class="card-headings">
-              <DzText weight="semibold" as="div">Project Atlas</DzText>
-              <DzText size="sm" tone="muted" as="div">8 collaborators · Active</DzText>
+              <DzText weight="semibold" as="div">
+                Project Atlas
+              </DzText>
+              <DzText size="sm" tone="muted" as="div">
+                8 collaborators · Active
+              </DzText>
             </div>
             <ArrowUpRight :size="16" class="card-cue" aria-hidden="true" />
           </div>
@@ -60,7 +64,9 @@ const reduced = useReducedMotion()
           <div class="dialog-head">
             <span class="glyph glyph--lg" aria-hidden="true"><Users :size="22" /></span>
             <div>
-              <DzDialogTitle class="dialog-title">Project Atlas</DzDialogTitle>
+              <DzDialogTitle class="dialog-title">
+                Project Atlas
+              </DzDialogTitle>
               <DzDialogDescription class="dialog-sub">
                 A shared workspace for the design-systems team.
               </DzDialogDescription>
@@ -73,14 +79,22 @@ const reduced = useReducedMotion()
               aria-label="Close dialog"
               @click="collapse"
             >
-              <template #prefix><X :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <X :size="16" aria-hidden="true" />
+              </template>
             </DzButton>
           </div>
 
           <div class="stats">
-            <DzBadge variant="subtle" tone="primary">8 collaborators</DzBadge>
-            <DzBadge variant="subtle" tone="success">Active</DzBadge>
-            <DzBadge variant="subtle" tone="info">12 open tasks</DzBadge>
+            <DzBadge variant="subtle" tone="primary">
+              8 collaborators
+            </DzBadge>
+            <DzBadge variant="subtle" tone="success">
+              Active
+            </DzBadge>
+            <DzBadge variant="subtle" tone="info">
+              12 open tasks
+            </DzBadge>
           </div>
 
           <DzText size="sm" tone="muted" as="p" class="dialog-copy">
@@ -90,7 +104,9 @@ const reduced = useReducedMotion()
           </DzText>
 
           <div class="dialog-actions">
-            <DzButton variant="solid" tone="primary" size="sm" @click="collapse">Done</DzButton>
+            <DzButton variant="solid" tone="primary" size="sm" @click="collapse">
+              Done
+            </DzButton>
           </div>
         </div>
       </template>

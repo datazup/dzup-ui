@@ -20,7 +20,7 @@ import type { CanonicalTone } from '@dzup-ui/contracts'
 export type OrderStatus = 'delivered' | 'shipped' | 'processing' | 'cancelled'
 
 /** Display label + semantic badge tone for each status. */
-export const STATUS_META: Record<OrderStatus, { label: string; tone: CanonicalTone }> = {
+export const STATUS_META: Record<OrderStatus, { label: string, tone: CanonicalTone }> = {
   delivered: { label: 'Delivered', tone: 'success' },
   shipped: { label: 'Shipped', tone: 'info' },
   processing: { label: 'Processing', tone: 'warning' },
@@ -28,7 +28,7 @@ export const STATUS_META: Record<OrderStatus, { label: string; tone: CanonicalTo
 }
 
 /** Filter chips for the status facet (the leading 'all' shows everything). */
-export const STATUS_FILTERS: { value: OrderStatus | 'all'; label: string }[] = [
+export const STATUS_FILTERS: { value: OrderStatus | 'all', label: string }[] = [
   { value: 'all', label: 'All orders' },
   { value: 'delivered', label: 'Delivered' },
   { value: 'shipped', label: 'Shipped' },

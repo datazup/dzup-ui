@@ -176,18 +176,18 @@ export function DzRepl({ code, height = 460, title }: DzReplProps) {
     [
       title
         ? h(
-          'div',
-          {
-            key: 'cap',
-            style: {
-              padding: '8px 12px',
-              fontSize: 13,
-              fontWeight: 600,
-              borderBottom: '1px solid var(--dz-border, #e5e7eb)',
+            'div',
+            {
+              key: 'cap',
+              style: {
+                padding: '8px 12px',
+                fontSize: 13,
+                fontWeight: 600,
+                borderBottom: '1px solid var(--dz-border, #e5e7eb)',
+              },
             },
-          },
-          title,
-        )
+            title,
+          )
         : null,
       h(
         'div',
@@ -195,25 +195,25 @@ export function DzRepl({ code, height = 460, title }: DzReplProps) {
         [
           status !== 'ready'
             ? h(
-              'div',
-              {
-                key: 'ovl',
-                style: {
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 13,
-                  color: status === 'error' ? '#b91c1c' : 'var(--dz-muted-foreground, #6b7280)',
-                  padding: 16,
-                  textAlign: 'center',
+                'div',
+                {
+                  key: 'ovl',
+                  style: {
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 13,
+                    color: status === 'error' ? '#b91c1c' : 'var(--dz-muted-foreground, #6b7280)',
+                    padding: 16,
+                    textAlign: 'center',
+                  },
                 },
-              },
-              status === 'error'
-                ? `Couldn't load the playground: ${error}`
-                : 'Loading live playground…',
-            )
+                status === 'error'
+                  ? `Couldn't load the playground: ${error}`
+                  : 'Loading live playground…',
+              )
             : null,
           h('div', { key: 'mount', ref: hostRef, style: { height: '100%' } }),
         ],

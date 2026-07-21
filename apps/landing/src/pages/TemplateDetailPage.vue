@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TemplateRawFile } from '../templates/rawSources.ts'
 /**
  * Template detail / preview surface (/templates/:slug) — the conversion page
  * (docs/templates.md §5). It frames a single LIVE preview of the template:
@@ -30,27 +31,29 @@ import {
 import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun, Zap } from 'lucide-vue-next'
 import { computed, ref, watch } from 'vue'
 import Section from '../components/Section.vue'
+import { useTheme } from '../composables/useTheme.ts'
 import { componentDocs, LINKS } from '../config.ts'
 import { openInStackblitz } from '../lib/stackblitz.ts'
-import { useTheme } from '../composables/useTheme.ts'
+import { paletteSwatchColor, PREVIEW_PALETTES } from '../templates/previewCustomiser.ts'
+import { resolveTemplateSources } from '../templates/rawSources.ts'
 import { getTemplate, TEMPLATES } from '../templates/registry.ts'
-import { resolveTemplateSources, type TemplateRawFile } from '../templates/rawSources.ts'
-import { PREVIEW_PALETTES, paletteSwatchColor } from '../templates/previewCustomiser.ts'
 
 const props = defineProps<{ slug: string }>()
 
 const template = computed(() => getTemplate(props.slug))
 
 /** Index of the current template within the catalogue, for prev/next. */
-const index = computed(() => TEMPLATES.findIndex((t) => t.slug === props.slug))
+const index = computed(() => TEMPLATES.findIndex(t => t.slug === props.slug))
 const prevTemplate = computed(() => {
   const i = index.value
-  if (i < 0) return undefined
+  if (i < 0)
+    return undefined
   return TEMPLATES[(i - 1 + TEMPLATES.length) % TEMPLATES.length]
 })
 const nextTemplate = computed(() => {
   const i = index.value
-  if (i < 0) return undefined
+  if (i < 0)
+    return undefined
   return TEMPLATES[(i + 1) % TEMPLATES.length]
 })
 
@@ -91,7 +94,7 @@ const announcement = ref('')
 /** The swatch row: a "Default" (native) chip plus the curated spectrum. */
 const swatches = computed(() => [
   { value: '', label: 'Default', color: 'var(--dz-colors-primary-500)' },
-  ...PREVIEW_PALETTES.map((p) => ({ ...p, color: paletteSwatchColor(p.value) })),
+  ...PREVIEW_PALETTES.map(p => ({ ...p, color: paletteSwatchColor(p.value) })),
 ])
 
 function toggleTheme(): void {
@@ -108,8 +111,8 @@ function setPrimary(palette: string, label: string): void {
 
 function toggleDir(): void {
   previewDir.value = previewDir.value === 'rtl' ? 'ltr' : 'rtl'
-  announcement.value =
-    previewDir.value === 'rtl' ? 'Preview direction: right to left.' : 'Preview direction: left to right.'
+  announcement.value
+    = previewDir.value === 'rtl' ? 'Preview direction: right to left.' : 'Preview direction: left to right.'
 }
 
 /** Restore the preview to the template's native theme, colour and direction. */
@@ -117,7 +120,7 @@ function resetPreview(): void {
   previewTheme.value = 'light'
   previewPrimary.value = ''
   previewDir.value = 'ltr'
-  announcement.value = "Preview reset to the template's defaults."
+  announcement.value = 'Preview reset to the template\'s defaults.'
 }
 
 /**
@@ -127,8 +130,10 @@ function resetPreview(): void {
  */
 const previewSrc = computed(() => {
   const params = new URLSearchParams({ theme: previewTheme.value })
-  if (previewPrimary.value) params.set('primary', previewPrimary.value)
-  if (previewDir.value === 'rtl') params.set('dir', 'rtl')
+  if (previewPrimary.value)
+    params.set('primary', previewPrimary.value)
+  if (previewDir.value === 'rtl')
+    params.set('dir', 'rtl')
   return `/templates/${props.slug}/preview?${params.toString()}`
 })
 
@@ -162,7 +167,8 @@ watch(
   async (source) => {
     sources.value = []
     sourcesError.value = false
-    if (!source) return
+    if (!source)
+      return
     const files = resolveTemplateSources(source)
     if (files.length === 0) {
       sourcesError.value = true
@@ -170,11 +176,13 @@ watch(
     }
     try {
       const loaded = await Promise.all(
-        files.map(async (file) => ({ ...file, code: await file.load() })),
+        files.map(async file => ({ ...file, code: await file.load() })),
       )
       // Discard if the slug changed while we were loading (avoid a stale swap).
-      if (template.value?.source === source) sources.value = loaded
-    } catch {
+      if (template.value?.source === source)
+        sources.value = loaded
+    }
+    catch {
       sourcesError.value = true
     }
   },
@@ -192,10 +200,12 @@ const mainSource = computed(() => sources.value[0]?.code ?? '')
  */
 function openStackblitz(): void {
   const t = template.value
-  if (!t || !mainSource.value) return
+  if (!t || !mainSource.value)
+    return
   const files: Record<string, string> = { 'src/App.vue': mainSource.value }
-  const data = sources.value.find((file) => file.filename === 'data.ts')
-  if (data) files['src/data.ts'] = data.code
+  const data = sources.value.find(file => file.filename === 'data.ts')
+  if (data)
+    files['src/data.ts'] = data.code
   openInStackblitz({
     title: `${t.name} — dzup-ui template`,
     description: t.blurb,
@@ -210,11 +220,12 @@ function openStackblitz(): void {
  */
 const llmBundle = computed(() => {
   const t = template.value
-  if (!t || sources.value.length === 0) return ''
-  const header =
-    `# dzup-ui template: ${t.name}\n\n` +
-    `Built with @dzup-ui/core — ${t.stack.join(', ')}.\n` +
-    `${t.blurb}\n`
+  if (!t || sources.value.length === 0)
+    return ''
+  const header
+    = `# dzup-ui template: ${t.name}\n\n`
+      + `Built with @dzup-ui/core — ${t.stack.join(', ')}.\n`
+      + `${t.blurb}\n`
   const blocks = sources.value
     .map((file) => {
       const fence = file.language === 'vue' ? 'vue' : 'ts'
@@ -265,7 +276,9 @@ const llmBundle = computed(() => {
             :aria-label="`Open ${template.name} in a live StackBlitz project`"
             @click="openStackblitz"
           >
-            <template #prefix><Zap :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <Zap :size="16" aria-hidden="true" />
+            </template>
             Open in StackBlitz
           </DzButton>
           <DzCopyButton
@@ -286,7 +299,9 @@ const llmBundle = computed(() => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <template #prefix><Github :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <Github :size="16" aria-hidden="true" />
+            </template>
             View source
           </DzButton>
           <DzCopyButton
@@ -309,8 +324,12 @@ const llmBundle = computed(() => {
         aria-label="Template preview and source"
       >
         <DzTabList>
-          <DzTabTrigger value="preview">Preview</DzTabTrigger>
-          <DzTabTrigger value="code">Code</DzTabTrigger>
+          <DzTabTrigger value="preview">
+            Preview
+          </DzTabTrigger>
+          <DzTabTrigger value="code">
+            Code
+          </DzTabTrigger>
         </DzTabList>
 
         <!-- Preview: force-mounted so the iframe (and its device/theme state)
@@ -377,7 +396,9 @@ const llmBundle = computed(() => {
                 aria-label="Reset preview to the template's defaults"
                 @click="resetPreview"
               >
-                <template #prefix><RotateCcw :size="16" aria-hidden="true" /></template>
+                <template #prefix>
+                  <RotateCcw :size="16" aria-hidden="true" />
+                </template>
                 Reset
               </DzButton>
               <DzButton
@@ -388,14 +409,18 @@ const llmBundle = computed(() => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <template #prefix><ExternalLink :size="16" aria-hidden="true" /></template>
+                <template #prefix>
+                  <ExternalLink :size="16" aria-hidden="true" />
+                </template>
                 Open fullscreen
               </DzButton>
             </div>
           </div>
 
           <!-- Visually-hidden live region: announces colour/theme/RTL changes. -->
-          <p class="sr-only" role="status" aria-live="polite">{{ announcement }}</p>
+          <p class="sr-only" role="status" aria-live="polite">
+            {{ announcement }}
+          </p>
 
           <!-- Live preview stage. -->
           <div class="stage" :data-device="device">

@@ -12,8 +12,8 @@
  * is the registry's only automated gate, so it must stand on its own.
  */
 
-import { describe, expect, it } from 'vitest'
 import * as core from '@dzup-ui/core'
+import { describe, expect, it } from 'vitest'
 import { BLOCKS, blocksByCategory, CATEGORIES } from './registry.ts'
 import { getBlockSource } from './sources.ts'
 
@@ -21,7 +21,7 @@ import { getBlockSource } from './sources.ts'
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 /** Valid category ids, derived from the registry's own metadata. */
-const CATEGORY_IDS = new Set(CATEGORIES.map((category) => category.id))
+const CATEGORY_IDS = new Set(CATEGORIES.map(category => category.id))
 
 /** Every runtime export name of `@dzup-ui/core` (components live here as named exports). */
 const CORE_EXPORTS = new Set(Object.keys(core))
@@ -43,12 +43,12 @@ describe('block registry', () => {
   })
 
   it('has unique category ids', () => {
-    const ids = CATEGORIES.map((category) => category.id)
+    const ids = CATEGORIES.map(category => category.id)
     expect(new Set(ids).size).toBe(ids.length)
   })
 
   it('has unique block ids', () => {
-    const ids = BLOCKS.map((block) => block.id)
+    const ids = BLOCKS.map(block => block.id)
     const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index)
     expect(duplicates, `duplicate block id(s): ${[...new Set(duplicates)].join(', ')}`).toEqual([])
   })
@@ -63,7 +63,7 @@ describe('block registry', () => {
       expect(Array.isArray(blocks)).toBe(true)
     }
     // The strong inverse guard — no block points at a category the index can't render:
-    const usedCategories = new Set(BLOCKS.map((block) => block.category))
+    const usedCategories = new Set(BLOCKS.map(block => block.category))
     for (const category of usedCategories) {
       expect(CATEGORY_IDS.has(category), `block category "${category}" is not in CATEGORIES`).toBe(true)
     }

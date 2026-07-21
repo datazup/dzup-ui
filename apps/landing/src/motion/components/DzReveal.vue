@@ -39,10 +39,12 @@ const reduced = useReducedMotion()
 // will-change while the reveal plays; cleared after to avoid GPU-layer bloat.
 const animating = ref(false)
 watch(isInView, (inView) => {
-  if (!inView) return
+  if (!inView)
+    return
   animating.value = true
   const el = root.value
-  if (!el) return
+  if (!el)
+    return
   const done = (): void => {
     animating.value = false
     el.removeEventListener('transitionend', done)

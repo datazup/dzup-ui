@@ -26,7 +26,9 @@ const rows = [
       :delay="i * 90"
     >
       <DzCard variant="outlined" padding="md" class="row">
-        <DzText size="sm" as="div">{{ row.label }}</DzText>
+        <DzText size="sm" as="div">
+          {{ row.label }}
+        </DzText>
       </DzCard>
     </DzReveal>
   </div>

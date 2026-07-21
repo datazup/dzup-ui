@@ -21,8 +21,12 @@ const reduced = useReducedMotion()
       class="card"
     >
       <span class="card__badge">PRO</span>
-      <DzHeading :level="4" size="lg" weight="bold">Membership card</DzHeading>
-      <DzText size="sm" tone="muted">Tilt-free gloss tracks the pointer.</DzText>
+      <DzHeading :level="4" size="lg" weight="bold">
+        Membership card
+      </DzHeading>
+      <DzText size="sm" tone="muted">
+        Tilt-free gloss tracks the pointer.
+      </DzText>
     </DzCard>
   </div>
 </template>

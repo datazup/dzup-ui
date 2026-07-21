@@ -68,8 +68,12 @@ const highlights = [
         </span>
 
         <header class="auth-head">
-          <DzHeading :level="1" size="2xl" weight="semibold">Welcome back</DzHeading>
-          <DzText tone="muted" as="p">Sign in to your workspace to continue.</DzText>
+          <DzHeading :level="1" size="2xl" weight="semibold">
+            Welcome back
+          </DzHeading>
+          <DzText tone="muted" as="p">
+            Sign in to your workspace to continue.
+          </DzText>
         </header>
 
         <DzCard variant="elevated" padding="lg" class="auth-card">
@@ -96,7 +100,9 @@ const highlights = [
               />
             </DzFormField>
 
-            <DzCheckbox v-model="remember">Keep me signed in</DzCheckbox>
+            <DzCheckbox v-model="remember">
+              Keep me signed in
+            </DzCheckbox>
 
             <DzButton type="submit" variant="solid" tone="primary" class="auth-submit">
               Sign in
@@ -104,13 +110,17 @@ const highlights = [
 
             <div class="or-divider" role="separator" aria-label="or continue with">
               <DzDivider decorative class="or-line" />
-              <DzText size="xs" tone="muted" class="or-text">or continue with</DzText>
+              <DzText size="xs" tone="muted" class="or-text">
+                or continue with
+              </DzText>
               <DzDivider decorative class="or-line" />
             </div>
 
             <div class="social-row">
               <DzButton variant="outline" tone="neutral" class="social-btn">
-                <template #prefix><Github :size="16" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Github :size="16" aria-hidden="true" />
+                </template>
                 GitHub
               </DzButton>
               <DzButton variant="outline" tone="neutral" class="social-btn">

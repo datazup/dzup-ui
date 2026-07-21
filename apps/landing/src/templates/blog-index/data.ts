@@ -151,5 +151,5 @@ export function buildCover(p: CoverPalette, hue: number): string {
     <circle cx="470" cy="250" r="64" fill="none" stroke="${p.primary}" stroke-width="12" opacity="0.7"/>
   </g>
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }

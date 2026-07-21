@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest'
 import { PALETTE_CONFIGS } from '@dzup-ui/tokens'
+import { afterEach, describe, expect, it } from 'vitest'
 import { useThemeDesigner } from './useThemeDesigner.ts'
 
 /**
@@ -61,8 +61,8 @@ describe('useThemeDesigner', () => {
 
   it('computes WCAG contrast pairs for both themes', () => {
     // Body text on the surface is high-contrast by construction in both themes.
-    const lightBody = d.contrastLight.value.find((p) => p.label === 'Body text')
-    const darkBody = d.contrastDark.value.find((p) => p.label === 'Body text')
+    const lightBody = d.contrastLight.value.find(p => p.label === 'Body text')
+    const darkBody = d.contrastDark.value.find(p => p.label === 'Body text')
     expect(lightBody?.ratio).toBeGreaterThan(7)
     expect(darkBody?.ratio).toBeGreaterThan(7)
     expect(lightBody?.passNormal).toBe(true)

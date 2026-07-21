@@ -18,12 +18,12 @@
  */
 
 /** The `--dz-enter-*` custom properties the keyframes interpolate. */
-export type EnterCustomProperty =
-  | '--dz-enter-opacity'
-  | '--dz-enter-scale'
-  | '--dz-enter-x'
-  | '--dz-enter-y'
-  | '--dz-enter-rotate'
+export type EnterCustomProperty
+  = | '--dz-enter-opacity'
+    | '--dz-enter-scale'
+    | '--dz-enter-x'
+    | '--dz-enter-y'
+    | '--dz-enter-rotate'
 
 /** A partial map of the enter custom props to their CSS string values. */
 export type EnterStyle = Partial<Record<EnterCustomProperty, string>>
@@ -55,11 +55,16 @@ function withUnit(value: number | string, unit: string): string {
 export function enterStyle(opts: EnterStyleOptions = {}): EnterStyle {
   const style: EnterStyle = {}
 
-  if (opts.opacity !== undefined) style['--dz-enter-opacity'] = String(opts.opacity)
-  if (opts.scale !== undefined) style['--dz-enter-scale'] = String(opts.scale)
-  if (opts.x !== undefined) style['--dz-enter-x'] = withUnit(opts.x, 'px')
-  if (opts.y !== undefined) style['--dz-enter-y'] = withUnit(opts.y, 'px')
-  if (opts.rotate !== undefined) style['--dz-enter-rotate'] = withUnit(opts.rotate, 'deg')
+  if (opts.opacity !== undefined)
+    style['--dz-enter-opacity'] = String(opts.opacity)
+  if (opts.scale !== undefined)
+    style['--dz-enter-scale'] = String(opts.scale)
+  if (opts.x !== undefined)
+    style['--dz-enter-x'] = withUnit(opts.x, 'px')
+  if (opts.y !== undefined)
+    style['--dz-enter-y'] = withUnit(opts.y, 'px')
+  if (opts.rotate !== undefined)
+    style['--dz-enter-rotate'] = withUnit(opts.rotate, 'deg')
 
   return style
 }

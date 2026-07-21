@@ -8,6 +8,7 @@ A Pinterest-style cascading board built on DzMasonry — variable-height DzCards
 
 ```vue
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Masonry gallery — a Pinterest-style cascading board built on DzMasonry.
  *
@@ -33,7 +34,6 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface Item {
   id: number
@@ -103,8 +103,12 @@ const items: Item[] = [
 <template>
   <section class="mg" aria-labelledby="mg-title">
     <header class="mg-head">
-      <DzHeading id="mg-title" :level="4" size="lg" weight="bold">Inspiration board</DzHeading>
-      <DzText size="sm" tone="muted">Balanced columns from DzMasonry</DzText>
+      <DzHeading id="mg-title" :level="4" size="lg" weight="bold">
+        Inspiration board
+      </DzHeading>
+      <DzText size="sm" tone="muted">
+        Balanced columns from DzMasonry
+      </DzText>
     </header>
 
     <DzMasonry :columns="{ xs: 1, sm: 2, lg: 3 }" gap="md">
@@ -125,14 +129,24 @@ const items: Item[] = [
         </DzAspectRatio>
 
         <div class="mg-body">
-          <DzTag variant="subtle" :tone="item.tag.tone" size="sm" class="mg-tag">{{ item.tag.label }}</DzTag>
-          <DzHeading :level="5" size="sm" weight="semibold" class="mg-card-title">{{ item.title }}</DzHeading>
-          <DzText size="sm" tone="muted" class="mg-card-body">{{ item.body }}</DzText>
+          <DzTag variant="subtle" :tone="item.tag.tone" size="sm" class="mg-tag">
+            {{ item.tag.label }}
+          </DzTag>
+          <DzHeading :level="5" size="sm" weight="semibold" class="mg-card-title">
+            {{ item.title }}
+          </DzHeading>
+          <DzText size="sm" tone="muted" class="mg-card-body">
+            {{ item.body }}
+          </DzText>
 
           <div class="mg-foot">
             <DzAvatar :fallback="item.initials" :alt="item.author" size="xs" />
-            <DzText size="xs" tone="muted" as="span">{{ item.author }}</DzText>
-            <DzBadge variant="subtle" tone="neutral" size="sm" class="mg-read">4 min</DzBadge>
+            <DzText size="xs" tone="muted" as="span">
+              {{ item.author }}
+            </DzText>
+            <DzBadge variant="subtle" tone="neutral" size="sm" class="mg-read">
+              4 min
+            </DzBadge>
           </div>
         </div>
       </DzCard>

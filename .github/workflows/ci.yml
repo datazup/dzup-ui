@@ -34,7 +34,10 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Typecheck (all packages)
+      # Blocking. Covers every package AND apps/landing (`typecheck:apps`, folded
+      # into typecheck:all by TASK-FREE2-01). apps/storybook is typechecked by its
+      # build in the `storybook` job instead — see docs/storybook-decisions.md.
+      - name: Typecheck (all packages + apps/landing)
         run: yarn typecheck:all
 
   lint:
@@ -56,7 +59,12 @@ jobs:
           restore-keys: yarn-${{ runner.os }}-
       - name: Install dependencies
         run: yarn install --immutable
-      - name: ESLint
+      # Blocking, and zero-tolerance: `--max-warnings 0`. Covers packages/ AND both
+      # free-tier apps (TASK-FREE2-01 — the script read `eslint packages/` for
+      # months, so neither public-facing app was ever linted). The baseline is 0
+      # errors / 0 warnings; a "known baseline" that exits 1 is a gate people learn
+      # to ignore. Generated output is excluded via eslint.config.js `ignores`.
+      - name: ESLint (packages + apps, zero warnings)
         run: yarn lint
 
   test:
@@ -156,14 +164,17 @@ jobs:
           yarn workspace @dzup-ui/landing build:component-index
           yarn workspace @dzup-ui/landing build:counts
           yarn workspace @dzup-ui/landing build:og
+          yarn workspace @dzup-ui/landing build:releases
           git diff --exit-code \
             apps/landing/public/r/ \
             apps/landing/public/llms.txt \
             apps/landing/public/llms-full.txt \
+            apps/landing/public/feed.xml \
             apps/landing/index.html \
             apps/landing/src/generated/components.ts \
             apps/landing/src/generated/counts.ts \
-            apps/landing/src/generated/ogImages.ts
+            apps/landing/src/generated/ogImages.ts \
+            apps/landing/src/generated/releases.ts
       - name: Changelog validation
         run: yarn validate:changelog
       - name: Peer dependency validation
@@ -284,6 +295,17 @@ jobs:
       # structurally red on every run.
       - name: Build packages
         run: yarn build
+      # TASK-FREE2-12 — the per-component playground snippets are generated from each
+      # component's `@example` (build-playground-snippets.mjs). Unlike its gitignored
+      # `_data/*.generated.ts` siblings this file is COMMITTED, because the docs block
+      # that reads it is reachable from `.storybook/preview.ts`, which the `storybook-test`
+      # job loads with no generation step — a gitignored import there would make that job
+      # structurally red (the trap the landing's untracked generated files hit). This
+      # guard proves the committed copy is still a pure function of the component source.
+      - name: Playground snippets in sync with component sources
+        run: |
+          yarn workspace @dzup-ui/storybook build:playground-snippets
+          git diff --exit-code apps/storybook/stories/_data/playgroundSnippets.generated.ts
       - name: Build Storybook
         run: yarn storybook:build
       # `storybook:build` runs build:llms; these files are consumed by machines,
@@ -291,10 +313,17 @@ jobs:
       # single H1) rather than trusting the generator.
       - name: Validate generated llms.txt
         run: yarn workspace @dzup-ui/storybook validate:llms
-      # Internal MDX deep links (`?path=/docs/<id>`) resolved against the REAL
-      # story index of the build above — two of them shipped dead for months
-      # because nothing checked ids against the built index (TASK-FREE-11).
-      - name: Check MDX deep links against built index
+      # Asserts the built index.json against what the docs claim (TASK-FREE-11 +
+      # TASK-FREE2-02/03). Three things, all resolved against the REAL story index
+      # of the build above rather than by inspection:
+      #   1. every `?path=/docs/<id>` in the MDX guides + _blocks resolves — two
+      #      shipped dead for months because nothing checked;
+      #   2. no page links CLAUDE.md (internal agent instructions) or a
+      #      filesystem-relative path that cannot resolve from a docs iframe;
+      #   3. sidebar sentinels: no `visual-refresh-*` id leaked into the public
+      #      build, and `Guides/Design Tokens` still built (it shares the excluded
+      #      _gallery/ directory, so an over-broad glob would silently drop it).
+      - name: Check MDX links + sidebar sentinels against built index
         run: yarn workspace @dzup-ui/storybook check:mdx-links
       # The "Try it now" REPL is the first interactive thing a new user touches and
       # the most fragile surface here: custom compiler-sfc resolution, a sandbox
@@ -306,7 +335,11 @@ jobs:
       # asset, an unstyled/non-reactive component, or a broken theme toggle.
       - name: Install Playwright Chromium
         run: yarn workspace @dzup-ui/storybook exec playwright install --with-deps chromium
-      - name: Verify REPL playground (live render, no 404s)
+      # Also drives the TASK-FREE2-12 per-component "Open in playground": it opens a
+      # cross-family sample of component docs pages (DzButton / DzTable / DzSelect),
+      # expands the playground, and asserts the DERIVED snippet actually mounts —
+      # compile-validation at build time proves a snippet parses, this proves it runs.
+      - name: Verify REPL playground (live render, no 404s, per-component deep links)
         run: yarn workspace @dzup-ui/storybook verify:repl
       # TASK-X.7 — track the docs build's total size as a NON-BLOCKING metric.
       # `yarn validate:bundle` budgets packages/*/dist (the shipped library); this
@@ -352,8 +385,17 @@ jobs:
       # a violation there fails this step and blocks the PR. Reporters write the
       # per-story results (incl. axe violation detail) to apps/storybook/a11y-report
       # for the artifact below — a11y findings are visible even while report-only.
+      # DZUP_APP_SPECIFIC=1 — the `Core/Feedback/App-Specific/*` badges are excluded
+      # from the PUBLISHED build (TASK-FREE2-06), but they are still shipped, exported
+      # components with internal consumers, so they must still be TESTED. This runner
+      # takes its story list from `.storybook/main.ts`, so without the flag the four
+      # would drop out of play() + a11y silently — unpublishing would have quietly
+      # become untesting. The published artifact is built by the separate `storybook`
+      # job, which runs WITHOUT the flag and asserts the ids are absent.
       - name: Run Storybook tests (play + WCAG 2.2 AA a11y audit)
         run: yarn workspace @dzup-ui/storybook test-storybook:ci
+        env:
+          DZUP_APP_SPECIFIC: '1'
       # Publish the a11y/test results even when the step above fails, so a gated
       # violation is inspectable from the run without re-running locally.
       - name: Upload Storybook a11y report

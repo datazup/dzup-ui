@@ -6,15 +6,16 @@
  * same as blocks).
  */
 
-import { describe, expect, it } from 'vitest'
 import type { TemplateMeta } from '../templates/registry.ts'
+import type { ResolvedTemplateFile } from './templatesItem.ts'
+import { describe, expect, it } from 'vitest'
+import { REGISTRY_ITEM_SCHEMA, REGISTRY_SCHEMA } from './registryItem.ts'
 import {
   buildTemplatesIndex,
+
   TEMPLATE_TARGET_DIR,
   toTemplateItem,
-  type ResolvedTemplateFile,
 } from './templatesItem.ts'
-import { REGISTRY_ITEM_SCHEMA, REGISTRY_SCHEMA } from './registryItem.ts'
 
 const META = {
   slug: 'analytics-dashboard',
@@ -54,7 +55,7 @@ describe('toTemplateItem', () => {
     expect(item.files[0]!.target).toBe(`${TEMPLATE_TARGET_DIR}/analytics-dashboard/AnalyticsDashboard.vue`)
     expect(item.files[0]!.content).toContain('<template>')
     expect(item.files[1]!.target).toBe(`${TEMPLATE_TARGET_DIR}/analytics-dashboard/data.ts`)
-    expect(item.files.every((f) => f.type === 'registry:file')).toBe(true)
+    expect(item.files.every(f => f.type === 'registry:file')).toBe(true)
   })
 
   it('throws when no source files resolved', () => {

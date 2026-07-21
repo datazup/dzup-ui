@@ -30,12 +30,13 @@ const consent = ref(false)
 const submitted = ref(false)
 const touched = ref(false)
 
-const emailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()))
+const emailValid = computed(() => /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(email.value.trim()))
 const showError = computed(() => touched.value && !emailValid.value)
 
 function subscribe() {
   touched.value = true
-  if (!emailValid.value || !consent.value) return
+  if (!emailValid.value || !consent.value)
+    return
   submitted.value = true
 }
 </script>

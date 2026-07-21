@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * Newsroom / Press — Content template (docs/templates.md §6.5).
  *
@@ -22,7 +23,6 @@ import {
   DzListItem,
   DzText,
 } from '@dzup-ui/core'
-import type { Component } from 'vue'
 import { ArrowRight, Download, Mail, Megaphone } from 'lucide-vue-next'
 import { ICONS } from '../../icons.ts'
 import { MEDIA_LOGOS, NEWS, PINNED, PRESS_KITS } from './data.ts'
@@ -43,7 +43,9 @@ function iconFor(key: string): Component {
           <span class="brand-name">Northwind Newsroom</span>
         </span>
         <DzButton variant="solid" tone="danger" size="sm">
-          <template #prefix><Download :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Download :size="15" aria-hidden="true" />
+          </template>
           Press kit
         </DzButton>
       </div>
@@ -53,7 +55,9 @@ function iconFor(key: string): Component {
       <!-- ── Header ───────────────────────────────────────────── -->
       <header class="head">
         <div class="head-main">
-          <DzBadge variant="subtle" tone="danger" size="sm">Newsroom</DzBadge>
+          <DzBadge variant="subtle" tone="danger" size="sm">
+            Newsroom
+          </DzBadge>
           <DzHeading :level="1" size="3xl" weight="bold" class="head-title">
             News & press
           </DzHeading>
@@ -62,16 +66,24 @@ function iconFor(key: string): Component {
           </DzText>
         </div>
         <DzCard variant="outlined" padding="md" class="contact">
-          <DzText size="xs" tone="muted" as="div" class="contact-label">Media contact</DzText>
+          <DzText size="xs" tone="muted" as="div" class="contact-label">
+            Media contact
+          </DzText>
           <div class="contact-row">
             <DzAvatar fallback="PR" size="sm" />
             <div class="contact-meta">
-              <DzText size="sm" weight="semibold" as="span">Priya Raman</DzText>
-              <DzText size="xs" tone="muted" as="span">Head of Communications</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                Priya Raman
+              </DzText>
+              <DzText size="xs" tone="muted" as="span">
+                Head of Communications
+              </DzText>
             </div>
           </div>
           <DzButton variant="outline" tone="danger" size="sm" class="contact-btn">
-            <template #prefix><Mail :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Mail :size="15" aria-hidden="true" />
+            </template>
             press@northwind.io
           </DzButton>
         </DzCard>
@@ -81,8 +93,12 @@ function iconFor(key: string): Component {
       <section aria-label="Featured announcement">
         <DzCard variant="elevated" padding="lg" class="pinned">
           <div class="pinned-meta">
-            <DzBadge variant="solid" tone="danger" size="sm">{{ PINNED.badge }}</DzBadge>
-            <DzText size="sm" tone="muted" as="span">{{ PINNED.date }}</DzText>
+            <DzBadge variant="solid" tone="danger" size="sm">
+              {{ PINNED.badge }}
+            </DzBadge>
+            <DzText size="sm" tone="muted" as="span">
+              {{ PINNED.date }}
+            </DzText>
           </div>
           <DzHeading :level="2" size="2xl" weight="bold" class="pinned-title">
             {{ PINNED.title }}
@@ -92,16 +108,22 @@ function iconFor(key: string): Component {
           </DzText>
           <DzButton variant="solid" tone="danger" size="md" class="pinned-cta">
             Read the release
-            <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+            <template #suffix>
+              <ArrowRight :size="16" aria-hidden="true" />
+            </template>
           </DzButton>
         </DzCard>
       </section>
 
       <!-- ── As featured in ───────────────────────────────────── -->
       <section class="featured-in" aria-label="Media coverage">
-        <DzText size="xs" tone="muted" as="div" class="featured-label">As featured in</DzText>
+        <DzText size="xs" tone="muted" as="div" class="featured-label">
+          As featured in
+        </DzText>
         <ul class="logos">
-          <li v-for="logo in MEDIA_LOGOS" :key="logo" class="logo">{{ logo }}</li>
+          <li v-for="logo in MEDIA_LOGOS" :key="logo" class="logo">
+            {{ logo }}
+          </li>
         </ul>
       </section>
 
@@ -113,10 +135,16 @@ function iconFor(key: string): Component {
               <span class="kit-icon" aria-hidden="true">
                 <component :is="iconFor(kit.icon)" :size="22" />
               </span>
-              <DzText weight="semibold" as="div" class="kit-title">{{ kit.title }}</DzText>
-              <DzText size="sm" tone="muted" as="p" class="kit-desc">{{ kit.description }}</DzText>
+              <DzText weight="semibold" as="div" class="kit-title">
+                {{ kit.title }}
+              </DzText>
+              <DzText size="sm" tone="muted" as="p" class="kit-desc">
+                {{ kit.description }}
+              </DzText>
               <div class="kit-foot">
-                <DzText size="xs" tone="muted" as="span">{{ kit.meta }}</DzText>
+                <DzText size="xs" tone="muted" as="span">
+                  {{ kit.meta }}
+                </DzText>
                 <span class="kit-link">
                   Download <Download :size="13" aria-hidden="true" />
                 </span>
@@ -129,8 +157,12 @@ function iconFor(key: string): Component {
       <!-- ── Recent releases ──────────────────────────────────── -->
       <section class="releases" aria-label="Recent press releases">
         <div class="releases-head">
-          <DzHeading :level="2" size="lg" weight="semibold">Recent releases</DzHeading>
-          <DzButton variant="ghost" tone="neutral" size="sm">View all →</DzButton>
+          <DzHeading :level="2" size="lg" weight="semibold">
+            Recent releases
+          </DzHeading>
+          <DzButton variant="ghost" tone="neutral" size="sm">
+            View all →
+          </DzButton>
         </div>
 
         <DzList variant="divided" interactive class="news-list">
@@ -158,12 +190,16 @@ function iconFor(key: string): Component {
       <!-- ── Subscribe ────────────────────────────────────────── -->
       <section class="subscribe">
         <div class="subscribe-copy">
-          <DzHeading :level="2" size="md" weight="semibold">Stay in the loop</DzHeading>
+          <DzHeading :level="2" size="md" weight="semibold">
+            Stay in the loop
+          </DzHeading>
           <DzText size="sm" tone="muted" as="p">
             Get company news the moment it’s published.
           </DzText>
         </div>
-        <DzButton variant="solid" tone="danger" size="md">Subscribe to updates</DzButton>
+        <DzButton variant="solid" tone="danger" size="md">
+          Subscribe to updates
+        </DzButton>
       </section>
     </main>
 
@@ -172,7 +208,9 @@ function iconFor(key: string): Component {
         <span class="brand-mark" aria-hidden="true"><Megaphone :size="16" /></span>
         <span class="brand-name">Northwind</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Northwind. Built with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Northwind. Built with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

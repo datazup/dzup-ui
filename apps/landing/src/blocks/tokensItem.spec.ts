@@ -8,13 +8,13 @@
  */
 
 import { describe, expect, it } from 'vitest'
+import { REGISTRY_ITEM_SCHEMA } from './registryItem.ts'
 import {
   parseTokenCssVars,
-  toTokensItem,
   TOKENS_ITEM_NAME,
   TOKENS_ITEM_TYPE,
+  toTokensItem,
 } from './tokensItem.ts'
-import { REGISTRY_ITEM_SCHEMA } from './registryItem.ts'
 
 const FIXTURE = `/**
  * @dzup-ui/tokens — Generated CSS Custom Properties
@@ -60,7 +60,7 @@ describe('parseTokenCssVars', () => {
 
   it('strips only the leading -- and drops trailing comments/semicolons', () => {
     expect(vars.light['--dz-background']).toBeUndefined()
-    expect(Object.values(vars.light).every((v) => !v.includes('/*'))).toBe(true)
+    expect(Object.values(vars.light).every(v => !v.includes('/*'))).toBe(true)
   })
 })
 

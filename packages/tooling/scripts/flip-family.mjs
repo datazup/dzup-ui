@@ -2,7 +2,7 @@
 /**
  * One-shot codemod: opt a story family into the enforced a11y gate.
  *
- *   node packages/core/stories/_shared/flip-family.mjs buttons "Buttons audits clean (TASK-DS-07)."
+ *   node packages/tooling/scripts/flip-family.mjs buttons "Buttons audits clean (TASK-DS-07)."
  *
  * For every `*.stories.ts` in the family it:
  *   1. ensures `a11yError` is imported from '../_shared'

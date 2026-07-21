@@ -17,18 +17,21 @@ const RESOLVED_KEY = 'data-theme'
 let singleton: ReturnType<typeof create> | null = null
 
 function readStored(): ThemeMode {
-  if (typeof window === 'undefined') return 'system'
+  if (typeof window === 'undefined')
+    return 'system'
   const value = window.localStorage.getItem(STORAGE_KEY)
   return value === 'light' || value === 'dark' || value === 'system' ? value : 'system'
 }
 
 function systemPrefers(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'light'
+  if (typeof window === 'undefined')
+    return 'light'
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
 function applyTheme(resolved: 'light' | 'dark'): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   document.documentElement.setAttribute(RESOLVED_KEY, resolved)
 }
 
@@ -38,8 +41,8 @@ function create() {
 
   applyTheme(resolved.value)
 
-  const media =
-    typeof window === 'undefined' ? null : window.matchMedia('(prefers-color-scheme: dark)')
+  const media
+    = typeof window === 'undefined' ? null : window.matchMedia('(prefers-color-scheme: dark)')
 
   function onSystemChange(): void {
     if (mode.value === 'system') {
@@ -58,8 +61,19 @@ function create() {
     applyTheme(resolved.value)
   })
 
+  /**
+   * Select a mode explicitly — including `'system'`, which the binary `toggle`
+   * below can never reach (TASK-FREE2-08). This is what the nav's three-way
+   * control drives.
+   */
+  function setMode(next: ThemeMode): void {
+    mode.value = next
+  }
+
   function toggle(): void {
-    // Toggle relative to what's currently on screen.
+    // Toggle relative to what's currently on screen. Deliberately one-way out of
+    // `system`: a flip is a request for a specific appearance, so it pins one.
+    // Getting back to `system` is the nav control's job, not this one's.
     mode.value = resolved.value === 'dark' ? 'light' : 'dark'
   }
 
@@ -67,7 +81,7 @@ function create() {
     media?.removeEventListener('change', onSystemChange)
   }
 
-  return { mode, resolved, toggle, dispose }
+  return { mode, resolved, setMode, toggle, dispose }
 }
 
 export function useTheme() {
@@ -80,7 +94,12 @@ export function useTheme() {
   onBeforeUnmount(() => {
     /* keep singleton alive across page navigations */
   })
-  return { mode: singleton.mode, resolved: singleton.resolved, toggle: singleton.toggle }
+  return {
+    mode: singleton.mode,
+    resolved: singleton.resolved,
+    setMode: singleton.setMode,
+    toggle: singleton.toggle,
+  }
 }
 
 export const THEME_MODES: ThemeMode[] = ['light', 'dark', 'system']

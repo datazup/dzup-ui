@@ -66,17 +66,27 @@ function submit() {
           <DzFormLabel>Overall rating</DzFormLabel>
           <div class="fb-rating-row">
             <DzRating v-model:value="rating" allow-half aria-label="Overall rating" />
-            <DzText v-if="ratingLabel" size="sm" tone="muted" as="span">{{ ratingLabel }}</DzText>
+            <DzText v-if="ratingLabel" size="sm" tone="muted" as="span">
+              {{ ratingLabel }}
+            </DzText>
           </div>
         </DzFormField>
 
         <DzFormField>
           <DzFormLabel>How often do you use the product?</DzFormLabel>
           <DzRadioGroup v-model="frequency" orientation="vertical" aria-label="Usage frequency">
-            <DzRadio value="daily">Every day</DzRadio>
-            <DzRadio value="weekly">A few times a week</DzRadio>
-            <DzRadio value="monthly">A few times a month</DzRadio>
-            <DzRadio value="rarely">Rarely</DzRadio>
+            <DzRadio value="daily">
+              Every day
+            </DzRadio>
+            <DzRadio value="weekly">
+              A few times a week
+            </DzRadio>
+            <DzRadio value="monthly">
+              A few times a month
+            </DzRadio>
+            <DzRadio value="rarely">
+              Rarely
+            </DzRadio>
           </DzRadioGroup>
         </DzFormField>
 
@@ -94,8 +104,12 @@ function submit() {
             aria-label="Likelihood to recommend"
           />
           <div class="fb-scale">
-            <DzText size="xs" tone="muted" as="span">Not likely</DzText>
-            <DzText size="xs" tone="muted" as="span">Very likely</DzText>
+            <DzText size="xs" tone="muted" as="span">
+              Not likely
+            </DzText>
+            <DzText size="xs" tone="muted" as="span">
+              Very likely
+            </DzText>
           </div>
         </DzFormField>
 

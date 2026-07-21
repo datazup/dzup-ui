@@ -11,9 +11,12 @@ import { darkModeDecorator } from '../_shared'
  * It renders `role="progressbar"` with `aria-valuenow={used}` / `aria-valuemax={total}`
  * and exposes a label slot with `{ percent, used, total, state }`.
  *
- * > **Scope:** datazup token-budget concept → documented under
- * > **Core/Feedback/App-Specific** (see TASK-X.4). For generic progress, use
- * > [DzProgress](?path=/docs/core-feedback-dzprogress--docs).
+ * > **Scope:** an LLM token-budget bar is a datazup product concept, so this is
+ * > **not part of the public catalog** and this page does not ship — you are reading
+ * > it because someone ran with `DZUP_APP_SPECIFIC=1`. It remains exported from
+ * > `@dzup-ui/core` for the internal consumer. For generic progress, use
+ * > [DzProgress](?path=/docs/core-feedback-dzprogress--docs). Rationale: TASK-FREE2-06
+ * > in `docs/storybook-decisions.md` (supersedes TASK-X.4, which is stale).
  */
 const meta = {
   title: 'Core/Feedback/App-Specific/DzTokenProgressBar',

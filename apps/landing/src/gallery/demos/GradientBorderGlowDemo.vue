@@ -23,7 +23,9 @@ const frameClass = computed(() => ({
   <div class="stage">
     <div :class="frameClass" class="frame">
       <DzCard variant="flat" padding="lg" class="inner">
-        <DzHeading :level="3" size="md" weight="semibold">Featured</DzHeading>
+        <DzHeading :level="3" size="md" weight="semibold">
+          Featured
+        </DzHeading>
         <DzText size="sm" tone="muted" as="p" class="copy">
           A conic ring glows around the card to draw the eye.
         </DzText>

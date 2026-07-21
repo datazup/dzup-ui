@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, watch } from 'vue'
-import { ref } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { useInView } from '../useInView.ts'
 import { useReducedMotion } from '../useReducedMotion.ts'
 
@@ -45,9 +44,12 @@ function children(): HTMLElement[] {
 function setupChildren(): void {
   children().forEach((child, i) => {
     child.classList.add('dz-reveal')
-    if (props.direction) child.classList.add(`dz-reveal--${props.direction}`)
-    if (props.blur) child.classList.add('dz-reveal--blur')
-    if (props.scale) child.classList.add('dz-reveal--scale')
+    if (props.direction)
+      child.classList.add(`dz-reveal--${props.direction}`)
+    if (props.blur)
+      child.classList.add('dz-reveal--blur')
+    if (props.scale)
+      child.classList.add('dz-reveal--scale')
     child.style.setProperty('--reveal-delay', `${props.step * i}ms`)
   })
 }
@@ -72,14 +74,16 @@ onMounted(async () => {
   await nextTick()
   setupChildren()
   applyReduced(reduced.value)
-  if (isInView.value) revealChildren()
+  if (isInView.value)
+    revealChildren()
 })
 
 watch(isInView, (inView) => {
-  if (inView) revealChildren()
+  if (inView)
+    revealChildren()
 })
 
-watch(reduced, (on) => applyReduced(on))
+watch(reduced, on => applyReduced(on))
 </script>
 
 <template>

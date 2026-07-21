@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DzButton, DzDivider, DzHeading, DzList, DzListItem, DzNumberInput, DzText } from '@dzup-ui/core'
 /**
  * Cart summary — an editable line-item list with live totals.
  *
@@ -12,7 +13,6 @@
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { computed, ref } from 'vue'
-import { DzButton, DzDivider, DzHeading, DzList, DzListItem, DzNumberInput, DzText } from '@dzup-ui/core'
 
 interface LineItem {
   id: number
@@ -65,22 +65,26 @@ const total = computed(() => subtotal.value + shipping.value + tax.value)
 const money = (value: number) => `$${value.toFixed(2)}`
 
 function remove(id: number) {
-  items.value = items.value.filter((item) => item.id !== id)
+  items.value = items.value.filter(item => item.id !== id)
 }
 </script>
 
 <template>
   <section class="cs-wrap" aria-labelledby="cs-title">
     <header class="cs-head">
-      <DzHeading id="cs-title" :level="4" size="md" weight="semibold" class="cs-heading">Your cart</DzHeading>
-      <DzText size="sm" tone="muted" as="span">{{ items.length }} item{{ items.length === 1 ? '' : 's' }}</DzText>
+      <DzHeading id="cs-title" :level="4" size="md" weight="semibold" class="cs-heading">
+        Your cart
+      </DzHeading>
+      <DzText size="sm" tone="muted" as="span">
+        {{ items.length }} item{{ items.length === 1 ? '' : 's' }}
+      </DzText>
     </header>
 
     <DzList v-if="items.length" variant="divided" size="md" class="cs-list">
       <DzListItem v-for="item in items" :key="item.id">
         <template #prefix>
           <span class="cs-thumb-wrap">
-            <img :src="item.src" :alt="item.alt" class="cs-thumb" loading="lazy" decoding="async" />
+            <img :src="item.src" :alt="item.alt" class="cs-thumb" loading="lazy" decoding="async">
           </span>
         </template>
 
@@ -115,37 +119,69 @@ function remove(id: number) {
       </DzListItem>
     </DzList>
 
-    <DzText v-else size="sm" tone="muted" as="p" class="cs-empty">Your cart is empty.</DzText>
+    <DzText v-else size="sm" tone="muted" as="p" class="cs-empty">
+      Your cart is empty.
+    </DzText>
 
     <template v-if="items.length">
       <DzDivider class="cs-rule" />
 
       <dl class="cs-totals">
         <div class="cs-row">
-          <dt><DzText size="sm" tone="muted" as="span">Subtotal</DzText></dt>
-          <dd><DzText size="sm" as="span">{{ money(subtotal) }}</DzText></dd>
-        </div>
-        <div class="cs-row">
-          <dt><DzText size="sm" tone="muted" as="span">Shipping</DzText></dt>
+          <dt>
+            <DzText size="sm" tone="muted" as="span">
+              Subtotal
+            </DzText>
+          </dt>
           <dd>
-            <DzText size="sm" as="span">{{ shipping === 0 ? 'Free' : money(shipping) }}</DzText>
+            <DzText size="sm" as="span">
+              {{ money(subtotal) }}
+            </DzText>
           </dd>
         </div>
         <div class="cs-row">
-          <dt><DzText size="sm" tone="muted" as="span">Tax (8%)</DzText></dt>
-          <dd><DzText size="sm" as="span">{{ money(tax) }}</DzText></dd>
+          <dt>
+            <DzText size="sm" tone="muted" as="span">
+              Shipping
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" as="span">
+              {{ shipping === 0 ? 'Free' : money(shipping) }}
+            </DzText>
+          </dd>
+        </div>
+        <div class="cs-row">
+          <dt>
+            <DzText size="sm" tone="muted" as="span">
+              Tax (8%)
+            </DzText>
+          </dt>
+          <dd>
+            <DzText size="sm" as="span">
+              {{ money(tax) }}
+            </DzText>
+          </dd>
         </div>
       </dl>
 
       <DzDivider class="cs-rule" />
 
       <div class="cs-row cs-row--total">
-        <DzText size="md" weight="semibold" as="span">Total</DzText>
-        <DzText size="lg" weight="bold" as="span">{{ money(total) }}</DzText>
+        <DzText size="md" weight="semibold" as="span">
+          Total
+        </DzText>
+        <DzText size="lg" weight="bold" as="span">
+          {{ money(total) }}
+        </DzText>
       </div>
 
-      <DzButton variant="solid" tone="primary" size="lg" class="cs-checkout">Checkout</DzButton>
-      <DzButton variant="text" tone="neutral" size="sm" class="cs-continue">Continue shopping</DzButton>
+      <DzButton variant="solid" tone="primary" size="lg" class="cs-checkout">
+        Checkout
+      </DzButton>
+      <DzButton variant="text" tone="neutral" size="sm" class="cs-continue">
+        Continue shopping
+      </DzButton>
     </template>
   </section>
 </template>

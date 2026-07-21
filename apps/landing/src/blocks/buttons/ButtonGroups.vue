@@ -33,14 +33,18 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
   <section class="bgr-wrap" aria-label="Button groups">
     <!-- View switcher -->
     <div class="bgr-group">
-      <DzText size="xs" tone="muted" as="p" class="bgr-label">View switcher</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bgr-label">
+        View switcher
+      </DzText>
       <DzButtonGroup size="sm" variant="outline" tone="neutral" aria-label="Select view">
         <DzButton
           :variant="view === 'list' ? 'solid' : undefined"
           :tone="view === 'list' ? 'primary' : undefined"
           @click="view = 'list'"
         >
-          <template #prefix><LayoutList :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <LayoutList :size="15" aria-hidden="true" />
+          </template>
           List
         </DzButton>
         <DzButton
@@ -48,7 +52,9 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
           :tone="view === 'board' ? 'primary' : undefined"
           @click="view = 'board'"
         >
-          <template #prefix><LayoutGrid :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <LayoutGrid :size="15" aria-hidden="true" />
+          </template>
           Board
         </DzButton>
         <DzButton
@@ -56,7 +62,9 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
           :tone="view === 'calendar' ? 'primary' : undefined"
           @click="view = 'calendar'"
         >
-          <template #prefix><Calendar :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Calendar :size="15" aria-hidden="true" />
+          </template>
           Calendar
         </DzButton>
       </DzButtonGroup>
@@ -64,7 +72,9 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
 
     <!-- Time range -->
     <div class="bgr-group">
-      <DzText size="xs" tone="muted" as="p" class="bgr-label">Time range</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bgr-label">
+        Time range
+      </DzText>
       <DzButtonGroup size="sm" variant="outline" tone="neutral" aria-label="Select time range">
         <DzButton
           v-for="r in (['day', 'week', 'month', 'year'] as const)"
@@ -80,18 +90,26 @@ const range = ref<'day' | 'week' | 'month' | 'year'>('week')
 
     <!-- Vertical action group -->
     <div class="bgr-group">
-      <DzText size="xs" tone="muted" as="p" class="bgr-label">Vertical group</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bgr-label">
+        Vertical group
+      </DzText>
       <DzButtonGroup orientation="vertical" size="sm" variant="outline" tone="neutral" aria-label="Row actions">
         <DzButton>
-          <template #prefix><Copy :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Copy :size="15" aria-hidden="true" />
+          </template>
           Copy
         </DzButton>
         <DzButton>
-          <template #prefix><Files :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Files :size="15" aria-hidden="true" />
+          </template>
           Duplicate
         </DzButton>
         <DzButton>
-          <template #prefix><Archive :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Archive :size="15" aria-hidden="true" />
+          </template>
           Archive
         </DzButton>
       </DzButtonGroup>

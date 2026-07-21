@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -12,7 +13,6 @@ import {
   DzSelect,
   DzText,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { CreditCard, Lock, Tag } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
 
@@ -49,7 +49,8 @@ const COUNTRIES: DzSelectItem[] = [
 const total = computed(() => (promoApplied.value ? '$39.00' : '$49.00'))
 
 function applyPromo() {
-  if (promo.value.trim() !== '') promoApplied.value = true
+  if (promo.value.trim() !== '')
+    promoApplied.value = true
 }
 </script>
 
@@ -61,11 +62,17 @@ function applyPromo() {
           <DzHeading id="pf-title" :level="4" size="xl" weight="semibold">
             Payment details
           </DzHeading>
-          <DzText tone="muted" size="sm" as="p">Pro plan · billed monthly</DzText>
+          <DzText tone="muted" size="sm" as="p">
+            Pro plan · billed monthly
+          </DzText>
         </div>
         <div class="pf-total">
-          <DzText size="xs" tone="muted" as="div">Due today</DzText>
-          <DzText size="xl" weight="bold" as="div" class="pf-total-amt">{{ total }}</DzText>
+          <DzText size="xs" tone="muted" as="div">
+            Due today
+          </DzText>
+          <DzText size="xl" weight="bold" as="div" class="pf-total-amt">
+            {{ total }}
+          </DzText>
         </div>
       </header>
 

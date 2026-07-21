@@ -44,7 +44,7 @@ export const PLANS: Plan[] = [
 ]
 
 /** Per-seat usage breakdown for the DzMeterGroup. */
-export const USAGE_SEGMENTS: { label: string; value: number; tone: CanonicalTone }[] = [
+export const USAGE_SEGMENTS: { label: string, value: number, tone: CanonicalTone }[] = [
   { label: 'Active members', value: 14, tone: 'primary' },
   { label: 'Pending invites', value: 3, tone: 'warning' },
   { label: 'Available', value: 3, tone: 'neutral' },
@@ -54,7 +54,7 @@ export const USAGE_SEGMENTS: { label: string; value: number; tone: CanonicalTone
 export const SEAT_LIMIT = 20
 
 /** Individual resource meters. */
-export const RESOURCE_USAGE: { label: string; used: number; total: number; unit: string }[] = [
+export const RESOURCE_USAGE: { label: string, used: number, total: number, unit: string }[] = [
   { label: 'Storage', used: 68, total: 100, unit: 'GB' },
   { label: 'API calls', used: 412, total: 500, unit: 'k' },
   { label: 'Build minutes', used: 240, total: 1000, unit: 'min' },

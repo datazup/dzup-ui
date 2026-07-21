@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { DzToastContext } from '@dzup-ui/core'
-import { DzButton } from '@dzup-ui/core'
-import { DZ_TOAST_KEY } from '@dzup-ui/core'
+import { DZ_TOAST_KEY, DzButton } from '@dzup-ui/core'
 import { Bell } from 'lucide-vue-next'
 import { inject, onMounted } from 'vue'
 

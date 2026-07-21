@@ -75,7 +75,9 @@ const remember = ref(false)
           />
         </DzFormField>
 
-        <DzCheckbox v-model="remember">Keep me signed in</DzCheckbox>
+        <DzCheckbox v-model="remember">
+          Keep me signed in
+        </DzCheckbox>
 
         <DzButton type="submit" variant="solid" tone="primary" class="si-submit">
           Sign in
@@ -83,7 +85,9 @@ const remember = ref(false)
 
         <div class="si-or" role="separator" aria-label="or continue with">
           <DzDivider decorative class="si-or-line" />
-          <DzText size="xs" tone="muted" as="span" class="si-or-text">or continue with</DzText>
+          <DzText size="xs" tone="muted" as="span" class="si-or-text">
+            or continue with
+          </DzText>
           <DzDivider decorative class="si-or-line" />
         </div>
 

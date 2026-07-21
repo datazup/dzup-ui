@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DzFab, DzSpeedDial, DzText } from '@dzup-ui/core'
 import type { DzSpeedDialItem } from '@dzup-ui/core'
+import { DzFab, DzSpeedDial, DzText } from '@dzup-ui/core'
 import {
   ArrowUp,
   Copy,
@@ -38,19 +38,23 @@ const actions: DzSpeedDialItem[] = [
   <section class="fa-wrap" aria-label="Floating actions">
     <!-- FAB tones / variants -->
     <div class="fa-col">
-      <DzText size="xs" tone="muted" as="p" class="fa-label">Floating action button</DzText>
+      <DzText size="xs" tone="muted" as="p" class="fa-label">
+        Floating action button
+      </DzText>
       <div class="fa-fabs">
-        <DzFab :icon="Plus" ariaLabel="Create" tone="primary" />
-        <DzFab :icon="Pencil" ariaLabel="Compose" tone="neutral" variant="outline" />
-        <DzFab :icon="Sparkles" ariaLabel="Ask AI" tone="info" />
-        <DzFab :icon="ArrowUp" ariaLabel="Back to top" tone="neutral" variant="ghost" size="sm" />
-        <DzFab :icon="Plus" ariaLabel="Loading" tone="primary" loading />
+        <DzFab :icon="Plus" aria-label="Create" tone="primary" />
+        <DzFab :icon="Pencil" aria-label="Compose" tone="neutral" variant="outline" />
+        <DzFab :icon="Sparkles" aria-label="Ask AI" tone="info" />
+        <DzFab :icon="ArrowUp" aria-label="Back to top" tone="neutral" variant="ghost" size="sm" />
+        <DzFab :icon="Plus" aria-label="Loading" tone="primary" loading />
       </div>
     </div>
 
     <!-- Speed dial pinned inside a mock canvas -->
     <div class="fa-col">
-      <DzText size="xs" tone="muted" as="p" class="fa-label">Speed dial</DzText>
+      <DzText size="xs" tone="muted" as="p" class="fa-label">
+        Speed dial
+      </DzText>
       <div class="fa-canvas">
         <DzText size="sm" tone="muted" as="p" class="fa-canvas-hint">
           Open the dial in the corner →
@@ -58,7 +62,7 @@ const actions: DzSpeedDialItem[] = [
         <div class="fa-dial">
           <DzSpeedDial
             v-model:open="open"
-            ariaLabel="Quick actions"
+            aria-label="Quick actions"
             :items="actions"
             direction="up"
             tone="primary"

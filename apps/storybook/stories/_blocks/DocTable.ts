@@ -25,7 +25,8 @@
  * />
  * ```
  */
-import { createElement as h, Fragment, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { Fragment, createElement as h } from 'react'
 
 type Align = 'left' | 'center' | 'right'
 

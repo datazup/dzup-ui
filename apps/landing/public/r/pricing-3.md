@@ -103,7 +103,9 @@ const tiers: PricingTier[] = [
   <section class="pricing-three" aria-labelledby="pricing-three-title">
     <!-- Section header ----------------------------------------------------->
     <div class="pt-header">
-      <DzBadge variant="subtle" tone="primary" size="sm">Pricing</DzBadge>
+      <DzBadge variant="subtle" tone="primary" size="sm">
+        Pricing
+      </DzBadge>
       <DzHeading id="pricing-three-title" :level="4" size="2xl" weight="bold" align="center" class="pt-title">
         Simple, transparent pricing
       </DzHeading>
@@ -131,58 +133,66 @@ const tiers: PricingTier[] = [
           class="pt-card"
           :class="{ 'pt-card--popular': tier.popular }"
         >
-        <!-- Card header ---->
-        <div class="pt-card-head">
-          <div class="pt-name-row">
-            <DzHeading :level="5" size="lg" weight="semibold">{{ tier.name }}</DzHeading>
-            <DzBadge
-              v-if="tier.popular"
-              variant="solid"
-              tone="primary"
-              size="xs"
-              aria-label="Most popular plan"
+          <!-- Card header ---->
+          <div class="pt-card-head">
+            <div class="pt-name-row">
+              <DzHeading :level="5" size="lg" weight="semibold">
+                {{ tier.name }}
+              </DzHeading>
+              <DzBadge
+                v-if="tier.popular"
+                variant="solid"
+                tone="primary"
+                size="xs"
+                aria-label="Most popular plan"
+              >
+                Most popular
+              </DzBadge>
+            </div>
+
+            <DzText size="sm" tone="muted" class="pt-desc">
+              {{ tier.description }}
+            </DzText>
+
+            <div class="pt-price-row" aria-label="Price">
+              <DzHeading :level="6" size="3xl" weight="bold" class="pt-price">
+                {{ tier.price }}
+              </DzHeading>
+              <DzText size="sm" tone="muted" class="pt-period">
+                / {{ tier.period }}
+              </DzText>
+            </div>
+          </div>
+
+          <DzDivider decorative class="pt-divider" />
+
+          <!-- Feature list ---->
+          <ul class="pt-features" :aria-label="`${tier.name} plan features`">
+            <li
+              v-for="feature in tier.features"
+              :key="feature"
+              class="pt-feature"
             >
-              Most popular
-            </DzBadge>
-          </div>
+              <Check
+                :size="16"
+                class="pt-check"
+                aria-hidden="true"
+              />
+              <DzText size="sm">
+                {{ feature }}
+              </DzText>
+            </li>
+          </ul>
 
-          <DzText size="sm" tone="muted" class="pt-desc">{{ tier.description }}</DzText>
-
-          <div class="pt-price-row" aria-label="Price">
-            <DzHeading :level="6" size="3xl" weight="bold" class="pt-price">
-              {{ tier.price }}
-            </DzHeading>
-            <DzText size="sm" tone="muted" class="pt-period">/ {{ tier.period }}</DzText>
-          </div>
-        </div>
-
-        <DzDivider decorative class="pt-divider" />
-
-        <!-- Feature list ---->
-        <ul class="pt-features" :aria-label="`${tier.name} plan features`">
-          <li
-            v-for="feature in tier.features"
-            :key="feature"
-            class="pt-feature"
+          <!-- CTA ---->
+          <DzButton
+            :variant="tier.popular ? 'solid' : 'outline'"
+            :tone="tier.popular ? 'primary' : 'neutral'"
+            size="md"
+            class="pt-cta"
           >
-            <Check
-              :size="16"
-              class="pt-check"
-              aria-hidden="true"
-            />
-            <DzText size="sm">{{ feature }}</DzText>
-          </li>
-        </ul>
-
-        <!-- CTA ---->
-        <DzButton
-          :variant="tier.popular ? 'solid' : 'outline'"
-          :tone="tier.popular ? 'primary' : 'neutral'"
-          size="md"
-          class="pt-cta"
-        >
-          {{ tier.cta }}
-        </DzButton>
+            {{ tier.cta }}
+          </DzButton>
         </DzCard>
       </li>
     </ul>

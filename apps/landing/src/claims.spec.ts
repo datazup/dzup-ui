@@ -3,7 +3,7 @@
  * claims to count.
  *
  * `config.ts` has stated the rule since the day `FACTS.freeComponents` was fixed:
- * *"Hand-maintained counts drift — this one used to read 147 while the real figure
+ * "Hand-maintained counts drift — this one used to read 147 while the real figure
  * was 139. Never replace it with a literal."* Nine other places ignored it. The
  * meta description, the OpenGraph card and the JSON-LD all told Google, X and
  * every AI crawler that dzup-ui has 147 components; the announcement bar promised
@@ -31,7 +31,7 @@
  */
 
 import { readdirSync, readFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { dirname, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
@@ -43,14 +43,16 @@ import { CATALOG, CATEGORIES } from './gallery/catalog.ts'
 import { COMPONENTS } from './generated/components.ts'
 import { COUNTS, FAMILY_COUNTS } from './generated/counts.ts'
 import { META_DESCRIPTION, SOCIAL_DESCRIPTION } from './lib/seo.ts'
+import { SITE_ORIGIN } from './origin.ts'
 import { TEMPLATES } from './templates/registry.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LANDING_ROOT = resolve(__dirname, '..')
 const REPO_ROOT = resolve(LANDING_ROOT, '..', '..')
 
-const read = (...segments: string[]): string =>
-  readFileSync(resolve(REPO_ROOT, ...segments), 'utf8')
+function read(...segments: string[]): string {
+  return readFileSync(resolve(REPO_ROOT, ...segments), 'utf8')
+}
 
 const INDEX_HTML = read('apps', 'landing', 'index.html')
 const DATA_TS = read('apps', 'landing', 'src', 'data.ts')
@@ -198,7 +200,7 @@ describe('the landing copy', () => {
     // The values above could all be right and still be literals. Assert the
     // rendered copy INTERPOLATES — a digit next to one of these nouns is a bug.
     const typed = (source: string) =>
-      [...source.matchAll(/(?<!--)(?<![\w-])(\d{2,3})\+?\s+(?:components?|blocks?|effects?|templates?|categor|famil)/gi)]
+      [...source.matchAll(/(?<![\w-])(\d{2,3})\+?\s+(?:components?|blocks?|effects?|templates?|categor|famil)/gi)]
         .map(m => m[0])
     for (const [name, source] of [['data.ts', DATA_TS], ['config.ts', CONFIG_TS], ['compare.ts', COMPARE_TS]] as const) {
       // Prose in the file header may cite the OLD wrong numbers as the cautionary
@@ -225,20 +227,21 @@ describe('the Pro page', () => {
     const template = PRO_PAGE.slice(PRO_PAGE.indexOf('<template>'), PRO_PAGE.indexOf('</template>'))
     expect(template).not.toMatch(/\d+\s+(?:enterprise\s+)?components?/i)
     expect(template).not.toMatch(/\d+\s+families/i)
-    if (template.includes('PRO_FACTS.planned')) expect(template).toMatch(/roadmap|planned/i)
+    if (template.includes('PRO_FACTS.planned'))
+      expect(template).toMatch(/roadmap|planned/i)
   })
 })
 
 describe('the Storybook docs', () => {
-  it('Introduction generates its family table instead of typing it', () => {
-    expect(INTRODUCTION_MDX).toContain("from './_data/counts.generated.ts'")
+  it('introduction generates its family table instead of typing it', () => {
+    expect(INTRODUCTION_MDX).toContain('from \'./_data/counts.generated.ts\'')
     expect(INTRODUCTION_MDX).toContain('FAMILY_COUNTS.map')
     // The old table: a literal row per family, 10 of 11 wrong, totalling 163.
     expect(INTRODUCTION_PROSE).not.toMatch(/\['\*\*\w+\*\*', '\d+'/)
     expect(INTRODUCTION_PROSE).not.toContain('163')
   })
 
-  it('Introduction and ComponentStatus agree on the catalog size', () => {
+  it('introduction and ComponentStatus agree on the catalog size', () => {
     // These two pages contradicted each other: 163 vs 205. Both now read the
     // same generated module, so the only way to disagree is to type a number.
     for (const [name, mdx] of [
@@ -252,9 +255,76 @@ describe('the Storybook docs', () => {
     }
   })
 
-  it('Accessibility derives the story-file count in its backlog table', () => {
+  it('accessibility derives the story-file count in its backlog table', () => {
     expect(ACCESSIBILITY_MDX).toContain('COUNTS.storyFiles')
     // "across all 175 story files" — an audit that ran over 176.
     expect(ACCESSIBILITY_MDX).not.toMatch(/\d+ story files/)
+  })
+})
+
+/**
+ * Every origin this site publishes, checked against the one domain we own.
+ *
+ * The same failure mode as the counts above, in a different currency. The repo
+ * declared a canonical origin in `origin.ts` and then hand-typed a DIFFERENT host
+ * — a `.dev` variant of our name, which we do not own — into seven places. Two of
+ * them were worse than cosmetic: the `homepage` field of the registry indexes
+ * under `public/r/**`, which are *distributed* artifacts that consumers fetch with
+ * `npx shadcn add`, and the `$schema` of every theme file the designer exports.
+ * We were shipping a wrong address into other people's repositories.
+ *
+ * So: no file this app ships may contain that host, in code, in copy, in a
+ * comment, or in a generated artifact. Not "no un-derived literal" — none at all.
+ * A domain has no cautionary-tale exemption the way an old count does: the string
+ * is either something we own or it is a link to a stranger. Anything needing an
+ * absolute URL imports `SITE_ORIGIN`.
+ *
+ * If this fails: import `SITE_ORIGIN` from `src/origin.ts` instead of typing a
+ * host. If it fails on a file under `public/`, that file is GENERATED — fix the
+ * source it is built from and re-run `yarn workspace @dzup-ui/landing build:registry`
+ * (and `build:animations-registry`), which rewrites `public/r/**` + `llms*.txt`.
+ */
+describe('the origin this site publishes', () => {
+  // Assembled from parts so this spec is not itself a hit for the string it bans.
+  const DEAD_HOST = ['dzup-ui', 'dev'].join('.')
+
+  /** Text this app ships: authored source + the generated artifacts under public/. */
+  const SHIPPED_TEXT = /\.(?:ts|tsx|vue|json|md|txt|html|css|xml)$/
+
+  function walk(dir: string): string[] {
+    return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+      const full = resolve(dir, entry.name)
+      if (entry.isDirectory())
+        return entry.name === 'node_modules' ? [] : walk(full)
+      return SHIPPED_TEXT.test(entry.name) ? [full] : []
+    })
+  }
+
+  const FILES = [
+    ...walk(resolve(LANDING_ROOT, 'src')),
+    ...walk(resolve(LANDING_ROOT, 'public')),
+  ]
+
+  it('scans the files it means to scan', () => {
+    // A walk that silently matched nothing would make every assertion below pass
+    // while checking air. Anchor it on files known to carry origins.
+    expect(FILES.length).toBeGreaterThan(100)
+    expect(FILES).toContain(resolve(LANDING_ROOT, 'src', 'origin.ts'))
+    expect(FILES).toContain(resolve(LANDING_ROOT, 'public', 'r', 'registry.json'))
+  })
+
+  it(`no shipped file names the dead host`, () => {
+    const offenders = FILES.filter(file => readFileSync(file, 'utf8').includes(DEAD_HOST))
+      .map(file => file.slice(LANDING_ROOT.length + 1).split(sep).join('/'))
+    expect(offenders, `these files name ${DEAD_HOST}; derive from SITE_ORIGIN`).toEqual([])
+  })
+
+  it('the published registry indexes carry the canonical origin', () => {
+    // The artifact, read off disk — not the constant that was supposed to produce
+    // it. This is the thing a consumer's shadcn CLI actually downloads.
+    for (const index of ['r/registry.json', 'r/templates/registry.json', 'r/animations/registry.json']) {
+      const published = JSON.parse(readFileSync(resolve(LANDING_ROOT, 'public', index), 'utf8'))
+      expect(published.homepage, `${index}: homepage`).toBe(SITE_ORIGIN)
+    }
   })
 })

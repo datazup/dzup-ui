@@ -85,8 +85,12 @@ function resetFilters(): void {
             <div class="ip-card-head">
               <DzAvatar fallback="AL" alt="Ada Lovelace" size="lg" />
               <div class="ip-card-id">
-                <DzText size="sm" weight="semibold" as="span">Ada Lovelace</DzText>
-                <DzText size="xs" tone="muted" as="span">@ada · Engineering</DzText>
+                <DzText size="sm" weight="semibold" as="span">
+                  Ada Lovelace
+                </DzText>
+                <DzText size="xs" tone="muted" as="span">
+                  @ada · Engineering
+                </DzText>
               </div>
             </div>
             <DzText size="sm" as="p" class="ip-card-bio">
@@ -94,7 +98,9 @@ function resetFilters(): void {
             </DzText>
             <div class="ip-card-meta">
               <MapPin :size="13" aria-hidden="true" />
-              <DzText size="xs" tone="muted" as="span">London, UK</DzText>
+              <DzText size="xs" tone="muted" as="span">
+                London, UK
+              </DzText>
             </div>
             <DzButton
               :variant="following ? 'outline' : 'solid'"
@@ -113,16 +119,22 @@ function resetFilters(): void {
       <DzPopover v-model:open="filtersOpen">
         <DzPopoverTrigger>
           <DzButton variant="outline" tone="neutral" size="sm">
-            <template #prefix><SlidersHorizontal :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <SlidersHorizontal :size="15" aria-hidden="true" />
+            </template>
             Filters
             <template v-if="appliedCount" #suffix>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ appliedCount }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ appliedCount }}
+              </DzBadge>
             </template>
           </DzButton>
         </DzPopoverTrigger>
         <DzPopoverContent side="bottom" align="end" size="md">
           <div class="ip-filters">
-            <DzText size="sm" weight="semibold" as="p" class="ip-filters-title">Filter members</DzText>
+            <DzText size="sm" weight="semibold" as="p" class="ip-filters-title">
+              Filter members
+            </DzText>
             <label class="ip-filter-row">
               <DzText size="sm" as="span">Active only</DzText>
               <DzSwitch v-model="onlyActive" aria-label="Active only" />
@@ -137,7 +149,9 @@ function resetFilters(): void {
             </label>
             <DzDivider />
             <div class="ip-filters-actions">
-              <DzButton variant="ghost" tone="neutral" size="sm" @click="resetFilters">Reset</DzButton>
+              <DzButton variant="ghost" tone="neutral" size="sm" @click="resetFilters">
+                Reset
+              </DzButton>
               <DzButton variant="solid" tone="primary" size="sm" @click="applyFilters">
                 Apply ({{ pendingCount }})
               </DzButton>

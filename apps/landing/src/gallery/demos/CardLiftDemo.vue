@@ -23,7 +23,9 @@ const liftClass = computed(() => ({
 <template>
   <div class="stage">
     <DzCard variant="outlined" padding="lg" :class="liftClass" class="card">
-      <DzHeading :level="3" size="md" weight="semibold">Hover to lift</DzHeading>
+      <DzHeading :level="3" size="md" weight="semibold">
+        Hover to lift
+      </DzHeading>
       <DzText size="sm" tone="muted" as="p" class="copy">
         The card rises with a soft shadow and a brand-tinted border on hover.
       </DzText>

@@ -81,12 +81,14 @@ function wrapperStyle(i: number): Record<string, string> {
 const frontIndex = computed(() => order.value[0] ?? 0)
 
 function setWrapper(i: number, el: unknown): void {
-  if (el instanceof HTMLElement) wrappers.set(i, el)
+  if (el instanceof HTMLElement)
+    wrappers.set(i, el)
   else wrappers.delete(i)
 }
 
 function prefersReduced(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
@@ -94,22 +96,27 @@ function prefersReduced(): boolean {
 function rotate(): void {
   const next = order.value.slice()
   const front = next.shift()
-  if (front === undefined) return
+  if (front === undefined)
+    return
   next.push(front)
   order.value = next
 }
 
-/** FLIP via the Web Animations API — composited (`add`) over the resting CSS
- *  transform so it never overwrites the reactive `:style` binding. */
+/**
+ * FLIP via the Web Animations API — composited (`add`) over the resting CSS
+ *  transform so it never overwrites the reactive `:style` binding.
+ */
 function flip(before: Map<number, DOMRect>): void {
   for (const [i, el] of wrappers) {
     const b = before.get(i)
-    if (!b) continue
+    if (!b)
+      continue
     const a = el.getBoundingClientRect()
     const dx = b.left - a.left
     const dy = b.top - a.top
     const sx = a.width ? b.width / a.width : 1
-    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(sx - 1) < 0.001) continue
+    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(sx - 1) < 0.001)
+      continue
     el.animate(
       [
         { transform: `translate(${dx}px, ${dy}px) scale(${sx})` },
@@ -138,7 +145,8 @@ function advance(): void {
       // Resolve after the DOM/style update so the VT snapshots the new layout.
       return Promise.resolve()
     })
-  } else {
+  }
+  else {
     // FLIP: snapshot, mutate, then invert-and-play next frame.
     const before = new Map<number, DOMRect>()
     for (const [i, el] of wrappers) before.set(i, el.getBoundingClientRect())
@@ -151,9 +159,11 @@ function advance(): void {
 // --- Auto-cycle (optional, pausable, off under reduced motion) ---------------
 function startAuto(): void {
   stopAuto()
-  if (!props.interval || props.disabled || prefersReduced()) return
+  if (!props.interval || props.disabled || prefersReduced())
+    return
   autoTimer = setInterval(() => {
-    if (!paused) advance()
+    if (!paused)
+      advance()
   }, props.interval)
 }
 function stopAuto(): void {

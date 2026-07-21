@@ -30,7 +30,9 @@ const stats = [
           :aria-label="s.label"
         />
       </span>
-      <DzText size="xs" tone="muted" as="div">{{ s.label }}</DzText>
+      <DzText size="xs" tone="muted" as="div">
+        {{ s.label }}
+      </DzText>
     </div>
   </div>
 </template>

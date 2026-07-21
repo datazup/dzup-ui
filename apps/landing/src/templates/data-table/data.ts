@@ -70,21 +70,21 @@ export const PLAN_TONE: Record<CustomerPlan, CanonicalTone> = {
 
 /** Badge tone per lifecycle status. */
 export const STATUS_TONE: Record<CustomerStatus, CanonicalTone> = {
-  Active: 'success',
-  Trial: 'info',
+  'Active': 'success',
+  'Trial': 'info',
   'Past due': 'warning',
-  Churned: 'danger',
+  'Churned': 'danger',
 }
 
 /** Facet options for the plan DzMultiSelect — values are the plan labels. */
 export const PLAN_OPTIONS: DzSelectItem[] = (['Free', 'Starter', 'Pro', 'Enterprise'] as const).map(
-  (p) => ({ label: p, value: p }),
+  p => ({ label: p, value: p }),
 )
 
 /** Facet options for the status DzMultiSelect — values are the status labels. */
 export const STATUS_OPTIONS: DzSelectItem[] = (
   ['Active', 'Trial', 'Past due', 'Churned'] as const
-).map((s) => ({ label: s, value: s }))
+).map(s => ({ label: s, value: s }))
 
 /** Plan choices for the "New customer" dialog form's DzSelect. */
 export const PLAN_SELECT: DzSelectItem[] = PLAN_OPTIONS

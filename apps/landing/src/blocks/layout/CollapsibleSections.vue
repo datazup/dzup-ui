@@ -1,4 +1,17 @@
 <script setup lang="ts">
+import {
+  DzButton,
+  DzCollapse,
+  DzContainer,
+  DzDivider,
+  DzHeading,
+  DzIcon,
+  DzPanel,
+  DzStack,
+  DzSwitch,
+  DzText,
+} from '@dzup-ui/core'
+import { ChevronDown } from 'lucide-vue-next'
 /**
  * Collapsible sections — a settings page of expandable panels built on DzPanel
  * and DzCollapse.
@@ -13,19 +26,6 @@
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { reactive, ref } from 'vue'
-import {
-  DzButton,
-  DzCollapse,
-  DzContainer,
-  DzDivider,
-  DzHeading,
-  DzIcon,
-  DzPanel,
-  DzStack,
-  DzSwitch,
-  DzText,
-} from '@dzup-ui/core'
-import { ChevronDown } from 'lucide-vue-next'
 
 /** Open state per panel (true = collapsed/hidden). */
 const collapsed = reactive({
@@ -49,45 +49,71 @@ const advancedOpen = ref(false)
   <section class="cs" aria-labelledby="cs-title">
     <DzContainer max-width="md" :padding="false">
       <header class="cs-head">
-        <DzHeading id="cs-title" :level="4" size="lg" weight="bold">Settings</DzHeading>
-        <DzText size="sm" tone="muted">Collapsible sections from DzPanel · DzCollapse</DzText>
+        <DzHeading id="cs-title" :level="4" size="lg" weight="bold">
+          Settings
+        </DzHeading>
+        <DzText size="sm" tone="muted">
+          Collapsible sections from DzPanel · DzCollapse
+        </DzText>
       </header>
 
       <DzStack direction="vertical" gap="md">
         <!-- Account -->
-        <DzPanel header="Account" variant="outlined" collapsible v-model:collapsed="collapsed.account">
+        <DzPanel v-model:collapsed="collapsed.account" header="Account" variant="outlined" collapsible>
           <DzStack direction="vertical" gap="sm">
             <div class="cs-field">
-              <DzText size="sm" weight="semibold" as="span">Display name</DzText>
-              <DzText size="sm" tone="muted" as="span">Ava Restić</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                Display name
+              </DzText>
+              <DzText size="sm" tone="muted" as="span">
+                Ava Restić
+              </DzText>
             </div>
             <DzDivider />
             <div class="cs-field">
-              <DzText size="sm" weight="semibold" as="span">Email</DzText>
-              <DzText size="sm" tone="muted" as="span">ava@stratus.dev</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                Email
+              </DzText>
+              <DzText size="sm" tone="muted" as="span">
+                ava@stratus.dev
+              </DzText>
             </div>
             <DzDivider />
             <div class="cs-field">
-              <DzText size="sm" weight="semibold" as="span">Plan</DzText>
-              <DzText size="sm" tone="muted" as="span">Team · 8 seats</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                Plan
+              </DzText>
+              <DzText size="sm" tone="muted" as="span">
+                Team · 8 seats
+              </DzText>
             </div>
           </DzStack>
         </DzPanel>
 
         <!-- Notifications -->
-        <DzPanel header="Notifications" variant="outlined" collapsible v-model:collapsed="collapsed.notifications">
+        <DzPanel v-model:collapsed="collapsed.notifications" header="Notifications" variant="outlined" collapsible>
           <DzStack direction="vertical" gap="md">
-            <DzSwitch v-model="prefs.email">Email notifications</DzSwitch>
-            <DzSwitch v-model="prefs.push">Push notifications</DzSwitch>
-            <DzSwitch v-model="prefs.digest">Weekly digest</DzSwitch>
+            <DzSwitch v-model="prefs.email">
+              Email notifications
+            </DzSwitch>
+            <DzSwitch v-model="prefs.push">
+              Push notifications
+            </DzSwitch>
+            <DzSwitch v-model="prefs.digest">
+              Weekly digest
+            </DzSwitch>
           </DzStack>
         </DzPanel>
 
         <!-- Privacy -->
-        <DzPanel header="Privacy" variant="outlined" collapsible v-model:collapsed="collapsed.privacy">
+        <DzPanel v-model:collapsed="collapsed.privacy" header="Privacy" variant="outlined" collapsible>
           <DzStack direction="vertical" gap="md">
-            <DzSwitch v-model="prefs.analytics">Share anonymous usage analytics</DzSwitch>
-            <DzSwitch v-model="prefs.discoverable">Discoverable by teammates</DzSwitch>
+            <DzSwitch v-model="prefs.analytics">
+              Share anonymous usage analytics
+            </DzSwitch>
+            <DzSwitch v-model="prefs.discoverable">
+              Discoverable by teammates
+            </DzSwitch>
           </DzStack>
         </DzPanel>
       </DzStack>
@@ -102,7 +128,7 @@ const advancedOpen = ref(false)
           class="cs-advanced-toggle"
           @click="advancedOpen = !advancedOpen"
         >
-          <DzIcon :icon="ChevronDown" size="sm" :class="['cs-chevron', { 'cs-chevron--open': advancedOpen }]" />
+          <DzIcon :icon="ChevronDown" size="sm" class="cs-chevron" :class="[{ 'cs-chevron--open': advancedOpen }]" />
           Advanced options
         </DzButton>
 
@@ -113,8 +139,12 @@ const advancedOpen = ref(false)
               via the same DzCollapse primitive that powers every collapsible panel on this page.
             </DzText>
             <DzStack direction="horizontal" gap="sm" class="cs-advanced-actions">
-              <DzButton variant="outline" tone="danger" size="sm">Reset preferences</DzButton>
-              <DzButton variant="outline" tone="neutral" size="sm">Export data</DzButton>
+              <DzButton variant="outline" tone="danger" size="sm">
+                Reset preferences
+              </DzButton>
+              <DzButton variant="outline" tone="neutral" size="sm">
+                Export data
+              </DzButton>
             </DzStack>
           </div>
         </DzCollapse>

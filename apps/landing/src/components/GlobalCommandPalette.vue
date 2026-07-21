@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CommandGroup, CommandItem } from '@dzup-ui/core'
+import type { SearchDoc, SearchKind } from '../composables/useGlobalSearch.ts'
 /**
  * GlobalCommandPalette — the site-wide ⌘K / Ctrl+K navigator.
  *
@@ -16,13 +18,11 @@
  * kinds. Built only from @dzup-ui/core + `--dz-*` tokens.
  */
 import { DzCommandPalette } from '@dzup-ui/core'
-import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 import { Blocks, Box, LayoutTemplate } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { storybookDocs } from '../config.ts'
 import { useGlobalSearch } from '../composables/useGlobalSearch.ts'
-import type { SearchDoc, SearchKind } from '../composables/useGlobalSearch.ts'
+import { storybookDocs } from '../config.ts'
 
 const router = useRouter()
 const search = useGlobalSearch()
@@ -48,7 +48,7 @@ interface PaletteItem extends CommandItem {
 
 /** Map the ranked (or popular) docs to palette rows. */
 const items = computed<PaletteItem[]>(() =>
-  search.results.value.map((doc) => ({
+  search.results.value.map(doc => ({
     id: doc.id,
     label: doc.haystack,
     icon: KIND_ICON[doc.kind],
@@ -116,7 +116,9 @@ function kindOf(item: CommandItem): SearchKind {
       <span class="gcp-item-meta" :data-kind="kindOf(item)">{{ metaOf(item) }}</span>
     </template>
 
-    <template #empty> No components, blocks or templates match. </template>
+    <template #empty>
+      No components, blocks or templates match.
+    </template>
   </DzCommandPalette>
 </template>
 

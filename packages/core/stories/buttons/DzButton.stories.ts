@@ -3,7 +3,16 @@ import { ChevronRight, Download, Mail, Plus, Search } from 'lucide-vue-next'
 import { userEvent, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzIcon } from '../../src/components/media'
-import { a11yError, darkModeDecorator } from '../_shared'
+import {
+  a11yArgTypes,
+  a11yError,
+  darkModeDecorator,
+  disabledArgType,
+  sizeArgType,
+  toneArgType,
+  TONES,
+  VARIANTS,
+} from '../_shared'
 
 /**
  * DzButton is the primary interactive button component.
@@ -23,28 +32,14 @@ const meta = {
     // Appearance
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'ghost', 'text', 'link'],
+      options: VARIANTS.button,
       description: 'Visual style variant',
       table: { category: 'Appearance', defaultValue: { summary: 'solid' } },
     },
-    size: {
-      control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'xl'],
-      description: 'Component size',
-      table: { category: 'Appearance', defaultValue: { summary: 'md' } },
-    },
-    tone: {
-      control: 'select',
-      options: ['neutral', 'primary', 'success', 'warning', 'danger', 'info'],
-      description: 'Semantic color tone',
-      table: { category: 'Appearance', defaultValue: { summary: 'primary' } },
-    },
+    size: sizeArgType,
+    tone: toneArgType,
     // Behavior
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state -- prevents interaction',
-      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
-    },
+    disabled: disabledArgType,
     loading: {
       control: 'boolean',
       description: 'Loading state -- shows spinner and sets aria-busy',
@@ -61,27 +56,8 @@ const meta = {
       description: 'Render as child element (slot content becomes the root)',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
-    // Accessibility
-    id: {
-      control: 'text',
-      description: 'Unique element ID',
-      table: { category: 'Accessibility' },
-    },
-    ariaLabel: {
-      control: 'text',
-      description: 'Accessible label',
-      table: { category: 'Accessibility' },
-    },
-    ariaLabelledby: {
-      control: 'text',
-      description: 'ID of labelling element',
-      table: { category: 'Accessibility' },
-    },
-    ariaDescribedby: {
-      control: 'text',
-      description: 'ID of describing element',
-      table: { category: 'Accessibility' },
-    },
+    // Accessibility (canonical, shared)
+    ...a11yArgTypes,
   },
   args: {
     variant: 'solid',
@@ -302,17 +278,27 @@ export const VariantToneMatrix: Story = {
   name: 'Visual Matrix: Variant x Tone',
   render: () => ({
     components: { DzButton },
+    // Both axes come from the shared taxonomies, so a variant or tone added to
+    // ADR-02 shows up in this matrix instead of quietly missing from it.
+    //
+    // The label is title-cased in `setup` rather than by a `capitalize` class:
+    // the class only restyles the glyphs, leaving the button's TEXT — and so its
+    // accessible name — as the lowercase token. Screen readers would read
+    // "neutral" while the page showed "Neutral".
+    setup() {
+      return {
+        variants: VARIANTS.button,
+        tones: TONES.map(tone => ({ tone, label: tone[0]!.toUpperCase() + tone.slice(1) })),
+      }
+    },
     template: `
       <div class="space-y-6">
-        <div v-for="variant in ['solid', 'outline', 'ghost', 'text', 'link']" :key="variant">
+        <div v-for="variant in variants" :key="variant">
           <p class="text-sm font-medium mb-2 capitalize">{{ variant }}</p>
           <div class="flex flex-wrap gap-3 items-center">
-            <DzButton :variant="variant" tone="neutral">Neutral</DzButton>
-            <DzButton :variant="variant" tone="primary">Primary</DzButton>
-            <DzButton :variant="variant" tone="success">Success</DzButton>
-            <DzButton :variant="variant" tone="warning">Warning</DzButton>
-            <DzButton :variant="variant" tone="danger">Danger</DzButton>
-            <DzButton :variant="variant" tone="info">Info</DzButton>
+            <DzButton v-for="t in tones" :key="t.tone" :variant="variant" :tone="t.tone">
+              {{ t.label }}
+            </DzButton>
           </div>
         </div>
       </div>
@@ -374,10 +360,6 @@ export const DarkMode: Story = {
 export const Interactive: Story = {
   render: () => ({
     components: { DzButton },
-    setup() {
-      const count = { value: 0 }
-      return { count }
-    },
     data() {
       return { clickCount: 0 }
     },

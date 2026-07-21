@@ -17,7 +17,9 @@ import { DzBorderBeam } from '../../motion/index.ts'
   <div class="stage">
     <DzBorderBeam class="beam">
       <DzCard variant="flat" padding="lg" class="inner">
-        <DzHeading :level="3" size="md" weight="semibold">Live status</DzHeading>
+        <DzHeading :level="3" size="md" weight="semibold">
+          Live status
+        </DzHeading>
         <DzText size="sm" tone="muted" as="p" class="copy">
           A beam of light circles the border to draw the eye.
         </DzText>

@@ -48,8 +48,10 @@ const props = withDefaults(
 const reduced = useReducedMotion()
 const slots = useSlots()
 
-/** Flatten the default slot to its real element/component children (drop comments
- * and whitespace-only text nodes, unwrap v-for / template fragments). */
+/**
+ * Flatten the default slot to its real element/component children (drop comments
+ * and whitespace-only text nodes, unwrap v-for / template fragments).
+ */
 function flatten(nodes: VNode[]): VNode[] {
   const out: VNode[] = []
   for (const node of nodes) {
@@ -60,7 +62,8 @@ function flatten(nodes: VNode[]): VNode[] {
       continue
     }
     else if (node.type === Text) {
-      if (typeof node.children !== 'string' || node.children.trim() !== '') out.push(node)
+      if (typeof node.children !== 'string' || node.children.trim() !== '')
+        out.push(node)
     }
     else {
       out.push(node)
@@ -90,8 +93,10 @@ interface OrbitNode {
   counterStyle: CSSProperties
 }
 
-/** Each slotted item paired with its placement (position + spin/counter-spin).
- * Re-evaluates when the orbit props change (fresh vnodes from the slot). */
+/**
+ * Each slotted item paired with its placement (position + spin/counter-spin).
+ * Re-evaluates when the orbit props change (fresh vnodes from the slot).
+ */
 const nodes = computed<OrbitNode[]>(() => {
   const list = flatten(slots.default?.() ?? [])
   const count = list.length

@@ -8,6 +8,8 @@ The compound toast system wired up — DzToastProvider owns a capped, auto-dismi
 
 ```vue
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import { DZ_TOAST_KEY, DzButton, DzHeading, DzText, DzToastProvider, DzToastViewport } from '@dzup-ui/core'
 /**
  * Toast launcher — fire ephemeral DzToasts from the imperative provider API.
  *
@@ -21,8 +23,6 @@ The compound toast system wired up — DzToastProvider owns a capped, auto-dismi
  * tokens (docs/blocks.md §3.6).
  */
 import { defineComponent, h, inject } from 'vue'
-import { DZ_TOAST_KEY, DzButton, DzHeading, DzText, DzToastProvider, DzToastViewport } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface ToastSpec {
   tone: CanonicalTone
@@ -51,7 +51,7 @@ const ToastLauncher = defineComponent({
       h(
         'div',
         { class: 'tl-buttons' },
-        TOASTS.map((spec) =>
+        TOASTS.map(spec =>
           h(
             DzButton,
             {
@@ -80,7 +80,9 @@ const ToastLauncher = defineComponent({
   <section class="tl-wrap" aria-labelledby="tl-title">
     <DzToastProvider :duration="4000" :max-toasts="4">
       <header class="tl-head">
-        <DzHeading id="tl-title" :level="4" size="md" weight="semibold" class="tl-title">Toasts</DzHeading>
+        <DzHeading id="tl-title" :level="4" size="md" weight="semibold" class="tl-title">
+          Toasts
+        </DzHeading>
         <DzText size="sm" tone="muted" as="p" class="tl-sub">
           Fire an ephemeral, auto-dismissing toast for each tone — it appears bottom-right and clears itself after 4s.
         </DzText>

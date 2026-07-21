@@ -166,6 +166,32 @@ Stateful components additionally manage the right ARIA state for you, e.g.
 `aria-busy` while `loading`, `aria-pressed` on toggles, `aria-invalid` on invalid
 form controls, `aria-current` on active navigation items.
 
+## Keyboard shortcuts
+
+This Storybook enables its manager keyboard shortcuts (`enableShortcuts: true` in
+`.storybook/manager.ts`), so you can browse and inspect components without reaching
+for the mouse. The always-current, editable list lives in the app itself — open the
+menu (**☰**, top-left) → **Keyboard shortcuts** — but the ones worth knowing:
+
+<DocTable
+  head={['Shortcut', 'Action']}
+  align={['left', 'left']}
+  rows={[
+    ['`/`', 'Focus the sidebar search'],
+    ['`S`', 'Toggle the sidebar'],
+    ['`T`', 'Toggle the canvas toolbar (theme / viewport / direction controls)'],
+    ['`A`', 'Toggle the addons panel (Controls, A11y, Interactions)'],
+    ['`D`', 'Move the addons panel (dock right ↔ bottom)'],
+    ['`F`', 'Toggle fullscreen canvas'],
+    ['`alt` + `↑` / `↓`', 'Previous / next story'],
+    ['`alt` + `←` / `→`', 'Previous / next component'],
+  ]}
+/>
+
+The **theme**, **viewport** and **direction (LTR/RTL)** toggles all live on the
+canvas toolbar (`T` to reveal it if hidden) — see the Direction control for checking
+a component under RTL.
+
 ## Authoring checklist
 
 - **Name** — every control has an accessible name (visible label, `ariaLabel`, or

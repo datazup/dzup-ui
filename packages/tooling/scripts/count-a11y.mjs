@@ -1,7 +1,7 @@
 /* eslint-disable no-console -- ad-hoc CLI report; console.log is its output */
 // Ad-hoc: parse a Vitest JSON report from the storybook a11y run at test:'error'
 // and print per-family FAILING-STORY counts (one assertion == one story export).
-// Usage: node packages/tooling/count-a11y.mjs <path-to-json>
+// Usage: node packages/tooling/scripts/count-a11y.mjs <path-to-json>
 import { readFileSync } from 'node:fs'
 import process from 'node:process'
 

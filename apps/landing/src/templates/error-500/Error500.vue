@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * 500 — Server Error — Utility template (docs/templates.md §6.3).
  *
@@ -13,7 +14,6 @@
  */
 import { DzButton, DzCard, DzDivider, DzResult, DzText } from '@dzup-ui/core'
 import { Activity, Boxes, LifeBuoy, RefreshCw, RotateCw } from 'lucide-vue-next'
-import type { Component } from 'vue'
 import { ref } from 'vue'
 
 interface NextStep {
@@ -46,7 +46,8 @@ const INCIDENT_ID = 'INC-4F9C-2207'
 /** A short, self-clearing "retrying" state so the primary action feels alive. */
 const retrying = ref(false)
 function retry(): void {
-  if (retrying.value) return
+  if (retrying.value)
+    return
   retrying.value = true
   window.setTimeout(() => {
     retrying.value = false
@@ -62,7 +63,9 @@ function retry(): void {
         <span class="brand-name">Northwind</span>
       </span>
 
-      <p class="err-code" aria-hidden="true">500</p>
+      <p class="err-code" aria-hidden="true">
+        500
+      </p>
 
       <DzResult
         status="error"
@@ -71,11 +74,17 @@ function retry(): void {
       >
         <template #actions>
           <DzButton variant="solid" tone="danger" :loading="retrying" @click="retry">
-            <template #prefix><RefreshCw :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <RefreshCw :size="16" aria-hidden="true" />
+            </template>
             {{ retrying ? 'Retrying…' : 'Try again' }}
           </DzButton>
-          <DzButton variant="outline" tone="neutral" href="#">Status page</DzButton>
-          <DzButton variant="text" tone="neutral" href="#">Contact support</DzButton>
+          <DzButton variant="outline" tone="neutral" href="#">
+            Status page
+          </DzButton>
+          <DzButton variant="text" tone="neutral" href="#">
+            Contact support
+          </DzButton>
         </template>
       </DzResult>
 

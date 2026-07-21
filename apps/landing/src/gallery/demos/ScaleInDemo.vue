@@ -16,7 +16,7 @@ import { DzReveal } from '../../motion/index.ts'
     <DzReveal scale class="frame">
       <DzStatCard
         title="Monthly active"
-        :value="'48.2k'"
+        value="48.2k"
         variant="elevated"
         trend="up"
         trend-value="+12%"

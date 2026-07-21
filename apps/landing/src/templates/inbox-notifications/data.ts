@@ -50,7 +50,7 @@ export const NOTIFICATIONS: Notification[] = [
 ]
 
 /** Tabs across the top of the notifications list. */
-export const INBOX_TABS: { value: string; label: string }[] = [
+export const INBOX_TABS: { value: string, label: string }[] = [
   { value: 'all', label: 'All' },
   { value: 'unread', label: 'Unread' },
   { value: 'mentions', label: 'Mentions' },

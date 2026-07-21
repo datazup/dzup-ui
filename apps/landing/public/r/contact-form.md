@@ -8,6 +8,7 @@ A labeled "get in touch" card: two-column name/email row, topic select, message 
 
 ```vue
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -22,7 +23,6 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { computed, ref } from 'vue'
 
 /**
@@ -57,8 +57,9 @@ const TOPICS: DzSelectItem[] = [
 ]
 
 const emailError = computed(() => {
-  if (!submitted.value || email.value.trim() === '') return undefined
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())
+  if (!submitted.value || email.value.trim() === '')
+    return undefined
+  return /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(email.value.trim())
     ? undefined
     : 'Enter a valid email address.'
 })

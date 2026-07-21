@@ -53,7 +53,7 @@ const keys = ref([
   { id: 'k3', label: 'CI bot', masked: 'sk_ci_••••  7b88' },
 ])
 function removeKey(id: string, label: string): void {
-  keys.value = keys.value.filter((k) => k.id !== id)
+  keys.value = keys.value.filter(k => k.id !== id)
   status.value = `Revoked the "${label}" key.`
 }
 </script>
@@ -73,11 +73,17 @@ function removeKey(id: string, label: string): void {
       <!-- Reset row -->
       <div class="ca-row">
         <div class="ca-row-text">
-          <DzText size="sm" weight="medium" as="span">Reset to defaults</DzText>
-          <DzText size="xs" tone="muted" as="span">Restore the original workspace settings.</DzText>
+          <DzText size="sm" weight="medium" as="span">
+            Reset to defaults
+          </DzText>
+          <DzText size="xs" tone="muted" as="span">
+            Restore the original workspace settings.
+          </DzText>
         </div>
         <DzButton variant="outline" tone="neutral" size="sm" @click="resetOpen = true">
-          <template #prefix><RotateCcw :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <RotateCcw :size="15" aria-hidden="true" />
+          </template>
           Reset
         </DzButton>
       </div>
@@ -87,8 +93,12 @@ function removeKey(id: string, label: string): void {
       <!-- Delete workspace row -->
       <div class="ca-row">
         <div class="ca-row-text">
-          <DzText size="sm" weight="medium" as="span">Delete this workspace</DzText>
-          <DzText size="xs" tone="muted" as="span">Permanently removes all projects and data.</DzText>
+          <DzText size="sm" weight="medium" as="span">
+            Delete this workspace
+          </DzText>
+          <DzText size="xs" tone="muted" as="span">
+            Permanently removes all projects and data.
+          </DzText>
         </div>
         <DzButton variant="solid" tone="danger" size="sm" @click="deleteOpen = true">
           Delete…
@@ -99,7 +109,9 @@ function removeKey(id: string, label: string): void {
 
       <!-- API keys with inline popconfirm -->
       <div class="ca-keys">
-        <DzText size="sm" weight="medium" as="p" class="ca-keys-title">API keys</DzText>
+        <DzText size="sm" weight="medium" as="p" class="ca-keys-title">
+          API keys
+        </DzText>
         <ul class="ca-key-list">
           <li v-for="key in keys" :key="key.id" class="ca-key">
             <span class="ca-key-meta">
@@ -114,18 +126,24 @@ function removeKey(id: string, label: string): void {
               placement="left"
               @confirm="removeKey(key.id, key.label)"
             >
-              <DzIconButton :icon="Trash2" ariaLabel="Revoke key" variant="ghost" tone="danger" size="sm" />
+              <DzIconButton :icon="Trash2" aria-label="Revoke key" variant="ghost" tone="danger" size="sm" />
             </DzPopconfirm>
           </li>
         </ul>
-        <DzText v-if="!keys.length" size="sm" tone="muted" as="p">All keys revoked.</DzText>
+        <DzText v-if="!keys.length" size="sm" tone="muted" as="p">
+          All keys revoked.
+        </DzText>
       </div>
 
       <DzDivider />
 
       <div class="ca-status" role="status" aria-live="polite">
-        <DzBadge v-if="status" variant="subtle" tone="warning" size="sm">{{ status }}</DzBadge>
-        <DzText v-else size="sm" tone="muted" as="span">No actions taken.</DzText>
+        <DzBadge v-if="status" variant="subtle" tone="warning" size="sm">
+          {{ status }}
+        </DzBadge>
+        <DzText v-else size="sm" tone="muted" as="span">
+          No actions taken.
+        </DzText>
       </div>
     </div>
 

@@ -15,7 +15,8 @@
  * <SemanticGrid groups={[{ title: 'Primary', tokens: ['--dz-primary', '--dz-primary-hover'] }]} />
  * ```
  */
-import { createElement as h, Fragment, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { createElement as h } from 'react'
 
 /** The 11 canonical shade steps shipped for every primitive hue. */
 export const SHADES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
@@ -39,7 +40,8 @@ const CSS = `
 
 let injected = false
 function style(): ReactNode {
-  if (injected) return null
+  if (injected)
+    return null
   injected = true
   return h('style', { key: 'dz-pal-css' }, CSS)
 }
@@ -50,12 +52,12 @@ function labelColor(shade: number): string {
 }
 
 /** One hue rendered as its full 50→950 ramp. */
-export function SwatchRow({ name, prefix = '--dz-colors' }: { name: string; prefix?: string }): ReactNode {
+export function SwatchRow({ name, prefix = '--dz-colors' }: { name: string, prefix?: string }): ReactNode {
   return h(
     'div',
     { className: 'dz-pal__row' },
     h('div', { className: 'dz-pal__label' }, name),
-    ...SHADES.map(shade => {
+    ...SHADES.map((shade) => {
       const v = `var(${prefix}-${name}-${shade})`
       return h(
         'div',
@@ -72,7 +74,7 @@ export function SwatchRow({ name, prefix = '--dz-colors' }: { name: string; pref
 }
 
 /** A labelled grid of full hue ramps with a shade-number header. */
-export function PaletteGrid({ names, prefix = '--dz-colors' }: { names: string[]; prefix?: string }): ReactNode {
+export function PaletteGrid({ names, prefix = '--dz-colors' }: { names: string[], prefix?: string }): ReactNode {
   return h(
     'div',
     { className: 'dz-pal' },
@@ -113,7 +115,7 @@ export function SemanticGrid({ groups }: { groups: SemanticGroup[] }): ReactNode
           'div',
           { key: group.title, className: 'dz-sem__group' },
           h('div', { className: 'dz-sem__title' }, group.title),
-          ...group.tokens.map(entry => {
+          ...group.tokens.map((entry) => {
             const t = typeof entry === 'string' ? { token: entry } : entry
             return h(
               'div',

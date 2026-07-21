@@ -1,3 +1,4 @@
+import type { Buffer } from 'node:buffer'
 import type { ChildProcess } from 'node:child_process'
 import type { BlockDef } from '../src/blocks/registry.ts'
 /**
@@ -44,6 +45,7 @@ import { spawn } from 'node:child_process'
 import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
 

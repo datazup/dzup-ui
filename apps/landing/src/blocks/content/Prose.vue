@@ -28,9 +28,15 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 
       <DzText as="p" class="pr-p">
         Components never hard-code a colour. Instead they reference tokens such as
-        <DzCode variant="inline">var(--dz-primary)</DzCode> and
-        <DzCode variant="inline">var(--dz-radius-md)</DzCode>, so a theme is just a
-        set of values on <DzCode variant="inline">:root</DzCode>. Switching to dark
+        <DzCode variant="inline">
+          var(--dz-primary)
+        </DzCode> and
+        <DzCode variant="inline">
+          var(--dz-radius-md)
+        </DzCode>, so a theme is just a
+        set of values on <DzCode variant="inline">
+          :root
+        </DzCode>. Switching to dark
         mode swaps the values, not the markup.
       </DzText>
 
@@ -45,11 +51,13 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
         up the new values automatically — no props, no recompilation:
       </DzText>
 
-      <DzCode variant="block" language="css" class="pr-code">.brand {
-  --dz-primary: oklch(0.62 0.21 270);
-  --dz-radius-md: 0.75rem;
-  --dz-font-sans: 'Inter', system-ui, sans-serif;
-}</DzCode>
+      <DzCode variant="block" language="css" class="pr-code">
+        .brand {
+        --dz-primary: oklch(0.62 0.21 270);
+        --dz-radius-md: 0.75rem;
+        --dz-font-sans: 'Inter', system-ui, sans-serif;
+        }
+      </DzCode>
 
       <DzText as="p" class="pr-p">
         Because the cascade does the work, the same button renders on-brand in a
@@ -59,7 +67,9 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
       <DzBlockquote class="pr-quote">
         Good defaults are invisible. The best theming system is the one your team
         never has to think about.
-        <template #footer>The dzup-ui design principles</template>
+        <template #footer>
+          The dzup-ui design principles
+        </template>
       </DzBlockquote>
 
       <DzDivider class="pr-rule" />
@@ -70,17 +80,29 @@ import { DzBlockquote, DzCode, DzDivider, DzHeading, DzText } from '@dzup-ui/cor
 
       <ul class="pr-list">
         <li>
-          <DzText as="span"><strong>Primitives</strong> — raw scales like the colour
-          ramp and the spacing steps.</DzText>
+          <DzText as="span">
+            <strong>Primitives</strong> — raw scales like the colour
+            ramp and the spacing steps.
+          </DzText>
         </li>
         <li>
-          <DzText as="span"><strong>Semantic tokens</strong> — meaning-bearing
-          aliases such as <DzCode variant="inline">--dz-surface</DzCode> and
-          <DzCode variant="inline">--dz-border</DzCode>.</DzText>
+          <DzText as="span">
+            <strong>Semantic tokens</strong> — meaning-bearing
+            aliases such as <DzCode variant="inline">
+              --dz-surface
+            </DzCode> and
+            <DzCode variant="inline">
+              --dz-border
+            </DzCode>.
+          </DzText>
         </li>
         <li>
-          <DzText as="span"><strong>Component tokens</strong> — local anatomy
-          mappings, e.g. <DzCode variant="inline">--dz-button-md-height</DzCode>.</DzText>
+          <DzText as="span">
+            <strong>Component tokens</strong> — local anatomy
+            mappings, e.g. <DzCode variant="inline">
+              --dz-button-md-height
+            </DzCode>.
+          </DzText>
         </li>
       </ul>
 

@@ -1,10 +1,9 @@
-/* eslint-disable no-console */
 /**
  * check-bundle-size.mjs — size metric for the Storybook *static build*
  * (TASK-X.7 follow-up, see docs/storybook-decisions.md).
  *
  * WHY: the library bundle budgets (`packages/tooling/src/bundle-budget-check.ts`,
- * `yarn validate:bundle`) cover the shipped packages under `packages/*​/dist`, but
+ * `yarn validate:bundle`) cover the shipped packages under `packages/*\/dist`, but
  * nothing tracked the *docs* build — `apps/storybook/storybook-static`. A docs
  * build that quietly balloons (a heavy addon, an un-lazy dataset baked into a story
  * chunk, a duplicated vendor) slows the hosted Storybook with no signal. This walks
@@ -46,8 +45,10 @@ const MB = 1024 * 1024
 const COMPRESSIBLE = /\.(?:js|mjs|css|html|json|svg|map)$/
 
 function formatBytes(bytes) {
-  if (bytes < KB) return `${bytes} B`
-  if (bytes < MB) return `${(bytes / KB).toFixed(1)} kB`
+  if (bytes < KB)
+    return `${bytes} B`
+  if (bytes < MB)
+    return `${(bytes / KB).toFixed(1)} kB`
   return `${(bytes / MB).toFixed(2)} MB`
 }
 
@@ -56,8 +57,10 @@ function walk(dir) {
   const out = []
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name)
-    if (entry.isDirectory()) out.push(...walk(full))
-    else if (entry.isFile()) out.push({ path: full, size: statSync(full).size })
+    if (entry.isDirectory())
+      out.push(...walk(full))
+    else if (entry.isFile())
+      out.push({ path: full, size: statSync(full).size })
   }
   return out
 }

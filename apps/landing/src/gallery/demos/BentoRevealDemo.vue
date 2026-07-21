@@ -36,8 +36,12 @@ const cells = [
         :class="cell.span"
       >
         <component :is="cell.icon" :size="18" class="cell-icon" aria-hidden="true" />
-        <DzText weight="semibold" size="sm" as="div">{{ cell.title }}</DzText>
-        <DzText size="xs" tone="muted" as="div">{{ cell.body }}</DzText>
+        <DzText weight="semibold" size="sm" as="div">
+          {{ cell.title }}
+        </DzText>
+        <DzText size="xs" tone="muted" as="div">
+          {{ cell.body }}
+        </DzText>
       </DzCard>
     </DzBentoReveal>
 

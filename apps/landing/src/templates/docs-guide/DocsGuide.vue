@@ -49,7 +49,9 @@ const search = ref('')
             aria-label="Search documentation"
             class="nav-search"
           />
-          <DzButton variant="outline" tone="neutral" size="sm">GitHub</DzButton>
+          <DzButton variant="outline" tone="neutral" size="sm">
+            GitHub
+          </DzButton>
         </div>
       </div>
     </header>
@@ -59,7 +61,9 @@ const search = ref('')
       <aside class="sidebar" aria-label="Documentation">
         <nav class="side-nav">
           <div v-for="group in SIDEBAR" :key="group.title" class="side-group">
-            <DzText size="xs" tone="muted" as="div" class="side-title">{{ group.title }}</DzText>
+            <DzText size="xs" tone="muted" as="div" class="side-title">
+              {{ group.title }}
+            </DzText>
             <ul class="side-list">
               <li v-for="link in group.links" :key="link.label">
                 <a
@@ -80,12 +84,20 @@ const search = ref('')
       <!-- ── Article ──────────────────────────────────────────── -->
       <main class="doc">
         <DzBreadcrumb separator="/" aria-label="Breadcrumb" class="crumbs">
-          <DzBreadcrumbItem href="#">Docs</DzBreadcrumbItem>
-          <DzBreadcrumbItem href="#">Core concepts</DzBreadcrumbItem>
-          <DzBreadcrumbItem current>Theming</DzBreadcrumbItem>
+          <DzBreadcrumbItem href="#">
+            Docs
+          </DzBreadcrumbItem>
+          <DzBreadcrumbItem href="#">
+            Core concepts
+          </DzBreadcrumbItem>
+          <DzBreadcrumbItem current>
+            Theming
+          </DzBreadcrumbItem>
         </DzBreadcrumb>
 
-        <DzHeading :level="1" size="3xl" weight="bold" class="doc-title">Theming</DzHeading>
+        <DzHeading :level="1" size="3xl" weight="bold" class="doc-title">
+          Theming
+        </DzHeading>
         <DzText size="lg" tone="muted" as="p" class="doc-lede">
           Every component reads its colours, radii and shadows from named design
           tokens. Re-point the tokens and the whole UI follows — no per-component
@@ -95,7 +107,9 @@ const search = ref('')
         <DzDivider class="doc-rule" />
 
         <section id="overview" class="doc-section">
-          <DzHeading :level="2" size="xl" weight="semibold" class="h2">Overview</DzHeading>
+          <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+            Overview
+          </DzHeading>
           <DzText as="p" class="p">
             Theming in this library is a single-layer concern. Components never
             hardcode a value; they reference a semantic token such as
@@ -113,7 +127,9 @@ const search = ref('')
         </section>
 
         <section id="tokens" class="doc-section">
-          <DzHeading :level="2" size="xl" weight="semibold" class="h2">How theming works</DzHeading>
+          <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+            How theming works
+          </DzHeading>
           <DzText as="p" class="p">
             Semantic tokens point at primitive scale values; components only ever
             read the semantic layer. That indirection is what makes re-skinning a
@@ -129,7 +145,9 @@ const search = ref('')
         </section>
 
         <section id="override" class="doc-section">
-          <DzHeading :level="2" size="xl" weight="semibold" class="h2">Overriding tokens</DzHeading>
+          <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+            Overriding tokens
+          </DzHeading>
           <DzText as="p" class="p">
             Override tokens under any selector — <code>:root</code>, a brand
             attribute, or a scoped container. The closest definition wins, so you
@@ -153,7 +171,9 @@ const search = ref('')
         </section>
 
         <section id="dark" class="doc-section">
-          <DzHeading :level="2" size="xl" weight="semibold" class="h2">Dark mode</DzHeading>
+          <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+            Dark mode
+          </DzHeading>
           <DzText as="p" class="p">
             Dark mode stops being a feature and becomes a side effect: override the
             semantic tokens under <code>[data-theme='dark']</code> and every
@@ -164,19 +184,25 @@ const search = ref('')
         <!-- ── Prev / next ────────────────────────────────────── -->
         <nav class="pager" aria-label="Page navigation">
           <DzButton variant="outline" tone="neutral" size="md" class="pager-btn">
-            <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+            <template #prefix>
+              <ArrowLeft :size="16" aria-hidden="true" />
+            </template>
             Design tokens
           </DzButton>
           <DzButton variant="solid" tone="warning" size="md" class="pager-btn">
             Accessibility
-            <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+            <template #suffix>
+              <ArrowRight :size="16" aria-hidden="true" />
+            </template>
           </DzButton>
         </nav>
       </main>
 
       <!-- ── On this page ─────────────────────────────────────── -->
       <aside class="toc" aria-label="On this page">
-        <DzText size="xs" tone="muted" class="toc-label">On this page</DzText>
+        <DzText size="xs" tone="muted" class="toc-label">
+          On this page
+        </DzText>
         <DzAnchor :items="TOC" :offset-top="80" aria-label="Sections on this page" />
       </aside>
     </div>

@@ -148,7 +148,9 @@ const testimonials: Testimonial[] = [
               shape="circle"
             />
             <div class="tm-reviewer-info">
-              <DzText size="sm" weight="semibold" class="tm-name">{{ item.name }}</DzText>
+              <DzText size="sm" weight="semibold" class="tm-name">
+                {{ item.name }}
+              </DzText>
               <DzText size="xs" tone="muted" class="tm-role">
                 {{ item.role }}, {{ item.company }}
               </DzText>

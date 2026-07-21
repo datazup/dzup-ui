@@ -449,6 +449,10 @@ export function resolveClassList(classList: string): { classList: string, unclas
  *
  * Pure: takes source, returns source. Honors the `token-check-disable-file`
  * marker used by `tooling/token-checks/color-lint.ts`.
+ *
+ * The sibling `token-check-allow-raw-values` marker is deliberately NOT a skip:
+ * it exempts raw `#hex` / `rgb()` values, and this transform only ever rewrites
+ * class lists, so a file carrying it still wants its classes tokenized.
  */
 export function transformStoryColors(source: string): TransformStoryColorsResult {
   if (source.includes(FILE_DISABLE_MARKER))

@@ -47,4 +47,20 @@ export default antfu({
     'apps/*/dist/**',
     'apps/*/storybook-static/**',
   ],
+}, {
+  // Node CLI + build scripts: stdout is their user interface, not a debugging
+  // leftover. `no-console` guards shipped component code; it does not apply here.
+  name: 'dzup/cli-scripts',
+  files: ['**/scripts/**'],
+  rules: {
+    'no-console': 'off',
+  },
+}, {
+  // DzPresence clones its slot's child vnode to stamp `data-state` onto it, which
+  // requires a render function — `<script setup>` cannot express that.
+  name: 'dzup/render-function-components',
+  files: ['apps/landing/src/motion/components/DzPresence.vue'],
+  rules: {
+    'vue/component-api-style': 'off',
+  },
 })

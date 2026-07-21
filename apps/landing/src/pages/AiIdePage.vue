@@ -82,7 +82,16 @@ const prompts = [
 </script>
 
 <template>
-  <main class="ai">
+  <!--
+    A div, not a <main>: App.vue already wraps every routed view in the single
+    <main id="main"> that the skip link targets, so a <main> here nested one
+    inside the other and gave /ai two main landmarks — invalid HTML, and an
+    ambiguous page map for anything that navigates by landmark. Every other page
+    root is a div/section for this reason; `pageLandmarks.spec.ts` enforces it.
+    (The <main>s under src/templates/** are correct and out of scope — a template
+    renders standalone in an iframe.)
+  -->
+  <div class="ai">
     <!-- Hero -->
     <section class="ai-hero">
       <span class="lp-eyebrow">AI-native distribution</span>
@@ -114,11 +123,15 @@ const prompts = [
 
       <div class="ai-hero-links">
         <DzButton as="a" :href="LINKS.github" target="_blank" rel="noopener" variant="outline" tone="neutral" size="sm">
-          <template #prefix><Github :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <Github :size="16" aria-hidden="true" />
+          </template>
           Source &amp; docs
         </DzButton>
         <DzButton as="a" :href="LINKS.components" target="_blank" rel="noopener" variant="outline" tone="neutral" size="sm">
-          <template #prefix><BookOpen :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <BookOpen :size="16" aria-hidden="true" />
+          </template>
           Component API
         </DzButton>
       </div>
@@ -165,8 +178,12 @@ const prompts = [
         <article v-for="tool in tools" :key="tool.name" class="ai-tool">
           <component :is="tool.icon" :size="18" aria-hidden="true" class="ai-tool-icon" />
           <div>
-            <DzText size="sm" weight="semibold" as="div" class="ai-tool-name">{{ tool.name }}</DzText>
-            <DzText size="sm" tone="muted" as="div">{{ tool.blurb }}</DzText>
+            <DzText size="sm" weight="semibold" as="div" class="ai-tool-name">
+              {{ tool.name }}
+            </DzText>
+            <DzText size="sm" tone="muted" as="div">
+              {{ tool.blurb }}
+            </DzText>
           </div>
         </article>
       </div>
@@ -180,11 +197,13 @@ const prompts = [
       <ul class="ai-prompts">
         <li v-for="prompt in prompts" :key="prompt" class="ai-prompt">
           <Sparkles :size="15" aria-hidden="true" class="ai-prompt-icon" />
-          <DzText size="sm" as="span">{{ prompt }}</DzText>
+          <DzText size="sm" as="span">
+            {{ prompt }}
+          </DzText>
         </li>
       </ul>
     </section>
-  </main>
+  </div>
 </template>
 
 <style scoped>

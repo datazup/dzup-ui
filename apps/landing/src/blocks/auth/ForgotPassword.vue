@@ -29,16 +29,19 @@ const sent = ref(false)
 const attempted = ref(false)
 
 const emailError = computed(() => {
-  if (!attempted.value) return undefined
-  if (email.value.trim() === '') return 'Email is required.'
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())
+  if (!attempted.value)
+    return undefined
+  if (email.value.trim() === '')
+    return 'Email is required.'
+  return /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(email.value.trim())
     ? undefined
     : 'Enter a valid email address.'
 })
 
 function submit() {
   attempted.value = true
-  if (!emailError.value) sent.value = true
+  if (!emailError.value)
+    sent.value = true
 }
 
 function reset() {

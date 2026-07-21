@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import { DzAnimatedNumber, DzStatCard } from '@dzup-ui/core'
 import { DollarSign, TrendingUp, Users, Zap } from 'lucide-vue-next'
-import type { Component } from 'vue'
 
 /**
  * Stats band — a horizontal strip of four key product metrics.

@@ -27,8 +27,12 @@ const sheen = computed(() => ({
     </DzButton>
 
     <DzCard variant="elevated" padding="lg" :class="sheen" class="card">
-      <DzText weight="semibold" as="div">Hover for sheen</DzText>
-      <DzText size="sm" tone="muted" as="div">A light streak sweeps across.</DzText>
+      <DzText weight="semibold" as="div">
+        Hover for sheen
+      </DzText>
+      <DzText size="sm" tone="muted" as="div">
+        A light streak sweeps across.
+      </DzText>
     </DzCard>
   </div>
 </template>

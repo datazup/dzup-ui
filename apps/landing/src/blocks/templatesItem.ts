@@ -24,20 +24,21 @@
  * surfaces, and what installs cleanly; see `scripts/README.md`.
  */
 
+import type { TemplateMeta } from '../templates/registry.ts'
+import type { RegistryFile, RegistryIndexItem } from './registryItem.ts'
+import { SITE_ORIGIN } from '../origin.ts'
 import { sourceDependencies } from './config.ts'
 import {
   REGISTRY_FILE_TYPE,
   REGISTRY_ITEM_SCHEMA,
   REGISTRY_ITEM_TYPE,
   REGISTRY_SCHEMA,
-  type RegistryFile,
-  type RegistryIndexItem,
+
 } from './registryItem.ts'
-import type { TemplateMeta } from '../templates/registry.ts'
 
 /** Registry name + homepage stamped into the templates `registry.json` index. */
 export const TEMPLATES_REGISTRY_NAME = 'dzup-ui-templates'
-export const TEMPLATES_REGISTRY_HOMEPAGE = 'https://dzup-ui.dev'
+export const TEMPLATES_REGISTRY_HOMEPAGE = SITE_ORIGIN
 
 /** Project-relative directory the CLI writes each template's files into. */
 export const TEMPLATE_TARGET_DIR = 'components/templates'
@@ -98,7 +99,7 @@ export function toTemplateItem(
     title: meta.name,
     description: meta.blurb,
     categories: [meta.category],
-    files: files.map((file) => ({
+    files: files.map(file => ({
       path: file.filename,
       content: file.content,
       type: REGISTRY_FILE_TYPE,
@@ -107,7 +108,7 @@ export function toTemplateItem(
     registryDependencies: [],
     // Union of every resolved file's imports, so a multi-file template lists all
     // its runtime packages (e.g. an SFC using lucide + a data.ts that does not).
-    dependencies: sourceDependencies(files.map((f) => f.content).join('\n')),
+    dependencies: sourceDependencies(files.map(f => f.content).join('\n')),
     meta: { components: [...meta.stack], tier: meta.tier },
   }
 }

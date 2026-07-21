@@ -135,9 +135,12 @@ together with the conventions block below.
     Verify light AND dark (Playwright defaults to light).</a11y>
   <validation>
     yarn install                              # FIRST, once — the tree bumped storybook without it
-    yarn typecheck && yarn lint               # packages gates. lint currently exits 1 on a 147-error
-                                              # baseline (TASK-FREE2-01 drives it to 0)
-    npx vue-tsc -p apps/landing/tsconfig.json # landing types (6 known errors; TASK-FREE2-01 → 0)
+    yarn typecheck && yarn lint               # TASK-FREE2-01 DONE: `lint` now covers packages/ AND both
+                                              # apps at a 0-error/0-warning baseline (--max-warnings 0).
+                                              # It exits 0. Any new problem is YOURS — don't add to it.
+    yarn typecheck:apps                       # landing types, folded into `typecheck:all`. 0 errors.
+                                              # (The 6 errors this review measured were already fixed by
+                                              # d3047a8 before TASK-FREE2-01 ran — see that task's notes.)
     yarn test                                 # vitest incl. apps/*/src. 1 pre-existing win32 failure
                                               # (interaction-contract.spec.ts path separators) is the
                                               # green baseline on Windows. Don't run concurrently with
@@ -159,7 +162,36 @@ together with the conventions block below.
 
 ---
 
-## [ ] TASK-FREE2-01 — Close out TASK-FREE-05 for real: apps under lint + typecheck, and a zero-error baseline
+## [x] TASK-FREE2-01 — Close out TASK-FREE-05 for real: apps under lint + typecheck, and a zero-error baseline
+
+> **Landed 2026-07-16.** `yarn lint` = `eslint packages/ apps/ --max-warnings 0`, exits **0/0**.
+> `typecheck:apps` (vue-tsc, apps/landing) added and folded into `typecheck:all` — **0 errors**.
+> Both gates were already blocking in CI as their own `typecheck` / `lint` jobs (which `build`
+> `needs:`), so widening the scripts widened the gates; they were NOT moved into `validate`, which
+> would have cost the parallelism for nothing. `packages/tooling/measure-warning.ts` deleted (a
+> one-off probe; its finding — the warning-token fix — already shipped). `count-a11y.mjs` and
+> `flip-family.mjs` moved to `packages/tooling/scripts/` so one `**/scripts/**` glob carries the
+> `no-console` override.
+>
+> **Three things this task's own motivation got wrong** — later checkouts had moved:
+> 1. **The 6 landing type errors were already gone**, fixed by `d3047a8` before this ran. There is
+>    no `as="h4"` anywhere in `apps/landing/src`, and no unused `writeFile` in `verify-auth.mts`.
+>    So **no `DzHeading :level="4"` conversion happened** — there was nothing to convert. The block
+>    a11y suite is green regardless.
+> 2. **Lint measured 155 problems (140 errors), not 192/147.**
+> 3. **`--fix` is not safe to trust here.** It introduced two real regressions that only `vue-tsc`
+>    caught: `new Array<number>(BINS).fill(0)` → `Array.from({length:BINS}).fill(0)` (dropping the
+>    type argument → `unknown[]`) in `ThemesPage.vue`, and `.some(x => x === tag)` → `.includes(tag)`
+>    in `TemplatesPage.vue`, defeating a workaround explained in the comment directly above it. It
+>    also hoisted imports above 7 files' leading doc comments, orphaning them. **Typecheck after
+>    linting, and read the diff.**
+>
+> Two config-level rule overrides exist, both in `eslint.config.js` with a justification:
+> `no-console` off for `**/scripts/**` (stdout is a CLI's interface), and `vue/component-api-style`
+> off for `DzPresence.vue` (it clones a slot vnode, which needs a render function).
+> Regex rewrites for `regexp/no-super-linear-backtracking` were verified **byte-identical**: the
+> `llms.txt`/`llms-full.txt` and `releases.generated.ts` generators produce the same output as
+> before, modulo their timestamp.
 
 ```xml
 <role>
@@ -245,7 +277,25 @@ Measured on this checkout, 2026-07-15:
 
 ---
 
-## [ ] TASK-FREE2-02 — Unship the "Visual Refresh" internal design gallery from the public sidebar
+## [x] TASK-FREE2-02 — Unship the "Visual Refresh" internal design gallery from the public sidebar
+
+> **Landed 2026-07-17.** Mechanism: an **inclusion flag**, not a glob negation —
+> `.storybook/main.ts` names what ships (`stories/!(_gallery)/**` + an explicit
+> `_gallery/DzTokenBrowser.stories.ts`) and globs the 8 screens in only under
+> `DZUP_GALLERY=1`. A trailing `!…` entry was rejected because `stories` entries are
+> globbed independently, so an ineffective negation fails *open* — it ships the scratch.
+> Measured on real builds: public = **0** `visual-refresh` ids (and 0 `freestyle`
+> chunks — the mockups no longer bundle at all); `DZUP_GALLERY=1` = **24** ids, so the
+> comparison stays runnable. All 8 files now import `@storybook/vue3-vite`; zero files
+> repo-wide import `@storybook/vue3`. Decision + local-run path in
+> `docs/storybook-decisions.md`; `_gallery/README.md` no longer claims they're pinned
+> in the sidebar.
+>
+> **Correction to this task's spec:** it says to assert `guides-design-tokens--docs`.
+> That id **does not exist** — `DesignTokens.mdx` attaches via `<Meta of={…} />`, and an
+> `of`-attached docs entry is named after the MDX file, so the real ids are
+> `guides-design-tokens--designtokens` and `--browser`. Asserting the specified id
+> would have failed on a correct tree. The sentinels use the measured ids.
 
 ```xml
 <role>
@@ -313,7 +363,40 @@ and MUST keep shipping.
 
 ---
 
-## [ ] TASK-FREE2-03 — Repair every broken or lying link inside the shipped docs
+## [x] TASK-FREE2-03 — Repair every broken or lying link inside the shipped docs
+
+> **Landed 2026-07-17.** Smaller than measured: **2 of the 5 links were already fixed**
+> by TASK-FREE-11 (`ComponentStatus.mdx` → `contributing--docs`, `Typography.mdx` →
+> `guides-design-tokens--designtokens`), which also shipped `check-mdx-links.mjs` —
+> so the validator this task asks for **already existed** and needed extending, not
+> writing. Three real defects remained and are fixed:
+>
+> - `Releases.mdx:23` — `CHANGELOG.md` now links the real changelog on GitHub
+>   (was: `?path=/docs/introduction--docs`). Verified in the shipped chunk.
+> - `GettingStarted.mdx:40` / `Contributing.mdx:18` — CLAUDE.md links **removed**, not
+>   redirected. This task offers DESIGN.md as the substitute, but **DESIGN.md contains
+>   neither thing the two links promise** (no package dependency graph; nothing about
+>   story layout) — swapping the URL would have traded a dead link for a lying one.
+>   Both sentences already state the fact, so the requirement's second branch applies.
+> - The `main.ts`/`preview.ts` comments now state the real invariant: the two addon
+>   lists answer *different* questions (build-time/manager vs preview-runtime) and are
+>   **not** meant to match; only addon-docs needs both. No TASK-0.1 reference.
+>
+> **Validator extended** (same script, per this task's suggestion): now also scans
+> `stories/_blocks/*.ts`, bans CLAUDE.md links in **every** form (the absolute GitHub
+> URL the repo had "fixed" them into is what it caught), reports runtime-built dynamic
+> links rather than silently passing them, and carries the FREE2-02 sentinels. Proved
+> red-then-green by reintroducing each defect: exits 1 on the CLAUDE.md URL + the dead
+> `getting-started-design-tokens--docs` id, exits 0 restored.
+>
+> **Not machine-checkable, by construction:** the Releases mislabel pointed at a
+> *valid* id (`introduction--docs`), so no id-resolver could ever have caught it. A
+> label/target mismatch needs a human or an LLM check.
+>
+> **Left alone, flagged:** `Accessibility.mdx:106` cites `CLAUDE.md` in **prose** (not a
+> link) as the source of rule 1b. It passes the success criterion as written. Note the
+> generated public `DESIGN.md` cites "CLAUDE.md rule #1" the same way, so this is a
+> broader pattern worth one decision rather than a drive-by edit here.
 
 ```xml
 <role>
@@ -381,7 +464,7 @@ Verified on this checkout:
 
 ---
 
-## [ ] TASK-FREE2-04 — Landing truth pass: the "Coming soon" that shipped, and the double `<main>`
+## [x] TASK-FREE2-04 — Landing truth pass: the "Coming soon" that shipped, and the double `<main>`
 
 ```xml
 <role>
@@ -446,7 +529,7 @@ registry — then add the regression guards that keep all three true.
 
 ---
 
-## [ ] TASK-FREE2-05 — One canonical origin: end the `dzup-ui.dev` / `dzup-ui.com` split
+## [x] TASK-FREE2-05 — One canonical origin: end the `dzup-ui.dev` / `dzup-ui.com` split
 
 ```xml
 <role>
@@ -525,7 +608,51 @@ embedding a localhost URL.
 
 ---
 
-## [ ] TASK-FREE2-06 — Decide what "App-Specific" components are doing in a public component library
+## [x] TASK-FREE2-06 — Decide what "App-Specific" components are doing in a public component library
+
+> **Landed 2026-07-17. Decision: (b) REMOVE FROM PUBLIC.** The vocabulary settles it —
+> `GovernanceBadge.pattern` is `supervisor | contract_net | blackboard | peer_to_peer |
+> council`, `TeamMemberBadge.participantId` is scoped to "the team run (not the
+> team-definition ID)". No consumer outside datazup can use these, so (a)'s best case is
+> a paragraph explaining that four catalog entries are not for you — plus a permanent
+> `Dz*` rename through compat + codemod + changeset to spell them consistently in a
+> catalog they should not be in. The four story files moved to
+> `packages/core/stories/_app-specific/` and ship only under `DZUP_APP_SPECIFIC=1`,
+> reusing the FREE2-02 inclusion-flag mechanism (a negation fails *open*). Components
+> stay exported; the rename is recorded as internal debt. Decision +
+> promote-it-back criteria in `docs/storybook-decisions.md` (supersedes TASK-X.4).
+>
+> **Correction to this task's premise:** it describes the bucket as under-documented.
+> It was worse — `Feedback.mdx` stated the two badges were "unimplemented stubs …
+> not exported … intentionally **excluded** from this Storybook" while both were
+> implemented, exported, `status:stable`, and publishing pages. Meanwhile
+> `build-counts.ts` and the ⌘K palette filter on the `Dz` prefix, so those two were
+> **published but uncounted and unsearchable**. Three surfaces, three different
+> answers; the docs section is deleted rather than corrected.
+>
+> **The trap this nearly walked into:** `apps/storybook/vitest.config.ts` runs
+> `storybookTest({ configDir })`, so the play() + a11y runner reads the SAME
+> `main.ts` glob as the builder. Narrowing it would have silently ended a11y and
+> play() coverage for four shipped components — unpublishing quietly becoming
+> untesting. The `storybook-test` CI step now sets `DZUP_APP_SPECIFIC: '1'`: tested
+> like everything else, published like nothing else. Verified both ways — without the
+> flag the runner reports "No test files found" for `GovernanceBadge`.
+>
+> **Measured, not assumed:** public build serves **0** `core-feedback-app-specific`
+> ids and `check:mdx-links` passes (the two `guides-design-tokens--*` ids still
+> present, so the exclusion did not overshoot); `DZUP_APP_SPECIFIC=1` serves **38**
+> and the sentinel exits 1. Counts moved on their own: documented **139 → 137**
+> (Feedback 16 → 14), catalog **205** unchanged (still `.vue`-derived — the
+> components did not leave the library), `index.html` meta + DESIGN.md rewritten by
+> their generators. `claims.spec.ts` green. Nothing hand-edited.
+>
+> **One test rewritten, not deleted.** `componentIndex.spec.ts` asserted that the two
+> `Dz*` App-Specific components appear in `COMPONENTS` — a guard against a regex that
+> assumed exactly one title-group segment and silently dropped nested titles. They
+> were its only fixture. The guard now tests `readComponentTitle` directly against
+> synthetic titles (the bug lives in the regex, so the test belongs on the regex), so
+> it holds even though nothing published nests a group — which is precisely when a
+> silent-drop bug would return unseen.
 
 ```xml
 <role>
@@ -604,7 +731,37 @@ demos of general-purpose components; they are another product's domain widgets.
 
 ---
 
-## [ ] TASK-FREE2-07 — Story-corpus consistency: the raw-colour stragglers and the flagship that ignores the house style
+## [x] TASK-FREE2-07 — Story-corpus consistency: the raw-colour stragglers and the flagship that ignores the house style
+
+> **Landed 2026-07-17.** Six `text-gray-*` classes tokenised to
+> `text-[var(--dz-muted-foreground)]`; DzButton.stories.ts now imports `sizeArgType`,
+> `toneArgType`, `disabledArgType`, `a11yArgTypes`, `VARIANTS.button` and `TONES` from
+> `_shared`; the dead `count` ref is gone.
+>
+> **Correction to this task's premise — the validator was never the hole.** The task
+> asserts colour-lint "demonstrably does not flag bare `text-{palette}-{shade}` classes"
+> and asks for the rule to be extended. It already had that rule, and it works:
+> `checkSource` on the pre-fix file with the marker narrowed reports all six classes.
+> What actually let them ship was line 1 of the file — a blanket
+> `token-check-disable-file`, added so the hex *presets* (legitimate test data) would
+> pass, which switched off **all three** rule groups as a side effect. Extending the
+> regex would have changed nothing; the file was exempt before any regex ran.
+>
+> So the fix is to the marker's *reach*, not the pattern. `token-check-allow-raw-values`
+> now exempts group 1 (`#hex` / `rgb()` / `hsl()`) only, leaving palette classes and
+> untokenized borders armed — which is the whole of what "this file is about colour
+> values" actually justifies. `token-check-disable-file` keeps its blunt meaning for
+> `_gallery/freestyle/*`, where raw Tailwind IS the point. DzColorPicker's `.vue` and
+> `.stories.ts` moved to the narrow marker; the sweep then surfaced a **seventh**
+> violation the review missed — an untokenized `border` at `:269`.
+>
+> Proven fail-then-pass by driving `checkSource` over `git show HEAD:` of the story:
+> 7 violations with the narrow marker, 0 with the blunt one (the gap), 0 after the fix.
+> Four cases added to `color-lint.spec.ts` pin that a raw-values exemption never covers
+> a palette class. The `VariantToneMatrix` refactor was diffed against the hand-rolled
+> version by mounting both: byte-identical markup, same 30 labels — note the tone labels
+> are title-cased in `setup`, not by a `capitalize` class, which would have left each
+> button's accessible name as the lowercase token.
 
 ```xml
 <role>
@@ -626,10 +783,12 @@ fragments it is supposed to exemplify.
     `text-gray-400`/`text-gray-500` classes: the ONLY raw-palette usage in 176 story files
     (verified by corpus-wide scan). ADR-04 and CLAUDE.md rule 1 forbid it; the correct token
     is `text-[var(--dz-muted-foreground)]`.
-  • Those six classes shipped THROUGH `yarn validate:tokens` — the colour-lint (which
-    docs/story-color-tokens-codemod work extended to stories) demonstrably does not flag
-    bare `text-{palette}-{shade}` classes. Fixing the file without fixing the validator
-    re-arms the trap.
+  • Those six classes shipped THROUGH `yarn validate:tokens`. Fixing the file without
+    fixing whatever let them through re-arms the trap.
+    [CORRECTED ON LANDING — see the note above this block. The colour-lint DOES flag
+    bare `text-{palette}-{shade}` in stories; that rule was never missing. The file was
+    exempt at line 1 via a blanket `token-check-disable-file` taken out for its hex
+    presets. The hole was the marker's reach, not the regex.]
   • `packages/core/stories/buttons/DzButton.stories.ts:22-85` hand-declares size/tone/aria
     argTypes and literal option arrays that `_shared/options.ts` exports (`sizeArgType`,
     `toneArgType`, `a11yArgTypes`, `SIZES`, `TONES`) — the exact fragments `Contributing.mdx:27-35`
@@ -673,7 +832,53 @@ fragments it is supposed to exemplify.
 
 ---
 
-## [ ] TASK-FREE2-08 — Make `system` theme mode reachable again (three-way theme control)
+## [x] TASK-FREE2-08 — Make `system` theme mode reachable again (three-way theme control)
+
+> **Landed 2026-07-17.** The nav control is now `DzColorModeToggle` (icon variant) — the
+> library's own component, dogfooded on the site that markets it. It cycles
+> light → dark → system, shows the preference as its glyph (sun / moon / monitor), and
+> its live region announces `System theme (Light)`, carrying both the mode and the
+> resolved theme to assistive tech. Verified in a real browser: clicking alone reaches
+> `light, dark, system`. RethemeButton stays a binary flip but now says so — its tooltip
+> states that it pins an explicit mode and points at the nav control for `system`.
+>
+> **The `<sync>` question: the dual writers DID desync, and it lost a real preference.**
+> Reproduced, not theorised. `useTheme` and `DzThemeProvider` share the `dz-theme` key
+> and both write `data-theme`, but each reads that key exactly once, at init — so they
+> agree at load and never again. The failing path: pick **light** explicitly, then flip
+> the OS to dark; the provider, still holding the `system` preference it read at mount,
+> recomputes on its own media listener and overwrites `data-theme` back to `dark`. The
+> visitor's explicit choice is gone. App.vue's comment asserted these two "stay in sync
+> rather than conflicting" — that assertion was false and is now replaced by the design.
+>
+> **Authority:** the landing `useTheme` singleton owns the preference (it is created
+> before any component mounts and is what the FOUC IIFE agrees with). `ThemeSync` +
+> `useProviderThemeSync` make the provider mirror it — two-way, so a `DzColorModeToggle`
+> inside a block preview is adopted rather than lost, each direction value-guarded so a
+> propagated write lands as a same-value assignment and stops there. The provider's
+> internal attribute write survives (it cannot be disabled from outside) but can no
+> longer express an opinion the singleton does not hold.
+>
+> Adopting DzColorModeToggle in the nav is only correct BECAUSE of that bridge: it binds
+> to the provider context, so before the bridge it would have split the site's theme
+> state in two.
+>
+> Browser-verified (Playwright, temporary spec): explicit light survives an OS flip to
+> dark; system mode tracks a live OS flip both ways; and with `dz-theme=system` + OS dark,
+> `data-theme` is already `dark` at `domcontentloaded` — no FOUC (ADR-15). 18 new unit
+> specs (`useTheme.spec.ts`, `themeSync.spec.ts`); the sync specs were proven non-vacuous
+> by neutering the bridge and watching 3 of 4 fail.
+>
+> **Trade-off, deliberate:** a nav theme change now cross-fades via the CSS
+> `--dz-landing-theme-transition` rather than the full-page View Transition snapshot —
+> `DzColorModeToggle` knows nothing of that landing-only flourish. RethemeButton, where
+> the effect is the selling point, still drives `useThemeTransition`.
+>
+> **Gotcha for anyone touching `themeSync.spec.ts`:** `DZ_THEME_KEY` is a `Symbol()`, so
+> a statically-imported `DzThemeProvider` provides under a different key than a bridge
+> re-imported after `vi.resetModules()` injects with. `useTheme({ optional: true })` then
+> silently returns its no-op sentinel and the tests pass for the wrong reason. Import
+> core inside the fresh graph.
 
 ```xml
 <role>

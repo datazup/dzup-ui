@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Blog post list — a grid of editorial cards for a blog or news index.
  *
@@ -11,7 +12,6 @@
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { DzAvatar, DzBadge, DzImageCard, DzText } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface Post {
   id: number
@@ -91,9 +91,13 @@ const posts: Post[] = [
 <template>
   <section class="bl-wrap" aria-labelledby="bl-title">
     <header class="bl-head">
-      <DzText size="xs" tone="muted" as="p" class="bl-eyebrow">From the blog</DzText>
+      <DzText size="xs" tone="muted" as="p" class="bl-eyebrow">
+        From the blog
+      </DzText>
       <h4 id="bl-title" class="bl-title">
-        <DzText size="xl" weight="bold" as="span">Latest writing</DzText>
+        <DzText size="xl" weight="bold" as="span">
+          Latest writing
+        </DzText>
       </h4>
       <DzText size="sm" tone="muted" as="p" class="bl-sub">
         Notes on building dzup-ui — engineering, design and product.
@@ -121,15 +125,21 @@ const posts: Post[] = [
             <h5 class="bl-post-title">
               <a :href="`#post-${post.id}`" class="bl-post-link">{{ post.title }}</a>
             </h5>
-            <DzText size="sm" tone="muted" as="p" class="bl-excerpt">{{ post.excerpt }}</DzText>
+            <DzText size="sm" tone="muted" as="p" class="bl-excerpt">
+              {{ post.excerpt }}
+            </DzText>
           </div>
 
           <template #footer>
             <div class="bl-byline">
               <DzAvatar :src="post.author.src" :fallback="post.author.initials" size="sm" :alt="post.author.name" />
               <div class="bl-byline-meta">
-                <DzText size="sm" weight="medium" as="span">{{ post.author.name }}</DzText>
-                <DzText size="xs" tone="muted" as="span">{{ post.readTime }}</DzText>
+                <DzText size="sm" weight="medium" as="span">
+                  {{ post.author.name }}
+                </DzText>
+                <DzText size="xs" tone="muted" as="span">
+                  {{ post.readTime }}
+                </DzText>
               </div>
             </div>
           </template>

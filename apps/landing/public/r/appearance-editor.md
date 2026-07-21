@@ -45,7 +45,9 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
         <DzHeading id="ae-title" :level="4" size="xl" weight="semibold">
           Appearance
         </DzHeading>
-        <DzText tone="muted" size="sm" as="p">Tune your brand and preview it live.</DzText>
+        <DzText tone="muted" size="sm" as="p">
+          Tune your brand and preview it live.
+        </DzText>
       </header>
 
       <div class="ae-body">
@@ -91,21 +93,29 @@ const PRESETS = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6
 
         <!-- Live preview -->
         <div class="ae-preview" :style="{ '--ae-brand': brand, '--ae-radius': `${radius}px`, '--ae-scale': `${scale / 100}` }">
-          <DzText size="xs" tone="muted" weight="medium" as="div" class="ae-preview-label">Preview</DzText>
+          <DzText size="xs" tone="muted" weight="medium" as="div" class="ae-preview-label">
+            Preview
+          </DzText>
           <div class="ae-card-demo">
             <div class="ae-swatch" aria-hidden="true" />
             <div class="ae-card-demo-body">
               <div class="ae-bar ae-bar--lg" aria-hidden="true" />
               <div class="ae-bar ae-bar--sm" aria-hidden="true" />
             </div>
-            <button type="button" class="ae-demo-btn">Get started</button>
+            <button type="button" class="ae-demo-btn">
+              Get started
+            </button>
           </div>
         </div>
       </div>
 
       <div class="ae-actions">
-        <DzButton variant="ghost" tone="neutral">Reset</DzButton>
-        <DzButton variant="solid" tone="primary">Save theme</DzButton>
+        <DzButton variant="ghost" tone="neutral">
+          Reset
+        </DzButton>
+        <DzButton variant="solid" tone="primary">
+          Save theme
+        </DzButton>
       </div>
     </DzCard>
   </section>

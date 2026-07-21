@@ -1,4 +1,6 @@
-// token-check-disable-file — color picker stories legitimately use raw color values as test data
+// token-check-allow-raw-values — presets and v-model fixtures must be literal hex to mean anything.
+// Deliberately NOT `token-check-disable-file`: that switched off the palette-class rule too, and
+// six `text-gray-*` captions rode along behind it for months (TASK-FREE2-07).
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzColorPicker } from '../../src/components/forms'
@@ -218,15 +220,15 @@ export const States: Story = {
       <div class="flex gap-6 items-start">
         <div class="text-center">
           <DzColorPicker :presets="presets" />
-          <p class="text-xs text-gray-400 mt-1">Default</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Default</p>
         </div>
         <div class="text-center">
           <DzColorPicker :presets="presets" disabled />
-          <p class="text-xs text-gray-400 mt-1">Disabled</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Disabled</p>
         </div>
         <div class="text-center">
           <DzColorPicker :presets="presets" invalid />
-          <p class="text-xs text-gray-400 mt-1">Invalid</p>
+          <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Invalid</p>
         </div>
       </div>
     `,
@@ -266,8 +268,8 @@ export const Interactive: Story = {
       <div class="space-y-4">
         <DzColorPicker v-model="color" :presets="presets" />
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded border" :style="{ backgroundColor: color }" />
-          <p class="text-sm text-gray-500">Selected: <strong>{{ color }}</strong></p>
+          <div class="w-8 h-8 rounded border border-[var(--dz-border)]" :style="{ backgroundColor: color }" />
+          <p class="text-sm text-[var(--dz-muted-foreground)]">Selected: <strong>{{ color }}</strong></p>
         </div>
       </div>
     `,
@@ -300,7 +302,7 @@ export const Accessibility: Story = {
     },
     template: `
       <div class="space-y-4">
-        <p class="text-sm text-gray-500">Tab to focus trigger, Enter to open, arrow keys in color area, Tab through presets.</p>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus trigger, Enter to open, arrow keys in color area, Tab through presets.</p>
         <DzColorPicker :presets="presets" aria-label="Brand color" />
       </div>
     `,
@@ -327,7 +329,7 @@ export const RealWorldBrandColor: Story = {
           name="brand-color"
           aria-label="Brand primary color"
         />
-        <p class="text-xs text-gray-400 mt-1">Used for buttons, links, and accents across your site.</p>
+        <p class="text-xs text-[var(--dz-muted-foreground)] mt-1">Used for buttons, links, and accents across your site.</p>
       </div>
     `,
   }),

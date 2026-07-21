@@ -8,6 +8,7 @@ A hierarchical classification panel — a filterable DzTreeSelect for a nested c
 
 ```vue
 <script setup lang="ts">
+import type { DateRangeValue, DzCascaderOption } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -20,7 +21,6 @@ import {
   DzText,
   DzTreeSelect,
 } from '@dzup-ui/core'
-import type { DateRangeValue, DzCascaderOption } from '@dzup-ui/core'
 import { ref } from 'vue'
 
 /**

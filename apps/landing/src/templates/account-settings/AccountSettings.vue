@@ -96,11 +96,11 @@ const form = reactive({
   twoFactor: true,
   loginAlerts: true,
   // Notifications (event × channel matrix)
-  notify: NOTIFY_SEED.map((row) => ({ ...row })),
+  notify: NOTIFY_SEED.map(row => ({ ...row })),
 })
 
 // Sessions are an immediate action (revoke), not part of the save batch.
-const sessions = reactive(SESSIONS_SEED.map((s) => ({ ...s })))
+const sessions = reactive(SESSIONS_SEED.map(s => ({ ...s })))
 
 const pristine = ref(JSON.stringify(form))
 const dirty = computed(() => JSON.stringify(form) !== pristine.value)
@@ -108,7 +108,8 @@ const dirty = computed(() => JSON.stringify(form) !== pristine.value)
 const justSaved = ref(false)
 // The moment the user edits again, retire the confirmation banner.
 watch(dirty, (isDirty) => {
-  if (isDirty) justSaved.value = false
+  if (isDirty)
+    justSaved.value = false
 })
 
 function save(): void {
@@ -121,31 +122,35 @@ function cancel(): void {
 }
 
 function revokeSession(id: string): void {
-  const i = sessions.findIndex((s) => s.id === id)
-  if (i !== -1) sessions.splice(i, 1)
+  const i = sessions.findIndex(s => s.id === id)
+  if (i !== -1)
+    sessions.splice(i, 1)
 }
 
 // ── Derived display ──────────────────────────────────────────────────────────
 const initials = computed(() =>
   form.fullName
     .split(' ')
-    .map((part) => part[0])
+    .map(part => part[0])
     .join('')
     .slice(0, 2)
     .toUpperCase(),
 )
 
 const passwordHint = computed(() => {
-  if (!form.newPassword) return ''
+  if (!form.newPassword)
+    return ''
   if (form.confirmPassword && form.newPassword !== form.confirmPassword) {
     return 'Passwords do not match.'
   }
-  if (form.newPassword.length < 8) return 'Use at least 8 characters.'
+  if (form.newPassword.length < 8)
+    return 'Use at least 8 characters.'
   return 'Looks good.'
 })
 
-const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
-  status === 'Paid' ? 'success' : status === 'Pending' ? 'warning' : 'danger'
+function invoiceTone(status: string): 'success' | 'warning' | 'danger' {
+  return status === 'Paid' ? 'success' : status === 'Pending' ? 'warning' : 'danger'
+}
 </script>
 
 <template>
@@ -167,7 +172,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
             href="#"
             @click.prevent="tab = s.value"
           >
-            <template #icon><component :is="s.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="s.icon" :size="18" />
+            </template>
             {{ s.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -186,8 +193,12 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
 
     <template #header>
       <div class="ac-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Account Centre</DzHeading>
-        <DzText size="sm" tone="muted" as="p">Manage your profile, security and billing.</DzText>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Account Centre
+        </DzHeading>
+        <DzText size="sm" tone="muted" as="p">
+          Manage your profile, security and billing.
+        </DzText>
       </div>
     </template>
 
@@ -218,7 +229,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
         <DzTabContent value="profile">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Public profile</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Public profile
+              </DzHeading>
               <DzText size="sm" tone="muted" as="p">
                 This is how you appear to teammates across the workspace.
               </DzText>
@@ -229,15 +242,21 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
               <div class="avatar-actions">
                 <div class="avatar-btns">
                   <DzButton variant="outline" tone="neutral" size="sm">
-                    <template #prefix><Upload :size="15" aria-hidden="true" /></template>
+                    <template #prefix>
+                      <Upload :size="15" aria-hidden="true" />
+                    </template>
                     Upload
                   </DzButton>
                   <DzButton variant="ghost" tone="danger" size="sm">
-                    <template #prefix><Trash2 :size="15" aria-hidden="true" /></template>
+                    <template #prefix>
+                      <Trash2 :size="15" aria-hidden="true" />
+                    </template>
                     Remove
                   </DzButton>
                 </div>
-                <DzText size="xs" tone="muted" as="p">PNG, JPG or GIF — up to 2&nbsp;MB.</DzText>
+                <DzText size="xs" tone="muted" as="p">
+                  PNG, JPG or GIF — up to 2&nbsp;MB.
+                </DzText>
               </div>
             </div>
 
@@ -251,7 +270,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
               <DzFormField>
                 <DzFormLabel>Username</DzFormLabel>
                 <DzInput v-model="form.username" autocomplete="username">
-                  <template #prefix><span class="at">@</span></template>
+                  <template #prefix>
+                    <span class="at">@</span>
+                  </template>
                 </DzInput>
               </DzFormField>
             </div>
@@ -285,7 +306,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
         <DzTabContent value="security">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Password</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Password
+              </DzHeading>
               <DzText size="sm" tone="muted" as="p">
                 Choose a strong password you don't use elsewhere.
               </DzText>
@@ -304,22 +327,32 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
               <DzFormField>
                 <DzFormLabel>Confirm new password</DzFormLabel>
                 <DzInput v-model="form.confirmPassword" type="password" autocomplete="new-password" />
-                <DzFormDescription v-if="passwordHint">{{ passwordHint }}</DzFormDescription>
+                <DzFormDescription v-if="passwordHint">
+                  {{ passwordHint }}
+                </DzFormDescription>
               </DzFormField>
             </div>
 
             <DzDivider />
 
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Two-factor authentication</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Two-factor authentication
+              </DzHeading>
             </header>
 
             <div class="switch-row">
               <div class="switch-copy">
                 <div class="switch-title">
-                  <DzText weight="medium" as="span">Authenticator app</DzText>
-                  <DzBadge v-if="form.twoFactor" variant="subtle" tone="success" size="sm">On</DzBadge>
-                  <DzBadge v-else variant="subtle" tone="neutral" size="sm">Off</DzBadge>
+                  <DzText weight="medium" as="span">
+                    Authenticator app
+                  </DzText>
+                  <DzBadge v-if="form.twoFactor" variant="subtle" tone="success" size="sm">
+                    On
+                  </DzBadge>
+                  <DzBadge v-else variant="subtle" tone="neutral" size="sm">
+                    Off
+                  </DzBadge>
                 </div>
                 <DzText size="sm" tone="muted" as="div">
                   Require a one-time code from your authenticator at sign-in.
@@ -330,8 +363,12 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
 
             <div class="switch-row">
               <div class="switch-copy">
-                <DzText weight="medium" as="div">New-device sign-in alerts</DzText>
-                <DzText size="sm" tone="muted" as="div">Email me when a new device signs in.</DzText>
+                <DzText weight="medium" as="div">
+                  New-device sign-in alerts
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  Email me when a new device signs in.
+                </DzText>
               </div>
               <DzSwitch v-model="form.loginAlerts" aria-label="New-device sign-in alerts" />
             </div>
@@ -339,8 +376,12 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
             <DzDivider />
 
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Active sessions</DzHeading>
-              <DzText size="sm" tone="muted" as="p">Devices currently signed in to your account.</DzText>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Active sessions
+              </DzHeading>
+              <DzText size="sm" tone="muted" as="p">
+                Devices currently signed in to your account.
+              </DzText>
             </header>
 
             <ul class="session-list">
@@ -350,7 +391,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
                 </span>
                 <div class="session-main">
                   <div class="session-head">
-                    <DzText weight="medium" as="span">{{ session.device }}</DzText>
+                    <DzText weight="medium" as="span">
+                      {{ session.device }}
+                    </DzText>
                     <DzBadge v-if="session.current" variant="subtle" tone="primary" size="sm">
                       This device
                     </DzBadge>
@@ -358,7 +401,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
                   <DzText size="sm" tone="muted" as="div" class="session-meta">
                     <MapPin :size="13" aria-hidden="true" /> {{ session.location }} · {{ session.meta }}
                   </DzText>
-                  <DzText size="xs" tone="muted" as="div">{{ session.lastActive }}</DzText>
+                  <DzText size="xs" tone="muted" as="div">
+                    {{ session.lastActive }}
+                  </DzText>
                 </div>
                 <DzButton
                   v-if="!session.current"
@@ -367,10 +412,14 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
                   size="sm"
                   @click="revokeSession(session.id)"
                 >
-                  <template #prefix><LogOut :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <LogOut :size="15" aria-hidden="true" />
+                  </template>
                   Revoke
                 </DzButton>
-                <DzBadge v-else variant="outline" tone="success" size="sm">Current</DzBadge>
+                <DzBadge v-else variant="outline" tone="success" size="sm">
+                  Current
+                </DzBadge>
               </li>
             </ul>
           </div>
@@ -380,7 +429,9 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
         <DzTabContent value="notifications">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Notifications</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Notifications
+              </DzHeading>
               <DzText size="sm" tone="muted" as="p">
                 Pick how each kind of update reaches you.
               </DzText>
@@ -388,7 +439,7 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
 
             <div class="matrix" role="group" aria-label="Notification preferences">
               <div class="matrix-head" aria-hidden="true">
-                <span></span>
+                <span />
                 <span v-for="channel in NOTIFY_CHANNELS" :key="channel" class="matrix-channel">
                   {{ channel }}
                 </span>
@@ -398,8 +449,12 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
                 <DzDivider v-if="i > 0" />
                 <div class="matrix-row">
                   <div class="matrix-copy">
-                    <DzText weight="medium" as="div">{{ row.label }}</DzText>
-                    <DzText size="sm" tone="muted" as="div">{{ row.desc }}</DzText>
+                    <DzText weight="medium" as="div">
+                      {{ row.label }}
+                    </DzText>
+                    <DzText size="sm" tone="muted" as="div">
+                      {{ row.desc }}
+                    </DzText>
                   </div>
                   <span class="matrix-cell">
                     <DzSwitch v-model="row.email" size="sm" :aria-label="`${row.label} — Email`" />
@@ -420,63 +475,99 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
         <DzTabContent value="billing">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Plan &amp; billing</DzHeading>
-              <DzText size="sm" tone="muted" as="p">Manage your subscription and payment method.</DzText>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Plan &amp; billing
+              </DzHeading>
+              <DzText size="sm" tone="muted" as="p">
+                Manage your subscription and payment method.
+              </DzText>
             </header>
 
             <div class="plan">
               <div class="plan-main">
                 <div class="plan-name">
-                  <DzText weight="semibold" as="span">Team</DzText>
-                  <DzBadge variant="solid" tone="primary" size="sm">Current plan</DzBadge>
+                  <DzText weight="semibold" as="span">
+                    Team
+                  </DzText>
+                  <DzBadge variant="solid" tone="primary" size="sm">
+                    Current plan
+                  </DzBadge>
                 </div>
                 <DzText size="sm" tone="muted" as="p">
                   <span class="plan-price">$48</span> / month · renews Jul 1, 2026
                 </DzText>
               </div>
               <div class="plan-actions">
-                <DzButton variant="ghost" tone="neutral" size="sm">Cancel plan</DzButton>
-                <DzButton variant="solid" tone="primary" size="sm">Change plan</DzButton>
+                <DzButton variant="ghost" tone="neutral" size="sm">
+                  Cancel plan
+                </DzButton>
+                <DzButton variant="solid" tone="primary" size="sm">
+                  Change plan
+                </DzButton>
               </div>
             </div>
 
             <DzDescriptions :columns="{ base: 1, sm: 3 }" layout="vertical" size="sm" class="plan-facts">
-              <DzDescriptionsItem label="Billing cycle">Monthly</DzDescriptionsItem>
-              <DzDescriptionsItem label="Seats">8 of 10 used</DzDescriptionsItem>
-              <DzDescriptionsItem label="Next invoice">Jul 1, 2026</DzDescriptionsItem>
+              <DzDescriptionsItem label="Billing cycle">
+                Monthly
+              </DzDescriptionsItem>
+              <DzDescriptionsItem label="Seats">
+                8 of 10 used
+              </DzDescriptionsItem>
+              <DzDescriptionsItem label="Next invoice">
+                Jul 1, 2026
+              </DzDescriptionsItem>
             </DzDescriptions>
 
             <DzDivider />
 
             <header class="panel-head">
-              <DzHeading :level="3" size="sm" weight="semibold">Payment method</DzHeading>
+              <DzHeading :level="3" size="sm" weight="semibold">
+                Payment method
+              </DzHeading>
             </header>
             <div class="pay">
               <span class="pay-card" aria-hidden="true"><CreditCard :size="18" /></span>
               <div class="pay-main">
-                <DzText weight="medium" as="div">Visa ending in 4242</DzText>
-                <DzText size="sm" tone="muted" as="div">Expires 09 / 2027</DzText>
+                <DzText weight="medium" as="div">
+                  Visa ending in 4242
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  Expires 09 / 2027
+                </DzText>
               </div>
-              <DzButton variant="outline" tone="neutral" size="sm">Update</DzButton>
+              <DzButton variant="outline" tone="neutral" size="sm">
+                Update
+              </DzButton>
             </div>
 
             <DzDivider />
 
             <header class="panel-head">
-              <DzHeading :level="3" size="sm" weight="semibold">Recent invoices</DzHeading>
+              <DzHeading :level="3" size="sm" weight="semibold">
+                Recent invoices
+              </DzHeading>
             </header>
             <ul class="invoice-list">
               <li v-for="inv in INVOICES" :key="inv.id" class="invoice">
                 <div class="invoice-id">
-                  <DzText weight="medium" as="span">{{ inv.id }}</DzText>
-                  <DzText size="sm" tone="muted" as="span">{{ inv.date }}</DzText>
+                  <DzText weight="medium" as="span">
+                    {{ inv.id }}
+                  </DzText>
+                  <DzText size="sm" tone="muted" as="span">
+                    {{ inv.date }}
+                  </DzText>
                 </div>
                 <DzBadge variant="subtle" :tone="invoiceTone(inv.status)" size="sm">
                   {{ inv.status }}
                 </DzBadge>
-                <DzText weight="medium" as="span" class="invoice-amount">{{ inv.amount }}</DzText>
+                <DzText weight="medium" as="span" class="invoice-amount">
+                  {{ inv.amount }}
+                </DzText>
                 <DzButton variant="ghost" tone="neutral" size="sm" aria-label="Download invoice">
-                  <template #prefix><Download :size="15" aria-hidden="true" /></template>
+                  <template #prefix>
+                    <Download :size="15" aria-hidden="true" />
+                  </template>
                   PDF
                 </DzButton>
               </li>
@@ -493,8 +584,12 @@ const invoiceTone = (status: string): 'success' | 'warning' | 'danger' =>
           You have unsaved changes.
         </DzText>
         <div class="save-actions">
-          <DzButton variant="ghost" tone="neutral" @click="cancel">Cancel</DzButton>
-          <DzButton variant="solid" tone="primary" @click="save">Save changes</DzButton>
+          <DzButton variant="ghost" tone="neutral" @click="cancel">
+            Cancel
+          </DzButton>
+          <DzButton variant="solid" tone="primary" @click="save">
+            Save changes
+          </DzButton>
         </div>
       </div>
     </Transition>

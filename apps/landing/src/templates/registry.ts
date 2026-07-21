@@ -17,13 +17,13 @@ import type { Component } from 'vue'
  * tier ships six; the pro tier (§10) widens this later — keep additions in sync
  * with `TEMPLATE_CATEGORIES`.
  */
-export type TemplateCategory =
-  | 'dashboards'
-  | 'auth'
-  | 'marketing'
-  | 'commerce'
-  | 'content'
-  | 'utility'
+export type TemplateCategory
+  = | 'dashboards'
+    | 'auth'
+    | 'marketing'
+    | 'commerce'
+    | 'content'
+    | 'utility'
 
 /**
  * Metadata describing one template. The render itself is a lazy-loaded
@@ -82,16 +82,16 @@ export interface TemplateMeta {
  * `@dzup-ui/tokens` decorative spectrum). Each resolves to `--dz-colors-{name}-*`
  * shades at render time, so adding one only needs the palette to exist in tokens.
  */
-export type TemplateAccent =
-  | 'blue'
-  | 'violet'
-  | 'pink'
-  | 'emerald'
-  | 'amber'
-  | 'cyan'
-  | 'teal'
-  | 'rose'
-  | 'indigo'
+export type TemplateAccent
+  = | 'blue'
+    | 'violet'
+    | 'pink'
+    | 'emerald'
+    | 'amber'
+    | 'cyan'
+    | 'teal'
+    | 'rose'
+    | 'indigo'
 
 /**
  * Category keys paired with their display labels and a gallery accent. Order =
@@ -102,7 +102,7 @@ export type TemplateAccent =
  * 350°) so adjacent categories stay visually separable. Individual templates can
  * override via `TemplateMeta.accent`.
  */
-export const TEMPLATE_CATEGORIES: { key: TemplateCategory; label: string; accent: TemplateAccent }[] = [
+export const TEMPLATE_CATEGORIES: { key: TemplateCategory, label: string, accent: TemplateAccent }[] = [
   { key: 'dashboards', label: 'Dashboards & Apps', accent: 'blue' },
   { key: 'auth', label: 'Auth & Account', accent: 'violet' },
   { key: 'marketing', label: 'Marketing', accent: 'pink' },
@@ -183,9 +183,11 @@ const NEW_WINDOW_DAYS = 30
  * without a `createdAt`, or with an unparseable one, are never "new".
  */
 export function isNew(t: TemplateMeta, now?: Date): boolean {
-  if (!t.createdAt) return false
+  if (!t.createdAt)
+    return false
   const created = new Date(`${t.createdAt}T00:00:00`)
-  if (Number.isNaN(created.getTime())) return false
+  if (Number.isNaN(created.getTime()))
+    return false
   const reference = now ?? new Date()
   const ageMs = reference.getTime() - created.getTime()
   return ageMs >= 0 && ageMs <= NEW_WINDOW_DAYS * 24 * 60 * 60 * 1000
@@ -690,7 +692,7 @@ export const TEMPLATES: TemplateMeta[] = [
     slug: 'maintenance',
     name: 'Scheduled Maintenance',
     blurb:
-      "A centered \"we'll be right back\" page — an amber status badge, a live progress bar with an ETA, and a notify-me card pairing an email input with a call to action.",
+      'A centered "we\'ll be right back" page — an amber status badge, a live progress bar with an ETA, and a notify-me card pairing an email input with a call to action.',
     category: 'utility',
     stack: [
       'DzCard',
@@ -1207,5 +1209,5 @@ for (const template of TEMPLATES) {
 
 /** Resolve a template by its slug, or `undefined` if unknown. */
 export function getTemplate(slug: string): TemplateMeta | undefined {
-  return TEMPLATES.find((t) => t.slug === slug)
+  return TEMPLATES.find(t => t.slug === slug)
 }

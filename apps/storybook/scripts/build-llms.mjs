@@ -29,8 +29,9 @@
  * Run automatically before `storybook dev` / `storybook build` (see the
  * `build:llms` package script), same lifecycle as build-playground / build-releases.
  */
-import { readFile, readdir, writeFile } from 'node:fs/promises'
+import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import ts from 'typescript'
 
@@ -240,7 +241,7 @@ function expandType(typeText, seen = new Set()) {
     return expandType(aliasRefs.get(typeText), seen)
   // Inline union of quoted literals, e.g. `'button' | 'submit' | 'reset'`.
   const trimmed = typeText.trim()
-  if (/^(['"][^'"]*['"]\s*(\|\s*)?)+$/.test(trimmed)) {
+  if (/^(?:['"][^'"]*['"]\s*(?:\|\s*)?)+$/.test(trimmed)) {
     const lits = [...trimmed.matchAll(/['"]([^'"]*)['"]/g)].map(m => m[1])
     if (lits.length)
       return lits
@@ -261,13 +262,13 @@ function parseVue(name, text) {
 
   // Description: text after the `DzXxx — …` / `DzXxx -- …` lead line.
   let description = ''
-  const lead = comment.match(/^\s*Dz\w+\s*(?:—|--|-)\s*(.+)$/m)
+  const lead = comment.match(/^\s*Dz\w+\s*(?:—|--|-)\s*(\S.*)$/m)
   if (lead)
     description = lead[1].trim().replace(/\s+/g, ' ')
 
   // Minimal usage snippet: the first ```vue fenced block in the @example.
   let example = ''
-  const fence = comment.match(/```vue\s*\n([\s\S]*?)```/)
+  const fence = comment.match(/```vue[ \t]*\r?\n([\s\S]*?)```/)
   if (fence)
     example = fence[1].replace(/\s+$/, '')
 
@@ -278,9 +279,8 @@ function parseVue(name, text) {
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/(^|[^:])\/\/[^\n]*/g, '$1')
   const models = []
-  const re = /defineModel\s*(?:<([^>]+)>)?\s*\(\s*(?:(['"])([^'"]+)\2)?/g
-  let m
-  while ((m = re.exec(code)) !== null) {
+  const re = /defineModel\s*(?:<([^>]+)>\s*)?\(\s*(?:(['"])([^'"]+)\2)?/g
+  for (let m = re.exec(code); m !== null; m = re.exec(code)) {
     models.push({ name: m[3] || 'modelValue', type: (m[1] || 'unknown').trim() })
   }
 

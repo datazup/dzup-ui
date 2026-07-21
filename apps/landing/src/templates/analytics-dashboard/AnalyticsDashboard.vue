@@ -53,9 +53,9 @@ const rangeItems = [
 ]
 
 // Scale the faux chart bars to the tallest month so the panel reads as a chart.
-const peak = Math.max(...REVENUE_SERIES.map((p) => p.value))
+const peak = Math.max(...REVENUE_SERIES.map(p => p.value))
 const bars = computed(() =>
-  REVENUE_SERIES.map((p) => ({ ...p, height: Math.round((p.value / peak) * 100) })),
+  REVENUE_SERIES.map(p => ({ ...p, height: Math.round((p.value / peak) * 100) })),
 )
 </script>
 
@@ -77,17 +77,23 @@ const bars = computed(() =>
             :active="item.active"
             href="#"
           >
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
             <template v-if="item.badge" #badge>
-              <DzBadge variant="solid" tone="primary" size="sm">{{ item.badge }}</DzBadge>
+              <DzBadge variant="solid" tone="primary" size="sm">
+                {{ item.badge }}
+              </DzBadge>
             </template>
           </DzSidebarItem>
         </DzSidebarSection>
 
         <DzSidebarSection title="Workspace">
           <DzSidebarItem v-for="item in SECONDARY_NAV" :key="item.label" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -106,8 +112,12 @@ const bars = computed(() =>
 
     <template #header>
       <div class="dash-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Overview</DzHeading>
-        <DzBadge variant="subtle" tone="success" size="sm">Live</DzBadge>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Overview
+        </DzHeading>
+        <DzBadge variant="subtle" tone="success" size="sm">
+          Live
+        </DzBadge>
       </div>
     </template>
 
@@ -121,7 +131,9 @@ const bars = computed(() =>
         aria-label="Search the dashboard"
       />
       <DzButton size="sm" variant="solid" tone="primary">
-        <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+        <template #prefix>
+          <Plus :size="15" aria-hidden="true" />
+        </template>
         New report
       </DzButton>
     </template>
@@ -144,10 +156,16 @@ const bars = computed(() =>
           <DzCard variant="outlined" padding="md" class="chart-card">
             <div class="card-head-row">
               <div>
-                <DzText size="sm" tone="muted" as="div">Revenue this year</DzText>
-                <DzText weight="semibold" as="div" class="chart-figure">$534,180</DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  Revenue this year
+                </DzText>
+                <DzText weight="semibold" as="div" class="chart-figure">
+                  $534,180
+                </DzText>
               </div>
-              <DzBadge variant="subtle" tone="success" size="sm">+12.4%</DzBadge>
+              <DzBadge variant="subtle" tone="success" size="sm">
+                +12.4%
+              </DzBadge>
             </div>
             <div
               class="chart"
@@ -168,18 +186,30 @@ const bars = computed(() =>
           <DzCard variant="outlined" padding="none" class="table-card">
             <DzCardHeader>
               <div class="card-head-row">
-                <DzText weight="semibold">Members</DzText>
-                <DzBadge variant="subtle" tone="primary">{{ MEMBERS.length }} seats</DzBadge>
+                <DzText weight="semibold">
+                  Members
+                </DzText>
+                <DzBadge variant="subtle" tone="primary">
+                  {{ MEMBERS.length }} seats
+                </DzBadge>
               </div>
             </DzCardHeader>
             <div class="table-scroll">
               <DzTable size="sm" hoverable>
                 <DzTableHeader>
                   <DzTableRow>
-                    <DzTableCell header>Member</DzTableCell>
-                    <DzTableCell header>Plan</DzTableCell>
-                    <DzTableCell header>Usage</DzTableCell>
-                    <DzTableCell header>Status</DzTableCell>
+                    <DzTableCell header>
+                      Member
+                    </DzTableCell>
+                    <DzTableCell header>
+                      Plan
+                    </DzTableCell>
+                    <DzTableCell header>
+                      Usage
+                    </DzTableCell>
+                    <DzTableCell header>
+                      Status
+                    </DzTableCell>
                   </DzTableRow>
                 </DzTableHeader>
                 <DzTableBody>
@@ -188,18 +218,26 @@ const bars = computed(() =>
                       <div class="member-cell">
                         <DzAvatar :fallback="m.name.slice(0, 1)" size="sm" />
                         <div class="member-meta">
-                          <DzText size="sm" weight="medium" as="div">{{ m.name }}</DzText>
-                          <DzText size="xs" tone="muted" as="div">{{ m.email }}</DzText>
+                          <DzText size="sm" weight="medium" as="div">
+                            {{ m.name }}
+                          </DzText>
+                          <DzText size="xs" tone="muted" as="div">
+                            {{ m.email }}
+                          </DzText>
                         </div>
                       </div>
                     </DzTableCell>
                     <DzTableCell>
-                      <DzBadge variant="outline" tone="neutral" size="sm">{{ m.plan }}</DzBadge>
+                      <DzBadge variant="outline" tone="neutral" size="sm">
+                        {{ m.plan }}
+                      </DzBadge>
                     </DzTableCell>
                     <DzTableCell>
                       <div class="usage-cell">
                         <DzProgress :value="m.usage" size="sm" tone="primary" class="usage-bar" />
-                        <DzText size="xs" tone="muted">{{ m.usage }}%</DzText>
+                        <DzText size="xs" tone="muted">
+                          {{ m.usage }}%
+                        </DzText>
                       </div>
                     </DzTableCell>
                     <DzTableCell>
@@ -216,19 +254,31 @@ const bars = computed(() =>
 
         <div class="dash-side">
           <DzCard variant="outlined" padding="md">
-            <DzText weight="semibold" as="div" class="side-title">Storage</DzText>
-            <DzText size="sm" tone="muted" as="div" class="side-sub">68.4 GB of 100 GB used</DzText>
+            <DzText weight="semibold" as="div" class="side-title">
+              Storage
+            </DzText>
+            <DzText size="sm" tone="muted" as="div" class="side-sub">
+              68.4 GB of 100 GB used
+            </DzText>
             <DzProgress :value="68" tone="primary" class="side-progress" />
           </DzCard>
 
           <DzCard variant="outlined" padding="md">
-            <DzText weight="semibold" as="div" class="side-title">Acquisition</DzText>
-            <DzText size="sm" tone="muted" as="div" class="side-sub">Top channels, last 30 days</DzText>
+            <DzText weight="semibold" as="div" class="side-title">
+              Acquisition
+            </DzText>
+            <DzText size="sm" tone="muted" as="div" class="side-sub">
+              Top channels, last 30 days
+            </DzText>
             <ul class="channel-list">
               <li v-for="c in CHANNELS" :key="c.label" class="channel-row">
                 <div class="channel-head">
-                  <DzText size="sm">{{ c.label }}</DzText>
-                  <DzText size="sm" weight="medium">{{ c.share }}%</DzText>
+                  <DzText size="sm">
+                    {{ c.label }}
+                  </DzText>
+                  <DzText size="sm" weight="medium">
+                    {{ c.share }}%
+                  </DzText>
                 </div>
                 <DzProgress :value="c.share" size="sm" tone="primary" />
               </li>

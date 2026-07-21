@@ -83,8 +83,10 @@ watch(
   [paused, () => props.interval, () => props.phrases],
   () => {
     stop()
-    if (reduced.value) index.value = 0
-    else if (!paused.value) start()
+    if (reduced.value)
+      index.value = 0
+    else if (!paused.value)
+      start()
   },
   { immediate: true },
 )

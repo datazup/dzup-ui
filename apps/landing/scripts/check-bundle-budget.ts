@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Landing bundle-size budget.
  *

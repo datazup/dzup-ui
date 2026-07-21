@@ -1,31 +1,57 @@
 <script setup lang="ts">
 import { DzBadge, DzText } from '@dzup-ui/core'
 import { ArrowRight } from 'lucide-vue-next'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import Section from './Section.vue'
 import { ECOSYSTEM } from '../data.ts'
 import { ICONS } from '../icons.ts'
+import Section from './Section.vue'
 
 /**
  * Ecosystem grid — "beyond components". Showcases the offerings that complement
- * the library (Blocks, Templates, Animations + Icons, Themes, Figma kit), each
- * built on the same tokens and a11y bar as `@dzup-ui/core`.
+ * the library, each built on the same tokens and a11y bar as `@dzup-ui/core`.
  *
- * Tiles are non-interactive "Planned" placeholders until an offering ships. A
- * shipped offering (`status: 'available'`) renders as a whole-tile router-link
- * carrying a "Free" badge and an "Explore" affordance — Blocks, Templates and
- * Animations are the first.
+ * `status` is the one place an offering's availability is stated. An
+ * `'available'` offering renders as a whole-tile router-link carrying a "Free"
+ * badge and an "Explore" affordance; a `'planned'` one is a non-interactive
+ * placeholder. Which offerings are which is `ECOSYSTEM`'s business, not this
+ * comment's — that is why neither this comment nor the lede lists them by hand.
  *
  * Mirrors the ComponentGallery / FeatureGrid patterns (Section + lp-card tiles,
  * staggered scroll-reveal, token-only styling) so it reads as one family.
  */
+
+/**
+ * The section lede, with the shipped surfaces read off `ECOSYSTEM` rather than
+ * typed.
+ *
+ * This sentence used to end "Coming soon." while, directly beneath it, four
+ * tiles rendered live "Free" badges and linked to four shipped pages. A lede is
+ * a claim like any count on this site: the fix is not to retype it correctly
+ * once, it is to stop authoring it separately from the data it describes. Add a
+ * surface, flip its `status`, and this sentence follows. There is deliberately no
+ * temporal claim here — "soon" has no source of truth and rots silently.
+ */
+const lede = computed<string>(() => {
+  const shipped = ECOSYSTEM.filter(item => item.status === 'available').map(item =>
+    item.title.toLowerCase(),
+  )
+  const list
+    = shipped.length > 1
+      ? `${shipped.slice(0, -1).join(', ')} and ${shipped[shipped.length - 1]}`
+      : shipped[0] ?? ''
+  return (
+    `The pieces that build on the library — ${list}. `
+    + 'Same tokens, same accessibility bar, same design language.'
+  )
+})
 </script>
 
 <template>
   <Section
     eyebrow="Ecosystem"
     title="Beyond components"
-    lede="The pieces that build on the library — blocks, templates, animations and more. Same tokens, same accessibility bar, same design language. Coming soon."
+    :lede="lede"
     heading-id="ecosystem-title"
   >
     <ul class="eco-grid">
@@ -40,21 +66,31 @@ import { ICONS } from '../icons.ts'
           class="lp-card tile"
           :class="{ 'lp-card--hover': item.status === 'available', 'tile--link': item.status === 'available' }"
           v-bind="item.status === 'available'
-            ? { to: item.href, 'aria-label': `Explore ${item.title}` }
+            ? { 'to': item.href, 'aria-label': `Explore ${item.title}` }
             : {}"
         >
           <div class="tile-top">
             <span class="tile-icon" aria-hidden="true">
               <component :is="ICONS[item.icon]" :size="20" />
             </span>
-            <DzBadge v-if="item.status === 'available'" variant="solid" tone="success" size="sm">Free</DzBadge>
-            <DzBadge v-else variant="subtle" tone="neutral" size="sm">Planned</DzBadge>
+            <DzBadge v-if="item.status === 'available'" variant="solid" tone="success" size="sm">
+              Free
+            </DzBadge>
+            <DzBadge v-else variant="subtle" tone="neutral" size="sm">
+              Planned
+            </DzBadge>
           </div>
 
-          <DzText weight="semibold" as="div" class="tile-title">{{ item.title }}</DzText>
-          <DzText size="sm" tone="muted" as="div" class="tile-blurb">{{ item.blurb }}</DzText>
+          <DzText weight="semibold" as="div" class="tile-title">
+            {{ item.title }}
+          </DzText>
+          <DzText size="sm" tone="muted" as="div" class="tile-blurb">
+            {{ item.blurb }}
+          </DzText>
 
-          <DzText size="xs" tone="muted" as="div" class="tile-meta">{{ item.meta }}</DzText>
+          <DzText size="xs" tone="muted" as="div" class="tile-meta">
+            {{ item.meta }}
+          </DzText>
 
           <span v-if="item.status === 'available'" class="tile-explore">
             Explore

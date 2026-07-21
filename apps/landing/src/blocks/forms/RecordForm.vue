@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzListboxOption, DzSelectItem } from '@dzup-ui/core'
 import {
   DzButton,
   DzCard,
@@ -12,7 +13,6 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import type { DzListboxOption, DzSelectItem } from '@dzup-ui/core'
 import { SignalHigh, SignalLow, SignalMedium } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -120,8 +120,12 @@ const PRIORITIES: DzListboxOption[] = [
         </DzFormField>
 
         <div class="rf-actions">
-          <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
-          <DzButton type="submit" variant="solid" tone="primary">Create issue</DzButton>
+          <DzButton variant="ghost" tone="neutral">
+            Cancel
+          </DzButton>
+          <DzButton type="submit" variant="solid" tone="primary">
+            Create issue
+          </DzButton>
         </div>
       </form>
     </DzCard>

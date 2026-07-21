@@ -53,7 +53,7 @@ export function useTextDecode(
   let seed = 1
 
   function randIndex(max: number): number {
-    seed = (seed * 1103515245 + 12345) & 0x7fffffff
+    seed = (seed * 1103515245 + 12345) & 0x7FFFFFFF
     return seed % max
   }
 
@@ -68,7 +68,8 @@ export function useTextDecode(
     let out = ''
     for (let i = 0; i < text.length; i += 1) {
       const ch = text[i]
-      if (i < revealed || ch === ' ' || ch === '\n' || ch === '\t') out += ch
+      if (i < revealed || ch === ' ' || ch === '\n' || ch === '\t')
+        out += ch
       else out += charset[randIndex(charset.length)]
     }
     return out
@@ -89,7 +90,8 @@ export function useTextDecode(
       frame += 1
       const revealed = Math.floor(frame / framesPerChar)
       display.value = render(text, revealed)
-      if (revealed >= text.length) resolve()
+      if (revealed >= text.length)
+        resolve()
     }, frameMs)
   }
 

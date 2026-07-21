@@ -24,7 +24,8 @@ const MotionOverrideKey: InjectionKey<Ref<boolean>> = Symbol('dz-motion-override
 let osPreference: Ref<boolean> | null = null
 
 function useOsReducedMotion(): Ref<boolean> {
-  if (osPreference) return osPreference
+  if (osPreference)
+    return osPreference
 
   const state = ref(false)
   if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {

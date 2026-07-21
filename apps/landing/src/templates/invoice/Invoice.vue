@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Invoice — Commerce template (docs/templates.md §6.5).
  *
@@ -26,7 +27,6 @@ import {
   DzTableRow,
   DzText,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 import { Download, Printer, Send, Sparkles } from 'lucide-vue-next'
 import { computed } from 'vue'
 import {
@@ -71,7 +71,8 @@ const tax = computed(() => taxable.value * TAX_RATE)
 const total = computed(() => taxable.value + tax.value)
 
 function print() {
-  if (typeof window !== 'undefined') window.print()
+  if (typeof window !== 'undefined')
+    window.print()
 }
 </script>
 
@@ -80,18 +81,26 @@ function print() {
     <main class="inv-wrap">
       <!-- ── Action bar (hidden when printing) ─────────────────── -->
       <div class="inv-actions no-print">
-        <DzText size="sm" tone="muted">Invoice {{ INVOICE_META.number }}</DzText>
+        <DzText size="sm" tone="muted">
+          Invoice {{ INVOICE_META.number }}
+        </DzText>
         <div class="inv-actions-end">
           <DzButton variant="outline" tone="neutral" size="sm">
-            <template #prefix><Download :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Download :size="15" aria-hidden="true" />
+            </template>
             Download
           </DzButton>
           <DzButton variant="outline" tone="neutral" size="sm" @click="print">
-            <template #prefix><Printer :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Printer :size="15" aria-hidden="true" />
+            </template>
             Print
           </DzButton>
           <DzButton variant="solid" tone="primary" size="sm">
-            <template #prefix><Send :size="15" aria-hidden="true" /></template>
+            <template #prefix>
+              <Send :size="15" aria-hidden="true" />
+            </template>
             Send invoice
           </DzButton>
         </div>
@@ -104,13 +113,21 @@ function print() {
           <div class="issuer">
             <span class="brand-mark" aria-hidden="true"><Sparkles :size="20" /></span>
             <div>
-              <DzText weight="semibold" size="lg" as="div">{{ ISSUER.name }}</DzText>
-              <DzText size="sm" tone="muted" as="div">Design & engineering studio</DzText>
+              <DzText weight="semibold" size="lg" as="div">
+                {{ ISSUER.name }}
+              </DzText>
+              <DzText size="sm" tone="muted" as="div">
+                Design & engineering studio
+              </DzText>
             </div>
           </div>
           <div class="head-meta">
-            <DzHeading :level="1" size="xl" weight="bold" class="inv-word">Invoice</DzHeading>
-            <DzText size="sm" tone="muted" as="div">{{ INVOICE_META.number }}</DzText>
+            <DzHeading :level="1" size="xl" weight="bold" class="inv-word">
+              Invoice
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="div">
+              {{ INVOICE_META.number }}
+            </DzText>
             <DzBadge
               variant="subtle"
               :tone="STATUS_TONE[INVOICE_META.status]"
@@ -130,7 +147,9 @@ function print() {
             <DzText size="xs" weight="semibold" tone="muted" as="div" class="party-label">
               From
             </DzText>
-            <DzText weight="medium" as="div">{{ ISSUER.name }}</DzText>
+            <DzText weight="medium" as="div">
+              {{ ISSUER.name }}
+            </DzText>
             <address class="party-lines">
               <span v-for="line in ISSUER.lines" :key="line">{{ line }}</span>
               <span>{{ ISSUER.email }}</span>
@@ -142,7 +161,9 @@ function print() {
             <DzText size="xs" weight="semibold" tone="muted" as="div" class="party-label">
               Bill to
             </DzText>
-            <DzText weight="medium" as="div">{{ CLIENT.name }}</DzText>
+            <DzText weight="medium" as="div">
+              {{ CLIENT.name }}
+            </DzText>
             <address class="party-lines">
               <span v-for="line in CLIENT.lines" :key="line">{{ line }}</span>
               <span>{{ CLIENT.email }}</span>
@@ -156,9 +177,15 @@ function print() {
             size="sm"
             class="party-facts"
           >
-            <DzDescriptionsItem label="Invoice no.">{{ INVOICE_META.number }}</DzDescriptionsItem>
-            <DzDescriptionsItem label="Issued">{{ formatDate(INVOICE_META.issued) }}</DzDescriptionsItem>
-            <DzDescriptionsItem label="Due">{{ formatDate(INVOICE_META.due) }}</DzDescriptionsItem>
+            <DzDescriptionsItem label="Invoice no.">
+              {{ INVOICE_META.number }}
+            </DzDescriptionsItem>
+            <DzDescriptionsItem label="Issued">
+              {{ formatDate(INVOICE_META.issued) }}
+            </DzDescriptionsItem>
+            <DzDescriptionsItem label="Due">
+              {{ formatDate(INVOICE_META.due) }}
+            </DzDescriptionsItem>
             <DzDescriptionsItem label="Amount due">
               <span class="facts-due">{{ money.format(total) }}</span>
             </DzDescriptionsItem>
@@ -170,17 +197,29 @@ function print() {
           <DzTable aria-label="Invoice line items">
             <DzTableHeader>
               <DzTableRow>
-                <DzTableCell header>Description</DzTableCell>
-                <DzTableCell header align="right">Qty</DzTableCell>
-                <DzTableCell header align="right">Unit price</DzTableCell>
-                <DzTableCell header align="right">Amount</DzTableCell>
+                <DzTableCell header>
+                  Description
+                </DzTableCell>
+                <DzTableCell header align="right">
+                  Qty
+                </DzTableCell>
+                <DzTableCell header align="right">
+                  Unit price
+                </DzTableCell>
+                <DzTableCell header align="right">
+                  Amount
+                </DzTableCell>
               </DzTableRow>
             </DzTableHeader>
             <DzTableBody>
               <DzTableRow v-for="item in LINE_ITEMS" :key="item.id">
                 <DzTableCell>
-                  <DzText size="sm" weight="medium" as="div">{{ item.description }}</DzText>
-                  <DzText size="xs" tone="muted" as="div">{{ item.detail }}</DzText>
+                  <DzText size="sm" weight="medium" as="div">
+                    {{ item.description }}
+                  </DzText>
+                  <DzText size="xs" tone="muted" as="div">
+                    {{ item.detail }}
+                  </DzText>
                 </DzTableCell>
                 <DzTableCell align="right">
                   <span class="num">{{ item.qty }}</span>
@@ -223,8 +262,12 @@ function print() {
 
         <!-- Notes -->
         <section class="notes">
-          <DzText size="xs" weight="semibold" tone="muted" as="div" class="party-label">Notes</DzText>
-          <DzText size="sm" tone="muted" as="p">{{ NOTES }}</DzText>
+          <DzText size="xs" weight="semibold" tone="muted" as="div" class="party-label">
+            Notes
+          </DzText>
+          <DzText size="sm" tone="muted" as="p">
+            {{ NOTES }}
+          </DzText>
         </section>
 
         <footer class="sheet-foot">

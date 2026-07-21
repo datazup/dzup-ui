@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { DzText } from '@dzup-ui/core'
+import { useLiveStats } from '../composables/useLiveStats.ts'
 import { FACTS, LINKS } from '../config.ts'
 import { PRO_FACTS } from '../data.ts'
-import { useLiveStats } from '../composables/useLiveStats.ts'
 import { DzCountUp } from '../motion'
 
 // Hard breadth numbers (spec §4.7) sit alongside the two *live* metrics —

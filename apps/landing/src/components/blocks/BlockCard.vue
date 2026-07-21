@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { BlockDef } from '../../blocks/registry.ts'
 import { DzCopyButton, DzText } from '@dzup-ui/core'
 import { ArrowDown, ArrowUpRight } from 'lucide-vue-next'
+import { computed } from 'vue'
 import { REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
-import type { BlockDef } from '../../blocks/registry.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
 import { getBlockSource } from '../../blocks/sources.ts'
 import BlockTrustMarks from './BlockTrustMarks.vue'
@@ -22,7 +22,7 @@ import PmCommandTabs from './PmCommandTabs.vue'
  * lifted above the whole-card cover so its click isn't swallowed by the anchor.
  *
  * Each chip is also a reverse-lookup button: clicking it asks the page to filter
- * the index to every block using that component. It emits `select-component` —
+ * the index to every block using that component. It emits `selectComponent` —
  * BlocksIndexPage owns the single `useBlockSearch` filtering path (Task E3/E4) and
  * sets `activeComponent`; the card never derives results itself. The chip carries
  * a subtle usage count (`blocksUsingComponent(name).length`, Task E1) so the
@@ -34,7 +34,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   /** Request the index filter to all blocks using this `Dz*` component. */
-  'select-component': [name: string]
+  selectComponent: [name: string]
 }>()
 
 /** How many catalog blocks use `name` (memoized reverse index, Task E1). */
@@ -49,8 +49,12 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 <template>
   <article class="lp-card lp-card--hover block-card">
     <div class="block-card-body">
-      <DzText weight="semibold" as="div" class="block-card-title">{{ block.title }}</DzText>
-      <DzText size="sm" tone="muted" as="div" class="block-card-desc">{{ block.description }}</DzText>
+      <DzText weight="semibold" as="div" class="block-card-title">
+        {{ block.title }}
+      </DzText>
+      <DzText size="sm" tone="muted" as="div" class="block-card-desc">
+        {{ block.description }}
+      </DzText>
       <!-- Earned trust marks (Task I3): present only because the per-block axe
            suite backs them. Renders nothing for a block with known a11y debt. -->
       <BlockTrustMarks :block-id="block.id" class="block-card-marks" />
@@ -67,7 +71,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
             type="button"
             class="block-card-chip"
             :aria-label="`Show ${usageCount(name)} ${usageCount(name) === 1 ? 'block' : 'blocks'} using ${name}`"
-            @click="emit('select-component', name)"
+            @click="emit('selectComponent', name)"
           >
             <span class="block-card-chip-name">{{ name }}</span>
             <span class="block-card-chip-count" aria-hidden="true">{{ usageCount(name) }}</span>

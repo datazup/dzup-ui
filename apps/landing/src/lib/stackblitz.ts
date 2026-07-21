@@ -49,7 +49,8 @@ function buildFiles(injected: Record<string, string>): Record<string, string> {
   const files: Record<string, string> = {}
   for (const [path, contents] of Object.entries(RAW_TEMPLATE)) {
     const idx = path.indexOf(TEMPLATE_MARKER)
-    if (idx === -1) continue
+    if (idx === -1)
+      continue
     files[path.slice(idx + TEMPLATE_MARKER.length)] = contents
   }
 
@@ -67,7 +68,8 @@ function buildFiles(injected: Record<string, string>): Record<string, string> {
       pkg.dependencies['@dzup-ui/tokens'] = DZUP_VERSION
       pkg.dependencies['@dzup-ui/contracts'] = DZUP_VERSION
       files['package.json'] = `${JSON.stringify(pkg, null, 2)}\n`
-    } catch {
+    }
+    catch {
       // Leave the starter's package.json untouched if it isn't parseable.
     }
   }
@@ -104,7 +106,8 @@ export interface OpenInStackblitzOptions {
  * form is removed immediately after submission. No-op during SSR/prerender.
  */
 export function openInStackblitz(options: OpenInStackblitzOptions): void {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
 
   const openFile = options.openFile ?? 'src/App.vue'
   const files = buildFiles(options.files)

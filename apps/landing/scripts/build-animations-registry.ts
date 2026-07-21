@@ -38,6 +38,7 @@
 import type { CatalogEntry } from '../src/gallery/catalog.ts'
 import { mkdir, rm, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
 import { buildRegistryIndex, toRegistryItem } from '../src/gallery/registryItem.ts'

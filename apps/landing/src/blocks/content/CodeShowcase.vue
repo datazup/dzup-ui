@@ -68,8 +68,12 @@ createApp(App).mount('#app')`,
 <template>
   <section class="cs-wrap" aria-labelledby="cs-title">
     <header class="cs-head">
-      <h4 id="cs-title" class="cs-title">Add it to your app</h4>
-      <p class="cs-sub">Three files from zero to a themed button.</p>
+      <h4 id="cs-title" class="cs-title">
+        Add it to your app
+      </h4>
+      <p class="cs-sub">
+        Three files from zero to a themed button.
+      </p>
     </header>
 
     <DzTabs v-model="tab" variant="enclosed" aria-label="Setup snippets" class="cs-tabs">

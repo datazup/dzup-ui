@@ -33,14 +33,16 @@ const reduced = useReducedMotion()
 const { display, run, resolve } = useTextDecode(() => props.text)
 
 function trigger(): void {
-  if (reduced.value) resolve()
+  if (reduced.value)
+    resolve()
   else run()
 }
 
 // Decode each time the label enters view (so Replay re-triggers it); under
 // reduced motion just snap to the resolved text.
 watch([isInView, reduced], ([inView]) => {
-  if (inView) trigger()
+  if (inView)
+    trigger()
 }, { immediate: true })
 </script>
 

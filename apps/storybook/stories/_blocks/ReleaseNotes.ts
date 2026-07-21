@@ -1,3 +1,10 @@
+import type { ReactNode } from 'react'
+import type {
+  Highlight,
+  PendingChange,
+  Release,
+  ReleaseEntry,
+} from '../_data/releases.generated.ts'
 /**
  * Reusable MDX doc-blocks for the "What's New" / Releases page (TASK-APP-07).
  *
@@ -13,13 +20,7 @@
  * `HighlightsCallout` pulls deprecations and breaking changes to the very top so
  * they are impossible to miss.
  */
-import { createElement as h, Fragment, type ReactNode } from 'react'
-import type {
-  Highlight,
-  PendingChange,
-  Release,
-  ReleaseEntry,
-} from '../_data/releases.generated.ts'
+import { Fragment, createElement as h } from 'react'
 
 /** Per-category accent — keyed by the `### ` section name from the changelog. */
 interface CategoryMeta {
@@ -82,7 +83,7 @@ export function SectionChip({ name }: { name: string }) {
   return h(
     'span',
     { className: 'dz-rel-chip', style: { color: m.color, background: tint(m.color, 12), border: `1px solid ${tint(m.color, 40)}` } },
-    [h('span', { key: 'i', 'aria-hidden': 'true' }, m.icon), h('span', { key: 't' }, name)],
+    [h('span', { 'key': 'i', 'aria-hidden': 'true' }, m.icon), h('span', { key: 't' }, name)],
   )
 }
 

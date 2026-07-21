@@ -10,8 +10,8 @@
 import { DzButton, DzCard, DzHeading, DzTable, DzTableBody, DzTableCell, DzTableHeader, DzTableRow, DzText } from '@dzup-ui/core'
 import { ArrowRight, ExternalLink } from 'lucide-vue-next'
 import Section from '../components/Section.vue'
-import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
 import { LINKS } from '../config.ts'
+import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
 </script>
 
 <template>
@@ -33,7 +33,9 @@ import { LINKS } from '../config.ts'
           <DzTable size="sm" hoverable aria-label="Feature comparison of dzup-ui and other Vue 3 component libraries">
             <DzTableHeader>
               <DzTableRow>
-                <DzTableCell header scope="col" class="feature-col">Feature</DzTableCell>
+                <DzTableCell header scope="col" class="feature-col">
+                  Feature
+                </DzTableCell>
                 <DzTableCell
                   v-for="lib in LIBRARIES"
                   :key="lib.key"
@@ -72,9 +74,11 @@ import { LINKS } from '../config.ts'
       <div class="compare-actions">
         <DzButton variant="solid" tone="primary" as="a" :href="LINKS.components">
           Browse dzup-ui components
-          <template #suffix><ArrowRight :size="16" aria-hidden="true" /></template>
+          <template #suffix>
+            <ArrowRight :size="16" aria-hidden="true" />
+          </template>
         </DzButton>
-        <DzButton variant="outline" tone="neutral" :to="'/themes'">
+        <DzButton variant="outline" tone="neutral" to="/themes">
           Try the theme designer
         </DzButton>
       </div>
@@ -94,7 +98,9 @@ import { LINKS } from '../config.ts'
       </DzText>
       <ul class="sources-list">
         <li v-for="lib in LIBRARIES" :key="lib.key">
-          <DzText size="sm" weight="medium" as="span">{{ lib.name }}</DzText>
+          <DzText size="sm" weight="medium" as="span">
+            {{ lib.name }}
+          </DzText>
           <a :href="lib.href" target="_blank" rel="noreferrer noopener" class="source-link">
             {{ lib.source }}
             <ExternalLink :size="12" aria-hidden="true" />

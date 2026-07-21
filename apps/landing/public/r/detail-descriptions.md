@@ -37,43 +37,65 @@ import {
     <DzCard variant="outlined" padding="lg">
       <header class="dd-head">
         <div>
-          <DzHeading id="dd-title" :level="4" size="md" weight="semibold" class="dd-title">Subscription #DZ-4821</DzHeading>
-          <DzText size="sm" tone="muted" as="p" class="dd-sub">Created 14 Mar 2026 · Acme Inc.</DzText>
+          <DzHeading id="dd-title" :level="4" size="md" weight="semibold" class="dd-title">
+            Subscription #DZ-4821
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p" class="dd-sub">
+            Created 14 Mar 2026 · Acme Inc.
+          </DzText>
         </div>
-        <DzButton variant="outline" tone="neutral" size="sm">Edit</DzButton>
+        <DzButton variant="outline" tone="neutral" size="sm">
+          Edit
+        </DzButton>
       </header>
 
       <DzDescriptions :columns="{ base: 1, sm: 2 }" layout="horizontal" bordered size="md">
         <DzDescriptionsItem label="Status">
-          <DzBadge variant="subtle" tone="success" size="sm">Active</DzBadge>
+          <DzBadge variant="subtle" tone="success" size="sm">
+            Active
+          </DzBadge>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Plan">
-          <DzTag variant="subtle" tone="primary" size="sm">Scale · annual</DzTag>
+          <DzTag variant="subtle" tone="primary" size="sm">
+            Scale · annual
+          </DzTag>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Customer">
-          <DzText size="sm" as="span">Ava Restić</DzText>
+          <DzText size="sm" as="span">
+            Ava Restić
+          </DzText>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Seats">
-          <DzText size="sm" as="span">42 of 50</DzText>
+          <DzText size="sm" as="span">
+            42 of 50
+          </DzText>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Amount">
-          <DzText size="sm" weight="medium" as="span">$1,290.00 / yr</DzText>
+          <DzText size="sm" weight="medium" as="span">
+            $1,290.00 / yr
+          </DzText>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Payment">
-          <DzText size="sm" as="span" class="dd-mono">Visa •••• 4242</DzText>
+          <DzText size="sm" as="span" class="dd-mono">
+            Visa •••• 4242
+          </DzText>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Renews">
-          <DzText size="sm" as="span">14 Mar 2027</DzText>
+          <DzText size="sm" as="span">
+            14 Mar 2027
+          </DzText>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Owner">
-          <DzText size="sm" as="span">platform-team</DzText>
+          <DzText size="sm" as="span">
+            platform-team
+          </DzText>
         </DzDescriptionsItem>
 
         <DzDescriptionsItem label="Labels" :span="2">

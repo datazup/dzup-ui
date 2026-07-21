@@ -45,13 +45,15 @@ const states = new WeakMap<HTMLElement, GlareState>()
 
 /** Whether the OS currently requests reduced motion (SSR-safe). */
 function prefersReduced(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 /** Whether the device has a fine, hover-capable pointer (SSR-safe). */
 function canHover(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
@@ -61,9 +63,11 @@ function shouldRun(binding: DirectiveBinding<GlareOptions | undefined>): boolean
 
 function applyFrame(el: HTMLElement, state: GlareState): void {
   state.frame = 0
-  if (!state.glare) return
+  if (!state.glare)
+    return
   const rect = el.getBoundingClientRect()
-  if (!rect.width || !rect.height) return
+  if (!rect.width || !rect.height)
+    return
   const px = (state.nextX - rect.left) / rect.width
   const py = (state.nextY - rect.top) / rect.height
   state.glare.style.setProperty('--dz-glare-x', `${(px * 100).toFixed(2)}%`)
@@ -72,7 +76,8 @@ function applyFrame(el: HTMLElement, state: GlareState): void {
 
 function createGlare(el: HTMLElement): HTMLElement {
   // Host must establish a positioning context for the absolute overlay.
-  if (getComputedStyle(el).position === 'static') el.style.position = 'relative'
+  if (getComputedStyle(el).position === 'static')
+    el.style.position = 'relative'
   const glare = document.createElement('span')
   glare.className = 'dz-glare'
   glare.setAttribute('aria-hidden', 'true')
@@ -81,15 +86,19 @@ function createGlare(el: HTMLElement): HTMLElement {
 }
 
 function attach(el: HTMLElement, state: GlareState): void {
-  if (state.attached) return
-  if (!state.glare) state.glare = createGlare(el)
+  if (state.attached)
+    return
+  if (!state.glare)
+    state.glare = createGlare(el)
 
   state.onMove = (event: PointerEvent): void => {
-    if (event.pointerType === 'touch') return
+    if (event.pointerType === 'touch')
+      return
     state.nextX = event.clientX
     state.nextY = event.clientY
     state.glare?.classList.add('dz-glare--active')
-    if (!state.frame) state.frame = requestAnimationFrame(() => applyFrame(el, state))
+    if (!state.frame)
+      state.frame = requestAnimationFrame(() => applyFrame(el, state))
   }
 
   state.onLeave = (): void => {
@@ -106,7 +115,8 @@ function attach(el: HTMLElement, state: GlareState): void {
 }
 
 function detach(el: HTMLElement, state: GlareState): void {
-  if (!state.attached) return
+  if (!state.attached)
+    return
   el.removeEventListener('pointermove', state.onMove)
   el.removeEventListener('pointerleave', state.onLeave)
   if (state.frame) {
@@ -129,18 +139,22 @@ export const vGlare: Directive<HTMLElement, GlareOptions | undefined> = {
       onLeave: () => {},
     }
     states.set(el, state)
-    if (shouldRun(binding)) attach(el, state)
+    if (shouldRun(binding))
+      attach(el, state)
   },
   updated(el, binding) {
     const state = states.get(el)
-    if (!state) return
+    if (!state)
+      return
     // React to the page-level reduced-motion toggle flipping `disabled`.
-    if (shouldRun(binding)) attach(el, state)
+    if (shouldRun(binding))
+      attach(el, state)
     else detach(el, state)
   },
   unmounted(el) {
     const state = states.get(el)
-    if (!state) return
+    if (!state)
+      return
     detach(el, state)
     state.glare?.remove()
     states.delete(el)

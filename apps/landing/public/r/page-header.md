@@ -32,9 +32,15 @@ import { Download, Plus, Share2 } from 'lucide-vue-next'
   <section class="ph-wrap" aria-labelledby="ph-title">
     <!-- Breadcrumb row -->
     <DzBreadcrumb aria-label="Page location" class="ph-breadcrumb">
-      <DzBreadcrumbItem href="#">Workspace</DzBreadcrumbItem>
-      <DzBreadcrumbItem href="#">Projects</DzBreadcrumbItem>
-      <DzBreadcrumbItem :current="true">Q3 Launch Plan</DzBreadcrumbItem>
+      <DzBreadcrumbItem href="#">
+        Workspace
+      </DzBreadcrumbItem>
+      <DzBreadcrumbItem href="#">
+        Projects
+      </DzBreadcrumbItem>
+      <DzBreadcrumbItem :current="true">
+        Q3 Launch Plan
+      </DzBreadcrumbItem>
     </DzBreadcrumb>
 
     <!-- Title + actions row -->
@@ -44,21 +50,29 @@ import { Download, Plus, Share2 } from 'lucide-vue-next'
           <DzHeading id="ph-title" :level="4" size="2xl" weight="bold">
             Q3 Launch Plan
           </DzHeading>
-          <DzBadge variant="subtle" tone="success" size="sm">In progress</DzBadge>
+          <DzBadge variant="subtle" tone="success" size="sm">
+            In progress
+          </DzBadge>
         </div>
       </div>
 
       <div class="ph-actions">
         <DzButton variant="ghost" tone="neutral" size="sm">
-          <template #prefix><Share2 :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Share2 :size="15" aria-hidden="true" />
+          </template>
           Share
         </DzButton>
         <DzButton variant="outline" tone="neutral" size="sm">
-          <template #prefix><Download :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Download :size="15" aria-hidden="true" />
+          </template>
           Export
         </DzButton>
         <DzButton variant="solid" tone="primary" size="sm">
-          <template #prefix><Plus :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Plus :size="15" aria-hidden="true" />
+          </template>
           New task
         </DzButton>
       </div>

@@ -8,6 +8,7 @@ A ⌘K command palette (DzCommandPalette) — a search-field launcher with a DzK
 
 ```vue
 <script setup lang="ts">
+import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 /**
  * Command menu — a ⌘K command palette launcher (DzCommandPalette).
  *
@@ -21,7 +22,6 @@ A ⌘K command palette (DzCommandPalette) — a search-field launcher with a DzK
  * tokens. Heading level is 4 so it nests under the BlockPreview H3.
  */
 import { DzCommandPalette, DzHeading, DzKbd, DzText } from '@dzup-ui/core'
-import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 import {
   ArrowRight,
   CreditCard,

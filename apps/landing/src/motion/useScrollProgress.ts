@@ -20,7 +20,8 @@ export function useScrollProgress(elRef: Ref<HTMLElement | null | undefined>): R
   function compute(): void {
     frame = 0
     const el = target
-    if (!el || typeof window === 'undefined') return
+    if (!el || typeof window === 'undefined')
+      return
     const viewport = window.innerHeight || document.documentElement.clientHeight
     const rect = el.getBoundingClientRect()
     const total = viewport + rect.height
@@ -33,13 +34,15 @@ export function useScrollProgress(elRef: Ref<HTMLElement | null | undefined>): R
   }
 
   function onScroll(): void {
-    if (frame) return
+    if (frame)
+      return
     frame = window.requestAnimationFrame(compute)
   }
 
   function start(el: HTMLElement): void {
     target = el
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined')
+      return
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
     compute()
@@ -49,19 +52,22 @@ export function useScrollProgress(elRef: Ref<HTMLElement | null | undefined>): R
     if (typeof window !== 'undefined') {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
-      if (frame) window.cancelAnimationFrame(frame)
+      if (frame)
+        window.cancelAnimationFrame(frame)
     }
     frame = 0
     target = null
   }
 
   onMounted(() => {
-    if (elRef.value) start(elRef.value)
+    if (elRef.value)
+      start(elRef.value)
   })
 
   watch(elRef, (el) => {
     stop()
-    if (el) start(el)
+    if (el)
+      start(el)
   })
 
   onBeforeUnmount(stop)

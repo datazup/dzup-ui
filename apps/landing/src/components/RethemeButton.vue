@@ -5,7 +5,14 @@ import { useThemeTransition } from '../composables/useThemeTransition.ts'
 
 // Prominent hero control (spec §4.2): one click re-themes the entire page with a
 // short colour cross-fade (or an instant swap under reduced motion). Reuses the
-// shared theme singleton via useThemeTransition, so the nav toggle stays in sync.
+// shared theme singleton via useThemeTransition, so the nav control stays in sync.
+//
+// Deliberately still a binary flip (TASK-FREE2-08 <retheme>): this is a "look what
+// the tokens do" affordance, and a three-way control would blunt it. What it must
+// NOT do is pretend to be the whole theme story — a flip here PINS an explicit
+// mode, so the label says so and points at the nav control, which is where
+// `system` lives. Before that control existed, this button silently converted one
+// curious click into a permanent override with no way back.
 const { resolved, retheme } = useThemeTransition()
 
 const next = computed(() => (resolved.value === 'dark' ? 'light' : 'dark'))
@@ -16,6 +23,7 @@ const next = computed(() => (resolved.value === 'dark' ? 'light' : 'dark'))
     type="button"
     class="retheme"
     :aria-label="`Re-theme the whole page — switch to ${next} mode`"
+    :title="`Switch to ${next} mode. Pins an explicit theme — the nav control is where 'system' lives.`"
     @click="retheme"
   >
     <span class="retheme-glow" aria-hidden="true" />

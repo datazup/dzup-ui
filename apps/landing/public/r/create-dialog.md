@@ -8,6 +8,7 @@ A focus-trapped modal form built from the DzDialog compound — a trigger button
 
 ```vue
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 /**
  * Create dialog — a modal form in a focus-trapped dialog (DzDialog).
  *
@@ -37,7 +38,6 @@ import {
   DzText,
   DzTextarea,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { FolderGit2, Plus } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -63,7 +63,8 @@ function resetForm(): void {
 
 function create(): void {
   const trimmed = name.value.trim()
-  if (!trimmed) return
+  if (!trimmed)
+    return
   created.value.unshift({ name: trimmed, visibility: visibility.value })
   open.value = false
   resetForm()
@@ -84,7 +85,9 @@ function create(): void {
     <DzDialog v-model:open="open">
       <DzDialogTrigger as-child>
         <DzButton variant="solid" tone="primary" size="md">
-          <template #prefix><Plus :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <Plus :size="16" aria-hidden="true" />
+          </template>
           New project
         </DzButton>
       </DzDialogTrigger>
@@ -95,7 +98,9 @@ function create(): void {
         <div class="cd-dialog-head">
           <span class="cd-dialog-icon" aria-hidden="true"><FolderGit2 :size="20" /></span>
           <div>
-            <DzDialogTitle class="cd-dialog-title">Create a new project</DzDialogTitle>
+            <DzDialogTitle class="cd-dialog-title">
+              Create a new project
+            </DzDialogTitle>
             <DzDialogDescription class="cd-dialog-desc">
               Projects keep your dashboards, members and data sources together.
             </DzDialogDescription>
@@ -121,7 +126,9 @@ function create(): void {
 
         <footer class="cd-dialog-footer">
           <DzDialogClose as-child>
-            <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
+            <DzButton variant="ghost" tone="neutral">
+              Cancel
+            </DzButton>
           </DzDialogClose>
           <DzButton variant="solid" tone="primary" :disabled="!name.trim()" @click="create">
             Create project
@@ -137,8 +144,12 @@ function create(): void {
       </DzText>
       <ul v-else class="cd-list">
         <li v-for="(p, i) in created" :key="i" class="cd-list-item">
-          <DzText size="sm" weight="medium" as="span">{{ p.name }}</DzText>
-          <DzBadge variant="subtle" tone="neutral" size="sm">{{ p.visibility }}</DzBadge>
+          <DzText size="sm" weight="medium" as="span">
+            {{ p.name }}
+          </DzText>
+          <DzBadge variant="subtle" tone="neutral" size="sm">
+            {{ p.visibility }}
+          </DzBadge>
         </li>
       </ul>
     </div>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TooltipSide } from '@dzup-ui/core'
+import type { Component } from 'vue'
 /**
  * Tooltip toolbar — labelled icon actions on hover/focus (DzTooltip).
  *
@@ -21,8 +23,6 @@ import {
   DzTooltipContent,
   DzTooltipTrigger,
 } from '@dzup-ui/core'
-import type { TooltipSide } from '@dzup-ui/core'
-import type { Component } from 'vue'
 import {
   AlignCenter,
   AlignLeft,
@@ -70,7 +70,8 @@ const toolbar: Tip[][] = [
 const pressed = reactive<Record<string, boolean>>({})
 
 function onClick(tip: Tip): void {
-  if (tip.toggle) pressed[tip.key] = !pressed[tip.key]
+  if (tip.toggle)
+    pressed[tip.key] = !pressed[tip.key]
 }
 </script>
 
@@ -97,7 +98,7 @@ function onClick(tip: Tip): void {
             <DzTooltipTrigger as-child>
               <DzIconButton
                 :icon="tip.icon"
-                :ariaLabel="tip.label"
+                :aria-label="tip.label"
                 variant="ghost"
                 :tone="tip.toggle && pressed[tip.key] ? 'primary' : 'neutral'"
                 size="sm"

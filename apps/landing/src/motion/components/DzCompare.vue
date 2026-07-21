@@ -69,7 +69,8 @@ function clamp(v: number): number {
 
 function setFromClientX(clientX: number): void {
   const rect = stage.value?.getBoundingClientRect()
-  if (!rect || !rect.width) return
+  if (!rect || !rect.width)
+    return
   position.value = clamp(((clientX - rect.left) / rect.width) * 100)
 }
 
@@ -83,12 +84,14 @@ function onPointerDown(event: PointerEvent): void {
 }
 
 function onPointerMove(event: PointerEvent): void {
-  if (!dragging.value || event.pointerId !== activePointer) return
+  if (!dragging.value || event.pointerId !== activePointer)
+    return
   setFromClientX(event.clientX)
 }
 
 function onPointerUp(event: PointerEvent): void {
-  if (event.pointerId !== activePointer) return
+  if (event.pointerId !== activePointer)
+    return
   dragging.value = false
   activePointer = null
 }
@@ -121,7 +124,8 @@ function onKeydown(event: KeyboardEvent): void {
 
 /** A short one-shot auto wipe on mount that hints the control is draggable. */
 function runIntro(): void {
-  if (props.disabled || prefersReduced()) return
+  if (props.disabled || prefersReduced())
+    return
   const from = props.start
   const sweepTo = 78
   const startTs = performance.now()
@@ -131,7 +135,8 @@ function runIntro(): void {
     // Ease out-and-back so the handle nudges over then settles at `start`.
     const e = Math.sin(t * Math.PI)
     position.value = clamp(from + (sweepTo - from) * e)
-    if (t < 1) introFrame = requestAnimationFrame(tick)
+    if (t < 1)
+      introFrame = requestAnimationFrame(tick)
     else position.value = props.start
   }
   introTimer = setTimeout(() => {
@@ -151,7 +156,8 @@ function cancelIntro(): void {
 }
 
 function prefersReduced(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 

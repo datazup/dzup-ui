@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { DzText } from '@dzup-ui/core'
 import { ArrowUpRight } from 'lucide-vue-next'
-import Section from './Section.vue'
-import FamilyPreview from './FamilyPreview.vue'
-import { FAMILIES } from '../data.ts'
 import { FACTS, LINKS } from '../config.ts'
+import { FAMILIES } from '../data.ts'
+import FamilyPreview from './FamilyPreview.vue'
+import Section from './Section.vue'
 </script>
 
 <template>
@@ -32,7 +32,9 @@ import { FACTS, LINKS } from '../config.ts'
           :style="{ '--reveal-delay': `${i * 45}ms` }"
         >
           <div class="tile-head">
-            <DzText weight="semibold" as="span">{{ family.label }}</DzText>
+            <DzText weight="semibold" as="span">
+              {{ family.label }}
+            </DzText>
             <span class="tile-count">{{ family.count }}</span>
           </div>
 

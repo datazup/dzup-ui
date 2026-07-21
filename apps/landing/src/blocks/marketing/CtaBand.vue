@@ -35,8 +35,12 @@ import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
       </DzText>
 
       <div class="cb-actions">
-        <DzButton variant="solid" tone="primary" size="lg">Get started free</DzButton>
-        <DzButton variant="outline" tone="neutral" size="lg">Talk to sales</DzButton>
+        <DzButton variant="solid" tone="primary" size="lg">
+          Get started free
+        </DzButton>
+        <DzButton variant="outline" tone="neutral" size="lg">
+          Talk to sales
+        </DzButton>
       </div>
     </div>
   </section>

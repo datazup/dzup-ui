@@ -25,13 +25,17 @@ const rows = [
   <div class="stage">
     <div class="scroller">
       <div v-for="row in rows" :key="row" class="row">
-        <DzText size="sm">{{ row }}</DzText>
+        <DzText size="sm">
+          {{ row }}
+        </DzText>
       </div>
     </div>
     <!-- Pinned to the host's bottom edge; the host clips it. -->
     <div class="dz-progressive-blur" aria-hidden="true" />
     <div class="label">
-      <DzText size="xs" tone="muted" as="div">Scroll edge fades through layered blur</DzText>
+      <DzText size="xs" tone="muted" as="div">
+        Scroll edge fades through layered blur
+      </DzText>
     </div>
   </div>
 </template>

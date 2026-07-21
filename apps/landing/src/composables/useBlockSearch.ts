@@ -13,12 +13,12 @@
  * (docs/blocks.md §3.1).
  */
 
-import { computed, ref } from 'vue'
 import type { ComputedRef, Ref } from 'vue'
-import { BLOCKS, allComponents, allTags, blocksUsingComponent } from '../blocks/registry.ts'
 import type { BlockDef } from '../blocks/registry.ts'
-import { scoreFields } from '../lib/searchScore.ts'
 import type { WeightedField } from '../lib/searchScore.ts'
+import { computed, ref } from 'vue'
+import { allComponents, allTags, BLOCKS, blocksUsingComponent } from '../blocks/registry.ts'
+import { scoreFields } from '../lib/searchScore.ts'
 
 /**
  * Per-field weights for query ranking. A block's score is the sum of the weights
@@ -104,23 +104,24 @@ export function useBlockSearch(): UseBlockSearch {
     // must carry every active tag (and the active component) to survive.
     let pool = BLOCKS as readonly BlockDef[]
     if (tags.length > 0) {
-      pool = pool.filter((block) => tags.every((tag) => block.tags.includes(tag)))
+      pool = pool.filter(block => tags.every(tag => block.tags.includes(tag)))
     }
     if (component !== null) {
-      pool = pool.filter((block) => block.components.includes(component))
+      pool = pool.filter(block => block.components.includes(component))
     }
 
     // No text query → return the faceted pool in registry order (a copy, so
     // callers can't mutate BLOCKS through the result).
-    if (q === '') return [...pool]
+    if (q === '')
+      return [...pool]
 
     // Rank text matches: title hits before description/component hits; ties keep
     // registry order via the carried index.
     return pool
       .map((block, index) => ({ block, index, score: scoreBlock(block, q) }))
-      .filter((entry) => entry.score > 0)
+      .filter(entry => entry.score > 0)
       .sort((a, b) => b.score - a.score || a.index - b.index)
-      .map((entry) => entry.block)
+      .map(entry => entry.block)
   })
 
   return {

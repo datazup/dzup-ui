@@ -9,6 +9,8 @@
  *   • exactly one <h1> per route, and no skipped heading levels — the three
  *     routes that used to start at <h2> (/templates, /templates/:slug,
  *     /compare) regress loudly now;
+ *   • exactly one <main> landmark per route (TASK-FREE2-04) — see the landmark
+ *     describe below for why this suite was green while /ai shipped two;
  *   • zero serious/critical axe violations (WCAG 2.0/2.1 A+AA structural
  *     rules — like the block suite, jsdom has no layout so color-contrast
  *     comes back *incomplete*, not *fail*, and is NOT claimed here);
@@ -82,6 +84,7 @@ const CHROMED_ROUTES: Array<{ path: string, label: string }> = [
   { path: `/templates/${TEMPLATES[0]!.slug}`, label: 'template detail' },
   { path: '/ai', label: 'ai ide' },
   { path: '/compare', label: 'compare' },
+  { path: '/changelog', label: 'changelog' },
   { path: '/definitely-not-a-page', label: 'not found (404)' },
 ]
 
@@ -138,6 +141,43 @@ describe.sequential('landing pages — accessibility', () => {
         blocking,
         `route ${path} has ${blocking.length} blocking a11y violation(s):\n    ${blocking.map(reportViolation).join('\n    ')}`,
       ).toEqual([])
+    })
+  })
+
+  /**
+   * One <main> per page (TASK-FREE2-04).
+   *
+   * `App.vue` wraps every routed view in the single `<main id="main">` that the
+   * skip link targets, so a page component's root must not be a landmark of its
+   * own. `/ai` shipped `<main class="ai">` as its root: two main landmarks, one
+   * inside the other — invalid HTML, and an ambiguous page map for anyone
+   * navigating by landmark, including a skip link that now has two plausible
+   * destinations.
+   *
+   * It shipped *past this very suite*, which mounts /ai and runs axe on it. axe
+   * has the rule — `landmark-no-duplicate-main` — but grades it **moderate**, and
+   * the audit above only fails on serious/critical. Widening that filter would
+   * re-arm a long backlog of unrelated moderate findings, so the invariant gets
+   * its own assertion at full strength instead. Structure is checked structurally.
+   *
+   * Asserted against the whole document, not `#main`: the second landmark can
+   * appear anywhere, and nesting is exactly the case a scoped query would miss.
+   */
+  describe('landmark structure', () => {
+    it.each(CHROMED_ROUTES)('route "$label" ($path) renders exactly one <main>', async ({ path }) => {
+      await mountAt(path)
+
+      const mains = [...document.querySelectorAll('main')]
+      expect(
+        mains.length,
+        `route ${path} rendered ${mains.length} <main> landmarks (want 1): `
+        + `${mains.map(el => `<main${el.id ? ` id="${el.id}"` : ''}${el.className ? ` class="${el.className}"` : ''}>`).join(', ')}`
+        + '\n      A page root must be a div/section — App.vue already provides the page <main>.',
+      ).toBe(1)
+
+      // The one that exists is the skip link's target, not some other element
+      // that merely happens to be the only main left.
+      expect(mains[0]!.id, `route ${path}: the page <main> is not the skip-link target`).toBe('main')
     })
   })
 

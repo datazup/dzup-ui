@@ -63,7 +63,8 @@ const d = ref('')
 const ends = ref({ x1: 0, y1: 0, x2: 0, y2: 0 })
 
 function resolve(target: HTMLElement | string | null | undefined): Element | null {
-  if (!target) return null
+  if (!target)
+    return null
   if (typeof target === 'string') {
     return svg.value?.parentElement?.querySelector(target) ?? null
   }
@@ -79,7 +80,8 @@ function measure(): void {
     return
   }
   const s = svgEl.getBoundingClientRect()
-  if (!s.width || !s.height) return
+  if (!s.width || !s.height)
+    return
   const ra = a.getBoundingClientRect()
   const rb = b.getBoundingClientRect()
   const x1 = ra.left + ra.width / 2 - s.left
@@ -97,7 +99,8 @@ let observer: ResizeObserver | null = null
 const observed = new Set<Element>()
 
 function syncObserved(): void {
-  if (!observer) return
+  if (!observer)
+    return
   const next = [svg.value, resolve(props.from), resolve(props.to)].filter(Boolean) as Element[]
   for (const el of observed) {
     if (!next.includes(el)) {

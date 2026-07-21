@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import type { UseBlockSearch } from '../../composables/useBlockSearch.ts'
 import { DzSearchInput, DzText } from '@dzup-ui/core'
 import { X } from 'lucide-vue-next'
-import type { UseBlockSearch } from '../../composables/useBlockSearch.ts'
+import { computed, ref } from 'vue'
 
 /**
  * BlockSearchBar — the on-page search + tag-filter control for /blocks
@@ -48,7 +48,7 @@ function isActive(tag: string): boolean {
 /** Toggle a tag in/out of the active facet (new array so the computed re-runs). */
 function toggleTag(tag: string): void {
   activeTags.value = isActive(tag)
-    ? activeTags.value.filter((t) => t !== tag)
+    ? activeTags.value.filter(t => t !== tag)
     : [...activeTags.value, tag]
 }
 
@@ -105,7 +105,9 @@ function clearComponent(): void {
       <!-- Active component facet (Task E4): a removable pill shown when a chip's
            "show blocks using <Dz*>" reverse-lookup is driving results mode. -->
       <div v-if="activeComponent" class="block-search-facet">
-        <DzText size="sm" tone="muted" as="span">Showing blocks using</DzText>
+        <DzText size="sm" tone="muted" as="span">
+          Showing blocks using
+        </DzText>
         <button
           type="button"
           class="block-search-facet-chip"

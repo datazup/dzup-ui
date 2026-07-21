@@ -25,13 +25,14 @@ import {
   DzTag,
   DzText,
 } from '@dzup-ui/core'
-import { ArrowLeft, ArrowUpRight, BookOpen, Bookmark, Share2 } from 'lucide-vue-next'
+import { ArrowLeft, ArrowUpRight, Bookmark, BookOpen, Share2 } from 'lucide-vue-next'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { buildCover, buildFigure, RELATED, SAMPLE_CODE, TOC } from './data.ts'
 
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -72,7 +73,9 @@ onBeforeUnmount(() => observer?.disconnect())
           <span class="brand-name">Overflow</span>
         </span>
         <DzButton variant="ghost" tone="neutral" size="sm">
-          <template #prefix><ArrowLeft :size="16" aria-hidden="true" /></template>
+          <template #prefix>
+            <ArrowLeft :size="16" aria-hidden="true" />
+          </template>
           All articles
         </DzButton>
       </div>
@@ -81,7 +84,9 @@ onBeforeUnmount(() => observer?.disconnect())
     <main class="article">
       <!-- ── Article header ───────────────────────────────────── -->
       <header class="head">
-        <DzTag variant="subtle" tone="primary" size="sm">Engineering</DzTag>
+        <DzTag variant="subtle" tone="primary" size="sm">
+          Engineering
+        </DzTag>
         <DzHeading :level="1" size="3xl" weight="bold" class="title">
           Stop hardcoding colors: design tokens from first principles
         </DzHeading>
@@ -94,16 +99,24 @@ onBeforeUnmount(() => observer?.disconnect())
         <div class="byline">
           <DzAvatar fallback="EI" size="md" />
           <div class="byline-meta">
-            <DzText weight="semibold" as="span">Esmir Isić</DzText>
-            <DzText size="sm" tone="muted" as="span">Jun 25, 2026 · 8 min read</DzText>
+            <DzText weight="semibold" as="span">
+              Esmir Isić
+            </DzText>
+            <DzText size="sm" tone="muted" as="span">
+              Jun 25, 2026 · 8 min read
+            </DzText>
           </div>
           <div class="byline-actions">
             <DzButton variant="outline" tone="neutral" size="sm">
-              <template #prefix><Bookmark :size="15" aria-hidden="true" /></template>
+              <template #prefix>
+                <Bookmark :size="15" aria-hidden="true" />
+              </template>
               Save
             </DzButton>
             <DzButton variant="ghost" tone="neutral" size="sm">
-              <template #prefix><Share2 :size="15" aria-hidden="true" /></template>
+              <template #prefix>
+                <Share2 :size="15" aria-hidden="true" />
+              </template>
               Share
             </DzButton>
           </div>
@@ -126,7 +139,9 @@ onBeforeUnmount(() => observer?.disconnect())
       <div class="layout">
         <article class="prose">
           <section id="intro" class="scroll-section">
-            <DzHeading :level="2" size="xl" weight="semibold" class="h2">Why tokens, not hex</DzHeading>
+            <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+              Why tokens, not hex
+            </DzHeading>
             <DzText as="p" class="p">
               Every raw <code>#6366f1</code> scattered through a codebase is a tiny
               promise you'll have to keep forever. Change the brand blue and you're
@@ -151,7 +166,9 @@ onBeforeUnmount(() => observer?.disconnect())
           <DzDivider class="rule" />
 
           <section id="anatomy" class="scroll-section">
-            <DzHeading :level="2" size="xl" weight="semibold" class="h2">The anatomy of a token</DzHeading>
+            <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+              The anatomy of a token
+            </DzHeading>
             <DzText as="p" class="p">
               A token is just a named CSS custom property, but the naming is where the
               leverage lives. Primitives describe raw values; semantic tokens describe
@@ -188,7 +205,9 @@ onBeforeUnmount(() => observer?.disconnect())
           <DzDivider class="rule" />
 
           <section id="theming" class="scroll-section">
-            <DzHeading :level="2" size="xl" weight="semibold" class="h2">Theming in one layer</DzHeading>
+            <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+              Theming in one layer
+            </DzHeading>
             <DzText as="p" class="p">
               Dark mode stops being a feature and becomes a side effect. You override
               the semantic tokens under a <code>[data-theme='dark']</code> selector and
@@ -198,7 +217,9 @@ onBeforeUnmount(() => observer?.disconnect())
           </section>
 
           <section id="code" class="scroll-section">
-            <DzHeading :level="2" size="xl" weight="semibold" class="h2">Wiring it up</DzHeading>
+            <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+              Wiring it up
+            </DzHeading>
             <DzText as="p" class="p">
               Here's the whole idea in a handful of lines. Define the tokens, override
               them for dark, and let components reference the names:
@@ -216,7 +237,9 @@ onBeforeUnmount(() => observer?.disconnect())
           <DzDivider class="rule" />
 
           <section id="closing" class="scroll-section">
-            <DzHeading :level="2" size="xl" weight="semibold" class="h2">Where to go next</DzHeading>
+            <DzHeading :level="2" size="xl" weight="semibold" class="h2">
+              Where to go next
+            </DzHeading>
             <DzText as="p" class="p">
               Start small: pick one component, replace its hardcoded values with
               tokens, and add a dark override. Once you feel the leverage, rolling it
@@ -228,13 +251,17 @@ onBeforeUnmount(() => observer?.disconnect())
               <div class="bio-row">
                 <DzAvatar fallback="EI" size="lg" />
                 <div class="bio-meta">
-                  <DzText weight="semibold" as="span">Esmir Isić</DzText>
+                  <DzText weight="semibold" as="span">
+                    Esmir Isić
+                  </DzText>
                   <DzText size="sm" tone="muted" as="p" class="bio-text">
                     Design-systems engineer writing about tokens, theming and the
                     unglamorous work that makes interfaces feel inevitable.
                   </DzText>
                 </div>
-                <DzButton variant="solid" tone="primary" size="sm">Follow</DzButton>
+                <DzButton variant="solid" tone="primary" size="sm">
+                  Follow
+                </DzButton>
               </div>
             </DzCard>
           </section>
@@ -242,7 +269,9 @@ onBeforeUnmount(() => observer?.disconnect())
 
         <!-- ── Sticky TOC ─────────────────────────────────────── -->
         <aside class="toc" aria-label="On this page">
-          <DzText size="xs" tone="muted" class="toc-label">On this page</DzText>
+          <DzText size="xs" tone="muted" class="toc-label">
+            On this page
+          </DzText>
           <DzAnchor :items="TOC" :offset-top="88" aria-label="Article sections" />
         </aside>
       </div>
@@ -250,8 +279,12 @@ onBeforeUnmount(() => observer?.disconnect())
       <!-- ── Continue reading ─────────────────────────────────── -->
       <section class="related" aria-label="Continue reading">
         <div class="related-head">
-          <DzHeading :level="2" size="lg" weight="semibold">Continue reading</DzHeading>
-          <DzText size="sm" tone="muted" as="p">More from the Engineering desk.</DzText>
+          <DzHeading :level="2" size="lg" weight="semibold">
+            Continue reading
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p">
+            More from the Engineering desk.
+          </DzText>
         </div>
         <ul class="related-grid">
           <li v-for="post in RELATED" :key="post.slug">
@@ -285,7 +318,9 @@ onBeforeUnmount(() => observer?.disconnect())
         <span class="brand-mark" aria-hidden="true"><BookOpen :size="16" /></span>
         <span class="brand-name">Overflow</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Overflow Journal. Written with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Overflow Journal. Written with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

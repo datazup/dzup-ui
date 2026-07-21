@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 /**
  * About & FAQ — Marketing template (docs/templates.md §6.2).
  *
@@ -22,7 +23,6 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import type { Component } from 'vue'
 import {
   Boxes,
   Compass,
@@ -31,7 +31,7 @@ import {
   Shapes,
   Sparkles,
 } from 'lucide-vue-next'
-import { MILESTONES, STATS, TEAM, VALUES, WIDER_TEAM, FAQS } from './data.ts'
+import { FAQS, MILESTONES, STATS, TEAM, VALUES, WIDER_TEAM } from './data.ts'
 
 /** Local map from a value's Lucide key to its component (data stays import-free). */
 const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkles, Leaf }
@@ -74,7 +74,9 @@ const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkl
             <DzHeading :level="2" size="2xl" weight="bold" class="stat-value">
               {{ stat.value }}
             </DzHeading>
-            <DzText size="sm" tone="muted" as="span">{{ stat.label }}</DzText>
+            <DzText size="sm" tone="muted" as="span">
+              {{ stat.label }}
+            </DzText>
           </li>
         </ul>
       </section>
@@ -128,7 +130,9 @@ const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkl
               <span class="value-icon" aria-hidden="true">
                 <component :is="VALUE_ICONS[value.icon]" :size="22" />
               </span>
-              <DzHeading :level="3" size="md" weight="semibold">{{ value.title }}</DzHeading>
+              <DzHeading :level="3" size="md" weight="semibold">
+                {{ value.title }}
+              </DzHeading>
               <DzText size="sm" tone="muted" as="p" class="value-detail">
                 {{ value.detail }}
               </DzText>
@@ -155,7 +159,9 @@ const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkl
             <DzCard variant="outlined" padding="lg" class="member">
               <DzAvatar :fallback="member.initials" size="lg" class="member-avatar" />
               <div class="member-body">
-                <DzHeading :level="3" size="md" weight="semibold">{{ member.name }}</DzHeading>
+                <DzHeading :level="3" size="md" weight="semibold">
+                  {{ member.name }}
+                </DzHeading>
                 <DzText size="sm" tone="muted" as="span" class="member-role">
                   {{ member.role }}
                 </DzText>
@@ -172,7 +178,9 @@ const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkl
             <DzAvatar v-for="initials in WIDER_TEAM" :key="initials" :fallback="initials" />
           </DzAvatarGroup>
           <div class="wider-copy">
-            <DzText weight="semibold" as="span">…and 60 more across the company</DzText>
+            <DzText weight="semibold" as="span">
+              …and 60 more across the company
+            </DzText>
             <DzText size="sm" tone="muted" as="p" class="wider-detail">
               Engineering, design, support and operations in 14 countries — all
               remote, all building in the open.
@@ -198,7 +206,9 @@ const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkl
           <DzAccordionItem v-for="faq in FAQS" :key="faq.value" :value="faq.value">
             <DzAccordionTrigger>{{ faq.q }}</DzAccordionTrigger>
             <DzAccordionContent>
-              <DzText size="sm" tone="muted" as="p" class="faq-answer">{{ faq.a }}</DzText>
+              <DzText size="sm" tone="muted" as="p" class="faq-answer">
+                {{ faq.a }}
+              </DzText>
             </DzAccordionContent>
           </DzAccordionItem>
         </DzAccordion>
@@ -210,7 +220,9 @@ const VALUE_ICONS: Record<string, Component> = { Compass, HeartHandshake, Sparkl
         <span class="brand-mark" aria-hidden="true"><Boxes :size="16" /></span>
         <span class="brand-name">Northwind</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Northwind. Built with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Northwind. Built with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

@@ -87,8 +87,9 @@ export default defineComponent({
     /** Parse a CSS `<time>` (`'200ms'` / `'0.3s'`) to milliseconds. */
     function toMs(value: string): number {
       const v = value.trim()
-      if (!v) return 0
-      return v.endsWith('ms') ? parseFloat(v) : parseFloat(v) * 1000
+      if (!v)
+        return 0
+      return v.endsWith('ms') ? Number.parseFloat(v) : Number.parseFloat(v) * 1000
     }
 
     /** Largest `duration + delay` across the comma-separated CSS time lists, in ms. */
@@ -117,16 +118,18 @@ export default defineComponent({
         return
       }
       let settled = false
-      const finish = (): void => {
-        if (settled) return
+      function finish(): void {
+        if (settled)
+          return
         settled = true
         clearExitTimer()
         el.removeEventListener('animationend', onEnd)
         el.removeEventListener('transitionend', onEnd)
         rendered.value = false
       }
-      const onEnd = (event: Event): void => {
-        if (event.target === el) finish()
+      function onEnd(event: Event): void {
+        if (event.target === el)
+          finish()
       }
       el.addEventListener('animationend', onEnd)
       el.addEventListener('transitionend', onEnd)
@@ -153,8 +156,10 @@ export default defineComponent({
         }
         // Wait one frame for the closed-state styles to apply, then time the exit.
         requestAnimationFrame(() => {
-          if (props.present) return
-          if (childEl.value) unmountWhenDone(childEl.value)
+          if (props.present)
+            return
+          if (childEl.value)
+            unmountWhenDone(childEl.value)
           else rendered.value = false
         })
       },
@@ -169,14 +174,16 @@ export default defineComponent({
     }
 
     return () => {
-      if (!rendered.value) return null
+      if (!rendered.value)
+        return null
       const nodes = slots.default?.({ state: dataState.value }) ?? []
       // Pick the single real element/component child, skipping whitespace text and
       // comment vnodes (whose `type` is a symbol).
       const child = nodes.find(
         (n): n is VNode => typeof n === 'object' && n !== null && 'type' in n && typeof n.type !== 'symbol',
       )
-      if (!child) return null
+      if (!child)
+        return null
       // Clone the single child so we can stamp data-state + capture its element
       // without requiring the consumer to forward anything.
       return cloneVNode(

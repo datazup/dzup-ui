@@ -1,16 +1,9 @@
 <script lang="ts">
-import type { BlockCategory } from '../../blocks/registry.ts'
-
-/** Where a palette selection wants the page to go. */
-export interface BlockNavTarget {
-  /** Category deck to open. */
-  category: BlockCategory
-  /** Optional block to scroll into view once its deck is shown. */
-  blockId?: string
-}
+import type { BlockCategory, BlockDef } from '../../blocks/registry.ts'
 </script>
 
 <script setup lang="ts">
+import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 /**
  * BlockCommandPalette — a ⌘K / Ctrl+K navigator for /blocks.
  *
@@ -33,12 +26,18 @@ export interface BlockNavTarget {
  * Built only from @dzup-ui/core + `--dz-*` tokens.
  */
 import { DzCommandPalette, DzKbd } from '@dzup-ui/core'
-import type { CommandGroup, CommandItem } from '@dzup-ui/core'
 import { Box, LayoutGrid, LayoutTemplate, Search } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
-import { CATEGORIES, blocksByCategory } from '../../blocks/registry.ts'
-import type { BlockDef } from '../../blocks/registry.ts'
+import { blocksByCategory, CATEGORIES } from '../../blocks/registry.ts'
 import { useBlockSearch } from '../../composables/useBlockSearch.ts'
+
+/** Where a palette selection wants the page to go. */
+export interface BlockNavTarget {
+  /** Category deck to open. */
+  category: BlockCategory
+  /** Optional block to scroll into view once its deck is shown. */
+  blockId?: string
+}
 
 const emit = defineEmits<{
   /** A palette item was chosen — open this target in the deck. */
@@ -73,12 +72,12 @@ const open = ref(false)
 const search = useBlockSearch()
 
 /** Human label for a category id. */
-const categoryLabels = new Map(CATEGORIES.map((c) => [c.id, c.label]))
+const categoryLabels = new Map(CATEGORIES.map(c => [c.id, c.label]))
 
 /** Categories that actually hold blocks, with their block counts, in browse order. */
 const categorySections = computed(() =>
-  CATEGORIES.map((c) => ({ ...c, count: blocksByCategory(c.id).length })).filter(
-    (c) => c.count > 0,
+  CATEGORIES.map(c => ({ ...c, count: blocksByCategory(c.id).length })).filter(
+    c => c.count > 0,
   ),
 )
 
@@ -99,7 +98,8 @@ const items = computed<PaletteItem[]>(() => {
   // Categories — always available as the default navigation set.
   for (const cat of categorySections.value) {
     const hay = `${cat.label} ${cat.blurb} ${cat.id}`.toLowerCase()
-    if (q && !hay.includes(q)) continue
+    if (q && !hay.includes(q))
+      continue
     out.push({
       id: `cat:${cat.id}`,
       label: hay,
@@ -115,8 +115,8 @@ const items = computed<PaletteItem[]>(() => {
   if (q) {
     // Blocks — already filtered and ranked title-first by useBlockSearch.
     for (const block of search.results.value) {
-      const hay =
-        `${block.title} ${block.id} ${block.tags.join(' ')} ${block.components.join(' ')} ${block.description} ${categoryLabels.get(block.category) ?? ''}`.toLowerCase()
+      const hay
+        = `${block.title} ${block.id} ${block.tags.join(' ')} ${block.components.join(' ')} ${block.description} ${categoryLabels.get(block.category) ?? ''}`.toLowerCase()
       out.push({
         id: `block:${block.id}`,
         label: hay,
@@ -131,7 +131,8 @@ const items = computed<PaletteItem[]>(() => {
     }
     // Components — every Dz* export whose name matches the query.
     for (const name of search.allComponents()) {
-      if (!name.toLowerCase().includes(q)) continue
+      if (!name.toLowerCase().includes(q))
+        continue
       out.push({
         id: `comp:${name}`,
         label: name.toLowerCase(),
@@ -158,12 +159,15 @@ function onSelect(raw: CommandItem): void {
   const item = raw as PaletteItem
   if (item.kind === 'block' && item.block) {
     emit('navigate', { category: item.block.category, blockId: item.block.id })
-  } else if (item.kind === 'category' && item.categoryId) {
+  }
+  else if (item.kind === 'category' && item.categoryId) {
     emit('navigate', { category: item.categoryId })
-  } else if (item.kind === 'component' && item.componentName) {
+  }
+  else if (item.kind === 'component' && item.componentName) {
     // Defer the filtered "blocks using <X>" view (E3/E4) — jump to the first match.
     const first = search.blocksUsingComponent(item.componentName)[0]
-    if (first) emit('navigate', { category: first.category, blockId: first.id })
+    if (first)
+      emit('navigate', { category: first.category, blockId: first.id })
   }
 }
 
@@ -223,7 +227,9 @@ function chipsOf(item: CommandItem): string[] {
         <span v-if="!chipsOf(item).length" class="bcp-item-meta">{{ metaOf(item) }}</span>
       </template>
 
-      <template #empty> No blocks, categories or components match. </template>
+      <template #empty>
+        No blocks, categories or components match.
+      </template>
     </DzCommandPalette>
   </div>
 </template>

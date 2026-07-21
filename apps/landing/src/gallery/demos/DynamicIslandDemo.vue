@@ -43,13 +43,19 @@ const playing = ref(true)
           <div class="track">
             <span class="cover" aria-hidden="true">♪</span>
             <div class="meta">
-              <DzText weight="semibold" size="sm" as="div" class="track-title">Midnight Pulse</DzText>
-              <DzText size="xs" tone="muted" as="div" class="track-artist">Aurora</DzText>
+              <DzText weight="semibold" size="sm" as="div" class="track-title">
+                Midnight Pulse
+              </DzText>
+              <DzText size="xs" tone="muted" as="div" class="track-artist">
+                Aurora
+              </DzText>
             </div>
           </div>
 
           <div class="controls">
-            <button type="button" class="ctl" aria-label="Previous track"><SkipBack :size="18" /></button>
+            <button type="button" class="ctl" aria-label="Previous track">
+              <SkipBack :size="18" />
+            </button>
             <button
               type="button"
               class="ctl ctl--primary"
@@ -59,7 +65,9 @@ const playing = ref(true)
               <Pause v-if="playing" :size="20" />
               <Play v-else :size="20" />
             </button>
-            <button type="button" class="ctl" aria-label="Next track"><SkipForward :size="18" /></button>
+            <button type="button" class="ctl" aria-label="Next track">
+              <SkipForward :size="18" />
+            </button>
           </div>
         </div>
       </template>

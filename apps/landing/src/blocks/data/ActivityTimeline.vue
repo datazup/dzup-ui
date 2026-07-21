@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Activity timeline — a vertical feed of events built from DzTimeline.
  *
@@ -20,7 +21,6 @@ import {
   DzTimeline,
   DzTimelineItem,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 interface Event {
   id: number
@@ -89,8 +89,12 @@ const events: Event[] = [
   <section class="at-wrap" aria-labelledby="at-title">
     <DzCard variant="outlined" padding="lg">
       <header class="at-head">
-        <DzHeading id="at-title" :level="4" size="md" weight="semibold" class="at-title">Recent activity</DzHeading>
-        <DzBadge variant="subtle" tone="neutral" size="sm">Today</DzBadge>
+        <DzHeading id="at-title" :level="4" size="md" weight="semibold" class="at-title">
+          Recent activity
+        </DzHeading>
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          Today
+        </DzBadge>
       </header>
 
       <DzTimeline size="md">
@@ -106,10 +110,14 @@ const events: Event[] = [
 
           <div class="at-body">
             <DzText size="sm" as="p" class="at-line">
-              <DzText size="sm" weight="semibold" as="span">{{ event.actor }}</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                {{ event.actor }}
+              </DzText>
               {{ ' ' }}{{ event.title }}
             </DzText>
-            <DzText size="sm" tone="muted" as="p" class="at-detail">{{ event.detail }}</DzText>
+            <DzText size="sm" tone="muted" as="p" class="at-detail">
+              {{ event.detail }}
+            </DzText>
             <DzTag v-if="event.tag" variant="subtle" :tone="event.tag.tone" size="sm" class="at-tag">
               {{ event.tag.label }}
             </DzTag>

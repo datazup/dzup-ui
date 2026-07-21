@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest'
 import { BLOCKS } from '../blocks/registry.ts'
 import { useBlockSearch } from './useBlockSearch.ts'
 
-const ids = (blocks: { id: string }[]): string[] => blocks.map((block) => block.id)
+const ids = (blocks: { id: string }[]): string[] => blocks.map(block => block.id)
 
 describe('useBlockSearch', () => {
   it('exposes the documented reactive surface', () => {
@@ -82,7 +82,7 @@ describe('useBlockSearch', () => {
     const matched = ids(results.value)
     expect(matched).toContain('table-card')
     for (const block of results.value) {
-      const hit = block.components.some((name) => name.toLowerCase().includes('dztable'))
+      const hit = block.components.some(name => name.toLowerCase().includes('dztable'))
       // a component-name match is the only reason these surface for this query
       expect(hit).toBe(true)
     }
@@ -92,7 +92,7 @@ describe('useBlockSearch', () => {
     const { activeTags, results, isFiltering } = useBlockSearch()
     activeTags.value = ['cta']
     expect(isFiltering.value).toBe(true)
-    const expected = BLOCKS.filter((block) => block.tags.includes('cta'))
+    const expected = BLOCKS.filter(block => block.tags.includes('cta'))
     expect(results.value).toEqual(expected)
     expect(results.value.length).toBeLessThan(BLOCKS.length)
     expect(results.value.length).toBeGreaterThan(0)
@@ -128,7 +128,7 @@ describe('useBlockSearch', () => {
     const { activeComponent, results, isFiltering } = useBlockSearch()
     activeComponent.value = 'DzTable'
     expect(isFiltering.value).toBe(true)
-    const expected = BLOCKS.filter((block) => block.components.includes('DzTable'))
+    const expected = BLOCKS.filter(block => block.components.includes('DzTable'))
     expect(results.value).toEqual(expected)
     for (const block of results.value) {
       expect(block.components).toContain('DzTable')
@@ -143,7 +143,7 @@ describe('useBlockSearch', () => {
       for (const block of using) {
         expect(block.components).toContain('DzButton')
       }
-      const expected = BLOCKS.filter((block) => block.components.includes('DzButton'))
+      const expected = BLOCKS.filter(block => block.components.includes('DzButton'))
       expect(using).toEqual(expected)
     })
 
@@ -175,7 +175,7 @@ describe('useBlockSearch', () => {
       const tags = allTags()
       expect([...tags]).toEqual([...tags].sort())
       expect(new Set(tags).size).toBe(tags.length)
-      const everyTag = new Set(BLOCKS.flatMap((block) => block.tags))
+      const everyTag = new Set(BLOCKS.flatMap(block => block.tags))
       expect(new Set(tags)).toEqual(everyTag)
     })
 
@@ -184,7 +184,7 @@ describe('useBlockSearch', () => {
       const components = allComponents()
       expect([...components]).toEqual([...components].sort())
       expect(new Set(components).size).toBe(components.length)
-      const everyComponent = new Set(BLOCKS.flatMap((block) => block.components))
+      const everyComponent = new Set(BLOCKS.flatMap(block => block.components))
       expect(new Set(components)).toEqual(everyComponent)
       expect(components).toContain('DzButton')
     })

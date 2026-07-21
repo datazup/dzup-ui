@@ -1,6 +1,5 @@
 <script lang="ts">
 // Module-scoped counter so each popover's panel/trigger ids are unique.
-let popoverUid = 0
 </script>
 
 <script setup lang="ts">
@@ -49,6 +48,8 @@ const props = withDefaults(
   { ariaLabel: undefined, role: undefined, offset: 8, disabled: false },
 )
 
+let popoverUid = 0
+
 const uid = ++popoverUid
 const panelId = `dz-native-popover-${uid}`
 
@@ -64,7 +65,8 @@ const panelEl = ref<HTMLElement | null>(null)
 function positionPanel(): void {
   const btn = triggerBtn.value
   const panel = panelEl.value
-  if (!btn || !panel) return
+  if (!btn || !panel)
+    return
   const r = btn.getBoundingClientRect()
   panel.style.left = `${Math.round(r.left)}px`
   panel.style.top = `${Math.round(r.bottom + props.offset)}px`
@@ -78,7 +80,8 @@ function onBeforeToggle(event: Event): void {
     positionPanel()
     window.addEventListener('scroll', positionPanel, true)
     window.addEventListener('resize', positionPanel)
-  } else {
+  }
+  else {
     window.removeEventListener('scroll', positionPanel, true)
     window.removeEventListener('resize', positionPanel)
   }
@@ -105,20 +108,24 @@ function toggleFb(): void {
 
 function onDocPointerDown(event: PointerEvent): void {
   const root = fbRoot.value
-  if (root && event.target instanceof Node && !root.contains(event.target)) fbOpen.value = false
+  if (root && event.target instanceof Node && !root.contains(event.target))
+    fbOpen.value = false
 }
 function onKeydown(event: KeyboardEvent): void {
-  if (event.key === 'Escape') fbOpen.value = false
+  if (event.key === 'Escape')
+    fbOpen.value = false
 }
 
 // Light-dismiss + Esc, mounted only while the fallback surface is open (the
 // native path gets these from the browser for free).
 watch(fbOpen, (isOpen) => {
-  if (typeof document === 'undefined') return
+  if (typeof document === 'undefined')
+    return
   if (isOpen) {
     document.addEventListener('pointerdown', onDocPointerDown)
     document.addEventListener('keydown', onKeydown)
-  } else {
+  }
+  else {
     document.removeEventListener('pointerdown', onDocPointerDown)
     document.removeEventListener('keydown', onKeydown)
   }
@@ -138,7 +145,8 @@ onBeforeUnmount(() => {
 
 /** Unified close handed to the slot so menu items can dismiss either path. */
 function close(): void {
-  if (native) closeNative()
+  if (native)
+    closeNative()
   else fbOpen.value = false
 }
 </script>

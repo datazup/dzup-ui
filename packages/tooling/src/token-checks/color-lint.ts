@@ -25,7 +25,26 @@
  *   - Comments (single-line // and multi-line blocks)
  *   - Test and fixture files (*.spec.ts, *.test.ts)
  *   - `token-check-disable-file` / `-line` / `-next-line` markers
+ *   - `token-check-allow-raw-values` — group 1 only (see below)
  *   - For group 1 only: lines that reference var(--…)
+ *
+ * The two file-level markers are deliberately different in reach, because the
+ * two reasons a file asks for one are different:
+ *
+ *   - `token-check-allow-raw-values` — "this file's subject matter IS colour
+ *     values" (DzColorPicker's presets, its stories' fixtures). That justifies
+ *     group 1 and nothing else: a colour picker has no more claim to
+ *     `text-gray-400` in its caption than any other component does. Groups 2
+ *     and 3 stay armed.
+ *   - `token-check-disable-file` — "this file is raw Tailwind ON PURPOSE and
+ *     tokenizing it would destroy its reason to exist". Only `_gallery/freestyle/*`
+ *     qualifies: those screens are the untokenized visual target the token system
+ *     is measured against.
+ *
+ * Reach for the narrow marker first. The blunt one used to be the only option,
+ * and it is why six `text-gray-*` classes rode along inside
+ * DzColorPicker.stories.ts behind a marker that was only ever asked for to
+ * cover its hex presets (TASK-FREE2-07).
  *
  * Usage:
  *   tsx packages/tooling/src/token-checks/color-lint.ts
@@ -197,12 +216,24 @@ const SOFT_EXCLUSION_PATTERNS: RegExp[] = [
 ]
 
 /**
- * File-level disable comment. When a file contains this string anywhere,
- * the entire file is exempt from color literal checks.
- * Use sparingly — only for components that inherently deal with raw colors
- * (e.g., color pickers).
+ * File-level disable comment. When a file contains this string anywhere, the
+ * entire file — all three groups — is exempt.
+ *
+ * Use only where raw Tailwind is the point of the file (`_gallery/freestyle/*`).
+ * If the file merely handles colour *values*, reach for
+ * `FILE_ALLOW_RAW_VALUES_MARKER` instead: it is the narrowest marker that
+ * covers that case, and it leaves the class rules armed.
  */
 const FILE_DISABLE_MARKER = 'token-check-disable-file'
+
+/**
+ * Narrow file-level opt-out: exempts group 1 (raw `#hex` / `rgb()` / `hsl()`
+ * values) only. Tailwind palette classes and untokenized borders still fail.
+ *
+ * For files whose subject matter is colour values — DzColorPicker and its
+ * stories, whose presets and fixtures must be literal hex to be meaningful.
+ */
+const FILE_ALLOW_RAW_VALUES_MARKER = 'token-check-allow-raw-values'
 
 // --- File scanning ---
 
@@ -298,10 +329,13 @@ function matchLine(
 export function checkSource(content: string, displayPath: string): ColorViolation[] {
   const violations: ColorViolation[] = []
 
-  // File-level exemption
+  // File-level exemption — every group.
   if (content.includes(FILE_DISABLE_MARKER)) {
     return violations
   }
+
+  // Narrow file-level exemption — group 1 only; classes and borders stay armed.
+  const allowRawValues = content.includes(FILE_ALLOW_RAW_VALUES_MARKER)
 
   // Bare `border` in a component's `tv()` base string gets its colour from a
   // separate compoundVariants entry, so that rule only applies to stories.
@@ -358,7 +392,7 @@ export function checkSource(content: string, displayPath: string): ColorViolatio
     }
 
     // Group 1 — raw CSS values, with the permissive exclusions.
-    if (!SOFT_EXCLUSION_PATTERNS.some(p => p.test(line))) {
+    if (!allowRawValues && !SOFT_EXCLUSION_PATTERNS.some(p => p.test(line))) {
       matchLine(line, COLOR_PATTERNS, record)
     }
 
@@ -420,7 +454,13 @@ function main(): void {
   console.error('  status chips    → bg-[var(--dz-{intent}-muted)] text-[var(--dz-{intent}-muted-foreground)]')
   console.error('  decorative      → var(--dz-colors-{palette}-{shade})')
   console.error('\nIn packages/core/stories, `yarn codemod:story-colors` applies these for you.')
-  console.error('For a genuine exception, add `token-check-disable-line` or `token-check-disable-file`.\n')
+  console.error('\nFor a genuine exception, narrowest marker first:')
+  console.error('  one line                → `token-check-disable-line` / `-next-line`')
+  console.error('  file is ABOUT colour values (a picker, its fixtures)')
+  console.error('                          → `token-check-allow-raw-values` (hex/rgb/hsl only;')
+  console.error('                            palette classes still fail — they are never the exception)')
+  console.error('  file is raw Tailwind ON PURPOSE (_gallery/freestyle/*)')
+  console.error('                          → `token-check-disable-file` (everything off)\n')
 
   process.exit(1)
 }

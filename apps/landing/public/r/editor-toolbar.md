@@ -64,21 +64,21 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
     <div class="et-bar" role="toolbar" aria-label="Text formatting">
       <!-- History -->
       <div class="et-cluster">
-        <DzIconButton :icon="Undo2" ariaLabel="Undo" variant="ghost" tone="neutral" size="sm" />
-        <DzIconButton :icon="Redo2" ariaLabel="Redo" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton :icon="Undo2" aria-label="Undo" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton :icon="Redo2" aria-label="Redo" variant="ghost" tone="neutral" size="sm" />
       </div>
 
       <span class="et-sep" aria-hidden="true" />
 
       <!-- Inline format -->
       <div class="et-cluster">
-        <DzToggleButton v-model="bold" size="sm" ariaLabel="Bold">
+        <DzToggleButton v-model="bold" size="sm" aria-label="Bold">
           <Bold :size="16" aria-hidden="true" />
         </DzToggleButton>
-        <DzToggleButton v-model="italic" size="sm" ariaLabel="Italic">
+        <DzToggleButton v-model="italic" size="sm" aria-label="Italic">
           <Italic :size="16" aria-hidden="true" />
         </DzToggleButton>
-        <DzToggleButton v-model="underline" size="sm" ariaLabel="Underline">
+        <DzToggleButton v-model="underline" size="sm" aria-label="Underline">
           <Underline :size="16" aria-hidden="true" />
         </DzToggleButton>
       </div>
@@ -90,7 +90,7 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
         <DzToggleButton
           :model-value="align === 'left'"
           size="sm"
-          ariaLabel="Align left"
+          aria-label="Align left"
           @change="setAlign('left')"
         >
           <AlignLeft :size="16" aria-hidden="true" />
@@ -98,7 +98,7 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
         <DzToggleButton
           :model-value="align === 'center'"
           size="sm"
-          ariaLabel="Align center"
+          aria-label="Align center"
           @change="setAlign('center')"
         >
           <AlignCenter :size="16" aria-hidden="true" />
@@ -106,7 +106,7 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
         <DzToggleButton
           :model-value="align === 'right'"
           size="sm"
-          ariaLabel="Align right"
+          aria-label="Align right"
           @change="setAlign('right')"
         >
           <AlignRight :size="16" aria-hidden="true" />
@@ -117,8 +117,8 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
 
       <!-- Insert -->
       <div class="et-cluster">
-        <DzIconButton :icon="Link" ariaLabel="Insert link" variant="ghost" tone="neutral" size="sm" />
-        <DzIconButton :icon="Image" ariaLabel="Insert image" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton :icon="Link" aria-label="Insert link" variant="ghost" tone="neutral" size="sm" />
+        <DzIconButton :icon="Image" aria-label="Insert image" variant="ghost" tone="neutral" size="sm" />
       </div>
 
       <!-- Right-aligned actions -->
@@ -136,7 +136,7 @@ function setAlign(value: 'left' | 'center' | 'right'): void {
 
       <DzSplitButton tone="primary" size="sm" aria-label="Publish actions">
         <DzSplitButtonAction>Publish</DzSplitButtonAction>
-        <DzSplitButtonMenu ariaLabel="More publish options" />
+        <DzSplitButtonMenu aria-label="More publish options" />
       </DzSplitButton>
     </div>
 

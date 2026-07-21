@@ -24,7 +24,7 @@ import {
 } from '@dzup-ui/core'
 import { Boxes, Check, Github } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
-import { PERKS, SOCIAL_PROOF, STRENGTH_LEVELS, scorePassword } from './data.ts'
+import { PERKS, scorePassword, SOCIAL_PROOF, STRENGTH_LEVELS } from './data.ts'
 
 const name = ref('Ava Kessler')
 const email = ref('ava@northwind.io')
@@ -38,7 +38,7 @@ const strengthScore = computed(() => scorePassword(password.value))
  * The matching strength rung (label + tone), strongest first. The final rung has
  * `min: 0`, so a match is guaranteed for any 0–4 score (hence the assertion).
  */
-const strength = computed(() => STRENGTH_LEVELS.find((level) => strengthScore.value >= level.min)!)
+const strength = computed(() => STRENGTH_LEVELS.find(level => strengthScore.value >= level.min)!)
 
 /** Meter fill 0–100, leaving a visible sliver even at the lowest score. */
 const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100))
@@ -55,7 +55,9 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
         </span>
 
         <div class="aside-lead">
-          <p class="aside-quote">Start building with Northwind today.</p>
+          <p class="aside-quote">
+            Start building with Northwind today.
+          </p>
           <p class="aside-sub">
             Join 12,000+ teams shipping faster with one connected workspace.
           </p>
@@ -63,7 +65,9 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
 
         <div class="aside-proof">
           <ul class="proof-avatars">
-            <li v-for="initials in SOCIAL_PROOF" :key="initials">{{ initials }}</li>
+            <li v-for="initials in SOCIAL_PROOF" :key="initials">
+              {{ initials }}
+            </li>
           </ul>
           <span class="proof-label">Loved by teams at every stage</span>
         </div>
@@ -89,8 +93,12 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
         </span>
 
         <header class="auth-head">
-          <DzHeading :level="1" size="2xl" weight="semibold">Create your account</DzHeading>
-          <DzText tone="muted" as="p">Free for 14 days. No credit card required.</DzText>
+          <DzHeading :level="1" size="2xl" weight="semibold">
+            Create your account
+          </DzHeading>
+          <DzText tone="muted" as="p">
+            Free for 14 days. No credit card required.
+          </DzText>
         </header>
 
         <DzCard variant="elevated" padding="lg" class="auth-card">
@@ -155,13 +163,17 @@ const strengthValue = computed(() => Math.max(8, (strengthScore.value / 4) * 100
 
             <div class="or-divider" role="separator" aria-label="or sign up with">
               <DzDivider decorative class="or-line" />
-              <DzText size="xs" tone="muted" class="or-text">or sign up with</DzText>
+              <DzText size="xs" tone="muted" class="or-text">
+                or sign up with
+              </DzText>
               <DzDivider decorative class="or-line" />
             </div>
 
             <div class="social-row">
               <DzButton variant="outline" tone="neutral" class="social-btn">
-                <template #prefix><Github :size="16" aria-hidden="true" /></template>
+                <template #prefix>
+                  <Github :size="16" aria-hidden="true" />
+                </template>
                 GitHub
               </DzButton>
               <DzButton variant="outline" tone="neutral" class="social-btn">

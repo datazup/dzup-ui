@@ -1,3 +1,4 @@
+import type { Buffer } from 'node:buffer'
 import type { ChildProcess } from 'node:child_process'
 /**
  * shoot-thumbnails — the committed thumbnail pipeline for the Templates gallery.
@@ -39,9 +40,11 @@ import type { ChildProcess } from 'node:child_process'
  * icon fallback rather than shipping blank/broken images.
  */
 import { spawn } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { TEMPLATES, THUMBNAIL_DIR } from '../src/templates/registry.ts'
 
@@ -59,6 +62,15 @@ const OUT_DIR = resolve(LANDING_ROOT, 'public', THUMBNAIL_DIR.replace(/^\//, '')
 
 const THEMES = ['light', 'dark'] as const
 type Theme = (typeof THEMES)[number]
+
+/**
+ * `--missing`: only shoot (slug, theme) pairs whose WebP is not already on disk.
+ * Full re-shoots are non-deterministic at the byte level (font-render timing), so
+ * re-capturing the whole set churns 88 committed binaries every run; this mode
+ * fills a gap (e.g. the dark thumbnails a partial run left behind) without
+ * touching the images that are already correct. Default (no flag) re-shoots all.
+ */
+const MISSING_ONLY = process.argv.includes('--missing')
 
 /** Output filename for a (slug, theme) pair — matches the gallery's convention. */
 function fileFor(slug: string, theme: Theme): string {
@@ -210,6 +222,12 @@ async function main(): Promise<void> {
       const page = await context.newPage()
 
       for (const template of TEMPLATES) {
+        const out = fileFor(template.slug, theme)
+        if (MISSING_ONLY && existsSync(out)) {
+          console.log(`  · ${theme.padEnd(5)} ${template.slug} — exists, skipped`)
+          continue
+        }
+
         const url = `${base}/templates/${template.slug}/preview?theme=${theme}`
         await page.goto(url, { waitUntil: 'networkidle', timeout: 45_000 })
 
@@ -248,7 +266,6 @@ async function main(): Promise<void> {
           .webp({ quality: 80, effort: 6 })
           .toBuffer()
 
-        const out = fileFor(template.slug, theme)
         await writeFile(out, webp)
         weights.push(webp.byteLength)
         console.log(`  ✓ ${theme.padEnd(5)} ${template.slug} — ${kb(webp.byteLength)}`)
@@ -262,10 +279,15 @@ async function main(): Promise<void> {
     stopDevServer(child)
   }
 
+  if (weights.length === 0) {
+    console.log(`\n▸ Nothing to do — every thumbnail already exists (${MISSING_ONLY ? '--missing' : 'full'} mode).`)
+    return
+  }
+
   const total = weights.reduce((a, b) => a + b, 0)
   const avg = total / weights.length
   console.log(
-    `\n▸ Done: ${weights.length} images (${TEMPLATES.length} templates × ${THEMES.length} themes)\n`
+    `\n▸ Done: ${weights.length} image(s) written${MISSING_ONLY ? ' (missing-only)' : ''}\n`
     + `  Total ${kb(total)} · avg ${kb(avg)} · max ${kb(Math.max(...weights))} per image\n`
     + `  Written to ${OUT_DIR}`,
   )

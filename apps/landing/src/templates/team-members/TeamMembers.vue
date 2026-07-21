@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ColumnDef } from '@dzup-ui/core'
+import type { MemberRow } from './data.ts'
 /**
  * Team Members — full-page directory template (docs/templates.md §6.1).
  *
@@ -29,15 +31,14 @@ import {
   DzMultiSelect,
   DzText,
 } from '@dzup-ui/core'
-import type { ColumnDef } from '@dzup-ui/core'
 import { MoreHorizontal, UserPlus } from 'lucide-vue-next'
 import { ref } from 'vue'
 import {
+
   MEMBERS,
   ROLE_TONE,
   STATUS_TONE,
   TEAM_OPTIONS,
-  type MemberRow,
 } from './data.ts'
 
 const inviteOpen = ref(false)
@@ -56,14 +57,20 @@ const columns: ColumnDef<MemberRow>[] = [
     <div class="team-wrap">
       <header class="team-head">
         <div>
-          <DzHeading :level="1" size="xl" weight="semibold">Team members</DzHeading>
-          <DzText tone="muted" as="p">{{ MEMBERS.length }} people in your workspace.</DzText>
+          <DzHeading :level="1" size="xl" weight="semibold">
+            Team members
+          </DzHeading>
+          <DzText tone="muted" as="p">
+            {{ MEMBERS.length }} people in your workspace.
+          </DzText>
         </div>
 
         <DzDialog v-model:open="inviteOpen">
           <DzDialogTrigger as-child>
             <DzButton variant="solid" tone="primary">
-              <template #prefix><UserPlus :size="16" aria-hidden="true" /></template>
+              <template #prefix>
+                <UserPlus :size="16" aria-hidden="true" />
+              </template>
               Invite people
             </DzButton>
           </DzDialogTrigger>
@@ -86,10 +93,14 @@ const columns: ColumnDef<MemberRow>[] = [
 
             <div class="invite-foot">
               <DzDialogClose as-child>
-                <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
+                <DzButton variant="ghost" tone="neutral">
+                  Cancel
+                </DzButton>
               </DzDialogClose>
               <DzDialogClose as-child>
-                <DzButton variant="solid" tone="primary">Send invites</DzButton>
+                <DzButton variant="solid" tone="primary">
+                  Send invites
+                </DzButton>
               </DzDialogClose>
             </div>
           </DzDialogContent>
@@ -103,8 +114,12 @@ const columns: ColumnDef<MemberRow>[] = [
               <div class="member-cell">
                 <DzAvatar :fallback="(row as MemberRow).name.slice(0, 1)" size="sm" />
                 <div class="member-meta">
-                  <DzText size="sm" weight="medium" as="div">{{ (row as MemberRow).name }}</DzText>
-                  <DzText size="xs" tone="muted" as="div">{{ (row as MemberRow).email }}</DzText>
+                  <DzText size="sm" weight="medium" as="div">
+                    {{ (row as MemberRow).name }}
+                  </DzText>
+                  <DzText size="xs" tone="muted" as="div">
+                    {{ (row as MemberRow).email }}
+                  </DzText>
                 </div>
               </div>
             </template>
@@ -123,7 +138,7 @@ const columns: ColumnDef<MemberRow>[] = [
                 <DzDropdownMenuTrigger as-child>
                   <DzIconButton
                     :icon="MoreHorizontal"
-                    ariaLabel="Member actions"
+                    aria-label="Member actions"
                     variant="ghost"
                     tone="neutral"
                     size="sm"
@@ -138,7 +153,9 @@ const columns: ColumnDef<MemberRow>[] = [
                 </DzDropdownMenuContent>
               </DzDropdownMenu>
             </template>
-            <template v-else>{{ value }}</template>
+            <template v-else>
+              {{ value }}
+            </template>
           </template>
         </DzDataGrid>
       </div>

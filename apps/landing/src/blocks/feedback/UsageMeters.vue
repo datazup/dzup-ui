@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type { DzMeterGroupSegment } from '@dzup-ui/core'
 /**
  * Usage meters — a quota dashboard from DzMeterGroup + DzProgress.
  *
@@ -12,8 +14,6 @@
  * components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { DzBadge, DzCard, DzDivider, DzHeading, DzMeterGroup, DzProgress, DzText } from '@dzup-ui/core'
-import type { DzMeterGroupSegment } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 const storage: DzMeterGroupSegment[] = [
   { label: 'Documents', value: 32, tone: 'primary' },
@@ -43,17 +43,27 @@ const overall = 74
     <DzCard variant="outlined" padding="lg">
       <header class="um-head">
         <div>
-          <DzHeading id="um-title" :level="4" size="md" weight="semibold" class="um-title">Usage</DzHeading>
-          <DzText size="sm" tone="muted" as="p" class="um-sub">Billing period resets in 12 days.</DzText>
+          <DzHeading id="um-title" :level="4" size="md" weight="semibold" class="um-title">
+            Usage
+          </DzHeading>
+          <DzText size="sm" tone="muted" as="p" class="um-sub">
+            Billing period resets in 12 days.
+          </DzText>
         </div>
-        <DzBadge variant="subtle" tone="primary" size="sm">Pro plan</DzBadge>
+        <DzBadge variant="subtle" tone="primary" size="sm">
+          Pro plan
+        </DzBadge>
       </header>
 
       <!-- Storage breakdown -->
       <div class="um-section">
         <div class="um-section-head">
-          <DzText size="sm" weight="medium" as="span">Storage</DzText>
-          <DzText size="sm" tone="muted" as="span">74 of 100 GB</DzText>
+          <DzText size="sm" weight="medium" as="span">
+            Storage
+          </DzText>
+          <DzText size="sm" tone="muted" as="span">
+            74 of 100 GB
+          </DzText>
         </div>
         <DzMeterGroup :values="storage" :max="100" size="lg" aria-label="Storage usage by type" />
       </div>
@@ -64,8 +74,12 @@ const overall = 74
       <div class="um-limits">
         <div v-for="limit in limits" :key="limit.label" class="um-limit">
           <div class="um-limit-head">
-            <DzText size="sm" weight="medium" as="span">{{ limit.label }}</DzText>
-            <DzText size="sm" tone="muted" as="span">{{ limit.total }}</DzText>
+            <DzText size="sm" weight="medium" as="span">
+              {{ limit.label }}
+            </DzText>
+            <DzText size="sm" tone="muted" as="span">
+              {{ limit.total }}
+            </DzText>
           </div>
           <DzProgress :value="limit.used" :tone="limit.tone" size="sm" :aria-label="`${limit.label} usage`" />
         </div>
@@ -81,7 +95,9 @@ const overall = 74
           </DzProgress>
         </div>
         <div>
-          <DzText weight="medium" as="p" class="um-overall-title">Overall usage</DzText>
+          <DzText weight="medium" as="p" class="um-overall-title">
+            Overall usage
+          </DzText>
           <DzText size="sm" tone="muted" as="p" class="um-overall-sub">
             Across storage, requests and bandwidth. You're on track for the month.
           </DzText>

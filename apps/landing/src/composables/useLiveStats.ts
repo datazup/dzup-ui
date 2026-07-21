@@ -12,7 +12,8 @@ import { fetchLiveStats } from '../lib/liveStats.ts'
  */
 function formatAsOf(iso: string): string {
   const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return 'an unknown date'
+  if (Number.isNaN(date.getTime()))
+    return 'an unknown date'
   return new Intl.DateTimeFormat(undefined, {
     day: 'numeric',
     month: 'short',
@@ -49,10 +50,13 @@ export function useLiveStats(): {
   // no try/catch can suppress). Opt in via VITE_ENABLE_LIVE_STATS once published;
   // the baked build-time values in LIVE_STATS render regardless.
   onMounted(async () => {
-    if (import.meta.env.VITE_ENABLE_LIVE_STATS !== 'true') return
+    if (import.meta.env.VITE_ENABLE_LIVE_STATS !== 'true')
+      return
     const fresh = await fetchLiveStats()
-    if (fresh.githubStars !== null) githubStars.value = fresh.githubStars
-    if (fresh.npmDownloads !== null) npmDownloads.value = fresh.npmDownloads
+    if (fresh.githubStars !== null)
+      githubStars.value = fresh.githubStars
+    if (fresh.npmDownloads !== null)
+      npmDownloads.value = fresh.npmDownloads
   })
 
   return { githubStars, npmDownloads, asOf }

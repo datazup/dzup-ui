@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 /**
  * Settings layout — tab section nav beside form panels.
  *
@@ -32,7 +33,6 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { ref } from 'vue'
 
 const tab = ref('profile')
@@ -68,16 +68,24 @@ const reduceMotion = ref(false)
   <section class="sl-wrap" aria-label="Settings layout">
     <DzTabs v-model="tab" variant="line" aria-label="Settings categories">
       <DzTabList>
-        <DzTabTrigger value="profile">Profile</DzTabTrigger>
-        <DzTabTrigger value="notifications">Notifications</DzTabTrigger>
-        <DzTabTrigger value="appearance">Appearance</DzTabTrigger>
+        <DzTabTrigger value="profile">
+          Profile
+        </DzTabTrigger>
+        <DzTabTrigger value="notifications">
+          Notifications
+        </DzTabTrigger>
+        <DzTabTrigger value="appearance">
+          Appearance
+        </DzTabTrigger>
       </DzTabList>
 
       <!-- ── Profile ─────────────────────────────────────────────────── -->
       <DzTabContent value="profile">
         <div class="panel">
           <header class="panel-head">
-            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Public profile</DzHeading>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">
+              Public profile
+            </DzHeading>
             <DzText size="sm" tone="muted" as="p">
               This information is visible to your teammates.
             </DzText>
@@ -106,7 +114,9 @@ const reduceMotion = ref(false)
       <DzTabContent value="notifications">
         <div class="panel">
           <header class="panel-head">
-            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Email notifications</DzHeading>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">
+              Email notifications
+            </DzHeading>
             <DzText size="sm" tone="muted" as="p">
               Choose what Acme sends to your inbox.
             </DzText>
@@ -115,32 +125,48 @@ const reduceMotion = ref(false)
           <ul class="switch-list">
             <li class="switch-row">
               <div class="switch-copy">
-                <DzText weight="medium" as="div">Product updates</DzText>
-                <DzText size="sm" tone="muted" as="div">New features and improvements.</DzText>
+                <DzText weight="medium" as="div">
+                  Product updates
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  New features and improvements.
+                </DzText>
               </div>
               <DzSwitch v-model="notifyProduct" aria-label="Product updates" />
             </li>
             <DzDivider decorative />
             <li class="switch-row">
               <div class="switch-copy">
-                <DzText weight="medium" as="div">Weekly digest</DzText>
-                <DzText size="sm" tone="muted" as="div">A Monday summary of your workspace.</DzText>
+                <DzText weight="medium" as="div">
+                  Weekly digest
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  A Monday summary of your workspace.
+                </DzText>
               </div>
               <DzSwitch v-model="notifyDigest" aria-label="Weekly digest" />
             </li>
             <DzDivider decorative />
             <li class="switch-row">
               <div class="switch-copy">
-                <DzText weight="medium" as="div">Security alerts</DzText>
-                <DzText size="sm" tone="muted" as="div">Sign-ins from new devices.</DzText>
+                <DzText weight="medium" as="div">
+                  Security alerts
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  Sign-ins from new devices.
+                </DzText>
               </div>
               <DzSwitch v-model="notifySecurity" aria-label="Security alerts" />
             </li>
             <DzDivider decorative />
             <li class="switch-row">
               <div class="switch-copy">
-                <DzText weight="medium" as="div">Marketing</DzText>
-                <DzText size="sm" tone="muted" as="div">Occasional tips and offers.</DzText>
+                <DzText weight="medium" as="div">
+                  Marketing
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  Occasional tips and offers.
+                </DzText>
               </div>
               <DzSwitch v-model="notifyMarketing" aria-label="Marketing" />
             </li>
@@ -152,8 +178,12 @@ const reduceMotion = ref(false)
       <DzTabContent value="appearance">
         <div class="panel">
           <header class="panel-head">
-            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">Appearance</DzHeading>
-            <DzText size="sm" tone="muted" as="p">Customize how the app looks for you.</DzText>
+            <DzHeading :level="4" size="md" weight="semibold" class="panel-title">
+              Appearance
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="p">
+              Customize how the app looks for you.
+            </DzText>
           </header>
 
           <DzFormField>
@@ -166,8 +196,12 @@ const reduceMotion = ref(false)
 
           <div class="switch-row">
             <div class="switch-copy">
-              <DzText weight="medium" as="div">Reduce motion</DzText>
-              <DzText size="sm" tone="muted" as="div">Minimize non-essential animation.</DzText>
+              <DzText weight="medium" as="div">
+                Reduce motion
+              </DzText>
+              <DzText size="sm" tone="muted" as="div">
+                Minimize non-essential animation.
+              </DzText>
             </div>
             <DzSwitch v-model="reduceMotion" aria-label="Reduce motion" />
           </div>
@@ -178,8 +212,12 @@ const reduceMotion = ref(false)
     <DzDivider decorative />
 
     <footer class="sl-footer">
-      <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
-      <DzButton variant="solid" tone="primary">Save changes</DzButton>
+      <DzButton variant="ghost" tone="neutral">
+        Cancel
+      </DzButton>
+      <DzButton variant="solid" tone="primary">
+        Save changes
+      </DzButton>
     </footer>
   </section>
 </template>

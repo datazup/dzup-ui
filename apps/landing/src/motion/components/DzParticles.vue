@@ -89,7 +89,8 @@ let pointerY: number | null = null
  */
 function resolveColor(): void {
   const host = root.value
-  if (!host) return
+  if (!host)
+    return
   const probe = document.createElement('span')
   probe.style.color = 'var(--dz-colors-primary-500, #6366f1)'
   probe.style.display = 'none'
@@ -97,13 +98,15 @@ function resolveColor(): void {
   const resolved = getComputedStyle(probe).color
   host.removeChild(probe)
   const match = resolved.match(/(\d+),\s*(\d+),\s*(\d+)/)
-  if (match) rgb = `${match[1]}, ${match[2]}, ${match[3]}`
+  if (match)
+    rgb = `${match[1]}, ${match[2]}, ${match[3]}`
 }
 
 function resize(): void {
   const el = canvas.value
   const host = root.value
-  if (!el || !host) return
+  if (!el || !host)
+    return
   const rect = host.getBoundingClientRect()
   width = rect.width
   height = rect.height
@@ -114,7 +117,8 @@ function resize(): void {
   el.style.width = `${width}px`
   el.style.height = `${height}px`
   const ctx = el.getContext('2d')
-  if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  if (ctx)
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 }
 
 /** Particle count scaled to the surface area, clamped to the prop + the ceiling. */
@@ -141,10 +145,14 @@ function update(): void {
     p.x += p.vx
     p.y += p.vy
     // Wrap around the edges so the field never thins out.
-    if (p.x < -4) p.x = width + 4
-    else if (p.x > width + 4) p.x = -4
-    if (p.y < -4) p.y = height + 4
-    else if (p.y > height + 4) p.y = -4
+    if (p.x < -4)
+      p.x = width + 4
+    else if (p.x > width + 4)
+      p.x = -4
+    if (p.y < -4)
+      p.y = height + 4
+    else if (p.y > height + 4)
+      p.y = -4
 
     if (pushing) {
       const dx = p.x - (pointerX as number)
@@ -163,7 +171,8 @@ function update(): void {
 /** Paint the current positions: link lines first, dots on top. */
 function render(): void {
   const ctx = canvas.value?.getContext('2d')
-  if (!ctx) return
+  if (!ctx)
+    return
   ctx.clearRect(0, 0, width, height)
 
   if (props.link) {
@@ -172,10 +181,12 @@ function render(): void {
     ctx.strokeStyle = `rgb(${rgb})`
     for (let i = 0; i < particles.length; i++) {
       const a = particles[i]
-      if (!a) continue
+      if (!a)
+        continue
       for (let j = i + 1; j < particles.length; j++) {
         const b = particles[j]
-        if (!b) continue
+        if (!b)
+          continue
         const d = Math.hypot(a.x - b.x, a.y - b.y)
         if (d < maxD) {
           ctx.globalAlpha = (1 - d / maxD) * 0.5
@@ -204,7 +215,8 @@ function loop(): void {
 }
 
 function start(): void {
-  if (frame) return
+  if (frame)
+    return
   frame = requestAnimationFrame(loop)
 }
 
@@ -223,7 +235,8 @@ function onPointerMove(event: PointerEvent): void {
     return
   }
   const rect = root.value?.getBoundingClientRect()
-  if (!rect) return
+  if (!rect)
+    return
   const x = event.clientX - rect.left
   const y = event.clientY - rect.top
   // Drop the push once the pointer leaves the field's box.
@@ -242,10 +255,12 @@ function onPointerMove(event: PointerEvent): void {
 watch(
   [root, canvas, inView, reduced],
   ([host, el, visible, isReduced]) => {
-    if (!host || !el) return
+    if (!host || !el)
+      return
     resolveColor()
     resize()
-    if (!particles.length) seed()
+    if (!particles.length)
+      seed()
     stop()
     if (isReduced || !visible) {
       render()
@@ -260,14 +275,16 @@ watch(
 watch(
   root,
   (host, _prev, onCleanup) => {
-    if (!host || typeof window === 'undefined') return
+    if (!host || typeof window === 'undefined')
+      return
     window.addEventListener('pointermove', onPointerMove)
     let observer: ResizeObserver | null = null
     if (typeof ResizeObserver !== 'undefined') {
       observer = new ResizeObserver(() => {
         resize()
         seed()
-        if (reduced.value || !inView.value) render()
+        if (reduced.value || !inView.value)
+          render()
       })
       observer.observe(host)
     }

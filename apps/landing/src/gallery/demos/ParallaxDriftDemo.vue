@@ -21,7 +21,8 @@ const reduced = useReducedMotion()
 const TRAVEL = 48
 
 const layerStyle = computed(() => {
-  if (reduced.value) return { transform: 'none' }
+  if (reduced.value)
+    return { transform: 'none' }
   // Center the range so the layer drifts from +TRAVEL to -TRAVEL as it passes.
   const y = (0.5 - progress.value) * 2 * TRAVEL
   return { transform: `translate3d(0, ${y.toFixed(1)}px, 0)`, willChange: 'transform' }
@@ -32,8 +33,12 @@ const layerStyle = computed(() => {
   <div ref="root" class="stage">
     <div class="layer" :style="layerStyle" aria-hidden="true" />
     <div class="content">
-      <DzText weight="semibold" as="div">Parallax drift</DzText>
-      <DzText size="xs" tone="muted" as="div">Scroll — the backdrop trails behind.</DzText>
+      <DzText weight="semibold" as="div">
+        Parallax drift
+      </DzText>
+      <DzText size="xs" tone="muted" as="div">
+        Scroll — the backdrop trails behind.
+      </DzText>
     </div>
   </div>
 </template>

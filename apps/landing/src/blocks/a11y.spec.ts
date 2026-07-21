@@ -29,16 +29,16 @@
  * the only automated a11y gate, so — like registry.spec.ts — it stands alone.
  */
 
+import type { Result } from 'axe-core'
+import type { Component } from 'vue'
+import type { AuditedTheme } from './certifications.ts'
 import { render } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
-import type { Component } from 'vue'
 import { defineComponent, h } from 'vue'
-import { BLOCKS } from './registry.ts'
 import { AUDITED_THEMES, CERTIFICATIONS, isCertified, KNOWN_A11Y_DEBT } from './certifications.ts'
-import type { AuditedTheme } from './certifications.ts'
-import type { Result } from 'axe-core'
+import { BLOCKS } from './registry.ts'
 
 /**
  * jsdom lacks `matchMedia` / `IntersectionObserver`; some composed components
@@ -95,7 +95,8 @@ const BLOCKING_IMPACTS = new Set(['critical', 'serious'])
  */
 async function resolveBlock(component: Component): Promise<void> {
   const loader = (component as { __asyncLoader?: () => Promise<unknown> }).__asyncLoader
-  if (typeof loader === 'function') await loader()
+  if (typeof loader === 'function')
+    await loader()
 }
 
 /**
@@ -122,13 +123,17 @@ async function mountBlock(component: Component, theme: AuditedTheme) {
   return { ...utils, errors }
 }
 
-/** Best-effort stringify for a thrown value — Errors give their message, plain
- *  objects are JSON'd (so the guard never reports a useless "[object Object]"). */
+/**
+ * Best-effort stringify for a thrown value — Errors give their message, plain
+ *  objects are JSON'd (so the guard never reports a useless "[object Object]").
+ */
 function describeError(error: unknown): string {
-  if (error instanceof Error) return error.message
+  if (error instanceof Error)
+    return error.message
   try {
     return typeof error === 'object' && error !== null ? JSON.stringify(error) : String(error)
-  } catch {
+  }
+  catch {
     return String(error)
   }
 }
@@ -136,7 +141,7 @@ function describeError(error: unknown): string {
 /** Render one violation as a loud, copy-pasteable line: rule + help + nodes + url. */
 function reportViolation(violation: Result): string {
   const targets = violation.nodes
-    .map((node) => (Array.isArray(node.target) ? node.target.join(' ') : String(node.target)))
+    .map(node => (Array.isArray(node.target) ? node.target.join(' ') : String(node.target)))
     .join(', ')
   return `[${violation.impact}] ${violation.id} — ${violation.help}\n      nodes: ${targets}\n      ${violation.helpUrl}`
 }
@@ -155,14 +160,15 @@ async function auditBlock(component: Component, blockId: string, theme: AuditedT
   try {
     await resolveBlock(component)
     ;({ container, errors } = await mountBlock(component, theme))
-  } catch (error) {
+  }
+  catch (error) {
     throw new Error(`[a11y] block "${blockId}" threw while mounting (${theme} theme): ${describeError(error)}`)
   }
 
   if (errors.length > 0) {
     throw new Error(
-      `[a11y] block "${blockId}" raised ${errors.length} error(s) while rendering (${theme} theme): ` +
-        errors.map(describeError).join('; '),
+      `[a11y] block "${blockId}" raised ${errors.length} error(s) while rendering (${theme} theme): ${
+        errors.map(describeError).join('; ')}`,
     )
   }
   expect(
@@ -172,13 +178,13 @@ async function auditBlock(component: Component, blockId: string, theme: AuditedT
 
   const results = await axe(container, { runOnly: { type: 'tag', values: [...AXE_TAGS] } })
   return (results.violations ?? []).filter(
-    (violation) => violation.impact != null && BLOCKING_IMPACTS.has(violation.impact),
+    violation => violation.impact != null && BLOCKING_IMPACTS.has(violation.impact),
   )
 }
 
 /** Certified blocks render the marks; known-debt blocks are tracked separately. */
-const certified = BLOCKS.filter((block) => isCertified(block.id)).map((block) => ({ block, label: block.id }))
-const debt = BLOCKS.filter((block) => !isCertified(block.id)).map((block) => ({ block, label: block.id }))
+const certified = BLOCKS.filter(block => isCertified(block.id)).map(block => ({ block, label: block.id }))
+const debt = BLOCKS.filter(block => !isCertified(block.id)).map(block => ({ block, label: block.id }))
 
 describe('block trust marks are backed by this suite', () => {
   // The marks rendered on the cards and the checks run here share one source of
@@ -186,7 +192,7 @@ describe('block trust marks are backed by this suite', () => {
   // be added without a backing assertion, and "Light + dark" stays truthful only
   // while the per-block loop below audits both themes.
   it('renders exactly the certifications this suite enforces (no decorative marks)', () => {
-    expect(CERTIFICATIONS.map((mark) => mark.id)).toEqual(['accessible', 'light-dark'])
+    expect(CERTIFICATIONS.map(mark => mark.id)).toEqual(['accessible', 'light-dark'])
   })
 
   it('audits every theme the "Light + dark" mark claims', () => {
@@ -237,11 +243,11 @@ describe.runIf(debt.length > 0)('blocks — known a11y debt (tracked, uncertifie
     for (const theme of AUDITED_THEMES) {
       it(`has only its documented known-issue rules (${theme}) — ${known.ref}`, async () => {
         const blocking = await auditBlock(block.component, block.id, theme)
-        const unexpected = blocking.filter((violation) => !known.rules.includes(violation.id))
+        const unexpected = blocking.filter(violation => !known.rules.includes(violation.id))
         expect(
           unexpected,
-          `Block "${block.id}" (${theme} theme) has ${unexpected.length} NEW violation(s) beyond its known debt ` +
-            `[${known.rules.join(', ')}]:\n    ${unexpected.map(reportViolation).join('\n    ')}`,
+          `Block "${block.id}" (${theme} theme) has ${unexpected.length} NEW violation(s) beyond its known debt `
+          + `[${known.rules.join(', ')}]:\n    ${unexpected.map(reportViolation).join('\n    ')}`,
         ).toEqual([])
       })
     }

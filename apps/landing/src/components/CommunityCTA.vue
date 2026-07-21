@@ -21,16 +21,22 @@ import { LINKS } from '../config.ts'
         <div class="community-ctas">
           <DzButton size="lg" variant="solid" tone="primary" as="a" :href="LINKS.gettingStarted">
             Get started
-            <template #suffix><ArrowRight :size="18" aria-hidden="true" /></template>
+            <template #suffix>
+              <ArrowRight :size="18" aria-hidden="true" />
+            </template>
           </DzButton>
           <DzButton size="lg" variant="outline" tone="neutral" as="a" :href="LINKS.github" target="_blank" rel="noreferrer noopener">
-            <template #prefix><Github :size="18" aria-hidden="true" /></template>
+            <template #prefix>
+              <Github :size="18" aria-hidden="true" />
+            </template>
             Star on GitHub
           </DzButton>
           <!-- Issues, not Discord: no Discord server exists yet (the old invite
                404'd — TASK-FREE-11). Bring a chat link back when one is real. -->
           <DzButton size="lg" variant="ghost" tone="primary" as="a" :href="LINKS.issues" target="_blank" rel="noreferrer noopener">
-            <template #prefix><MessageCircle :size="18" aria-hidden="true" /></template>
+            <template #prefix>
+              <MessageCircle :size="18" aria-hidden="true" />
+            </template>
             Report an issue
           </DzButton>
         </div>

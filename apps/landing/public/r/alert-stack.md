@@ -8,6 +8,8 @@ A column of inline DzAlerts spanning the variant taxonomy and tones — info, su
 
 ```vue
 <script setup lang="ts">
+import { DzAlert, DzButton, DzHeading, DzText } from '@dzup-ui/core'
+import { CheckCircle2, Info, ShieldAlert, TriangleAlert } from 'lucide-vue-next'
 /**
  * Alert stack — inline DzAlert messages across tones and variants.
  *
@@ -20,8 +22,6 @@ A column of inline DzAlerts spanning the variant taxonomy and tones — info, su
  * components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { ref } from 'vue'
-import { CheckCircle2, Info, ShieldAlert, TriangleAlert } from 'lucide-vue-next'
-import { DzAlert, DzButton, DzHeading, DzText } from '@dzup-ui/core'
 
 const showDanger = ref(true)
 </script>
@@ -29,7 +29,9 @@ const showDanger = ref(true)
 <template>
   <section class="as-wrap" aria-labelledby="as-title">
     <header class="as-head">
-      <DzHeading id="as-title" :level="4" size="md" weight="semibold" class="as-title">Alerts</DzHeading>
+      <DzHeading id="as-title" :level="4" size="md" weight="semibold" class="as-title">
+        Alerts
+      </DzHeading>
       <DzText size="sm" tone="muted" as="p" class="as-sub">
         Inline contextual feedback across every tone and variant.
       </DzText>
@@ -43,8 +45,12 @@ const showDanger = ref(true)
       <DzAlert variant="outline" tone="success" :icon="CheckCircle2" title="Payment received">
         We've emailed your receipt for invoice <strong>#DZ-4821</strong>.
         <template #actions>
-          <DzButton size="sm" variant="solid" tone="success">View invoice</DzButton>
-          <DzButton size="sm" variant="ghost" tone="success">Download PDF</DzButton>
+          <DzButton size="sm" variant="solid" tone="success">
+            View invoice
+          </DzButton>
+          <DzButton size="sm" variant="ghost" tone="success">
+            Download PDF
+          </DzButton>
         </template>
       </DzAlert>
 
@@ -64,8 +70,12 @@ const showDanger = ref(true)
         The connection timed out before your edits were stored. Check your network and try again.
       </DzAlert>
       <div v-else class="as-restore">
-        <DzText size="sm" tone="muted" as="span">Danger alert dismissed.</DzText>
-        <DzButton size="sm" variant="outline" tone="neutral" @click="showDanger = true">Restore</DzButton>
+        <DzText size="sm" tone="muted" as="span">
+          Danger alert dismissed.
+        </DzText>
+        <DzButton size="sm" variant="outline" tone="neutral" @click="showDanger = true">
+          Restore
+        </DzButton>
       </div>
     </div>
   </section>

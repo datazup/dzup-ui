@@ -16,8 +16,12 @@ import { DzParticles } from '../../motion/index.ts'
   <div class="stage">
     <DzParticles :count="48" :link-distance="108" />
     <div class="content">
-      <DzHeading :level="3" size="lg" weight="bold" class="lp-balance">Constellation</DzHeading>
-      <DzText size="xs" tone="muted" as="div">Dots drift, link up and react to your cursor.</DzText>
+      <DzHeading :level="3" size="lg" weight="bold" class="lp-balance">
+        Constellation
+      </DzHeading>
+      <DzText size="xs" tone="muted" as="div">
+        Dots drift, link up and react to your cursor.
+      </DzText>
     </div>
   </div>
 </template>

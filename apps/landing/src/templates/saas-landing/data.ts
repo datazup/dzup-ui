@@ -99,7 +99,7 @@ export const FAQS: Faq[] = [
 /** Customer logo wordmarks (text marks keep the template asset-free). */
 export const LOGOS: string[] = ['Lumen', 'Crest', 'Vant', 'Northpeak', 'Orbit', 'Helio']
 
-export const NAV_LINKS: { label: string; href: string }[] = [
+export const NAV_LINKS: { label: string, href: string }[] = [
   { label: 'Features', href: '#features' },
   { label: 'Testimonials', href: '#testimonials' },
   { label: 'Pricing', href: '#pricing' },
@@ -152,5 +152,5 @@ export function buildHeroShot(p: HeroPalette): string {
   <rect x="246" y="210" width="120" height="12" rx="6" fill="${p.line}"/>
   <g fill="${p.bar}">${barRects}</g>
 </svg>`
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
 }

@@ -61,7 +61,9 @@ function money(n: number): string {
           <span class="brand-mark" aria-hidden="true"><Package :size="18" /></span>
           <span class="brand-name">Atlas Supply</span>
         </span>
-        <DzBadge variant="subtle" tone="neutral" size="sm">Order #ATL-20461</DzBadge>
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          Order #ATL-20461
+        </DzBadge>
       </div>
     </header>
 
@@ -75,11 +77,15 @@ function money(n: number): string {
       >
         <template #actions>
           <DzButton variant="solid" tone="primary" href="#history">
-            <template #prefix><Truck :size="17" aria-hidden="true" /></template>
+            <template #prefix>
+              <Truck :size="17" aria-hidden="true" />
+            </template>
             Track shipment
           </DzButton>
           <DzButton variant="outline" tone="neutral">
-            <template #prefix><Receipt :size="17" aria-hidden="true" /></template>
+            <template #prefix>
+              <Receipt :size="17" aria-hidden="true" />
+            </template>
             View receipt
           </DzButton>
         </template>
@@ -89,11 +95,19 @@ function money(n: number): string {
       <DzCard variant="outlined" padding="lg" class="tracker">
         <div class="tracker-head">
           <div>
-            <DzText size="sm" weight="semibold" as="span" class="eyebrow">Estimated delivery</DzText>
-            <DzHeading :level="2" size="lg" weight="bold" class="tracker-eta">Arriving today</DzHeading>
-            <DzText size="sm" tone="muted" as="p">Atlas Express · 9:00 AM – 1:00 PM</DzText>
+            <DzText size="sm" weight="semibold" as="span" class="eyebrow">
+              Estimated delivery
+            </DzText>
+            <DzHeading :level="2" size="lg" weight="bold" class="tracker-eta">
+              Arriving today
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="p">
+              Atlas Express · 9:00 AM – 1:00 PM
+            </DzText>
           </div>
-          <DzBadge variant="solid" tone="primary" size="sm">On the way</DzBadge>
+          <DzBadge variant="solid" tone="primary" size="sm">
+            On the way
+          </DzBadge>
         </div>
         <DzStepper v-model="stage" class="stages" aria-label="Delivery progress">
           <DzStepperItem
@@ -148,7 +162,9 @@ function money(n: number): string {
         </DzCard>
 
         <DzCard variant="outlined" padding="lg" class="details">
-          <DzHeading :level="2" size="md" weight="semibold" class="card-title">Order details</DzHeading>
+          <DzHeading :level="2" size="md" weight="semibold" class="card-title">
+            Order details
+          </DzHeading>
           <DzDescriptions :columns="{ base: 1, sm: 2 }" layout="vertical" size="sm">
             <DzDescriptionsItem v-for="f in ORDER_FACTS" :key="f.label" :label="f.label">
               {{ f.value }}
@@ -173,7 +189,9 @@ function money(n: number): string {
 
       <!-- ── Shipment history ─────────────────────────────────── -->
       <DzCard id="history" variant="outlined" padding="lg" class="history">
-        <DzHeading :level="2" size="md" weight="semibold" class="card-title">Shipment history</DzHeading>
+        <DzHeading :level="2" size="md" weight="semibold" class="card-title">
+          Shipment history
+        </DzHeading>
         <DzTimeline>
           <DzTimelineItem
             v-for="(event, i) in TRACKING_EVENTS"
@@ -181,8 +199,12 @@ function money(n: number): string {
             :tone="event.tone"
             :status="event.when"
           >
-            <DzText weight="medium" as="div">{{ event.title }}</DzText>
-            <DzText size="sm" tone="muted" as="div">{{ event.detail }}</DzText>
+            <DzText weight="medium" as="div">
+              {{ event.title }}
+            </DzText>
+            <DzText size="sm" tone="muted" as="div">
+              {{ event.detail }}
+            </DzText>
           </DzTimelineItem>
         </DzTimeline>
       </DzCard>
@@ -191,12 +213,16 @@ function money(n: number): string {
       <DzCard variant="flat" padding="lg" class="help">
         <span class="help-icon" aria-hidden="true"><LifeBuoy :size="22" /></span>
         <div class="help-copy">
-          <DzText weight="semibold" as="div">Something not right?</DzText>
+          <DzText weight="semibold" as="div">
+            Something not right?
+          </DzText>
           <DzText size="sm" tone="muted" as="div">
             Our support team replies within a few hours, every day.
           </DzText>
         </div>
-        <DzButton variant="outline" tone="neutral" class="help-cta">Contact support</DzButton>
+        <DzButton variant="outline" tone="neutral" class="help-cta">
+          Contact support
+        </DzButton>
       </DzCard>
     </main>
 
@@ -205,7 +231,9 @@ function money(n: number): string {
         <span class="brand-mark" aria-hidden="true"><Package :size="16" /></span>
         <span class="brand-name">Atlas Supply</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Atlas Supply. Considered things for the home.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Atlas Supply. Considered things for the home.
+      </DzText>
     </footer>
   </div>
 </template>

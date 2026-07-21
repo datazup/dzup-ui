@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { CategoryMeta } from '../../blocks/registry.ts'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+/** Selected category — drives which panel the page renders. */
+const active = defineModel<string>({ required: true })
 
 /**
  * BlockCategoryNav — sticky tab switcher for /blocks (docs/blocks.md §3.1).
@@ -22,9 +25,6 @@ const props = defineProps<{
   panelIdPrefix?: string
 }>()
 
-/** Selected category — drives which panel the page renders. */
-const active = defineModel<string>({ required: true })
-
 /** Which tab currently holds the roving tabindex (follows focus, not selection). */
 const focusId = ref<string>(active.value)
 
@@ -38,7 +38,7 @@ function accentVar(category: CategoryMeta): string {
  * sliding pill and the active tab's label both tint to the current group.
  */
 const pillAccent = computed(() => {
-  const current = props.categories.find((c) => c.id === active.value)
+  const current = props.categories.find(c => c.id === active.value)
   return current ? accentVar(current) : 'var(--dz-primary)'
 })
 
@@ -52,14 +52,16 @@ const indicatorW = ref(0)
 const indicatorReady = ref(false)
 
 function setTabEl(id: string, el: Element | null) {
-  if (el) tabEls.set(id, el as HTMLButtonElement)
+  if (el)
+    tabEls.set(id, el as HTMLButtonElement)
   else tabEls.delete(id)
 }
 
 /** Move the pill behind the active tab and keep that tab in view. */
 function syncIndicator() {
   const el = tabEls.get(active.value)
-  if (!el) return
+  if (!el)
+    return
   indicatorX.value = el.offsetLeft
   indicatorW.value = el.offsetWidth
   indicatorReady.value = true
@@ -75,9 +77,10 @@ function panelId(id: string): string {
 }
 
 function onKeydown(event: KeyboardEvent) {
-  const ids: string[] = props.categories.map((c) => c.id)
+  const ids: string[] = props.categories.map(c => c.id)
   const current = ids.indexOf(focusId.value)
-  if (current === -1) return
+  if (current === -1)
+    return
 
   let next = current
   switch (event.key) {
@@ -99,7 +102,8 @@ function onKeydown(event: KeyboardEvent) {
       return
   }
   const target = ids[next]
-  if (target === undefined) return
+  if (target === undefined)
+    return
   event.preventDefault()
   focusId.value = target
   tabEls.get(target)?.focus()
@@ -157,6 +161,7 @@ onBeforeUnmount(() => {
 
       <button
         v-for="category in categories"
+        :id="tabId(category.id)"
         :key="category.id"
         :ref="(el) => setTabEl(category.id, el as Element | null)"
         type="button"
@@ -164,7 +169,6 @@ onBeforeUnmount(() => {
         class="cat-nav-tab"
         :class="{ 'is-active': active === category.id }"
         :style="{ '--tab-accent': accentVar(category) }"
-        :id="tabId(category.id)"
         :aria-selected="active === category.id"
         :aria-controls="panelId(category.id)"
         :tabindex="focusId === category.id ? 0 : -1"

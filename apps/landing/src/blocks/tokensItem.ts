@@ -18,12 +18,13 @@
  * dzup-ui's own runtime toggles dark via `[data-theme="dark"]`, so a consumer who
  * installs these tokens standalone drives them with shadcn's `.dark` convention
  * (or adds `@import '@dzup-ui/tokens/css'` for the native selectors). The token
- * *values* are identical either way; only the activating selector differs. The
+ * values* are identical either way; only the activating selector differs. The
  * npm package (`@dzup-ui/tokens`) is listed in `dependencies` so the source of
  * truth stays installable.
  */
 
-import { REGISTRY_ITEM_SCHEMA, type RegistryDirectoryEntry } from './registryItem.ts'
+import type { RegistryDirectoryEntry } from './registryItem.ts'
+import { REGISTRY_ITEM_SCHEMA } from './registryItem.ts'
 
 /** The registry-item `type` for a token theme (shadcn taxonomy). */
 export const TOKENS_ITEM_TYPE = 'registry:theme'
@@ -64,7 +65,8 @@ function bucketFor(selector: string): keyof CssVarBuckets | null {
   if (/\[data-theme="dark"\]/.test(selector) || /:not\(\[data-theme="light"\]\)/.test(selector)) {
     return 'dark'
   }
-  if (/:root/.test(selector) || /\[data-theme="light"\]/.test(selector)) return 'light'
+  if (/:root/.test(selector) || /\[data-theme="light"\]/.test(selector))
+    return 'light'
   return null
 }
 
@@ -89,15 +91,17 @@ export function parseTokenCssVars(cssText: string): CssVarBuckets {
   for (const rawLine of cssText.split('\n')) {
     // Drop trailing `/* … */` inline comments so a selector line still ends `{`.
     const line = rawLine.replace(/\/\*.*?\*\//g, '').trim()
-    if (!line) continue
+    if (!line)
+      continue
 
     if (line.startsWith('--')) {
-      const match = /^--([\w-]+)\s*:\s*(.+?);?$/.exec(line)
+      const match = /^--([\w-]+)\s*:\s*(\S.*?);?$/.exec(line)
       const name = match?.[1]
       const value = match?.[2]
       if (name && value !== undefined) {
         const current = [...stack].reverse().find((b): b is keyof CssVarBuckets => b !== null)
-        if (current) buckets[current][`dz-${name.replace(/^dz-/, '')}`] = value.trim()
+        if (current)
+          buckets[current][`dz-${name.replace(/^dz-/, '')}`] = value.trim()
       }
       continue
     }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Post } from './data.ts'
 /**
  * Blog Index — Content template (docs/templates.md §6.5).
  *
@@ -23,11 +24,11 @@ import {
 import { ArrowUpRight, BookOpen, Rss } from 'lucide-vue-next'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { buildCover, CATEGORIES, FEATURED, POSTS } from './data.ts'
-import type { Post } from './data.ts'
 
 /** Resolve a `--dz-*` token to its computed value, with a neutral fallback. */
 function token(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback
+  if (typeof window === 'undefined')
+    return fallback
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
@@ -64,10 +65,10 @@ const visiblePosts = computed<Post[]>(() => {
   const q = query.value.trim().toLowerCase()
   return POSTS.filter((post) => {
     const inCategory = activeCategory.value === 'All' || post.category === activeCategory.value
-    const inQuery =
-      !q ||
-      post.title.toLowerCase().includes(q) ||
-      post.excerpt.toLowerCase().includes(q)
+    const inQuery
+      = !q
+        || post.title.toLowerCase().includes(q)
+        || post.excerpt.toLowerCase().includes(q)
     return inCategory && inQuery
   })
 })
@@ -83,7 +84,9 @@ const visiblePosts = computed<Post[]>(() => {
           <span class="brand-name">Overflow</span>
         </span>
         <DzButton variant="outline" tone="neutral" size="sm">
-          <template #prefix><Rss :size="15" aria-hidden="true" /></template>
+          <template #prefix>
+            <Rss :size="15" aria-hidden="true" />
+          </template>
           Subscribe
         </DzButton>
       </div>
@@ -92,7 +95,9 @@ const visiblePosts = computed<Post[]>(() => {
     <main>
       <!-- ── Header ───────────────────────────────────────────── -->
       <section class="head">
-        <DzTag variant="subtle" tone="primary" size="sm">The Overflow blog</DzTag>
+        <DzTag variant="subtle" tone="primary" size="sm">
+          The Overflow blog
+        </DzTag>
         <DzHeading :level="1" size="3xl" weight="bold" class="head-title">
           Ideas on design systems, in the open
         </DzHeading>
@@ -141,7 +146,9 @@ const visiblePosts = computed<Post[]>(() => {
           class="featured-card"
         >
           <div class="featured-body">
-            <DzTag variant="subtle" tone="primary" size="sm">{{ FEATURED.category }}</DzTag>
+            <DzTag variant="subtle" tone="primary" size="sm">
+              {{ FEATURED.category }}
+            </DzTag>
             <DzHeading :level="2" size="2xl" weight="bold" class="featured-title">
               {{ FEATURED.title }}
             </DzHeading>
@@ -150,7 +157,9 @@ const visiblePosts = computed<Post[]>(() => {
             </DzText>
             <div class="meta">
               <DzAvatar :fallback="FEATURED.initials" size="sm" />
-              <DzText size="sm" weight="medium" as="span">{{ FEATURED.author }}</DzText>
+              <DzText size="sm" weight="medium" as="span">
+                {{ FEATURED.author }}
+              </DzText>
               <span class="dot" aria-hidden="true">·</span>
               <DzText size="sm" tone="muted" as="span">
                 {{ FEATURED.date }} · {{ FEATURED.readingTime }}
@@ -182,9 +191,13 @@ const visiblePosts = computed<Post[]>(() => {
               </DzText>
               <div class="meta post-meta">
                 <DzAvatar :fallback="post.initials" size="sm" />
-                <DzText size="xs" weight="medium" as="span">{{ post.author }}</DzText>
+                <DzText size="xs" weight="medium" as="span">
+                  {{ post.author }}
+                </DzText>
                 <span class="dot" aria-hidden="true">·</span>
-                <DzText size="xs" tone="muted" as="span">{{ post.readingTime }}</DzText>
+                <DzText size="xs" tone="muted" as="span">
+                  {{ post.readingTime }}
+                </DzText>
                 <span class="post-link" aria-hidden="true">
                   <ArrowUpRight :size="15" />
                 </span>
@@ -194,7 +207,9 @@ const visiblePosts = computed<Post[]>(() => {
         </ul>
 
         <div v-else class="no-results">
-          <DzText tone="muted" as="p">No articles match your search.</DzText>
+          <DzText tone="muted" as="p">
+            No articles match your search.
+          </DzText>
           <DzButton
             variant="outline"
             size="sm"
@@ -215,7 +230,9 @@ const visiblePosts = computed<Post[]>(() => {
         <span class="brand-mark" aria-hidden="true"><BookOpen :size="16" /></span>
         <span class="brand-name">Overflow</span>
       </span>
-      <DzText size="sm" tone="muted">© 2026 Overflow Journal. Built with @dzup-ui/core.</DzText>
+      <DzText size="sm" tone="muted">
+        © 2026 Overflow Journal. Built with @dzup-ui/core.
+      </DzText>
     </footer>
   </div>
 </template>

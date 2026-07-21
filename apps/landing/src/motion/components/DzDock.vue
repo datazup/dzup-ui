@@ -54,13 +54,15 @@ let attached = false
 
 /** Whether the device has a fine, hover-capable pointer (SSR-safe). */
 function canHover(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+    return false
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
 /** The direct element children — each is one dock item. */
 function items(): HTMLElement[] {
-  if (!root.value) return []
+  if (!root.value)
+    return []
   return Array.from(root.value.children).filter((c): c is HTMLElement => c instanceof HTMLElement)
 }
 
@@ -94,7 +96,8 @@ function reset(): void {
 }
 
 function onMove(event: PointerEvent): void {
-  if (event.pointerType === 'touch') return
+  if (event.pointerType === 'touch')
+    return
   pointerX = event.clientX
   if (!frame) {
     for (const item of items()) {
@@ -114,14 +117,16 @@ function onLeave(): void {
 }
 
 function attach(): void {
-  if (attached || !root.value) return
+  if (attached || !root.value)
+    return
   root.value.addEventListener('pointermove', onMove)
   root.value.addEventListener('pointerleave', onLeave)
   attached = true
 }
 
 function detach(): void {
-  if (!attached || !root.value) return
+  if (!attached || !root.value)
+    return
   root.value.removeEventListener('pointermove', onMove)
   root.value.removeEventListener('pointerleave', onLeave)
   if (frame) {
@@ -138,7 +143,8 @@ function detach(): void {
 }
 
 function sync(): void {
-  if (!props.disabled && canHover()) attach()
+  if (!props.disabled && canHover())
+    attach()
   else detach()
 }
 

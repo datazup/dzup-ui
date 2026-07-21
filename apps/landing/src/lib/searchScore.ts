@@ -31,7 +31,8 @@ export interface WeightedField {
 export function scoreFields(fields: readonly WeightedField[], q: string): number {
   let score = 0
   for (const field of fields) {
-    if (field.value.toLowerCase().includes(q)) score += field.weight
+    if (field.value.toLowerCase().includes(q))
+      score += field.weight
   }
   return score
 }
@@ -49,7 +50,7 @@ export function rankBySearch<T>(
 ): T[] {
   return items
     .map((item, index) => ({ item, index, score: scoreFields(fieldsOf(item), q) }))
-    .filter((entry) => entry.score > 0)
+    .filter(entry => entry.score > 0)
     .sort((a, b) => b.score - a.score || a.index - b.index)
-    .map((entry) => entry.item)
+    .map(entry => entry.item)
 }

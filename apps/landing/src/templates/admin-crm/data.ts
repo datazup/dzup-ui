@@ -3,6 +3,7 @@
  * self-contained and copy-pasteable (docs/templates.md §7). Content is plausible
  * sales-CRM fare — never lorem ipsum (§7 "realistic content").
  */
+import type { CanonicalTone } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 import {
   Building2,
@@ -14,7 +15,6 @@ import {
   PieChart,
   Settings,
 } from 'lucide-vue-next'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 
 /** A sidebar navigation entry. */
 export interface NavItem {
@@ -78,7 +78,7 @@ export const STATUS_TONE: Record<ContactStatus, CanonicalTone> = {
 }
 
 /** Tabs across the top of the contacts table. */
-export const CONTACT_TABS: { value: string; label: string; match?: ContactStatus }[] = [
+export const CONTACT_TABS: { value: string, label: string, match?: ContactStatus }[] = [
   { value: 'all', label: 'All contacts' },
   { value: 'customers', label: 'Customers', match: 'Customer' },
   { value: 'leads', label: 'Leads', match: 'Lead' },

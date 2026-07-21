@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
 /**
  * App Settings — full-page settings template (docs/templates.md §6.1).
  *
@@ -33,7 +34,6 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { Bell, Boxes, CreditCard, Palette, Plug, Shield, User } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -91,7 +91,9 @@ const reduceMotion = ref(false)
 
         <DzSidebarSection title="Settings">
           <DzSidebarItem v-for="item in NAV" :key="item.label" :active="item.active" href="#">
-            <template #icon><component :is="item.icon" :size="18" /></template>
+            <template #icon>
+              <component :is="item.icon" :size="18" />
+            </template>
             {{ item.label }}
           </DzSidebarItem>
         </DzSidebarSection>
@@ -110,23 +112,33 @@ const reduceMotion = ref(false)
 
     <template #header>
       <div class="set-title">
-        <DzHeading :level="1" size="lg" weight="semibold">Settings</DzHeading>
+        <DzHeading :level="1" size="lg" weight="semibold">
+          Settings
+        </DzHeading>
       </div>
     </template>
 
     <div class="set-body">
       <DzTabs v-model="tab" variant="line" aria-label="Settings categories">
         <DzTabList>
-          <DzTabTrigger value="profile">Profile</DzTabTrigger>
-          <DzTabTrigger value="notifications">Notifications</DzTabTrigger>
-          <DzTabTrigger value="appearance">Appearance</DzTabTrigger>
+          <DzTabTrigger value="profile">
+            Profile
+          </DzTabTrigger>
+          <DzTabTrigger value="notifications">
+            Notifications
+          </DzTabTrigger>
+          <DzTabTrigger value="appearance">
+            Appearance
+          </DzTabTrigger>
         </DzTabList>
 
         <!-- ── Profile ─────────────────────────────────────────────── -->
         <DzTabContent value="profile">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Public profile</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Public profile
+              </DzHeading>
               <DzText size="sm" tone="muted" as="p">
                 This information is visible to your teammates.
               </DzText>
@@ -160,7 +172,9 @@ const reduceMotion = ref(false)
         <DzTabContent value="notifications">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Email notifications</DzHeading>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Email notifications
+              </DzHeading>
               <DzText size="sm" tone="muted" as="p">
                 Choose what Northwind sends to your inbox.
               </DzText>
@@ -169,32 +183,48 @@ const reduceMotion = ref(false)
             <ul class="switch-list">
               <li class="switch-row">
                 <div class="switch-copy">
-                  <DzText weight="medium" as="div">Product updates</DzText>
-                  <DzText size="sm" tone="muted" as="div">New features and improvements.</DzText>
+                  <DzText weight="medium" as="div">
+                    Product updates
+                  </DzText>
+                  <DzText size="sm" tone="muted" as="div">
+                    New features and improvements.
+                  </DzText>
                 </div>
                 <DzSwitch v-model="notifyProduct" aria-label="Product updates" />
               </li>
               <DzDivider />
               <li class="switch-row">
                 <div class="switch-copy">
-                  <DzText weight="medium" as="div">Weekly digest</DzText>
-                  <DzText size="sm" tone="muted" as="div">A Monday summary of your workspace.</DzText>
+                  <DzText weight="medium" as="div">
+                    Weekly digest
+                  </DzText>
+                  <DzText size="sm" tone="muted" as="div">
+                    A Monday summary of your workspace.
+                  </DzText>
                 </div>
                 <DzSwitch v-model="notifyWeekly" aria-label="Weekly digest" />
               </li>
               <DzDivider />
               <li class="switch-row">
                 <div class="switch-copy">
-                  <DzText weight="medium" as="div">Security alerts</DzText>
-                  <DzText size="sm" tone="muted" as="div">Sign-ins from new devices.</DzText>
+                  <DzText weight="medium" as="div">
+                    Security alerts
+                  </DzText>
+                  <DzText size="sm" tone="muted" as="div">
+                    Sign-ins from new devices.
+                  </DzText>
                 </div>
                 <DzSwitch v-model="notifySecurity" aria-label="Security alerts" />
               </li>
               <DzDivider />
               <li class="switch-row">
                 <div class="switch-copy">
-                  <DzText weight="medium" as="div">Marketing</DzText>
-                  <DzText size="sm" tone="muted" as="div">Occasional tips and offers.</DzText>
+                  <DzText weight="medium" as="div">
+                    Marketing
+                  </DzText>
+                  <DzText size="sm" tone="muted" as="div">
+                    Occasional tips and offers.
+                  </DzText>
                 </div>
                 <DzSwitch v-model="notifyMarketing" aria-label="Marketing" />
               </li>
@@ -206,16 +236,26 @@ const reduceMotion = ref(false)
         <DzTabContent value="appearance">
           <div class="panel">
             <header class="panel-head">
-              <DzHeading :level="2" size="md" weight="semibold">Appearance</DzHeading>
-              <DzText size="sm" tone="muted" as="p">Customize how the app looks for you.</DzText>
+              <DzHeading :level="2" size="md" weight="semibold">
+                Appearance
+              </DzHeading>
+              <DzText size="sm" tone="muted" as="p">
+                Customize how the app looks for you.
+              </DzText>
             </header>
 
             <DzFormField>
               <DzFormLabel>Theme</DzFormLabel>
               <DzRadioGroup v-model="theme" orientation="horizontal" aria-label="Theme">
-                <DzRadio value="light">Light</DzRadio>
-                <DzRadio value="dark">Dark</DzRadio>
-                <DzRadio value="system">Match system</DzRadio>
+                <DzRadio value="light">
+                  Light
+                </DzRadio>
+                <DzRadio value="dark">
+                  Dark
+                </DzRadio>
+                <DzRadio value="system">
+                  Match system
+                </DzRadio>
               </DzRadioGroup>
             </DzFormField>
 
@@ -229,8 +269,12 @@ const reduceMotion = ref(false)
 
             <div class="switch-row switch-row--bare">
               <div class="switch-copy">
-                <DzText weight="medium" as="div">Reduce motion</DzText>
-                <DzText size="sm" tone="muted" as="div">Minimize non-essential animation.</DzText>
+                <DzText weight="medium" as="div">
+                  Reduce motion
+                </DzText>
+                <DzText size="sm" tone="muted" as="div">
+                  Minimize non-essential animation.
+                </DzText>
               </div>
               <DzSwitch v-model="reduceMotion" aria-label="Reduce motion" />
             </div>
@@ -240,8 +284,12 @@ const reduceMotion = ref(false)
 
       <DzDivider />
       <footer class="set-foot">
-        <DzButton variant="ghost" tone="neutral">Cancel</DzButton>
-        <DzButton variant="solid" tone="primary">Save changes</DzButton>
+        <DzButton variant="ghost" tone="neutral">
+          Cancel
+        </DzButton>
+        <DzButton variant="solid" tone="primary">
+          Save changes
+        </DzButton>
       </footer>
     </div>
   </DzAppShell>

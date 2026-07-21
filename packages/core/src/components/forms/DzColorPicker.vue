@@ -1,4 +1,5 @@
-<!-- token-check-disable-file: color picker component inherently uses raw color values -->
+<!-- token-check-allow-raw-values: hex/rgb parsing and swatch fills are this component's subject
+     matter. Narrow by design — its own chrome is still held to the palette-class rules. -->
 <script setup lang="ts">
 import type { DzColorPickerEmits, DzColorPickerProps, DzColorPickerSlots } from './DzColorPicker.types.ts'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'

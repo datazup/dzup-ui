@@ -8,6 +8,7 @@ A slide-out record panel (DzSheet) — an orders list where each row opens a rig
 
 ```vue
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
 /**
  * Detail sheet — a slide-out record panel (DzSheet).
  *
@@ -33,7 +34,6 @@ import {
   DzSheetTitle,
   DzText,
 } from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 import { ArrowRight, X } from 'lucide-vue-next'
 import { ref } from 'vue'
 
@@ -115,11 +115,17 @@ function view(order: Order): void {
           <DzText size="sm" weight="medium" as="span">{{ order.customer }}</DzText>
           <DzText size="xs" tone="muted" as="span">{{ order.id }} · {{ order.placed }}</DzText>
         </span>
-        <DzBadge variant="subtle" :tone="order.tone" size="sm">{{ order.status }}</DzBadge>
-        <DzText size="sm" weight="semibold" as="span" class="ds-row-total">{{ order.total }}</DzText>
+        <DzBadge variant="subtle" :tone="order.tone" size="sm">
+          {{ order.status }}
+        </DzBadge>
+        <DzText size="sm" weight="semibold" as="span" class="ds-row-total">
+          {{ order.total }}
+        </DzText>
         <DzButton variant="ghost" tone="neutral" size="sm" @click="view(order)">
           View
-          <template #suffix><ArrowRight :size="14" aria-hidden="true" /></template>
+          <template #suffix>
+            <ArrowRight :size="14" aria-hidden="true" />
+          </template>
         </DzButton>
       </li>
     </ul>
@@ -128,13 +134,15 @@ function view(order: Order): void {
       <DzSheetContent side="right" size="md" class="ds-sheet">
         <header class="ds-sheet-head">
           <div>
-            <DzSheetTitle class="ds-sheet-title">{{ selected.id }}</DzSheetTitle>
+            <DzSheetTitle class="ds-sheet-title">
+              {{ selected.id }}
+            </DzSheetTitle>
             <DzSheetDescription class="ds-sheet-desc">
               Placed {{ selected.placed }}
             </DzSheetDescription>
           </div>
           <DzSheetClose as-child>
-            <DzIconButton :icon="X" ariaLabel="Close panel" variant="ghost" tone="neutral" size="sm" />
+            <DzIconButton :icon="X" aria-label="Close panel" variant="ghost" tone="neutral" size="sm" />
           </DzSheetClose>
         </header>
 
@@ -144,10 +152,16 @@ function view(order: Order): void {
           <div class="ds-customer">
             <DzAvatar :fallback="selected.initials" :alt="selected.customer" size="md" />
             <div class="ds-customer-meta">
-              <DzText size="sm" weight="semibold" as="span">{{ selected.customer }}</DzText>
-              <DzText size="xs" tone="muted" as="span">{{ selected.email }}</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                {{ selected.customer }}
+              </DzText>
+              <DzText size="xs" tone="muted" as="span">
+                {{ selected.email }}
+              </DzText>
             </div>
-            <DzBadge variant="subtle" :tone="selected.tone" size="sm">{{ selected.status }}</DzBadge>
+            <DzBadge variant="subtle" :tone="selected.tone" size="sm">
+              {{ selected.status }}
+            </DzBadge>
           </div>
 
           <div class="ds-items">
@@ -159,21 +173,31 @@ function view(order: Order): void {
                 <DzText size="sm" as="span">{{ item.name }}</DzText>
                 <DzText size="xs" tone="muted" as="span">Qty {{ item.qty }}</DzText>
               </span>
-              <DzText size="sm" weight="medium" as="span">{{ item.price }}</DzText>
+              <DzText size="sm" weight="medium" as="span">
+                {{ item.price }}
+              </DzText>
             </div>
             <DzDivider />
             <div class="ds-item ds-total">
-              <DzText size="sm" weight="semibold" as="span">Total</DzText>
-              <DzText size="sm" weight="bold" as="span">{{ selected.total }}</DzText>
+              <DzText size="sm" weight="semibold" as="span">
+                Total
+              </DzText>
+              <DzText size="sm" weight="bold" as="span">
+                {{ selected.total }}
+              </DzText>
             </div>
           </div>
         </div>
 
         <footer class="ds-sheet-footer">
           <DzSheetClose as-child>
-            <DzButton variant="ghost" tone="neutral">Close</DzButton>
+            <DzButton variant="ghost" tone="neutral">
+              Close
+            </DzButton>
           </DzSheetClose>
-          <DzButton variant="solid" tone="primary">Print invoice</DzButton>
+          <DzButton variant="solid" tone="primary">
+            Print invoice
+          </DzButton>
         </footer>
       </DzSheetContent>
     </DzSheet>

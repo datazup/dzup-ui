@@ -8,6 +8,9 @@ A hierarchical DzTree with per-node lucide icons, expand/collapse and selection 
 
 ```vue
 <script setup lang="ts">
+import type { TreeNode } from '@dzup-ui/core'
+import { DzBadge, DzCard, DzHeading, DzText, DzTree } from '@dzup-ui/core'
+import { FileCode2, FileJson, FileText, Folder, Image } from 'lucide-vue-next'
 /**
  * File explorer — a hierarchical DzTree with per-node icons + selection.
  *
@@ -21,9 +24,6 @@ A hierarchical DzTree with per-node lucide icons, expand/collapse and selection 
  * @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
 import { computed, ref } from 'vue'
-import { DzBadge, DzCard, DzHeading, DzText, DzTree } from '@dzup-ui/core'
-import type { TreeNode } from '@dzup-ui/core'
-import { FileCode2, FileJson, FileText, Folder, Image } from 'lucide-vue-next'
 
 const items: TreeNode[] = [
   {
@@ -69,7 +69,7 @@ const expandedKeys = ref<string[]>(['src', 'components'])
 const selectedKeys = ref<string[]>(['tree.vue'])
 
 const LABELS: Record<string, string> = Object.fromEntries(
-  flatten(items).map((node) => [node.key, node.label]),
+  flatten(items).map(node => [node.key, node.label]),
 )
 
 const selectedLabel = computed(() => {
@@ -78,7 +78,7 @@ const selectedLabel = computed(() => {
 })
 
 function flatten(nodes: TreeNode[]): TreeNode[] {
-  return nodes.flatMap((node) => [node, ...(node.children ? flatten(node.children) : [])])
+  return nodes.flatMap(node => [node, ...(node.children ? flatten(node.children) : [])])
 }
 </script>
 
@@ -86,16 +86,20 @@ function flatten(nodes: TreeNode[]): TreeNode[] {
   <section class="ft-wrap" aria-labelledby="ft-title">
     <DzCard variant="outlined" padding="none">
       <header class="ft-head">
-        <DzHeading id="ft-title" :level="4" size="md" weight="semibold" class="ft-title">Project files</DzHeading>
-        <DzBadge variant="subtle" tone="neutral" size="sm">{{ flatten(items).length }} nodes</DzBadge>
+        <DzHeading id="ft-title" :level="4" size="md" weight="semibold" class="ft-title">
+          Project files
+        </DzHeading>
+        <DzBadge variant="subtle" tone="neutral" size="sm">
+          {{ flatten(items).length }} nodes
+        </DzBadge>
       </header>
 
       <div class="ft-grid">
         <div class="ft-pane">
           <DzTree
-            :items="items"
             v-model:expanded-keys="expandedKeys"
             v-model:selected-keys="selectedKeys"
+            :items="items"
             selectable
             size="sm"
             aria-label="Project file tree"
@@ -103,8 +107,12 @@ function flatten(nodes: TreeNode[]): TreeNode[] {
         </div>
 
         <aside class="ft-detail" aria-live="polite">
-          <DzText size="xs" tone="muted" as="p" class="ft-detail-label">Selected</DzText>
-          <DzText size="sm" weight="medium" as="p" class="ft-detail-value">{{ selectedLabel }}</DzText>
+          <DzText size="xs" tone="muted" as="p" class="ft-detail-label">
+            Selected
+          </DzText>
+          <DzText size="sm" weight="medium" as="p" class="ft-detail-value">
+            {{ selectedLabel }}
+          </DzText>
         </aside>
       </div>
     </DzCard>

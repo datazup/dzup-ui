@@ -54,7 +54,8 @@ function reveal(el: HTMLElement): void {
 }
 
 function getObserver(): IntersectionObserver | null {
-  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') return null
+  if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined')
+    return null
   if (!observer) {
     observer = new IntersectionObserver(
       (entries) => {
@@ -74,7 +75,8 @@ function getObserver(): IntersectionObserver | null {
 function applyModifiers(el: HTMLElement, binding: DirectiveBinding): void {
   for (const key of Object.keys(binding.modifiers)) {
     const cls = MODIFIER_CLASSES[key]
-    if (cls) el.classList.add(cls)
+    if (cls)
+      el.classList.add(cls)
   }
 }
 
