@@ -1,18 +1,13 @@
-import type { Buffer } from 'node:buffer'
 import { expect, test } from '@playwright/test'
-import sharp from 'sharp'
+import { samplePixels } from './utils/pixels.ts'
 
 /**
  * Landing home-page render guard — light AND dark.
  *
  * Why this exists: the landing page once rendered as a fully blank white screen in
- * dark mode only. `DzCursor.vue` carried `:global([data-theme='dark']) .dz-cursor__blob
- * { mix-blend-mode: screen }`; Vue's scoped-CSS compiler dropped the descendant and
- * emitted a bare `[data-theme="dark"] { mix-blend-mode: screen }`. Because `data-theme`
- * lives on <html>, the whole document was screen-blended against the white canvas, so
- * every pixel painted white. The DOM was intact, computed colors were correct, the page
- * scrolled, and the console was clean — so every DOM-based assertion passed. Only the
- * PIXELS were wrong.
+ * dark mode only, with an intact DOM, correct computed colors, a scrolling page and
+ * a clean console — so every DOM-based assertion passed. Only the PIXELS were
+ * wrong. The full story lives with the histogram helper in `utils/pixels.ts`.
  *
  * Two consequences shape this file:
  *
@@ -26,32 +21,6 @@ import sharp from 'sharp'
  */
 
 const THEMES = ['light', 'dark'] as const
-
-/** Colors sampled from the rendered viewport, used to prove the page actually painted. */
-interface Pixels {
-  /** Number of distinct RGB triples. A blank/blended-out page collapses toward 1. */
-  distinct: number
-  /** Mean luminance 0–255 of the dominant color — distinguishes a light vs dark page. */
-  dominantLuma: number
-  /** Share of the viewport occupied by the single most common color, 0–1. */
-  dominantShare: number
-}
-
-async function samplePixels(png: Buffer): Promise<Pixels> {
-  const { data, info } = await sharp(png).raw().toBuffer({ resolveWithObject: true })
-  const counts = new Map<string, number>()
-  for (let i = 0; i < data.length; i += info.channels) {
-    const key = `${data[i]},${data[i + 1]},${data[i + 2]}`
-    counts.set(key, (counts.get(key) ?? 0) + 1)
-  }
-  const [color, n] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]!
-  const [r, g, bl] = color.split(',').map(Number) as [number, number, number]
-  return {
-    distinct: counts.size,
-    dominantLuma: 0.2126 * r + 0.7152 * g + 0.0722 * bl,
-    dominantShare: n / (info.width * info.height),
-  }
-}
 
 for (const theme of THEMES) {
   test.describe(`landing home — ${theme}`, () => {
@@ -96,25 +65,23 @@ for (const theme of THEMES) {
     })
 
     /**
-     * LOCAL-ONLY — this test does not run in CI, by design.
+     * Hero snapshot — runs everywhere, including CI (TASK-FREE3-06).
      *
-     * `toHaveScreenshot` baselines are per-platform, and the only ones committed
-     * are `…-chromium-win32.png`. CI is `ubuntu-latest`, where a win32 baseline
-     * is meaningless (font rasterisation and subpixel AA differ), so the CI job
-     * runs `--grep "renders real pixels"` and never reaches this test.
+     * `toHaveScreenshot` baselines are per-platform, and for a long time the only
+     * ones committed were `…-chromium-win32.png`. CI is `ubuntu-latest`, so this
+     * test used to `test.skip()` itself there and the CI job ran with
+     * `--grep "renders real pixels"` — a green run was never evidence that the hero
+     * looked right on any machine but a Windows developer's.
      *
-     * That is a deliberate split, not an oversight:
-     *   • `renders real pixels` (above) is the regression guard that matters —
-     *     it asserts a pixel HISTOGRAM, is platform-independent, and runs on
-     *     every CI push. It is what catches the blank-page compositing class of
-     *     bug this file exists for.
-     *   • this snapshot is a finer-grained local check for a developer changing
-     *     the hero. Refresh it with `yarn test:visual:landing:update`.
+     * `…-chromium-linux.png` baselines are now committed alongside the win32 ones
+     * (generated on the CI runner itself — see
+     * `.github/workflows/landing-e2e-snapshots.yml`), so the test executes on both.
+     * A platform whose baseline is missing fails loudly rather than skipping;
+     * refresh or add one with `yarn test:e2e:landing:update`.
      *
-     * To make it a CI gate, commit `…-chromium-linux.png` baselines generated on
-     * a Linux runner (or in the Playwright container) and drop the `--grep` from
-     * the `landing-perf` job. Until then, do not read a green CI as evidence that
-     * the hero looks right.
+     * This is the finer-grained companion to `renders real pixels` above: the
+     * histogram is platform-independent and catches the blank-page compositing class
+     * of bug; this catches a hero that renders but renders WRONG.
      */
     test(`hero snapshot — ${theme}`, async ({ page }) => {
       await page.goto('/', { waitUntil: 'networkidle' })

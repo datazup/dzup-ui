@@ -489,6 +489,77 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  # The landing's own browser suite (TASK-FREE3-06). Until this job existed, 1,953
+  # unit tests ran in jsdom and the ONLY real browser that touched the landing in
+  # CI was a single pixel-histogram spec — pointed at the DEV SERVER, not the
+  # artifact that ships. Nav, the ⌘K palette, 404s, the theme toggle and the skip
+  # link had never run in a real browser here, the hero snapshot silently skipped
+  # on ubuntu (win32-only baselines), and no mobile viewport was ever driven.
+  #
+  # Gating, not report-only: every assertion in apps/landing/e2e is something jsdom
+  # structurally cannot make (real focus, real chunk fetches, real painting, the
+  # real SPA history fallback), so a failure here is a real user-visible break.
+  landing-e2e:
+    name: Landing E2E (built dist)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn install --immutable
+      # The landing imports @dzup-ui/core + @dzup-ui/contracts from SOURCE (see the
+      # aliases in apps/landing/vite.config.ts), but `@dzup-ui/tokens/css` and
+      # `/tailwind` resolve to packages/tokens/dist — generated, gitignored — so
+      # tokens must be built or the site ships with no design tokens at all.
+      - name: Build contracts + design tokens
+        run: yarn workspace @dzup-ui/contracts build && yarn workspace @dzup-ui/tokens build
+      # LANDING_SKIP_STORYBOOK=1 — build the landing WITHOUT bundling the Storybook.
+      #
+      # Every flow in apps/landing/e2e stays inside the landing SPA, so mounting a
+      # multi-minute Storybook build under /storybook/ would buy this job nothing and
+      # cost it most of its budget. The `landing-perf` job builds the real thing and
+      # `check:storybook` asserts dist/storybook/index.html is there, so the mount is
+      # still gated — just not here.
+      #
+      # The one rule this implies: a flow added to this suite must not navigate into
+      # /storybook/. That includes the ⌘K palette's COMPONENT rows, which
+      # `window.location.assign` into the docs app — the palette flow deliberately
+      # selects a BLOCK row. Lift this flag before testing anything that leaves the SPA.
+      - name: Build landing site (no Storybook mount)
+        run: yarn workspace @dzup-ui/landing build
+        env:
+          LANDING_SKIP_STORYBOOK: '1'
+      - name: Install Playwright Chromium
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
+      # LANDING_E2E_TARGET=preview (set by the script) swaps the dev server for
+      # `vite preview` over apps/landing/dist: minified, code-split, real asset URLs,
+      # the SPA history fallback. Both Playwright projects run — Desktop Chrome for
+      # the flows + hero baselines, Pixel 7 for the drawer and a block page.
+      - name: Landing e2e (flows + visual + mobile, against dist)
+        run: yarn test:e2e:landing:preview
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-e2e-report
+          path: |
+            apps/landing/playwright-report/
+            apps/landing/test-results/
+          retention-days: 7
+
   landing-perf:
     name: Landing Perf (Lighthouse + bundle budget)
     runs-on: ubuntu-latest
@@ -527,21 +598,12 @@ jobs:
         run: yarn workspace @dzup-ui/core build
       - name: Build Storybook (mounted at /storybook/ by the landing build)
         run: yarn storybook:build
-      # Blank-page guard, light AND dark. A `mix-blend-mode` on <html> once
-      # screen-blended the whole document against the white canvas, so dark mode
-      # painted every pixel white while the DOM, computed styles, scroll height and
-      # console all looked perfectly healthy. Only a PIXEL check catches that class
-      # of bug — and only if the run sets `prefers-color-scheme: dark`, which
-      # Playwright does NOT do by default.
-      #
-      # `--grep` selects the histogram/blend assertions and skips the hero
-      # `toHaveScreenshot` baselines: those are committed per-platform (…-win32.png)
-      # and would need Linux baselines to run here. The guard below is
-      # platform-independent, so it works on any runner.
-      - name: Install Playwright Chromium
-        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
-      - name: Landing renders in light + dark
-        run: yarn test:visual:landing --grep "renders real pixels"
+      # The blank-page guard (light AND dark pixel histograms) used to run here,
+      # against the DEV SERVER and with `--grep` skipping the hero baselines. It has
+      # moved to the `landing-e2e` job (TASK-FREE3-06), which runs the whole visual
+      # suite — histograms and hero snapshots — against the BUILT dist. Keeping a
+      # second, weaker copy of it here would only cost this job a Chromium install
+      # and a dev-server boot to assert less.
       - name: Build landing site
         run: yarn workspace @dzup-ui/landing build
       # The artifact we measure must be the artifact users get. Assert the built

@@ -10,10 +10,12 @@
  *   3. A11y: each tile's accessible name is a full phrase ("<n> free
  *      components"), not a bare number read out of context.
  *
- * `githubStars` / `npmDownloads` are `null` in this repo today — the repo and
- * `@dzup-ui/core` are unpublished, so both APIs 404. The null-path assertions
- * below are therefore the *live* path, and the number-path is exercised by
- * stubbing the composable.
+ * Every assertion about a live metric STUBS it, never reading the value off
+ * `generated/liveStats.ts` — that file is build output whose values move on
+ * their own (the GitHub repo is public now, so `githubStars` bakes a real
+ * figure; `@dzup-ui/core` is still unpublished, so `npmDownloads` is `null`).
+ * A spec that reads it asserts on today's fetch rather than on behaviour, and
+ * this one broke in exactly that way once.
  */
 import { cleanup, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -92,12 +94,40 @@ describe('socialProof — accessible names', () => {
   })
 
   it('degrades an unavailable metric to a call-to-action, never a number', async () => {
+    // Stubbed to null rather than read off the committed `generated/liveStats.ts`:
+    // that file is build output, and the day the GitHub repo went public it
+    // started baking a real `githubStars` — which flipped this tile to the
+    // number path and failed an assertion about the DEGRADED path. The
+    // behaviour under test is "no number → CTA", so the absence is the input.
+    vi.doMock('../composables/useLiveStats.ts', () => ({
+      useLiveStats: () => ({
+        githubStars: ref(null),
+        npmDownloads: ref(null),
+        asOf: '2 Jul 2026',
+      }),
+    }))
     const { getByLabelText, queryByTitle } = await mount()
-    // Both live metrics are null in this repo (unpublished repo + package).
     expect(getByLabelText('Star dzup-ui on GitHub')).toBeTruthy()
     expect(getByLabelText('Install dzup-ui from npm')).toBeTruthy()
     // No freshness tooltip on a tile with no number to date.
     expect(queryByTitle(/As of the last site build/)).toBeNull()
+  })
+
+  it('names a zero metric as a number, not as a missing one', async () => {
+    // `0` is a real, fetched, publishable figure — a public repo with no stars
+    // yet. It must not fall down the `null` CTA path (`value === null`, never a
+    // truthiness check), and it must carry the freshness date every baked
+    // number carries. This is the live shape of `generated/liveStats.ts` today.
+    vi.doMock('../composables/useLiveStats.ts', () => ({
+      useLiveStats: () => ({
+        githubStars: ref(0),
+        npmDownloads: ref(null),
+        asOf: '2 Jul 2026',
+      }),
+    }))
+    const { getByLabelText, getAllByTitle } = await mount()
+    expect(getByLabelText('0 GitHub stars')).toBeTruthy()
+    expect(getAllByTitle('As of the last site build, 2 Jul 2026')).toHaveLength(1)
   })
 })
 

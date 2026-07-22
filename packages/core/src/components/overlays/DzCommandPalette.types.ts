@@ -17,7 +17,16 @@ import type { Component } from 'vue'
 export interface CommandItem {
   /** Unique identifier */
   id: string
-  /** Display label */
+  /**
+   * Display label — and the palette's ONLY search key.
+   *
+   * The query is matched against this string, case- and accent-insensitively.
+   * Nothing else is searched: not the id, not the group, and not whatever the
+   * `#item` slot renders. So when a row's visible text is a subset of what it
+   * should be findable by, put the full haystack here (`'Centered hero
+   * hero-centered hero cta marketing'`) and render the display text from your own
+   * data in the slot — `label` is then the search index, not the caption.
+   */
   label: string
   /** Optional icon component */
   icon?: Component

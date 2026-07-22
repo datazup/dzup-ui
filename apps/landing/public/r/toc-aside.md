@@ -20,7 +20,7 @@ import type { DzAnchorItem } from '@dzup-ui/core'
  * Self-contained: static content, no props, no network. Composed only from
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
-import { DzAnchor, DzText } from '@dzup-ui/core'
+import { DzAnchor, DzHeading, DzText } from '@dzup-ui/core'
 
 const items: DzAnchorItem[] = [
   { href: '#toc-intro', label: 'Introduction' },
@@ -43,9 +43,9 @@ const items: DzAnchorItem[] = [
     <div class="ta-grid">
       <article class="ta-main">
         <header>
-          <h4 id="toc-intro" class="ta-h ta-h-lead">
+          <DzHeading id="toc-intro" :level="4" size="lg" class="ta-h ta-h-lead">
             Introduction
-          </h4>
+          </DzHeading>
           <DzText as="p" class="ta-p">
             dzup-ui is a token-first Vue 3 component library. This guide walks
             through installing the package, wiring up the theme and rendering your
@@ -53,17 +53,17 @@ const items: DzAnchorItem[] = [
           </DzText>
         </header>
 
-        <h5 id="toc-install" class="ta-h">
+        <DzHeading id="toc-install" :level="5" size="lg" class="ta-h">
           Installation
-        </h5>
+        </DzHeading>
         <DzText as="p" class="ta-p">
           The library ships as a single package with a peer set of design tokens.
           Add both with your package manager of choice.
         </DzText>
 
-        <h6 id="toc-package" class="ta-sub">
+        <DzHeading id="toc-package" :level="6" size="sm" class="ta-sub">
           Package manager
-        </h6>
+        </DzHeading>
         <DzText as="p" class="ta-p">
           Install <DzText as="strong">
             @dzup-ui/core
@@ -71,9 +71,9 @@ const items: DzAnchorItem[] = [
           package; the bundled types come along automatically.
         </DzText>
 
-        <h6 id="toc-theme" class="ta-sub">
+        <DzHeading id="toc-theme" :level="6" size="sm" class="ta-sub">
           Theme setup
-        </h6>
+        </DzHeading>
         <DzText as="p" class="ta-p">
           Import the global theme stylesheet once at your application entry point
           so the <DzText as="strong">
@@ -82,25 +82,25 @@ const items: DzAnchorItem[] = [
           available everywhere.
         </DzText>
 
-        <h5 id="toc-usage" class="ta-h">
+        <DzHeading id="toc-usage" :level="5" size="lg" class="ta-h">
           Usage
-        </h5>
+        </DzHeading>
         <DzText as="p" class="ta-p">
           Import components by name and drop them into any template. They arrive
           already themed, accessible and responsive — no per-component setup.
         </DzText>
 
-        <h5 id="toc-theming" class="ta-h">
+        <DzHeading id="toc-theming" :level="5" size="lg" class="ta-h">
           Theming
-        </h5>
+        </DzHeading>
         <DzText as="p" class="ta-p">
           Override tokens on any wrapping element to re-skin everything nested
           inside. Light and dark modes are simply two sets of token values.
         </DzText>
 
-        <h5 id="toc-faq" class="ta-h">
+        <DzHeading id="toc-faq" :level="5" size="lg" class="ta-h">
           FAQ
-        </h5>
+        </DzHeading>
         <DzText as="p" class="ta-p">
           Common questions about browser support, SSR and the upgrade path live
           here, with links out to the full documentation.

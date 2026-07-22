@@ -354,7 +354,40 @@ Measured on this checkout, 2026-07-17:
 
 ---
 
-## [ ] TASK-FREE3-04 — Get mobile LCP under budget and flip the gate from warn to error
+## [x] TASK-FREE3-04 — Get mobile LCP under budget and flip the gate from warn to error
+
+> **Landed 2026-07-20 as End State B (ratchet), because End State A is provably unreachable.**
+> LCP can never precede FCP, and mobile FCP measures 2222–2686ms on every audited route —
+> `/blocks` and `/templates` exceed 2500ms **at FCP alone**. The site is fully client-rendered
+> (`<div id="app">` ships empty), so nothing is contentful until 226.5 kB gzip of critical path
+> lands and mounts Vue. Cutting the entry by 19 kB gzip moved FCP by approximately nothing,
+> which is the evidence that the cost is the whole path rather than one trimmable chunk.
+> Reaching 2500 needs prerendered above-the-fold HTML (SSG); that is the ratchet's next lever
+> and a much larger change than this task.
+>
+> Mobile LCP is now `["error", 4000]` — tight enough to fail the pre-task site (worst route
+> 4192–4296ms) and loose enough not to paint CI red on day one. **The 4000 is provisional:**
+> it was calibrated on a dev machine and CI reads higher, so the first CI run is the real
+> calibration, with a one-time documented raise permitted if needed. `lighthouserc.spec.ts`
+> pins both bounds and the "never back to warn" rule.
+>
+> Measured improvements (medians of 3 interleaved runs, two sessions): `/blocks/hero-split`
+> **4296 → 3559ms (-737ms)**, `/compare` -156ms, `/` -251ms; `/blocks` and `/templates` net
+> flat within noise. TBT on `/` 496 → 161ms (crosses the 300ms budget). Entry JS 154 → 135 kB
+> gzip, initial payload 248 → 227 kB. CLS stayed 0 across all 120 measured runs.
+>
+> **Two findings worth more than the numbers.** (1) The a11y suite's `IntersectionObserver`
+> stub was a no-op, so `observe()` never fired — once sections mount lazily that means axe
+> audits a page of empty placeholders and passes. Fixed to report an immediate intersection;
+> it promptly exposed a real bug, a skipped heading level (h2 → h4) on **every** block detail
+> page, now fixed with a visually-hidden `h2`. (2) Preloading a route's full static-import set
+> made `/blocks` *worse* (FCP +293ms, LCP +484ms): a preload is a reprioritisation, not extra
+> bandwidth, and pulling a 488 kB chunk forward starves the entry. The plugin now bounds
+> preloads to imports ≤60 kB.
+>
+> **Not done:** no image lever was applied — the LCP element on both worst routes turned out
+> to be a text paragraph, not an image, so `fetchpriority`/eager-loading would have been a
+> fix to a non-problem. Webfonts were checked and ruled out too (landing uses system fonts).
 
 ```xml
 <role>
@@ -509,7 +542,55 @@ robots.txt), write down the drift policy for the three manual screenshot/asset g
 
 ---
 
-## [ ] TASK-FREE3-06 — Give the landing real browser e2e: functional flows against the built dist, CI-runnable snapshots, a mobile project
+## [x] TASK-FREE3-06 — Give the landing real browser e2e: functional flows against the built dist, CI-runnable snapshots, a mobile project
+
+> **Landed 2026-07-21, with one step blocked on a push.** `apps/landing/e2e` now holds the
+> five flows plus a Pixel 7 project; `playwright.config.ts` grew a `LANDING_E2E_TARGET=preview`
+> switch that swaps the dev server for `vite preview` over `dist`, and a new gating
+> `landing-e2e` CI job drives that. The job builds with `LANDING_SKIP_STORYBOOK=1` — no flow
+> leaves the SPA, and mounting a multi-minute Storybook build would have eaten the whole
+> budget; `landing-perf` still gates the real mount via `check:storybook`. The dev-server
+> pixel guard was REMOVED from `landing-perf` rather than duplicated: the new job runs the
+> same histograms against the built artifact, so keeping a weaker copy would have cost a
+> Chromium install to assert less. Suite runs **16s** against preview / **28s** against dev
+> locally, both green, so dev↔preview parity is confirmed — including that the existing win32
+> hero baselines pass unchanged against `dist`, which settles whether baselines are
+> target-sensitive (they are not).
+>
+> **Deliberate deviations and findings:**
+> - **Nothing is hard-coded to the catalog.** `e2e/utils/catalog.ts` derives the block and
+>   template URLs from `public/sitemap.xml` and the block title from `public/r/<id>.json` —
+>   both generated from the registries and both diffed by CI's drift guard, so a renamed block
+>   moves the fixtures with it instead of turning the suite red for a non-reason.
+> - **Found — and then fixed — a real, shipped defect in the ⌘K palette.**
+>   `useGlobalSearch` weights a block's `id` (10), `tags` (5) and `Dz*` components (2), and
+>   `GlobalCommandPalette` puts that whole haystack in each row's `label` expressly so the
+>   palette's substring filter "never drops a ranked match". It did not survive: Reka's
+>   `ComboboxItem` registers each row's RENDERED TEXT with `ComboboxRoot` and hides any row its
+>   own filter scores 0 — a second filter downstream of and invisible to the first. Because the
+>   `#item` slot renders only title + category, searching `hero-centered`, `stat-row` or
+>   `DzBadge` returned "No components, blocks or templates match" while `centered` worked.
+>   `DzCommandPalette` now sets `ignore-filter` on `ComboboxRoot` and filters on `label` with
+>   Reka's own `useFilter` collator, so matching stays case- and accent-insensitive rather than
+>   silently downgrading to `includes`. That also removed a `:filter-function` binding which had
+>   quietly stopped doing anything — it is not a `ComboboxRoot` prop in Reka 2.x, so it fell
+>   through to `$attrs` onto the listbox. Guarded at both levels: a
+>   `DzCommandPalette.spec.ts` case that mounts the REAL Reka stack (every stubbed/shallow test
+>   in that file passed throughout the bug — `filteredItems` was always correct), verified to
+>   fail with `ignore-filter` removed; and the landing e2e case, now a real test rather than the
+>   `fixme` it started as. Changeset: `command-palette-label-is-the-search-key` (patch,
+>   `@dzup-ui/core`) — which regenerates `src/generated/releases.ts`, committed with it since
+>   CI diffs that file.
+> - **`apps/landing/tsconfig.json` now includes `e2e/**` and `playwright.config.ts`**, so the
+>   specs are typechecked by `typecheck:apps` in CI. They never were before — `visual.spec.ts`
+>   included.
+> - **BLOCKED: the Linux baselines are not committed yet.** Generating them requires a Linux
+>   Chromium with the runner's font set; this workstation has no Docker daemon and no WSL, so
+>   they cannot be produced locally. `.github/workflows/landing-e2e-snapshots.yml` shoots them
+>   on the runner and uploads them for review + commit (dispatch, or push `ci/landing-snapshots`).
+>   Until that artifact is committed, the `landing-e2e` job's two `hero snapshot` tests fail on
+>   a missing baseline. **Do not "fix" that with `--update-snapshots=missing` in CI** — that
+>   pins whatever the runner happened to render, unreviewed, and reports green.
 
 ```xml
 <role>
@@ -846,7 +927,7 @@ coverage so the next batch can't silently ship half-covered.
 
 ---
 
-## [ ] TASK-FREE3-10 — DzHeading in the three straggler content blocks
+## [x] TASK-FREE3-10 — DzHeading in the three straggler content blocks
 
 ```xml
 <role>
@@ -899,7 +980,7 @@ exactly.
 
 ---
 
-## [ ] TASK-FREE3-11 — Ratchet the axe gates onto moderate-impact rules
+## [x] TASK-FREE3-11 — Ratchet the axe gates onto moderate-impact rules
 
 ```xml
 <role>
@@ -967,7 +1048,61 @@ moderate backlog as a visible, ratchetable count instead of silence.
 
 ---
 
-## [ ] TASK-FREE3-12 — Raise the landing coverage `functions` floor from 65 toward the repo's 80% bar
+## [x] TASK-FREE3-12 — Raise the landing coverage `functions` floor from 65 toward the repo's 80% bar
+
+> **Landed 2026-07-21. Functions 64.16% → 80.49–83.44%; the floor is now 80, and the
+> landing clears the repo's own 80% bar rather than being excused from it.** All four
+> numbers ratcheted: branches 88→89, functions 65→80, lines 89→91, statements 89→91.
+>
+> **Why a range, and why the floors sit a point below it.** These percentages are not
+> reproducible to the decimal. The function TOTAL for the same tree came back as 1,953 /
+> 2,051 / 2,343 across runs of the same command, because how much of a compiled SFC v8
+> attributes to its file depends on what else ran — a file counted in its executed shape
+> reports several times the functions of the same file counted statically, so both sides
+> of the fraction move together. A narrower invocation shifts it again
+> (`--coverage.include=apps/landing/src/**` read 82.57% where `yarn test:coverage` read
+> 80.49%). So: measure with CI's own command, take the lowest reading, leave a point of
+> margin. The four numbers are `floor(min observed) − 1`, except `functions`, pinned at
+> the repo's 80 bar. A gate set to the highest reading would have been red on arrival.
+>
+> **No `v8 ignore` was needed anywhere** — every point came from executing code, not from
+> exempting it. Four seams did the work:
+>
+> - **Interaction sweeps** (`templates/interactions.spec.ts`, `blocks/interactions.spec.ts`,
+>   `pages.interactions.spec.ts`): mount each template / block / route and click every
+>   enabled control, asserting the click doesn't throw, Vue's `errorHandler` catches
+>   nothing, and the surface still renders. Per area: templates 29.0% → 82.8%, blocks
+>   87.0% → 93.2%, pages 36.1% → 67.5%, `components/blocks` 23.4% → 54.7%. Controls are
+>   deduped by role + class signature — a data table renders one delete button per row on
+>   one handler, and `/blocks` ~90 cards on one handler, so clicking each buys nothing but
+>   wall-clock. That dedupe took the landing suite from 142s back to 101s against a 96s
+>   pre-task baseline (+5%), inside the task's ~20% runtime budget; the same suite varies
+>   96–212s run to run on this machine, so treat all four figures as one-machine medians.
+> - **`templates/rawSources.spec.ts`**: loads the Code-tab `?raw` chunk for all 44
+>   templates. 79 functions in one file (75 of them Vite glob thunks, 4/79 → 79/79) and,
+>   more to the point, a real drift guard — a renamed template file degrades the Code tab
+>   to its "source unavailable" fallback silently, and
+>   `render.spec.ts` stays green through it because the component resolves via a different glob.
+> - **`motion/directives/directives.spec.ts`** (0/8 → 100% on `animateOnScroll`): the
+>   pointer directives were invisible to the gallery suite for a structural reason —
+>   every one gates on `matchMedia('(hover: hover) and (pointer: fine)')` and the shared
+>   jsdom stub answers `matches: false` to every query, so they correctly declined to
+>   attach on what looked like a touch device and nothing past `attach()` ever ran.
+> - **`motion/composables.spec.ts` + `composables/useThemeTransition.spec.ts`**: scroll/
+>   timeline maths, the View-Transitions capability detectors, and the theme swap's
+>   reduced-motion path (theme still changes, cross-fade doesn't).
+>
+> Two things found on the way: the stale `SocialProof.spec.ts` failure (it asserted both
+> live metrics were `null`, but the repo went public and `githubStars` now bakes a real
+> `0`) is fixed by stubbing the composable instead of reading build output — plus a new
+> test that `0` takes the number path, not the "unavailable" CTA. And `useTheme`'s
+> singleton builds its `watch(mode)` inside whichever component's `setup` calls it FIRST,
+> so unmounting that component disposes the watcher for everyone; inert in the app
+> (`App.vue` never unmounts) but a trap for any spec that mounts and unmounts hosts.
+>
+> Remaining 388 uncovered functions are enumerated by area, dated, in the `vitest.config.ts`
+> threshold comment — the honest tail is jsdom-hostile rAF/canvas motion internals and
+> flows only a real browser reaches (`apps/landing/e2e` owns those).
 
 ```xml
 <role>

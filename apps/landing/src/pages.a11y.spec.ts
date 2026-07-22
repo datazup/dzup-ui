@@ -14,6 +14,10 @@
  *   • zero serious/critical axe violations (WCAG 2.0/2.1 A+AA structural
  *     rules — like the block suite, jsdom has no layout so color-contrast
  *     comes back *incomplete*, not *fail*, and is NOT claimed here);
+ *   • zero violations of the explicitly gated moderate-impact rules — the
+ *     landmark family and document-wide heading order (TASK-FREE3-11). See
+ *     `lib/axeGates.ts` for why widening the impact filter would NOT have
+ *     caught the duplicate `<main>`, and for the dated moderate backlog;
  *   • the SPA focus-move: after client-side navigation, focus sits on the new
  *     page's <h1> (or <main>), and the aria-live route announcer carries the
  *     new page title;
@@ -28,13 +32,13 @@
  * template that is itself a full page brings its own <h1>.
  */
 
-import type { Result } from 'axe-core'
 import { render } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
 import App from './App.vue'
 import { BLOCKS } from './blocks/registry.ts'
+import { AXE_WCAG_TAGS, blockingViolations, PAGE_GATED_RULES, reportViolation } from './lib/axeGates.ts'
 import router from './router.ts'
 import { TEMPLATES } from './templates/registry.ts'
 
@@ -54,8 +58,30 @@ beforeAll(() => {
     })) as unknown as typeof window.matchMedia
   }
   if (typeof globalThis.IntersectionObserver === 'undefined') {
+    /**
+     * This stub must FIRE, not just exist (TASK-FREE3-04).
+     *
+     * A no-op `observe()` used to satisfy the type while never invoking the
+     * callback. That was harmless only while every page rendered eagerly. Now
+     * that below-the-fold sections mount through `useLazyMount` — the home page's
+     * nine sections, and every BlockPreview — a silent observer means
+     * `shouldRender` never flips, those subtrees never mount, and axe audits a
+     * page containing nothing but placeholders. The suite would stay green while
+     * covering an empty document, which is worse than no suite at all.
+     *
+     * Reporting an immediate intersection is also the honest emulation: jsdom has
+     * no layout, so "is it near the viewport" has exactly one defensible answer
+     * for content the page intends to show.
+     */
     globalThis.IntersectionObserver = class {
-      observe(): void {}
+      constructor(private readonly callback: IntersectionObserverCallback) {}
+      observe(target: Element): void {
+        this.callback(
+          [{ isIntersecting: true, target } as IntersectionObserverEntry],
+          this as unknown as IntersectionObserver,
+        )
+      }
+
       unobserve(): void {}
       disconnect(): void {}
       takeRecords(): [] {
@@ -65,22 +91,22 @@ beforeAll(() => {
   }
 })
 
-const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] as const
-const BLOCKING_IMPACTS = new Set(['critical', 'serious'])
-
-function reportViolation(violation: Result): string {
-  const targets = violation.nodes
-    .map(node => (Array.isArray(node.target) ? node.target.join(' ') : String(node.target)))
-    .join(', ')
-  return `[${violation.impact}] ${violation.id} — ${violation.help}\n      nodes: ${targets}\n      ${violation.helpUrl}`
-}
-
-/** Every chromed route, one representative per dynamic pattern. */
-const CHROMED_ROUTES: Array<{ path: string, label: string }> = [
+/**
+ * Every chromed route, one representative per dynamic pattern.
+ *
+ * `mustRender` is an anti-vacuous guard for lazily-mounted SUB-content — the
+ * failure mode the size floor below cannot see, because the page around it still
+ * renders plenty of chrome. It is not hypothetical: while measuring
+ * TASK-FREE3-11, `/blocks/:id` was observed both with and without its live
+ * preview mounted depending on how many routes ran before it, and the
+ * `landmark-unique` violation that preview causes appeared and vanished with it.
+ * An audit that silently stops covering the preview must fail, not pass.
+ */
+const CHROMED_ROUTES: Array<{ path: string, label: string, mustRender?: string }> = [
   { path: '/', label: 'home' },
   { path: '/pro', label: 'pro' },
   { path: '/blocks', label: 'blocks index' },
-  { path: `/blocks/${BLOCKS[0]!.id}`, label: 'block detail' },
+  { path: `/blocks/${BLOCKS[0]!.id}`, label: 'block detail', mustRender: '.block-preview' },
   { path: '/animations', label: 'animations' },
   { path: '/themes', label: 'themes' },
   { path: '/templates', label: 'templates index' },
@@ -107,13 +133,45 @@ function headingLevels(root: ParentNode): number[] {
   )
 }
 
+/**
+ * Anti-vacuous floor: the smallest real route (`/404`) renders 189 characters
+ * across 20 elements; the next smallest (`/`) renders 539 across 105. A route
+ * whose subtree failed to mount yields near-zero, so this catches it with ~35%
+ * headroom on the tightest case. Measured 2026-07-21.
+ *
+ * Every axe assertion in this file is only as good as the DOM it scanned — a
+ * rule "passing" over an empty page is the exact failure the block suite already
+ * learned to kill, and the gated moderate rules inherit the same guard.
+ */
+const MIN_MAIN_TEXT = 120
+const MIN_MAIN_ELEMENTS = 12
+
 describe.sequential('landing pages — accessibility', () => {
-  describe.each(CHROMED_ROUTES)('route "$label" ($path)', ({ path }) => {
-    it('has one h1, no skipped heading levels, and no serious/critical axe violations', async () => {
+  describe.each(CHROMED_ROUTES)('route "$label" ($path)', ({ path, mustRender }) => {
+    it('has one h1, no skipped heading levels, and no blocking axe violations', async () => {
       await mountAt(path)
 
       const main = document.getElementById('main')
       expect(main, `route ${path} did not render a <main id="main">`).toBeTruthy()
+
+      const text = (main!.textContent ?? '').replace(/\s+/g, ' ').trim()
+      expect(
+        text.length,
+        `route ${path} rendered only ${text.length} characters into <main> — the audit below `
+        + 'would be scanning an essentially empty page and would pass vacuously',
+      ).toBeGreaterThanOrEqual(MIN_MAIN_TEXT)
+      expect(
+        main!.querySelectorAll('*').length,
+        `route ${path} rendered too few elements into <main> to audit meaningfully`,
+      ).toBeGreaterThanOrEqual(MIN_MAIN_ELEMENTS)
+
+      if (mustRender != null) {
+        expect(
+          document.querySelector(mustRender),
+          `route ${path} did not mount "${mustRender}" — its lazily-loaded content is missing, `
+          + 'so any clean axe result below is about the placeholder, not the page',
+        ).toBeTruthy()
+      }
 
       const h1s = main!.querySelectorAll('h1')
       expect(h1s.length, `route ${path} must have exactly one <h1>`).toBe(1)
@@ -134,11 +192,22 @@ describe.sequential('landing pages — accessibility', () => {
       // an <iframe> (a separate document axe cannot inject into under jsdom);
       // the preview content is the template itself, audited via its own route.
       const results = await axe(document.body, {
-        runOnly: { type: 'tag', values: [...AXE_TAGS] },
+        runOnly: { type: 'tag', values: [...AXE_WCAG_TAGS] },
         iframes: false,
       })
-      const blocking = (results.violations ?? []).filter(
-        violation => violation.impact != null && BLOCKING_IMPACTS.has(violation.impact),
+
+      // Second pass, selected by rule id. The gated moderate rules are all tagged
+      // `best-practice` with no WCAG tag, so the tag pass above never runs them —
+      // see lib/axeGates.ts. Their findings fail whatever impact axe assigns.
+      const gated = await axe(document.body, {
+        runOnly: { type: 'rule', values: [...PAGE_GATED_RULES] },
+        iframes: false,
+      })
+
+      const blocking = blockingViolations(
+        results.violations ?? [],
+        gated.violations ?? [],
+        PAGE_GATED_RULES,
       )
       expect(
         blocking,
@@ -157,11 +226,22 @@ describe.sequential('landing pages — accessibility', () => {
    * navigating by landmark, including a skip link that now has two plausible
    * destinations.
    *
-   * It shipped *past this very suite*, which mounts /ai and runs axe on it. axe
-   * has the rule — `landmark-no-duplicate-main` — but grades it **moderate**, and
-   * the audit above only fails on serious/critical. Widening that filter would
-   * re-arm a long backlog of unrelated moderate findings, so the invariant gets
-   * its own assertion at full strength instead. Structure is checked structurally.
+   * It shipped *past this very suite*, which mounts /ai and runs axe on it.
+   *
+   * The original diagnosis here was that axe has the rule
+   * (`landmark-no-duplicate-main`) but grades it **moderate**, while the audit
+   * only fails on serious/critical. That was half right, and the missing half
+   * mattered: the rule is tagged `cat.semantics, best-practice` and carries no
+   * WCAG tag, so the audit's `runOnly` tag filter excluded it from the run
+   * altogether. It never executed — its impact grade was never even consulted,
+   * and flipping the impact filter would have changed nothing.
+   *
+   * As of TASK-FREE3-11 the axe path DOES gate it, via a second rule-id-selected
+   * pass (see lib/axeGates.ts). This bespoke assertion stays anyway — double
+   * coverage, on purpose. It is cheap, it names the failure in one line instead
+   * of an axe node dump, and it does not depend on the allowlist staying correct.
+   * It also still covers `landmark-one-main`, which is anchored to `<html>` and
+   * therefore unreachable from this suite's `document.body` context at any impact.
    *
    * Asserted against the whole document, not `#main`: the second landmark can
    * appear anywhere, and nesting is exactly the case a scoped query would miss.

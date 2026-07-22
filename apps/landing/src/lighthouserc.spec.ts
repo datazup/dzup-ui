@@ -67,21 +67,57 @@ describe('lighthouse configs', () => {
   })
 
   /**
-   * The one sanctioned difference. Desktop measures 0.66-1.19s and hard-fails over
-   * 2.5s; mobile measures 3.08-4.34s and cannot hold that bar today, so it warns
-   * (see the `//lcp` note in lighthouserc.mobile.json). Pinned in both directions:
-   * relaxing desktop to `warn` would drop the only enforced LCP gate the site has,
-   * and the day mobile LCP is fixed this test is what says to promote it.
+   * The one sanctioned difference — now a level the two configs AGREE on (both
+   * `error`) at thresholds they do not (2500 desktop, 4000 mobile).
+   *
+   * Mobile cannot hold 2500ms: LCP can never precede FCP, and mobile FCP alone is
+   * 2258-2686ms across the audited routes because the site is client-rendered.
+   * So mobile carries a ratchet instead — an enforced ceiling above today's worst
+   * measurement, which may only ever move down. See the `//lcp*` notes in
+   * lighthouserc.mobile.json for the numbers and the reasoning.
+   *
+   * Pinned in both directions on purpose. Relaxing either back to `warn` would
+   * silently retire an enforced gate, and RAISING the mobile ceiling would let a
+   * regression ratchet the wrong way — which is exactly the failure this number
+   * exists to prevent. Tightening it is the only edit that should not need a
+   * conversation, and the assertion below states that in the failure message.
    */
-  it('gates LCP as error on desktop and warn on mobile — the recorded mobile gap', () => {
+  it('gates LCP as error on BOTH configs', () => {
+    for (const [name, rc] of [['desktop', desktop], ['mobile', mobile]] as const) {
+      const [level] = rc.ci.assert.assertions['largest-contentful-paint'] as [string, unknown]
+      expect(level, `${name} LCP must stay error-level`).toBe('error')
+    }
+  })
+
+  it('holds desktop LCP at the real 2.5s Core Web Vitals target', () => {
     expect(desktop.ci.assert.assertions['largest-contentful-paint']).toEqual([
       'error',
       { maxNumericValue: 2500 },
     ])
-    expect(mobile.ci.assert.assertions['largest-contentful-paint']).toEqual([
-      'warn',
-      { maxNumericValue: 2500 },
-    ])
+  })
+
+  it('ratchets mobile LCP: bound by 4000ms, and tight enough to still bind', () => {
+    const [, opts] = mobile.ci.assert.assertions['largest-contentful-paint'] as [
+      string,
+      { maxNumericValue: number },
+    ]
+    expect(
+      opts.maxNumericValue,
+      'The mobile LCP ceiling moves DOWN, not up. The one sanctioned exception is the first '
+      + 'CI calibration described in //lcp-why-4000 (these 4000ms were measured on a dev '
+      + 'machine, and CI reads higher) — and that raise must land here WITH the CI evidence, '
+      + 'not as a quiet bump. Never answer a red gate by dropping back to `warn`.',
+    ).toBeLessThanOrEqual(4000)
+    /**
+     * The lower bound of usefulness. The worst route measured 4192-4296ms locally
+     * (4340ms in the 2026-07-16 CI note) BEFORE TASK-FREE3-04, so a ceiling at or
+     * above that would pass the unimproved site and gate nothing at all.
+     */
+    expect(
+      opts.maxNumericValue,
+      'ceiling must stay below the ~4300ms the site measured before TASK-FREE3-04, '
+      + 'or reverting that work sails straight through the gate',
+    ).toBeLessThan(4300)
   })
 
   it('differ only in form factor', () => {

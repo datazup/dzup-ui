@@ -6,8 +6,10 @@
  * honest because this suite runs `axe-core` against every block in CI. Each
  * `BLOCKS` entry is mounted with zero props (blocks are self-contained — no
  * required inputs) under each `AUDITED_THEMES` value and scanned against the WCAG
- * 2.0/2.1 A + AA rule set; a `critical` or `serious` violation fails the run
- * loudly, naming the block id, the theme, the rule, and the offending nodes.
+ * 2.0/2.1 A + AA rule set; a `critical` or `serious` violation — or a violation of
+ * any explicitly gated `best-practice` rule (`BLOCK_GATED_RULES`, TASK-FREE3-11) —
+ * fails the run loudly, naming the block id, the theme, the rule, and the
+ * offending nodes.
  *
  * Single source of truth: the marks live in `certifications.ts` and the meta-test
  * below asserts this suite enforces exactly those marks — you cannot render a mark
@@ -37,6 +39,7 @@ import { flushPromises } from '@vue/test-utils'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
 import { defineComponent, h } from 'vue'
+import { AXE_WCAG_TAGS, BLOCK_GATED_RULES, blockingViolations, reportViolation } from '../lib/axeGates.ts'
 import { AUDITED_THEMES, CERTIFICATIONS, isCertified, KNOWN_A11Y_DEBT } from './certifications.ts'
 import { BLOCKS } from './registry.ts'
 
@@ -74,14 +77,13 @@ beforeAll(() => {
 })
 
 /**
- * The WCAG 2.0/2.1 Level A + AA rule tags — the exact conformance target the
- * marks advertise (docs/blocks.md §3.7). Best-practice/experimental rules are
- * excluded so the gate tracks the standard, not axe's house opinions.
+ * The gate is impact-based (critical/serious on the WCAG A/AA tag set) PLUS an
+ * explicit allowlist of `best-practice` rules gated by id — `BLOCK_GATED_RULES`
+ * in `lib/axeGates.ts`, which also carries this surface's remaining, dated
+ * moderate backlog. That list is deliberately narrower than the page suite's:
+ * blocks render in isolation, so "is this landmark top level?" rules fire on
+ * nesting that is correct in a real page.
  */
-const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] as const
-
-/** Impacts that block the marks. Moderate/minor are surfaced by axe but not gating. */
-const BLOCKING_IMPACTS = new Set(['critical', 'serious'])
 
 /**
  * Force-resolve a block's lazy `defineAsyncComponent` BEFORE mount.
@@ -138,19 +140,12 @@ function describeError(error: unknown): string {
   }
 }
 
-/** Render one violation as a loud, copy-pasteable line: rule + help + nodes + url. */
-function reportViolation(violation: Result): string {
-  const targets = violation.nodes
-    .map(node => (Array.isArray(node.target) ? node.target.join(' ') : String(node.target)))
-    .join(', ')
-  return `[${violation.impact}] ${violation.id} — ${violation.help}\n      nodes: ${targets}\n      ${violation.helpUrl}`
-}
-
 /**
  * Mount `block` under `theme`, guard against silent empty/error renders, and
- * return the serious/critical axe violations. Throws loudly (with block id +
- * theme) if the block can't even be rendered to a non-empty DOM — an unrendered
- * block must never be mistaken for a clean one.
+ * return the blocking axe violations. Throws loudly (with block id + theme) if
+ * the block can't even be rendered to a non-empty DOM — an unrendered block must
+ * never be mistaken for a clean one, and the gated moderate rules run against
+ * the same guarded DOM as the impact-based ones.
  */
 async function auditBlock(component: Component, blockId: string, theme: AuditedTheme): Promise<Result[]> {
   // @testing-library/vue types `container` as Element (not HTMLElement); axe and
@@ -176,10 +171,13 @@ async function auditBlock(component: Component, blockId: string, theme: AuditedT
     `[a11y] block "${blockId}" rendered no content (${theme} theme) — cannot certify`,
   ).not.toBe('')
 
-  const results = await axe(container, { runOnly: { type: 'tag', values: [...AXE_TAGS] } })
-  return (results.violations ?? []).filter(
-    violation => violation.impact != null && BLOCKING_IMPACTS.has(violation.impact),
-  )
+  const results = await axe(container, { runOnly: { type: 'tag', values: [...AXE_WCAG_TAGS] } })
+
+  // Second pass, selected by rule id: the gated rules are `best-practice`-tagged
+  // and so are invisible to the tag pass above, whatever their impact.
+  const gated = await axe(container, { runOnly: { type: 'rule', values: [...BLOCK_GATED_RULES] } })
+
+  return blockingViolations(results.violations ?? [], gated.violations ?? [], BLOCK_GATED_RULES)
 }
 
 /** Certified blocks render the marks; known-debt blocks are tracked separately. */
@@ -208,8 +206,9 @@ describe('block trust marks are backed by this suite', () => {
 
 // ---------------------------------------------------------------------------
 // Certified catalog — the gate. Every certified block, under every audited
-// theme, must have ZERO serious/critical violations. This is what the
-// "Accessible" + "Light + dark" marks promise.
+// theme, must have ZERO serious/critical violations AND zero violations of the
+// gated best-practice rules. This is what the "Accessible" + "Light + dark"
+// marks promise.
 // ---------------------------------------------------------------------------
 
 describe('blocks — accessibility (axe-core, WCAG A/AA)', () => {
@@ -219,7 +218,7 @@ describe('blocks — accessibility (axe-core, WCAG A/AA)', () => {
 
   describe.each(certified)('block "$label"', ({ block }) => {
     for (const theme of AUDITED_THEMES) {
-      it(`renders with no critical or serious a11y violations (${theme})`, async () => {
+      it(`renders with no blocking a11y violations (${theme})`, async () => {
         const blocking = await auditBlock(block.component, block.id, theme)
         expect(
           blocking,

@@ -20,7 +20,7 @@ import type { CanonicalTone } from '@dzup-ui/contracts'
  * Self-contained: local static data, no props, no network. Composed only from
  * free @dzup-ui/core components and `--dz-*` tokens (docs/blocks.md §3.6).
  */
-import { DzAvatar, DzBadge, DzImageCard, DzText } from '@dzup-ui/core'
+import { DzAvatar, DzBadge, DzHeading, DzImageCard, DzText } from '@dzup-ui/core'
 
 interface Post {
   id: number
@@ -103,11 +103,11 @@ const posts: Post[] = [
       <DzText size="xs" tone="muted" as="p" class="bl-eyebrow">
         From the blog
       </DzText>
-      <h4 id="bl-title" class="bl-title">
+      <DzHeading id="bl-title" :level="4" class="bl-title">
         <DzText size="xl" weight="bold" as="span">
           Latest writing
         </DzText>
-      </h4>
+      </DzHeading>
       <DzText size="sm" tone="muted" as="p" class="bl-sub">
         Notes on building dzup-ui — engineering, design and product.
       </DzText>
@@ -131,9 +131,9 @@ const posts: Post[] = [
           </template>
 
           <div class="bl-body">
-            <h5 class="bl-post-title">
+            <DzHeading :level="5" size="md" class="bl-post-title">
               <a :href="`#post-${post.id}`" class="bl-post-link">{{ post.title }}</a>
-            </h5>
+            </DzHeading>
             <DzText size="sm" tone="muted" as="p" class="bl-excerpt">
               {{ post.excerpt }}
             </DzText>

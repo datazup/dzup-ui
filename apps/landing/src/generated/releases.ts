@@ -1451,6 +1451,16 @@ export const PENDING: PendingChange[] = [
       "@dzup-ui/core"
     ],
     "level": "patch",
+    "summary": "**`DzCommandPalette`: search the whole `label`, not just what the row happens to render.**",
+    "body": "**`DzCommandPalette`: search the whole `label`, not just what the row happens to render.**\n\nThe palette documented `label` as its search key and filtered `props.items` on it — but Reka's\n`ComboboxItem` also registers each row's *rendered text* (`textValue || textContent`) with\n`ComboboxRoot` and hides any row its own filter scores zero. That second filter sat downstream\nof, and invisible to, the first, so it silently won.\n\nThe effect only shows up in the pattern `label` exists for: a consumer that puts a full search\nhaystack in `label` (ids, tags, keywords) and renders a shorter caption through the `#item`\nslot. Those rows were then filtered by the caption. On this repo's own site that made every\nblock unfindable by its id, its tags, or the `Dz*` components it is built from — all three\nindexed and weighted — while the visible title still matched, and nothing in the DOM showed why.\n\n`ComboboxRoot` now gets `ignore-filter`, leaving this component's filter the only one. Matching\nis unchanged in kind: it uses the same `Intl.Collator`-backed comparison Reka's filter used, so\nit stays case- and accent-insensitive (`resume` still finds `Résumé`).\n\nAlso removes a `:filter-function` binding that had quietly stopped doing anything — it is not a\n`ComboboxRoot` prop in Reka 2.x, so it fell through to `$attrs` and onto the listbox element.\n\nNo API change: same props, same emits, same slots. Rows that were being filtered out despite a\nmatching `label` now appear, which is the documented behaviour.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
     "summary": "Fix `DzDropdownMenu`'s `defaultOpen` prop, which was declared but had no effect.",
     "body": "Fix `DzDropdownMenu`'s `defaultOpen` prop, which was declared but had no effect.\n\nTwo defects, both required for an uncontrolled menu to open on mount:\n\n- `defaultOpen` was never forwarded to Reka's `DropdownMenuRoot`.\n- `defineModel<boolean | undefined>('open')` declared `open` as a **Boolean** prop\n  with no default, so Vue boolean-cast the unbound value to `false`. Reka read that\n  as \"controlled, and closed\", which pinned the menu shut and made `defaultOpen`\n  unreachable even once forwarded. The model now declares `default: undefined`, so\n  `open` stays undefined until a consumer binds `v-model:open`.\n\nClick-to-open was unaffected (the local `defineModel` fed the new value back), so\nthis only changes menus that relied on `defaultOpen`, which previously could not\nopen at all. `DzDropdownMenuProps` doc comments were also corrected — `modal` was\ndescribed as \"controlled open state\".",
     "breaking": false,

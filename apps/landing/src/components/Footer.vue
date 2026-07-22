@@ -137,9 +137,16 @@ const badges = [
 
       <nav class="footer-cols" aria-label="Footer">
         <div v-for="col in columns" :key="col.title" class="footer-col">
-          <h3 class="footer-col-title">
+          <!--
+            h2, not h3: the footer sits outside <main>, so its column titles
+            follow the page's <h1> directly in document order. An <h3> here made
+            every route whose main content stops at <h1> (home, /pro, /animations,
+            /templates, 404 …) skip a level — an `heading-order` failure the
+            in-#main heading check could never see (TASK-FREE3-11).
+          -->
+          <h2 class="footer-col-title">
             {{ col.title }}
-          </h3>
+          </h2>
           <ul>
             <li v-for="link in col.links" :key="link.label">
               <a

@@ -31,9 +31,12 @@ function formatAsOf(iso: string): string {
  * absent refresh leaves the baked values untouched — {@link fetchLiveStats} never
  * throws, and a `null` field is ignored rather than blanking a real number.
  *
- * Both metrics are `null` until the repo (`LINKS.github`) and `@dzup-ui/core`
- * are published — their APIs 404 today. The tiles render a call-to-action in
- * that case; they never invent a number.
+ * A metric stays `null` until its API answers: the GitHub repo is public, so
+ * `githubStars` bakes a real figure (`0` is a real figure — a public repo with
+ * no stars yet, and the null check is `=== null` for exactly that reason);
+ * `@dzup-ui/core` is unpublished, so the npm endpoint still 404s and
+ * `npmDownloads` is `null`. The tiles render a call-to-action for a `null`;
+ * they never invent a number.
  */
 export function useLiveStats(): {
   githubStars: Ref<number | null>

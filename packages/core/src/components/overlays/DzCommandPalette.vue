@@ -19,12 +19,18 @@ import {
   DialogPortal,
   DialogRoot,
   DialogTitle,
+  useFilter,
 } from 'reka-ui'
 /**
  * DzCommandPalette — A combined command palette with search, items, and groups.
  *
  * Uses Reka UI Dialog for the overlay and Combobox for the search/selection.
  * Opens with Ctrl+K / Cmd+K by default.
+ *
+ * Filtering matches the query against each item's `label`, case- and
+ * accent-insensitively — and against `label` ALONE, whatever the `#item` slot
+ * renders. Put everything a row should be findable by in `label` (ids, tags,
+ * keywords) and render the display text from your own data in the slot.
  *
  * @example
  * ```vue
@@ -83,14 +89,28 @@ const contentAria = computed<Record<string, unknown>>(() => {
   return aria
 })
 
-/** Items filtered by search query */
+/**
+ * Locale-aware, case- and accent-insensitive substring matching — the SAME
+ * `Intl.Collator`-backed comparison Reka's own combobox filter uses. Turning that
+ * filter off (see `ignore-filter` in the template) therefore changes *what* is
+ * searched, not *how*: `résumé` still matches `resume`.
+ */
+const { contains } = useFilter({ sensitivity: 'base' })
+
+/**
+ * Items whose `label` matches the search query.
+ *
+ * `label` is the search key, deliberately: it is the one field a consumer can put
+ * anything into. Rows rendered through the `#item` slot commonly show a *subset*
+ * of what they should be findable by — a title and a category, say — while `label`
+ * carries the full haystack (ids, tags, keywords). See the `ignore-filter` note in
+ * the template for why that only started working when Reka's filter was disabled.
+ */
 const filteredItems = computed(() => {
-  const query = searchQuery.value.toLowerCase().trim()
+  const query = searchQuery.value.trim()
   if (!query)
     return props.items
-  return props.items.filter(item =>
-    item.label.toLowerCase().includes(query),
-  )
+  return props.items.filter(item => contains(item.label, query))
 })
 
 /** Group items by their group id */
@@ -181,11 +201,26 @@ watch(open, (isOpen) => {
         <DialogDescription class="sr-only">
           Search commands, then use arrow keys to move through results and Enter to select.
         </DialogDescription>
+        <!-- `ignore-filter` — this component owns filtering; Reka must not also.
+             Reka's `ComboboxItem` registers each row's RENDERED TEXT
+             (`textValue || textContent`) with `ComboboxRoot` and hides any row its
+             own filter scores zero. That is a SECOND filter, downstream of and
+             invisible to the one above, and it silently overrode it: a consumer
+             that put a full search haystack in `label` — exactly what `label` is
+             for — got rows filtered by the handful of words the `#item` slot
+             happened to render instead. On this repo's own site that made every
+             block unfindable by its id, its tags or the components it is built
+             from, even though all three were indexed and weighted, while the
+             visible title still worked. Nothing in the DOM showed why.
+
+             This also removes a `:filter-function` binding that had quietly
+             stopped doing anything: it is not a `ComboboxRoot` prop in Reka 2.x,
+             so it fell through to `$attrs` and was spread onto the listbox. -->
         <ComboboxRoot
           v-model="searchModel"
           v-model:search-term="searchQuery"
           open
-          :filter-function="() => filteredItems"
+          ignore-filter
         >
           <!-- Search input -->
           <div :class="styles.inputWrapper()">

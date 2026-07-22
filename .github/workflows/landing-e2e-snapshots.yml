@@ -1,0 +1,87 @@
+name: Landing E2E Snapshots
+
+# Regenerate the landing's visual baselines ON THE RUNNER and upload them for
+# committing (TASK-FREE3-06).
+#
+# ## Why this workflow exists
+#
+# `toHaveScreenshot` baselines are per-platform: font rasterisation and subpixel
+# antialiasing differ enough between Windows and Linux that a win32 PNG is
+# meaningless on `ubuntu-latest`. For a long time the only committed baselines were
+# `…-chromium-win32.png`, so the hero snapshot test skipped itself in CI and the
+# `landing-perf` job ran with `--grep "renders real pixels"` — a green CI was never
+# evidence that the hero rendered correctly anywhere but on a Windows developer's
+# machine.
+#
+# Committing `…-chromium-linux.png` fixes that, but they cannot be produced on a
+# Windows workstation: it needs a Linux Chromium with the runner's exact font set.
+# So the runner shoots them and hands them back.
+#
+# ## How to use it
+#
+#   1. Trigger it — from the Actions tab (`workflow_dispatch`), with `gh workflow
+#      run landing-e2e-snapshots.yml`, or by pushing the `ci/landing-snapshots`
+#      branch (the push trigger exists because `workflow_dispatch` only reaches
+#      workflows that already live on the default branch).
+#   2. Download the `landing-e2e-snapshots` artifact:
+#      `gh run download <run-id> -n landing-e2e-snapshots -D apps/landing/e2e/`
+#   3. Inspect the PNGs, then commit them. They are baselines: LOOK at them before
+#      committing, or you are pinning whatever the site happened to render.
+#
+# The same command works locally for the win32 baselines:
+# `yarn test:e2e:landing:update --project=chromium`.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ci/landing-snapshots]
+
+jobs:
+  snapshots:
+    name: Shoot Linux baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn install --immutable
+      # Identical build to the `landing-e2e` job in ci.yml — baselines must be shot
+      # against the same artifact they will later be compared to, or the very first
+      # comparison diffs on the build, not on the design.
+      - name: Build contracts + design tokens
+        run: yarn workspace @dzup-ui/contracts build && yarn workspace @dzup-ui/tokens build
+      - name: Build landing site (no Storybook mount)
+        run: yarn workspace @dzup-ui/landing build
+        env:
+          LANDING_SKIP_STORYBOOK: '1'
+      - name: Install Playwright Chromium
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium
+      # `--update-snapshots` writes any missing or changed baseline. Scoped to the
+      # chromium project (the only one with `toHaveScreenshot` assertions) and run
+      # with no retries so a flaky first shot cannot be silently re-taken and
+      # committed as the truth.
+      - name: Regenerate visual baselines
+        run: yarn test:e2e:landing:preview --project=chromium --update-snapshots --retries=0
+      # Show what moved. A run that changes nothing means the committed baselines
+      # already match this runner — no artifact worth downloading.
+      - name: Report changes
+        run: git status --porcelain apps/landing/e2e
+      - name: Upload baselines
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-e2e-snapshots
+          path: apps/landing/e2e/**/*-snapshots/
+          retention-days: 14
+          if-no-files-found: error

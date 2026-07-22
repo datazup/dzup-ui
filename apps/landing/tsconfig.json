@@ -12,6 +12,6 @@
     },
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts", "scripts/**/*.mts", "scripts/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts", "playwright.config.ts", "e2e/**/*.ts", "scripts/**/*.mts", "scripts/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

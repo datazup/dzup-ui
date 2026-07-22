@@ -3,10 +3,11 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { workspaceAliases } from '../../packages/tooling/src/workspace-aliases.ts'
+import { preloadRouteChunk } from './vite/preload-route-chunk.ts'
 import { serveStorybook } from './vite/serve-storybook.ts'
 
 export default defineConfig({
-  plugins: [tailwindcss(), vue(), serveStorybook()],
+  plugins: [tailwindcss(), vue(), serveStorybook(), preloadRouteChunk()],
   resolve: {
     alias: workspaceAliases(resolve(__dirname, '../..')),
   },

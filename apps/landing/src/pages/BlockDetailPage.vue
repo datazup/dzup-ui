@@ -19,18 +19,35 @@
  * The route guard redirects unknown ids to /blocks, so a resolved block is
  * guaranteed here; we still guard defensively for type-safety.
  */
-import { DzButton, DzCopyButton, DzHeading, DzText } from '@dzup-ui/core'
+import { DzButton, DzCopyButton, DzHeading, DzText, DzVisuallyHidden } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
-import { computed } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
 import { getBlockSource } from '../blocks/sources.ts'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
-import BlockPreview from '../components/blocks/BlockPreview.vue'
 import Section from '../components/Section.vue'
 import { openInStackblitz, stackblitzEnabled, UNPUBLISHED_NOTE } from '../lib/stackblitz.ts'
 
 const props = defineProps<{ id: string }>()
+
+/**
+ * LazyBlockPreview is loaded asynchronously, not statically (TASK-FREE3-04).
+ *
+ * It viewport-gates the preview once it is loaded, but a static import still made
+ * its chunk a hard dependency of this route: Rollup groups the preview's shared
+ * component code into the chunk the wrapper lives in (488 kB raw / 106 kB gzip),
+ * and the page could not render a single pixel until it arrived. That was the last
+ * big item on this route's critical path — measured mobile LCP 4.33 s at baseline,
+ * the worst on the site, against an FCP of roughly 2.5 s.
+ *
+ * Loading it asynchronously leaves this route's own chunk at 4 kB. The wrapper in
+ * the template reserves the preview's height, so arriving late costs no layout shift.
+ */
+const LazyBlockPreview = defineAsyncComponent(
+  () => import('../components/blocks/LazyBlockPreview.vue'),
+)
+
 const router = useRouter()
 
 const block = computed(() => getBlock(props.id))
@@ -176,9 +193,42 @@ function openStackblitz(): void {
       </div>
     </Section>
 
-    <!-- The full interactive preview (live preview / code / copy / fullscreen). -->
+    <!--
+      The full interactive preview (live preview / code / copy / fullscreen).
+
+      Viewport-gated, exactly like the /blocks index (TASK-FREE3-04). A direct
+      `<BlockPreview>` here made the 112 kB-gzip preview chunk a render-blocking
+      dependency of a page whose above-the-fold content is just a heading, an
+      intro and the manifest — and, because the preview is the largest element
+      on the page, it also *became* the LCP element once it finally painted.
+      Mobile LCP for this route was 4.34 s, the worst on the site.
+
+      Gating it hands LCP back to the heading block, which is ready as soon as
+      the route chunk parses. The skeleton reserves the preview's height, so the
+      swap costs no layout shift (the CLS gate is hard-asserted at 0.1).
+    -->
     <Section>
-      <BlockPreview :block="block" :heading-level="2" @select-component="showBlocksUsing" />
+      <!--
+        The heading here is real but visually hidden, and it fixes a genuine
+        structure bug (TASK-FREE3-04). Block markup hard-codes its own headings at
+        level 4 — correct on the /blocks index, which nests h1 page → h2 category →
+        h3 preview title → h4 block content. This page has no category tier, so
+        rendering the preview title at h2 produced h1 → h2 → h4: a skipped level on
+        every block detail page. It went unnoticed because the a11y suite's
+        IntersectionObserver stub never fired, so the preview never rendered and
+        was never audited.
+
+        Restoring the missing tier as a visually-hidden h2 gives screen readers
+        h1 → h2 → h3 → h4 while leaving the page looking exactly as designed.
+      -->
+      <DzVisuallyHidden as="h2">
+        Live preview
+      </DzVisuallyHidden>
+      <!-- min-height reserves the preview's own skeleton height, so the async
+           chunk arriving cannot displace the prev/next nav below it. -->
+      <div class="bd-preview-slot">
+        <LazyBlockPreview :block="block" :heading-level="3" @select-component="showBlocksUsing" />
+      </div>
     </Section>
 
     <!-- Prev / next across the whole catalog + back to the gallery. -->
@@ -221,6 +271,13 @@ function openStackblitz(): void {
 <style scoped>
 .block-detail {
   display: block;
+}
+
+/* Holds the preview's place while its chunk loads (TASK-FREE3-04), so the
+   prev/next nav below never jumps. Matches LazyBlockPreview's own skeleton
+   height; `min-height` so the real preview is free to be taller. */
+.bd-preview-slot {
+  min-height: 520px;
 }
 
 /* ── Hero ─────────────────────────────────────────────────────── */

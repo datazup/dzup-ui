@@ -209,3 +209,99 @@ describe('dzCommandPalette — Escape dismissal', () => {
     warnSpy.mockRestore()
   })
 })
+
+/**
+ * Filtering, driven through the REAL (un-stubbed) Reka Combobox.
+ *
+ * These have to mount the real primitive. The bug they pin was invisible to every
+ * stubbed or shallow test in this file: `filteredItems` was always correct, and
+ * `wrapper.exists()` was always true. What went wrong happened one layer down —
+ * Reka's `ComboboxItem` registered each row's RENDERED TEXT with `ComboboxRoot`
+ * and hid any row its own filter scored zero, a second filter downstream of this
+ * component's. So a `label` carrying more than the row displayed was filtered on
+ * the display text instead, and the only symptom was a query that found nothing.
+ *
+ * Asserting on the rendered rows (not on internal state) is the point: that is the
+ * only level at which the second filter is observable.
+ */
+describe('dzCommandPalette — filtering', () => {
+  /**
+   * Mount open with the real Reka stack, type `query`, and return this palette's
+   * rendered rows.
+   *
+   * Everything is scoped to a per-test `id`, not queried off `document`: the
+   * dialog is TELEPORTED to <body>, several tests above mount without unmounting,
+   * and wiping <body> between tests breaks Teleport's own unmount. A global
+   * `[role="option"]` query passes alone and picks up the previous test's rows
+   * when the file runs in order.
+   */
+  let seq = 0
+  async function search(items: CommandItem[], query: string, slot?: string) {
+    const id = `palette-${seq++}`
+    const wrapper = mount(DzCommandPalette, {
+      attachTo: document.body,
+      props: { open: true, items, id },
+      slots: slot ? { item: slot } : undefined,
+    })
+    await nextTick()
+    const dialog = document.getElementById(id)!
+    const input = dialog.querySelector<HTMLInputElement>('[role="combobox"]')!
+    input.value = query
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    await nextTick()
+    await nextTick()
+    const rows = [...dialog.querySelectorAll('[role="option"]')].map(
+      el => el.textContent?.trim() ?? '',
+    )
+    return { wrapper, dialog, rows }
+  }
+
+  it('searches the full label even when the row renders only part of it', async () => {
+    // The shape every real consumer ends up with: `label` is the search index,
+    // the slot renders the caption. Searching a term that exists ONLY in the
+    // label must still find the row.
+    const items: CommandItem[] = [
+      { id: 'hero-centered', label: 'Centered hero hero-centered cta marketing' },
+      { id: 'sign-in', label: 'Sign-in card sign-in auth forms' },
+    ]
+    const slot = `<span>{{ params.item.id === 'hero-centered' ? 'Centered hero' : 'Sign-in card' }}</span>`
+
+    const { wrapper, rows } = await search(items, 'hero-centered', slot)
+
+    expect(rows).toEqual(['Centered hero'])
+    wrapper.unmount()
+  })
+
+  it('drops items whose label does not match', async () => {
+    const items: CommandItem[] = [
+      { id: 'edit', label: 'Edit File' },
+      { id: 'save', label: 'Save File' },
+    ]
+
+    const { wrapper, rows } = await search(items, 'edit')
+
+    expect(rows).toEqual(['Edit File'])
+    wrapper.unmount()
+  })
+
+  it('matches case- and accent-insensitively', async () => {
+    // Reka's filter was `Intl.Collator`-backed, so disabling it must not quietly
+    // downgrade matching to a plain `includes`.
+    const items: CommandItem[] = [{ id: 'cv', label: 'Résumé' }]
+
+    const { wrapper, rows } = await search(items, 'resume')
+
+    expect(rows).toEqual(['Résumé'])
+    wrapper.unmount()
+  })
+
+  it('renders the empty slot when nothing matches', async () => {
+    const items: CommandItem[] = [{ id: 'edit', label: 'Edit File' }]
+
+    const { wrapper, dialog, rows } = await search(items, 'nothing-matches-this')
+
+    expect(rows).toEqual([])
+    expect(dialog.textContent).toContain('No results found.')
+    wrapper.unmount()
+  })
+})

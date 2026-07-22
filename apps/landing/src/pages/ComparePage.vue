@@ -29,7 +29,13 @@ import { COMPARE_UPDATED, LIBRARIES, ROWS } from '../data/compare.ts'
       </p>
 
       <DzCard variant="outlined" padding="none" class="compare-card">
-        <div class="compare-scroll" role="region" aria-labelledby="compare-title" tabindex="0">
+        <!--
+          Its own name, not the page heading's: labelling this scroll region
+          `compare-title` gave it the same role+name as the <section> wrapping the
+          whole page, so two `region` landmarks were indistinguishable in a
+          landmark list (`landmark-unique`, TASK-FREE3-11).
+        -->
+        <div class="compare-scroll" role="region" aria-label="Feature comparison table" tabindex="0">
           <DzTable size="sm" hoverable aria-label="Feature comparison of dzup-ui and other Vue 3 component libraries">
             <DzTableHeader>
               <DzTableRow>

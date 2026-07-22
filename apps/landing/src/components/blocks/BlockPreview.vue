@@ -472,10 +472,17 @@ const langModel = computed<string>({
 </script>
 
 <template>
+  <!--
+    Named "<title> preview", not the bare block title (TASK-FREE3-11).
+    On /blocks/:id the page's own <section> is already labelled by the <h1>, which
+    carries the same block title — two `region` landmarks with an identical
+    accessible name (`landmark-unique`). "Preview" is also the truer name: this
+    region is the demo stage, not the block itself. The visible <h3> is unchanged.
+  -->
   <section
     :id="block.id"
     class="block-preview"
-    :aria-labelledby="titleId"
+    :aria-label="`${block.title} preview`"
   >
     <!-- Header: title + description, viewport control, full-screen toggle. -->
     <header class="bp-head">

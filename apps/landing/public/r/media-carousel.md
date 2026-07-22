@@ -90,7 +90,7 @@ const active = ref(0)
       loop
       :interval="4500"
       size="lg"
-      aria-label="Product highlights"
+      aria-label="Product highlights carousel"
       class="cs-carousel"
     >
       <DzCarouselSlide v-for="slide in slides" :key="slide.src">

@@ -22,6 +22,7 @@ A tabbed setup example — DzTabs switch between files, each a DzCodeBlock with 
 import {
   DzCodeBlock,
   DzCopyButton,
+  DzHeading,
   DzTabContent,
   DzTabList,
   DzTabs,
@@ -77,9 +78,9 @@ createApp(App).mount('#app')`,
 <template>
   <section class="cs-wrap" aria-labelledby="cs-title">
     <header class="cs-head">
-      <h4 id="cs-title" class="cs-title">
+      <DzHeading id="cs-title" :level="4" size="lg" class="cs-title">
         Add it to your app
-      </h4>
+      </DzHeading>
       <p class="cs-sub">
         Three files from zero to a themed button.
       </p>
