@@ -447,13 +447,21 @@ function main(): void {
   const types = generateTypes()
   const tailwindTheme = generateTailwindTheme()
   const tailwindThemeTypes = generateTailwindThemeTypes()
-  const designMd = buildDesignMd()
+
+  // DESIGN.md is a monorepo-root doc (counts .vue files under packages/core
+  // and apps/landing relative to this package's location). Vendored copies
+  // of tokens/src (see dz-identity's prepare-vendored-ui-dist.mjs) don't
+  // carry those sibling directories, so buildDesignMd() would throw there —
+  // skip it outside the canonical repo.
+  if (!process.env.DZUP_UI_TOKENS_SKIP_DESIGN_MD) {
+    const designMd = buildDesignMd()
+    writeFileSync(DESIGN_MD_PATH, designMd, 'utf-8')
+  }
 
   writeFileSync(resolve(DIST_DIR, 'tokens.css'), css, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tokens.d.ts'), types, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tailwind-theme.js'), tailwindTheme, 'utf-8')
   writeFileSync(resolve(DIST_DIR, 'tailwind-theme.d.ts'), tailwindThemeTypes, 'utf-8')
-  writeFileSync(DESIGN_MD_PATH, designMd, 'utf-8')
 
   const lineCount = css.split('\n').length
   const tokenCount = css.match(/--dz-/g)?.length ?? 0
@@ -467,7 +475,9 @@ function main(): void {
   console.log('[tokens] Generated dist/tokens.d.ts')
   console.log('[tokens] Generated dist/tailwind-theme.js')
   console.log('[tokens] Generated dist/tailwind-theme.d.ts')
-  console.log('[tokens] Generated DESIGN.md')
+  if (!process.env.DZUP_UI_TOKENS_SKIP_DESIGN_MD) {
+    console.log('[tokens] Generated DESIGN.md')
+  }
   /* eslint-enable no-console */
 }
 
