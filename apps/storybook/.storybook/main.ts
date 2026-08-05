@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/vue3-vite/node'
 import tailwindcss from '@tailwindcss/vite'
 import remarkGfm from 'remark-gfm'
+import { resolveRemoteDevelopmentServer } from '../../../packages/tooling/src/remote-development-server.ts'
 import { workspaceAliases } from '../../../packages/tooling/src/workspace-aliases.ts'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
@@ -129,6 +130,15 @@ export default defineMain({
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
       ...workspaceAliases(resolve(__dirname, '../../..')),
     ]
+
+    const remoteDevelopment = resolveRemoteDevelopmentServer(
+      process.env,
+      'dzup-ui-storybook.dev.dziphost.com',
+    )
+    config.server = {
+      ...config.server,
+      ...remoteDevelopment.server,
+    }
 
     return config
   },
