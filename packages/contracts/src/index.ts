@@ -17,6 +17,7 @@ export type {
   AnyVariant,
   BadgeVariant,
   ButtonVariant,
+  CanonicalDensity,
   CanonicalSize,
   CanonicalTone,
   CardVariant,
