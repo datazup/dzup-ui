@@ -127,6 +127,11 @@ export default defineMain({
     // rule and why the token CSS targets resolve to dist/.
     config.resolve = config.resolve || {}
     config.resolve.alias = [
+      // Keep the exact REPL compiler subpath ahead of the framework's broad
+      // `vue` runtime alias. The pre-resolver above protects normal Storybook
+      // builds; this alias also survives into @storybook/addon-vitest's derived
+      // Vite config, where plugin ordering is different.
+      { find: 'vue/compiler-sfc', replacement: compilerSfcBrowser },
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
       ...workspaceAliases(resolve(__dirname, '../../..')),
     ]
