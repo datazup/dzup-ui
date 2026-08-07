@@ -6,7 +6,6 @@ export interface RemoteDevelopmentServerConfig {
     strictPort?: true
     hmr?: {
       protocol: 'wss'
-      host: string
       clientPort: 443
     }
   }
@@ -50,7 +49,6 @@ export function resolveRemoteDevelopmentServer(
       strictPort: true,
       hmr: {
         protocol: 'wss',
-        host: expectedHostname,
         clientPort: 443,
       },
     },

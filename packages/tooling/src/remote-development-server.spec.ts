@@ -28,7 +28,6 @@ describe('resolveRemoteDevelopmentServer', () => {
         strictPort: true,
         hmr: {
           protocol: 'wss',
-          host: 'dzup-ui.dev.dziphost.com',
           clientPort: 443,
         },
       },
