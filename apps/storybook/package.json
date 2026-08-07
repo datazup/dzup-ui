@@ -16,7 +16,7 @@
     "validate:llms": "node scripts/validate-llms.mjs",
     "verify:repl": "node scripts/verify-repl.mjs",
     "check:mdx-links": "node scripts/check-mdx-links.mjs",
-    "dev": "yarn build:counts && yarn build:releases && yarn build:playground && yarn build:llms && yarn build:playground-snippets && storybook dev -p 6006",
+  "dev": "node scripts/dev.mjs",
     "build": "yarn build:counts && yarn build:releases && yarn build:playground && yarn build:llms && yarn build:playground-snippets && storybook build",
     "test-storybook": "vitest run --project=storybook",
     "test-storybook:coverage": "vitest run --project=storybook --coverage",

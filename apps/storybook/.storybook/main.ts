@@ -41,8 +41,15 @@ const INCLUDE_GALLERY = process.env.DZUP_GALLERY === '1'
 // and ship. `check-mdx-links.mjs` asserts no `core-feedback-app-specific` id in a
 // public index.json. Rationale in docs/storybook-decisions.md (supersedes TASK-X.4).
 const INCLUDE_APP_SPECIFIC = process.env.DZUP_APP_SPECIFIC === '1'
+const REMOTE_DEVELOPMENT_HOST = 'dzup-ui-storybook.dev.dziphost.com'
+const REMOTE_DEVELOPMENT_ENABLED = process.env.APP_ENV === 'development-remote'
 
 export default defineMain({
+  core: {
+    // Storybook serves its manager outside Vite's `server.allowedHosts` check.
+    // Keep that surface fail-closed as well as the Vite preview/HMR server.
+    allowedHosts: REMOTE_DEVELOPMENT_ENABLED ? [REMOTE_DEVELOPMENT_HOST] : undefined,
+  },
   // Addon registration is split across two files and the rule is NOT "keep the two
   // lists identical" — they answer different questions:
   //   • main.ts `addons`  — build-time: presets, Vite config, and MANAGER UI panels.
@@ -117,7 +124,7 @@ export default defineMain({
       enforce: 'pre',
       resolveId(id: string) {
         if (id === 'vue/compiler-sfc' || id.endsWith('vue.esm-bundler.js/compiler-sfc'))
-          return compilerSfcBrowser
+          return { id: compilerSfcBrowser }
         return null
       },
     })
@@ -131,14 +138,24 @@ export default defineMain({
       // `vue` runtime alias. The pre-resolver above protects normal Storybook
       // builds; this alias also survives into @storybook/addon-vitest's derived
       // Vite config, where plugin ordering is different.
-      { find: 'vue/compiler-sfc', replacement: compilerSfcBrowser },
+      { find: /^vue\/compiler-sfc$/, replacement: compilerSfcBrowser },
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
       ...workspaceAliases(resolve(__dirname, '../../..')),
     ]
 
+    // Vite's dependency optimiser uses esbuild rather than the normal Vite
+    // resolver. It consequently applies the framework's broad `vue` alias
+    // before the compiler-SFC resolver above. Keep the browser-only REPL out
+    // of that prebundle so normal Vite resolution can map its compiler import.
+    config.optimizeDeps = config.optimizeDeps || {}
+    config.optimizeDeps.exclude = [
+      ...(config.optimizeDeps.exclude || []),
+      '@vue/repl',
+    ]
+
     const remoteDevelopment = resolveRemoteDevelopmentServer(
       process.env,
-      'dzup-ui-storybook.dev.dziphost.com',
+      REMOTE_DEVELOPMENT_HOST,
     )
     config.server = {
       ...config.server,
