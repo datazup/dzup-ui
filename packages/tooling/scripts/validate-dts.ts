@@ -18,7 +18,7 @@
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { dirname, relative, resolve } from 'node:path'
+import { dirname, isAbsolute, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
@@ -184,6 +184,44 @@ function validateDtsParity(
 }
 
 /**
+ * Ensures declaration imports remain within the package or use a public bare
+ * package specifier. Relative paths that escape dist make a packed package
+ * depend on the workspace's sibling source layout and fail in real consumers.
+ */
+function validateDtsImportBoundaries(
+  packageName: string,
+  distDir: string,
+): ValidationError[] {
+  const errors: ValidationError[] = []
+  const declarationFiles = collectFiles(distDir)
+    .filter(file => file.endsWith('.d.ts') || file.endsWith('.d.mts'))
+  const moduleSpecifier = /(?:\bfrom\s+|\bimport\s*\(\s*|\bimport\s+)['"]([^'"]+)['"]/g
+
+  for (const declarationFile of declarationFiles) {
+    const content = readFileSync(declarationFile, 'utf-8')
+    let match = moduleSpecifier.exec(content)
+
+    while (match !== null) {
+      const specifier = match[1]
+      if (specifier?.startsWith('.')) {
+        const target = resolve(dirname(declarationFile), specifier)
+        const relativeTarget = relative(distDir, target)
+        if (relativeTarget === '..' || relativeTarget.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(relativeTarget)) {
+          errors.push({
+            package: packageName,
+            file: relative(ROOT, declarationFile),
+            message: `Declaration import escapes package dist: ${specifier}`,
+          })
+        }
+      }
+      match = moduleSpecifier.exec(content)
+    }
+  }
+
+  return errors
+}
+
+/**
  * Reads the root declaration file and checks that it contains export statements.
  * For manifest-backed packages (core), also verifies category coverage.
  * For manifest-less packages, only verifies that exports exist (non-empty barrel).
@@ -342,6 +380,11 @@ function main(): void {
 
     const rootStatus = rootErrors.length === 0 ? 'PASS' : 'FAIL'
     console.warn(`  ${rootStatus}  ${rootDtsName} export coverage`)
+
+    const boundaryErrors = validateDtsImportBoundaries(pkg.name, pkg.distDir)
+    allErrors.push(...boundaryErrors)
+    const boundaryStatus = boundaryErrors.length === 0 ? 'PASS' : 'FAIL'
+    console.warn(`  ${boundaryStatus}  declaration import boundaries`)
   }
 
   console.warn(`\n${'='.repeat(60)}`)
