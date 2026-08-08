@@ -36,7 +36,17 @@ export interface DzTooltipProps {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzTooltipContent component */
-export interface DzTooltipContentProps extends BasePortalProps {
+export interface DzTooltipContentProps extends /* @vue-ignore */ BasePortalProps {
+  // Vue's SFC compiler cannot resolve the imported base interface through the
+  // source-linked Research App portal. Keep the contract extension for TypeScript
+  // consumers, while declaring these fields locally so they remain runtime props
+  // rather than becoming fallthrough attributes.
+  /** Portal target. Defaults to `document.body` when omitted. */
+  portalTo?: string | HTMLElement
+  /** Render inline instead of teleporting to the portal target. */
+  portalDisabled?: boolean
+  /** Defer target resolution until the application has mounted. */
+  portalDefer?: boolean
   /** Side to place the tooltip (default 'top') */
   side?: TooltipSide
   /** Offset from the trigger in px (default 4) */
