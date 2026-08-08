@@ -15,6 +15,20 @@ export type CanonicalSize = 'icon' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 /** Canonical semantic tone values */
 export type CanonicalTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
 
+/**
+ * Canonical information-density values.
+ *
+ * `density` is the vertical-rhythm axis: row height, cell padding, tile
+ * height. It is ORTHOGONAL to `CanonicalSize`, which is the type-scale /
+ * control-footprint axis. A `size="lg"` grid may legitimately be
+ * `density="compact"` (large type, tight rows) and vice versa.
+ *
+ * `normal` — not `default` — is the middle value: `default` names a position
+ * in a fallback chain rather than a visual property, and reads wrongly next
+ * to `compact` / `comfortable`, which are both descriptive.
+ */
+export type CanonicalDensity = 'compact' | 'normal' | 'comfortable'
+
 /** Canonical orientation for components that support horizontal/vertical layout */
 export type Orientation = 'horizontal' | 'vertical'
 
