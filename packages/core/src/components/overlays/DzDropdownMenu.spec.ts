@@ -1,8 +1,9 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzDropdownMenu — Unit / behavior tests.
  */
 import { afterEach, describe, expect, it } from 'vitest'
+import { h } from 'vue'
 import DzDropdownMenu from './DzDropdownMenu.vue'
 import DzDropdownMenuContent from './DzDropdownMenuContent.vue'
 import DzDropdownMenuItem from './DzDropdownMenuItem.vue'
@@ -11,26 +12,26 @@ import DzDropdownMenuTrigger from './DzDropdownMenuTrigger.vue'
 /** Reka portals content through Presence, which settles over several microtasks. */
 const flush = () => new Promise(resolve => setTimeout(resolve, 0))
 
+enableAutoUnmount(afterEach)
+
 /** Content is portalled to <body>, so assertions read the document, not the wrapper. */
-function mountMenu(props: Record<string, unknown>) {
+function mountMenu(
+  props: Record<string, unknown>,
+  contentProps: Record<string, unknown> = {},
+) {
   return mount(DzDropdownMenu, {
     props,
-    global: { components: { DzDropdownMenuTrigger, DzDropdownMenuContent, DzDropdownMenuItem } },
     slots: {
-      default: `
-        <DzDropdownMenuTrigger><button type="button">Open</button></DzDropdownMenuTrigger>
-        <DzDropdownMenuContent><DzDropdownMenuItem>One</DzDropdownMenuItem></DzDropdownMenuContent>`,
+      default: () => h('div', { 'data-testid': 'menu-host' }, [
+        h(DzDropdownMenuTrigger, {}, () => h('button', { type: 'button' }, 'Open')),
+        h(DzDropdownMenuContent, contentProps, () => h(DzDropdownMenuItem, {}, () => 'One')),
+      ]),
     },
     attachTo: document.body,
   })
 }
 
 describe('dzDropdownMenu — Unit Tests', () => {
-  afterEach(() => {
-    // Portalled content outlives the wrapper; clear it so tests stay independent.
-    document.body.innerHTML = ''
-  })
-
   it('renders the component', () => {
     const wrapper = mount(DzDropdownMenu, {
       slots: { default: '<div>Content</div>' },
@@ -66,5 +67,23 @@ describe('dzDropdownMenu — Unit Tests', () => {
     mountMenu({ modal: false })
     await flush()
     expect(document.querySelector('[role="menu"]')).toBeNull()
+  })
+
+  it('renders the real Reka menu inline when portalDisabled is true', async () => {
+    const wrapper = mountMenu({ defaultOpen: true, modal: false }, { portalDisabled: true })
+    await flush()
+
+    expect(wrapper.find('[data-testid="menu-host"] [role="menu"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mountMenu({ defaultOpen: true, modal: false })
+    await flush()
+
+    const host = document.querySelector('[data-testid="menu-host"]')
+    expect(host?.querySelector('[role="menu"]')).toBeNull()
+    expect(document.body.querySelector('[role="menu"]')?.textContent).toContain('One')
+    wrapper.unmount()
   })
 })

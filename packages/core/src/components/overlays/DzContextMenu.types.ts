@@ -6,7 +6,7 @@
  * @module @dzup-ui/core/components/overlays/DzContextMenu
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Side / Align
@@ -49,7 +49,7 @@ export interface DzContextMenuTriggerSlots {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzContextMenuContent component */
-export interface DzContextMenuContentProps extends BaseAccessibilityProps {
+export interface DzContextMenuContentProps extends BaseAccessibilityProps, BasePortalProps {
   /** Side of pointer to render content */
   side?: ContextMenuSide
   /** Alignment relative to the pointer */

@@ -59,6 +59,9 @@ const props = withDefaults(defineProps<DzMultiSelectProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzMultiSelectEmits>()
@@ -261,7 +264,11 @@ const rootClasses = computed(() =>
         </ComboboxTrigger>
       </ComboboxAnchor>
 
-      <ComboboxPortal>
+      <ComboboxPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
           <ComboboxViewport :class="styles.viewport()">
             <ComboboxItem

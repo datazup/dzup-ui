@@ -9,6 +9,7 @@
 
 import type {
   BaseAccessibilityProps,
+  BasePortalProps,
   BaseValidationProps,
   CanonicalSize,
   InputVariant,
@@ -35,7 +36,7 @@ export interface DzComboboxResolvedItem {
 }
 
 /** Props for the DzCombobox component */
-export interface DzComboboxProps extends BaseAccessibilityProps, BaseValidationProps {
+export interface DzComboboxProps extends BaseAccessibilityProps, BaseValidationProps, BasePortalProps {
   /** Available options */
   items: DzComboboxItem[]
   /** Placeholder text for the search input */

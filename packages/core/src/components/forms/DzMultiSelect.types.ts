@@ -9,6 +9,7 @@
 
 import type {
   BaseAccessibilityProps,
+  BasePortalProps,
   BaseValidationProps,
   CanonicalSize,
   InputVariant,
@@ -21,7 +22,7 @@ import type { DzSelectItem } from './DzSelect.types.ts'
 // ---------------------------------------------------------------------------
 
 /** Props for the DzMultiSelect component */
-export interface DzMultiSelectProps extends BaseAccessibilityProps, BaseValidationProps {
+export interface DzMultiSelectProps extends BaseAccessibilityProps, BaseValidationProps, BasePortalProps {
   /** Available options */
   items: DzSelectItem[]
   /** Placeholder text when no values are selected */

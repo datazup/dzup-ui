@@ -34,6 +34,18 @@ const meta = {
     // Overlays enforced (TASK-DS-13).
     ...a11yError,
   },
+  argTypes: {
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render the menu inline instead of teleporting it',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
+  },
 } satisfies Meta<typeof DzContextMenuContent>
 
 export default meta
