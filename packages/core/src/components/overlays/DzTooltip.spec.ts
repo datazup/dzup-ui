@@ -169,4 +169,42 @@ describe('dzTooltip -- Unit Tests', () => {
     expect(wrapper.exists()).toBe(true)
     wrapper.unmount()
   })
+
+  it('renders real Reka content inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzTooltip, {
+      props: { open: true, delayDuration: 0 },
+      slots: {
+        default: () => h('div', { 'data-testid': 'tooltip-host' }, [
+          h(DzTooltipTrigger, {}, () => h('button', 'Inline tooltip trigger')),
+          h(DzTooltipContent, { portalDisabled: true }, () => 'Inline tooltip text'),
+        ]),
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[data-testid="tooltip-host"] [role="tooltip"]').text()).toContain('Inline tooltip text')
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzTooltip, {
+      props: { open: true, delayDuration: 0 },
+      slots: {
+        default: () => h('div', { 'data-testid': 'tooltip-host' }, [
+          h(DzTooltipTrigger, {}, () => h('button', 'Portaled tooltip trigger')),
+          h(DzTooltipContent, {}, () => 'Portaled tooltip text'),
+        ]),
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    const host = document.querySelector('[data-testid="tooltip-host"]')
+    expect(host?.querySelector('[role="tooltip"]')).toBeNull()
+    expect(document.body.querySelector('[role="tooltip"]')?.textContent).toContain('Portaled tooltip text')
+    wrapper.unmount()
+  })
 })

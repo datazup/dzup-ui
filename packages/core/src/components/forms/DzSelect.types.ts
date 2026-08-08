@@ -10,6 +10,7 @@
 
 import type {
   BaseAccessibilityProps,
+  BasePortalProps,
   BaseValidationProps,
   CanonicalSize,
   InputVariant,
@@ -35,7 +36,7 @@ export interface DzSelectItem {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzSelect component */
-export interface DzSelectProps extends BaseAccessibilityProps, BaseValidationProps {
+export interface DzSelectProps extends BaseAccessibilityProps, BaseValidationProps, BasePortalProps {
   /** Available options */
   items: DzSelectItem[]
   /** Placeholder text shown when no value is selected */

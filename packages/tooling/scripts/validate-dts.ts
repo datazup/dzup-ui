@@ -8,7 +8,8 @@
  *   3. The root declaration file (dist/index.d.ts or dist/module.d.ts for nuxt)
  *      contains at least one export statement
  *
- * Covers all 6 publishable packages: contracts, tokens, core, compat, codemods, nuxt.
+ * Covers all 7 publishable packages: contracts, tokens, testing, core, compat,
+ * codemods, and nuxt.
  *
  * Usage:
  *   tsx packages/tooling/scripts/validate-dts.ts
@@ -75,6 +76,10 @@ const PACKAGES: PackageDef[] = [
   {
     name: '@dzup-ui/tokens',
     distDir: resolve(ROOT, 'packages/tokens/dist'),
+  },
+  {
+    name: '@dzup-ui/testing',
+    distDir: resolve(ROOT, 'packages/testing/dist'),
   },
   {
     name: '@dzup-ui/core',

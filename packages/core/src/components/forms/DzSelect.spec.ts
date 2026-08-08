@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 /**
  * DzSelect — Unit / behavior tests.
  */
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzFormField from './DzFormField.vue'
 import DzFormLabel from './DzFormLabel.vue'
@@ -27,25 +27,6 @@ function accessibleName(el: Element, root: ParentNode = document): string {
   }
   return el.getAttribute('aria-label')?.trim() ?? ''
 }
-
-// Polyfill pointer capture APIs missing in jsdom (needed by Reka UI SelectTrigger)
-const origHasPointerCapture = HTMLElement.prototype.hasPointerCapture
-const origSetPointerCapture = HTMLElement.prototype.setPointerCapture
-const origReleasePointerCapture = HTMLElement.prototype.releasePointerCapture
-
-beforeAll(() => {
-  HTMLElement.prototype.hasPointerCapture = function (): boolean {
-    return false
-  }
-  HTMLElement.prototype.setPointerCapture = function (): void {}
-  HTMLElement.prototype.releasePointerCapture = function (): void {}
-})
-
-afterAll(() => {
-  HTMLElement.prototype.hasPointerCapture = origHasPointerCapture
-  HTMLElement.prototype.setPointerCapture = origSetPointerCapture
-  HTMLElement.prototype.releasePointerCapture = origReleasePointerCapture
-})
 
 const mockItems: DzSelectItem[] = [
   { label: 'Apple', value: 'apple' },
@@ -127,6 +108,43 @@ describe('dzSelect — Unit Tests', () => {
       props: { items: mockItems, variant: 'underlined' },
     })
     expect(wrapper.exists()).toBe(true)
+  })
+
+  it('renders real Reka content inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzSelect, {
+      props: {
+        items: mockItems,
+        defaultOpen: true,
+        portalDisabled: true,
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(mockItems.length)
+    wrapper.unmount()
+  })
+
+  it('forwards a custom portal target', async () => {
+    const target = document.createElement('div')
+    target.id = 'select-portal-target'
+    document.body.append(target)
+    const wrapper = mount(DzSelect, {
+      props: {
+        items: mockItems,
+        defaultOpen: true,
+        portalTo: target,
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(target.querySelector('[role="listbox"]')).toBeTruthy()
+    wrapper.unmount()
+    target.remove()
   })
 })
 

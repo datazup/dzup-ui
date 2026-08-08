@@ -8,7 +8,7 @@
  * @module @dzup-ui/core/components/overlays/DzDialog
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ export interface DzDialogProps {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzDialogContent component */
-export interface DzDialogContentProps extends BaseAccessibilityProps {
+export interface DzDialogContentProps extends BaseAccessibilityProps, BasePortalProps {
   /** Size of the dialog content panel */
   size?: DialogContentSize
   /**
@@ -63,6 +63,8 @@ export interface DzDialogContentProps extends BaseAccessibilityProps {
    * The default slot is used as the scrollable body.
    */
   scrollable?: boolean
+  /** Additional class applied to the overlay owned by DzDialogContent. */
+  overlayClass?: string
 }
 
 // ---------------------------------------------------------------------------

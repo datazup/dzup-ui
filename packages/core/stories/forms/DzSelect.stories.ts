@@ -65,6 +65,16 @@ const meta = {
       description: 'Form field name',
       table: { category: 'Behavior' },
     },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render dropdown content inline instead of teleporting',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
     // State
     invalid: {
       control: 'boolean',

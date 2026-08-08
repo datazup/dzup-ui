@@ -6,7 +6,9 @@ import { DialogOverlay } from 'reka-ui'
  *
  * Wraps Reka UI DialogOverlay with token-based styling (ADR-04).
  * Supports open/close fade transition via parent DzDialog context.
- * Typically rendered internally by DzDialogContent, but can be used standalone.
+ * DzDialogContent already owns and renders the normal dialog backdrop. Use this
+ * component only for advanced low-level composition; do not render it as a
+ * sibling of DzDialogContent or the dialog will have two overlays.
  */
 import { computed, inject, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'

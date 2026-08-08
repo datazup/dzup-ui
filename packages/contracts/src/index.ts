@@ -53,6 +53,7 @@ export type {
   BaseBehaviorProps,
   BaseFormControlProps,
   BaseInteractiveProps,
+  BasePortalProps,
   BaseValidationProps,
 } from './props.types'
 

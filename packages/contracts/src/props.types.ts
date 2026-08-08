@@ -81,6 +81,26 @@ export interface BaseAccessibilityProps {
 }
 
 // ---------------------------------------------------------------------------
+// Portals
+// ---------------------------------------------------------------------------
+
+/**
+ * Shared portal placement props for components backed by an overlay primitive.
+ *
+ * The defaults are intentionally left to each component and its headless
+ * primitive. Consumers can render inline for embedded surfaces and component
+ * tests without replacing the real primitive with a stub.
+ */
+export interface BasePortalProps {
+  /** Portal target. Defaults to `document.body` when omitted. */
+  portalTo?: string | HTMLElement
+  /** Render inline instead of teleporting to the portal target. */
+  portalDisabled?: boolean
+  /** Defer target resolution until the application has mounted. */
+  portalDefer?: boolean
+}
+
+// ---------------------------------------------------------------------------
 // Composed base interfaces
 // ---------------------------------------------------------------------------
 

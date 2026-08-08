@@ -7,6 +7,8 @@
  * @module @dzup-ui/core/components/overlays/DzTooltip
  */
 
+import type { BasePortalProps } from '@dzup-ui/contracts'
+
 // ---------------------------------------------------------------------------
 // Positioning
 // ---------------------------------------------------------------------------
@@ -34,7 +36,7 @@ export interface DzTooltipProps {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzTooltipContent component */
-export interface DzTooltipContentProps {
+export interface DzTooltipContentProps extends BasePortalProps {
   /** Side to place the tooltip (default 'top') */
   side?: TooltipSide
   /** Offset from the trigger in px (default 4) */

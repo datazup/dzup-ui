@@ -38,6 +38,10 @@ const props = withDefaults(defineProps<DzDialogContentProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
+  overlayClass: undefined,
 })
 
 const emit = defineEmits<DzDialogContentEmits>()
@@ -77,7 +81,7 @@ const overlayTransitionName = computed(() => dialogCtx?.overlayTransition.value 
 const contentTransitionName = computed(() => dialogCtx?.contentTransition.value ?? 'dz-dialog-content')
 
 const styles = computed(() => dialogVariants({ size: props.size, scrollable: props.scrollable }))
-const overlayClasses = computed(() => styles.value.overlay())
+const overlayClasses = computed(() => cn(styles.value.overlay(), props.overlayClass))
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
@@ -110,9 +114,16 @@ function handleCloseAutoFocus(event: Event): void {
 </script>
 
 <template>
-  <DialogPortal>
+  <DialogPortal
+    :to="portalTo"
+    :disabled="portalDisabled"
+    :defer="portalDefer"
+  >
     <Transition :name="overlayTransitionName">
-      <DialogOverlay :class="overlayClasses" />
+      <DialogOverlay
+        :class="overlayClasses"
+        data-dz-dialog-overlay
+      />
     </Transition>
     <Transition :name="contentTransitionName">
       <DialogContent

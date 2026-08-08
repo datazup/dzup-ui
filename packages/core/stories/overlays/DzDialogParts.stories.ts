@@ -14,7 +14,8 @@ import { a11yError, darkModeDecorator } from '../_shared'
 
 /**
  * DzDialogContent compound sub-parts: DzDialogTitle, DzDialogDescription,
- * DzDialogClose, DzDialogTrigger, DzDialogOverlay.
+ * DzDialogClose, and DzDialogTrigger. DzDialogContent owns the portal and
+ * overlay; DzDialogOverlay is exported only for advanced low-level composition.
  *
  * DzDialogContent is the primary visible panel rendered inside a DzDialog portal.
  * It supports five size variants (sm, md, lg, xl, full) and is always paired with
@@ -45,6 +46,21 @@ const meta = {
       options: ['sm', 'md', 'lg', 'xl', 'full'],
       description: 'Width variant of the dialog content panel',
       table: { category: 'Appearance', defaultValue: { summary: 'md' } },
+    },
+    overlayClass: {
+      control: 'text',
+      description: 'Additional class applied to the overlay owned by DzDialogContent',
+      table: { category: 'Appearance' },
+    },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render inline instead of teleporting; useful for embedded surfaces and component tests',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
   },
 } satisfies Meta<typeof DzDialogContent>
@@ -166,9 +182,9 @@ export const CompoundComposition: Story = {
     template: `
       <div class="space-y-4">
         <p class="text-sm max-w-lg" style="color: var(--dz-muted-foreground);">
-          DzDialog is a compound component. All six sub-parts are shown here:
+          DzDialog is a compound component. Its public composition is shown here:
           <code>DzDialogTrigger</code>, <code>DzDialogContent</code>,
-          <code>DzDialogOverlay</code> (rendered automatically inside DzDialogContent),
+          the overlay owned by <code>DzDialogContent</code>,
           <code>DzDialogTitle</code>, <code>DzDialogDescription</code>, and
           <code>DzDialogClose</code>.
         </p>
@@ -200,8 +216,8 @@ export const CompoundComposition: Story = {
             >
               <p>&lt;DzDialog&gt;                  <!-- root, manages open state --&gt;</p>
               <p class="pl-4">&lt;DzDialogTrigger /&gt;      <!-- opens dialog --&gt;</p>
-              <p class="pl-4">&lt;DzDialogContent&gt;        <!-- modal panel + portal --&gt;</p>
-              <p class="pl-8">&lt;DzDialogOverlay /&gt;      <!-- backdrop scrim --&gt;</p>
+              <p class="pl-4">&lt;DzDialogContent&gt;        <!-- owns portal + backdrop + panel --&gt;</p>
+              <p class="pl-8">(owned overlay)                 <!-- backdrop scrim --&gt;</p>
               <p class="pl-8">&lt;DzDialogTitle /&gt;        <!-- aria-labelledby --&gt;</p>
               <p class="pl-8">&lt;DzDialogDescription /&gt;  <!-- aria-describedby --&gt;</p>
               <p class="pl-8">&lt;DzDialogClose /&gt;        <!-- closes dialog --&gt;</p>

@@ -62,6 +62,9 @@ const props = withDefaults(defineProps<DzSelectProps>(), {
   searchPlaceholder: 'Search...',
   filterFn: undefined,
   noResultsText: 'No results found',
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzSelectEmits>()
@@ -238,7 +241,11 @@ const triggerClasses = computed(() =>
         </SelectIcon>
       </SelectTrigger>
 
-      <SelectPortal>
+      <SelectPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <SelectContent :class="styles.content()" position="popper" :side-offset="4">
           <SelectViewport :class="styles.viewport()">
             <div

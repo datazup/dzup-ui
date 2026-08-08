@@ -7,14 +7,14 @@
  * @module @dzup-ui/core/components/overlays/DzConfirmDialog
  */
 
-import type { CanonicalSize } from '@dzup-ui/contracts'
+import type { BasePortalProps, CanonicalSize } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
 /** Props for the DzConfirmDialog component */
-export interface DzConfirmDialogProps {
+export interface DzConfirmDialogProps extends BasePortalProps {
   /** Optional id attribute for the dialog content */
   id?: string
   /** Whether the dialog is open (v-model:open) */
@@ -33,6 +33,8 @@ export interface DzConfirmDialogProps {
   loading?: boolean
   /** Size of the underlying dialog content panel */
   size?: CanonicalSize
+  /** Additional class applied to the dialog's owned overlay. */
+  overlayClass?: string
 }
 
 // ---------------------------------------------------------------------------
