@@ -3,6 +3,7 @@
   "references": [
     { "path": "./packages/tokens" },
     { "path": "./packages/contracts" },
+    { "path": "./packages/testing" },
     { "path": "./packages/core" },
     { "path": "./packages/compat" },
     { "path": "./packages/codemods" },

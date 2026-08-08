@@ -1326,6 +1326,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@dzup-ui/testing@workspace:packages/testing":
+  version: 0.0.0-use.local
+  resolution: "@dzup-ui/testing@workspace:packages/testing"
+  dependencies:
+    typescript: "npm:^5.8.3"
+    vitest: "npm:^3.2.4"
+  languageName: unknown
+  linkType: soft
+
 "@dzup-ui/tokens@workspace:*, @dzup-ui/tokens@workspace:packages/tokens":
   version: 0.0.0-use.local
   resolution: "@dzup-ui/tokens@workspace:packages/tokens"
