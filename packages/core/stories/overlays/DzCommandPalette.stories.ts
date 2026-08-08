@@ -57,6 +57,11 @@ const meta = {
       description: 'Controlled open state via v-model:open',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
     },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render the palette inline instead of teleporting it (useful for embedded surfaces and component tests)',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
     // Accessibility
     id: {
       control: 'text',

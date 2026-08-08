@@ -9,6 +9,7 @@
 
 import type {
   BaseAccessibilityProps,
+  BasePortalProps,
 } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
@@ -30,7 +31,7 @@ export interface LightboxImage {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzLightbox component */
-export interface DzLightboxProps extends BaseAccessibilityProps {
+export interface DzLightboxProps extends BaseAccessibilityProps, BasePortalProps {
   /** Array of images to display */
   images: LightboxImage[]
   /** Starting image index */

@@ -109,6 +109,53 @@ describe('dzCascader — columns', () => {
   })
 })
 
+describe('dzCascader — portal placement', () => {
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  it('renders real Reka content inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzCascader, {
+      props: { options, portalDisabled: true },
+      attachTo: document.body,
+    })
+    await openPanel(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(options.length)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzCascader, {
+      props: { options },
+      attachTo: document.body,
+    })
+    await openPanel(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
+    expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(options.length)
+    wrapper.unmount()
+  })
+
+  it('forwards a custom portal target', async () => {
+    const target = document.createElement('div')
+    document.body.append(target)
+    const wrapper = mount(DzCascader, {
+      props: { options, portalTo: target },
+      attachTo: document.body,
+    })
+    await openPanel(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(target.querySelector('[role="listbox"]')).toBeTruthy()
+    wrapper.unmount()
+    target.remove()
+  })
+})
+
 describe('dzCascader — changeOnSelect', () => {
   afterEach(() => {
     document.body.innerHTML = ''

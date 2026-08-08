@@ -14,6 +14,7 @@
 
 import type {
   BaseFormControlProps,
+  BasePortalProps,
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
@@ -60,7 +61,7 @@ export interface DzCascaderFlatPath {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzCascader component */
-export interface DzCascaderProps extends BaseFormControlProps<InputVariant> {
+export interface DzCascaderProps extends BaseFormControlProps<InputVariant>, BasePortalProps {
   /** Nested option tree */
   options: DzCascaderOption[]
   /** Placeholder shown on the trigger when nothing is selected */

@@ -118,6 +118,16 @@ const meta = {
       description: 'Show the clear button when a value is set',
       table: { category: 'Behavior', defaultValue: { summary: 'true' } },
     },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render the options inline instead of teleporting them',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
     disabled: {
       control: 'boolean',
       description: 'Disabled state — prevents interaction',
