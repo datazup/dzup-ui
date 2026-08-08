@@ -501,7 +501,11 @@ const showCleaner = computed(
         </button>
       </PopoverTrigger>
 
-      <PopoverPortal>
+      <PopoverPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <PopoverContent
           :side-offset="4"
           align="start"
