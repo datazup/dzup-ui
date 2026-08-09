@@ -1290,7 +1290,9 @@ is self-sufficient:
    axe/Vitest matrix. Responsive and RTL are backed by `e2e/block-responsive.spec.ts`: all 87 standalone
    previews run in Chromium under both `dir="ltr"` and `dir="rtl"` at 390px, 768px, and 1280px with applied-
    direction, render, containment, clipping, and horizontal-overflow checks, plus computed structural reflow
-   probes for every registry entry declaring `responsive.mobile`. The CI workflow runs that exact browser lane.
+   probes for every registry entry declaring `responsive.mobile`. CI runs that exact lane with two workers and
+   fails on flaky tests; local runs retain the stable one-worker default. A four-worker benchmark was rejected
+   after it produced an empty-render retry under load.
 7. **MCP (G5)** — ship now as **docs + config** pointed at the generated registry, or defer until a hosted
    registry endpoint is confirmed? Recommend docs+config alongside G1 so it's ready when the host is.
 8. **Pro source in the registry (§9)** — confirm that the public `/r/*` registry and `llms*.txt` include

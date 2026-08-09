@@ -17,6 +17,10 @@ interface PublishedRegistryIndex {
   items: Array<{ name: string, type: string }>
 }
 
+interface RootPackageJson {
+  scripts?: Record<string, string>
+}
+
 const repositoryRoot = existsSync(resolve(process.cwd(), '.github/workflows/ci.yml'))
   ? process.cwd()
   : resolve(process.cwd(), '../..')
@@ -34,6 +38,9 @@ const workflow = readFileSync(
   resolve(repositoryRoot, '.github/workflows/ci.yml'),
   'utf8',
 )
+const rootPackage = JSON.parse(
+  readFileSync(resolve(repositoryRoot, 'package.json'), 'utf8'),
+) as RootPackageJson
 
 describe('responsive block certification', () => {
   it('drives the browser matrix from every live block id, in registry order', () => {
@@ -83,7 +90,9 @@ describe('responsive block certification', () => {
     expect(rtl?.certifies).toContain('horizontal overflow')
   })
 
-  it('runs the responsive browser certification in CI', () => {
-    expect(workflow).toContain('yarn test:responsive:landing')
+  it('runs the responsive browser certification with bounded fail-closed CI parallelism', () => {
+    expect(rootPackage.scripts?.['test:responsive:landing:ci'])
+      .toBe('yarn test:responsive:landing --workers=2 --fail-on-flaky-tests')
+    expect(workflow).toContain('yarn test:responsive:landing:ci')
   })
 })

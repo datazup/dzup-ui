@@ -57,6 +57,7 @@
     "test:visual:landing": "node node_modules/@playwright/test/cli.js test -c apps/landing/playwright.config.ts",
     "test:visual:landing:update": "node node_modules/@playwright/test/cli.js test -c apps/landing/playwright.config.ts --update-snapshots",
     "test:responsive:landing": "node node_modules/@playwright/test/cli.js test -c apps/landing/playwright.config.ts apps/landing/e2e/block-responsive.spec.ts",
+    "test:responsive:landing:ci": "yarn test:responsive:landing --workers=2 --fail-on-flaky-tests",
     "landing": "yarn workspace @dzup-ui/landing dev",
     "landing:build": "yarn workspace @dzup-ui/landing build",
     "storybook": "yarn workspace @dzup-ui/storybook dev",

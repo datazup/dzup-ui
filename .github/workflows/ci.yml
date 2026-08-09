@@ -507,7 +507,7 @@ jobs:
       - name: Landing renders in light + dark
         run: yarn test:visual:landing --grep "renders real pixels"
       - name: Certify every block across widths and text directions
-        run: yarn test:responsive:landing
+        run: yarn test:responsive:landing:ci
       - name: Build landing site
         run: yarn workspace @dzup-ui/landing build
       # The artifact we measure must be the artifact users get. Assert the built
