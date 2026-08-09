@@ -6,7 +6,7 @@
  * drifting apart between browser runs.
  */
 
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { CERTIFICATIONS } from './certifications.ts'
@@ -17,8 +17,13 @@ interface PublishedRegistryIndex {
   items: Array<{ name: string, type: string }>
 }
 
+const repositoryRoot = existsSync(resolve(process.cwd(), '.github/workflows/ci.yml'))
+  ? process.cwd()
+  : resolve(process.cwd(), '../..')
+const landingRoot = resolve(repositoryRoot, 'apps/landing')
+
 const registry = JSON.parse(
-  readFileSync(resolve(process.cwd(), 'apps/landing/public/r/registry.json'), 'utf8'),
+  readFileSync(resolve(landingRoot, 'public/r/registry.json'), 'utf8'),
 ) as PublishedRegistryIndex
 
 const publishedBlockIds = registry.items
@@ -26,7 +31,7 @@ const publishedBlockIds = registry.items
   .map(item => item.name)
 
 const workflow = readFileSync(
-  resolve(process.cwd(), '.github/workflows/ci.yml'),
+  resolve(repositoryRoot, '.github/workflows/ci.yml'),
   'utf8',
 )
 
