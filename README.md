@@ -3,7 +3,7 @@
 <!-- claims:generated:start -->
 **Open-source Vue 3 component library — 206 catalog components, including 138 with dedicated Storybook pages.**
 
-> dzup-ui Pro 0.1.0-alpha.0 publishes 78 enterprise components across 8 families. Its built Storybook contains 630 stories; 57 exported components have dedicated documentation pages, while compound parts are documented through their parent.
+> dzup-ui Pro 0.1.0-alpha.0 publishes 78 enterprise components across 8 families. Its built Storybook contains 699 stories; 61 exported components have dedicated documentation pages, while compound parts are documented through their parent.
 
 Counting rules: Core “catalog components” counts every exported `.vue` component, including compound sub-parts; Core and Pro “dedicated documentation pages” count components with their own Storybook docs entry. Pro “published components” counts public exports from the Pro family barrels.
 <!-- claims:generated:end -->
