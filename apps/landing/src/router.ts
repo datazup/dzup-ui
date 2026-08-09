@@ -1,6 +1,7 @@
 import type { RouteLocationNormalized } from 'vue-router'
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { PRO_FACTS } from './data.ts'
 import { getBlock } from './blocks/registry.ts'
 import { SITE_ORIGIN } from './config.ts'
 import { BLOCK_OG_IDS, TEMPLATE_OG_SLUGS } from './generated/ogImages.ts'
@@ -137,8 +138,6 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: HomePage },
-    // Phase 1: renders a "coming soon" / waitlist state. Phase 2 flips the
-    // CTAs that point here to the published pro Storybook + pricing page.
     // Carries its own head — a primary marketing surface must not inherit the
     // home title, and without a self-canonical it would tell crawlers it IS
     // the home page (the index.html default canonical).
@@ -150,7 +149,7 @@ const router = createRouter({
         head: {
           title: 'dzup-ui Pro — enterprise Vue 3 components | dzup-ui',
           description:
-            'The commercial tier of dzup-ui: enterprise-grade Vue 3 components built on the same token system and accessibility bar as the free core. Join the waitlist to hear when it ships.',
+            `${PRO_FACTS.published} published enterprise Vue 3 components across ${PRO_FACTS.families} families, built on the same token system and accessibility contract as dzup-ui Core.`,
           canonical: '/pro',
         },
       },

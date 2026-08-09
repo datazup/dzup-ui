@@ -37,7 +37,7 @@ import { describe, expect, it } from 'vitest'
 
 import { BLOCKS } from './blocks/registry.ts'
 import { ANNOUNCEMENT, FACTS } from './config.ts'
-import { ECOSYSTEM, FAMILIES, FEATURES, PRO_COMPONENTS, PRO_FACTS } from './data.ts'
+import { ECOSYSTEM, FAMILIES, FEATURES, PRO_COMPONENTS, PRO_FACTS, PRO_FAMILIES } from './data.ts'
 import { ROWS } from './data/compare.ts'
 import { CATALOG, CATEGORIES } from './gallery/catalog.ts'
 import { COMPONENTS } from './generated/components.ts'
@@ -59,6 +59,27 @@ const DATA_TS = read('apps', 'landing', 'src', 'data.ts')
 const CONFIG_TS = read('apps', 'landing', 'src', 'config.ts')
 const COMPARE_TS = read('apps', 'landing', 'src', 'data', 'compare.ts')
 const PRO_PAGE = read('apps', 'landing', 'src', 'pages', 'ProPage.vue')
+const ROUTER_TS = read('apps', 'landing', 'src', 'router.ts')
+const README_MD = read('README.md')
+const PRO_SNAPSHOT_SOURCE = read('apps', 'landing', 'src', 'generated', 'pro-showcase.snapshot.json')
+const PRO_SNAPSHOT = JSON.parse(PRO_SNAPSHOT_SOURCE) as {
+  schemaVersion: number
+  package: { name: string, version: string }
+  sourceRevision: string
+  counts: {
+    publishedComponents: number
+    dedicatedDocumentationPages: number
+    families: number
+    stories: number
+  }
+  families: Array<{
+    id: string
+    label: string
+    publishedComponents: number
+    dedicatedDocumentationPages: number
+    components: Array<{ name: string, storyId: string | null, storyPath: string | null }>
+  }>
+}
 const INTRODUCTION_MDX = read('apps', 'storybook', 'stories', 'Introduction.mdx')
 // MDX with its authoring comments stripped — only what a reader actually sees.
 // (Those comments are allowed to name the old, wrong numbers; the page is not.)
@@ -212,23 +233,63 @@ describe('the landing copy', () => {
 })
 
 describe('the Pro page', () => {
-  it('derives both of its present-tense numbers from PRO_COMPONENTS', () => {
-    expect(PRO_FACTS.announced).toBe(PRO_COMPONENTS.length)
-    expect(PRO_FACTS.announcedFamilies).toBe(new Set(PRO_COMPONENTS.map(c => c.family)).size)
-    expect(PRO_PAGE).toContain('PRO_FACTS.announced')
-    expect(PRO_PAGE).toContain('PRO_FACTS.announcedFamilies')
+  it('projects every current claim from the generated public snapshot', () => {
+    expect(PRO_SNAPSHOT.schemaVersion).toBe(1)
+    expect(PRO_SNAPSHOT.package.name).toBe('@dzup-ui-pro/pro')
+    expect(PRO_SNAPSHOT.sourceRevision).toMatch(/^sha256:[a-f0-9]{64}$/)
+    expect(PRO_FACTS.version).toBe(PRO_SNAPSHOT.package.version)
+    expect(PRO_FACTS.published).toBe(PRO_SNAPSHOT.counts.publishedComponents)
+    expect(PRO_FACTS.documented).toBe(PRO_SNAPSHOT.counts.dedicatedDocumentationPages)
+    expect(PRO_FACTS.families).toBe(PRO_SNAPSHOT.counts.families)
+    expect(PRO_FACTS.stories).toBe(PRO_SNAPSHOT.counts.stories)
+    expect(PRO_FACTS.published).toBe(PRO_COMPONENTS.length)
+    expect(PRO_FAMILIES).toHaveLength(PRO_FACTS.families)
+    expect(PRO_FAMILIES.reduce((total, family) => total + family.publishedComponents, 0))
+      .toBe(PRO_FACTS.published)
   })
 
-  it('never prints the roadmap target as a present-tense fact', () => {
-    // The page promised "41 enterprise components" above a list of 13 in 7
-    // families. The roadmap figure may still appear — but only as a roadmap, and
-    // only interpolated. Checked against the rendered template, not the comments
-    // above it (which are free to name the old numbers as the cautionary tale).
+  it('renders generated claims and carries no stale launch narrative', () => {
     const template = PRO_PAGE.slice(PRO_PAGE.indexOf('<template>'), PRO_PAGE.indexOf('</template>'))
     expect(template).not.toMatch(/\d+\s+(?:enterprise\s+)?components?/i)
     expect(template).not.toMatch(/\d+\s+families/i)
-    if (template.includes('PRO_FACTS.planned'))
-      expect(template).toMatch(/roadmap|planned/i)
+    expect(template).toContain('PRO_FACTS.published')
+    expect(template).toContain('PRO_FACTS.stories')
+    expect(template).toContain('PRO_FACTS.families')
+    expect(template).not.toMatch(/coming soon|none have shipped|waitlist/i)
+    expect(ROUTER_TS).toContain('PRO_FACTS.published')
+    expect(ROUTER_TS).toContain('PRO_FACTS.families')
+    expect(ROUTER_TS).not.toMatch(/coming soon|when it ships/i)
+  })
+
+  it('keeps the OSS runtime independent from Pro implementation packages', () => {
+    const runtimeFiles = readdirSync(resolve(LANDING_ROOT, 'src'), {
+      recursive: true,
+      encoding: 'utf-8',
+    }).filter(name => /\.(?:ts|vue)$/.test(name) && !name.endsWith('.spec.ts'))
+    const offenders = runtimeFiles.filter((name) => {
+      const source = readFileSync(resolve(LANDING_ROOT, 'src', name), 'utf8')
+      return /from\s+['"]@dzup-ui-pro\//.test(source) || /import\s*\(\s*['"]@dzup-ui-pro\//.test(source)
+    })
+    expect(offenders).toEqual([])
+  })
+
+  it('generates README product truth and leaves no count literals outside the region', () => {
+    const start = '<!-- claims:generated:start -->'
+    const end = '<!-- claims:generated:end -->'
+    const startIndex = README_MD.indexOf(start)
+    const endIndex = README_MD.indexOf(end)
+    expect(startIndex).toBeGreaterThanOrEqual(0)
+    expect(endIndex).toBeGreaterThan(startIndex)
+    const region = README_MD.slice(startIndex, endIndex + end.length)
+    expect(region).toContain(`${COUNTS.catalogComponents} catalog components`)
+    expect(region).toContain(`${COUNTS.documentedComponents} with dedicated Storybook pages`)
+    expect(region).toContain(`${PRO_FACTS.published} enterprise components`)
+    expect(region).toContain(`${PRO_FACTS.stories} stories`)
+    expect(region).toContain('Counting rules:')
+
+    const authored = `${README_MD.slice(0, startIndex)}${README_MD.slice(endIndex + end.length)}`
+    expect(authored).not.toMatch(/\b\d{2,4}\+?\s+(?:catalog\s+)?components?/i)
+    expect(authored).not.toMatch(/coming soon|none have shipped|no public Pro repository/i)
   })
 })
 

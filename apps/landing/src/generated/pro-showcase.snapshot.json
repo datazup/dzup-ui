@@ -1,0 +1,516 @@
+{
+  "schemaVersion": 1,
+  "package": {
+    "name": "@dzup-ui-pro/pro",
+    "version": "0.1.0-alpha.0"
+  },
+  "sourceRevision": "sha256:020f53e825743b74d6d505f57acacd1efa30ddc8f187a5a2d3d096fcbb06a5be",
+  "sourceRevisionKind": "content-sha256",
+  "countRules": {
+    "publishedComponents": "publicly exported Dz*.vue components in the Pro family barrels",
+    "dedicatedDocumentationPages": "published components with a dedicated Storybook docs entry",
+    "stories": "built Storybook entries whose type is story"
+  },
+  "counts": {
+    "publishedComponents": 78,
+    "dedicatedDocumentationPages": 57,
+    "families": 8,
+    "stories": 630
+  },
+  "families": [
+    {
+      "id": "builders",
+      "label": "Builders",
+      "publishedComponents": 9,
+      "dedicatedDocumentationPages": 4,
+      "components": [
+        {
+          "name": "DzDashboardBuilder",
+          "storyId": "pro-builders-dzdashboardbuilder--docs",
+          "storyPath": "?path=/docs/pro-builders-dzdashboardbuilder--docs"
+        },
+        {
+          "name": "DzDashboardWidget",
+          "storyId": "pro-builders-dzdashboardwidget--docs",
+          "storyPath": "?path=/docs/pro-builders-dzdashboardwidget--docs"
+        },
+        {
+          "name": "DzFormBuilder",
+          "storyId": "pro-builders-dzformbuilder--docs",
+          "storyPath": "?path=/docs/pro-builders-dzformbuilder--docs"
+        },
+        {
+          "name": "DzFormBuilderField",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzFormBuilderSection",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzReportBand",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzReportBuilder",
+          "storyId": "pro-builders-dzreportbuilder--docs",
+          "storyPath": "?path=/docs/pro-builders-dzreportbuilder--docs"
+        },
+        {
+          "name": "DzReportElement",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzSchemaForm",
+          "storyId": null,
+          "storyPath": null
+        }
+      ]
+    },
+    {
+      "id": "business",
+      "label": "Business",
+      "publishedComponents": 6,
+      "dedicatedDocumentationPages": 5,
+      "components": [
+        {
+          "name": "DzAuditLog",
+          "storyId": "pro-business-dzauditlog--docs",
+          "storyPath": "?path=/docs/pro-business-dzauditlog--docs"
+        },
+        {
+          "name": "DzFileManager",
+          "storyId": "pro-business-dzfilemanager--docs",
+          "storyPath": "?path=/docs/pro-business-dzfilemanager--docs"
+        },
+        {
+          "name": "DzFileManagerTree",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzNotificationCenter",
+          "storyId": "pro-business-dznotificationcenter--docs",
+          "storyPath": "?path=/docs/pro-business-dznotificationcenter--docs"
+        },
+        {
+          "name": "DzRibbon",
+          "storyId": "pro-business-dzribbon--docs",
+          "storyPath": "?path=/docs/pro-business-dzribbon--docs"
+        },
+        {
+          "name": "DzWorkspaceShell",
+          "storyId": "pro-business-dzworkspaceshell--docs",
+          "storyPath": "?path=/docs/pro-business-dzworkspaceshell--docs"
+        }
+      ]
+    },
+    {
+      "id": "communication",
+      "label": "Communication",
+      "publishedComponents": 10,
+      "dedicatedDocumentationPages": 7,
+      "components": [
+        {
+          "name": "DzAiAssistant",
+          "storyId": "pro-communication-dzaiassistant--docs",
+          "storyPath": "?path=/docs/pro-communication-dzaiassistant--docs"
+        },
+        {
+          "name": "DzAiCodeBlock",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzAiMarkdown",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzChat",
+          "storyId": "pro-communication-dzchat--docs",
+          "storyPath": "?path=/docs/pro-communication-dzchat--docs"
+        },
+        {
+          "name": "DzChatMessage",
+          "storyId": "pro-communication-dzchatmessage--docs",
+          "storyPath": "?path=/docs/pro-communication-dzchatmessage--docs"
+        },
+        {
+          "name": "DzCommentItem",
+          "storyId": "pro-communication-dzcommentitem--docs",
+          "storyPath": "?path=/docs/pro-communication-dzcommentitem--docs"
+        },
+        {
+          "name": "DzComments",
+          "storyId": "pro-communication-dzcomments--docs",
+          "storyPath": "?path=/docs/pro-communication-dzcomments--docs"
+        },
+        {
+          "name": "DzEmojiPicker",
+          "storyId": "pro-communication-dzemojipicker--docs",
+          "storyPath": "?path=/docs/pro-communication-dzemojipicker--docs"
+        },
+        {
+          "name": "DzReactionPicker",
+          "storyId": "pro-communication-dzreactionpicker--docs",
+          "storyPath": "?path=/docs/pro-communication-dzreactionpicker--docs"
+        },
+        {
+          "name": "DzToolCallCard",
+          "storyId": null,
+          "storyPath": null
+        }
+      ]
+    },
+    {
+      "id": "data-pro",
+      "label": "Data Pro",
+      "publishedComponents": 7,
+      "dedicatedDocumentationPages": 7,
+      "components": [
+        {
+          "name": "DzDataGridPro",
+          "storyId": "pro-datapro-dzdatagridpro--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzdatagridpro--docs"
+        },
+        {
+          "name": "DzDataLineage",
+          "storyId": "pro-datapro-dzdatalineage--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzdatalineage--docs"
+        },
+        {
+          "name": "DzFilterBuilder",
+          "storyId": "pro-datapro-dzfilterbuilder--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzfilterbuilder--docs"
+        },
+        {
+          "name": "DzPivotTable",
+          "storyId": "pro-datapro-dzpivottable--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzpivottable--docs"
+        },
+        {
+          "name": "DzQueryBuilder",
+          "storyId": "pro-datapro-dzquerybuilder--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzquerybuilder--docs"
+        },
+        {
+          "name": "DzQuickFilter",
+          "storyId": "pro-datapro-dzquickfilter--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzquickfilter--docs"
+        },
+        {
+          "name": "DzVirtualTable",
+          "storyId": "pro-datapro-dzvirtualtable--docs",
+          "storyPath": "?path=/docs/pro-datapro-dzvirtualtable--docs"
+        }
+      ]
+    },
+    {
+      "id": "editors",
+      "label": "Editors",
+      "publishedComponents": 13,
+      "dedicatedDocumentationPages": 10,
+      "components": [
+        {
+          "name": "DzCodeEditor",
+          "storyId": "pro-editors-dzcodeeditor--docs",
+          "storyPath": "?path=/docs/pro-editors-dzcodeeditor--docs"
+        },
+        {
+          "name": "DzDiffViewer",
+          "storyId": "pro-editors-dzdiffviewer--docs",
+          "storyPath": "?path=/docs/pro-editors-dzdiffviewer--docs"
+        },
+        {
+          "name": "DzImageEditor",
+          "storyId": "pro-editors-dzimageeditor--docs",
+          "storyPath": "?path=/docs/pro-editors-dzimageeditor--docs"
+        },
+        {
+          "name": "DzJsonEditor",
+          "storyId": "pro-editors-dzjsoneditor--docs",
+          "storyPath": "?path=/docs/pro-editors-dzjsoneditor--docs"
+        },
+        {
+          "name": "DzMarkdownEditor",
+          "storyId": "pro-editors-dzmarkdowneditor--docs",
+          "storyPath": "?path=/docs/pro-editors-dzmarkdowneditor--docs"
+        },
+        {
+          "name": "DzMarkdownRenderer",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzMermaidDiagram",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzNotebook",
+          "storyId": "pro-editors-dznotebook--docs",
+          "storyPath": "?path=/docs/pro-editors-dznotebook--docs"
+        },
+        {
+          "name": "DzNotebookCell",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzPdfViewer",
+          "storyId": "pro-editors-dzpdfviewer--docs",
+          "storyPath": "?path=/docs/pro-editors-dzpdfviewer--docs"
+        },
+        {
+          "name": "DzRichTextEditor",
+          "storyId": "pro-editors-dzrichtexteditor--docs",
+          "storyPath": "?path=/docs/pro-editors-dzrichtexteditor--docs"
+        },
+        {
+          "name": "DzSignaturePad",
+          "storyId": "pro-editors-dzsignaturepad--docs",
+          "storyPath": "?path=/docs/pro-editors-dzsignaturepad--docs"
+        },
+        {
+          "name": "DzSpreadsheet",
+          "storyId": "pro-editors-dzspreadsheet--docs",
+          "storyPath": "?path=/docs/pro-editors-dzspreadsheet--docs"
+        }
+      ]
+    },
+    {
+      "id": "planning",
+      "label": "Planning",
+      "publishedComponents": 11,
+      "dedicatedDocumentationPages": 5,
+      "components": [
+        {
+          "name": "DzCalendarDayView",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzCalendarMonthView",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzCalendarWeekView",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzCronEditor",
+          "storyId": "pro-planning-dzcroneditor--docs",
+          "storyPath": "?path=/docs/pro-planning-dzcroneditor--docs"
+        },
+        {
+          "name": "DzGantt",
+          "storyId": "pro-planning-dzgantt--docs",
+          "storyPath": "?path=/docs/pro-planning-dzgantt--docs"
+        },
+        {
+          "name": "DzGanttTaskRow",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzKanban",
+          "storyId": "pro-planning-dzkanban--docs",
+          "storyPath": "?path=/docs/pro-planning-dzkanban--docs"
+        },
+        {
+          "name": "DzKanbanCard",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzKanbanColumn",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzMindMap",
+          "storyId": "pro-planning-dzmindmap--docs",
+          "storyPath": "?path=/docs/pro-planning-dzmindmap--docs"
+        },
+        {
+          "name": "DzScheduler",
+          "storyId": "pro-planning-dzscheduler--docs",
+          "storyPath": "?path=/docs/pro-planning-dzscheduler--docs"
+        }
+      ]
+    },
+    {
+      "id": "visualization",
+      "label": "Visualization",
+      "publishedComponents": 17,
+      "dedicatedDocumentationPages": 17,
+      "components": [
+        {
+          "name": "DzBarcode",
+          "storyId": "pro-visualization-dzbarcode--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzbarcode--docs"
+        },
+        {
+          "name": "DzChart",
+          "storyId": "pro-visualization-dzchart--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzchart--docs"
+        },
+        {
+          "name": "DzChartDataTable",
+          "storyId": "pro-visualization-dzchartdatatable--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzchartdatatable--docs"
+        },
+        {
+          "name": "DzDiagramEditor",
+          "storyId": "pro-visualization-dzdiagrameditor--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzdiagrameditor--docs"
+        },
+        {
+          "name": "DzFunnelChart",
+          "storyId": "pro-visualization-dzfunnelchart--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzfunnelchart--docs"
+        },
+        {
+          "name": "DzGauge",
+          "storyId": "pro-visualization-dzgauge--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzgauge--docs"
+        },
+        {
+          "name": "DzGeoMap",
+          "storyId": "pro-visualization-dzgeomap--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzgeomap--docs"
+        },
+        {
+          "name": "DzHeatMap",
+          "storyId": "pro-visualization-dzheatmap--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzheatmap--docs"
+        },
+        {
+          "name": "DzNetworkGraph",
+          "storyId": "pro-visualization-dznetworkgraph--docs",
+          "storyPath": "?path=/docs/pro-visualization-dznetworkgraph--docs"
+        },
+        {
+          "name": "DzOrgChart",
+          "storyId": "pro-visualization-dzorgchart--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzorgchart--docs"
+        },
+        {
+          "name": "DzSankeyDiagram",
+          "storyId": "pro-visualization-dzsankeydiagram--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzsankeydiagram--docs"
+        },
+        {
+          "name": "DzSchemaDesigner",
+          "storyId": "pro-visualization-dzschemadesigner--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzschemadesigner--docs"
+        },
+        {
+          "name": "DzScorecard",
+          "storyId": "pro-visualization-dzscorecard--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzscorecard--docs"
+        },
+        {
+          "name": "DzSparkline",
+          "storyId": "pro-visualization-dzsparkline--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzsparkline--docs"
+        },
+        {
+          "name": "DzStockChart",
+          "storyId": "pro-visualization-dzstockchart--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzstockchart--docs"
+        },
+        {
+          "name": "DzTreeMap",
+          "storyId": "pro-visualization-dztreemap--docs",
+          "storyPath": "?path=/docs/pro-visualization-dztreemap--docs"
+        },
+        {
+          "name": "DzWhiteboard",
+          "storyId": "pro-visualization-dzwhiteboard--docs",
+          "storyPath": "?path=/docs/pro-visualization-dzwhiteboard--docs"
+        }
+      ]
+    },
+    {
+      "id": "workflow",
+      "label": "Workflow",
+      "publishedComponents": 5,
+      "dedicatedDocumentationPages": 2,
+      "components": [
+        {
+          "name": "DzApprovalFlow",
+          "storyId": "pro-workflow-dzapprovalflow--docs",
+          "storyPath": "?path=/docs/pro-workflow-dzapprovalflow--docs"
+        },
+        {
+          "name": "DzWorkflowDesigner",
+          "storyId": "pro-workflow-dzworkflowdesigner--docs",
+          "storyPath": "?path=/docs/pro-workflow-dzworkflowdesigner--docs"
+        },
+        {
+          "name": "DzWorkflowEdge",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzWorkflowNode",
+          "storyId": null,
+          "storyPath": null
+        },
+        {
+          "name": "DzWorkflowToolbar",
+          "storyId": null,
+          "storyPath": null
+        }
+      ]
+    }
+  ],
+  "storybook": {
+    "indexVersion": 5,
+    "basePath": "/storybook/",
+    "stories": 630,
+    "docsEntries": 75
+  },
+  "showcase": {
+    "routes": [
+      {
+        "id": "showcase",
+        "label": "Showcase",
+        "path": "/",
+        "description": "Core and Pro working together in one operational workspace."
+      },
+      {
+        "id": "scenarios",
+        "label": "Scenarios",
+        "path": "/scenarios",
+        "description": "Integrated workflows and retained component-family examples."
+      },
+      {
+        "id": "theme-lab",
+        "label": "Theme Lab",
+        "path": "/theme-lab",
+        "description": "Runtime appearance, accessibility, and direction previews."
+      },
+      {
+        "id": "component-catalog",
+        "label": "Component Catalog",
+        "path": "/catalog",
+        "description": "Generated Pro inventory with direct Storybook documentation links."
+      },
+      {
+        "id": "storybook",
+        "label": "Storybook",
+        "path": "/storybook",
+        "description": "Raw component APIs, variants, states, and engineering examples."
+      }
+    ]
+  }
+}

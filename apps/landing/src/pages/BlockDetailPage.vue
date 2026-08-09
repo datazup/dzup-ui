@@ -5,10 +5,9 @@
  * /blocks/preview/:id render (the iframe / OG source), this page wears the full
  * site chrome and is meant to be crawled and linked:
  *
- *   • an H1 + eyebrow + one-line "what it is / when to use it" intro,
- *   • the dependency manifest at a glance (BlockManifest — import + install +
- *     the "Built from" chips), so the install path is visible above the fold,
- *   • the full interactive BlockPreview (live preview / code / copy / fullscreen),
+ *   • the full interactive BlockPreview first (live preview / code / copy /
+ *     fullscreen), with the block title serving as the page H1,
+ *   • unique usage + setup guidance below the preview,
  *   • prev/next across the catalog + a back-to-gallery link.
  *
  * The per-block <title>/description/OG card + the self-referential canonical are
@@ -19,7 +18,7 @@
  * The route guard redirects unknown ids to /blocks, so a resolved block is
  * guaranteed here; we still guard defensively for type-safety.
  */
-import { DzButton, DzCopyButton, DzHeading, DzText } from '@dzup-ui/core'
+import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -54,19 +53,13 @@ const accentStyle = computed(() =>
 )
 
 /**
- * A short "when to use it" line, derived (never hand-authored per block) from the
- * category + responsive metadata so it can't drift from the catalog.
+ * Category-level placement guidance. The block's exact description already
+ * appears in the preview header, so the supporting section uses the category
+ * blurb rather than repeating the same sentence below the fold.
  */
 const whenToUse = computed(() => {
-  const label = category.value?.label ?? 'UI'
-  const responsive = block.value?.responsive?.mobile
-    ? ' It reflows to a single column on narrow viewports.'
-    : ''
-  return (
-    `A ${label.toLowerCase()} block composed entirely from free @dzup-ui/core `
-    + `components and design tokens, so it drops in already themed, accessible `
-    + `and light/dark-ready.${responsive}`
-  )
+  return category.value?.blurb
+    ?? 'A production-ready starting point composed from free @dzup-ui/core components.'
 })
 
 /** Index of the current block within the catalog, for prev/next (wraps around). */
@@ -111,37 +104,44 @@ function openStackblitz(): void {
 <template>
   <!-- Single root element: rendered inside App.vue's route <Transition>. -->
   <div v-if="block" class="block-detail" :style="accentStyle">
-    <!-- Hero intro: the page's single H1, eyebrow + lede + "when to use it". -->
-    <Section heading-id="block-detail-title">
-      <div class="bd-hero">
+    <!-- Preview-first: route context stays compact, then the live block owns the
+         first viewport. Its title is the page's single H1. -->
+    <Section class="bd-preview-section">
+      <div class="bd-context">
         <RouterLink to="/blocks" class="bd-back">
           <ArrowLeft :size="15" aria-hidden="true" />
           <span>All blocks</span>
         </RouterLink>
-        <span v-if="category" class="lp-eyebrow">{{ category.label }}</span>
-        <DzHeading id="block-detail-title" :level="1" size="3xl" weight="semibold" class="bd-title lp-balance">
-          {{ block.title }}
-        </DzHeading>
-        <DzText size="lg" tone="muted" as="p" class="bd-lede lp-balance">
-          {{ block.description }}
-        </DzText>
-        <DzText size="md" tone="muted" as="p" class="bd-when">
-          {{ whenToUse }}
-        </DzText>
+        <span class="bd-position">{{ index + 1 }} of {{ BLOCKS.length }}</span>
+      </div>
+      <BlockPreview
+        :block="block"
+        :heading-level="1"
+        :show-code-manifest="false"
+        @select-component="showBlocksUsing"
+      />
+    </Section>
 
-        <!-- Dependency manifest at a glance: the one import + install command(s)
-             + "Built from" chips, so the install path is visible without opening
-             the Code tab. Reused verbatim from the catalog (single source). -->
-        <BlockManifest :block="block" class="bd-manifest" @select-component="showBlocksUsing" />
-
-        <!-- One-click handoff: fork the block into a live StackBlitz project, or
-             copy its exact source. Both reuse the block's `?raw` `source`. -->
-        <div class="bd-actions">
+    <!-- Supporting information is deliberately below the working preview. The
+         preview already owns title, description, components and source copy; this
+         section only adds category context, install commands and the live-editor
+         handoff, so no information is duplicated on the page. -->
+    <Section surface bordered class="bd-details-section">
+      <div class="bd-details">
+        <div class="bd-overview">
+          <span class="lp-eyebrow">{{ category?.label ?? 'Block' }}</span>
+          <DzHeading id="block-detail-usage-title" :level="2" size="xl" weight="semibold" class="bd-section-title">
+            Use this block
+          </DzHeading>
+          <DzText size="md" tone="muted" as="p" class="bd-when">
+            {{ whenToUse }}
+          </DzText>
           <DzButton
             variant="solid"
             tone="primary"
             size="sm"
             :aria-label="`Open ${block.title} in a live StackBlitz project`"
+            class="bd-stackblitz"
             @click="openStackblitz"
           >
             <template #prefix>
@@ -149,26 +149,28 @@ function openStackblitz(): void {
             </template>
             Open in StackBlitz
           </DzButton>
-          <DzCopyButton
-            :value="getBlockSource(block.path)"
-            variant="outline"
-            tone="neutral"
-            size="sm"
-            label="Copy code"
-            copied-label="Copied!"
-            :aria-label="`Copy the full source of ${block.title}`"
+        </div>
+
+        <div class="bd-setup">
+          <div class="bd-setup-head">
+            <DzHeading id="block-detail-setup-title" :level="2" size="md" weight="semibold" class="bd-section-title">
+              Add it to your project
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="p" class="bd-setup-lede">
+              Use the registry command, or install the packages and import the components manually.
+            </DzText>
+          </div>
+          <BlockManifest
+            :block="block"
+            :show-components="false"
+            :show-source-copy="false"
+            class="bd-manifest"
+            @select-component="showBlocksUsing"
           />
         </div>
       </div>
-    </Section>
 
-    <!-- The full interactive preview (live preview / code / copy / fullscreen). -->
-    <Section>
-      <BlockPreview :block="block" :heading-level="2" @select-component="showBlocksUsing" />
-    </Section>
-
-    <!-- Prev / next across the whole catalog + back to the gallery. -->
-    <Section>
+      <!-- Prev / next across the whole catalog + back to the gallery. -->
       <nav class="bd-pager" aria-label="Block navigation">
         <RouterLink
           v-if="prevBlock"
@@ -209,12 +211,18 @@ function openStackblitz(): void {
   display: block;
 }
 
-/* ── Hero ─────────────────────────────────────────────────────── */
-.bd-hero {
+/* ── Preview-first route context ───────────────────────────────── */
+.bd-preview-section {
+  padding-top: clamp(24px, 4vw, 48px);
+  padding-bottom: clamp(40px, 6vw, 72px);
+}
+
+.bd-context {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-space-4, 1rem);
 }
 
 .bd-back {
@@ -237,36 +245,78 @@ function openStackblitz(): void {
   border-radius: var(--dz-radius-sm, 0.375rem);
 }
 
-.bd-title {
-  margin: 0;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+.bd-position {
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  color: var(--dz-muted-foreground, #64748b);
+  font-variant-numeric: tabular-nums;
 }
 
-.bd-lede {
+.bd-details-section {
+  padding-top: clamp(40px, 6vw, 64px);
+  padding-bottom: clamp(40px, 6vw, 64px);
+}
+
+.bd-details {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.7fr) minmax(0, 1.5fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+.bd-overview,
+.bd-setup {
+  min-width: 0;
+}
+
+.bd-overview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--dz-space-3, 0.75rem);
+}
+
+.bd-section-title {
   margin: 0;
-  max-width: 60ch;
-  line-height: 1.6;
 }
 
 .bd-when {
   margin: 0;
-  max-width: 64ch;
-  line-height: 1.65;
+  max-width: 48ch;
+  line-height: 1.6;
 }
 
-.bd-manifest {
-  margin-top: 10px;
-  width: 100%;
-  max-width: 640px;
+.bd-stackblitz {
+  margin-top: var(--dz-space-2, 0.5rem);
 }
 
-.bd-actions {
+.bd-setup {
+  padding-inline-start: clamp(24px, 4vw, 48px);
+  border-inline-start: 1px solid var(--lp-hairline);
+}
+
+.bd-setup-head {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
+  flex-direction: column;
+  gap: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-space-5, 1.25rem);
+}
+
+.bd-setup-lede {
+  margin: 0;
+  max-width: 62ch;
+  line-height: 1.5;
+}
+
+/* Import spans the width; package and registry commands sit side by side. */
+.bd-manifest {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--dz-space-5, 1.25rem);
+}
+
+.bd-manifest :deep(.bm-group:first-child) {
+  grid-column: 1 / -1;
 }
 
 /* ── Pager ────────────────────────────────────────────────────── */
@@ -274,7 +324,10 @@ function openStackblitz(): void {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--dz-space-3, 0.75rem);
+  margin-top: clamp(32px, 5vw, 56px);
+  padding-top: var(--dz-space-5, 1.25rem);
+  border-top: 1px solid var(--lp-hairline);
 }
 
 .bd-pager-link {
@@ -333,6 +386,29 @@ function openStackblitz(): void {
 }
 
 @media (max-width: 560px) {
+  .bd-preview-section {
+    padding-inline: var(--dz-space-4, 1rem);
+  }
+
+  .bd-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bd-setup {
+    padding-inline-start: 0;
+    padding-top: var(--dz-space-6, 1.5rem);
+    border-inline-start: 0;
+    border-top: 1px solid var(--lp-hairline);
+  }
+
+  .bd-manifest {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bd-manifest :deep(.bm-group:first-child) {
+    grid-column: auto;
+  }
+
   .bd-pager-name {
     display: none;
   }

@@ -144,6 +144,32 @@ describe.sequential('landing pages — accessibility', () => {
     })
   })
 
+  it('keeps block details preview-first without repeating summary or setup content', async () => {
+    const target = BLOCKS[0]!
+    await mountAt(`/blocks/${target.id}`)
+
+    const main = document.getElementById('main')!
+    const preview = main.querySelector<HTMLElement>('.block-preview')
+    const details = main.querySelector<HTMLElement>('.bd-details-section')
+
+    expect(preview, 'block detail did not render its live preview').toBeTruthy()
+    expect(details, 'block detail did not render its supporting information').toBeTruthy()
+    expect(
+      preview!.compareDocumentPosition(details!) & Node.DOCUMENT_POSITION_FOLLOWING,
+      'supporting information must follow the live preview in DOM order',
+    ).toBeTruthy()
+
+    expect(preview!.querySelector('h1')?.textContent).toContain(target.title)
+    expect(preview!.querySelector('.bp-desc')?.textContent).toContain(target.description)
+    expect(details!.textContent).not.toContain(target.description)
+
+    // Components remain in the preview header; install/import commands live in
+    // the one supporting manifest rather than repeating inside the Code tab.
+    expect(main.querySelectorAll('.bp-chips')).toHaveLength(1)
+    expect(main.querySelectorAll('.bm-chips')).toHaveLength(0)
+    expect(main.querySelectorAll('.block-manifest')).toHaveLength(1)
+  })
+
   /**
    * One <main> per page (TASK-FREE2-04).
    *

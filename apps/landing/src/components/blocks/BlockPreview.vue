@@ -56,13 +56,19 @@ const props = withDefaults(
     block: BlockDef
     /**
      * Semantic level for the block-title heading. 3 fits the /blocks index
-     * (page h1 → category h2 → block h3); the block DETAIL page passes 2 —
-     * its own h1 is the block title, so the preview heading is one level
-     * below it (no skipped levels, TASK-FREE-10). Visual size is unchanged.
+     * (page h1 → category h2 → block h3); the block detail page passes 1
+     * because the preview is that route's primary content and canonical title.
+     * Visual size is unchanged.
      */
-    headingLevel?: 2 | 3
+    headingLevel?: 1 | 2 | 3
+    /**
+     * Keep install/import commands in the Code tab by default. The detail route
+     * places that manifest in its supporting section below the preview and turns
+     * this off so setup information appears only once on the page.
+     */
+    showCodeManifest?: boolean
   }>(),
-  { headingLevel: 3 },
+  { headingLevel: 3, showCodeManifest: true },
 )
 
 const emit = defineEmits<{
@@ -653,6 +659,7 @@ const langModel = computed<string>({
              here (`:show-components="false"`) because the header already carries
              the reverse-lookup chips — no need to repeat them in the same view. -->
         <BlockManifest
+          v-if="showCodeManifest"
           :block="block"
           :show-components="false"
           class="bp-manifest"
@@ -800,8 +807,10 @@ const langModel = computed<string>({
 .bp-head-controls {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
-  flex-shrink: 0;
+  flex: 1 1 32rem;
+  flex-wrap: wrap;
 }
 
 /* Visually-hidden live region for the copy-action success announcement. */
@@ -984,13 +993,18 @@ const langModel = computed<string>({
   }
 
   .bp-head-controls {
-    justify-content: space-between;
+    width: 100%;
+    flex: 0 1 auto;
+    justify-content: flex-start;
   }
 
-  .bp-viewport,
+  .bp-viewport {
+    flex: 1 1 100%;
+  }
+
   .bp-theme,
   .bp-dir {
-    flex: 1;
+    flex: 1 1 calc(50% - var(--dz-space-2, 0.5rem));
   }
 }
 </style>
