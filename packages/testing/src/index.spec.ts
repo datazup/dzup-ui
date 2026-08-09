@@ -5,6 +5,8 @@ describe('installDzupUiDomTestEnvironment', () => {
   it('installs and cleans up the DOM methods used by Reka UI', () => {
     const targets: Array<[object, PropertyKey]> = [
       [globalThis, 'ResizeObserver'],
+      [globalThis, 'requestAnimationFrame'],
+      [globalThis, 'cancelAnimationFrame'],
       [Element.prototype, 'scrollIntoView'],
       [Element.prototype, 'hasPointerCapture'],
       [Element.prototype, 'setPointerCapture'],
@@ -19,6 +21,8 @@ describe('installDzupUiDomTestEnvironment', () => {
 
       const cleanup = installDzupUiDomTestEnvironment()
       expect(globalThis.ResizeObserver).toBeTypeOf('function')
+      expect(globalThis.requestAnimationFrame).toBeTypeOf('function')
+      expect(globalThis.cancelAnimationFrame).toBeTypeOf('function')
       expect(Element.prototype.scrollIntoView).toBeTypeOf('function')
       expect(Element.prototype.hasPointerCapture).toBeTypeOf('function')
       expect(Element.prototype.setPointerCapture).toBeTypeOf('function')
@@ -35,6 +39,37 @@ describe('installDzupUiDomTestEnvironment', () => {
         if (descriptor !== undefined)
           Object.defineProperty(target, key, descriptor)
       })
+    }
+  })
+
+  it('runs and cancels animation frames deterministically', async () => {
+    const requestDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'requestAnimationFrame')
+    const cancelDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'cancelAnimationFrame')
+    Reflect.deleteProperty(globalThis, 'requestAnimationFrame')
+    Reflect.deleteProperty(globalThis, 'cancelAnimationFrame')
+
+    try {
+      const cleanup = installDzupUiDomTestEnvironment()
+      let cancelledFrameRan = false
+      const id = requestAnimationFrame(() => {
+        cancelledFrameRan = true
+      })
+      cancelAnimationFrame(id)
+      const timestamp = await new Promise<number>(resolve => requestAnimationFrame(resolve))
+
+      expect(timestamp).toBeTypeOf('number')
+      expect(cancelledFrameRan).toBe(false)
+      cleanup()
+    }
+    finally {
+      if (requestDescriptor !== undefined)
+        Object.defineProperty(globalThis, 'requestAnimationFrame', requestDescriptor)
+      else
+        Reflect.deleteProperty(globalThis, 'requestAnimationFrame')
+      if (cancelDescriptor !== undefined)
+        Object.defineProperty(globalThis, 'cancelAnimationFrame', cancelDescriptor)
+      else
+        Reflect.deleteProperty(globalThis, 'cancelAnimationFrame')
     }
   })
 

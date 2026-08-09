@@ -10,6 +10,8 @@
  */
 export function installDzupUiDomTestEnvironment(): () => void {
   const restorers: Array<() => void> = []
+  const animationFrameTimers = new Map<number, ReturnType<typeof setTimeout>>()
+  let nextAnimationFrameId = 1
 
   function defineIfMissing(target: object, key: PropertyKey, value: unknown): void {
     const descriptor = Object.getOwnPropertyDescriptor(target, key)
@@ -38,6 +40,31 @@ export function installDzupUiDomTestEnvironment(): () => void {
   }
 
   defineIfMissing(globalThis, 'ResizeObserver', ResizeObserverStub)
+  defineIfMissing(
+    globalThis,
+    'requestAnimationFrame',
+    (callback: FrameRequestCallback): number => {
+      const id = nextAnimationFrameId++
+      const timer = setTimeout(() => {
+        animationFrameTimers.delete(id)
+        callback(typeof performance === 'undefined' ? Date.now() : performance.now())
+      }, 0)
+      animationFrameTimers.set(id, timer)
+      return id
+    },
+  )
+  defineIfMissing(globalThis, 'cancelAnimationFrame', (id: number): void => {
+    const timer = animationFrameTimers.get(id)
+    if (timer !== undefined)
+      clearTimeout(timer)
+    animationFrameTimers.delete(id)
+  })
+
+  restorers.push(() => {
+    for (const timer of animationFrameTimers.values())
+      clearTimeout(timer)
+    animationFrameTimers.clear()
+  })
 
   if (typeof Element !== 'undefined') {
     defineIfMissing(Element.prototype, 'scrollIntoView', (): void => {})
