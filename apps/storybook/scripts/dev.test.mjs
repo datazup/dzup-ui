@@ -1,7 +1,7 @@
-import { expect, test } from 'vitest'
+import { expect, it } from 'vitest'
 import { main, preparationEnvironment } from './dev.mjs'
 
-test('preparation removes remote-development host state only for generated artifacts', () => {
+it('preparation removes remote-development host state only for generated artifacts', () => {
   const prepared = preparationEnvironment({
     APP_ENV: 'development-remote',
     VITE_PUBLIC_URL: 'https://dzup-ui-storybook.dev.dziphost.com/',
@@ -12,7 +12,7 @@ test('preparation removes remote-development host state only for generated artif
   expect(prepared).toEqual({ VITE_PORT: '6006', KEEP: 'value' })
 })
 
-test('remote development is restored for the Storybook server after preparation', async () => {
+it('remote development is restored for the Storybook server after preparation', async () => {
   const calls = []
   const env = {
     APP_ENV: 'development-remote',
