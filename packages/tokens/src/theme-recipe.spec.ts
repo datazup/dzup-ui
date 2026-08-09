@@ -9,6 +9,7 @@ import {
   serializeThemeRecipe,
   ThemeRecipeError,
   themeRecipeFromUrl,
+  themeRecipeToCssText,
   themeRecipeToCssVariables,
   themeRecipeToUrl,
   validateThemeRecipe,
@@ -46,6 +47,13 @@ describe('theme recipe v1', () => {
     expect(() => decodeThemeRecipe('not-valid!')).toThrowError(
       expect.objectContaining({ code: 'INVALID_ENCODING' }),
     )
+
+    const recipe = createDefaultThemeRecipe()
+    expect(validateThemeRecipe({ ...recipe, radius: Number.POSITIVE_INFINITY })).toBe(false)
+    expect(validateThemeRecipe({
+      ...recipe,
+      palettes: { ...recipe.palettes, privateAccent: { hue: 10, chroma: 0.1 } },
+    })).toBe(false)
   })
 
   it('migrates default and legacy Theme Designer shapes', () => {
@@ -77,6 +85,22 @@ describe('theme recipe v1', () => {
     expect(light['--dz-spacing-4']).toBe('0.9rem')
     expect(light['--dz-shadow-md']).not.toBe(dark['--dz-shadow-md'])
     expect(light['--dz-font-sans']).toBeDefined()
+
+    const darkCss = themeRecipeToCssText(recipe, 'dark', '[data-theme="dark"]')
+    expect(darkCss).toContain('[data-theme="dark"] {')
+    expect(darkCss).toContain(`--dz-shadow-md: ${dark['--dz-shadow-md']};`)
+  })
+
+  it('normalizes into a detached recipe and preserves runtime preferences across presets', () => {
+    const input = createThemeRecipePreset('emerald', {
+      mode: 'dark',
+      direction: 'rtl',
+      motion: 'reduced',
+    })
+    const normalized = normalizeThemeRecipe(input)
+    normalized.palettes.primary.hue = 42
+    expect(input.palettes.primary.hue).toBe(165)
+    expect(normalized).toMatchObject({ mode: 'dark', direction: 'rtl', motion: 'reduced' })
   })
 
   it('applies to an explicit target without requiring document or window', () => {
