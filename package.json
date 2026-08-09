@@ -18,7 +18,7 @@
     "//lint": "packages/ AND both apps (TASK-FREE2-01). --max-warnings 0: the baseline is zero errors and zero warnings, so a new warning fails CI rather than accreting into a 'known baseline' everyone ignores. Generated output is excluded via eslint.config.js `ignores`, not CLI globs.",
     "lint": "eslint packages/ apps/ --max-warnings 0",
     "lint:fix": "eslint packages/ apps/ --fix",
-    "test": "vitest run",
+    "test": "yarn workspace @dzup-ui/landing build:counts && vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "vitest run --reporter=verbose packages/**/a11y/**/*.a11y.spec.ts",
