@@ -1,6 +1,12 @@
 # dzup-ui
 
-**Open-source Vue 3 component library — 147 foundational components.**
+<!-- claims:generated:start -->
+**Open-source Vue 3 component library — 206 catalog components, including 138 with dedicated Storybook pages.**
+
+> dzup-ui Pro 0.1.0-alpha.0 publishes 78 enterprise components across 8 families. Its built Storybook contains 630 stories; 57 exported components have dedicated documentation pages, while compound parts are documented through their parent.
+
+Counting rules: Core “catalog components” counts every exported `.vue` component, including compound sub-parts; Core and Pro “dedicated documentation pages” count components with their own Storybook docs entry. Pro “published components” counts public exports from the Pro family barrels.
+<!-- claims:generated:end -->
 
 <!-- Badges must RENDER (TASK-FREE-11): npm-backed badges (version, downloads,
      bundlephobia) show shields' "not found" placeholder while @dzup-ui/core is
@@ -10,13 +16,13 @@
 ![Core Web Vitals](https://img.shields.io/badge/Core%20Web%20Vitals-LCP%3C2.5s%20%C2%B7%20CLS%3C0.1-6366f1)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
-> Looking for enterprise components? **dzup-ui Pro** is in development under a
-> commercial license — see the `/pro` page on the site for what is shipped versus
-> planned. (No public Pro repository exists yet.)
+> Looking for enterprise workflows? **dzup-ui Pro** is commercially licensed and
+> uses the same Core token and accessibility contract. The public `/pro` page is
+> generated from a safe snapshot of the Pro inventory and Storybook build.
 
 ## Features
 
-- 147 Vue 3 components across 11 families
+- A generated Core inventory across 11 component families
 - TypeScript strict mode with zero `any` types and full type inference
 - Tailwind CSS 4 design token system with light/dark/system theming
 - Reka UI headless primitives for accessible interactive components
@@ -76,7 +82,7 @@ const name = ref('')
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [`@dzup-ui/core`](./packages/core) | 0.1.0-alpha.0 | 147 foundational components (buttons, inputs, forms, layout, navigation, overlays, feedback, data, media, typography) |
+| [`@dzup-ui/core`](./packages/core) | 0.1.0-alpha.0 | Foundational components for buttons, inputs, forms, layout, navigation, overlays, feedback, data, media, and typography |
 | [`@dzup-ui/tokens`](./packages/tokens) | 0.1.0-alpha.0 | Design tokens — CSS custom properties, Tailwind theme, TypeScript definitions |
 | [`@dzup-ui/contracts`](./packages/contracts) | 0.1.0-alpha.0 | Canonical public API contract types (props, events, slots) |
 | [`@dzup-ui/compat`](./packages/compat) | 0.0.1 | Optional migration adapters from old dzup-ui to vNext |
@@ -149,10 +155,9 @@ Reference:
 ## Enterprise Components
 
 Need Kanban, Gantt, FormBuilder, DashboardBuilder, WorkflowDesigner, and more?
-**dzup-ui Pro** is in development under a commercial license; the site's `/pro`
-page states what is shipped versus planned. (No public Pro repository or
-hand-countable component figure is published here on purpose — counts drift,
-and the Pro page derives its numbers from the real registry.)
+**dzup-ui Pro** is distributed under a commercial license. The site's `/pro`
+page reports the current generated inventory, demonstrates the Core/Pro boundary,
+and provides the access path for the integrated Showcase and Pro Storybook.
 
 ## Contributing
 
