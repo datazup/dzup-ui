@@ -1499,6 +1499,39 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/core",
+      "@dzup-ui/tokens"
+    ],
+    "level": "minor",
+    "summary": "New `DzPageHero` layout component + `.dz-prose` rich-content styles.",
+    "body": "New `DzPageHero` layout component + `.dz-prose` rich-content styles.\n\n**DzPageHero** — dark gradient hero band for top-level views (eyebrow,\ngradient h1, description, meta row, glass-treated actions cluster), extracted\nfrom docs-app's `DocsPageHero` so every app on the neural-indigo preset can\nshare the band. Styling keys off the new `PAGE_HERO_TOKENS`\n(`--dz-page-hero-*`) in `@dzup-ui/tokens`, with `--dz-auth-brand-*` fallbacks.\n\n**.dz-prose** — typography for rendered rich content (markdown → sanitized\nHTML), ported from docs-app's `.docs-prose` and shipped unlayered in\n`dist/core.css` via base.css.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "Fix `DzPageHero` title gradient rendering as a solid bar: use `background-image`",
+    "body": "Fix `DzPageHero` title gradient rendering as a solid bar: use `background-image`\ninstead of the `background` shorthand, which reset `background-clip` to\n`border-box` and defeated `bg-clip-text` in consumer builds.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
+      "@dzup-ui/contracts",
+      "@dzup-ui/core",
+      "@dzup-ui/testing"
+    ],
+    "level": "minor",
+    "summary": "Add a shared portal-placement contract and expose it on `DzDialogContent`,",
+    "body": "Add a shared portal-placement contract and expose it on `DzDialogContent`,\n`DzConfirmDialog`, `DzSheetContent`, `DzPopoverContent`, `DzTooltipContent`,\n`DzDropdownMenuContent`, `DzContextMenuContent`, `DzSelect`, `DzMultiSelect`,\n`DzCombobox`, `DzCommandPalette`, and `DzLightbox`. Dialog content now identifies and\nsupports customizing its single owned overlay, while production portal defaults\nremain unchanged.\n\nPublish `@dzup-ui/testing` with guarded DOM test-environment support so\nconsumers can mount real Reka-backed components instead of replacing portals or\ndesign-system components with stubs.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/tokens",
       "@dzup-ui/core",
       "@dzup-ui/tooling",
