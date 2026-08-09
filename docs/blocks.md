@@ -1287,10 +1287,10 @@ is self-sufficient:
 5. **Theme editor scope (H1)** — limit overrides to **brand color / radius / density**, or expose more tokens?
    Recommend starting with those three (highest signal, lowest contrast-risk) and expanding later.
 6. **Trust marks (I3) — resolved 2026-08-09.** Accessible and Light + dark are backed by the per-block
-   axe/Vitest matrix. Responsive is backed by `e2e/block-responsive.spec.ts`: all 87 standalone previews run
-   in Chromium at 390px, 768px, and 1280px with render/containment/horizontal-overflow checks, plus computed
-   structural reflow probes for every registry entry declaring `responsive.mobile`. The CI workflow runs that
-   exact browser lane. RTL remains tested behavior but is not presented as a certification mark yet.
+   axe/Vitest matrix. Responsive and RTL are backed by `e2e/block-responsive.spec.ts`: all 87 standalone
+   previews run in Chromium under both `dir="ltr"` and `dir="rtl"` at 390px, 768px, and 1280px with applied-
+   direction, render, containment, clipping, and horizontal-overflow checks, plus computed structural reflow
+   probes for every registry entry declaring `responsive.mobile`. The CI workflow runs that exact browser lane.
 7. **MCP (G5)** — ship now as **docs + config** pointed at the generated registry, or defer until a hosted
    registry endpoint is confirmed? Recommend docs+config alongside G1 so it's ready when the host is.
 8. **Pro source in the registry (§9)** — confirm that the public `/r/*` registry and `llms*.txt` include
