@@ -1320,7 +1320,6 @@ __metadata:
     "@stackblitz/sdk": "npm:^1.11.1"
     "@storybook/addon-a11y": "npm:^10.5.1"
     "@storybook/addon-docs": "npm:^10.5.1"
-    "@storybook/addon-themes": "npm:^10.5.1"
     "@storybook/addon-vitest": "npm:^10.5.1"
     "@storybook/vue3-vite": "npm:^10.5.1"
     "@tailwindcss/vite": "npm:^4.0.0"
@@ -4551,17 +4550,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/59da54baadb838e4943fa77f8ff7f93d5e503e2eb4610074e2b1a635ab1237a294a99480a4017811c47ed30de939e971a2964bd59cc1b887d058be54f6d771d7
-  languageName: node
-  linkType: hard
-
-"@storybook/addon-themes@npm:^10.5.1":
-  version: 10.5.1
-  resolution: "@storybook/addon-themes@npm:10.5.1"
-  dependencies:
-    ts-dedent: "npm:^2.0.0"
-  peerDependencies:
-    storybook: ^10.5.1
-  checksum: 10c0/86dabee3e42253de18471b19abe08a680e1bc9869379f0fe4af47ab627e0405f2921ab63e46f90f8a70874c5f80ac1f0a4ed43df8194fc8d7841db67fdcefdd6
   languageName: node
   linkType: hard
 
