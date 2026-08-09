@@ -45,6 +45,21 @@ describe('dzTimePicker — Trigger', () => {
     expect(wrapper.text()).toContain('Select time')
   })
 
+  it('uses the placeholder to name a standalone combobox trigger', () => {
+    const wrapper = mountPicker({ placeholder: 'Pick a time' })
+    expect(wrapper.get('[role="combobox"]').attributes('aria-label')).toBe('Pick a time')
+  })
+
+  it('prefers explicit ARIA labelling over the standalone placeholder fallback', () => {
+    const labelled = mountPicker({ placeholder: 'Pick a time', ariaLabel: 'Meeting time' })
+    expect(labelled.get('[role="combobox"]').attributes('aria-label')).toBe('Meeting time')
+
+    const labelledBy = mountPicker({ placeholder: 'Pick a time', ariaLabelledby: 'time-label' })
+    const trigger = labelledBy.get('[role="combobox"]')
+    expect(trigger.attributes('aria-label')).toBeUndefined()
+    expect(trigger.attributes('aria-labelledby')).toBe('time-label')
+  })
+
   it('displays a bound 24-hour value', () => {
     const wrapper = mountPicker({ modelValue: '14:30', hour12: false })
     expect(wrapper.text()).toContain('14')

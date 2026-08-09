@@ -95,6 +95,19 @@ const resolvedAriaDescribedby = computed(() => {
   return parts.length > 0 ? parts.join(' ') : undefined
 })
 
+/**
+ * A standalone ARIA combobox needs an author-provided accessible name; text
+ * content does not name this role. Preserve explicit and FormField labelling,
+ * otherwise use the stable placeholder as the trigger's action label.
+ */
+const resolvedAriaLabel = computed(() => {
+  if (props.ariaLabel)
+    return props.ariaLabel
+  if (props.ariaLabelledby || fieldContext)
+    return undefined
+  return props.placeholder
+})
+
 // ---------------------------------------------------------------------------
 // Time parsing / formatting
 // ---------------------------------------------------------------------------
@@ -439,7 +452,7 @@ const rootClasses = computed(() =>
             type="button"
             :class="styles.trigger()"
             role="combobox"
-            :aria-label="ariaLabel"
+            :aria-label="resolvedAriaLabel"
             :aria-labelledby="ariaLabelledby"
             :aria-describedby="resolvedAriaDescribedby"
             :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
