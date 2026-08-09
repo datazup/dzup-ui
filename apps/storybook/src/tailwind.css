@@ -9,3 +9,14 @@
    render with no spacing. */
 @source "../../../packages/core/stories/**/*.{ts,mdx}";
 @source "../../../packages/pro/stories/**/*.{ts,mdx}";
+
+/* ThemeRecipeV1's explicit motion preview mirrors the OS reduced-motion branch
+   without changing the browser preference used by other Storybook tooling. */
+[data-motion-preview='reduced'] *,
+[data-motion-preview='reduced'] *::before,
+[data-motion-preview='reduced'] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}

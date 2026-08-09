@@ -2,7 +2,9 @@
 import type { SegmentedItem } from '@dzup-ui/core'
 import type { BlockDef } from '../../blocks/registry.ts'
 import {
+  DzButton,
   DzCodeBlock,
+  DzCollapse,
   DzCopyButton,
   DzDialog,
   DzDialogClose,
@@ -17,7 +19,7 @@ import {
   DzTabTrigger,
   DzText,
 } from '@dzup-ui/core'
-import { Check, ExternalLink, FileText, Maximize2, Sparkles, Wand2 } from 'lucide-vue-next'
+import { Check, ChevronDown, ExternalLink, FileText, Maximize2, SlidersHorizontal, Sparkles, Wand2 } from 'lucide-vue-next'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { REGISTRY_ENABLED, v0OpenUrl } from '../../blocks/config.ts'
 import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'
@@ -314,6 +316,24 @@ function onKeydown(event: KeyboardEvent): void {
 /** Set by `announceCopied` below; cleared here on unmount. */
 let copyStatusTimer: ReturnType<typeof setTimeout> | undefined
 let resizeObserver: ResizeObserver | null = null
+
+/**
+ * Secondary preview utilities stay visible on desktop, but collapse behind one
+ * explicit control on narrow screens so the live block reaches the first
+ * viewport. matchMedia keeps the breakpoint semantic in sync with the CSS and
+ * resets to the appropriate default when the viewport crosses it.
+ */
+const PREVIEW_CONTROLS_QUERY = '(max-width: 560px)'
+let previewControlsMedia
+  = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia(PREVIEW_CONTROLS_QUERY)
+    : null
+const previewControlsOpen = ref(!(previewControlsMedia?.matches ?? false))
+
+function syncPreviewControls(event: MediaQueryList | MediaQueryListEvent): void {
+  previewControlsOpen.value = !event.matches
+}
+
 onMounted(() => {
   containerWidth.value = availableWidth()
   if (stageEl.value && typeof ResizeObserver !== 'undefined') {
@@ -322,9 +342,12 @@ onMounted(() => {
     })
     resizeObserver.observe(stageEl.value)
   }
+  previewControlsMedia?.addEventListener('change', syncPreviewControls)
 })
 onBeforeUnmount(() => {
   resizeObserver?.disconnect()
+  previewControlsMedia?.removeEventListener('change', syncPreviewControls)
+  previewControlsMedia = null
   if (rafId)
     cancelAnimationFrame(rafId)
   if (copyStatusTimer !== undefined)
@@ -334,6 +357,7 @@ onBeforeUnmount(() => {
 /** Stable ids so the regions/dialog have accessible names. */
 const titleId = computed(() => `block-${props.block.id}-title`)
 const dialogTitleId = computed(() => `block-${props.block.id}-fs-title`)
+const controlsId = computed(() => `block-${props.block.id}-preview-controls`)
 
 /**
  * URL of the standalone, chrome-free render of this block (docs/blocks.md §3.5),
@@ -514,99 +538,126 @@ const langModel = computed<string>({
         <BlockTrustMarks :block-id="block.id" class="bp-marks" />
       </div>
 
-      <div class="bp-head-controls">
-        <DzSegmented
-          v-show="tab === 'preview'"
-          v-model="viewport"
-          :items="viewports"
-          size="sm"
-          aria-label="Preview width"
-          class="bp-viewport"
-        />
-        <!-- Always-on width readout (the live value also lives on the drag
-             handle as aria-valuenow). aria-hidden: it mirrors the handle. -->
-        <span v-show="tab === 'preview'" class="bp-width-readout" aria-hidden="true">
-          {{ readoutWidth }}px
-        </span>
-        <DzSegmented
-          v-show="tab === 'preview'"
-          v-model="previewThemeModel"
-          :items="themeItems"
-          size="sm"
-          aria-label="Preview theme"
-          class="bp-theme"
-        />
-        <DzSegmented
-          v-show="tab === 'preview'"
-          v-model="previewDir"
-          :items="dirItems"
-          size="sm"
-          aria-label="Text direction"
-          class="bp-dir"
-        />
-        <!-- Copy-for-AI actions: the block as a markdown doc (byte-identical to
-             the generated /r/<id>.md) and as a ready-to-paste prompt. Both reuse
-             DzCopyButton, so the copied-checkmark + success-tone feedback comes
-             for free; the icon slot keeps each action's glyph while still flipping
-             to a check on copy. The bp-copy-status live region adds a distinct
-             spoken confirmation (the icon-only buttons would sound identical). -->
-        <DzCopyButton
-          :value="markdownPayload"
-          aria-label="Copy block as markdown"
+      <div class="bp-controls-wrap">
+        <DzButton
           variant="outline"
           tone="neutral"
           size="sm"
-          @copied="announceCopied('markdown')"
+          class="bp-controls-toggle"
+          :aria-expanded="previewControlsOpen"
+          :aria-controls="controlsId"
+          @click="previewControlsOpen = !previewControlsOpen"
         >
-          <template #icon="{ copied }">
-            <Check v-if="copied" :size="16" aria-hidden="true" />
-            <FileText v-else :size="16" aria-hidden="true" />
+          <template #prefix>
+            <SlidersHorizontal :size="16" aria-hidden="true" />
           </template>
-        </DzCopyButton>
-        <DzCopyButton
-          :value="promptPayload"
-          aria-label="Copy block as AI prompt"
-          variant="outline"
-          tone="neutral"
-          size="sm"
-          @copied="announceCopied('AI prompt')"
-        >
-          <template #icon="{ copied }">
-            <Check v-if="copied" :size="16" aria-hidden="true" />
-            <Sparkles v-else :size="16" aria-hidden="true" />
+          Preview settings
+          <template #suffix>
+            <ChevronDown
+              :size="16"
+              aria-hidden="true"
+              class="bp-controls-chevron"
+              :class="{ 'is-open': previewControlsOpen }"
+            />
           </template>
-        </DzCopyButton>
-        <span class="bp-copy-status" role="status" aria-live="polite">{{ copyStatus }}</span>
-        <!-- "Open in v0" handoff (Task G4): remix this block in v0 with the
-             registry item JSON + `--dz-*` tokens preloaded. Gated on the same
-             REGISTRY_ENABLED flag as the F6 `shadcn-vue add` line, plus a
-             resolvable registry host (`v0Url`), so it never renders a dead link.
-             `window.open(..., 'noopener')` severs the opener ref (rel=noopener). -->
-        <DzIconButton
-          v-if="REGISTRY_ENABLED && v0Url"
-          :icon="Wand2"
-          aria-label="Open in v0"
-          variant="outline"
-          tone="neutral"
-          size="sm"
-          @click="openInV0"
-        />
-        <DzIconButton
-          :icon="ExternalLink"
-          aria-label="Open preview in new tab"
-          variant="outline"
-          tone="neutral"
-          size="sm"
-          @click="openInNewTab"
-        />
-        <DzIconButton
-          :icon="Maximize2"
-          aria-label="Open preview full screen"
-          variant="outline"
-          tone="neutral"
-          size="sm"
-          @click="fullscreen = true"
-        />
+        </DzButton>
+
+        <DzCollapse :id="controlsId" v-model="previewControlsOpen" class="bp-controls-collapse">
+          <div class="bp-head-controls">
+            <DzSegmented
+              v-show="tab === 'preview'"
+              v-model="viewport"
+              :items="viewports"
+              size="sm"
+              aria-label="Preview width"
+              class="bp-viewport"
+            />
+            <!-- Always-on width readout (the live value also lives on the drag
+                 handle as aria-valuenow). aria-hidden: it mirrors the handle. -->
+            <span v-show="tab === 'preview'" class="bp-width-readout" aria-hidden="true">
+              {{ readoutWidth }}px
+            </span>
+            <DzSegmented
+              v-show="tab === 'preview'"
+              v-model="previewThemeModel"
+              :items="themeItems"
+              size="sm"
+              aria-label="Preview theme"
+              class="bp-theme"
+            />
+            <DzSegmented
+              v-show="tab === 'preview'"
+              v-model="previewDir"
+              :items="dirItems"
+              size="sm"
+              aria-label="Text direction"
+              class="bp-dir"
+            />
+            <!-- Copy-for-AI actions: the block as a markdown doc (byte-identical to
+                 the generated /r/<id>.md) and as a ready-to-paste prompt. Both reuse
+                 DzCopyButton, so the copied-checkmark + success-tone feedback comes
+                 for free; the icon slot keeps each action's glyph while still flipping
+                 to a check on copy. The bp-copy-status live region adds a distinct
+                 spoken confirmation (the icon-only buttons would sound identical). -->
+            <DzCopyButton
+              :value="markdownPayload"
+              aria-label="Copy block as markdown"
+              variant="outline"
+              tone="neutral"
+              size="sm"
+              @copied="announceCopied('markdown')"
+            >
+              <template #icon="{ copied }">
+                <Check v-if="copied" :size="16" aria-hidden="true" />
+                <FileText v-else :size="16" aria-hidden="true" />
+              </template>
+            </DzCopyButton>
+            <DzCopyButton
+              :value="promptPayload"
+              aria-label="Copy block as AI prompt"
+              variant="outline"
+              tone="neutral"
+              size="sm"
+              @copied="announceCopied('AI prompt')"
+            >
+              <template #icon="{ copied }">
+                <Check v-if="copied" :size="16" aria-hidden="true" />
+                <Sparkles v-else :size="16" aria-hidden="true" />
+              </template>
+            </DzCopyButton>
+            <span class="bp-copy-status" role="status" aria-live="polite">{{ copyStatus }}</span>
+            <!-- "Open in v0" handoff (Task G4): remix this block in v0 with the
+                 registry item JSON + `--dz-*` tokens preloaded. Gated on the same
+                 REGISTRY_ENABLED flag as the F6 `shadcn-vue add` line, plus a
+                 resolvable registry host (`v0Url`), so it never renders a dead link.
+                 `window.open(..., 'noopener')` severs the opener ref (rel=noopener). -->
+            <DzIconButton
+              v-if="REGISTRY_ENABLED && v0Url"
+              :icon="Wand2"
+              aria-label="Open in v0"
+              variant="outline"
+              tone="neutral"
+              size="sm"
+              @click="openInV0"
+            />
+            <DzIconButton
+              :icon="ExternalLink"
+              aria-label="Open preview in new tab"
+              variant="outline"
+              tone="neutral"
+              size="sm"
+              @click="openInNewTab"
+            />
+            <DzIconButton
+              :icon="Maximize2"
+              aria-label="Open preview full screen"
+              variant="outline"
+              tone="neutral"
+              size="sm"
+              @click="fullscreen = true"
+            />
+          </div>
+        </DzCollapse>
       </div>
     </header>
 
@@ -804,13 +855,34 @@ const langModel = computed<string>({
   opacity: 0.7;
 }
 
+.bp-controls-wrap {
+  min-width: 0;
+  flex: 1 1 32rem;
+}
+
+.bp-controls-toggle {
+  display: none;
+}
+
+.bp-controls-collapse {
+  width: 100%;
+}
+
 .bp-head-controls {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  flex: 1 1 32rem;
+  width: 100%;
   flex-wrap: wrap;
+}
+
+.bp-controls-chevron {
+  transition: transform var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
+}
+
+.bp-controls-chevron.is-open {
+  transform: rotate(180deg);
 }
 
 /* Visually-hidden live region for the copy-action success announcement. */
@@ -874,6 +946,7 @@ const langModel = computed<string>({
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bp-controls-chevron,
   .bp-frame {
     transition: none;
   }
@@ -992,9 +1065,22 @@ const langModel = computed<string>({
     align-items: stretch;
   }
 
-  .bp-head-controls {
+  .bp-controls-wrap {
     width: 100%;
     flex: 0 1 auto;
+  }
+
+  .bp-controls-toggle {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .bp-controls-collapse[data-state='open'] .bp-head-controls {
+    padding-top: var(--dz-space-3, 0.75rem);
+  }
+
+  .bp-head-controls {
     justify-content: flex-start;
   }
 

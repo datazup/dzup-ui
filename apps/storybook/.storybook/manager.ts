@@ -1,5 +1,12 @@
-import { createElement, useEffect, useState } from 'react'
-import { addons, types } from 'storybook/manager-api'
+import type { ThemeRecipeMode } from '@dzup-ui/tokens'
+import {
+  normalizeStorybookThemeRecipeGlobals,
+  normalizeThemeRecipe,
+  STORYBOOK_THEME_RECIPE_STORAGE_KEY,
+  themeRecipeToStorybookGlobals,
+} from '@dzup-ui/tokens'
+import { createElement } from 'react'
+import { addons } from 'storybook/manager-api'
 import { create } from 'storybook/theming'
 import { STATUS_BADGES, statusFromTags } from '../../../packages/core/stories/_shared/status.ts'
 import { BRAND_COLORS, NEUTRAL_COLORS, PAPER, STATUS_BADGE_COLORS } from './brandPalette.ts'
@@ -114,114 +121,54 @@ const darkTheme = create({
 // supported way to restyle live.
 // ---------------------------------------------------------------------------
 
-/** `system` follows the OS; `light`/`dark` pin the chrome regardless of it. */
-type ThemePreference = 'system' | 'light' | 'dark'
-
-const THEME_PREF_KEY = 'dzup-ui:manager-theme'
-
 const darkQuery
   = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     ? window.matchMedia('(prefers-color-scheme: dark)')
     : undefined
 
-/** Read the stored override. Storage can throw (private mode) — default to OS. */
-function readPreference(): ThemePreference {
+/** Read the shared preview recipe. Storage can throw — default to the OS. */
+function readPreference(): ThemeRecipeMode {
   try {
-    const stored = window.localStorage.getItem(THEME_PREF_KEY)
-    if (stored === 'system' || stored === 'light' || stored === 'dark')
-      return stored
+    const stored = window.localStorage.getItem(STORYBOOK_THEME_RECIPE_STORAGE_KEY)
+    if (stored)
+      return themeRecipeToStorybookGlobals(normalizeThemeRecipe(JSON.parse(stored) as unknown)).theme
   }
   catch {}
   return 'system'
 }
 
-function writePreference(preference: ThemePreference): void {
-  try {
-    window.localStorage.setItem(THEME_PREF_KEY, preference)
-  }
-  catch {}
-}
-
-function resolveTheme(preference: ThemePreference) {
+function resolveTheme(preference: ThemeRecipeMode) {
   const dark = preference === 'system' ? (darkQuery?.matches ?? false) : preference === 'dark'
   return dark ? darkTheme : lightTheme
 }
 
-function applyTheme(preference: ThemePreference): void {
+function applyTheme(preference: ThemeRecipeMode): void {
   addons.setConfig({ theme: resolveTheme(preference) })
 }
 
-// The listener that the old one-shot read could never have. Only `system` tracks
-// the OS — an explicit override must survive the OS flipping underneath it.
+let currentPreference = readPreference()
+
+// Manager and preview now share the Storybook `theme` global. A toolbar change
+// restyles both documents, while only `system` follows subsequent OS changes.
 darkQuery?.addEventListener('change', () => {
-  if (readPreference() === 'system')
+  if (currentPreference === 'system')
     applyTheme('system')
 })
 
-const THEME_LABELS: Record<ThemePreference, string> = {
-  system: '🖥️ OS theme',
-  light: '☀️ Light',
-  dark: '🌙 Dark',
-}
+addons.getChannel().on('globalsUpdated', (payload: { globals?: Record<string, unknown> }) => {
+  const globals = normalizeStorybookThemeRecipeGlobals(payload.globals ?? {})
+  currentPreference = globals.theme
+  applyTheme(currentPreference)
+})
 
-const NEXT_PREFERENCE: Record<ThemePreference, ThemePreference> = {
-  system: 'light',
-  light: 'dark',
-  dark: 'system',
-}
-
-/**
- * The manual override, cycling system → light → dark. Storybook exposes no
- * built-in switcher for the MANAGER theme (the toolbar's theme control belongs to
- * addon-themes and drives the preview iframe only), so this is a small tool of
- * our own. It lives in the toolbar because that is the only surface an addon can
- * render into; the preference persists per browser.
- */
-function ManagerThemeTool() {
-  const [preference, setPreference] = useState<ThemePreference>(readPreference)
-
-  useEffect(() => {
-    applyTheme(preference)
-  }, [preference])
-
-  return createElement(
-    'button',
-    {
-      'type': 'button',
-      'title': `Manager chrome: ${THEME_LABELS[preference]} — click to change`,
-      'aria-label': `Manager chrome theme: ${THEME_LABELS[preference]}. Click to change.`,
-      'onClick': () => {
-        const next = NEXT_PREFERENCE[preference]
-        writePreference(next)
-        setPreference(next)
-      },
-      'style': {
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        font: 'inherit',
-        fontSize: 12,
-        padding: '0 8px',
-        height: 28,
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 4,
-        color: 'inherit',
-      },
-    },
-    THEME_LABELS[preference],
-  )
-}
-
-addons.register('dzup-ui/manager-theme', () => {
-  addons.add('dzup-ui/manager-theme', {
-    type: types.TOOL,
-    title: 'Manager theme',
-    // Every story, plus the MDX docs pages — the chrome is global, so the control
-    // for it should not vanish depending on what is selected.
-    match: () => true,
-    render: () => createElement(ManagerThemeTool),
-  })
+// The initial globals event can precede manager addon registration on a cold
+// static load. The preview persists the same canonical recipe, and storage
+// events fire in the sibling manager document, closing that startup race.
+window.addEventListener('storage', (event) => {
+  if (event.key !== STORYBOOK_THEME_RECIPE_STORAGE_KEY)
+    return
+  currentPreference = readPreference()
+  applyTheme(currentPreference)
 })
 
 // TASK-0.13 — render a component-status badge next to each entry in the sidebar.
@@ -238,7 +185,7 @@ const BADGE_HEX: Record<string, string> = {
 }
 
 addons.setConfig({
-  theme: resolveTheme(readPreference()),
+  theme: resolveTheme(currentPreference),
   sidebar: {
     showRoots: true,
     renderLabel: (item) => {

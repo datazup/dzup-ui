@@ -26,7 +26,7 @@
  */
 
 import type { Result } from 'axe-core'
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
@@ -168,6 +168,43 @@ describe.sequential('landing pages — accessibility', () => {
     expect(main.querySelectorAll('.bp-chips')).toHaveLength(1)
     expect(main.querySelectorAll('.bm-chips')).toHaveLength(0)
     expect(main.querySelectorAll('.block-manifest')).toHaveLength(1)
+  })
+
+  it('collapses secondary preview settings by default on narrow screens', async () => {
+    const originalMatchMedia = window.matchMedia
+    window.matchMedia = ((query: string) => ({
+      matches: query === '(max-width: 560px)',
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    })) as typeof window.matchMedia
+
+    try {
+      await mountAt(`/blocks/${BLOCKS[0]!.id}`)
+
+      const toggle = document.querySelector<HTMLButtonElement>('.bp-controls-toggle')
+      expect(toggle, 'mobile preview settings toggle did not render').toBeTruthy()
+      expect(toggle!.getAttribute('aria-expanded')).toBe('false')
+
+      const controlsId = toggle!.getAttribute('aria-controls')!
+      const controls = document.getElementById(controlsId)
+      expect(controls?.dataset.state).toBe('closed')
+      expect(controls?.getAttribute('aria-hidden')).toBe('true')
+
+      await fireEvent.click(toggle!)
+      await flushPromises()
+
+      expect(toggle!.getAttribute('aria-expanded')).toBe('true')
+      expect(controls?.dataset.state).toBe('open')
+      expect(controls?.hasAttribute('aria-hidden')).toBe(false)
+    }
+    finally {
+      window.matchMedia = originalMatchMedia
+    }
   })
 
   /**

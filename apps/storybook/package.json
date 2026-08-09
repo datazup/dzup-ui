@@ -17,12 +17,12 @@
     "verify:repl": "node scripts/verify-repl.mjs",
     "check:mdx-links": "node scripts/check-mdx-links.mjs",
     "dev": "node scripts/dev.mjs",
-    "build": "yarn build:counts && yarn build:releases && yarn build:playground && yarn build:llms && yarn build:playground-snippets && storybook build",
+    "build": "yarn build:counts && yarn build:releases && yarn build:playground && yarn build:llms && yarn build:playground-snippets && storybook build && node scripts/check-theme-recipe-static.mjs && yarn check:size",
     "test-storybook": "vitest run --project=storybook",
     "test-storybook:coverage": "vitest run --project=storybook --coverage",
     "test-storybook:ci": "vitest run --project=storybook --coverage --reporter=default --reporter=junit --reporter=json --outputFile.junit=a11y-report/junit.xml --outputFile.json=a11y-report/a11y-results.json",
     "chromatic": "chromatic --build-script-name build --exit-zero-on-changes",
-    "check:size": "node scripts/check-bundle-size.mjs"
+    "check:size": "node scripts/check-bundle-size.mjs --max-mb 25"
   },
   "dependencies": {
     "@dzup-ui/core": "workspace:*",
@@ -33,7 +33,6 @@
   "devDependencies": {
     "@storybook/addon-a11y": "^10.5.1",
     "@storybook/addon-docs": "^10.5.1",
-    "@storybook/addon-themes": "^10.5.1",
     "@storybook/addon-vitest": "^10.5.1",
     "@storybook/vue3-vite": "^10.5.1",
     "@tailwindcss/vite": "^4.0.0",
