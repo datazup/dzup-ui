@@ -1521,6 +1521,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/core"
+    ],
+    "level": "patch",
+    "summary": "Give standalone time-picker combobox triggers an accessible name derived from their placeholder while preserving explicit ARIA and form-field labelling.",
+    "body": "Give standalone time-picker combobox triggers an accessible name derived from their placeholder while preserving explicit ARIA and form-field labelling.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/core",
       "@dzup-ui/tokens"
     ],
