@@ -199,10 +199,9 @@ describe('block trust marks are backed by this suite', () => {
     expect([...AUDITED_THEMES]).toEqual(['light', 'dark'])
   })
 
-  it('certifies the bulk of the catalog (known debt is the rare exception)', () => {
-    // A backstop against the known-debt list quietly swallowing the catalog: if it
-    // ever covers most blocks, the marks stop meaning anything. Keep it small.
-    expect(certified.length).toBeGreaterThan(BLOCKS.length - 5)
+  it('certifies the entire catalog with no known accessibility debt', () => {
+    expect(certified).toHaveLength(BLOCKS.length)
+    expect(debt).toEqual([])
   })
 })
 

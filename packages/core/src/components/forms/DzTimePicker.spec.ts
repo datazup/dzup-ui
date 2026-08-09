@@ -94,7 +94,10 @@ describe('dzTimePicker — Trigger', () => {
 
   it('reflects the required prop via aria-required', () => {
     const wrapper = mountPicker({ required: true })
-    expect(wrapper.find('button').attributes('aria-required')).toBe('true')
+    const trigger = wrapper.get('[role="combobox"]')
+    expect(trigger.element.tagName).toBe('BUTTON')
+    expect(trigger.attributes('aria-required')).toBe('true')
+    expect(trigger.attributes('aria-haspopup')).toBe('dialog')
   })
 
   it('renders a hidden form input carrying the value', () => {
@@ -110,7 +113,7 @@ describe('dzTimePicker — Trigger', () => {
     const errorEl = wrapper.find('[role="alert"]')
     expect(errorEl.text()).toContain('Time required')
     const errorId = errorEl.attributes('id')!
-    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+    expect(wrapper.find(`[role="combobox"][aria-describedby~="${errorId}"]`).exists()).toBe(true)
   })
 })
 
@@ -124,12 +127,23 @@ describe('dzTimePicker — Cleaner', () => {
     expect(mountPicker({ modelValue: '10:00' }).find('[aria-label="Clear time"]').exists()).toBe(true)
   })
 
+  it('renders the cleaner as a sibling button, never inside the combobox trigger', () => {
+    const wrapper = mountPicker({ modelValue: '10:00' })
+    const trigger = wrapper.get('[role="combobox"]')
+    const cleaner = wrapper.get('button[aria-label="Clear time"]')
+
+    expect(trigger.element.contains(cleaner.element)).toBe(false)
+    expect(trigger.find('button, [role="button"]').exists()).toBe(false)
+  })
+
   it('clears the value and emits clear + change on cleaner click', async () => {
     const wrapper = mountPicker({ modelValue: '10:00' })
     await wrapper.find('[aria-label="Clear time"]').trigger('click')
     expect(wrapper.emitted('clear')).toBeTruthy()
     const updates = wrapper.emitted('update:modelValue')!
     expect(updates[updates.length - 1]).toEqual([''])
+    expect(wrapper.emitted('open')).toBeFalsy()
+    expect(document.activeElement).toBe(wrapper.get('[role="combobox"]').element)
   })
 
   it('hides the cleaner when cleaner=false', () => {

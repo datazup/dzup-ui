@@ -81,20 +81,7 @@ export interface A11yDebt {
   ref: string
 }
 
-export const KNOWN_A11Y_DEBT: Readonly<Record<string, A11yDebt>> = {
-  'booking-form': {
-    rules: ['aria-allowed-attr', 'nested-interactive'],
-    ref: 'DzTimePicker trigger nests <span role="button"> inside its <button> '
-      + '(packages/core/src/components/forms/DzTimePicker.vue:451); DzDatePicker/DzFormField '
-      + 'wire aria-describedby onto a non-supporting wrapper.',
-  },
-  'access-transfer': {
-    rules: ['aria-required-parent', 'nested-interactive'],
-    ref: 'DzTransfer renders <div role="option"> with no role="listbox" parent and an '
-      + '<input type="checkbox"> inside each option '
-      + '(packages/core/src/components/forms/DzTransfer.vue:187,193,281,287).',
-  },
-}
+export const KNOWN_A11Y_DEBT: Readonly<Record<string, A11yDebt>> = {}
 
 /**
  * Whether the catalog can honestly show trust marks for this block — true unless
