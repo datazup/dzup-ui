@@ -1,8 +1,6 @@
 ---
 "@dzup-ui/tokens": minor
 "@dzup-ui/core": minor
-"@dzup-ui/tooling": minor
-"@dzup-ui/codemods": minor
 ---
 
 Normalize the `warning` intent: every intent now exposes the same solid-fill state set (TASK-DS-10).
