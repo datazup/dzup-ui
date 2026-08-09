@@ -13,11 +13,13 @@ async function copy(): Promise<void> {
   try {
     await navigator.clipboard.writeText(props.code)
     copied.value = true
-    if (resetTimer) clearTimeout(resetTimer)
+    if (resetTimer)
+      clearTimeout(resetTimer)
     resetTimer = setTimeout(() => {
       copied.value = false
     }, 1500)
-  } catch {
+  }
+  catch {
     copied.value = false
   }
 }

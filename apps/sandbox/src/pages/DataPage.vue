@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import type { CanonicalSize } from '@dzup-ui/contracts'
+import type {
+  ColumnDef,
+  DzDataGridFilter,
+  ListVariant,
+  SortModel,
+  TableDensity,
+  TreeNode,
+} from '@dzup-ui/core'
 import {
   DzDataGrid,
   DzList,
@@ -11,15 +20,6 @@ import {
   DzTableRow,
   DzTree,
 } from '@dzup-ui/core'
-import type {
-  ColumnDef,
-  DzDataGridFilter,
-  ListVariant,
-  SortModel,
-  TableDensity,
-  TreeNode,
-} from '@dzup-ui/core'
-import type { CanonicalSize } from '@dzup-ui/contracts'
 import { computed, defineComponent, h, markRaw, onMounted, ref, watch } from 'vue'
 
 // ── Inline SVG icon components (used via TreeNode.icon) ─────────────────────

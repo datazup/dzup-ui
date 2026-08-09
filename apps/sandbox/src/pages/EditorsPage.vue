@@ -178,7 +178,8 @@ function renderMarkdown(src: string): string {
         inCode = false
       }
       else {
-        flushList(); flushQuote()
+        flushList()
+        flushQuote()
         codeLang = raw.slice(3).trim()
         inCode = true
       }
@@ -190,7 +191,8 @@ function renderMarkdown(src: string): string {
     }
 
     if (/^#{1,3} /.test(raw)) {
-      flushList(); flushQuote()
+      flushList()
+      flushQuote()
       const level = raw.match(/^#+/)![0]!.length
       out.push(`<h${level}>${inline(raw.replace(/^#+ /, ''))}</h${level}>`)
       continue
@@ -214,14 +216,18 @@ function renderMarkdown(src: string): string {
       continue
     }
     if (raw.trim() === '') {
-      flushList(); flushQuote()
+      flushList()
+      flushQuote()
       continue
     }
-    flushList(); flushQuote()
+    flushList()
+    flushQuote()
     out.push(`<p>${inline(raw)}</p>`)
   }
-  flushList(); flushQuote()
-  if (inCode) out.push(`<pre class="md-code"><code>${escape(codeBuf.join('\n'))}</code></pre>`)
+  flushList()
+  flushQuote()
+  if (inCode)
+    out.push(`<pre class="md-code"><code>${escape(codeBuf.join('\n'))}</code></pre>`)
 
   return out.join('\n')
 }
@@ -236,7 +242,8 @@ const markdownWordCount = computed(() =>
 
 function wrapSelection(prefix: string, suffix: string = prefix): void {
   const ta = document.getElementById('md-textarea') as HTMLTextAreaElement | null
-  if (!ta) return
+  if (!ta)
+    return
   const start = ta.selectionStart
   const end = ta.selectionEnd
   const before = ta.value.slice(0, start)
@@ -303,12 +310,14 @@ const jsonValidation = computed<JsonValidation>(() => {
 })
 
 function formatJson(): void {
-  if (!jsonValidation.value.ok) return
+  if (!jsonValidation.value.ok)
+    return
   jsonSource.value = JSON.stringify(jsonValidation.value.value, null, 2)
 }
 
 function minifyJson(): void {
-  if (!jsonValidation.value.ok) return
+  if (!jsonValidation.value.ok)
+    return
   jsonSource.value = JSON.stringify(jsonValidation.value.value)
 }
 
@@ -401,7 +410,8 @@ function computeDiff(a: string, b: string): DiffRow[] {
   while (i < n && j < m) {
     if (left[i] === right[j]) {
       rows.push({ type: 'equal', left: { n: i + 1, text: left[i]! }, right: { n: j + 1, text: right[j]! } })
-      i++; j++
+      i++
+      j++
     }
     else if (dp[i + 1]![j]! >= dp[i]![j + 1]!) {
       rows.push({ type: 'remove', left: { n: i + 1, text: left[i]! } })
@@ -428,8 +438,10 @@ const diffStats = computed(() => {
   let add = 0
   let rem = 0
   for (const r of diffRows.value) {
-    if (r.type === 'add') add++
-    else if (r.type === 'remove') rem++
+    if (r.type === 'add')
+      add++
+    else if (r.type === 'remove')
+      rem++
   }
   return { add, rem }
 })
@@ -544,7 +556,7 @@ function resetDiff(): void {
               :icon="WrapText"
               size="sm"
               variant="ghost"
-              ariaLabel="Toggle word wrap"
+              aria-label="Toggle word wrap"
               :aria-pressed="codeWordWrap"
               @click="codeWordWrap = !codeWordWrap"
             />
@@ -641,13 +653,13 @@ function resetDiff(): void {
           </DzButtonGroup>
 
           <div class="editor-toolbar" :aria-disabled="markdownView === 'preview'">
-            <DzIconButton :icon="Bold" size="sm" variant="ghost" ariaLabel="Bold" @click="wrapSelection('**')" />
-            <DzIconButton :icon="Italic" size="sm" variant="ghost" ariaLabel="Italic" @click="wrapSelection('*')" />
-            <DzIconButton :icon="Code2" size="sm" variant="ghost" ariaLabel="Inline code" @click="wrapSelection('`')" />
-            <DzIconButton :icon="Link2" size="sm" variant="ghost" ariaLabel="Link" @click="wrapSelection('[', '](https://)')" />
+            <DzIconButton :icon="Bold" size="sm" variant="ghost" aria-label="Bold" @click="wrapSelection('**')" />
+            <DzIconButton :icon="Italic" size="sm" variant="ghost" aria-label="Italic" @click="wrapSelection('*')" />
+            <DzIconButton :icon="Code2" size="sm" variant="ghost" aria-label="Inline code" @click="wrapSelection('`')" />
+            <DzIconButton :icon="Link2" size="sm" variant="ghost" aria-label="Link" @click="wrapSelection('[', '](https://)')" />
             <span class="toolbar-divider" aria-hidden="true" />
-            <DzIconButton :icon="ListIcon" size="sm" variant="ghost" ariaLabel="Bullet list" @click="wrapSelection('\n- ', '')" />
-            <DzIconButton :icon="Quote" size="sm" variant="ghost" ariaLabel="Block quote" @click="wrapSelection('\n> ', '')" />
+            <DzIconButton :icon="ListIcon" size="sm" variant="ghost" aria-label="Bullet list" @click="wrapSelection('\n- ', '')" />
+            <DzIconButton :icon="Quote" size="sm" variant="ghost" aria-label="Block quote" @click="wrapSelection('\n> ', '')" />
           </div>
         </header>
 
@@ -767,19 +779,19 @@ function resetDiff(): void {
       <div class="editor-shell">
         <header class="editor-head">
           <div class="editor-toolbar">
-            <DzIconButton :icon="Bold" size="sm" variant="ghost" ariaLabel="Bold" @click="exec('bold')" />
-            <DzIconButton :icon="Italic" size="sm" variant="ghost" ariaLabel="Italic" @click="exec('italic')" />
-            <DzIconButton :icon="Underline" size="sm" variant="ghost" ariaLabel="Underline" @click="exec('underline')" />
-            <DzIconButton :icon="Strikethrough" size="sm" variant="ghost" ariaLabel="Strikethrough" @click="exec('strikeThrough')" />
+            <DzIconButton :icon="Bold" size="sm" variant="ghost" aria-label="Bold" @click="exec('bold')" />
+            <DzIconButton :icon="Italic" size="sm" variant="ghost" aria-label="Italic" @click="exec('italic')" />
+            <DzIconButton :icon="Underline" size="sm" variant="ghost" aria-label="Underline" @click="exec('underline')" />
+            <DzIconButton :icon="Strikethrough" size="sm" variant="ghost" aria-label="Strikethrough" @click="exec('strikeThrough')" />
             <span class="toolbar-divider" aria-hidden="true" />
-            <DzIconButton :icon="Pilcrow" size="sm" variant="ghost" ariaLabel="Paragraph" @click="exec('formatBlock', 'p')" />
+            <DzIconButton :icon="Pilcrow" size="sm" variant="ghost" aria-label="Paragraph" @click="exec('formatBlock', 'p')" />
             <DzButton size="sm" variant="ghost" tone="neutral" class="toolbar-h-button" aria-label="Heading 2" @click="exec('formatBlock', 'h2')">
               H2
             </DzButton>
-            <DzIconButton :icon="Quote" size="sm" variant="ghost" ariaLabel="Quote" @click="exec('formatBlock', 'blockquote')" />
+            <DzIconButton :icon="Quote" size="sm" variant="ghost" aria-label="Quote" @click="exec('formatBlock', 'blockquote')" />
             <span class="toolbar-divider" aria-hidden="true" />
-            <DzIconButton :icon="ListIcon" size="sm" variant="ghost" ariaLabel="Bullet list" @click="exec('insertUnorderedList')" />
-            <DzIconButton :icon="ListOrdered" size="sm" variant="ghost" ariaLabel="Numbered list" @click="exec('insertOrderedList')" />
+            <DzIconButton :icon="ListIcon" size="sm" variant="ghost" aria-label="Bullet list" @click="exec('insertUnorderedList')" />
+            <DzIconButton :icon="ListOrdered" size="sm" variant="ghost" aria-label="Numbered list" @click="exec('insertOrderedList')" />
           </div>
 
           <DzButton

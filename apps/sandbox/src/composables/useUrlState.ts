@@ -1,29 +1,32 @@
-import { onBeforeUnmount, ref, watch, type Ref } from 'vue'
+import type { Ref } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-type Codec<T> = {
+interface Codec<T> {
   decode: (raw: string) => T
   encode: (val: T) => string
 }
 
 const stringCodec: Codec<string> = {
-  decode: (raw) => raw,
-  encode: (val) => val,
+  decode: raw => raw,
+  encode: val => val,
 }
 
 const numberCodec: Codec<number> = {
-  decode: (raw) => Number(raw),
-  encode: (val) => String(val),
+  decode: raw => Number(raw),
+  encode: val => String(val),
 }
 
 const booleanCodec: Codec<boolean> = {
-  decode: (raw) => raw === '1' || raw === 'true',
-  encode: (val) => (val ? '1' : '0'),
+  decode: raw => raw === '1' || raw === 'true',
+  encode: val => (val ? '1' : '0'),
 }
 
 function pickCodec<T>(defaultValue: T): Codec<T> {
-  if (typeof defaultValue === 'number') return numberCodec as unknown as Codec<T>
-  if (typeof defaultValue === 'boolean') return booleanCodec as unknown as Codec<T>
+  if (typeof defaultValue === 'number')
+    return numberCodec as unknown as Codec<T>
+  if (typeof defaultValue === 'boolean')
+    return booleanCodec as unknown as Codec<T>
   return stringCodec as unknown as Codec<T>
 }
 
@@ -41,8 +44,8 @@ export function useUrlState<T extends string | number | boolean>(
   const resolved = codec ?? pickCodec(defaultValue)
 
   const initial = route.query[key]
-  const initialValue =
-    typeof initial === 'string' && initial.length > 0
+  const initialValue
+    = typeof initial === 'string' && initial.length > 0
       ? safeDecode(resolved, initial, defaultValue)
       : defaultValue
 
@@ -52,13 +55,16 @@ export function useUrlState<T extends string | number | boolean>(
     const encoded = resolved.encode(next)
     const current = route.query[key]
     const isDefault = encoded === resolved.encode(defaultValue)
-    if (isDefault && current === undefined) return
+    if (isDefault && current === undefined)
+      return
     const nextQuery = { ...route.query }
     if (isDefault) {
       delete nextQuery[key]
-    } else if (current !== encoded) {
+    }
+    else if (current !== encoded) {
       nextQuery[key] = encoded
-    } else {
+    }
+    else {
       return
     }
     void router.replace({ query: nextQuery })
@@ -76,7 +82,8 @@ function safeDecode<T>(codec: Codec<T>, raw: string, fallback: T): T {
       return fallback
     }
     return decoded
-  } catch {
+  }
+  catch {
     return fallback
   }
 }

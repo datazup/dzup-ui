@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
+import type { JsonSchema, ResolvedField, ResolvedGroup } from '../schema/jsonSchema.ts'
 import {
   DzCheckbox,
   DzCheckboxGroup,
@@ -18,14 +20,12 @@ import {
   DzSwitch,
   DzTextarea,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { computed } from 'vue'
-import type { JsonSchema, ResolvedField, ResolvedGroup } from '../schema/jsonSchema.ts'
 import { buildLayout } from '../schema/jsonSchema.ts'
 
+const modelValue = defineModel<Record<string, unknown>>({ required: true })
 const props = defineProps<{
   schema: JsonSchema
-  modelValue: Record<string, unknown>
 }>()
 
 const groups = computed<ResolvedGroup[]>(() => buildLayout(props.schema))
@@ -43,11 +43,20 @@ function fieldStyle(field: ResolvedField): Record<string, string> {
 }
 
 function toItems(values: readonly (string | number)[] | undefined, labels?: Record<string, string>): DzSelectItem[] {
-  if (!values) return []
+  if (!values)
+    return []
   return values.map((v) => {
     const value = String(v)
     return { value, label: labels?.[value] ?? value }
   })
+}
+
+function updateField(key: string, value: unknown): void {
+  modelValue.value = { ...modelValue.value, [key]: value }
+}
+
+function toOptionalString(value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined
 }
 </script>
 
@@ -83,7 +92,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :model-value="(modelValue[field.key] as string) ?? ''"
             :placeholder="field.schema.placeholder"
             :maxlength="field.schema.maxLength"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzInput
@@ -91,21 +100,21 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             type="email"
             :model-value="(modelValue[field.key] as string) ?? ''"
             :placeholder="field.schema.placeholder ?? 'name@example.com'"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzPasswordInput
             v-else-if="field.widget === 'password'"
             :model-value="(modelValue[field.key] as string) ?? ''"
             :placeholder="field.schema.placeholder"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzTextarea
             v-else-if="field.widget === 'textarea'"
             :model-value="(modelValue[field.key] as string) ?? ''"
             :placeholder="field.schema.placeholder"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzNumberInput
@@ -114,7 +123,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :min="(field.schema.minimum as number | undefined)"
             :max="(field.schema.maximum as number | undefined)"
             :step="field.schema.type === 'integer' ? 1 : (field.schema.multipleOf ?? 1)"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzSlider
@@ -123,13 +132,13 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :min="(field.schema.minimum as number | undefined) ?? 0"
             :max="(field.schema.maximum as number | undefined) ?? 100"
             :step="field.schema.multipleOf ?? 1"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzSwitch
             v-else-if="field.widget === 'switch'"
             :model-value="Boolean(modelValue[field.key])"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           >
             {{ field.schema.title ?? field.key }}
           </DzSwitch>
@@ -137,7 +146,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
           <DzCheckbox
             v-else-if="field.widget === 'checkbox'"
             :model-value="Boolean(modelValue[field.key])"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           >
             {{ field.schema.title ?? field.key }}
           </DzCheckbox>
@@ -147,7 +156,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :model-value="(modelValue[field.key] as string) ?? ''"
             :items="toItems(field.schema.enum, field.schema.enumLabels)"
             :placeholder="field.schema.placeholder ?? 'Select...'"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzRadioGroup
@@ -155,7 +164,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :model-value="(modelValue[field.key] as string) ?? ''"
             orientation="horizontal"
             :aria-label="field.schema.title ?? field.key"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           >
             <DzRadio
               v-for="option in toItems(field.schema.enum, field.schema.enumLabels)"
@@ -172,7 +181,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :items="toItems(field.schema.items?.enum, field.schema.items?.enumLabels)"
             :max-selections="field.schema.maxItems"
             :placeholder="field.schema.placeholder ?? 'Select...'"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <DzCheckboxGroup
@@ -180,7 +189,7 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
             :model-value="(modelValue[field.key] as string[]) ?? []"
             orientation="horizontal"
             :aria-label="field.schema.title ?? field.key"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           >
             <DzCheckbox
               v-for="option in toItems(field.schema.items?.enum, field.schema.items?.enumLabels)"
@@ -194,10 +203,10 @@ function toItems(values: readonly (string | number)[] | undefined, labels?: Reco
           <DzDatePicker
             v-else-if="field.widget === 'date'"
             :model-value="(modelValue[field.key] as string) ?? ''"
-            :min="field.schema.minimum as string | undefined"
-            :max="field.schema.maximum as string | undefined"
+            :min="toOptionalString(field.schema.minimum)"
+            :max="toOptionalString(field.schema.maximum)"
             :placeholder="field.schema.placeholder ?? 'Pick a date'"
-            @update:model-value="v => (modelValue[field.key] = v)"
+            @update:model-value="v => updateField(field.key, v)"
           />
 
           <p v-else class="unsupported">

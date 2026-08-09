@@ -11,7 +11,7 @@ const required = [
   'data-theme-mode',
   'data-density',
   'data-motion-preview',
-  "setAttribute('dir'",
+  'setAttribute(\'dir\'',
 ]
 
 for (const marker of required) {

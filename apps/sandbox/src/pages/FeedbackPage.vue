@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { CanonicalSize, CanonicalTone } from '@dzup-ui/contracts'
 import type { DzRunStatusBadgeProps, ResultStatus } from '@dzup-ui/core'
-
-type DzRunStatus = DzRunStatusBadgeProps['status']
 import {
   DZ_TOAST_KEY,
   DzAlert,
@@ -17,6 +15,8 @@ import {
   DzTokenProgressBar,
 } from '@dzup-ui/core'
 import { inject, ref } from 'vue'
+
+type DzRunStatus = DzRunStatusBadgeProps['status']
 
 const progressValue = ref(45)
 const showAlert = ref(true)

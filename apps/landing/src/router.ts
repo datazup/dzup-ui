@@ -1,9 +1,9 @@
 import type { RouteLocationNormalized } from 'vue-router'
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { PRO_FACTS } from './data.ts'
 import { getBlock } from './blocks/registry.ts'
 import { SITE_ORIGIN } from './config.ts'
+import { PRO_FACTS } from './data.ts'
 import { BLOCK_OG_IDS, TEMPLATE_OG_SLUGS } from './generated/ogImages.ts'
 import { startViewTransition, supportsViewTransitions } from './motion/useViewTransition.ts'
 // `/` is the only eagerly-imported route: it is the first paint for most visitors,

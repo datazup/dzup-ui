@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const PREPARATION_COMMANDS = [
@@ -20,8 +21,9 @@ export function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, options)
     child.once('error', reject)
-    child.once('exit', code => {
-      if (code === 0) resolve()
+    child.once('exit', (code) => {
+      if (code === 0)
+        resolve()
       else reject(new Error(`${command} ${args.join(' ')} exited with code ${code ?? 'unknown'}`))
     })
   })
@@ -46,7 +48,7 @@ export async function main({
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(error => {
+  main().catch((error) => {
     process.stderr.write(`${error.message}\n`)
     process.exitCode = 1
   })

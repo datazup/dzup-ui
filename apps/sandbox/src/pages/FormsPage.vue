@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { DzSelectItem } from '@dzup-ui/core'
+import type { JsonSchema } from '../schema/jsonSchema.ts'
 import {
   DzCheckbox,
   DzCheckboxGroup,
@@ -15,10 +17,8 @@ import {
   DzSlider,
   DzSwitch,
 } from '@dzup-ui/core'
-import type { DzSelectItem } from '@dzup-ui/core'
 import { computed, reactive, ref, watch } from 'vue'
 import SchemaFormRenderer from '../components/SchemaFormRenderer.vue'
-import type { JsonSchema } from '../schema/jsonSchema.ts'
 import { initialFormData, isFormReady } from '../schema/jsonSchema.ts'
 
 const accountType = ref('')
@@ -174,18 +174,18 @@ const basicSchema: JsonSchema = {
       },
     },
     billingPlan: {
-      type: 'string',
-      title: 'Billing Plan',
-      enum: ['starter', 'pro', 'enterprise'],
-      enumLabels: { starter: 'Starter', pro: 'Pro', enterprise: 'Enterprise' },
-      default: 'pro',
+      'type': 'string',
+      'title': 'Billing Plan',
+      'enum': ['starter', 'pro', 'enterprise'],
+      'enumLabels': { starter: 'Starter', pro: 'Pro', enterprise: 'Enterprise' },
+      'default': 'pro',
       'x-widget': 'radio-group',
     },
     notifications: {
-      type: 'array',
-      title: 'Notification Channels',
-      default: ['email'],
-      items: {
+      'type': 'array',
+      'title': 'Notification Channels',
+      'default': ['email'],
+      'items': {
         type: 'string',
         enum: ['email', 'sms', 'push'],
         enumLabels: { email: 'Email', sms: 'SMS', push: 'Push' },
@@ -201,11 +201,11 @@ const basicSchema: JsonSchema = {
       description: 'Slider rendered because integer has bounded min/max.',
     },
     seats: {
-      type: 'integer',
-      title: 'Seats',
-      minimum: 1,
-      multipleOf: 1,
-      default: 5,
+      'type': 'integer',
+      'title': 'Seats',
+      'minimum': 1,
+      'multipleOf': 1,
+      'default': 5,
       'x-widget': 'number',
     },
     notes: {
@@ -220,18 +220,18 @@ const basicSchema: JsonSchema = {
       default: true,
     },
     termsAccepted: {
-      type: 'boolean',
-      title: 'I agree to the Terms of Service and Privacy Policy',
+      'type': 'boolean',
+      'title': 'I agree to the Terms of Service and Privacy Policy',
       'x-widget': 'checkbox',
     },
   },
 }
 
 const advancedSchema: JsonSchema = {
-  $schema: 'https://json-schema.org/draft-07/schema',
-  title: 'Workspace Setup',
-  type: 'object',
-  required: ['workspaceName', 'accountType', 'country', 'launchDate', 'frameworks', 'billingPlan', 'termsAccepted'],
+  '$schema': 'https://json-schema.org/draft-07/schema',
+  'title': 'Workspace Setup',
+  'type': 'object',
+  'required': ['workspaceName', 'accountType', 'country', 'launchDate', 'frameworks', 'billingPlan', 'termsAccepted'],
   'x-layout': { columns: 12, gap: '14px' },
   'x-groups': [
     { id: 'identity', title: 'Identity', description: 'Who owns this workspace and how to reach you.', columns: 12 },
@@ -239,82 +239,125 @@ const advancedSchema: JsonSchema = {
     { id: 'preferences', title: 'Preferences', columns: 12 },
     { id: 'consent', columns: 1 },
   ],
-  properties: {
+  'properties': {
     workspaceName: {
-      type: 'string', title: 'Workspace Name', placeholder: 'e.g. Acme Platform',
-      description: 'Shown to teammates and on invoices.', maxLength: 60,
-      'x-group': 'identity', 'x-layout': { colSpan: 8, order: 1 },
+      'type': 'string',
+      'title': 'Workspace Name',
+      'placeholder': 'e.g. Acme Platform',
+      'description': 'Shown to teammates and on invoices.',
+      'maxLength': 60,
+      'x-group': 'identity',
+      'x-layout': { colSpan: 8, order: 1 },
     },
     accountType: {
-      type: 'string', title: 'Account Type',
-      enum: ['personal', 'startup', 'enterprise'],
-      enumLabels: { personal: 'Personal Workspace', startup: 'Startup Team', enterprise: 'Enterprise' },
-      'x-group': 'identity', 'x-layout': { colSpan: 4, order: 2 },
+      'type': 'string',
+      'title': 'Account Type',
+      'enum': ['personal', 'startup', 'enterprise'],
+      'enumLabels': { personal: 'Personal Workspace', startup: 'Startup Team', enterprise: 'Enterprise' },
+      'x-group': 'identity',
+      'x-layout': { colSpan: 4, order: 2 },
     },
     contactEmail: {
-      type: 'string', title: 'Contact Email', format: 'email',
-      description: 'Used for billing receipts and security alerts.',
-      'x-group': 'identity', 'x-layout': { colSpan: 6, order: 3 },
+      'type': 'string',
+      'title': 'Contact Email',
+      'format': 'email',
+      'description': 'Used for billing receipts and security alerts.',
+      'x-group': 'identity',
+      'x-layout': { colSpan: 6, order: 3 },
     },
     country: {
-      type: 'string', title: 'Country',
-      enum: ['us', 'de', 'ba', 'uk', 'ca'],
-      enumLabels: { us: 'United States', de: 'Germany', ba: 'Bosnia and Herzegovina', uk: 'United Kingdom', ca: 'Canada' },
-      'x-group': 'identity', 'x-layout': { colSpan: 3, order: 4 },
+      'type': 'string',
+      'title': 'Country',
+      'enum': ['us', 'de', 'ba', 'uk', 'ca'],
+      'enumLabels': { us: 'United States', de: 'Germany', ba: 'Bosnia and Herzegovina', uk: 'United Kingdom', ca: 'Canada' },
+      'x-group': 'identity',
+      'x-layout': { colSpan: 3, order: 4 },
     },
     launchDate: {
-      type: 'string', title: 'Launch Date', format: 'date',
-      minimum: '2026-01-01', maximum: '2027-12-31',
-      'x-group': 'identity', 'x-layout': { colSpan: 3, order: 5 },
+      'type': 'string',
+      'title': 'Launch Date',
+      'format': 'date',
+      'minimum': '2026-01-01',
+      'maximum': '2027-12-31',
+      'x-group': 'identity',
+      'x-layout': { colSpan: 3, order: 5 },
     },
     billingPlan: {
-      type: 'string', title: 'Billing Plan',
-      enum: ['starter', 'pro', 'enterprise'],
-      enumLabels: { starter: 'Starter', pro: 'Pro', enterprise: 'Enterprise' },
-      default: 'pro', 'x-widget': 'radio-group',
-      'x-group': 'plan', 'x-layout': { colSpan: 6, order: 1 },
+      'type': 'string',
+      'title': 'Billing Plan',
+      'enum': ['starter', 'pro', 'enterprise'],
+      'enumLabels': { starter: 'Starter', pro: 'Pro', enterprise: 'Enterprise' },
+      'default': 'pro',
+      'x-widget': 'radio-group',
+      'x-group': 'plan',
+      'x-layout': { colSpan: 6, order: 1 },
     },
     seats: {
-      type: 'integer', title: 'Seats', minimum: 1, multipleOf: 1, default: 5,
-      'x-widget': 'number', 'x-group': 'plan', 'x-layout': { colSpan: 3, order: 2 },
+      'type': 'integer',
+      'title': 'Seats',
+      'minimum': 1,
+      'multipleOf': 1,
+      'default': 5,
+      'x-widget': 'number',
+      'x-group': 'plan',
+      'x-layout': { colSpan: 3, order: 2 },
     },
     budget: {
-      type: 'integer', title: 'Budget Confidence',
-      minimum: 0, maximum: 100, default: 55,
-      description: 'Slider rendered because integer has bounded min/max.',
-      'x-group': 'plan', 'x-layout': { colSpan: 3, order: 3 },
+      'type': 'integer',
+      'title': 'Budget Confidence',
+      'minimum': 0,
+      'maximum': 100,
+      'default': 55,
+      'description': 'Slider rendered because integer has bounded min/max.',
+      'x-group': 'plan',
+      'x-layout': { colSpan: 3, order: 3 },
     },
     frameworks: {
-      type: 'array', title: 'Preferred Stack', maxItems: 3, default: ['vue'],
-      items: {
+      'type': 'array',
+      'title': 'Preferred Stack',
+      'maxItems': 3,
+      'default': ['vue'],
+      'items': {
         type: 'string',
         enum: ['vue', 'react', 'angular', 'svelte', 'solid'],
         enumLabels: { vue: 'Vue', react: 'React', angular: 'Angular', svelte: 'Svelte', solid: 'Solid' },
       },
-      'x-group': 'plan', 'x-layout': { colSpan: 12, order: 4 },
+      'x-group': 'plan',
+      'x-layout': { colSpan: 12, order: 4 },
     },
     notifications: {
-      type: 'array', title: 'Notification Channels', default: ['email'],
-      items: {
+      'type': 'array',
+      'title': 'Notification Channels',
+      'default': ['email'],
+      'items': {
         type: 'string',
         enum: ['email', 'sms', 'push'],
         enumLabels: { email: 'Email', sms: 'SMS', push: 'Push' },
       },
       'x-widget': 'checkbox-group',
-      'x-group': 'preferences', 'x-layout': { colSpan: 8, order: 1 },
+      'x-group': 'preferences',
+      'x-layout': { colSpan: 8, order: 1 },
     },
     autoRenew: {
-      type: 'boolean', title: 'Auto-renew subscription', default: true,
-      'x-group': 'preferences', 'x-layout': { colSpan: 4, order: 2 },
+      'type': 'boolean',
+      'title': 'Auto-renew subscription',
+      'default': true,
+      'x-group': 'preferences',
+      'x-layout': { colSpan: 4, order: 2 },
     },
     notes: {
-      type: 'string', title: 'Internal Notes', format: 'textarea',
-      placeholder: 'Anything reviewers should know...',
-      'x-group': 'preferences', 'x-layout': { colSpan: 12, order: 3 },
+      'type': 'string',
+      'title': 'Internal Notes',
+      'format': 'textarea',
+      'placeholder': 'Anything reviewers should know...',
+      'x-group': 'preferences',
+      'x-layout': { colSpan: 12, order: 3 },
     },
     termsAccepted: {
-      type: 'boolean', title: 'I agree to the Terms of Service and Privacy Policy',
-      'x-widget': 'checkbox', 'x-group': 'consent',
+      'type': 'boolean',
+      'title': 'I agree to the Terms of Service and Privacy Policy',
+      'x-widget': 'checkbox',
+      'x-group': 'consent',
     },
   },
 }
@@ -324,6 +367,12 @@ const schemaSource = ref(JSON.stringify(basicSchema, null, 2))
 const parseError = ref<string | null>(null)
 const activeSchema = ref<JsonSchema>(basicSchema)
 const schemaFormData = reactive(initialFormData(basicSchema))
+
+function updateSchemaFormData(value: Record<string, unknown>): void {
+  for (const key of Object.keys(schemaFormData))
+    delete schemaFormData[key]
+  Object.assign(schemaFormData, value)
+}
 const lastSubmitted = ref<string | null>(null)
 const advancedSchemaSource = JSON.stringify(advancedSchema, null, 2)
 
@@ -352,7 +401,8 @@ const schemaReady = computed(() => isFormReady(activeSchema.value, schemaFormDat
 const schemaSnapshot = computed(() => JSON.stringify(schemaFormData, null, 2))
 
 function submitSchemaForm(): void {
-  if (!schemaReady.value) return
+  if (!schemaReady.value)
+    return
   lastSubmitted.value = schemaSnapshot.value
   // eslint-disable-next-line no-console
   console.info('[schema-form submit]', JSON.parse(schemaSnapshot.value))
@@ -579,7 +629,11 @@ function resetSchemaForm(): void {
           <h3 class="pane-title">
             Rendered Form
           </h3>
-          <SchemaFormRenderer :schema="activeSchema" :model-value="schemaFormData" />
+          <SchemaFormRenderer
+            :schema="activeSchema"
+            :model-value="schemaFormData"
+            @update:model-value="updateSchemaFormData"
+          />
 
           <div class="actions-row">
             <button class="primary-btn" type="button" :disabled="!schemaReady" @click="submitSchemaForm">

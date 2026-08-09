@@ -47,7 +47,8 @@ const ICON: Record<string, string> = {
 
 function deriveName(file: string): string {
   const match = file.match(/\.\/pages\/(\w+)Page\.vue$/)
-  if (!match || !match[1]) throw new Error(`Unexpected page filename: ${file}`)
+  if (!match || !match[1])
+    throw new Error(`Unexpected page filename: ${file}`)
   return match[1]
 }
 

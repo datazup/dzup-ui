@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict'
-import test from 'node:test'
+import { expect, test } from 'vitest'
 import { main, preparationEnvironment } from './dev.mjs'
 
 test('preparation removes remote-development host state only for generated artifacts', () => {
@@ -10,7 +9,7 @@ test('preparation removes remote-development host state only for generated artif
     KEEP: 'value',
   })
 
-  assert.deepEqual(prepared, { VITE_PORT: '6006', KEEP: 'value' })
+  expect(prepared).toEqual({ VITE_PORT: '6006', KEEP: 'value' })
 })
 
 test('remote development is restored for the Storybook server after preparation', async () => {
@@ -28,13 +27,21 @@ test('remote development is restored for the Storybook server after preparation'
     execute: async (command, args, options) => calls.push({ command, args, options }),
   })
 
-  assert.equal(calls.length, 6)
+  expect(calls).toHaveLength(6)
   for (const call of calls.slice(0, 5)) {
-    assert.equal(call.options.env.APP_ENV, undefined)
-    assert.equal(call.options.env.VITE_PUBLIC_URL, undefined)
+    expect(call.options.env.APP_ENV).toBeUndefined()
+    expect(call.options.env.VITE_PUBLIC_URL).toBeUndefined()
   }
-  assert.equal(calls[5].options.env, env)
-  assert.deepEqual(calls[5].args, [
-    'workspace', '@dzup-ui/storybook', 'exec', 'storybook', 'dev', '-p', '6006', '--host', '0.0.0.0',
+  expect(calls[5].options.env).toBe(env)
+  expect(calls[5].args).toEqual([
+    'workspace',
+    '@dzup-ui/storybook',
+    'exec',
+    'storybook',
+    'dev',
+    '-p',
+    '6006',
+    '--host',
+    '0.0.0.0',
   ])
 })

@@ -1,22 +1,4 @@
 <script setup lang="ts">
-import {
-  DzAppShell,
-  DzAspectRatio,
-  DzCollapse,
-  DzContainer,
-  DzDivider,
-  DzFlex,
-  DzGrid,
-  DzResizable,
-  DzResizableHandle,
-  DzResizablePanel,
-  DzScrollArea,
-  DzSpacer,
-  DzSplitter,
-  DzSplitterHandle,
-  DzSplitterPanel,
-  DzStack,
-} from '@dzup-ui/core'
 import type {
   ContainerMaxWidth,
   DzAspectRatioProps,
@@ -38,6 +20,24 @@ import type {
   SpacerSize,
   StackAlign,
   StackDirection,
+} from '@dzup-ui/core'
+import {
+  DzAppShell,
+  DzAspectRatio,
+  DzCollapse,
+  DzContainer,
+  DzDivider,
+  DzFlex,
+  DzGrid,
+  DzResizable,
+  DzResizableHandle,
+  DzResizablePanel,
+  DzScrollArea,
+  DzSpacer,
+  DzSplitter,
+  DzSplitterHandle,
+  DzSplitterPanel,
+  DzStack,
 } from '@dzup-ui/core'
 import { computed } from 'vue'
 import DemoCode from '../components/DemoCode.vue'
@@ -423,8 +423,10 @@ const appShellSnippet = `<DzAppShell sidebar-width="14rem" header-height="3.5rem
         <span class="muted-text">Logout</span>
       </div>
 
-      <DemoCode code="<DzDivider />
-<DzDivider orientation=&quot;vertical&quot; decorative />" />
+      <DemoCode
+        code="<DzDivider />
+<DzDivider orientation=&quot;vertical&quot; decorative />"
+      />
     </section>
 
     <!-- DzSpacer -->

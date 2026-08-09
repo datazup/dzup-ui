@@ -1,4 +1,15 @@
 <script setup lang="ts">
+import type { CanonicalTone } from '@dzup-ui/contracts'
+import type {
+  ColumnDef,
+  CommandGroup,
+  CommandItem,
+  DzSelectItem,
+  Persona,
+  SegmentedItem,
+  TransferItem,
+  TreeNode,
+} from '@dzup-ui/core'
 /**
  * ListsPage — review playground for every list-driven component.
  *
@@ -46,17 +57,6 @@ import {
   DzTransfer,
   DzTree,
 } from '@dzup-ui/core'
-import type {
-  ColumnDef,
-  CommandGroup,
-  CommandItem,
-  DzSelectItem,
-  Persona,
-  SegmentedItem,
-  TransferItem,
-  TreeNode,
-} from '@dzup-ui/core'
-import type { CanonicalTone } from '@dzup-ui/contracts'
 import { computed, ref } from 'vue'
 
 // ── Shared sample lists ──────────────────────────────────────────────────────
@@ -253,10 +253,12 @@ const selectedTreeLabels = computed(() =>
   treeSelected.value.map((key) => {
     function find(nodes: TreeNode[]): string | undefined {
       for (const n of nodes) {
-        if (n.key === key) return n.label
+        if (n.key === key)
+          return n.label
         if (n.children) {
           const hit = find(n.children)
-          if (hit) return hit
+          if (hit)
+            return hit
         }
       }
       return undefined

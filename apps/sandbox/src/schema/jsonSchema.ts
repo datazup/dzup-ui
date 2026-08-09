@@ -22,20 +22,20 @@ export interface FieldLayout {
 }
 
 export interface JsonSchemaProperty {
-  type?: 'string' | 'number' | 'integer' | 'boolean' | 'array' | 'object'
-  title?: string
-  description?: string
-  placeholder?: string
-  format?: 'email' | 'password' | 'date' | 'textarea'
-  enum?: readonly (string | number)[]
-  enumLabels?: Record<string, string>
-  default?: unknown
-  minimum?: number | string
-  maximum?: number | string
-  multipleOf?: number
-  maxLength?: number
-  maxItems?: number
-  items?: JsonSchemaProperty
+  'type'?: 'string' | 'number' | 'integer' | 'boolean' | 'array' | 'object'
+  'title'?: string
+  'description'?: string
+  'placeholder'?: string
+  'format'?: 'email' | 'password' | 'date' | 'textarea'
+  'enum'?: readonly (string | number)[]
+  'enumLabels'?: Record<string, string>
+  'default'?: unknown
+  'minimum'?: number | string
+  'maximum'?: number | string
+  'multipleOf'?: number
+  'maxLength'?: number
+  'maxItems'?: number
+  'items'?: JsonSchemaProperty
   'x-widget'?: Widget
   /** Group id; matches an entry in the root x-groups array. Ungrouped → default bucket. */
   'x-group'?: string
@@ -58,21 +58,23 @@ export interface RootLayout {
 }
 
 export interface JsonSchema {
-  $schema?: string
-  title?: string
-  type: 'object'
-  required?: string[]
-  properties: Record<string, JsonSchemaProperty>
+  '$schema'?: string
+  'title'?: string
+  'type': 'object'
+  'required'?: string[]
+  'properties': Record<string, JsonSchemaProperty>
   'x-layout'?: RootLayout
   'x-groups'?: GroupSpec[]
 }
 
 export function widgetFor(schema: JsonSchemaProperty): Widget {
   const override = schema['x-widget']
-  if (override) return override
+  if (override)
+    return override
 
   const t = schema.type
-  if (t === 'boolean') return 'switch'
+  if (t === 'boolean')
+    return 'switch'
 
   if (t === 'integer' || t === 'number') {
     const hasBounds = typeof schema.minimum === 'number' && typeof schema.maximum === 'number'
@@ -80,17 +82,24 @@ export function widgetFor(schema: JsonSchemaProperty): Widget {
   }
 
   if (t === 'array') {
-    if (schema.items?.enum) return 'multi-select'
+    if (schema.items?.enum)
+      return 'multi-select'
     return 'unsupported'
   }
 
   if (t === 'string') {
-    if (schema.enum) return 'select'
-    if (schema.format === 'date') return 'date'
-    if (schema.format === 'email') return 'email'
-    if (schema.format === 'password') return 'password'
-    if (schema.format === 'textarea') return 'textarea'
-    if (schema.maxLength && schema.maxLength > 200) return 'textarea'
+    if (schema.enum)
+      return 'select'
+    if (schema.format === 'date')
+      return 'date'
+    if (schema.format === 'email')
+      return 'email'
+    if (schema.format === 'password')
+      return 'password'
+    if (schema.format === 'textarea')
+      return 'textarea'
+    if (schema.maxLength && schema.maxLength > 200)
+      return 'textarea'
     return 'input'
   }
 
@@ -98,7 +107,8 @@ export function widgetFor(schema: JsonSchemaProperty): Widget {
 }
 
 export function defaultValueFor(schema: JsonSchemaProperty): unknown {
-  if (schema.default !== undefined) return schema.default
+  if (schema.default !== undefined)
+    return schema.default
 
   switch (schema.type) {
     case 'boolean': return false
@@ -149,7 +159,8 @@ export function buildLayout(schema: JsonSchema): ResolvedGroup[] {
 
   function ensureGroup(id: string, spec?: GroupSpec): ResolvedGroup {
     const existing = groupMap.get(id)
-    if (existing) return existing
+    if (existing)
+      return existing
     const columns = Math.max(1, spec?.columns ?? rootColumns)
     const group: ResolvedGroup = {
       id,
@@ -197,9 +208,12 @@ export function buildLayout(schema: JsonSchema): ResolvedGroup[] {
 export function isFormReady(schema: JsonSchema, data: Record<string, unknown>): boolean {
   for (const key of schema.required ?? []) {
     const value = data[key]
-    if (value === undefined || value === null || value === '') return false
-    if (Array.isArray(value) && value.length === 0) return false
-    if (value === false && schema.properties[key]?.type === 'boolean') return false
+    if (value === undefined || value === null || value === '')
+      return false
+    if (Array.isArray(value) && value.length === 0)
+      return false
+    if (value === false && schema.properties[key]?.type === 'boolean')
+      return false
   }
   return true
 }

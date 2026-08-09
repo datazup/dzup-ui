@@ -1,4 +1,20 @@
 <script setup lang="ts">
+import type {
+  CanonicalSize,
+  CanonicalTone,
+  TabsVariant,
+} from '@dzup-ui/contracts'
+import type {
+  DzBreadcrumbProps,
+  DzMenuProps,
+  DzPaginationProps,
+  DzSegmentedProps,
+  DzSidebarProps,
+  DzStepperProps,
+  DzTabsProps,
+  SegmentedItem,
+  StepperOrientation,
+} from '@dzup-ui/core'
 import {
   DzBreadcrumb,
   DzBreadcrumbItem,
@@ -19,22 +35,6 @@ import {
   DzTabList,
   DzTabs,
   DzTabTrigger,
-} from '@dzup-ui/core'
-import type {
-  CanonicalSize,
-  CanonicalTone,
-  TabsVariant,
-} from '@dzup-ui/contracts'
-import type {
-  DzBreadcrumbProps,
-  DzMenuProps,
-  DzPaginationProps,
-  DzSegmentedProps,
-  DzSidebarProps,
-  DzStepperProps,
-  DzTabsProps,
-  SegmentedItem,
-  StepperOrientation,
 } from '@dzup-ui/core'
 import { computed, reactive, ref } from 'vue'
 import DemoCode from '../components/DemoCode.vue'
@@ -68,7 +68,8 @@ const activeClosable = ref<string>('editor')
 
 function closeTab(value: string): void {
   const idx = closableTabs.value.findIndex(t => t.value === value)
-  if (idx === -1) return
+  if (idx === -1)
+    return
   closableTabs.value.splice(idx, 1)
   if (activeClosable.value === value) {
     activeClosable.value = closableTabs.value[0]?.value ?? ''
@@ -216,11 +217,13 @@ const activeStep = ref<number>(1)
 const stepperTotal = computed(() => stepperSteps.length)
 
 function nextStep(): void {
-  if (activeStep.value < stepperTotal.value - 1) activeStep.value += 1
+  if (activeStep.value < stepperTotal.value - 1)
+    activeStep.value += 1
 }
 
 function prevStep(): void {
-  if (activeStep.value > 0) activeStep.value -= 1
+  if (activeStep.value > 0)
+    activeStep.value -= 1
 }
 
 const stepperSnippet = useDemoSnippet<Partial<DzStepperProps>>(() => ({
@@ -750,7 +753,7 @@ const compositionState = reactive({
             </DzSidebarItem>
           </DzSidebarSection>
           <DzSidebarSection title="External">
-            <DzSidebarItem href="https://github.com" :aria-label="'Open GitHub in a new tab'">
+            <DzSidebarItem href="https://github.com" aria-label="Open GitHub in a new tab">
               <template #icon>
                 <span class="sidebar-icon">↗</span>
               </template>

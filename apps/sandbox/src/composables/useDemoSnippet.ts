@@ -1,4 +1,5 @@
-import { computed, type ComputedRef } from 'vue'
+import type { ComputedRef } from 'vue'
+import { computed } from 'vue'
 
 export interface SnippetManifest<TProps extends Record<string, unknown>> {
   tag: string
@@ -19,12 +20,14 @@ function kebabCase(name: string): string {
 }
 
 function isDefault(value: unknown, dflt: unknown): boolean {
-  if (dflt === undefined) return false
+  if (dflt === undefined)
+    return false
   return Object.is(value, dflt)
 }
 
 function formatProp(name: string, value: unknown): string | null {
-  if (value === undefined || value === null) return null
+  if (value === undefined || value === null)
+    return null
   const kebab = kebabCase(name)
   if (typeof value === 'string') {
     return `${kebab}="${value.replace(/"/g, '&quot;')}"`
@@ -71,9 +74,11 @@ export function buildSnippet<TProps extends Record<string, unknown>>(
 
   if (allEntries.length === 0) {
     lines.push(children == null ? `<${tag} />` : `<${tag}>`)
-  } else if (allEntries.length === 1) {
+  }
+  else if (allEntries.length === 1) {
     lines.push(children == null ? `<${tag} ${allEntries[0]} />` : `<${tag} ${allEntries[0]}>`)
-  } else {
+  }
+  else {
     lines.push(`<${tag}`)
     for (const entry of allEntries) lines.push(`${INDENT}${entry}`)
     lines.push(children == null ? '/>' : '>')

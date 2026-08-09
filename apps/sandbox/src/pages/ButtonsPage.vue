@@ -3,18 +3,16 @@ import {
   DzButton,
   DzButtonGroup,
   DzCopyButton,
-  DzIconButton,
-  DzSplitButton,
-  DzSplitButtonAction,
-  DzSplitButtonMenu,
-  DzToggleButton,
-} from '@dzup-ui/core'
-import {
   DzDropdownMenu,
   DzDropdownMenuContent,
   DzDropdownMenuItem,
   DzDropdownMenuSeparator,
   DzDropdownMenuTrigger,
+  DzIconButton,
+  DzSplitButton,
+  DzSplitButtonAction,
+  DzSplitButtonMenu,
+  DzToggleButton,
 } from '@dzup-ui/core'
 import {
   AlignCenter,
@@ -64,7 +62,8 @@ const matrixLoading = ref(false)
 const formatting = ref<string[]>(['bold'])
 function toggleFormat(key: string): void {
   const i = formatting.value.indexOf(key)
-  if (i === -1) formatting.value.push(key)
+  if (i === -1)
+    formatting.value.push(key)
   else formatting.value.splice(i, 1)
 }
 const isPressed = (key: string): boolean => formatting.value.includes(key)
@@ -74,7 +73,9 @@ const alignment = ref<'left' | 'center' | 'right'>('left')
 // Toggle matrix: pressed states for each cell so demo shows both states
 const matrixToggleVariants: Variant[] = ['solid', 'outline', 'ghost']
 const toggleMatrixState = ref<Record<string, boolean>>({})
-function matrixKey(v: Variant, s: typeof sizes[number]): string { return `${v}:${s}` }
+function matrixKey(v: Variant, s: typeof sizes[number]): string {
+  return `${v}:${s}`
+}
 
 // SplitButton state
 const lastSaveAction = ref<string | null>(null)
@@ -90,7 +91,6 @@ const snippet = ref(
 
 // Accessibility demo
 const ariaToggle = ref(false)
-
 </script>
 
 <template>
@@ -200,19 +200,19 @@ const ariaToggle = ref(false)
         DzIconButton — Sizes
       </h3>
       <div class="demo-row align-end">
-        <DzIconButton v-for="s in sizes" :key="s" :size="s" :icon="Settings" :ariaLabel="`Settings (${s})`" variant="outline" />
+        <DzIconButton v-for="s in sizes" :key="s" :size="s" :icon="Settings" :aria-label="`Settings (${s})`" variant="outline" />
       </div>
 
       <h3 class="subsection-title">
         DzIconButton — Tones &amp; States
       </h3>
       <div class="demo-row">
-        <DzIconButton :icon="Pencil" ariaLabel="Edit" tone="primary" />
-        <DzIconButton :icon="Heart" ariaLabel="Favorite" tone="danger" variant="ghost" />
-        <DzIconButton :icon="Star" ariaLabel="Star" tone="warning" variant="outline" />
-        <DzIconButton :icon="Download" ariaLabel="Download" tone="success" />
-        <DzIconButton :icon="Trash2" ariaLabel="Delete" tone="danger" variant="ghost" disabled />
-        <DzIconButton :icon="Settings" ariaLabel="Loading" tone="primary" loading />
+        <DzIconButton :icon="Pencil" aria-label="Edit" tone="primary" />
+        <DzIconButton :icon="Heart" aria-label="Favorite" tone="danger" variant="ghost" />
+        <DzIconButton :icon="Star" aria-label="Star" tone="warning" variant="outline" />
+        <DzIconButton :icon="Download" aria-label="Download" tone="success" />
+        <DzIconButton :icon="Trash2" aria-label="Delete" tone="danger" variant="ghost" disabled />
+        <DzIconButton :icon="Settings" aria-label="Loading" tone="primary" loading />
       </div>
     </section>
 
@@ -378,7 +378,7 @@ const ariaToggle = ref(false)
         Segmented (outline)
       </h3>
       <div class="demo-row">
-        <DzButtonGroup variant="outline" ariaLabel="Pagination range">
+        <DzButtonGroup variant="outline" aria-label="Pagination range">
           <DzButton>Previous</DzButton>
           <DzButton>1</DzButton>
           <DzButton tone="primary">
@@ -393,15 +393,15 @@ const ariaToggle = ref(false)
         Mixed children (DzButton + DzIconButton)
       </h3>
       <div class="demo-row">
-        <DzButtonGroup variant="outline" ariaLabel="Item actions">
+        <DzButtonGroup variant="outline" aria-label="Item actions">
           <DzButton>
             <template #prefix>
               <Pencil class="btn-icon" aria-hidden="true" />
             </template>
             Edit
           </DzButton>
-          <DzIconButton :icon="Star" ariaLabel="Star" variant="outline" />
-          <DzIconButton :icon="Trash2" ariaLabel="Delete" tone="danger" variant="outline" />
+          <DzIconButton :icon="Star" aria-label="Star" variant="outline" />
+          <DzIconButton :icon="Trash2" aria-label="Delete" tone="danger" variant="outline" />
         </DzButtonGroup>
       </div>
 
@@ -409,12 +409,12 @@ const ariaToggle = ref(false)
         Vertical orientation
       </h3>
       <div class="demo-row">
-        <DzButtonGroup orientation="vertical" variant="outline" size="sm" ariaLabel="Quantity">
-          <DzIconButton :icon="Plus" ariaLabel="Increment" variant="outline" size="sm" />
-          <DzIconButton :icon="Minus" ariaLabel="Decrement" variant="outline" size="sm" />
+        <DzButtonGroup orientation="vertical" variant="outline" size="sm" aria-label="Quantity">
+          <DzIconButton :icon="Plus" aria-label="Increment" variant="outline" size="sm" />
+          <DzIconButton :icon="Minus" aria-label="Decrement" variant="outline" size="sm" />
         </DzButtonGroup>
 
-        <DzButtonGroup orientation="vertical" tone="primary" ariaLabel="Sidebar">
+        <DzButtonGroup orientation="vertical" tone="primary" aria-label="Sidebar">
           <DzButton variant="ghost">
             Dashboard
           </DzButton>
@@ -431,7 +431,7 @@ const ariaToggle = ref(false)
         Disabled group
       </h3>
       <div class="demo-row">
-        <DzButtonGroup variant="outline" disabled ariaLabel="Read only actions">
+        <DzButtonGroup variant="outline" disabled aria-label="Read only actions">
           <DzButton>Approve</DzButton>
           <DzButton>Reject</DzButton>
           <DzButton>Defer</DzButton>
@@ -453,11 +453,11 @@ const ariaToggle = ref(false)
         Formatting bar (independent toggles)
       </h3>
       <div class="demo-row">
-        <DzButtonGroup variant="outline" ariaLabel="Text formatting">
+        <DzButtonGroup variant="outline" aria-label="Text formatting">
           <DzToggleButton
             :model-value="isPressed('bold')"
             variant="outline"
-            ariaLabel="Bold"
+            aria-label="Bold"
             @update:model-value="toggleFormat('bold')"
           >
             <template #prefix>
@@ -468,7 +468,7 @@ const ariaToggle = ref(false)
           <DzToggleButton
             :model-value="isPressed('italic')"
             variant="outline"
-            ariaLabel="Italic"
+            aria-label="Italic"
             @update:model-value="toggleFormat('italic')"
           >
             <template #prefix>
@@ -479,7 +479,7 @@ const ariaToggle = ref(false)
           <DzToggleButton
             :model-value="isPressed('underline')"
             variant="outline"
-            ariaLabel="Underline"
+            aria-label="Underline"
             @update:model-value="toggleFormat('underline')"
           >
             <template #prefix>
@@ -495,24 +495,24 @@ const ariaToggle = ref(false)
         Alignment (exclusive toggle group)
       </h3>
       <div class="demo-row">
-        <DzButtonGroup variant="outline" ariaLabel="Text alignment">
+        <DzButtonGroup variant="outline" aria-label="Text alignment">
           <DzToggleButton
             :model-value="alignment === 'left'"
-            ariaLabel="Align left"
+            aria-label="Align left"
             @update:model-value="alignment = 'left'"
           >
             <AlignLeft class="btn-icon" aria-hidden="true" />
           </DzToggleButton>
           <DzToggleButton
             :model-value="alignment === 'center'"
-            ariaLabel="Align center"
+            aria-label="Align center"
             @update:model-value="alignment = 'center'"
           >
             <AlignCenter class="btn-icon" aria-hidden="true" />
           </DzToggleButton>
           <DzToggleButton
             :model-value="alignment === 'right'"
-            ariaLabel="Align right"
+            aria-label="Align right"
             @update:model-value="alignment = 'right'"
           >
             <AlignRight class="btn-icon" aria-hidden="true" />
@@ -672,7 +672,7 @@ const ariaToggle = ref(false)
       </h3>
       <div class="copy-row">
         <code class="token-display token-display--block">{{ snippet }}</code>
-        <DzCopyButton :value="snippet" size="sm" ariaLabel="Copy snippet" />
+        <DzCopyButton :value="snippet" size="sm" aria-label="Copy snippet" />
       </div>
 
       <h3 class="subsection-title">

@@ -74,7 +74,8 @@ async function copyCode(key: string, code: string): Promise<void> {
   try {
     await navigator.clipboard.writeText(code)
     copiedKey.value = key
-    if (copyTimer) clearTimeout(copyTimer)
+    if (copyTimer)
+      clearTimeout(copyTimer)
     copyTimer = setTimeout(() => {
       copiedKey.value = null
     }, 1500)
@@ -84,11 +85,11 @@ async function copyCode(key: string, code: string): Promise<void> {
   }
 }
 
-const ClipboardIcon = () =>
-  h('svg', {
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
+function ClipboardIcon() {
+  return h('svg', {
+    'viewBox': '0 0 24 24',
+    'fill': 'none',
+    'stroke': 'currentColor',
     'stroke-width': '2',
     'stroke-linecap': 'round',
     'stroke-linejoin': 'round',
@@ -96,18 +97,20 @@ const ClipboardIcon = () =>
     h('rect', { x: '9', y: '9', width: '13', height: '13', rx: '2', ry: '2' }),
     h('path', { d: 'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1' }),
   ])
+}
 
-const CheckIcon = () =>
-  h('svg', {
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
+function CheckIcon() {
+  return h('svg', {
+    'viewBox': '0 0 24 24',
+    'fill': 'none',
+    'stroke': 'currentColor',
     'stroke-width': '2.5',
     'stroke-linecap': 'round',
     'stroke-linejoin': 'round',
   }, [
     h('path', { d: 'M20 6 9 17l-5-5' }),
   ])
+}
 </script>
 
 <template>
@@ -239,7 +242,9 @@ const CheckIcon = () =>
           v-else
           variant="block"
           :language="playCodeLanguage"
-        >{{ blockSnippetTs }}</DzCode>
+        >
+          {{ blockSnippetTs }}
+        </DzCode>
       </div>
     </section>
 
@@ -403,11 +408,13 @@ const CheckIcon = () =>
       </p>
       <div class="demo-stack">
         <div class="code-wrap">
-          <DzCode variant="block" language="typescript">{{ blockSnippetTs }}</DzCode>
+          <DzCode variant="block" language="typescript">
+            {{ blockSnippetTs }}
+          </DzCode>
           <DzIconButton
             class="code-copy"
             :icon="copiedKey === 'ts' ? CheckIcon : ClipboardIcon"
-            :ariaLabel="copiedKey === 'ts' ? 'Copied' : 'Copy code'"
+            :aria-label="copiedKey === 'ts' ? 'Copied' : 'Copy code'"
             size="sm"
             variant="ghost"
             :tone="copiedKey === 'ts' ? 'success' : 'neutral'"
@@ -415,11 +422,13 @@ const CheckIcon = () =>
           />
         </div>
         <div class="code-wrap">
-          <DzCode variant="block" language="vue">{{ blockSnippetVue }}</DzCode>
+          <DzCode variant="block" language="vue">
+            {{ blockSnippetVue }}
+          </DzCode>
           <DzIconButton
             class="code-copy"
             :icon="copiedKey === 'vue' ? CheckIcon : ClipboardIcon"
-            :ariaLabel="copiedKey === 'vue' ? 'Copied' : 'Copy code'"
+            :aria-label="copiedKey === 'vue' ? 'Copied' : 'Copy code'"
             size="sm"
             variant="ghost"
             :tone="copiedKey === 'vue' ? 'success' : 'neutral'"
@@ -508,11 +517,13 @@ const CheckIcon = () =>
         </DzBlockquote>
 
         <div class="code-wrap">
-          <DzCode variant="block" language="typescript">{{ blockSnippetTs }}</DzCode>
+          <DzCode variant="block" language="typescript">
+            {{ blockSnippetTs }}
+          </DzCode>
           <DzIconButton
             class="code-copy"
             :icon="copiedKey === 'article' ? CheckIcon : ClipboardIcon"
-            :ariaLabel="copiedKey === 'article' ? 'Copied' : 'Copy code'"
+            :aria-label="copiedKey === 'article' ? 'Copied' : 'Copy code'"
             size="sm"
             variant="ghost"
             :tone="copiedKey === 'article' ? 'success' : 'neutral'"
