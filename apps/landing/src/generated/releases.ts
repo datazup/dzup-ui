@@ -1449,6 +1449,17 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/testing",
+      "@dzup-ui/landing"
+    ],
+    "level": "patch",
+    "summary": "Prepare generated count projections before aggregate tests and make shared DOM animation-frame cleanup deterministic. Landing animation demos now release their timers and observers when unmounted.",
+    "body": "Prepare generated count projections before aggregate tests and make shared DOM animation-frame cleanup deterministic. Landing animation demos now release their timers and observers when unmounted.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/core"
     ],
     "level": "patch",
