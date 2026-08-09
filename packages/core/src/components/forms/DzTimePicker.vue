@@ -56,6 +56,9 @@ const props = withDefaults(defineProps<DzTimePickerProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzTimePickerEmits>()
@@ -462,7 +465,11 @@ const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDi
         </button>
       </PopoverTrigger>
 
-      <PopoverPortal>
+      <PopoverPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <PopoverContent
           :side-offset="4"
           align="start"

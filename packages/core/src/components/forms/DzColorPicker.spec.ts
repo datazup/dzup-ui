@@ -110,4 +110,26 @@ describe('dzColorPicker — Unit Tests', () => {
     })
     expect(wrapper.find('button[aria-expanded]').attributes('aria-required')).toBe('true')
   })
+
+  it('renders the real Reka popover inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzColorPicker, {
+      props: { portalDisabled: true },
+      attachTo: document.body,
+    })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('input[aria-label="Color area"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzColorPicker, { attachTo: document.body })
+    await wrapper.find('button[aria-expanded]').trigger('click')
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(document.body.querySelector('input[aria-label="Color area"]')).not.toBeNull()
+    expect(wrapper.find('input[aria-label="Color area"]').exists()).toBe(false)
+    wrapper.unmount()
+  })
 })

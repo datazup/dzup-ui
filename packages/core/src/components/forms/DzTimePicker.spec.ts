@@ -20,6 +20,10 @@ function mountPicker(props: Record<string, unknown> = {}) {
   })
 }
 
+function mountRealPicker(props: Record<string, unknown> = {}) {
+  return mount(DzTimePicker, { props, attachTo: document.body })
+}
+
 /** Open the popover by clicking the trigger button. */
 async function open(wrapper: ReturnType<typeof mountPicker>) {
   await wrapper.find('button').trigger('click')
@@ -143,6 +147,25 @@ describe('dzTimePicker — Popover (roll layout)', () => {
     const wrapper = mountPicker()
     await open(wrapper)
     expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('renders the real Reka popover inline when portalDisabled is true', async () => {
+    const wrapper = mountRealPicker({ portalDisabled: true })
+    await open(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mountRealPicker()
+    await open(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(document.body.querySelector('[role="listbox"][aria-label="Hours"]')).not.toBeNull()
+    expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(false)
+    wrapper.unmount()
   })
 
   it('renders hour and minute columns when open', async () => {
