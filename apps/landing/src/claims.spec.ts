@@ -249,7 +249,7 @@ describe('the Pro page', () => {
   })
 
   it('renders generated claims and carries no stale launch narrative', () => {
-    const template = PRO_PAGE.slice(PRO_PAGE.indexOf('<template>'), PRO_PAGE.indexOf('</template>'))
+    const template = PRO_PAGE.slice(PRO_PAGE.indexOf('<template>'), PRO_PAGE.lastIndexOf('</template>'))
     expect(template).not.toMatch(/\d+\s+(?:enterprise\s+)?components?/i)
     expect(template).not.toMatch(/\d+\s+families/i)
     expect(template).toContain('PRO_FACTS.published')

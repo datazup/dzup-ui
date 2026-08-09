@@ -22,7 +22,7 @@ Counting rules: Core “catalog components” counts every exported `.vue` compo
 
 ## Features
 
-- A generated Core inventory across 11 component families
+- A generated Core inventory across every published component family
 - TypeScript strict mode with zero `any` types and full type inference
 - Tailwind CSS 4 design token system with light/dark/system theming
 - Reka UI headless primitives for accessible interactive components
