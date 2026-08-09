@@ -52,7 +52,7 @@ export const multiSelectVariants = tv({
       'inline-flex items-center gap-[var(--dz-spacing-1)]',
       'rounded-[var(--dz-radius-sm)]',
       'bg-[var(--dz-primary-muted)]',
-      'text-[var(--dz-primary)]',
+      'text-[var(--dz-primary-muted-foreground)]',
       'px-[var(--dz-spacing-1_5)]',
     ].join(' '),
     tagClose: [

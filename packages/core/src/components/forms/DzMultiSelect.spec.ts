@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
  * DzMultiSelect — Unit / behavior tests.
  */
 import { afterEach, describe, expect, it } from 'vitest'
+import { multiSelectTokens } from './DzMultiSelect.tokens.ts'
 import DzMultiSelect from './DzMultiSelect.vue'
 
 const items = [
@@ -38,6 +39,9 @@ describe('dzMultiSelect — Unit Tests', () => {
     })
     expect(wrapper.text()).toContain('Apple')
     expect(wrapper.text()).toContain('Banana')
+    const appleTag = wrapper.get('[aria-label="Remove Apple"]').element.parentElement
+    expect(appleTag?.className).toContain('text-[var(--dz-primary-muted-foreground)]')
+    expect(multiSelectTokens.tag.foreground).toBe('var(--dz-primary-muted-foreground)')
   })
 
   it('applies size variant classes', () => {
