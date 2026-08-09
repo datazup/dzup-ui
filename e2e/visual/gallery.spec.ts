@@ -17,7 +17,8 @@ test.setTimeout(90_000)
 
 for (const screen of SCREENS) {
   for (const theme of THEMES) {
-    test(`gallery ${screen.name} ${theme}`, async ({ page }) => {
+    test(`gallery ${screen.name} ${theme}`, async ({ page, browserName }) => {
+      test.skip(browserName !== 'chromium', 'Pixel baselines are qualified on Chromium/Linux.')
       const canvas = await loadStoryCanvas(page, screen.id, `theme:${theme}`, { waitForMainClass: false })
       await expect(canvas.locator('html')).toHaveAttribute('data-theme', theme)
       const root = canvas.locator('#storybook-root')
