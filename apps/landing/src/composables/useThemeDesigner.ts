@@ -24,19 +24,31 @@
  * A module-level singleton keeps one design across the SPA.
  */
 
-import type { Shade } from '@dzup-ui/tokens'
+import type {
+  Shade,
+  ThemeRecipeDensity,
+  ThemeRecipeFontId,
+  ThemeRecipePalette,
+  ThemeRecipePaletteName,
+  ThemeRecipePresetId,
+  ThemeRecipeV1,
+} from '@dzup-ui/tokens'
 import type { ComputedRef } from 'vue'
 import {
-  FONT_FAMILIES,
+  createDefaultThemeRecipe,
+  createThemeRecipePreset,
+  decodeThemeRecipe,
+  encodeThemeRecipe,
   formatOklch,
   PALETTE_CONFIGS,
-  RADIUS_SCALE,
-  SHADE_STEPS,
-  SHADOW_SCALE,
-  SHADOW_SCALE_DARK,
-  SPACING_SCALE,
+  serializeThemeRecipe,
+  THEME_RECIPE_FONTS,
+  themeRecipePaletteColor,
+  themeRecipeToCssText,
+  themeRecipeToCssVariables,
+  themeRecipeToUrl,
 } from '@dzup-ui/tokens'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, toRef, watch } from 'vue'
 import { SITE_ORIGIN } from '../origin.ts'
 
 // ── The design surface: the palettes a user can retune ───────────────────────
@@ -52,58 +64,15 @@ export const DESIGNER_INTENTS = [
   'danger',
   'info',
   'neutral',
-] as const
+] as const satisfies readonly ThemeRecipePaletteName[]
 
-export type DesignerIntent = (typeof DESIGNER_INTENTS)[number]
+export type DesignerIntent = ThemeRecipePaletteName
 
 /** A palette's editable OKLCH base: the hue and the chroma of its 500 shade. */
-export interface PaletteState {
-  hue: number
-  chroma: number
-}
+export type PaletteState = ThemeRecipePalette
 
 /** Density presets → a multiplier on the whole `--dz-spacing-*` scale. */
-export type Density = 'compact' | 'comfortable' | 'spacious'
-
-const DENSITY_FACTORS: Record<Density, number> = {
-  compact: 0.9,
-  comfortable: 1,
-  spacious: 1.12,
-}
-
-// ── Ramp curve — MIRRORS @dzup-ui/tokens primitives/colors.ts ────────────────
-// Kept in lockstep with the token build so a regenerated ramp is byte-identical
-// to the shipped one when hue/chroma are left at their defaults (the editor then
-// emits nothing for that palette — see `paletteChanged`). These two records are
-// the only place the curve is duplicated; if the token curve ever changes, this
-// is the single spot to re-sync.
-const LIGHTNESS_SCALE: Record<Shade, number> = {
-  50: 0.97,
-  100: 0.93,
-  200: 0.87,
-  300: 0.78,
-  400: 0.68,
-  500: 0.55,
-  600: 0.47,
-  700: 0.39,
-  800: 0.31,
-  900: 0.23,
-  950: 0.15,
-}
-
-const CHROMA_MULTIPLIER: Record<Shade, number> = {
-  50: 0.12,
-  100: 0.22,
-  200: 0.4,
-  300: 0.62,
-  400: 0.82,
-  500: 1.0,
-  600: 0.94,
-  700: 0.82,
-  800: 0.68,
-  900: 0.52,
-  950: 0.36,
-}
+export type Density = ThemeRecipeDensity
 
 /** Radius slider bounds — 1 is the shipped scale (no override emitted). */
 export const RADIUS_MIN = 0
@@ -115,14 +84,6 @@ export const SHADOW_MIN = 0
 export const SHADOW_MAX = 2.5
 export const SHADOW_STEP = 0.05
 
-/**
- * Radius steps we scale. `full` (pill) and `none` (square) are left untouched so
- * a pill stays a pill and a square stays square at any multiplier.
- */
-const RADIUS_STEPS = (Object.keys(RADIUS_SCALE) as (keyof typeof RADIUS_SCALE)[]).filter(
-  step => step !== 'full' && step !== 'none',
-)
-
 /** Minimum WCAG contrast for normal text (AA) and large text (AA Large). */
 export const AA_NORMAL = 4.5
 export const AA_LARGE = 3
@@ -132,41 +93,26 @@ export const AA_LARGE = 3
 // face isn't installed — no webfont fetch is added by the editor. `inter` is the
 // shipped default (emits nothing when selected).
 export interface FontChoice {
-  key: string
+  key: ThemeRecipeFontId
   label: string
   stack: string
 }
 
-export const FONT_CHOICES: readonly FontChoice[] = [
-  { key: 'inter', label: 'Inter', stack: FONT_FAMILIES.sans },
-  {
-    key: 'system',
-    label: 'System UI',
-    stack: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-  },
-  {
-    key: 'geist',
-    label: 'Geist',
-    stack: '"Geist", "Inter", ui-sans-serif, system-ui, sans-serif',
-  },
-  {
-    key: 'rounded',
-    label: 'Rounded',
-    stack: '"SF Pro Rounded", "Nunito", ui-rounded, "Segoe UI", system-ui, sans-serif',
-  },
-  {
-    key: 'serif',
-    label: 'Serif',
-    stack: 'ui-serif, Georgia, Cambria, "Times New Roman", serif',
-  },
-  {
-    key: 'mono',
-    label: 'Monospace',
-    stack: FONT_FAMILIES.mono,
-  },
-] as const
+const FONT_LABELS: Record<ThemeRecipeFontId, string> = {
+  inter: 'Inter',
+  system: 'System UI',
+  geist: 'Geist',
+  rounded: 'Rounded',
+  serif: 'Serif',
+  mono: 'Monospace',
+}
 
-const DEFAULT_FONT = 'inter'
+export const FONT_CHOICES: readonly FontChoice[] = Object.entries(THEME_RECIPE_FONTS)
+  .map(([key, stack]) => ({
+    key: key as ThemeRecipeFontId,
+    label: FONT_LABELS[key as ThemeRecipeFontId],
+    stack,
+  }))
 
 // ── Colour maths: OKLCH ⇄ sRGB, WCAG luminance ───────────────────────────────
 // Björn Ottosson's OKLab conversions. We convert an OKLCH triple straight to
@@ -241,22 +187,47 @@ export function srgbToOklch(r255: number, g255: number, b255: number): {
 }
 
 // ── Module-level singleton state ─────────────────────────────────────────────
-// Seeded from the shipped palette configs so the editor opens on the real dzup
-// theme; the neutral ramp carries its faint chroma so "reset" restores exactly.
-function seedPalettes(): Record<DesignerIntent, PaletteState> {
-  const seed = {} as Record<DesignerIntent, PaletteState>
-  for (const intent of DESIGNER_INTENTS) {
-    const cfg = PALETTE_CONFIGS[intent]
-    seed[intent] = { hue: cfg.hue, chroma: cfg.chroma }
+// The contract and transforms are token-owned; this singleton is application
+// state only, keeping one recipe across landing routes.
+const recipe = reactive<ThemeRecipeV1>(createDefaultThemeRecipe())
+const palettes = recipe.palettes
+const radiusScale = toRef(recipe, 'radius')
+const density = toRef(recipe, 'density')
+const shadowIntensity = toRef(recipe, 'shadow')
+const fontKey = toRef(recipe, 'font')
+const mode = toRef(recipe, 'mode')
+const direction = toRef(recipe, 'direction')
+const motion = toRef(recipe, 'motion')
+let applyingRecipe = false
+
+function replaceRecipe(next: ThemeRecipeV1): void {
+  applyingRecipe = true
+  try {
+    recipe.version = next.version
+    recipe.preset = next.preset
+    for (const intent of DESIGNER_INTENTS)
+      Object.assign(palettes[intent], next.palettes[intent])
+    recipe.radius = next.radius
+    recipe.shadow = next.shadow
+    recipe.density = next.density
+    recipe.font = next.font
+    recipe.mode = next.mode
+    recipe.direction = next.direction
+    recipe.motion = next.motion
   }
-  return seed
+  finally {
+    applyingRecipe = false
+  }
 }
 
-const palettes = reactive<Record<DesignerIntent, PaletteState>>(seedPalettes())
-const radiusScale = ref(1)
-const density = ref<Density>('comfortable')
-const shadowIntensity = ref(1)
-const fontKey = ref<string>(DEFAULT_FONT)
+watch(
+  [() => recipe.palettes, radiusScale, density, shadowIntensity, fontKey],
+  () => {
+    if (!applyingRecipe)
+      recipe.preset = 'custom'
+  },
+  { deep: true, flush: 'sync' },
+)
 
 /** Whether a palette deviates from its shipped hue/chroma (→ needs emitting). */
 function paletteChanged(intent: DesignerIntent): boolean {
@@ -271,12 +242,7 @@ function shadeColor(intent: DesignerIntent, shade: Shade): {
   chroma: number
   hue: number
 } {
-  const cur = palettes[intent]
-  return {
-    lightness: LIGHTNESS_SCALE[shade],
-    chroma: cur.chroma * CHROMA_MULTIPLIER[shade],
-    hue: cur.hue,
-  }
+  return themeRecipePaletteColor(recipe, intent, shade)
 }
 
 /** The CSS `oklch(...)` string for a shade — the swatch/ramp source of truth. */
@@ -284,134 +250,24 @@ export function shadeCss(intent: DesignerIntent, shade: Shade): string {
   return formatOklch(shadeColor(intent, shade))
 }
 
-// ── Scaling helpers (shared with the /blocks editor's approach) ──────────────
-function scaleLength(value: string, factor: number): string {
-  const match = /^(-?[\d.]+)(rem|px|em)?$/.exec(value)
-  const num = match?.[1]
-  if (num === undefined)
-    return value
-  const scaled = Number.parseFloat(num) * factor
-  return `${Number.parseFloat(scaled.toFixed(4))}${match?.[2] ?? ''}`
-}
-
-/** Scale the alpha of every `oklch(0 0 0 / a)` layer in a shadow value. */
-function scaleShadowAlpha(shadow: string, factor: number): string {
-  if (shadow === 'none')
-    return shadow
-  return shadow.replace(/\/\s*([\d.]+)\s*\)/g, (_m, a: string) => {
-    const scaled = clamp01(Number.parseFloat(a) * factor)
-    return `/ ${Number.parseFloat(scaled.toFixed(3))})`
-  })
-}
-
-// ── The single override map ──────────────────────────────────────────────────
-// Colour ramps + radius + spacing + font. Shadow overrides are theme-specific
-// (light vs dark elevation differ), so they are layered on per preview panel by
-// `varsFor()` and merged into `cssText` from the light scale for the export.
-const baseVars = computed<Record<string, string>>(() => {
-  const out: Record<string, string> = {}
-
-  // Colour: regenerate a full 11-shade ramp for each *changed* palette. Unchanged
-  // palettes emit nothing — they already resolve to the shipped tokens, keeping
-  // the export lean and the diff honest.
-  for (const intent of DESIGNER_INTENTS) {
-    if (!paletteChanged(intent))
-      continue
-    for (const shade of SHADE_STEPS) {
-      out[`--dz-colors-${intent}-${shade}`] = shadeCss(intent, shade)
-    }
-  }
-
-  // Radius: multiply each named step (pill/square excluded).
-  if (radiusScale.value !== 1) {
-    for (const step of RADIUS_STEPS) {
-      const base = RADIUS_SCALE[step]
-      if (base !== undefined)
-        out[`--dz-radius-${step}`] = scaleLength(base, radiusScale.value)
-    }
-  }
-
-  // Density: multiply the whole spacing scale — component heights/paddings read
-  // from `--dz-spacing-*`, so this re-densifies every control proportionally.
-  const factor = DENSITY_FACTORS[density.value]
-  if (factor !== 1) {
-    for (const [step, value] of Object.entries(SPACING_SCALE)) {
-      const name = step.replace('.', '_') // CSS custom props can't contain a dot.
-      out[`--dz-spacing-${name}`] = scaleLength(value, factor)
-    }
-  }
-
-  // Font: swap the sans stack that the whole library inherits.
-  if (fontKey.value !== DEFAULT_FONT) {
-    const choice = FONT_CHOICES.find(f => f.key === fontKey.value)
-    if (choice)
-      out['--dz-font-sans'] = choice.stack
-  }
-
-  return out
-})
-
-/** Shadow overrides for a theme, or `{}` when intensity is at its default. */
-function shadowVars(theme: 'light' | 'dark'): Record<string, string> {
-  if (shadowIntensity.value === 1)
-    return {}
-  const scale = theme === 'dark' ? SHADOW_SCALE_DARK : SHADOW_SCALE
-  const out: Record<string, string> = {}
-  for (const [step, value] of Object.entries(scale)) {
-    out[`--dz-shadow-${step}`] = scaleShadowAlpha(value, shadowIntensity.value)
-  }
-  return out
-}
-
 /** Full override map for a given preview theme (colour ramps + theme shadows). */
 export function varsFor(theme: 'light' | 'dark'): Record<string, string> {
-  return { ...baseVars.value, ...shadowVars(theme) }
+  return themeRecipeToCssVariables(recipe, theme)
 }
 
-/** The export map: the light-mode view of every override (ramps are theme-agnostic). */
-const vars = computed<Record<string, string>>(() => ({
-  ...baseVars.value,
-  ...shadowVars('light'),
-}))
+/** The export map is the contract's complete light-mode expansion. */
+const vars = computed<Record<string, string>>(() => themeRecipeToCssVariables(recipe, 'light'))
 
-const hasOverrides = computed<boolean>(() => Object.keys(vars.value).length > 0)
+const defaultSerialized = serializeThemeRecipe(createDefaultThemeRecipe())
+const hasOverrides = computed<boolean>(() => serializeThemeRecipe(recipe) !== defaultSerialized)
 
 // ── Exports: CSS + JSON ──────────────────────────────────────────────────────
-const cssText = computed<string>(() => {
-  const body = Object.entries(vars.value)
-    .map(([prop, value]) => `  ${prop}: ${value};`)
-    .join('\n')
-  return (
-    '/* dzup-ui theme — generated by the Theme Designer (/themes).\n'
-    + '   Drop this into your global stylesheet, after @dzup-ui/tokens/css, so the\n'
-    + '   library re-skins to your palette. Values are OKLCH primitive-ramp\n'
-    + '   overrides — the semantic tokens resolve through them in light AND dark. */\n'
-    + `:root {\n${body || '  /* defaults — no overrides */'}\n}`
-  )
-})
+const cssText = computed<string>(() =>
+  `/* ThemeRecipeV1 · light expansion */\n${themeRecipeToCssText(recipe, 'light')}`,
+)
 
 /** A structured token export: the design params + the resolved CSS variables. */
-const jsonText = computed<string>(() => {
-  const changed: Record<string, PaletteState> = {}
-  for (const intent of DESIGNER_INTENTS) {
-    if (paletteChanged(intent))
-      changed[intent] = { ...palettes[intent] }
-  }
-  return JSON.stringify(
-    {
-      $schema: `${SITE_ORIGIN}/schema/theme.json`,
-      name: 'dzup-ui-theme',
-      palettes: changed,
-      radius: radiusScale.value,
-      density: density.value,
-      shadow: shadowIntensity.value,
-      font: fontKey.value,
-      cssVars: vars.value,
-    },
-    null,
-    2,
-  )
-})
+const jsonText = computed<string>(() => serializeThemeRecipe(recipe, true))
 
 // ── Live WCAG contrast readouts ──────────────────────────────────────────────
 export interface ContrastPair {
@@ -490,211 +346,45 @@ const failingCount = computed<number>(
 
 // ── Curated presets ──────────────────────────────────────────────────────────
 export interface ThemePreset {
+  id: Exclude<ThemeRecipePresetId, 'custom'>
   name: string
   /** Swatch hue/chroma for the button (the preset's primary). */
   swatch: { hue: number, chroma: number }
   apply: () => void
 }
 
-/** Partial application helper — sets only the palettes/knobs a preset names. */
-function applyPartial(spec: {
-  palettes?: Partial<Record<DesignerIntent, PaletteState>>
-  radius?: number
-  density?: Density
-  shadow?: number
-  font?: string
-}): void {
-  if (spec.palettes) {
-    for (const intent of DESIGNER_INTENTS) {
-      const next = spec.palettes[intent]
-      if (next)
-        palettes[intent] = { ...next }
-    }
-  }
-  if (spec.radius !== undefined)
-    radiusScale.value = spec.radius
-  if (spec.density !== undefined)
-    density.value = spec.density
-  if (spec.shadow !== undefined)
-    shadowIntensity.value = spec.shadow
-  if (spec.font !== undefined)
-    fontKey.value = spec.font
+function applyPreset(preset: Exclude<ThemeRecipePresetId, 'custom'>): void {
+  replaceRecipe(createThemeRecipePreset(preset, {
+    mode: recipe.mode,
+    direction: recipe.direction,
+    motion: recipe.motion,
+  }))
 }
 
 export const PRESETS: ThemePreset[] = [
-  {
-    name: 'dzup',
-    swatch: { hue: 260, chroma: 0.22 },
-    apply: () => reset(),
-  },
-  {
-    name: 'Emerald',
-    swatch: { hue: 165, chroma: 0.17 },
-    apply: () =>
-      applyPartial({
-        palettes: {
-          primary: { hue: 165, chroma: 0.17 },
-          neutral: { hue: 165, chroma: 0.012 },
-        },
-        radius: 1,
-      }),
-  },
-  {
-    name: 'Rose',
-    swatch: { hue: 12, chroma: 0.2 },
-    apply: () =>
-      applyPartial({
-        palettes: {
-          primary: { hue: 12, chroma: 0.2 },
-          neutral: { hue: 12, chroma: 0.01 },
-        },
-        radius: 1.4,
-      }),
-  },
-  {
-    name: 'Amber',
-    swatch: { hue: 75, chroma: 0.18 },
-    apply: () =>
-      applyPartial({
-        palettes: {
-          primary: { hue: 75, chroma: 0.18 },
-          neutral: { hue: 70, chroma: 0.012 },
-        },
-        radius: 0.6,
-        font: 'rounded',
-      }),
-  },
-  {
-    name: 'Slate',
-    swatch: { hue: 235, chroma: 0.15 },
-    apply: () =>
-      applyPartial({
-        palettes: {
-          primary: { hue: 235, chroma: 0.15 },
-          neutral: { hue: 255, chroma: 0.018 },
-        },
-        radius: 0.7,
-        density: 'compact',
-      }),
-  },
-  {
-    name: 'Violet',
-    swatch: { hue: 292, chroma: 0.2 },
-    apply: () =>
-      applyPartial({
-        palettes: { primary: { hue: 292, chroma: 0.2 } },
-        radius: 1.6,
-        shadow: 1.4,
-      }),
-  },
-  {
-    name: 'Mono',
-    swatch: { hue: 260, chroma: 0.004 },
-    apply: () =>
-      applyPartial({
-        palettes: {
-          primary: { hue: 286, chroma: 0.006 },
-          neutral: { hue: 286, chroma: 0.004 },
-        },
-        radius: 0.4,
-        font: 'mono',
-      }),
-  },
+  { id: 'dzup', name: 'dzup', swatch: { hue: 260, chroma: 0.22 }, apply: () => applyPreset('dzup') },
+  { id: 'emerald', name: 'Emerald', swatch: { hue: 165, chroma: 0.17 }, apply: () => applyPreset('emerald') },
+  { id: 'rose', name: 'Rose', swatch: { hue: 12, chroma: 0.2 }, apply: () => applyPreset('rose') },
+  { id: 'amber', name: 'Amber', swatch: { hue: 75, chroma: 0.18 }, apply: () => applyPreset('amber') },
+  { id: 'slate', name: 'Slate', swatch: { hue: 235, chroma: 0.15 }, apply: () => applyPreset('slate') },
+  { id: 'violet', name: 'Violet', swatch: { hue: 292, chroma: 0.2 }, apply: () => applyPreset('violet') },
+  { id: 'mono', name: 'Mono', swatch: { hue: 260, chroma: 0.004 }, apply: () => applyPreset('mono') },
 ]
 
-// ── URL encode / decode ──────────────────────────────────────────────────────
-// The whole design is a compact JSON blob, base64url-encoded into `?theme=`.
-// Only non-default knobs are serialised, so a default theme yields no param and
-// a shared link stays short. `serialize()` returns '' when nothing is overridden.
-interface SerializedTheme {
-  p?: Record<string, [number, number]>
-  r?: number
-  d?: Density
-  s?: number
-  f?: string
-}
-
-function toBase64Url(json: string): string {
-  const b64 = typeof btoa === 'function' ? btoa(unescape(encodeURIComponent(json))) : ''
-  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
-}
-
-function fromBase64Url(text: string): string {
-  const b64 = text.replace(/-/g, '+').replace(/_/g, '/')
-  try {
-    return typeof atob === 'function' ? decodeURIComponent(escape(atob(b64))) : ''
-  }
-  catch {
-    return ''
-  }
-}
-
-/** The current design as a URL-safe token (empty when at defaults). */
+/** The current canonical recipe as a URL-safe token. */
 function serialize(): string {
-  const state: SerializedTheme = {}
-  const p: Record<string, [number, number]> = {}
-  for (const intent of DESIGNER_INTENTS) {
-    if (paletteChanged(intent)) {
-      p[intent] = [
-        Number(palettes[intent].hue.toFixed(1)),
-        Number(palettes[intent].chroma.toFixed(4)),
-      ]
-    }
-  }
-  if (Object.keys(p).length)
-    state.p = p
-  if (radiusScale.value !== 1)
-    state.r = radiusScale.value
-  if (density.value !== 'comfortable')
-    state.d = density.value
-  if (shadowIntensity.value !== 1)
-    state.s = shadowIntensity.value
-  if (fontKey.value !== DEFAULT_FONT)
-    state.f = fontKey.value
-  if (!Object.keys(state).length)
-    return ''
-  return toBase64Url(JSON.stringify(state))
+  return encodeThemeRecipe(recipe)
 }
-
-const DENSITIES: Density[] = ['compact', 'comfortable', 'spacious']
 
 /** Restore a design from a `?theme=` token. Returns true if anything applied. */
 function deserialize(token: string): boolean {
-  const json = fromBase64Url(token)
-  if (!json)
-    return false
-  let parsed: unknown
   try {
-    parsed = JSON.parse(json)
+    replaceRecipe(decodeThemeRecipe(token))
+    return true
   }
   catch {
     return false
   }
-  if (typeof parsed !== 'object' || parsed === null)
-    return false
-  const state = parsed as SerializedTheme
-  reset()
-  if (state.p) {
-    for (const intent of DESIGNER_INTENTS) {
-      const pair = state.p[intent]
-      if (Array.isArray(pair) && pair.length === 2) {
-        const [hue, chroma] = pair
-        if (typeof hue === 'number' && typeof chroma === 'number') {
-          palettes[intent] = { hue, chroma }
-        }
-      }
-    }
-  }
-  if (typeof state.r === 'number')
-    radiusScale.value = state.r
-  if (typeof state.d === 'string' && DENSITIES.includes(state.d))
-    density.value = state.d
-  if (typeof state.s === 'number')
-    shadowIntensity.value = state.s
-  if (typeof state.f === 'string' && FONT_CHOICES.some(c => c.key === state.f)) {
-    fontKey.value = state.f
-  }
-  return true
 }
 
 /**
@@ -707,24 +397,23 @@ function deserialize(token: string): boolean {
 const shareUrl = computed<string>(() => {
   const base
     = typeof window !== 'undefined' ? `${window.location.origin}/themes` : `${SITE_ORIGIN}/themes`
-  const token = serialize()
-  return token ? `${base}?theme=${token}` : base
+  return themeRecipeToUrl(base, recipe)
 })
 
 function reset(): void {
-  Object.assign(palettes, seedPalettes())
-  radiusScale.value = 1
-  density.value = 'comfortable'
-  shadowIntensity.value = 1
-  fontKey.value = DEFAULT_FONT
+  replaceRecipe(createDefaultThemeRecipe())
 }
 
 export interface UseThemeDesigner {
   palettes: Record<DesignerIntent, PaletteState>
+  recipe: ThemeRecipeV1
   radiusScale: typeof radiusScale
   density: typeof density
   shadowIntensity: typeof shadowIntensity
   fontKey: typeof fontKey
+  mode: typeof mode
+  direction: typeof direction
+  motion: typeof motion
   vars: ComputedRef<Record<string, string>>
   varsFor: typeof varsFor
   hasOverrides: ComputedRef<boolean>
@@ -736,6 +425,7 @@ export interface UseThemeDesigner {
   shareUrl: ComputedRef<string>
   serialize: typeof serialize
   deserialize: typeof deserialize
+  replaceRecipe: typeof replaceRecipe
   paletteChanged: typeof paletteChanged
   reset: typeof reset
 }
@@ -748,10 +438,14 @@ export interface UseThemeDesigner {
 export function useThemeDesigner(): UseThemeDesigner {
   return {
     palettes,
+    recipe,
     radiusScale,
     density,
     shadowIntensity,
     fontKey,
+    mode,
+    direction,
+    motion,
     vars,
     varsFor,
     hasOverrides,
@@ -763,6 +457,7 @@ export function useThemeDesigner(): UseThemeDesigner {
     shareUrl,
     serialize,
     deserialize,
+    replaceRecipe,
     paletteChanged,
     reset,
   }

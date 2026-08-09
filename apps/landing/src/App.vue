@@ -5,14 +5,9 @@ import { useRoute, useRouter } from 'vue-router'
 import AnnouncementBanner from './components/AnnouncementBanner.vue'
 import AppFooter from './components/Footer.vue'
 import GlobalCommandPalette from './components/GlobalCommandPalette.vue'
-import ThemeSync from './components/ThemeSync.ts'
+import ThemeRecipeController from './components/ThemeRecipeController.ts'
 import TopNav from './components/TopNav.vue'
-import { useTheme } from './composables/useTheme.ts'
 import { supportsViewTransitions, useReducedMotion } from './motion/index.ts'
-
-// Initialise the theme singleton at the root so the toggle re-themes the whole
-// page (spec §4.2 / §6.4). DzToastProvider lets showcase components raise toasts.
-useTheme()
 
 // The preview routes render chromeless — they are the iframe / fullscreen /
 // "open in new tab" targets — so suppress the nav and footer around them: the
@@ -79,26 +74,12 @@ router.afterEach((to, from, failure) => {
 </script>
 
 <template>
-  <!-- DzThemeProvider supplies the core theme context (the `dz-theme` injection)
-       so theme-bound components resolve: the nav's own DzColorModeToggle, and the
-       ones inside the nav-bar / footer block previews.
-
-       It shares the landing useTheme() storage key ('dz-theme') and `data-theme`
-       attribute — but sharing a key is NOT synchronisation. The provider keeps its
-       own preference and only reads that key once, at mount, so from then on the
-       two are independent state machines. This comment used to claim they "stay in
-       sync rather than conflicting"; they did not. A visitor who picked light
-       explicitly, then flipped their OS to dark, had the provider — still holding
-       the `system` preference it read at mount — overwrite data-theme back to dark.
-
-       AUTHORITY: the landing useTheme() singleton owns the preference. ThemeSync
-       below makes the provider mirror it (both ways, so a DzColorModeToggle inside
-       a block preview is adopted rather than lost), which leaves the provider's
-       internal attribute write unable to say anything the singleton did not.
-       Rationale and the failing case: composables/useProviderThemeSync.ts, pinned
-       by composables/themeSync.spec.ts. -->
+  <!-- DzThemeProvider is the landing's one color-mode preference authority.
+       ThemeRecipeController applies the app-owned ThemeRecipeV1 design fields
+       and mirrors the provider's mode into that recipe; no second theme store or
+       synchronization bridge remains. -->
   <DzThemeProvider>
-    <ThemeSync />
+    <ThemeRecipeController />
     <DzToastProvider>
       <a class="skip-link" href="#main">Skip to content</a>
       <div class="landing-shell">

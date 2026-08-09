@@ -247,3 +247,15 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* ThemeRecipeV1 preview override. This mirrors the OS branch without changing
+   the user's actual browser preference, so the full landing can be audited in
+   its reduced-motion state from the Theme Designer. */
+[data-motion-preview='reduced'] *,
+[data-motion-preview='reduced'] *::before,
+[data-motion-preview='reduced'] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}

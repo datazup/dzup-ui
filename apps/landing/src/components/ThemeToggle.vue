@@ -14,11 +14,9 @@ import { useTheme } from '../composables/useTheme.ts'
  * so the "following system" state and the resolved theme both reach assistive
  * tech. It is a DzIconButton underneath, so it is keyboard operable and themed.
  *
- * It binds to the `DzThemeProvider` context rather than to the landing's
- * `useTheme` singleton. That is only correct because `useProviderThemeSync`
- * (mounted in App.vue) makes the provider mirror the singleton — before that
- * bridge existed, adopting this component here would have split the site's
- * theme state in two. See that composable for the authority design.
+ * It binds directly to the landing's sole `DzThemeProvider` authority. The
+ * landing-friendly useTheme facade below exposes the same provider refs under
+ * the API names used by the surrounding app.
  *
  * The binary flip this replaced could reach `light` and `dark` only: one click
  * pinned an explicit mode and `system` became unreachable without clearing
