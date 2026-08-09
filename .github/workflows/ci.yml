@@ -506,6 +506,8 @@ jobs:
         run: node node_modules/@playwright/test/cli.js install --with-deps chromium
       - name: Landing renders in light + dark
         run: yarn test:visual:landing --grep "renders real pixels"
+      - name: Certify every block at mobile, tablet, and desktop widths
+        run: yarn test:responsive:landing
       - name: Build landing site
         run: yarn workspace @dzup-ui/landing build
       # The artifact we measure must be the artifact users get. Assert the built

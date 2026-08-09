@@ -1428,6 +1428,17 @@ export const RELEASES: Release[] = [
 export const PENDING: PendingChange[] = [
   {
     "packages": [
+      "@dzup-ui/core",
+      "@dzup-ui/landing"
+    ],
+    "level": "patch",
+    "summary": "Repair form-control semantics in `DzDatePicker`, `DzTimePicker`, and `DzTransfer`.",
+    "body": "Repair form-control semantics in `DzDatePicker`, `DzTimePicker`, and `DzTransfer`.\n\n- `DzDatePicker` now forwards required state to Reka's native form input instead\n  of placing an unsupported `aria-required` attribute on a `role=\"group\"`.\n- `DzTimePicker` exposes its trigger as a combobox and renders its clear action\n  as a sibling control, avoiding nested interactive content while preserving\n  focus after clearing.\n- `DzTransfer` now owns its options with labelled multiselect listboxes and uses\n  keyboard-operable options with a non-interactive visual selection indicator.\n\nThe landing catalog's light/dark accessibility audit now certifies every block,\nso the two resolved debt exceptions and their unbacked trust-mark fallback are\nremoved.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/landing"
     ],
     "level": "minor",
@@ -1532,11 +1543,21 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/landing"
+    ],
+    "level": "patch",
+    "summary": "Earn a CI-backed Responsive trust mark for the complete Blocks catalog.",
+    "body": "Earn a CI-backed Responsive trust mark for the complete Blocks catalog.\n\nEvery standalone block preview now runs through a Chromium mobile, tablet, and\ndesktop matrix that verifies meaningful rendering, viewport containment, and no\npage or frame horizontal overflow. Blocks declaring mobile behavior also carry\ncomputed-layout reflow probes. The new gate found and fixed the compact tooltip\ntoolbar's mobile overflow before the mark was enabled.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/tokens"
     ],
     "level": "minor",
     "summary": "Add the public, versioned `ThemeRecipeV1` contract with strict validation and",
-    "body": "Add the public, versioned `ThemeRecipeV1` contract with strict validation and\nlegacy migration, deterministic JSON and URL round trips, curated presets, and\nCSS-variable generation/application for palette, radius, shadow, density, font,\nmode, direction, and motion preferences.",
+    "body": "Add the public, versioned `ThemeRecipeV1` contract with strict validation and\nlegacy migration, deterministic JSON and URL round trips, curated presets, and\nCSS-variable generation/application for palette, radius, shadow, density, font,\nmode, direction, and motion preferences. Include a framework-neutral Storybook\npreset and FOUC-cache helper so OSS and Pro catalogs share the same runtime axes.",
     "breaking": false,
     "deprecated": false
   },

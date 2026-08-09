@@ -5,16 +5,13 @@
  * docs/blocks.md §3.6 is explicit: a trust signal "only ships if … backs it" — a
  * mark is earned by an automated check, never a manual claim. So this module pairs
  * each rendered mark with the exact guarantee a check makes, and `a11y.spec.ts`
- * imports the SAME constants to prove every guarantee per block. The meta-test in
- * that suite asserts the rendered marks and the enforced checks can't drift: you
- * cannot add a `Certification` here without a backing assertion, and the audit can
- * only claim the themes listed in `AUDITED_THEMES`.
- *
- * Deliberately *absent*: a "Responsive" mark. Reflow at the `900px`/`560px`
- * breakpoints (docs §3.7) needs a real layout engine to verify; jsdom has none, so
- * no Vitest check can honestly back it. Per §3.6 we withhold the mark rather than
- * decorate the card — earning it is a follow-up for a Playwright viewport pass.
+ * imports the SAME constants to prove every guarantee per block. Accessibility
+ * and theme coverage come from `a11y.spec.ts`; responsive coverage comes from the
+ * real Chromium layout pass in `e2e/block-responsive.spec.ts`. Meta-tests assert
+ * the marks, browser manifest, declared reflow probes, and CI command cannot drift.
  */
+
+import { RESPONSIVE_VIEWPORTS } from './responsiveCertification.ts'
 
 /**
  * Themes the a11y suite mounts every block under and runs axe against. The
@@ -26,7 +23,7 @@ export const AUDITED_THEMES = ['light', 'dark'] as const
 export type AuditedTheme = (typeof AUDITED_THEMES)[number]
 
 /** Stable identifier for a trust mark, shared by the UI and the suite's meta-test. */
-export type CertificationId = 'accessible' | 'light-dark'
+export type CertificationId = 'accessible' | 'light-dark' | 'responsive'
 
 /** A single earned trust mark rendered on BlockCard / BlockPreview. */
 export interface Certification {
@@ -47,6 +44,8 @@ export interface Certification {
  * assertion `a11y.spec.ts` runs against every block:
  *   • `accessible` ← axe finds zero serious/critical violations.
  *   • `light-dark` ← that audit runs under every `AUDITED_THEMES` value.
+ *   • `responsive` ← Playwright renders every block at each certified viewport,
+ *     asserts containment/no horizontal overflow, and verifies declared reflow.
  */
 export const CERTIFICATIONS: readonly Certification[] = [
   {
@@ -59,6 +58,13 @@ export const CERTIFICATIONS: readonly Certification[] = [
     id: 'light-dark',
     label: 'Light + dark',
     certifies: `Rendered and axe-audited under both ${AUDITED_THEMES.join(' and ')} themes.`,
+  },
+  {
+    id: 'responsive',
+    label: 'Responsive',
+    certifies:
+      `Rendered in Chromium at ${RESPONSIVE_VIEWPORTS.map(viewport => `${viewport.label} ${viewport.width}px`).join(', ')}; `
+      + 'CI verifies meaningful content, viewport containment, no page or frame horizontal overflow, and every declared mobile reflow.',
   },
 ] as const
 

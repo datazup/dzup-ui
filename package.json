@@ -56,6 +56,7 @@
     "test:e2e:update": "playwright test --update-snapshots",
     "test:visual:landing": "node node_modules/@playwright/test/cli.js test -c apps/landing/playwright.config.ts",
     "test:visual:landing:update": "node node_modules/@playwright/test/cli.js test -c apps/landing/playwright.config.ts --update-snapshots",
+    "test:responsive:landing": "node node_modules/@playwright/test/cli.js test -c apps/landing/playwright.config.ts apps/landing/e2e/block-responsive.spec.ts",
     "landing": "yarn workspace @dzup-ui/landing dev",
     "landing:build": "yarn workspace @dzup-ui/landing build",
     "storybook": "yarn workspace @dzup-ui/storybook dev",

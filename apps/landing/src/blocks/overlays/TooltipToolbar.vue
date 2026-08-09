@@ -167,4 +167,19 @@ function onClick(tip: Tip): void {
 .tt-tip-label {
   font-size: var(--dz-text-xs, 0.75rem);
 }
+
+/* Keep action groups intact while allowing the compact toolbar to reflow on
+   phones. Separators disappear once groups may wrap so none starts a new row. */
+@media (max-width: 420px) {
+  .tt-bar {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tt-sep {
+    display: none;
+  }
+}
 </style>

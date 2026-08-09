@@ -2,18 +2,17 @@
 import type { Component } from 'vue'
 import type { CertificationId } from '../../blocks/certifications.ts'
 import { DzBadge } from '@dzup-ui/core'
-import { ShieldCheck, SunMoon } from 'lucide-vue-next'
+import { MonitorSmartphone, ShieldCheck, SunMoon } from 'lucide-vue-next'
 import { CERTIFICATIONS, isCertified } from '../../blocks/certifications.ts'
 
 /**
  * BlockTrustMarks — the *earned* trust badges shown on BlockCard / BlockPreview
  * (docs/blocks.md §3.6, Task I3).
  *
- * Each mark corresponds 1:1 to a guarantee the CI a11y suite (`blocks/a11y.spec.ts`)
- * proves for this block: "Accessible" ← zero serious/critical axe violations,
- * "Light + dark" ← that audit runs under both themes. The marks and the checks
- * share ONE source of truth (`certifications.ts`), and a meta-test there asserts
- * they can't drift — so nothing here is decorative.
+ * Each mark corresponds 1:1 to an automated guarantee: `blocks/a11y.spec.ts`
+ * proves "Accessible" and "Light + dark", while the real Chromium viewport matrix
+ * proves "Responsive". The marks and checks share one source of truth
+ * (`certifications.ts`), with parity/CI meta-tests preventing decorative claims.
  *
  * Honesty over completeness: a block carrying known core-component a11y debt is
  * NOT certified, so this renders NOTHING for it rather than a mark the audit can't
@@ -31,6 +30,7 @@ const props = defineProps<{
 const ICONS: Record<CertificationId, Component> = {
   'accessible': ShieldCheck,
   'light-dark': SunMoon,
+  'responsive': MonitorSmartphone,
 }
 </script>
 

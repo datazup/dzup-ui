@@ -34,6 +34,8 @@ export default defineConfig({
   reporter: 'line',
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
+    reducedMotion: 'reduce',
+    screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
