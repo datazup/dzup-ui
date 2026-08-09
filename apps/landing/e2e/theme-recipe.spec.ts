@@ -66,6 +66,7 @@ test('ThemeRecipeV1 persists, follows system mode, shares, resets, and remains a
   })
   const shareUrl = await page.getByRole('link', { name: 'Open share URL' }).getAttribute('href')
   expect(shareUrl).toContain('?theme=')
+  await expect(page.getByLabel('Generated theme CSS')).toContainText('[data-theme="dark"]')
 
   await page.addInitScript(() => {
     window.__landingRecipeBootstrap = null
@@ -101,11 +102,23 @@ test('ThemeRecipeV1 persists, follows system mode, shares, resets, and remains a
 
   await page.evaluate(() => {
     localStorage.removeItem('dz-theme-recipe-v1')
+    localStorage.removeItem('dz-theme-recipe-css-v1')
     localStorage.removeItem('dz-theme')
   })
   await page.goto(shareUrl!, { waitUntil: 'networkidle' })
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await expect(page.locator('html')).toHaveAttribute('data-density', 'compact')
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await expect(page.locator('html')).toHaveAttribute('data-motion-preview', 'reduced')
+  await expect.poll(() => page.evaluate(() =>
+    getComputedStyle(document.documentElement).getPropertyValue('--dz-radius-lg').trim(),
+  )).toBe('0.8438rem')
+
+  // A malformed URL token falls back to the now-persisted valid recipe instead
+  // of discarding both sources and returning to defaults.
+  await page.goto('/themes?theme=not-valid!', { waitUntil: 'networkidle' })
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
 
   await page.getByRole('button', { name: 'Reset', exact: true }).click()
   const reset = await page.evaluate(() => ({

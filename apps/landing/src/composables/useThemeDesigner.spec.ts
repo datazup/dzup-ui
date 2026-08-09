@@ -24,6 +24,8 @@ describe('useThemeDesigner', () => {
     expect(d.paletteChanged('primary')).toBe(false)
     expect(d.vars.value['--dz-colors-primary-500']).toContain('260.0')
     expect(d.cssText.value).toContain(':root {')
+    expect(d.cssText.value).toContain('[data-theme="dark"] {')
+    expect(d.cssText.value.match(/--dz-shadow-md:/g)).toHaveLength(2)
   })
 
   it('regenerates the primitive ramp when a palette hue changes', () => {

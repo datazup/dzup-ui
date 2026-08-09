@@ -4,8 +4,7 @@ import type { DesignerIntent } from '../composables/useThemeDesigner.ts'
 import { DzBadge, DzButton, DzHeading, DzSegmented, DzSelect, DzText } from '@dzup-ui/core'
 import { SHADE_STEPS } from '@dzup-ui/tokens'
 import { Check, Copy, Download, Link2, RotateCcw, Sparkles, Upload } from 'lucide-vue-next'
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
 import ThemePreviewCluster from '../components/themes/ThemePreviewCluster.vue'
 import {
   AA_NORMAL,
@@ -33,7 +32,6 @@ import {
  * export and link). This page is the control surface + layout only.
  */
 
-const route = useRoute()
 const designer = useThemeDesigner()
 const {
   palettes,
@@ -50,7 +48,6 @@ const {
   contrastDark,
   failingCount,
   shareUrl,
-  deserialize,
   reset,
 } = designer
 
@@ -58,13 +55,6 @@ const {
 // theme so the two render light and dark regardless of the site's global theme.
 const lightVars = computed(() => designer.varsFor('light'))
 const darkVars = computed(() => designer.varsFor('dark'))
-
-// ── Restore a shared design from the URL on first load ──────────────────────
-onMounted(() => {
-  const token = route.query.theme
-  if (typeof token === 'string' && token)
-    deserialize(token)
-})
 
 // ── Palette control metadata ────────────────────────────────────────────────
 interface PaletteMeta {

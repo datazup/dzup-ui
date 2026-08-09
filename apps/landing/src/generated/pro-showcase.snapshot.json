@@ -4,7 +4,7 @@
     "name": "@dzup-ui-pro/pro",
     "version": "0.1.0-alpha.0"
   },
-  "sourceRevision": "sha256:020f53e825743b74d6d505f57acacd1efa30ddc8f187a5a2d3d096fcbb06a5be",
+  "sourceRevision": "sha256:19d33f5aba069e8ffc119ebd25a131f1eee2ead7a8e193e780dd2d0cc3613260",
   "sourceRevisionKind": "content-sha256",
   "countRules": {
     "publishedComponents": "publicly exported Dz*.vue components in the Pro family barrels",
@@ -13,16 +13,16 @@
   },
   "counts": {
     "publishedComponents": 78,
-    "dedicatedDocumentationPages": 57,
+    "dedicatedDocumentationPages": 61,
     "families": 8,
-    "stories": 630
+    "stories": 699
   },
   "families": [
     {
       "id": "builders",
       "label": "Builders",
       "publishedComponents": 9,
-      "dedicatedDocumentationPages": 4,
+      "dedicatedDocumentationPages": 5,
       "components": [
         {
           "name": "DzDashboardBuilder",
@@ -66,8 +66,8 @@
         },
         {
           "name": "DzSchemaForm",
-          "storyId": null,
-          "storyPath": null
+          "storyId": "pro-builders-dzschemaform--docs",
+          "storyPath": "?path=/docs/pro-builders-dzschemaform--docs"
         }
       ]
     },
@@ -75,7 +75,7 @@
       "id": "business",
       "label": "Business",
       "publishedComponents": 6,
-      "dedicatedDocumentationPages": 5,
+      "dedicatedDocumentationPages": 6,
       "components": [
         {
           "name": "DzAuditLog",
@@ -89,8 +89,8 @@
         },
         {
           "name": "DzFileManagerTree",
-          "storyId": null,
-          "storyPath": null
+          "storyId": "pro-business-dzfilemanagertree--docs",
+          "storyPath": "?path=/docs/pro-business-dzfilemanagertree--docs"
         },
         {
           "name": "DzNotificationCenter",
@@ -214,7 +214,7 @@
       "id": "editors",
       "label": "Editors",
       "publishedComponents": 13,
-      "dedicatedDocumentationPages": 10,
+      "dedicatedDocumentationPages": 12,
       "components": [
         {
           "name": "DzCodeEditor",
@@ -243,13 +243,13 @@
         },
         {
           "name": "DzMarkdownRenderer",
-          "storyId": null,
-          "storyPath": null
+          "storyId": "pro-editors-dzmarkdownrenderer--docs",
+          "storyPath": "?path=/docs/pro-editors-dzmarkdownrenderer--docs"
         },
         {
           "name": "DzMermaidDiagram",
-          "storyId": null,
-          "storyPath": null
+          "storyId": "pro-editors-dzmermaiddiagram--docs",
+          "storyPath": "?path=/docs/pro-editors-dzmermaiddiagram--docs"
         },
         {
           "name": "DzNotebook",
@@ -476,8 +476,8 @@
   "storybook": {
     "indexVersion": 5,
     "basePath": "/storybook/",
-    "stories": 630,
-    "docsEntries": 75
+    "stories": 699,
+    "docsEntries": 79
   },
   "showcase": {
     "routes": [

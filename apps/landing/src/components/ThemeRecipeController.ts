@@ -4,6 +4,7 @@ import {
   applyThemeRecipe,
   normalizeThemeRecipe,
   serializeThemeRecipe,
+  themeRecipeFromUrl,
   themeRecipeToCssVariables,
 } from '@dzup-ui/tokens'
 import { defineComponent, watch } from 'vue'
@@ -21,15 +22,28 @@ interface FouCCache {
   motion: ThemeRecipeV1['motion']
 }
 
-function readPersistedRecipe(): ThemeRecipeV1 | null {
+function readInitialRecipe(): { recipe: ThemeRecipeV1 | null, fromUrl: boolean } {
   if (typeof window === 'undefined')
-    return null
+    return { recipe: null, fromUrl: false }
+
   try {
-    const stored = window.localStorage.getItem(LANDING_RECIPE_STORAGE_KEY)
-    return stored ? normalizeThemeRecipe(JSON.parse(stored) as unknown) : null
+    const shared = themeRecipeFromUrl(window.location.href)
+    if (shared)
+      return { recipe: shared, fromUrl: true }
   }
   catch {
-    return null
+    // An invalid share token must not suppress a valid persisted preference.
+  }
+
+  try {
+    const stored = window.localStorage.getItem(LANDING_RECIPE_STORAGE_KEY)
+    return {
+      recipe: stored ? normalizeThemeRecipe(JSON.parse(stored) as unknown) : null,
+      fromUrl: false,
+    }
+  }
+  catch {
+    return { recipe: null, fromUrl: false }
   }
 }
 
@@ -59,13 +73,16 @@ export default defineComponent({
   setup() {
     const designer = useThemeDesigner()
     const provider = useTheme()
-    const persisted = readPersistedRecipe()
-    if (persisted)
-      designer.replaceRecipe(persisted)
+    const initial = readInitialRecipe()
+    if (initial.recipe)
+      designer.replaceRecipe(initial.recipe)
 
-    // The provider's persisted `dz-theme` preference wins at startup. Shared
-    // recipe URLs loaded later can still intentionally set a different mode.
-    designer.mode.value = provider.theme.value
+    // An explicit shared recipe is the navigation intent and therefore owns its
+    // mode. Otherwise the provider's persisted `dz-theme` remains authoritative.
+    if (initial.fromUrl)
+      provider.setTheme(designer.mode.value)
+    else
+      designer.mode.value = provider.theme.value
 
     watch(provider.theme, (next) => {
       if (designer.mode.value !== next)

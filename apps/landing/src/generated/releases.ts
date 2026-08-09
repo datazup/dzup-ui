@@ -1532,6 +1532,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/tokens"
+    ],
+    "level": "minor",
+    "summary": "Add the public, versioned `ThemeRecipeV1` contract with strict validation and",
+    "body": "Add the public, versioned `ThemeRecipeV1` contract with strict validation and\nlegacy migration, deterministic JSON and URL round trips, curated presets, and\nCSS-variable generation/application for palette, radius, shadow, density, font,\nmode, direction, and motion preferences.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/tokens",
       "@dzup-ui/core",
       "@dzup-ui/tooling",

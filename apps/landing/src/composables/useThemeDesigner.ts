@@ -262,9 +262,11 @@ const defaultSerialized = serializeThemeRecipe(createDefaultThemeRecipe())
 const hasOverrides = computed<boolean>(() => serializeThemeRecipe(recipe) !== defaultSerialized)
 
 // ── Exports: CSS + JSON ──────────────────────────────────────────────────────
-const cssText = computed<string>(() =>
-  `/* ThemeRecipeV1 · light expansion */\n${themeRecipeToCssText(recipe, 'light')}`,
-)
+const cssText = computed<string>(() => [
+  '/* ThemeRecipeV1 · light and dark expansion */',
+  themeRecipeToCssText(recipe, 'light'),
+  themeRecipeToCssText(recipe, 'dark', '[data-theme="dark"]'),
+].join('\n\n'))
 
 /** A structured token export: the design params + the resolved CSS variables. */
 const jsonText = computed<string>(() => serializeThemeRecipe(recipe, true))
