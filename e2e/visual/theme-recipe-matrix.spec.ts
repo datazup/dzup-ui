@@ -21,8 +21,6 @@ const CASES = [
   { id: 'desktop-light-spacious-ltr-normal-os-light', theme: 'light', density: 'spacious', direction: 'ltr', motion: 'normal', viewport: { width: 1440, height: 900 }, colorScheme: 'light' },
 ] as const
 
-test.setTimeout(90_000)
-
 for (const screen of SCREENS) {
   for (const item of CASES) {
     test(`ThemeRecipe matrix ${screen.name} ${item.id}`, async ({ page, browserName }) => {
@@ -54,4 +52,3 @@ for (const screen of SCREENS) {
     })
   }
 }
-
