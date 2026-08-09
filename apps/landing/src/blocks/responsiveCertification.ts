@@ -3,8 +3,9 @@
  *
  * Keep this module dependency-free: the Playwright suite imports it directly in
  * Node, while landing Vitest specs compare its declared probes with `BLOCKS`.
- * A viewport or probe added here therefore changes both the browser evidence and
- * the trust-mark contract instead of leaving a decorative claim behind.
+ * A viewport, direction, or probe added here therefore changes both the browser
+ * evidence and the trust-mark contract instead of leaving a decorative claim
+ * behind.
  */
 
 export const RESPONSIVE_VIEWPORTS = [
@@ -14,6 +15,14 @@ export const RESPONSIVE_VIEWPORTS = [
 ] as const
 
 export type ResponsiveViewportId = (typeof RESPONSIVE_VIEWPORTS)[number]['id']
+
+/** Text directions exercised for every block at every certified viewport. */
+export const CERTIFIED_DIRECTIONS = [
+  { id: 'ltr', label: 'LTR' },
+  { id: 'rtl', label: 'RTL' },
+] as const
+
+export type CertifiedDirectionId = (typeof CERTIFIED_DIRECTIONS)[number]['id']
 
 export type ResponsiveProbeProperty = 'gridColumns' | 'flexDirection' | 'alignItems'
 

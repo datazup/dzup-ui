@@ -1553,6 +1553,16 @@ export const PENDING: PendingChange[] = [
   },
   {
     "packages": [
+      "@dzup-ui/landing"
+    ],
+    "level": "patch",
+    "summary": "Earn an RTL trust mark for the complete Blocks catalog.",
+    "body": "Earn an RTL trust mark for the complete Blocks catalog.\n\nEvery standalone block preview now runs the full Chromium mobile, tablet, and\ndesktop layout matrix under both LTR and RTL. The gate verifies that the requested\ndirection reaches block content and that RTL introduces no page or frame overflow\nor clipping before the catalog displays the new mark.",
+    "breaking": false,
+    "deprecated": false
+  },
+  {
+    "packages": [
       "@dzup-ui/tokens"
     ],
     "level": "minor",
@@ -1564,9 +1574,7 @@ export const PENDING: PendingChange[] = [
   {
     "packages": [
       "@dzup-ui/tokens",
-      "@dzup-ui/core",
-      "@dzup-ui/tooling",
-      "@dzup-ui/codemods"
+      "@dzup-ui/core"
     ],
     "level": "minor",
     "summary": "Normalize the `warning` intent: every intent now exposes the same solid-fill state set (TASK-DS-10).",

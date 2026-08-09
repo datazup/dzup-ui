@@ -10,8 +10,8 @@
  * loudly, naming the block id, the theme, the rule, and the offending nodes.
  *
  * Single source of truth: the marks live in `certifications.ts`. This file backs
- * Accessible + Light/dark; `e2e/block-responsive.spec.ts` backs Responsive with a
- * real layout engine. The paired responsive meta-test guards that browser lane.
+ * Accessible + Light/dark; `e2e/block-responsive.spec.ts` backs Responsive + RTL
+ * with a real layout engine. The paired responsive meta-test guards that lane.
  *
  * Scope & honesty (what the marks can claim):
  *   • This is a static axe pass in jsdom under each theme. It catches the
@@ -187,10 +187,10 @@ const debt = BLOCKS.filter(block => !isCertified(block.id)).map(block => ({ bloc
 
 describe('block trust marks are backed by this suite', () => {
   // Keep the complete public claim set explicit. Accessible + Light/dark are
-  // enforced below; Responsive is enforced by the Playwright lane and its own
+  // enforced below; Responsive + RTL are enforced by the Playwright lane and its
   // parity/CI meta-test in responsiveCertification.spec.ts.
   it('renders exactly the certifications backed by automated gates', () => {
-    expect(CERTIFICATIONS.map(mark => mark.id)).toEqual(['accessible', 'light-dark', 'responsive'])
+    expect(CERTIFICATIONS.map(mark => mark.id)).toEqual(['accessible', 'light-dark', 'responsive', 'rtl'])
   })
 
   it('audits every theme the "Light + dark" mark claims', () => {

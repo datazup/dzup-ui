@@ -6,6 +6,7 @@ import type {
 import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 import {
+  CERTIFIED_DIRECTIONS,
   RESPONSIVE_PROBES,
   RESPONSIVE_VIEWPORTS,
 } from '../src/blocks/responsiveCertification.ts'
@@ -17,6 +18,7 @@ interface PublishedRegistryIndex {
 interface LayoutMetrics {
   bodyOverflow: number
   childCount: number
+  computedDirection: string
   documentOverflow: number
   frameOverflow: number
   frameOutsideLeft: number
@@ -65,6 +67,7 @@ async function readLayoutMetrics(page: Page): Promise<LayoutMetrics> {
     return {
       bodyOverflow: Math.max(0, document.body.scrollWidth - viewportWidth),
       childCount: frame.children.length,
+      computedDirection: getComputedStyle(frame).direction,
       documentOverflow: Math.max(0, document.documentElement.scrollWidth - viewportWidth),
       frameOverflow: Math.max(0, frame.scrollWidth - frame.clientWidth),
       frameOutsideLeft: Math.max(0, -frameRect.left),
@@ -97,49 +100,59 @@ test.describe('block catalog — responsive certification', () => {
   })
 
   for (const blockId of BLOCK_IDS) {
-    test(`${blockId} renders and stays contained at every certified viewport`, async ({ page }) => {
+    test(`${blockId} renders and stays contained in every direction and viewport`, async ({ page }) => {
       const runtimeErrors: string[] = []
       page.on('pageerror', error => runtimeErrors.push(error.message))
 
       const firstViewport = RESPONSIVE_VIEWPORTS[0]
-      await page.setViewportSize(firstViewport)
-      const response = await page.goto(
-        `/blocks/preview/${blockId}?theme=light&dir=ltr`,
-        { waitUntil: 'domcontentloaded' },
-      )
-      expect(response?.ok(), `${blockId}: standalone preview request failed`).toBe(true)
-      await expect(page).toHaveURL(new RegExp(`/blocks/preview/${blockId}(?:\\?|$)`))
+      for (const direction of CERTIFIED_DIRECTIONS) {
+        await test.step(`${direction.label} direction`, async () => {
+          await page.setViewportSize(firstViewport)
+          const response = await page.goto(
+            `/blocks/preview/${blockId}?theme=light&dir=${direction.id}`,
+            { waitUntil: 'domcontentloaded' },
+          )
+          expect(
+            response?.ok(),
+            `${blockId} @ ${direction.id}: standalone preview request failed`,
+          ).toBe(true)
+          await expect(page).toHaveURL(new RegExp(`/blocks/preview/${blockId}(?:\\?|$)`))
+          expect(new URL(page.url()).searchParams.get('dir')).toBe(direction.id)
+          await expect(page.locator('html')).toHaveAttribute('dir', direction.id)
 
-      const frame = page.locator('.block-preview-frame')
-      await expect(frame).toBeVisible()
-      await expect(frame.locator(':scope > *').first()).toBeVisible()
+          const frame = page.locator('.block-preview-frame')
+          await expect(frame).toBeVisible()
+          await expect(frame.locator(':scope > *').first()).toBeVisible()
 
-      for (const viewport of RESPONSIVE_VIEWPORTS) {
-        await test.step(`${viewport.label} ${viewport.width}x${viewport.height}`, async () => {
-          await page.setViewportSize({ width: viewport.width, height: viewport.height })
-          await settleResponsiveLayout(page)
+          for (const viewport of RESPONSIVE_VIEWPORTS) {
+            await test.step(`${viewport.label} ${viewport.width}x${viewport.height}`, async () => {
+              await page.setViewportSize({ width: viewport.width, height: viewport.height })
+              await settleResponsiveLayout(page)
 
-          const metrics = await readLayoutMetrics(page)
-          const evidence = `${blockId} @ ${viewport.id}: ${JSON.stringify(metrics)}`
-          expect(metrics.childCount, `${evidence}; preview frame is empty`).toBeGreaterThan(0)
-          expect(metrics.textLength, `${evidence}; preview has no meaningful text`).toBeGreaterThan(0)
-          expect(metrics.documentOverflow, `${evidence}; document overflows horizontally`).toBeLessThanOrEqual(1)
-          expect(metrics.bodyOverflow, `${evidence}; body overflows horizontally`).toBeLessThanOrEqual(1)
-          expect(metrics.rootOverflow, `${evidence}; preview root overflows horizontally`).toBeLessThanOrEqual(1)
-          expect(metrics.frameOverflow, `${evidence}; preview frame overflows horizontally`).toBeLessThanOrEqual(1)
-          expect(metrics.frameOutsideLeft, `${evidence}; preview frame is clipped on the left`).toBeLessThanOrEqual(1)
-          expect(metrics.frameOutsideRight, `${evidence}; preview frame is clipped on the right`).toBeLessThanOrEqual(1)
-          expect(metrics.primaryOutsideLeft, `${evidence}; block root is clipped on the left`).toBeLessThanOrEqual(1)
-          expect(metrics.primaryOutsideRight, `${evidence}; block root is clipped on the right`).toBeLessThanOrEqual(1)
+              const metrics = await readLayoutMetrics(page)
+              const evidence = `${blockId} @ ${direction.id}/${viewport.id}: ${JSON.stringify(metrics)}`
+              expect(metrics.computedDirection, `${evidence}; block content did not inherit direction`).toBe(direction.id)
+              expect(metrics.childCount, `${evidence}; preview frame is empty`).toBeGreaterThan(0)
+              expect(metrics.textLength, `${evidence}; preview has no meaningful text`).toBeGreaterThan(0)
+              expect(metrics.documentOverflow, `${evidence}; document overflows horizontally`).toBeLessThanOrEqual(1)
+              expect(metrics.bodyOverflow, `${evidence}; body overflows horizontally`).toBeLessThanOrEqual(1)
+              expect(metrics.rootOverflow, `${evidence}; preview root overflows horizontally`).toBeLessThanOrEqual(1)
+              expect(metrics.frameOverflow, `${evidence}; preview frame overflows horizontally`).toBeLessThanOrEqual(1)
+              expect(metrics.frameOutsideLeft, `${evidence}; preview frame is clipped on the left`).toBeLessThanOrEqual(1)
+              expect(metrics.frameOutsideRight, `${evidence}; preview frame is clipped on the right`).toBeLessThanOrEqual(1)
+              expect(metrics.primaryOutsideLeft, `${evidence}; block root is clipped on the left`).toBeLessThanOrEqual(1)
+              expect(metrics.primaryOutsideRight, `${evidence}; block root is clipped on the right`).toBeLessThanOrEqual(1)
 
-          if (isResponsiveProbeBlock(blockId)) {
-            const probe = RESPONSIVE_PROBES[blockId]
-            const actual = await readProbeValue(page, probe)
-            const expected = probe.expected[viewport.id]
-            expect(
-              actual,
-              `${blockId} @ ${viewport.id}: ${probe.selector} ${probe.property} did not reflow`,
-            ).toBe(expected)
+              if (isResponsiveProbeBlock(blockId)) {
+                const probe = RESPONSIVE_PROBES[blockId]
+                const actual = await readProbeValue(page, probe)
+                const expected = probe.expected[viewport.id]
+                expect(
+                  actual,
+                  `${blockId} @ ${direction.id}/${viewport.id}: ${probe.selector} ${probe.property} did not reflow`,
+                ).toBe(expected)
+              }
+            })
           }
         })
       }

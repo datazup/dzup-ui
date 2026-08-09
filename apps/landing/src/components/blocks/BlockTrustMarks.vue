@@ -2,7 +2,7 @@
 import type { Component } from 'vue'
 import type { CertificationId } from '../../blocks/certifications.ts'
 import { DzBadge } from '@dzup-ui/core'
-import { MonitorSmartphone, ShieldCheck, SunMoon } from 'lucide-vue-next'
+import { Languages, MonitorSmartphone, ShieldCheck, SunMoon } from 'lucide-vue-next'
 import { CERTIFICATIONS, isCertified } from '../../blocks/certifications.ts'
 
 /**
@@ -10,8 +10,8 @@ import { CERTIFICATIONS, isCertified } from '../../blocks/certifications.ts'
  * (docs/blocks.md §3.6, Task I3).
  *
  * Each mark corresponds 1:1 to an automated guarantee: `blocks/a11y.spec.ts`
- * proves "Accessible" and "Light + dark", while the real Chromium viewport matrix
- * proves "Responsive". The marks and checks share one source of truth
+ * proves "Accessible" and "Light + dark", while the real Chromium viewport and
+ * direction matrix proves "Responsive" and "RTL". The marks share one source of truth
  * (`certifications.ts`), with parity/CI meta-tests preventing decorative claims.
  *
  * Honesty over completeness: a block carrying known core-component a11y debt is
@@ -31,6 +31,7 @@ const ICONS: Record<CertificationId, Component> = {
   'accessible': ShieldCheck,
   'light-dark': SunMoon,
   'responsive': MonitorSmartphone,
+  'rtl': Languages,
 }
 </script>
 

@@ -6,12 +6,13 @@
  * mark is earned by an automated check, never a manual claim. So this module pairs
  * each rendered mark with the exact guarantee a check makes, and `a11y.spec.ts`
  * imports the SAME constants to prove every guarantee per block. Accessibility
- * and theme coverage come from `a11y.spec.ts`; responsive coverage comes from the
- * real Chromium layout pass in `e2e/block-responsive.spec.ts`. Meta-tests assert
- * the marks, browser manifest, declared reflow probes, and CI command cannot drift.
+ * and theme coverage come from `a11y.spec.ts`; responsive and RTL coverage come
+ * from the real Chromium layout pass in `e2e/block-responsive.spec.ts`. Meta-tests
+ * assert the marks, browser matrix, declared reflow probes, and CI command cannot
+ * drift.
  */
 
-import { RESPONSIVE_VIEWPORTS } from './responsiveCertification.ts'
+import { CERTIFIED_DIRECTIONS, RESPONSIVE_VIEWPORTS } from './responsiveCertification.ts'
 
 /**
  * Themes the a11y suite mounts every block under and runs axe against. The
@@ -23,7 +24,7 @@ export const AUDITED_THEMES = ['light', 'dark'] as const
 export type AuditedTheme = (typeof AUDITED_THEMES)[number]
 
 /** Stable identifier for a trust mark, shared by the UI and the suite's meta-test. */
-export type CertificationId = 'accessible' | 'light-dark' | 'responsive'
+export type CertificationId = 'accessible' | 'light-dark' | 'responsive' | 'rtl'
 
 /** A single earned trust mark rendered on BlockCard / BlockPreview. */
 export interface Certification {
@@ -46,6 +47,8 @@ export interface Certification {
  *   • `light-dark` ← that audit runs under every `AUDITED_THEMES` value.
  *   • `responsive` ← Playwright renders every block at each certified viewport,
  *     asserts containment/no horizontal overflow, and verifies declared reflow.
+ *   • `rtl` ← the same browser matrix proves `dir="rtl"` reaches block content
+ *     without introducing overflow or clipping.
  */
 export const CERTIFICATIONS: readonly Certification[] = [
   {
@@ -64,7 +67,14 @@ export const CERTIFICATIONS: readonly Certification[] = [
     label: 'Responsive',
     certifies:
       `Rendered in Chromium at ${RESPONSIVE_VIEWPORTS.map(viewport => `${viewport.label} ${viewport.width}px`).join(', ')}; `
-      + 'CI verifies meaningful content, viewport containment, no page or frame horizontal overflow, and every declared mobile reflow.',
+      + `CI verifies meaningful content, viewport containment, no page or frame horizontal overflow, and every declared mobile reflow under ${CERTIFIED_DIRECTIONS.map(direction => direction.label).join(' and ')}.`,
+  },
+  {
+    id: 'rtl',
+    label: 'RTL',
+    certifies:
+      `Rendered in Chromium with dir="rtl" at ${RESPONSIVE_VIEWPORTS.map(viewport => `${viewport.label} ${viewport.width}px`).join(', ')}; `
+      + 'CI verifies the requested direction reaches block content with meaningful rendering, viewport containment, and no page or frame horizontal overflow or clipping.',
   },
 ] as const
 
