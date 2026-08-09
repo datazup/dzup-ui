@@ -506,7 +506,7 @@ jobs:
         run: node node_modules/@playwright/test/cli.js install --with-deps chromium
       - name: Landing renders in light + dark
         run: yarn test:visual:landing --grep "renders real pixels"
-      - name: Certify every block at mobile, tablet, and desktop widths
+      - name: Certify every block across widths and text directions
         run: yarn test:responsive:landing
       - name: Build landing site
         run: yarn workspace @dzup-ui/landing build
