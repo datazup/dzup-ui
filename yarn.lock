@@ -1330,7 +1330,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^3.2.6"
     "@vue/repl": "npm:^4.6.1"
     chromatic: "npm:^11.0.0"
-    playwright: "npm:^1.49.0"
+    playwright: "npm:1.61.1"
     react: "npm:^19.2.4"
     react-dom: "npm:^19.2.4"
     remark-gfm: "npm:^4.0.1"
@@ -8264,7 +8264,7 @@ __metadata:
     eslint: "npm:^9.39.1"
     eslint-plugin-vue: "npm:^10.0.0"
     jsdom: "npm:^29.0.2"
-    playwright: "npm:^1.49.0"
+    playwright: "npm:1.61.1"
     prettier: "npm:^3.5.0"
     tsx: "npm:^4.19.0"
     typescript: "npm:^5.8.3"
@@ -13895,15 +13895,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.60.0":
-  version: 1.60.0
-  resolution: "playwright-core@npm:1.60.0"
-  bin:
-    playwright-core: cli.js
-  checksum: 10c0/99ccd43923b6e9355e0723b7fe221e6326efd4687f8dafff951313662aea11db51f542a9c2122c704c445fb9baae1c9ec9fa6f895126bbddd9fe92313f6942c9
-  languageName: node
-  linkType: hard
-
 "playwright-core@npm:1.61.1":
   version: 1.61.1
   resolution: "playwright-core@npm:1.61.1"
@@ -13925,21 +13916,6 @@ __metadata:
   bin:
     playwright: cli.js
   checksum: 10c0/cea1bc4d2a64ec3ef683891606774029da7b8a8036ed98332565cec2f8e89549ca1fab9a89fbfba4e08e27e0d7e7d148031e965af66d5ff97bb3c34058cfcad0
-  languageName: node
-  linkType: hard
-
-"playwright@npm:^1.49.0":
-  version: 1.60.0
-  resolution: "playwright@npm:1.60.0"
-  dependencies:
-    fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.60.0"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    playwright: cli.js
-  checksum: 10c0/714ad76d85b4865d7e43c0012f9039800c1485373388973ed39d79339cee5ad467052d1e2f1eaeca107a1cb6e65342186a8578a4c3504853d84c3a691250d5db
   languageName: node
   linkType: hard
 

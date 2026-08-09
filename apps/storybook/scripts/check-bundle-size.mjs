@@ -24,6 +24,8 @@
  *   node scripts/check-bundle-size.mjs                              # metric report (exit 0)
  *   node scripts/check-bundle-size.mjs --badge storybook-static/size-badge.json
  *   node scripts/check-bundle-size.mjs --max-mb 18                 # enforced budget (exit 1 over)
+ *   DZUP_GALLERY=1 node scripts/check-bundle-size.mjs --max-mb 18 --gallery-max-mb 24
+ *                                                                  # separate visual-fixture budget
  *
  * Run from CI after `storybook build` (see the `check:size` package script and the
  * `storybook` job in .github/workflows/ci.yml).
@@ -74,7 +76,11 @@ function main() {
   const args = process.argv.slice(2)
   const badgePath = argValue(args, '--badge')
   const maxMbRaw = argValue(args, '--max-mb')
-  const maxMb = maxMbRaw !== undefined ? Number(maxMbRaw) : undefined
+  const galleryMaxMbRaw = argValue(args, '--gallery-max-mb')
+  const selectedMaxMbRaw = process.env.DZUP_GALLERY === '1' && galleryMaxMbRaw !== undefined
+    ? galleryMaxMbRaw
+    : maxMbRaw
+  const maxMb = selectedMaxMbRaw !== undefined ? Number(selectedMaxMbRaw) : undefined
 
   if (!existsSync(staticDir)) {
     console.error(

@@ -22,7 +22,7 @@
     "test-storybook:coverage": "vitest run --project=storybook --coverage",
     "test-storybook:ci": "vitest run --project=storybook --coverage --reporter=default --reporter=junit --reporter=json --outputFile.junit=a11y-report/junit.xml --outputFile.json=a11y-report/a11y-results.json",
     "chromatic": "chromatic --build-script-name build --exit-zero-on-changes",
-    "check:size": "node scripts/check-bundle-size.mjs --max-mb 25"
+    "check:size": "node scripts/check-bundle-size.mjs --max-mb 25 --gallery-max-mb 35"
   },
   "dependencies": {
     "@dzup-ui/core": "workspace:*",
@@ -42,7 +42,7 @@
     "@vitest/browser": "^3.2.6",
     "@vitest/coverage-v8": "^3.2.6",
     "chromatic": "^11.0.0",
-    "playwright": "^1.49.0",
+    "playwright": "1.61.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "remark-gfm": "^4.0.1",

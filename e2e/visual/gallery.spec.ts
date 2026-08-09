@@ -13,8 +13,6 @@ const SCREENS = [
 ] as const
 const THEMES = ['light', 'dark'] as const
 
-test.setTimeout(90_000)
-
 for (const screen of SCREENS) {
   for (const theme of THEMES) {
     test(`gallery ${screen.name} ${theme}`, async ({ page, browserName }) => {

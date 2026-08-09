@@ -1,7 +1,10 @@
+import process from 'node:process'
 import { defineConfig, devices } from '@playwright/test'
 
 const useStaticStorybook = process.env.STORYBOOK_E2E_STATIC === '1'
-const staticStorybookPreviewCommand = 'yarn exec vite preview --outDir apps/storybook/storybook-static --host 127.0.0.1 --port 6006'
+const storybookPort = Number(process.env.STORYBOOK_E2E_PORT ?? (useStaticStorybook ? 6106 : 6006))
+const storybookBaseUrl = `http://127.0.0.1:${storybookPort}`
+const staticStorybookPreviewCommand = `yarn exec vite preview --outDir apps/storybook/storybook-static --host 127.0.0.1 --port ${storybookPort} --strictPort`
 const staticStorybookCommand = process.env.STORYBOOK_E2E_PREBUILT === '1'
   ? staticStorybookPreviewCommand
   : [
@@ -19,7 +22,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'line',
   use: {
-    baseURL: 'http://127.0.0.1:6006', // Storybook
+    baseURL: storybookBaseUrl,
     trace: 'on-first-retry',
   },
   projects: [
@@ -29,8 +32,10 @@ export default defineConfig({
   ],
   webServer: {
     command: useStaticStorybook ? staticStorybookCommand : 'yarn storybook --no-open',
-    url: 'http://127.0.0.1:6006',
-    reuseExistingServer: !process.env.CI,
+    url: storybookBaseUrl,
+    // Static qualification must never attach to a developer's non-gallery
+    // Storybook on 6006: that silently changes the catalog under test.
+    reuseExistingServer: useStaticStorybook ? false : !process.env.CI,
     timeout: useStaticStorybook ? 420_000 : 120_000,
   },
 })
