@@ -131,3 +131,21 @@ export type {
   ThemeRecipeStyleDeclaration,
   ThemeRecipeV1,
 } from './theme-recipe.js'
+
+// Framework-neutral Storybook integration for the ThemeRecipeV1 runtime.
+export {
+  applyStorybookThemeRecipe,
+  createStorybookThemeRecipeFoucCache,
+  normalizeStorybookThemeRecipeGlobals,
+  STORYBOOK_THEME_RECIPE_FOUC_CACHE_KEY,
+  STORYBOOK_THEME_RECIPE_GLOBAL_TYPES,
+  STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS,
+  STORYBOOK_THEME_RECIPE_STORAGE_KEY,
+  themeRecipeFromStorybookGlobals,
+  themeRecipeToStorybookGlobals,
+} from './storybook-theme-recipe.js'
+export type {
+  AppliedStorybookThemeRecipe,
+  StorybookThemeRecipeFoucCacheV1,
+  StorybookThemeRecipeGlobals,
+} from './storybook-theme-recipe.js'

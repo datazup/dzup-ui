@@ -71,6 +71,17 @@ Recipe versions are strict: unknown future versions are rejected rather than
 silently reinterpreted. The pure utilities do not read global DOM state;
 `applyThemeRecipe` mutates only the target explicitly supplied by the caller.
 
+### Storybook integration
+
+The package also exports a framework-neutral Storybook preset so catalogs use
+the same `ThemeRecipeV1` axes and defaults as applications. Register
+`STORYBOOK_THEME_RECIPE_GLOBAL_TYPES`, restore
+`STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS`, and call
+`applyStorybookThemeRecipe` from a renderer-specific decorator. The preset
+keeps `system | light | dark`, density, direction, and motion values identical
+across OSS and Pro Storybooks without adding a Storybook runtime dependency to
+the tokens package.
+
 ## Dark mode
 
 Set `data-theme="dark"` on `<html>` to activate the dark-mode token set. Use `<DzThemeProvider>` from `@dzup-ui/core` to manage this automatically. See the [theming guide](../core/README.md#theming) for the full setup.

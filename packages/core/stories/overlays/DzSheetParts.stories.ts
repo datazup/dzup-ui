@@ -272,7 +272,7 @@ export const Interactive: Story = {
  * 1. DzSheetContent renders through Reka's `DialogPortal`, so the panel lands
  *    OUTSIDE the decorator's `data-theme="dark"` wrapper and would resolve the
  *    LIGHT tokens. Setting the `theme` global puts `data-theme="dark"` on
- *    `<html>` (`withThemeByDataAttribute`, see `.storybook/preview.ts`), which
+ *    `<html>` (the global ThemeRecipe decorator; see `.storybook/preview.ts`), which
  *    the portaled panel does inherit.
  * 2. A closed trigger previews none of the sub-parts. `play()` opens the sheet —
  *    and because docs pages do not autoplay, the modal overlay and focus trap

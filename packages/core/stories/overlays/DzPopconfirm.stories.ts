@@ -207,7 +207,7 @@ export const PlacementMatrix: Story = {
  * 1. The panel is `<Teleport to="body">`d, so it lands OUTSIDE the decorator's
  *    `data-theme="dark"` wrapper and would resolve the LIGHT tokens — a light
  *    popover floating over a dark canvas. Setting the `theme` global puts
- *    `data-theme="dark"` on `<html>` (`withThemeByDataAttribute`, see
+ *    `data-theme="dark"` on `<html>` (the global ThemeRecipe decorator; see
  *    `.storybook/preview.ts`), which the teleported panel does inherit.
  * 2. A closed trigger previews nothing. `play()` opens the panel — and because
  *    docs pages do not autoplay, the always-on focus trap this component
