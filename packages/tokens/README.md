@@ -37,6 +37,40 @@ import { tokens } from '@dzup-ui/tokens'
 // tokens.colors.primary[500] etc.
 ```
 
+### Versioned theme recipes
+
+`ThemeRecipeV1` is the public, framework-neutral contract for a portable dzup-ui
+appearance. It carries palette ramps, radius, shadow, density, font, color mode,
+direction, motion preference, and a curated preset identifier. Applications own
+reactive state and persistence; the tokens package owns validation, migration,
+deterministic serialization, CSS-variable expansion, and share-URL encoding.
+
+```ts
+import {
+  applyThemeRecipe,
+  createThemeRecipePreset,
+  decodeThemeRecipe,
+  encodeThemeRecipe,
+  serializeThemeRecipe,
+} from '@dzup-ui/tokens'
+
+const recipe = createThemeRecipePreset('violet', {
+  mode: 'system',
+  direction: 'rtl',
+  motion: 'reduced',
+})
+
+const token = encodeThemeRecipe(recipe)
+const restored = decodeThemeRecipe(token)
+const json = serializeThemeRecipe(restored)
+
+applyThemeRecipe(document.documentElement, restored, 'dark')
+```
+
+Recipe versions are strict: unknown future versions are rejected rather than
+silently reinterpreted. The pure utilities do not read global DOM state;
+`applyThemeRecipe` mutates only the target explicitly supplied by the caller.
+
 ## Dark mode
 
 Set `data-theme="dark"` on `<html>` to activate the dark-mode token set. Use `<DzThemeProvider>` from `@dzup-ui/core` to manage this automatically. See the [theming guide](../core/README.md#theming) for the full setup.

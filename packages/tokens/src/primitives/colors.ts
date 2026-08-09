@@ -49,7 +49,7 @@ const CHROMA_MULTIPLIER: Record<Shade, number> = {
 }
 
 /** Color palette definition: base chroma and hue */
-interface PaletteConfig {
+export interface PaletteConfig {
   readonly chroma: number
   readonly hue: number
 }
@@ -144,7 +144,7 @@ export interface OklchColor {
 export type ColorPalette = Record<Shade, OklchColor>
 
 /** Generate an OKLCH color for a specific shade of a palette */
-function generateShade(config: PaletteConfig, shade: Shade): OklchColor {
+export function generateShade(config: PaletteConfig, shade: Shade): OklchColor {
   return {
     lightness: LIGHTNESS_SCALE[shade],
     chroma: config.chroma * CHROMA_MULTIPLIER[shade],
@@ -153,7 +153,7 @@ function generateShade(config: PaletteConfig, shade: Shade): OklchColor {
 }
 
 /** Generate a full 11-shade palette from a config */
-function generatePalette(config: PaletteConfig): ColorPalette {
+export function generatePalette(config: PaletteConfig): ColorPalette {
   const palette = {} as Record<Shade, OklchColor>
   for (const shade of SHADE_STEPS) {
     palette[shade] = generateShade(config, shade)

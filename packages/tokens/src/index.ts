@@ -53,8 +53,11 @@ export { SIDEBAR_TOKENS } from './component/index.js'
 export {
   type ColorPalette,
   formatOklch,
+  generatePalette,
+  generateShade,
   type OklchColor,
   PALETTE_CONFIGS,
+  type PaletteConfig,
   type PaletteName,
   palettes,
   type Shade,
@@ -87,3 +90,44 @@ export type ThemeMode = 'light' | 'dark' | 'system'
 
 /** Resolved theme (no 'system') */
 export type ResolvedTheme = 'light' | 'dark'
+
+// Versioned, application-neutral theme recipe contract.
+export {
+  applyThemeRecipe,
+  createDefaultThemeRecipe,
+  createThemeRecipePreset,
+  decodeThemeRecipe,
+  encodeThemeRecipe,
+  normalizeThemeRecipe,
+  resolveThemeRecipeMode,
+  serializeThemeRecipe,
+  THEME_RECIPE_DENSITIES,
+  THEME_RECIPE_DIRECTIONS,
+  THEME_RECIPE_FONTS,
+  THEME_RECIPE_MODES,
+  THEME_RECIPE_MOTIONS,
+  THEME_RECIPE_PALETTES,
+  THEME_RECIPE_PRESETS,
+  THEME_RECIPE_VERSION,
+  ThemeRecipeError,
+  themeRecipeFromUrl,
+  themeRecipePaletteColor,
+  themeRecipeToCssText,
+  themeRecipeToCssVariables,
+  themeRecipeToUrl,
+  validateThemeRecipe,
+} from './theme-recipe.js'
+export type {
+  ThemeRecipeApplyTarget,
+  ThemeRecipeDensity,
+  ThemeRecipeDirection,
+  ThemeRecipeErrorCode,
+  ThemeRecipeFontId,
+  ThemeRecipeMode,
+  ThemeRecipeMotion,
+  ThemeRecipePalette,
+  ThemeRecipePaletteName,
+  ThemeRecipePresetId,
+  ThemeRecipeStyleDeclaration,
+  ThemeRecipeV1,
+} from './theme-recipe.js'

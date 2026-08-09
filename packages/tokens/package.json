@@ -30,7 +30,7 @@
     "generate": "node --import tsx src/generate.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test": "echo 'No unit tests in tokens — run yarn typecheck'",
+    "test": "yarn --cwd ../.. vitest run packages/tokens/src/theme-recipe.spec.ts",
     "build": "vite build && node --import tsx src/generate.ts"
   },
   "devDependencies": {
