@@ -21,6 +21,7 @@
 
 import type { Router } from 'vue-router'
 import { beforeAll, describe, expect, it } from 'vitest'
+import { PRO_FACTS } from './data.ts'
 import { TEMPLATE_OG_SLUGS } from './generated/ogImages.ts'
 import { TEMPLATES } from './templates/registry.ts'
 
@@ -77,7 +78,8 @@ describe('applyHead — writing a route head', () => {
     await router.push('/pro')
     expect(document.title).toContain('dzup-ui Pro')
     const description = content('meta[name="description"]')
-    expect(description).toContain('commercial tier')
+    expect(description).toContain(`${PRO_FACTS.published} published`)
+    expect(description).toContain(`${PRO_FACTS.families} families`)
 
     // og:* and twitter:* mirror the same title/description — a share card that
     // disagrees with the page is the defect this guards.
