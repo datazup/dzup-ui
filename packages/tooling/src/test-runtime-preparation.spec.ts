@@ -12,9 +12,15 @@ const rootPackage = JSON.parse(
 ) as RootPackageJson
 
 describe('aggregate test runtime preparation', () => {
-  it('generates every ignored artifact consumed by the root test suite', () => {
-    expect(rootPackage.scripts?.test).toBe(
-      'yarn tokens:generate && yarn workspace @dzup-ui/landing build:counts && vitest run',
+  it('centralizes every ignored artifact consumed by root test entrypoints', () => {
+    expect(rootPackage.scripts?.['test:prepare']).toBe(
+      'yarn tokens:generate && yarn workspace @dzup-ui/landing build:counts',
     )
+  })
+
+  it.each(['test', 'test:coverage'])('%s runs the shared preparation before Vitest', (entrypoint) => {
+    const command = rootPackage.scripts?.[entrypoint]
+    expect(command, `missing root ${entrypoint} script`).toBeDefined()
+    expect(command).toMatch(/^yarn test:prepare && vitest run(?:\s|$)/)
   })
 })
