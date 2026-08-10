@@ -37,6 +37,20 @@ import { vReveal } from '../motion/index.ts'
 
 const PANEL_PREFIX = 'blocks-panel'
 
+/**
+ * Upper bound on the re-anchor loop in `scrollToBlock` (~2s at 60fps). Purely a
+ * safety valve so a preview that never settles cannot spin a rAF loop forever.
+ */
+const MAX_SCROLL_SETTLE_FRAMES = 120
+
+/**
+ * Height of the sticky stack above the panels — TopNav (64px) + the category
+ * tab bar (~52px). Mirrors the `scroll-margin-top` on `.blocks-panel` /
+ * `.block-preview`, which only applies to native `#id` jumps; the scripted
+ * jump has to subtract it itself.
+ */
+const STICKY_HEADER_OFFSET = 124
+
 interface CategorySection extends CategoryMeta {
   blocks: ReturnType<typeof blocksByCategory>
 }
@@ -240,12 +254,72 @@ async function scrollToBlock(id: string) {
   if (typeof window === 'undefined') return
   forcedBlockIds.add(id)
   await nextTick()
-  requestAnimationFrame(() => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      block: 'start',
-    })
-  })
+
+  // One scroll is not enough. The previews ABOVE the target are still lazy
+  // skeletons; as they scroll into range they mount and grow from skeleton
+  // height to full block height, pushing the target down — which read as the
+  // page "bouncing back to the top" after the jump. Re-assert the position
+  // until the target's document offset stops moving.
+  //
+  // The correction pass writes `scrollTo` with an explicit offset rather than
+  // `scrollIntoView({ behavior: 'smooth' })`: a smooth scroll is still
+  // animating on the next frame, so comparing offsets mid-flight reads as
+  // "settled" and we stop short of the target. One smooth glide to the first
+  // estimate, then instant nudges as the layout above resolves.
+  const smooth = !prefersReducedMotion()
+  let lastTop = Number.NaN
+  let stableFrames = 0
+  let attempts = 0
+  let firstPass = true
+
+  // Hand control back the moment the reader scrolls themselves, so the
+  // re-anchoring never fights a deliberate wheel/touch gesture.
+  let cancelled = false
+  const cancel = () => {
+    cancelled = true
+  }
+  window.addEventListener('wheel', cancel, { once: true, passive: true })
+  window.addEventListener('touchmove', cancel, { once: true, passive: true })
+  window.addEventListener('keydown', cancel, { once: true })
+
+  const done = () => {
+    window.removeEventListener('wheel', cancel)
+    window.removeEventListener('touchmove', cancel)
+    window.removeEventListener('keydown', cancel)
+  }
+
+  const settle = () => {
+    if (cancelled) {
+      done()
+      return
+    }
+    const el = document.getElementById(id)
+    if (!el) {
+      // Target not mounted yet — keep waiting for the forced mount to paint.
+      if (attempts++ < MAX_SCROLL_SETTLE_FRAMES) requestAnimationFrame(settle)
+      else done()
+      return
+    }
+    const top = el.getBoundingClientRect().top + window.scrollY
+    if (top === lastTop) stableFrames += 1
+    else stableFrames = 0
+    lastTop = top
+
+    // Two consecutive identical offsets means the reflow above has finished.
+    if (stableFrames < 2 && attempts++ < MAX_SCROLL_SETTLE_FRAMES) {
+      // Clear the sticky TopNav + category tab bar, matching the
+      // `scroll-margin-top` the CSS applies for native `#id` jumps.
+      window.scrollTo({
+        top: Math.max(0, top - STICKY_HEADER_OFFSET),
+        behavior: firstPass && smooth ? 'smooth' : 'auto',
+      })
+      firstPass = false
+      requestAnimationFrame(settle)
+    } else {
+      done()
+    }
+  }
+  requestAnimationFrame(settle)
 }
 
 /**
