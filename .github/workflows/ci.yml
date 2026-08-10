@@ -576,8 +576,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Run coverage with threshold enforcement
-        run: |
-          yarn test:coverage -- --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 --coverage.thresholds.branches=80 --coverage.thresholds.statements=80
+        # vitest.config.ts owns both the global package bar and the measured
+        # active-app ratchet. CLI overrides replace that nested policy.
+        run: yarn test:coverage
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
