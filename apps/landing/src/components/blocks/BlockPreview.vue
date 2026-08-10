@@ -18,8 +18,20 @@ import {
   DzTabs,
   DzTabTrigger,
   DzText,
+  DzTooltip,
+  DzTooltipContent,
+  DzTooltipTrigger,
 } from '@dzup-ui/core'
-import { Check, ChevronDown, ExternalLink, FileText, Maximize2, SlidersHorizontal, Sparkles, Wand2 } from 'lucide-vue-next'
+import {
+  Check,
+  ChevronDown,
+  ExternalLink,
+  FileText,
+  Maximize2,
+  SlidersHorizontal,
+  Sparkles,
+  Wand2,
+} from 'lucide-vue-next'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { REGISTRY_ENABLED, v0OpenUrl } from '../../blocks/config.ts'
 import { blockMarkdown, blockPrompt, LLMS_TXT } from '../../blocks/llmsText.ts'
@@ -124,7 +136,8 @@ const viewport = computed<string>({
     return ''
   },
   set: (value) => {
-    width.value = value === 'mobile' ? PRESET_WIDTHS.mobile : value === 'tablet' ? PRESET_WIDTHS.tablet : 'full'
+    width.value
+      = value === 'mobile' ? PRESET_WIDTHS.mobile : value === 'tablet' ? PRESET_WIDTHS.tablet : 'full'
   },
 })
 
@@ -200,12 +213,20 @@ const dragging = ref(false)
 
 /** The current rendered width in px — the live readout and aria-valuenow. */
 const readoutWidth = computed(() =>
-  width.value === 'full' ? containerWidth.value : Math.min(width.value, containerWidth.value || width.value),
+  width.value === 'full'
+    ? containerWidth.value
+    : Math.min(width.value, containerWidth.value || width.value),
 )
 
 /** Frame max-width: `'full'` fills the container, a number pins explicit px. */
 const frameStyle = computed(() => ({
-  maxWidth: width.value === 'full' ? '100%' : `${width.value}px`,
+  'maxWidth': width.value === 'full' ? '100%' : `${width.value}px`,
+  '--bp-preview-min-height-wide': props.block.previewMinHeight
+    ? `${props.block.previewMinHeight.wide}px`
+    : undefined,
+  '--bp-preview-min-height-compact': props.block.previewMinHeight
+    ? `${props.block.previewMinHeight.compact}px`
+    : undefined,
 }))
 
 /** Measure the stage's content-box width (clientWidth minus horizontal padding). */
@@ -405,7 +426,9 @@ function openInV0(): void {
  * the copied text is byte-for-byte identical to the served `.md` and the two can
  * never drift. The single source of that markdown lives in `blocks/llmsText.ts`.
  */
-const markdownPayload = computed(() => blockMarkdown(props.block, CATEGORIES, b => getBlockSource(b.path)))
+const markdownPayload = computed(() =>
+  blockMarkdown(props.block, CATEGORIES, b => getBlockSource(b.path)),
+)
 
 /**
  * Absolute URL of the catalog's AI-docs index, resolved against the live origin
@@ -502,11 +525,7 @@ const langModel = computed<string>({
 </script>
 
 <template>
-  <section
-    :id="block.id"
-    class="block-preview"
-    :aria-labelledby="titleId"
-  >
+  <section :id="block.id" class="block-preview" :aria-labelledby="titleId">
     <!-- Header: title + description, viewport control, full-screen toggle. -->
     <header class="bp-head">
       <div class="bp-head-text">
@@ -564,98 +583,132 @@ const langModel = computed<string>({
 
         <DzCollapse :id="controlsId" v-model="previewControlsOpen" class="bp-controls-collapse">
           <div class="bp-head-controls">
-            <DzSegmented
-              v-show="tab === 'preview'"
-              v-model="viewport"
-              :items="viewports"
-              size="sm"
-              aria-label="Preview width"
-              class="bp-viewport"
-            />
-            <!-- Always-on width readout (the live value also lives on the drag
-                 handle as aria-valuenow). aria-hidden: it mirrors the handle. -->
-            <span v-show="tab === 'preview'" class="bp-width-readout" aria-hidden="true">
-              {{ readoutWidth }}px
-            </span>
-            <DzSegmented
-              v-show="tab === 'preview'"
-              v-model="previewThemeModel"
-              :items="themeItems"
-              size="sm"
-              aria-label="Preview theme"
-              class="bp-theme"
-            />
-            <DzSegmented
-              v-show="tab === 'preview'"
-              v-model="previewDir"
-              :items="dirItems"
-              size="sm"
-              aria-label="Text direction"
-              class="bp-dir"
-            />
-            <!-- Copy-for-AI actions: the block as a markdown doc (byte-identical to
+            <!-- Group 1 — "how the preview renders". Kept in one non-wrapping
+                 cluster so the three segmented controls break to a new line
+                 together instead of stranding one of them beside an action
+                 button; the whole group hides on the Code tab. -->
+            <div v-show="tab === 'preview'" class="bp-control-group bp-control-group--render">
+              <DzSegmented
+                v-model="viewport"
+                :items="viewports"
+                size="sm"
+                aria-label="Preview width"
+                class="bp-viewport"
+              />
+              <!-- Always-on width readout (the live value also lives on the drag
+                   handle as aria-valuenow). aria-hidden: it mirrors the handle. -->
+              <span class="bp-width-readout" aria-hidden="true"> {{ readoutWidth }}px </span>
+              <DzSegmented
+                v-model="previewThemeModel"
+                :items="themeItems"
+                size="sm"
+                aria-label="Preview theme"
+                class="bp-theme"
+              />
+              <DzSegmented
+                v-model="previewDir"
+                :items="dirItems"
+                size="sm"
+                aria-label="Text direction"
+                class="bp-dir"
+              />
+            </div>
+
+            <!-- Group 2 — "what I do with the block". Always present (these
+                 actions are meaningful on both tabs), so on the Code tab the
+                 header collapses to this single tidy cluster. -->
+            <div
+              class="bp-control-group bp-control-group--actions"
+              :data-leading="tab === 'code' || undefined"
+            >
+              <!-- Copy-for-AI actions: the block as a markdown doc (byte-identical to
                  the generated /r/<id>.md) and as a ready-to-paste prompt. Both reuse
                  DzCopyButton, so the copied-checkmark + success-tone feedback comes
                  for free; the icon slot keeps each action's glyph while still flipping
                  to a check on copy. The bp-copy-status live region adds a distinct
                  spoken confirmation (the icon-only buttons would sound identical). -->
-            <DzCopyButton
-              :value="markdownPayload"
-              aria-label="Copy block as markdown"
-              variant="outline"
-              tone="neutral"
-              size="sm"
-              @copied="announceCopied('markdown')"
-            >
-              <template #icon="{ copied }">
-                <Check v-if="copied" :size="16" aria-hidden="true" />
-                <FileText v-else :size="16" aria-hidden="true" />
-              </template>
-            </DzCopyButton>
-            <DzCopyButton
-              :value="promptPayload"
-              aria-label="Copy block as AI prompt"
-              variant="outline"
-              tone="neutral"
-              size="sm"
-              @copied="announceCopied('AI prompt')"
-            >
-              <template #icon="{ copied }">
-                <Check v-if="copied" :size="16" aria-hidden="true" />
-                <Sparkles v-else :size="16" aria-hidden="true" />
-              </template>
-            </DzCopyButton>
-            <span class="bp-copy-status" role="status" aria-live="polite">{{ copyStatus }}</span>
-            <!-- "Open in v0" handoff (Task G4): remix this block in v0 with the
+              <DzTooltip>
+                <DzTooltipTrigger as-child>
+                  <DzCopyButton
+                    :value="markdownPayload"
+                    aria-label="Copy block as markdown"
+                    variant="outline"
+                    tone="neutral"
+                    size="sm"
+                    @copied="announceCopied('markdown')"
+                  >
+                    <template #icon="{ copied }">
+                      <Check v-if="copied" :size="16" aria-hidden="true" />
+                      <FileText v-else :size="16" aria-hidden="true" />
+                    </template>
+                  </DzCopyButton>
+                </DzTooltipTrigger>
+                <DzTooltipContent>Copy as markdown</DzTooltipContent>
+              </DzTooltip>
+              <DzTooltip>
+                <DzTooltipTrigger as-child>
+                  <DzCopyButton
+                    :value="promptPayload"
+                    aria-label="Copy block as AI prompt"
+                    variant="outline"
+                    tone="neutral"
+                    size="sm"
+                    @copied="announceCopied('AI prompt')"
+                  >
+                    <template #icon="{ copied }">
+                      <Check v-if="copied" :size="16" aria-hidden="true" />
+                      <Sparkles v-else :size="16" aria-hidden="true" />
+                    </template>
+                  </DzCopyButton>
+                </DzTooltipTrigger>
+                <DzTooltipContent>Copy as AI prompt</DzTooltipContent>
+              </DzTooltip>
+              <span class="bp-copy-status" role="status" aria-live="polite">{{ copyStatus }}</span>
+              <!-- "Open in v0" handoff (Task G4): remix this block in v0 with the
                  registry item JSON + `--dz-*` tokens preloaded. Gated on the same
                  REGISTRY_ENABLED flag as the F6 `shadcn-vue add` line, plus a
                  resolvable registry host (`v0Url`), so it never renders a dead link.
                  `window.open(..., 'noopener')` severs the opener ref (rel=noopener). -->
-            <DzIconButton
-              v-if="REGISTRY_ENABLED && v0Url"
-              :icon="Wand2"
-              aria-label="Open in v0"
-              variant="outline"
-              tone="neutral"
-              size="sm"
-              @click="openInV0"
-            />
-            <DzIconButton
-              :icon="ExternalLink"
-              aria-label="Open preview in new tab"
-              variant="outline"
-              tone="neutral"
-              size="sm"
-              @click="openInNewTab"
-            />
-            <DzIconButton
-              :icon="Maximize2"
-              aria-label="Open preview full screen"
-              variant="outline"
-              tone="neutral"
-              size="sm"
-              @click="fullscreen = true"
-            />
+              <DzTooltip v-if="REGISTRY_ENABLED && v0Url">
+                <DzTooltipTrigger as-child>
+                  <DzIconButton
+                    :icon="Wand2"
+                    aria-label="Open in v0"
+                    variant="outline"
+                    tone="neutral"
+                    size="sm"
+                    @click="openInV0"
+                  />
+                </DzTooltipTrigger>
+                <DzTooltipContent>Open in v0</DzTooltipContent>
+              </DzTooltip>
+              <DzTooltip>
+                <DzTooltipTrigger as-child>
+                  <DzIconButton
+                    :icon="ExternalLink"
+                    aria-label="Open preview in new tab"
+                    variant="outline"
+                    tone="neutral"
+                    size="sm"
+                    @click="openInNewTab"
+                  />
+                </DzTooltipTrigger>
+                <DzTooltipContent>Open in a new tab</DzTooltipContent>
+              </DzTooltip>
+              <DzTooltip>
+                <DzTooltipTrigger as-child>
+                  <DzIconButton
+                    :icon="Maximize2"
+                    aria-label="Open preview full screen"
+                    variant="outline"
+                    tone="neutral"
+                    size="sm"
+                    @click="fullscreen = true"
+                  />
+                </DzTooltipTrigger>
+                <DzTooltipContent>Full screen</DzTooltipContent>
+              </DzTooltip>
+            </div>
           </div>
         </DzCollapse>
       </div>
@@ -676,8 +729,19 @@ const langModel = computed<string>({
       <DzTabContent value="preview" class="bp-panel">
         <!-- `data-theme` here scopes the override to this stage only (attribute
              selector → only this subtree's --dz-*/--lp-* tokens re-resolve). -->
-        <div ref="stageEl" class="bp-stage" :data-theme="previewTheme" :dir="previewDir" :style="themeVars">
-          <div ref="frameEl" class="bp-frame" :style="frameStyle" :data-dragging="dragging || undefined">
+        <div
+          ref="stageEl"
+          class="bp-stage"
+          :data-theme="previewTheme"
+          :dir="previewDir"
+          :style="themeVars"
+        >
+          <div
+            ref="frameEl"
+            class="bp-frame"
+            :style="frameStyle"
+            :data-dragging="dragging || undefined"
+          >
             <component :is="block.component" />
             <!-- Draggable + keyboard-operable width handle on the frame's right
                  edge. role="separator" with the live width as aria-valuenow so AT
@@ -797,6 +861,9 @@ const langModel = computed<string>({
 
 .bp-head-text {
   min-width: 0;
+  /* The controls now own a full-width row of their own (see
+     `.bp-controls-wrap`), so the text column simply takes the whole line. */
+  flex: 1 1 100%;
 }
 
 .bp-title {
@@ -835,13 +902,25 @@ const langModel = computed<string>({
   cursor: pointer;
   /* Same category-accent tint as BlockCard's chips (`--lp-cat-500` inherited
      from the panel), legible in light and dark; primary is the fallback. */
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%, var(--dz-surface, #fff));
-  color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%, var(--dz-foreground, #1a202c));
+  background: color-mix(
+    in oklch,
+    var(--lp-cat-500, var(--dz-primary, #4f46e5)) 13%,
+    var(--dz-surface, #fff)
+  );
+  color: color-mix(
+    in oklch,
+    var(--lp-cat-500, var(--dz-primary, #4f46e5)) 62%,
+    var(--dz-foreground, #1a202c)
+  );
   transition: background-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
 .bp-chip:hover {
-  background: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #4f46e5)) 22%, var(--dz-surface, #fff));
+  background: color-mix(
+    in oklch,
+    var(--lp-cat-500, var(--dz-primary, #4f46e5)) 22%,
+    var(--dz-surface, #fff)
+  );
 }
 
 .bp-chip:focus-visible {
@@ -857,7 +936,14 @@ const langModel = computed<string>({
 
 .bp-controls-wrap {
   min-width: 0;
-  flex: 1 1 32rem;
+  /* The two clusters need ~670px together — more than is left beside a title
+     and description in a 1078px header, so squeezing them onto that line only
+     produced the ragged wrap this replaces. They get their own full-width row,
+     which is stable at every viewport and reads as a real toolbar. */
+  flex: 1 1 100%;
+  padding-top: 14px;
+  margin-top: 2px;
+  border-top: 1px solid var(--lp-hairline);
 }
 
 .bp-controls-toggle {
@@ -871,10 +957,42 @@ const langModel = computed<string>({
 .bp-head-controls {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
+  /* Render settings read left-to-right from the start of the row; the actions
+     cluster is pushed to the trailing edge (see `--actions`). */
+  justify-content: flex-start;
+  gap: 10px 16px;
   width: 100%;
   flex-wrap: wrap;
+}
+
+/* Two clusters — render settings and actions. Each is `nowrap` so a group
+   moves to the next line as a unit; previously all 8 controls were siblings in
+   one wrapping row, which stranded 2 icon buttons on a ragged second line at
+   both 1440px and 1280px. */
+.bp-control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+/* A hairline rule reads the two clusters apart without adding chrome. It is
+   decorative, so it hangs off the actions group rather than an extra element,
+   and is dropped once the groups stack. */
+.bp-control-group--actions {
+  /* Sit at the trailing edge of the toolbar row, opposite the render settings.
+     `auto` collapses to 0 once the groups wrap, so the actions stay left-
+     aligned under the settings instead of drifting to a lonely right edge. */
+  margin-inline-start: auto;
+  padding-inline-start: 16px;
+  border-inline-start: 1px solid var(--lp-hairline);
+}
+
+/* On the Code tab the render group is hidden, leaving the actions cluster
+   alone — the divider would then float with nothing before it. */
+.bp-control-group--actions[data-leading] {
+  padding-inline-start: 0;
+  border-inline-start: 0;
 }
 
 .bp-controls-chevron {
@@ -928,7 +1046,11 @@ const langModel = computed<string>({
   /* A faint corner wash in the category accent so each preview's stage hints at
      its group's colour without competing with the live block on top. */
   background:
-    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #6366f1)) 6%, transparent), transparent 42%),
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #6366f1)) 6%, transparent),
+      transparent 42%
+    ),
     var(--dz-background, #fff);
 }
 
@@ -936,8 +1058,15 @@ const langModel = computed<string>({
 .bp-frame {
   position: relative;
   width: 100%;
+  min-height: var(--bp-preview-min-height-wide, 0);
   margin: 0 auto;
   transition: max-width var(--dz-transition-base, 250ms) ease;
+}
+
+@media (max-width: 768px) {
+  .bp-frame {
+    min-height: var(--bp-preview-min-height-compact, var(--bp-preview-min-height-wide, 0));
+  }
 }
 
 /* While dragging, track the pointer 1:1 — no easing lag. */

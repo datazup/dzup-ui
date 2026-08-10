@@ -6,6 +6,17 @@ const DESKTOP_VIEWPORT = { width: 1440, height: 1000 }
 const HERO_SPLIT_DESCRIPTION
   = 'Copy and two CTAs on the left, a framed product image on the right; stacks to one column on narrow viewports.'
 
+interface LayoutShiftEntry extends PerformanceEntry {
+  hadRecentInput: boolean
+  value: number
+}
+
+declare global {
+  interface Window {
+    __dzupObservedCls: number
+  }
+}
+
 async function expectNoHorizontalOverflow(page: Page): Promise<void> {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true)
 }
@@ -74,4 +85,38 @@ test('block detail keeps the live preview first across mobile and desktop', asyn
   await expectNoHorizontalOverflow(page)
 
   expect(consoleErrors).toEqual([])
+})
+
+test('hero split reserves its lazy preview geometry within the CLS budget', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__dzupObservedCls = 0
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries() as LayoutShiftEntry[]) {
+        if (!entry.hadRecentInput)
+          window.__dzupObservedCls += entry.value
+      }
+    }).observe({ type: 'layout-shift', buffered: true })
+  })
+
+  // Exercise the real loadingComponent -> HeroSplit transition deterministically
+  // in both Vite dev (`HeroSplit.vue`) and production (`HeroSplit-<hash>.js`).
+  await page.route(/\/HeroSplit(?:\.vue|-[^/]+\.js)(?:\?|$)/, async (route) => {
+    await page.waitForTimeout(500)
+    await route.continue()
+  })
+
+  await page.setViewportSize(DESKTOP_VIEWPORT)
+  await page.goto('/blocks/hero-split', { waitUntil: 'domcontentloaded' })
+
+  await expect(page.locator('.async-loading')).toBeVisible()
+  const loadingDetailsY = await page.locator('.bd-details-section').evaluate(element => element.getBoundingClientRect().y)
+
+  await expect(page.locator('.hero-split')).toBeVisible()
+  const loadedDetailsY = await page.locator('.bd-details-section').evaluate(element => element.getBoundingClientRect().y)
+  const observedCls = await page.evaluate(() => window.__dzupObservedCls)
+
+  expect(loadedDetailsY - loadingDetailsY, 'lazy resolution must not materially move supporting details')
+    .toBeLessThanOrEqual(60)
+  expect(observedCls, 'the instrumented route must remain inside the Lighthouse CLS ceiling')
+    .toBeLessThan(0.1)
 })

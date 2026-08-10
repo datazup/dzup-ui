@@ -332,13 +332,19 @@ onMounted(async () => {
     <Section heading-id="blocks-title">
       <div class="blocks-hero">
         <span class="lp-eyebrow">Ecosystem</span>
-        <DzHeading id="blocks-title" :level="1" size="3xl" weight="semibold" class="blocks-hero-title lp-balance">
+        <DzHeading
+          id="blocks-title"
+          :level="1"
+          size="3xl"
+          weight="semibold"
+          class="blocks-hero-title lp-balance"
+        >
           Blocks
         </DzHeading>
         <DzText size="lg" tone="muted" class="blocks-hero-lede lp-balance">
-          Pre-composed UI sections — heroes, pricing, navbars, stat rows, auth cards — built from the same
-          @dzup-ui/core components and design tokens. Copy the markup, paste it in, and it drops in already
-          themed, accessible, and light/dark-ready.
+          Pre-composed UI sections — heroes, pricing, navbars, stat rows, auth cards — built from
+          the same @dzup-ui/core components and design tokens. Copy the markup, paste it in, and it
+          drops in already themed, accessible, and light/dark-ready.
         </DzText>
 
         <!-- ⌘K navigator: jump to any block, category or component. -->
@@ -378,11 +384,7 @@ onMounted(async () => {
 
             <!-- Reuse the same lazy preview mounting as the deck, flat. -->
             <div class="block-previews">
-              <div
-                v-for="block in results"
-                :key="block.id"
-                :style="itemAccentStyle(block)"
-              >
+              <div v-for="block in results" :key="block.id" :style="itemAccentStyle(block)">
                 <LazyBlockPreview
                   v-reveal
                   :block="block"
@@ -427,11 +429,7 @@ onMounted(async () => {
               >
                 <!-- Index: a card per block, scrolling to its preview within the panel. -->
                 <ul class="block-grid">
-                  <li
-                    v-for="(block, i) in activeSection.blocks"
-                    :key="block.id"
-                    v-reveal="i * 45"
-                  >
+                  <li v-for="(block, i) in activeSection.blocks" :key="block.id" v-reveal="i * 45">
                     <BlockCard :block="block" @select-component="showBlocksUsing" />
                   </li>
                 </ul>
@@ -533,7 +531,8 @@ onMounted(async () => {
    alone reads cleanly. Degrades to an instant swap under reduced motion. */
 .mode-fade-enter-active,
 .mode-fade-leave-active {
-  transition: opacity var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  transition: opacity var(--dz-duration-normal, 240ms)
+    var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .mode-fade-enter-from,
@@ -594,8 +593,19 @@ onMounted(async () => {
   margin: 0 0 clamp(40px, 6vw, 72px);
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr) — NOT `1fr`. A plain `1fr` is `minmax(auto, 1fr)`, so a card
+     whose content has a wide min-content floor (the install command renders
+     `white-space: pre`, ~596px) inflates its track and pushes the trailing
+     column outside the 1120px container. Flooring at 0 lets the track shrink
+     and hands the overflow to the code block's own horizontal scroll. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+/* Grid items are themselves flex/grid parents; without an explicit 0 floor the
+   same min-content inflation re-enters one level down. */
+.block-grid > li {
+  min-width: 0;
 }
 
 .block-previews {
