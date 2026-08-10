@@ -52,7 +52,8 @@ const emit = defineEmits<{
  */
 function onJumpToPreview(event: MouseEvent): void {
   // Let the browser handle modified clicks (new tab/window) natively.
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
+    return
   event.preventDefault()
   emit('openBlock', props.block.id)
 }
