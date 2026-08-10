@@ -43,8 +43,8 @@ interface CategorySection extends CategoryMeta {
 
 /** Only categories that actually have registered blocks, in browse order. */
 const sections = computed<CategorySection[]>(() =>
-  CATEGORIES.map(category => ({ ...category, blocks: blocksByCategory(category.id) })).filter(
-    section => section.blocks.length > 0,
+  CATEGORIES.map((category) => ({ ...category, blocks: blocksByCategory(category.id) })).filter(
+    (section) => section.blocks.length > 0,
   ),
 )
 
@@ -86,8 +86,7 @@ function showBlocksUsing(name: string): void {
   search.query.value = ''
   search.activeTags.value = []
   search.activeComponent.value = name
-  if (typeof window === 'undefined')
-    return
+  if (typeof window === 'undefined') return
   requestAnimationFrame(() => {
     document.querySelector('.block-search')?.scrollIntoView({
       behavior: prefersReducedMotion() ? 'auto' : 'smooth',
@@ -105,7 +104,7 @@ const resultsLede = computed(() => {
 })
 
 /** Category id → decorative accent, so each cross-category card/preview keeps its group's hue. */
-const accentByCategory = new Map(CATEGORIES.map(c => [c.id, c.accent] as const))
+const accentByCategory = new Map(CATEGORIES.map((c) => [c.id, c.accent] as const))
 
 /**
  * Per-block accent custom property for results mode. In the deck the accent is
@@ -120,18 +119,14 @@ function itemAccentStyle(block: BlockDef) {
 /** Resolve the category to open on load from the URL hash, if any. */
 function initialCategory(): string {
   const fallback = sections.value[0]?.id ?? ''
-  if (typeof window === 'undefined')
-    return fallback
+  if (typeof window === 'undefined') return fallback
   const hash = window.location.hash.slice(1)
-  if (!hash)
-    return fallback
+  if (!hash) return fallback
   // Direct category deep link (#marketing).
-  if (sections.value.some(s => s.id === hash))
-    return hash
+  if (sections.value.some((s) => s.id === hash)) return hash
   // Legacy block deep link (#hero-centered) → open the block's category.
-  const block = BLOCKS.find(b => b.id === hash)
-  if (block && sections.value.some(s => s.id === block.category))
-    return block.category
+  const block = BLOCKS.find((b) => b.id === hash)
+  if (block && sections.value.some((s) => s.id === block.category)) return block.category
   return fallback
 }
 
@@ -140,7 +135,7 @@ const active = ref<string>(initialCategory())
 
 /** The section object for the active category. */
 const activeSection = computed<CategorySection | undefined>(() =>
-  sections.value.find(s => s.id === active.value),
+  sections.value.find((s) => s.id === active.value),
 )
 
 /**
@@ -156,7 +151,7 @@ const accentStyle = computed(() =>
 )
 
 /** Index of the active category among the visible sections. */
-const activeIndex = computed(() => sections.value.findIndex(s => s.id === active.value))
+const activeIndex = computed(() => sections.value.findIndex((s) => s.id === active.value))
 
 /** Adjacent groups for the pager (undefined at the ends). */
 const prevSection = computed(() => sections.value[activeIndex.value - 1])
@@ -178,18 +173,17 @@ function tabId(id: string): string {
 
 function prefersReducedMotion(): boolean {
   return (
-    typeof window !== 'undefined'
-    && typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
   )
 }
 
 /** Switch to a category, recording the direction so the deck slides the right way. */
 function goTo(id: string) {
-  if (id === active.value)
-    return
+  if (id === active.value) return
   const from = activeIndex.value
-  const to = sections.value.findIndex(s => s.id === id)
+  const to = sections.value.findIndex((s) => s.id === id)
   direction.value = to >= from ? 'fwd' : 'back'
   active.value = id
 }
@@ -200,11 +194,9 @@ function goTo(id: string) {
  * The sticky stack above the panels is TopNav (64px) + the tab bar (~52px).
  */
 function scrollToPanelTop() {
-  if (typeof window === 'undefined')
-    return
+  if (typeof window === 'undefined') return
   const deck = document.getElementById('blocks-deck')
-  if (!deck)
-    return
+  if (!deck) return
   const top = deck.getBoundingClientRect().top + window.scrollY - 116
   // Only pull the page up when the panel top is above the fold; never scroll down
   // past content the reader can already see.
@@ -229,8 +221,7 @@ const forcedBlockIds = reactive(new Set<string>())
 // scroll, even when the block sits below the fold.
 if (typeof window !== 'undefined') {
   const initialHash = window.location.hash.slice(1)
-  if (initialHash && BLOCKS.some(b => b.id === initialHash))
-    forcedBlockIds.add(initialHash)
+  if (initialHash && BLOCKS.some((b) => b.id === initialHash)) forcedBlockIds.add(initialHash)
 }
 
 /** Whether a block should skip the lazy gate and render its preview now. */
@@ -246,8 +237,7 @@ function isForced(id: string): boolean {
  * then waits a tick + rAF so the scroll fires after the preview has painted.
  */
 async function scrollToBlock(id: string) {
-  if (typeof window === 'undefined')
-    return
+  if (typeof window === 'undefined') return
   forcedBlockIds.add(id)
   await nextTick()
   requestAnimationFrame(() => {
@@ -264,16 +254,26 @@ async function scrollToBlock(id: string) {
  */
 const pendingBlockId = ref<string | null>(null)
 
-/** When the palette navigates to a block, open its deck then scroll to it. */
+/**
+ * When the palette or a BlockCard navigates to a block, open its deck then
+ * scroll to it.
+ *
+ * A card's `#<id>` anchor cannot do this by itself: previews are lazily mounted
+ * (LazyBlockPreview), so a below-the-fold target is still a skeleton with no
+ * `#<id>` anchor and the browser's native jump silently lands nowhere. The card
+ * therefore calls `preventDefault()` and routes here, which force-mounts the
+ * target first — so we also own writing the hash the anchor would have set.
+ */
 function openBlock(blockId: string) {
-  const block = BLOCKS.find(b => b.id === blockId)
-  if (!block)
-    return
+  const block = BLOCKS.find((b) => b.id === blockId)
+  if (!block) return
+  // Keep the URL shareable/back-navigable exactly as the plain anchor did.
+  if (typeof window !== 'undefined' && window.location.hash.slice(1) !== blockId)
+    window.history.pushState(window.history.state, '', `#${blockId}`)
   if (block.category === active.value) {
     // Deck already showing this group — just scroll the preview into view.
     scrollToBlock(blockId)
-  }
-  else {
+  } else {
     // Switch decks first; the scroll waits for the enter transition (after-enter).
     pendingBlockId.value = blockId
     goTo(block.category)
@@ -282,8 +282,7 @@ function openBlock(blockId: string) {
 
 /** Handle a ⌘K palette selection: open the target block or category deck. */
 function onPaletteNavigate(target: BlockNavTarget) {
-  if (target.blockId)
-    openBlock(target.blockId)
+  if (target.blockId) openBlock(target.blockId)
   else goTo(target.category)
 }
 
@@ -299,11 +298,13 @@ let isMounted = false
 
 watch(active, async (id) => {
   // Keep the URL shareable without triggering the router's hash scroll.
-  if (typeof window !== 'undefined') {
+  // Skip while a block jump is in flight: `openBlock` already wrote the more
+  // specific `#<block-id>`, and overwriting it with the category would drop the
+  // deep link the user just followed.
+  if (typeof window !== 'undefined' && !pendingBlockId.value) {
     window.history.replaceState(window.history.state, '', `#${id}`)
   }
-  if (!isMounted)
-    return
+  if (!isMounted) return
   await nextTick()
   scrollToPanelTop()
   panelEl.value?.focus({ preventScroll: true })
@@ -315,7 +316,7 @@ onMounted(async () => {
   // the (async) panel has had a chance to mount.
   if (typeof window !== 'undefined') {
     const hash = window.location.hash.slice(1)
-    const block = hash ? BLOCKS.find(b => b.id === hash) : undefined
+    const block = hash ? BLOCKS.find((b) => b.id === hash) : undefined
     if (block) {
       await nextTick()
       scrollToBlock(block.id)
@@ -378,7 +379,11 @@ onMounted(async () => {
                 v-reveal="i * 45"
                 :style="itemAccentStyle(block)"
               >
-                <BlockCard :block="block" @select-component="showBlocksUsing" />
+                <BlockCard
+                  :block="block"
+                  @select-component="showBlocksUsing"
+                  @open-block="openBlock"
+                />
               </li>
             </ul>
 
@@ -430,7 +435,11 @@ onMounted(async () => {
                 <!-- Index: a card per block, scrolling to its preview within the panel. -->
                 <ul class="block-grid">
                   <li v-for="(block, i) in activeSection.blocks" :key="block.id" v-reveal="i * 45">
-                    <BlockCard :block="block" @select-component="showBlocksUsing" />
+                    <BlockCard
+                      :block="block"
+                      @select-component="showBlocksUsing"
+                      @open-block="openBlock"
+                    />
                   </li>
                 </ul>
 
