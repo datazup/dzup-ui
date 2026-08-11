@@ -1,7 +1,7 @@
 {
   "name": "@dzup-ui/testing",
   "type": "module",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "DOM test-environment support for dzup-ui consumers",
   "license": "MIT",
   "sideEffects": [

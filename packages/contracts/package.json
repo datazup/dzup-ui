@@ -1,7 +1,7 @@
 {
   "name": "@dzup-ui/contracts",
   "type": "module",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "description": "Canonical public API contracts for dzup-ui components",
   "license": "MIT",
   "exports": {
