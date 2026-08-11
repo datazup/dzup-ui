@@ -1223,6 +1223,7 @@ __metadata:
     "@dzup-ui/contracts": "workspace:*"
     "@dzup-ui/tokens": "workspace:*"
     "@floating-ui/vue": "npm:^1.1.0"
+    "@internationalized/date": "npm:^3.5.0"
     "@vitejs/plugin-vue": "npm:^6"
     clsx: "npm:^2.1.1"
     lucide-vue-next: "npm:^0.477.0"

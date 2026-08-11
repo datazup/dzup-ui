@@ -1,27 +1,68 @@
 import type { UserConfig } from 'vite'
+import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 
-const DEFAULT_EXTERNALS = [
-  'vue',
-  'reka-ui',
-  '@floating-ui/vue',
-  'lucide-vue-next',
-  '@internationalized/date',
-  '@dzup-ui/tokens',
-  '@dzup-ui/contracts',
-  '@dzup-ui/core',
-  'clsx',
-  'tailwind-merge',
-  'tailwind-variants',
-]
+/**
+ * Every runtime dependency the package DECLARES — `dependencies` +
+ * `peerDependencies` read from its own package.json — is externalized.
+ *
+ * This is derived, never hand-maintained. It used to be a literal list here, and
+ * it drifted: `qrcode-generator` was added to `@dzup-ui/core`'s dependencies but
+ * not to the list, so Rollup bundled it, and under `preserveModules` that emitted
+ * `import E from "../../node_modules/qrcode-generator/dist/qrcode.js"` into
+ * `dist/components/media/DzQRCode.vue.js`. That path exists in the repo but NOT in
+ * the published tarball (`files: [dist]`), so importing the package barrel died
+ * with ERR_MODULE_NOT_FOUND for every consumer.
+ *
+ * Deriving from package.json makes the build and the manifest impossible to
+ * disagree: a dependency is externalized because it is declared, and
+ * `yarn validate:externals` fails the build if dist imports anything that isn't.
+ */
+function declaredRuntimeDeps(baseDir: string): string[] {
+  const pkg = JSON.parse(readFileSync(resolve(baseDir, 'package.json'), 'utf-8')) as {
+    dependencies?: Record<string, string>
+    peerDependencies?: Record<string, string>
+  }
+  return [
+    ...Object.keys(pkg.dependencies ?? {}),
+    ...Object.keys(pkg.peerDependencies ?? {}),
+  ]
+}
+
+/**
+ * Matches a bare specifier against a package name, subpaths included — `vue`
+ * externalizes `vue`, and `@internationalized/date` also externalizes
+ * `@internationalized/date/utils`. A plain array `external` would miss the
+ * subpath and silently inline it.
+ */
+function makeIsExternal(names: string[]): (id: string) => boolean {
+  const set = new Set(names)
+  return (id: string): boolean => {
+    if (id.startsWith('node:'))
+      return true
+    if (set.has(id))
+      return true
+    const scoped = id.startsWith('@')
+    const parts = id.split('/')
+    const root = scoped ? parts.slice(0, 2).join('/') : parts[0]
+    return root !== undefined && set.has(root)
+  }
+}
 
 export interface CreateLibConfigOptions {
   baseDir: string
   entry: Record<string, string> | string
   name?: string
+  /**
+   * EXTRA externals beyond the package's declared `dependencies` +
+   * `peerDependencies`, which are externalized automatically. Reach for this only
+   * when a specifier is genuinely not a declared dependency (a bundler virtual
+   * module, say) — an ordinary runtime import belongs in package.json, where the
+   * consumer's installer can actually see it.
+   */
   external?: string[]
   tsconfigPath?: string
   outDir?: string
@@ -84,7 +125,7 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
         ...(cssFileName === undefined ? {} : { cssFileName }),
       },
       rollupOptions: {
-        external: [...DEFAULT_EXTERNALS, ...external],
+        external: makeIsExternal([...declaredRuntimeDeps(baseDir), ...external]),
         output: {
           preserveModules: true,
           preserveModulesRoot: 'src',
