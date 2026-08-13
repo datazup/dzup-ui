@@ -19,7 +19,8 @@
         "dockerfile": "ui/dzup-ui/deploy/Dockerfile.static",
         "args": {
           "UI_WORKSPACE": "@dzup-ui/landing",
-          "UI_DIST_PATH": "apps/landing/dist"
+          "UI_DIST_PATH": "apps/landing/dist",
+          "UI_BUILD_STORYBOOK": "1"
         }
       },
       "postBuildAssertions": {

@@ -10,8 +10,14 @@ RUN yarn install --immutable \
 
 ARG UI_WORKSPACE
 ARG UI_DIST_PATH
+ARG UI_BUILD_STORYBOOK=0
 
-RUN test -n "$UI_WORKSPACE" \
+RUN case "$UI_BUILD_STORYBOOK" in \
+      0) ;; \
+      1) yarn storybook:build ;; \
+      *) printf '%s\n' 'UI_BUILD_STORYBOOK must be 0 or 1' >&2; exit 1 ;; \
+    esac \
+  && test -n "$UI_WORKSPACE" \
   && test -n "$UI_DIST_PATH" \
   && case "$UI_DIST_PATH" in /*|*..*) exit 1 ;; esac \
   && rm -rf "$UI_DIST_PATH" /workspace/ui-dist \
