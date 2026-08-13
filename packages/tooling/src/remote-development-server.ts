@@ -13,10 +13,20 @@ export interface RemoteDevelopmentServerConfig {
 
 export function resolveRemoteDevelopmentServer(
   env: Record<string, string | undefined>,
-  expectedHostname: string,
+  expectedHostname: string | readonly string[],
 ): RemoteDevelopmentServerConfig {
   if (env.APP_ENV !== 'development-remote')
     return { enabled: false, server: {} }
+
+  const expectedHostnames = [
+    ...new Set(
+      (Array.isArray(expectedHostname) ? expectedHostname : [expectedHostname])
+        .map(hostname => hostname.trim())
+        .filter(Boolean),
+    ),
+  ]
+  if (expectedHostnames.length === 0)
+    throw new Error('remote development requires at least one expected hostname')
 
   let publicUrl: URL
   try {
@@ -28,7 +38,7 @@ export function resolveRemoteDevelopmentServer(
 
   if (
     publicUrl.protocol !== 'https:'
-    || publicUrl.hostname !== expectedHostname
+    || !expectedHostnames.includes(publicUrl.hostname)
     || publicUrl.port !== ''
     || publicUrl.pathname !== '/'
     || publicUrl.search !== ''
@@ -37,7 +47,7 @@ export function resolveRemoteDevelopmentServer(
     || publicUrl.password !== ''
   ) {
     throw new Error(
-      `remote development requires VITE_PUBLIC_URL=https://${expectedHostname}/`,
+      `remote development requires VITE_PUBLIC_URL to use an approved HTTPS hostname: ${expectedHostnames.join(', ')}`,
     )
   }
 
@@ -45,7 +55,7 @@ export function resolveRemoteDevelopmentServer(
     enabled: true,
     server: {
       host: '0.0.0.0',
-      allowedHosts: [expectedHostname],
+      allowedHosts: [publicUrl.hostname],
       strictPort: true,
       hmr: {
         protocol: 'wss',
