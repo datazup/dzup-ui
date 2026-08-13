@@ -5,14 +5,15 @@ RUN corepack enable && corepack prepare yarn@4.16.0 --activate
 WORKDIR /workspace/ui/dzup-ui
 COPY ui/dzup-ui/ ./
 
+RUN yarn install --immutable \
+  && yarn build
+
 ARG UI_WORKSPACE
 ARG UI_DIST_PATH
 
 RUN test -n "$UI_WORKSPACE" \
   && test -n "$UI_DIST_PATH" \
   && case "$UI_DIST_PATH" in /*|*..*) exit 1 ;; esac \
-  && yarn install --immutable \
-  && yarn build \
   && rm -rf "$UI_DIST_PATH" /workspace/ui-dist \
   && yarn workspace "$UI_WORKSPACE" build \
   && test -f "$UI_DIST_PATH/index.html" \
