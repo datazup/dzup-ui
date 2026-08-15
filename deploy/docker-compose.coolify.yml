@@ -6,12 +6,12 @@ services:
       - "8080"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.rule=Host(`${COOLIFY_DOMAIN:?COOLIFY_DOMAIN required}`)
-      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.entrypoints=https
-      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.tls=true
-      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.tls.certresolver=letsencrypt
-      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.service=${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web
-      - traefik.http.services.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.loadbalancer.server.port=8080
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web.rule=Host(`${COOLIFY_DOMAIN:-dzup-ui-static.invalid}`)
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web.entrypoints=https
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web.tls=true
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web.tls.certresolver=letsencrypt
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web.service=${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web
+      - traefik.http.services.${COOLIFY_RESOURCE_NAME:-dzup-ui-static}-web.loadbalancer.server.port=8080
       - traefik.docker.network=coolify
     networks:
       - coolify
