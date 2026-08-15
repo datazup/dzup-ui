@@ -4,9 +4,24 @@ services:
     restart: unless-stopped
     expose:
       - "8080"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.rule=Host(`${COOLIFY_DOMAIN:?COOLIFY_DOMAIN required}`)
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.entrypoints=https
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.tls=true
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.tls.certresolver=letsencrypt
+      - traefik.http.routers.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.service=${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web
+      - traefik.http.services.${COOLIFY_RESOURCE_NAME:?COOLIFY_RESOURCE_NAME required}-web.loadbalancer.server.port=8080
+      - traefik.docker.network=coolify
+    networks:
+      - coolify
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/healthz >/dev/null || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
+
+networks:
+  coolify:
+    external: true
