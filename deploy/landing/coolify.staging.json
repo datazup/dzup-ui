@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "app": "dzup-ui-landing",
+  "resourceName": "dzup-ui-landing-staging",
+  "environment": "staging",
+  "sourcePath": "ui/dzup-ui",
+  "sourceRepository": "dzup-ui",
+  "buildPack": "docker-compose",
+  "deployMode": "remote-workspace-image",
+  "composeFile": "deploy/docker-compose.coolify.yml",
+  "domains": { "web": "dzup-ui-landing.staging.dziphost.com" },
+  "services": {
+    "web": {
+      "public": true,
+      "port": 8080,
+      "healthUrl": "https://dzup-ui-landing.staging.dziphost.com/healthz",
+      "remoteWorkspaceBuild": {
+        "context": ".",
+        "dockerfile": "ui/dzup-ui/deploy/Dockerfile.static",
+        "args": {
+          "UI_WORKSPACE": "@dzup-ui/landing",
+          "UI_DIST_PATH": "apps/landing/dist",
+          "UI_BUILD_STORYBOOK": "1"
+        }
+      },
+      "postBuildAssertions": {
+        "requiredFiles": ["/usr/share/nginx/html/index.html"],
+        "nginxConfig": true
+      }
+    }
+  },
+  "build": {
+    "dependencyMode": "workspace-bundle",
+    "hasExternalPortalDependencies": false
+  },
+  "requiredEnv": [],
+  "notes": ["Staging build of the canonical dzup-ui landing site."]
+}

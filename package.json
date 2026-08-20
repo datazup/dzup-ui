@@ -52,6 +52,7 @@
     "report:component-sizes": "tsx packages/tooling/src/component-size-report.ts",
     "report:component-sizes:ci": "tsx packages/tooling/src/component-size-report.ts --ci",
     "test:perf": "vitest run packages/tooling/src/perf-bench.spec.ts",
+    "test:deployment": "node --test deploy/Dockerfile.static.test.mjs",
     "test:e2e": "playwright test",
     "test:e2e:functional": "yarn workspace @dzup-ui/tokens build && yarn storybook:build && STORYBOOK_E2E_STATIC=1 STORYBOOK_E2E_PREBUILT=1 playwright test e2e/a11y e2e/components e2e/smoke",
     "test:e2e:visual": "yarn workspace @dzup-ui/tokens build && DZUP_GALLERY=1 yarn storybook:build && STORYBOOK_E2E_STATIC=1 STORYBOOK_E2E_PREBUILT=1 playwright test e2e/visual --max-failures=1",
