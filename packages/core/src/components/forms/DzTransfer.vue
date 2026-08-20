@@ -4,6 +4,7 @@ import type {
   DzTransferProps,
   DzTransferSlots,
 } from './DzTransfer.types.ts'
+import { Check } from 'lucide-vue-next'
 /**
  * DzTransfer — Dual-list transfer component.
  *
@@ -131,6 +132,22 @@ function moveToSource(): void {
   emitChange(newModel)
 }
 
+function isItemDisabled(item: { disabled?: boolean }): boolean {
+  return resolvedDisabled.value || !!item.disabled
+}
+
+function selectSourceItem(item: Parameters<typeof toggleSourceItem>[0]): void {
+  if (resolvedDisabled.value)
+    return
+  toggleSourceItem(item)
+}
+
+function selectTargetItem(item: Parameters<typeof toggleTargetItem>[0]): void {
+  if (resolvedDisabled.value)
+    return
+  toggleTargetItem(item)
+}
+
 function handleFocus(event: FocusEvent): void {
   emit('focus', event)
 }
@@ -152,7 +169,6 @@ function handleBlur(event: FocusEvent): void {
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-      :aria-required="resolvedRequired || undefined"
       role="group"
       style="contain: layout style"
       @focus.capture="handleFocus"
@@ -176,26 +192,36 @@ function handleBlur(event: FocusEvent): void {
           :placeholder="searchPlaceholder"
           aria-label="Search source items"
         >
-        <div :class="styles.listBody()">
+        <div
+          :class="styles.listBody()"
+          role="listbox"
+          aria-label="Source items"
+          aria-multiselectable="true"
+          :aria-disabled="resolvedDisabled || undefined"
+        >
           <template v-if="filteredSourceItems.length > 0">
             <div
               v-for="item in filteredSourceItems"
               :key="item.key"
               :class="cn(styles.item(), sourceSelected.has(item.key) ? styles.itemSelected() : '')"
-              :data-disabled="item.disabled ? '' : undefined"
+              :data-disabled="isItemDisabled(item) ? '' : undefined"
               role="option"
               :aria-selected="sourceSelected.has(item.key)"
-              @click="toggleSourceItem(item)"
+              :aria-disabled="isItemDisabled(item) || undefined"
+              :tabindex="isItemDisabled(item) ? -1 : 0"
+              @click="selectSourceItem(item)"
+              @keydown.enter.prevent="selectSourceItem(item)"
+              @keydown.space.prevent="selectSourceItem(item)"
             >
               <slot name="item" :item="item" :selected="sourceSelected.has(item.key)">
-                <input
-                  type="checkbox"
+                <span
                   :class="styles.itemCheckbox()"
-                  :checked="sourceSelected.has(item.key)"
-                  :disabled="item.disabled"
-                  tabindex="-1"
-                  :aria-hidden="true"
+                  :data-checked="sourceSelected.has(item.key)"
+                  data-transfer-check
+                  aria-hidden="true"
                 >
+                  <Check v-if="sourceSelected.has(item.key)" class="h-3 w-3" />
+                </span>
                 <span>{{ item.label }}</span>
               </slot>
             </div>
@@ -270,26 +296,37 @@ function handleBlur(event: FocusEvent): void {
           :placeholder="searchPlaceholder"
           aria-label="Search target items"
         >
-        <div :class="styles.listBody()">
+        <div
+          :class="styles.listBody()"
+          role="listbox"
+          aria-label="Target items"
+          aria-multiselectable="true"
+          :aria-disabled="resolvedDisabled || undefined"
+          :aria-required="resolvedRequired || undefined"
+        >
           <template v-if="filteredTargetItems.length > 0">
             <div
               v-for="item in filteredTargetItems"
               :key="item.key"
               :class="cn(styles.item(), targetSelected.has(item.key) ? styles.itemSelected() : '')"
-              :data-disabled="item.disabled ? '' : undefined"
+              :data-disabled="isItemDisabled(item) ? '' : undefined"
               role="option"
               :aria-selected="targetSelected.has(item.key)"
-              @click="toggleTargetItem(item)"
+              :aria-disabled="isItemDisabled(item) || undefined"
+              :tabindex="isItemDisabled(item) ? -1 : 0"
+              @click="selectTargetItem(item)"
+              @keydown.enter.prevent="selectTargetItem(item)"
+              @keydown.space.prevent="selectTargetItem(item)"
             >
               <slot name="item" :item="item" :selected="targetSelected.has(item.key)">
-                <input
-                  type="checkbox"
+                <span
                   :class="styles.itemCheckbox()"
-                  :checked="targetSelected.has(item.key)"
-                  :disabled="item.disabled"
-                  tabindex="-1"
-                  :aria-hidden="true"
+                  :data-checked="targetSelected.has(item.key)"
+                  data-transfer-check
+                  aria-hidden="true"
                 >
+                  <Check v-if="targetSelected.has(item.key)" class="h-3 w-3" />
+                </span>
                 <span>{{ item.label }}</span>
               </slot>
             </div>

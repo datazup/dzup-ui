@@ -163,8 +163,8 @@ export const Default: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    // The trigger is a button with aria-haspopup; clicking it opens the popover
-    const trigger = canvas.getByRole('button', { name: /select time/i })
+    // The trigger exposes the popup as a named ARIA combobox.
+    const trigger = canvas.getByRole('combobox', { name: /select time/i })
     expect(trigger).toBeVisible()
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
     await userEvent.click(trigger)
@@ -316,7 +316,7 @@ export const NoFooter: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const trigger = canvas.getByRole('button', { name: /pick a time/i })
+    const trigger = canvas.getByRole('combobox', { name: /pick a time/i })
     await userEvent.click(trigger)
     // Popover is portalled to document.body — use screen, not canvas.
     await waitFor(() => expect(screen.getByRole('listbox', { name: /hours/i })).toBeVisible())
@@ -421,7 +421,7 @@ export const Interactive: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    const trigger = canvas.getByRole('button', { name: /pick a time/i })
+    const trigger = canvas.getByRole('combobox', { name: /pick a time/i })
     await userEvent.click(trigger)
     // Popover is portalled to document.body — use screen, not canvas.
     await waitFor(() => expect(screen.getByRole('listbox', { name: /hours/i })).toBeVisible())

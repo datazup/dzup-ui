@@ -65,20 +65,15 @@ const freshness = `As of the last site build, ${asOf}`
         </span>
         <DzText size="sm" tone="muted">Component families</DzText>
       </a>
-      <!--
-        The one forward-looking tile. `plannedComponents` is a roadmap target, not
-        a shipped count, so the label says "planned" — the tiles either side of it
-        are present-tense facts and a visitor must be able to tell which is which.
-      -->
       <a
         class="stat"
         :href="LINKS.pro"
-        :aria-label="`${PRO_FACTS.plannedComponents} Pro components planned`"
+        :aria-label="`${PRO_FACTS.published} published Pro components`"
       >
-        <span class="stat-value" :style="{ '--reserve': reserve(PRO_FACTS.plannedComponents) }">
-          <DzCountUp :value="PRO_FACTS.plannedComponents" :duration="1200" prefix="+" />
+        <span class="stat-value" :style="{ '--reserve': reserve(PRO_FACTS.published) }">
+          <DzCountUp :value="PRO_FACTS.published" :duration="1200" />
         </span>
-        <DzText size="sm" tone="muted">Pro components planned</DzText>
+        <DzText size="sm" tone="muted">Published Pro exports</DzText>
       </a>
       <a
         class="stat"

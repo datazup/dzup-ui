@@ -11,10 +11,9 @@
  * fails the run loudly, naming the block id, the theme, the rule, and the
  * offending nodes.
  *
- * Single source of truth: the marks live in `certifications.ts` and the meta-test
- * below asserts this suite enforces exactly those marks — you cannot render a mark
- * without a backing check here, and the "Light + dark" claim is earned only because
- * the per-block loop audits every theme in `AUDITED_THEMES`.
+ * Single source of truth: the marks live in `certifications.ts`. This file backs
+ * Accessible + Light/dark; `e2e/block-responsive.spec.ts` backs Responsive + RTL
+ * with a real layout engine. The paired responsive meta-test guards that lane.
  *
  * Scope & honesty (what the marks can claim):
  *   • This is a static axe pass in jsdom under each theme. It catches the
@@ -24,11 +23,11 @@
  *   • Contrast (`color-contrast`) needs real layout/paint, which jsdom does not
  *     provide, so axe returns it as *incomplete*, not a violation — rendered
  *     contrast is verified manually + via the preview's light/dark toggle, not
- *     claimed here. There is deliberately NO "Responsive" mark: reflow needs a
- *     real layout engine (see certifications.ts).
+ *     claimed here. Responsive reflow is intentionally owned by Playwright, not
+ *     inferred from this layout-free environment.
  *
- * ESLint is broken locally (MEMORY.md → "Lint config broken"); this Vitest run is
- * the only automated a11y gate, so — like registry.spec.ts — it stands alone.
+ * This remains a standalone accessibility gate alongside lint, typecheck, and
+ * browser validation, so a failure identifies the exact trust claim it blocks.
  */
 
 import type { Result } from 'axe-core'
@@ -185,22 +184,20 @@ const certified = BLOCKS.filter(block => isCertified(block.id)).map(block => ({ 
 const debt = BLOCKS.filter(block => !isCertified(block.id)).map(block => ({ block, label: block.id }))
 
 describe('block trust marks are backed by this suite', () => {
-  // The marks rendered on the cards and the checks run here share one source of
-  // truth (certifications.ts). These guards make drift impossible: a mark cannot
-  // be added without a backing assertion, and "Light + dark" stays truthful only
-  // while the per-block loop below audits both themes.
-  it('renders exactly the certifications this suite enforces (no decorative marks)', () => {
-    expect(CERTIFICATIONS.map(mark => mark.id)).toEqual(['accessible', 'light-dark'])
+  // Keep the complete public claim set explicit. Accessible + Light/dark are
+  // enforced below; Responsive + RTL are enforced by the Playwright lane and its
+  // parity/CI meta-test in responsiveCertification.spec.ts.
+  it('renders exactly the certifications backed by automated gates', () => {
+    expect(CERTIFICATIONS.map(mark => mark.id)).toEqual(['accessible', 'light-dark', 'responsive', 'rtl'])
   })
 
   it('audits every theme the "Light + dark" mark claims', () => {
     expect([...AUDITED_THEMES]).toEqual(['light', 'dark'])
   })
 
-  it('certifies the bulk of the catalog (known debt is the rare exception)', () => {
-    // A backstop against the known-debt list quietly swallowing the catalog: if it
-    // ever covers most blocks, the marks stop meaning anything. Keep it small.
-    expect(certified.length).toBeGreaterThan(BLOCKS.length - 5)
+  it('certifies the entire catalog with no known accessibility debt', () => {
+    expect(certified).toHaveLength(BLOCKS.length)
+    expect(debt).toEqual([])
   })
 })
 

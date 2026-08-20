@@ -8,7 +8,7 @@ import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import DzConfirmDialog from './DzConfirmDialog.vue'
 
-/** Stub portal to render inline (Reka UI portals don't work in jsdom) */
+/** Unit tests keep the transport boundary synchronous; integration cases below use the real portal. */
 const InlinePortal = { template: '<div data-testid="portal"><slot /></div>' }
 
 function mountConfirmDialog(
@@ -19,6 +19,7 @@ function mountConfirmDialog(
     props: {
       open: true,
       title: 'Confirm Action',
+      portalDisabled: true,
       ...props,
     },
     slots: slots as Record<string, () => string>,
@@ -145,7 +146,7 @@ describe('dzConfirmDialog -- Unit Tests', () => {
 
   it('does not render content when open is false', () => {
     const wrapper = mount(DzConfirmDialog, {
-      props: { open: false, title: 'Hidden Dialog' },
+      props: { open: false, title: 'Hidden Dialog', portalDisabled: true },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
@@ -222,6 +223,30 @@ describe('dzConfirmDialog -- Unit Tests', () => {
     ) as HTMLElement
     expect(confirmBtn).toBeTruthy()
     expect(confirmBtn.getAttribute('data-tone')).toBe('primary')
+    wrapper.unmount()
+  })
+
+  it('uses one owned overlay and forwards its customization class', () => {
+    const wrapper = mountConfirmDialog({ overlayClass: 'consumer-overlay' })
+    const overlays = document.querySelectorAll('[data-dz-dialog-overlay]')
+    expect(overlays).toHaveLength(1)
+    expect(overlays.item(0)?.classList.contains('consumer-overlay')).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the default production behavior portalled to document.body', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const wrapper = mount(DzConfirmDialog, {
+      props: { open: true, title: 'Portalled dialog' },
+      attachTo: host,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 0))
+
+    const dialog = document.querySelector('[role="dialog"]')
+    expect(dialog).toBeTruthy()
+    expect(host.contains(dialog)).toBe(false)
     wrapper.unmount()
   })
 })

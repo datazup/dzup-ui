@@ -1,7 +1,19 @@
+import type { Decorator } from '@storybook/vue3'
+import {
+  applyStorybookThemeRecipe,
+  createStorybookThemeRecipeFoucCache,
+  normalizeThemeRecipe,
+  serializeThemeRecipe,
+  STORYBOOK_THEME_RECIPE_FOUC_CACHE_KEY,
+  STORYBOOK_THEME_RECIPE_GLOBAL_TYPES,
+  STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS,
+  STORYBOOK_THEME_RECIPE_STORAGE_KEY,
+  themeRecipeToStorybookGlobals,
+} from '@dzup-ui/tokens'
 import addonA11y from '@storybook/addon-a11y'
 import addonDocs from '@storybook/addon-docs'
-import { withThemeByDataAttribute } from '@storybook/addon-themes'
 import { definePreview } from '@storybook/vue3-vite'
+import { onBeforeUnmount } from 'vue'
 import { RESPONSIVE_VIEWPORTS } from '../../../packages/core/stories/_shared/options.ts'
 import { AutodocsPage } from '../stories/_blocks/AutodocsPage.ts'
 
@@ -14,37 +26,77 @@ import '@dzup-ui/tokens/css'
 // reference. Without this, disabled/focus states have no effect in Storybook.
 import '../../../packages/core/src/styles/base.css'
 
+function readInitialThemeRecipeGlobals() {
+  if (typeof window === 'undefined')
+    return STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS
+  try {
+    const stored = window.localStorage.getItem(STORYBOOK_THEME_RECIPE_STORAGE_KEY)
+    return stored
+      ? themeRecipeToStorybookGlobals(normalizeThemeRecipe(JSON.parse(stored) as unknown))
+      : STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS
+  }
+  catch {
+    return STORYBOOK_THEME_RECIPE_INITIAL_GLOBALS
+  }
+}
+
+function persistThemeRecipe(recipe: Parameters<typeof serializeThemeRecipe>[0]): void {
+  if (typeof window === 'undefined')
+    return
+  try {
+    window.localStorage.setItem(STORYBOOK_THEME_RECIPE_STORAGE_KEY, serializeThemeRecipe(recipe))
+    window.localStorage.setItem(
+      STORYBOOK_THEME_RECIPE_FOUC_CACHE_KEY,
+      JSON.stringify(createStorybookThemeRecipeFoucCache(recipe)),
+    )
+  }
+  catch {
+    // Storage can be unavailable in privacy-restricted browsing contexts.
+  }
+}
+
+/** Global ThemeRecipeV1 decorator shared by every OSS story and docs page. */
+const withThemeRecipe: Decorator = (story, context) => ({
+  components: { story },
+  setup() {
+    const media = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)')
+      : undefined
+    let direction = 'ltr'
+
+    const apply = () => {
+      if (typeof document === 'undefined')
+        return
+      const applied = applyStorybookThemeRecipe(
+        document.documentElement,
+        context.globals,
+        media?.matches ?? false,
+      )
+      direction = applied.recipe.direction
+      persistThemeRecipe(applied.recipe)
+    }
+    const handleSystemChange = () => {
+      if (context.globals.theme === 'system')
+        apply()
+    }
+
+    apply()
+    media?.addEventListener('change', handleSystemChange)
+    onBeforeUnmount(() => media?.removeEventListener('change', handleSystemChange))
+    return { direction }
+  },
+  template: '<div :dir="direction"><story /></div>',
+})
+
 export default definePreview({
   // PREVIEW-side addon registration: decorators, parameters, and anything that runs
   // inside the story iframe. This is deliberately NOT a mirror of main.ts `addons`
   // (which registers presets, Vite config and manager-side panels) — see the note
-  // there. Only addon-docs needs both sides. addon-themes contributes its behavior
-  // through `withThemeByDataAttribute` in `decorators` below rather than an entry
-  // here, and addon-vitest is build-time only.
+  // there. Only addon-docs needs both sides. ThemeRecipe behavior comes from the
+  // shared global preset and renderer decorator below; addon-vitest is build-time only.
   addons: [addonDocs(), addonA11y()],
-  // FREE2-11 — a global text-direction toolbar, bringing the Storybook to parity
-  // with the landing's template preview (which already offers LTR/RTL). Reviewers
-  // can now check any component under RTL without cloning. Default LTR via
-  // `initialGlobals` so no existing story changes how it renders; the `direction`
-  // decorator (below) applies it. This ships the TOGGLE — RTL layout bugs it
-  // surfaces are tracked as follow-up (see docs/storybook-decisions.md).
-  globalTypes: {
-    direction: {
-      description: 'Text direction (LTR / RTL)',
-      toolbar: {
-        title: 'Direction',
-        icon: 'transfer',
-        items: [
-          { value: 'ltr', title: 'Left-to-right', right: 'LTR' },
-          { value: 'rtl', title: 'Right-to-left', right: 'RTL' },
-        ],
-        dynamicTitle: true,
-      },
-    },
-  },
-  initialGlobals: {
-    direction: 'ltr',
-  },
+  globalTypes: STORYBOOK_THEME_RECIPE_GLOBAL_TYPES,
+  initialGlobals: readInitialThemeRecipeGlobals(),
   parameters: {
     controls: {
       matchers: {
@@ -81,8 +133,8 @@ export default definePreview({
     // TASK-FREE-17 — check a component against the real surfaces it will sit on.
     //
     // Each value is a `var(--dz-*)` token, not a hex: the addon sets these on the
-    // preview body, which lives INSIDE the token iframe, and `withThemeByDataAttribute`
-    // writes `data-theme` to <html> (its `parentSelector` default) — above the body.
+    // preview body, which lives INSIDE the token iframe, and withThemeRecipe
+    // writes `data-theme` to <html> — above the body.
     // So every swatch below re-resolves when the theme toolbar flips, and one
     // definition serves light and dark. Hardcoding hex here would have needed two
     // sets and would drift from the ramp exactly the way manager.ts's literals do.
@@ -203,8 +255,8 @@ export default definePreview({
       test: 'todo',
     },
     // TASK-APP-01 / TASK-X.5 — Chromatic visual-regression modes. Each mode sets
-    // the `theme` global registered by `withThemeByDataAttribute` (decorators
-    // below), so Chromatic captures every story in BOTH light and dark in a
+    // the `theme` global registered by the shared ThemeRecipe preset, so
+    // Chromatic captures every story in BOTH light and dark in a
     // single run — which also proves the token system holds in dark mode. Applied
     // globally here; a story opts out of a mode with its own
     // `parameters.chromatic.modes` (e.g. `{ dark: { disable: true } }`) and opts
@@ -223,24 +275,6 @@ export default definePreview({
     () => ({
       template: '<div class="p-6"><story /></div>',
     }),
-    // FREE2-11 — apply the `direction` global. Written to <html> (like the theme
-    // decorator's `data-theme`) so Reka overlays teleported to <body> inherit it
-    // too, not just the in-canvas wrapper; the wrapper also carries `dir` so the
-    // story root is correct even in isolation. Always writes the CURRENT value
-    // (never leaves a stale `rtl` when you switch back to LTR), so no teardown.
-    (_story, context) => ({
-      setup() {
-        const dir = context.globals.direction === 'rtl' ? 'rtl' : 'ltr'
-        if (typeof document !== 'undefined')
-          document.documentElement.setAttribute('dir', dir)
-        return { dir }
-      },
-      template: '<div :dir="dir"><story /></div>',
-    }),
-    withThemeByDataAttribute({
-      themes: { light: 'light', dark: 'dark' },
-      defaultTheme: 'light',
-      attributeName: 'data-theme',
-    }),
+    withThemeRecipe,
   ],
 })

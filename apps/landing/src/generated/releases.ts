@@ -1428,116 +1428,11 @@ export const RELEASES: Release[] = [
 export const PENDING: PendingChange[] = [
   {
     "packages": [
-      "@dzup-ui/landing"
-    ],
-    "level": "minor",
-    "summary": "Ship the **Blocks** ecosystem surface in the landing app (`apps/landing`).",
-    "body": "Ship the **Blocks** ecosystem surface in the landing app (`apps/landing`).\n\nThis activates the previously \"Planned\" Blocks tile into a live `/blocks` catalog:\n\n- **Display infrastructure (Phase A):** new `/blocks` route + `BlocksIndexPage`, a typed\n  block registry (`src/blocks/registry.ts`) that pairs each block's lazily-loaded component\n  with its exact `?raw` source (zero preview/code drift), the `BlockPreview` shell\n  (Preview/Code tabs, viewport resizer, copy), `BlockCard` + `BlockCategoryNav`, \"Built from\"\n  component chips, and per-route SEO/meta. The Ecosystem tile is now `status: 'available'`\n  linking to `/blocks`, with matching nav + footer links.\n- **Quality gates (Phase C):** a Vitest registry guard (`registry.spec.ts`) that fails loudly\n  if a block advertises a `@dzup-ui/core` component that does not exist, plus the a11y /\n  responsive / reduced-motion audit.\n- **Catalog (Phase B, in progress):** one reference block live — `hero-centered` (Marketing) —\n  composed purely from free `@dzup-ui/core` components and `--dz-*` tokens, validating the\n  end-to-end pipeline. The remaining MVP and full catalog blocks are fast-follows.\n\nNo published `@dzup-ui/*` library package changes — this is a private app and is versioned for\nchangelog purposes only (it is never published to npm).",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/core"
-    ],
-    "level": "patch",
-    "summary": "Fix `DzCodeBlock`'s language chip failing WCAG AA.",
-    "body": "Fix `DzCodeBlock`'s language chip failing WCAG AA.\n\nThe chip (`bash`, `vue`, …) inherited the header's `--dz-muted-foreground` and sat\non a 10%-opacity `--dz-foreground` fill, measuring **3.64:1** — below the 4.5:1\nrequired for text. It carries real information, so it now takes the full\n`--dz-foreground` colour, and the pair passes.\n\nFound with an axe pass over the landing hero, which renders two code blocks above\nthe fold. `yarn validate:tokens` does not catch this: the `intent-text-contrast`\ngate is scoped to `--dz-{intent}` text on `{intent}-muted` fills, and this pair is\nneither.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
       "@dzup-ui/core"
     ],
     "level": "patch",
     "summary": "**`DzCommandPalette`: search the whole `label`, not just what the row happens to render.**",
     "body": "**`DzCommandPalette`: search the whole `label`, not just what the row happens to render.**\n\nThe palette documented `label` as its search key and filtered `props.items` on it — but Reka's\n`ComboboxItem` also registers each row's *rendered text* (`textValue || textContent`) with\n`ComboboxRoot` and hides any row its own filter scores zero. That second filter sat downstream\nof, and invisible to, the first, so it silently won.\n\nThe effect only shows up in the pattern `label` exists for: a consumer that puts a full search\nhaystack in `label` (ids, tags, keywords) and renders a shorter caption through the `#item`\nslot. Those rows were then filtered by the caption. On this repo's own site that made every\nblock unfindable by its id, its tags, or the `Dz*` components it is built from — all three\nindexed and weighted — while the visible title still matched, and nothing in the DOM showed why.\n\n`ComboboxRoot` now gets `ignore-filter`, leaving this component's filter the only one. Matching\nis unchanged in kind: it uses the same `Intl.Collator`-backed comparison Reka's filter used, so\nit stays case- and accent-insensitive (`resume` still finds `Résumé`).\n\nAlso removes a `:filter-function` binding that had quietly stopped doing anything — it is not a\n`ComboboxRoot` prop in Reka 2.x, so it fell through to `$attrs` and onto the listbox element.\n\nNo API change: same props, same emits, same slots. Rows that were being filtered out despite a\nmatching `label` now appear, which is the documented behaviour.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/core"
-    ],
-    "level": "patch",
-    "summary": "Fix `DzDropdownMenu`'s `defaultOpen` prop, which was declared but had no effect.",
-    "body": "Fix `DzDropdownMenu`'s `defaultOpen` prop, which was declared but had no effect.\n\nTwo defects, both required for an uncontrolled menu to open on mount:\n\n- `defaultOpen` was never forwarded to Reka's `DropdownMenuRoot`.\n- `defineModel<boolean | undefined>('open')` declared `open` as a **Boolean** prop\n  with no default, so Vue boolean-cast the unbound value to `false`. Reka read that\n  as \"controlled, and closed\", which pinned the menu shut and made `defaultOpen`\n  unreachable even once forwarded. The model now declares `default: undefined`, so\n  `open` stays undefined until a consumer binds `v-model:open`.\n\nClick-to-open was unaffected (the local `defineModel` fed the new value back), so\nthis only changes menus that relied on `defaultOpen`, which previously could not\nopen at all. `DzDropdownMenuProps` doc comments were also corrected — `modal` was\ndescribed as \"controlled open state\".",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/core"
-    ],
-    "level": "minor",
-    "summary": "Add `DzEmoji` — an accessible emoji primitive in the **media** family.",
-    "body": "Add `DzEmoji` — an accessible emoji primitive in the **media** family.\n\nRenders an emoji glyph with a consistent type-scale (`xs`–`xl`) and correct\nscreen-reader semantics: decorative by default (`aria-hidden=\"true\"`), or\nmeaningful (`role=\"img\"` + `aria-label`) when a `label` is provided. Solves the\ninconsistent announcement of raw emoji characters across assistive tech.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/mcp",
-      "@dzup-ui/landing"
-    ],
-    "level": "minor",
-    "summary": "Ship `@dzup-ui/mcp` — a free, open-source Model Context Protocol server for the dzup-ui ecosystem (Task G5).",
-    "body": "Ship `@dzup-ui/mcp` — a free, open-source Model Context Protocol server for the dzup-ui ecosystem (Task G5).\n\nConnect it in Cursor, Claude Code, Windsurf or VS Code with a single `npx -y @dzup-ui/mcp` and an assistant can browse every component, block, template and design token, then fetch the **real `.vue` source** and the `shadcn add` install command on request — \"add a dzup-ui pricing block\" now resolves to actual code.\n\n- **New package `packages/mcp`** — a thin, read-only, stdio MCP server over the STATIC catalog artifacts the landing site already generates (`/r/*.json`, `/r/tokens.json`, `/storybook/llms.txt`), so there is one source of truth and zero drift. Tools: `list_components`, `get_component`, `list_blocks`, `get_block`, `list_templates`, `get_template`, `list_tokens`, `get_install_command`, `search`. Configurable origin via `DZUP_UI_REGISTRY_URL` (defaults to the public site; accepts a local checkout for dev). Ships parser/registry unit tests plus an end-to-end JSON-RPC smoke test, and a `server.json` manifest for the public MCP registry.\n- **Landing `/ai` page** — \"Use dzup-ui with your AI IDE\": copy-paste MCP configs per client, the tool list and example prompts, wired into the top nav. New `dzupMcpConfig()` / `dzupMcpVscodeConfig()` / `dzupMcpClaudeCliCommand()` helpers in `blocks/config.ts` keep the page's snippets in lockstep with the shipped server.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/core"
-    ],
-    "level": "patch",
-    "summary": "Fix export targets that the build never emitted.",
-    "body": "Fix export targets that the build never emitted.\n\n`package.json` declared `\"./styles\": \"./dist/core.css\"`, and the README told consumers to\n`@import \"@dzup-ui/core/styles\"` — but no build step ever produced a CSS file, so the import\nfailed to resolve for anyone installing the package. `src/index.ts` now side-effect-imports\n`./styles/base.css` and the Vite lib build pins the extracted asset to `dist/core.css`\n(`build.lib.cssFileName`). The JS entry itself stays CSS-free, so `./styles` remains opt-in and\nsafe to import under SSR.\n\nThe same class of bug hit every per-family subpath: `./buttons`, `./cards`, `./data`,\n`./feedback`, `./forms`, `./inputs`, `./layout`, `./media`, `./navigation`, `./overlays`,\n`./typography` and `./providers` all shipped an `index.d.ts` with no `index.js` beside it —\nRollup inlines re-export-only barrels under `preserveModules`, so no chunk was emitted and the\nsubpath resolved to nothing. Each barrel is now an explicit build entry.\n\n`yarn validate:exports` now asserts that **every** target in an `exports` map exists on disk,\nincluding plain-string and non-JS (`.css`/`.json`) targets, which it previously never walked.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/landing"
-    ],
-    "level": "minor",
-    "summary": "Hero v2 (TASK-DS-11) and the regrouped TopNav + trust scaffold (TASK-DS-12).",
-    "body": "Hero v2 (TASK-DS-11) and the regrouped TopNav + trust scaffold (TASK-DS-12).\n\n**Hero v2 — lead with the product, not the gradient.**\n\n- A compact, *live* `ShowcaseFrame` (real `@dzup-ui/core` components, no screenshot)\n  now sits above the fold, alongside a new `HeroCodePanel` — a two-step\n  \"install → import → use\" panel that reuses `PmCommandTabs` and `DzCodeBlock`.\n  At 1280×800 the page previously showed **zero** product visuals and **zero** code.\n- Full-bleed decorative layers cut from **four to one**. Measured individually\n  (Playwright, 1280×800, medians): the aurora cost ~52ms of first paint, the\n  spotlight ~48ms, the grid + grain ~4ms. The spotlight survives — cheapest of the\n  three that do real work, and the only one with no `filter` or `mix-blend-mode`.\n- The headline no longer runs through `lp-gradient-text`, and the seven-child\n  staggered `opacity: 0` entrance is gone — it promoted seven compositing layers\n  and gated the LCP element on an animation. Only the visual column animates.\n- `ShowcaseDashboard`'s two below-the-fold frames now mount through the existing\n  `useLazyMount`, a screen ahead of the scroll.\n- The hero's duplicate stat row is removed; `SocialProof` already renders it.\n- Net, interleaved A/B against the previous build on the same machine: **median LCP\n  1092ms → 948ms (−13%)**, CLS 0 → 0, compositing layers 35 → 17.\n\n**Accessibility, measured with axe (WCAG 2.x A/AA, serious + critical):**\ndesktop **11 → 6** violations, mobile **10 → 7**.\n\n- `ShowcaseFrame`'s window declared `role=\"img\"` while containing a segmented\n  control, a search input, a switch and buttons — an `axe` `nested-interactive`\n  violation and simply wrong. It is now `role=\"group\"`.\n- The hero's \"Built with\" list dimmed `--dz-foreground` to `opacity: 0.62`, which\n  measures **4.41:1**. axe never reported it: the aurora and grain layers made the\n  backdrop uncomputable, so the rule returned *incomplete* rather than *fail*.\n  Removing those layers surfaced it; it now uses `--dz-muted-foreground`. The same\n  layers were also causing a real **4.1:1** failure on the re-theme button's mode\n  pill. Nodes axe could not evaluate at all dropped from 38 to 22.\n\n**TopNav — nine flat items regrouped into five.**\n\n- `Components` and `Docs` both resolved into Storybook; they are now distinct\n  menus. `Ecosystem` duplicated its own children (Blocks / Templates / Animations /\n  Themes, three of which were its siblings) and is gone — the home-page section\n  stays. `/templates` reaches the nav for the first time.\n- Menus are Reka-backed `DzDropdownMenu`, non-modal, opening onto real anchors\n  (middle-click and open-in-new-tab work). `aria-current=\"page\"` marks the active\n  route and `aria-current=\"true\"` the group containing it. Menu items get a\n  `--dz-ring` focus ring. The mobile drawer mirrors the grouping, closes on Escape\n  with focus returned to its toggle, and closes on navigation.\n- `src/nav.ts` is the single source for both surfaces; `nav.spec.ts` gates the two\n  invariants the review found broken: ≤5 top-level entries, and no destination\n  reachable from two entries.\n\n**Trust section — shipped empty, on purpose.**\n\n`HomeTestimonials` is built from `DzCard` / `DzAvatar` / `DzText` and renders\nnothing while `TESTIMONIALS` in `config.ts` is `[]`. dzup-ui has no public users\nyet (the GitHub repo and the npm package are both unpublished — the same reason\n`useLiveStats` degrades its tiles), so there is no real quote to print and no logo\nwe have permission to show. A fabricated testimonial would be worse than none.\n`HomeTestimonials.spec.ts` asserts the list stays empty and that the section\nrenders correctly once real, permission-cleared entries are added.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/core",
-      "@dzup-ui/tokens"
-    ],
-    "level": "minor",
-    "summary": "New `DzPageHero` layout component + `.dz-prose` rich-content styles.",
-    "body": "New `DzPageHero` layout component + `.dz-prose` rich-content styles.\n\n**DzPageHero** — dark gradient hero band for top-level views (eyebrow,\ngradient h1, description, meta row, glass-treated actions cluster), extracted\nfrom docs-app's `DocsPageHero` so every app on the neural-indigo preset can\nshare the band. Styling keys off the new `PAGE_HERO_TOKENS`\n(`--dz-page-hero-*`) in `@dzup-ui/tokens`, with `--dz-auth-brand-*` fallbacks.\n\n**.dz-prose** — typography for rendered rich content (markdown → sanitized\nHTML), ported from docs-app's `.docs-prose` and shipped unlayered in\n`dist/core.css` via base.css.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/core"
-    ],
-    "level": "patch",
-    "summary": "Fix `DzPageHero` title gradient rendering as a solid bar: use `background-image`",
-    "body": "Fix `DzPageHero` title gradient rendering as a solid bar: use `background-image`\ninstead of the `background` shorthand, which reset `background-clip` to\n`border-box` and defeated `bg-clip-text` in consumer builds.",
-    "breaking": false,
-    "deprecated": false
-  },
-  {
-    "packages": [
-      "@dzup-ui/tokens",
-      "@dzup-ui/core",
-      "@dzup-ui/tooling",
-      "@dzup-ui/codemods"
-    ],
-    "level": "minor",
-    "summary": "Normalize the `warning` intent: every intent now exposes the same solid-fill state set (TASK-DS-10).",
-    "body": "Normalize the `warning` intent: every intent now exposes the same solid-fill state set (TASK-DS-10).\n\n`warning` was the only intent that shipped `-solid` / `-solid-hover`, so every\nconsumer — `tv()` variants, the contrast gate, the story codemod — carried a\n`tone === 'warning'` branch, and each branch was a place to forget warning exists.\n\n**New tokens (additive; nothing was renamed or removed):**\n\n- `--dz-{intent}-solid` and `--dz-{intent}-solid-hover` for `primary`, `secondary`,\n  `success`, `danger`, `info`. These resolve to the same primitive shades as\n  `--dz-{intent}` / `--dz-{intent}-hover` (500/600 light, 400/300 dark), so **no\n  published token changed color** and the swap is a visual no-op for those five.\n- `--dz-warning-hover`, which the intent was missing entirely.\n\n`--dz-warning-solid` / `--dz-warning-solid-hover` keep their exact values. They are\nno longer a bespoke pair — they are warning's members of a uniform family.\n\n**Why warning is shaped this way, and why the fill set has two states.** Near-black\n`--dz-warning-foreground` on `--dz-warning` (shade 500) measures **3.51:1** — below\nWCAG AA. A warning button therefore fills with shade 300 (8.44:1) and hovers to 400\n(5.87:1). The ramp affords no shade between 400 and 500, so a third, darker pressed\nstep is not available at AA. The uniform fill set is `-solid` + `-solid-hover`; there\nis no `-solid-active` for any intent.\n\n**Behavior change.** `DzButton`, `DzToast` and `DzTabs` previously hovered solid\n`success` / `danger` / `info` fills with a `/90` alpha shortcut while `primary` used\nits designed `-hover` shade. All tones now hover to `--dz-{tone}-solid-hover` (the\nshade-600 step). This aligns them with `primary` and puts every hover fill under the\ncontrast gate, which the alpha shortcut escaped.\n\n**`-active` reclassified.** `--dz-{intent}-active` is documented as a pressed *surface*\ncolor, not a text-bearing fill: no component puts `{intent}-foreground` on it, and\n`--dz-warning-active` could not carry it legibly. The contrast gate no longer asserts\nthat pair (94 → 84 pairs), because it was gating a combination nothing renders.\n\n**Special cases removed:** `buildContrastPairs()` in `@dzup-ui/tooling`, the solid and\noutline compound variants across 15 `*.variants.ts` / `*.tokens.ts` files, and the\n`story-color-tokens` codemod all now loop over intents with no branch.",
     "breaking": false,
     "deprecated": false
   }

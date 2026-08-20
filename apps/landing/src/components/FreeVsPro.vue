@@ -8,10 +8,8 @@ import Section from './Section.vue'
 // The ambient upsell fork (spec §4.8). Count contrast + a clear visual
 // distinction; the word "Pro" is reserved strictly for the paid tier.
 //
-// The free side counts what you can install today; the Pro side counts what is
-// NAMED today (PRO_FACTS.announced — the very chips rendered below it) and marks
-// the roadmap target as planned. It previously advertised the roadmap's 41 as if
-// they existed.
+// Both sides read generated inventory. Core counts dedicated documentation
+// pages here; Pro counts public exports and states that rule in the copy.
 const freePoints = [
   `${FACTS.freeComponents} MIT-licensed components`,
   'Full Storybook documentation',
@@ -19,10 +17,10 @@ const freePoints = [
   'WCAG AA accessibility',
 ]
 const proPoints = [
-  `${PRO_FACTS.announced} enterprise components announced`,
-  `${PRO_FACTS.plannedComponents} planned across ${PRO_FACTS.plannedFamilies} families`,
-  'Priority support',
-  'Commercial license',
+  `${PRO_FACTS.published} published exports across ${PRO_FACTS.families} families`,
+  `${PRO_FACTS.stories} Storybook stories for API and state coverage`,
+  'Core + Pro on one token and accessibility contract',
+  'Commercially licensed distribution',
 ]
 const proPreview = PRO_COMPONENTS.slice(0, 8)
 </script>
@@ -37,8 +35,8 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
       <p class="contrast lp-balance">
         <strong>{{ FACTS.freeComponents }}</strong> free
         <span class="contrast-sep">·</span>
-        <strong class="contrast-pro">{{ PRO_FACTS.plannedComponents }}</strong> pro planned —
-        the open library covers the essentials; Pro adds the enterprise-grade pieces.
+        <strong class="contrast-pro">{{ PRO_FACTS.published }}</strong> Pro exports —
+        Core covers the foundation; Pro adds integrated enterprise workflows.
       </p>
 
       <div class="fork-grid">
@@ -67,13 +65,13 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
           <span class="plan-ring" aria-hidden="true" />
           <DzBadge variant="solid" tone="primary">
             <Sparkles :size="13" aria-hidden="true" />
-            Pro · Coming soon
+            Pro · Published
           </DzBadge>
           <DzHeading :level="3" size="lg" weight="semibold" class="plan-title">
             Go Pro
           </DzHeading>
           <DzText size="sm" tone="muted">
-            The heavy, business-critical components — built on the same tokens and a11y bar.
+            Enterprise components built on the same tokens and accessibility contract.
           </DzText>
           <ul class="plan-points">
             <li v-for="p in proPoints" :key="p">
@@ -87,16 +85,14 @@ const proPreview = PRO_COMPONENTS.slice(0, 8)
                 {{ c.label }}
               </DzBadge>
             </li>
-            <!-- The rest of the NAMED list, not the roadmap: these chips promise
-                 components a visitor can go and read about on /pro. -->
             <li>
               <DzBadge variant="subtle" tone="primary" size="sm">
-                +{{ PRO_FACTS.announced - proPreview.length }} more
+                +{{ PRO_FACTS.published - proPreview.length }} more
               </DzBadge>
             </li>
           </ul>
           <DzButton variant="solid" tone="primary" :to="LINKS.pro" class="plan-cta">
-            Join the waitlist
+            Explore Pro
           </DzButton>
         </article>
       </div>

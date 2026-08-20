@@ -3,7 +3,7 @@ import type { CommandItem } from './DzCommandPalette.types'
  * DzCommandPalette — Unit / behavior tests.
  */
 import { mount } from '@vue/test-utils'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 import { mountWithDialogStubs } from '../../../test-utils/dialog'
 import DzCommandPalette from './DzCommandPalette.vue'
@@ -14,6 +14,10 @@ import DzCommandPalette from './DzCommandPalette.vue'
  */
 beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn()
+})
+
+afterEach(() => {
+  document.body.innerHTML = ''
 })
 
 const sampleItems: CommandItem[] = [
@@ -207,6 +211,41 @@ describe('dzCommandPalette — Escape dismissal', () => {
 
     wrapper.unmount()
     warnSpy.mockRestore()
+  })
+
+  it('renders the real Reka dialog inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzCommandPalette, {
+      props: {
+        open: true,
+        items: sampleItems,
+        enableGlobalShortcut: false,
+        portalDisabled: true,
+      },
+      attachTo: document.body,
+    })
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(true)
+    expect(wrapper.find('[role="combobox"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzCommandPalette, {
+      props: {
+        open: true,
+        items: sampleItems,
+        enableGlobalShortcut: false,
+      },
+      attachTo: document.body,
+    })
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
+    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Edit File')
+    wrapper.unmount()
   })
 })
 

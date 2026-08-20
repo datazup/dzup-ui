@@ -550,6 +550,26 @@ jobs:
       # the flows + hero baselines, Pixel 7 for the drawer and a block page.
       - name: Landing e2e (flows + visual + mobile, against dist)
         run: yarn test:e2e:landing:preview
+      # Deliberately re-runs block-responsive.spec.ts, which the full suite above
+      # already covered — because it runs it under a STRICTER contract, not a
+      # duplicate one. The suite above inherits `retries: 2` from
+      # playwright.config.ts, so a responsive assertion that fails then passes on
+      # retry is laundered into a green run. `--fail-on-flaky-tests` refuses that:
+      # a block whose layout only holds together on the second attempt is not
+      # certified. `--workers=2` bounds the sweep (every block × 3 viewports × 2
+      # text directions) so the parallelism itself cannot be the source of flake.
+      #
+      # Cheap where it sits: the dist is built and Chromium installed by the steps
+      # above, which is why this gate lives here rather than in `landing-perf`.
+      #
+      # LANDING_E2E_TARGET=preview is set here, not baked into the script: the
+      # script is also the one-block local command (`yarn test:responsive:landing`),
+      # where the dev server is the right target. Without it this step would cold-
+      # start Vite on the dev port and certify source instead of the artifact.
+      - name: Certify every block across widths and text directions
+        run: yarn test:responsive:landing:ci
+        env:
+          LANDING_E2E_TARGET: preview
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -598,12 +618,20 @@ jobs:
         run: yarn workspace @dzup-ui/core build
       - name: Build Storybook (mounted at /storybook/ by the landing build)
         run: yarn storybook:build
-      # The blank-page guard (light AND dark pixel histograms) used to run here,
-      # against the DEV SERVER and with `--grep` skipping the hero baselines. It has
-      # moved to the `landing-e2e` job (TASK-FREE3-06), which runs the whole visual
-      # suite — histograms and hero snapshots — against the BUILT dist. Keeping a
-      # second, weaker copy of it here would only cost this job a Chromium install
-      # and a dev-server boot to assert less.
+      # Two browser gates used to run here, against the DEV SERVER: the blank-page
+      # guard (light AND dark pixel histograms, `--grep`-ed to skip the hero
+      # baselines) and the per-block responsive certification. Both have moved to
+      # the `landing-e2e` job (TASK-FREE3-06), which drives the BUILT dist.
+      #
+      # What they guard is unchanged and still worth stating. A `mix-blend-mode` on
+      # <html> once screen-blended the whole document against the white canvas, so
+      # dark mode painted every pixel white while the DOM, computed styles, scroll
+      # height and console all looked perfectly healthy. Only a PIXEL check catches
+      # that class of bug — and only if the run sets `prefers-color-scheme: dark`,
+      # which Playwright does NOT do by default.
+      #
+      # Keeping a second, weaker copy of either here would cost this job a Chromium
+      # install and a dev-server boot to assert less than `landing-e2e` already does.
       - name: Build landing site
         run: yarn workspace @dzup-ui/landing build
       # The artifact we measure must be the artifact users get. Assert the built
@@ -672,8 +700,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Run coverage with threshold enforcement
-        run: |
-          yarn test:coverage -- --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 --coverage.thresholds.branches=80 --coverage.thresholds.statements=80
+        # vitest.config.ts owns both the global package bar and the measured
+        # active-app ratchet. CLI overrides replace that nested policy.
+        run: yarn test:coverage
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:

@@ -144,7 +144,7 @@ const bars = [42, 58, 48, 70, 60, 78, 66, 88, 74, 96]
           </DzBadge>
         </div>
       </DzCardHeader>
-      <DzTable size="sm" hoverable>
+      <DzTable size="sm" hoverable tabindex="0" aria-label="Members table scroll area">
         <DzTableHeader>
           <DzTableRow>
             <DzTableCell header>

@@ -144,7 +144,9 @@ test.describe('landing flows', () => {
     // A cold, address-bar load of a lazy detail route — the SPA history fallback
     // plus the route chunk, neither of which a client-side `router.push` exercises.
     await page.goto(BLOCK_PATH)
-    await expect(page.locator('#block-detail-title')).toBeVisible()
+    // The detail page is preview-first: the block's own preview heading IS the
+    // page H1, so assert the level rather than the old hero's `#block-detail-title`.
+    await expect(page.getByRole('heading', { level: 1, name: BLOCK_TITLE })).toBeVisible()
     expect(pathnameOf(page.url())).toBe(BLOCK_PATH)
 
     await page.goto(TEMPLATE_PATH)

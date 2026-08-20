@@ -74,6 +74,9 @@ const props = withDefaults(defineProps<DzComboboxProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzComboboxEmits>()
@@ -351,7 +354,11 @@ watch(
         </ComboboxTrigger>
       </ComboboxAnchor>
 
-      <ComboboxPortal>
+      <ComboboxPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
           <ComboboxViewport :class="styles.viewport()">
             <template v-if="loading">

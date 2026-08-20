@@ -27,6 +27,18 @@ const meta = {
     // Overlays enforced (TASK-DS-13).
     ...a11yError,
   },
+  argTypes: {
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render content inline instead of teleporting it (useful for embedded surfaces and tests)',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
+  },
 } satisfies Meta<typeof DzTooltipContent>
 
 export default meta

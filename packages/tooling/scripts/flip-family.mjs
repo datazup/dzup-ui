@@ -1,4 +1,3 @@
-/* eslint-disable no-console -- one-shot CLI codemod; console.log is its output */
 /**
  * One-shot codemod: opt a story family into the enforced a11y gate.
  *

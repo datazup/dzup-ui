@@ -18,6 +18,9 @@ defineOptions({
 const props = withDefaults(defineProps<DzSheetContentProps>(), {
   side: 'right',
   size: 'sm',
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzSheetContentEmits>()
@@ -68,7 +71,11 @@ function handleInteractOutside(event: Event): void {
 </script>
 
 <template>
-  <DialogPortal>
+  <DialogPortal
+    :to="portalTo"
+    :disabled="portalDisabled"
+    :defer="portalDefer"
+  >
     <DialogOverlay :class="overlayClasses" />
     <DialogContent
       :id="id"

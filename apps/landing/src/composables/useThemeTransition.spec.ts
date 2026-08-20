@@ -18,24 +18,26 @@
  * to change it drags all ~35 motion components back through the transform for
  * every test — 15s a test, measured.
  *
- * ## The trap that shapes the harness
+ * ## What shapes the harness
  *
- * `useTheme`'s singleton is built lazily inside whichever component's `setup`
- * calls it FIRST, so the `watch(mode)` that publishes `resolved` and writes
- * `data-theme` belongs to that component's effect scope. Unmount that component
- * and the watcher is disposed for everyone: `toggle()` still moves `mode`, but
- * `resolved` and the DOM attribute stop following it. In the app this is inert —
- * `App.vue` is always the first caller and never unmounts — but in a test file
- * where each case mounts and unmounts its own host it is a trap that makes every
- * test after the first silently assert nothing. Hence `warm` below: one host,
- * mounted for the file's lifetime, owns the singleton.
+ * `useTheme` is a facade over the DzThemeProvider context, so every case must
+ * mount a provider — calling it without one throws by design. The provider owns
+ * the state, which is what makes each case independent: the watcher that
+ * publishes `resolved` and writes `data-theme` lives in the provider's scope, so
+ * mounting and unmounting a host per test cannot leave a later test asserting
+ * against a disposed scope.
+ *
+ * (This file previously kept one long-lived `warm` host mounted for exactly that
+ * reason, back when `useTheme` was a module singleton whose watcher belonged to
+ * whichever component's `setup` reached it first. The provider retired both the
+ * singleton and the workaround.)
  */
 
+import { DzThemeProvider } from '@dzup-ui/core'
 import { mount } from '@vue/test-utils'
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
 import { provideMotionPreference } from '../motion/useReducedMotion.ts'
-import { useTheme } from './useTheme.ts'
 import { useThemeTransition } from './useThemeTransition.ts'
 
 /**
@@ -61,9 +63,12 @@ function stubViewTransitions(): { calls: number } {
 /**
  * Mount a parent that installs the page-level reduced-motion override around a
  * child that calls the composable — it registers lifecycle hooks and injects, so
- * it belongs inside a component instance. The two levels are required, not
+ * it belongs inside a component instance. The levels are required, not
  * decorative: Vue resolves `inject` against the PARENT's provides, so a
  * component that provides and injects in one `setup` never sees its own value.
+ *
+ * `DzThemeProvider` sits between them because `useThemeTransition` calls
+ * `useTheme`, which injects the provider context and throws without an ancestor.
  */
 function mountTransition(reduced = false) {
   let api!: ReturnType<typeof useThemeTransition>
@@ -76,21 +81,17 @@ function mountTransition(reduced = false) {
   const wrapper = mount(defineComponent({
     setup() {
       provideMotionPreference(reduced)
-      return () => h(Child)
+      return () => h(DzThemeProvider, null, { default: () => h(Child) })
     },
   }))
   return { wrapper, ...api }
 }
 
-/** Owns the theme singleton's effect scope for the whole file — see the header. */
-let warm: ReturnType<typeof mount> | null = null
-
 beforeAll(() => {
-  // jsdom has no matchMedia; `useTheme` reads it for the system colour scheme
-  // and `useReducedMotion` for the OS motion setting. A non-matching stub gives
-  // the light / full-motion baseline; the reduced case is driven by the
-  // page-level override instead. Installed before `warm` mounts, because that
-  // mount is what builds the theme singleton.
+  // jsdom has no matchMedia; DzThemeProvider reads it for the system colour
+  // scheme and `useReducedMotion` for the OS motion setting. A non-matching stub
+  // gives the light / full-motion baseline; the reduced case is driven by the
+  // page-level override instead.
   if (typeof window.matchMedia !== 'function') {
     vi.stubGlobal('matchMedia', (query: string) => ({
       matches: false,
@@ -103,12 +104,6 @@ beforeAll(() => {
       dispatchEvent: () => false,
     }))
   }
-  warm = mount(defineComponent({
-    setup() {
-      useTheme()
-      return () => h('div')
-    },
-  }))
 })
 
 beforeEach(() => {
@@ -118,10 +113,6 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers()
   delete doc.startViewTransition
-})
-
-afterAll(() => {
-  warm?.unmount()
 })
 
 describe('useThemeTransition', () => {

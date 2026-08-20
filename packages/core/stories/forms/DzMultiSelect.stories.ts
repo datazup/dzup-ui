@@ -90,6 +90,16 @@ const meta = {
       description: 'Accessible label',
       table: { category: 'Accessibility' },
     },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render the options inline instead of teleporting them',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
   },
   args: {
     items: sampleItems,

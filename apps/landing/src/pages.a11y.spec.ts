@@ -32,7 +32,7 @@
  * template that is itself a full page brings its own <h1>.
  */
 
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
@@ -213,7 +213,83 @@ describe.sequential('landing pages — accessibility', () => {
         blocking,
         `route ${path} has ${blocking.length} blocking a11y violation(s):\n    ${blocking.map(reportViolation).join('\n    ')}`,
       ).toEqual([])
-    })
+    },
+    // Four minutes, against a 60s file default, and only for these route audits.
+    //
+    // `/blocks` is the outlier that sets the number: it mounts all 87 block
+    // previews and then runs TWO full axe passes over the result. That measures
+    // ~17s bare and ~23s under `--coverage` in isolation — but `yarn test:coverage`
+    // runs it alongside 400 other files, and under that contention the same test
+    // crossed 60s and failed the coverage job while passing every other way.
+    //
+    // A timeout that only trips when the machine is busy is a flake, not a gate:
+    // it reports "accessibility broken" for a scheduling artifact. Raised here
+    // rather than in vitest.config.ts so the rest of the suite keeps the tight
+    // default, where a 60s test really does mean something hung.
+    240_000)
+  })
+
+  it('keeps block details preview-first without repeating summary or setup content', async () => {
+    const target = BLOCKS[0]!
+    await mountAt(`/blocks/${target.id}`)
+
+    const main = document.getElementById('main')!
+    const preview = main.querySelector<HTMLElement>('.block-preview')
+    const details = main.querySelector<HTMLElement>('.bd-details-section')
+
+    expect(preview, 'block detail did not render its live preview').toBeTruthy()
+    expect(details, 'block detail did not render its supporting information').toBeTruthy()
+    expect(
+      preview!.compareDocumentPosition(details!) & Node.DOCUMENT_POSITION_FOLLOWING,
+      'supporting information must follow the live preview in DOM order',
+    ).toBeTruthy()
+
+    expect(preview!.querySelector('h1')?.textContent).toContain(target.title)
+    expect(preview!.querySelector('.bp-desc')?.textContent).toContain(target.description)
+    expect(details!.textContent).not.toContain(target.description)
+
+    // Components remain in the preview header; install/import commands live in
+    // the one supporting manifest rather than repeating inside the Code tab.
+    expect(main.querySelectorAll('.bp-chips')).toHaveLength(1)
+    expect(main.querySelectorAll('.bm-chips')).toHaveLength(0)
+    expect(main.querySelectorAll('.block-manifest')).toHaveLength(1)
+  })
+
+  it('collapses secondary preview settings by default on narrow screens', async () => {
+    const originalMatchMedia = window.matchMedia
+    window.matchMedia = ((query: string) => ({
+      matches: query === '(max-width: 560px)',
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    })) as typeof window.matchMedia
+
+    try {
+      await mountAt(`/blocks/${BLOCKS[0]!.id}`)
+
+      const toggle = document.querySelector<HTMLButtonElement>('.bp-controls-toggle')
+      expect(toggle, 'mobile preview settings toggle did not render').toBeTruthy()
+      expect(toggle!.getAttribute('aria-expanded')).toBe('false')
+
+      const controlsId = toggle!.getAttribute('aria-controls')!
+      const controls = document.getElementById(controlsId)
+      expect(controls?.dataset.state).toBe('closed')
+      expect(controls?.getAttribute('aria-hidden')).toBe('true')
+
+      await fireEvent.click(toggle!)
+      await flushPromises()
+
+      expect(toggle!.getAttribute('aria-expanded')).toBe('true')
+      expect(controls?.dataset.state).toBe('open')
+      expect(controls?.hasAttribute('aria-hidden')).toBe(false)
+    }
+    finally {
+      window.matchMedia = originalMatchMedia
+    }
   })
 
   /**

@@ -20,6 +20,9 @@ withDefaults(defineProps<DzDropdownMenuContentProps>(), {
   side: 'bottom',
   align: 'start',
   sideOffset: 4,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzDropdownMenuContentEmits>()
@@ -42,7 +45,11 @@ function handlePointerDownOutside(event: Event): void {
 </script>
 
 <template>
-  <DropdownMenuPortal>
+  <DropdownMenuPortal
+    :to="portalTo"
+    :disabled="portalDisabled"
+    :defer="portalDefer"
+  >
     <DropdownMenuContent
       :id="id"
       :side="side"

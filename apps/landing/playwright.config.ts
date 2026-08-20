@@ -69,6 +69,14 @@ export default defineConfig({
     : 'line',
   use: {
     baseURL: `http://127.0.0.1:${PORT}`,
+    // Nested under `contextOptions`, not a sibling of `baseURL`: Playwright 1.61
+    // (which this merge pulled in) removed the top-level `use.reducedMotion`
+    // shorthand and routes the emulation through BrowserContextOptions instead.
+    // Same emulation, same value — only the key path moved.
+    contextOptions: {
+      reducedMotion: 'reduce',
+    },
+    screenshot: 'only-on-failure',
     trace: 'on-first-retry',
   },
   projects: [

@@ -59,7 +59,7 @@ onMounted(() => {
 })
 
 watch(reduced, r => (r ? controller?.disable() : controller?.enable()))
-onBeforeUnmount(() => controller?.disable())
+onBeforeUnmount(() => controller?.destroy?.())
 
 function add(): void {
   if (members.value.length >= POOL.length)

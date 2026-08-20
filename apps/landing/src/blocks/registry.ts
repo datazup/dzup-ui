@@ -81,6 +81,14 @@ export interface BlockDef {
   path: string
   /** Notes when a mobile variant differs from the default layout. */
   responsive?: { mobile?: boolean }
+  /**
+   * Conservative floor for the live preview frame while this lazy block loads.
+   * Values remain applied after resolution, so they must not exceed the block's
+   * rendered height at the corresponding breakpoint. This prevents supporting
+   * content below the preview from shifting when a short skeleton is replaced
+   * by a taller block without imposing one oversized floor on the whole catalog.
+   */
+  previewMinHeight?: { wide: number, compact: number }
 }
 
 /**
@@ -289,6 +297,10 @@ export const BLOCKS: BlockDef[] = [
     tags: ['hero', 'cta', 'image'],
     components: ['DzBadge', 'DzHeading', 'DzText', 'DzButton', 'DzImage', 'DzAspectRatio'],
     path: './marketing/HeroSplit.vue',
+    // Measured lower bounds across the production preview's responsive widths.
+    // The lazy scaffold is 248px tall; without these floors the details section
+    // moves 203.625px on desktop and 439.219px at 390px when the chunk resolves.
+    previewMinHeight: { wide: 400, compact: 687 },
   }),
   defineBlock({
     id: 'nav-bar',

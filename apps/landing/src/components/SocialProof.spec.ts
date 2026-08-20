@@ -90,7 +90,7 @@ describe('socialProof — accessible names', () => {
     expect(getByLabelText(`${FACTS.families} component families`)).toBeTruthy()
     // The Pro tile shows a ROADMAP figure, and its name has to say so — the two
     // tiles beside it are present-tense facts. See PRO_FACTS in data.ts.
-    expect(getByLabelText(`${PRO_FACTS.plannedComponents} Pro components planned`)).toBeTruthy()
+    expect(getByLabelText(`${PRO_FACTS.published} published Pro components`)).toBeTruthy()
   })
 
   it('degrades an unavailable metric to a call-to-action, never a number', async () => {

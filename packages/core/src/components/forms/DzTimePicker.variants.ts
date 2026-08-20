@@ -21,6 +21,7 @@ import { tv } from 'tailwind-variants'
 export const timePickerVariants = tv({
   slots: {
     root: 'inline-flex flex-col gap-[var(--dz-spacing-1)]',
+    control: 'relative inline-flex w-full',
     trigger: [
       'inline-flex items-center gap-[var(--dz-spacing-2)]',
       'w-full',
@@ -35,6 +36,7 @@ export const timePickerVariants = tv({
     valueText: 'flex-1 truncate text-[var(--dz-foreground)]',
     placeholder: 'flex-1 truncate text-[var(--dz-muted-foreground)]',
     cleaner: [
+      'absolute right-[var(--dz-spacing-2)] top-1/2 -translate-y-1/2',
       'shrink-0 inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',
       'text-[var(--dz-muted-foreground)]',
@@ -157,6 +159,9 @@ export const timePickerVariants = tv({
     },
     invalid: {
       true: { trigger: 'border-[var(--dz-danger)] focus:border-[var(--dz-danger)]' },
+    },
+    cleanable: {
+      true: { trigger: 'pr-[var(--dz-spacing-10)]' },
     },
     confirm: {
       true: { footerButton: 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] hover:bg-[var(--dz-primary-hover)]' },

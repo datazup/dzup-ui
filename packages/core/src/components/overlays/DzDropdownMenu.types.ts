@@ -6,7 +6,7 @@
  * @module @dzup-ui/core/components/overlays/DzDropdownMenu
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 
 // ---------------------------------------------------------------------------
 // Side / Align
@@ -54,7 +54,7 @@ export interface DzDropdownMenuTriggerSlots {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzDropdownMenuContent component */
-export interface DzDropdownMenuContentProps extends BaseAccessibilityProps {
+export interface DzDropdownMenuContentProps extends BaseAccessibilityProps, BasePortalProps {
   /** Side of trigger to render content */
   side?: DropdownSide
   /** Alignment relative to the trigger */

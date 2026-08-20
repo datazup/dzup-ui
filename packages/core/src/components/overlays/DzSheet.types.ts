@@ -7,7 +7,7 @@
  * @module @dzup-ui/core/components/overlays/DzSheet
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 
 /** Sheet slide direction */
 export type SheetSide = 'top' | 'right' | 'bottom' | 'left'
@@ -30,7 +30,7 @@ export interface DzSheetProps {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzSheetContent component */
-export interface DzSheetContentProps extends BaseAccessibilityProps {
+export interface DzSheetContentProps extends BaseAccessibilityProps, BasePortalProps {
   /** Side from which the sheet slides in */
   side?: SheetSide
   /**

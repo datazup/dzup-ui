@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import { DzBadge, DzButton, DzCard, DzHeading, DzText } from '@dzup-ui/core'
-import { ArrowLeft, Sparkles } from 'lucide-vue-next'
-import { PRO_COMPONENTS, PRO_FACTS } from '../data.ts'
-
-// Phase 1 (spec §3.5): the /pro route exists but renders a "coming soon" state.
-// Phase 2 flips these CTAs to the published pro Storybook + pricing — no
-// structural change, only link targets and badge state.
-//
-// The headline counts the list rendered below it. It used to read "41 enterprise
-// components" — the roadmap target — directly above 13 components in 7 families,
-// so anyone who scrolled could see the page overstate itself by 3×. The roadmap
-// figure still appears, but as a roadmap: "13 named, 41 planned".
-const families = [...new Set(PRO_COMPONENTS.map(c => c.family))]
+import { ArrowLeft, BookOpen, Boxes, Sparkles } from 'lucide-vue-next'
+import { PRO_FACTS, PRO_FAMILIES } from '../data.ts'
 </script>
 
 <template>
@@ -19,24 +9,25 @@ const families = [...new Set(PRO_COMPONENTS.map(c => c.family))]
     <div class="pro-inner">
       <DzBadge variant="subtle" tone="primary">
         <Sparkles :size="14" aria-hidden="true" />
-        Pro · Coming soon
+        Pro · Published
       </DzBadge>
 
       <DzHeading :level="1" size="3xl" weight="bold" class="pro-title">
-        {{ PRO_FACTS.announced }} enterprise components, in the works
+        {{ PRO_FACTS.published }} enterprise components, ready for integrated workflows
       </DzHeading>
 
       <DzText size="lg" tone="muted" class="pro-sub">
-        dzup-ui Pro extends the free library with the heavy, business-critical pieces most apps
-        eventually need. {{ PRO_FACTS.announced }} are named below, across
-        {{ PRO_FACTS.announcedFamilies }} families; the roadmap targets
-        {{ PRO_FACTS.plannedComponents }} across {{ PRO_FACTS.plannedFamilies }}. None have shipped
-        yet — join the waitlist and we'll let you know the moment they do.
+        dzup-ui Pro extends Core with advanced builders, data tools, editors, planning,
+        visualization, communication, and workflow components. The figures below come from the
+        Pro export inventory and built Storybook, not a manually maintained roadmap.
       </DzText>
 
       <div class="pro-actions">
-        <DzButton variant="solid" tone="primary" as="a" href="mailto:hello@dzup-ui.com?subject=dzup-ui%20Pro%20waitlist">
-          Join the waitlist
+        <DzButton variant="solid" tone="primary" as="a" href="#pro-catalog">
+          Explore shipped families
+        </DzButton>
+        <DzButton variant="outline" tone="primary" as="a" href="mailto:hello@dzup-ui.com?subject=dzup-ui%20Pro%20access">
+          Request Pro access
         </DzButton>
         <DzButton variant="outline" tone="neutral" to="/">
           <template #prefix>
@@ -46,25 +37,61 @@ const families = [...new Set(PRO_COMPONENTS.map(c => c.family))]
         </DzButton>
       </div>
 
-      <DzCard variant="outlined" padding="lg" class="pro-list">
+      <div class="pro-proof" aria-label="Generated Pro inventory summary">
+        <div>
+          <Boxes :size="18" aria-hidden="true" />
+          <strong>{{ PRO_FACTS.published }}</strong>
+          <span>public exports</span>
+        </div>
+        <div>
+          <BookOpen :size="18" aria-hidden="true" />
+          <strong>{{ PRO_FACTS.stories }}</strong>
+          <span>Storybook stories</span>
+        </div>
+        <div>
+          <Sparkles :size="18" aria-hidden="true" />
+          <strong>{{ PRO_FACTS.families }}</strong>
+          <span>enterprise families</span>
+        </div>
+      </div>
+
+      <DzCard id="pro-catalog" variant="outlined" padding="lg" class="pro-list">
         <DzText size="sm" weight="semibold" class="pro-list-title">
-          What's coming
+          Published component catalog
         </DzText>
         <div class="pro-grid">
-          <div v-for="family in families" :key="family" class="pro-family">
+          <div v-for="family in PRO_FAMILIES" :key="family.id" class="pro-family">
             <DzText size="xs" tone="muted" weight="semibold" as="div" class="pro-family-name">
-              {{ family }}
+              {{ family.label }} · {{ family.publishedComponents }}
             </DzText>
             <ul class="pro-items">
-              <li v-for="c in PRO_COMPONENTS.filter((x) => x.family === family)" :key="c.label">
+              <li v-for="component in family.components" :key="component.name">
                 <DzBadge variant="outline" tone="neutral" size="sm">
-                  {{ c.label }}
+                  {{ component.name }}
                 </DzBadge>
               </li>
             </ul>
           </div>
         </div>
       </DzCard>
+
+      <div id="pro-storybook" class="pro-evidence">
+        <DzHeading :level="2" size="xl" weight="semibold">
+          Product proof and API reference stay separate
+        </DzHeading>
+        <DzText size="md" tone="muted">
+          The Pro Showcase demonstrates Core and Pro in coordinated workflows. Pro Storybook
+          remains the raw catalog for props, variants, states, accessibility, and edge cases.
+        </DzText>
+        <div class="pro-actions">
+          <DzButton variant="outline" tone="primary" as="a" href="mailto:hello@dzup-ui.com?subject=dzup-ui%20Pro%20Showcase%20access">
+            Request Showcase access
+          </DzButton>
+          <DzButton variant="outline" tone="neutral" as="a" href="mailto:hello@dzup-ui.com?subject=dzup-ui%20Pro%20Storybook%20access">
+            Request Storybook access
+          </DzButton>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -104,6 +131,41 @@ const families = [...new Set(PRO_COMPONENTS.map(c => c.family))]
   width: 100%;
 }
 
+.pro-proof {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-block: 1px solid var(--lp-hairline);
+}
+
+.pro-proof > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 20px 16px;
+  border-inline-start: 1px solid var(--lp-hairline);
+}
+
+.pro-proof > div:first-child {
+  border-inline-start: 0;
+}
+
+.pro-proof svg {
+  grid-row: span 2;
+  color: var(--dz-primary);
+}
+
+.pro-proof strong {
+  font-size: var(--dz-text-xl);
+  color: var(--dz-foreground);
+}
+
+.pro-proof span {
+  font-size: var(--dz-text-xs);
+  color: var(--dz-muted-foreground);
+}
+
 .pro-list-title {
   display: block;
   margin-bottom: 16px;
@@ -128,5 +190,27 @@ const families = [...new Set(PRO_COMPONENTS.map(c => c.family))]
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.pro-evidence {
+  display: grid;
+  gap: 12px;
+  max-width: 62ch;
+  padding-block: 16px;
+}
+
+@media (max-width: 640px) {
+  .pro-proof {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-proof > div {
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--lp-hairline);
+  }
+
+  .pro-proof > div:first-child {
+    border-block-start: 0;
+  }
 }
 </style>

@@ -20,6 +20,10 @@ function mountPicker(props: Record<string, unknown> = {}) {
   })
 }
 
+function mountRealPicker(props: Record<string, unknown> = {}) {
+  return mount(DzTimePicker, { props, attachTo: document.body })
+}
+
 /** Open the popover by clicking the trigger button. */
 async function open(wrapper: ReturnType<typeof mountPicker>) {
   await wrapper.find('button').trigger('click')
@@ -39,6 +43,21 @@ describe('dzTimePicker — Trigger', () => {
   it('shows the placeholder while empty', () => {
     const wrapper = mountPicker({ placeholder: 'Select time' })
     expect(wrapper.text()).toContain('Select time')
+  })
+
+  it('uses the placeholder to name a standalone combobox trigger', () => {
+    const wrapper = mountPicker({ placeholder: 'Pick a time' })
+    expect(wrapper.get('[role="combobox"]').attributes('aria-label')).toBe('Pick a time')
+  })
+
+  it('prefers explicit ARIA labelling over the standalone placeholder fallback', () => {
+    const labelled = mountPicker({ placeholder: 'Pick a time', ariaLabel: 'Meeting time' })
+    expect(labelled.get('[role="combobox"]').attributes('aria-label')).toBe('Meeting time')
+
+    const labelledBy = mountPicker({ placeholder: 'Pick a time', ariaLabelledby: 'time-label' })
+    const trigger = labelledBy.get('[role="combobox"]')
+    expect(trigger.attributes('aria-label')).toBeUndefined()
+    expect(trigger.attributes('aria-labelledby')).toBe('time-label')
   })
 
   it('displays a bound 24-hour value', () => {
@@ -90,7 +109,10 @@ describe('dzTimePicker — Trigger', () => {
 
   it('reflects the required prop via aria-required', () => {
     const wrapper = mountPicker({ required: true })
-    expect(wrapper.find('button').attributes('aria-required')).toBe('true')
+    const trigger = wrapper.get('[role="combobox"]')
+    expect(trigger.element.tagName).toBe('BUTTON')
+    expect(trigger.attributes('aria-required')).toBe('true')
+    expect(trigger.attributes('aria-haspopup')).toBe('dialog')
   })
 
   it('renders a hidden form input carrying the value', () => {
@@ -106,7 +128,7 @@ describe('dzTimePicker — Trigger', () => {
     const errorEl = wrapper.find('[role="alert"]')
     expect(errorEl.text()).toContain('Time required')
     const errorId = errorEl.attributes('id')!
-    expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+    expect(wrapper.find(`[role="combobox"][aria-describedby~="${errorId}"]`).exists()).toBe(true)
   })
 })
 
@@ -120,12 +142,23 @@ describe('dzTimePicker — Cleaner', () => {
     expect(mountPicker({ modelValue: '10:00' }).find('[aria-label="Clear time"]').exists()).toBe(true)
   })
 
+  it('renders the cleaner as a sibling button, never inside the combobox trigger', () => {
+    const wrapper = mountPicker({ modelValue: '10:00' })
+    const trigger = wrapper.get('[role="combobox"]')
+    const cleaner = wrapper.get('button[aria-label="Clear time"]')
+
+    expect(trigger.element.contains(cleaner.element)).toBe(false)
+    expect(trigger.find('button, [role="button"]').exists()).toBe(false)
+  })
+
   it('clears the value and emits clear + change on cleaner click', async () => {
     const wrapper = mountPicker({ modelValue: '10:00' })
     await wrapper.find('[aria-label="Clear time"]').trigger('click')
     expect(wrapper.emitted('clear')).toBeTruthy()
     const updates = wrapper.emitted('update:modelValue')!
     expect(updates[updates.length - 1]).toEqual([''])
+    expect(wrapper.emitted('open')).toBeFalsy()
+    expect(document.activeElement).toBe(wrapper.get('[role="combobox"]').element)
   })
 
   it('hides the cleaner when cleaner=false', () => {
@@ -143,6 +176,25 @@ describe('dzTimePicker — Popover (roll layout)', () => {
     const wrapper = mountPicker()
     await open(wrapper)
     expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('renders the real Reka popover inline when portalDisabled is true', async () => {
+    const wrapper = mountRealPicker({ portalDisabled: true })
+    await open(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mountRealPicker()
+    await open(wrapper)
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(document.body.querySelector('[role="listbox"][aria-label="Hours"]')).not.toBeNull()
+    expect(wrapper.find('[role="listbox"][aria-label="Hours"]').exists()).toBe(false)
+    wrapper.unmount()
   })
 
   it('renders hour and minute columns when open', async () => {

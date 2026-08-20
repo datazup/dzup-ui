@@ -1286,9 +1286,13 @@ is self-sufficient:
    it affects F1–F4 and H1.
 5. **Theme editor scope (H1)** — limit overrides to **brand color / radius / density**, or expose more tokens?
    Recommend starting with those three (highest signal, lowest contrast-risk) and expanding later.
-6. **Trust marks (I3)** — which marks do we commit to backing with CI now (Accessible is the clear P0;
-   light/dark + RTL + responsive need visual-regression infra)? Confirm the initial set so we don't ship a
-   decorative badge.
+6. **Trust marks (I3) — resolved 2026-08-09.** Accessible and Light + dark are backed by the per-block
+   axe/Vitest matrix. Responsive and RTL are backed by `e2e/block-responsive.spec.ts`: all 87 standalone
+   previews run in Chromium under both `dir="ltr"` and `dir="rtl"` at 390px, 768px, and 1280px with applied-
+   direction, render, containment, clipping, and horizontal-overflow checks, plus computed structural reflow
+   probes for every registry entry declaring `responsive.mobile`. CI runs that exact lane with two workers and
+   fails on flaky tests; local runs retain the stable one-worker default. A four-worker benchmark was rejected
+   after it produced an empty-render retry under load.
 7. **MCP (G5)** — ship now as **docs + config** pointed at the generated registry, or defer until a hosted
    registry endpoint is confirmed? Recommend docs+config alongside G1 so it's ready when the host is.
 8. **Pro source in the registry (§9)** — confirm that the public `/r/*` registry and `llms*.txt` include

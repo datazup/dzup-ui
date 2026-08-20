@@ -3,6 +3,15 @@
 _Review date: 2026-07-08. Scope: core design system (`packages/`), the landing app
 (`apps/landing`), and Storybook (`apps/storybook` + `packages/core/stories`)._
 
+> **Current-status correction (2026-08-06):** this document remains the historical
+> 2026-07-08 review, but its statement that the accessibility ratchet had never
+> engaged is no longer current. The ratchet now enforces 4 of 11 story families
+> (`buttons`, `cards`, `media`, and `overlays`); 7 families remain report-only.
+> The current inventory is 206 public core components (207 physical `.vue` files,
+> including one internal component). The dated cross-system receipt and remaining
+> exceptions are recorded in
+> `workspace-docs/repos/dzup-ui/docs/qa/DZUP_UI_CORE_AND_PRO_ACCESSIBILITY_ACCEPTANCE_STATUS_2026-08-06.md`.
+
 > **The tasks below are written up as ready-to-run agent prompts in
 > [`design-tasks.md`](./design-tasks.md)** (TASK-DS-01 … TASK-DS-12), following the same
 > XML/role/success-criteria format as [`new-features.md`](./new-features.md). This doc is
@@ -12,7 +21,8 @@ _Review date: 2026-07-08. Scope: core design system (`packages/`), the landing a
 pure/testable `DESIGN.md` emitter, dependency-free WCAG contrast math, a dogfooded
 landing, and a Storybook with `play()` + status + autodocs on ~160 stories. The
 weaknesses are almost all the **same shape**: _claims that outrun enforcement._ The
-infrastructure exists; the ratchet hasn't been pulled. That is the through-line to fix.
+infrastructure exists; the ratchet is engaged for 4 of 11 families but remains incomplete.
+That is the through-line to fix.
 
 ---
 
@@ -22,9 +32,9 @@ infrastructure exists; the ratchet hasn't been pulled. That is the through-line 
 |---|---|---|
 | Core | DESIGN.md: "Documented pairs meet WCAG AA" | Contrast gate asserts ~22 pairs; the `-muted` / `-muted-foreground`, `link`, and card/popover-foreground pairs it advertises are **not gated** (pass today, unguarded against regression) |
 | Core | Narrative: "Motion is quick and functional (150–300 ms)" | DESIGN.md emits **no motion/easing, z-index, or breakpoint** table — those tokens exist but are invisible to the AI consumers the file is _for_ |
-| Storybook | Accessibility.mdx: "enforced pipeline" | The a11y ratchet is **0 of 11 families** — every family still says "🔍 Audit"; `a11yError` is spread by zero stories |
+| Storybook | Accessibility.mdx: "enforced pipeline" | The a11y ratchet is **4 of 11 families** (`buttons`, `cards`, `media`, `overlays`); the other seven remain report-only |
 | Landing | 5 social-proof stat tiles | 2 of 5 (`githubStars`, `npmDownloads`) are hardcoded `null`; **no testimonials, no logo wall** on the home page |
-| Docs | "158 components" / "155 .vue files" | Actually **205 `.vue` files**, flat layout — hand-maintained counts have drifted; CLAUDE.md's nested-folder layout description is also wrong |
+| Docs | Older hand-maintained component totals | Generated inventory is **206 public components / 207 physical `.vue` files**; some hand-maintained counts remain stale and CLAUDE.md's nested-folder layout description is also wrong |
 
 If you fix one _category_, fix this one. Everything below rolls up to it.
 
@@ -32,11 +42,12 @@ If you fix one _category_, fix this one. Everything below rolls up to it.
 
 ## Design improvements, ranked by impact
 
-### 1. Advance the a11y ratchet — it has never engaged. (highest)
-The whole per-family enforcement machine (`packages/core/stories/_shared/a11y.ts`,
-`preview.ts` global `a11y.test: 'todo'`, CI wiring) is built and has never advanced
-one notch. Pick the cleanest family (Typography or Cards), clear its violations, flip
-it to `a11yError`. That proves the loop and turns an aspirational claim into a real gate.
+### 1. Continue advancing the a11y ratchet — 4 of 11 families are enforced. (highest)
+The per-family enforcement machine (`packages/core/stories/_shared/a11y.ts`,
+`preview.ts` global `a11y.test: 'todo'`, CI wiring) now gates `buttons`, `cards`,
+`media`, and `overlays`. Clear the next report-only family, then flip that family to
+`a11yError`. Do not describe the remaining seven families as enforced until that
+ratchet change and its browser evidence are present.
 
 ### 2. Clear story-authoring token debt — it's what's blocking #1. (high)
 114 of 175 story files use raw Tailwind grays (`text-gray-*`) / untokenized `border-t`

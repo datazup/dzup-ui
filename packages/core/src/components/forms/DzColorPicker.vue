@@ -40,6 +40,9 @@ const props = withDefaults(defineProps<DzColorPickerProps>(), {
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
   canvasHeight: 120,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzColorPickerEmits>()
@@ -163,7 +166,11 @@ function handleBlur(event: FocusEvent): void {
       </PopoverTrigger>
 
       <!-- Popover panel -->
-      <PopoverPortal>
+      <PopoverPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <PopoverContent
           :side-offset="4"
           class="z-50 w-64 rounded-[var(--dz-radius-lg)] border border-[var(--dz-border)] bg-[var(--dz-background)] shadow-[var(--dz-shadow-lg)]"

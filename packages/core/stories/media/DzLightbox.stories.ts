@@ -32,6 +32,11 @@ const meta = {
       description: 'Starting image index when the lightbox opens',
       table: { category: 'Behavior', defaultValue: { summary: '0' } },
     },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render the lightbox inline instead of teleporting it (useful for embedded surfaces and component tests)',
+      table: { category: 'Portal', defaultValue: { summary: 'false' } },
+    },
     // Accessibility
     id: {
       control: 'text',

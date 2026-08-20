@@ -40,6 +40,10 @@ const props = withDefaults(defineProps<DzConfirmDialogProps>(), {
   variant: 'default',
   loading: false,
   size: 'sm',
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
+  overlayClass: undefined,
 })
 
 const emit = defineEmits<DzConfirmDialogEmits>()
@@ -121,6 +125,10 @@ function handleInteractOutside(): void {
     <DzDialogContent
       :id="id"
       :size="dialogSize"
+      :portal-to="portalTo"
+      :portal-disabled="portalDisabled"
+      :portal-defer="portalDefer"
+      :overlay-class="overlayClass"
       v-bind="forwardAttrs"
       @escape-key-down="handleEscapeKeyDown"
       @interact-outside="handleInteractOutside"

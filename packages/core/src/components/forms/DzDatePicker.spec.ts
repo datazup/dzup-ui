@@ -91,6 +91,17 @@ describe('dzDatePicker — Unit Tests', () => {
     expect(wrapper.html()).toContain('Pick a date')
   })
 
+  it('uses native required semantics without placing aria-required on the field group', () => {
+    const wrapper = mount(DzDatePicker, {
+      props: { required: true },
+    })
+    const field = wrapper.find('[role="group"]')
+    const nativeInput = wrapper.find('input[type="date"]')
+
+    expect(field.attributes('aria-required')).toBeUndefined()
+    expect(nativeInput.attributes('required')).toBeDefined()
+  })
+
   it('renders calendar icon', () => {
     const wrapper = mount(DzDatePicker)
     expect(wrapper.find('svg').exists()).toBe(true)

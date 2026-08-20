@@ -17,6 +17,7 @@ export type {
   AnyVariant,
   BadgeVariant,
   ButtonVariant,
+  CanonicalDensity,
   CanonicalSize,
   CanonicalTone,
   CardVariant,
@@ -53,6 +54,7 @@ export type {
   BaseBehaviorProps,
   BaseFormControlProps,
   BaseInteractiveProps,
+  BasePortalProps,
   BaseValidationProps,
 } from './props.types'
 

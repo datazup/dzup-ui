@@ -95,11 +95,11 @@
     </script>
 
     <!--
-      FOUC prevention (ADR-15): reads 'dz-theme' from localStorage and sets
-      data-theme on <html> before any CSS or Vue renders. Canonical script from
-      @dzup-ui/core/providers — do not edit this IIFE manually; update themeScript instead.
+      FOUC prevention (ADR-15): the color-mode branch matches the canonical
+      provider bootstrap, then an app-owned cache applies ThemeRecipeV1 variables
+      and non-color preferences before CSS or Vue renders.
     -->
-    <script>(function(){try{var s=localStorage.getItem('dz-theme');var t=s==='light'||s==='dark'?s:null;if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})()</script>
+    <script>(function(){try{var s=localStorage.getItem('dz-theme');var t=s==='light'||s==='dark'?s:window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';var r=document.documentElement;r.setAttribute('data-theme',t);r.setAttribute('data-theme-mode',s==='light'||s==='dark'||s==='system'?s:'system');var c=JSON.parse(localStorage.getItem('dz-theme-recipe-css-v1')||'null');if(c&&c.version===1){var v=c[t];if(v&&typeof v==='object'){Object.keys(v).forEach(function(k){r.style.setProperty(k,v[k])})}if(c.density)r.setAttribute('data-density',c.density);if(c.motion)r.setAttribute('data-motion-preview',c.motion);if(c.direction)r.setAttribute('dir',c.direction)}}catch(e){}})()</script>
     <style>
       /* Prevent FOUC — set base styles before Vue mounts */
       html {

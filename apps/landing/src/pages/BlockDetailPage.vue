@@ -5,10 +5,9 @@
  * /blocks/preview/:id render (the iframe / OG source), this page wears the full
  * site chrome and is meant to be crawled and linked:
  *
- *   • an H1 + eyebrow + one-line "what it is / when to use it" intro,
- *   • the dependency manifest at a glance (BlockManifest — import + install +
- *     the "Built from" chips), so the install path is visible above the fold,
- *   • the full interactive BlockPreview (live preview / code / copy / fullscreen),
+ *   • the full interactive BlockPreview first (live preview / code / copy /
+ *     fullscreen), with the block title serving as the page H1,
+ *   • unique usage + setup guidance below the preview,
  *   • prev/next across the catalog + a back-to-gallery link.
  *
  * The per-block <title>/description/OG card + the self-referential canonical are
@@ -19,35 +18,18 @@
  * The route guard redirects unknown ids to /blocks, so a resolved block is
  * guaranteed here; we still guard defensively for type-safety.
  */
-import { DzButton, DzCopyButton, DzHeading, DzText, DzVisuallyHidden } from '@dzup-ui/core'
+import { DzButton, DzHeading, DzText } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, Zap } from 'lucide-vue-next'
-import { computed, defineAsyncComponent } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { BLOCKS, CATEGORIES, getBlock } from '../blocks/registry.ts'
 import { getBlockSource } from '../blocks/sources.ts'
 import BlockManifest from '../components/blocks/BlockManifest.vue'
+import BlockPreview from '../components/blocks/BlockPreview.vue'
 import Section from '../components/Section.vue'
-import { openInStackblitz, stackblitzEnabled, UNPUBLISHED_NOTE } from '../lib/stackblitz.ts'
+import { openInStackblitz } from '../lib/stackblitz.ts'
 
 const props = defineProps<{ id: string }>()
-
-/**
- * LazyBlockPreview is loaded asynchronously, not statically (TASK-FREE3-04).
- *
- * It viewport-gates the preview once it is loaded, but a static import still made
- * its chunk a hard dependency of this route: Rollup groups the preview's shared
- * component code into the chunk the wrapper lives in (488 kB raw / 106 kB gzip),
- * and the page could not render a single pixel until it arrived. That was the last
- * big item on this route's critical path — measured mobile LCP 4.33 s at baseline,
- * the worst on the site, against an FCP of roughly 2.5 s.
- *
- * Loading it asynchronously leaves this route's own chunk at 4 kB. The wrapper in
- * the template reserves the preview's height, so arriving late costs no layout shift.
- */
-const LazyBlockPreview = defineAsyncComponent(
-  () => import('../components/blocks/LazyBlockPreview.vue'),
-)
-
 const router = useRouter()
 
 const block = computed(() => getBlock(props.id))
@@ -71,19 +53,13 @@ const accentStyle = computed(() =>
 )
 
 /**
- * A short "when to use it" line, derived (never hand-authored per block) from the
- * category + responsive metadata so it can't drift from the catalog.
+ * Category-level placement guidance. The block's exact description already
+ * appears in the preview header, so the supporting section uses the category
+ * blurb rather than repeating the same sentence below the fold.
  */
 const whenToUse = computed(() => {
-  const label = category.value?.label ?? 'UI'
-  const responsive = block.value?.responsive?.mobile
-    ? ' It reflows to a single column on narrow viewports.'
-    : ''
-  return (
-    `A ${label.toLowerCase()} block composed entirely from free @dzup-ui/core `
-    + `components and design tokens, so it drops in already themed, accessible `
-    + `and light/dark-ready.${responsive}`
-  )
+  return category.value?.blurb
+    ?? 'A production-ready starting point composed from free @dzup-ui/core components.'
 })
 
 /** Index of the current block within the catalog, for prev/next (wraps around). */
@@ -113,14 +89,6 @@ function showBlocksUsing(name: string): void {
  * Vite + Vue 3 + @dzup-ui/core starter, so a visitor goes from "I like this" to
  * "it runs in my editor" in one click.
  */
-/**
- * Whether the StackBlitz fork can install its `@dzup-ui/*` deps yet. Read once
- * at setup — it's a build-time flag, not reactive state. While it's false the
- * button is replaced by {@link UNPUBLISHED_NOTE}, so the page never offers a
- * one-click flow that dies on `npm install` (TASK-FREE3-03).
- */
-const canFork = stackblitzEnabled()
-
 function openStackblitz(): void {
   const b = block.value
   if (!b)
@@ -136,38 +104,44 @@ function openStackblitz(): void {
 <template>
   <!-- Single root element: rendered inside App.vue's route <Transition>. -->
   <div v-if="block" class="block-detail" :style="accentStyle">
-    <!-- Hero intro: the page's single H1, eyebrow + lede + "when to use it". -->
-    <Section heading-id="block-detail-title">
-      <div class="bd-hero">
+    <!-- Preview-first: route context stays compact, then the live block owns the
+         first viewport. Its title is the page's single H1. -->
+    <Section class="bd-preview-section">
+      <div class="bd-context">
         <RouterLink to="/blocks" class="bd-back">
           <ArrowLeft :size="15" aria-hidden="true" />
           <span>All blocks</span>
         </RouterLink>
-        <span v-if="category" class="lp-eyebrow">{{ category.label }}</span>
-        <DzHeading id="block-detail-title" :level="1" size="3xl" weight="semibold" class="bd-title lp-balance">
-          {{ block.title }}
-        </DzHeading>
-        <DzText size="lg" tone="muted" as="p" class="bd-lede lp-balance">
-          {{ block.description }}
-        </DzText>
-        <DzText size="md" tone="muted" as="p" class="bd-when">
-          {{ whenToUse }}
-        </DzText>
+        <span class="bd-position">{{ index + 1 }} of {{ BLOCKS.length }}</span>
+      </div>
+      <BlockPreview
+        :block="block"
+        :heading-level="1"
+        :show-code-manifest="false"
+        @select-component="showBlocksUsing"
+      />
+    </Section>
 
-        <!-- Dependency manifest at a glance: the one import + install command(s)
-             + "Built from" chips, so the install path is visible without opening
-             the Code tab. Reused verbatim from the catalog (single source). -->
-        <BlockManifest :block="block" class="bd-manifest" @select-component="showBlocksUsing" />
-
-        <!-- One-click handoff: fork the block into a live StackBlitz project, or
-             copy its exact source. Both reuse the block's `?raw` `source`. -->
-        <div class="bd-actions">
+    <!-- Supporting information is deliberately below the working preview. The
+         preview already owns title, description, components and source copy; this
+         section only adds category context, install commands and the live-editor
+         handoff, so no information is duplicated on the page. -->
+    <Section surface bordered class="bd-details-section">
+      <div class="bd-details">
+        <div class="bd-overview">
+          <span class="lp-eyebrow">{{ category?.label ?? 'Block' }}</span>
+          <DzHeading id="block-detail-usage-title" :level="2" size="xl" weight="semibold" class="bd-section-title">
+            Use this block
+          </DzHeading>
+          <DzText size="md" tone="muted" as="p" class="bd-when">
+            {{ whenToUse }}
+          </DzText>
           <DzButton
-            v-if="canFork"
             variant="solid"
             tone="primary"
             size="sm"
             :aria-label="`Open ${block.title} in a live StackBlitz project`"
+            class="bd-stackblitz"
             @click="openStackblitz"
           >
             <template #prefix>
@@ -175,64 +149,28 @@ function openStackblitz(): void {
             </template>
             Open in StackBlitz
           </DzButton>
-          <DzCopyButton
-            :value="getBlockSource(block.path)"
-            variant="outline"
-            tone="neutral"
-            size="sm"
-            label="Copy code"
-            copied-label="Copied!"
-            :aria-label="`Copy the full source of ${block.title}`"
+        </div>
+
+        <div class="bd-setup">
+          <div class="bd-setup-head">
+            <DzHeading id="block-detail-setup-title" :level="2" size="md" weight="semibold" class="bd-section-title">
+              Add it to your project
+            </DzHeading>
+            <DzText size="sm" tone="muted" as="p" class="bd-setup-lede">
+              Use the registry command, or install the packages and import the components manually.
+            </DzText>
+          </div>
+          <BlockManifest
+            :block="block"
+            :show-components="false"
+            :show-source-copy="false"
+            class="bd-manifest"
+            @select-component="showBlocksUsing"
           />
         </div>
-        <!-- Honest stand-in for the fork button while @dzup-ui/* is unpublished
-             — the same standard the npm badges and live stats already hold. -->
-        <DzText v-if="!canFork" size="sm" tone="muted" as="p" class="bd-unpublished">
-          {{ UNPUBLISHED_NOTE }}
-        </DzText>
       </div>
-    </Section>
 
-    <!--
-      The full interactive preview (live preview / code / copy / fullscreen).
-
-      Viewport-gated, exactly like the /blocks index (TASK-FREE3-04). A direct
-      `<BlockPreview>` here made the 112 kB-gzip preview chunk a render-blocking
-      dependency of a page whose above-the-fold content is just a heading, an
-      intro and the manifest — and, because the preview is the largest element
-      on the page, it also *became* the LCP element once it finally painted.
-      Mobile LCP for this route was 4.34 s, the worst on the site.
-
-      Gating it hands LCP back to the heading block, which is ready as soon as
-      the route chunk parses. The skeleton reserves the preview's height, so the
-      swap costs no layout shift (the CLS gate is hard-asserted at 0.1).
-    -->
-    <Section>
-      <!--
-        The heading here is real but visually hidden, and it fixes a genuine
-        structure bug (TASK-FREE3-04). Block markup hard-codes its own headings at
-        level 4 — correct on the /blocks index, which nests h1 page → h2 category →
-        h3 preview title → h4 block content. This page has no category tier, so
-        rendering the preview title at h2 produced h1 → h2 → h4: a skipped level on
-        every block detail page. It went unnoticed because the a11y suite's
-        IntersectionObserver stub never fired, so the preview never rendered and
-        was never audited.
-
-        Restoring the missing tier as a visually-hidden h2 gives screen readers
-        h1 → h2 → h3 → h4 while leaving the page looking exactly as designed.
-      -->
-      <DzVisuallyHidden as="h2">
-        Live preview
-      </DzVisuallyHidden>
-      <!-- min-height reserves the preview's own skeleton height, so the async
-           chunk arriving cannot displace the prev/next nav below it. -->
-      <div class="bd-preview-slot">
-        <LazyBlockPreview :block="block" :heading-level="3" @select-component="showBlocksUsing" />
-      </div>
-    </Section>
-
-    <!-- Prev / next across the whole catalog + back to the gallery. -->
-    <Section>
+      <!-- Prev / next across the whole catalog + back to the gallery. -->
       <nav class="bd-pager" aria-label="Block navigation">
         <RouterLink
           v-if="prevBlock"
@@ -273,19 +211,18 @@ function openStackblitz(): void {
   display: block;
 }
 
-/* Holds the preview's place while its chunk loads (TASK-FREE3-04), so the
-   prev/next nav below never jumps. Matches LazyBlockPreview's own skeleton
-   height; `min-height` so the real preview is free to be taller. */
-.bd-preview-slot {
-  min-height: 520px;
+/* ── Preview-first route context ───────────────────────────────── */
+.bd-preview-section {
+  padding-top: clamp(24px, 4vw, 48px);
+  padding-bottom: clamp(40px, 6vw, 72px);
 }
 
-/* ── Hero ─────────────────────────────────────────────────────── */
-.bd-hero {
+.bd-context {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dz-space-3, 0.75rem);
+  margin-bottom: var(--dz-space-4, 1rem);
 }
 
 .bd-back {
@@ -308,42 +245,78 @@ function openStackblitz(): void {
   border-radius: var(--dz-radius-sm, 0.375rem);
 }
 
-.bd-title {
-  margin: 0;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+.bd-position {
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  color: var(--dz-muted-foreground, #585b60);
+  font-variant-numeric: tabular-nums;
 }
 
-.bd-lede {
+.bd-details-section {
+  padding-top: clamp(40px, 6vw, 64px);
+  padding-bottom: clamp(40px, 6vw, 64px);
+}
+
+.bd-details {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.7fr) minmax(0, 1.5fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+.bd-overview,
+.bd-setup {
+  min-width: 0;
+}
+
+.bd-overview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--dz-space-3, 0.75rem);
+}
+
+.bd-section-title {
   margin: 0;
-  max-width: 60ch;
-  line-height: 1.6;
 }
 
 .bd-when {
   margin: 0;
-  max-width: 64ch;
-  line-height: 1.65;
+  max-width: 48ch;
+  line-height: 1.6;
 }
 
-.bd-manifest {
-  margin-top: 10px;
-  width: 100%;
-  max-width: 640px;
+.bd-stackblitz {
+  margin-top: var(--dz-space-2, 0.5rem);
 }
 
-.bd-actions {
+.bd-setup {
+  padding-inline-start: clamp(24px, 4vw, 48px);
+  border-inline-start: 1px solid var(--lp-hairline);
+}
+
+.bd-setup-head {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
+  flex-direction: column;
+  gap: var(--dz-space-1, 0.25rem);
+  margin-bottom: var(--dz-space-5, 1.25rem);
 }
 
-.bd-unpublished {
-  margin: 8px 0 0;
+.bd-setup-lede {
+  margin: 0;
   max-width: 62ch;
   line-height: 1.5;
+}
+
+/* Import spans the width; package and registry commands sit side by side. */
+.bd-manifest {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--dz-space-5, 1.25rem);
+}
+
+.bd-manifest :deep(.bm-group:first-child) {
+  grid-column: 1 / -1;
 }
 
 /* ── Pager ────────────────────────────────────────────────────── */
@@ -351,7 +324,10 @@ function openStackblitz(): void {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--dz-space-3, 0.75rem);
+  margin-top: clamp(32px, 5vw, 56px);
+  padding-top: var(--dz-space-5, 1.25rem);
+  border-top: 1px solid var(--lp-hairline);
 }
 
 .bd-pager-link {
@@ -362,7 +338,7 @@ function openStackblitz(): void {
   padding: 12px 16px;
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-lg, 0.625rem);
-  background: var(--dz-surface, #ffffff);
+  background: var(--dz-surface, #fff);
   color: var(--dz-foreground, #1b1d1f);
   text-decoration: none;
   transition: border-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
@@ -410,6 +386,29 @@ function openStackblitz(): void {
 }
 
 @media (max-width: 560px) {
+  .bd-preview-section {
+    padding-inline: var(--dz-space-4, 1rem);
+  }
+
+  .bd-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bd-setup {
+    padding-inline-start: 0;
+    padding-top: var(--dz-space-6, 1.5rem);
+    border-inline-start: 0;
+    border-top: 1px solid var(--lp-hairline);
+  }
+
+  .bd-manifest {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bd-manifest :deep(.bm-group:first-child) {
+    grid-column: auto;
+  }
+
   .bd-pager-name {
     display: none;
   }

@@ -92,6 +92,11 @@ const MANIFEST_PATHS: Array<{ name: string, path: string, packageDir: string }> 
  */
 const FLAT_EXPORT_PACKAGES: Array<{ name: string, packageDir: string, entryFile: string }> = [
   {
+    name: '@dzup-ui/testing',
+    packageDir: resolve(ROOT, 'packages/testing'),
+    entryFile: 'src/index.ts',
+  },
+  {
     name: '@dzup-ui/compat',
     packageDir: resolve(ROOT, 'packages/compat'),
     entryFile: 'src/index.ts',

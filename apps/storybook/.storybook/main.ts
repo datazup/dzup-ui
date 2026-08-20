@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { defineMain } from '@storybook/vue3-vite/node'
 import tailwindcss from '@tailwindcss/vite'
 import remarkGfm from 'remark-gfm'
+import { resolveRemoteDevelopmentServer } from '../../../packages/tooling/src/remote-development-server.ts'
 import { workspaceAliases } from '../../../packages/tooling/src/workspace-aliases.ts'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
@@ -40,16 +41,28 @@ const INCLUDE_GALLERY = process.env.DZUP_GALLERY === '1'
 // and ship. `check-mdx-links.mjs` asserts no `core-feedback-app-specific` id in a
 // public index.json. Rationale in docs/storybook-decisions.md (supersedes TASK-X.4).
 const INCLUDE_APP_SPECIFIC = process.env.DZUP_APP_SPECIFIC === '1'
+const REMOTE_DEVELOPMENT_HOST = 'dzup-ui-storybook.dev.dziphost.com'
+const REMOTE_DEVELOPMENT_ENABLED = process.env.APP_ENV === 'development-remote'
+
+// Apply the last ThemeRecipeV1 cache before the preview bundle mounts. The Vue
+// decorator remains authoritative and rewrites this state from Storybook
+// globals; this synchronous bootstrap only prevents a theme/density flash.
+const THEME_RECIPE_PREVIEW_BOOTSTRAP = `<script data-dz-theme-recipe-bootstrap="v1">(function(){try{var c=JSON.parse(localStorage.getItem('dz-storybook-theme-recipe-css-v1')||'null');if(!c||c.version!==1)return;var q=window.matchMedia('(prefers-color-scheme:dark)').matches;var t=c.mode==='dark'?'dark':c.mode==='light'?'light':q?'dark':'light';var r=document.documentElement;var v=c[t];if(v&&typeof v==='object'){Object.keys(v).forEach(function(k){r.style.setProperty(k,v[k])})}r.setAttribute('data-theme',t);r.setAttribute('data-theme-mode',c.mode);r.setAttribute('data-density',c.density);r.setAttribute('data-motion-preview',c.motion);r.setAttribute('dir',c.direction)}catch(e){}})()</script>`
 
 export default defineMain({
+  core: {
+    // Storybook serves its manager outside Vite's `server.allowedHosts` check.
+    // Keep that surface fail-closed as well as the Vite preview/HMR server.
+    allowedHosts: REMOTE_DEVELOPMENT_ENABLED ? [REMOTE_DEVELOPMENT_HOST] : undefined,
+  },
   // Addon registration is split across two files and the rule is NOT "keep the two
   // lists identical" — they answer different questions:
   //   • main.ts `addons`  — build-time: presets, Vite config, and MANAGER UI panels.
   //   • preview.ts `addons` — runtime: preview-side behavior (decorators, parameters).
   // Only addon-docs strictly needs an entry on both sides (manager UI here, doc
-  // rendering there). a11y and themes wire their preview behavior in preview.ts;
-  // they are listed here so the A11y panel and Theme toolbar mount on a fresh
-  // `storybook dev`. addon-vitest is build-time only — it has no preview entry.
+  // rendering there). a11y wires its preview behavior in preview.ts and is listed
+  // here so its panel mounts on a fresh `storybook dev`. The ThemeRecipe toolbar
+  // is declared by preview.ts globalTypes; addon-vitest is build-time only.
   // Adding an addon to one list does not imply adding it to the other; ask which
   // side needs it.
   addons: [
@@ -70,7 +83,6 @@ export default defineMain({
       },
     },
     '@storybook/addon-a11y',
-    '@storybook/addon-themes',
     '@storybook/addon-vitest',
   ],
   stories: [
@@ -116,7 +128,7 @@ export default defineMain({
       enforce: 'pre',
       resolveId(id: string) {
         if (id === 'vue/compiler-sfc' || id.endsWith('vue.esm-bundler.js/compiler-sfc'))
-          return compilerSfcBrowser
+          return { id: compilerSfcBrowser }
         return null
       },
     })
@@ -126,9 +138,33 @@ export default defineMain({
     // rule and why the token CSS targets resolve to dist/.
     config.resolve = config.resolve || {}
     config.resolve.alias = [
+      // Keep the exact REPL compiler subpath ahead of the framework's broad
+      // `vue` runtime alias. The pre-resolver above protects normal Storybook
+      // builds; this alias also survives into @storybook/addon-vitest's derived
+      // Vite config, where plugin ordering is different.
+      { find: /^vue\/compiler-sfc$/, replacement: compilerSfcBrowser },
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
       ...workspaceAliases(resolve(__dirname, '../../..')),
     ]
+
+    // Vite's dependency optimiser uses esbuild rather than the normal Vite
+    // resolver. It consequently applies the framework's broad `vue` alias
+    // before the compiler-SFC resolver above. Keep the browser-only REPL out
+    // of that prebundle so normal Vite resolution can map its compiler import.
+    config.optimizeDeps = config.optimizeDeps || {}
+    config.optimizeDeps.exclude = [
+      ...(config.optimizeDeps.exclude || []),
+      '@vue/repl',
+    ]
+
+    const remoteDevelopment = resolveRemoteDevelopmentServer(
+      process.env,
+      REMOTE_DEVELOPMENT_HOST,
+    )
+    config.server = {
+      ...config.server,
+      ...remoteDevelopment.server,
+    }
 
     return config
   },
@@ -137,6 +173,7 @@ export default defineMain({
   // Storybook's default favicon on a fresh `dev` and in the built static app.
   managerHead: head =>
     `${head}\n<link rel="icon" type="image/svg+xml" href="./favicon.svg" />`,
+  previewHead: head => `${head}\n${THEME_RECIPE_PREVIEW_BOOTSTRAP}`,
   docs: {
     autodocs: 'tag',
   },

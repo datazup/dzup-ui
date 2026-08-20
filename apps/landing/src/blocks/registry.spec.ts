@@ -90,6 +90,13 @@ describe('block registry', () => {
       expect(CATEGORY_IDS.has(block.category), `category "${block.category}"`).toBe(true)
     })
 
+    it('uses positive responsive preview floors when reservation metadata is present', () => {
+      if (!block.previewMinHeight)
+        return
+      expect(block.previewMinHeight.wide, 'wide preview floor').toBeGreaterThan(0)
+      expect(block.previewMinHeight.compact, 'compact preview floor').toBeGreaterThan(0)
+    })
+
     it('declares at least one component, each a real @dzup-ui/core export', () => {
       expect(Array.isArray(block.components)).toBe(true)
       expect(block.components.length).toBeGreaterThan(0)

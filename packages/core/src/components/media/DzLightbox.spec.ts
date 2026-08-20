@@ -61,8 +61,6 @@ describe('dzLightbox', () => {
   })
 
   it('renders aria-label', () => {
-    // DzLightbox renders DialogContent in a portal (teleport to body).
-    // Portal content is not accessible in jsdom. Verify prop is accepted without error.
     const wrapper = mountWithDialogStubs(DzLightbox, {
       props: {
         images: sampleImages,
@@ -71,6 +69,39 @@ describe('dzLightbox', () => {
       },
     })
     expect(wrapper.exists()).toBe(true)
+  })
+
+  it('renders the real Reka dialog inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzLightbox, {
+      attachTo: document.body,
+      props: {
+        images: sampleImages,
+        modelValue: true,
+        portalDisabled: true,
+      },
+    })
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(true)
+    expect(wrapper.find('[role="dialog"]').text()).toContain('1 / 3')
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzLightbox, {
+      attachTo: document.body,
+      props: {
+        images: sampleImages,
+        modelValue: true,
+      },
+    })
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
+    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('1 / 3')
+    wrapper.unmount()
   })
 
   it('registers hidden dialog title and description without Reka warnings', async () => {

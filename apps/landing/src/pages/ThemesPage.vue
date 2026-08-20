@@ -41,6 +41,9 @@ const {
   density,
   shadowIntensity,
   fontKey,
+  mode,
+  direction,
+  motion,
   cssText,
   jsonText,
   contrastLight,
@@ -57,6 +60,10 @@ const lightVars = computed(() => designer.varsFor('light'))
 const darkVars = computed(() => designer.varsFor('dark'))
 
 // ── Restore a shared design from the URL on first load ──────────────────────
+// The other half of the "Copy share link" button: `shareUrl` serialises the
+// design into a `?theme=` token, and this is what reads it back. Without it that
+// button hands out links that open a default editor, which is worse than not
+// offering the button at all.
 onMounted(() => {
   const token = route.query.theme
   if (typeof token === 'string' && token)
@@ -99,10 +106,23 @@ function chromaTrack(intent: DesignerIntent): string {
 
 const densityItems = [
   { value: 'compact', label: 'Compact' },
-  { value: 'comfortable', label: 'Cozy' },
+  { value: 'cozy', label: 'Cozy' },
   { value: 'spacious', label: 'Spacious' },
 ]
 const fontItems = FONT_CHOICES.map(f => ({ value: f.key, label: f.label }))
+const modeItems = [
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'system', label: 'System' },
+]
+const directionItems = [
+  { value: 'ltr', label: 'LTR' },
+  { value: 'rtl', label: 'RTL' },
+]
+const motionItems = [
+  { value: 'normal', label: 'Normal' },
+  { value: 'reduced', label: 'Reduced' },
+]
 
 // ── Copy / download plumbing ────────────────────────────────────────────────
 
@@ -305,6 +325,7 @@ function applyImagePalette(img: HTMLImageElement): void {
             </template>
             Reset
           </DzButton>
+          <a class="themes-share-link" :href="shareUrl">Open share URL</a>
         </div>
       </div>
     </header>
@@ -454,6 +475,28 @@ function applyImagePalette(img: HTMLImageElement): void {
           </div>
         </section>
 
+        <!-- Runtime preferences -->
+        <section class="control-group">
+          <h2 class="control-h">
+            Runtime
+          </h2>
+          <div class="field">
+            <span class="field-cap">Color mode</span>
+            <DzSegmented v-model="mode" :items="modeItems" size="sm" aria-label="Color mode" />
+          </div>
+          <div class="field">
+            <span class="field-cap">Direction</span>
+            <DzSegmented v-model="direction" :items="directionItems" size="sm" aria-label="Direction" />
+          </div>
+          <div class="field">
+            <span class="field-cap">Motion preview</span>
+            <DzSegmented v-model="motion" :items="motionItems" size="sm" aria-label="Motion preview" />
+          </div>
+          <DzText size="xs" tone="muted">
+            These preferences apply to the full landing surface and travel with the exported recipe.
+          </DzText>
+        </section>
+
         <!-- Experimental: from image -->
         <section class="control-group">
           <h2 class="control-h">
@@ -580,7 +623,11 @@ function applyImagePalette(img: HTMLImageElement): void {
             Copy failed — your browser blocked clipboard access. Select the text below and copy it
             manually.
           </p>
-          <pre class="export-code"><code>{{ cssText }}</code></pre>
+          <pre class="export-code" tabindex="0" aria-label="Generated theme CSS"><code>{{ cssText }}</code></pre>
+          <details class="recipe-json">
+            <summary>Serialized ThemeRecipeV1</summary>
+            <pre data-testid="theme-recipe-export" tabindex="0" aria-label="Serialized theme recipe"><code>{{ jsonText }}</code></pre>
+          </details>
         </section>
       </div>
     </div>
@@ -634,6 +681,14 @@ function applyImagePalette(img: HTMLImageElement): void {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 6px;
+}
+
+.themes-share-link {
+  align-self: center;
+  color: var(--dz-link, var(--dz-primary));
+  font-size: var(--dz-text-sm, 0.875rem);
+  font-weight: 600;
+  text-underline-offset: 3px;
 }
 
 /* ── Workspace ── */
@@ -1008,6 +1063,24 @@ function applyImagePalette(img: HTMLImageElement): void {
   font-family: var(--dz-font-mono, monospace);
   font-size: var(--dz-text-xs, 0.75rem);
   line-height: 1.65;
+}
+
+.recipe-json {
+  padding: 0 16px 16px;
+  color: var(--dz-muted-foreground, #585b60);
+  font-size: var(--dz-text-xs, 0.75rem);
+}
+
+.recipe-json summary {
+  width: fit-content;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.recipe-json pre {
+  max-height: 320px;
+  overflow: auto;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 1040px) {

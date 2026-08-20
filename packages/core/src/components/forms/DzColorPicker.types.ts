@@ -9,6 +9,7 @@
 
 import type {
   BaseAccessibilityProps,
+  BasePortalProps,
   BaseValidationProps,
   CanonicalSize,
   ChangeEvents,
@@ -19,7 +20,7 @@ import type {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzColorPicker component */
-export interface DzColorPickerProps extends BaseAccessibilityProps, BaseValidationProps {
+export interface DzColorPickerProps extends BaseAccessibilityProps, BasePortalProps, BaseValidationProps {
   /** Preset color swatches to display */
   presets?: string[]
   /** Show hex/rgb text input */

@@ -20,6 +20,9 @@ withDefaults(defineProps<DzContextMenuContentProps>(), {
   side: 'bottom',
   align: 'start',
   sideOffset: 4,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzContextMenuContentEmits>()
@@ -42,7 +45,11 @@ function handlePointerDownOutside(event: Event): void {
 </script>
 
 <template>
-  <ContextMenuPortal>
+  <ContextMenuPortal
+    :to="portalTo"
+    :disabled="portalDisabled"
+    :defer="portalDefer"
+  >
     <ContextMenuContent
       :id="id"
       :side="side"

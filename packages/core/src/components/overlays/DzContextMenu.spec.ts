@@ -1,12 +1,31 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzContextMenu — Unit / behavior tests.
  */
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { h } from 'vue'
 import DzContextMenu from './DzContextMenu.vue'
+import DzContextMenuContent from './DzContextMenuContent.vue'
+import DzContextMenuItem from './DzContextMenuItem.vue'
 import DzContextMenuSeparator from './DzContextMenuSeparator.vue'
 import DzContextMenuTrigger from './DzContextMenuTrigger.vue'
+
+const flush = () => new Promise(resolve => setTimeout(resolve, 50))
+
+enableAutoUnmount(afterEach)
+
+function mountContextMenu(contentProps: Record<string, unknown> = {}) {
+  return mount(DzContextMenu, {
+    props: { modal: false },
+    slots: {
+      default: () => h('div', { 'data-testid': 'context-menu-host' }, [
+        h(DzContextMenuTrigger, {}, () => h('div', { 'data-testid': 'context-trigger' }, 'Open')),
+        h(DzContextMenuContent, contentProps, () => h(DzContextMenuItem, {}, () => 'One')),
+      ]),
+    },
+    attachTo: document.body,
+  })
+}
 
 describe('dzContextMenu — Unit Tests', () => {
   it('renders the component', () => {
@@ -36,6 +55,26 @@ describe('dzContextMenu — Unit Tests', () => {
       slots: { default: '<div>Content</div>' },
     })
     expect(wrapper.exists()).toBe(true)
+  })
+
+  it('renders the real Reka menu inline when portalDisabled is true', async () => {
+    const wrapper = mountContextMenu({ portalDisabled: true })
+    await wrapper.get('[data-testid="context-trigger"]').trigger('contextmenu', { clientX: 20, clientY: 20 })
+    await flush()
+
+    expect(wrapper.find('[data-testid="context-menu-host"] [role="menu"]').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mountContextMenu()
+    await wrapper.get('[data-testid="context-trigger"]').trigger('contextmenu', { clientX: 20, clientY: 20 })
+    await flush()
+
+    const host = document.querySelector('[data-testid="context-menu-host"]')
+    expect(host?.querySelector('[role="menu"]')).toBeNull()
+    expect(document.body.querySelector('[role="menu"]')?.textContent).toContain('One')
+    wrapper.unmount()
   })
 })
 

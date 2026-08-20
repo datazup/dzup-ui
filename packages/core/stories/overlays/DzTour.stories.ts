@@ -223,7 +223,7 @@ export const ControlledStep: Story = {
  * 1. The spotlight popover is `<Teleport to="body">`d, so it lands OUTSIDE the
  *    decorator's `data-theme="dark"` wrapper and would resolve the LIGHT tokens.
  *    Setting the `theme` global puts `data-theme="dark"` on `<html>`
- *    (`withThemeByDataAttribute`, see `.storybook/preview.ts`), which the
+ *    (the global ThemeRecipe decorator; see `.storybook/preview.ts`), which the
  *    teleported popover does inherit.
  * 2. A closed tour previews nothing. `play()` starts it — and because docs pages
  *    do not autoplay, the spotlight mask and focus trap never blanket the docs

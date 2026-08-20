@@ -1,8 +1,9 @@
-import { mount } from '@vue/test-utils'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
 /**
  * DzMultiSelect — Unit / behavior tests.
  */
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { multiSelectTokens } from './DzMultiSelect.tokens.ts'
 import DzMultiSelect from './DzMultiSelect.vue'
 
 const items = [
@@ -10,6 +11,8 @@ const items = [
   { label: 'Banana', value: 'banana' },
   { label: 'Cherry', value: 'cherry' },
 ]
+
+enableAutoUnmount(afterEach)
 
 describe('dzMultiSelect — Unit Tests', () => {
   it('renders the multi-select root', () => {
@@ -36,6 +39,9 @@ describe('dzMultiSelect — Unit Tests', () => {
     })
     expect(wrapper.text()).toContain('Apple')
     expect(wrapper.text()).toContain('Banana')
+    const appleTag = wrapper.get('[aria-label="Remove Apple"]').element.parentElement
+    expect(appleTag?.className).toContain('text-[var(--dz-primary-muted-foreground)]')
+    expect(multiSelectTokens.tag.foreground).toBe('var(--dz-primary-muted-foreground)')
   })
 
   it('applies size variant classes', () => {
@@ -164,5 +170,33 @@ describe('dzMultiSelect — Unit Tests', () => {
     const errorId = errorEl.attributes('id')!
     expect(errorId).toBeTruthy()
     expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
+
+  it('renders real Reka options inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzMultiSelect, {
+      props: { items, portalDisabled: true },
+      attachTo: document.body,
+    })
+    await wrapper.find('input').trigger('focus')
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(items.length)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzMultiSelect, {
+      props: { items },
+      attachTo: document.body,
+    })
+    await wrapper.find('input').trigger('focus')
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
+    expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length)
+    wrapper.unmount()
   })
 })

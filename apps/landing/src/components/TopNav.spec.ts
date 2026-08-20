@@ -6,9 +6,10 @@
  * that fake navigation), aria-current on the active route and on the group that
  * contains it, and a mobile drawer that closes on Escape and on navigation.
  */
+import { DzThemeProvider } from '@dzup-ui/core'
 import { cleanup, fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { nextTick } from 'vue'
+import { defineComponent, h, nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from './TopNav.vue'
 
@@ -34,7 +35,10 @@ async function mountAt(path: string) {
   const router = makeRouter()
   await router.push(path)
   await router.isReady()
-  const utils = render(TopNav, { global: { plugins: [router] } })
+  const TestShell = defineComponent({
+    setup: () => () => h(DzThemeProvider, null, { default: () => h(TopNav) }),
+  })
+  const utils = render(TestShell, { global: { plugins: [router] } })
   return { ...utils, router }
 }
 

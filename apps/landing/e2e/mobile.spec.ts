@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { BLOCK_PATH } from './utils/catalog.ts'
+import { BLOCK_PATH, BLOCK_TITLE } from './utils/catalog.ts'
 import { expectPainted } from './utils/pixels.ts'
 
 /**
@@ -61,7 +61,9 @@ test.describe('mobile', () => {
   test('a block detail page renders on a phone without a horizontal overflow', async ({ page }) => {
     await page.goto(BLOCK_PATH, { waitUntil: 'networkidle' })
 
-    await expect(page.locator('#block-detail-title')).toBeVisible()
+    // Preview-first detail page: the block preview's own heading is the page H1,
+    // so there is no separate hero `#block-detail-title` to wait on.
+    await expect(page.getByRole('heading', { level: 1, name: BLOCK_TITLE })).toBeVisible()
     await expectPainted(page, 'light', `${BLOCK_PATH} on mobile`)
 
     // The failure mode a desktop project cannot see: a fixed-width child (a code

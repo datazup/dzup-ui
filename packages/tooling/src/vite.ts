@@ -88,10 +88,9 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
     cssFileName,
   } = options
 
-  const resolvedEntry
-    = typeof entry === 'string'
-      ? { index: resolve(baseDir, entry) }
-      : Object.fromEntries(Object.entries(entry).map(([k, v]) => [k, resolve(baseDir, v)]))
+  const resolvedEntry = typeof entry === 'string'
+    ? { index: resolve(baseDir, entry) }
+    : Object.fromEntries(Object.entries(entry).map(([k, v]) => [k, resolve(baseDir, v)]))
 
   return defineConfig({
     plugins: [
@@ -100,6 +99,12 @@ export function createLibConfig(options: CreateLibConfigOptions): UserConfig {
         tsconfigPath: resolve(baseDir, tsconfigPath),
         outDir,
         entryRoot: 'src',
+        // Workspace tsconfig paths point @dzup-ui/* imports at sibling source
+        // packages for authoring. Those aliases must not leak into published
+        // declarations as ../../../../contracts/src-style paths: consumers do
+        // not have our monorepo layout. Keep package dependencies bare so each
+        // app resolves them through the dependency's public exports map.
+        aliasesExclude: [/^@dzup-ui\//],
         // cleanVueFileName strips the trailing `.vue` from both the emitted
         // declaration filename AND the barrel re-export module specifier
         // (e.g. `export { default as DzCard } from './DzCard'`). TypeScript's

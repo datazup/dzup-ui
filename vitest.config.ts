@@ -29,6 +29,7 @@ export default defineConfig({
       'packages/*/src/**/*.spec.ts',
       'packages/*/tests/**/*.spec.ts',
       'apps/*/src/**/*.spec.ts',
+      'apps/*/scripts/**/*.test.mjs',
     ],
     exclude: [
       '**/node_modules/**',
@@ -37,10 +38,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
-      // Both apps are inside the gate (TASK-FREE-16). They shipped for months
-      // contributing nothing to coverage and held to no bar, which is how the
-      // router's ~150 lines of head management reached production untested.
-      include: ['packages/*/src/**/*.{ts,vue}', 'apps/*/src/**/*.{ts,vue}'],
+      // The active landing app is inside the gate (TASK-FREE-16). The legacy
+      // apps/sandbox tree is retired and superseded by Storybook contract parity,
+      // so including apps/* would count dead source at zero coverage.
+      include: ['packages/*/src/**/*.{ts,vue}', 'apps/landing/src/**/*.{ts,vue}'],
       exclude: [
         '**/*.spec.ts',
         '**/*.contract.spec.ts',
@@ -54,10 +55,15 @@ export default defineConfig({
         '**/generate.ts',
       ],
       thresholds: {
-        branches: 80,
-        functions: 80,
-        lines: 80,
-        statements: 80,
+        // Vitest applies global thresholds to every included file even when a
+        // more specific glob also matches. Express both scopes as globs so the
+        // package bar and active-app ratchet remain independent and complete.
+        'packages/*/src/**': {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+        },
         /**
          * The apps enter the gate BELOW their measured floor — a ratchet, not a
          * rubber stamp, and not a tripwire either. Measured 2026-07-21
@@ -110,10 +116,17 @@ export default defineConfig({
          * Raise each number as that work lands; never lower one to make a build
          * pass.
          *
-         * NB: files matching this glob are checked against THESE numbers and are
-         * excluded from the global 80s above, so packages/ keeps its bar.
+         * Packages are checked separately above, so the app's intentional
+         * function floor does not dilute or replace the package bar.
+         *
+         * The key names the landing app explicitly instead of globbing every app
+         * directory. Both select exactly the same files today — `include` above
+         * admits only the landing — but a wildcard would silently adopt any
+         * future app tree, including the retired `apps/sandbox`, into a ratchet
+         * that was measured purely against the landing.
+         * `coverage-policy.spec.ts` pins the explicit form.
          */
-        'apps/*/src/**': {
+        'apps/landing/src/**': {
           branches: 89,
           functions: 80,
           lines: 91,

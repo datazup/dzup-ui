@@ -72,6 +72,21 @@ const meta = {
       description: 'Keeps the dialog open with a busy confirm button while an async action runs',
       table: { category: 'State', defaultValue: { summary: 'false' } },
     },
+    portalDisabled: {
+      control: 'boolean',
+      description: 'Render inline instead of teleporting; useful for embedded surfaces and component tests',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    portalDefer: {
+      control: 'boolean',
+      description: 'Defer portal target resolution until the application has mounted',
+      table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    overlayClass: {
+      control: 'text',
+      description: 'Additional class applied to the dialog-owned overlay',
+      table: { category: 'Appearance' },
+    },
     // Accessibility
     id: {
       control: 'text',

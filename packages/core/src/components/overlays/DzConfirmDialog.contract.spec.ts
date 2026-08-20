@@ -8,7 +8,7 @@ import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import DzConfirmDialog from './DzConfirmDialog.vue'
 
-/** Stub portal to render inline (Reka UI portals don't work in jsdom) */
+/** Contract tests keep the transport boundary synchronous; a real portal case is covered below. */
 const InlinePortal = { template: '<div data-testid="portal"><slot /></div>' }
 
 function mountConfirmDialog(
@@ -19,6 +19,7 @@ function mountConfirmDialog(
     props: {
       open: true,
       title: 'Confirm action',
+      portalDisabled: true,
       ...props,
     },
     slots: slots as Record<string, () => string>,
@@ -44,7 +45,7 @@ describe('dzConfirmDialog -- Contract Spec v1', () => {
 
   it('accepts open prop (default false)', () => {
     const wrapper = mount(DzConfirmDialog, {
-      props: { title: 'X' },
+      props: { title: 'X', portalDisabled: true },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
@@ -143,7 +144,7 @@ describe('dzConfirmDialog -- Contract Spec v1', () => {
   it('emits cancel on escape key', async () => {
     const onCancel = vi.fn()
     const wrapper = mount(DzConfirmDialog, {
-      props: { open: true, title: 'X', onCancel },
+      props: { open: true, title: 'X', onCancel, portalDisabled: true },
       global: { stubs: { DialogPortal: InlinePortal } },
       attachTo: document.body,
     })
@@ -186,6 +187,26 @@ describe('dzConfirmDialog -- Contract Spec v1', () => {
   it('id prop forwards to underlying dialog content', () => {
     const wrapper = mountConfirmDialog({ id: 'my-confirm' })
     expect(document.querySelector('#my-confirm')).toBeTruthy()
+    wrapper.unmount()
+  })
+
+  it('supports inline portal rendering without replacing the Reka primitive', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const wrapper = mount(DzConfirmDialog, {
+      props: {
+        open: true,
+        title: 'Inline contract',
+        portalDisabled: true,
+      },
+      attachTo: host,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 0))
+
+    const dialog = host.querySelector('[role="dialog"]')
+    expect(dialog).toBeTruthy()
+    expect(host.querySelectorAll('[data-dz-dialog-overlay]')).toHaveLength(1)
     wrapper.unmount()
   })
 })

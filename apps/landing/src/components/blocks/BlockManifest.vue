@@ -40,8 +40,13 @@ const props = withDefaults(
      * not duplicated; the import/install commands still render.
      */
     showComponents?: boolean
+    /**
+     * Render the standalone source-copy action. A host with an adjacent Code
+     * tab can hide it so the same source action is not presented twice.
+     */
+    showSourceCopy?: boolean
   }>(),
-  { showComponents: true },
+  { showComponents: true, showSourceCopy: true },
 )
 
 const emit = defineEmits<{
@@ -124,7 +129,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
     </div>
 
     <!-- Copy the block's SFC source verbatim (the ?raw string on the BlockDef). -->
-    <div class="bm-group">
+    <div v-if="showSourceCopy" class="bm-group">
       <DzText size="xs" tone="muted" as="div" class="bm-label">
         Or copy the source
       </DzText>

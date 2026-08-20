@@ -1,0 +1,37 @@
+{
+  "name": "@dzup-ui/testing",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "DOM test-environment support for dzup-ui consumers",
+  "license": "MIT",
+  "sideEffects": [
+    "./dist/vitest.js"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./vitest": {
+      "types": "./dist/vitest.d.ts",
+      "import": "./dist/vitest.js"
+    }
+  },
+  "files": [
+    "LICENSE",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run src/index.spec.ts",
+    "build": "tsc --project tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

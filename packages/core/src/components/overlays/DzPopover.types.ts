@@ -7,6 +7,8 @@
  * @module @dzup-ui/core/components/overlays/DzPopover
  */
 
+import type { BasePortalProps } from '@dzup-ui/contracts'
+
 // ---------------------------------------------------------------------------
 // Positioning
 // ---------------------------------------------------------------------------
@@ -35,7 +37,7 @@ export interface DzPopoverProps {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzPopoverContent component */
-export interface DzPopoverContentProps {
+export interface DzPopoverContentProps extends BasePortalProps {
   /** Side to place the popover */
   side?: PopoverSide
   /** Offset from the trigger in px */

@@ -32,6 +32,9 @@ const props = withDefaults(defineProps<DzPopoverContentProps>(), {
   align: 'center',
   arrow: true,
   size: 'md',
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzPopoverContentEmits>()
@@ -65,7 +68,11 @@ function handleCloseAutoFocus(event: Event): void {
 </script>
 
 <template>
-  <PopoverPortal>
+  <PopoverPortal
+    :to="portalTo"
+    :disabled="portalDisabled"
+    :defer="portalDefer"
+  >
     <PopoverContent
       :side="props.side"
       :side-offset="props.sideOffset"

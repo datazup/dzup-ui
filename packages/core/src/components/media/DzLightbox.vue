@@ -35,6 +35,9 @@ const open = defineModel<boolean>({ default: false })
 
 const props = withDefaults(defineProps<DzLightboxProps>(), {
   startIndex: 0,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzLightboxEmits>()
@@ -107,7 +110,11 @@ function handleKeydown(event: KeyboardEvent): void {
   <slot />
 
   <DialogRoot v-model:open="open">
-    <DialogPortal>
+    <DialogPortal
+      :to="portalTo"
+      :disabled="portalDisabled"
+      :defer="portalDefer"
+    >
       <DialogOverlay :class="styles.overlay" />
 
       <DialogContent

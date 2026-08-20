@@ -37,6 +37,20 @@ import { vReveal } from '../motion/index.ts'
 
 const PANEL_PREFIX = 'blocks-panel'
 
+/**
+ * Upper bound on the re-anchor loop in `scrollToBlock` (~2s at 60fps). Purely a
+ * safety valve so a preview that never settles cannot spin a rAF loop forever.
+ */
+const MAX_SCROLL_SETTLE_FRAMES = 120
+
+/**
+ * Height of the sticky stack above the panels — TopNav (64px) + the category
+ * tab bar (~52px). Mirrors the `scroll-margin-top` on `.blocks-panel` /
+ * `.block-preview`, which only applies to native `#id` jumps; the scripted
+ * jump has to subtract it itself.
+ */
+const STICKY_HEADER_OFFSET = 124
+
 interface CategorySection extends CategoryMeta {
   blocks: ReturnType<typeof blocksByCategory>
 }
@@ -250,12 +264,87 @@ async function scrollToBlock(id: string) {
     return
   forcedBlockIds.add(id)
   await nextTick()
-  requestAnimationFrame(() => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
-      block: 'start',
-    })
-  })
+
+  // One scroll is not enough. The previews ABOVE the target are still lazy
+  // skeletons; as they scroll into range they mount and grow from skeleton
+  // height to full block height, pushing the target down — which read as the
+  // page "bouncing back to the top" after the jump. Re-assert the position
+  // until the target's document offset stops moving.
+  //
+  // The correction pass writes `scrollTo` with an explicit offset rather than
+  // `scrollIntoView({ behavior: 'smooth' })`: a smooth scroll is still
+  // animating on the next frame, so comparing offsets mid-flight reads as
+  // "settled" and we stop short of the target. One smooth glide to the first
+  // estimate, then instant nudges as the layout above resolves.
+  const smooth = !prefersReducedMotion()
+  let lastTop = Number.NaN
+  let stableFrames = 0
+  let attempts = 0
+  let firstPass = true
+
+  // The final blocks in a category cannot reach the top of the viewport; without
+  // clamping, `arrived` would never be true for them and the loop would spin to
+  // its frame cap on every jump.
+  const maxScroll = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
+
+  // Hand control back the moment the reader scrolls themselves, so the
+  // re-anchoring never fights a deliberate wheel/touch gesture.
+  let cancelled = false
+  const cancel = () => {
+    cancelled = true
+  }
+  window.addEventListener('wheel', cancel, { once: true, passive: true })
+  window.addEventListener('touchmove', cancel, { once: true, passive: true })
+  window.addEventListener('keydown', cancel, { once: true })
+
+  const done = () => {
+    window.removeEventListener('wheel', cancel)
+    window.removeEventListener('touchmove', cancel)
+    window.removeEventListener('keydown', cancel)
+  }
+
+  const settle = () => {
+    if (cancelled) {
+      done()
+      return
+    }
+    const el = document.getElementById(id)
+    if (!el) {
+      // Target not mounted yet — keep waiting for the forced mount to paint.
+      if (attempts++ < MAX_SCROLL_SETTLE_FRAMES)
+        requestAnimationFrame(settle)
+      else done()
+      return
+    }
+    const top = el.getBoundingClientRect().top + window.scrollY
+    // Clear the sticky TopNav + category tab bar, matching the
+    // `scroll-margin-top` the CSS applies for native `#id` jumps.
+    const wanted = Math.max(0, Math.min(top - STICKY_HEADER_OFFSET, maxScroll()))
+
+    // Settled means BOTH the layout above has stopped reflowing AND we have
+    // actually arrived. Checking the offset alone ends the loop while the
+    // opening smooth glide is still in flight, which left the block ~390px
+    // below where it belongs.
+    const arrived = Math.abs(window.scrollY - wanted) <= 1
+    if (top === lastTop && arrived)
+      stableFrames += 1
+    else stableFrames = 0
+    lastTop = top
+
+    if (stableFrames < 2 && attempts++ < MAX_SCROLL_SETTLE_FRAMES) {
+      // Only re-issue a scroll when we are not already there, so the smooth
+      // glide is never interrupted by a same-target write each frame.
+      if (!arrived) {
+        window.scrollTo({ top: wanted, behavior: firstPass && smooth ? 'smooth' : 'auto' })
+        firstPass = false
+      }
+      requestAnimationFrame(settle)
+    }
+    else {
+      done()
+    }
+  }
+  requestAnimationFrame(settle)
 }
 
 /**
@@ -264,11 +353,23 @@ async function scrollToBlock(id: string) {
  */
 const pendingBlockId = ref<string | null>(null)
 
-/** When the palette navigates to a block, open its deck then scroll to it. */
+/**
+ * When the palette or a BlockCard navigates to a block, open its deck then
+ * scroll to it.
+ *
+ * A card's `#<id>` anchor cannot do this by itself: previews are lazily mounted
+ * (LazyBlockPreview), so a below-the-fold target is still a skeleton with no
+ * `#<id>` anchor and the browser's native jump silently lands nowhere. The card
+ * therefore calls `preventDefault()` and routes here, which force-mounts the
+ * target first — so we also own writing the hash the anchor would have set.
+ */
 function openBlock(blockId: string) {
   const block = BLOCKS.find(b => b.id === blockId)
   if (!block)
     return
+  // Keep the URL shareable/back-navigable exactly as the plain anchor did.
+  if (typeof window !== 'undefined' && window.location.hash.slice(1) !== blockId)
+    window.history.pushState(window.history.state, '', `#${blockId}`)
   if (block.category === active.value) {
     // Deck already showing this group — just scroll the preview into view.
     scrollToBlock(blockId)
@@ -299,7 +400,10 @@ let isMounted = false
 
 watch(active, async (id) => {
   // Keep the URL shareable without triggering the router's hash scroll.
-  if (typeof window !== 'undefined') {
+  // Skip while a block jump is in flight: `openBlock` already wrote the more
+  // specific `#<block-id>`, and overwriting it with the category would drop the
+  // deep link the user just followed.
+  if (typeof window !== 'undefined' && !pendingBlockId.value) {
     window.history.replaceState(window.history.state, '', `#${id}`)
   }
   if (!isMounted)
@@ -332,13 +436,19 @@ onMounted(async () => {
     <Section heading-id="blocks-title">
       <div class="blocks-hero">
         <span class="lp-eyebrow">Ecosystem</span>
-        <DzHeading id="blocks-title" :level="1" size="3xl" weight="semibold" class="blocks-hero-title lp-balance">
+        <DzHeading
+          id="blocks-title"
+          :level="1"
+          size="3xl"
+          weight="semibold"
+          class="blocks-hero-title lp-balance"
+        >
           Blocks
         </DzHeading>
         <DzText size="lg" tone="muted" class="blocks-hero-lede lp-balance">
-          Pre-composed UI sections — heroes, pricing, navbars, stat rows, auth cards — built from the same
-          @dzup-ui/core components and design tokens. Copy the markup, paste it in, and it drops in already
-          themed, accessible, and light/dark-ready.
+          Pre-composed UI sections — heroes, pricing, navbars, stat rows, auth cards — built from
+          the same @dzup-ui/core components and design tokens. Copy the markup, paste it in, and it
+          drops in already themed, accessible, and light/dark-ready.
         </DzText>
 
         <!-- ⌘K navigator: jump to any block, category or component. -->
@@ -372,17 +482,17 @@ onMounted(async () => {
                 v-reveal="i * 45"
                 :style="itemAccentStyle(block)"
               >
-                <BlockCard :block="block" @select-component="showBlocksUsing" />
+                <BlockCard
+                  :block="block"
+                  @select-component="showBlocksUsing"
+                  @open-block="openBlock"
+                />
               </li>
             </ul>
 
             <!-- Reuse the same lazy preview mounting as the deck, flat. -->
             <div class="block-previews">
-              <div
-                v-for="block in results"
-                :key="block.id"
-                :style="itemAccentStyle(block)"
-              >
+              <div v-for="block in results" :key="block.id" :style="itemAccentStyle(block)">
                 <LazyBlockPreview
                   v-reveal
                   :block="block"
@@ -427,12 +537,12 @@ onMounted(async () => {
               >
                 <!-- Index: a card per block, scrolling to its preview within the panel. -->
                 <ul class="block-grid">
-                  <li
-                    v-for="(block, i) in activeSection.blocks"
-                    :key="block.id"
-                    v-reveal="i * 45"
-                  >
-                    <BlockCard :block="block" @select-component="showBlocksUsing" />
+                  <li v-for="(block, i) in activeSection.blocks" :key="block.id" v-reveal="i * 45">
+                    <BlockCard
+                      :block="block"
+                      @select-component="showBlocksUsing"
+                      @open-block="openBlock"
+                    />
                   </li>
                 </ul>
 
@@ -533,7 +643,8 @@ onMounted(async () => {
    alone reads cleanly. Degrades to an instant swap under reduced motion. */
 .mode-fade-enter-active,
 .mode-fade-leave-active {
-  transition: opacity var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  transition: opacity var(--dz-duration-normal, 240ms)
+    var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .mode-fade-enter-from,
@@ -594,8 +705,19 @@ onMounted(async () => {
   margin: 0 0 clamp(40px, 6vw, 72px);
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr) — NOT `1fr`. A plain `1fr` is `minmax(auto, 1fr)`, so a card
+     whose content has a wide min-content floor (the install command renders
+     `white-space: pre`, ~596px) inflates its track and pushes the trailing
+     column outside the 1120px container. Flooring at 0 lets the track shrink
+     and hands the overflow to the code block's own horizontal scroll. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+/* Grid items are themselves flex/grid parents; without an explicit 0 floor the
+   same min-content inflation re-enters one level down. */
+.block-grid > li {
+  min-width: 0;
 }
 
 .block-previews {

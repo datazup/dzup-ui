@@ -63,6 +63,9 @@ const props = withDefaults(defineProps<DzCommandPaletteProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzCommandPaletteEmits>()
@@ -187,7 +190,11 @@ watch(open, (isOpen) => {
 
 <template>
   <DialogRoot v-model:open="open">
-    <DialogPortal>
+    <DialogPortal
+      :to="portalTo"
+      :disabled="portalDisabled"
+      :defer="portalDefer"
+    >
       <DialogOverlay :class="styles.overlay()" />
       <DialogContent
         :id="id"

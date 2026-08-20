@@ -31,7 +31,7 @@ export const multiSelectTokens = {
   /** Selected tag styling */
   tag: {
     background: 'var(--dz-primary-muted)',
-    foreground: 'var(--dz-primary)',
+    foreground: 'var(--dz-primary-muted-foreground)',
     radius: 'var(--dz-radius-sm)',
     paddingX: 'var(--dz-spacing-1_5)',
     gap: 'var(--dz-spacing-1)',
@@ -52,7 +52,7 @@ export const multiSelectTokens = {
     radius: 'var(--dz-radius-sm)',
     highlightBackground: 'var(--dz-muted)',
     checkedBackground: 'var(--dz-primary-muted)',
-    checkedForeground: 'var(--dz-primary)',
+    checkedForeground: 'var(--dz-primary-muted-foreground)',
   },
   /** Icon colors */
   iconColor: 'var(--dz-muted-foreground)',

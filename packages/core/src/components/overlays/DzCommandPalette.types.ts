@@ -6,7 +6,7 @@
  * @module @dzup-ui/core/components/overlays/DzCommandPalette
  */
 
-import type { BaseAccessibilityProps } from '@dzup-ui/contracts'
+import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ export interface CommandGroup {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzCommandPalette root component */
-export interface DzCommandPaletteProps extends BaseAccessibilityProps {
+export interface DzCommandPaletteProps extends BaseAccessibilityProps, BasePortalProps {
   /** Placeholder text for the search input */
   placeholder?: string
   /** Command items to display */

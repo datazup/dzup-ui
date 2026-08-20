@@ -43,6 +43,35 @@ describe('dzTransfer — Unit Tests', () => {
     expect(wrapper.text()).toContain('Item B')
   })
 
+  it('owns every option with two labelled multiselect listboxes', () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems, modelValue: ['a'] },
+    })
+    const listboxes = wrapper.findAll('[role="listbox"]')
+
+    expect(listboxes).toHaveLength(2)
+    expect(listboxes.map(listbox => listbox.attributes('aria-label'))).toEqual([
+      'Source items',
+      'Target items',
+    ])
+    for (const listbox of listboxes) {
+      expect(listbox.attributes('aria-multiselectable')).toBe('true')
+      for (const option of listbox.findAll('[role="option"]'))
+        expect(option.element.parentElement).toBe(listbox.element)
+    }
+  })
+
+  it('places required semantics on the target listbox, not the group wrapper', () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems, required: true },
+    })
+    const [sourceList, targetList] = wrapper.findAll('[role="listbox"]')
+
+    expect(wrapper.get('[role="group"]').attributes('aria-required')).toBeUndefined()
+    expect(sourceList!.attributes('aria-required')).toBeUndefined()
+    expect(targetList!.attributes('aria-required')).toBe('true')
+  })
+
   it('renders target items based on modelValue', () => {
     const wrapper = mount(DzTransfer, {
       props: { source: sourceItems, modelValue: ['a', 'b'] },
@@ -121,12 +150,39 @@ describe('dzTransfer — Unit Tests', () => {
       props: { source: sourceItems },
     })
     const options = wrapper.findAll('[role="option"]')
-    if (options.length > 0) {
-      await options[0]!.trigger('click')
-      // After click, checkbox should be checked
-      const checkbox = options[0]!.find('input[type="checkbox"]')
-      expect(checkbox.element as HTMLInputElement).toBeTruthy()
-    }
+    expect(options.length).toBeGreaterThan(0)
+    expect(options[0]!.find('input, button, select, textarea, a[href]').exists()).toBe(false)
+    expect(options[0]!.find('[data-transfer-check]').exists()).toBe(true)
+
+    await options[0]!.trigger('click')
+    expect(options[0]!.attributes('aria-selected')).toBe('true')
+    expect(options[0]!.find('[data-transfer-check]').attributes('data-checked')).toBe('true')
+  })
+
+  it('toggles options with Enter and Space', async () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems },
+    })
+    const [first, second] = wrapper.findAll('[role="option"]')
+
+    await first!.trigger('keydown', { key: 'Enter' })
+    await second!.trigger('keydown', { key: ' ' })
+
+    expect(first!.attributes('aria-selected')).toBe('true')
+    expect(second!.attributes('aria-selected')).toBe('true')
+  })
+
+  it('prevents pointer and keyboard selection while disabled', async () => {
+    const wrapper = mount(DzTransfer, {
+      props: { source: sourceItems, disabled: true },
+    })
+    const option = wrapper.find('[role="option"]')
+
+    expect(option.attributes('aria-disabled')).toBe('true')
+    expect(option.attributes('tabindex')).toBe('-1')
+    await option.trigger('click')
+    await option.trigger('keydown', { key: 'Enter' })
+    expect(option.attributes('aria-selected')).toBe('false')
   })
 
   it('marks both lists with data-dz-transfer-list (invalid border hook)', () => {

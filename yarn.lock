@@ -1295,6 +1295,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@dzup-ui/sandbox@workspace:apps/sandbox":
+  version: 0.0.0-use.local
+  resolution: "@dzup-ui/sandbox@workspace:apps/sandbox"
+  dependencies:
+    "@dzup-ui/core": "workspace:*"
+    "@dzup-ui/tokens": "workspace:*"
+    "@tailwindcss/vite": "npm:^4.0.0"
+    "@vitejs/plugin-vue": "npm:^5.2.0"
+    lucide-vue-next: "npm:^0.475.0"
+    tailwindcss: "npm:^4.0.0"
+    typescript: "npm:^5.7.0"
+    vite: "npm:^6.1.0"
+    vue: "npm:^3.5.13"
+    vue-router: "npm:^4.5.0"
+  languageName: unknown
+  linkType: soft
+
 "@dzup-ui/storybook@workspace:apps/storybook":
   version: 0.0.0-use.local
   resolution: "@dzup-ui/storybook@workspace:apps/storybook"
@@ -1304,7 +1321,6 @@ __metadata:
     "@stackblitz/sdk": "npm:^1.11.1"
     "@storybook/addon-a11y": "npm:^10.5.1"
     "@storybook/addon-docs": "npm:^10.5.1"
-    "@storybook/addon-themes": "npm:^10.5.1"
     "@storybook/addon-vitest": "npm:^10.5.1"
     "@storybook/vue3-vite": "npm:^10.5.1"
     "@tailwindcss/vite": "npm:^4.0.0"
@@ -1315,7 +1331,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^3.2.6"
     "@vue/repl": "npm:^4.6.1"
     chromatic: "npm:^11.0.0"
-    playwright: "npm:^1.49.0"
+    playwright: "npm:1.61.1"
     react: "npm:^19.2.4"
     react-dom: "npm:^19.2.4"
     remark-gfm: "npm:^4.0.1"
@@ -1324,6 +1340,15 @@ __metadata:
     vite: "npm:^6.1.0"
     vitest: "npm:^3.2.6"
     vue: "npm:^3.5.13"
+  languageName: unknown
+  linkType: soft
+
+"@dzup-ui/testing@workspace:packages/testing":
+  version: 0.0.0-use.local
+  resolution: "@dzup-ui/testing@workspace:packages/testing"
+  dependencies:
+    typescript: "npm:^5.8.3"
+    vitest: "npm:^3.2.4"
   languageName: unknown
   linkType: soft
 
@@ -4526,17 +4551,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/59da54baadb838e4943fa77f8ff7f93d5e503e2eb4610074e2b1a635ab1237a294a99480a4017811c47ed30de939e971a2964bd59cc1b887d058be54f6d771d7
-  languageName: node
-  linkType: hard
-
-"@storybook/addon-themes@npm:^10.5.1":
-  version: 10.5.1
-  resolution: "@storybook/addon-themes@npm:10.5.1"
-  dependencies:
-    ts-dedent: "npm:^2.0.0"
-  peerDependencies:
-    storybook: ^10.5.1
-  checksum: 10c0/86dabee3e42253de18471b19abe08a680e1bc9869379f0fe4af47ab627e0405f2921ab63e46f90f8a70874c5f80ac1f0a4ed43df8194fc8d7841db67fdcefdd6
   languageName: node
   linkType: hard
 
@@ -8251,7 +8265,7 @@ __metadata:
     eslint: "npm:^9.39.1"
     eslint-plugin-vue: "npm:^10.0.0"
     jsdom: "npm:^29.0.2"
-    playwright: "npm:^1.49.0"
+    playwright: "npm:1.61.1"
     prettier: "npm:^3.5.0"
     tsx: "npm:^4.19.0"
     typescript: "npm:^5.8.3"
@@ -13882,15 +13896,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.60.0":
-  version: 1.60.0
-  resolution: "playwright-core@npm:1.60.0"
-  bin:
-    playwright-core: cli.js
-  checksum: 10c0/99ccd43923b6e9355e0723b7fe221e6326efd4687f8dafff951313662aea11db51f542a9c2122c704c445fb9baae1c9ec9fa6f895126bbddd9fe92313f6942c9
-  languageName: node
-  linkType: hard
-
 "playwright-core@npm:1.61.1":
   version: 1.61.1
   resolution: "playwright-core@npm:1.61.1"
@@ -13912,21 +13917,6 @@ __metadata:
   bin:
     playwright: cli.js
   checksum: 10c0/cea1bc4d2a64ec3ef683891606774029da7b8a8036ed98332565cec2f8e89549ca1fab9a89fbfba4e08e27e0d7e7d148031e965af66d5ff97bb3c34058cfcad0
-  languageName: node
-  linkType: hard
-
-"playwright@npm:^1.49.0":
-  version: 1.60.0
-  resolution: "playwright@npm:1.60.0"
-  dependencies:
-    fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.60.0"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    playwright: cli.js
-  checksum: 10c0/714ad76d85b4865d7e43c0012f9039800c1485373388973ed39d79339cee5ad467052d1e2f1eaeca107a1cb6e65342186a8578a4c3504853d84c3a691250d5db
   languageName: node
   linkType: hard
 

@@ -156,12 +156,13 @@ describe('/themes — working clipboard', () => {
     await flushPromises()
 
     expect(writeText).toHaveBeenCalledOnce()
-    // A pristine page has no palette overrides yet, so the export is the header
-    // comment plus an empty `:root {}` — assert the SHAPE of the export, not a
-    // `--dz-*` line that only appears once the user has changed something.
+    // A pristine page has no palette overrides yet, so assert the SHAPE of the
+    // export — its header banner and both scope blocks — rather than a `--dz-*`
+    // line that only appears once the user has changed something.
     const written = writeText.mock.calls[0]![0] as string
-    expect(written).toContain('dzup-ui theme')
+    expect(written).toContain('ThemeRecipeV1')
     expect(written).toContain(':root {')
+    expect(written).toContain('[data-theme="dark"] {')
     expect(button.textContent).toContain('Copied')
   })
 

@@ -30,6 +30,9 @@ const props = withDefaults(defineProps<DzTooltipContentProps>(), {
   sideOffset: 4,
   align: 'center',
   arrow: true,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 defineSlots<DzTooltipContentSlots>()
@@ -42,7 +45,11 @@ const contentClasses = computed(() =>
 </script>
 
 <template>
-  <TooltipPortal>
+  <TooltipPortal
+    :to="portalTo"
+    :disabled="portalDisabled"
+    :defer="portalDefer"
+  >
     <TooltipContent
       :side="props.side"
       :side-offset="props.sideOffset"

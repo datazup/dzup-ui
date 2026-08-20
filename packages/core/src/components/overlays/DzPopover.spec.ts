@@ -211,4 +211,42 @@ describe('dzPopover -- Unit Tests', () => {
     expect(content.exists()).toBeTruthy()
     wrapper.unmount()
   })
+
+  it('renders real Reka content inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzPopover, {
+      props: { open: true },
+      slots: {
+        default: () => h('div', { 'data-testid': 'popover-host' }, [
+          h(DzPopoverTrigger, {}, () => h('button', 'Toggle inline popover')),
+          h(DzPopoverContent, { portalDisabled: true }, () => 'Inline popover body'),
+        ]),
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[data-testid="popover-host"] [role="dialog"]').text()).toContain('Inline popover body')
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzPopover, {
+      props: { open: true },
+      slots: {
+        default: () => h('div', { 'data-testid': 'popover-host' }, [
+          h(DzPopoverTrigger, {}, () => h('button', 'Toggle portaled popover')),
+          h(DzPopoverContent, {}, () => 'Portaled popover body'),
+        ]),
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    const host = document.querySelector('[data-testid="popover-host"]')
+    expect(host?.querySelector('[role="dialog"]')).toBeNull()
+    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain('Portaled popover body')
+    wrapper.unmount()
+  })
 })

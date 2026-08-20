@@ -35,7 +35,28 @@ const props = defineProps<{
 const emit = defineEmits<{
   /** Request the index filter to all blocks using this `Dz*` component. */
   selectComponent: [name: string]
+  /**
+   * Ask the page to open this block's live preview (force-mount + scroll).
+   * The bare `#<id>` href cannot do this on its own: previews below the fold
+   * are lazy skeletons with no `#<id>` anchor yet, so the browser's native
+   * jump silently lands nowhere. The page owns `forcedBlockIds`, so it must
+   * mount the target before scrolling to it.
+   */
+  openBlock: [id: string]
 }>()
+
+/**
+ * Intercept the in-page jump so the target preview is mounted first. The `href`
+ * stays on the anchor — middle-click / "open in new tab" / no-JS all keep the
+ * plain hash behaviour, and the page still updates the URL to `#<id>`.
+ */
+function onJumpToPreview(event: MouseEvent): void {
+  // Let the browser handle modified clicks (new tab/window) natively.
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
+    return
+  event.preventDefault()
+  emit('openBlock', props.block.id)
+}
 
 /** How many catalog blocks use `name` (memoized reverse index, Task E1). */
 function usageCount(name: string): number {
@@ -83,7 +104,10 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
     <!-- One-command install + copy-code. Lifted above the whole-card `.block-card-cover`
          link (like the chips) so the tabs/buttons stay independently clickable. -->
     <div v-if="REGISTRY_ENABLED" class="block-card-cli">
-      <PmCommandTabs :commands="registryAddCmds" :aria-label="`Add ${block.title} from the dzup-ui registry`" />
+      <PmCommandTabs
+        :commands="registryAddCmds"
+        :aria-label="`Add ${block.title} from the dzup-ui registry`"
+      />
       <DzCopyButton
         :value="getBlockSource(block.path)"
         label="Copy code"
@@ -96,9 +120,18 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
       />
     </div>
 
+    <!-- Two destinations, deliberately distinct: the whole-card target scrolls to
+         the live preview further down THIS page, while the permalink leaves for
+         the block's own route. "View block" / "Open page" gave no hint of that
+         difference — the labels below name the destination instead. -->
     <div class="block-card-actions">
-      <a class="block-card-link" :href="`#${block.id}`" :aria-label="`View block: ${block.title}`">
-        <span>View block</span>
+      <a
+        class="block-card-link"
+        :href="`#${block.id}`"
+        :aria-label="`Jump to the ${block.title} preview on this page`"
+        @click="onJumpToPreview"
+      >
+        <span>Jump to preview</span>
         <ArrowDown :size="14" aria-hidden="true" />
         <span class="block-card-cover" aria-hidden="true" />
       </a>
@@ -107,7 +140,7 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
         :to="`/blocks/${block.id}`"
         :aria-label="`Open the ${block.title} block page`"
       >
-        <span>Open page</span>
+        <span>Open block page</span>
         <ArrowUpRight :size="13" aria-hidden="true" />
       </RouterLink>
     </div>
@@ -120,6 +153,11 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   display: flex;
   flex-direction: column;
   padding: 20px;
+  /* The install command is `white-space: pre` and cannot wrap, so it would
+     otherwise set a ~596px min-content floor on the card and blow out the
+     grid track. Flooring the card (and the CLI row below) at 0 keeps the
+     overflow inside the code block, which already scrolls horizontally. */
+  min-width: 0;
 }
 
 .block-card-body {
@@ -211,6 +249,9 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   flex-direction: column;
   gap: 8px;
   align-items: flex-start;
+  /* See `.block-card` — the non-wrapping command must not widen the track. */
+  min-width: 0;
+  width: 100%;
 }
 
 /* Bottom action row: the primary whole-card anchor + the secondary permalink. */
@@ -240,21 +281,36 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  /* Reads as a real secondary action: a bordered pill with a comfortable hit
+     area, rather than muted micro-text that looked like a caption next to the
+     primary link. Still quieter than `.block-card-link`. */
+  padding: 4px 10px;
+  border: 1px solid var(--lp-hairline);
+  border-radius: var(--dz-radius-full, 9999px);
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   color: var(--dz-muted-foreground, #585b60);
   text-decoration: none;
   white-space: nowrap;
+  transition:
+    color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out),
+    border-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
 .block-card-permalink:hover {
+  border-color: var(--lp-cat-500, var(--dz-primary, #0766ee));
   color: color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
 }
 
 .block-card-permalink:focus-visible {
   outline: 2px solid var(--lp-cat-500, var(--dz-ring, #0766ee));
   outline-offset: 2px;
-  border-radius: var(--dz-radius-sm, 0.375rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block-card-permalink {
+    transition: none;
+  }
 }
 
 /* Whole-card click target without nesting interactive content. */

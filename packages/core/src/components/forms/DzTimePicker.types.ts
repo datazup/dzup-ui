@@ -14,6 +14,7 @@
 
 import type {
   BaseAccessibilityProps,
+  BasePortalProps,
   BaseValidationProps,
   CanonicalSize,
   InputVariant,
@@ -32,7 +33,7 @@ export type TimePickerSelection = 'roll' | 'select'
 // ---------------------------------------------------------------------------
 
 /** Props for the DzTimePicker component */
-export interface DzTimePickerProps extends BaseAccessibilityProps, BaseValidationProps {
+export interface DzTimePickerProps extends BaseAccessibilityProps, BasePortalProps, BaseValidationProps {
   /** Placeholder text shown on the trigger when no time is selected */
   placeholder?: string
   /** Minimum selectable time (`HH:mm` or `HH:mm:ss`) */

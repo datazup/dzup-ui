@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 /**
  * DzCombobox — Unit / behavior tests.
  */
@@ -20,6 +20,8 @@ const richItems = [
 ]
 
 const originalScrollIntoView = HTMLElement.prototype.scrollIntoView
+
+enableAutoUnmount(afterEach)
 
 describe('dzCombobox — Unit Tests', () => {
   beforeAll(() => {
@@ -273,6 +275,32 @@ describe('dzCombobox — Unit Tests', () => {
     const errorId = errorEl.attributes('id')!
     expect(errorId).toBeTruthy()
     expect(wrapper.find(`[aria-describedby~="${errorId}"]`).exists()).toBe(true)
+  })
+
+  it('renders real Reka options inline when portalDisabled is true', async () => {
+    const wrapper = mount(DzCombobox, {
+      props: { items, defaultOpen: true, portalDisabled: true },
+      attachTo: document.body,
+    })
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(true)
+    expect(wrapper.findAll('[role="option"]')).toHaveLength(items.length)
+    wrapper.unmount()
+  })
+
+  it('keeps the real Reka default portal behavior', async () => {
+    const wrapper = mount(DzCombobox, {
+      props: { items, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[role="listbox"]').exists()).toBe(false)
+    expect(document.body.querySelectorAll('[role="option"]')).toHaveLength(items.length)
+    wrapper.unmount()
   })
 })
 

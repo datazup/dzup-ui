@@ -1,4 +1,4 @@
-import { PALETTE_CONFIGS } from '@dzup-ui/tokens'
+import { decodeThemeRecipe, PALETTE_CONFIGS } from '@dzup-ui/tokens'
 import { afterEach, describe, expect, it } from 'vitest'
 import { useThemeDesigner } from './useThemeDesigner.ts'
 
@@ -18,12 +18,14 @@ describe('useThemeDesigner', () => {
 
   afterEach(() => d.reset())
 
-  it('emits no overrides at the shipped defaults', () => {
-    expect(d.vars.value).toEqual({})
+  it('expands a complete recipe at the shipped defaults', () => {
+    expect(Object.keys(d.vars.value).length).toBeGreaterThan(100)
     expect(d.hasOverrides.value).toBe(false)
     expect(d.paletteChanged('primary')).toBe(false)
-    // The CSS still serialises, just with no properties.
+    expect(d.vars.value['--dz-colors-primary-500']).toContain('260.0')
     expect(d.cssText.value).toContain(':root {')
+    expect(d.cssText.value).toContain('[data-theme="dark"] {')
+    expect(d.cssText.value.match(/--dz-shadow-md:/g)).toHaveLength(2)
   })
 
   it('regenerates the primitive ramp when a palette hue changes', () => {
@@ -40,21 +42,21 @@ describe('useThemeDesigner', () => {
     expect(d.cssText.value).not.toContain('--dz-primary:')
   })
 
-  it('does not emit unchanged palettes', () => {
+  it('keeps unchanged palettes at their canonical values', () => {
     d.palettes.primary.hue = 20
-    // secondary/success/etc. left at defaults → no keys for them.
-    expect(d.vars.value['--dz-colors-secondary-500']).toBeUndefined()
-    expect(d.vars.value['--dz-colors-success-500']).toBeUndefined()
+    expect(d.vars.value['--dz-colors-secondary-500']).toContain('290.0')
+    expect(d.vars.value['--dz-colors-success-500']).toContain('145.0')
   })
 
-  it('emits radius, density, shadow and font overrides only when moved', () => {
-    expect(d.vars.value['--dz-radius-lg']).toBeUndefined()
+  it('expands radius, density, shadow and font changes', () => {
+    const defaultRadius = d.vars.value['--dz-radius-lg']
+    const defaultSpacing = d.vars.value['--dz-spacing-4']
     d.radiusScale.value = 1.5
     d.density.value = 'compact'
     d.shadowIntensity.value = 2
     d.fontKey.value = 'serif'
-    expect(d.vars.value['--dz-radius-lg']).toBeDefined()
-    expect(d.vars.value['--dz-spacing-4']).toBeDefined()
+    expect(d.vars.value['--dz-radius-lg']).not.toBe(defaultRadius)
+    expect(d.vars.value['--dz-spacing-4']).not.toBe(defaultSpacing)
     expect(d.vars.value['--dz-shadow-md']).toContain('oklch(')
     expect(d.vars.value['--dz-font-sans']).toContain('serif')
   })
@@ -73,9 +75,11 @@ describe('useThemeDesigner', () => {
     d.palettes.primary.hue = 20
     d.radiusScale.value = 1.4
     const parsed = JSON.parse(d.jsonText.value)
+    expect(parsed.version).toBe(1)
+    expect(parsed.preset).toBe('custom')
     expect(parsed.palettes.primary.hue).toBe(20)
     expect(parsed.radius).toBe(1.4)
-    expect(parsed.cssVars['--dz-colors-primary-500']).toContain('oklch(')
+    expect(parsed.cssVars).toBeUndefined()
   })
 
   it('reproduces the exact theme from a shared URL token (round-trip)', () => {
@@ -106,9 +110,10 @@ describe('useThemeDesigner', () => {
     expect(d.cssText.value).toBe(cssBefore)
   })
 
-  it('serialises to an empty token at the shipped defaults', () => {
-    expect(d.serialize()).toBe('')
-    // A default palette matches its shipped config, so nothing is emitted.
+  it('serialises a versioned default recipe', () => {
+    const decoded = decodeThemeRecipe(d.serialize())
+    expect(decoded.version).toBe(1)
+    expect(decoded.preset).toBe('dzup')
     expect(d.palettes.primary.hue).toBe(PALETTE_CONFIGS.primary.hue)
   })
 

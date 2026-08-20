@@ -70,16 +70,20 @@ export const transferVariants = tv({
       'cursor-pointer',
       'transition-colors',
       'hover:bg-[var(--dz-muted)]',
+      'outline-none dz-focus-ring-control',
       'dz-disabled-control',
+      'motion-reduce:transition-none',
     ].join(' '),
     itemSelected: [
       'bg-[var(--dz-muted)]',
     ].join(' '),
     itemCheckbox: [
-      'h-4 w-4',
+      'h-4 w-4 shrink-0 inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',
       'border border-[var(--dz-border)]',
-      'accent-[var(--dz-primary)]',
+      'text-[var(--dz-primary-foreground)]',
+      'data-[checked=true]:border-[var(--dz-primary)]',
+      'data-[checked=true]:bg-[var(--dz-primary)]',
     ].join(' '),
     actions: [
       'flex flex-col items-center justify-center',

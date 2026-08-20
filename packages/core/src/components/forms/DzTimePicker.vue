@@ -56,6 +56,9 @@ const props = withDefaults(defineProps<DzTimePickerProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  portalTo: undefined,
+  portalDisabled: false,
+  portalDefer: false,
 })
 
 const emit = defineEmits<DzTimePickerEmits>()
@@ -68,6 +71,8 @@ const fieldContext = useFormFieldContext()
 const open = ref(false)
 /** Element that scopes the roll columns so we can auto-scroll the selection */
 const columnsEl = ref<HTMLElement>()
+/** Native trigger restored after the independently focusable cleaner removes itself. */
+const triggerEl = ref<HTMLButtonElement>()
 
 // ---------------------------------------------------------------------------
 // Resolved field-context state
@@ -88,6 +93,19 @@ const resolvedAriaDescribedby = computed(() => {
   if (fieldContext?.ariaDescribedby.value)
     parts.push(fieldContext.ariaDescribedby.value)
   return parts.length > 0 ? parts.join(' ') : undefined
+})
+
+/**
+ * A standalone ARIA combobox needs an author-provided accessible name; text
+ * content does not name this role. Preserve explicit and FormField labelling,
+ * otherwise use the stable placeholder as the trigger's action label.
+ */
+const resolvedAriaLabel = computed(() => {
+  if (props.ariaLabel)
+    return props.ariaLabel
+  if (props.ariaLabelledby || fieldContext)
+    return undefined
+  return props.placeholder
 })
 
 // ---------------------------------------------------------------------------
@@ -332,6 +350,7 @@ function handleClear(): void {
   draftSecond.value = null
   emit('clear')
   emit('change', '', { source: 'user' })
+  nextTick(() => triggerEl.value?.focus())
 }
 
 // ---------------------------------------------------------------------------
@@ -396,19 +415,20 @@ function handleBlur(event: FocusEvent): void {
 // Styling
 // ---------------------------------------------------------------------------
 
+const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDisabled.value)
+
 const styles = computed(() =>
   timePickerVariants({
     variant: props.variant,
     size: props.size,
     invalid: resolvedInvalid.value || undefined,
+    cleanable: showCleaner.value || undefined,
   }),
 )
 
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
-
-const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDisabled.value)
 </script>
 
 <template>
@@ -421,48 +441,55 @@ const showCleaner = computed(() => props.cleaner && !!model.value && !resolvedDi
     v-bind="{ ...$attrs, class: undefined }"
   >
     <PopoverRoot v-model:open="open">
-      <PopoverTrigger
-        as-child
-        :disabled="resolvedDisabled"
-      >
+      <div :class="styles.control()">
+        <PopoverTrigger
+          as-child
+          :disabled="resolvedDisabled"
+        >
+          <button
+            :id="resolvedId"
+            ref="triggerEl"
+            type="button"
+            :class="styles.trigger()"
+            role="combobox"
+            :aria-label="resolvedAriaLabel"
+            :aria-labelledby="ariaLabelledby"
+            :aria-describedby="resolvedAriaDescribedby"
+            :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
+            :aria-required="resolvedRequired || undefined"
+            :aria-expanded="open"
+            aria-haspopup="dialog"
+            :disabled="resolvedDisabled || undefined"
+            @focus="handleFocus"
+            @blur="handleBlur"
+          >
+            <slot name="trigger" :value="model" :display="displayValue">
+              <span v-if="displayValue" :class="styles.valueText()">{{ displayValue }}</span>
+              <span v-else :class="styles.placeholder()">{{ placeholder }}</span>
+            </slot>
+
+            <Clock v-if="indicator && !showCleaner" :class="styles.icon()" aria-hidden="true" />
+          </button>
+        </PopoverTrigger>
+
         <button
-          :id="resolvedId"
+          v-if="showCleaner"
           type="button"
-          :class="styles.trigger()"
-          :aria-label="ariaLabel"
-          :aria-labelledby="ariaLabelledby"
-          :aria-describedby="resolvedAriaDescribedby"
-          :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
-          :aria-required="resolvedRequired || undefined"
-          :aria-expanded="open"
-          :aria-haspopup="true"
-          :disabled="resolvedDisabled || undefined"
+          :class="styles.cleaner()"
+          aria-label="Clear time"
+          @click="handleClear"
           @focus="handleFocus"
           @blur="handleBlur"
         >
-          <slot name="trigger" :value="model" :display="displayValue">
-            <span v-if="displayValue" :class="styles.valueText()">{{ displayValue }}</span>
-            <span v-else :class="styles.placeholder()">{{ placeholder }}</span>
-          </slot>
-
-          <span
-            v-if="showCleaner"
-            :class="styles.cleaner()"
-            role="button"
-            tabindex="-1"
-            aria-label="Clear time"
-            @click.stop="handleClear"
-            @keydown.enter.stop.prevent="handleClear"
-            @keydown.space.stop.prevent="handleClear"
-          >
-            <X class="h-3.5 w-3.5" aria-hidden="true" />
-          </span>
-
-          <Clock v-if="indicator" :class="styles.icon()" aria-hidden="true" />
+          <X class="h-3.5 w-3.5" aria-hidden="true" />
         </button>
-      </PopoverTrigger>
+      </div>
 
-      <PopoverPortal>
+      <PopoverPortal
+        :to="portalTo"
+        :disabled="portalDisabled"
+        :defer="portalDefer"
+      >
         <PopoverContent
           :side-offset="4"
           align="start"
