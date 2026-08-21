@@ -14,6 +14,7 @@ import { TabsTrigger } from 'reka-ui'
  * ```
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
@@ -67,6 +68,9 @@ function handleKeydown(event: KeyboardEvent): void {
     tabsContext?.onClose?.(props.value)
   }
 }
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzTabTrigger')
 </script>
 
 <template>
@@ -87,7 +91,7 @@ function handleKeydown(event: KeyboardEvent): void {
       type="button"
       class="dz-tab-close-btn"
       :tabindex="-1"
-      aria-label="Close tab"
+      :aria-label="dzMessages.closeTab"
       :disabled="disabled"
       @click="handleCloseClick"
       @pointerdown.stop

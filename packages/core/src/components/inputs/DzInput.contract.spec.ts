@@ -1,11 +1,13 @@
-import { mount } from '@vue/test-utils'
 /**
  * DzInput — Contract Spec v1 conformance tests.
  *
  * Verifies that the component's public API (props, events, slots,
  * data attributes, ARIA) conforms to the canonical contract.
  */
+import { expectAnatomy } from '@dzup-ui/testing'
+import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { anatomy } from './DzInput.anatomy.ts'
 import DzInput from './DzInput.vue'
 
 describe('dzInput — Contract Spec v1', () => {
@@ -188,5 +190,90 @@ describe('dzInput — Contract Spec v1', () => {
   it('omits error message element when error prop is not set', () => {
     const wrapper = mount(DzInput)
     expect(wrapper.find('[role="alert"]').exists()).toBe(false)
+  })
+  // ── Anatomy (ADR-19) ──
+
+  it('conforms to its declared anatomy in the default render', () => {
+    expectAnatomy(mount(DzInput), anatomy)
+  })
+
+  it('conforms with every conditional part present at once', () => {
+    // The render most likely to emit an undeclared part, because it is the one
+    // no single existing test covers.
+    const wrapper = mount(DzInput, {
+      props: { modelValue: 'text', clearable: true, error: 'Required' },
+      slots: { prefix: '<i>@</i>', suffix: '<i>x</i>' },
+    })
+
+    for (const part of ['prefix', 'suffix', 'clear', 'error'])
+      expect(wrapper.find(`[data-part="${part}"]`).exists(), part).toBe(true)
+
+    expectAnatomy(wrapper, anatomy)
+  })
+
+  it('conforms while loading, when the spinner replaces the clear button', () => {
+    const wrapper = mount(DzInput, { props: { modelValue: 'x', clearable: true, loading: true } })
+
+    expect(wrapper.find('[data-part="spinner"]').exists()).toBe(true)
+    expect(wrapper.find('[data-part="clear"]').exists()).toBe(false)
+    expectAnatomy(wrapper, anatomy)
+  })
+
+  it('conforms when disabled and when readonly', () => {
+    expectAnatomy(mount(DzInput, { props: { disabled: true } }), anatomy)
+    expectAnatomy(mount(DzInput, { props: { readonly: true } }), anatomy)
+  })
+
+  it('puts the input part on the native element, not on its wrapper', () => {
+    // A consumer targeting `input` means the thing that takes the value.
+    const wrapper = mount(DzInput)
+    expect(wrapper.find('[data-part="input"]').element.tagName).toBe('INPUT')
+    expect(wrapper.find('[data-part="control"]').element.tagName).toBe('DIV')
+  })
+
+  // ── Per-part overrides (`ui`) ──
+
+  it('applies a ui override to the part it names', () => {
+    const wrapper = mount(DzInput, {
+      props: { modelValue: 'x', clearable: true, ui: { clear: 'w-10' } },
+    })
+
+    expect(wrapper.find('[data-part="clear"]').classes()).toContain('w-10')
+  })
+
+  it('reaches a part no prop and no slot could reach', () => {
+    // The argument for the whole mechanism: before `ui`, restyling the error
+    // message meant a descendant selector against classes tv() generates.
+    const wrapper = mount(DzInput, {
+      props: { error: 'Required', ui: { error: 'text-base' } },
+    })
+
+    const error = wrapper.find('[data-part="error"]').classes()
+    expect(error).toContain('text-base')
+    expect(error).not.toContain('text-[length:var(--dz-text-xs)]')
+  })
+
+  it('keeps class on the control, where it has always landed', () => {
+    const wrapper = mount(DzInput, { attrs: { class: 'shadow-lg' } })
+
+    expect(wrapper.find('[data-part="control"]').classes()).toContain('shadow-lg')
+    expect(wrapper.classes()).not.toContain('shadow-lg')
+  })
+
+  it('sends ui.root to the outer node instead', () => {
+    const wrapper = mount(DzInput, { props: { ui: { root: 'w-full' } } })
+
+    expect(wrapper.classes()).toContain('w-full')
+  })
+
+  it('needs no !important to win', () => {
+    const wrapper = mount(DzInput, { props: { ui: { input: 'text-right' } } })
+
+    expect(wrapper.find('[data-part="input"]').classes()).toContain('text-right')
+    expect(wrapper.html()).not.toContain('!important')
+  })
+
+  it('changes nothing when no ui is given', () => {
+    expect(mount(DzInput, { props: { ui: {} } }).html()).toBe(mount(DzInput).html())
   })
 })

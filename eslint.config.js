@@ -46,6 +46,25 @@ export default antfu({
     'apps/landing/src/generated/**',
     'apps/*/dist/**',
     'apps/*/storybook-static/**',
+
+    // Nuxt consumer fixtures (TASK-OSS-P1-03): `package.json` is rendered from
+    // `package.template.json` with absolute tarball paths, and `.tarballs/`
+    // holds the packed artifacts. Both are build output for this machine.
+    'packages/nuxt/test/.tarballs/**',
+    'packages/nuxt/test/fixtures/*/package.json',
+    'packages/nuxt/test/fixtures/*/package-lock.json',
+
+    // Generated ownership table read by the auto-import resolver
+    // (TASK-OSS-P1-02). Written by `yarn generate:ownership`, freshness-gated by
+    // `yarn validate:ownership`; an eslint --fix here would be reverted by the
+    // next generate and would fail the gate in between.
+    'packages/core/src/generated/**',
+
+    // Ownership-scanner fixtures (TASK-OSS-P0-01). These are deliberately
+    // malformed inputs -- unsorted export clauses, a re-export of a module that
+    // does not exist -- because that is what the scanner must survive. Linting
+    // them into tidiness would delete the cases under test.
+    'packages/tooling/src/ownership/__fixtures__/**',
   ],
 }, {
   // Node CLI + build scripts: stdout is their user interface, not a debugging

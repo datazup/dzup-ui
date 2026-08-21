@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20, 22]
+        node-version: ['20.19.0', '22.13.0']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -98,6 +98,55 @@ jobs:
       - name: Run SSR smoke tests
         run: yarn test:ssr
 
+  # ──────────────────────────────────────────────
+  # The floor, exercised (ADR-18, TASK-OSS-P2-01)
+  # ──────────────────────────────────────────────
+
+  validate-min-runtime:
+    # A contributor who satisfies `engines` must be able to run every mandatory
+    # gate. Before this job that was a claim: every other job requested
+    # `node-version: 20`, which resolves to the newest 20.x, so the declared
+    # floor was never the one anything ran on. The floor said `>=20.0.0` while
+    # vite@7 and jsdom@29 both require `^20.19.0` — `yarn build` and `yarn test`
+    # could not start on a version the repository advertised.
+    #
+    # `.nvmrc` holds the floor and this job reads it, so there is one number.
+    name: Validators at the minimum runtime
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Report the runtime under test
+        run: node -v
+      # No cache restore, on purpose: this job answers "does a clean checkout
+      # work at the floor?", and a warm cache from a newer-Node job could hide
+      # an install-time engine rejection.
+      - name: Install dependencies (clean)
+        run: yarn install --immutable
+      # The declarations agree, and every gate dependency accepts the floor.
+      - name: Engine declarations
+        run: yarn validate:engines
+      # Each generator must START. A startup error — ERR_UNKNOWN_FILE_EXTENSION,
+      # SyntaxError, Unsupported engine — is the failure this job exists to
+      # catch, and it is indistinguishable from "there is no gate".
+      - name: Generators
+        run: |
+          yarn generate:exports:core
+          yarn generate:ownership:core
+      # Every validator named in `validate:all`, run individually so the report
+      # says which one failed rather than which chain did.
+      - name: Validators
+        run: yarn validate:all
+      # The two gates whose own dependencies (vite, jsdom) set the floor.
+      - name: Build and test at the floor
+        run: |
+          yarn build
+          yarn test
+
   validate:
     name: Validate (boundaries + tokens)
     runs-on: ubuntu-latest
@@ -105,7 +154,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -236,7 +285,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -313,7 +362,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -399,7 +448,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -459,7 +508,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -508,7 +557,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4
@@ -588,7 +637,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - name: Get yarn cache directory
@@ -687,7 +736,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.19.0'
       - name: Enable Corepack
         run: corepack enable
       - uses: actions/cache@v4

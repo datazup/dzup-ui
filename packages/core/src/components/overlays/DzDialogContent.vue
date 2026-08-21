@@ -22,6 +22,7 @@ import { DialogContent, DialogOverlay, DialogPortal, injectDialogRootContext } f
  * ```
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_DIALOG_KEY } from './DzDialog.types.ts'
 import { dialogVariants } from './DzDialog.variants.ts'
@@ -42,10 +43,17 @@ const props = withDefaults(defineProps<DzDialogContentProps>(), {
   portalDisabled: false,
   portalDefer: false,
   overlayClass: undefined,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzDialogContentEmits>()
 const slots = defineSlots<DzDialogContentSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 
@@ -81,13 +89,18 @@ const overlayTransitionName = computed(() => dialogCtx?.overlayTransition.value 
 const contentTransitionName = computed(() => dialogCtx?.contentTransition.value ?? 'dz-dialog-content')
 
 const styles = computed(() => dialogVariants({ size: props.size, scrollable: props.scrollable }))
-const overlayClasses = computed(() => cn(styles.value.overlay(), props.overlayClass))
+/**
+ * `overlayClass` predates `ui` and keeps working: it is applied after the
+ * recipe and before `ui.overlay`, so a consumer already using it sees no
+ * change, and one adopting `ui` gets the last word (ADR-19 §6, dual-emit).
+ */
+const overlayClasses = computed(() => cn(styles.value.overlay(), props.overlayClass, props.ui?.overlay))
 const contentClasses = computed(() =>
-  cn(styles.value.content(), attrs.class as string | undefined),
+  cn(styles.value.content(), props.ui?.content, attrs.class as string | undefined),
 )
-const headerClasses = computed(() => styles.value.header())
-const bodyClasses = computed(() => styles.value.body())
-const footerClasses = computed(() => styles.value.footer())
+const headerClasses = computed(() => cn(styles.value.header(), props.ui?.header))
+const bodyClasses = computed(() => cn(styles.value.body(), props.ui?.viewport))
+const footerClasses = computed(() => cn(styles.value.footer(), props.ui?.footer))
 
 const hasHeaderSlot = computed(() => Boolean(slots.header))
 const hasFooterSlot = computed(() => Boolean(slots.footer))
@@ -115,12 +128,16 @@ function handleCloseAutoFocus(event: Event): void {
 
 <template>
   <DialogPortal
-    :to="portalTo"
+    :to="resolvedPortalTo"
     :disabled="portalDisabled"
     :defer="portalDefer"
   >
     <Transition :name="overlayTransitionName">
+      <!-- TODO(remove-after: 0.3.0): `data-dz-dialog-overlay` is dual-emitted
+           beside `data-part="overlay"` for one minor series (ADR-19 §6).
+           Removing it is a breaking change and needs a major changeset. -->
       <DialogOverlay
+        data-part="overlay"
         :class="overlayClasses"
         data-dz-dialog-overlay
       />
@@ -128,6 +145,7 @@ function handleCloseAutoFocus(event: Event): void {
     <Transition :name="contentTransitionName">
       <DialogContent
         :id="id"
+        data-part="content"
         :class="contentClasses"
         style="contain: layout style"
         v-bind="{ ...contentAria, ...$attrs, class: undefined }"
@@ -138,13 +156,13 @@ function handleCloseAutoFocus(event: Event): void {
         @close-auto-focus="handleCloseAutoFocus"
       >
         <template v-if="scrollable">
-          <header v-if="hasHeaderSlot" :class="headerClasses">
+          <header v-if="hasHeaderSlot" data-part="header" :class="headerClasses">
             <slot name="header" />
           </header>
-          <div :class="bodyClasses">
+          <div data-part="viewport" :class="bodyClasses">
             <slot />
           </div>
-          <footer v-if="hasFooterSlot" :class="footerClasses">
+          <footer v-if="hasFooterSlot" data-part="footer" :class="footerClasses">
             <slot name="footer" />
           </footer>
         </template>

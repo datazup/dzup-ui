@@ -15,7 +15,9 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { colorPickerVariants } from './DzColorPicker.variants.ts'
 
@@ -35,7 +37,7 @@ const props = withDefaults(defineProps<DzColorPickerProps>(), {
   required: false,
   name: undefined,
   id: undefined,
-  ariaLabel: 'Choose a color',
+  ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
@@ -47,6 +49,17 @@ const props = withDefaults(defineProps<DzColorPickerProps>(), {
 
 const emit = defineEmits<DzColorPickerEmits>()
 defineSlots<DzColorPickerSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzColorPicker')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 const fieldContext = useFormFieldContext()
@@ -144,7 +157,7 @@ function handleBlur(event: FocusEvent): void {
           :id="resolvedId"
           type="button"
           :class="styles.trigger()"
-          :aria-label="ariaLabel"
+          :aria-label="resolvedAriaLabel"
           :aria-labelledby="ariaLabelledby"
           :aria-describedby="resolvedAriaDescribedby"
           :aria-invalid="ariaInvalid ?? (isInvalid || undefined)"
@@ -167,7 +180,7 @@ function handleBlur(event: FocusEvent): void {
 
       <!-- Popover panel -->
       <PopoverPortal
-        :to="portalTo"
+        :to="resolvedPortalTo"
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
@@ -183,7 +196,7 @@ function handleBlur(event: FocusEvent): void {
                 :value="model"
                 class="h-full w-full cursor-crosshair border-0 p-0"
                 style="appearance: none; -webkit-appearance: none; border: none; background: none;"
-                aria-label="Color area"
+                :aria-label="dzMessages.colorArea"
                 @input="handleNativeColorChange"
               >
             </div>
@@ -201,7 +214,7 @@ function handleBlur(event: FocusEvent): void {
                 :value="model"
                 maxlength="7"
                 placeholder="#000000"
-                aria-label="Hex color value"
+                :aria-label="dzMessages.hexValue"
                 @change="handleInputChange"
               >
             </div>

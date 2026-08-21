@@ -14,6 +14,7 @@ import type { DzAlertEmits, DzAlertProps, DzAlertSlots } from './DzAlert.types.t
  * ```
  */
 import { computed, ref, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { alertVariants } from './DzAlert.variants.ts'
 
@@ -50,6 +51,9 @@ function handleClose(): void {
   visible.value = false
   emit('close')
 }
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzAlert')
 </script>
 
 <template>
@@ -102,7 +106,7 @@ function handleClose(): void {
       v-if="closable"
       type="button"
       class="shrink-0 inline-flex items-center justify-center rounded-[var(--dz-radius-sm)] p-[var(--dz-spacing-1)] opacity-70 hover:opacity-100 dz-focus-ring-button transition-opacity"
-      aria-label="Close"
+      :aria-label="dzMessages.close"
       @click="handleClose"
     >
       <svg

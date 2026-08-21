@@ -71,6 +71,7 @@ const expandRowClasses = computed(() => styles.value.expandRow())
 
 <template>
   <tr
+    data-part="row"
     :class="classes"
     :aria-selected="selected || undefined"
     :data-state="selected ? 'selected' : undefined"

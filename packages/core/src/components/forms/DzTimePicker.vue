@@ -19,7 +19,11 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useDzLocale } from '../../composables/provider/useDzLocale.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { cachedDateTimeFormat } from '../../i18n/intl-cache.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { timePickerVariants } from './DzTimePicker.variants.ts'
 
@@ -46,8 +50,8 @@ const props = withDefaults(defineProps<DzTimePickerProps>(), {
   indicator: true,
   cleaner: true,
   footer: true,
-  confirmText: 'OK',
-  cancelText: 'Cancel',
+  confirmText: undefined,
+  cancelText: undefined,
   invalid: false,
   error: undefined,
   required: false,
@@ -63,6 +67,19 @@ const props = withDefaults(defineProps<DzTimePickerProps>(), {
 
 const emit = defineEmits<DzTimePickerEmits>()
 defineSlots<DzTimePickerSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzTimePicker')
+const dzLocale = useDzLocale()
+const resolvedConfirmText = computed(() => props.confirmText ?? dzMessages.value.confirm)
+const resolvedCancelText = computed(() => props.cancelText ?? dzMessages.value.cancel)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -146,7 +163,9 @@ const displayValue = computed(() => {
   if (!p)
     return ''
   const date = new Date(2000, 0, 1, p.hour, p.minute, p.second)
-  return new Intl.DateTimeFormat(props.locale ?? 'en-US', {
+  // Was `props.locale ?? 'en-US'`. The fallback is now the application's
+  // declared locale, and `en-US` only when nothing declared one (ADR-20).
+  return cachedDateTimeFormat(props.locale ?? dzLocale.value, {
     hour: '2-digit',
     minute: '2-digit',
     second: showSeconds.value ? '2-digit' : undefined,
@@ -476,7 +495,7 @@ const rootClasses = computed(() =>
           v-if="showCleaner"
           type="button"
           :class="styles.cleaner()"
-          aria-label="Clear time"
+          :aria-label="dzMessages.clearTime"
           @click="handleClear"
           @focus="handleFocus"
           @blur="handleBlur"
@@ -486,7 +505,7 @@ const rootClasses = computed(() =>
       </div>
 
       <PopoverPortal
-        :to="portalTo"
+        :to="resolvedPortalTo"
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
@@ -506,7 +525,7 @@ const rootClasses = computed(() =>
                 :class="styles.column()"
                 data-roll-column
                 role="listbox"
-                aria-label="Hours"
+                :aria-label="dzMessages.hours"
               >
                 <button
                   v-for="h in hourValues"
@@ -527,7 +546,7 @@ const rootClasses = computed(() =>
                 :class="styles.column()"
                 data-roll-column
                 role="listbox"
-                aria-label="Minutes"
+                :aria-label="dzMessages.minutes"
               >
                 <button
                   v-for="m in minuteValues"
@@ -549,7 +568,7 @@ const rootClasses = computed(() =>
                 :class="styles.column()"
                 data-roll-column
                 role="listbox"
-                aria-label="Seconds"
+                :aria-label="dzMessages.seconds"
               >
                 <button
                   v-for="s in secondValues"
@@ -571,7 +590,7 @@ const rootClasses = computed(() =>
                 :class="styles.column()"
                 data-roll-column
                 role="listbox"
-                aria-label="AM/PM"
+                :aria-label="dzMessages.dayPeriod"
               >
                 <button
                   v-for="mer in (['AM', 'PM'] as const)"
@@ -596,7 +615,7 @@ const rootClasses = computed(() =>
             >
               <select
                 :class="styles.select()"
-                aria-label="Select hours"
+                :aria-label="dzMessages.selectHours"
                 :value="selectedHourDisplay ?? ''"
                 @change="onSelectHour"
               >
@@ -615,7 +634,7 @@ const rootClasses = computed(() =>
               <span :class="styles.selectSeparator()">:</span>
               <select
                 :class="styles.select()"
-                aria-label="Select minutes"
+                :aria-label="dzMessages.selectMinutes"
                 :value="draftMinute ?? ''"
                 @change="onSelectMinute"
               >
@@ -635,7 +654,7 @@ const rootClasses = computed(() =>
                 <span :class="styles.selectSeparator()">:</span>
                 <select
                   :class="styles.select()"
-                  aria-label="Select seconds"
+                  :aria-label="dzMessages.selectSeconds"
                   :value="draftSecond ?? ''"
                   @change="onSelectSecond"
                 >
@@ -655,7 +674,7 @@ const rootClasses = computed(() =>
               <select
                 v-if="is12h"
                 :class="styles.select()"
-                aria-label="Select AM/PM"
+                :aria-label="dzMessages.selectDayPeriod"
                 :value="draftHour !== null ? draftMeridiem : ''"
                 @change="onSelectMeridiem"
               >
@@ -680,14 +699,14 @@ const rootClasses = computed(() =>
                 :class="styles.footerButton({ confirm: false })"
                 @click="handleCancel"
               >
-                {{ cancelText }}
+                {{ resolvedCancelText }}
               </button>
               <button
                 type="button"
                 :class="styles.footerButton({ confirm: true })"
                 @click="handleConfirm"
               >
-                {{ confirmText }}
+                {{ resolvedConfirmText }}
               </button>
             </div>
           </div>

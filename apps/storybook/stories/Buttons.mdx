@@ -5,6 +5,7 @@ import { DoDont, Do, Dont } from './_blocks/DoDont.ts'
 import { DzRepl } from './_blocks/DzRepl.ts'
 import { OpenInStackblitz } from './_blocks/OpenInStackblitz.ts'
 import { FamilyComponents } from './_blocks/FamilyComponents.ts'
+import { Anatomy } from './_blocks/Anatomy.ts'
 
 export const buttonExample = `<script setup lang="ts">
 import { DzButton } from '@dzup-ui/core'
@@ -86,6 +87,18 @@ Edit the markup below — the preview re-renders instantly. Swap a `variant`,
 - **Choosing between mutually-exclusive options** → consider
   [DzSegmented](?path=/docs/core-navigation-dzsegmented--docs) instead of a
   button group of toggles.
+
+## Styling surface — DzButton
+
+What a consumer may address, generated from `DzButton.anatomy.ts` (ADR-19). Parts
+are stable identities: a part may move in the tree or change element type in a
+minor release, but removing or renaming one is breaking.
+
+<Anatomy of="DzButton" />
+
+Style through these and through design tokens. A selector that reaches for a
+class name or an element structure the table does not list is not a supported
+override, and nothing prevents it from breaking.
 
 ## Accessibility
 

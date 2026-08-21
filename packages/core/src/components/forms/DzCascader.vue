@@ -28,7 +28,9 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { cascaderVariants } from './DzCascader.variants.ts'
 
@@ -44,8 +46,8 @@ const props = withDefaults(defineProps<DzCascaderProps>(), {
   expandTrigger: 'click',
   filter: false,
   separator: '/',
-  searchPlaceholder: 'Search…',
-  noResultsText: 'No matching paths',
+  searchPlaceholder: undefined,
+  noResultsText: undefined,
   cleaner: true,
   disabled: false,
   readonly: false,
@@ -66,6 +68,18 @@ const props = withDefaults(defineProps<DzCascaderProps>(), {
 
 const emit = defineEmits<DzCascaderEmits>()
 defineSlots<DzCascaderSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzCascader')
+const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMessages.value.searchPlaceholder)
+const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -489,7 +503,7 @@ const showCleaner = computed(
             :class="styles.cleaner()"
             role="button"
             tabindex="-1"
-            aria-label="Clear selection"
+            :aria-label="dzMessages.clearSelection"
             @click.stop="handleClear"
             @keydown.enter.stop.prevent="handleClear"
             @keydown.space.stop.prevent="handleClear"
@@ -502,7 +516,7 @@ const showCleaner = computed(
       </PopoverTrigger>
 
       <PopoverPortal
-        :to="portalTo"
+        :to="resolvedPortalTo"
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
@@ -517,10 +531,10 @@ const showCleaner = computed(
               <input
                 type="text"
                 :value="searchQuery"
-                :placeholder="searchPlaceholder"
+                :placeholder="resolvedSearchPlaceholder"
                 :class="styles.searchInput()"
                 role="searchbox"
-                aria-label="Search paths"
+                :aria-label="dzMessages.searchPaths"
                 data-dz-cascader-search
                 @input="searchQuery = ($event.target as HTMLInputElement).value"
               >
@@ -531,7 +545,7 @@ const showCleaner = computed(
               v-if="showFlat"
               :class="styles.flatList()"
               role="listbox"
-              aria-label="Matching paths"
+              :aria-label="dzMessages.matchingPaths"
             >
               <button
                 v-for="(entry, i) in filteredPaths"
@@ -546,7 +560,7 @@ const showCleaner = computed(
                 {{ entry.labels.join(` ${separator} `) }}
               </button>
               <div v-if="filteredPaths.length === 0" :class="styles.empty()" data-dz-cascader-empty>
-                {{ noResultsText }}
+                {{ resolvedNoResultsText }}
               </div>
             </div>
 

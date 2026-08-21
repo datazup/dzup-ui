@@ -96,7 +96,16 @@ const COMPONENT_STATUS_MDX = read('apps', 'storybook', 'stories', 'ComponentStat
  */
 describe('generated counts match what they count', () => {
   it('components: catalog = every `.vue`, documented = every component with a story', () => {
-    const families = readdirSync(resolve(REPO_ROOT, 'packages', 'core', 'src', 'components'))
+    // `withFileTypes`, because this directory is a family namespace and not
+    // *only* a family namespace: a cross-cutting `.spec.ts` dropped in beside
+    // the folders used to make this `readdirSync` throw ENOTDIR, which reads as
+    // a broken count rather than as "that file should not be there".
+    const families = readdirSync(
+      resolve(REPO_ROOT, 'packages', 'core', 'src', 'components'),
+      { withFileTypes: true },
+    )
+      .filter(entry => entry.isDirectory())
+      .map(entry => entry.name)
     const vue = families.flatMap(family =>
       readdirSync(resolve(REPO_ROOT, 'packages', 'core', 'src', 'components', family))
         .filter(name => name.endsWith('.vue')),

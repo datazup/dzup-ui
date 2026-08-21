@@ -14,6 +14,8 @@ import addonA11y from '@storybook/addon-a11y'
 import addonDocs from '@storybook/addon-docs'
 import { definePreview } from '@storybook/vue3-vite'
 import { onBeforeUnmount } from 'vue'
+import { pseudoMessages } from '../../../packages/core/src/i18n/pseudo.ts'
+import DzProvider from '../../../packages/core/src/providers/DzProvider.vue'
 import { RESPONSIVE_VIEWPORTS } from '../../../packages/core/stories/_shared/options.ts'
 import { AutodocsPage } from '../stories/_blocks/AutodocsPage.ts'
 
@@ -56,6 +58,60 @@ function persistThemeRecipe(recipe: Parameters<typeof serializeThemeRecipe>[0]):
 }
 
 /** Global ThemeRecipeV1 decorator shared by every OSS story and docs page. */
+/**
+ * Pseudo-locale toolbar (TASK-OSS-P4-03).
+ *
+ * Wraps EVERY story in a `DzProvider` carrying a pseudo-localised catalog when
+ * the toolbar is switched on. Global rather than a per-story decorator on
+ * purpose: the packet asks that one story per family render under pseudo, and a
+ * toolbar that applies to all 169 story pages satisfies that for every family
+ * at once — including families added after this was written, which eleven
+ * hand-placed decorators would not.
+ *
+ * What to look for when it is on:
+ *   - **Un-transformed English** — a string the catalog does not reach.
+ *   - **A missing `!!!]`** — the label clipped; the frame is how you see it
+ *     without knowing what the text should have said.
+ *   - **Broken layout** — the +30% padding is the shortest realistic German.
+ */
+/**
+ * Direction toolbar (TASK-OSS-P4-05).
+ *
+ * Renders every story under `dir="rtl"` with an Arabic locale, so the RTL
+ * contract each component declares in its anatomy can be seen rather than
+ * inferred. Global for the same reason the pseudo-locale toggle is: the packet
+ * asks for one story per family, and a toolbar covers all 169 pages — including
+ * families added after this was written.
+ *
+ * The `dir` goes on a wrapper element, not on `<html>`: only the ROOT
+ * `DzProvider` reflects onto the document (ADR-20 A2), and every story here is
+ * nested inside Storybook's own tree. That is the same one-attribute job a host
+ * does to scope a subtree, so the toolbar demonstrates the documented pattern
+ * instead of a private one.
+ *
+ * What to look for: a chevron pointing away from the panel it opens, a border
+ * that stayed on the physical left, text still aligned to the wrong edge, and
+ * arrow keys that move the selection backwards.
+ */
+const withDirection: Decorator = (story, context) => ({
+  components: { story, DzProvider },
+  setup() {
+    const rtl = context.globals.direction === 'rtl'
+    return { locale: rtl ? 'ar-EG' : 'en-US', dir: rtl ? 'rtl' : 'ltr' }
+  },
+  template: '<DzProvider :locale="locale"><div :dir="dir"><story /></div></DzProvider>',
+})
+
+const withPseudoLocale: Decorator = (story, context) => ({
+  components: { story, DzProvider },
+  setup() {
+    return { pseudo: context.globals.pseudoLocale === 'on' ? pseudoMessages() : undefined }
+  },
+  // One `DzProvider` either way, so switching the toolbar does not remount the
+  // tree into a different component shape and lose the story's own state.
+  template: '<DzProvider :messages="pseudo"><story /></DzProvider>',
+})
+
 const withThemeRecipe: Decorator = (story, context) => ({
   components: { story },
   setup() {
@@ -95,7 +151,35 @@ export default definePreview({
   // there. Only addon-docs needs both sides. ThemeRecipe behavior comes from the
   // shared global preset and renderer decorator below; addon-vitest is build-time only.
   addons: [addonDocs(), addonA11y()],
-  globalTypes: STORYBOOK_THEME_RECIPE_GLOBAL_TYPES,
+  globalTypes: {
+    ...STORYBOOK_THEME_RECIPE_GLOBAL_TYPES,
+    direction: {
+      name: 'Direction',
+      description: 'Render every story right-to-left, under an Arabic locale',
+      defaultValue: 'ltr',
+      toolbar: {
+        icon: 'transfer',
+        items: [
+          { value: 'ltr', title: 'Direction: LTR' },
+          { value: 'rtl', title: 'Direction: RTL' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    pseudoLocale: {
+      name: 'Pseudo-locale',
+      description: 'Render every string accented, padded +30% and framed in [!!! !!!]',
+      defaultValue: 'off',
+      toolbar: {
+        icon: 'globe',
+        items: [
+          { value: 'off', title: 'Pseudo-locale: off' },
+          { value: 'on', title: 'Pseudo-locale: on' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   initialGlobals: readInitialThemeRecipeGlobals(),
   parameters: {
     controls: {
@@ -268,6 +352,7 @@ export default definePreview({
       },
     },
   },
+
   decorators: [
     // TASK-0.3 — baseline padding so `layout: 'centered'` stories aren't cramped.
     // Per-story `layout: 'fullscreen'`/`'padded'` overrides still apply; this only
@@ -276,5 +361,7 @@ export default definePreview({
       template: '<div class="p-6"><story /></div>',
     }),
     withThemeRecipe,
+    withPseudoLocale,
+    withDirection,
   ],
 })

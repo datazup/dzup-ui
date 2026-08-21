@@ -11,9 +11,9 @@ import { tv } from 'tailwind-variants'
 
 export const blockquoteVariants = tv({
   base: [
-    'border-l-4',
+    'border-s-4',
     'border-[var(--dz-border)]',
-    'pl-[var(--dz-spacing-4)]',
+    'ps-[var(--dz-spacing-4)]',
     'py-[var(--dz-spacing-2)]',
     'text-[var(--dz-muted-foreground)]',
     'italic',

@@ -10,6 +10,7 @@
 import type { Orientation } from '@dzup-ui/contracts'
 import type { MaybeRef, Ref } from 'vue'
 import { computed, ref, toValue } from 'vue'
+import { useDzDirection } from '../provider/useDzLocale.ts'
 
 // ---------------------------------------------------------------------------
 // Interfaces
@@ -157,13 +158,33 @@ export function useTabs(options: UseTabsOptions = {}): UseTabsReturn {
   /**
    * Keyboard event handler implementing WAI-ARIA Tabs pattern.
    *
-   * Horizontal: ArrowLeft (prev), ArrowRight (next)
+   * Horizontal: ArrowLeft (prev), ArrowRight (next) — **swapped under RTL**
    * Vertical: ArrowUp (prev), ArrowDown (next)
    * Both: Home (first), End (last)
+   *
+   * **The horizontal keys follow the writing direction** (TASK-OSS-P4-05).
+   * APG's tabs pattern is written in terms of "previous" and "next", not left
+   * and right: in a right-to-left document the *next* tab is to the left, so
+   * ArrowLeft advances. Hard-coding ArrowRight as "next" means an Arabic user
+   * pressing the key that points at the next tab gets the previous one.
+   *
+   * The **vertical** keys do not swap. `dir` is about the inline axis; ArrowUp
+   * is ArrowUp in every language, and swapping it would be applying a rule past
+   * where it holds.
    */
+  // The active writing direction, from `DzProvider` (ADR-20). Resolves to
+  // `'ltr'` with no provider mounted, so the keyboard behaviour is unchanged
+  // for every consumer that has not declared a locale.
+  const direction = useDzDirection()
+
   function onKeydown(event: KeyboardEvent): void {
-    const prevKey = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp'
-    const nextKey = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown'
+    const rtl = direction.value === 'rtl'
+    const prevKey = orientation === 'horizontal'
+      ? (rtl ? 'ArrowRight' : 'ArrowLeft')
+      : 'ArrowUp'
+    const nextKey = orientation === 'horizontal'
+      ? (rtl ? 'ArrowLeft' : 'ArrowRight')
+      : 'ArrowDown'
 
     switch (event.key) {
       case prevKey:

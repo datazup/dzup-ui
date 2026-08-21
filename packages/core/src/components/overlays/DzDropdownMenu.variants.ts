@@ -41,7 +41,7 @@ export const dropdownMenuVariants = tv({
       'text-[var(--dz-muted-foreground)]',
     ].join(' '),
     itemSuffix: [
-      'ml-auto inline-flex shrink-0 items-center justify-center',
+      'ms-auto inline-flex shrink-0 items-center justify-center',
       'text-[length:var(--dz-text-xs)]',
       'text-[var(--dz-muted-foreground)]',
     ].join(' '),

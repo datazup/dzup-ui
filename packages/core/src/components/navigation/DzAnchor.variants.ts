@@ -17,8 +17,8 @@ export const anchorVariants = tv({
     list: 'flex flex-col',
     item: 'relative',
     link: [
-      'block pr-[var(--dz-spacing-2)] py-[var(--dz-anchor-item-gap)]',
-      'border-l-2 border-[var(--dz-anchor-rail-color)]',
+      'block pe-[var(--dz-spacing-2)] py-[var(--dz-anchor-item-gap)]',
+      'border-s-2 border-[var(--dz-anchor-rail-color)]',
       'text-[var(--dz-anchor-color)]',
       'transition-colors',
       'hover:text-[var(--dz-anchor-hover-color)]',

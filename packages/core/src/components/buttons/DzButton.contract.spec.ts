@@ -1,11 +1,14 @@
-import { mount } from '@vue/test-utils'
 /**
  * DzButton — Contract Spec v1 conformance tests.
  *
  * Verifies that the component's public API (props, events, slots,
  * data attributes, ARIA) conforms to the canonical contract.
  */
+import type { DzButtonProps } from './DzButton.types.ts'
+import { expectAnatomy } from '@dzup-ui/testing'
+import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { anatomy } from './DzButton.anatomy.ts'
 import DzButton from './DzButton.vue'
 
 describe('dzButton — Contract Spec v1', () => {
@@ -264,5 +267,110 @@ describe('dzButton — Contract Spec v1', () => {
       slots: { default: 'Link' },
     })
     expect(wrapper.attributes('style')).toContain('contain: layout style')
+  })
+  // ── Anatomy (Contract Spec v1 styling surface, ADR-19) ──
+
+  it('conforms to its declared anatomy in the default render', () => {
+    expectAnatomy(mount(DzButton, { slots: { default: 'Save' } }), anatomy)
+  })
+
+  it('conforms while loading, when the spinner part is present', () => {
+    const wrapper = mount(DzButton, { props: { loading: true }, slots: { default: 'Save' } })
+
+    expect(wrapper.find('[data-part="spinner"]').exists()).toBe(true)
+    expectAnatomy(wrapper, anatomy)
+  })
+
+  it('conforms while disabled', () => {
+    expectAnatomy(mount(DzButton, { props: { disabled: true }, slots: { default: 'Save' } }), anatomy)
+  })
+
+  it('keeps its parts when rendered as another element', () => {
+    // Polymorphism is where a part attribute is most likely to be dropped: the
+    // root is a different element every time.
+    const wrapper = mount(DzButton, { props: { href: '/x' }, slots: { default: 'Link' } })
+
+    expect(wrapper.attributes('data-part')).toBe('root')
+    expectAnatomy(wrapper, anatomy)
+  })
+
+  it('declares every data-state value it can emit', () => {
+    const cases: DzButtonProps[] = [{}, { loading: true }, { disabled: true }]
+    const emitted = new Set<string>()
+    for (const props of cases) {
+      const wrapper = mount(DzButton, { props, slots: { default: 'btn' } })
+      emitted.add(wrapper.attributes('data-state') as string)
+    }
+
+    expect([...emitted].sort()).toEqual([...anatomy.states].sort())
+  })
+
+  it('emits data-tone, and not yet data-variant or data-size', () => {
+    // ADR-19 §4 makes recipe attributes public: the library's own stylesheet
+    // already selects on them (`.dz-panel[data-size=lg]`). DzButton mirrors only
+    // `tone` today. This asserts the GAP rather than hiding it — when P3-03
+    // emits the other two, this test fails and is updated to an empty list,
+    // which is how a ratchet is supposed to behave.
+    const wrapper = mount(DzButton, {
+      props: { variant: 'outline', size: 'lg', tone: 'danger' },
+      slots: { default: 'btn' },
+    })
+
+    const missing = anatomy.recipes.filter(axis => wrapper.attributes(`data-${axis}`) === undefined)
+    expect(missing).toEqual(['variant', 'size'])
+    expect(wrapper.attributes('data-tone')).toBe('danger')
+  })
+  // ── Per-part overrides (`ui`, ADR-19 §5) ──
+
+  it('applies a ui override to the part it names', () => {
+    const wrapper = mount(DzButton, {
+      props: { loading: true, ui: { spinner: 'h-8 w-8' } },
+      slots: { default: 'Save' },
+    })
+
+    expect(wrapper.find('[data-part="spinner"]').classes()).toContain('h-8')
+  })
+
+  it('lets a ui override beat the component own utility without !important', () => {
+    // The whole point of routing overrides through cn()/tailwind-merge: the
+    // consumer's `h-8` replaces the size recipe's `h-4` rather than fighting it.
+    const wrapper = mount(DzButton, {
+      props: { loading: true, size: 'md', ui: { spinner: 'h-8' } },
+      slots: { default: 'Save' },
+    })
+
+    const spinner = wrapper.find('[data-part="spinner"]').classes()
+    expect(spinner).toContain('h-8')
+    expect(spinner).not.toContain('h-4')
+    expect(wrapper.html()).not.toContain('!important')
+  })
+
+  it('applies ui.root to the root and leaves class working alongside it', () => {
+    const wrapper = mount(DzButton, {
+      props: { ui: { root: 'rounded-none' } },
+      attrs: { class: 'tracking-wide' },
+      slots: { default: 'Save' },
+    })
+
+    expect(wrapper.classes()).toContain('rounded-none')
+    expect(wrapper.classes()).toContain('tracking-wide')
+  })
+
+  it('gives class the last word over ui.root, since it is the narrower request', () => {
+    const wrapper = mount(DzButton, {
+      props: { ui: { root: 'p-2' } },
+      attrs: { class: 'p-8' },
+      slots: { default: 'Save' },
+    })
+
+    expect(wrapper.classes()).toContain('p-8')
+    expect(wrapper.classes()).not.toContain('p-2')
+  })
+
+  it('changes nothing when no ui is given', () => {
+    const withUi = mount(DzButton, { props: { ui: {} }, slots: { default: 'Save' } })
+    const without = mount(DzButton, { slots: { default: 'Save' } })
+
+    expect(withUi.html()).toBe(without.html())
   })
 })

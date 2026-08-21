@@ -23,6 +23,7 @@ import type {
  */
 import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { fileUploadVariants } from './DzFileUpload.variants.ts'
 
@@ -44,7 +45,7 @@ const props = withDefaults(defineProps<DzFileUploadProps>(), {
   required: false,
   name: undefined,
   id: undefined,
-  ariaLabel: 'Upload files',
+  ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
@@ -52,6 +53,10 @@ const props = withDefaults(defineProps<DzFileUploadProps>(), {
 
 const emit = defineEmits<DzFileUploadEmits>()
 defineSlots<DzFileUploadSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzFileUpload')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 const fieldContext = useFormFieldContext()
@@ -227,7 +232,7 @@ function handleBlur(event: FocusEvent): void {
       role="button"
       :tabindex="resolvedDisabled ? -1 : 0"
       :class="dropzoneClasses"
-      :aria-label="ariaLabel"
+      :aria-label="resolvedAriaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (isInvalid || undefined)"

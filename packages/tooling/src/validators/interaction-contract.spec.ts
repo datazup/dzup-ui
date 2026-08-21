@@ -66,12 +66,29 @@ describe('interaction-contract validator', () => {
     writeFileSync(join(familyDir, 'DzGood.variants.ts'), 'export const x = "dz-focus-ring-button"')
     writeFileSync(join(familyDir, 'DzIgnored.spec.ts'), 'export const ignored = true')
     writeFileSync(join(familyDir, 'DzIgnored.tokens.ts'), 'export const ignored = true')
+    // An anatomy declaration NAMES tokens as override points; it does not apply
+    // them, so scanning it would report the documentation of a sanctioned token
+    // as if it were inlined plumbing (TASK-OSS-P3-02, ADR-19).
+    writeFileSync(join(familyDir, 'DzIgnored.anatomy.ts'), 'export const ignored = true')
 
     const files = collectFiles(COMPONENTS_DIR)
 
     expect(files.some(file => file.endsWith('DzGood.variants.ts'))).toBe(true)
     expect(files.some(file => file.endsWith('DzIgnored.spec.ts'))).toBe(false)
     expect(files.some(file => file.endsWith('DzIgnored.tokens.ts'))).toBe(false)
+    expect(files.some(file => file.endsWith('DzIgnored.anatomy.ts'))).toBe(false)
+  })
+
+  it('does not report a focus-ring token that an anatomy file declares', () => {
+    const familyDir = join(COMPONENTS_DIR, 'buttons')
+    mkdirSync(familyDir, { recursive: true })
+    writeFileSync(
+      join(familyDir, 'DzReal.anatomy.ts'),
+      `export const anatomy = { componentTokens: ['--dz-button-focus-ring-color'] }`,
+    )
+
+    const files = collectFiles(COMPONENTS_DIR)
+    expect(files.some(file => file.endsWith('DzReal.anatomy.ts'))).toBe(false)
   })
 
   it('scans a components directory and reports relative file paths', () => {

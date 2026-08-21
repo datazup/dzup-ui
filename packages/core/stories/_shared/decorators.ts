@@ -26,3 +26,22 @@ export const darkModeDecorator: Decorator = () => ({
 export const galleryDecorator: Decorator = () => ({
   template: '<div class="mx-auto w-full max-w-5xl"><story /></div>',
 })
+
+/**
+ * Stretches every slotted label to a realistic worst case (TASK-OSS-P4-03).
+ *
+ * The companion to the pseudo-locale toolbar. Pseudo-locale lengthens the
+ * strings the *library* owns; this lengthens the ones a *consumer* passes,
+ * which is the other half of the same failure — a button that fits
+ * "Save" and not "Änderungen speichern".
+ *
+ * Applied as a CSS constraint rather than by rewriting slot content: it works
+ * on any story without knowing what that story renders, and it exposes the
+ * thing worth seeing — whether the component wraps, truncates or overflows —
+ * rather than a longer string in a container that was already wide enough.
+ */
+export const longLabelDecorator: Decorator = () => ({
+  template:
+    '<div data-dz-long-label class="max-w-[16rem] [&_button]:max-w-full [&_[data-part=label]]:max-w-full">'
+    + '<story /></div>',
+})

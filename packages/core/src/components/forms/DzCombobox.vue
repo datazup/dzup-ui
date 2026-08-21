@@ -36,7 +36,9 @@ import {
  * ```
  */
 import { computed, ref, useAttrs, useId, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { comboboxVariants } from './DzCombobox.variants.ts'
@@ -58,9 +60,9 @@ const props = withDefaults(defineProps<DzComboboxProps>(), {
   openOnFocus: false,
   allowCustomValue: false,
   loading: false,
-  loadingText: 'Loading options…',
-  emptyText: 'No options available',
-  noResultsText: 'No results found',
+  loadingText: undefined,
+  emptyText: undefined,
+  noResultsText: undefined,
   getItemValue: undefined,
   getItemLabel: undefined,
   getItemDisabled: undefined,
@@ -81,6 +83,19 @@ const props = withDefaults(defineProps<DzComboboxProps>(), {
 
 const emit = defineEmits<DzComboboxEmits>()
 defineSlots<DzComboboxSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzCombobox')
+const resolvedLoadingText = computed(() => props.loadingText ?? dzMessages.value.loading)
+const resolvedEmptyText = computed(() => props.emptyText ?? dzMessages.value.empty)
+const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -328,7 +343,7 @@ watch(
           <button
             type="button"
             :class="styles.clearButton()"
-            aria-label="Clear selection"
+            :aria-label="dzMessages.clearSelection"
             @click.stop="handleClear"
           >
             <X class="h-3.5 w-3.5" aria-hidden="true" />
@@ -339,14 +354,14 @@ watch(
           <button
             type="button"
             :class="styles.icon()"
-            aria-label="Toggle options"
+            :aria-label="dzMessages.toggleOptions"
             :disabled="resolvedDisabled"
           >
             <DzSpinner
               v-if="loading"
               size="xs"
               tone="neutral"
-              :label="loadingText"
+              :label="resolvedLoadingText"
               class="h-full w-full"
             />
             <ChevronDown v-else class="h-full w-full" aria-hidden="true" />
@@ -355,7 +370,7 @@ watch(
       </ComboboxAnchor>
 
       <ComboboxPortal
-        :to="portalTo"
+        :to="resolvedPortalTo"
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
@@ -364,7 +379,7 @@ watch(
             <template v-if="loading">
               <slot name="loading">
                 <div :class="styles.empty()">
-                  {{ loadingText }}
+                  {{ resolvedLoadingText }}
                 </div>
               </slot>
             </template>
@@ -399,7 +414,7 @@ watch(
                 :loading="loading"
                 :has-items="normalizedItems.length > 0"
               >
-                {{ normalizedItems.length > 0 ? noResultsText : emptyText }}
+                {{ normalizedItems.length > 0 ? resolvedNoResultsText : resolvedEmptyText }}
               </slot>
             </div>
           </ComboboxViewport>

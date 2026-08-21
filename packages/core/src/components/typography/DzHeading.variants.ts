@@ -5,6 +5,13 @@
  */
 import { tv } from 'tailwind-variants'
 
+/**
+ * `rtl-physical-ok`: `align="left"` is an author naming a side, not asking
+ * for the start edge — `text-start` is what an unset `align` already does.
+ * Mirroring these would make `align="left"` mean right in an RTL document,
+ * which is the one thing a consumer who typed `left` did not ask for
+ * (TASK-OSS-P4-05).
+ */
 export const headingVariants = tv({
   base: 'text-[var(--dz-foreground)] font-[var(--dz-font-sans)] m-0',
   variants: {

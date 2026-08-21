@@ -17,6 +17,7 @@ import type {
  */
 import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
@@ -36,11 +37,15 @@ const props = withDefaults(defineProps<DzPasswordInputProps>(), {
   loading: false,
   invalid: false,
   required: false,
-  loadingLabel: 'Loading',
+  loadingLabel: undefined,
 })
 
 const emit = defineEmits<DzPasswordInputEmits>()
 defineSlots<DzPasswordInputSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzPasswordInput')
+const resolvedLoadingLabel = computed(() => props.loadingLabel ?? dzMessages.value.loading)
 
 const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -170,7 +175,7 @@ defineExpose({ inputRef })
         class="shrink-0"
         :size="spinnerSize"
         :tone="tone ?? 'neutral'"
-        :label="loadingLabel"
+        :label="resolvedLoadingLabel"
       />
 
       <!-- Toggle visibility button -->

@@ -1,0 +1,85 @@
+{
+  "$comment": [
+    "Cited ADRs that have no document in docs/adr/ (TASK-OSS-P3-01, ADR-19).",
+    "This is a DEBT LEDGER, not a permission list. `validate:adr-references` fails on any",
+    "ADR number cited anywhere in the repository that is neither documented nor listed here,",
+    "so the set can only shrink. Writing one of these ADRs means deleting its entry and",
+    "lowering maxUndocumented in the same change.",
+    "Titles are transcribed from wherever the decision is currently recorded — usually the",
+    "table in CLAUDE.md, otherwise the source comment that cites it. They are summaries of",
+    "what the code does, NOT approved decision records; that is the whole point of the debt."
+  ],
+  "maxUndocumented": 14,
+  "undocumented": [
+    {
+      "id": "ADR-01",
+      "title": "Manifest-driven public API: TypeScript interfaces for every public component, exports generated from public-api.manifest.json",
+      "recordedIn": "packages/tooling/src/manifest-generator.ts, packages/tooling/scripts/validate-exports.ts, packages/core/src/index.ts header"
+    },
+    {
+      "id": "ADR-02",
+      "title": "Contract-first design; variant, size and tone taxonomies are frozen",
+      "recordedIn": "CLAUDE.md § Key ADRs; DESIGN.md line 372"
+    },
+    {
+      "id": "ADR-04",
+      "title": "Token-only styling: tv() recipes, no <style scoped>, no raw color literals",
+      "recordedIn": "CLAUDE.md § Key ADRs and § Styling; enforced by validate:tokens and validate:scoped-style"
+    },
+    {
+      "id": "ADR-06",
+      "title": "compat isolation: stable core and pro must never import from @dzup-ui/compat",
+      "recordedIn": "packages/compat/src header comments; enforced by validate:boundaries"
+    },
+    {
+      "id": "ADR-07",
+      "title": "Reka UI as the headless primitive layer",
+      "recordedIn": "CLAUDE.md § Key ADRs"
+    },
+    {
+      "id": "ADR-08",
+      "title": "Compound component wiring by provide/inject with a typed injection key per family",
+      "recordedIn": "packages/contracts/src/compound.types.ts; the DZ_*_KEY declarations in each family"
+    },
+    {
+      "id": "ADR-09",
+      "title": "Theme context: DzThemeProvider exposes a minimal inject API consumed through useTheme",
+      "recordedIn": "packages/core/src/providers/*, packages/core/src/composables/useTheme.ts"
+    },
+    {
+      "id": "ADR-10",
+      "title": "Class merging through cn() (clsx + tailwind-merge); consumer class always merges into the root",
+      "recordedIn": "packages/core/src/utilities/cn.ts"
+    },
+    {
+      "id": "ADR-11",
+      "title": "ESM-only distribution: no .cjs artifact in any published dist",
+      "recordedIn": "docs/program-2026-08/foundation-tasks.md <no_regression>; packages/*/vite.config.ts"
+    },
+    {
+      "id": "ADR-12",
+      "title": "Committed dist artifacts",
+      "recordedIn": "CLAUDE.md § Key ADRs"
+    },
+    {
+      "id": "ADR-13",
+      "title": "Calendar and date-picker date math delegated to @internationalized/date via the useCalendar composable. NOTE: dzup-ui-pro numbers a different decision ADR-13 (neutral models) — the two tiers share a number space and do not coordinate it, which is itself worth a decision",
+      "recordedIn": "packages/core/src/composables/useCalendar.ts; DzDatePicker/DzCalendar headers"
+    },
+    {
+      "id": "ADR-15",
+      "title": "FOUC prevention: a synchronous theme script sets data-theme before first paint",
+      "recordedIn": "CLAUDE.md § Key ADRs; packages/tokens/src/utils/theme-script.ts; packages/nuxt/src/module.ts"
+    },
+    {
+      "id": "ADR-16",
+      "title": "defineModel for v-model rather than manual prop + emit pairs",
+      "recordedIn": "CLAUDE.md § Key ADRs"
+    },
+    {
+      "id": "ADR-17",
+      "title": "Token source of truth and component token ownership (hybrid model: tokens package owns primitives/semantic, components may own anatomy mapping)",
+      "recordedIn": "CLAUDE.md § Token Ownership; a document exists OUTSIDE this repo at workspace-docs/repos/dzup-ui/docs/adr/ADR-17-token-source-of-truth-and-component-token-ownership.md and has never been copied in"
+    }
+  ]
+}

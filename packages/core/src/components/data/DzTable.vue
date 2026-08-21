@@ -45,6 +45,7 @@ const props = withDefaults(defineProps<DzTableProps>(), {
   density: 'default',
   loading: false,
   captionVisible: false,
+  ui: undefined,
   virtualScroll: false,
   rowHeight: 44,
   maxHeight: undefined,
@@ -146,7 +147,9 @@ const styles = computed(() =>
   }),
 )
 
-const rootClasses = computed(() => cn('relative overflow-auto', attrs.class as string | undefined))
+const rootClasses = computed(() =>
+  cn('relative overflow-auto', props.ui?.root, attrs.class as string | undefined),
+)
 
 const rootStyle = computed(() => {
   const base = 'contain: layout style'
@@ -155,12 +158,15 @@ const rootStyle = computed(() => {
   return base
 })
 
-const tableClasses = computed(() => styles.value.root())
+const tableClasses = computed(() => cn(styles.value.root(), props.ui?.content))
+
+const captionClasses = computed(() => cn(props.captionVisible ? undefined : 'sr-only', props.ui?.title))
 </script>
 
 <template>
   <div
     ref="scrollEl"
+    data-part="root"
     :class="rootClasses"
     :data-state="loading ? 'loading' : 'ready'"
     :data-loading="loading ? '' : undefined"
@@ -171,6 +177,7 @@ const tableClasses = computed(() => styles.value.root())
   >
     <table
       :id="id"
+      data-part="content"
       :class="tableClasses"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
@@ -178,7 +185,7 @@ const tableClasses = computed(() => styles.value.root())
       :aria-busy="loading || undefined"
       role="table"
     >
-      <caption v-if="$slots.caption" :class="captionVisible ? undefined : 'sr-only'">
+      <caption v-if="$slots.caption" data-part="title" :class="captionClasses">
         <slot name="caption" />
       </caption>
       <slot />

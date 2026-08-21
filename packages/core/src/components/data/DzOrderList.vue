@@ -34,6 +34,7 @@ import {
  * ```
  */
 import { computed, nextTick, ref, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIconButton from '../buttons/DzIconButton.vue'
 import { orderListVariants } from './DzOrderList.variants.ts'
@@ -54,10 +55,17 @@ const props = withDefaults(defineProps<DzOrderListProps>(), {
   dragHandle: true,
   controlsPosition: 'start',
   dataKey: undefined,
-  moveUpLabel: 'Move up',
-  moveDownLabel: 'Move down',
-  moveTopLabel: 'Move to top',
-  moveBottomLabel: 'Move to bottom',
+  moveUpLabel: undefined,
+  moveDownLabel: undefined,
+  moveTopLabel: undefined,
+  moveBottomLabel: undefined,
+  // hardcoded-string-ok: never rendered. The prop is documented as "accessible
+  // label for each row's drag handle", but the handle is `aria-hidden="true"`
+  // — a pointer-only affordance, with the keyboard path exposed through the
+  // Move Up/Down controls — so no element carries this string and no assistive
+  // technology can reach it. Moving a dead string into the catalog would have
+  // translated something nobody renders; giving the handle an accessible name
+  // instead is an accessibility decision (TASK-OSS-P5-01), not a codemod.
   dragHandleLabel: 'Drag to reorder',
   id: undefined,
   ariaLabel: undefined,
@@ -67,6 +75,13 @@ const props = withDefaults(defineProps<DzOrderListProps>(), {
 
 const emit = defineEmits<DzOrderListEmits>()
 defineSlots<DzOrderListSlots<T>>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzOrderList')
+const resolvedMoveUpLabel = computed(() => props.moveUpLabel ?? dzMessages.value.moveUp)
+const resolvedMoveDownLabel = computed(() => props.moveDownLabel ?? dzMessages.value.moveDown)
+const resolvedMoveTopLabel = computed(() => props.moveTopLabel ?? dzMessages.value.moveTop)
+const resolvedMoveBottomLabel = computed(() => props.moveBottomLabel ?? dzMessages.value.moveBottom)
 
 const attrs = useAttrs()
 
@@ -480,11 +495,11 @@ function handleBlur(event: FocusEvent): void {
       v-if="showControls"
       :class="cn(styles.controls(), controlsPosition === 'end' ? 'order-2' : 'order-0')"
       role="group"
-      aria-label="Reorder controls"
+      :aria-label="dzMessages.reorderControls"
     >
       <DzIconButton
         :icon="ChevronsUp"
-        :aria-label="moveTopLabel"
+        :aria-label="resolvedMoveTopLabel"
         :disabled="!canMoveUp"
         variant="ghost"
         tone="neutral"
@@ -494,7 +509,7 @@ function handleBlur(event: FocusEvent): void {
       />
       <DzIconButton
         :icon="ChevronUp"
-        :aria-label="moveUpLabel"
+        :aria-label="resolvedMoveUpLabel"
         :disabled="!canMoveUp"
         variant="ghost"
         tone="neutral"
@@ -504,7 +519,7 @@ function handleBlur(event: FocusEvent): void {
       />
       <DzIconButton
         :icon="ChevronDown"
-        :aria-label="moveDownLabel"
+        :aria-label="resolvedMoveDownLabel"
         :disabled="!canMoveDown"
         variant="ghost"
         tone="neutral"
@@ -514,7 +529,7 @@ function handleBlur(event: FocusEvent): void {
       />
       <DzIconButton
         :icon="ChevronsDown"
-        :aria-label="moveBottomLabel"
+        :aria-label="resolvedMoveBottomLabel"
         :disabled="!canMoveDown"
         variant="ghost"
         tone="neutral"

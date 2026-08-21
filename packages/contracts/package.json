@@ -20,8 +20,8 @@
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src/",
-    "test": "echo 'No unit tests in contracts — run yarn typecheck'",
-    "build": "tsc --project tsconfig.json"
+    "test": "yarn --cwd ../.. vitest run packages/contracts/src",
+    "build": "tsc --project tsconfig.build.json"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

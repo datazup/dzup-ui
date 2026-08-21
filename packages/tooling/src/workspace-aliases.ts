@@ -42,7 +42,12 @@ export function workspaceAliases(repoRoot: string): Alias[] {
     { find: '@dzup-ui/tokens/utils', replacement: pkg('tokens/src/utils/index.ts') },
     { find: '@dzup-ui/tokens', replacement: pkg('tokens/src') },
     { find: '@dzup-ui/core/styles', replacement: pkg('core/src/styles/base.css') },
+    // Generated integration data (TASK-OSS-P1-02). The Nuxt module reads component
+    // ownership from here rather than importing the component library.
+    { find: '@dzup-ui/core/ownership', replacement: pkg('core/src/generated/component-ownership.ts') },
     { find: '@dzup-ui/contracts', replacement: pkg('contracts/src/index.ts') },
+    { find: '@dzup-ui/testing/vitest', replacement: pkg('testing/src/vitest.ts') },
+    { find: '@dzup-ui/testing', replacement: pkg('testing/src/index.ts') },
     { find: '@dzup-ui/core', replacement: pkg('core/src') },
   ]
 }

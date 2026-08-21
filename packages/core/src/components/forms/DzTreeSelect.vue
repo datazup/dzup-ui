@@ -32,6 +32,7 @@ import { Check, ChevronDown, Minus, X } from 'lucide-vue-next'
  */
 import { computed, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzTree from '../data/DzTree.vue'
 import { flattenVisibleNodes, getAdjacentKey } from '../data/treeNavigation.ts'
@@ -51,8 +52,8 @@ const props = withDefaults(defineProps<DzTreeSelectProps>(), {
   selectionMode: 'single',
   placeholder: undefined,
   filter: false,
-  filterPlaceholder: 'Search...',
-  noResultsText: 'No results found',
+  filterPlaceholder: undefined,
+  noResultsText: undefined,
   defaultOpen: false,
   disabled: false,
   readonly: false,
@@ -71,6 +72,11 @@ const props = withDefaults(defineProps<DzTreeSelectProps>(), {
 
 const emit = defineEmits<DzTreeSelectEmits>()
 const slots = defineSlots<DzTreeSelectSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzTreeSelect')
+const resolvedFilterPlaceholder = computed(() => props.filterPlaceholder ?? dzMessages.value.filterPlaceholder)
+const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -623,10 +629,10 @@ const triggerClasses = computed(() =>
           <input
             type="text"
             :value="query"
-            :placeholder="filterPlaceholder"
+            :placeholder="resolvedFilterPlaceholder"
             :class="styles.searchInput()"
             role="searchbox"
-            aria-label="Filter options"
+            :aria-label="dzMessages.filterOptions"
             data-dz-tree-search
             @input="handleSearchInput"
           >
@@ -679,7 +685,7 @@ const triggerClasses = computed(() =>
 
         <div v-else :class="styles.empty()" data-dz-tree-empty>
           <slot name="empty">
-            {{ filterActive ? noResultsText : 'No options available' }}
+            {{ filterActive ? resolvedNoResultsText : 'No options available' }}
           </slot>
         </div>
       </DzPopoverContent>

@@ -1,0 +1,7 @@
+{
+  "$comment": "Checked-in collision decisions for the cross-tier ownership map (TASK-OSS-P0-02). A collision is NEVER auto-resolved: until a maintainer records one here, `generate:ownership:map` exits non-zero and the symbol resolves to null. Each decision must name an ADR — the point of the file is that the reasoning is reviewable, not that the build goes green. Empty is the correct state while no Core/Pro name collides (verified 2026-08-20: zero overlapping symbols between Core @ be76ddb and Pro @ origin/main).",
+  "$example": {
+    "DzButton": { "tier": "core", "adr": "ADR-XX-cross-tier-naming", "rationale": "one sentence a reviewer can check" }
+  },
+  "decisions": {}
+}

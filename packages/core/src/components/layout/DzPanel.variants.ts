@@ -62,7 +62,7 @@ export const panelHeaderVariants = tv({
 
 /** Header toggle / title wrapper. Becomes a focusable button when collapsible. */
 export const panelTriggerVariants = tv({
-  base: 'flex flex-1 items-center gap-[var(--dz-panel-gap)] min-w-0 text-left',
+  base: 'flex flex-1 items-center gap-[var(--dz-panel-gap)] min-w-0 text-start',
   variants: {
     collapsible: {
       true: 'cursor-pointer rounded-[var(--dz-radius-sm)] dz-focus-ring-control -m-1 p-1',

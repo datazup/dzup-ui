@@ -94,7 +94,7 @@ export const megaMenuVariants = tv({
     /** Disclosure region holding the columns of a collapsed item */
     disclosure: [
       'flex flex-col gap-[var(--dz-spacing-3)]',
-      'pl-[var(--dz-spacing-3)] pt-[var(--dz-spacing-2)]',
+      'ps-[var(--dz-spacing-3)] pt-[var(--dz-spacing-2)]',
     ].join(' '),
   },
 

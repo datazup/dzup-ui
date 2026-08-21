@@ -9,6 +9,7 @@ import { DropdownMenuContent, DropdownMenuPortal } from 'reka-ui'
  * DzDropdownMenuContent — Content panel for DzDropdownMenu.
  */
 import { computed, useAttrs } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { dropdownMenuVariants } from './DzDropdownMenu.variants.ts'
 
@@ -16,7 +17,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-withDefaults(defineProps<DzDropdownMenuContentProps>(), {
+const props = withDefaults(defineProps<DzDropdownMenuContentProps>(), {
   side: 'bottom',
   align: 'start',
   sideOffset: 4,
@@ -27,6 +28,12 @@ withDefaults(defineProps<DzDropdownMenuContentProps>(), {
 
 const emit = defineEmits<DzDropdownMenuContentEmits>()
 defineSlots<DzDropdownMenuContentSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 const styles = computed(() => dropdownMenuVariants())
@@ -46,7 +53,7 @@ function handlePointerDownOutside(event: Event): void {
 
 <template>
   <DropdownMenuPortal
-    :to="portalTo"
+    :to="resolvedPortalTo"
     :disabled="portalDisabled"
     :defer="portalDefer"
   >

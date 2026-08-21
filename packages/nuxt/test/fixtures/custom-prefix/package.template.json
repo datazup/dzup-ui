@@ -1,0 +1,21 @@
+{
+  "name": "@dzup-ui-fixture/custom-prefix",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@dzup-ui/core": "file:@dzup-ui/core",
+    "@dzup-ui/nuxt": "file:@dzup-ui/nuxt",
+    "@dzup-ui/tokens": "file:@dzup-ui/tokens",
+    "nuxt": "^3.19.0",
+    "reka-ui": "^2.0.0",
+    "vue": "^3.5.13"
+  },
+  "overrides": {
+    "@dzup-ui/contracts": "file:@dzup-ui/contracts",
+    "@dzup-ui/tokens": "file:@dzup-ui/tokens"
+  }
+}

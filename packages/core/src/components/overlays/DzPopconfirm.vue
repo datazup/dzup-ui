@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { DzPopconfirmEmits, DzPopconfirmProps, DzPopconfirmSlots } from './DzPopconfirm.types.ts'
 import { computed, nextTick, ref, useId, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useClickOutside } from '../../composables/useClickOutside/index.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { useFloating } from '../../composables/useFloating/index.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
 import DzIcon from '../media/DzIcon.vue'
@@ -40,8 +42,8 @@ const open = defineModel<boolean>('open', { default: false })
 
 const props = withDefaults(defineProps<DzPopconfirmProps>(), {
   description: undefined,
-  confirmText: 'Confirm',
-  cancelText: 'Cancel',
+  confirmText: undefined,
+  cancelText: undefined,
   tone: 'danger',
   icon: undefined,
   placement: 'top',
@@ -55,6 +57,18 @@ const props = withDefaults(defineProps<DzPopconfirmProps>(), {
 
 const emit = defineEmits<DzPopconfirmEmits>()
 const slots = defineSlots<DzPopconfirmSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then `body` (ADR-20, TASK-OSS-P4-04). `'body'` is spelled
+// out here rather than left to the portal's default because `<Teleport>` requires
+// a target and has no default of its own.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value ?? 'body')
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzPopconfirm')
+const resolvedConfirmText = computed(() => props.confirmText ?? dzMessages.value.confirm)
+const resolvedCancelText = computed(() => props.cancelText ?? dzMessages.value.cancel)
 
 const styles = computed(() => popconfirmVariants({ tone: props.tone }))
 
@@ -185,7 +199,7 @@ const panelClasses = computed(() => cn(styles.value.panel()))
     <slot />
   </span>
 
-  <Teleport v-if="open" to="body">
+  <Teleport v-if="open" :to="resolvedPortalTo">
     <div
       ref="floatingRef"
       role="alertdialog"
@@ -228,7 +242,7 @@ const panelClasses = computed(() => cn(styles.value.panel()))
           data-testid="dz-popconfirm-cancel"
           @click="cancel"
         >
-          {{ cancelText }}
+          {{ resolvedCancelText }}
         </DzButton>
         <DzButton
           ref="confirmButtonRef"
@@ -240,7 +254,7 @@ const panelClasses = computed(() => cn(styles.value.panel()))
           data-testid="dz-popconfirm-confirm"
           @click="confirm"
         >
-          {{ confirmText }}
+          {{ resolvedConfirmText }}
         </DzButton>
       </div>
     </div>

@@ -1,0 +1,137 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Guides/Portals & Embedding" />
+
+# Portals & Embedding
+
+Nineteen components teleport part of themselves out of the DOM where you wrote
+them: dialogs, sheets, popovers, tooltips, menus, select and combobox panels,
+the command palette, the lightbox, the tour, the sidebar's mobile overlay and
+the full-screen blocking layer. They do it so that an overlay is not clipped by
+an ancestor's `overflow: hidden` and not trapped under one's `z-index`.
+
+That is the right default and it is also the thing that breaks when the library
+is embedded in something. This page is about the second case.
+
+## Where a portal goes
+
+One rule, the same for every one of the nineteen:
+
+| Precedence | Source | Use it for |
+|---|---|---|
+| 1 | the instance's `portalTo` prop | one overlay that has to live somewhere specific |
+| 2 | `DzProvider`'s `portal` | the whole application — a shell, a shadow root, a test harness |
+| 3 | `document.body` | the default, and what you get with no provider |
+
+```vue
+<DzProvider portal="#app-overlays">
+  <App />
+</DzProvider>
+```
+
+```vue
+<!-- and where one instance disagrees -->
+<DzDialogContent portal-to="#print-region">…</DzDialogContent>
+```
+
+`portalTo` accepts a selector string or an element. Resolution happens on the
+client only: the value is handed to the portal, never used to run a DOM query
+during a server render.
+
+Two neighbouring props stay per-instance, because they are about *this* overlay
+rather than about where overlays go: `portalDisabled` renders inline instead of
+teleporting, and `portalDefer` waits for the application to mount before
+resolving the target.
+
+## Shadow DOM
+
+Components work inside a shadow root, with **both halves handled** — and the
+second is the one people miss.
+
+- **Custom properties inherit through the shadow boundary.** `--dz-*` tokens set
+  on an ancestor reach the shadow tree for free.
+- **Stylesheets do not.** The component stylesheet has to be adopted into the
+  root explicitly.
+
+Missing the second half looks like "the tokens work but nothing is styled".
+
+```ts
+const root = host.attachShadow({ mode: 'open' })
+const sheet = new CSSStyleSheet()
+sheet.replaceSync(coreCss)          // @dzup-ui/core/styles
+root.adoptedStyleSheets = [sheet]
+```
+
+**Then point the portals inside the root.** Until TASK-OSS-P4-04 this was the
+part you could not fix: an overlay teleported to `document.body`, landed outside
+the boundary, and lost the adopted sheet — and four of the nineteen components
+had no `portalTo` prop at all, so there was no workaround even one instance at a
+time.
+
+```vue
+<DzProvider :portal="shadowOverlayContainer">
+  <App />
+</DzProvider>
+```
+
+`portal` takes an element, so pass a container you created *inside* the shadow
+root. Everything then renders within the boundary and keeps the adopted sheet.
+
+`DzProvider` itself renders no element (its anatomy is `parts: 'none'`), so it
+can sit directly inside the root without adding a wrapper to your layout.
+
+## End-to-end tests
+
+Two settings make an overlay findable without guessing at `document.body`:
+
+```vue
+<DzProvider portal="#e2e-overlays" test-id-prefix="e2e">
+  <App />
+</DzProvider>
+```
+
+- **`portal`** puts every overlay in one known container, so a test scopes to it
+  instead of querying the whole document and hoping the right dialog is first.
+- **`test-id-prefix`** turns test ids on and namespaces them —
+  `data-testid="e2e-submit"`. They are **off by default**: an attribute nobody
+  asked for is payload on every rendered node, and `data-testid`, `data-test`
+  and `data-qa` are all in use, so the host names the attribute rather than the
+  library picking one.
+
+```ts
+const overlays = page.locator('#e2e-overlays')
+await expect(overlays.getByTestId('e2e-confirm')).toBeVisible()
+```
+
+## Content-Security-Policy
+
+`DzProvider` injects one `<style>` tag at runtime: a transition suppressor that
+lives for a single frame during a theme change, so the page does not sweep
+through colours. Under a strict CSP that tag is **dropped silently** — and the
+symptom is a colour sweep on theme change that nobody can reproduce locally,
+because nobody develops with the production CSP.
+
+Give the provider the nonce your server generated:
+
+```vue
+<DzProvider :nonce="cspNonce">
+  <App />
+</DzProvider>
+```
+
+If you would rather not have the tag at all, turn the behaviour off:
+
+```vue
+<DzProvider :theme="{ disableTransitionOnChange: false }">
+  <App />
+</DzProvider>
+```
+
+## Server rendering
+
+Nothing on this page runs during a server render. The portal target resolves to
+a string or an element and is handed to the portal; no `querySelector` runs, no
+`document` is touched, and a provider configured with `portal` renders on a
+server with the browser globals genuinely deleted — which is how
+`packages/core/tests/ssr/dz-provider-ssr.spec.ts` asserts it rather than merely
+rendering to a string in a jsdom process that has a `document` anyway.

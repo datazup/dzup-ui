@@ -44,6 +44,7 @@
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzTableUi } from './DzTable.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -143,6 +144,22 @@ export interface DzTableProps extends BaseAccessibilityProps {
    * Default `false` preserves the original `sr-only` behaviour.
    */
   captionVisible?: boolean
+  /**
+   * Per-part class overrides for the nodes DzTable itself renders — the scroll
+   * container, the `<table>` and the `<caption>` (ADR-19).
+   *
+   * Rows and cells are part of the same anatomy but are NOT keys here: a
+   * consumer writes `<DzTableRow>` and `<DzTableCell>` themselves, so `class`
+   * at the call site already reaches them.
+   *
+   * `class` continues to apply to the scroll container.
+   *
+   * @example
+   * ```vue
+   * <DzTable :ui="{ content: 'table-fixed', title: 'text-left' }" />
+   * ```
+   */
+  ui?: DzTableUi
   /**
    * Enable windowed (virtual) rendering of DzTableBody rows for large datasets.
    * Requires fixed row heights (`rowHeight`). Only visible rows plus an overscan

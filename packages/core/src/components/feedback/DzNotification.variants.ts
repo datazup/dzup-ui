@@ -25,11 +25,11 @@ export const notificationVariants = tv({
   variants: {
     tone: {
       neutral: 'border-[var(--dz-border)]',
-      primary: 'border-l-4 border-l-[var(--dz-primary)]',
-      success: 'border-l-4 border-l-[var(--dz-success)]',
-      warning: 'border-l-4 border-l-[var(--dz-warning)]',
-      danger: 'border-l-4 border-l-[var(--dz-danger)]',
-      info: 'border-l-4 border-l-[var(--dz-info)]',
+      primary: 'border-s-4 border-s-[var(--dz-primary)]',
+      success: 'border-s-4 border-s-[var(--dz-success)]',
+      warning: 'border-s-4 border-s-[var(--dz-warning)]',
+      danger: 'border-s-4 border-s-[var(--dz-danger)]',
+      info: 'border-s-4 border-s-[var(--dz-info)]',
     },
   },
 

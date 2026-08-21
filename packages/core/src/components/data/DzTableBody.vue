@@ -114,7 +114,7 @@ const windowedRows = computed<VNode[]>(() => {
 </script>
 
 <template>
-  <tbody :class="classes" v-bind="{ ...$attrs, class: undefined }">
+  <tbody data-part="body" :class="classes" v-bind="{ ...$attrs, class: undefined }">
     <template v-if="isLoading">
       <tr v-for="n in props.skeletonRows" :key="`skeleton-row-${n}`" aria-hidden="true">
         <td colspan="1000">

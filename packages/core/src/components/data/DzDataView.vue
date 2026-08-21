@@ -7,6 +7,7 @@ import type {
   DzDataViewSlots,
 } from './DzDataView.types.ts'
 import { computed, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzEmpty from '../feedback/DzEmpty.vue'
 import DzSkeleton from '../feedback/DzSkeleton.vue'
@@ -214,6 +215,9 @@ const announcement = computed(() => {
   const end = Math.min(pageOffset.value + props.rows, total.value)
   return `Showing ${start} to ${end} of ${total.value} items`
 })
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzDataView')
 </script>
 
 <template>
@@ -256,7 +260,7 @@ const announcement = computed(() => {
             :class="styles.sortSelect()"
             :disabled="disabled"
             :value="activeSortIndex"
-            aria-label="Sort by"
+            :aria-label="dzMessages.sortBy"
             @change="onSortSelect"
           >
             <option value="">
@@ -279,7 +283,7 @@ const announcement = computed(() => {
           :items="layoutItems"
           :size="size"
           :disabled="disabled"
-          aria-label="View layout"
+          :aria-label="dzMessages.viewLayout"
         />
       </div>
     </div>

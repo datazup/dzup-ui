@@ -23,19 +23,26 @@ with the rest of the library.
 npm install @dzup-ui/core @dzup-ui/tokens @dzup-ui/nuxt
 ```
 
+{/* fixture: packages/nuxt/test/fixtures/core-only/nuxt.config.ts */}
+
 ```ts
-// nuxt.config.ts
 export default defineNuxtConfig({
   modules: ['@dzup-ui/nuxt'],
 })
 ```
 
+That snippet is copied from a fixture `yarn test:nuxt-fixtures` installs from a
+packed tarball and builds, and `yarn validate:doc-snippets` fails if the two
+drift apart. Every configuration on this page is backed the same way.
+
 That is the whole setup. The module does four things, and you do not have to do
 any of them yourself:
 
-1. **Adds the stylesheets** — `@dzup-ui/tokens/dist/tokens.css` and
-   `@dzup-ui/core/styles` are pushed onto `nuxt.options.css`. The token CSS is what
-   every `var(--dz-*)` resolves against; without it components render unstyled.
+1. **Adds the stylesheets, in order** — `@dzup-ui/tokens/css` first, then
+   `@dzup-ui/core/styles`. The token sheet is what every `var(--dz-*)` resolves
+   against, so loading it second paints the first frame with unresolved
+   variables. Your own CSS is appended after both, so you can override without
+   `!important`.
 2. **Transpiles** `@dzup-ui/core` and `@dzup-ui/tokens`.
 3. **Auto-imports the components** — use `<DzButton />` in any template with no
    import statement.
@@ -47,25 +54,34 @@ any of them yourself:
 
 ### Options
 
+| Option | Default | Effect |
+|---|---|---|
+| `includePro` | `false` | also register `@dzup-ui-pro/pro` components |
+| `prefix` | `''` | replace the `Dz` tag prefix |
+
+`prefix: 'X'` lets templates write `<XButton>`; the generated import still names
+the real export from the package that owns it.
+
+{/* fixture: packages/nuxt/test/fixtures/custom-prefix/nuxt.config.ts */}
+
 ```ts
 export default defineNuxtConfig({
   modules: ['@dzup-ui/nuxt'],
   dzupUi: {
-    // Prefix the auto-imported names: 'Acme' turns DzButton into AcmeButton.
-    // Default '' (keep the Dz prefix).
-    prefix: '',
-
-    // Also auto-import @dzup-ui/pro components. See the note below.
-    includePro: false,
+    prefix: 'X',
   },
 })
 ```
 
 <DoDont>
   <Dont title="Set includePro: true today">
-    `@dzup-ui/pro` is **not published** — there is no such package to install. The
-    option exists for the commercial tier and turning it on now makes the build
-    fail on an unresolvable import. Leave it `false` until Pro ships.
+    The commercial tier is `@dzup-ui-pro/pro`, and it is **not published** — there
+    is nothing to install yet, so turning the option on now makes the build fail on
+    an unresolvable import. Leave it `false` until Pro ships.
+    {/* retired-name-ok: the migration note has to name the package it replaced. */}
+    (Until 2026-08-20 the module named the package `@dzup-ui/pro`, which has never
+    existed under any publication plan; `yarn validate:package-names` now fails if
+    that name returns.)
   </Dont>
   <Do title="Use prefix if Dz collides with your own components">
     `prefix: 'Acme'` registers `AcmeButton` instead of `DzButton`. It rewrites only
@@ -74,22 +90,19 @@ export default defineNuxtConfig({
   </Do>
 </DoDont>
 
-### A known gap in the module
+### Closed: the hand-maintained component list
 
-The module registers components from a **hand-maintained list** of names in
-`packages/nuxt/src/module.ts`, not from the core export map. The list currently
-holds 138 names while core exports considerably more, so **a component can ship in
-`@dzup-ui/core` and not be auto-imported in Nuxt**. Nothing checks the two agree.
+Until 2026-08-20 the module registered components from a hand-maintained list of
+names in `packages/nuxt/src/module.ts`. It held 138 names while core exported
+considerably more, so a component could ship in `@dzup-ui/core` and simply not
+be auto-importable in Nuxt — and nothing checked the two agreed. They had also
+drifted in the other direction: the list classified the Core components
+`DzAppShell` and `DzCalendar` as Pro, and named Pro components (`DzScheduler`,
+`DzComment`, `DzVirtualTable`) that Pro does not export.
 
-This is a real limitation, not a caveat about edge cases. If auto-import does not
-find a component, it is not broken — just unlisted. Import it explicitly and it
-works normally:
-
-```vue
-<script setup lang="ts">
-import { DzKnob } from '@dzup-ui/core'
-</script>
-```
+The module now registers from `@dzup-ui/core/ownership`, a table generated from
+the packages themselves and freshness-checked by `yarn validate:ownership`.
+There is no list to maintain and no second inventory to disagree with.
 
 ## Any other SSR framework
 
@@ -97,8 +110,10 @@ There is nothing Nuxt-specific about the components. For Vite SSR, Astro, or a
 hand-rolled `renderToString`, do what the module does:
 
 ```ts
-// 1. The token CSS must load, or every var(--dz-*) is undefined.
-import '@dzup-ui/tokens/dist/tokens.css'
+// 1. The token CSS must load first, or every var(--dz-*) is undefined.
+//    Both are declared package subpaths — a deep path into dist is not
+//    exported and will fail to resolve in a real install.
+import '@dzup-ui/tokens/css'
 import '@dzup-ui/core/styles'
 ```
 

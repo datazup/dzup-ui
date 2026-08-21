@@ -48,6 +48,16 @@ export interface DzTourStep {
 
 /** Props for the DzTour component. */
 export interface DzTourProps extends BaseAccessibilityProps {
+  /**
+   * Portal target for the teleported layer.
+   *
+   * Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded
+   * `body` with no way to redirect it — which is precisely the case an
+   * application embedding the library in a shadow root or a micro-frontend
+   * shell cannot work around. Falls back to the `DzProvider` target, then to
+   * `document.body`.
+   */
+  portalTo?: string | HTMLElement
   /** The ordered steps that make up the tour. */
   steps: DzTourStep[]
   /** Dim everything except the active target with a spotlight mask. */

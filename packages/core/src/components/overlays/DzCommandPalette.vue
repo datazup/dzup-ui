@@ -43,7 +43,9 @@ import {
  * ```
  */
 import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/useEscapeKey.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { commandPaletteVariants } from './DzCommandPalette.variants.ts'
 
@@ -59,7 +61,7 @@ const props = withDefaults(defineProps<DzCommandPaletteProps>(), {
   groups: () => [],
   enableGlobalShortcut: true,
   id: undefined,
-  ariaLabel: 'Command palette',
+  ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
@@ -70,6 +72,17 @@ const props = withDefaults(defineProps<DzCommandPaletteProps>(), {
 
 const emit = defineEmits<DzCommandPaletteEmits>()
 defineSlots<DzCommandPaletteSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzCommandPalette')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 const searchQuery = ref('')
@@ -80,11 +93,20 @@ const styles = computed(() => commandPaletteVariants())
 const contentClasses = computed(() =>
   cn(styles.value.content(), attrs.class as string | undefined),
 )
-const fallbackTitle = computed(() => props.ariaLabel ?? 'Command palette')
+/**
+ * The visually-hidden dialog title.
+ *
+ * Was `props.ariaLabel ?? 'Command palette'` — a second copy of the same
+ * literal that already sat in `withDefaults`, and one the string inventory
+ * missed because it is an inline fallback rather than a prop default. Both are
+ * now the one catalog entry, and the fallback is gone rather than left as
+ * unreachable code: `resolvedAriaLabel` is typed `string`, so there was nothing
+ * left for `??` to catch.
+ */
+const fallbackTitle = resolvedAriaLabel
 const contentAria = computed<Record<string, unknown>>(() => {
   const aria: Record<string, unknown> = {}
-  if (props.ariaLabel !== undefined)
-    aria['aria-label'] = props.ariaLabel
+  aria['aria-label'] = resolvedAriaLabel.value
   if (props.ariaLabelledby !== undefined)
     aria['aria-labelledby'] = props.ariaLabelledby
   if (props.ariaDescribedby !== undefined)
@@ -191,7 +213,7 @@ watch(open, (isOpen) => {
 <template>
   <DialogRoot v-model:open="open">
     <DialogPortal
-      :to="portalTo"
+      :to="resolvedPortalTo"
       :disabled="portalDisabled"
       :defer="portalDefer"
     >

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dzup-ui.dev/schemas/component-ownership.manifest.schema.json",
+  "title": "dzup-ui component ownership manifest",
+  "description": "Generated, deterministic statement of which package and subpath owns each exported symbol, and what that symbol is. Produced by packages/tooling/src/ownership/generate-ownership-manifest.ts. Never hand-edited.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "tier", "sourceCommit", "generatedFrom", "entries"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver of this schema. Core and Pro must agree on the major before their manifests can be merged."
+    },
+    "tier": {
+      "enum": ["core", "pro"],
+      "description": "Which tier generated the file. A Core checkout can only produce 'core'."
+    },
+    "sourceCommit": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Repository HEAD at generation time, or 'unknown' outside a git checkout. Provenance only -- excluded from the freshness diff."
+    },
+    "generatedFrom": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Authority paths/globs the entries were derived from, sorted."
+    },
+    "entries": {
+      "type": "array",
+      "description": "One entry per exported symbol, sorted by symbol with a locale-independent comparator.",
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "anatomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parts", "states", "componentTokens", "riskTier"],
+      "description": "Declared styling surface (ADR-19), copied from the component's Dz{Name}.anatomy.ts. Absent when the component has not declared one.",
+      "properties": {
+        "parts": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "uniqueItems": true },
+            { "const": "none" }
+          ],
+          "description": "Addressable nodes emitted as data-part. 'none' means the component renders no element of its own -- NOT that its parts are undeclared."
+        },
+        "states": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "data-state values plus presence-only boolean state attributes."
+        },
+        "componentTokens": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^--dz-" },
+          "uniqueItems": true
+        },
+        "recipes": {
+          "type": "array",
+          "items": { "enum": ["size", "variant", "tone", "density", "orientation"] },
+          "uniqueItems": true
+        },
+        "optionalParts": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Parts that may render zero or many times. Every other declared part must appear exactly once."
+        },
+        "globalDefaults": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "riskTier": { "enum": ["A", "B", "C", "D"] }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symbol", "package", "subpath", "kind", "evidence"],
+      "properties": {
+        "symbol": { "type": "string", "minLength": 1 },
+        "package": { "type": "string", "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$" },
+        "subpath": { "type": "string", "pattern": "^\\.(/[A-Za-z0-9._-]+)*$" },
+        "subpaths": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^\\.(/[A-Za-z0-9._-]+)*$" },
+          "uniqueItems": true
+        },
+        "kind": {
+          "enum": [
+            "public-component",
+            "compound-part",
+            "composable",
+            "type",
+            "recipe",
+            "token-module",
+            "internal",
+            "compat-alias",
+            "unclassified"
+          ]
+        },
+        "parentComponent": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required for compound-part. Must itself be a public-component in this manifest."
+        },
+        "aliasOf": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required for compat-alias. Must name a symbol that exists in this manifest."
+        },
+        "status": { "enum": ["experimental", "beta", "stable", "deprecated"] },
+        "anatomy": { "$ref": "#/$defs/anatomy" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Authority paths that justified the classification; for unclassified entries, the reason no authority applied."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "compound-part" } }, "required": ["kind"] },
+          "then": { "required": ["parentComponent"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "compat-alias" } }, "required": ["kind"] },
+          "then": { "required": ["aliasOf"] }
+        }
+      ]
+    }
+  }
+}

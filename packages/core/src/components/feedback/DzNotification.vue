@@ -21,6 +21,7 @@ import type {
  * ```
  */
 import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
   notificationCloseVariants,
@@ -75,6 +76,9 @@ onBeforeUnmount(() => {
     clearTimeout(dismissTimer)
   }
 })
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzNotification')
 </script>
 
 <template>
@@ -125,7 +129,7 @@ onBeforeUnmount(() => {
       v-if="closable"
       type="button"
       :class="notificationCloseVariants()"
-      aria-label="Dismiss notification"
+      :aria-label="dzMessages.dismiss"
       @click="handleClose"
     >
       <svg

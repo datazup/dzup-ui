@@ -29,6 +29,7 @@ import type {
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { mentionVariants } from './DzMention.variants.ts'
 
@@ -46,8 +47,8 @@ const props = withDefaults(defineProps<DzMentionProps>(), {
   maxlength: undefined,
   insertSpace: true,
   allowSpaceInQuery: false,
-  loadingText: 'Loading…',
-  noResultsText: 'No matches',
+  loadingText: undefined,
+  noResultsText: undefined,
   disabled: false,
   readonly: false,
   loading: false,
@@ -67,6 +68,11 @@ const props = withDefaults(defineProps<DzMentionProps>(), {
 
 const emit = defineEmits<DzMentionEmits>()
 defineSlots<DzMentionSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzMention')
+const resolvedLoadingText = computed(() => props.loadingText ?? dzMessages.value.loading)
+const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -152,10 +158,10 @@ const announcement = computed(() => {
   if (!menuOpen.value)
     return ''
   if (loading.value)
-    return props.loadingText
+    return resolvedLoadingText.value
   const n = filteredOptions.value.length
   if (n === 0)
-    return props.noResultsText
+    return resolvedNoResultsText.value
   return `${n} suggestion${n === 1 ? '' : 's'} available`
 })
 
@@ -614,7 +620,7 @@ defineExpose({ controlRef })
         <template v-if="loading">
           <div :class="styles.helper()" data-mention-loading>
             <slot name="loading" :char="activeTrigger!.char" :query="activeQuery">
-              {{ loadingText }}
+              {{ resolvedLoadingText }}
             </slot>
           </div>
         </template>
@@ -655,7 +661,7 @@ defineExpose({ controlRef })
 
         <div v-else :class="styles.helper()" data-mention-empty>
           <slot name="empty" :char="activeTrigger!.char" :query="activeQuery">
-            {{ noResultsText }}
+            {{ resolvedNoResultsText }}
           </slot>
         </div>
       </div>

@@ -2,7 +2,7 @@
   "name": "@dzup-ui/nuxt",
   "type": "module",
   "version": "0.1.0-alpha.0",
-  "description": "Nuxt module for dzup-ui — auto-imports all Dz* components",
+  "description": "Nuxt module for dzup-ui — registers every component from the generated ownership table as a Nuxt auto-import",
   "license": "MIT",
   "exports": {
     ".": {
@@ -22,7 +22,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "test": "echo 'No unit tests in nuxt — run yarn typecheck'",
+    "test": "yarn --cwd ../.. vitest run packages/nuxt/src",
     "build": "tsc --project tsconfig.json"
   },
   "peerDependencies": {

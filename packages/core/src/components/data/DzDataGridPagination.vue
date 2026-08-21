@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
  * Renders page navigation and page size selector.
  */
 import { computed } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import DzIconButton from '../buttons/DzIconButton.vue'
 import DzSelect from '../forms/DzSelect.vue'
 import { dataGridVariants } from './DzDataGrid.variants.ts'
@@ -39,6 +40,9 @@ function goToPage(page: number): void {
   const clamped = Math.max(1, Math.min(page, totalPages.value))
   emit('update:page', clamped)
 }
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzDataGridPagination')
 </script>
 
 <template>
@@ -56,12 +60,12 @@ function goToPage(page: number): void {
         v-model="pageSizeModel"
         :items="pageSizeItems"
         size="sm"
-        aria-label="Rows per page"
+        :aria-label="dzMessages.rowsPerPage"
       />
 
       <DzIconButton
         :icon="ChevronLeft"
-        aria-label="Previous page"
+        :aria-label="dzMessages.previousPage"
         variant="ghost"
         size="sm"
         tone="neutral"
@@ -75,7 +79,7 @@ function goToPage(page: number): void {
 
       <DzIconButton
         :icon="ChevronRight"
-        aria-label="Next page"
+        :aria-label="dzMessages.nextPage"
         variant="ghost"
         size="sm"
         tone="neutral"

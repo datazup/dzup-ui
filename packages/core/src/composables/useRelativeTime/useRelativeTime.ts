@@ -21,6 +21,8 @@
 
 import type { ComputedRef, MaybeRefOrGetter, Ref } from 'vue'
 import { computed, onBeforeUnmount, onMounted, ref, toValue, watch } from 'vue'
+import { cachedDateTimeFormat, cachedRelativeTimeFormat } from '../../i18n/intl-cache.ts'
+import { useDzLocale } from '../provider/useDzLocale.ts'
 
 /** Accepted timestamp inputs: a Date, epoch milliseconds, or an ISO string. */
 export type RelativeTimeValue = Date | number | string
@@ -83,7 +85,12 @@ export function formatRelativeTime(
   if (Number.isNaN(target))
     return ''
 
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
+  // Cached (TASK-OSS-P4-03). `locale` keeps its documented meaning — omitted
+  // still means the runtime's own locale — because this is a public pure
+  // function and changing what `undefined` resolves to would be a breaking
+  // change for anyone calling it directly. The composable below is where the
+  // provider locale enters.
+  const rtf = cachedRelativeTimeFormat(locale, { numeric: 'auto' })
   // Signed seconds: negative = in the past, positive = in the future.
   let duration = (target - reference) / SECOND_MS
 
@@ -110,7 +117,7 @@ export function formatAbsoluteTime(
   const date = toDate(value)
   if (Number.isNaN(date.getTime()))
     return ''
-  return new Intl.DateTimeFormat(locale, {
+  return cachedDateTimeFormat(locale, {
     dateStyle: 'full',
     timeStyle: 'short',
   }).format(date)
@@ -148,7 +155,15 @@ export interface UseRelativeTimeOptions {
   value: MaybeRefOrGetter<RelativeTimeValue>
   /** Display mode — `'relative'` (live) or `'absolute'` (static) */
   mode?: MaybeRefOrGetter<RelativeTimeMode>
-  /** Locale override; defaults to the runtime/document locale */
+  /**
+   * Locale override.
+   *
+   * Defaults to the application's `DzProvider` locale, and to `en-US` when no
+   * provider declares one (ADR-20). It used to default to the *runtime* locale,
+   * which is not the same value on a Node server as in the visitor's browser —
+   * so a server-rendered "2 minutes ago" and its hydrated replacement could be
+   * in different languages.
+   */
   locale?: MaybeRefOrGetter<RelativeTimeLocale>
   /**
    * Fixed refresh interval in ms. Omit (or pass `undefined`) to derive the
@@ -180,6 +195,13 @@ export interface UseRelativeTimeReturn {
 export function useRelativeTime(options: UseRelativeTimeOptions): UseRelativeTimeReturn {
   const { value, mode, locale, updateInterval } = options
 
+  // The provider locale, used when the caller states none. This is the one
+  // behavioural change TASK-OSS-P4-03 makes to this composable, and it is the
+  // point of it: an application sets its locale once and every relative time
+  // follows, deterministically on both sides of hydration.
+  const dzLocale = useDzLocale()
+  const activeLocale = (): RelativeTimeLocale => toValue(locale) ?? dzLocale.value
+
   // Seed `now` from the wall clock at setup so the first render already reads
   // correctly (server and client clocks agree closely enough); the mounted
   // timer then keeps it fresh.
@@ -191,11 +213,11 @@ export function useRelativeTime(options: UseRelativeTimeOptions): UseRelativeTim
   })
 
   const relative = computed(() =>
-    formatRelativeTime(toValue(value), now.value, toValue(locale)),
+    formatRelativeTime(toValue(value), now.value, activeLocale()),
   )
 
   const absolute = computed(() =>
-    formatAbsoluteTime(toValue(value), toValue(locale)),
+    formatAbsoluteTime(toValue(value), activeLocale()),
   )
 
   const display = computed(() =>

@@ -11,6 +11,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzButtonUi } from './DzButton.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -28,6 +29,18 @@ export interface DzButtonProps extends BaseAccessibilityProps {
   disabled?: boolean
   /** Loading state -- shows spinner and sets aria-busy */
   loading?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzButton.anatomy.ts`
+   * (ADR-19). `class` still applies to the root only; `ui` reaches the parts by
+   * name, and a name the anatomy does not declare is a type error rather than a
+   * class that lands nowhere.
+   *
+   * @example
+   * ```vue
+   * <DzButton :ui="{ spinner: 'size-5' }">Save</DzButton>
+   * ```
+   */
+  ui?: DzButtonUi
   /** HTML button type attribute */
   type?: 'button' | 'submit' | 'reset'
   /** Render as child element (slot content becomes the root) */

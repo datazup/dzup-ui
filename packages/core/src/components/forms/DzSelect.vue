@@ -33,7 +33,9 @@ import {
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { selectVariants } from './DzSelect.variants.ts'
 
@@ -59,17 +61,29 @@ const props = withDefaults(defineProps<DzSelectProps>(), {
   ariaInvalid: undefined,
   defaultOpen: false,
   searchable: false,
-  searchPlaceholder: 'Search...',
+  searchPlaceholder: undefined,
   filterFn: undefined,
-  noResultsText: 'No results found',
+  noResultsText: undefined,
   portalTo: undefined,
   portalDisabled: false,
   portalDefer: false,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzSelectEmits>()
-
 defineSlots<DzSelectSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzSelect')
+const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMessages.value.searchPlaceholder)
+const resolvedNoResultsText = computed(() => props.noResultsText ?? dzMessages.value.noResults)
 
 const EMPTY_VALUE_SENTINEL = '__DZ_SELECT_EMPTY__'
 
@@ -203,13 +217,41 @@ function handleBlur(event: FocusEvent): void {
   emit('blur', event)
 }
 
+/**
+ * Per-part class strings (ADR-19).
+ *
+ * `class` continues to land on the TRIGGER — the node it has always landed on,
+ * and the only one a consumer could reach before `ui` existed. `ui.root` is the
+ * way to the outer wrapper.
+ */
 const triggerClasses = computed(() =>
-  cn(styles.value.trigger(), attrs.class as string | undefined),
+  cn(styles.value.trigger(), props.ui?.trigger, attrs.class as string | undefined),
 )
+const rootClasses = computed(() => cn(props.ui?.root))
+const iconClasses = computed(() => cn(styles.value.icon(), props.ui?.icon))
+const contentClasses = computed(() => cn(styles.value.content(), props.ui?.content))
+const viewportClasses = computed(() => cn(styles.value.viewport(), props.ui?.viewport))
+const searchInputClasses = computed(() => cn(styles.value.searchInput(), props.ui?.input))
+const itemClasses = computed(() => cn(styles.value.item(), props.ui?.item))
+const itemIndicatorClasses = computed(() => cn(
+  'absolute left-1 flex items-center justify-center',
+  props.ui?.['item-indicator'],
+))
+const itemLabelClasses = computed(() => cn('pl-6', props.ui?.['item-label']))
+const noResultsClasses = computed(() => cn(styles.value.noResults(), props.ui?.empty))
+const emptyClasses = computed(() => cn(
+  'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center '
+  + 'text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
+  props.ui?.empty,
+))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 </script>
 
 <template>
-  <div>
+  <div data-part="root" :class="rootClasses">
     <SelectRoot
       :model-value="toInternal(model)"
       :disabled="resolvedDisabled"
@@ -221,6 +263,7 @@ const triggerClasses = computed(() =>
     >
       <SelectTrigger
         :id="resolvedId"
+        data-part="trigger"
         :aria-label="ariaLabel"
         :aria-labelledby="resolvedAriaLabelledby"
         :aria-describedby="resolvedAriaDescribedby"
@@ -237,17 +280,26 @@ const triggerClasses = computed(() =>
       >
         <SelectValue :id="valueId" :placeholder="placeholder" />
         <SelectIcon as-child>
-          <ChevronDown :class="styles.icon()" aria-hidden="true" />
+          <ChevronDown data-part="icon" :class="iconClasses" aria-hidden="true" />
         </SelectIcon>
       </SelectTrigger>
 
       <SelectPortal
-        :to="portalTo"
+        :to="resolvedPortalTo"
         :disabled="portalDisabled"
         :defer="portalDefer"
       >
-        <SelectContent :class="styles.content()" position="popper" :side-offset="4">
-          <SelectViewport :class="styles.viewport()">
+        <SelectContent
+          data-part="content"
+          :class="contentClasses"
+          position="popper"
+          :side-offset="4"
+        >
+          <SelectViewport data-part="viewport" :class="viewportClasses">
+            <!-- TODO(remove-after: 0.3.0): `data-dz-search-input` and
+                 `data-dz-no-results` below are dual-emitted beside their
+                 `data-part` names for one minor series (ADR-19 §6). Removing
+                 either is breaking and needs a major changeset. -->
             <div
               v-if="searchable"
               :class="styles.searchWrapper()"
@@ -257,10 +309,11 @@ const triggerClasses = computed(() =>
                 ref="searchInputRef"
                 type="text"
                 :value="searchQuery"
-                :placeholder="searchPlaceholder"
-                :class="styles.searchInput()"
+                :placeholder="resolvedSearchPlaceholder"
+                :class="searchInputClasses"
                 role="searchbox"
-                aria-label="Filter options"
+                :aria-label="dzMessages.filterOptions"
+                data-part="input"
                 data-dz-search-input
                 @input="handleSearchInput"
                 @keydown.stop
@@ -272,26 +325,29 @@ const triggerClasses = computed(() =>
                 :key="toInternal(item.value)"
                 :value="toInternal(item.value)"
                 :disabled="item.disabled"
-                :class="styles.item()"
+                data-part="item"
+                :class="itemClasses"
               >
-                <SelectItemIndicator class="absolute left-1 flex items-center justify-center">
+                <SelectItemIndicator data-part="item-indicator" :class="itemIndicatorClasses">
                   <Check :class="styles.checkIcon()" aria-hidden="true" />
                 </SelectItemIndicator>
-                <SelectItemText class="pl-6">
+                <SelectItemText data-part="item-label" :class="itemLabelClasses">
                   {{ item.label }}
                 </SelectItemText>
               </SelectItem>
             </template>
             <div
               v-else-if="searchable && searchQuery.trim()"
-              :class="styles.noResults()"
+              data-part="empty"
+              :class="noResultsClasses"
               data-dz-no-results
             >
-              {{ noResultsText }}
+              {{ resolvedNoResultsText }}
             </div>
             <div
               v-else
-              class="px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]"
+              data-part="empty"
+              :class="emptyClasses"
             >
               <slot name="empty">
                 No options available
@@ -306,7 +362,8 @@ const triggerClasses = computed(() =>
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

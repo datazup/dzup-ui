@@ -43,6 +43,18 @@ export * from './components/typography/index.ts'
 
 // ── Composables ──
 
+// Provider composables (TASK-OSS-P4-01, ADR-20).
+//
+// Added BY HAND, not by `yarn generate:exports`. That generator rewrites this
+// whole barrel from public-api.manifest.json, and the two have drifted: a
+// regeneration today would DROP useAffix, useCalendar, useInfiniteScroll,
+// useScrollSpy and useScrollToTop from the public API and ADD useCountdown and
+// useIntersection to it. That drift is a recorded owner decision (TASK-OSS-P0-01
+// finding 2) and resolving it is an API change, not a side effect of adding a
+// composable. The manifest carries the `provider` entry too, so whenever the
+// drift IS resolved, a regeneration keeps this line.
+export * from './composables/provider/index.ts'
+
 export * from './composables/useAffix/index.ts'
 export * from './composables/useCalendar/index.ts'
 export * from './composables/useClickOutside/index.ts'

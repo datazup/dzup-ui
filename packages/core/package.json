@@ -16,6 +16,10 @@
       "types": "./dist/resolver.d.ts",
       "import": "./dist/resolver.js"
     },
+    "./ownership": {
+      "types": "./dist/generated/component-ownership.d.ts",
+      "import": "./dist/generated/component-ownership.js"
+    },
     "./providers": {
       "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js"
@@ -99,6 +103,7 @@
     "tailwind-variants": "0.3.1"
   },
   "devDependencies": {
+    "@dzup-ui/testing": "workspace:*",
     "@vitejs/plugin-vue": "^6",
     "reka-ui": "^2.0.0",
     "tailwindcss": "^4.0.0",

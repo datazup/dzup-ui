@@ -23,7 +23,7 @@ export const treeSelectVariants = tv({
       'dz-focus-ring-input dz-disabled-input-shell',
       'cursor-pointer',
     ].join(' '),
-    value: 'flex flex-1 min-w-0 flex-wrap items-center gap-[var(--dz-spacing-1)] text-left',
+    value: 'flex flex-1 min-w-0 flex-wrap items-center gap-[var(--dz-spacing-1)] text-start',
     placeholder: 'truncate text-[var(--dz-muted-foreground)]',
     singleValue: 'truncate',
     chip: [

@@ -1,0 +1,5 @@
+{
+  "$comment": "Build-only view of packages/contracts (TASK-OSS-P3-02). tsconfig.json deliberately INCLUDES *.spec.ts so `yarn typecheck:all` checks the type-level assertions in anatomy.types.spec.ts -- `expectTypeOf` and `@ts-expect-error` are only real when a compiler sees them, and vitest does not typecheck by default. But `tsc --project tsconfig.json` also EMITS what it includes, which would ship a spec inside the published package. This view is what `yarn build` compiles: same options, specs excluded.",
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}

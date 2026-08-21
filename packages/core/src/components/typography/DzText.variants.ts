@@ -5,6 +5,10 @@
  */
 import { tv } from 'tailwind-variants'
 
+/**
+ * `rtl-physical-ok`: see `DzHeading.variants.ts` — `align="left"` names a
+ * side (TASK-OSS-P4-05).
+ */
 export const textVariants = tv({
   base: 'font-[var(--dz-font-sans)] m-0',
   variants: {

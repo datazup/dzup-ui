@@ -6,6 +6,7 @@ import type { DzCarouselDotsProps, DzCarouselDotsSlots } from './DzCarousel.type
  * Injects context from parent DzCarousel (ADR-08).
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
@@ -34,13 +35,16 @@ const dotsClasses = computed(() =>
 const slideIndices = computed(() =>
   Array.from({ length: carouselContext?.slideCount.value ?? 0 }, (_, i) => i),
 )
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzCarouselDots')
 </script>
 
 <template>
   <div
     :class="dotsClasses"
     role="tablist"
-    aria-label="Slide navigation"
+    :aria-label="dzMessages.slideNavigation"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <button

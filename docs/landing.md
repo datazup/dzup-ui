@@ -2,7 +2,7 @@
 
 > **Status:** Proposal / specification. **No implementation yet.**
 > **Owner:** dzup-ui team · **Last updated:** 2026-06-22
-> **Scope:** Public marketing/landing page for the dzup-ui component library, the entry point that funnels visitors into the **free** components (Storybook) today and the **Pro** components (`@dzup-ui/pro`) later.
+> **Scope:** Public marketing/landing page for the dzup-ui component library, the entry point that funnels visitors into the **free** components (Storybook) today and the **Pro** components (`@dzup-ui-pro/pro`) later.
 
 ---
 

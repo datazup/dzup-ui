@@ -19,7 +19,7 @@ export const dataGridVariants = tv({
     header: 'bg-[var(--dz-muted)]',
     headerRow: '',
     headerCell: [
-      'text-left font-medium text-[var(--dz-muted-foreground)]',
+      'text-start font-medium text-[var(--dz-muted-foreground)]',
       'select-none',
     ].join(' '),
     body: '',
@@ -28,11 +28,11 @@ export const dataGridVariants = tv({
       'transition-[var(--dz-transition-fast)]',
       'hover:bg-[var(--dz-muted)]/50',
     ].join(' '),
-    cell: 'text-left',
-    sortIcon: 'inline-flex ml-[var(--dz-spacing-1)]',
+    cell: 'text-start',
+    sortIcon: 'inline-flex ms-[var(--dz-spacing-1)]',
     filterIcon: [
       'inline-flex items-center justify-center',
-      'h-5 w-5 ml-[var(--dz-spacing-1)]',
+      'h-5 w-5 ms-[var(--dz-spacing-1)]',
       'rounded-[var(--dz-radius-sm)]',
       'hover:bg-[var(--dz-muted)]',
       'transition-[var(--dz-transition-fast)]',

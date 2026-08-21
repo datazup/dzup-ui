@@ -96,7 +96,7 @@ export const tabsVariants = tv({
       vertical: {
         root: 'flex-row',
         list: 'flex-col',
-        content: 'mt-0 ml-[var(--dz-spacing-2)]',
+        content: 'mt-0 ms-[var(--dz-spacing-2)]',
       },
     },
   },
@@ -131,16 +131,16 @@ export const tabsVariants = tv({
       variant: 'line',
       orientation: 'vertical',
       class: {
-        list: 'border-b-0 border-r border-[var(--dz-border)]',
-        trigger: 'border-b-0 border-r-2 border-transparent -mr-px mb-0',
+        list: 'border-b-0 border-e border-[var(--dz-border)]',
+        trigger: 'border-b-0 border-e-2 border-transparent -me-px mb-0',
       },
     },
     {
       variant: 'enclosed',
       orientation: 'vertical',
       class: {
-        list: 'border-b-0 border-r border-[var(--dz-border)]',
-        trigger: 'rounded-t-none rounded-l-[var(--dz-radius-md)] border-b-transparent -mr-px mb-0 data-[state=active]:border-r-[var(--dz-background)]',
+        list: 'border-b-0 border-e border-[var(--dz-border)]',
+        trigger: 'rounded-t-none rounded-s-[var(--dz-radius-md)] border-b-transparent -me-px mb-0 data-[state=active]:border-e-[var(--dz-background)]',
       },
     },
   ],

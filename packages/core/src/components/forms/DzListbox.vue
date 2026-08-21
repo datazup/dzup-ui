@@ -35,6 +35,7 @@ import {
  */
 import { computed, markRaw, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { listboxVariants } from './DzListbox.variants.ts'
 
@@ -51,9 +52,9 @@ const props = withDefaults(defineProps<DzListboxProps>(), {
   optionDisabled: undefined,
   optionGroup: undefined,
   filter: false,
-  filterPlaceholder: 'Search...',
+  filterPlaceholder: undefined,
   checkmark: false,
-  emptyMessage: 'No options',
+  emptyMessage: undefined,
   disabled: false,
   size: 'md',
   invalid: false,
@@ -69,6 +70,11 @@ const props = withDefaults(defineProps<DzListboxProps>(), {
 
 const emit = defineEmits<DzListboxEmits>()
 defineSlots<DzListboxSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzListbox')
+const resolvedFilterPlaceholder = computed(() => props.filterPlaceholder ?? dzMessages.value.filterPlaceholder)
+const resolvedEmptyMessage = computed(() => props.emptyMessage ?? dzMessages.value.empty)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -329,9 +335,9 @@ function onContentClickCapture(event: MouseEvent): void {
       <div v-if="filter" :class="styles.filterWrapper()">
         <ListboxFilter
           :model-value="filterQuery"
-          :placeholder="filterPlaceholder"
+          :placeholder="resolvedFilterPlaceholder"
           :class="styles.filter()"
-          aria-label="Filter options"
+          :aria-label="dzMessages.filterOptions"
           @update:model-value="handleFilterInput"
         />
       </div>
@@ -416,7 +422,7 @@ function onContentClickCapture(event: MouseEvent): void {
 
         <div v-else :class="styles.empty()">
           <slot name="empty">
-            {{ emptyMessage }}
+            {{ resolvedEmptyMessage }}
           </slot>
         </div>
       </ListboxContent>

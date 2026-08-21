@@ -1,11 +1,13 @@
 import type { DzSelectItem } from './DzSelect.types.ts'
-import { mount } from '@vue/test-utils'
 /**
  * DzSelect — Contract Spec v1 conformance tests.
  *
  * Verifies props, events, slots, data attributes, and ARIA compliance.
  */
+import { expectAnatomy } from '@dzup-ui/testing'
+import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import { anatomy } from './DzSelect.anatomy.ts'
 import DzSelect from './DzSelect.vue'
 
 const mockItems: DzSelectItem[] = [
@@ -104,5 +106,118 @@ describe('dzSelect — Contract Spec v1', () => {
     })
     const trigger = wrapper.find('[style*="contain"]')
     expect(trigger.exists()).toBe(true)
+  })
+  // ── Anatomy (ADR-19) ──
+
+  it('conforms to its declared anatomy while closed', () => {
+    const wrapper = mount(DzSelect, { props: { items: mockItems } })
+
+    expect(wrapper.attributes('data-part')).toBe('root')
+    expect(wrapper.find('[data-part="trigger"]').exists()).toBe(true)
+    expectAnatomy(wrapper, anatomy)
+  })
+
+  it('conforms while open, with the listbox rendered inline', async () => {
+    // `portalDisabled` keeps the content inside the wrapper so one check covers
+    // both halves; the portaled case is the next test.
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, defaultOpen: true, portalDisabled: true, searchable: true },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    for (const part of ['content', 'viewport', 'input', 'item', 'item-label'])
+      expect(wrapper.find(`[data-part="${part}"]`).exists(), part).toBe(true)
+
+    expectAnatomy(wrapper, anatomy)
+    wrapper.unmount()
+  })
+
+  it('emits no undeclared part into the portal either', async () => {
+    // The portaled content is outside the wrapper entirely, so nothing else in
+    // this file sees it. An undeclared part there would be invisible.
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    const content = document.body.querySelector('[data-part="content"]')
+    expect(content).not.toBeNull()
+    expectAnatomy(content!, anatomy, {
+      // The portal root is the content, so the trigger side is not in this tree.
+      absentParts: ['root', 'trigger', 'icon'],
+    })
+    wrapper.unmount()
+  })
+
+  it('names the empty state when there are no options', async () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: [], defaultOpen: true, portalDisabled: true },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[data-part="empty"]').exists()).toBe(true)
+    expectAnatomy(wrapper, anatomy)
+    wrapper.unmount()
+  })
+
+  it('keeps the legacy hooks alongside the new parts (dual-emit)', async () => {
+    // `data-dz-search-input` and `data-dz-no-results` predate this contract and
+    // stay for one minor series (ADR-19 §6) — removing them is a major.
+    const wrapper = mount(DzSelect, {
+      props: { items: [], defaultOpen: true, portalDisabled: true, searchable: true },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    const search = wrapper.find('[data-dz-search-input]')
+    expect(search.exists()).toBe(true)
+    expect(search.attributes('data-part')).toBe('input')
+    wrapper.unmount()
+  })
+
+  // ── Per-part overrides (`ui`) ──
+
+  it('reaches the portaled content, which no class could reach', async () => {
+    const wrapper = mount(DzSelect, {
+      props: {
+        items: mockItems,
+        defaultOpen: true,
+        portalDisabled: true,
+        ui: { content: 'max-h-40', item: 'py-3' },
+      },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 50))
+
+    expect(wrapper.find('[data-part="content"]').classes()).toContain('max-h-40')
+    expect(wrapper.find('[data-part="item"]').classes()).toContain('py-3')
+    wrapper.unmount()
+  })
+
+  it('keeps class on the trigger and sends ui.root to the wrapper', () => {
+    const wrapper = mount(DzSelect, {
+      props: { items: mockItems, ui: { root: 'w-64' } },
+      attrs: { class: 'shadow-lg' },
+    })
+
+    expect(wrapper.find('[data-part="trigger"]').classes()).toContain('shadow-lg')
+    expect(wrapper.classes()).toContain('w-64')
+    expect(wrapper.classes()).not.toContain('shadow-lg')
+  })
+
+  it('changes nothing when no ui is given', () => {
+    const withUi = mount(DzSelect, { props: { items: mockItems, ui: {} } })
+    const without = mount(DzSelect, { props: { items: mockItems } })
+
+    expect(withUi.find('[data-part="trigger"]').classes())
+      .toEqual(without.find('[data-part="trigger"]').classes())
   })
 })

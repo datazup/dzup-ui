@@ -49,7 +49,7 @@ export const mentionVariants = tv({
       'list-none m-0',
     ].join(' '),
     item: [
-      'w-full text-left',
+      'w-full text-start',
       'inline-flex items-center gap-[var(--dz-spacing-2)]',
       'rounded-[var(--dz-radius-sm)]',
       'mx-[var(--dz-spacing-1)]',

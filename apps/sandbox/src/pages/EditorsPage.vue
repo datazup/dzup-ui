@@ -40,7 +40,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 // DzCodeEditor — Monaco/CodeMirror wrap (sandbox stub)
 // Demonstrates the planned API: v-model, language, readonly, line-numbers,
 // minimap, word-wrap. The textarea is a stand-in for the real editor surface
-// that will live in @dzup-ui/pro.
+// that will live in @dzup-ui-pro/pro.
 // ---------------------------------------------------------------------------
 
 const codeLanguages = ['typescript', 'json', 'vue', 'markdown', 'css'] as const
@@ -459,7 +459,7 @@ function resetDiff(): void {
     </h1>
     <p class="page-description">
       Content authoring surfaces. Each demo below is a sandbox stub that mirrors the planned
-      <code>@dzup-ui/pro</code> editor API — paired with the shipping
+      <code>@dzup-ui-pro/pro</code> editor API — paired with the shipping
       <code>DzCodeBlock</code> for static code display.
     </p>
 
@@ -471,7 +471,7 @@ function resetDiff(): void {
     >
       The real <code>DzCodeEditor</code>, <code>DzMarkdownEditor</code>, <code>DzJsonEditor</code>,
       <code>DzRichTextEditor</code> and <code>DzDiffViewer</code> components live in
-      <code>@dzup-ui/pro</code> (see <code>packages/core/src/resolver.ts</code>) and will wrap
+      <code>@dzup-ui-pro/pro</code> (see <code>packages/core/src/resolver.ts</code>) and will wrap
       Monaco / CodeMirror / Tiptap. The textareas below are intentional placeholders that
       exercise the planned props, slots and events using only <code>@dzup-ui/core</code> chrome
       and design tokens.
@@ -994,7 +994,7 @@ function resetDiff(): void {
         </h2>
         <p class="section-description">
           Concrete follow-ups required to promote these stubs into real
-          <code>@dzup-ui/pro</code> components.
+          <code>@dzup-ui-pro/pro</code> components.
         </p>
       </header>
 
@@ -1056,7 +1056,7 @@ function resetDiff(): void {
           dzup equivalents. Mirror the migration pattern used for buttons / inputs.
         </li>
         <li>
-          <strong>Sandbox parity story</strong> — once <code>@dzup-ui/pro</code> exists, swap the
+          <strong>Sandbox parity story</strong> — once <code>@dzup-ui-pro/pro</code> exists, swap the
           textareas in this page for the real components and delete the stub helpers
           (<code>renderMarkdown</code>, <code>computeDiff</code>, <code>exec</code>). This page
           then becomes the integration smoke test for the family.

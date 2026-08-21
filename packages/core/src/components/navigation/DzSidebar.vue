@@ -25,6 +25,8 @@ import type {
  * ```
  */
 import { computed, onMounted, onUnmounted, provide, ref, useAttrs, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_SIDEBAR_KEY } from './DzSidebar.types.ts'
 import { sidebarVariants } from './DzSidebar.variants.ts'
@@ -45,15 +47,25 @@ const props = withDefaults(defineProps<DzSidebarProps>(), {
   activeStyle: 'filled',
   storageKey: undefined,
   id: undefined,
-  ariaLabel: 'Sidebar navigation',
+  ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
 })
 
 defineEmits<DzSidebarEmits>()
-
 defineSlots<DzSidebarSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then `body` (ADR-20, TASK-OSS-P4-04). `'body'` is spelled
+// out here rather than left to the portal's default because `<Teleport>` requires
+// a target and has no default of its own.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value ?? 'body')
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzSidebar')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const canUseStorage = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined'
 
@@ -188,7 +200,7 @@ function handleOverlayClick(): void {
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport :to="resolvedPortalTo">
     <Transition name="dz-sidebar-overlay">
       <div
         v-if="isMobile && mobileOpenModel"
@@ -203,7 +215,7 @@ function handleOverlayClick(): void {
     :id="id"
     :class="rootClasses"
     :style="rootStyles"
-    :aria-label="ariaLabel"
+    :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :aria-hidden="mobileClosed ? 'true' : undefined"

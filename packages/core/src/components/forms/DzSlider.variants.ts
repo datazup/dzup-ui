@@ -76,7 +76,7 @@ export const sliderVariants = tv({
       horizontal: {
         root: 'w-full',
         track: 'w-full',
-        label: 'mr-3',
+        label: 'me-3',
       },
       vertical: {
         root: 'h-full flex-col',

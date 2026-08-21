@@ -29,6 +29,7 @@ import type { DzAnchorEmits, DzAnchorItem, DzAnchorProps, DzAnchorSlots } from '
  */
 import { computed, h, toRef, useAttrs } from 'vue'
 import { useScrollSpy } from '../../composables/useScrollSpy/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { anchorVariants } from './DzAnchor.variants.ts'
 
@@ -42,7 +43,7 @@ const activeHref = defineModel<string>('active', { default: '' })
 const props = withDefaults(defineProps<DzAnchorProps>(), {
   offsetTop: 0,
   affix: false,
-  ariaLabel: 'Page navigation',
+  ariaLabel: undefined,
   id: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
@@ -51,6 +52,10 @@ const props = withDefaults(defineProps<DzAnchorProps>(), {
 
 const emit = defineEmits<DzAnchorEmits>()
 const slots = defineSlots<DzAnchorSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzAnchor')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 
@@ -192,7 +197,7 @@ function AnchorTree(): VNode {
     :id="id"
     :class="rootClasses"
     :style="rootStyle"
-    :aria-label="ariaLabel"
+    :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     data-state="ready"

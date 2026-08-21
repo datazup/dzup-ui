@@ -33,7 +33,7 @@ const classes = computed(() =>
 </script>
 
 <template>
-  <thead :class="classes" v-bind="{ ...$attrs, class: undefined }">
+  <thead data-part="header" :class="classes" v-bind="{ ...$attrs, class: undefined }">
     <slot />
   </thead>
 </template>

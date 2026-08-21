@@ -51,8 +51,10 @@ describe('dzBlockquote — Unit Tests', () => {
     expect(wrapper.find('footer').exists()).toBe(false)
   })
 
-  it('applies left border styling', () => {
+  it('applies an inline-start border', () => {
+    // `border-s-4`, not `border-l-4`: the accent rail follows the reading
+    // direction, so it sits on the right in an Arabic document (TASK-OSS-P4-05).
     const wrapper = mount(DzBlockquote, { slots: { default: 'text' } })
-    expect(wrapper.classes().join(' ')).toContain('border-l-4')
+    expect(wrapper.classes().join(' ')).toContain('border-s-4')
   })
 })

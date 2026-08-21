@@ -12,6 +12,7 @@ import { Filter } from 'lucide-vue-next'
  */
 import { computed, inject } from 'vue'
 import { useDataGridHeader } from '../../composables/useDataGridHeader/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
 import DzIconButton from '../buttons/DzIconButton.vue'
@@ -71,6 +72,9 @@ const {
   handleFilterKeyDown,
   handleClearFilter,
 } = useDataGridHeader({ ctx: ctx! })
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzDataGridHeader')
 </script>
 
 <template>
@@ -85,7 +89,7 @@ const {
           :model-value="ctx!.isAllSelected.value"
           :indeterminate="ctx!.isSomeSelected.value"
           size="sm"
-          aria-label="Select all rows"
+          :aria-label="dzMessages.selectAllRows"
           @update:model-value="ctx!.toggleAllSelection()"
         />
       </th>

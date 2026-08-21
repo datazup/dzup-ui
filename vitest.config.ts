@@ -8,9 +8,18 @@ export default defineConfig({
     alias: {
       '@dzup-ui/tokens': resolve(__dirname, 'packages/tokens/src'),
       '@dzup-ui/contracts': resolve(__dirname, 'packages/contracts/src'),
+      // Sub-path exports must precede the bare package alias: Vite matches by
+      // prefix in declaration order, so '@dzup-ui/core' first would swallow
+      // '@dzup-ui/core/ownership' and resolve it to a directory that does not
+      // exist. Same ordering rule as packages/tooling/src/workspace-aliases.ts.
+      '@dzup-ui/core/ownership': resolve(__dirname, 'packages/core/src/generated/component-ownership.ts'),
       '@dzup-ui/core': resolve(__dirname, 'packages/core/src'),
       '@dzup-ui/compat': resolve(__dirname, 'packages/compat/src'),
       '@dzup-ui/tooling': resolve(__dirname, 'packages/tooling/src'),
+      // Specs assert against the working tree, not the last build: without this,
+      // `@dzup-ui/testing` resolves through the workspace link to its stale
+      // `dist/`, so a helper added to src is invisible until someone rebuilds.
+      '@dzup-ui/testing': resolve(__dirname, 'packages/testing/src'),
     },
   },
   test: {
@@ -28,6 +37,12 @@ export default defineConfig({
     include: [
       'packages/*/src/**/*.spec.ts',
       'packages/*/tests/**/*.spec.ts',
+      // packages/*/scripts holds the validators invoked as `tsx <script>` rather
+      // than imported from a barrel (validate-exports, validate-peers,
+      // validate-package-names …). Their logic gates merges, so it is testable
+      // in the default `yarn test` lane rather than only through the CLI it
+      // happens to be wrapped in (TASK-OSS-P1-01).
+      'packages/*/scripts/**/*.spec.ts',
       'apps/*/src/**/*.spec.ts',
       'apps/*/scripts/**/*.test.mjs',
     ],

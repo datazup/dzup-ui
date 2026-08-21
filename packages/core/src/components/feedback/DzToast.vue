@@ -20,6 +20,7 @@ import {
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { toastVariants } from './DzToast.variants.ts'
 
@@ -65,6 +66,9 @@ const rootStateProps = computed(() => ({
   ...(props.open === undefined ? {} : { open: props.open }),
   ...(props.defaultOpen === undefined ? {} : { defaultOpen: props.defaultOpen }),
 }))
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzToast')
 </script>
 
 <template>
@@ -103,7 +107,7 @@ const rootStateProps = computed(() => ({
 
     <ToastClose
       :class="styles.closeButton()"
-      aria-label="Close notification"
+      :aria-label="dzMessages.close"
       @click="handleClose"
     >
       <X class="h-3 w-3" aria-hidden="true" />

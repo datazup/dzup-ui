@@ -19,6 +19,7 @@ import { PopoverArrow, PopoverContent, PopoverPortal } from 'reka-ui'
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { popoverVariants } from './DzPopover.variants.ts'
 
@@ -39,6 +40,12 @@ const props = withDefaults(defineProps<DzPopoverContentProps>(), {
 
 const emit = defineEmits<DzPopoverContentEmits>()
 defineSlots<DzPopoverContentSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 const styles = computed(() => popoverVariants({ size: props.size }))
@@ -69,7 +76,7 @@ function handleCloseAutoFocus(event: Event): void {
 
 <template>
   <PopoverPortal
-    :to="portalTo"
+    :to="resolvedPortalTo"
     :disabled="portalDisabled"
     :defer="portalDefer"
   >

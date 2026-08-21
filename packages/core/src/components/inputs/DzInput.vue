@@ -16,6 +16,7 @@ import type { DzInputEmits, DzInputProps, DzInputSlots } from './DzInput.types.t
  */
 import { computed, inject, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
@@ -38,11 +39,16 @@ const props = withDefaults(defineProps<DzInputProps>(), {
   invalid: false,
   required: false,
   clearable: false,
-  loadingLabel: 'Loading',
+  loadingLabel: undefined,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzInputEmits>()
 defineSlots<DzInputSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzInput')
+const resolvedLoadingLabel = computed(() => props.loadingLabel ?? dzMessages.value.loading)
 
 const attrs = useAttrs()
 const inputRef = ref<HTMLInputElement | null>(null)
@@ -76,8 +82,14 @@ const isInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
 
-/** Wrapper classes merged with consumer class via cn() (ADR-10) */
-const wrapperClasses = computed(() =>
+/**
+ * Control classes merged with consumer class via cn() (ADR-10).
+ *
+ * `class` lands on the visual field rather than on the outer root: that is
+ * where it has always landed, and moving it now would silently restyle every
+ * existing consumer. `ui.root` reaches the outer node (ADR-19).
+ */
+const controlClasses = computed(() =>
   cn(
     inputWrapperVariants({
       variant: props.variant,
@@ -86,9 +98,28 @@ const wrapperClasses = computed(() =>
       invalid: isInvalid.value,
       seamless: isGrouped.value,
     }),
+    props.ui?.control,
     attrs.class as string | undefined,
   ),
 )
+
+/** Affix classes — shared by the prefix and suffix parts, overridable apart. */
+const AFFIX_BASE = 'flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]'
+const prefixClasses = computed(() => cn(AFFIX_BASE, props.ui?.prefix))
+const suffixClasses = computed(() => cn(AFFIX_BASE, props.ui?.suffix))
+
+const spinnerClasses = computed(() => cn('shrink-0', props.ui?.spinner))
+
+const clearClasses = computed(() => cn(
+  'flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] '
+  + 'hover:text-[var(--dz-foreground)] transition-colors',
+  props.ui?.clear,
+))
+
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /**
  * Spinner size mapped down from the input size so the indicator stays
@@ -107,7 +138,7 @@ const spinnerSize = computed(() => {
 })
 
 /** Inner input element classes */
-const inputClasses = computed(() => inputElementVariants())
+const inputClasses = computed(() => cn(inputElementVariants(), props.ui?.input))
 
 /** ID for the error message element (for aria-describedby) */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -149,19 +180,23 @@ defineExpose({ inputRef })
 
 <template>
   <div
+    data-part="root"
+    :class="cn(ui?.root)"
     :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <!-- Input wrapper with variant styling -->
-    <div :class="wrapperClasses">
+    <!-- The visual field: border, background, focus ring -->
+    <div data-part="control" :class="controlClasses">
       <!-- Prefix slot -->
       <span
         v-if="$slots.prefix"
-        class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]"
+        data-part="prefix"
+        :class="prefixClasses"
       >
         <slot name="prefix" />
       </span>
@@ -171,6 +206,7 @@ defineExpose({ inputRef })
         :id="resolvedId"
         ref="inputRef"
         v-model="model"
+        data-part="input"
         :type="type"
         :class="inputClasses"
         :name="name"
@@ -193,18 +229,20 @@ defineExpose({ inputRef })
       <!-- Loading spinner -->
       <DzSpinner
         v-if="loading"
-        class="shrink-0"
+        data-part="spinner"
+        :class="spinnerClasses"
         :size="spinnerSize"
         :tone="tone ?? 'neutral'"
-        :label="loadingLabel"
+        :label="resolvedLoadingLabel"
       />
 
       <!-- Clear button -->
       <button
         v-if="clearable && model && !resolvedDisabled && !readonly && !loading"
         type="button"
-        class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
-        aria-label="Clear input"
+        data-part="clear"
+        :class="clearClasses"
+        :aria-label="dzMessages.clear"
         tabindex="-1"
         @click="handleClear"
       >
@@ -227,7 +265,8 @@ defineExpose({ inputRef })
       <!-- Suffix slot -->
       <span
         v-if="$slots.suffix"
-        class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]"
+        data-part="suffix"
+        :class="suffixClasses"
       >
         <slot name="suffix" />
       </span>
@@ -237,7 +276,8 @@ defineExpose({ inputRef })
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

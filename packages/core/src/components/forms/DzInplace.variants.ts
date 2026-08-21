@@ -16,7 +16,7 @@ export const inplaceVariants = tv({
     root: 'dz-inplace inline-flex max-w-full align-middle',
     display: [
       'inline-flex items-center gap-[var(--dz-inplace-gap)]',
-      'max-w-full text-left',
+      'max-w-full text-start',
       'rounded-[var(--dz-inplace-radius)]',
       'px-[var(--dz-inplace-padding-x)] py-[var(--dz-inplace-padding-y)]',
       'cursor-text transition-colors',

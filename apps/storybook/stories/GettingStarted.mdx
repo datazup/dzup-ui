@@ -67,6 +67,48 @@ import { DzButton } from '@dzup-ui/core'
 </template>
 ```
 
+## Nuxt
+
+`@dzup-ui/nuxt` registers every component as a global auto-import, so templates
+need no import statement at all:
+
+```bash
+yarn add @dzup-ui/nuxt @dzup-ui/core @dzup-ui/tokens
+```
+
+{/* fixture: packages/nuxt/test/fixtures/core-only/nuxt.config.ts */}
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@dzup-ui/nuxt'],
+})
+```
+
+The module also pushes the token stylesheet before the component stylesheet and
+injects the FOUC-prevention theme script (ADR-15). Full options, the Pro tier,
+CSS ordering, and SSR are on **[Guides/SSR & Nuxt](?path=/docs/guides-ssr--docs)**.
+
+That config is copied from a fixture that CI installs from a packed tarball and
+builds — `yarn validate:doc-snippets` fails if this page and the fixture drift
+apart.
+
+## Vite auto-imports
+
+For a plain Vite app, `DzResolver` teaches
+[unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components)
+which names this library owns. It answers from generated ownership data by exact
+name, so a component it does not own resolves to nothing rather than to a guess:
+
+```ts
+// vite.config.ts
+import { DzResolver } from '@dzup-ui/core/resolver'
+import Components from 'unplugin-vue-components/vite'
+
+export default defineConfig({
+  plugins: [Components({ resolvers: [DzResolver()] })],
+})
+```
+
 ## Theme switching
 
 Dark mode keys off `[data-theme="dark"]` on an ancestor element. Set it on

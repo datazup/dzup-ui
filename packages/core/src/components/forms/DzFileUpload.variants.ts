@@ -62,13 +62,13 @@ export const fileUploadVariants = tv({
       'flex-1 truncate',
     ].join(' '),
     fileSize: [
-      'ml-[var(--dz-spacing-2)]',
+      'ms-[var(--dz-spacing-2)]',
       'text-[length:var(--dz-text-xs)]',
       'text-[var(--dz-muted-foreground)]',
       'shrink-0',
     ].join(' '),
     removeButton: [
-      'ml-[var(--dz-spacing-2)]',
+      'ms-[var(--dz-spacing-2)]',
       'shrink-0',
       'inline-flex items-center justify-center',
       'rounded-[var(--dz-radius-sm)]',

@@ -76,5 +76,5 @@ export const COUNTS = {
   /** Full-page templates — `TEMPLATES.length` in `src/templates/registry.ts`. */
   templates: 44,
   /** Story files across the 11 families, `*Parts` bundles included. */
-  storyFiles: 177,
+  storyFiles: 180,
 } as const

@@ -195,6 +195,15 @@ export interface DzButtonSlots {
 | ADR-15 | FOUC prevention                                    |
 | ADR-16 | `defineModel` for v-model                          |
 | ADR-17 | Token source of truth and component token ownership |
+| ADR-18 | Runtime floor and validator runner (`docs/adr/`)   |
+| ADR-19 | Public styling contract: layers, parts, states, `ui` (`docs/adr/`) |
+| ADR-20 | Provider contract: locale, direction, messages, formats, portals, motion, defaults, nonce, test ids (`docs/adr/`) |
+
+> Only ADR-18, ADR-19 and ADR-20 have a document in `docs/adr/`. The rest are
+> recorded by this table and by the source comments that cite them; they are
+> listed as debt in `packages/tooling/scripts/adr-registry.json`, and
+> `yarn validate:adr-references` fails on any *new* ADR number cited without
+> one. Writing one of them means deleting its entry and lowering the ceiling.
 
 ## Tooling
 

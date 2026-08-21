@@ -1,0 +1,58 @@
+{
+  "$comment": "Fixture (TASK-OSS-P0-02): a miniature Pro ownership manifest in the same schema Core emits, so the merge can be exercised without the live Pro checkout. `DzGanttTaskRow` is the cross-tier case that must be reported as a relationship rather than an error: it is a Pro part whose declared parent is deliberately absent from the Pro tier. `proInternalHelper` is the `unclassified` case that must survive the merge unchanged.",
+  "schemaVersion": "1.0.0",
+  "tier": "pro",
+  "sourceCommit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "generatedFrom": ["packages/pro/src/index.ts"],
+  "entries": [
+    {
+      "symbol": "DzDataGridPro",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "public-component",
+      "status": "beta",
+      "evidence": ["packages/pro/src/components/data-pro/DzDataGridPro.vue"]
+    },
+    {
+      "symbol": "DzGantt",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": "./planning",
+      "kind": "public-component",
+      "status": "experimental",
+      "evidence": ["packages/pro/src/components/planning/DzGantt.vue"]
+    },
+    {
+      "symbol": "DzGanttTaskRow",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": "./planning",
+      "kind": "compound-part",
+      "parentComponent": "DzGantt",
+      "evidence": ["packages/pro/src/components/planning/DzGanttTaskRow.vue"]
+    },
+    {
+      "symbol": "DzGanttProps",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": "./planning",
+      "kind": "type",
+      "evidence": ["packages/pro/src/components/planning/DzGantt.types.ts"]
+    },
+    {
+      "symbol": "DzProCardBody",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "compound-part",
+      "parentComponent": "DzCard",
+      "evidence": ["packages/pro/src/components/business/DzProCardBody.vue"]
+    },
+    {
+      "symbol": "proInternalHelper",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "unclassified",
+      "evidence": [
+        "packages/pro/src/utils/internal.ts",
+        "runtime export that no authority classifies — maintainer decision required"
+      ]
+    }
+  ]
+}

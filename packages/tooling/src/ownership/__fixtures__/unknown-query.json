@@ -1,0 +1,4 @@
+{
+  "$comment": "Fixture (TASK-OSS-P0-02): names the map must answer `null` for. `DzGanttRow` and `DzAppShell` are taken from the stale handwritten Pro list in packages/nuxt/src/module.ts — a resolver that guesses from a `Dz` prefix answers `@dzup-ui/core` for all three. Note `DzAppShell` IS a real Core component in the live manifest (P0-01 drift finding); what this fixture asserts is that a name absent from the *map given* resolves to null, never to a tier inferred from its spelling.",
+  "symbols": ["DzNotAComponent", "DzGanttRow", "DzAppShell", "DzButtonn", "Button"]
+}

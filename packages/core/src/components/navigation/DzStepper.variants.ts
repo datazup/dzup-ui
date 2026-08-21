@@ -42,7 +42,7 @@ export const stepperVariants = tv({
       vertical: {
         root: 'flex-col',
         step: 'flex-row gap-[var(--dz-spacing-3)]',
-        connector: 'w-px min-h-[var(--dz-spacing-6)] ml-4 my-[var(--dz-spacing-1)]',
+        connector: 'w-px min-h-[var(--dz-spacing-6)] ms-4 my-[var(--dz-spacing-1)]',
       },
     },
     status: {

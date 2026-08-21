@@ -1,4 +1,23 @@
 /**
+ * Anatomy conformance for rendered DOM (TASK-OSS-P3-02, ADR-19).
+ *
+ * Re-exported here so a consumer needs one import to test a dzup-ui component:
+ * the DOM installer below and the anatomy assertion are the same job.
+ */
+export type { AnatomyCheckOptions, AnatomyTarget, CheckableAnatomy } from './anatomy.js'
+export { checkAnatomy, expectAnatomy } from './anatomy.js'
+
+/**
+ * Right-to-left conformance (TASK-OSS-P4-05).
+ *
+ * `expectRtl` is source-level and runs anywhere. `expectRtlComputed` needs an
+ * engine that does layout and **throws rather than passing** under jsdom, so a
+ * suite cannot go green on a claim it never checked.
+ */
+export type { RtlTarget } from './rtl.js'
+export { checkRtl, expectRtl, expectRtlComputed, forwardArrow } from './rtl.js'
+
+/**
  * Install the DOM affordances used by dzup-ui's Reka UI primitives.
  *
  * The installer is intentionally framework- and runner-independent. Consumers

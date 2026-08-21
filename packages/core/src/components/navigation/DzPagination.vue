@@ -22,6 +22,7 @@ import {
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { paginationVariants } from './DzPagination.variants.ts'
 
@@ -38,7 +39,7 @@ const props = withDefaults(defineProps<DzPaginationProps>(), {
   size: 'md',
   disabled: false,
   id: undefined,
-  ariaLabel: 'Pagination',
+  ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
@@ -46,6 +47,10 @@ const props = withDefaults(defineProps<DzPaginationProps>(), {
 
 const emit = defineEmits<DzPaginationEmits>()
 defineSlots<DzPaginationSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzPagination')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 
@@ -75,7 +80,7 @@ function handleBlur(event: FocusEvent): void {
   <nav
     :id="id"
     :class="navClasses"
-    :aria-label="ariaLabel"
+    :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :data-state="disabled ? 'disabled' : 'idle'"
@@ -99,7 +104,7 @@ function handleBlur(event: FocusEvent): void {
         <PaginationFirst
           v-if="showEdges"
           :class="styles.button()"
-          aria-label="Go to first page"
+          :aria-label="dzMessages.firstPage"
         >
           <slot name="first">
             <ChevronsLeft class="h-4 w-4" aria-hidden="true" />
@@ -109,7 +114,7 @@ function handleBlur(event: FocusEvent): void {
         <!-- Previous button -->
         <PaginationPrev
           :class="styles.button()"
-          aria-label="Go to previous page"
+          :aria-label="dzMessages.previousPage"
         >
           <slot name="prev">
             <ChevronLeft class="h-4 w-4" aria-hidden="true" />
@@ -142,7 +147,7 @@ function handleBlur(event: FocusEvent): void {
         <!-- Next button -->
         <PaginationNext
           :class="styles.button()"
-          aria-label="Go to next page"
+          :aria-label="dzMessages.nextPage"
         >
           <slot name="next">
             <ChevronRight class="h-4 w-4" aria-hidden="true" />
@@ -153,7 +158,7 @@ function handleBlur(event: FocusEvent): void {
         <PaginationLast
           v-if="showEdges"
           :class="styles.button()"
-          aria-label="Go to last page"
+          :aria-label="dzMessages.lastPage"
         >
           <slot name="last">
             <ChevronsRight class="h-4 w-4" aria-hidden="true" />

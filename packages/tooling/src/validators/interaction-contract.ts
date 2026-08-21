@@ -34,7 +34,12 @@ interface Rule {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../')
 const COMPONENTS_DIR = resolve(ROOT, 'packages/core/src/components')
 
-const IGNORE_SUFFIXES = ['.spec.ts', '.test.ts', '.stories.ts', '.tokens.ts']
+// `.tokens.ts` and `.anatomy.ts` NAME tokens; they do not apply them. The rules
+// below are about styling code inlining focus-ring plumbing, and a declaration
+// file that lists `--dz-button-focus-ring-color` as an override point is the
+// opposite of that — it is how a consumer learns the sanctioned name to set
+// (TASK-OSS-P3-02, ADR-19).
+const IGNORE_SUFFIXES = ['.spec.ts', '.test.ts', '.stories.ts', '.tokens.ts', '.anatomy.ts']
 const VALID_EXTENSIONS = ['.ts', '.vue']
 
 const RULES: Rule[] = [
@@ -119,7 +124,11 @@ export function validateContent(content: string, filePath: string): Violation[] 
 
 export function validateFile(filePath: string, rootDir = ROOT): Violation[] {
   const content = readFileSync(filePath, 'utf8')
-  return validateContent(content, relative(rootDir, filePath))
+  // Forward slashes on every platform, matching the other validators. A
+  // violation message is read by a human and pasted into a search; win32
+  // separators make the same finding print two different ways depending on who
+  // ran the gate, and the spec asserting the POSIX form failed on Windows.
+  return validateContent(content, relative(rootDir, filePath).replaceAll('\\', '/'))
 }
 
 export function runInteractionContractCheck(

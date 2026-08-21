@@ -345,7 +345,7 @@ describe('dzSidebar -- Unit Tests', () => {
     expect(item.classes().some(c => c.includes('var(--dz-sidebar-item-active-text)'))).toBe(true)
   })
 
-  it('active item with activeStyle=rail uses border-left accent', () => {
+  it('active item with activeStyle=rail uses an inline-start accent rail', () => {
     const wrapper = mount(DzSidebar, {
       props: { activeStyle: 'rail' },
       global: { stubs: { Teleport: true } },
@@ -354,9 +354,12 @@ describe('dzSidebar -- Unit Tests', () => {
       },
     })
     const item = wrapper.find('[data-state="active"]')
-    expect(item.classes().some(c => c.includes('border-l-[3px]'))).toBe(true)
+    // `border-s-`, not `border-l-`: the rail marks the *start* edge, so it moves
+    // to the right in an Arabic document rather than staying pinned to the
+    // physical left of a mirrored sidebar (TASK-OSS-P4-05).
+    expect(item.classes().some(c => c.includes('border-s-[3px]'))).toBe(true)
     expect(
-      item.classes().some(c => c.includes('border-l-[var(--dz-sidebar-item-active-bg)]')),
+      item.classes().some(c => c.includes('border-s-[var(--dz-sidebar-item-active-bg)]')),
     ).toBe(true)
   })
 })

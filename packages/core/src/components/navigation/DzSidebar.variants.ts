@@ -13,7 +13,7 @@ export const sidebarVariants = tv({
   slots: {
     root: [
       'flex flex-col overflow-hidden shrink-0',
-      'border-r border-[var(--dz-sidebar-border)]',
+      'border-e border-[var(--dz-sidebar-border)]',
       'bg-[var(--dz-sidebar-bg)]',
       'text-[var(--dz-sidebar-foreground)]',
       'transition-[width,transform] duration-300 ease-in-out',
@@ -106,7 +106,7 @@ export const sidebarVariants = tv({
       active: true,
       activeStyle: 'rail',
       class: {
-        item: 'bg-[var(--dz-sidebar-item-hover-bg)] text-[var(--dz-sidebar-foreground-hover)] border-l-[3px] border-l-[var(--dz-sidebar-item-active-bg)] !pl-[calc(var(--dz-sidebar-item-padding-x)-3px)]',
+        item: 'bg-[var(--dz-sidebar-item-hover-bg)] text-[var(--dz-sidebar-foreground-hover)] border-s-[3px] border-s-[var(--dz-sidebar-item-active-bg)] !ps-[calc(var(--dz-sidebar-item-padding-x)-3px)]',
       },
     },
   ],

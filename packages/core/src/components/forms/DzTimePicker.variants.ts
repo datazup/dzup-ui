@@ -28,7 +28,7 @@ export const timePickerVariants = tv({
       'rounded-[var(--dz-radius-md)]',
       'bg-[var(--dz-background)]',
       'text-[var(--dz-foreground)]',
-      'cursor-pointer text-left',
+      'cursor-pointer text-start',
       'transition-[var(--dz-transition-fast)]',
       'dz-focus-ring-input dz-disabled-input-shell',
       'motion-reduce:transition-none',
@@ -60,7 +60,7 @@ export const timePickerVariants = tv({
       'overflow-y-auto overflow-x-hidden',
       'scroll-smooth',
       'py-[var(--dz-spacing-1)]',
-      'border-r border-[var(--dz-border)] last:border-r-0',
+      'border-e border-[var(--dz-border)] last:border-e-0',
       '[scrollbar-width:thin]',
     ].join(' '),
     option: [
@@ -161,7 +161,7 @@ export const timePickerVariants = tv({
       true: { trigger: 'border-[var(--dz-danger)] focus:border-[var(--dz-danger)]' },
     },
     cleanable: {
-      true: { trigger: 'pr-[var(--dz-spacing-10)]' },
+      true: { trigger: 'pe-[var(--dz-spacing-10)]' },
     },
     confirm: {
       true: { footerButton: 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)] hover:bg-[var(--dz-primary-hover)]' },

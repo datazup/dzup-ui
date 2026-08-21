@@ -31,7 +31,7 @@ export const scrollAreaVariants = tv({
   variants: {
     scrollbarOrientation: {
       vertical: {
-        scrollbar: 'h-full w-2.5 border-l border-l-transparent',
+        scrollbar: 'h-full w-2.5 border-s border-s-transparent',
       },
       horizontal: {
         scrollbar: 'h-2.5 flex-col border-t border-t-transparent',

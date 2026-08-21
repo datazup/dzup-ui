@@ -221,6 +221,21 @@
       }
     },
     "composables": {
+      "provider": {
+        "path": "./src/composables/provider/index.ts",
+        "exports": [
+          "useDzTheme",
+          "useDzLocale",
+          "useDzDirection",
+          "useDzMessages",
+          "useDzFormats",
+          "useDzPortalTarget",
+          "useDzMotion",
+          "useDzDefaults",
+          "useDzNonce",
+          "useDzTestIds"
+        ]
+      },
       "useClickOutside": {
         "path": "./src/composables/useClickOutside/index.ts",
         "exports": [
@@ -337,6 +352,7 @@
       "themeProvider": {
         "path": "./src/providers/index.ts",
         "exports": [
+          "DzProvider",
           "DzThemeProvider",
           "DZ_THEME_KEY",
           "useTheme",
@@ -1009,7 +1025,11 @@
       "DzAnimatedNumberSlots",
       "DzAnimatedNumberAffixSlotProps",
       "DzAnimatedNumberExpose",
-      "AnimatedNumberVariantProps"
+      "AnimatedNumberVariantProps",
+      "DzProviderProps",
+      "DzProviderSlots",
+      "DzProviderThemeOptions",
+      "DzProviderDefaults"
     ]
   }
 }

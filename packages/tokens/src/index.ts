@@ -7,7 +7,7 @@
  * Tokens are consumed via CSS custom properties using `var()`.
  * No `getToken()` or `getCssVar()` API exists — use CSS `var()` directly (ADR-09).
  *
- * Component-local `*.tokens.ts` files in `@dzup-ui/core` and `@dzup-ui/pro`
+ * Component-local `*.tokens.ts` files in `@dzup-ui/core` and `@dzup-ui-pro/pro`
  * remain valid implementation-layer adaptation files. See ADR-17 for the
  * current hybrid ownership model.
  *

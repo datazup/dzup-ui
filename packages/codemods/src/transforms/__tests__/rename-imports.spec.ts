@@ -42,17 +42,17 @@ describe('rename-imports transform', () => {
     expect(result).toContain('DzButton')
   })
 
-  it('rewrites "dzup-ui/pro" to "@dzup-ui/pro"', () => {
+  it('rewrites "dzup-ui/pro" to "@dzup-ui-pro/pro"', () => {
     const input = `import { DzKanbanBoard } from 'dzup-ui/pro'`
     const result = applyTransform(input)
-    expect(result).toContain(`from '@dzup-ui/pro'`)
+    expect(result).toContain(`from '@dzup-ui-pro/pro'`)
     expect(result).toContain('DzKanbanBoard')
   })
 
-  it('rewrites "@dzup-ui/pro-components" to "@dzup-ui/pro"', () => {
+  it('rewrites "@dzup-ui/pro-components" to "@dzup-ui-pro/pro"', () => {
     const input = `import { DzGantt } from '@dzup-ui/pro-components'`
     const result = applyTransform(input)
-    expect(result).toContain(`from '@dzup-ui/pro'`)
+    expect(result).toContain(`from '@dzup-ui-pro/pro'`)
   })
 
   // -----------------------------------------------------------------------
@@ -65,7 +65,7 @@ describe('rename-imports transform', () => {
     expect(result).not.toBeNull()
     // DzButton should go to core, DzKanbanBoard to pro
     expect(result).toContain(`from '@dzup-ui/core'`)
-    expect(result).toContain(`from '@dzup-ui/pro'`)
+    expect(result).toContain(`from '@dzup-ui-pro/pro'`)
   })
 
   // -----------------------------------------------------------------------
@@ -110,7 +110,7 @@ describe('rename-imports transform', () => {
     const result = applyTransform(input)
     expect(result).not.toBeNull()
     expect(result).toContain(`from '@dzup-ui/core'`)
-    expect(result).toContain(`from '@dzup-ui/pro'`)
+    expect(result).toContain(`from '@dzup-ui-pro/pro'`)
     expect(result).toContain(`from 'vue'`)
   })
 

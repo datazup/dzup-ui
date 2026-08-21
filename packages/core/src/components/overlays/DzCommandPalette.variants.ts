@@ -68,7 +68,7 @@ export const commandPaletteVariants = tv({
       'dz-disabled-control',
     ].join(' '),
     itemIcon: [
-      'mr-[var(--dz-spacing-2)]',
+      'me-[var(--dz-spacing-2)]',
       'h-4 w-4',
       'shrink-0',
       'text-[var(--dz-muted-foreground)]',
@@ -77,7 +77,7 @@ export const commandPaletteVariants = tv({
       'flex-1',
     ].join(' '),
     itemShortcut: [
-      'ml-auto',
+      'ms-auto',
       'text-[length:var(--dz-text-xs)]',
       'tracking-widest',
       'text-[var(--dz-muted-foreground)]',

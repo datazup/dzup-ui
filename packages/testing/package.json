@@ -2,7 +2,7 @@
   "name": "@dzup-ui/testing",
   "type": "module",
   "version": "0.1.0",
-  "description": "DOM test-environment support for dzup-ui consumers",
+  "description": "DOM test-environment support and anatomy conformance for dzup-ui consumers",
   "license": "MIT",
   "sideEffects": [
     "./dist/vitest.js"
@@ -27,7 +27,7 @@
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "lint": "eslint src/",
-    "test": "vitest run src/index.spec.ts",
+    "test": "yarn --cwd ../.. vitest run packages/testing/src",
     "build": "tsc --project tsconfig.json"
   },
   "devDependencies": {

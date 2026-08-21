@@ -1,0 +1,25 @@
+{
+  "$comment": "Fixture (TASK-OSS-P0-02): a Pro manifest that re-exports a name Core already owns. There is no such collision between the real Core and Pro manifests today (checked 2026-08-20: zero overlapping symbols), which is exactly why the case needs a fixture — the merge must fail closed the first time one appears rather than the first time anyone notices.",
+  "schemaVersion": "1.0.0",
+  "tier": "pro",
+  "sourceCommit": "cccccccccccccccccccccccccccccccccccccccc",
+  "generatedFrom": ["packages/pro/src/index.ts"],
+  "entries": [
+    {
+      "symbol": "DzButton",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "public-component",
+      "status": "experimental",
+      "evidence": ["packages/pro/src/components/business/DzButton.vue"]
+    },
+    {
+      "symbol": "DzDataGridPro",
+      "package": "@dzup-ui-pro/pro",
+      "subpath": ".",
+      "kind": "public-component",
+      "status": "beta",
+      "evidence": ["packages/pro/src/components/data-pro/DzDataGridPro.vue"]
+    }
+  ]
+}

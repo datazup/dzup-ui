@@ -10,7 +10,9 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) before contribu
 
 ### Prerequisites
 
-- Node.js >= 20.0.0
+- Node.js `^20.19.0 || >=22.13.0` — the exact range the build and test
+  dependencies require, not a round number (ADR-18). `.nvmrc` pins the
+  floor, so `nvm use` gives you the minimum a contributor must support.
 - Yarn 4.x (`corepack enable && corepack prepare yarn@4.6.0 --activate`)
 
 ### Setup

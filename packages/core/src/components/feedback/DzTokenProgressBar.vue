@@ -16,6 +16,7 @@ import type { DzTokenProgressBarProps, DzTokenProgressBarSlots } from './DzToken
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 
 defineOptions({
@@ -74,6 +75,9 @@ const labelBindings = computed(() => ({
   total: props.total,
   state: state.value,
 }))
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzTokenProgressBar')
 </script>
 
 <template>
@@ -83,7 +87,7 @@ const labelBindings = computed(() => ({
     :aria-valuenow="used"
     aria-valuemin="0"
     :aria-valuemax="total"
-    aria-label="Token usage"
+    :aria-label="dzMessages.tokenUsage"
     :data-state="state"
     :data-warn="state === 'warn' ? '' : undefined"
     :data-danger="state === 'danger' ? '' : undefined"

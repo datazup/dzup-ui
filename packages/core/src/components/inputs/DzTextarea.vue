@@ -14,6 +14,7 @@ import type { DzTextareaEmits, DzTextareaProps } from './DzTextarea.types.ts'
  */
 import { computed, nextTick, onMounted, ref, useAttrs, useId, watch } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { textareaVariants } from './DzTextarea.variants.ts'
@@ -36,10 +37,14 @@ const props = withDefaults(defineProps<DzTextareaProps>(), {
   required: false,
   autoResize: false,
   maxRows: undefined,
-  loadingLabel: 'Loading',
+  loadingLabel: undefined,
 })
 
 const emit = defineEmits<DzTextareaEmits>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzTextarea')
+const resolvedLoadingLabel = computed(() => props.loadingLabel ?? dzMessages.value.loading)
 
 const attrs = useAttrs()
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
@@ -221,7 +226,7 @@ defineExpose({ textareaRef })
       class="absolute right-[var(--dz-spacing-2)] top-[var(--dz-spacing-2)]"
       :size="spinnerSize"
       :tone="tone ?? 'neutral'"
-      :label="loadingLabel"
+      :label="resolvedLoadingLabel"
     />
 
     <!-- Error message -->

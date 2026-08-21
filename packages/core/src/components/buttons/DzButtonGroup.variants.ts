@@ -15,9 +15,9 @@ export const buttonGroupVariants = tv({
       horizontal: [
         'flex-row',
         '[&>*:not(:first-child):not(:last-child)]:rounded-none',
-        '[&>*:first-child]:rounded-r-none',
-        '[&>*:last-child]:rounded-l-none',
-        '[&>*+*]:border-l-0',
+        '[&>*:first-child]:rounded-e-none',
+        '[&>*:last-child]:rounded-s-none',
+        '[&>*+*]:border-s-0',
       ].join(' '),
       vertical: [
         'flex-col',

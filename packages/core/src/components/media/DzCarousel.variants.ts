@@ -62,7 +62,7 @@ export const carouselVariants = tv({
         slide: 'basis-full',
         navPrev: 'top-[var(--dz-spacing-2)] left-1/2 -translate-x-1/2',
         navNext: 'bottom-[var(--dz-spacing-2)] left-1/2 -translate-x-1/2',
-        dots: 'ml-[var(--dz-spacing-3)] flex-col',
+        dots: 'ms-[var(--dz-spacing-3)] flex-col',
       },
     },
 

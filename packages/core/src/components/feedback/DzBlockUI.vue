@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DzBlockUIEmits, DzBlockUIProps, DzBlockUISlots } from './DzBlockUI.types.ts'
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { blockUiVariants } from './DzBlockUI.variants.ts'
@@ -47,6 +48,12 @@ const props = withDefaults(defineProps<DzBlockUIProps>(), {
 
 const emit = defineEmits<DzBlockUIEmits>()
 defineSlots<DzBlockUISlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then `body` (ADR-20, TASK-OSS-P4-04). `'body'` is spelled
+// out here rather than left to the portal's default because `<Teleport>` requires
+// a target and has no default of its own.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value ?? 'body')
 
 const attrs = useAttrs()
 const styles = blockUiVariants()
@@ -128,7 +135,7 @@ onBeforeUnmount(() => {
       <slot />
     </div>
 
-    <Teleport to="body" :disabled="!fullScreen">
+    <Teleport :to="resolvedPortalTo" :disabled="!fullScreen">
       <Transition
         enter-active-class="transition-opacity duration-200 motion-reduce:transition-none"
         enter-from-class="opacity-0"

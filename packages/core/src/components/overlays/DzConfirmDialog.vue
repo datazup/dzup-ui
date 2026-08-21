@@ -19,6 +19,7 @@ import type { DzConfirmDialogEmits, DzConfirmDialogProps, DzConfirmDialogSlots }
  * ```
  */
 import { computed, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzButton from '../buttons/DzButton.vue'
 import { confirmDialogVariants } from './DzConfirmDialog.variants.ts'
@@ -35,8 +36,8 @@ const props = withDefaults(defineProps<DzConfirmDialogProps>(), {
   id: undefined,
   open: false,
   message: undefined,
-  confirmLabel: 'Confirm',
-  cancelLabel: 'Cancel',
+  confirmLabel: undefined,
+  cancelLabel: undefined,
   variant: 'default',
   loading: false,
   size: 'sm',
@@ -48,6 +49,11 @@ const props = withDefaults(defineProps<DzConfirmDialogProps>(), {
 
 const emit = defineEmits<DzConfirmDialogEmits>()
 defineSlots<DzConfirmDialogSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzConfirmDialog')
+const resolvedConfirmLabel = computed(() => props.confirmLabel ?? dzMessages.value.confirm)
+const resolvedCancelLabel = computed(() => props.cancelLabel ?? dzMessages.value.cancel)
 
 const attrs = useAttrs()
 
@@ -191,7 +197,7 @@ function handleInteractOutside(): void {
           data-testid="confirm-dialog-cancel"
           @click="handleCancel"
         >
-          {{ cancelLabel }}
+          {{ resolvedCancelLabel }}
         </DzButton>
         <DzButton
           variant="solid"
@@ -201,7 +207,7 @@ function handleInteractOutside(): void {
           data-testid="confirm-dialog-confirm"
           @click="handleConfirm"
         >
-          {{ confirmLabel }}
+          {{ resolvedConfirmLabel }}
         </DzButton>
       </div>
     </DzDialogContent>

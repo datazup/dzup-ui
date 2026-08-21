@@ -1,0 +1,4 @@
+/* Fixture app stylesheet - must be ordered after the library's own CSS. */
+.dz-fixture-app {
+  color: var(--dz-primary);
+}

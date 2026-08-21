@@ -9,6 +9,8 @@
  * @module @dzup-ui/core/components/data/DzAnimatedNumber.tween
  */
 
+import { cachedNumberFormat } from '../../i18n/intl-cache.ts'
+
 /**
  * Named easing curves. Each (except `linear`) maps to a `cubic-bezier` whose
  * control points mirror the `EASINGS` scale in `@dzup-ui/tokens`
@@ -138,8 +140,20 @@ export function sampleTween({ from, to, elapsed, duration, easing }: TweenOption
 
 /**
  * Format a number via `Intl.NumberFormat`, falling back to `String(value)` if
- * the runtime rejects the locale/options. Pure — callers that animate should
- * cache a formatter instead of calling this per frame.
+ * the runtime rejects the locale/options.
+ *
+ * The formatter comes from the shared cache (TASK-OSS-P4-03). It used to be
+ * constructed **inside this function**, and ECMA-402 requires locale data to be
+ * resolved on construction — so a caller animating a number resolved locale
+ * data once per frame. The advice this comment used to give ("callers that
+ * animate should cache a formatter instead of calling this per frame") is no
+ * longer the caller's problem.
+ *
+ * `intl-cache` imports nothing, so this module stays framework-free and its
+ * specs still run without a DOM.
+ *
+ * Signature and semantics are unchanged — `locale` is still optional and still
+ * means "the runtime's own locale" when omitted. This is a public export.
  */
 export function formatNumber(
   value: number,
@@ -147,7 +161,7 @@ export function formatNumber(
   locale?: string | string[],
 ): string {
   try {
-    return new Intl.NumberFormat(locale, options).format(value)
+    return cachedNumberFormat(locale, options).format(value)
   }
   catch {
     return String(value)

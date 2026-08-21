@@ -34,7 +34,9 @@ import {
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { multiSelectVariants } from './DzMultiSelect.variants.ts'
 
@@ -66,6 +68,12 @@ const props = withDefaults(defineProps<DzMultiSelectProps>(), {
 
 const emit = defineEmits<DzMultiSelectEmits>()
 defineSlots<DzMultiSelectSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -185,6 +193,9 @@ function handleClear(): void {
 const rootClasses = computed(() =>
   cn(styles.value.root(), attrs.class as string | undefined),
 )
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzMultiSelect')
 </script>
 
 <template>
@@ -246,7 +257,7 @@ const rootClasses = computed(() =>
           v-if="model.length > 0"
           type="button"
           :class="styles.icon()"
-          aria-label="Clear all"
+          :aria-label="dzMessages.clearAll"
           @click.stop="handleClear"
         >
           <X class="h-3.5 w-3.5" aria-hidden="true" />
@@ -256,7 +267,7 @@ const rootClasses = computed(() =>
           <button
             type="button"
             :class="styles.icon()"
-            aria-label="Toggle options"
+            :aria-label="dzMessages.toggleOptions"
             :disabled="resolvedDisabled"
           >
             <ChevronDown class="h-full w-full" aria-hidden="true" />
@@ -265,7 +276,7 @@ const rootClasses = computed(() =>
       </ComboboxAnchor>
 
       <ComboboxPortal
-        :to="portalTo"
+        :to="resolvedPortalTo"
         :disabled="portalDisabled"
         :defer="portalDefer"
       >

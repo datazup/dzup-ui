@@ -14,6 +14,7 @@ import { Check } from 'lucide-vue-next'
 import { computed, toRef, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useTransfer } from '../../composables/useTransfer/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { transferVariants } from './DzTransfer.variants.ts'
 
@@ -29,12 +30,12 @@ const props = withDefaults(defineProps<DzTransferProps>(), {
   searchable: false,
   disabled: false,
   size: 'md',
-  searchPlaceholder: 'Search...',
+  searchPlaceholder: undefined,
   invalid: false,
   error: undefined,
   required: false,
   id: undefined,
-  ariaLabel: 'Transfer list',
+  ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
@@ -42,6 +43,11 @@ const props = withDefaults(defineProps<DzTransferProps>(), {
 
 const emit = defineEmits<DzTransferEmits>()
 defineSlots<DzTransferSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzTransfer')
+const resolvedSearchPlaceholder = computed(() => props.searchPlaceholder ?? dzMessages.value.searchPlaceholder)
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -165,7 +171,7 @@ function handleBlur(event: FocusEvent): void {
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-state="resolvedDisabled ? 'disabled' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
-      :aria-label="ariaLabel"
+      :aria-label="resolvedAriaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
@@ -189,13 +195,13 @@ function handleBlur(event: FocusEvent): void {
           v-model="sourceSearch"
           type="text"
           :class="styles.searchInput()"
-          :placeholder="searchPlaceholder"
-          aria-label="Search source items"
+          :placeholder="resolvedSearchPlaceholder"
+          :aria-label="dzMessages.searchSource"
         >
         <div
           :class="styles.listBody()"
           role="listbox"
-          aria-label="Source items"
+          :aria-label="dzMessages.sourceItems"
           aria-multiselectable="true"
           :aria-disabled="resolvedDisabled || undefined"
         >
@@ -238,7 +244,7 @@ function handleBlur(event: FocusEvent): void {
           type="button"
           :class="styles.actionButton()"
           :disabled="sourceSelected.size === 0 || resolvedDisabled"
-          aria-label="Move selected to target"
+          :aria-label="dzMessages.moveToTarget"
           @click="moveToTarget"
         >
           <svg
@@ -259,7 +265,7 @@ function handleBlur(event: FocusEvent): void {
           type="button"
           :class="styles.actionButton()"
           :disabled="targetSelected.size === 0 || resolvedDisabled"
-          aria-label="Move selected to source"
+          :aria-label="dzMessages.moveToSource"
           @click="moveToSource"
         >
           <svg
@@ -293,13 +299,13 @@ function handleBlur(event: FocusEvent): void {
           v-model="targetSearch"
           type="text"
           :class="styles.searchInput()"
-          :placeholder="searchPlaceholder"
-          aria-label="Search target items"
+          :placeholder="resolvedSearchPlaceholder"
+          :aria-label="dzMessages.searchTarget"
         >
         <div
           :class="styles.listBody()"
           role="listbox"
-          aria-label="Target items"
+          :aria-label="dzMessages.targetItems"
           aria-multiselectable="true"
           :aria-disabled="resolvedDisabled || undefined"
           :aria-required="resolvedRequired || undefined"

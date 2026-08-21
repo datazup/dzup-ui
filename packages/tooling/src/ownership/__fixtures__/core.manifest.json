@@ -1,0 +1,55 @@
+{
+  "$comment": "Fixture (TASK-OSS-P0-02): a miniature Core ownership manifest. One of each kind the merge tool has to carry through — a public component, a compound part, a type-only export, a composable, and a compat alias from a second package in the same tier. Kept tiny on purpose: the merge behaviour must be reviewable by reading the file.",
+  "schemaVersion": "1.0.0",
+  "tier": "core",
+  "sourceCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "generatedFrom": ["packages/core/src/index.ts"],
+  "entries": [
+    {
+      "symbol": "DzButton",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "public-component",
+      "status": "stable",
+      "evidence": ["packages/core/src/components/buttons/DzButton.vue"]
+    },
+    {
+      "symbol": "DzButtonProps",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": ["packages/core/src/components/buttons/DzButton.types.ts"]
+    },
+    {
+      "symbol": "DzCard",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "public-component",
+      "status": "stable",
+      "evidence": ["packages/core/src/components/cards/DzCard.vue"]
+    },
+    {
+      "symbol": "DzCardBody",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "compound-part",
+      "parentComponent": "DzCard",
+      "evidence": ["packages/core/src/components/cards/DzCardBody.vue"]
+    },
+    {
+      "symbol": "DzLegacyToast",
+      "package": "@dzup-ui/compat",
+      "subpath": ".",
+      "kind": "compat-alias",
+      "aliasOf": "DzToast",
+      "evidence": ["packages/compat/src/adapters/DzLegacyToast.vue"]
+    },
+    {
+      "symbol": "useTheme",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": ["packages/core/src/providers/useTheme.ts"]
+    }
+  ]
+}

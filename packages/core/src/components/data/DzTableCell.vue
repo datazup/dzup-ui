@@ -15,6 +15,7 @@ import type { DzTableCellProps, DzTableCellSlots } from './DzTable.types.ts'
  *   the `colId` adopt that width.
  */
 import { computed, inject, ref, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABLE_KEY } from './DzTable.types.ts'
 import { tableVariants } from './DzTable.variants.ts'
@@ -164,12 +165,16 @@ const classes = computed(() =>
     attrs.class as string | undefined,
   ),
 )
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzTableCell')
 </script>
 
 <template>
   <component
     :is="header ? 'th' : 'td'"
     ref="cellEl"
+    data-part="cell"
     :class="classes"
     :style="cellStyle"
     :colspan="colspan"
@@ -183,7 +188,7 @@ const classes = computed(() =>
       v-if="showResizeHandle"
       type="button"
       class="absolute -right-1 top-0 z-10 h-full w-2 cursor-col-resize touch-none select-none bg-transparent hover:bg-[var(--dz-primary)]/40"
-      aria-label="Resize column"
+      :aria-label="dzMessages.resizeColumn"
       data-dz-resize-handle
       @pointerdown="onResizeStart"
       @keydown="onResizeKey"

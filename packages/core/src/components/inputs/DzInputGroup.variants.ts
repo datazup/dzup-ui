@@ -35,8 +35,8 @@ export const inputGroupVariants = tv({
       'text-[var(--dz-muted-foreground)]',
       'text-[length:var(--dz-text-sm)]',
     ].join(' '),
-    addonPrefix: 'border-r border-[var(--dz-input-border)]',
-    addonSuffix: 'border-l border-[var(--dz-input-border)]',
+    addonPrefix: 'border-e border-[var(--dz-input-border)]',
+    addonSuffix: 'border-s border-[var(--dz-input-border)]',
     /** Wrapper around the default slot (the field) — grows to fill the row. */
     field: 'min-w-0 flex-1',
   },

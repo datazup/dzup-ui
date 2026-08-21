@@ -7,5 +7,9 @@
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  // __fixtures__ holds deliberately broken inputs for the ownership scanner --
+  // including a re-export of a module that does not exist, which is the case
+  // proving the scanner reports an unreadable reference instead of silently
+  // exporting nothing. Type-checking them would report the fixture as the bug.
+  "exclude": ["node_modules", "dist", "src/**/__fixtures__/**"]
 }

@@ -78,20 +78,78 @@ const name = ref('')
 </template>
 ```
 
+### Nuxt
+
+`@dzup-ui/nuxt` registers every component as a global auto-import, so no import
+statement is needed:
+
+```bash
+yarn add @dzup-ui/nuxt @dzup-ui/core @dzup-ui/tokens
+```
+
+<!-- fixture: packages/nuxt/test/fixtures/core-only/nuxt.config.ts -->
+
+```ts
+export default defineNuxtConfig({
+  modules: ['@dzup-ui/nuxt'],
+})
+```
+
+That snippet is copied from a fixture that `yarn test:nuxt-fixtures` installs
+from a packed tarball and builds; `yarn validate:doc-snippets` fails if the two
+drift apart. See [`packages/nuxt/README.md`](packages/nuxt/README.md) for the
+Pro tier, the `prefix` option, CSS ordering, and SSR.
+
+**Vite auto-imports.** `DzResolver` resolves component names for
+[unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components)
+from the same generated ownership data. A name it does not own resolves to
+nothing rather than to a guess:
+
+```ts
+// vite.config.ts
+import { DzResolver } from '@dzup-ui/core/resolver'
+import Components from 'unplugin-vue-components/vite'
+
+export default defineConfig({
+  plugins: [Components({ resolvers: [DzResolver()] })],
+})
+```
+
 ## Packages
 
+Versions and descriptions below are read from each `package.json` by
+`yarn generate:readme-facts`; `yarn validate:readme-facts` fails if this table
+is edited by hand or falls behind. Until 2026-08-20 it was hand-typed, and five
+of its six rows named a version the package had already moved past.
+
+<!-- facts:packages:start -->
+
 | Package | Version | Description |
-|---------|---------|-------------|
-| [`@dzup-ui/core`](./packages/core) | 0.1.0-alpha.0 | Foundational components for buttons, inputs, forms, layout, navigation, overlays, feedback, data, media, and typography |
-| [`@dzup-ui/tokens`](./packages/tokens) | 0.1.0-alpha.0 | Design tokens — CSS custom properties, Tailwind theme, TypeScript definitions |
-| [`@dzup-ui/contracts`](./packages/contracts) | 0.1.0-alpha.0 | Canonical public API contract types (props, events, slots) |
-| [`@dzup-ui/compat`](./packages/compat) | 0.0.1 | Optional migration adapters from old dzup-ui to vNext |
-| [`@dzup-ui/codemods`](./packages/codemods) | 0.0.1 | Optional migration transforms and CLI tooling (`dzup-codemod`) |
-| [`@dzup-ui/nuxt`](./packages/nuxt) | 0.1.0-alpha.0 | Optional Nuxt 3 integration module for auto-importing Dz* components |
+|---|---|---|
+| [`@dzup-ui/codemods`](./packages/codemods) | 0.1.0-alpha.0 | Code transforms for migrating from old dzup-ui to vNext |
+| [`@dzup-ui/compat`](./packages/compat) | 0.1.0-alpha.0 | Migration adapters from old dzup-ui to vNext |
+| [`@dzup-ui/contracts`](./packages/contracts) | 0.1.0 | Canonical public API contracts for dzup-ui components |
+| [`@dzup-ui/core`](./packages/core) | 0.2.0 | Core foundational components for dzup-ui |
+| [`@dzup-ui/mcp`](./packages/mcp) | 0.2.0 | Model Context Protocol server for dzup-ui — browse components, blocks, templates and design tokens, and fetch real block source + install commands from any AI coding tool (Cursor, Claude Code, Windsurf). |
+| [`@dzup-ui/nuxt`](./packages/nuxt) | 0.1.0-alpha.0 | Nuxt module for dzup-ui — registers every component from the generated ownership table as a Nuxt auto-import |
+| [`@dzup-ui/testing`](./packages/testing) | 0.1.0 | DOM test-environment support and anatomy conformance for dzup-ui consumers |
+| [`@dzup-ui/tokens`](./packages/tokens) | 0.2.0 | Design tokens for the dzup-ui component library |
+
+<!-- facts:packages:end -->
 
 ## Component Families
 
-Buttons · Cards · Inputs · Forms · Layout · Navigation · Overlays · Feedback · Data · Media · Typography
+<!-- facts:families:start -->
+
+Buttons · Cards · Data · Feedback · Forms · Inputs · Layout · Media · Navigation · Overlays · Typography
+
+<!-- facts:families:end -->
+
+<!-- facts:catalog:start -->
+
+**144 public components** across **11 families**, plus 64 compound parts, documented by 180 story files.
+
+<!-- facts:catalog:end -->
 
 ## Tech Stack
 

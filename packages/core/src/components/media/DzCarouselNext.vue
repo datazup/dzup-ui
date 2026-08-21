@@ -6,6 +6,7 @@ import type { DzCarouselNavProps, DzCarouselNavSlots } from './DzCarousel.types.
  * Injects context from parent DzCarousel (ADR-08).
  */
 import { computed, inject, useAttrs } from 'vue'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_CAROUSEL_KEY } from './DzCarousel.types.ts'
 import { carouselVariants } from './DzCarousel.variants.ts'
@@ -30,6 +31,9 @@ const styles = computed(() =>
 const classes = computed(() =>
   cn(styles.value.navButton(), styles.value.navNext(), attrs.class as string | undefined),
 )
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzCarouselNext')
 </script>
 
 <template>
@@ -37,7 +41,7 @@ const classes = computed(() =>
     type="button"
     :class="classes"
     :disabled="!carouselContext?.canNext.value"
-    aria-label="Next slide"
+    :aria-label="dzMessages.nextSlide"
     v-bind="{ ...$attrs, class: undefined }"
     @click="carouselContext?.next()"
   >

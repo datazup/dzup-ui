@@ -8,6 +8,7 @@ import { DialogContent, DialogOverlay, DialogPortal, injectDialogRootContext } f
  * with sheet-specific side positioning.
  */
 import { computed, useAttrs } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { cn } from '../../utilities/cn.ts'
 import { sheetVariants } from './DzSheet.variants.ts'
 
@@ -25,6 +26,12 @@ const props = withDefaults(defineProps<DzSheetContentProps>(), {
 
 const emit = defineEmits<DzSheetContentEmits>()
 defineSlots<DzSheetContentSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 
@@ -72,7 +79,7 @@ function handleInteractOutside(event: Event): void {
 
 <template>
   <DialogPortal
-    :to="portalTo"
+    :to="resolvedPortalTo"
     :disabled="portalDisabled"
     :defer="portalDefer"
   >

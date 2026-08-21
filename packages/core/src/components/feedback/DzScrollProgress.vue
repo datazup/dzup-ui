@@ -19,6 +19,7 @@ import type { DzScrollProgressEmits, DzScrollProgressProps, DzScrollProgressSlot
  */
 import { computed, useAttrs } from 'vue'
 import { useScrollProgress } from '../../composables/useScrollProgress/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import {
   scrollProgressBarVariants,
@@ -38,11 +39,15 @@ const props = withDefaults(defineProps<DzScrollProgressProps>(), {
   thickness: undefined,
   size: 'md',
   tone: 'primary',
-  ariaLabel: 'Page scroll progress',
+  ariaLabel: undefined,
 })
 
 const emit = defineEmits<DzScrollProgressEmits>()
 defineSlots<DzScrollProgressSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzScrollProgress')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 
@@ -90,7 +95,7 @@ const circularToneVar = computed(() => scrollProgressToneVar[props.tone] ?? 'var
     :aria-valuenow="valueNow"
     aria-valuemin="0"
     aria-valuemax="100"
-    :aria-label="ariaLabel"
+    :aria-label="resolvedAriaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :data-tone="tone"

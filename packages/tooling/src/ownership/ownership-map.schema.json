@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dzup-ui.dev/schemas/ownership-map.schema.json",
+  "title": "dzup-ui cross-tier ownership map",
+  "description": "Exact-name lookup merged from one Core and one Pro component-ownership manifest. Consumed by the resolver and the Nuxt module so neither has to guess a tier from a Dz prefix. A symbol absent from `symbols` is unowned: callers must answer null, never infer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "inputs", "symbols", "collisions"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version of the map, which tracks the manifest schema major it merges."
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Provenance of each merged manifest, in tier order.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tier", "sourceCommit"],
+        "properties": {
+          "tier": { "enum": ["core", "pro"] },
+          "sourceCommit": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "symbols": {
+      "type": "object",
+      "description": "Symbol → owner. Keys are sorted. A symbol involved in an unresolved collision is deliberately absent.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["package", "subpath", "kind", "tier"],
+        "properties": {
+          "package": { "type": "string", "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$" },
+          "subpath": { "type": "string", "pattern": "^\\.(/[A-Za-z0-9._-]+)*$" },
+          "kind": {
+            "enum": [
+              "public-component",
+              "compound-part",
+              "composable",
+              "type",
+              "recipe",
+              "token-module",
+              "internal",
+              "compat-alias",
+              "unclassified"
+            ]
+          },
+          "tier": { "enum": ["core", "pro"] },
+          "parentComponent": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "collisions": {
+      "type": "array",
+      "description": "Symbols more than one tier exports. Never auto-resolved.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["symbol", "tiers", "resolution"],
+        "properties": {
+          "symbol": { "type": "string", "minLength": 1 },
+          "tiers": {
+            "type": "array",
+            "minItems": 2,
+            "items": { "enum": ["core", "pro"] },
+            "uniqueItems": true
+          },
+          "resolution": {
+            "type": "string",
+            "description": "\"unresolved\" until collision-decisions.json records a winning tier and the ADR that decided it; then \"<adr>: <tier>\"."
+          }
+        }
+      }
+    },
+    "crossTierRelationships": {
+      "type": "array",
+      "description": "A compound part in one tier whose parent lives in the other. A fact to surface for review, not an error.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["symbol", "tier", "parentComponent", "parentTier"],
+        "properties": {
+          "symbol": { "type": "string", "minLength": 1 },
+          "tier": { "enum": ["core", "pro"] },
+          "parentComponent": { "type": "string", "minLength": 1 },
+          "parentTier": { "enum": ["core", "pro", "unknown"] }
+        }
+      }
+    }
+  }
+}

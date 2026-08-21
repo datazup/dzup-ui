@@ -7,6 +7,12 @@
 import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
+/**
+ * `rtl-physical-ok`: source code reads left-to-right in every locale, so the
+ * line-number gutter stays on the left and the numbers stay right-aligned
+ * against it. Mirroring them would put the gutter on the right of code that
+ * still runs left-to-right (TASK-OSS-P4-05).
+ */
 export const codeBlockVariants = tv({
   slots: {
     root: 'overflow-hidden rounded-lg border font-mono text-sm',

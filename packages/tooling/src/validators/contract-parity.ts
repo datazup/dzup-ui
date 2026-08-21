@@ -37,8 +37,20 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../')
 const STORIES_DIR = resolve(ROOT, 'packages/core/stories')
+/**
+ * Where a `Dz*.vue` may live.
+ *
+ * `packages/core/src/providers` was added by TASK-OSS-P4-02. Until then this
+ * validator looked only inside `**\/src/components`, so `DzThemeProvider` —
+ * a public component the story corpus imports, and one whose defect surface is
+ * an entire application's theme — was invisible to it in both directions: it
+ * was never counted as a component, and a spec placed beside it would never
+ * have been found. Widening the list surfaced exactly two components, and both
+ * gained a spec in the same change.
+ */
 const COMPONENT_ROOTS = [
   resolve(ROOT, 'packages/core/src/components'),
+  resolve(ROOT, 'packages/core/src/providers'),
   resolve(ROOT, 'packages/compat/src/components'),
 ]
 
@@ -63,10 +75,11 @@ export interface ParityViolation {
 
 /**
  * Component imports, from either the stories' relative paths
- * (`'../../src/components/data'`) or a package specifier.
+ * (`'../../src/components/data'`, `'../../src/providers'`) or a package
+ * specifier.
  */
 const IMPORT_RE
-  = /import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"]([^'"]*(?:src\/components|@dzup-ui\/(?:core|compat))[^'"]*)['"]/g
+  = /import\s+(?:type\s+)?\{([^}]+)\}\s+from\s+['"]([^'"]*(?:src\/(?:components|providers)|@dzup-ui\/(?:core|compat))[^'"]*)['"]/g
 
 export function walk(dir: string, predicate: (path: string) => boolean): string[] {
   const out: string[] = []

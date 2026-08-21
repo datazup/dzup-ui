@@ -1,14 +1,17 @@
-import { mount } from '@vue/test-utils'
 /**
  * DzDialog -- Contract Spec v1 conformance tests.
  *
  * Verifies compound component API shape, props, events, slots,
  * data attributes, ARIA compliance, and CSS containment.
  */
+import { expectAnatomy } from '@dzup-ui/testing'
+import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
+import { anatomy as dialogAnatomy } from './DzDialog.anatomy.ts'
 import DzDialog from './DzDialog.vue'
 import DzDialogClose from './DzDialogClose.vue'
+import { anatomy as contentAnatomy } from './DzDialogContent.anatomy.ts'
 import DzDialogContent from './DzDialogContent.vue'
 import DzDialogDescription from './DzDialogDescription.vue'
 import DzDialogOverlay from './DzDialogOverlay.vue'
@@ -337,6 +340,111 @@ describe('dzDialog -- Contract Spec v1', () => {
     })
     const content = document.querySelector('[role="dialog"]')
     expect(content?.getAttribute('aria-labelledby')).toBe('external-heading')
+    wrapper.unmount()
+  })
+  // ── Anatomy (ADR-19) ──
+
+  it('renders no element of its own, as parts: none declares', () => {
+    // The claim and the DOM checked against each other: DialogRoot is a
+    // provider, so a `data-part` appearing here would mean the declaration is
+    // wrong, not that a part was forgotten.
+    const wrapper = mount(DzDialog, {
+      props: { open: false },
+      slots: { default: () => h('div', 'child') },
+    })
+
+    expect(wrapper.find('[data-part]').exists()).toBe(false)
+    expectAnatomy(wrapper, dialogAnatomy)
+    wrapper.unmount()
+  })
+
+  it('emits the content anatomy from DzDialogContent', () => {
+    const wrapper = mountDialog()
+
+    for (const part of ['overlay', 'content'])
+      expect(wrapper.find(`[data-part="${part}"]`).exists(), part).toBe(true)
+
+    expectAnatomy(wrapper.find('[data-part="content"]').element, contentAnatomy, {
+      // The overlay is a sibling of the content, not a descendant.
+      absentParts: ['root', 'overlay'],
+    })
+    wrapper.unmount()
+  })
+
+  it('emits header, viewport and footer only in the scrollable layout', () => {
+    const wrapper = mount(DzDialog, {
+      props: { open: true },
+      slots: {
+        default: () => h(
+          DzDialogContent,
+          { scrollable: true },
+          { header: () => 'H', default: () => 'B', footer: () => 'F' },
+        ),
+      },
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+
+    for (const part of ['header', 'viewport', 'footer'])
+      expect(wrapper.find(`[data-part="${part}"]`).exists(), part).toBe(true)
+
+    expectAnatomy(wrapper.find('[data-part="content"]').element, contentAnatomy, {
+      absentParts: ['root', 'overlay'],
+    })
+    wrapper.unmount()
+  })
+
+  it('keeps the legacy overlay hook alongside the new part (dual-emit)', () => {
+    const wrapper = mountDialog()
+    const overlay = wrapper.find('[data-dz-dialog-overlay]')
+
+    expect(overlay.exists()).toBe(true)
+    expect(overlay.attributes('data-part')).toBe('overlay')
+    wrapper.unmount()
+  })
+
+  // ── Per-part overrides (`ui`) ──
+
+  it('reaches the overlay and the panel by name', () => {
+    const wrapper = mount(DzDialog, {
+      props: { open: true },
+      slots: {
+        default: () => h(
+          DzDialogContent,
+          { ui: { overlay: 'backdrop-blur-sm', content: 'rounded-none' } },
+          () => 'body',
+        ),
+      },
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+
+    expect(wrapper.find('[data-part="overlay"]').classes()).toContain('backdrop-blur-sm')
+    expect(wrapper.find('[data-part="content"]').classes()).toContain('rounded-none')
+    expect(wrapper.html()).not.toContain('!important')
+    wrapper.unmount()
+  })
+
+  it('keeps overlayClass working, with ui.overlay taking precedence', () => {
+    // Dual-emit for props, not just attributes: a consumer on `overlayClass`
+    // sees no change, and one adopting `ui` gets the last word (ADR-19 §6).
+    const wrapper = mount(DzDialog, {
+      props: { open: true },
+      slots: {
+        default: () => h(
+          DzDialogContent,
+          { overlayClass: 'bg-red-500/50 p-2', ui: { overlay: 'p-8' } },
+          () => 'body',
+        ),
+      },
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+
+    const overlay = wrapper.find('[data-part="overlay"]').classes()
+    expect(overlay).toContain('bg-red-500/50')
+    expect(overlay).toContain('p-8')
+    expect(overlay).not.toContain('p-2')
     wrapper.unmount()
   })
 })

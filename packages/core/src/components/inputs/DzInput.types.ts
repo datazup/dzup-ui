@@ -8,6 +8,7 @@
  */
 
 import type { BaseFormControlProps, ChangeEvents, InputVariant } from '@dzup-ui/contracts'
+import type { DzInputUi } from './DzInput.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -23,6 +24,17 @@ export interface DzInputProps extends BaseFormControlProps<InputVariant> {
   maxlength?: number
   /** Whether the input shows a clear button when non-empty */
   clearable?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzInput.anatomy.ts`
+   * (ADR-19). `class` keeps landing on the `control` part — the visual field —
+   * which is where it has always landed; `ui.root` reaches the outer node.
+   *
+   * @example
+   * ```vue
+   * <DzInput v-model="q" clearable :ui="{ clear: 'text-[var(--dz-danger)]' }" />
+   * ```
+   */
+  ui?: DzInputUi
   /** Accessible label for the loading spinner shown when `loading` is true */
   loadingLabel?: string
 }

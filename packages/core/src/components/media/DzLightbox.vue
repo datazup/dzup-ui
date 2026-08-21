@@ -24,6 +24,8 @@ import {
  * ```
  */
 import { computed, ref, useAttrs, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { lightboxVariants } from './DzLightbox.variants.ts'
 
@@ -42,6 +44,12 @@ const props = withDefaults(defineProps<DzLightboxProps>(), {
 
 const emit = defineEmits<DzLightboxEmits>()
 defineSlots<DzLightboxSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then the portal's own default of `document.body`
+// (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
+// element handed to the portal, never a DOM query run here.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 const currentIndex = ref(props.startIndex)
@@ -104,6 +112,9 @@ function handleKeydown(event: KeyboardEvent): void {
       break
   }
 }
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzLightbox')
 </script>
 
 <template>
@@ -111,7 +122,7 @@ function handleKeydown(event: KeyboardEvent): void {
 
   <DialogRoot v-model:open="open">
     <DialogPortal
-      :to="portalTo"
+      :to="resolvedPortalTo"
       :disabled="portalDisabled"
       :defer="portalDefer"
     >
@@ -139,7 +150,7 @@ function handleKeydown(event: KeyboardEvent): void {
         <button
           type="button"
           :class="styles.closeButton"
-          aria-label="Close lightbox"
+          :aria-label="dzMessages.close"
           @click="open = false"
         >
           <svg
@@ -164,7 +175,7 @@ function handleKeydown(event: KeyboardEvent): void {
           type="button"
           :class="cn(styles.navButton, styles.prevButton)"
           :disabled="!hasPrev"
-          aria-label="Previous image"
+          :aria-label="dzMessages.previous"
           @click="prev"
         >
           <svg
@@ -196,7 +207,7 @@ function handleKeydown(event: KeyboardEvent): void {
           type="button"
           :class="cn(styles.navButton, styles.nextButton)"
           :disabled="!hasNext"
-          aria-label="Next image"
+          :aria-label="dzMessages.next"
           @click="next"
         >
           <svg

@@ -16,8 +16,8 @@ export const tableVariants = tv({
     body: '',
     footer: 'border-t border-[var(--dz-border)] bg-[var(--dz-muted)] font-medium',
     row: 'border-b border-[var(--dz-border)] transition-[var(--dz-transition-fast)]',
-    headerCell: ['text-left font-medium text-[var(--dz-muted-foreground)]'].join(' '),
-    cell: 'text-left',
+    headerCell: ['text-start font-medium text-[var(--dz-muted-foreground)]'].join(' '),
+    cell: 'text-start',
     expandToggle: [
       'inline-flex items-center justify-center',
       'text-[var(--dz-muted-foreground)]',

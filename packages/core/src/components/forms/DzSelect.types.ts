@@ -16,6 +16,7 @@ import type {
   InputVariant,
   SelectOpenableEvents,
 } from '@dzup-ui/contracts'
+import type { DzSelectUi } from './DzSelect.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Item shape
@@ -51,6 +52,18 @@ export interface DzSelectProps extends BaseAccessibilityProps, BaseValidationPro
   name?: string
   /** Whether the dropdown should be open by default (uncontrolled) */
   defaultOpen?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzSelect.anatomy.ts`
+   * (ADR-19). `class` keeps landing on the `trigger`, the node it has always
+   * landed on; `ui.root` reaches the outer wrapper, and `ui.content` reaches
+   * the portaled listbox that no `class` could ever reach.
+   *
+   * @example
+   * ```vue
+   * <DzSelect :ui="{ content: 'max-h-40', item: 'py-3' }" />
+   * ```
+   */
+  ui?: DzSelectUi
   /** Enable search/filter input in the dropdown */
   searchable?: boolean
   /** Placeholder text for the search input */

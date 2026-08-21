@@ -36,6 +36,16 @@ export const DZ_SIDEBAR_KEY: InjectionKey<DzSidebarContext> = Symbol('dz-sidebar
 
 /** Props for the DzSidebar root component */
 export interface DzSidebarProps extends BaseAccessibilityProps {
+  /**
+   * Portal target for the teleported layer.
+   *
+   * Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded
+   * `body` with no way to redirect it — which is precisely the case an
+   * application embedding the library in a shadow root or a micro-frontend
+   * shell cannot work around. Falls back to the `DzProvider` target, then to
+   * `document.body`.
+   */
+  portalTo?: string | HTMLElement
   /** Whether the sidebar is collapsed to icon-only mode */
   collapsed?: boolean
   /** Whether the mobile overlay sidebar is open */

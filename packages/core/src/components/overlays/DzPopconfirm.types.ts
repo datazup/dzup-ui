@@ -29,6 +29,16 @@ export type PopconfirmPlacement = FloatingPlacement
 
 /** Props for the DzPopconfirm component. */
 export interface DzPopconfirmProps extends BaseAccessibilityProps {
+  /**
+   * Portal target for the teleported layer.
+   *
+   * Added by TASK-OSS-P4-04. This component used to teleport to a hard-coded
+   * `body` with no way to redirect it — which is precisely the case an
+   * application embedding the library in a shadow root or a micro-frontend
+   * shell cannot work around. Falls back to the `DzProvider` target, then to
+   * `document.body`.
+   */
+  portalTo?: string | HTMLElement
   /** Title / question rendered as the popover heading. */
   title: string
   /** Optional supporting description rendered below the title. */

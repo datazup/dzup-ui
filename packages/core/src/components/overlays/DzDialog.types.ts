@@ -10,6 +10,7 @@
 
 import type { BaseAccessibilityProps, BasePortalProps } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzDialogContentUi } from './DzDialogContent.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Compound context (ADR-08)
@@ -63,8 +64,28 @@ export interface DzDialogContentProps extends BaseAccessibilityProps, BasePortal
    * The default slot is used as the scrollable body.
    */
   scrollable?: boolean
-  /** Additional class applied to the overlay owned by DzDialogContent. */
+  /**
+   * Additional class applied to the overlay owned by DzDialogContent.
+   *
+   * @deprecated since the `ui` prop landed (ADR-19 §5) — prefer
+   * `:ui="{ overlay: … }"`, which names the part rather than singling one node
+   * out with a prop of its own. Kept working for one minor series; removing it
+   * needs a major changeset. Both apply, with `ui.overlay` last.
+   *
+   * TODO(remove-after: 0.3.0)
+   */
   overlayClass?: string
+  /**
+   * Per-part class overrides, keyed by the names in
+   * `DzDialogContent.anatomy.ts` (ADR-19). `class` continues to apply to the
+   * content panel.
+   *
+   * @example
+   * ```vue
+   * <DzDialogContent :ui="{ overlay: 'backdrop-blur-sm', footer: 'justify-start' }" />
+   * ```
+   */
+  ui?: DzDialogContentUi
 }
 
 // ---------------------------------------------------------------------------

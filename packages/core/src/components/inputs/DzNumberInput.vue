@@ -14,6 +14,7 @@ import type { DzNumberInputEmits, DzNumberInputProps, DzNumberInputSlots } from 
  */
 import { computed, ref, useAttrs, useId } from 'vue'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { inputElementVariants, inputWrapperVariants } from './DzInput.variants.ts'
 
@@ -184,6 +185,9 @@ function handleBlur(event: FocusEvent): void {
 
 /** Expose the native input ref for programmatic focus */
 defineExpose({ inputRef })
+
+// User-visible strings, resolved against the application's catalog (ADR-20).
+const dzMessages = useComponentMessages('DzNumberInput')
 </script>
 
 <template>
@@ -221,7 +225,7 @@ defineExpose({ inputRef })
         type="button"
         class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
         :aria-disabled="!canDecrement || undefined"
-        aria-label="Decrease value"
+        :aria-label="dzMessages.decrease"
         tabindex="-1"
         @click="handleDecrement"
       >
@@ -274,7 +278,7 @@ defineExpose({ inputRef })
         type="button"
         class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
         :aria-disabled="!canIncrement || undefined"
-        aria-label="Increase value"
+        :aria-label="dzMessages.increase"
         tabindex="-1"
         @click="handleIncrement"
       >

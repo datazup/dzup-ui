@@ -7,7 +7,7 @@
 >
 > **Scope:** free tier only. Enterprise components (Kanban, Gantt, FormBuilder,
 > WorkflowDesigner, OrganizationChart, Terminal, Dock) are intentionally **out of
-> scope** — they belong in `@dzup-ui/pro`. Everything here is a general-purpose
+> scope** — they belong in `@dzup-ui-pro/pro`. Everything here is a general-purpose
 > primitive appropriate for the open library.
 
 ## How these tasks are written

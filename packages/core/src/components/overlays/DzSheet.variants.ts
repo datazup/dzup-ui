@@ -9,6 +9,12 @@
 import type { VariantProps } from 'tailwind-variants'
 import { tv } from 'tailwind-variants'
 
+/**
+ * `rtl-physical-ok`: `side="right"` names a side. Whether a sheet should
+ * open from the inline-end instead in an RTL document is a product decision,
+ * not a refactor — TASK-OSS-P4-05's stop condition, recorded rather than
+ * taken.
+ */
 export const sheetVariants = tv({
   slots: {
     overlay: [

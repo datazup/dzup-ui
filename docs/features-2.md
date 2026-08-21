@@ -11,7 +11,7 @@
 >
 > **Scope:** free tier only. Every item below is a general-purpose primitive that
 > belongs in the open library. Enterprise surfaces (Kanban, Gantt, charts, editors,
-> virtualized data grids, builders, whiteboard, etc.) live in `@dzup-ui/pro` and are
+> virtualized data grids, builders, whiteboard, etc.) live in `@dzup-ui-pro/pro` and are
 > **out of scope** here. Each candidate below was verified to exist in **neither**
 > `packages/core` **nor** `dzup-ui-pro/packages/pro` before being listed.
 
@@ -679,7 +679,7 @@ a performance primitive for long pages with charts, images, or expensive lists._
 | 37  | DzVisuallyHidden  | Reka/Radix · Chakra                               | done           | typography | 🟢 P2    |
 | 38  | DzDeferredContent | PrimeVue DeferredContent                          | done           | layout     | 🟢 P2    |
 
-> **Deliberately excluded (Pro / enterprise tier — already in `@dzup-ui/pro` or belongs there):**
+> **Deliberately excluded (Pro / enterprise tier — already in `@dzup-ui-pro/pro` or belongs there):**
 > virtualized tables/scrollers (DzVirtualTable), charts/gauges/sparklines, rich-text and
 > code editors, Kanban/Gantt/Scheduler, query/filter/form/report builders, whiteboard,
 > diagram/network/org-chart, spreadsheet, AI chat. These are not general-purpose

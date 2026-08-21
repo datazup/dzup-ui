@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DzTourProps, DzTourSlotProps, DzTourSlots, DzTourStep } from './DzTour.types.ts'
 import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
+import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
 import { useEscapeKey } from '../../composables/useEscapeKey/index.ts'
 import { useFloating } from '../../composables/useFloating/index.ts'
 import { useFocusTrap } from '../../composables/useFocusTrap/index.ts'
@@ -53,8 +54,13 @@ const emit = defineEmits<{
   close: []
   change: [index: number]
 }>()
-
 const _slots = defineSlots<DzTourSlots>()
+// Portal target: an explicit `portalTo` on this instance, then the application's
+// `DzProvider` target, then `body` (ADR-20, TASK-OSS-P4-04). `'body'` is spelled
+// out here rather than left to the portal's default because `<Teleport>` requires
+// a target and has no default of its own.
+const dzPortalTarget = useDzPortalTarget()
+const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value ?? 'body')
 
 const styles = tourVariants()
 
@@ -271,7 +277,7 @@ const panelClasses = computed(() => cn(styles.panel()))
 </script>
 
 <template>
-  <Teleport v-if="open && activeStep" to="body">
+  <Teleport v-if="open && activeStep" :to="resolvedPortalTo">
     <!-- Spotlight mask (box-shadow cutout dims everything except the target) -->
     <div
       v-if="mask && targetRect"

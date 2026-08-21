@@ -5,6 +5,8 @@ import type {
   DzAnimatedNumberSlots,
 } from './DzAnimatedNumber.types.ts'
 import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+import { useDzLocale } from '../../composables/provider/useDzLocale.ts'
+import { cachedNumberFormat } from '../../i18n/intl-cache.ts'
 import { cn } from '../../utilities/cn.ts'
 import { sampleTween } from './DzAnimatedNumber.tween.ts'
 import { animatedNumberVariants } from './DzAnimatedNumber.variants.ts'
@@ -64,9 +66,22 @@ const displayValue = ref(props.value)
 // Formatting — one cached Intl.NumberFormat reused every frame
 // ---------------------------------------------------------------------------
 
+/**
+ * The active locale: an explicit `locale` prop, then whatever the application's
+ * `DzProvider` declares, then `en-US` (ADR-20).
+ *
+ * It used to be `props.locale` alone, which `Intl` reads as "the runtime's own
+ * locale" when undefined. That is not the same value on a Node server as it is
+ * in a German browser, so a server-rendered figure and its hydrated replacement
+ * could disagree on the group separator — a hydration mismatch invisible to
+ * anyone developing in the locale their server happens to run in.
+ */
+const dzLocale = useDzLocale()
+const activeLocale = computed(() => props.locale ?? dzLocale.value)
+
 const formatter = computed<Intl.NumberFormat | null>(() => {
   try {
-    return new Intl.NumberFormat(props.locale, props.format)
+    return cachedNumberFormat(activeLocale.value, props.format)
   }
   catch {
     return null

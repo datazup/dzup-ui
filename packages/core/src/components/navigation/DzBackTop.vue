@@ -17,6 +17,7 @@ import type { DzBackTopEmits, DzBackTopProps, DzBackTopSlots } from './DzBackTop
  */
 import { computed, useAttrs } from 'vue'
 import { useScrollToTop } from '../../composables/useScrollToTop/index.ts'
+import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzFab from '../buttons/DzFab.vue'
 import { backTopVariants } from './DzBackTop.variants.ts'
@@ -26,7 +27,7 @@ defineOptions({
 })
 
 const props = withDefaults(defineProps<DzBackTopProps>(), {
-  ariaLabel: 'Back to top',
+  ariaLabel: undefined,
   visibilityHeight: 400,
   target: undefined,
   duration: 400,
@@ -37,6 +38,10 @@ const props = withDefaults(defineProps<DzBackTopProps>(), {
 
 const emit = defineEmits<DzBackTopEmits>()
 defineSlots<DzBackTopSlots>()
+// User-visible strings, resolved against the application's catalog (ADR-20).
+// An explicit prop still wins; these are the defaults that used to be literals.
+const dzMessages = useComponentMessages('DzBackTop')
+const resolvedAriaLabel = computed(() => props.ariaLabel ?? dzMessages.value.ariaLabel)
 
 const attrs = useAttrs()
 
@@ -61,7 +66,7 @@ function handleClick(event: MouseEvent): void {
 
 <template>
   <DzFab
-    :aria-label="ariaLabel"
+    :aria-label="resolvedAriaLabel"
     :variant="variant"
     :size="size"
     :tone="tone"

@@ -32,7 +32,7 @@ const classes = computed(() => cn(styles.value.footer(), attrs.class as string |
 </script>
 
 <template>
-  <tfoot :class="classes" v-bind="{ ...$attrs, class: undefined }">
+  <tfoot data-part="footer" :class="classes" v-bind="{ ...$attrs, class: undefined }">
     <slot />
   </tfoot>
 </template>
