@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "be76ddb97e82228d8f6d0b436b0b20a70e528661",
+  "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -2524,7 +2524,7 @@
           "--dz-button-xs-height",
           "--dz-button-xs-padding-x"
         ],
-        "riskTier": "A",
+        "riskTier": "B",
         "recipes": [
           "variant",
           "size",
@@ -5170,7 +5170,7 @@
         "parts": "none",
         "states": [],
         "componentTokens": [],
-        "riskTier": "A",
+        "riskTier": "B",
         "rtl": {
           "mirrors": "layout",
           "keyboard": "none"
@@ -5262,7 +5262,7 @@
         "componentTokens": [
           "--dz-overlay-bg"
         ],
-        "riskTier": "A",
+        "riskTier": "B",
         "recipes": [
           "size"
         ],
@@ -6029,6 +6029,23 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "D",
+        "recipes": [
+          "size"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/forms/index.ts",
         "packages/core/src/components/forms/DzFileUpload.vue",
@@ -6838,7 +6855,7 @@
           "--dz-input-xs-height",
           "--dz-input-xs-padding-x"
         ],
-        "riskTier": "A",
+        "riskTier": "B",
         "recipes": [
           "variant",
           "size",
@@ -8739,7 +8756,7 @@
         "parts": "none",
         "states": [],
         "componentTokens": [],
-        "riskTier": "A",
+        "riskTier": "B",
         "rtl": {
           "mirrors": "none",
           "keyboard": "none"
@@ -9688,7 +9705,7 @@
           "unchecked"
         ],
         "componentTokens": [],
-        "riskTier": "A",
+        "riskTier": "B",
         "recipes": [
           "variant",
           "size"
@@ -11244,7 +11261,7 @@
           "selected"
         ],
         "componentTokens": [],
-        "riskTier": "B",
+        "riskTier": "C",
         "recipes": [
           "size",
           "variant"
@@ -11868,7 +11885,7 @@
         "parts": "none",
         "states": [],
         "componentTokens": [],
-        "riskTier": "A",
+        "riskTier": "B",
         "rtl": {
           "mirrors": "none",
           "keyboard": "none"

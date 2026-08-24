@@ -2570,3 +2570,609 @@ than left for a reader to infer from a short table.
    reduced motion, RTL.
 3. **TASK-OSS-P5-05 (performance baselines with variance)** — it already has two
    real inputs in the two flakes recorded above.
+
+---
+
+## Packet P5 — Evidence completeness by risk
+
+**Maturity: implemented → focused-validated → aggregate-qualified.** The browser
+lane reached one engine of three; the AT lane is generated and unexecuted. Both
+are stated per cell below rather than folded into the packet's level.
+
+### The finding that had to be settled before anything else: the tier scale was inverted
+
+TASK-OSS-P3-02 introduced `riskTier` on the component anatomy with this
+definition:
+
+> `A` — focus-managing or form-bearing … `D` — structural: layout primitives
+
+The 2026-08-11 reassessment it was implementing says the opposite, in
+`06-quality-accessibility-i18n-security-spec.md` §"Quality model":
+
+| Tier | Examples |
+|---|---|
+| A — presentational | badge, separator, skeleton, typography |
+| D — security or data boundary | rich HTML, files, URLs, schema references |
+
+So did every P5 packet that consumes the field — "Tier B–D" for the evidence
+that matters, "Tier A only in chromium default", "Tier C/D performance
+baselines". Six documents read one way and one shipped JSDoc read the other, and
+eight components had been declared against the shipped one.
+
+The scale is now ascending and the eight declarations were migrated:
+
+| Component | Was | Now |
+|---|---|---|
+| DzButton, DzInput, DzSelect, DzDialog, DzDialogContent | A | **B** |
+| DzProvider, DzThemeProvider | A | **B**, with two recorded exceptions |
+| DzTable | B | **C** |
+
+`validate:quality-tiers` gate 5 is the check that would have caught it: a
+component's own anatomy and the tier assignment must agree, and a compound part
+must agree with its parent.
+
+---
+
+## TASK-OSS-P5-01 — Risk tiers, WCAG 2.2 and APG per public component
+
+### Implemented files
+
+| File | Purpose |
+|---|---|
+| `packages/contracts/src/quality-tiers.ts` | the rules: tier→evidence, traits, boundaries, APG patterns, the WCAG 2.2 catalog |
+| `packages/contracts/src/anatomy.types.ts` | `RiskTier` corrected, with the inversion recorded at the type |
+| `packages/tooling/src/quality/component-tiers.ts` | the reviewed assignment, 144 rows |
+| `packages/tooling/src/quality/generate-quality-matrix.ts` | the join → `packages/core/docs/quality-matrix.json` |
+| `packages/tooling/src/validators/quality-tiers.ts` | six gates |
+| 8 `*.anatomy.ts` | migrated tiers |
+| specs | 24 in contracts, 27 in tooling |
+
+**144 of 144 public components tiered — A:55 B:67 C:21 D:1.**
+
+### The security boundary is a second axis, and that was forced by the stop condition
+
+The reassessment's tiers are cumulative: D requires everything C requires.
+`DzButton` accepts an `href`, so it owes a URL policy and a hostile-input
+corpus — and tiering it D would also make it owe dataset scenarios, a manual AT
+task and a performance baseline, none of which a button can satisfy or needs.
+
+That is exactly the case P5-01's stop condition names: *"a Tier D requirement the
+component cannot meet … report, do not downgrade the tier to pass."* So the
+boundary became `SecurityBoundary`, an orthogonal declaration that **adds** the
+Tier D security rows without dragging six unrelated ones behind them. The
+requirement is kept; it stopped being a tier.
+
+Thirteen components declare a boundary. Exactly one component is Tier D:
+`DzFileUpload`, whose primary job is the boundary.
+
+### Three rows follow what a component does, not how complex it is
+
+`portal-hydration`, `non-drag-alternative` and `data-scenarios` are qualified
+"where applicable" in the reassessment, and folding them into a tier erases the
+qualification: `DzButton` and `DzSelect` are both Tier B and only one teleports.
+They hang off traits instead, and `teleports` is checked against source.
+
+That check found the trait list was wrong in six places. `DzRelativeTime`
+renders no portal of its own — it discloses the absolute timestamp through a
+`DzTooltip`, whose content leaves the DOM position it was written in. The same
+for `DzDataGrid` (its pagination renders a `DzSelect`), `DzPersonaSelector`,
+`DzSpeedDial`, `DzTreeSelect` and `DzConfirmDialog`. What hydrates is the
+rendered tree, not the file, so the detector follows local `.vue` imports
+transitively.
+
+It also found one the other way: `DzProvider` was declared `teleports` and does
+not teleport. It *provides* the portal target every overlay resolves against and
+renders nothing outside its own position. Declaring the trait there would have
+claimed portal/hydration evidence for the one component with no teleported
+output to check.
+
+### A gate that could not fail, found by its own test
+
+The catalog check read `row.wcag` — the **generated** list. The generator emits
+in catalog order, which it can only do by filtering to ids the catalog knows, so
+an unrecognised id had already vanished before the validator saw it. Checking
+the output made the gate unfailable. It now reads the raw assignment.
+
+### Focused validation output
+
+```
+yarn generate:quality-matrix                       → 144 components — A:55 B:67 C:21 D:1
+yarn validate:quality-tiers                        → ✓ 144/144 tiered, matrix fresh
+vitest packages/contracts/src/quality-tiers.spec    → ✓ 24 tests
+vitest packages/tooling/src/validators/quality-tiers.spec → ✓ 27 tests
+```
+
+---
+
+## TASK-OSS-P5-02 — Triaging the 366 by risk tier
+
+**Status `[~]`: the triage and the ratchet are done; 51 items are open and
+assigned.**
+
+### The join, which is the whole point
+
+| check | required from | tier-required / reported |
+|---|---|---|
+| `states` | tier B | **30** / 35 |
+| `accessibility` | tier C | **11** / 66 |
+| `real-world` | tier C | **10** / 70 |
+| `gallery` | — | **0** / 155 |
+| `controls-live` | — | 0 / 27 |
+| `play` | — | 0 / 13 |
+
+**366 reported → 51 tier-required, across 32 components.** The largest category
+in the report is `gallery` at 155, and no tier requires any of it. That is the
+number the task warned about — *"Gallery percentage is the least valuable metric
+and the cheapest to inflate"* — and the join is what turns that from an opinion
+into a count.
+
+Twenty-six story files are `*Parts` pages and composition pages that name no
+public component. They are reported as untiered rather than folded into a
+parent's tier: a parts page and a component page owe different things, and
+averaging them is how a real gap on the component hides behind a satisfied parts
+page.
+
+### The ratchet, and why it is a ceiling rather than zero
+
+`validate:story-dod-tiers` holds a per-check ceiling that may only fall, seeded
+at today's counts (`states: 30`, `accessibility: 11`, `real-world: 10`). Nothing
+may get worse and every fix is permanent.
+
+Promoting the three checks to hard failures today would land 51 red items on a
+green build, which this task's own stop condition forbids: *"Stop if promoting a
+check to enforced turns a currently-green CI red."* A ceiling buys the same
+guarantee without the red build, and it is the mechanism
+`unclassified-ceiling.json` already uses for the ownership generator.
+
+### Not done — and this is the packet's largest open item
+
+**The 51 items are not closed.** Writing 30 state stories, 11 APG narratives and
+10 real-world compositions at the quality bar this corpus holds is a substantial
+piece of authoring, and filler stories would be worse than none: they would let
+the checks be promoted to enforced over content nobody benefits from, which is
+the failure mode the task explicitly warns against. The tooling, the join and
+the ratchet are in place; the authoring is assigned, per-component, and visible
+in `yarn validate:story-dod-tiers --all`.
+
+### Focused validation output
+
+```
+yarn validate:story-dod-tiers        → ✓ no tier-required category above its ceiling
+vitest .../story-dod-tiers.spec      → ✓ 14 tests
+yarn validate:story-dod              → ✓ enforced checks pass, 366 reported (unchanged)
+```
+
+---
+
+## TASK-OSS-P5-03 — Three engines by five conditions
+
+### Implemented files
+
+| File | Purpose |
+|---|---|
+| `playwright.config.ts` | 18 `matrix-{engine}-{condition}` projects; the base three now exclude `e2e/matrix` |
+| `e2e/matrix/conditions.spec.ts` | one assertion per condition over every Tier B–D component |
+| `e2e/matrix/fixtures.ts` | project metadata, targets, the unrun declaration, the ledger |
+| `e2e/matrix/targets.generated.ts` | 144 components, 89 in the lane, generated |
+| `e2e/matrix/engine-exceptions.json` | measured capability per engine — **empty**, and that is the finding |
+| `e2e/matrix/known-failures.json` | 46 measured failures, as a ratchet |
+| `packages/tooling/src/quality/generate-matrix-targets.ts` | the target generator |
+
+### The engine exceptions file is empty, and it was measured rather than assumed
+
+Received guidance says WebKit does not support `forcedColors` emulation and
+Firefox does not support `isMobile`. At Playwright 1.61.1, measured by opening
+each `{engine, condition}` pair and reading the media query back:
+
+| | chromium | firefox | webkit |
+|---|---|---|---|
+| `forced-colors: active` | ✓ | ✓ | ✓ |
+| `prefers-reduced-motion` | ✓ | ✓ | ✓ |
+| `pointer: coarse` + `isMobile` | ✓ | ✓ | ✓ |
+| 320px viewport | ✓ | ✓ | ✓ |
+
+So the exceptions file records the measurement and no exceptions. Pre-loading it
+with limitations nobody re-checked would have narrowed the lane on hearsay.
+
+### What the lane found on its first run
+
+**Chromium, all six conditions, 89 components: 1,055 passed, 6 skipped, 1
+environment failure.** `default`, `forced-colors`, `reduced-motion` and `rtl` are
+clean. Two conditions are not:
+
+- **`zoom-400` — 18 components do not reflow into 320 CSS px** (WCAG 1.4.10),
+  measured overflow from 2px (`DzOrderList`) to 272px (`DzImageComparison`). The
+  large ones are stories with a fixed width, which measures the published
+  example as much as the component — and the example is documentation, so it is
+  in scope either way. Each entry carries its measured number and which of the
+  two it looks like.
+- **`touch` — 28 components have pointer targets under 24×24 CSS px** (WCAG
+  2.5.8): `DzCheckbox` and `DzRadio` at 18×18, `DzCombobox` and six others at
+  16×16, `DzTagsInput` at 14×14, and a family of 21px-tall text inputs. This is
+  systemic across form controls rather than a set of individual defects; the fix
+  is an enlarged hit area per family.
+
+Both are recorded in `known-failures.json` as `test.fail()`, **not** skips. The
+cell still loads the story, still costs the wall-clock, still reports — and
+Playwright fails the run if it *unexpectedly passes*. Fixing a component
+therefore breaks the build until somebody deletes its line, which is the only
+way a list like this ever gets shorter.
+
+### Four defects in the lane itself, all found by running it
+
+1. **`not.toBeEmpty()` measures text, not children.** An icon-only
+   `DzCopyButton` renders a button and an SVG and no text, so the assertion
+   called eleven correct components empty.
+2. **Story ids were derived by lowercasing the export name.** Storybook runs it
+   through lodash `startCase(camelCase(key))` first, so `PanelBlock` is
+   `panel-block`, not `panelblock`. Single-word exports like `Default` worked
+   and hid it; the rest resolved to ids Storybook answers with
+   `sb-show-errordisplay` — a 60-second timeout that reads as "the component is
+   broken". `openTarget` now says which it is.
+3. **`_gallery` and `_app-specific` are not built by default**, so four Tier A
+   badges were being given story ids that do not exist. They are `story: null`
+   now, which is `unrun`, not covered.
+4. **The touch assertion counted visually hidden native inputs.** `DzCheckbox`
+   and `DzFileUpload` both put a 1×1 `<input>` under a styled label; the input
+   is not the pointer target, and reporting 2.5.8 against an element no pointer
+   can reach is the kind of false positive that gets a lane switched off.
+
+A unit spec now cross-checks every derived story id against the ids a built
+Storybook actually contains, and says so out loud when the build is absent
+rather than skipping quietly.
+
+### The `\b` that became a backspace byte, again
+
+A scripted edit wrote a literal `0x08` where `\b` was intended in the word-split
+regex — the identical failure the P4-05 handoff records, in the identical way,
+and again invisible in a terminal. Found with `cat -v`. Recorded a second time
+because the lesson is not "be careful": it is that a shell heredoc is the wrong
+tool for writing a regex, and the fix was to stop using one.
+
+### Focused validation output
+
+```
+yarn generate:matrix-targets                → 144 components, 89 in the lane, 1 unrun
+matrix-chromium-{6 conditions}, 89 targets  → 1,055 passed · 6 skipped · 1 env failure
+```
+
+The one failure is `net::ERR_NO_BUFFER_SPACE` navigating to a story — Windows
+local socket exhaustion after 1,062 navigations at three workers. Not a
+component and not the spec. `retries` was deliberately left at `0` outside CI:
+turning it on would hide this class of failure and every real flake with it.
+
+### Not done
+
+**Firefox and WebKit have not run this lane.** Twelve of the eighteen projects
+are configured, measured capable, and unrun. `known-failures.json` records that
+its entries were measured on chromium only, and the first run on another engine
+will say so by failing on an unexpected pass. The capability matrix shows the
+browser column as available; it does not claim three engines.
+
+---
+
+## TASK-OSS-P5-04 — The manual AT task matrix
+
+### Implemented files
+
+`packages/tooling/src/quality/at-matrix.ts` (the six pairings, the tasks each APG
+pattern implies), `generate-at-matrix.ts`, `packages/tooling/src/validators/at-matrix.ts`,
+89 files under `e2e/at-matrix/` plus `index.json`, and 13 specs.
+
+**89 Tier B–D components · 534 cells · 0 executed.**
+
+### Zero executed is the honest number, and the task asked for it
+
+The stop condition is explicit: *"Do not mark a row passed without an actual
+run; if the AT/device is unavailable, record 'unrun'."* No screen reader was
+available, so every one of the 534 cells says `unrun`, and `unrun` is a
+first-class result in the vocabulary rather than a placeholder — it is a
+different fact from `fail` and must not be laundered into one.
+
+### The generator owns the header; the human owns the rows
+
+Each file splits at a marker. Everything above it is regenerated from the tier,
+the APG pattern and the traits; everything below is preserved verbatim. So
+re-running after a pattern changes updates the tasks without touching a recorded
+run — which is the failure mode that turns an evidence file into a file nobody
+trusts.
+
+### Three gates, demonstrated rather than asserted
+
+Written into `DzTabs.md` and reverted:
+
+```
+· [stale]      DzTabs / nvda-firefox was pass at 00000000, and the component has
+               changed since (80ce3012).
+✗ [substance]  DzTabs / nvda-chrome claims `pass` with no sourceCommit. A result
+               with nothing behind it is worse than `unrun`, because `unrun` is true.
+✗ [index]      e2e/at-matrix/index.json disagrees with the markdown files.
+EXIT=1
+```
+
+Stale and unrun **report**; malformed and unevidenced rows **fail**. A gate that
+failed on 534 unrun cells the day it landed would be a gate switched off the day
+after.
+
+### The staleness rule was wrong, and the fix is an ancestry check
+
+The first implementation compared `row.sourceCommit !== componentCommit`. A
+tester records the repository HEAD they observed and a baseline records the HEAD
+it was captured at — neither is the commit that last touched the component, so
+the two hashes are almost never equal and almost every cell read `stale`. Seven
+Tier C cells were reading stale for this reason alone.
+
+`evidenceIsCurrent` now asks the real question with
+`git merge-base --is-ancestor`: is the component's last change at or before the
+commit the evidence was taken at? Correct across merges, where a date comparison
+would not be. Stale dropped from 7 to 0.
+
+### Retirement, not deletion
+
+A file for a component that leaves the Tier B–D lane must move to
+`e2e/at-matrix/retired/` with a reason. Recorded runs are history, and a
+validator that told you to delete them would be telling you to lose the only
+record that a component was ever driven with a screen reader.
+
+---
+
+## TASK-OSS-P5-05 — Baselines with variance, then thresholds
+
+### What the old assertion was
+
+```ts
+expect(result.average).toBeLessThan(3_000)
+```
+
+One wall-clock average against a fixed constant, for a benchmark competing with
+429 other test files for CPU. It produced the two flakes the P4-02 and P4-05
+handoffs recorded. Raising the constant would have bought silence.
+
+### What the measurement says
+
+35 samples per metric — five separate vitest processes × seven iterations, so
+the distribution includes process start-up and whatever else the machine was
+doing, which is where the flakes come from.
+
+**33 metrics: 24 with a derived threshold, 9 not yet measurable.** The split is
+not even:
+
+| kind | metrics | with a threshold |
+|---|---|---|
+| `size` — per-export gzip, from a tree-shaken fixture build | 22 | **22** |
+| `runtime` — mount and interaction timings | 11 | **2** |
+
+| runtime metric | median | cv | threshold |
+|---|---|---|---|
+| `DzDataGrid:mount-1000` | 394.56 ms | 0.19 | **613.59** |
+| `DzTabs:mount-10` | 33.35 ms | 0.23 | **56.68** |
+| `DzTable:mount-1000` | 1779.34 ms | 0.26 | *not yet measurable* |
+| `DzListbox:arrow-down-10` | 304.20 ms | 0.36 | *not yet measurable* |
+| `DzDataGrid:mount-1` | 9.39 ms | **2.63** | *not yet measurable* |
+| `DzDialog:open-close` | 3.36 ms | **2.99** | *not yet measurable* |
+
+**Nine of eleven runtime metrics are not measurable on this host.** That is the
+stop condition the task names — *"stop if variance exceeds the signal (report as
+'not yet measurable')"* — reached by measurement rather than by assumption, and
+it is the direct explanation of the two flakes this task inherited:
+`DzDataGrid:mount-100` sits at cv 0.45, and no fixed constant can be right for a
+number that moves by half its own value between runs.
+
+The 22 Tier C/D **per-export gzip sizes** are all measurable, because a build is
+deterministic: `DzDataGrid` 32.3 kB, `DzTreeSelect` 24.8 kB, `DzTable` 15.4 kB.
+Their thresholds come from the 5% floor rather than 3σ of zero.
+
+### The policy
+
+`threshold = median + max(3σ, 5%)`. Ratchets **downward only**, on ≥ 5 runs
+whose cv is inside the measurable limit. A slower run does not raise a
+threshold — that is an owner decision, which is the reassessment's own rule
+(*"a budget increase needs a recorded user benefit and owner; it is not the
+default response to regression"*).
+
+Capture is a separate command. A suite that recorded its own baseline every run
+would ratchet upward forever and call it a budget.
+
+### The runtime gate is off by default, and that too was measured
+
+The first version of this spec failed the build on a regression. It then failed
+three of them, and the failure was correct arithmetic about a component that had
+not changed by a byte:
+
+| capture | `DzTable:mount-1000` median | that capture's cv |
+|---|---|---|
+| first, quiet | **2,392 ms** | 0.17 |
+| second, sharing the machine with a Storybook build | **1,344 ms** | 0.17 |
+| a bench run minutes later | **3,623 ms** | 0.10 |
+| the committed capture | **1,779 ms** | 0.26 |
+
+Three of the four are internally consistent — their cv is inside the measurable
+limit — and they disagree by a factor of 2.7. A 3σ threshold derived
+from any one of them is wrong about the other two. That is not a threshold to be
+tuned: a wall-clock benchmark on a shared developer machine measures the
+machine, and no amount of statistics inside one capture can see across captures.
+
+So runtime metrics **report always and fail only under `DZUP_PERF_GATE=1`** —
+the flag a dedicated perf job sets, which is the reassessment's "declared
+hardware/browser profile" made concrete. The 22 **size** baselines gate
+unconditionally, because a gzipped byte count is deterministic and does not care
+what else the machine is doing.
+
+The two flakes this task inherited are therefore fixed twice over: they are no
+longer single-sample assertions, and the class of number they belong to no
+longer gates a developer's machine at all.
+
+### Focused validation output
+
+```
+yarn perf:capture --runs 5   → 33 metrics, 24 with a threshold, 9 not yet measurable
+yarn test:perf               → ✓ 11 tests
+vitest .../perf/statistics.spec → ✓ 19 tests
+```
+
+---
+
+## TASK-OSS-P5-06 — The capability matrix
+
+### Implemented files
+
+`packages/tooling/src/quality/capability-matrix.ts` (the shape),
+`generate-capability-matrix.ts` (the join), `emit-capability-data.ts` (the
+Storybook projection), `packages/tooling/src/validators/capability-matrix.ts`,
+`apps/storybook/stories/_blocks/CapabilityMatrix.ts`,
+`apps/storybook/stories/Capability-Matrix.mdx`, and 10 specs.
+
+**144 components · 1,661 evidence cells.**
+
+| tier | pass | present | stale | unrun | excepted |
+|---|---|---|---|---|---|
+| A | 106 | 158 | 0 | 81 | 4 |
+| B | 279 | 253 | 0 | 376 | 9 |
+| C | 121 | 81 | 0 | 172 | 0 |
+| D | 8 | 10 | 0 | 1 | 2 |
+
+**There is no percentage on the page and none in this table.** One number over
+cells of different weight is satisfied equally by closing four badge cells and
+by closing one combobox cell, and it hides which. The honest headline is the
+`unrun` column.
+
+### `present` is not `pass`, and the distinction is the point
+
+A spec file on disk is `present`. The same spec with a recorded passing result
+is `pass`. Collapsing them would let a skipped test read as evidence, which is
+how a matrix comes to say a component is qualified when nothing ran.
+
+`scope` carries the same weight in the other direction: `validate:tokens` proves
+every colour pair in the repository and is real evidence, and it is not
+per-component. It is marked `corpus`, so a repository gate cannot stand in for
+144 component checks.
+
+### An absent input is not a failing component
+
+A whole column of `unrun` means one of two very different things. Before the
+browser lane was run into a JSON report, 443 Tier B cells read `unrun`; after,
+376. Nothing about any component changed. The `inputs` panel records which
+artifacts existed, and the page prints it above the table.
+
+### The Tier D gate, and what it made happen
+
+`validate:capability-matrix` fails on an unexplained `unrun` cell for a Tier D
+component. On its first run it produced eleven, all on `DzFileUpload`, and
+closing them found two defects:
+
+> **`accept` was not enforced on the drop path.** `:accept` on
+> `<input type="file">` filters the operating system's picker and does **nothing
+> at all** to a drop — `DataTransfer.files` arrives unfiltered. A component
+> rendering the words *"Accepted: image/\*"* directly under its drop zone would
+> take a dropped `.exe` into `v-model` and emit `upload`, with no `error` event
+> and nothing on screen to suggest anything had been skipped. `multiple: false`
+> had the same hole: a drop of nine files into a single-file control put nine
+> files in the model.
+
+Both are fixed in `processFiles`, where the picker and the drop zone meet, and
+asserted by a 17-case hostile-input corpus. The threat model beside it records
+what remains true and cannot be fixed client-side: `File.type` is a browser
+guess and is often empty, so `accept` is a **filename check** much of the time,
+and a server must revalidate and scan regardless.
+
+`url-policy` and `csp-fixture` are recorded as **exceptions** — the component
+accepts no URL and has no HTML sink — and the corpus asserts the premise of
+each, so an exception cannot outlive the fact it rests on.
+
+### "Unexplained" had to be made checkable
+
+The gate's first version failed on any `unrun` cell, including `at-manual`,
+where the AT task file exists with six pairs waiting for a human. That is a
+*scheduled* gap, not an absent one. Accepting a `note` as the explanation would
+have made the gate unfailable — the generator writes a note on nearly every
+unrun cell so the page reads well. The rule is therefore **artifacts**: an
+`unrun` cell with a file behind it is explained; one with nothing is not.
+
+### Focused validation output
+
+```
+yarn generate:capability-matrix  → 144 components, 1,661 cells
+yarn validate:capability-matrix  → ✓ fresh, and no Tier D cell is unexplained
+vitest .../capability-matrix.spec → ✓ 10 tests
+vitest .../security/DzFileUpload.malicious-corpus.spec → ✓ 17 tests
+```
+
+---
+
+## Packet P5 — aggregate qualification
+
+```
+yarn lint                     → ✓ 0 errors, 0 warnings (packages/ apps/)
+yarn typecheck                → ✓ 0 errors
+tsc -p packages/contracts     → ✓ 0 errors
+yarn storybook:build          → ✓ 23.50 MB within budget 25 MB; guides-capability-matrix--docs built
+yarn validate:all             → EXIT 0 — 24 gates, now including validate:quality-tiers,
+                                validate:story-dod-tiers, validate:at-matrix and
+                                validate:capability-matrix
+vitest run                    → EXIT 0 — 438 files, 7,763 passed, 2 skipped, 1 todo
+```
+
+**Three specs failed on the first full run, and all three were correct.**
+
+- `anatomy-source.spec.ts` asserted `DzButton` is Tier `A`. It is Tier `B` now,
+  because the scale was inverted. The assertion was updated with the reason
+  beside it rather than the number swapped.
+- `ownership-manifest.spec.ts` asserted the anatomy ceiling is 137. Adding
+  `DzFileUpload.anatomy.ts` made it 136, and the ceiling ratchets **down** — so
+  the ceiling was lowered in the same change, which is the rule that file states
+  about itself.
+- `perf-bench.spec.ts` reported three regressions. See the runtime-gate section
+  above: the arithmetic was right and the conclusion was wrong, which is what
+  moved the runtime gate behind `DZUP_PERF_GATE`.
+
+`packages/core/docs/rtl-matrix.md` also went stale, because `DzFileUpload` now
+declares an RTL contract and the matrix is generated from the declarations.
+Regenerated.
+
+### Not done
+
+**Firefox and WebKit.** Twelve of the eighteen matrix projects are configured
+and unrun. Measured capable; not measured against.
+
+**Every AT cell.** 534 of 534 unrun. The matrix, the tasks, the format and the
+freshness rule exist; no screen reader was driven.
+
+**The 51 story items.** Triaged, ceilinged and assigned; not authored.
+
+**`e2e/` is outside `yarn lint`.** The repo lints `packages/ apps/`. The new
+`e2e/matrix` files are clean, checked separately — but `e2e/smoke/storybook.spec.ts`
+and `e2e/utils/storybook.ts` carry ten pre-existing violations that nothing runs
+against them. Left alone; not this packet's to change.
+
+### Unresolved owner decisions
+
+1. **28 components fail WCAG 2.5.8 Target Size.** `DzCheckbox` and `DzRadio` at
+   18×18, seven controls at 16×16, `DzTagsInput` at 14×14. The fix is an
+   enlarged hit area that does not grow the visual, which is a per-family design
+   decision rather than a patch.
+2. **18 components fail WCAG 1.4.10 Reflow at 320px.** Some are the component
+   and some are a story with a fixed width. Both need triage; the ledger records
+   the measured overflow so triage has a number to start from.
+3. **`DzFileUpload`'s `accept` enforcement is a behaviour change.** An
+   application relying on the old drop path will start receiving `error` events
+   it previously did not. Recorded in the changeset as a minor.
+4. **Should `validate:capability-matrix` widen past Tier D?** Today one
+   component is gated. Tier C is where most of the `unrun` lives.
+5. **The Tier D ladder pulls in rows a boundary does not need.** `DzFileUpload`
+   excepts `url-policy` and `csp-fixture` with good reasons, and any second Tier
+   D component will except the same two or a different two. Worth deciding
+   whether D should be the boundary rows alone, with tier and boundary fully
+   orthogonal.
+
+### Ranked next packet
+
+1. **Run the browser matrix on Firefox and WebKit.** Everything is in place, it
+   is one command per engine, and it is the difference between "three-engine
+   lane" as a configuration and as a claim. Expect the ledger to shrink or to
+   split by engine; both are information.
+2. **The 2.5.8 target-size sweep.** 28 components, one systemic cause, and a
+   ratchet already holding the line.
+3. **TASK-OSS-P5-02's 51 story items.** Bounded, assigned per component, and the
+   ceiling makes progress permanent.
+4. **FORM-OSS** (`form-controls-readiness-tasks.md`) — the packet P5 gates, now
+   that the controls it depends on have tiers and a capability row each.

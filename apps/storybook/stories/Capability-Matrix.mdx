@@ -1,0 +1,95 @@
+{/* Capability-Matrix.mdx — TASK-OSS-P5-06. The table below is GENERATED.
+    Edit packages/tooling/src/quality/ and re-run `yarn generate:capability-matrix`;
+    `yarn validate:capability-matrix` fails if this page's data drifts from it. */}
+import { Meta } from '@storybook/addon-docs/blocks'
+import { CapabilityMatrix } from './_blocks/CapabilityMatrix.ts'
+import { DocTable } from './_blocks/DocTable.ts'
+
+<Meta title="Guides/Capability Matrix" />
+
+# Capability matrix
+
+**What evidence exists for `DzX`, and how much of it is missing.**
+
+Evidence for a component lives in six places: contract and unit specs beside the
+source, story status in a validator report, browser results in a Playwright run,
+manual screen-reader runs in `e2e/at-matrix/`, performance baselines in
+`packages/core/perf/`, and security artifacts in `packages/core/security/`.
+Answering "is `DzSelect` qualified?" used to mean knowing all six and how to
+read each. This page is the join.
+
+## How to read it
+
+Every component owes a set of evidence rows, and which rows it owes is not the
+same for all of them. A badge and a combobox carried identical expectations
+until TASK-OSS-P5-01, so effort went where it was cheapest rather than where a
+defect hurts. Now each component has a **risk tier**, and the tier — plus what
+the component actually does — decides the rows.
+
+<DocTable
+  head={['Tier', 'What it is', 'What it adds']}
+  align={['left', 'left', 'left']}
+  rows={[
+    ['`A`', 'Presentational — renders content, takes no focus. Badges, separators, typography.', 'Contract spec, unit spec, axe, light/dark story, SSR sample, token contrast.'],
+    ['`B`', 'Interactive primitive — owns focus, keyboard and a value. Buttons, inputs, dialogs.', 'Keyboard spec, state stories, controlled/uncontrolled, browser play, RTL contract, the three-engine browser matrix, a manual AT task.'],
+    ['`C`', 'Composite or domain — several primitives sharing state, or data at a scale where correctness and speed are the same question. Grids, calendars, trees.', 'An accessibility narrative, a real-world composition story, a performance baseline.'],
+    ['`D`', 'Security or data boundary — host-supplied files, HTML, URLs or payloads reach a sink.', 'A threat model, a hostile-input corpus, a URL policy, a CSP fixture.'],
+  ]}
+/>
+
+The tiers are **cumulative**: Tier C owes everything B owes. Three further rows
+follow what a component *does* rather than how complex it is —
+`portal-hydration` for anything that teleports, `non-drag-alternative` for
+anything with a pointer drag, `data-scenarios` for anything taking a
+consumer-supplied collection. And a **security boundary** is its own axis:
+`DzButton` accepts an `href`, so it owes a URL policy and a hostile-input
+corpus without owing a combobox's dataset scenarios.
+
+### The five cell states
+
+<DocTable
+  head={['State', 'Meaning']}
+  align={['left', 'left']}
+  rows={[
+    ['`pass`', 'An artifact exists **and** something recorded it passing.'],
+    ['`present`', 'An artifact exists. Nothing here proves it ran green — a spec file on disk is `present`; the same spec with a recorded result is `pass`. Collapsing the two would let a skipped test read as evidence.'],
+    ['`stale`', 'An artifact exists and the component has changed since it was taken. Not a pass: it is a pass about different code.'],
+    ['`unrun`', 'No artifact.'],
+    ['`excepted`', 'The component provably cannot produce this row. The row is **not** removed — the cell is still printed, with the reason on it.'],
+  ]}
+/>
+
+### There is no percentage on this page
+
+One number over cells of different weight is satisfied equally by closing four
+badge cells and by closing one combobox cell, and it hides which. The
+reassessment's P5 exit criterion says it directly — *"browser/AT/performance/
+security gaps are not collapsed into aggregate test counts"* — so the counts
+below are per tier and per state and are not reduced further. If you want a
+headline number, the honest one is the `unrun` column.
+
+### Inputs matter as much as cells
+
+A whole column of `unrun` means one of two very different things: nobody ran
+that lane, or it ran and found nothing. The **evidence inputs** panel at the top
+of the table says which. An absent input is a missing artifact, not a failing
+component.
+
+## The matrix
+
+<CapabilityMatrix />
+
+## Regenerating
+
+```bash
+yarn generate:quality-matrix      # tiers, traits, boundaries → what each component owes
+yarn generate:at-matrix           # one AT task file per Tier B–D component
+yarn generate:matrix-targets      # the browser lane's story targets
+yarn perf:capture                 # baselines, over >= 5 runs, with variance
+yarn generate:capability-matrix   # the join, and this page's data
+yarn validate:capability-matrix   # freshness, plus the Tier D rule
+```
+
+The page is regenerated, never hand-edited. `validate:capability-matrix` fails
+when the committed data drifts from what the generator produces, and when a
+Tier D component carries an `unrun` cell with nothing behind it.

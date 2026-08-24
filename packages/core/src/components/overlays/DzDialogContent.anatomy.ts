@@ -47,10 +47,11 @@ export const anatomy = {
   recipes: ['size'],
 
   /**
-   * Tier A: it is the focus trap, the scroll lock and the escape handler. A
-   * defect here strands a keyboard user inside or outside the dialog.
+   * Tier B — interactive primitive. It is the focus trap, the scroll lock and
+   * the escape handler. A defect here strands a keyboard user inside or
+   * outside the dialog.
    */
-  riskTier: 'A',
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy
 
 /** Addressable node names, for typing per-instance overrides. */

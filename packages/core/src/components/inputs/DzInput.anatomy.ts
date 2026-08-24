@@ -84,11 +84,12 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Tier A: it holds user input, carries `aria-invalid`/`aria-describedby`
-   * wiring, and inherits size and validation state from `DzInputGroup` and
-   * `DzFormField`. A defect is a data or accessibility failure.
+   * Tier B — interactive primitive. It holds user input, carries
+   * `aria-invalid`/`aria-describedby` wiring, and inherits size and validation
+   * state from `DzInputGroup` and `DzFormField`. A defect is a data or
+   * accessibility failure.
    */
-  riskTier: 'A',
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy
 
 /** Addressable node names, for typing per-instance overrides. */

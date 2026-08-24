@@ -98,6 +98,37 @@ export type {
   DzTestIds,
 } from './provider.types'
 
+// Quality tiers — the evidence a component owes at its risk tier (P5-01)
+export {
+  APG_PATTERNS,
+  BASELINE_WCAG,
+  baselineWcagFor,
+  BOUNDARY_EVIDENCE,
+  COMPONENT_TRAITS,
+  EVIDENCE_KINDS,
+  evidenceFor,
+  evidenceOrigin,
+  INTERACTIVE_WCAG,
+  requiredEvidence,
+  RISK_TIER_ORDER,
+  SECURITY_BOUNDARIES,
+  TIER_EVIDENCE_INCREMENT,
+  TRAIT_EVIDENCE,
+  TRAIT_WCAG,
+  WCAG_22_CRITERIA,
+  WCAG_CRITERION_IDS,
+} from './quality-tiers'
+
+export type {
+  ApgPattern,
+  ComponentQuality,
+  ComponentTrait,
+  EvidenceKind,
+  SecurityBoundary,
+  WcagCriterion,
+  WcagLevel,
+} from './quality-tiers'
+
 // Slot prop interfaces
 export type {
   ActionsSlotProps,

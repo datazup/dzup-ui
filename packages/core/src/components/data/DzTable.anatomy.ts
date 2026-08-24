@@ -74,7 +74,12 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'swap-horizontal' },
 
-  riskTier: 'B',
+  /**
+   * Tier C — composite. Several primitives share one selection and sort state,
+   * and at realistic row counts correctness and speed stop being separable
+   * questions.
+   */
+  riskTier: 'C',
 } as const satisfies ComponentAnatomy
 
 /** Addressable node names across the table family. */

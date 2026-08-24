@@ -23,9 +23,10 @@ export const anatomy = {
   rtl: { mirrors: 'none', keyboard: 'none' },
 
   /**
-   * Tier A, for the same reason as `DzProvider`: a theme that resolves wrongly
+   * Tier B, for the same reason as `DzProvider`: a theme that resolves wrongly
    * is a contrast failure across an entire application, and the failure is
-   * invisible to every component it affects.
+   * invisible to every component it affects. It carries the same two recorded
+   * exceptions, and for the same reason — it renders no focusable node.
    */
-  riskTier: 'A',
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy

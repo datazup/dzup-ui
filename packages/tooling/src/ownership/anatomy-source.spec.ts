@@ -206,7 +206,10 @@ describe('readAnatomyFor', () => {
 
     expect(result.problems).toEqual([])
     expect(result.anatomy?.parts).toEqual(['root', 'spinner'])
-    expect(result.anatomy?.riskTier).toBe('A')
+    // 'B', not 'A': TASK-OSS-P5-01 corrected the RiskTier scale, which
+    // TASK-OSS-P3-02 had introduced inverted. A button is an interactive
+    // primitive; 'A' is now presentational.
+    expect(result.anatomy?.riskTier).toBe('B')
     expect(result.file).toContain('DzButton.anatomy.ts')
   })
 })

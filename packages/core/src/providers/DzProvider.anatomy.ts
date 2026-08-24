@@ -38,15 +38,20 @@ export const anatomy = {
   rtl: { mirrors: 'none', keyboard: 'none' },
 
   /**
-   * Tier A.
+   * Tier B.
    *
-   * Not because it manages focus — it renders nothing to focus — but for the
-   * consequence the tier names: a defect here is an accessibility failure
-   * somebody cannot work around. Getting `motion` wrong animates for a user who
-   * asked the OS not to; getting `direction` wrong lays out an Arabic
-   * application left-to-right; getting `nonce` wrong drops the style tag under
-   * a strict CSP. Every one of those is silent, global, and invisible to the
-   * component that suffers it.
+   * The ladder has no rung for infrastructure, and this component is neither
+   * presentational nor an interactive primitive: it renders nothing to focus
+   * and nothing to look at. It sits at B for the consequence, not the surface —
+   * getting `motion` wrong animates for a user who asked the OS not to; getting
+   * `direction` wrong lays out an Arabic application left-to-right; getting
+   * `nonce` wrong drops the style tag under a strict CSP. Every one of those is
+   * silent, global, and invisible to the component that suffers it.
+   *
+   * The two Tier B rows it cannot satisfy — `keyboard-spec` and `browser-play`,
+   * both of which need a focusable node — are recorded as exceptions in the
+   * quality assignment rather than dropped, so the capability matrix still
+   * shows the cell and says why it is empty.
    */
-  riskTier: 'A',
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy

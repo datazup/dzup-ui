@@ -12,6 +12,13 @@ playwright-report/
 test-results/
 a11y-report/
 
+# TASK-OSS-P5-05 scratch: `perf:capture` builds a throwaway Vite fixture per
+# Tier C/D export in .perf-export-size/ and streams raw samples through
+# .perf-samples.ndjson. Both are removed in a `finally`; ignored so an
+# interrupted capture does not leave a dirty worktree behind it.
+.perf-export-size/
+.perf-samples.ndjson
+
 # derived on every landing build from the committed WebP thumbnails (build-og-images.ts)
 apps/landing/public/og-templates/
 

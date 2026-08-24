@@ -100,10 +100,93 @@ describe('dzFileUpload — Unit Tests', () => {
     expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
-  it('drop zone is keyboard accessible (Enter key)', async () => {
+  it('drop zone is reachable by Tab', async () => {
+    // Renamed from "drop zone is keyboard accessible (Enter key)", which
+    // asserted a tabindex and pressed no key. A test named after a behaviour it
+    // does not exercise is worse than no test: it is the reason nobody noticed
+    // the key handling had never been covered.
     const wrapper = mount(DzFileUpload)
     const dropzone = wrapper.find('[role="button"]')
     expect(dropzone.attributes('tabindex')).toBe('0')
+  })
+
+  it('opens the picker on Enter and on Space, and on nothing else', async () => {
+    const wrapper = mount(DzFileUpload, { attachTo: document.body })
+    const input = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const click = vi.spyOn(input, 'click').mockImplementation(() => {})
+    const dropzone = wrapper.find('[role="button"]')
+
+    await dropzone.trigger('keydown', { key: 'Enter' })
+    expect(click).toHaveBeenCalledTimes(1)
+
+    await dropzone.trigger('keydown', { key: ' ' })
+    expect(click).toHaveBeenCalledTimes(2)
+
+    // A control that opened a file picker on any keystroke would make the
+    // component unusable for anyone navigating by typeahead.
+    for (const key of ['a', 'Tab', 'Escape', 'ArrowDown'])
+      await dropzone.trigger('keydown', { key })
+    expect(click).toHaveBeenCalledTimes(2)
+
+    click.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('does not open the picker on Enter while disabled', async () => {
+    const wrapper = mount(DzFileUpload, {
+      props: { disabled: true },
+      attachTo: document.body,
+    })
+    const input = wrapper.find('input[type="file"]').element as HTMLInputElement
+    const click = vi.spyOn(input, 'click').mockImplementation(() => {})
+
+    await wrapper.find('[role="button"]').trigger('keydown', { key: 'Enter' })
+    expect(click).not.toHaveBeenCalled()
+
+    click.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('is controlled by modelValue, and the parent has the last word', async () => {
+    const first = new File([new Uint8Array(4)], 'first.txt', { type: 'text/plain' })
+    const second = new File([new Uint8Array(4)], 'second.txt', { type: 'text/plain' })
+
+    const wrapper = mount(DzFileUpload, {
+      props: { modelValue: [first], multiple: true },
+    })
+    expect(wrapper.text()).toContain('first.txt')
+
+    await wrapper.get('[role="button"]').trigger('drop', {
+      dataTransfer: { files: [second] },
+    })
+
+    // `defineModel` (ADR-16) updates locally and emits in the same tick — it is
+    // optimistic, not strictly controlled. Worth asserting rather than assuming:
+    // an application that validates in its handler will see the file rendered
+    // before it has decided, and that is the contract, not a bug.
+    const emitted = wrapper.emitted('update:modelValue')
+    expect(emitted).toBeTruthy()
+    expect((emitted!.at(-1)![0] as File[]).map(f => f.name)).toEqual(['first.txt', 'second.txt'])
+    expect(wrapper.text()).toContain('second.txt')
+
+    // …and a parent that refuses the change wins, which is what makes it
+    // controllable at all.
+    await wrapper.setProps({ modelValue: [first] })
+    expect(wrapper.text()).not.toContain('second.txt')
+  })
+
+  it('works uncontrolled, accumulating into its own default list', async () => {
+    // No `modelValue` prop: `defineModel` falls back to its declared default of
+    // `[]` and the component keeps the list itself. Both paths are asserted
+    // because a component that only works controlled is a component whose
+    // simplest example in the docs does not run.
+    const wrapper = mount(DzFileUpload, { props: { multiple: true } })
+    expect(wrapper.text()).not.toContain('note.txt')
+
+    await wrapper.get('[role="button"]').trigger('drop', {
+      dataTransfer: { files: [new File([new Uint8Array(4)], 'note.txt', { type: 'text/plain' })] },
+    })
+    expect(wrapper.text()).toContain('note.txt')
   })
 
   it('drop zone tabindex is -1 when disabled', () => {

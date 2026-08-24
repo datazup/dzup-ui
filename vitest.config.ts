@@ -43,6 +43,12 @@ export default defineConfig({
       // in the default `yarn test` lane rather than only through the CLI it
       // happens to be wrapped in (TASK-OSS-P1-01).
       'packages/*/scripts/**/*.spec.ts',
+      // packages/*/security holds Tier D evidence: a threat model beside the
+      // hostile-input corpus that checks it (TASK-OSS-P5-06). Its own directory
+      // rather than tests/, because the pairing is the point — a corpus without
+      // the document that says what it is defending is a list of odd inputs,
+      // and a document without the corpus is a claim.
+      'packages/*/security/**/*.spec.ts',
       'apps/*/src/**/*.spec.ts',
       'apps/*/scripts/**/*.test.mjs',
     ],

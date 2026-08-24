@@ -105,11 +105,17 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Tier A: it manages focus, carries `disabled`/`aria-disabled` semantics, and
-   * is polymorphic across `button`/`a`/`RouterLink`. A defect here is a
-   * functional failure for someone using a keyboard or a screen reader.
+   * Tier B — interactive primitive. It manages focus, carries
+   * `disabled`/`aria-disabled` semantics, and is polymorphic across
+   * `button`/`a`/`RouterLink`. A defect here is a functional failure for
+   * someone using a keyboard or a screen reader.
+   *
+   * Its `href` form crosses a URL boundary, which is declared separately as
+   * `securityBoundary: 'url'` in the quality assignment rather than by raising
+   * the tier — see `@dzup-ui/contracts` `SecurityBoundary` for why the two are
+   * different axes.
    */
-  riskTier: 'A',
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy
 
 /** Addressable node names, for typing per-instance overrides. */

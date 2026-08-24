@@ -1,0 +1,450 @@
+{
+  "$comment": "Known browser-matrix failures (TASK-OSS-P5-03). A listed cell runs as `test.fail()`: Playwright fails the run if it UNEXPECTEDLY PASSES, so this file can only shrink. It is a ratchet, not a skip list -- the cell still runs, still costs wall-clock, and still reports.",
+  "measuredAt": "2026-08-24",
+  "measuredOn": "chromium only, across all six conditions; firefox and webkit have not run this lane yet, so an entry may turn out to be engine-specific. The first run on another engine will say so by failing on an unexpected pass.",
+  "policy": "Entries are removed when fixed and never added without a measured number and a reason. Adding one is a decision with an owner; removing one is the point.",
+  "entries": [
+    {
+      "component": "DzAnchor",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 110
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzBreadcrumb",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "a 37.53125x21",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzCheckbox",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 18x18",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzCheckboxGroup",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 18x18",
+        "undersizedTargets": 3
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzCombobox",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzDataGrid",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 197
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzDatePicker",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzDateRangePicker",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzFieldArray",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "input 159x21",
+        "undersizedTargets": 3
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzFieldArray",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 144
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzImageComparison",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 272
+      },
+      "reason": "Large overflow. The published story sets a fixed width, so this measures the example as much as the component; the example is documentation and is in scope either way."
+    },
+    {
+      "component": "DzInplace",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "input 156x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzInput",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "input 159x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzInputMask",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "input 159x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzLightbox",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 3
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzMenu",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 16
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzMultiSelect",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzNumberInput",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 3
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzOrderList",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 2
+      },
+      "reason": "Marginal overflow. Likely a border or shadow escaping the container rather than a layout that cannot reflow; triage before treating it as a component defect."
+    },
+    {
+      "component": "DzOtpInput",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 40
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzPasswordInput",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzPersonaSelector",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 16x16",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzPersonaSelector",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 80
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzPopconfirm",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 50
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzProvider",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "input 159x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzRadio",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 18x18",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzRadioGroup",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 18x18",
+        "undersizedTargets": 3
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzRangeSlider",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "span 16x16",
+        "undersizedTargets": 2
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzRangeSlider",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 240
+      },
+      "reason": "Large overflow. The published story sets a fixed width, so this measures the example as much as the component; the example is documentation and is in scope either way."
+    },
+    {
+      "component": "DzRating",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "div 116x20",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzResizable",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "div 1x72",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzScrollArea",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 48
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzSearchInput",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "input 159x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzSlider",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "span 16x16",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzSlider",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 240
+      },
+      "reason": "Large overflow. The published story sets a fixed width, so this measures the example as much as the component; the example is documentation and is in scope either way."
+    },
+    {
+      "component": "DzSpeedDial",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 168
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzSplitter",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "div 1x72",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzTable",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 102
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzTabs",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 49
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzTagsInput",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "button 14x14",
+        "undersizedTargets": 3
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzToolbar",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 64
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzTour",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 6
+      },
+      "reason": "Marginal overflow. Likely a border or shadow escaping the container rather than a layout that cannot reflow; triage before treating it as a component defect."
+    },
+    {
+      "component": "DzTransfer",
+      "condition": "zoom-400",
+      "measured": {
+        "engine": "chromium",
+        "overflowPx": 176
+      },
+      "reason": "The component does not reflow into 320 CSS px."
+    },
+    {
+      "component": "DzTree",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "div 137.109375x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzTreeItem",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "div 154.5625x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    },
+    {
+      "component": "DzTreeSelect",
+      "condition": "touch",
+      "measured": {
+        "engine": "chromium",
+        "smallestTarget": "div 278x21",
+        "undersizedTargets": 1
+      },
+      "reason": "WCAG 2.5.8 Target Size (Minimum). The control is visually smaller than 24x24 CSS px and has no enlarged hit area, so on a coarse pointer it is harder to hit than the criterion allows. The fix is a pseudo-element or padding that grows the target without growing the visual, which is a design decision per family rather than a per-component patch."
+    }
+  ]
+}

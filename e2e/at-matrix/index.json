@@ -1,0 +1,6166 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedFrom": [
+    "packages/core/docs/quality-matrix.json",
+    "e2e/at-matrix/*.md"
+  ],
+  "pairs": [
+    {
+      "id": "nvda-firefox",
+      "at": "NVDA",
+      "browser": "Firefox",
+      "platform": "Windows",
+      "purpose": "Browse/forms mode switching and the Gecko accessibility tree."
+    },
+    {
+      "id": "nvda-chrome",
+      "at": "NVDA",
+      "browser": "Chrome",
+      "platform": "Windows",
+      "purpose": "The same AT over Blink, where virtualized and composite widgets differ."
+    },
+    {
+      "id": "jaws-chrome",
+      "at": "JAWS",
+      "browser": "Chrome",
+      "platform": "Windows",
+      "purpose": "JAWS heuristics over ARIA, which override author intent more often."
+    },
+    {
+      "id": "voiceover-safari",
+      "at": "VoiceOver",
+      "browser": "Safari",
+      "platform": "macOS",
+      "purpose": "WebKit behaviour and rotor navigation."
+    },
+    {
+      "id": "voiceover-ios",
+      "at": "VoiceOver",
+      "browser": "Safari",
+      "platform": "iOS",
+      "purpose": "Touch exploration; a control reached by gesture, not by Tab."
+    },
+    {
+      "id": "talkback-android",
+      "at": "TalkBack",
+      "browser": "Chrome",
+      "platform": "Android",
+      "purpose": "Touch exploration, gestures and drag alternatives."
+    }
+  ],
+  "entries": [
+    {
+      "component": "DzAccordion",
+      "tier": "B",
+      "pattern": "accordion",
+      "file": "e2e/at-matrix/DzAccordion.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "navigate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzAnchor",
+      "tier": "B",
+      "pattern": "link",
+      "file": "e2e/at-matrix/DzAnchor.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzBackTop",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzBackTop.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzBlockUI",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzBlockUI.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzBreadcrumb",
+      "tier": "B",
+      "pattern": "breadcrumb",
+      "file": "e2e/at-matrix/DzBreadcrumb.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzButton",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzButton.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzCalendar",
+      "tier": "C",
+      "pattern": "grid",
+      "file": "e2e/at-matrix/DzCalendar.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661"
+    },
+    {
+      "component": "DzCard",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzCard.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzCarousel",
+      "tier": "B",
+      "pattern": "carousel",
+      "file": "e2e/at-matrix/DzCarousel.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "activate",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzCascader",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzCascader.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzCheckbox",
+      "tier": "B",
+      "pattern": "checkbox",
+      "file": "e2e/at-matrix/DzCheckbox.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzCheckboxGroup",
+      "tier": "B",
+      "pattern": "checkbox",
+      "file": "e2e/at-matrix/DzCheckboxGroup.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzChip",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzChip.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzCollapse",
+      "tier": "B",
+      "pattern": "disclosure",
+      "file": "e2e/at-matrix/DzCollapse.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzColorModeToggle",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzColorModeToggle.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzColorPicker",
+      "tier": "C",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzColorPicker.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzCombobox",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzCombobox.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzCommandPalette",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzCommandPalette.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzConfirmDialog",
+      "tier": "B",
+      "pattern": "alertdialog",
+      "file": "e2e/at-matrix/DzConfirmDialog.md",
+      "tasks": [
+        "open",
+        "reach",
+        "activate",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzContextMenu",
+      "tier": "B",
+      "pattern": "menu",
+      "file": "e2e/at-matrix/DzContextMenu.md",
+      "tasks": [
+        "open",
+        "navigate",
+        "typeahead",
+        "activate",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "762e4c00351141cc9e5a7ed02c6762c0cb07479e"
+    },
+    {
+      "component": "DzCopyButton",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzCopyButton.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzDataGrid",
+      "tier": "C",
+      "pattern": "grid",
+      "file": "e2e/at-matrix/DzDataGrid.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzDataView",
+      "tier": "C",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzDataView.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzDatePicker",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzDatePicker.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "64359ea77bd87afcf7316c7793d4dade8271f19b"
+    },
+    {
+      "component": "DzDateRangePicker",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzDateRangePicker.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzDialog",
+      "tier": "B",
+      "pattern": "dialog",
+      "file": "e2e/at-matrix/DzDialog.md",
+      "tasks": [
+        "open",
+        "reach",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzDropdownMenu",
+      "tier": "B",
+      "pattern": "menu",
+      "file": "e2e/at-matrix/DzDropdownMenu.md",
+      "tasks": [
+        "open",
+        "navigate",
+        "typeahead",
+        "activate",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzFab",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzFab.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzFieldArray",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzFieldArray.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "live",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzFileUpload",
+      "tier": "D",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzFileUpload.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "non-drag",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzIconButton",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzIconButton.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzImageComparison",
+      "tier": "B",
+      "pattern": "slider",
+      "file": "e2e/at-matrix/DzImageComparison.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "error",
+        "non-drag"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzInfiniteScroll",
+      "tier": "B",
+      "pattern": "feed",
+      "file": "e2e/at-matrix/DzInfiniteScroll.md",
+      "tasks": [
+        "navigate",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661"
+    },
+    {
+      "component": "DzInplace",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzInplace.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661"
+    },
+    {
+      "component": "DzInput",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzInput.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzInputMask",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzInputMask.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzKnob",
+      "tier": "B",
+      "pattern": "slider",
+      "file": "e2e/at-matrix/DzKnob.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "error",
+        "non-drag"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzLightbox",
+      "tier": "B",
+      "pattern": "dialog",
+      "file": "e2e/at-matrix/DzLightbox.md",
+      "tasks": [
+        "open",
+        "reach",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzListItem",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzListItem.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+    },
+    {
+      "component": "DzListbox",
+      "tier": "B",
+      "pattern": "listbox",
+      "file": "e2e/at-matrix/DzListbox.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "typeahead",
+        "select",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzMegaMenu",
+      "tier": "C",
+      "pattern": "menubar",
+      "file": "e2e/at-matrix/DzMegaMenu.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "open",
+        "activate",
+        "dismiss",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzMention",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzMention.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzMenu",
+      "tier": "B",
+      "pattern": "menu",
+      "file": "e2e/at-matrix/DzMenu.md",
+      "tasks": [
+        "open",
+        "navigate",
+        "typeahead",
+        "activate",
+        "dismiss",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzMultiSelect",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzMultiSelect.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzNotification",
+      "tier": "B",
+      "pattern": "alert",
+      "file": "e2e/at-matrix/DzNotification.md",
+      "tasks": [
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzNumberInput",
+      "tier": "B",
+      "pattern": "spinbutton",
+      "file": "e2e/at-matrix/DzNumberInput.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzOrderList",
+      "tier": "C",
+      "pattern": "listbox",
+      "file": "e2e/at-matrix/DzOrderList.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "typeahead",
+        "select",
+        "non-drag",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzOtpInput",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzOtpInput.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzPagination",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzPagination.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzPanel",
+      "tier": "B",
+      "pattern": "disclosure",
+      "file": "e2e/at-matrix/DzPanel.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzPasswordInput",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzPasswordInput.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzPersonaSelector",
+      "tier": "C",
+      "pattern": "listbox",
+      "file": "e2e/at-matrix/DzPersonaSelector.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "typeahead",
+        "select",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzPopconfirm",
+      "tier": "B",
+      "pattern": "alertdialog",
+      "file": "e2e/at-matrix/DzPopconfirm.md",
+      "tasks": [
+        "open",
+        "reach",
+        "activate",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzPopover",
+      "tier": "B",
+      "pattern": "dialog",
+      "file": "e2e/at-matrix/DzPopover.md",
+      "tasks": [
+        "open",
+        "reach",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzProvider",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzProvider.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzRadio",
+      "tier": "B",
+      "pattern": "radio-group",
+      "file": "e2e/at-matrix/DzRadio.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzRadioGroup",
+      "tier": "B",
+      "pattern": "radio-group",
+      "file": "e2e/at-matrix/DzRadioGroup.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzRangeSlider",
+      "tier": "B",
+      "pattern": "slider-multithumb",
+      "file": "e2e/at-matrix/DzRangeSlider.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "error",
+        "non-drag"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzRating",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzRating.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzResizable",
+      "tier": "B",
+      "pattern": "window-splitter",
+      "file": "e2e/at-matrix/DzResizable.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "non-drag"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzScrollArea",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzScrollArea.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzSearchInput",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzSearchInput.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzSegmented",
+      "tier": "B",
+      "pattern": "radio-group",
+      "file": "e2e/at-matrix/DzSegmented.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzSelect",
+      "tier": "B",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzSelect.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzSheet",
+      "tier": "B",
+      "pattern": "dialog",
+      "file": "e2e/at-matrix/DzSheet.md",
+      "tasks": [
+        "open",
+        "reach",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzSidebar",
+      "tier": "C",
+      "pattern": "treeview",
+      "file": "e2e/at-matrix/DzSidebar.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select",
+        "typeahead",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzSlider",
+      "tier": "B",
+      "pattern": "slider",
+      "file": "e2e/at-matrix/DzSlider.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "error",
+        "non-drag"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzSpeedDial",
+      "tier": "B",
+      "pattern": "menu-button",
+      "file": "e2e/at-matrix/DzSpeedDial.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "activate",
+        "dismiss",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661"
+    },
+    {
+      "component": "DzSplitButton",
+      "tier": "B",
+      "pattern": "menu-button",
+      "file": "e2e/at-matrix/DzSplitButton.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "activate",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzSplitter",
+      "tier": "B",
+      "pattern": "window-splitter",
+      "file": "e2e/at-matrix/DzSplitter.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "non-drag"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzStepper",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzStepper.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzStepperItem",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzStepperItem.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzSwitch",
+      "tier": "B",
+      "pattern": "switch",
+      "file": "e2e/at-matrix/DzSwitch.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzTable",
+      "tier": "C",
+      "pattern": "table",
+      "file": "e2e/at-matrix/DzTable.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "non-drag",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzTabs",
+      "tier": "B",
+      "pattern": "tabs",
+      "file": "e2e/at-matrix/DzTabs.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzTag",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzTag.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzTagsInput",
+      "tier": "B",
+      "pattern": "custom",
+      "file": "e2e/at-matrix/DzTagsInput.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzTextarea",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzTextarea.md",
+      "tasks": [
+        "reach",
+        "activate",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzThemeProvider",
+      "tier": "B",
+      "pattern": "none",
+      "file": "e2e/at-matrix/DzThemeProvider.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzTimePicker",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzTimePicker.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzToast",
+      "tier": "B",
+      "pattern": "alertdialog",
+      "file": "e2e/at-matrix/DzToast.md",
+      "tasks": [
+        "open",
+        "reach",
+        "activate",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzToggleButton",
+      "tier": "B",
+      "pattern": "button",
+      "file": "e2e/at-matrix/DzToggleButton.md",
+      "tasks": [
+        "reach",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzToolbar",
+      "tier": "B",
+      "pattern": "toolbar",
+      "file": "e2e/at-matrix/DzToolbar.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "activate"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661"
+    },
+    {
+      "component": "DzTooltip",
+      "tier": "B",
+      "pattern": "tooltip",
+      "file": "e2e/at-matrix/DzTooltip.md",
+      "tasks": [
+        "reach",
+        "dismiss"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "762e4c00351141cc9e5a7ed02c6762c0cb07479e"
+    },
+    {
+      "component": "DzTour",
+      "tier": "C",
+      "pattern": "dialog",
+      "file": "e2e/at-matrix/DzTour.md",
+      "tasks": [
+        "open",
+        "reach",
+        "dismiss",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzTransfer",
+      "tier": "C",
+      "pattern": "listbox",
+      "file": "e2e/at-matrix/DzTransfer.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "typeahead",
+        "select",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    },
+    {
+      "component": "DzTree",
+      "tier": "C",
+      "pattern": "treeview",
+      "file": "e2e/at-matrix/DzTree.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select",
+        "typeahead",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzTreeItem",
+      "tier": "B",
+      "pattern": "treeview",
+      "file": "e2e/at-matrix/DzTreeItem.md",
+      "tasks": [
+        "reach",
+        "navigate",
+        "select",
+        "typeahead"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+    },
+    {
+      "component": "DzTreeSelect",
+      "tier": "C",
+      "pattern": "combobox",
+      "file": "e2e/at-matrix/DzTreeSelect.md",
+      "tasks": [
+        "reach",
+        "open",
+        "navigate",
+        "typeahead",
+        "select",
+        "dismiss",
+        "error",
+        "live"
+      ],
+      "rows": [
+        {
+          "pair": "nvda-firefox",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "nvda-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "jaws-chrome",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-safari",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "voiceover-ios",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        },
+        {
+          "pair": "talkback-android",
+          "result": "unrun",
+          "versions": "-",
+          "tester": "-",
+          "date": "-",
+          "sourceCommit": "-",
+          "notes": "not executed"
+        }
+      ],
+      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+    }
+  ]
+}

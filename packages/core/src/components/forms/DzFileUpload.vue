@@ -122,15 +122,69 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
+/**
+ * Whether a file satisfies one `accept` token.
+ *
+ * The three forms the HTML spec defines: a MIME wildcard (`image/*`), an exact
+ * MIME type (`application/pdf`), and an extension (`.pdf`). Extensions are
+ * compared case-insensitively, because a file named `REPORT.PDF` is a PDF.
+ */
+function matchesAcceptToken(file: File, token: string): boolean {
+  const rule = token.trim().toLowerCase()
+  if (rule === '')
+    return false
+  if (rule.startsWith('.'))
+    return file.name.toLowerCase().endsWith(rule)
+  const type = file.type.toLowerCase()
+  if (rule.endsWith('/*'))
+    return type.startsWith(rule.slice(0, -1))
+  return type === rule
+}
+
+/**
+ * Whether `accept` admits this file.
+ *
+ * **This is enforced here and not only on the input.** `:accept` on
+ * `<input type="file">` filters the operating system's picker and does nothing
+ * at all to a drop: `DataTransfer.files` arrives unfiltered, so before this
+ * check a component rendering "Accepted: image/\*" would take a dropped `.exe`
+ * into its model without a word. The picker and the drop zone are two doors
+ * into the same list and have to apply the same rule.
+ *
+ * A file the browser could not type-sniff (`file.type === ''`) is matched on
+ * its extension alone; if `accept` names only MIME types, it is rejected. That
+ * is the conservative direction, and it is the one a UI control should take —
+ * the documentation says the server must revalidate regardless.
+ */
+function isAccepted(file: File): boolean {
+  if (!props.accept)
+    return true
+  return props.accept.split(',').some(token => matchesAcceptToken(file, token))
+}
+
 /** Validate and add files */
 function processFiles(fileList: FileList | File[]): void {
   const files = Array.from(fileList)
   const validFiles: File[] = []
 
   for (const file of files) {
+    // A single-file control takes one file, whichever door it came through.
+    // `multiple` on the input constrains the picker and, like `accept`, has no
+    // effect on a drop.
+    if (!props.multiple && (model.value.length + validFiles.length) >= 1) {
+      emit('error', { file, reason: 'Only one file is accepted' })
+      continue
+    }
+
     // Check max files limit
     if (props.maxFiles && (model.value.length + validFiles.length) >= props.maxFiles) {
       emit('error', { file, reason: `Maximum ${props.maxFiles} files allowed` })
+      continue
+    }
+
+    // Check file type
+    if (!isAccepted(file)) {
+      emit('error', { file, reason: `File type is not accepted (${props.accept})` })
       continue
     }
 

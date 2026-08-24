@@ -90,7 +90,12 @@ export const anatomy = {
    */
   rtl: { mirrors: 'layout', keyboard: 'none', icons: ['indicator'] },
 
-  riskTier: 'A',
+  /**
+   * Tier B — interactive primitive. It owns focus, the listbox keyboard
+   * contract and a value, and its popup is teleported, so hydration is part of
+   * its contract rather than an implementation detail.
+   */
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy
 
 /** Addressable node names, for typing per-instance overrides. */

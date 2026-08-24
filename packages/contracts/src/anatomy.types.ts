@@ -95,15 +95,31 @@ export type RecipeAxis = 'size' | 'variant' | 'tone' | 'density' | 'orientation'
  * P5 tiers, named here so the tier travels with the component rather than with
  * a spreadsheet).
  *
- * - `A` — focus-managing or form-bearing: a defect is a functional or
- *   accessibility failure for someone who cannot work around it.
+ * The tiers are **cumulative and ascending**: every tier owes everything the
+ * tier below it owes, and `A` is the floor. See `./quality-tiers.ts` for the
+ * evidence each one adds, and `packages/core/docs/quality-matrix.json` for the
+ * assignment.
+ *
+ * - `A` — presentational: renders content, takes no focus of its own. A defect
+ *   is visible and recoverable. Badges, separators, skeletons, typography.
+ * - `B` — interactive primitive: owns focus, keyboard and value. A defect is a
+ *   functional or accessibility failure for someone who cannot work around it.
  *   Buttons, inputs, selects, dialogs, menus.
- * - `B` — composite and data-heavy: correct alone, breakable in combination.
- *   Tables, tabs, accordions, trees, calendars.
- * - `C` — display with variants: wrong output is visible and recoverable.
- *   Badges, cards, alerts, typography.
- * - `D` — structural: layout primitives with no interactive behaviour of their
- *   own. Stacks, grids, spacers.
+ * - `C` — composite or domain: several primitives with shared state, or data
+ *   at a scale where correctness and speed are the same question. Grids,
+ *   calendars, trees, editors.
+ * - `D` — security or data boundary: host-supplied HTML, files, URLs or
+ *   payloads reach a sink. Requires a threat model and a hostile corpus.
+ *
+ * **This definition was inverted until TASK-OSS-P5-01.** TASK-OSS-P3-02
+ * introduced the field with `A` as the *highest* risk and `D` as structural
+ * layout, which is the opposite of the 2026-08-11 reassessment's
+ * `06-quality-accessibility-i18n-security-spec.md` §"Quality model" that it was
+ * implementing — and the opposite of every P5 packet that consumes it, which
+ * ask for "Tier B–D" evidence and "Tier A only in chromium default". Eight
+ * declarations were written against the inverted reading and were migrated with
+ * this change. If a `riskTier` predating that commit turns up anywhere, read it
+ * as the mirror of this scale.
  */
 export type RiskTier = 'A' | 'B' | 'C' | 'D'
 

@@ -24,15 +24,16 @@ get both right and still show a chevron pointing away from the panel it opens.
 |---|---|---|---|
 | `DzButton` | layout | none | — |
 | `DzDialog` | layout | none | — |
+| `DzFileUpload` | layout | none | — |
 | `DzInput` | layout | none | — |
 | `DzProvider` | none | none | — |
 | `DzSelect` | layout | none | `indicator` |
 | `DzTable` | layout | swap-horizontal | — |
 | `DzThemeProvider` | none | none | — |
 
-**7 of 144 public components declare an RTL contract.** The
+**8 of 144 public components declare an RTL contract.** The
 rest are silent, not compliant: the field lives in the anatomy, and only
-7 components declare an anatomy at all. The two rollouts are the
+8 components declare an anatomy at all. The two rollouts are the
 same rollout, ratcheted by `maxWithoutAnatomy` in
 `packages/tooling/src/ownership/unclassified-ceiling.json`.
 

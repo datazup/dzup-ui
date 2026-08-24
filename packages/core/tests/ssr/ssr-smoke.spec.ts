@@ -259,6 +259,19 @@ describe('sSR: forms', () => {
     const html = await ssrRender(DzSlider)
     expect(html).toBeTruthy()
   }, 30000)
+
+  it('dzFileUpload renders in SSR', async () => {
+    // The catalog's only Tier D component (TASK-OSS-P5-01), so its SSR row is
+    // one the capability-matrix gate refuses to leave empty. The assertion is
+    // more than "did not throw": a file input reaching the client without its
+    // `accept` would be a control whose picker filters nothing, and the server
+    // pass is where that would first be visible.
+    const DzFileUpload = (await import('../../src/components/forms/DzFileUpload.vue')).default
+    const html = await ssrRender(DzFileUpload, { accept: 'image/*', maxFiles: 3 })
+    expect(html).toBeTruthy()
+    expect(html).toContain('type="file"')
+    expect(html).toContain('accept="image/*"')
+  }, 30000)
 })
 
 // ---------------------------------------------------------------------------

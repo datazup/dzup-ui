@@ -1,0 +1,33 @@
+{
+  "$comment": "Vendor-engine exceptions for the TASK-OSS-P5-03 browser matrix. An entry removes one {engine, condition} cell from the lane and MUST say why, at which engine version it was observed, and when it was last re-checked. A blanket skip is not an exception -- it is the lane narrowing without saying so, which is the failure this file exists to prevent.",
+  "measuredAt": "2026-08-24",
+  "playwrightVersion": "1.61.1",
+  "method": "Each {engine, condition} pair was opened with the context options the matrix uses, and the corresponding media query was read back from the page. See the handoff in docs/program-2026-08/EXECUTION-STATUS.md.",
+  "measured": {
+    "chromium": {
+      "forced-colors": "(forced-colors: active) resolves true",
+      "reduced-motion": "(prefers-reduced-motion: reduce) resolves true",
+      "touch": "(pointer: coarse) resolves true with hasTouch + isMobile",
+      "zoom-400": "320px viewport applies",
+      "rtl": "story global",
+      "default": "baseline"
+    },
+    "firefox": {
+      "forced-colors": "(forced-colors: active) resolves true",
+      "reduced-motion": "(prefers-reduced-motion: reduce) resolves true",
+      "touch": "(pointer: coarse) resolves true with hasTouch + isMobile -- isMobile IS accepted at 1.61.1, contrary to older guidance",
+      "zoom-400": "320px viewport applies",
+      "rtl": "story global",
+      "default": "baseline"
+    },
+    "webkit": {
+      "forced-colors": "(forced-colors: active) resolves true -- forcedColors IS accepted at 1.61.1, contrary to older guidance. Note this emulates the media feature; it does not install a system palette, so a spec must assert that an indicator survives rather than that it takes a system color.",
+      "reduced-motion": "(prefers-reduced-motion: reduce) resolves true",
+      "touch": "(pointer: coarse) resolves true with hasTouch + isMobile",
+      "zoom-400": "320px viewport applies",
+      "rtl": "story global",
+      "default": "baseline"
+    }
+  },
+  "exceptions": []
+}

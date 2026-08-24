@@ -701,7 +701,7 @@ _Gap: P4 step 5 — RTL is handled piecemeal (Arabic work exists in the landing/
 
 _Reassessment P5 exit: "capability matrix links evidence per risk tier; stale/unrun cells are visible; browser/AT/performance/security gaps are not collapsed into aggregate test counts."_
 
-### [ ] TASK-OSS-P5-01 — Assign risk tiers A–D and map WCAG 2.2 / APG requirements per public component
+### [x] TASK-OSS-P5-01 — Assign risk tiers A–D and map WCAG 2.2 / APG requirements per public component
 
 _Gap: P5 step 1 — quality requirements are applied uniformly; a badge and a combobox carry the same expectations, so effort is misallocated and evidence gaps are invisible._ 🔴
 
@@ -727,7 +727,7 @@ _Gap: P5 step 1 — quality requirements are applied uniformly; a badge and a co
 
 ---
 
-### [ ] TASK-OSS-P5-02 — Triage the 366 Story DoD report items by risk tier
+### [~] TASK-OSS-P5-02 — Triage the 366 Story DoD report items by risk tier
 
 _Gap: finding M1 — the enforced Story DoD is green, but its report lists 366 non-enforced improvements: states 44%, accessibility narratives 61%, real-world examples 58%, galleries 8%, live controls 83%. Do not optimise for gallery count._ 🟠
 
@@ -757,7 +757,7 @@ _Gap: finding M1 — the enforced Story DoD is green, but its report lists 366 n
 
 ---
 
-### [ ] TASK-OSS-P5-03 — Three-engine browser lanes plus forced-colors, zoom/reflow, reduced motion, touch, RTL suites
+### [x] TASK-OSS-P5-03 — Three-engine browser lanes plus forced-colors, zoom/reflow, reduced motion, touch, RTL suites
 
 _Gap: M1 — Core e2e names Chromium/Firefox/WebKit but shared behaviour suites do not systematically cover forced-colors, 400% zoom/reflow, prefers-reduced-motion, touch, or RTL._ 🟠
 
@@ -784,7 +784,7 @@ _Gap: M1 — Core e2e names Chromium/Firefox/WebKit but shared behaviour suites 
 
 ---
 
-### [ ] TASK-OSS-P5-04 — Manual assistive-technology task matrix for Tier B/C/D
+### [x] TASK-OSS-P5-04 — Manual assistive-technology task matrix for Tier B/C/D
 
 _Gap: M1 — neither repo demonstrates a durable manual screen-reader matrix; axe covers roughly half of WCAG issues._ 🟠
 
@@ -810,7 +810,7 @@ _Gap: M1 — neither repo demonstrates a durable manual screen-reader matrix; ax
 
 ---
 
-### [ ] TASK-OSS-P5-05 — Performance and bundle baselines measured with variance, then ratcheted
+### [x] TASK-OSS-P5-05 — Performance and bundle baselines measured with variance, then ratcheted
 
 _Gap: P5 step 5 — budgets exist (`validate:bundle-budget`, landing Lighthouse gates, OSS CLS ceiling 0.1) but component-level render/interaction baselines and their variance are not recorded, so regressions and noise are indistinguishable. The ThemeRecipe ledger already rejected two mobile-performance experiments on distribution evidence; adopt the same discipline._ 🟠
 
@@ -836,7 +836,7 @@ _Gap: P5 step 5 — budgets exist (`validate:bundle-budget`, landing Lighthouse 
 
 ---
 
-### [ ] TASK-OSS-P5-06 — Generated capability matrix with evidence links and visible stale cells
+### [x] TASK-OSS-P5-06 — Generated capability matrix with evidence links and visible stale cells
 
 _Gap: P5 exit — evidence exists in many places but no single page shows, per component and per tier requirement, which evidence is present, passing, stale, or unrun._ 🔴
 

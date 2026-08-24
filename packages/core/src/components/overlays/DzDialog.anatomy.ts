@@ -42,11 +42,11 @@ export const anatomy = {
   rtl: { mirrors: 'layout', keyboard: 'none' },
 
   /**
-   * Tier A: it owns the open state, the modal flag and the focus trap that
-   * Reka enforces. Nothing renders, and a defect still traps or releases focus
-   * wrongly.
+   * Tier B — interactive primitive. It owns the open state, the modal flag and
+   * the focus trap that Reka enforces. Nothing renders, and a defect still
+   * traps or releases focus wrongly.
    */
-  riskTier: 'A',
+  riskTier: 'B',
 } as const satisfies ComponentAnatomy
 
 /** `never` — a renderless component has no part to override. */
