@@ -1221,6 +1221,7 @@ __metadata:
   resolution: "@dzup-ui/core@workspace:packages/core"
   dependencies:
     "@dzup-ui/contracts": "workspace:*"
+    "@dzup-ui/testing": "workspace:*"
     "@dzup-ui/tokens": "workspace:*"
     "@floating-ui/vue": "npm:^1.1.0"
     "@internationalized/date": "npm:^3.5.0"
@@ -1343,7 +1344,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dzup-ui/testing@workspace:packages/testing":
+"@dzup-ui/testing@workspace:*, @dzup-ui/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@dzup-ui/testing@workspace:packages/testing"
   dependencies:
