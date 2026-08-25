@@ -26,7 +26,23 @@
  * @module @dzup-ui/testing/rtl
  */
 
-import type { ComponentRtl } from '@dzup-ui/contracts'
+/**
+ * The part of a `ComponentRtl` this helper reads.
+ *
+ * Accepted **structurally** rather than imported from `@dzup-ui/contracts`, for
+ * the same two reasons `CheckableAnatomy` in `./anatomy.ts` is: this package emits
+ * declarations, so `rootDir: src` forbids pulling another package's source into
+ * its program; and a testing helper that made `@dzup-ui/contracts` a real
+ * dependency would put a types-only package into every consumer's install for
+ * one string union. A real `ComponentRtl` satisfies this by shape.
+ *
+ * `keyboard` and `icons` are deliberately absent: arrow-key semantics are
+ * checked by the component's own keyboard spec and icon mirroring by the
+ * browser lane, neither of which reads a declaration through this helper.
+ */
+export interface CheckableRtl {
+  readonly mirrors: 'layout' | 'none'
+}
 
 /** Anything with an `element`, i.e. a Vue Test Utils wrapper, or an element. */
 export interface RtlTarget {
@@ -88,7 +104,7 @@ function classesIn(root: Element): string[] {
  * })
  * ```
  */
-export function expectRtl(target: RtlTarget | Element, rtl: ComponentRtl | undefined): void {
+export function expectRtl(target: RtlTarget | Element, rtl: CheckableRtl | undefined): void {
   if (rtl === undefined) {
     throw new Error(
       'expectRtl was given no RTL declaration. Add an `rtl` field to the component\'s '
@@ -107,7 +123,7 @@ export function expectRtl(target: RtlTarget | Element, rtl: ComponentRtl | undef
 }
 
 /** The rules, as a list of problems. Empty means conformant. */
-export function checkRtl(root: Element, rtl: ComponentRtl): string[] {
+export function checkRtl(root: Element, rtl: CheckableRtl): string[] {
   const problems: string[] = []
 
   if (rtl.mirrors === 'layout') {

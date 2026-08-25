@@ -6,7 +6,7 @@ import { defineMain } from '@storybook/vue3-vite/node'
 import tailwindcss from '@tailwindcss/vite'
 import remarkGfm from 'remark-gfm'
 import { resolveRemoteDevelopmentServer } from '../../../packages/tooling/src/remote-development-server.ts'
-import { workspaceAliases } from '../../../packages/tooling/src/workspace-aliases.ts'
+import { createDzupResolution } from '../../../packages/tooling/src/resolution/dzup-resolution.ts'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const require = createRequire(import.meta.url)
@@ -134,8 +134,12 @@ export default defineMain({
     })
 
     // Workspace package aliases — Storybook doesn't auto-resolve yarn workspace
-    // links to source. Single-sourced; see workspace-aliases.ts for the ordering
-    // rule and why the token CSS targets resolve to dist/.
+    // links to source. Derived from each package's `exports` map and ordered
+    // most-specific-first; see `packages/tooling/src/resolution/`.
+    const dzup = createDzupResolution({
+      mode: 'merged-source',
+      root: resolve(__dirname, '../../..'),
+    })
     config.resolve = config.resolve || {}
     config.resolve.alias = [
       // Keep the exact REPL compiler subpath ahead of the framework's broad
@@ -144,7 +148,11 @@ export default defineMain({
       // Vite config, where plugin ordering is different.
       { find: /^vue\/compiler-sfc$/, replacement: compilerSfcBrowser },
       ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : []),
-      ...workspaceAliases(resolve(__dirname, '../../..')),
+      ...dzup.alias,
+    ]
+    config.resolve.dedupe = [
+      ...(config.resolve.dedupe || []),
+      ...dzup.dedupe,
     ]
 
     // Vite's dependency optimiser uses esbuild rather than the normal Vite
@@ -154,6 +162,7 @@ export default defineMain({
     config.optimizeDeps = config.optimizeDeps || {}
     config.optimizeDeps.exclude = [
       ...(config.optimizeDeps.exclude || []),
+      ...dzup.optimizeDeps.exclude,
       '@vue/repl',
     ]
 

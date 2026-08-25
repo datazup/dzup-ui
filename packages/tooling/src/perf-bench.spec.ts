@@ -195,9 +195,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
   // between them says whether it is linear.
   describe.each([1, 100, 1_000])('dzDataGrid with %i rows', (rows) => {
     it('mounts within its baseline', async () => {
-      const { default: DzDataGrid } = await import(
-        '@dzup-ui/core/components/data/DzDataGrid.vue'
-      )
+      const { DzDataGrid } = await import('@dzup-ui/core/data')
       const data = generateGridRows(rows)
       const columns = generateGridColumns()
 
@@ -215,18 +213,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
 
   describe.each([1, 100, 1_000])('dzTable with %i rows', (rows) => {
     it('mounts within its baseline', async () => {
-      const { default: DzTable } = await import(
-        '@dzup-ui/core/components/data/DzTable.vue'
-      )
-      const { default: DzTableBody } = await import(
-        '@dzup-ui/core/components/data/DzTableBody.vue'
-      )
-      const { default: DzTableRow } = await import(
-        '@dzup-ui/core/components/data/DzTableRow.vue'
-      )
-      const { default: DzTableCell } = await import(
-        '@dzup-ui/core/components/data/DzTableCell.vue'
-      )
+      const { DzTable, DzTableBody, DzTableRow, DzTableCell } = await import('@dzup-ui/core/data')
 
       const data = generateGridRows(rows)
       const Host = defineComponent({
@@ -260,15 +247,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
   })
 
   it('dzDialog opens and closes within its baseline', async () => {
-    const { default: DzDialog } = await import(
-      '@dzup-ui/core/components/overlays/DzDialog.vue'
-    )
-    const { default: DzDialogContent } = await import(
-      '@dzup-ui/core/components/overlays/DzDialogContent.vue'
-    )
-    const { default: DzDialogTitle } = await import(
-      '@dzup-ui/core/components/overlays/DzDialogTitle.vue'
-    )
+    const { DzDialog, DzDialogContent, DzDialogTitle } = await import('@dzup-ui/core/overlays')
 
     const Host = defineComponent({
       props: { open: { type: Boolean, default: false } },
@@ -302,9 +281,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
   })
 
   it('dzListbox keyboard navigation stays within its baseline', async () => {
-    const { default: DzListbox } = await import(
-      '@dzup-ui/core/components/forms/DzListbox.vue'
-    )
+    const { DzListbox } = await import('@dzup-ui/core/forms')
 
     const options = Array.from({ length: 200 }, (_, i) => ({
       value: `option-${i}`,
@@ -333,18 +310,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
   })
 
   it('dzAccordion with 20 items mounts within its baseline', async () => {
-    const { default: DzAccordion } = await import(
-      '@dzup-ui/core/components/data/DzAccordion.vue'
-    )
-    const { default: DzAccordionItem } = await import(
-      '@dzup-ui/core/components/data/DzAccordionItem.vue'
-    )
-    const { default: DzAccordionTrigger } = await import(
-      '@dzup-ui/core/components/data/DzAccordionTrigger.vue'
-    )
-    const { default: DzAccordionContent } = await import(
-      '@dzup-ui/core/components/data/DzAccordionContent.vue'
-    )
+    const { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent } = await import('@dzup-ui/core/data')
 
     const items = Array.from({ length: 20 }, (_, i) => ({
       value: `item-${i}`,
@@ -386,9 +352,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
     // a baseline for it. The scenario is the file *list*, not the empty drop
     // zone: an empty control is three elements and measures nothing, and the
     // list is the part that grows with what a person selected.
-    const { default: DzFileUpload } = await import(
-      '@dzup-ui/core/components/forms/DzFileUpload.vue'
-    )
+    const { DzFileUpload } = await import('@dzup-ui/core/forms')
 
     const files = Array.from(
       { length: 50 },
@@ -407,18 +371,7 @@ describe('performance Benchmarks', { timeout: 120_000 }, () => {
   })
 
   it('dzTabs with 10 tabs mounts within its baseline', async () => {
-    const { default: DzTabs } = await import(
-      '@dzup-ui/core/components/navigation/DzTabs.vue'
-    )
-    const { default: DzTabList } = await import(
-      '@dzup-ui/core/components/navigation/DzTabList.vue'
-    )
-    const { default: DzTabTrigger } = await import(
-      '@dzup-ui/core/components/navigation/DzTabTrigger.vue'
-    )
-    const { default: DzTabContent } = await import(
-      '@dzup-ui/core/components/navigation/DzTabContent.vue'
-    )
+    const { DzTabs, DzTabList, DzTabTrigger, DzTabContent } = await import('@dzup-ui/core/navigation')
 
     const tabs = Array.from({ length: 10 }, (_, i) => ({
       value: `tab-${i}`,

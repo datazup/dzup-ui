@@ -70,9 +70,9 @@ export const CAPABILITY_TOTALS = {
     "excepted": 9
   },
   "C": {
-    "pass": 121,
+    "pass": 111,
     "present": 99,
-    "stale": 0,
+    "stale": 10,
     "unrun": 154,
     "excepted": 0
   },
@@ -558,7 +558,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "real-world-story", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCascader.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCascader.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -740,7 +740,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzColorPicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzColorPicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -769,7 +769,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzCombobox.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzCombobox.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -990,7 +990,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDatePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDatePicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1017,7 +1017,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzDateRangePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzDateRangePicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1772,7 +1772,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
     { kind: "real-world-story", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMention.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzMention.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -1846,7 +1846,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzMultiSelect.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzMultiSelect.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -2976,7 +2976,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTimePicker.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTimePicker.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTimePicker.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -3182,7 +3182,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "real-world-story", state: "pass", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTransfer.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTransfer.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {
@@ -3263,7 +3263,7 @@ export const CAPABILITY_ROWS: readonly DocCapabilityRow[] = [
     { kind: "a11y-narrative", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTreeSelect.stories.ts"] },
     { kind: "real-world-story", state: "unrun", origin: "tier C", artifacts: ["packages/core/stories/forms/DzTreeSelect.stories.ts"] },
     { kind: "at-manual", state: "unrun", origin: "tier B", artifacts: ["e2e/at-matrix/DzTreeSelect.md"], note: "6 AT/browser pairs, none executed." },
-    { kind: "perf-baseline", state: "pass", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
+    { kind: "perf-baseline", state: "stale", origin: "tier C", artifacts: ["packages/core/perf/baselines.json"], note: "1/1 metric(s) have a derived threshold" },
     ],
   },
   {

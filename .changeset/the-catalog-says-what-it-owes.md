@@ -1,7 +1,6 @@
 ---
 "@dzup-ui/contracts": minor
 "@dzup-ui/core": minor
-"@dzup-ui/tooling": minor
 ---
 
 Evidence by risk tier: every public component now says what it owes, and one page says what it has (TASK-OSS-P5-01…06).

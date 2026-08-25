@@ -115,7 +115,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzAnchor",
@@ -730,7 +730,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzCheckbox",
@@ -797,7 +797,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzCheckboxGroup",
@@ -1133,7 +1133,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzCombobox",
@@ -1206,7 +1206,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzCommandPalette",
@@ -1694,7 +1694,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "64359ea77bd87afcf7316c7793d4dade8271f19b"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzDateRangePicker",
@@ -1766,7 +1766,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzDialog",
@@ -2040,7 +2040,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzFileUpload",
@@ -2109,7 +2109,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "8d80bc39653e50a6da458d005b7691d2fb833edb"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzIconButton",
@@ -2379,7 +2379,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzInput",
@@ -2447,7 +2447,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzInputMask",
@@ -2515,7 +2515,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzKnob",
@@ -2584,7 +2584,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzLightbox",
@@ -2789,7 +2789,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzMegaMenu",
@@ -2933,7 +2933,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzMenu",
@@ -3077,7 +3077,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzNotification",
@@ -3211,7 +3211,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzOrderList",
@@ -3350,7 +3350,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzPagination",
@@ -3552,7 +3552,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzPersonaSelector",
@@ -3894,7 +3894,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzRadioGroup",
@@ -3963,7 +3963,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzRangeSlider",
@@ -4032,7 +4032,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzRating",
@@ -4099,7 +4099,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzResizable",
@@ -4301,7 +4301,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzSegmented",
@@ -4442,7 +4442,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzSheet",
@@ -4649,7 +4649,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzSpeedDial",
@@ -4925,7 +4925,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzStepperItem",
@@ -5059,7 +5059,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzTable",
@@ -5196,7 +5196,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzTag",
@@ -5331,7 +5331,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzTextarea",
@@ -5399,7 +5399,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzThemeProvider",
@@ -5538,7 +5538,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzToast",
@@ -5948,7 +5948,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     },
     {
       "component": "DzTree",
@@ -6160,7 +6160,7 @@
           "notes": "not executed"
         }
       ],
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563"
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d"
     }
   ]
 }

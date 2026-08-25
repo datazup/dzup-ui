@@ -166,8 +166,23 @@ describe('validateOwnershipManifest', () => {
     })
 
     it('is written against the same builder the generator uses', () => {
-      expect(serializeManifest(buildOwnershipManifest().manifest))
-        .toBe(readFileSync(OWNERSHIP_MANIFEST_PATH, 'utf8'))
+      // `sourceCommit` is stamped from `git rev-parse HEAD`, so it differs from
+      // the committed value on every commit that did not regenerate the
+      // manifest. That is not a drift this assertion can usefully report, and
+      // the rule directly above — 'ignores sourceCommit, which changes on every
+      // unrelated commit' — is the validator honouring it. Comparing the raw
+      // bytes here reinstated exactly the tripwire that rule removes, and it
+      // could never be satisfied: regenerating the manifest and committing it
+      // moves HEAD again, so the file is stale the moment it lands.
+      //
+      // Everything that IS drift — every entry, the input globs, the schema
+      // version, the 2-space-plus-newline format — is still compared byte for
+      // byte.
+      const withoutCommit = (json: string): string =>
+        json.replace(/"sourceCommit": "[^"]*"/, '"sourceCommit": "<head>"')
+
+      expect(withoutCommit(serializeManifest(buildOwnershipManifest().manifest)))
+        .toBe(withoutCommit(readFileSync(OWNERSHIP_MANIFEST_PATH, 'utf8')))
     })
   })
 })

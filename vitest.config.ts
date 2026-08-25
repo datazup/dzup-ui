@@ -1,26 +1,27 @@
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'node:path'
+import { createDzupResolution } from './packages/tooling/src/resolution/dzup-resolution.ts'
+
+/**
+ * Specs assert against the **working tree**, not the last build: without this,
+ * `@dzup-ui/*` resolves through the yarn workspace link to a stale `dist/`, so a
+ * helper added to `src` is invisible until someone rebuilds.
+ *
+ * This used to be a hand-written object of eight entries. It was missing five
+ * of the specifiers the packages declare — `@dzup-ui/tokens/css`,
+ * `/tailwind`, `/utils`, `@dzup-ui/core/styles` and `@dzup-ui/testing/vitest` —
+ * and it carried its own copy of the "sub-paths first" ordering rule as a
+ * comment, because an object's key order is the only thing keeping
+ * `@dzup-ui/core` from swallowing `@dzup-ui/core/ownership`. Both are now
+ * properties of the derived data rather than of this file's formatting.
+ */
+const dzup = createDzupResolution({ mode: 'merged-source', root: import.meta.dirname })
 
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    alias: {
-      '@dzup-ui/tokens': resolve(__dirname, 'packages/tokens/src'),
-      '@dzup-ui/contracts': resolve(__dirname, 'packages/contracts/src'),
-      // Sub-path exports must precede the bare package alias: Vite matches by
-      // prefix in declaration order, so '@dzup-ui/core' first would swallow
-      // '@dzup-ui/core/ownership' and resolve it to a directory that does not
-      // exist. Same ordering rule as packages/tooling/src/workspace-aliases.ts.
-      '@dzup-ui/core/ownership': resolve(__dirname, 'packages/core/src/generated/component-ownership.ts'),
-      '@dzup-ui/core': resolve(__dirname, 'packages/core/src'),
-      '@dzup-ui/compat': resolve(__dirname, 'packages/compat/src'),
-      '@dzup-ui/tooling': resolve(__dirname, 'packages/tooling/src'),
-      // Specs assert against the working tree, not the last build: without this,
-      // `@dzup-ui/testing` resolves through the workspace link to its stale
-      // `dist/`, so a helper added to src is invisible until someone rebuilds.
-      '@dzup-ui/testing': resolve(__dirname, 'packages/testing/src'),
-    },
+    alias: dzup.alias,
+    dedupe: dzup.dedupe,
   },
   test: {
     globals: true,

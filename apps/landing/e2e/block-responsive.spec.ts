@@ -118,7 +118,19 @@ test.describe('block catalog — responsive certification', () => {
           ).toBe(true)
           await expect(page).toHaveURL(new RegExp(`/blocks/preview/${blockId}(?:\\?|$)`))
           expect(new URL(page.url()).searchParams.get('dir')).toBe(direction.id)
-          await expect(page.locator('html')).toHaveAttribute('dir', direction.id)
+          // `dir` is written by BlockPreviewPage's `onMounted`/watch, so this
+          // assertion waits on **hydration**, not on a paint. `domcontentloaded`
+          // above returns before the route chunk has parsed, and Playwright's
+          // default 5 s expect timeout is not enough for that on a contended
+          // machine: in a run started immediately after `yarn landing:build`,
+          // three of these 88 blocks reported `dir` as absent after 14 polls
+          // over 5 s, then passed 88/88 in isolation twice. CI runs build and
+          // test back to back, which is exactly the contended case.
+          //
+          // The timeout is raised only on the hydration-dependent assertion —
+          // the surrounding containment checks keep the default, so a block that
+          // genuinely fails to render still fails fast.
+          await expect(page.locator('html')).toHaveAttribute('dir', direction.id, { timeout: 20_000 })
 
           const frame = page.locator('.block-preview-frame')
           await expect(frame).toBeVisible()

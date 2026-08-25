@@ -4,9 +4,17 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { resolveRemoteDevelopmentServer } from '../../packages/tooling/src/remote-development-server.ts'
-import { workspaceAliases } from '../../packages/tooling/src/workspace-aliases.ts'
+import { createDzupResolution } from '../../packages/tooling/src/resolution/dzup-resolution.ts'
 import { preloadRouteChunk } from './vite/preload-route-chunk.ts'
 import { serveStorybook } from './vite/serve-storybook.ts'
+
+// The landing app develops against the library it documents, so it resolves
+// `@dzup-ui/*` to workspace source. Stated rather than assumed — see
+// `packages/tooling/src/resolution/`.
+const dzup = createDzupResolution({
+  mode: 'merged-source',
+  root: resolve(__dirname, '../..'),
+})
 
 export default defineConfig(() => {
   const remoteDevelopment = resolveRemoteDevelopmentServer(
@@ -17,8 +25,10 @@ export default defineConfig(() => {
   return {
     plugins: [tailwindcss(), vue(), serveStorybook(), preloadRouteChunk()],
     resolve: {
-      alias: workspaceAliases(resolve(__dirname, '../..')),
+      alias: dzup.alias,
+      dedupe: dzup.dedupe,
     },
+    optimizeDeps: dzup.optimizeDeps,
     server: {
       port: 3001,
       // Fail loudly when 3001 is taken instead of drifting to the next free port.

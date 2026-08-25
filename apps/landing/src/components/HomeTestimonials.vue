@@ -92,7 +92,7 @@ import Section from './Section.vue'
 }
 
 .quote-source {
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: var(--dz-text-xs, 0.75rem);
   font-weight: 600;
   color: var(--dz-primary-muted-foreground);

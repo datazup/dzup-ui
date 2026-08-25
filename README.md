@@ -1,7 +1,7 @@
 # dzup-ui
 
 <!-- claims:generated:start -->
-**Open-source Vue 3 component library — 206 catalog components, including 138 with dedicated Storybook pages.**
+**Open-source Vue 3 component library — 207 catalog components, including 138 with dedicated Storybook pages.**
 
 > dzup-ui Pro 0.1.0-alpha.0 publishes 78 enterprise components across 8 families. Its built Storybook contains 699 stories; 61 exported components have dedicated documentation pages, while compound parts are documented through their parent.
 

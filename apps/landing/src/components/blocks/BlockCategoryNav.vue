@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CategoryMeta } from '../../blocks/registry.ts'
+import { useDzDirection } from '@dzup-ui/core'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 /** Selected category — drives which panel the page renders. */
@@ -76,19 +77,35 @@ function panelId(id: string): string {
   return `${props.panelIdPrefix ?? 'blocks-panel'}-${id}`
 }
 
+// The active writing direction, from `DzProvider` (ADR-20). Resolves to `'ltr'`
+// with no provider mounted, so nothing changes for a left-to-right reader.
+const direction = useDzDirection()
+
 function onKeydown(event: KeyboardEvent) {
   const ids: string[] = props.categories.map(c => c.id)
   const current = ids.indexOf(focusId.value)
   if (current === -1)
     return
 
+  // APG's tab pattern is written in terms of "previous" and "next", not left and
+  // right: in a right-to-left document the next tab is to the LEFT, so ArrowLeft
+  // advances. This handler hard-coded ArrowRight as "next", which is the exact
+  // defect TASK-OSS-P4-05 fixed in the library's own `useTabs` — re-introduced
+  // here because this nav re-implements the pattern instead of inheriting it.
+  //
+  // The vertical keys do not swap: `dir` is about the inline axis, and ArrowUp
+  // is ArrowUp in every language.
+  const rtl = direction.value === 'rtl'
+  const nextKey = rtl ? 'ArrowLeft' : 'ArrowRight'
+  const prevKey = rtl ? 'ArrowRight' : 'ArrowLeft'
+
   let next = current
   switch (event.key) {
-    case 'ArrowRight':
+    case nextKey:
     case 'ArrowDown':
       next = (current + 1) % ids.length
       break
-    case 'ArrowLeft':
+    case prevKey:
     case 'ArrowUp':
       next = (current - 1 + ids.length) % ids.length
       break

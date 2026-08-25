@@ -141,12 +141,12 @@ const freshness = `As of the last site build, ${asOf}`
   padding: 8px 16px;
   text-decoration: none;
   color: inherit;
-  border-left: 1px solid var(--lp-hairline);
+  border-inline-start: 1px solid var(--lp-hairline);
   transition: opacity var(--dz-duration-fast, 150ms);
 }
 
 .stat:first-child {
-  border-left: none;
+  border-inline-start: none;
 }
 
 .stat:hover {
@@ -193,7 +193,7 @@ const freshness = `As of the last site build, ${asOf}`
   }
   /* Left column of each row resets the vertical hairline. */
   .stat:nth-child(odd) {
-    border-left: none;
+    border-inline-start: none;
   }
 }
 </style>

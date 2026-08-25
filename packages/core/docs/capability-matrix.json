@@ -44,9 +44,9 @@
       "excepted": 9
     },
     "C": {
-      "pass": 121,
+      "pass": 111,
       "present": 99,
-      "stale": 0,
+      "stale": 10,
       "unrun": 154,
       "excepted": 0
     },
@@ -68,7 +68,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/data/DzAccordion.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2207,7 +2207,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzCascader.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -2365,7 +2365,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -2382,7 +2382,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzCheckbox.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3163,7 +3163,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzColorPicker.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3311,7 +3311,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -3331,7 +3331,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzCombobox.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -3491,7 +3491,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -4559,7 +4559,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzDatePicker.vue",
-      "componentCommit": "64359ea77bd87afcf7316c7793d4dade8271f19b",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -4701,7 +4701,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -4718,7 +4718,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzDateRangePicker.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -4858,7 +4858,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -5686,7 +5686,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzFieldArray.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -5824,7 +5824,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzFileUpload.vue",
-      "componentCommit": "8d80bc39653e50a6da458d005b7691d2fb833edb",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -6165,7 +6165,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzFormField.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -7043,7 +7043,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzInplace.vue",
-      "componentCommit": "a170c9a9a6da640c89fdd98e3154595c8029c661",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -7173,7 +7173,7 @@
       "traits": [],
       "anatomy": "declared",
       "source": "packages/core/src/components/inputs/DzInput.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -7307,7 +7307,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzInputGroup.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -7373,7 +7373,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzInputMask.vue",
-      "componentCommit": "6c5f52233aab4b8c5e6206e750baa5f81d3030aa",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -7569,7 +7569,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzKnob.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -8071,7 +8071,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzListbox.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -8462,7 +8462,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzMention.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -8611,7 +8611,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -8856,7 +8856,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzMultiSelect.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9017,7 +9017,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -9160,7 +9160,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzNumberInput.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9469,7 +9469,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzOtpInput.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -9919,7 +9919,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzPasswordInput.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10800,7 +10800,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzRadio.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -10932,7 +10932,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzRadioGroup.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -11066,7 +11066,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzRangeSlider.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -11203,7 +11203,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzRating.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -11865,7 +11865,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzSearchInput.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -12127,7 +12127,7 @@
       ],
       "anatomy": "declared",
       "source": "packages/core/src/components/forms/DzSelect.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -12684,7 +12684,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzSlider.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -13508,7 +13508,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/navigation/DzStepper.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -13764,7 +13764,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzSwitch.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14080,7 +14080,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/navigation/DzTabs.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14345,7 +14345,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzTagsInput.vue",
-      "componentCommit": "80ce301231a35feb48172daf7cadcc33e88a3880",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14552,7 +14552,7 @@
       "traits": [],
       "anatomy": "absent",
       "source": "packages/core/src/components/inputs/DzTextarea.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14809,7 +14809,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzTimePicker.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -14957,7 +14957,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -15877,7 +15877,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzTransfer.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -16027,7 +16027,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],
@@ -16339,7 +16339,7 @@
       ],
       "anatomy": "absent",
       "source": "packages/core/src/components/forms/DzTreeSelect.vue",
-      "componentCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+      "componentCommit": "e986952ead249a6fd1e132fc8996c2da86a8d82d",
       "cells": [
         {
           "kind": "contract-spec",
@@ -16498,7 +16498,7 @@
           "kind": "perf-baseline",
           "origin": "tier C",
           "scope": "component",
-          "state": "pass",
+          "state": "stale",
           "artifacts": [
             "packages/core/perf/baselines.json"
           ],

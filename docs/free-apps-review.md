@@ -1273,3 +1273,155 @@ Recorded so they aren't lost; each needs a scoping decision before it deserves a
 6. **TASK-FREE2-09 → 12** — the capability tier, in value order: template previews (sales),
    changelog + RSS (retention), Storybook toolbars (evaluation), per-component playground
    (conversion). Each is independent; ship as capacity allows.
+
+---
+
+# TASK-APP-1 — real-component rollout (2026-08-25)
+
+> From `docs/program-2026-08/oss-recovery-and-shared-kit-tasks.md`. The packet
+> asked: inventory hand-rolled UI in `apps/landing`, `apps/sandbox` and the
+> Storybook doc blocks, and replace it with real `@dzup-ui/core` components
+> "where a component fits", measuring that a11y, theming and RTL are **inherited
+> rather than re-implemented**.
+
+## The discovery changed the answer
+
+Two of the three named slices turned out not to exist as described, and the
+third turned out to be the wrong measurement.
+
+**Slice "sandbox pages" is closed by a standing instruction.**
+`docs/free-apps-audit.md:165` records `apps/sandbox` as *"LEGACY. Last touched
+2026-06-09, not in CI, superseded by Storybook … **Do not add to it.**"* CI
+agrees: the sandbox-parity gate was replaced by `validate:contract-parity`
+(TASK-FREE-16), no root script targets it, and it has no e2e config. Rolling
+components into a tree nobody builds is work nobody sees, and the audit already
+said not to. **Not done, on purpose.**
+
+**Slice "Storybook doc blocks" has nothing to roll out.**
+`apps/storybook/stories/_blocks/` contains **fifteen `.ts` files and zero
+`.vue` files** — the doc blocks are render functions and data, not markup. A
+grep for `<button|<input|<select|role="tab"|role="dialog"` across the directory
+returns nothing.
+
+**Slice "landing sections" is real, and the hand-rolled UI is almost all
+brand chrome.** Which is the finding.
+
+## The candidate inventory
+
+| Candidate | Raw markup | Fits | Verdict |
+|---|---|---|---|
+| `components/RethemeButton.vue` | 1 `<button>` | `DzButton` | **Keep.** A gradient-haloed pill with a mode badge and a backdrop blur, on the hero. Reproducing it means overriding radius, padding, colour, weight and adding two structural children — re-specification, not adoption. |
+| `components/AnnouncementBanner.vue` | 1 `<button>` | `DzIconButton` | **Keep** — but see "the gap this exposes". White icon on a brand gradient; no Core tone renders legibly on an arbitrary brand surface. Its `right: 12px` **was** fixed. |
+| `components/blocks/BlockSearchBar.vue` | 4 `<button>` | `DzButton` / `DzToggleButton` | **Keep.** Filter chips and a pill "Clear". `DzButton`'s `ui` surface is `root` + `spinner`, so parity needs height, padding, radius, colour and weight overrides at once. |
+| `components/blocks/BlockCategoryNav.vue` | `role="tablist"` + `role="tab"` | `DzTabs` | **Keep the markup, fix the behaviour.** `DzTabs` owns its panels; here the "panels" are page sections and activation must *not* follow focus (a category mounts a stack of live previews). But the hand-rolled keyboard handler was wrong — see below. |
+| `components/TopNav.vue` | 2 `<button>` | — | **Keep.** One is a `DzDropdownMenuTrigger` child (already the library's pattern); one is the mobile menu toggle, same brand-chrome case. Already uses `DzButton` + `DzDropdownMenu*`. |
+| `pages/ThemesPage.vue` | 8 `<input type="range">` | `DzSlider` | **Keep.** The theme designer's hue and chroma sliders paint the OKLCH ramp *into the track* (`--track`). The gradient is the affordance. |
+| `gallery/**`, `motion/**` | assorted | — | **Keep.** Animation demos; the raw element is the subject of the demo. |
+| `blocks/**`, `templates/**` | assorted | — | **Out of scope by the packet's own `<blocks>` rule** — `?raw`-paired copy-pasteable sources. |
+
+**Zero replacements, and that is the result, not an evasion.** The landing app's
+remaining hand-rolled controls are deliberately *not* the library's default
+surfaces: pills, gradients, glows and painted tracks. Swapping them at parity
+would mean overriding every part of the component, which adds indirection and
+removes nothing.
+
+## What the app genuinely failed to inherit was behaviour
+
+The packet's premise — *"that UI does not inherit the library's a11y, theming,
+RTL, and reduced-motion behaviour"* — is correct. It is just not visible in the
+component swap. It is visible in the CSS and the keyboard.
+
+### 1. The category nav re-introduced a defect the library had just fixed
+
+`BlockCategoryNav`'s `onKeydown` hard-coded `ArrowRight` as "next".
+`TASK-OSS-P4-05` fixed exactly this in the library's own `useTabs`, weeks
+earlier, and wrote down why: APG's tab pattern is expressed as *previous* and
+*next*, and in a right-to-left document the next tab is to the **left**, so an
+Arabic reader pressing the key that points at the next tab gets the previous
+one. The nav re-implemented the pattern and re-implemented the bug.
+
+It now reads `useDzDirection()` from `@dzup-ui/core` — the same ADR-20 provider
+contract the library's components use. `BlockCategoryNav.spec.ts` (4 tests)
+proves both directions, that the **vertical** keys do *not* swap, and that
+Home/End are direction-independent.
+
+### 2. Twenty-seven declarations in the shell did not mirror
+
+The shell — nav, banner, category nav, search bar, both command palettes,
+changelog, templates page, gallery cards — carried physical `left`/`right`,
+`margin-left`/`-right`, `padding-left` and `border-left` where the meaning is
+flow-relative. All 27 are now logical (`inset-inline-*`, `margin-inline-*`,
+`padding-inline-*`, `border-inline-*`). **Identical in LTR** — the light and dark
+hero visual snapshots pass untouched.
+
+Twenty-four physical declarations remain and every one is justified in
+`src/shellDirection.spec.ts`: centring (`left: 50%` with `translateX(-50%)`),
+decorative composition (aurora blobs, beam anchors — the library's own
+`mirrors: 'none'` case), and JavaScript-driven geometry (a drag handle and a
+sliding indicator whose offsets come from `getBoundingClientRect`, where logical
+CSS and physical maths would disagree).
+
+The spec is a ratchet with three assertions: no unjustified physical
+declaration, no *stale* justification (an entry whose line no longer holds one),
+and a count ceiling.
+
+### 3. Nothing could have caught either, because the shell cannot render RTL
+
+`e2e/block-responsive.spec.ts` certifies **88** block previews across
+`dir=ltr` and `dir=rtl`. It reaches RTL through
+`/blocks/preview/<id>?dir=rtl` — and `document.documentElement.setAttribute('dir', …)`
+is called in exactly **two** places in the whole app: `BlockPreviewPage.vue` and
+`templates/previewCustomiser.ts`.
+
+**No ordinary landing route can be right-to-left.** The app certifies RTL for
+the content it *documents* and never for the chrome it *is*, which is why 27
+physical declarations and a reversed arrow key sat there unnoticed.
+
+### 4. A merge gate was flaky, and running it four times is how that surfaced
+
+`e2e/block-responsive.spec.ts` asserts `<html dir>` five milliseconds of
+hydration after a `domcontentloaded` navigation, with Playwright's default 5 s
+expect timeout. Four full landing runs: **105/105, 105/105, 102/105, 105/105.**
+The one failure was the run launched immediately after `yarn landing:build` —
+three of 88 blocks reported `dir` absent after 14 polls over 5 s — and the same
+spec then passed 88/88 in isolation twice.
+
+CI runs build and test back to back, which is precisely the contended case. The
+timeout is now 20 s on that one hydration-dependent assertion; the containment
+checks around it keep the default, so a block that genuinely fails to render
+still fails fast. Re-run in the same build-then-test shape: **105/105**.
+
+This is not an APP-1 regression — the spec is untouched by this packet — but it
+is a merge gate that fails under the load its own CI job creates.
+
+## The gap this exposes in the library
+
+Recorded, not acted on — `<stop_conditions>` says a replacement that needs a new
+core component is a separate, unadmitted feature.
+
+1. **No tone renders on a brand surface.** `CanonicalTone` is
+   `neutral | primary | success | warning | danger | info`, all built on
+   `--dz-foreground` / `--dz-muted` / surface tokens. A control on a brand
+   gradient or a photo — an announcement bar, a hero overlay — has no tone to
+   ask for, so every app hand-rolls one. This is the single reason the two
+   clearest replacement candidates were rejected.
+2. **`DzButton`'s `ui` surface is `root` + `spinner`.** That is honest (its
+   anatomy says so, and the slots render consumer content with no wrapper of the
+   button's own), but it means "the same button, pill-shaped, in muted
+   foreground" is five overrides on one part rather than two named ones.
+3. **The landing has no direction control.** Adding `dir` to the app shell — a
+   toolbar, a query parameter, or a locale — would let the responsive
+   certification cover the chrome as well as the blocks. It is a product
+   decision, not a refactor.
+
+## Evidence
+
+| Gate | Result |
+|---|---|
+| `yarn lint` (`--max-warnings 0`) | exit 0 |
+| `yarn typecheck:all` | exit 0 |
+| `vitest run apps/landing/src` | **49 files / 2,597 passed** (was 47 / 2,590 — the two new specs) |
+| `yarn landing:build` | exit 0 |
+| `yarn test:e2e:landing` | **105/105** in four of five runs — see finding 4; includes the light **and** dark hero visual snapshots, unchanged |
+| `yarn test:responsive:landing` | **88/88** across both directions, twice |
+| `yarn validate:bundle-budget` | 2 passed, 0 failed |

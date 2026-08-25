@@ -292,7 +292,7 @@ const leaves = navLeaves()
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-right: auto;
+  margin-inline-end: auto;
 }
 
 .nav-link {
@@ -461,13 +461,13 @@ const leaves = navLeaves()
     display: flex;
   }
   .nav-links {
-    margin-right: 0;
+    margin-inline-end: 0;
   }
   .nav-inner {
     justify-content: space-between;
   }
   .brand {
-    margin-right: auto;
+    margin-inline-end: auto;
   }
 }
 </style>

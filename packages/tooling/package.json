@@ -12,6 +12,10 @@
     "./vite": {
       "types": "./src/vite.ts",
       "import": "./src/vite.ts"
+    },
+    "./resolution": {
+      "types": "./src/resolution/dzup-resolution.ts",
+      "import": "./src/resolution/dzup-resolution.ts"
     }
   },
   "scripts": {

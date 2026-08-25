@@ -148,7 +148,7 @@ function dismiss(): void {
 .announcement-close {
   position: absolute;
   top: 50%;
-  right: 12px;
+  inset-inline-end: 12px;
   transform: translateY(-50%);
   display: inline-flex;
   align-items: center;

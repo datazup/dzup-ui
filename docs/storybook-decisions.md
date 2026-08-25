@@ -196,6 +196,47 @@ re-add the `design` field to `componentStatus.ts`, and seed the flagships. The
 convention's *shape* is still documented in Contributing; only the unused machinery
 is gone.
 
+## TASK-SK-1 — Storybook states which build of the library it resolves
+
+**Decision: `merged-source`, said out loud.**
+
+`.storybook/main.ts` and `apps/storybook/vitest.config.ts` both resolved
+`@dzup-ui/*` through `workspaceAliases(repoRoot)` — the single-sourced list
+TASK-FREE-12 introduced after finding that two of five hand-copied alias maps had
+lost `@dzup-ui/core/styles`. That fixed the *duplication*. It left two things it
+could not fix:
+
+- **The list was still handwritten**, so it could disagree with the packages. It
+  did: ten entries against thirty-one declared specifiers. Storybook's stories
+  and MDX reach `@dzup-ui/core/providers` and `@dzup-ui/core/resolver`, and
+  neither had an entry — both resolved only because the bare `@dzup-ui/core`
+  alias happened to point at a *directory*.
+- **There was no mode.** Storybook builds the library from source, which is
+  correct for a documentation site that has to show the working tree — but
+  nothing recorded that as a decision, so nothing distinguished it from an
+  application that should have been resolving the built package.
+
+Both configs now call `createDzupResolution({ mode: 'merged-source', root })`
+from `packages/tooling/src/resolution/`, which derives the alias list from each
+package's `exports` map. Two additions Storybook did not have before:
+
+- `resolve.dedupe` — `vue`, `reka-ui` and the `@dzup-ui/*` packages. Storybook
+  loads the framework's own Vue *and* the workspace source; deduping is what
+  keeps overlay teleports, focus traps and `provide`/`inject` on one copy.
+  Nothing in the repository set `dedupe` before this.
+- `optimizeDeps.exclude` gains the workspace packages, so Vite's pre-bundler
+  cannot serve a cached copy of source that has since been edited. It is
+  appended to the existing `@vue/repl` exclusion, not replacing it.
+
+**Ordering is still load-bearing**, and still for the same reason — but it is now
+a property of the derived data (most-specific-first, asserted by a spec) rather
+than of the order someone typed the lines in. The REPL's
+`vue/compiler-sfc` alias and the framework's own entries keep their position
+ahead of the workspace list; only the workspace tail is generated.
+
+**Evidence:** `yarn storybook:build` 23.62 MB, within the 25 MB budget;
+`yarn typecheck:all`, `yarn lint`, `yarn validate:exports` and `yarn build` green.
+
 ## TASK-X.4 — Public vs app-specific triage (Feedback components)
 
 **Decision (Sprint 6 scope):** classify the five flagged feedback components as
