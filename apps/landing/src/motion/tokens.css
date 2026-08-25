@@ -57,6 +57,9 @@
   --dz-anim-sheen-duration: 0.7s; /* light streak sweep across a surface */
   --dz-anim-sheen-width: 42%; /* width of the sheen streak relative to host */
   --dz-anim-tilt-perspective: 600px; /* default v-tilt perspective depth */
+  --dz-anim-parallax-range: 12px; /* full travel of a depth-1 DzParallax layer (LV2-02) */
+  --dz-anim-parallax-smooth: 400ms; /* easing window that smooths pointer parallax */
+  --dz-anim-depth-perspective: 1200px; /* .dz-depth-stage perspective (LV2-02) */
   --dz-anim-beam-width: 1.5px; /* border-beam ring thickness */
 
   /* Lists, collections & attention (docs/animations.md §6.6–6.7, effects 24–29). */
@@ -1438,6 +1441,39 @@
  * to a quick opacity change or its static end-state; `dz-reveal` elements
  * degrade to an opacity-only fade with no transform/blur.
  * ========================================================================= */
+/* =========================================================================
+ * Depth & parallax utilities (docs/landing-v2.md TASK-LV2-02)
+ *
+ * `.dz-depth-stage` establishes a perspective so children may sit on a tilted
+ * 3D plane (`transform-style: preserve-3d` lets nested layers keep their own
+ * z). `.dz-parallax-layer` derives its translate entirely in CSS from the two
+ * unitless custom properties DzParallax writes on its host
+ * (`--dz-parallax-x/y`, -1..1) times the layer's own `--depth` times the
+ * token range — so N layers cost zero extra JS writes, and reduced motion is
+ * neutralised centrally by zeroing `--dz-anim-parallax-range` below.
+ * ========================================================================= */
+.dz-depth-stage {
+  perspective: var(--dz-anim-depth-perspective, 1200px);
+  transform-style: preserve-3d;
+}
+
+.dz-parallax {
+  position: relative;
+  pointer-events: none;
+}
+
+.dz-parallax-layer {
+  transform: translate3d(
+    calc(var(--dz-parallax-x, 0) * var(--depth, 0) * var(--dz-anim-parallax-range, 12px)),
+    calc(var(--dz-parallax-y, 0) * var(--depth, 0) * var(--dz-anim-parallax-range, 12px)),
+    0
+  );
+  /* Smooths the rAF-quantised input into a drift; also eases the return to
+   * rest on pointerleave. Transform-only, compositor-friendly. */
+  transition: transform var(--dz-anim-parallax-smooth, 400ms) var(--dz-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dz-anim,
   [class*="dz-anim-"] {
@@ -1556,5 +1592,16 @@
   .dz-meteors__streak {
     animation: none !important;
     opacity: 0 !important;
+  }
+
+  /* Depth & parallax (docs/landing-v2.md TASK-LV2-02) — useParallax never
+   * attaches under OS reduced motion; zeroing the range here also covers the
+   * page-level JS toggle and any consumer driving the vars by hand. */
+  .dz-parallax {
+    --dz-anim-parallax-range: 0px;
+  }
+  .dz-parallax-layer {
+    transition: none !important;
+    transform: none !important;
   }
 }

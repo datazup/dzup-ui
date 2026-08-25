@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-import Hero from '../components/Hero.vue'
+import HeroV2 from '../components/home/HeroV2.vue'
+import ScrollProgressBar from '../components/home/ScrollProgressBar.vue'
 import LazySection from '../components/LazySection.vue'
 import { vReveal } from '../motion/index.ts'
 
 /**
+ * The v2 "Depth & Play" home page (docs/landing-v2.md). The pre-v2 composition
+ * is preserved verbatim at `/classic` (`HomeClassicPage.vue`, TASK-LV2-01) —
+ * reverting v2 means pointing the home route back at that file.
+ *
  * The hero is the only eagerly-imported section (TASK-FREE3-04).
  *
  * Everything below it is `defineAsyncComponent` + `LazySection`, so it leaves the
@@ -25,46 +30,72 @@ import { vReveal } from '../motion/index.ts'
  *
  * `minHeight` per section reserves roughly the right space so the page does not
  * collapse; see LazySection for why this costs no layout shift.
+ *
+ * ## Motion choreography (TASK-LV2-09) — one entrance owner per section
+ *
+ * | Section                | Entrance owner            | Page wrapper       |
+ * |------------------------|---------------------------|--------------------|
+ * | HeroV2                 | itself (visual rise)      | none               |
+ * | ShowcaseSection        | itself (scroll rise)      | plain              |
+ * | FeatureBento           | DzBentoReveal cascade     | plain              |
+ * | ThemingDemo (v1)       | page                      | v-reveal.up        |
+ * | ComponentGallery (v1)  | page (+ tile stagger)     | v-reveal.up        |
+ * | TemplateWall           | page                      | v-reveal.scale     |
+ * | EcosystemConstellation | page (beams self-draw)    | v-reveal.blur      |
+ * | StatsSection           | per-stat v-reveal.blur    | plain              |
+ * | HomeTestimonials       | (renders nothing yet)     | plain              |
+ * | FreeVsProV2            | page                      | v-reveal.up        |
+ * | CommunityCTAV2         | page                      | v-reveal.up        |
+ *
+ * A section whose v2 component owns its entrance gets a PLAIN wrapper — a page
+ * fade on top of a component cascade is the double-animation this table exists
+ * to prevent. The 2px `ScrollProgressBar` is mounted here (home only), never in
+ * the shared `TopNav`.
  */
-const ShowcaseDashboard = defineAsyncComponent(() => import('../components/ShowcaseDashboard.vue'))
-const FeatureGrid = defineAsyncComponent(() => import('../components/FeatureGrid.vue'))
+const ShowcaseSection = defineAsyncComponent(() => import('../components/home/ShowcaseSection.vue'))
+const FeatureBento = defineAsyncComponent(() => import('../components/home/FeatureBento.vue'))
 const ThemingDemo = defineAsyncComponent(() => import('../components/ThemingDemo.vue'))
 const ComponentGallery = defineAsyncComponent(() => import('../components/ComponentGallery.vue'))
-const EcosystemGrid = defineAsyncComponent(() => import('../components/EcosystemGrid.vue'))
-const SocialProof = defineAsyncComponent(() => import('../components/SocialProof.vue'))
+const TemplateWall = defineAsyncComponent(() => import('../components/home/TemplateWall.vue'))
+const EcosystemConstellation = defineAsyncComponent(() => import('../components/home/EcosystemConstellation.vue'))
+const StatsSection = defineAsyncComponent(() => import('../components/home/StatsSection.vue'))
 const HomeTestimonials = defineAsyncComponent(() => import('../components/HomeTestimonials.vue'))
-const FreeVsPro = defineAsyncComponent(() => import('../components/FreeVsPro.vue'))
-const CommunityCTA = defineAsyncComponent(() => import('../components/CommunityCTA.vue'))
+const FreeVsProV2 = defineAsyncComponent(() => import('../components/home/FreeVsProV2.vue'))
+const CommunityCTAV2 = defineAsyncComponent(() => import('../components/home/CommunityCTAV2.vue'))
 </script>
 
 <template>
-  <Hero />
-  <div v-reveal>
-    <LazySection :component="ShowcaseDashboard" min-height="720px" />
+  <ScrollProgressBar />
+  <HeroV2 />
+  <div>
+    <LazySection :component="ShowcaseSection" min-height="720px" />
   </div>
-  <div v-reveal>
-    <LazySection :component="FeatureGrid" min-height="560px" />
+  <div>
+    <LazySection :component="FeatureBento" min-height="560px" />
   </div>
-  <div v-reveal>
+  <div v-reveal.up>
     <LazySection :component="ThemingDemo" min-height="640px" />
   </div>
-  <div v-reveal>
+  <div v-reveal.up>
     <LazySection :component="ComponentGallery" min-height="720px" />
   </div>
-  <div id="ecosystem" v-reveal>
-    <LazySection :component="EcosystemGrid" min-height="560px" />
+  <div v-reveal.scale>
+    <LazySection :component="TemplateWall" min-height="640px" />
   </div>
-  <div v-reveal>
-    <LazySection :component="SocialProof" min-height="400px" />
+  <div id="ecosystem" v-reveal.blur>
+    <LazySection :component="EcosystemConstellation" min-height="560px" />
+  </div>
+  <div>
+    <LazySection :component="StatsSection" min-height="400px" />
   </div>
   <!-- Renders nothing until `TESTIMONIALS` in config.ts holds real, cleared quotes. -->
-  <div v-reveal>
+  <div>
     <LazySection :component="HomeTestimonials" min-height="0px" />
   </div>
-  <div v-reveal>
-    <LazySection :component="FreeVsPro" min-height="640px" />
+  <div v-reveal.up>
+    <LazySection :component="FreeVsProV2" min-height="640px" />
   </div>
-  <div v-reveal>
-    <LazySection :component="CommunityCTA" min-height="360px" />
+  <div v-reveal.up>
+    <LazySection :component="CommunityCTAV2" min-height="360px" />
   </div>
 </template>

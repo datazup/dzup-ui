@@ -15,7 +15,10 @@ import { useReducedMotion } from '../useReducedMotion.ts'
  * {@link useReducedMotion} for the live toggle; the OS setting is also handled
  * centrally in `tokens.css`.
  *
- * The second run is `aria-hidden` so assistive tech announces the content once.
+ * The second run is `aria-hidden` AND `inert` so assistive tech announces the
+ * content once and — when the slotted items are interactive (the home page's
+ * template wall marquees real links, TASK-LV2-07) — the duplicates never
+ * become invisible tab stops (axe `aria-hidden-focus`).
  */
 const reduced = useReducedMotion()
 
@@ -37,7 +40,7 @@ const classes = computed(() => ({
       <div class="dz-marquee__run">
         <slot />
       </div>
-      <div class="dz-marquee__run" aria-hidden="true">
+      <div class="dz-marquee__run" aria-hidden="true" inert>
         <slot />
       </div>
     </div>
