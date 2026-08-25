@@ -29,18 +29,33 @@ import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { cascaderVariants } from './DzCascader.variants.ts'
+import DzOptionsState from './DzOptionsState.vue'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<DzCascaderValue>('value', { default: () => [] })
-
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` is what this component has always taken and it keeps working
+ * unchanged. `v-model` is what everything else in the catalog takes, and what a
+ * consumer binding a control generically will reach for — before this, that
+ * binding silently did nothing. Reads prefer whichever the consumer bound;
+ * writes go to both.
+ */
+const legacyValueModel = defineModel<DzCascaderValue>('value', { default: () => [] })
+const primaryModel = defineModel<DzCascaderValue | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzCascaderProps>(), {
+  optionsState: undefined,
+  optionsError: undefined,
+  optionsRetryable: undefined,
   placeholder: 'Select',
   changeOnSelect: false,
   expandTrigger: 'click',
@@ -68,6 +83,46 @@ const props = withDefaults(defineProps<DzCascaderProps>(), {
 
 const emit = defineEmits<DzCascaderEmits>()
 defineSlots<DzCascaderSlots>()
+
+// The async-options rows are one shared group across all seven selection
+// controls, so a translator writes them once (renderer contract C9).
+const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+
+/**
+ * The async-options seam (renderer contract C9).
+ *
+ * Inert unless the host passes `optionsState`, so a control with a static
+ * option array behaves exactly as it did. Every request supersedes and aborts
+ * the last, so a host that fences on the signal never has two in flight.
+ */
+const {
+  row: optionsRow,
+  state: resolvedOptionsState,
+  canRetry: canRetryOptions,
+  announcement: optionsAnnouncement,
+  request: requestOptions,
+} = useAsyncOptions(
+  {
+    state: () => props.optionsState,
+    error: () => props.optionsError,
+    retryable: () => props.optionsRetryable,
+    hasOptions: () => props.options.length > 0,
+    emit: request => emit('loadOptions', request),
+  },
+  () => ({
+    loading: dzAsyncMessages.value.loading,
+    empty: dzAsyncMessages.value.empty,
+    error: dzAsyncMessages.value.error,
+  }),
+)
+
+function handleRetryOptions(): void {
+  emit('retryOptions')
+  requestOptions('open')
+}
+
+const model = useDualModel(primaryModel, legacyValueModel)
+
 // Portal target: an explicit `portalTo` on this instance, then the application's
 // `DzProvider` target, then the portal's own default of `document.body`
 // (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
@@ -462,6 +517,10 @@ const showCleaner = computed(
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
+    :data-readonly="resolvedReadonly ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
+    :data-loading="loading ? '' : undefined"
+    :aria-busy="loading || undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -540,9 +599,26 @@ const showCleaner = computed(
               >
             </div>
 
+            <!--
+              One row instead of the panel while the host is loading, has
+              nothing, or failed (renderer contract C9).
+
+              First in the chain, so the flat results and the sliding columns
+              become its `v-else` branches. Placed between them it broke the
+              pair outright — the columns rendered unconditionally, and the
+              filter spec caught it.
+            -->
+            <DzOptionsState
+              v-if="optionsRow !== null"
+              :state="resolvedOptionsState"
+              :message="optionsAnnouncement"
+              :can-retry="canRetryOptions"
+              @retry="handleRetryOptions"
+            />
+
             <!-- Flat results (filter mode, with a query) -->
             <div
-              v-if="showFlat"
+              v-else-if="showFlat"
               :class="styles.flatList()"
               role="listbox"
               :aria-label="dzMessages.matchingPaths"

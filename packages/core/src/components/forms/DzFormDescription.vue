@@ -25,6 +25,10 @@ defineOptions({
 const attrs = useAttrs()
 const context = useFormFieldContext()
 
+// Tell the field this description exists, so the control's aria-describedby
+// names an element that is actually rendered (renderer contract C4).
+context?.registerDescription()
+
 const classes = computed(() =>
   cn(
     'text-[length:var(--dz-text-xs)] text-[var(--dz-muted-foreground)]',

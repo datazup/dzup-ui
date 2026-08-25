@@ -78,7 +78,12 @@ const resolvedRequired = computed(
   () => props.required || (fieldContext?.isRequired.value ?? false),
 )
 
-const resolvedId = computed(() => props.id ?? autoId)
+/**
+ * Own prop, then the DzFormField context, then a generated id — it skipped
+ * the middle step, so a DzFormLabel's `for` named an id this control never
+ * used (renderer contract C2).
+ */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
 /** ID for the error message element (for aria-describedby) */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -143,6 +148,7 @@ function handleBlur(event: FocusEvent): void {
   <div
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

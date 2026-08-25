@@ -41,3 +41,20 @@ describe('dzKnob — Contract Spec v1', () => {
     expect(wrapper.html()).toContain('custom-class')
   })
 })
+
+describe('dzKnob — renderer contract C1 value', () => {
+  it('reads a value bound with the legacy v-model:value', () => {
+    const wrapper = mount(DzKnob, { props: { value: 30, ariaLabel: 'Gain' } })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('30')
+  })
+
+  it('reads a value bound with the default v-model', () => {
+    const wrapper = mount(DzKnob, { props: { modelValue: 30, ariaLabel: 'Gain' } })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('30')
+  })
+
+  it('prefers the default model when both are bound', () => {
+    const wrapper = mount(DzKnob, { props: { modelValue: 70, value: 30, ariaLabel: 'Gain' } })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('70')
+  })
+})

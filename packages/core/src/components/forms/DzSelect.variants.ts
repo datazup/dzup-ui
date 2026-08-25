@@ -55,6 +55,14 @@ export const selectVariants = tv({
     ].join(' '),
     searchWrapper: 'sticky top-0 z-10 bg-[var(--dz-background)] p-[var(--dz-spacing-1)]',
     noResults: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
+    /**
+     * The one row shown instead of the list while options are loading, empty,
+     * or failed (renderer contract C9). Same metrics as `noResults` so the
+     * panel does not change height as the state changes — a list that jumps
+     * under the pointer between "loading" and "no matches" is its own defect.
+     */
+    optionsState: 'flex flex-col items-center gap-[var(--dz-spacing-2)] px-[var(--dz-spacing-2)] py-[var(--dz-spacing-4)] text-center text-[length:var(--dz-text-sm)] text-[var(--dz-muted-foreground)]',
+    optionsRetry: 'rounded-[var(--dz-radius-sm)] px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-sm)] text-[var(--dz-primary-muted-foreground)] underline underline-offset-2 dz-focus-ring-control hover:bg-[var(--dz-muted)] transition-colors motion-reduce:transition-none',
     icon: 'shrink-0 text-[var(--dz-muted-foreground)]',
     checkIcon: 'shrink-0 text-[var(--dz-primary)]',
   },

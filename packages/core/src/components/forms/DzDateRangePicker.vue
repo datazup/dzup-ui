@@ -199,6 +199,7 @@ const triggerClasses = computed(() =>
           :aria-required="resolvedRequired || undefined"
           :data-state="resolvedDisabled ? 'disabled' : 'idle'"
           :data-disabled="resolvedDisabled ? '' : undefined"
+          :data-required="resolvedRequired ? '' : undefined"
           :data-invalid="resolvedInvalid ? '' : undefined"
           style="contain: layout style"
           v-bind="{ ...$attrs, class: undefined }"

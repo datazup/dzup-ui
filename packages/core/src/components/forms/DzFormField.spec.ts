@@ -148,14 +148,19 @@ describe('dzFormMessage — Unit Tests', () => {
     expect(wrapper.findComponent(DzFormMessage).text()).toContain('Required')
   })
 
-  it('sets role="alert" when showing error', () => {
+  it('announces an error politely, and does not use role="alert"', () => {
     const wrapper = mount(DzFormField, {
       props: { error: 'Error!', invalid: true },
       slots: {
         default: () => h(DzFormMessage),
       },
     })
-    expect(wrapper.findComponent(DzFormMessage).attributes('role')).toBe('alert')
+    const msg = wrapper.findComponent(DzFormMessage)
+    // The pair was contradictory: `role="alert"` implies assertive and takes
+    // precedence over the `aria-live="polite"` beside it, so every standing
+    // field error interrupted the user (renderer contract C4).
+    expect(msg.attributes('aria-live')).toBe('polite')
+    expect(msg.attributes('role')).toBeUndefined()
   })
 
   it('does not set role="alert" when no error', () => {

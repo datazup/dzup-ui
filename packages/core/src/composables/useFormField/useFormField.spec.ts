@@ -72,19 +72,46 @@ describe('useFormField', () => {
     expect(result.isDisabled.value).toBe(true)
   })
 
-  it('ariaDescribedby includes description ID always', () => {
+  /**
+   * These three asserted "always", and "always" was the defect.
+   *
+   * The field provides ids for sub-parts a consumer may not have rendered, and
+   * most fields have no `DzFormDescription`. Naming its id anyway pointed every
+   * control's `aria-describedby` at an element that did not exist — which no
+   * test caught, because a dangling id is ignored rather than reported. A
+   * sub-part now registers when it mounts, so the ids are the rendered ones.
+   */
+  it('ariaDescribedby names nothing when no sub-part has registered', () => {
     const { result } = mountWithFormField()
+    expect(result.ariaDescribedby.value).toBeUndefined()
+  })
+
+  it('ariaDescribedby names the description once it registers', () => {
+    const { result } = mountWithFormField()
+    result.registerDescription()
     expect(result.ariaDescribedby.value).toContain(result.descriptionId)
   })
 
-  it('ariaDescribedby includes message ID when invalid', () => {
+  it('ariaDescribedby names the message when it registers and the field is invalid', () => {
     const { result } = mountWithFormField({ error: 'Bad value' })
+    result.registerMessage()
     expect(result.ariaDescribedby.value).toContain(result.messageId)
   })
 
-  it('ariaDescribedby does not include message ID when valid', () => {
+  it('ariaDescribedby omits a registered message while the field is valid', () => {
     const { result } = mountWithFormField()
-    expect(result.ariaDescribedby.value).not.toContain(result.messageId)
+    result.registerMessage()
+    // Undefined rather than a string without the id: with nothing to describe
+    // the control, the attribute is absent rather than empty.
+    expect(result.ariaDescribedby.value ?? '').not.toContain(result.messageId)
+  })
+
+  it('puts the description before the message, which is the order they are read in', () => {
+    const { result } = mountWithFormField({ error: 'Bad value' })
+    result.registerDescription()
+    result.registerMessage()
+    const ids = (result.ariaDescribedby.value ?? '').split(' ')
+    expect(ids.indexOf(result.descriptionId)).toBeLessThan(ids.indexOf(result.messageId))
   })
 
   it('provides context via DZ_FORM_FIELD_KEY', () => {

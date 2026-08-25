@@ -24,6 +24,19 @@ export type {
   UiOverrides,
   VocabularyPart,
 } from './anatomy.types'
+
+// Async option sources and file references (renderer contract C9, TASK-FORM-OSS-03)
+export type {
+  AsyncOptionsEmits,
+  AsyncOptionsProps,
+  AsyncOptionsState,
+  DzFileRef,
+  DzFileRefStatus,
+  LoadOptionsReason,
+  LoadOptionsRequest,
+  UploadRequest,
+} from './async-options.types'
+
 // Canonical taxonomies & variant enums
 export type {
   AlertVariant,
@@ -42,7 +55,6 @@ export type {
   TabsVariant,
   ToolbarVariant,
 } from './canonical.types'
-
 // Compound component context types
 export type { CompoundContext, CompoundRegistration } from './compound.types'
 // Data attribute types
@@ -58,6 +70,25 @@ export type {
   SelectEvents,
   SelectOpenableEvents,
 } from './events.types'
+// Value codecs a form renderer binds through (renderer contract C1).
+//
+// The second runtime export this package carries, after `assertNever`, and for
+// the same reason: pure, dependency-free, and part of the contract rather than
+// an implementation of it.
+export type { FormValueKind, JsonValue } from './form-value'
+
+export {
+  emptyValueFor,
+  fromIsoDate,
+  fromIsoTime,
+  isEmptyValue,
+  isFileRef,
+  isJsonSerializable,
+  toFileRef,
+  toIsoDate,
+  toIsoTime,
+  toNumberValue,
+} from './form-value'
 
 // Base prop interfaces
 export type {

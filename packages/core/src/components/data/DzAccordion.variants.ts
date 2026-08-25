@@ -25,10 +25,13 @@ export const accordionVariants = tv({
     content: [
       'overflow-hidden',
       'text-[var(--dz-muted-foreground)]',
-      'data-[state=open]:animate-[accordion-down_200ms_ease-out]',
-      'data-[state=closed]:animate-[accordion-up_200ms_ease-out]',
+      // The panel's height animation is the one thing here that moves, and it
+      // is what WCAG 2.3.3 is about. Under `prefers-reduced-motion` the panel
+      // still opens and closes — it just arrives (renderer contract C7).
+      'data-[state=open]:animate-[accordion-down_200ms_ease-out] motion-reduce:animate-none',
+      'data-[state=closed]:animate-[accordion-up_200ms_ease-out] motion-reduce:animate-none',
     ].join(' '),
-    chevron: 'h-4 w-4 shrink-0 transition-transform duration-200',
+    chevron: 'h-4 w-4 shrink-0 transition-transform duration-200 motion-reduce:transition-none',
   },
 
   variants: {

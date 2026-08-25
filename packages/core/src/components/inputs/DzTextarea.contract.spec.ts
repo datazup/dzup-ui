@@ -128,3 +128,15 @@ describe('dzTextarea — Contract Spec v1', () => {
     expect(wrapper.find('textarea').attributes('rows')).toBe('3')
   })
 })
+
+describe('dzTextarea — renderer contract C3 states', () => {
+  it('reflects readonly as a presence-only data-readonly', () => {
+    const wrapper = mount(DzTextarea, { props: { readonly: true } })
+    expect(wrapper.attributes('data-readonly')).toBe('')
+  })
+
+  it('omits data-readonly entirely when not readonly — never ="false"', () => {
+    const wrapper = mount(DzTextarea, { props: {} })
+    expect(wrapper.attributes('data-readonly')).toBeUndefined()
+  })
+})

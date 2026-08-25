@@ -34,10 +34,12 @@ import {
  * ```
  */
 import { computed, markRaw, ref, useAttrs, useId } from 'vue'
+import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import { listboxVariants } from './DzListbox.variants.ts'
+import DzOptionsState from './DzOptionsState.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -46,6 +48,9 @@ defineOptions({
 const model = defineModel<DzListboxValue | DzListboxValue[] | null>({ default: null })
 
 const props = withDefaults(defineProps<DzListboxProps>(), {
+  optionsState: undefined,
+  optionsError: undefined,
+  optionsRetryable: undefined,
   multiple: false,
   optionLabel: undefined,
   optionValue: undefined,
@@ -70,6 +75,43 @@ const props = withDefaults(defineProps<DzListboxProps>(), {
 
 const emit = defineEmits<DzListboxEmits>()
 defineSlots<DzListboxSlots>()
+
+// The async-options rows are one shared group across all seven selection
+// controls, so a translator writes them once (renderer contract C9).
+const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+
+/**
+ * The async-options seam (renderer contract C9).
+ *
+ * Inert unless the host passes `optionsState`, so a control with a static
+ * option array behaves exactly as it did. Every request supersedes and aborts
+ * the last, so a host that fences on the signal never has two in flight.
+ */
+const {
+  row: optionsRow,
+  state: resolvedOptionsState,
+  canRetry: canRetryOptions,
+  announcement: optionsAnnouncement,
+  request: requestOptions,
+} = useAsyncOptions(
+  {
+    state: () => props.optionsState,
+    error: () => props.optionsError,
+    retryable: () => props.optionsRetryable,
+    hasOptions: () => props.options.length > 0,
+    emit: request => emit('loadOptions', request),
+  },
+  () => ({
+    loading: dzAsyncMessages.value.loading,
+    empty: dzAsyncMessages.value.empty,
+    error: dzAsyncMessages.value.error,
+  }),
+)
+
+function handleRetryOptions(): void {
+  emit('retryOptions')
+  requestOptions('open')
+}
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzListbox')
@@ -94,6 +136,14 @@ const resolvedDisabled = computed(
 const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
+
+/**
+ * `required` was reaching the Reka root and nothing else; `readonly` and
+ * `loading` were declared, defaulted, and read nowhere at all. All three now
+ * reach the DOM as the presence-only attributes ADR-19 §4 names, so a
+ * stylesheet and a renderer can both see them (renderer contract C3).
+ */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 
@@ -322,10 +372,15 @@ function onContentClickCapture(event: MouseEvent): void {
       :multiple="multiple"
       :disabled="resolvedDisabled"
       :name="name"
-      :required="required || fieldContext?.isRequired.value"
+      :required="resolvedRequired"
       :class="rootClasses"
       :data-disabled="resolvedDisabled ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
+      :data-required="resolvedRequired ? '' : undefined"
+      :data-readonly="readonly ? '' : undefined"
+      :data-loading="loading ? '' : undefined"
+      :aria-busy="loading || undefined"
+      :aria-readonly="readonly || undefined"
       style="contain: layout style"
       v-bind="{ ...$attrs, class: undefined }"
       @update:model-value="handleUpdate"
@@ -341,6 +396,29 @@ function onContentClickCapture(event: MouseEvent): void {
           @update:model-value="handleFilterInput"
         />
       </div>
+
+      <!--
+
+        One row instead of the list while the host is loading, has nothing, or
+
+        failed (renderer contract C9). `optionsRow` is null whenever the control
+
+        is static, so a control with a plain option array renders none of this.
+
+      -->
+
+      <DzOptionsState
+
+        v-if="optionsRow !== null"
+
+        :state="resolvedOptionsState"
+
+        :message="optionsAnnouncement"
+
+        :can-retry="canRetryOptions"
+
+        @retry="handleRetryOptions"
+      />
 
       <ListboxContent
         :id="resolvedId"

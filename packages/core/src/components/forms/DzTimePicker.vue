@@ -454,6 +454,7 @@ const rootClasses = computed(() =>
   <div
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     style="contain: layout style"

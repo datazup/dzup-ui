@@ -15,6 +15,24 @@ tests, and visual references; they do not define new runtime behavior.
 | `DzPanel` | Layout | [DzPanel](./DzPanel.md) | `packages/core/src/components/layout/DzPanel.vue` |
 | `DzBadge` | Feedback | [DzBadge](./DzBadge.md) | `packages/core/src/components/feedback/DzBadge.vue` |
 
+## The renderer-facing control contract
+
+Separately from the per-component docs above, every form-capable control is held
+to one cross-cutting contract — nine clauses covering value semantics, identity,
+states, messages, SSR, RTL, motion, keyboard and async options — so a form
+renderer can bind any of them through one registry instead of a special case per
+control.
+
+| Document | What it is |
+| --- | --- |
+| [The renderer-facing control contract](../program-2026-08/form-control-renderer-contract.md) | The nine clauses, C1–C9, and why each exists |
+| [Form-control readiness matrix](../program-2026-08/form-controls-readiness-matrix.md) | All 39 controls against all nine clauses — **generated**, `yarn generate:form-readiness` |
+
+The matrix is gated by `yarn validate:form-readiness`, which is part of
+`yarn validate:all`. It is generated from source, the ownership manifest and the
+quality matrix, so a cell cannot claim a gap is closed while source still shows
+it open.
+
 ## DzFieldset Naming Decision
 
 `DzFieldset` is not a runtime component in `@dzup-ui/core`. The fieldset use

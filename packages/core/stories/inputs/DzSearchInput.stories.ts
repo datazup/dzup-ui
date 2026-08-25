@@ -405,3 +405,25 @@ export const RealWorldDataTableFilter: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Readonly
+// ---------------------------------------------------------------------------
+
+/**
+ * `readonly` reaches the DOM as `data-readonly` on the root (ADR-19 §4,
+ * renderer contract C3). The field stays focusable and its value stays
+ * selectable — which is what separates read-only from disabled, and why a form
+ * that shows a value the user may copy but not change wants this one.
+ */
+export const Readonly: Story = {
+  render: () => ({
+    components: { DzSearchInput },
+    template: `
+      <div class="flex flex-col gap-4">
+        <DzSearchInput readonly model-value="frozen query" class="max-w-sm" />
+        <DzSearchInput model-value="editable query" class="max-w-sm" />
+      </div>
+    `,
+  }),
+}

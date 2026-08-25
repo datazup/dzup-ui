@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "4c9fb7a1ed5f4f475795d41075ee642f03b12563",
+  "sourceCommit": "8d80bc39653e50a6da458d005b7691d2fb833edb",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -103,6 +103,26 @@
       "kind": "type",
       "evidence": [
         "packages/core/src/components/layout/DzAppShell.variants.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
+      "symbol": "AsyncOptionsMessages",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
+      "symbol": "AsyncOptionsRow",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
         "type-only export not listed in public-api.manifest.json#exports.types"
       ]
     },
@@ -14221,6 +14241,16 @@
       ]
     },
     {
+      "symbol": "RevealAndFocusOptions",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useRevealAndFocus/useRevealAndFocus.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
       "symbol": "ScrollAreaVariantProps",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -15205,6 +15235,26 @@
       "kind": "type",
       "evidence": [
         "packages/core/src/composables/useAffix/useAffix.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
+      "symbol": "UseAsyncOptionsOptions",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
+        "type-only export not listed in public-api.manifest.json#exports.types"
+      ]
+    },
+    {
+      "symbol": "UseAsyncOptionsReturn",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "type",
+      "evidence": [
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
         "type-only export not listed in public-api.manifest.json#exports.types"
       ]
     },
@@ -17885,6 +17935,16 @@
       ]
     },
     {
+      "symbol": "useAsyncOptions",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/composables/useAsyncOptions/useAsyncOptions.ts",
+        "packages/core/manifests/public-api.manifest.json#exports.composables"
+      ]
+    },
+    {
       "symbol": "useCalendar",
       "package": "@dzup-ui/core",
       "subpath": ".",
@@ -17971,6 +18031,16 @@
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useDialog/useDialog.ts",
+        "packages/core/manifests/public-api.manifest.json#exports.composables"
+      ]
+    },
+    {
+      "symbol": "useDualModel",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/composables/useDualModel/useDualModel.ts",
         "packages/core/manifests/public-api.manifest.json#exports.composables"
       ]
     },
@@ -18131,6 +18201,16 @@
       "kind": "composable",
       "evidence": [
         "packages/core/src/composables/useInfiniteScroll/useInfiniteScroll.ts",
+        "packages/core/manifests/public-api.manifest.json#exports.composables"
+      ]
+    },
+    {
+      "symbol": "useRevealAndFocus",
+      "package": "@dzup-ui/core",
+      "subpath": ".",
+      "kind": "composable",
+      "evidence": [
+        "packages/core/src/composables/useRevealAndFocus/useRevealAndFocus.ts",
         "packages/core/manifests/public-api.manifest.json#exports.composables"
       ]
     },

@@ -46,6 +46,13 @@ defineSlots<DzCheckboxSlots>()
 const attrs = useAttrs()
 const autoId = useId()
 const fieldContext = useFormFieldContext()
+
+/**
+ * `required` reached the Reka primitive (which renders `aria-required`) but
+ * never reached the DOM as the presence-only attribute ADR-19 §4 lists, so no
+ * stylesheet could show a required field as required (renderer contract C3).
+ */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 const groupContext = inject(DZ_CHECKBOX_GROUP_KEY, null)
 
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
@@ -108,6 +115,7 @@ const iconSizeClass = computed(() => {
   <label
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-state="checkedState === 'indeterminate' ? 'indeterminate' : checkedState ? 'checked' : 'unchecked'"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
@@ -117,7 +125,7 @@ const iconSizeClass = computed(() => {
       :model-value="checkedState"
       :disabled="resolvedDisabled"
       :name="name"
-      :required="required || fieldContext?.isRequired.value"
+      :required="resolvedRequired"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"

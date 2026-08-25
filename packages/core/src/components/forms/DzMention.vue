@@ -28,6 +28,7 @@ import type {
  * ```
  */
 import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -37,8 +38,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<string>('value', { default: '' })
-
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` keeps working unchanged; `v-model` is the binding every other
+ * control in the catalog takes, and until now it silently did nothing here.
+ */
+const legacyValueModel = defineModel<string>('value', { default: '' })
+const primaryModel = defineModel<string | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzMentionProps>(), {
   multiline: true,
   filter: true,
@@ -67,7 +74,11 @@ const props = withDefaults(defineProps<DzMentionProps>(), {
 })
 
 const emit = defineEmits<DzMentionEmits>()
+
 defineSlots<DzMentionSlots>()
+
+const model = useDualModel(primaryModel, legacyValueModel)
+
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzMention')
@@ -539,6 +550,10 @@ defineExpose({ controlRef })
     :class="styles.root()"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-loading="loading ? '' : undefined"
+    :aria-busy="loading || undefined"
     style="contain: layout style"
   >
     <div :class="styles.field()">

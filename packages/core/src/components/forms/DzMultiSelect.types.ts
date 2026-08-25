@@ -8,6 +8,9 @@
  */
 
 import type {
+  AsyncOptionsEmits,
+  AsyncOptionsProps,
+  AsyncOptionsState,
   BaseAccessibilityProps,
   BasePortalProps,
   BaseValidationProps,
@@ -22,7 +25,7 @@ import type { DzSelectItem } from './DzSelect.types.ts'
 // ---------------------------------------------------------------------------
 
 /** Props for the DzMultiSelect component */
-export interface DzMultiSelectProps extends BaseAccessibilityProps, BaseValidationProps, BasePortalProps {
+export interface DzMultiSelectProps extends BaseAccessibilityProps, BaseValidationProps, BasePortalProps, AsyncOptionsProps {
   /** Available options */
   items: DzSelectItem[]
   /** Placeholder text when no values are selected */
@@ -44,7 +47,7 @@ export interface DzMultiSelectProps extends BaseAccessibilityProps, BaseValidati
 // ---------------------------------------------------------------------------
 
 /** Events emitted by DzMultiSelect */
-export interface DzMultiSelectEmits extends SelectOpenableEvents<string[]> {}
+export interface DzMultiSelectEmits extends SelectOpenableEvents<string[]>, AsyncOptionsEmits {}
 
 // ---------------------------------------------------------------------------
 // Slots
@@ -52,10 +55,24 @@ export interface DzMultiSelectEmits extends SelectOpenableEvents<string[]> {}
 
 /** Slot definitions for DzMultiSelect */
 export interface DzMultiSelectSlots {
+  /**
+   * The single row shown instead of the list while the option set is loading,
+   * empty, or failed (renderer contract C9).
+   *
+   * Overriding it replaces all three states at once, on purpose: a consumer who
+   * styles "loading" and forgets "error" ships a panel that says nothing when a
+   * load fails.
+   */
+  'options-state'?: (props: {
+    state: AsyncOptionsState
+    message: string
+    error: string | undefined
+    retry: () => void
+  }) => unknown
   /** Custom item rendering */
-  item?: (props: { item: DzSelectItem, index: number, selected: boolean }) => unknown
+  'item'?: (props: { item: DzSelectItem, index: number, selected: boolean }) => unknown
   /** Content shown when items array is empty */
-  empty?: () => unknown
+  'empty'?: () => unknown
   /** Custom tag/chip for selected items */
-  tag?: (props: { value: string, label: string, remove: () => void }) => unknown
+  'tag'?: (props: { value: string, label: string, remove: () => void }) => unknown
 }

@@ -142,6 +142,7 @@ defineExpose({
       :aria-describedby="resolvedAriaDescribedby"
       :data-state="resolvedDisabled ? 'disabled' : 'idle'"
       :data-disabled="resolvedDisabled ? '' : undefined"
+      :data-required="resolvedRequired ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :data-tone="tone"
       style="contain: layout style"

@@ -133,7 +133,9 @@ function handleInputChange(event: Event): void {
   const raw = target.value.trim()
   if (raw === '') {
     model.value = undefined
-    emit('change', 0, { source: 'user' })
+    // The event carries what the model now holds. It announced `0` here, which
+    // is indistinguishable from the user typing zero (renderer contract C1.4).
+    emit('change', undefined, { source: 'user' })
     return
   }
   const parsed = Number.parseFloat(raw)
@@ -196,6 +198,8 @@ const dzMessages = useComponentMessages('DzNumberInput')
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >

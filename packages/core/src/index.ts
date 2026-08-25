@@ -56,6 +56,13 @@ export * from './components/typography/index.ts'
 export * from './composables/provider/index.ts'
 
 export * from './composables/useAffix/index.ts'
+// Added by hand for the same reason as the block above: this barrel is NOT
+// regenerated (see the warning). `useDualModel` merges a control's default and
+// named v-model so a renderer can bind either (TASK-FORM-OSS-02);
+// `useAsyncOptions` is the one async-options seam all seven selection controls
+// share (TASK-FORM-OSS-03). Both also carry an entry in public-api.manifest.json,
+// so a regeneration keeps them on the day the recorded drift is resolved.
+export * from './composables/useAsyncOptions/index.ts'
 export * from './composables/useCalendar/index.ts'
 export * from './composables/useClickOutside/index.ts'
 export * from './composables/useCollapse/index.ts'
@@ -63,11 +70,13 @@ export * from './composables/useDataGrid/index.ts'
 export * from './composables/useDataGridHeader/index.ts'
 export * from './composables/useDatePicker/index.ts'
 export * from './composables/useDialog/index.ts'
+export * from './composables/useDualModel/index.ts'
 export * from './composables/useEscapeKey/index.ts'
 export * from './composables/useFloating/index.ts'
 export * from './composables/useFocusTrap/index.ts'
 export * from './composables/useFormField/index.ts'
 export * from './composables/useInfiniteScroll/index.ts'
+export * from './composables/useRevealAndFocus/index.ts'
 export * from './composables/useScrollSpy/index.ts'
 export * from './composables/useScrollToTop/index.ts'
 export * from './composables/useSelect/index.ts'

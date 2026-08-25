@@ -159,3 +159,48 @@ describe('dzNumberInput — Contract Spec v1', () => {
     expect(wrapper.find('[data-testid="prefix"]').exists()).toBe(true)
   })
 })
+
+describe('dzNumberInput — renderer contract C3 states', () => {
+  it('reflects readonly as a presence-only data-readonly', () => {
+    const wrapper = mount(DzNumberInput, { props: { readonly: true } })
+    expect(wrapper.attributes('data-readonly')).toBe('')
+  })
+
+  it('omits data-readonly entirely when not readonly — never ="false"', () => {
+    const wrapper = mount(DzNumberInput, { props: {} })
+    expect(wrapper.attributes('data-readonly')).toBeUndefined()
+  })
+})
+
+describe('dzNumberInput — renderer contract C1 value', () => {
+  /**
+   * The event and the model have to agree. Clearing the field used to set the
+   * model to `undefined` and announce `0`, which is the same thing the control
+   * emits when a user types zero — so a listener could not tell "cleared" from
+   * "zero", and only the listener's answer was wrong.
+   */
+  it('announces undefined, not 0, when the field is cleared', async () => {
+    const wrapper = mount(DzNumberInput, { props: { modelValue: 42 } })
+    const input = wrapper.find('input')
+    await input.setValue('')
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBeUndefined()
+    expect(wrapper.emitted('change')?.at(-1)?.[0]).toBeUndefined()
+  })
+
+  it('still announces 0 when the user actually types zero', async () => {
+    const wrapper = mount(DzNumberInput, { props: { modelValue: 42 } })
+    await wrapper.find('input').setValue('0')
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe(0)
+    expect(wrapper.emitted('change')?.at(-1)?.[0]).toBe(0)
+  })
+
+  it('never emits NaN for input the parser cannot use', async () => {
+    const wrapper = mount(DzNumberInput, { props: { modelValue: 7 } })
+    await wrapper.find('input').setValue('not a number')
+
+    for (const [value] of wrapper.emitted('update:modelValue') ?? [])
+      expect(Number.isNaN(value)).toBe(false)
+  })
+})

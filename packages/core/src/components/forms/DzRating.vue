@@ -15,6 +15,7 @@ import { Star } from 'lucide-vue-next'
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzIcon from '../media/DzIcon.vue'
@@ -24,8 +25,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<number>('value', { default: 0 })
-
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` keeps working unchanged; `v-model` is the binding every other
+ * control in the catalog takes, and until now it silently did nothing here.
+ */
+const legacyValueModel = defineModel<number>('value', { default: 0 })
+const primaryModel = defineModel<number | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzRatingProps>(), {
   count: 5,
   allowHalf: false,
@@ -48,7 +55,10 @@ const props = withDefaults(defineProps<DzRatingProps>(), {
 })
 
 const emit = defineEmits<DzRatingEmits>()
+
 defineSlots<DzRatingSlots>()
+
+const model = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -249,7 +259,10 @@ defineExpose({
       :aria-required="resolvedRequired || undefined"
       :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
       :data-disabled="resolvedDisabled ? '' : undefined"
+      :data-required="resolvedRequired ? '' : undefined"
       :data-readonly="readonly ? '' : undefined"
+      :data-loading="loading ? '' : undefined"
+      :aria-busy="loading || undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :data-tone="tone"
       v-bind="{ ...$attrs, class: undefined }"

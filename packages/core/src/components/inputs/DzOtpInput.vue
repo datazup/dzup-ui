@@ -54,6 +54,16 @@ const resolvedDisabled = computed(
   () => props.disabled || (fieldContext?.isDisabled.value ?? false),
 )
 
+/**
+ * `required` was declared and defaulted but read nowhere, so a form that marked
+ * the code mandatory said so in the type and nowhere in the DOM (renderer
+ * contract C3). Resolved against the field context the same way the other
+ * states are, so `<DzFormField required>` reaches it without a prop.
+ */
+const resolvedRequired = computed(
+  () => props.required || (fieldContext?.isRequired.value ?? false),
+)
+
 const isInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
@@ -139,6 +149,7 @@ watch(() => props.length, () => void nextTick(normalizeAggregateInput))
   <div
     ref="rootRef"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     style="contain: layout style"
   >
@@ -154,6 +165,7 @@ watch(() => props.length, () => void nextTick(normalizeAggregateInput))
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="resolvedAriaDescribedby"
       :aria-invalid="ariaInvalid ?? (isInvalid || undefined)"
+      :aria-required="resolvedRequired || undefined"
       v-bind="{ ...$attrs, class: undefined }"
       @update:model-value="handleValueChange"
       @complete="handleComplete"

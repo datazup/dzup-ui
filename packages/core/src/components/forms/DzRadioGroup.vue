@@ -50,6 +50,21 @@ const attrs = useAttrs()
 const autoId = useId()
 const fieldContext = useFormFieldContext()
 
+/**
+ * `required` reached the Reka primitive (which renders `aria-required`) but
+ * never reached the DOM as the presence-only attribute ADR-19 §4 lists, so no
+ * stylesheet could show a required field as required (renderer contract C3).
+ */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
+
+/**
+ * The group read the field context for required, describedby and invalid — but
+ * not for disabled, so `<DzFormField disabled>` left every radio in the group
+ * live (renderer contract C2). The other four axes were already merged; this
+ * was the one that was not.
+ */
+const resolvedDisabled = computed(() => props.disabled || (fieldContext?.isDisabled.value ?? false))
+
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
@@ -81,17 +96,18 @@ const classes = computed(() =>
   <RadioGroupRoot
     :id="resolvedId"
     :model-value="model"
-    :disabled="disabled"
+    :disabled="resolvedDisabled"
     :name="name"
-    :required="required || fieldContext?.isRequired.value"
+    :required="resolvedRequired"
     :orientation="orientation"
     :aria-label="ariaLabel"
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"
     :aria-invalid="ariaInvalid ?? (fieldContext?.isInvalid.value || undefined)"
     :class="classes"
-    :data-state="disabled ? 'disabled' : 'ready'"
-    :data-disabled="disabled ? '' : undefined"
+    :data-state="resolvedDisabled ? 'disabled' : 'ready'"
+    :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-orientation="orientation"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"

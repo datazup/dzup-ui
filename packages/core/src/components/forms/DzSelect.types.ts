@@ -9,6 +9,9 @@
  */
 
 import type {
+  AsyncOptionsEmits,
+  AsyncOptionsProps,
+  AsyncOptionsState,
   BaseAccessibilityProps,
   BasePortalProps,
   BaseValidationProps,
@@ -37,7 +40,11 @@ export interface DzSelectItem {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzSelect component */
-export interface DzSelectProps extends BaseAccessibilityProps, BaseValidationProps, BasePortalProps {
+export interface DzSelectProps
+  extends BaseAccessibilityProps,
+  BaseValidationProps,
+  BasePortalProps,
+  AsyncOptionsProps {
   /** Available options */
   items: DzSelectItem[]
   /** Placeholder text shown when no value is selected */
@@ -79,7 +86,14 @@ export interface DzSelectProps extends BaseAccessibilityProps, BaseValidationPro
 // ---------------------------------------------------------------------------
 
 /** Events emitted by DzSelect */
-export interface DzSelectEmits extends SelectOpenableEvents<string> {}
+/**
+ * Events emitted by DzSelect.
+ *
+ * `AsyncOptionsEmits` adds `load-options` and `retry-options`, which a host
+ * listens to when the option set comes from somewhere. A host that passes a
+ * static `items` array never sees either (renderer contract C9).
+ */
+export interface DzSelectEmits extends SelectOpenableEvents<string>, AsyncOptionsEmits {}
 
 // ---------------------------------------------------------------------------
 // Slots
@@ -88,9 +102,24 @@ export interface DzSelectEmits extends SelectOpenableEvents<string> {}
 /** Slot definitions for DzSelect */
 export interface DzSelectSlots {
   /** Custom trigger content */
-  trigger?: (props: { value: string | undefined, placeholder: string | undefined }) => unknown
+  'trigger'?: (props: { value: string | undefined, placeholder: string | undefined }) => unknown
   /** Custom item rendering */
-  item?: (props: { item: DzSelectItem, index: number, selected: boolean }) => unknown
+  'item'?: (props: { item: DzSelectItem, index: number, selected: boolean }) => unknown
+  /**
+   * The single row shown instead of the list while the option set is loading,
+   * empty, or failed (renderer contract C9).
+   *
+   * Given the resolved state, the message the control would have shown, the
+   * host's error string, and a `retry` to call. Overriding it replaces all
+   * three states at once, on purpose: a consumer who styles "loading" and
+   * forgets "error" ships a panel that says nothing when a load fails.
+   */
+  'options-state'?: (props: {
+    state: AsyncOptionsState
+    message: string
+    error: string | undefined
+    retry: () => void
+  }) => unknown
   /** Content shown when items array is empty */
-  empty?: () => unknown
+  'empty'?: () => unknown
 }

@@ -14,6 +14,7 @@ import type { DzKnobEmits, DzKnobProps, DzKnobSlots } from './DzKnob.types.ts'
  * ```
  */
 import { computed, ref, useAttrs, useId } from 'vue'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import { knobTokens } from './DzKnob.tokens.ts'
@@ -23,8 +24,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<number>('value', { default: 0 })
-
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` keeps working unchanged; `v-model` is the binding every other
+ * control in the catalog takes, and until now it silently did nothing here.
+ */
+const legacyValueModel = defineModel<number>('value', { default: 0 })
+const primaryModel = defineModel<number | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzKnobProps>(), {
   min: 0,
   max: 100,
@@ -48,7 +55,10 @@ const props = withDefaults(defineProps<DzKnobProps>(), {
 })
 
 const emit = defineEmits<DzKnobEmits>()
+
 defineSlots<DzKnobSlots>()
+
+const model = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -299,7 +309,10 @@ defineExpose({
     :aria-required="resolvedRequired || undefined"
     :aria-invalid="ariaInvalid ?? (resolvedInvalid || undefined)"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-readonly="readonly ? '' : undefined"
+    :data-loading="loading ? '' : undefined"
+    :aria-busy="loading || undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
     :data-tone="tone"
     v-bind="{ ...$attrs, class: undefined }"

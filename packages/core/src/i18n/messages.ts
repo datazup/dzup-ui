@@ -53,6 +53,20 @@ declare module '@dzup-ui/contracts' {
   interface DzMessageCatalog {
     DzAlert: { close: string }
     DzAnchor: { ariaLabel: string }
+    /**
+     * The async-options rows, shared by every selection control that can be
+     * driven from a remote source (TASK-FORM-OSS-03, renderer contract C9).
+     *
+     * One group rather than the same three keys repeated under seven component
+     * names: a translator writes "Loading options" once, and seven controls
+     * cannot end up saying it three different ways.
+     */
+    DzAsyncOptions: {
+      loading: string
+      empty: string
+      error: string
+      retry: string
+    }
     DzBackTop: { ariaLabel: string }
     DzBreadcrumb: { ariaLabel: string }
     DzCarouselDots: { slideNavigation: string }
@@ -149,6 +163,12 @@ declare module '@dzup-ui/contracts' {
 export const enMessages = {
   DzAlert: { close: 'Close' },
   DzAnchor: { ariaLabel: 'Page navigation' },
+  DzAsyncOptions: {
+    loading: 'Loading options',
+    empty: 'No options found',
+    error: 'Could not load options',
+    retry: 'Try again',
+  },
   DzBackTop: { ariaLabel: 'Back to top' },
   DzBreadcrumb: { ariaLabel: 'Breadcrumb' },
   DzCarouselDots: { slideNavigation: 'Slide navigation' },

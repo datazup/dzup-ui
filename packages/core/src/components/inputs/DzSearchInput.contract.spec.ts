@@ -21,3 +21,15 @@ describe('dzSearchInput — Contract Spec v1', () => {
     expect(wrapper.html()).toContain('custom-class')
   })
 })
+
+describe('dzSearchInput — renderer contract C3 states', () => {
+  it('reflects readonly as a presence-only data-readonly', () => {
+    const wrapper = mount(DzSearchInput, { props: { readonly: true } })
+    expect(wrapper.attributes('data-readonly')).toBe('')
+  })
+
+  it('omits data-readonly entirely when not readonly — never ="false"', () => {
+    const wrapper = mount(DzSearchInput, { props: {} })
+    expect(wrapper.attributes('data-readonly')).toBeUndefined()
+  })
+})

@@ -7,7 +7,7 @@
  * @module @dzup-ui/core/components/forms/DzListbox
  */
 
-import type { BaseFormControlProps, SelectEvents } from '@dzup-ui/contracts'
+import type { AsyncOptionsEmits, AsyncOptionsProps, AsyncOptionsState, BaseFormControlProps, SelectEvents } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 
 // ---------------------------------------------------------------------------
@@ -45,7 +45,7 @@ export interface DzListboxOption {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzListbox component */
-export interface DzListboxProps extends BaseFormControlProps<never> {
+export interface DzListboxProps extends BaseFormControlProps<never>, AsyncOptionsProps {
   /**
    * Available options. Either canonical {@link DzListboxOption}s or arbitrary
    * objects resolved through `optionLabel`/`optionValue`/`optionGroup`.
@@ -76,7 +76,7 @@ export interface DzListboxProps extends BaseFormControlProps<never> {
 // ---------------------------------------------------------------------------
 
 /** Events emitted by DzListbox */
-export interface DzListboxEmits extends SelectEvents<DzListboxModelValue> {
+export interface DzListboxEmits extends SelectEvents<DzListboxModelValue>, AsyncOptionsEmits {
   /** The filter query changed (only when `filter` is enabled) */
   filter: [query: string]
 }
@@ -87,10 +87,24 @@ export interface DzListboxEmits extends SelectEvents<DzListboxModelValue> {
 
 /** Slot definitions for DzListbox */
 export interface DzListboxSlots {
+  /**
+   * The single row shown instead of the list while the option set is loading,
+   * empty, or failed (renderer contract C9).
+   *
+   * Overriding it replaces all three states at once, on purpose: a consumer who
+   * styles "loading" and forgets "error" ships a panel that says nothing when a
+   * load fails.
+   */
+  'options-state'?: (props: {
+    state: AsyncOptionsState
+    message: string
+    error: string | undefined
+    retry: () => void
+  }) => unknown
   /** Custom option rendering */
-  option?: (props: { option: DzListboxOption, index: number, selected: boolean }) => unknown
+  'option'?: (props: { option: DzListboxOption, index: number, selected: boolean }) => unknown
   /** Custom group label rendering */
-  groupLabel?: (props: { group: string }) => unknown
+  'groupLabel'?: (props: { group: string }) => unknown
   /** Content shown when there are no (matching) options */
-  empty?: () => unknown
+  'empty'?: () => unknown
 }

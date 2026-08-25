@@ -12,10 +12,12 @@ import { Check } from 'lucide-vue-next'
  * v-model via defineModel<string[]>() -- selected keys (ADR-16).
  */
 import { computed, toRef, useAttrs, useId } from 'vue'
+import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useTransfer } from '../../composables/useTransfer/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
+import DzOptionsState from './DzOptionsState.vue'
 import { transferVariants } from './DzTransfer.variants.ts'
 
 defineOptions({
@@ -26,6 +28,9 @@ defineOptions({
 const model = defineModel<string[]>({ default: () => [] })
 
 const props = withDefaults(defineProps<DzTransferProps>(), {
+  optionsState: undefined,
+  optionsError: undefined,
+  optionsRetryable: undefined,
   target: undefined,
   searchable: false,
   disabled: false,
@@ -43,6 +48,43 @@ const props = withDefaults(defineProps<DzTransferProps>(), {
 
 const emit = defineEmits<DzTransferEmits>()
 defineSlots<DzTransferSlots>()
+
+// The async-options rows are one shared group across all seven selection
+// controls, so a translator writes them once (renderer contract C9).
+const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+
+/**
+ * The async-options seam (renderer contract C9).
+ *
+ * Inert unless the host passes `optionsState`, so a control with a static
+ * option array behaves exactly as it did. Every request supersedes and aborts
+ * the last, so a host that fences on the signal never has two in flight.
+ */
+const {
+  row: optionsRow,
+  state: resolvedOptionsState,
+  canRetry: canRetryOptions,
+  announcement: optionsAnnouncement,
+  request: requestOptions,
+} = useAsyncOptions(
+  {
+    state: () => props.optionsState,
+    error: () => props.optionsError,
+    retryable: () => props.optionsRetryable,
+    hasOptions: () => props.source.length > 0,
+    emit: request => emit('loadOptions', request),
+  },
+  () => ({
+    loading: dzAsyncMessages.value.loading,
+    empty: dzAsyncMessages.value.empty,
+    error: dzAsyncMessages.value.error,
+  }),
+)
+
+function handleRetryOptions(): void {
+  emit('retryOptions')
+  requestOptions('open')
+}
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzTransfer')
@@ -169,6 +211,7 @@ function handleBlur(event: FocusEvent): void {
       :id="resolvedId"
       :class="groupClasses"
       :data-disabled="resolvedDisabled ? '' : undefined"
+      :data-required="resolvedRequired ? '' : undefined"
       :data-state="resolvedDisabled ? 'disabled' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :aria-label="resolvedAriaLabel"
@@ -180,6 +223,18 @@ function handleBlur(event: FocusEvent): void {
       @focus.capture="handleFocus"
       @blur.capture="handleBlur"
     >
+      <!--
+        One row instead of the list while the host is loading, has nothing, or
+        failed (renderer contract C9). `optionsRow` is null whenever the control
+        is static, so a control with a plain option array renders none of this.
+      -->
+      <DzOptionsState
+        v-if="optionsRow !== null"
+        :state="resolvedOptionsState"
+        :message="optionsAnnouncement"
+        :can-retry="canRetryOptions"
+        @retry="handleRetryOptions"
+      />
       <!-- Source list -->
       <div :class="styles.list()" data-dz-transfer-list>
         <div :class="styles.listHeader()">

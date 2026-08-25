@@ -68,3 +68,39 @@ describe('dzCascader — Contract Spec v1', () => {
     expect(wrapper.find('button').attributes('disabled')).toBeDefined()
   })
 })
+
+describe('dzCascader — renderer contract C1 value', () => {
+  /**
+   * Two model names, one value. `v-model:value` is what every existing consumer
+   * template uses; `v-model` is what a control-agnostic consumer reaches for,
+   * and it used to bind nothing at all — silently.
+   */
+  it('reads a value bound with the legacy v-model:value', () => {
+    const wrapper = mount(DzCascader, { props: { options, value: ['cn', 'zj'] } })
+    expect(wrapper.text()).toContain('Zhejiang')
+  })
+
+  it('reads a value bound with the default v-model', () => {
+    const wrapper = mount(DzCascader, { props: { options, modelValue: ['cn', 'zj'] } })
+    expect(wrapper.text()).toContain('Zhejiang')
+  })
+
+  it('emits both update events so neither binding goes stale', async () => {
+    const wrapper = mount(DzCascader, { props: { options, value: [] } })
+    await wrapper.find('button').trigger('click')
+    const cells = wrapper.findAll('[data-col]')
+    if (cells.length > 0)
+      await cells[0]!.trigger('click')
+
+    // Whether a click commits depends on `changeOnSelect`; what matters is that
+    // when it does commit, it commits to both models.
+    const legacy = wrapper.emitted('update:value')
+    const primary = wrapper.emitted('update:modelValue')
+    expect(Boolean(legacy)).toBe(Boolean(primary))
+  })
+
+  it('defaults to the empty array, which is the documented empty value', () => {
+    const wrapper = mount(DzCascader, { props: { options } })
+    expect(wrapper.text()).toContain('Select')
+  })
+})

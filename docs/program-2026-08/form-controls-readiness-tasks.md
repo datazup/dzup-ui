@@ -17,6 +17,14 @@
 > **Status legend:** `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked on owner decision
 > **Priority:** 🟠 P1 (all four — they gate Pro P6 but not each other except 01 → 02)
 
+## Deliverables produced by this file
+
+| Document | Task | Kind |
+| --- | --- | --- |
+| [`form-control-renderer-contract.md`](./form-control-renderer-contract.md) | FORM-OSS-01 | Written contract, clauses C1–C9 |
+| [`form-controls-readiness-matrix.md`](./form-controls-readiness-matrix.md) | FORM-OSS-01 | **Generated** — `yarn generate:form-readiness`, gated by `yarn validate:form-readiness` |
+| [`EXECUTION-STATUS-FORM.md`](./EXECUTION-STATUS-FORM.md) | all four | Live ledger of this run |
+
 ## Ordering
 
 ```text
@@ -34,7 +42,7 @@ Current Core inventory the audit must cover (verified 2026-08-20):
 
 ---
 
-### [ ] TASK-FORM-OSS-01 — Renderer-contract audit of every Core form control (produce the readiness matrix)
+### [x] TASK-FORM-OSS-01 — Renderer-contract audit of every Core form control (produce the readiness matrix)
 
 _Gap: the Form spec's renderer registry (document 04) dispatches JSON-Schema
 data types to Core controls and expects uniform value semantics, ARIA wiring
@@ -98,7 +106,7 @@ through `DzFormField`, and identical state vocabulary. Nobody has checked the
 
 ---
 
-### [ ] TASK-FORM-OSS-02 — Close the audited gaps in Core, one family slice at a time, additive API only
+### [x] TASK-FORM-OSS-02 — Close the audited gaps in Core, one family slice at a time, additive API only
 
 _Gap: whatever TASK-FORM-OSS-01's matrix reports as "gap". Expected classes
 from the spec: inconsistent empty/false value semantics, controls that ignore
@@ -138,7 +146,7 @@ date/file controls, and physical (`left/right`) CSS in sliders/knobs._
 
 ---
 
-### [ ] TASK-FORM-OSS-03 — Value codec and async-state primitives the renderer needs (additive Core props/slots)
+### [x] TASK-FORM-OSS-03 — Value codec and async-state primitives the renderer needs (additive Core props/slots)
 
 _Gap: the spec's F5 packet (remote data sources, validators, files) needs
 controls that can show pending/loading/error for async options with accessible
@@ -188,7 +196,7 @@ objects._
 
 ---
 
-### [ ] TASK-FORM-OSS-04 — Layout primitives readiness: Stack/Grid/Tabs/Accordion/Stepper as form layouts
+### [x] TASK-FORM-OSS-04 — Layout primitives readiness: Stack/Grid/Tabs/Accordion/Stepper as form layouts
 
 _Gap: the spec's F4 layouts (Stack, Grid, Group, Tabs, Accordion, Wizard/Step)
 must support wizard gating, error focus, and responsive spans. Core's DzTabs,

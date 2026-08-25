@@ -1,16 +1,38 @@
 <script setup lang="ts" generic="T = unknown">
 import type { DzFieldArrayEmits, DzFieldArrayProps, DzFieldArraySlots } from './DzFieldArray.types.ts'
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
+import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 
 const model = defineModel<T[]>({ default: () => [] })
 
 const props = withDefaults(defineProps<DzFieldArrayProps>(), {
   min: undefined,
   max: undefined,
+  id: undefined,
 })
 
 const emit = defineEmits<DzFieldArrayEmits<T>>()
 defineSlots<DzFieldArraySlots<T>>()
+
+/**
+ * Base for the per-item ids: own prop, then the surrounding DzFormField's id,
+ * then a generated one (renderer contract C2).
+ *
+ * A repeater puts many controls inside one field. Every one of them resolved to
+ * that field's single id, so a label pointing at row 1 could activate row 3 and
+ * an `aria-describedby` could name another row's error. The array is the only
+ * thing that knows how many rows there are, so it is what has to hand each row
+ * an id of its own.
+ */
+const fieldContext = useFormFieldContext()
+const autoId = useId()
+const baseId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+
+/** Ids for one row, derived from the base and the row's index. */
+function idsFor(index: number): { fieldId: string, descriptionId: string, messageId: string } {
+  const row = `${baseId.value}-${index}`
+  return { fieldId: `${row}-field`, descriptionId: `${row}-description`, messageId: `${row}-message` }
+}
 
 /** Current number of items in the array */
 const count = computed(() => model.value.length)
@@ -65,6 +87,9 @@ function move(from: number, to: number): void {
       :can-remove="canRemove"
       :can-append="canAppend"
       :count="count"
+      :field-id="idsFor(index).fieldId"
+      :description-id="idsFor(index).descriptionId"
+      :message-id="idsFor(index).messageId"
     />
   </template>
   <slot v-if="canAppend" name="append" :append="append" :count="count" :can-append="canAppend" />

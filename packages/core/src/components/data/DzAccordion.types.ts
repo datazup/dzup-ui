@@ -81,6 +81,8 @@ export type DzAccordionProps = DzAccordionSingleProps | DzAccordionMultipleProps
 
 /** Events emitted by DzAccordion */
 export interface DzAccordionEmits {
+  /** An item was revealed imperatively and its panel has rendered */
+  revealed: [value: string]
   /** Emitted when the active item(s) change */
   change: [value: string | string[]]
 }

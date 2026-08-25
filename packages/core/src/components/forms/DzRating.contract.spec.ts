@@ -41,3 +41,20 @@ describe('dzRating — Contract Spec v1', () => {
     expect(wrapper.html()).toContain('custom-class')
   })
 })
+
+describe('dzRating — renderer contract C1 value', () => {
+  it('reads a value bound with the legacy v-model:value', () => {
+    const wrapper = mount(DzRating, { props: { value: 3, ariaLabel: 'Rating' } })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('3')
+  })
+
+  it('reads a value bound with the default v-model', () => {
+    const wrapper = mount(DzRating, { props: { modelValue: 3, ariaLabel: 'Rating' } })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('3')
+  })
+
+  it('prefers the default model when both are bound', () => {
+    const wrapper = mount(DzRating, { props: { modelValue: 5, value: 3, ariaLabel: 'Rating' } })
+    expect(wrapper.find('[role="slider"]').attributes('aria-valuenow')).toBe('5')
+  })
+})

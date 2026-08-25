@@ -9,7 +9,9 @@ import type { DzInputMaskEmits, DzInputMaskProps, DzInputMaskSlots } from './DzI
  * (alphanumeric); every other character is a literal. Stays a native `<input>`
  * so screen readers and form autofill keep working (TASK-NF-25).
  *
- * v-model holds the displayed (masked) value; `update:unmasked` emits the value
+ * v-model holds the displayed (masked) value by default — pass
+ * `model-mode="unmasked"` to bind the stripped value instead, which is what a
+ * schema-driven form should persist. `update:unmasked` emits the value
  * with literals and slot characters stripped.
  *
  * @example
@@ -36,6 +38,7 @@ const props = withDefaults(defineProps<DzInputMaskProps>(), {
   tone: undefined,
   slotChar: '_',
   autoClear: false,
+  modelMode: 'masked',
   disabled: false,
   readonly: false,
   loading: false,
@@ -116,8 +119,34 @@ const resolvedAriaDescribedby = computed(() => {
 const unmasked = ref('')
 /** Whether every token position is filled */
 const completed = ref(false)
-/** Last masked value we wrote to the model — guards the external-change watcher */
-const lastMasked = ref('')
+/**
+ * Last value we wrote to the model — guards the external-change watcher.
+ *
+ * Not "last masked": with `modelMode="unmasked"` the model holds the stripped
+ * value, and a guard comparing against the masked string would treat every one
+ * of our own writes as an external change and re-normalise in a loop.
+ */
+const lastModel = ref('')
+
+/** What the model carries, which is the mask unless the consumer asked otherwise */
+function modelValueFor(res: MaskResult): string {
+  return props.modelMode === 'unmasked' ? res.unmasked : res.masked
+}
+
+/**
+ * What the `<input>` shows. Always the mask, whatever the model holds.
+ *
+ * Computed rather than a ref written in `commit`, because `commit` only runs on
+ * an edit or on mount: a ref would render empty on the server and fill in after
+ * hydration, which is a mismatch on the very value the field exists to display.
+ * In `masked` mode this is `model` unchanged, so the rendered output is
+ * byte-identical to what it was before `modelMode` existed.
+ */
+const displayed = computed(() =>
+  props.modelMode === 'unmasked'
+    ? applyMask(model.value ?? '', props.mask, props.slotChar).masked
+    : model.value,
+)
 
 /**
  * Commit a mask result to model + derived state and, when an element is given,
@@ -125,8 +154,8 @@ const lastMasked = ref('')
  * rejected characters never linger even when `model` is unchanged.
  */
 function commit(res: MaskResult, el?: HTMLInputElement | null): void {
-  lastMasked.value = res.masked
-  model.value = res.masked
+  lastModel.value = modelValueFor(res)
+  model.value = lastModel.value
 
   if (unmasked.value !== res.unmasked) {
     unmasked.value = res.unmasked
@@ -188,7 +217,7 @@ function handleBlur(event: FocusEvent): void {
 
 // Normalize externally-set model values (controlled usage / programmatic set).
 watch(model, (val) => {
-  if (val === lastMasked.value)
+  if (val === lastModel.value)
     return
   const res = applyMask(val ?? '', props.mask, props.slotChar)
   commit(res)
@@ -212,6 +241,8 @@ defineExpose({ inputRef, completed, unmasked })
     :data-completed="completed ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
@@ -231,7 +262,7 @@ defineExpose({ inputRef, completed, unmasked })
         ref="inputRef"
         type="text"
         :class="inputClasses"
-        :value="model"
+        :value="displayed"
         :name="name"
         :placeholder="placeholder"
         :disabled="resolvedDisabled"

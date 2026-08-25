@@ -37,11 +37,13 @@ import {
  */
 import { computed, ref, useAttrs, useId, watch } from 'vue'
 import { useDzPortalTarget } from '../../composables/provider/useDzEnvironment.ts'
+import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzSpinner from '../feedback/DzSpinner.vue'
 import { comboboxVariants } from './DzCombobox.variants.ts'
+import DzOptionsState from './DzOptionsState.vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -50,6 +52,9 @@ defineOptions({
 const model = defineModel<string>({ default: '' })
 
 const props = withDefaults(defineProps<DzComboboxProps>(), {
+  optionsState: undefined,
+  optionsError: undefined,
+  optionsRetryable: undefined,
   placeholder: undefined,
   disabled: false,
   size: 'md',
@@ -83,6 +88,43 @@ const props = withDefaults(defineProps<DzComboboxProps>(), {
 
 const emit = defineEmits<DzComboboxEmits>()
 defineSlots<DzComboboxSlots>()
+
+// The async-options rows are one shared group across all seven selection
+// controls, so a translator writes them once (renderer contract C9).
+const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+
+/**
+ * The async-options seam (renderer contract C9).
+ *
+ * Inert unless the host passes `optionsState`, so a control with a static
+ * option array behaves exactly as it did. Every request supersedes and aborts
+ * the last, so a host that fences on the signal never has two in flight.
+ */
+const {
+  row: optionsRow,
+  state: resolvedOptionsState,
+  canRetry: canRetryOptions,
+  announcement: optionsAnnouncement,
+  request: requestOptions,
+} = useAsyncOptions(
+  {
+    state: () => props.optionsState,
+    error: () => props.optionsError,
+    retryable: () => props.optionsRetryable,
+    hasOptions: () => props.items.length > 0,
+    emit: request => emit('loadOptions', request),
+  },
+  () => ({
+    loading: dzAsyncMessages.value.loading,
+    empty: dzAsyncMessages.value.empty,
+    error: dzAsyncMessages.value.error,
+  }),
+)
+
+function handleRetryOptions(): void {
+  emit('retryOptions')
+  requestOptions('open')
+}
 // Portal target: an explicit `portalTo` on this instance, then the application's
 // `DzProvider` target, then the portal's own default of `document.body`
 // (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
@@ -114,6 +156,12 @@ const resolvedDisabled = computed(
 const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
+
+/**
+ * `required` was declared, defaulted, and read nowhere — the type promised a
+ * consumer it worked and the DOM never mentioned it (renderer contract C3).
+ */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
 /** ID for the error message element (for aria-describedby) */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -317,6 +365,9 @@ watch(
         :data-state="resolvedDisabled ? 'disabled' : 'idle'"
         :data-disabled="resolvedDisabled ? '' : undefined"
         :data-invalid="resolvedInvalid ? '' : undefined"
+        :data-required="resolvedRequired ? '' : undefined"
+        :data-loading="loading ? '' : undefined"
+        :aria-busy="loading || undefined"
         style="contain: layout style"
         v-bind="{ ...$attrs, class: undefined }"
       >
@@ -376,7 +427,19 @@ watch(
       >
         <ComboboxContent :class="styles.content()" position="popper" :side-offset="4">
           <ComboboxViewport :class="styles.viewport()">
-            <template v-if="loading">
+            <!--
+              One row instead of the list while the host is loading, has nothing, or
+              failed (renderer contract C9). `optionsRow` is null whenever the control
+              is static, so a control with a plain option array renders none of this.
+            -->
+            <DzOptionsState
+              v-if="optionsRow !== null"
+              :state="resolvedOptionsState"
+              :message="optionsAnnouncement"
+              :can-retry="canRetryOptions"
+              @retry="handleRetryOptions"
+            />
+            <template v-else-if="loading">
               <slot name="loading">
                 <div :class="styles.empty()">
                   {{ resolvedLoadingText }}

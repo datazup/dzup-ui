@@ -13,6 +13,9 @@
  */
 
 import type {
+  AsyncOptionsEmits,
+  AsyncOptionsProps,
+  AsyncOptionsState,
   BaseFormControlProps,
   BasePortalProps,
   InputVariant,
@@ -61,7 +64,7 @@ export interface DzCascaderFlatPath {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzCascader component */
-export interface DzCascaderProps extends BaseFormControlProps<InputVariant>, BasePortalProps {
+export interface DzCascaderProps extends BaseFormControlProps<InputVariant>, BasePortalProps, AsyncOptionsProps {
   /** Nested option tree */
   options: DzCascaderOption[]
   /** Placeholder shown on the trigger when nothing is selected */
@@ -95,7 +98,7 @@ export interface DzCascaderProps extends BaseFormControlProps<InputVariant>, Bas
  * - `open` / `close` — popover visibility
  * - `focus` / `blur` — trigger focus
  */
-export interface DzCascaderEmits extends SelectOpenableEvents<DzCascaderValue> {}
+export interface DzCascaderEmits extends SelectOpenableEvents<DzCascaderValue>, AsyncOptionsEmits {}
 
 // ---------------------------------------------------------------------------
 // Slots
@@ -103,8 +106,22 @@ export interface DzCascaderEmits extends SelectOpenableEvents<DzCascaderValue> {
 
 /** Slot definitions for DzCascader */
 export interface DzCascaderSlots {
+  /**
+   * The single row shown instead of the list while the option set is loading,
+   * empty, or failed (renderer contract C9).
+   *
+   * Overriding it replaces all three states at once, on purpose: a consumer who
+   * styles "loading" and forgets "error" ships a panel that says nothing when a
+   * load fails.
+   */
+  'options-state'?: (props: {
+    state: AsyncOptionsState
+    message: string
+    error: string | undefined
+    retry: () => void
+  }) => unknown
   /** Override the selected-path display (default renders `A / B / C`). */
-  value?: (props: {
+  'value'?: (props: {
     path: DzCascaderOption[]
     value: DzCascaderValue
     labels: string[]

@@ -400,3 +400,25 @@ export const RealWorldSignUp: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Readonly
+// ---------------------------------------------------------------------------
+
+/**
+ * `readonly` reaches the DOM as `data-readonly` on the root (ADR-19 §4,
+ * renderer contract C3). The field stays focusable and its value stays
+ * selectable — which is what separates read-only from disabled, and why a form
+ * that shows a value the user may copy but not change wants this one.
+ */
+export const Readonly: Story = {
+  render: () => ({
+    components: { DzPasswordInput },
+    template: `
+      <div class="flex flex-col gap-4">
+        <DzPasswordInput readonly model-value="unchangeable" class="max-w-sm" />
+        <DzPasswordInput model-value="changeable" class="max-w-sm" />
+      </div>
+    `,
+  }),
+}

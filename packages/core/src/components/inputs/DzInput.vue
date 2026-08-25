@@ -187,6 +187,7 @@ defineExpose({ inputRef })
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-readonly="readonly ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >

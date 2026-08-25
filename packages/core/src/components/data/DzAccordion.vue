@@ -24,7 +24,7 @@ import { AccordionRoot } from 'reka-ui'
  * </DzAccordion>
  * ```
  */
-import { computed, provide, toRef, useAttrs } from 'vue'
+import { computed, nextTick, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_ACCORDION_KEY } from './DzAccordion.types.ts'
 import { accordionVariants } from './DzAccordion.variants.ts'
@@ -63,6 +63,32 @@ const context: DzAccordionContext = {
 }
 
 provide(DZ_ACCORDION_KEY, context)
+
+/**
+ * Open (or activate) the item holding `id`, then announce that it is rendered.
+ *
+ * The renderer contract's C-layouts case: a wizard or tabbed form validates on
+ * submit, finds its first invalid field inside a panel that is not currently
+ * shown, and calls `focus()` on an element the browser will not focus. This is
+ * the half a container can own — the caller pairs it with `useRevealAndFocus`.
+ *
+ * `revealed` fires after the panel has rendered, not when the model changed.
+ */
+async function revealItem(id: string): Promise<void> {
+  // Multiple mode adds to the open set rather than replacing it: revealing
+  // one field's panel must not close another the user is already reading.
+  if (Array.isArray(model.value)) {
+    if (!model.value.includes(id))
+      model.value = [...model.value, id]
+  }
+  else if (model.value !== id) {
+    model.value = id
+  }
+  await nextTick()
+  emit('revealed', id)
+}
+
+defineExpose({ revealItem })
 
 const styles = computed(() =>
   accordionVariants({

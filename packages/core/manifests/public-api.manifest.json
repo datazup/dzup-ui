@@ -346,6 +346,24 @@
         "exports": [
           "useTransfer"
         ]
+      },
+      "useDualModel": {
+        "path": "./src/composables/useDualModel/index.ts",
+        "exports": [
+          "useDualModel"
+        ]
+      },
+      "useAsyncOptions": {
+        "path": "./src/composables/useAsyncOptions/index.ts",
+        "exports": [
+          "useAsyncOptions"
+        ]
+      },
+      "useRevealAndFocus": {
+        "path": "./src/composables/useRevealAndFocus/index.ts",
+        "exports": [
+          "useRevealAndFocus"
+        ]
       }
     },
     "providers": {

@@ -12,6 +12,9 @@
  */
 
 import type {
+  AsyncOptionsEmits,
+  AsyncOptionsProps,
+  AsyncOptionsState,
   BaseFormControlProps,
   InputVariant,
 } from '@dzup-ui/contracts'
@@ -48,7 +51,7 @@ export type TreeSelectValue = string | string[] | undefined
 // ---------------------------------------------------------------------------
 
 /** Props for the DzTreeSelect component */
-export interface DzTreeSelectProps extends BaseFormControlProps<InputVariant> {
+export interface DzTreeSelectProps extends BaseFormControlProps<InputVariant>, AsyncOptionsProps {
   /** Hierarchical tree data shown in the overlay panel */
   nodes: TreeNode[]
   /** Selection behaviour */
@@ -72,7 +75,7 @@ export interface DzTreeSelectProps extends BaseFormControlProps<InputVariant> {
 // ---------------------------------------------------------------------------
 
 /** Events emitted by DzTreeSelect */
-export interface DzTreeSelectEmits {
+export interface DzTreeSelectEmits extends AsyncOptionsEmits {
   /** Emitted when the selected value changes */
   'change': [value: TreeSelectValue]
   /** Emitted when a node is selected (or toggled) */
@@ -95,13 +98,27 @@ export interface DzTreeSelectEmits {
 
 /** Slot definitions for DzTreeSelect */
 export interface DzTreeSelectSlots {
+  /**
+   * The single row shown instead of the list while the option set is loading,
+   * empty, or failed (renderer contract C9).
+   *
+   * Overriding it replaces all three states at once, on purpose: a consumer who
+   * styles "loading" and forgets "error" ships a panel that says nothing when a
+   * load fails.
+   */
+  'options-state'?: (props: {
+    state: AsyncOptionsState
+    message: string
+    error: string | undefined
+    retry: () => void
+  }) => unknown
   /** Custom rendering of the trigger value (selected label(s)) */
-  value?: (props: {
+  'value'?: (props: {
     selectedNodes: TreeNode[]
     placeholder: string | undefined
   }) => unknown
   /** Custom rendering of a tree node label inside the panel */
-  node?: (props: {
+  'node'?: (props: {
     node: TreeNode
     level: number
     expanded: boolean
@@ -109,5 +126,5 @@ export interface DzTreeSelectSlots {
     indeterminate: boolean
   }) => unknown
   /** Content shown when the panel has no (matching) nodes */
-  empty?: () => unknown
+  'empty'?: () => unknown
 }

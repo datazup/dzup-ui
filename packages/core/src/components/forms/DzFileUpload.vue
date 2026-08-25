@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type {
+  DzFileRef,
   DzFileUploadEmits,
   DzFileUploadProps,
   DzFileUploadSlots,
+  DzFileUploadValue,
 } from './DzFileUpload.types.ts'
+import { isFileRef, toFileRef } from '@dzup-ui/contracts'
 /**
  * DzFileUpload — File upload with drag-and-drop support.
  *
@@ -31,7 +34,16 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<File[]>({ default: () => [] })
+/**
+ * The value, in whichever mode the consumer asked for.
+ *
+ * `File[]` by default — unchanged — and `DzFileRef[]` under
+ * `model-mode="ref"`, which is what a persisted form document can actually
+ * hold. The union is a **type widening**: a consumer who annotated their ref as
+ * `File[]` widens it to `DzFileUploadValue`. Nothing changes at runtime in the
+ * default mode.
+ */
+const model = defineModel<DzFileUploadValue>({ default: () => [] })
 
 const props = withDefaults(defineProps<DzFileUploadProps>(), {
   accept: undefined,
@@ -49,10 +61,13 @@ const props = withDefaults(defineProps<DzFileUploadProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  modelMode: 'file',
 })
 
 const emit = defineEmits<DzFileUploadEmits>()
+
 defineSlots<DzFileUploadSlots>()
+
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzFileUpload')
@@ -77,7 +92,58 @@ const resolvedRequired = computed(
   () => props.required || (fieldContext?.isRequired.value ?? false),
 )
 
-const resolvedId = computed(() => props.id ?? autoId)
+/**
+ * Own prop, then the DzFormField context, then a generated id.
+ *
+ * It skipped the middle step, so a `<DzFormLabel>` inside the same field
+ * pointed its `for` at an id this control never used and clicking the label
+ * did nothing (renderer contract C2).
+ */
+const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
+
+/**
+ * The binaries, held beside the value rather than in it.
+ *
+ * Keyed by ref id in reference mode. This is the whole point of the mode: the
+ * `File` never enters the model, so it is never serialized into a document, and
+ * a builder preview rendering a saved form has no live handles in it. The map
+ * is local state, dropped with the component.
+ */
+const filesByRef = new Map<string, File>()
+
+/** Abort controllers for in-flight uploads, keyed by ref id. */
+const abortByRef = new Map<string, AbortController>()
+
+/** Ids are only unique within this control, which is all they need to be. */
+let refSequence = 0
+function nextRefId(): string {
+  refSequence += 1
+  return `${resolvedId.value}-file-${refSequence}`
+}
+
+/** The entries as rows to render, whatever the model holds. */
+interface FileRow {
+  key: string
+  name: string
+  size: number
+  status: DzFileRef['status']
+  error?: string
+  entry: File | DzFileRef
+}
+
+const rows = computed<FileRow[]>(() =>
+  model.value.map((entry, index) =>
+    isFileRef(entry)
+      ? { key: entry.id, name: entry.name, size: entry.size, status: entry.status, error: entry.error, entry }
+      : {
+          key: `${index}-${entry.name}`,
+          name: entry.name,
+          size: entry.size,
+          status: 'uploaded' as const,
+          entry,
+        },
+  ),
+)
 
 /** ID for the error message element (for aria-describedby) */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -197,14 +263,49 @@ function processFiles(fileList: FileList | File[]): void {
     validFiles.push(file)
   }
 
-  if (validFiles.length > 0) {
-    model.value = [...model.value, ...validFiles]
+  if (validFiles.length === 0)
+    return
+
+  if (props.modelMode === 'ref') {
+    // The reference goes into the value; the binary goes to the host through an
+    // event and is held here until the upload resolves or the row is removed.
+    const refs = validFiles.map((file) => {
+      const ref = toFileRef(file, nextRefId())
+      filesByRef.set(ref.id, file)
+      return ref
+    })
+    model.value = [...(model.value as DzFileRef[]), ...refs]
     emit('upload', validFiles)
+    for (const ref of refs) {
+      const controller = new AbortController()
+      abortByRef.set(ref.id, controller)
+      emit('uploadRequest', { file: filesByRef.get(ref.id)!, ref, signal: controller.signal })
+    }
+    return
   }
+
+  model.value = [...(model.value as File[]), ...validFiles]
+  emit('upload', validFiles)
 }
 
-function removeFile(file: File): void {
-  model.value = model.value.filter(f => f !== file)
+function removeRow(row: FileRow): void {
+  if (isFileRef(row.entry)) {
+    const { id } = row.entry
+    // Removing a row that is still uploading has to cancel it: the host is
+    // holding a signal, and the reference it would report against is gone.
+    abortByRef.get(id)?.abort()
+    abortByRef.delete(id)
+    const file = filesByRef.get(id)
+    filesByRef.delete(id)
+    model.value = (model.value as DzFileRef[]).filter(entry => entry.id !== id)
+    // `remove` has always carried a File and still does, so a consumer's
+    // handler keeps working; in reference mode it is the file behind the row.
+    if (file !== undefined)
+      emit('remove', file)
+    return
+  }
+  const file = row.entry
+  model.value = (model.value as File[]).filter(f => f !== file)
   emit('remove', file)
 }
 
@@ -262,6 +363,7 @@ function handleBlur(event: FocusEvent): void {
   <div
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
@@ -281,8 +383,20 @@ function handleBlur(event: FocusEvent): void {
       @change="handleInputChange"
     >
 
-    <!-- Drop zone -->
+    <!--
+      Drop zone.
+
+      This carries the id, not the hidden `<input>`. The input is
+      `aria-hidden` and `tabindex="-1"` — a label pointing at it would name a
+      node no user can reach. The drop zone is the focusable control, so it is
+      what a `DzFormLabel`'s `for` must resolve to.
+
+      `resolvedId` was computed and then rendered nowhere at all, so this
+      control had no id in the DOM and nothing could reference it (renderer
+      contract C2).
+    -->
     <div
+      :id="resolvedId"
       role="button"
       :tabindex="resolvedDisabled ? -1 : 0"
       :class="dropzoneClasses"
@@ -329,21 +443,32 @@ function handleBlur(event: FocusEvent): void {
       </slot>
     </div>
 
-    <!-- File list -->
-    <div v-if="model.length > 0" :class="styles.fileList()">
+    <!--
+      File list.
+
+      Driven by `rows` rather than by the model directly, because the model
+      holds `File`s in the default mode and `DzFileRef`s in reference mode and
+      the row needs the same three things from either. `data-file-status` is
+      what a stylesheet keys off to show an upload that is still pending or has
+      failed — in the default mode every row is `uploaded`, because a `File`
+      already in the model has nowhere else to be.
+    -->
+    <div v-if="rows.length > 0" :class="styles.fileList()">
       <div
-        v-for="(file, index) in model"
-        :key="`${file.name}-${index}`"
+        v-for="row in rows"
+        :key="row.key"
         :class="styles.fileItem()"
+        :data-file-status="row.status"
       >
-        <slot name="file-item" :file="file" :remove="() => removeFile(file)">
-          <span :class="styles.fileName()">{{ file.name }}</span>
-          <span :class="styles.fileSize()">{{ formatSize(file.size) }}</span>
+        <slot name="file-item" :file="row.entry" :row="row" :remove="() => removeRow(row)">
+          <span :class="styles.fileName()">{{ row.name }}</span>
+          <span :class="styles.fileSize()">{{ formatSize(row.size) }}</span>
+          <span v-if="row.status === 'failed'" :class="styles.fileError()">{{ row.error }}</span>
           <button
             type="button"
             :class="styles.removeButton()"
-            :aria-label="`Remove ${file.name}`"
-            @click="removeFile(file)"
+            :aria-label="`Remove ${row.name}`"
+            @click="removeRow(row)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

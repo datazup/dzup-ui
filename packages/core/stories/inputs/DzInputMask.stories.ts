@@ -357,3 +357,25 @@ export const Accessibility: Story = {
     await expect(date).toHaveFocus()
   },
 }
+
+// ---------------------------------------------------------------------------
+// Readonly
+// ---------------------------------------------------------------------------
+
+/**
+ * `readonly` reaches the DOM as `data-readonly` on the root (ADR-19 §4,
+ * renderer contract C3). The field stays focusable and its value stays
+ * selectable — which is what separates read-only from disabled, and why a form
+ * that shows a value the user may copy but not change wants this one.
+ */
+export const Readonly: Story = {
+  render: () => ({
+    components: { DzInputMask },
+    template: `
+      <div class="flex flex-col gap-4">
+        <DzInputMask readonly mask="(999) 999-9999" model-value="(555) 123-4567" class="max-w-sm" />
+        <DzInputMask mask="(999) 999-9999" model-value="(555) 123-4567" class="max-w-sm" />
+      </div>
+    `,
+  }),
+}

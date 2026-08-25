@@ -64,6 +64,8 @@ export interface DzTabsProps extends BaseAccessibilityProps {
 
 /** Events emitted by DzTabs */
 export interface DzTabsEmits {
+  /** A tab was revealed imperatively and its panel has rendered */
+  revealed: [value: string]
   /** Active tab value changed */
   change: [value: string]
   /** A closable tab's close button was activated */

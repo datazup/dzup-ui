@@ -67,6 +67,16 @@ export const fileUploadVariants = tv({
       'text-[var(--dz-muted-foreground)]',
       'shrink-0',
     ].join(' '),
+    /**
+     * Why a row's upload failed (reference mode only). `--dz-danger` is a fill
+     * colour, so the text uses the muted-foreground pair (CLAUDE.md rule 1b).
+     */
+    fileError: [
+      'ms-[var(--dz-spacing-2)]',
+      'text-[length:var(--dz-text-xs)]',
+      'text-[var(--dz-danger-muted-foreground)]',
+      'shrink-0',
+    ].join(' '),
     removeButton: [
       'ms-[var(--dz-spacing-2)]',
       'shrink-0',

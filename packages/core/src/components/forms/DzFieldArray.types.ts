@@ -1,6 +1,14 @@
 export interface DzFieldArrayProps {
   min?: number
   max?: number
+  /**
+   * Base for the per-item ids handed to the default slot.
+   *
+   * Defaults to the surrounding `DzFormField`'s id, then to a generated one.
+   * Set it when two arrays share a page and their generated bases would be
+   * indistinguishable in a test or a bug report.
+   */
+  id?: string
 }
 
 export interface DzFieldArrayEmits<T = unknown> {
@@ -22,6 +30,20 @@ export interface DzFieldArraySlotProps<T = unknown> {
   canAppend: boolean
   /** Current number of items in the array */
   count: number
+  /**
+   * Id for this row's control, unique across the array.
+   *
+   * Every row of a repeater sits inside one `DzFormField`, so every control in
+   * it resolved to the *same* id — a label pointing at one row activated a
+   * different one, and `aria-describedby` named an error belonging to another
+   * item. Spec 04 §8 asks for "collision-free control/help/error IDs per form
+   * instance and array item"; these are that, and the row is what wires them.
+   */
+  fieldId: string
+  /** Id for this row's description, paired with {@link fieldId}. */
+  descriptionId: string
+  /** Id for this row's error message, paired with {@link fieldId}. */
+  messageId: string
 }
 
 export interface DzFieldArrayAppendSlotProps<T = unknown> {

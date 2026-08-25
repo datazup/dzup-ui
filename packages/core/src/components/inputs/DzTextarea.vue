@@ -192,6 +192,8 @@ defineExpose({ textareaRef })
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     class="relative"
     style="contain: layout style"
   >

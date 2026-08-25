@@ -31,6 +31,8 @@ import { Check, ChevronDown, Minus, X } from 'lucide-vue-next'
  * ```
  */
 import { computed, ref, useAttrs, useId, watch } from 'vue'
+import { useAsyncOptions } from '../../composables/useAsyncOptions/index.ts'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { useComponentMessages } from '../../i18n/useComponentMessages.ts'
 import { cn } from '../../utilities/cn.ts'
@@ -39,16 +41,31 @@ import { flattenVisibleNodes, getAdjacentKey } from '../data/treeNavigation.ts'
 import DzPopover from '../overlays/DzPopover.vue'
 import DzPopoverContent from '../overlays/DzPopoverContent.vue'
 import DzPopoverTrigger from '../overlays/DzPopoverTrigger.vue'
+import DzOptionsState from './DzOptionsState.vue'
 import { treeSelectVariants } from './DzTreeSelect.variants.ts'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<TreeSelectValue>('value')
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` keeps working unchanged; `v-model` is the binding every other
+ * control in the catalog takes, and until now it silently did nothing here.
+ *
+ * `isEmpty` is `undefined`-only, which is exact for this control:
+ * `TreeSelectValue` is `string | string[] | undefined`, so the only value that
+ * means "the consumer did not bind the default model" is `undefined`, and an
+ * explicit clear writes `[]` in multiple mode or `''` in single.
+ */
+const legacyValueModel = defineModel<TreeSelectValue>('value')
+const primaryModel = defineModel<TreeSelectValue>({ default: undefined })
 const expandedKeysModel = defineModel<string[]>('expandedKeys', { default: () => [] })
-
 const props = withDefaults(defineProps<DzTreeSelectProps>(), {
+  optionsState: undefined,
+  optionsError: undefined,
+  optionsRetryable: undefined,
   selectionMode: 'single',
   placeholder: undefined,
   filter: false,
@@ -69,9 +86,46 @@ const props = withDefaults(defineProps<DzTreeSelectProps>(), {
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
 })
-
 const emit = defineEmits<DzTreeSelectEmits>()
 const slots = defineSlots<DzTreeSelectSlots>()
+
+// The async-options rows are one shared group across all seven selection
+// controls, so a translator writes them once (renderer contract C9).
+const dzAsyncMessages = useComponentMessages('DzAsyncOptions')
+
+/**
+ * The async-options seam (renderer contract C9).
+ *
+ * Inert unless the host passes `optionsState`, so a control with a static
+ * option array behaves exactly as it did. Every request supersedes and aborts
+ * the last, so a host that fences on the signal never has two in flight.
+ */
+const {
+  row: optionsRow,
+  state: resolvedOptionsState,
+  canRetry: canRetryOptions,
+  announcement: optionsAnnouncement,
+  request: requestOptions,
+} = useAsyncOptions(
+  {
+    state: () => props.optionsState,
+    error: () => props.optionsError,
+    retryable: () => props.optionsRetryable,
+    hasOptions: () => props.nodes.length > 0,
+    emit: request => emit('loadOptions', request),
+  },
+  () => ({
+    loading: dzAsyncMessages.value.loading,
+    empty: dzAsyncMessages.value.empty,
+    error: dzAsyncMessages.value.error,
+  }),
+)
+
+function handleRetryOptions(): void {
+  emit('retryOptions')
+  requestOptions('open')
+}
+const model = useDualModel(primaryModel, legacyValueModel)
 // User-visible strings, resolved against the application's catalog (ADR-20).
 // An explicit prop still wins; these are the defaults that used to be literals.
 const dzMessages = useComponentMessages('DzTreeSelect')
@@ -99,6 +153,12 @@ const resolvedDisabled = computed(
 const resolvedInvalid = computed(
   () => props.invalid || !!props.error || (fieldContext?.isInvalid.value ?? false),
 )
+
+/**
+ * `required` and `loading` were both declared, defaulted, and read nowhere —
+ * two props whose types told a consumer they worked (renderer contract C3).
+ */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
 
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
 
@@ -577,6 +637,10 @@ const triggerClasses = computed(() =>
           :data-disabled="resolvedDisabled ? '' : undefined"
           :data-invalid="resolvedInvalid ? '' : undefined"
           :data-readonly="readonly ? '' : undefined"
+          :data-required="resolvedRequired ? '' : undefined"
+          :data-loading="loading ? '' : undefined"
+          :aria-required="resolvedRequired || undefined"
+          :aria-busy="loading || undefined"
           style="contain: layout style"
           v-bind="{ ...$attrs, class: undefined }"
           @keydown="handleTriggerKeydown"
@@ -638,8 +702,31 @@ const triggerClasses = computed(() =>
           >
         </div>
 
+        <!--
+
+          One row instead of the list while the host is loading, has nothing, or
+
+          failed (renderer contract C9). `optionsRow` is null whenever the control
+
+          is static, so a control with a plain option array renders none of this.
+
+        -->
+
+        <DzOptionsState
+
+          v-if="optionsRow !== null"
+
+          :state="resolvedOptionsState"
+
+          :message="optionsAnnouncement"
+
+          :can-retry="canRetryOptions"
+
+          @retry="handleRetryOptions"
+        />
+
         <DzTree
-          v-if="displayNodes.length > 0"
+          v-else-if="displayNodes.length > 0"
           :id="panelId"
           :items="displayNodes"
           :size="size"

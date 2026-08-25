@@ -8,6 +8,9 @@
  */
 
 import type {
+  AsyncOptionsEmits,
+  AsyncOptionsProps,
+  AsyncOptionsState,
   BaseAccessibilityProps,
   BaseValidationProps,
   CanonicalSize,
@@ -40,7 +43,7 @@ export interface TransferChangePayload {
 // ---------------------------------------------------------------------------
 
 /** Props for the DzTransfer component */
-export interface DzTransferProps extends BaseAccessibilityProps, BaseValidationProps {
+export interface DzTransferProps extends BaseAccessibilityProps, BaseValidationProps, AsyncOptionsProps {
   /** All available source items */
   source: TransferItem[]
   /** Pre-populated target items (alternative to modelValue) */
@@ -60,7 +63,7 @@ export interface DzTransferProps extends BaseAccessibilityProps, BaseValidationP
 // ---------------------------------------------------------------------------
 
 /** Events emitted by DzTransfer */
-export interface DzTransferEmits {
+export interface DzTransferEmits extends AsyncOptionsEmits {
   /** Selection changed (keys that are in the target list) */
   change: [payload: TransferChangePayload]
   /** Focus gained */
@@ -75,6 +78,20 @@ export interface DzTransferEmits {
 
 /** Slot definitions for DzTransfer */
 export interface DzTransferSlots {
+  /**
+   * The single row shown instead of the list while the option set is loading,
+   * empty, or failed (renderer contract C9).
+   *
+   * Overriding it replaces all three states at once, on purpose: a consumer who
+   * styles "loading" and forgets "error" ships a panel that says nothing when a
+   * load fails.
+   */
+  'options-state'?: (props: {
+    state: AsyncOptionsState
+    message: string
+    error: string | undefined
+    retry: () => void
+  }) => unknown
   /** Custom source list header */
   'source-header'?: () => unknown
   /** Custom target list header */

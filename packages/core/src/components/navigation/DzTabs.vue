@@ -20,7 +20,7 @@ import { TabsRoot } from 'reka-ui'
  * </DzTabs>
  * ```
  */
-import { computed, provide, toRef, useAttrs } from 'vue'
+import { computed, nextTick, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
@@ -63,6 +63,25 @@ const context: DzTabsContext = {
 }
 
 provide(DZ_TABS_KEY, context)
+
+/**
+ * Open (or activate) the item holding `id`, then announce that it is rendered.
+ *
+ * The renderer contract's C-layouts case: a wizard or tabbed form validates on
+ * submit, finds its first invalid field inside a panel that is not currently
+ * shown, and calls `focus()` on an element the browser will not focus. This is
+ * the half a container can own — the caller pairs it with `useRevealAndFocus`.
+ *
+ * `revealed` fires after the panel has rendered, not when the model changed.
+ */
+async function revealItem(id: string): Promise<void> {
+  if (model.value !== id)
+    model.value = id
+  await nextTick()
+  emit('revealed', id)
+}
+
+defineExpose({ revealItem })
 
 const styles = computed(() =>
   tabsVariants({

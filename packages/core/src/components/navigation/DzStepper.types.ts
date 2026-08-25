@@ -49,10 +49,44 @@ export interface DzStepperProps extends BaseAccessibilityProps {
    * Upcoming steps remain non-interactive regardless. Defaults to `false`.
    */
   clickable?: boolean
+  /**
+   * Guard run before the active step changes. Return `false` to block it.
+   *
+   * A wizard cannot advance past a step whose fields are invalid, and the
+   * stepper is the only thing that knows a change is being attempted. It is a
+   * **boolean guard and nothing more**: the stepper is not told what validation
+   * is, only whether the host permits this move. Anything richer would put form
+   * semantics into a navigation primitive, which is the stop condition on this
+   * packet.
+   *
+   * Async because validation usually is. While it is pending the stepper stays
+   * where it is.
+   *
+   * `revealItem()` bypasses the guard on purpose: it is how a form takes the
+   * user *to* an error, and a guard that blocked it would trap them on a step
+   * whose problems are somewhere else.
+   */
+  beforeChange?: (from: number, to: number) => boolean | Promise<boolean>
+  /**
+   * Only allow moving to an adjacent step, or back to a completed one.
+   *
+   * Off by default. A linear wizard is a policy about the flow, not about the
+   * component, so a stepper used as a progress indicator is unaffected.
+   */
+  linear?: boolean
 }
 
 /** Events emitted by DzStepper */
 export interface DzStepperEmits {
+  /** A step was revealed imperatively and its panel has rendered */
+  revealed: [step: number]
+  /**
+   * A step change was refused — by `beforeChange`, or by `linear`.
+   *
+   * Emitted so a host can say *why* nothing happened. A wizard whose Next
+   * button silently does nothing is indistinguishable from a broken one.
+   */
+  blocked: [from: number, to: number, reason: 'guard' | 'linear']
   /** Active step changed */
   change: [step: number]
   /**

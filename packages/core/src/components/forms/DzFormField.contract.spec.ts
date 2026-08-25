@@ -132,7 +132,13 @@ describe('dzFormField — Contract Spec v1', () => {
     })
     const msg = wrapper.findComponent(DzFormMessage)
     expect(msg.text()).toContain('Field is required')
-    expect(msg.attributes('role')).toBe('alert')
+    // `aria-live="polite"` and no `role="alert"`. It carried both, and `alert`
+    // implies assertive and wins — so a standing field error interrupted
+    // whatever the user was being told. A message already on screen when the
+    // control is focused is read as its description; only one that arrives
+    // needs a live region (renderer contract C4).
+    expect(msg.attributes('aria-live')).toBe('polite')
+    expect(msg.attributes('role')).toBeUndefined()
   })
 
   it('dzFormMessage shows slot content when no error', () => {

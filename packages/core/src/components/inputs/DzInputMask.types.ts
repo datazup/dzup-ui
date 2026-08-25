@@ -27,6 +27,26 @@ export interface DzInputMaskProps extends BaseFormControlProps<InputVariant> {
   autoClear?: boolean
   /** Placeholder text shown when the field is empty */
   placeholder?: string
+  /**
+   * Which value `v-model` holds.
+   *
+   * `'masked'` (the default, and the existing behaviour) keeps the displayed
+   * string — `"(555) 123-4567"` — in the model. `'unmasked'` puts the stripped
+   * value there instead: `"5551234567"`.
+   *
+   * Why this exists: a form document persists whatever the model holds, so the
+   * default persists *presentation*. Change the mask from `"(999) 999-9999"` to
+   * `"999-999-9999"` and every stored value is now formatted for a mask that no
+   * longer exists. `update:unmasked` has always emitted the raw value, but a
+   * generic consumer — a schema-driven renderer binding `v-model` through a
+   * registry — has no way to reach a one-way emit. This gives it one without
+   * changing what anybody gets today.
+   *
+   * The displayed value is unaffected either way; only the model changes.
+   *
+   * @default 'masked'
+   */
+  modelMode?: 'masked' | 'unmasked'
 }
 
 // ---------------------------------------------------------------------------

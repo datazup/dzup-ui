@@ -149,3 +149,58 @@ describe('dzInputMask — Contract Spec v1', () => {
     expect(wrapper.find('[role="alert"]').exists()).toBe(false)
   })
 })
+
+describe('dzInputMask — renderer contract C3 states', () => {
+  it('reflects readonly as a presence-only data-readonly', () => {
+    const wrapper = mount(DzInputMask, { props: { ...{ mask: '99/99' }, readonly: true } })
+    expect(wrapper.attributes('data-readonly')).toBe('')
+  })
+
+  it('omits data-readonly entirely when not readonly — never ="false"', () => {
+    const wrapper = mount(DzInputMask, { props: { mask: '99/99' } })
+    expect(wrapper.attributes('data-readonly')).toBeUndefined()
+  })
+})
+
+describe('dzInputMask — renderer contract C1 value (modelMode)', () => {
+  const PHONE = '(999) 999-9999'
+
+  it('defaults to the masked value, unchanged from before modelMode existed', async () => {
+    const wrapper = mount(DzInputMask, { props: { mask: PHONE } })
+    await wrapper.find('input').setValue('5551234567')
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('(555) 123-4567')
+  })
+
+  it('puts the stripped value in the model when asked', async () => {
+    const wrapper = mount(DzInputMask, { props: { mask: PHONE, modelMode: 'unmasked' } })
+    await wrapper.find('input').setValue('5551234567')
+
+    expect(wrapper.emitted('update:modelValue')?.at(-1)?.[0]).toBe('5551234567')
+  })
+
+  it('shows the mask in the field even when the model is unmasked', async () => {
+    const wrapper = mount(DzInputMask, {
+      props: { mask: PHONE, modelMode: 'unmasked', modelValue: '5551234567' },
+    })
+    expect(wrapper.find('input').element.value).toBe('(555) 123-4567')
+  })
+
+  it('still emits update:unmasked in both modes', async () => {
+    for (const modelMode of ['masked', 'unmasked'] as const) {
+      const wrapper = mount(DzInputMask, { props: { mask: PHONE, modelMode } })
+      await wrapper.find('input').setValue('5551234567')
+      expect(wrapper.emitted('update:unmasked')?.at(-1)?.[0]).toBe('5551234567')
+    }
+  })
+
+  it('does not re-normalise its own writes into a loop in unmasked mode', async () => {
+    // The external-change watcher compares against the last value written. It
+    // compared against the masked string, which in this mode is never what the
+    // model holds — so every keystroke looked like an external change.
+    const wrapper = mount(DzInputMask, { props: { mask: PHONE, modelMode: 'unmasked' } })
+    await wrapper.find('input').setValue('555')
+
+    expect((wrapper.emitted('update:modelValue') ?? []).length).toBeLessThanOrEqual(2)
+  })
+})

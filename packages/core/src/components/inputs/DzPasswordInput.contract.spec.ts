@@ -21,3 +21,15 @@ describe('dzPasswordInput — Contract Spec v1', () => {
     expect(wrapper.html()).toContain('custom-class')
   })
 })
+
+describe('dzPasswordInput — renderer contract C3 states', () => {
+  it('reflects readonly as a presence-only data-readonly', () => {
+    const wrapper = mount(DzPasswordInput, { props: { readonly: true } })
+    expect(wrapper.attributes('data-readonly')).toBe('')
+  })
+
+  it('omits data-readonly entirely when not readonly — never ="false"', () => {
+    const wrapper = mount(DzPasswordInput, { props: {} })
+    expect(wrapper.attributes('data-readonly')).toBeUndefined()
+  })
+})

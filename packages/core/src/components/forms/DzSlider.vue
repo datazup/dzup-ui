@@ -141,6 +141,7 @@ defineExpose({
       :aria-describedby="resolvedAriaDescribedby"
       :data-state="resolvedDisabled ? 'disabled' : 'idle'"
       :data-disabled="resolvedDisabled ? '' : undefined"
+      :data-required="resolvedRequired ? '' : undefined"
       :data-invalid="resolvedInvalid ? '' : undefined"
       :data-tone="tone"
       style="contain: layout style"
@@ -153,6 +154,18 @@ defineExpose({
       <SliderTrack :class="styles.track()">
         <SliderRange :class="styles.range()" />
       </SliderTrack>
+      <!--
+        The thumb is deferred to the client, and that is Reka's design.
+
+        On the server it renders `display: none`, at `left: 0%`, with
+        `aria-valuemin`/`aria-valuemax` and no `aria-valuenow` — the value comes
+        from a collection that registers on mount. Setting `aria-valuenow` here
+        does not help: the primitive binds the attribute itself and its binding
+        wins over a fallthrough, and a hidden node announces nothing to
+        assistive technology either way. Recorded rather than worked around, and
+        `form-controls-ssr.spec.ts` asserts the deferral so a future Reka that
+        changes it is noticed rather than assumed.
+      -->
       <SliderThumb
         ref="thumbRef"
         :class="cn(styles.thumb(), resolvedInvalid && 'ring-2 ring-[var(--dz-danger)] border-[var(--dz-danger)]')"

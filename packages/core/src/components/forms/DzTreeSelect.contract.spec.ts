@@ -116,3 +116,16 @@ describe('dzTreeSelect — Contract Spec v1', () => {
     expect(trigger(wrapper).classes()).toContain('my-tree-select')
   })
 })
+
+describe('dzTreeSelect — renderer contract C1 value', () => {
+  it('reads a value bound with the legacy v-model:value', () => {
+    const wrapper = mount(DzTreeSelect, { props: { nodes: mockNodes, value: 'apple' } })
+    expect(wrapper.html()).toBeTruthy()
+    expect(wrapper.text()).toContain('Apple')
+  })
+
+  it('reads a value bound with the default v-model', () => {
+    const wrapper = mount(DzTreeSelect, { props: { nodes: mockNodes, modelValue: 'apple' } })
+    expect(wrapper.text()).toContain('Apple')
+  })
+})

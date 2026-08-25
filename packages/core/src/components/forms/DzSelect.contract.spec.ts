@@ -6,7 +6,7 @@ import type { DzSelectItem } from './DzSelect.types.ts'
  */
 import { expectAnatomy } from '@dzup-ui/testing'
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { anatomy } from './DzSelect.anatomy.ts'
 import DzSelect from './DzSelect.vue'
 
@@ -219,5 +219,101 @@ describe('dzSelect — Contract Spec v1', () => {
 
     expect(withUi.find('[data-part="trigger"]').classes())
       .toEqual(without.find('[data-part="trigger"]').classes())
+  })
+})
+
+describe('dzSelect — renderer contract C9 async options', () => {
+  const ITEMS = [{ label: 'Apple', value: 'apple' }]
+
+  /**
+   * Reka teleports the panel to the body, and an unmounted wrapper does not
+   * always take the teleported node with it — so each case starts from a clean
+   * document. Without this the first three assertions read rows left behind by
+   * the case before them, which is how a passing suite can be measuring nothing.
+   */
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
+  /**
+   * jsdom has no pointer-capture APIs, so Reka's trigger cannot be clicked
+   * open. `defaultOpen` is how the rest of this component's suite does it, and
+   * the portal needs a tick plus a beat before its content is in the document.
+   */
+  async function open(props: Record<string, unknown>) {
+    const wrapper = mount(DzSelect, {
+      props: { items: [], ...props, defaultOpen: true },
+      attachTo: document.body,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(resolve => setTimeout(resolve, 100))
+    return wrapper
+  }
+
+  const stateRow = () => document.querySelector('[data-part="options-state"]')
+
+  it('renders nothing of the seam for a static control', async () => {
+    // The additive guarantee: a select with a plain items array is untouched.
+    const wrapper = await open({ items: ITEMS })
+    expect(document.querySelector('[data-part="options-state"]')).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('shows a loading row while the host is loading', async () => {
+    const wrapper = await open({ optionsState: 'loading' })
+    const row = stateRow()
+    expect(row?.getAttribute('data-options-state')).toBe('loading')
+    expect(row?.textContent).toContain('Loading options')
+    wrapper.unmount()
+  })
+
+  it('shows an error row with the host’s message and a retry', async () => {
+    const wrapper = await open({ optionsState: 'error', optionsError: 'Service is down' })
+    const row = stateRow()
+    expect(row?.textContent).toContain('Service is down')
+    expect(document.querySelector('[data-part="options-retry"]')).not.toBeNull()
+    wrapper.unmount()
+  })
+
+  it('omits retry when the host says it retries itself', async () => {
+    const wrapper = await open({ optionsState: 'error', optionsRetryable: false })
+    expect(document.querySelector('[data-part="options-retry"]')).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('announces the row politely, because it arrives after first paint', async () => {
+    const wrapper = await open({ optionsState: 'loading' })
+    const row = stateRow()
+    expect(row?.getAttribute('role')).toBe('status')
+    expect(row?.getAttribute('aria-live')).toBe('polite')
+    wrapper.unmount()
+  })
+
+  it('emits load-options with an abortable signal when it opens empty', async () => {
+    const wrapper = await open({ optionsState: 'idle' })
+    const requests = wrapper.emitted('loadOptions')
+    expect(requests).toBeTruthy()
+    const request = requests![0]![0] as { reason: string, signal: AbortSignal }
+    expect(request.reason).toBe('open')
+    expect(request.signal.aborted).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('does not ask on open when the host already supplied options', async () => {
+    const wrapper = await open({ optionsState: 'ready', items: ITEMS })
+    expect(wrapper.emitted('loadOptions')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('emits retry-options and a fresh request when retry is pressed', async () => {
+    const wrapper = await open({ optionsState: 'error' })
+    const before = (wrapper.emitted('loadOptions') ?? []).length
+    const retry = document.querySelector('[data-part="options-retry"]') as HTMLButtonElement
+    retry.click()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('retryOptions')).toBeTruthy()
+    expect((wrapper.emitted('loadOptions') ?? []).length).toBe(before + 1)
+    wrapper.unmount()
   })
 })

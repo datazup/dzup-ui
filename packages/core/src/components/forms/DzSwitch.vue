@@ -42,6 +42,13 @@ const attrs = useAttrs()
 const autoId = useId()
 const fieldContext = useFormFieldContext()
 
+/**
+ * `required` reached the Reka primitive (which renders `aria-required`) but
+ * never reached the DOM as the presence-only attribute ADR-19 §4 lists, so no
+ * stylesheet could show a required field as required (renderer contract C3).
+ */
+const resolvedRequired = computed(() => props.required || (fieldContext?.isRequired.value ?? false))
+
 /** Resolved element ID — prop overrides field context, falls back to auto-generated */
 const resolvedId = computed(() => props.id ?? fieldContext?.fieldId ?? autoId)
 
@@ -71,6 +78,7 @@ function handleBlur(event: FocusEvent): void {
   <label
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
     :data-state="model ? 'checked' : 'unchecked'"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
@@ -80,7 +88,7 @@ function handleBlur(event: FocusEvent): void {
       :model-value="model"
       :disabled="resolvedDisabled"
       :name="name"
-      :required="required || fieldContext?.isRequired.value"
+      :required="resolvedRequired"
       :aria-label="ariaLabel"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby ?? fieldContext?.ariaDescribedby.value"

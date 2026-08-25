@@ -21,6 +21,7 @@
  */
 import type { DzInplaceEmits, DzInplaceProps, DzInplaceSlots } from './DzInplace.types.ts'
 import { computed, nextTick, ref, useAttrs, watch } from 'vue'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzInput from '../inputs/DzInput.vue'
 import { inplaceVariants } from './DzInplace.variants.ts'
@@ -33,8 +34,14 @@ defineOptions({
 const active = defineModel<boolean>('active', { default: false })
 
 /** Edited value — `v-model:value` passthrough (ADR-16) */
-const value = defineModel<T>('value')
-
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` keeps working unchanged; `v-model` is the binding every other
+ * control in the catalog takes, and until now it silently did nothing here.
+ */
+const legacyValueModel = defineModel<T>('value')
+const primaryModel = defineModel<T>({ default: undefined })
 const props = withDefaults(defineProps<DzInplaceProps>(), {
   saveOn: 'both',
   disabled: false,
@@ -43,7 +50,10 @@ const props = withDefaults(defineProps<DzInplaceProps>(), {
 })
 
 const emit = defineEmits<DzInplaceEmits<T>>()
+
 const _slots = defineSlots<DzInplaceSlots<T>>()
+
+const value = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
 
@@ -160,6 +170,7 @@ defineExpose({ activate, save, cancel })
 
 <template>
   <div
+    :id="id"
     :class="rootClasses"
     :data-state="active ? 'edit' : 'display'"
     :data-disabled="disabled ? '' : undefined"

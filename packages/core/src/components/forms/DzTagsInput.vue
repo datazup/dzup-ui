@@ -26,6 +26,7 @@ import type {
  * ```
  */
 import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { useFormFieldContext } from '../../composables/useFormField/index.ts'
 import { cn } from '../../utilities/cn.ts'
 import DzChip from '../data/DzChip.vue'
@@ -35,8 +36,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const model = defineModel<string[]>('value', { default: () => [] })
-
+/**
+ * Both `v-model` and `v-model:value` (renderer contract C1).
+ *
+ * `v-model:value` keeps working unchanged; `v-model` is the binding every other
+ * control in the catalog takes, and until now it silently did nothing here.
+ */
+const legacyValueModel = defineModel<string[]>('value', { default: () => [] })
+const primaryModel = defineModel<string[] | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzTagsInputProps>(), {
   placeholder: undefined,
   max: undefined,
@@ -64,7 +71,10 @@ const props = withDefaults(defineProps<DzTagsInputProps>(), {
 })
 
 const emit = defineEmits<DzTagsInputEmits>()
+
 defineSlots<DzTagsInputSlots>()
+
+const model = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
 const autoId = useId()
@@ -315,6 +325,10 @@ const rootClasses = computed(() =>
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
     :data-invalid="resolvedInvalid ? '' : undefined"
+    :data-required="resolvedRequired ? '' : undefined"
+    :data-readonly="readonly ? '' : undefined"
+    :data-loading="loading ? '' : undefined"
+    :aria-busy="loading || undefined"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >

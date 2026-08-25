@@ -27,7 +27,11 @@ export const switchVariants = tv({
       'block rounded-full',
       'bg-[var(--dz-background)]',
       'shadow-[var(--dz-shadow-sm)]',
-      'transition-transform',
+      // The thumb is the one part of this component that actually moves, so it
+      // is the one that WCAG 2.3.3 is about. Under `prefers-reduced-motion` the
+      // switch still changes state — it just arrives there instead of sliding
+      // (renderer contract C7).
+      'transition-transform motion-reduce:transition-none',
     ].join(' '),
     label: [
       'text-[var(--dz-foreground)]',
