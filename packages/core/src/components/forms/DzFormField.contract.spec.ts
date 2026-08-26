@@ -1,3 +1,5 @@
+import type { VNode } from 'vue'
+import type { DzFormFieldSlots } from './DzFormField.types.ts'
 import { mount } from '@vue/test-utils'
 /**
  * DzFormField — Contract Spec v1 conformance tests.
@@ -5,7 +7,7 @@ import { mount } from '@vue/test-utils'
  * Verifies that the compound form field wrapper provides correct
  * context to sub-parts (Label, Description, Message).
  */
-import { describe, expect, it } from 'vitest'
+import { describe, expect, expectTypeOf, it } from 'vitest'
 import { defineComponent, h, inject } from 'vue'
 import { DZ_FORM_FIELD_KEY } from '../../composables/useFormField/index.ts'
 import DzFormDescription from './DzFormDescription.vue'
@@ -14,6 +16,10 @@ import DzFormLabel from './DzFormLabel.vue'
 import DzFormMessage from './DzFormMessage.vue'
 
 describe('dzFormField — Contract Spec v1', () => {
+  it('types the default slot as renderable Vue nodes', () => {
+    expectTypeOf<ReturnType<DzFormFieldSlots['default']>>().toEqualTypeOf<VNode[]>()
+  })
+
   // ── Context provision ──
 
   it('provides form field context to children', () => {
