@@ -7,6 +7,8 @@
  * @module @dzup-ui/core/components/forms/DzFormField
  */
 
+import type { VNode } from 'vue'
+
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
@@ -32,5 +34,5 @@ export interface DzFormFieldProps {
 /** Slot definitions for DzFormField */
 export interface DzFormFieldSlots {
   /** Child content (label, control, description, message) */
-  default: () => unknown
+  default: () => VNode[]
 }
