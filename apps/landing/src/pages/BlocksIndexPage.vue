@@ -10,11 +10,12 @@ import BlockCard from '../components/blocks/BlockCard.vue'
 import BlockCategoryNav from '../components/blocks/BlockCategoryNav.vue'
 import BlockCommandPalette from '../components/blocks/BlockCommandPalette.vue'
 import BlockSearchBar from '../components/blocks/BlockSearchBar.vue'
+import BlocksHeroField from '../components/blocks/BlocksHeroField.vue'
 import BlockThemeToolbar from '../components/blocks/BlockThemeToolbar.vue'
 import LazyBlockPreview from '../components/blocks/LazyBlockPreview.vue'
 import Section from '../components/Section.vue'
 import { useBlockSearch } from '../composables/useBlockSearch.ts'
-import { vReveal } from '../motion/index.ts'
+import { DzCountUp, vMagnetic, vReveal } from '../motion/index.ts'
 
 /**
  * /blocks — the Blocks ecosystem index (docs/blocks.md §3.1, §3.2, §4).
@@ -62,6 +63,18 @@ const sections = computed<CategorySection[]>(() =>
   ),
 )
 
+/**
+ * Hero stat figures (TASK-BV2-02) — every number DERIVED from the registry, per
+ * the published-counts rule: blocks is the catalog length, categories is what
+ * the page actually shows (non-empty groups), components is the distinct `Dz*`
+ * names used across all blocks. Nothing here can drift from the catalog.
+ */
+const heroStats = computed(() => ({
+  blocks: BLOCKS.length,
+  categories: sections.value.length,
+  components: new Set(BLOCKS.flatMap(block => block.components)).size,
+}))
+
 // --- Results mode (search / tag filter) ------------------------------------
 //
 // An *additional* browse mode layered over the deck (docs/blocks.md §3.1): when a
@@ -108,6 +121,31 @@ function showBlocksUsing(name: string): void {
       block: 'start',
     })
   })
+}
+
+/**
+ * Suggested escape hatches for a dead-end filter (TASK-BV2-07): the catalog's
+ * three most-used tags (frequency DERIVED from the registry) not already
+ * active. Applying one REPLACES the failing filter set — adding to it would
+ * keep the result empty under the AND semantics, which helps nobody.
+ */
+const suggestedTags = computed(() => {
+  const freq = new Map<string, number>()
+  for (const block of BLOCKS) {
+    for (const tag of block.tags) freq.set(tag, (freq.get(tag) ?? 0) + 1)
+  }
+  return [...freq.entries()]
+    .filter(([tag]) => !search.activeTags.value.includes(tag))
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 3)
+    .map(([tag]) => tag)
+})
+
+/** Swap the dead-end filters for one suggested tag (stays in results mode). */
+function applySuggestedTag(tag: string): void {
+  search.query.value = ''
+  search.activeComponent.value = null
+  search.activeTags.value = [tag]
 }
 
 /** Live, count-aware lede for the results section heading. */
@@ -169,12 +207,35 @@ const accentStyle = computed(() =>
     : undefined,
 )
 
+/**
+ * Page-level ambient accent (TASK-BV2-01): the active category's hue, promoted
+ * from chips/pills to atmosphere. Set as `--bv2-accent` on the page root so the
+ * fixed `.bv2-atmosphere` washes AND the hero eyebrow inherit it; the `@property`
+ * registration (unscoped style block below) makes the hue itself interpolable,
+ * so switching categories cross-fades the room instead of snapping it. Results
+ * mode mixes categories, so it settles back to the neutral brand primary.
+ */
+const atmosphereAccent = computed(() =>
+  !isFiltering.value && activeSection.value
+    ? `var(--dz-colors-${activeSection.value.accent}-500)`
+    : 'var(--dz-primary)',
+)
+
 /** Index of the active category among the visible sections. */
 const activeIndex = computed(() => sections.value.findIndex(s => s.id === active.value))
 
 /** Adjacent groups for the pager (undefined at the ends). */
 const prevSection = computed(() => sections.value[activeIndex.value - 1])
 const nextSection = computed(() => sections.value[activeIndex.value + 1])
+
+/**
+ * Destination hue for each pager button (TASK-BV2-04): hovering "Next" previews
+ * the color of the aisle you are about to enter. Exposed as `--pager-accent`
+ * and consumed by the hover rules below.
+ */
+function pagerAccentStyle(section: CategorySection | undefined) {
+  return section ? { '--pager-accent': `var(--dz-colors-${section.accent}-500)` } : undefined
+}
 
 /** Slide direction for the deck transition, set just before `active` changes. */
 const direction = ref<'fwd' | 'back'>('fwd')
@@ -431,10 +492,21 @@ onMounted(async () => {
 <template>
   <!-- Single root element: this page is rendered inside App.vue's <Transition>,
        which can only animate a component with one root node. -->
-  <div class="blocks-page">
+  <div class="blocks-page" :style="{ '--bv2-accent': atmosphereAccent }">
+    <!-- Ambient atmosphere (TASK-BV2-01): two fixed accent washes lit by the
+         active category. Purely decorative — z-index -1 inside the page's own
+         isolated stacking context, so it paints above the shell background but
+         under every piece of content, and never intercepts the pointer. -->
+    <div class="bv2-atmosphere" aria-hidden="true" />
+
     <!-- Hero intro: the page's single H1. -->
     <Section heading-id="blocks-title">
       <div class="blocks-hero">
+        <!-- Depth field (TASK-BV2-02): floating token-built block postcards on a
+             pointer-parallax stage. Decoration only — aria-hidden, inert, mounts
+             post-paint, and steps aside entirely on narrow viewports. -->
+        <BlocksHeroField />
+
         <span class="lp-eyebrow">Ecosystem</span>
         <DzHeading
           id="blocks-title"
@@ -453,6 +525,40 @@ onMounted(async () => {
 
         <!-- ⌘K navigator: jump to any block, category or component. -->
         <BlockCommandPalette class="blocks-hero-search" @navigate="onPaletteNavigate" />
+
+        <!-- Counted-up catalog truth (TASK-BV2-02): every figure derived from
+             the registry (heroStats), rolling in-view via DzCountUp — which
+             renders the final number immediately under reduced motion. -->
+        <dl class="blocks-hero-stats" aria-label="Catalog size">
+          <div class="blocks-hero-stat">
+            <dt class="blocks-hero-stat-label">
+              Blocks
+            </dt>
+            <dd class="blocks-hero-stat-value">
+              <DzCountUp :value="heroStats.blocks" size="lg" aria-label="blocks in the catalog" />
+            </dd>
+          </div>
+          <div class="blocks-hero-stat">
+            <dt class="blocks-hero-stat-label">
+              Categories
+            </dt>
+            <dd class="blocks-hero-stat-value">
+              <DzCountUp :value="heroStats.categories" size="lg" aria-label="categories" />
+            </dd>
+          </div>
+          <div class="blocks-hero-stat">
+            <dt class="blocks-hero-stat-label">
+              Components used
+            </dt>
+            <dd class="blocks-hero-stat-value">
+              <DzCountUp
+                :value="heroStats.components"
+                size="lg"
+                aria-label="distinct core components used"
+              />
+            </dd>
+          </div>
+        </dl>
       </div>
     </Section>
 
@@ -475,11 +581,13 @@ onMounted(async () => {
           align="left"
         >
           <template v-if="results.length">
-            <ul class="block-grid">
+            <!-- FLIP choreography (TASK-BV2-07): survivors glide to their new
+                 grid slots, newcomers fade/scale in, leavers fade out. The
+                 TransitionGroup owns entry here — v-reveal would double it. -->
+            <TransitionGroup name="results-flip" tag="ul" class="block-grid block-grid--results">
               <li
-                v-for="(block, i) in results"
+                v-for="block in results"
                 :key="block.id"
-                v-reveal="i * 45"
                 :style="itemAccentStyle(block)"
               >
                 <BlockCard
@@ -488,7 +596,7 @@ onMounted(async () => {
                   @open-block="openBlock"
                 />
               </li>
-            </ul>
+            </TransitionGroup>
 
             <!-- Reuse the same lazy preview mounting as the deck, flat. -->
             <div class="block-previews">
@@ -502,6 +610,36 @@ onMounted(async () => {
               </div>
             </div>
           </template>
+
+          <!-- Dead end, designed (TASK-BV2-07): a ghost postcard stack, the one
+               true clear path (the composable's clearAll — same code the search
+               bar's Clear runs), and three derived popular tags as ramps back in. -->
+          <div v-else class="blocks-empty">
+            <div class="blocks-empty-art" aria-hidden="true">
+              <span class="blocks-empty-card" />
+              <span class="blocks-empty-card" />
+              <span class="blocks-empty-card" />
+            </div>
+            <DzText tone="muted" class="blocks-empty-copy">
+              Nothing on this shelf. Try one of the catalog's most-used tags, or
+              clear the filters to browse by category.
+            </DzText>
+            <div class="blocks-empty-actions">
+              <DzButton variant="outline" tone="neutral" @click="search.clearAll()">
+                Clear filters
+              </DzButton>
+              <button
+                v-for="tag in suggestedTags"
+                :key="tag"
+                type="button"
+                class="blocks-empty-tag"
+                :aria-label="`Show blocks tagged ${tag}`"
+                @click="applySuggestedTag(tag)"
+              >
+                {{ tag }}
+              </button>
+            </div>
+          </div>
         </Section>
       </div>
 
@@ -565,10 +703,12 @@ onMounted(async () => {
           <!-- Pager: flip to the previous / next group like turning a page. -->
           <nav v-if="sections.length > 1" class="blocks-pager" aria-label="Browse block groups">
             <DzButton
+              v-magnetic="{ strength: 0.25, radius: 8 }"
               variant="outline"
               tone="neutral"
               :disabled="!prevSection"
               class="blocks-pager-btn"
+              :style="pagerAccentStyle(prevSection)"
               @click="prevSection && goTo(prevSection.id)"
             >
               <template #prefix>
@@ -579,14 +719,21 @@ onMounted(async () => {
             </DzButton>
 
             <DzText size="sm" tone="muted" class="blocks-pager-count">
-              {{ activeIndex + 1 }} / {{ sections.length }}
+              <!-- The position ticks with a short roll (out-in, so the old digit
+                   clears first); reduced motion collapses it to an instant swap. -->
+              <Transition name="pager-count" mode="out-in">
+                <span :key="activeIndex" class="blocks-pager-count-num">{{ activeIndex + 1 }}</span>
+              </Transition>
+              / {{ sections.length }}
             </DzText>
 
             <DzButton
+              v-magnetic="{ strength: 0.25, radius: 8 }"
               variant="outline"
               tone="neutral"
               :disabled="!nextSection"
               class="blocks-pager-btn blocks-pager-btn--next"
+              :style="pagerAccentStyle(nextSection)"
               @click="nextSection && goTo(nextSection.id)"
             >
               <template #suffix>
@@ -607,13 +754,144 @@ onMounted(async () => {
   </div>
 </template>
 
+<style>
+/* TASK-BV2-01 — register the ambient accent as a real <color> so the browser can
+   interpolate it: switching categories then cross-fades the atmosphere's hue
+   instead of snapping it. UNSCOPED on purpose: `@property` is a document-level
+   registration (same precedent as App.vue's `::view-transition-*` block); the
+   rule is harmless if this page never mounts. Browsers without @property simply
+   snap the hue — behaviorally identical. */
+@property --bv2-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+</style>
+
 <style scoped>
+/* The page owns an isolated stacking context so `.bv2-atmosphere` (z-index -1)
+   paints above `.landing-shell`'s opaque background (App.vue) yet below every
+   child of the page — without isolation a negative z-index child would vanish
+   behind the shell's background paint. */
+.blocks-page {
+  isolation: isolate;
+  /* The hue itself is animated (via the @property registration above); every
+     wash/tint reading `--bv2-accent` follows the interpolated value. */
+  transition: --bv2-accent 600ms var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+/* Two large, whisper-quiet radial washes in the active category's hue: one high
+   behind the hero, one at the trailing edge mid-page. Fixed so the room stays
+   lit while scrolling; pointer-events none so it can never swallow a click. */
+.bv2-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      52rem 36rem at 12% -6%,
+      color-mix(in oklch, var(--bv2-accent, var(--dz-primary, #0766ee)) 9%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      44rem 32rem at 104% 44%,
+      color-mix(in oklch, var(--bv2-accent, var(--dz-primary, #0766ee)) 6%, transparent),
+      transparent 72%
+    );
+}
+
+/* Dark rooms need dimmer lamps: the same washes at a lower mix so the accent
+   reads as ambience, not a spotlight, on the dark background. */
+:root[data-theme='dark'] .bv2-atmosphere {
+  background:
+    radial-gradient(
+      52rem 36rem at 12% -6%,
+      color-mix(in oklch, var(--bv2-accent, var(--dz-primary, #0766ee)) 6%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      44rem 32rem at 104% 44%,
+      color-mix(in oklch, var(--bv2-accent, var(--dz-primary, #0766ee)) 4%, transparent),
+      transparent 72%
+    );
+}
+
+/* The eyebrow pill takes the room's tint too — same border/background recipe as
+   the global `.lp-eyebrow`, with the ambient accent standing in for the primary,
+   and the label mixed toward the foreground exactly like the chip/link treatment
+   (BlockCard) so it stays legible in both themes. */
+.blocks-hero .lp-eyebrow {
+  border-color: color-mix(in oklch, var(--bv2-accent, var(--dz-primary, #0766ee)) 22%, transparent);
+  background: color-mix(in oklch, var(--bv2-accent, var(--dz-primary, #0766ee)) 9%, transparent);
+  color: color-mix(
+    in oklch,
+    var(--bv2-accent, var(--dz-primary, #0766ee)) 62%,
+    var(--dz-foreground, #1b1d1f)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blocks-page {
+    transition: none;
+  }
+}
+
 .blocks-hero {
+  /* Anchors the BV2-02 depth field; the copy sits above it (z-index below). */
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 16px;
+}
+
+/* Everything except the depth field reads above it. */
+.blocks-hero > :not(.bv2-hero-field) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Derived catalog stats (TASK-BV2-02). */
+.blocks-hero-stats {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 10px 0 0;
+}
+
+.blocks-hero-stat {
+  /* Number above its label; DOM order stays dt→dd for the definition list. */
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 2px;
+  padding: 0 26px;
+}
+
+.blocks-hero-stat + .blocks-hero-stat {
+  border-inline-start: 1px solid var(--lp-hairline);
+}
+
+.blocks-hero-stat-label {
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dz-muted-foreground, #585b60);
+}
+
+.blocks-hero-stat-value {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 560px) {
+  .blocks-hero-stat {
+    padding: 0 14px;
+  }
 }
 
 .blocks-hero-title {
@@ -636,6 +914,9 @@ onMounted(async () => {
   /* Clip the in/out slide so a transitioning panel never spills sideways and
      spawns a horizontal scrollbar. */
   overflow-x: clip;
+  /* TASK-BV2-04: the stage the page-turn happens on — perspective makes the
+     panels' rotateY/translateZ read as depth instead of skew. */
+  perspective: var(--dz-anim-depth-perspective, 1200px);
 }
 
 /* ---- Mode switch (deck ⇄ results): a plain cross-fade, no overlap. ---------
@@ -700,6 +981,39 @@ onMounted(async () => {
   font-weight: 600;
 }
 
+.blocks-pager-count-num {
+  display: inline-block;
+}
+
+/* The position digit rolls: old slides up and out, new rises in (out-in). */
+.pager-count-enter-active,
+.pager-count-leave-active {
+  transition:
+    opacity 120ms var(--dz-ease-out, ease-out),
+    transform 120ms var(--dz-ease-out, ease-out);
+}
+
+.pager-count-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.pager-count-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* Hovering a pager button previews the DESTINATION aisle's hue (TASK-BV2-04):
+   border and destination name tint toward `--pager-accent`, which the template
+   sets per button from the adjacent section's accent. */
+.blocks-pager-btn:not(:disabled):hover {
+  border-color: color-mix(in oklch, var(--pager-accent, var(--dz-primary, #0766ee)) 55%, transparent);
+}
+
+.blocks-pager-btn:not(:disabled):hover .blocks-pager-name {
+  color: color-mix(in oklch, var(--pager-accent, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground, #1b1d1f));
+}
+
 .block-grid {
   list-style: none;
   margin: 0 0 clamp(40px, 6vw, 72px);
@@ -720,16 +1034,122 @@ onMounted(async () => {
   min-width: 0;
 }
 
+/* ---- Results FLIP (TASK-BV2-07). Move/enter/leave are transform+opacity only.
+   A leaving item goes absolute so it stops holding a grid cell and the
+   survivors' move transitions can engage. */
+.results-flip-move {
+  transition: transform var(--dz-duration-slow, 320ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.results-flip-enter-active {
+  transition:
+    opacity var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
+    transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+}
+
+.results-flip-leave-active {
+  position: absolute;
+  transition: opacity var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
+}
+
+.results-flip-enter-from {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.results-flip-leave-to {
+  opacity: 0;
+}
+
+/* ---- Empty state (TASK-BV2-07). */
+.blocks-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  padding: clamp(32px, 6vw, 64px) 24px;
+}
+
+/* Three ghost postcards fanned into a stack — the hero field's visual language
+   at rest, in the neutral primary (results mix categories). */
+.blocks-empty-art {
+  position: relative;
+  width: 132px;
+  height: 96px;
+}
+
+.blocks-empty-card {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in oklch, var(--dz-primary, #0766ee) 30%, var(--lp-hairline, #d5d7d9));
+  border-radius: var(--dz-radius-lg, 0.625rem);
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 6%, var(--dz-surface, #ffffff));
+}
+
+.blocks-empty-card:nth-child(1) {
+  transform: rotate(-7deg) translateX(-12px);
+  opacity: 0.45;
+}
+
+.blocks-empty-card:nth-child(2) {
+  transform: rotate(5deg) translateX(12px);
+  opacity: 0.65;
+}
+
+.blocks-empty-card:nth-child(3) {
+  box-shadow: var(--dz-shadow-sm, 0 2px 8px rgb(0 0 0 / 0.06));
+}
+
+.blocks-empty-copy {
+  max-width: 44ch;
+  margin: 0;
+}
+
+.blocks-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.blocks-empty-tag {
+  font-family: inherit;
+  font-size: var(--dz-text-sm, 0.875rem);
+  font-weight: 600;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--dz-radius-full, 9999px);
+  cursor: pointer;
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 12%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--dz-primary, #0766ee) 62%, var(--dz-foreground, #1b1d1f));
+  transition: background-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
+}
+
+.blocks-empty-tag:hover {
+  background: color-mix(in oklch, var(--dz-primary, #0766ee) 20%, var(--dz-surface, #ffffff));
+}
+
+.blocks-empty-tag:focus-visible {
+  outline: 2px solid var(--dz-ring, #0766ee);
+  outline-offset: 2px;
+}
+
 .block-previews {
   display: flex;
   flex-direction: column;
   gap: clamp(32px, 5vw, 56px);
 }
 
-/* ---- Deck transition: a directional slide + fade with a hint of depth. ----
+/* ---- Deck transition: a shallow 3D page-turn (TASK-BV2-04). ---------------
    mode="out-in" means no overlap, so plain transforms suffice. Forward (next
-   group) slides the old panel out left and the new one in from the right;
-   backward mirrors it. */
+   group) turns the old panel out to the left and the new one in from the
+   right — translateX carries the travel, a small rotateY + translateZ dip
+   (under the deck's perspective) makes it read as a card turning over a
+   surface rather than a flat slide; backward mirrors it. Transform-only, so
+   the panel's layout box (and the skeleton height parity below it) is
+   untouched. */
 .deck-fwd-enter-active,
 .deck-fwd-leave-active,
 .deck-back-enter-active,
@@ -740,21 +1160,32 @@ onMounted(async () => {
   will-change: opacity, transform;
 }
 
+/* The turn pivots near the edge the panel enters/leaves through. */
+.deck-fwd-enter-active,
+.deck-back-leave-active {
+  transform-origin: 80% center;
+}
+
+.deck-back-enter-active,
+.deck-fwd-leave-active {
+  transform-origin: 20% center;
+}
+
 .deck-fwd-enter-from {
   opacity: 0;
-  transform: translateX(36px) scale(0.99);
+  transform: translateX(48px) rotateY(-4deg) translateZ(-24px);
 }
 .deck-fwd-leave-to {
   opacity: 0;
-  transform: translateX(-36px) scale(0.99);
+  transform: translateX(-48px) rotateY(4deg) translateZ(-24px);
 }
 .deck-back-enter-from {
   opacity: 0;
-  transform: translateX(-36px) scale(0.99);
+  transform: translateX(-48px) rotateY(4deg) translateZ(-24px);
 }
 .deck-back-leave-to {
   opacity: 0;
-  transform: translateX(36px) scale(0.99);
+  transform: translateX(48px) rotateY(-4deg) translateZ(-24px);
 }
 
 @media (max-width: 900px) {
@@ -789,6 +1220,30 @@ onMounted(async () => {
   .deck-back-enter-from,
   .deck-back-leave-to {
     transform: none;
+  }
+
+  .pager-count-enter-active,
+  .pager-count-leave-active {
+    transition-duration: 0.01ms;
+  }
+
+  .pager-count-enter-from,
+  .pager-count-leave-to {
+    transform: none;
+  }
+
+  .results-flip-move,
+  .results-flip-enter-active,
+  .results-flip-leave-active {
+    transition-duration: 0.01ms;
+  }
+
+  .results-flip-enter-from {
+    transform: none;
+  }
+
+  .blocks-empty-tag {
+    transition: none;
   }
 }
 </style>

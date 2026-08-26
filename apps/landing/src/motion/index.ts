@@ -99,6 +99,12 @@ export { default as DzNativePopover } from './components/DzNativePopover.vue'
 // number shown instantly, no roll; tabular-nums avoids any width jump.
 export { default as DzOdometer } from './components/DzOdometer.vue'
 export { default as DzOrbit } from './components/DzOrbit.vue'
+// Depth & parallax (docs/landing-v2.md TASK-LV2-02) — DzParallax maps a
+// pointer-driven -1..1 input (useParallax) onto decorative layers via CSS
+// custom properties; the `.dz-depth-stage` / `.dz-parallax-layer` utilities in
+// tokens.css carry the actual transforms. Decoration only: the host renders
+// aria-hidden and must never contain interactive or informative children.
+export { default as DzParallax } from './components/DzParallax.vue'
 // Backgrounds v2 (docs/animations.md §5.4, effects 42–45 — Task N6): meteors (42)
 // and progressive blur (44) are the `.dz-meteors` / `.dz-progressive-blur` CSS
 // utilities in tokens.css; the particle field (43) is a self-pausing canvas and
@@ -155,8 +161,10 @@ export type { EnterCustomProperty, EnterStyle, EnterStyleOptions } from './useEn
 export { useInView } from './useInView.ts'
 
 export type { UseInViewOptions } from './useInView.ts'
+export { useParallax } from './useParallax.ts'
+export type { ParallaxHandle, ParallaxOptions } from './useParallax.ts'
 export { provideMotionPreference, useReducedMotion } from './useReducedMotion.ts'
-export { useScrollProgress } from './useScrollProgress.ts'
+export { useDocumentScrollProgress, useScrollProgress } from './useScrollProgress.ts'
 
 export { useSticky } from './useSticky.ts'
 export { useTextDecode } from './useTextDecode.ts'

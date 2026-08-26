@@ -73,7 +73,7 @@ const cards = [
 .card__chip {
   position: absolute;
   top: var(--dz-spacing-4, 1rem);
-  right: var(--dz-spacing-4, 1rem);
+  inset-inline-end: var(--dz-spacing-4, 1rem);
   width: 28px;
   height: 28px;
   border-radius: var(--dz-radius-full, 9999px);

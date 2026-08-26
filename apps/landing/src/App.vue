@@ -259,7 +259,7 @@ router.afterEach((to, from, failure) => {
 /* Visible-on-focus skip link for keyboard users (spec §8). */
 .skip-link {
   position: absolute;
-  left: 12px;
+  inset-inline-start: 12px;
   top: -48px;
   z-index: 100;
   padding: 8px 14px;

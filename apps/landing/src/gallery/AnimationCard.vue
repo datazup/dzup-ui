@@ -426,7 +426,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 .replay-btn {
   position: absolute;
   top: 10px;
-  right: 10px;
+  inset-inline-end: 10px;
   z-index: 3;
   opacity: 0;
   transform: translateY(-4px);
@@ -593,7 +593,7 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 }
 
 .built-label {
-  margin-right: 2px;
+  margin-inline-end: 2px;
 }
 
 .code {

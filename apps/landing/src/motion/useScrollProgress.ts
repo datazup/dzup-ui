@@ -74,3 +74,56 @@ export function useScrollProgress(elRef: Ref<HTMLElement | null | undefined>): R
 
   return progress
 }
+
+/**
+ * useDocumentScrollProgress — the PAGE's reading progress as a 0->1 value
+ * (docs/landing-v2.md TASK-LV2-09). The document-level sibling of
+ * {@link useScrollProgress}: `scrollY / (scrollHeight - viewport)`, clamped,
+ * rAF-throttled over passive scroll/resize listeners, SSR-safe, leak-free.
+ * Drives the home page's 2px reading bar; a page that fits the viewport
+ * reports 1 (there is nothing left to read, not nothing read).
+ */
+export function useDocumentScrollProgress(): Ref<number> {
+  const progress = ref(0)
+  let frame = 0
+
+  function compute(): void {
+    frame = 0
+    if (typeof window === 'undefined')
+      return
+    const doc = document.documentElement
+    const total = doc.scrollHeight - window.innerHeight
+    if (total <= 0) {
+      progress.value = 1
+      return
+    }
+    const traveled = window.scrollY / total
+    progress.value = traveled < 0 ? 0 : traveled > 1 ? 1 : traveled
+  }
+
+  function onScroll(): void {
+    if (frame)
+      return
+    frame = window.requestAnimationFrame(compute)
+  }
+
+  onMounted(() => {
+    if (typeof window === 'undefined')
+      return
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    compute()
+  })
+
+  onBeforeUnmount(() => {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame)
+        window.cancelAnimationFrame(frame)
+    }
+    frame = 0
+  })
+
+  return progress
+}

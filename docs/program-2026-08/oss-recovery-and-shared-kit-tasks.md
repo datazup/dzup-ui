@@ -31,7 +31,7 @@ reports the recovery as locally green on the exact source you are editing.
 
 ## 🔴 P0 — Recovery freeze
 
-### [ ] TASK-REC-01 — Verify and freeze the OSS CI recovery state; request promotion authority
+### [x] TASK-REC-01 — Verify and freeze the OSS CI recovery state; request promotion authority
 
 _Gap: the 08-10 handoff left the recovery on `fix/blocks-gallery-ui-ux` (local
 `fce7eef`, three commits ahead of `origin/…` `ff91966`; remote `main` `1f17c52`
@@ -102,7 +102,7 @@ Requested authority: commit group A (recovery files …) → push → monitor su
 
 ## 🟠 P1 — Shared-kit lane
 
-### [ ] TASK-SK-1 — Explicit shared-kit consumer helper for merged-source vs externalized modes
+### [x] TASK-SK-1 — Explicit shared-kit consumer helper for merged-source vs externalized modes
 
 _Gap: the 08-10 handoff reserved SK-1 as "the explicit shared-kit consumer
 helper for merged-source versus externalized modes" and ordered it first after
@@ -153,7 +153,7 @@ happened._
 
 ---
 
-### [ ] TASK-SK-2 — Rank and migrate overlay consumers onto the shared-kit helper; keep overlays testable
+### [x] TASK-SK-2 — Rank and migrate overlay consumers onto the shared-kit helper; keep overlays testable
 
 _Gap: SK-2 is the second reserved packet ("rank SK-2 overlay consumers"). The
 Reka dedupe / overlay testability plan
@@ -192,9 +192,43 @@ resolution produces._
 <stop_conditions>SK-1 not merged locally · an external app's owner has not accepted the patch proposal · a fix would require forking an overlay component.</stop_conditions>
 ```
 
+#### Ranked overlay-consumer inventory (2026-08-25)
+
+Measured on `ui/dzup-ui` `main` @ `e986952` plus the TASK-SK-1 working tree.
+"Overlay families" counts distinct portal-owning families imported
+(`DzDialog`, `DzSheet`, `DzPopover`, `DzTooltip`, `DzDropdownMenu`,
+`DzContextMenu`, `DzToast`, `DzConfirmDialog`, `DzCommandPalette`,
+`DzPopconfirm`, `DzTour`, `DzLightbox`, `DzSelect`, `DzMultiSelect`,
+`DzCombobox`, `DzCascader`, `DzColorPicker`, `DzTimePicker`), not import sites.
+
+| Rank | App | Overlay families | Files | Alias mechanism (before → after) | Duplicate-copy risk |
+|---:|---|---:|---:|---|---|
+| 1 | `apps/landing` | 18 | 69 | `workspaceAliases`, no `dedupe` → **helper, `merged-source`, `dedupe` set** | **Was high.** Public site; largest overlay surface in the repo; nothing pinned `reka-ui`. |
+| 2 | `apps/storybook` | 18 | 15 | `workspaceAliases` in `main.ts` *and* `vitest.config.ts`, no `dedupe` → **helper, `merged-source`, `dedupe` set in both** | **Was high.** Public docs site *and* the component test surface (1,371 stories, three engines) — a duplicate copy here corrupts the evidence everything else relies on. |
+| 3 | `workspace-share/apps/website-app` | 1 (`DzSelect`) | 1 | `@datazup/dzup-theme`'s `dzupAliases` — **still hand-rolled, still no `dedupe`** | **Unmitigated.** Another repository, resolving library *source* with no mode and no dedupe. Low surface, but it is the one consumer still exposed. |
+| 4 | `apps/sandbox` | 14 | 7 | hand-rolled 7-entry map, no `dedupe` → **helper, `merged-source`, `dedupe` set** | **Was moderate, now low.** Retired tree (CI: "apps/sandbox was retired", TASK-FREE-16); no root script, no CI build, no e2e config. |
+
+Ranked by blast radius = overlay families × reach of the consumer, with the
+retired app demoted below the external one despite a larger surface.
+
+**The risk is not hypothetical.** `yarn why` on this tree reports:
+
+| Package | Copies installed | Where |
+|---|---|---|
+| `vue` | `3.5.31` **and** `3.5.39` | `3.5.39` arrives via `@floating-ui/vue`, a **direct dependency of `@dzup-ui/core`** |
+| `reka-ui` | `2.9.2` under **two** `@dzup-ui/core` peer contexts | `[5b90a]` and `[66a70]` |
+| `vite` | `6.4.1` **and** `7.3.5` | all three apps on 6; root and every package on 7 |
+| `@vitejs/plugin-vue` | `5.2.4` **and** `6.0.7` | same split |
+
+Before TASK-SK-1, **not one consumer in this repository set `resolve.dedupe`**.
+The 2026-08-08 plan measured that `reka-ui` in `dedupe` is the fix and that
+deduping `vue` alone is not — pin the single Reka copy and the single Vue
+follows, not the reverse.
+
+
 ---
 
-### [ ] TASK-APP-1 — Real-component rollout: replace hand-rolled UI in apps with @dzup-ui/core components
+### [x] TASK-APP-1 — Real-component rollout: replace hand-rolled UI in apps with @dzup-ui/core components
 
 _Gap: APP-1 is the third reserved packet. Landing sections, sandbox pages, and
 Storybook doc blocks still hand-roll buttons, cards, tabs, and form rows with
@@ -235,7 +269,7 @@ regress independently._
 
 ## 🟢 P2 — Separately gated
 
-### [ ] TASK-AR-2 — Arabic vendor custody gate: evidence file and RTL verification matrix before any vendoring
+### [x] TASK-AR-2 — Arabic vendor custody gate: evidence file and RTL verification matrix before any vendoring
 
 _Gap: AR-2 ("Arabic vendor custody") is listed last in the 08-10 lane and is
 "separately gated by Arabic vendor-custody evidence". The ThemeRecipe ledger

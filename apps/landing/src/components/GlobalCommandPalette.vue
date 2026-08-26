@@ -126,7 +126,7 @@ function kindOf(item: CommandItem): SearchKind {
 /* The core item row is `display:flex; align-items:center`; these fill it. */
 .gcp-item-icon {
   flex-shrink: 0;
-  margin-right: var(--dz-space-2, 0.5rem);
+  margin-inline-end: var(--dz-space-2, 0.5rem);
   color: var(--dz-muted-foreground, #585b60);
 }
 
@@ -145,8 +145,8 @@ function kindOf(item: CommandItem): SearchKind {
 }
 
 .gcp-item-meta {
-  margin-left: auto;
-  padding-left: var(--dz-space-3, 0.75rem);
+  margin-inline-start: auto;
+  padding-inline-start: var(--dz-space-3, 0.75rem);
   flex-shrink: 0;
   font-size: var(--dz-text-xs, 0.75rem);
   color: var(--dz-muted-foreground, #585b60);

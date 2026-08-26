@@ -104,6 +104,7 @@ beforeAll(() => {
  */
 const CHROMED_ROUTES: Array<{ path: string, label: string, mustRender?: string }> = [
   { path: '/', label: 'home' },
+  { path: '/classic', label: 'home classic (pre-v2, TASK-LV2-01)' },
   { path: '/pro', label: 'pro' },
   { path: '/blocks', label: 'blocks index' },
   { path: `/blocks/${BLOCKS[0]!.id}`, label: 'block detail', mustRender: '.block-preview' },

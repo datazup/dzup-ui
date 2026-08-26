@@ -253,8 +253,8 @@ const shownHighlights = computed(() => HIGHLIGHTS.slice(0, 6))
 .cl-empty,
 .cl-more {
   max-width: var(--cl-wrap);
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
 }
 
 .cl-highlights {
@@ -320,7 +320,7 @@ const shownHighlights = computed(() => HIGHLIGHTS.slice(0, 6))
 }
 
 .cl-count {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .cl-section + .cl-section {
@@ -380,7 +380,7 @@ const shownHighlights = computed(() => HIGHLIGHTS.slice(0, 6))
 
 @media (max-width: 560px) {
   .cl-count {
-    margin-left: 0;
+    margin-inline-start: 0;
     width: 100%;
   }
   .cl-change-tag {

@@ -48,7 +48,7 @@ export interface FamilyCount {
 export const FAMILY_COUNTS: FamilyCount[] = [
   { key: 'buttons', label: 'Buttons', catalog: 10, documented: 8, examples: ['DzButton', 'DzButtonGroup', 'DzCopyButton', 'DzFab', 'DzIconButton'] },
   { key: 'inputs', label: 'Inputs', catalog: 8, documented: 8, examples: ['DzInput', 'DzInputGroup', 'DzInputMask', 'DzNumberInput', 'DzOtpInput'] },
-  { key: 'forms', label: 'Forms', catalog: 31, documented: 28, examples: ['DzCascader', 'DzCheckbox', 'DzCheckboxGroup', 'DzColorPicker', 'DzCombobox'] },
+  { key: 'forms', label: 'Forms', catalog: 32, documented: 28, examples: ['DzCascader', 'DzCheckbox', 'DzCheckboxGroup', 'DzColorPicker', 'DzCombobox'] },
   { key: 'cards', label: 'Cards', catalog: 6, documented: 3, examples: ['DzCard', 'DzImageCard', 'DzStatCard'] },
   { key: 'data', label: 'Data', catalog: 31, documented: 19, examples: ['DzAccordion', 'DzAnimatedNumber', 'DzCalendar', 'DzChip', 'DzCodeBlock'] },
   { key: 'feedback', label: 'Feedback', catalog: 20, documented: 14, examples: ['DzAlert', 'DzAsyncBoundary', 'DzBadge', 'DzBlockUI', 'DzEmpty'] },
@@ -62,7 +62,7 @@ export const FAMILY_COUNTS: FamilyCount[] = [
 /** Every published figure, derived. */
 export const COUNTS = {
   /** Every exported `.vue` under `packages/core/src/components`. @see CATALOG_COUNT_RULE */
-  catalogComponents: 206,
+  catalogComponents: 207,
   /** Components with a dedicated Storybook page. @see DOCUMENTED_COUNT_RULE */
   documentedComponents: 138,
   /** Component families. */

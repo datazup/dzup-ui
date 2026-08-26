@@ -538,7 +538,7 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
 
 /* The keyboard-shortcut pill inside the quick-find button. */
 .templates-kbd {
-  margin-left: 8px;
+  margin-inline-start: 8px;
   padding: 1px 6px;
   border-radius: var(--dz-radius-sm, 0.375rem);
   border: 1px solid color-mix(in oklch, currentColor 28%, transparent);
@@ -601,7 +601,7 @@ const shortcutHint = isMac ? '⌘K' : 'Ctrl K'
 }
 
 .templates-clear {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .templates-result-count {

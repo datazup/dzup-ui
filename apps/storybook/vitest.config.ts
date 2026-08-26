@@ -3,11 +3,12 @@ import { fileURLToPath } from 'node:url'
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
-import { workspaceAliases } from '../../packages/tooling/src/workspace-aliases.ts'
+import { createDzupResolution } from '../../packages/tooling/src/resolution/dzup-resolution.ts'
 
 const dirname = fileURLToPath(new URL('.', import.meta.url))
 const appDir = dirname
 const pkgRoot = resolve(dirname, '../../..')
+const dzup = createDzupResolution({ mode: 'merged-source', root: pkgRoot })
 const ignoredVueCompilerWarning
   = '[@vue/compiler-core] decodeEntities option is passed but will be ignored in non-browser builds.'
 
@@ -21,8 +22,9 @@ export default defineConfig({
         find: 'storybook/test',
         replacement: resolve(appDir, 'node_modules/storybook/dist/test/index.js'),
       },
-      ...workspaceAliases(pkgRoot),
+      ...dzup.alias,
     ],
+    dedupe: dzup.dedupe,
   },
   test: {
     name: 'storybook',

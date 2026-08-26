@@ -11,12 +11,15 @@
  *     state (with its reload action) instead of rendering nothing.
  */
 
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { render } from '@testing-library/vue'
 import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 import { BLOCKS } from './blocks/registry.ts'
 import { lazyComponent } from './lib/lazyComponent.ts'
+import { navDestinations } from './nav.ts'
 import router from './router.ts'
 import { TEMPLATES } from './templates/registry.ts'
 
@@ -99,5 +102,30 @@ describe('lazyComponent failure state', () => {
       const wrapper = block.component as { __asyncLoader?: unknown }
       expect(typeof wrapper.__asyncLoader, `block "${block.id}" is no longer lazily loaded`).toBe('function')
     }
+  })
+})
+
+describe('/classic preservation (docs/landing-v2.md TASK-LV2-01)', () => {
+  it('resolves to the preserved pre-v2 home composition', async () => {
+    await router.push('/classic')
+    await flushPromises()
+    expect(router.currentRoute.value.name).toBe('home-classic')
+  })
+
+  it('is noindexed via its route head', async () => {
+    await router.push('/classic')
+    await flushPromises()
+    const robots = document.head.querySelector('meta[name="robots"]')
+    expect(robots?.getAttribute('content')).toBe('noindex')
+    expect(document.title).toContain('Classic home')
+  })
+
+  it('never appears in the committed sitemap', () => {
+    const sitemap = readFileSync(resolve(__dirname, '../public/sitemap.xml'), 'utf-8')
+    expect(sitemap).not.toContain('/classic')
+  })
+
+  it('never appears in the nav', () => {
+    expect(navDestinations()).not.toContain('/classic')
   })
 })

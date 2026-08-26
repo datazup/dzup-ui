@@ -41,6 +41,7 @@ import { getBlockSource } from '../../blocks/sources.ts'
 import { useBlockCodeView } from '../../composables/useBlockCodeView.ts'
 import { useBlockTheme } from '../../composables/useBlockTheme.ts'
 import { useTheme } from '../../composables/useTheme.ts'
+import { useReducedMotion } from '../../motion/index.ts'
 import BlockManifest from './BlockManifest.vue'
 import BlockTrustMarks from './BlockTrustMarks.vue'
 
@@ -536,6 +537,32 @@ const langModel = computed<string>({
     codeView.lang.value = value === 'js' ? 'js' : 'ts'
   },
 })
+
+/**
+ * Stage presence (TASK-BV2-06): a light beam runs one lap around the resizable
+ * frame the moment the preview becomes LIVE (this component only mounts when
+ * the lazy gate swaps the skeleton out, so mount IS that moment), then rests;
+ * hovering the stage on a fine pointer runs it again (pure CSS below). Skipped
+ * entirely under reduced motion — the static glow is the whole story there.
+ */
+const BEAM_INTRO_MS = 4000 // exactly one lap of --dz-anim-beam-duration
+const beamReduced = useReducedMotion()
+const beamIntro = ref(false)
+let beamTimer: number | undefined
+
+onMounted(() => {
+  if (beamReduced.value || typeof window === 'undefined')
+    return
+  beamIntro.value = true
+  beamTimer = window.setTimeout(() => {
+    beamIntro.value = false
+  }, BEAM_INTRO_MS)
+})
+
+onBeforeUnmount(() => {
+  if (beamTimer !== undefined && typeof window !== 'undefined')
+    window.clearTimeout(beamTimer)
+})
 </script>
 
 <template>
@@ -795,6 +822,16 @@ const langModel = computed<string>({
             :data-dragging="dragging || undefined"
           >
             <component :is="block.component" />
+            <!-- "This one is live now": a border beam laps the frame once on
+                 mount, again while the stage is hovered (fine pointers). The
+                 utility ring paints on its own ::before; the overlay is inert
+                 chrome — outside the block's DOM, hidden from AT and pointers,
+                 gone under reduced motion. -->
+            <span
+              class="dz-border-beam bp-beam"
+              :class="{ 'is-intro': beamIntro }"
+              aria-hidden="true"
+            />
             <!-- Draggable + keyboard-operable width handle on the frame's right
                  edge. role="separator" with the live width as aria-valuenow so AT
                  announces the resize; presets and drag both write `width`. -->
@@ -897,8 +934,85 @@ const langModel = computed<string>({
   border: 1px solid var(--lp-hairline);
   border-radius: var(--dz-radius-xl, 0.875rem);
   background: var(--dz-surface, #ffffff);
-  box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
+  /* TASK-BV2-06: the resting shadow gains a soft outer glow in the category's
+     accent, deepening on hover/focus-within — each preview reads as lit by its
+     aisle. Transform-free; box-shadow only. */
+  box-shadow:
+    var(--lp-shadow-sm),
+    var(--lp-highlight),
+    0 0 56px -26px color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 45%, transparent);
   overflow: hidden;
+  transition: box-shadow var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+  /* Scroll-in rise (TASK-BV2-06): this component mounts exactly when the lazy
+     gate swaps the skeleton for the live preview, so a mount animation IS the
+     materialisation moment — a short rise with a perspective straighten. */
+  animation: bp-rise var(--dz-duration-slow, 320ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+}
+
+.block-preview:hover,
+.block-preview:focus-within {
+  box-shadow:
+    var(--lp-shadow-sm),
+    var(--lp-highlight),
+    0 0 64px -18px color-mix(in oklch, var(--lp-cat-500, var(--dz-primary, #0766ee)) 60%, transparent);
+}
+
+@keyframes bp-rise {
+  from {
+    opacity: 0;
+    transform: perspective(900px) translateY(24px) rotateX(2deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) rotateX(0deg);
+  }
+}
+
+/* The border beam overlay (TASK-BV2-06): rests invisible with its angle
+   animation PAUSED (13 idle previews must cost nothing); the mount intro and a
+   fine-pointer stage hover fade it in and let the beam run. Sits above the
+   live block, below the resize handle (z-index 2). */
+.bp-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+}
+
+.bp-beam::before {
+  animation-play-state: paused;
+}
+
+.bp-beam.is-intro {
+  opacity: 1;
+}
+
+.bp-beam.is-intro::before {
+  animation-play-state: running;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bp-stage:hover .bp-beam {
+    opacity: 1;
+  }
+
+  .bp-stage:hover .bp-beam::before {
+    animation-play-state: running;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block-preview {
+    animation: none;
+    transition: none;
+  }
+
+  .bp-beam {
+    display: none;
+  }
 }
 
 .bp-head {

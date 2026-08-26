@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
 }
 
 .label {
-  margin-left: 2px;
+  margin-inline-start: 2px;
 }
 
 .shake-wrap {

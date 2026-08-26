@@ -138,6 +138,24 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: HomePage },
+    // The pre-v2 home composition, preserved verbatim (docs/landing-v2.md
+    // TASK-LV2-01). Reachable for comparison and as the one-line revert path,
+    // but never indexed: `robots: 'noindex'` and absent from both
+    // build-sitemap.ts STATIC_ROUTES and nav.ts. No canonical — the default
+    // restore (the home URL) is exactly right for a duplicate of `/`.
+    {
+      path: '/classic',
+      name: 'home-classic',
+      component: () => import('./pages/HomeClassicPage.vue'),
+      meta: {
+        head: {
+          title: 'Classic home — dzup-ui',
+          description:
+            'The previous dzup-ui home page, kept for comparison with the current design.',
+          robots: 'noindex',
+        },
+      },
+    },
     // Carries its own head — a primary marketing surface must not inherit the
     // home title, and without a self-canonical it would tell crawlers it IS
     // the home page (the index.html default canonical).

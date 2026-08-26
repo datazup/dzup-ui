@@ -71,6 +71,12 @@ export interface UseBlockSearch {
   results: ComputedRef<BlockDef[]>
   /** Whether any filter (query, tags or component) is active — i.e. show results mode, not the deck. */
   isFiltering: ComputedRef<boolean>
+  /**
+   * Drop every active filter (text, tags and the component reverse-lookup) and
+   * restore the deck. Owned here (TASK-BV2-07) so the search bar's Clear and
+   * the empty state's "Clear filters" are the same code path.
+   */
+  clearAll: () => void
   /** Unique, sorted tag list for building filter chips (memoized off the registry). */
   allTags: typeof allTags
   /** Unique, sorted component-name list (memoized off the registry). */
@@ -124,12 +130,19 @@ export function useBlockSearch(): UseBlockSearch {
       .map(entry => entry.block)
   })
 
+  function clearAll(): void {
+    query.value = ''
+    activeTags.value = []
+    activeComponent.value = null
+  }
+
   return {
     query,
     activeTags,
     activeComponent,
     results,
     isFiltering,
+    clearAll,
     allTags,
     allComponents,
     blocksUsingComponent,

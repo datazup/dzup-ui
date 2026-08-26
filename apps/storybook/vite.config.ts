@@ -24,7 +24,7 @@ import { defineConfig } from 'vite'
  * `main.ts`'s `viteFinal` already supplies — so every Storybook build ran two Tailwind
  * plugin instances and resolved aliases from whichever of two copies happened to
  * agree. They didn't fully: this copy was missing `@dzup-ui/core/styles`. The aliases
- * now come from `packages/tooling/src/workspace-aliases.ts` via `viteFinal`, and
+ * now come from `packages/tooling/src/resolution/` via `viteFinal`, and
  * Tailwind is registered once, there. Keep this file limited to what only it can
  * provide.
  */

@@ -1,5 +1,21 @@
 <script setup lang="ts">
-import type { CategoryMeta } from '../../blocks/registry.ts'
+import type { Component } from 'vue'
+import type { BlockCategory, BlockDef, CategoryMeta } from '../../blocks/registry.ts'
+import { useDzDirection } from '@dzup-ui/core'
+import {
+  AppWindow,
+  FileText,
+  Image,
+  Layers,
+  LayoutPanelTop,
+  LockKeyhole,
+  Megaphone,
+  MessageSquare,
+  MousePointerClick,
+  ShoppingCart,
+  Table2,
+  TextCursorInput,
+} from 'lucide-vue-next'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 /** Selected category — drives which panel the page renders. */
@@ -19,11 +35,50 @@ const active = defineModel<string>({ required: true })
  * Left/Right move focus, Home/End jump to the ends, Enter/Space activate.
  */
 const props = defineProps<{
-  /** Non-empty categories to list, in browse order. */
-  categories: CategoryMeta[]
+  /**
+   * Non-empty categories to list, in browse order. The page passes its
+   * `CategorySection` objects (CategoryMeta + the category's blocks), which is
+   * what feeds the per-tab count badge (TASK-BV2-03); plain CategoryMeta still
+   * works — the badge simply doesn't render.
+   */
+  categories: Array<CategoryMeta & { blocks?: readonly BlockDef[] }>
   /** id prefix for the tabpanels this nav controls (for aria-controls). */
   panelIdPrefix?: string
 }>()
+
+/**
+ * Per-category identity glyphs (TASK-BV2-03). One map keyed by the canonical
+ * `BlockCategory` union — adding a category without a glyph is a type error, so
+ * the tabs can never silently fall back to text-only. Icons are aria-hidden;
+ * the accessible name stays the label (+ count, via aria-label below).
+ */
+const CATEGORY_ICONS: Record<BlockCategory, Component> = {
+  marketing: Megaphone,
+  application: AppWindow,
+  layout: LayoutPanelTop,
+  media: Image,
+  data: Table2,
+  feedback: MessageSquare,
+  overlays: Layers,
+  buttons: MousePointerClick,
+  auth: LockKeyhole,
+  forms: TextCursorInput,
+  commerce: ShoppingCart,
+  content: FileText,
+}
+
+/** Blocks in a category, for the badge; 0 (no badge) when meta-only input. */
+function countOf(category: CategoryMeta & { blocks?: readonly BlockDef[] }): number {
+  return category.blocks?.length ?? 0
+}
+
+/** Accessible tab name: label alone, or "Label, N blocks" when counted. */
+function tabLabel(category: CategoryMeta & { blocks?: readonly BlockDef[] }): string | undefined {
+  const n = countOf(category)
+  if (n === 0)
+    return undefined
+  return `${category.label}, ${n} ${n === 1 ? 'block' : 'blocks'}`
+}
 
 /** Which tab currently holds the roving tabindex (follows focus, not selection). */
 const focusId = ref<string>(active.value)
@@ -76,19 +131,35 @@ function panelId(id: string): string {
   return `${props.panelIdPrefix ?? 'blocks-panel'}-${id}`
 }
 
+// The active writing direction, from `DzProvider` (ADR-20). Resolves to `'ltr'`
+// with no provider mounted, so nothing changes for a left-to-right reader.
+const direction = useDzDirection()
+
 function onKeydown(event: KeyboardEvent) {
   const ids: string[] = props.categories.map(c => c.id)
   const current = ids.indexOf(focusId.value)
   if (current === -1)
     return
 
+  // APG's tab pattern is written in terms of "previous" and "next", not left and
+  // right: in a right-to-left document the next tab is to the LEFT, so ArrowLeft
+  // advances. This handler hard-coded ArrowRight as "next", which is the exact
+  // defect TASK-OSS-P4-05 fixed in the library's own `useTabs` — re-introduced
+  // here because this nav re-implements the pattern instead of inheriting it.
+  //
+  // The vertical keys do not swap: `dir` is about the inline axis, and ArrowUp
+  // is ArrowUp in every language.
+  const rtl = direction.value === 'rtl'
+  const nextKey = rtl ? 'ArrowLeft' : 'ArrowRight'
+  const prevKey = rtl ? 'ArrowRight' : 'ArrowLeft'
+
   let next = current
   switch (event.key) {
-    case 'ArrowRight':
+    case nextKey:
     case 'ArrowDown':
       next = (current + 1) % ids.length
       break
-    case 'ArrowLeft':
+    case prevKey:
     case 'ArrowUp':
       next = (current - 1 + ids.length) % ids.length
       break
@@ -171,10 +242,20 @@ onBeforeUnmount(() => {
         :style="{ '--tab-accent': accentVar(category) }"
         :aria-selected="active === category.id"
         :aria-controls="panelId(category.id)"
+        :aria-label="tabLabel(category)"
         :tabindex="focusId === category.id ? 0 : -1"
         @click="select(category.id)"
       >
+        <component
+          :is="CATEGORY_ICONS[category.id]"
+          :size="15"
+          class="cat-nav-icon"
+          aria-hidden="true"
+        />
         {{ category.label }}
+        <span v-if="countOf(category) > 0" class="cat-nav-count" aria-hidden="true">
+          {{ countOf(category) }}
+        </span>
       </button>
     </div>
   </nav>
@@ -228,9 +309,13 @@ onBeforeUnmount(() => {
 
 .cat-nav-indicator.is-ready {
   opacity: 1;
+  /* The glide gets a mild overshoot (TASK-BV2-03) so landing on a tab feels
+     sprung rather than eased-out. No `--dz-ease-*` token overshoots (they are
+     all monotonic), hence the local constant; the color fade stays on the
+     token ease — overshooting a color reads as a flash. */
   transition:
-    transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
-    width var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--dz-duration-normal, 240ms) cubic-bezier(0.34, 1.3, 0.64, 1),
+    width var(--dz-duration-normal, 240ms) cubic-bezier(0.34, 1.3, 0.64, 1),
     background-color var(--dz-duration-normal, 240ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
@@ -240,6 +325,7 @@ onBeforeUnmount(() => {
   flex: none;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   padding: 7px 14px;
   border: 0;
   background: transparent;
@@ -269,9 +355,49 @@ onBeforeUnmount(() => {
   outline-offset: 2px;
 }
 
+/* Identity glyph (TASK-BV2-03): tints ahead of the label on hover/active and
+   gives a tiny transform-only nudge under a fine pointer. */
+.cat-nav-icon {
+  flex: none;
+  opacity: 0.75;
+  transition: transform var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
+}
+
+.cat-nav-tab.is-active .cat-nav-icon {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cat-nav-tab:hover .cat-nav-icon {
+    transform: translateY(-1px) scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* Derived per-category block count — quieter than the label, tinted like the
+   chip counts on BlockCard. Purely visual; the figure lives in the tab's
+   aria-label. */
+.cat-nav-count {
+  font-size: var(--dz-text-xs, 0.75rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: var(--dz-radius-full, 9999px);
+  background: color-mix(in oklch, var(--tab-accent, var(--dz-primary, #0766ee)) 12%, var(--dz-surface, #ffffff));
+  color: color-mix(in oklch, var(--tab-accent, var(--dz-primary, #0766ee)) 58%, var(--dz-foreground, #1b1d1f));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cat-nav-indicator.is-ready {
     transition: none;
+  }
+
+  .cat-nav-icon {
+    transition: none;
+  }
+
+  .cat-nav-tab:hover .cat-nav-icon {
+    transform: none;
   }
 }
 </style>

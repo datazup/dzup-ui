@@ -14,7 +14,7 @@ export { checkAnatomy, expectAnatomy } from './anatomy.js'
  * engine that does layout and **throws rather than passing** under jsdom, so a
  * suite cannot go green on a claim it never checked.
  */
-export type { RtlTarget } from './rtl.js'
+export type { CheckableRtl, RtlTarget } from './rtl.js'
 export { checkRtl, expectRtl, expectRtlComputed, forwardArrow } from './rtl.js'
 
 /**

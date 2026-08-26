@@ -189,7 +189,7 @@ const reduced = useReducedMotion()
 }
 
 .close-btn {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .stats {
