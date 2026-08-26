@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { UseBlockSearch } from '../../composables/useBlockSearch.ts'
-import { DzSearchInput, DzText } from '@dzup-ui/core'
+import { DzSearchInput, DzText, DzVisuallyHidden } from '@dzup-ui/core'
 import { X } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
+import { DzOdometer } from '../../motion/index.ts'
 
 /**
  * BlockSearchBar — the on-page search + tag-filter control for /blocks
@@ -52,12 +53,8 @@ function toggleTag(tag: string): void {
     : [...activeTags.value, tag]
 }
 
-/** Drop every active filter (text, tags and the component reverse-lookup) and restore the category deck. */
-function clearAll(): void {
-  query.value = ''
-  activeTags.value = []
-  activeComponent.value = null
-}
+/** Drop every filter — the composable owns the path (shared with the empty state, TASK-BV2-07). */
+const clearAll = props.search.clearAll
 
 /** Drop just the component reverse-lookup facet (Task E4), keeping any text/tags. */
 function clearComponent(): void {
@@ -88,7 +85,13 @@ function clearComponent(): void {
             role="status"
             aria-live="polite"
           >
-            {{ countLabel }}
+            <!-- SR text stays plain (live regions announce text, not aria-labels);
+                 the rolling digits are the visual layer only (TASK-BV2-07). -->
+            <DzVisuallyHidden>{{ countLabel }}</DzVisuallyHidden>
+            <span aria-hidden="true" class="block-search-count-visual">
+              <DzOdometer :value="count" size="sm" :duration="700" />
+              {{ count === 1 ? 'block' : 'blocks' }}
+            </span>
           </DzText>
           <button
             v-if="isFiltering"
@@ -336,5 +339,10 @@ function clearComponent(): void {
   .block-search-status {
     justify-content: space-between;
   }
+}
+.block-search-count-visual {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
 }
 </style>

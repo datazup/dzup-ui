@@ -67,13 +67,13 @@ const PHYSICAL_DECLARATION
  */
 const DELIBERATE: Record<string, string> = {
   // JavaScript-driven geometry
-  'components/blocks/BlockCategoryNav.vue:231':
+  'components/blocks/BlockCategoryNav.vue:295':
     'sliding tab indicator, positioned by translateX() from getBoundingClientRect',
-  'components/blocks/BlockPreview.vue:1124':
+  'components/blocks/BlockPreview.vue:1238':
     'resize handle pinned to the frame edge; the drag maths is physical px',
-  'components/blocks/BlockPreview.vue:1133':
+  'components/blocks/BlockPreview.vue:1247':
     'the same handle, pulled half its width outward so the grip straddles the edge',
-  'components/blocks/BlockPreview.vue:1167':
+  'components/blocks/BlockPreview.vue:1281':
     'the width readout, aligned to the physical handle above',
   'gallery/demos/TabsIndicatorSlideDemo.vue:114':
     'demo of a sliding indicator — the physical origin is the thing being demonstrated',

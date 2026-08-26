@@ -140,3 +140,68 @@ describe('blockCategoryNav keyboard direction', () => {
     wrapper.unmount()
   })
 })
+
+describe('blockCategoryNav identity (TASK-BV2-03)', () => {
+  /** CategorySection-shaped input: meta + the category's blocks. */
+  const COUNTED = CATEGORIES.map((category, i) => ({
+    ...category,
+    blocks: Array.from({ length: i + 1 }, (_, j) => ({ id: `${category.id}-${j}` })),
+  })) as unknown as CategoryMeta[]
+
+  function mountCounted(categories: CategoryMeta[]) {
+    const Host = defineComponent({
+      setup() {
+        const active = ref('marketing')
+        return () =>
+          h(DzProvider, { direction: 'ltr' }, {
+            default: () =>
+              h(BlockCategoryNav, {
+                'categories': categories,
+                'modelValue': active.value,
+                'onUpdate:modelValue': (value: string) => {
+                  active.value = value
+                },
+              }),
+          })
+      },
+    })
+    return mount(Host, { attachTo: document.body })
+  }
+
+  it('every tab carries an aria-hidden identity glyph', () => {
+    const wrapper = mountCounted(COUNTED)
+    const tabs = wrapper.findAll('[role="tab"]')
+    expect(tabs.length).toBe(CATEGORIES.length)
+    for (const tab of tabs) {
+      const icon = tab.find('.cat-nav-icon')
+      expect(icon.exists()).toBe(true)
+      expect(icon.attributes('aria-hidden')).toBe('true')
+    }
+    wrapper.unmount()
+  })
+
+  it('shows the derived block count and folds it into the accessible name', () => {
+    const wrapper = mountCounted(COUNTED)
+    const tabs = wrapper.findAll('[role="tab"]')
+    tabs.forEach((tab, i) => {
+      const badge = tab.find('.cat-nav-count')
+      expect(badge.exists()).toBe(true)
+      // Count derived from the blocks handed in — never typed.
+      expect(badge.text()).toBe(String(i + 1))
+      expect(badge.attributes('aria-hidden')).toBe('true')
+      const expectedLabel = `${CATEGORIES[i]!.label}, ${i + 1} ${i === 0 ? 'block' : 'blocks'}`
+      expect(tab.attributes('aria-label')).toBe(expectedLabel)
+    })
+    wrapper.unmount()
+  })
+
+  it('meta-only input (no blocks) renders no badge and keeps the bare label', () => {
+    const wrapper = mountCounted(CATEGORIES)
+    const tabs = wrapper.findAll('[role="tab"]')
+    for (const tab of tabs) {
+      expect(tab.find('.cat-nav-count').exists()).toBe(false)
+      expect(tab.attributes('aria-label')).toBeUndefined()
+    }
+    wrapper.unmount()
+  })
+})

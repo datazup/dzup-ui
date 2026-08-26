@@ -6,6 +6,8 @@ import { computed } from 'vue'
 import { REGISTRY_ENABLED, registryAddCommands } from '../../blocks/config.ts'
 import { blocksUsingComponent } from '../../blocks/registry.ts'
 import { getBlockSource } from '../../blocks/sources.ts'
+import { useReducedMotion, vTilt } from '../../motion/index.ts'
+import BlockCardArt from './BlockCardArt.vue'
 import BlockTrustMarks from './BlockTrustMarks.vue'
 import PmCommandTabs from './PmCommandTabs.vue'
 
@@ -65,10 +67,25 @@ function usageCount(name: string): number {
 
 /** `npx shadcn@latest add …/r/<id>.json` per PM — the one-command install. */
 const registryAddCmds = computed(() => registryAddCommands(props.block.id))
+
+/**
+ * Page-level reduced-motion override for the tilt (TASK-BV2-05); the directive
+ * additionally self-gates on the OS setting and on coarse pointers, and a tilt
+ * is a rotation about the card's own centre — the box (and every one of the
+ * card's five interactive layers) stays exactly where it was.
+ */
+const reduced = useReducedMotion()
 </script>
 
 <template>
-  <article class="lp-card lp-card--hover block-card">
+  <article
+    v-tilt="{ max: 4, scale: 1.01, glare: true, disabled: reduced }"
+    class="lp-card lp-card--hover block-card"
+  >
+    <!-- The product IS the image (TASK-BV2-05): a live, inert, identity-stripped
+         miniature of the block, lazy-mounted and theme-reactive. -->
+    <BlockCardArt :block="block" class="block-card-art-slot" />
+
     <div class="block-card-body">
       <DzText weight="semibold" as="div" class="block-card-title">
         {{ block.title }}
@@ -162,6 +179,10 @@ const registryAddCmds = computed(() => registryAddCommands(props.block.id))
 
 .block-card-body {
   flex: 1;
+}
+
+.block-card-art-slot {
+  margin-bottom: 14px;
 }
 
 .block-card-title {

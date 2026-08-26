@@ -493,3 +493,36 @@ describe('blockPreview — heading bridge', () => {
       expect(levels[i]! <= levels[i - 1]! + 1, `h${levels[i - 1]} → h${levels[i]} skips a level`).toBe(true)
   })
 })
+
+describe('stage presence (TASK-BV2-06)', () => {
+  it('mounts the border beam as inert chrome and runs the one-lap intro', async () => {
+    const { container } = mountPreview()
+    await flushPromises()
+    const beam = container.querySelector('.bp-beam')
+    expect(beam).not.toBeNull()
+    expect(beam!.getAttribute('aria-hidden')).toBe('true')
+    expect(beam!.classList.contains('dz-border-beam')).toBe(true)
+    // Freshly live: the intro lap is armed (motion allowed in this harness).
+    expect(beam!.classList.contains('is-intro')).toBe(true)
+    // The overlay lives OUTSIDE the block's own subtree, inside the frame.
+    expect(beam!.closest('.bp-frame')).not.toBeNull()
+  })
+
+  it('never arms the intro under the page-level reduced-motion override', async () => {
+    // provideMotionPreference must wrap the mount (the OS matchMedia read is a
+    // module singleton — the provide override is the supported spec hook).
+    const { provideMotionPreference } = await import('../../motion/index.ts')
+    const utils = render(defineComponent({
+      setup() {
+        provideMotionPreference(true)
+        return () => h(DzThemeProvider, null, {
+          default: () => h(BlockPreview, { block }),
+        })
+      },
+    }))
+    await flushPromises()
+    const beam = utils.container.querySelector('.bp-beam')
+    expect(beam).not.toBeNull()
+    expect(beam!.classList.contains('is-intro')).toBe(false)
+  })
+})
