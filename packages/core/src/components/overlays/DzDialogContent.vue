@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<DzDialogContentProps>(), {
 })
 
 const emit = defineEmits<DzDialogContentEmits>()
-const slots = defineSlots<DzDialogContentSlots>()
+defineSlots<DzDialogContentSlots>()
 // Portal target: an explicit `portalTo` on this instance, then the application's
 // `DzProvider` target, then the portal's own default of `document.body`
 // (ADR-20, TASK-OSS-P4-04). Resolution is client-side — this is a string or an
@@ -102,9 +102,6 @@ const headerClasses = computed(() => cn(styles.value.header(), props.ui?.header)
 const bodyClasses = computed(() => cn(styles.value.body(), props.ui?.viewport))
 const footerClasses = computed(() => cn(styles.value.footer(), props.ui?.footer))
 
-const hasHeaderSlot = computed(() => Boolean(slots.header))
-const hasFooterSlot = computed(() => Boolean(slots.footer))
-
 function handleEscapeKeyDown(event: KeyboardEvent): void {
   emit('escapeKeyDown', event)
 }
@@ -156,13 +153,13 @@ function handleCloseAutoFocus(event: Event): void {
         @close-auto-focus="handleCloseAutoFocus"
       >
         <template v-if="scrollable">
-          <header v-if="hasHeaderSlot" data-part="header" :class="headerClasses">
+          <header v-if="$slots.header" data-part="header" :class="headerClasses">
             <slot name="header" />
           </header>
           <div data-part="viewport" :class="bodyClasses">
             <slot />
           </div>
-          <footer v-if="hasFooterSlot" data-part="footer" :class="footerClasses">
+          <footer v-if="$slots.footer" data-part="footer" :class="footerClasses">
             <slot name="footer" />
           </footer>
         </template>

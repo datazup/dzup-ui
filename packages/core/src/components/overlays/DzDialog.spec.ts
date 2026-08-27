@@ -6,7 +6,7 @@ import { mount } from '@vue/test-utils'
  * event forwarding, and subcomponent rendering.
  */
 import { afterEach, describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import DzDialog from './DzDialog.vue'
 import DzDialogClose from './DzDialogClose.vue'
 import DzDialogContent from './DzDialogContent.vue'
@@ -196,6 +196,43 @@ describe('dzDialog -- Unit Tests', () => {
     })
     const content = wrapper.find('[style*="contain"]')
     expect(content.classes().join(' ')).toContain('max-w-')
+    wrapper.unmount()
+  })
+
+  it('renders a footer slot introduced after the scrollable dialog mounts', async () => {
+    const showFooter = ref(false)
+    const DynamicFooterDialog = defineComponent({
+      setup() {
+        return () => h(DzDialog, { open: true }, {
+          default: () => h(
+            DzDialogContent,
+            { scrollable: true },
+            {
+              default: () => [
+                h(DzDialogTitle, {}, () => 'Create Research Session'),
+                h(DzDialogDescription, {}, () => 'Configure the research session.'),
+              ],
+              ...(showFooter.value
+                ? { footer: () => h('button', { type: 'submit' }, 'Create Session') }
+                : {}),
+            },
+          ),
+        })
+      },
+    })
+    const wrapper = mount(DynamicFooterDialog, {
+      global: { stubs: { DialogPortal: InlinePortal } },
+      attachTo: document.body,
+    })
+
+    expect(wrapper.find('[data-part="footer"]').exists()).toBe(false)
+
+    showFooter.value = true
+    await nextTick()
+
+    const footer = wrapper.find('[data-part="footer"]')
+    expect(footer.exists()).toBe(true)
+    expect(footer.get('button').text()).toBe('Create Session')
     wrapper.unmount()
   })
 
