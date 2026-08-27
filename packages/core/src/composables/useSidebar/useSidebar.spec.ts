@@ -452,4 +452,17 @@ describe('useSidebar', () => {
     expect(sb.mobileOpen.value).toBe(false)
     wrapper.unmount()
   })
+
+  it('does not apply a queued route close after the drawer is opened', async () => {
+    const routeKey = ref('/a')
+    const { getSidebar, wrapper } = mountSidebar({ closeMobileOn: routeKey })
+    const sb = getSidebar()
+
+    routeKey.value = '/b'
+    sb.openMobile()
+    await nextTick()
+
+    expect(sb.mobileOpen.value).toBe(true)
+    wrapper.unmount()
+  })
 })

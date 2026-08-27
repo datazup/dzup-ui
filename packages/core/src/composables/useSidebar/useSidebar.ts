@@ -222,7 +222,7 @@ export function useSidebar(options: UseSidebarOptions = {}): UseSidebarReturn {
     watch(closeMobileOn, () => {
       if (mobileOpen.value)
         closeMobile()
-    })
+    }, { flush: 'sync' })
   }
 
   // ---- Keyboard shortcut: Ctrl+B / Cmd+B ----
