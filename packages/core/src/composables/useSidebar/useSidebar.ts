@@ -212,8 +212,8 @@ export function useSidebar(options: UseSidebarOptions = {}): UseSidebarReturn {
   }
 
   // Auto-close mobile drawer when transitioning out of mobile mode (proxy for viewport resize).
-  watch(isMobile, () => {
-    if (mobileOpen.value) {
+  watch(isMobile, (mobile, wasMobile) => {
+    if (wasMobile && !mobile && mobileOpen.value) {
       closeMobile()
     }
   })
