@@ -3,7 +3,7 @@ import type { CatalogEntry, CatalogType } from './catalog.ts'
 import { DzBadge, DzButton, DzText } from '@dzup-ui/core'
 import { Check, Code2, Copy, Link2, RotateCcw, Zap } from 'lucide-vue-next'
 import { computed, ref } from 'vue'
-import { useInView } from '../motion/index.ts'
+import { useInView, useReducedMotion, vTilt } from '../motion/index.ts'
 import { categoryAccentStyle } from './catalog.ts'
 
 /**
@@ -32,9 +32,32 @@ const props = withDefaults(
     entry: CatalogEntry
     size?: 'normal' | 'wide'
     highlighted?: boolean
+    /**
+     * TASK-AV2-03: `true` when the entry's demo is itself pointer-driven
+     * (spotlight, tilt, lens, drag…) — the page decides from its
+     * POINTER_DRIVEN set. Such cards must NOT tilt (a tilting stage under a
+     * pointer-tracked performance sabotages the demo); they get the static
+     * "stage light" hover instead. The card stays effect-agnostic: it learns
+     * this from the prop, never by inspecting the entry id.
+     */
+    interactiveStage?: boolean
   }>(),
-  { size: 'normal', highlighted: false },
+  { size: 'normal', highlighted: false, interactiveStage: false },
 )
+
+// Both motion gates (OS preference + the page toolbar switch) — the page
+// provides the override; this resolves the combined preference.
+const reduced = useReducedMotion()
+
+// 3D tilt for cards whose performance doesn't own the pointer (TASK-AV2-03).
+// Modest angles + glare, mirroring BlockCard; the directive additionally
+// self-gates to fine pointers and the OS reduced-motion setting.
+const tiltOptions = computed(() => ({
+  max: 3.5,
+  scale: 1.01,
+  glare: true,
+  disabled: reduced.value || props.interactiveStage,
+}))
 
 // Replay re-mounts the demo by bumping its :key, re-triggering the effect
 // without the reviewer having to scroll away and back (§4.4).
@@ -172,152 +195,181 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   <article
     :id="anchorId"
     class="anim-card"
-    :class="[`is-${size}`, { 'is-highlighted': highlighted }]"
+    :class="[`is-${size}`, {
+      'is-highlighted': highlighted,
+      'is-tiltable': !interactiveStage,
+      'is-stage-live': interactiveStage,
+      'is-open': showCode,
+    }]"
     :style="accentStyle"
   >
-    <!-- Live, replayable preview stage — the hero of the tile. -->
-    <div class="stage-wrap">
-      <div ref="stageEl" class="stage" :class="{ 'dz-stage-idle': !inView }">
-        <component :is="entry.demo" :key="replayKey" />
-      </div>
+    <!-- The visual shell (TASK-AV2-03). The tilt transform is written here, on
+         an inner wrapper, because the article root carries content-visibility
+         (a paint-containment grouping property that would flatten preserve-3d)
+         — the article stays the perf/layout shell, this div is the 3D card. -->
+    <div v-tilt="tiltOptions" class="card-shell">
+      <!-- Permalink spotlight lap (TASK-AV2-03): one accent beam ride around the
+           border while the highlight pulse runs. Motion-gated in JS so the layer
+           simply never exists under either reduce gate. -->
+      <span v-if="highlighted && !reduced" class="av2-spotlight-lap dz-border-beam" aria-hidden="true" />
 
-      <!-- Decorative dreamy glow that warms the stage on hover. -->
-      <div class="stage-glow" aria-hidden="true" />
-
-      <DzButton
-        size="sm"
-        variant="ghost"
-        tone="neutral"
-        class="replay-btn"
-        :aria-label="`Replay ${entry.title} animation`"
-        @click="replay"
-      >
-        <template #prefix>
-          <RotateCcw :size="14" aria-hidden="true" />
-        </template>
-        Replay
-      </DzButton>
-    </div>
-
-    <!-- Quiet metadata beneath the stage. -->
-    <div class="body">
-      <div class="title-row">
-        <DzText weight="semibold" as="div" class="card-title">
-          {{ entry.title }}
-        </DzText>
-
-        <div class="title-meta">
-          <!-- Native-API badge: names the platform API the effect upgrades to,
-               with the fallback in its tooltip. Focusable so keyboard users can
-               surface the note (and get the --dz-ring). -->
-          <span
-            v-if="entry.native"
-            class="native-badge"
-            tabindex="0"
-            :title="nativeTooltip"
-            :aria-label="nativeTooltip"
-          >
-            <Zap :size="11" aria-hidden="true" />
-            {{ entry.native.api }}
-          </span>
-
-          <DzBadge variant="subtle" :tone="typeTone" size="sm">
-            {{ entry.type }}
-          </DzBadge>
-
-          <button
-            type="button"
-            class="link-btn"
-            :aria-label="linkCopied ? 'Link copied' : `Copy link to ${entry.title}`"
-            @click="copyLink"
-          >
-            <Check v-if="linkCopied" :size="14" aria-hidden="true" />
-            <Link2 v-else :size="14" aria-hidden="true" />
-          </button>
+      <!-- Live, replayable preview stage — the hero of the tile. -->
+      <div class="stage-wrap">
+        <div ref="stageEl" class="stage" :class="{ 'dz-stage-idle': !inView }">
+          <component :is="entry.demo" :key="replayKey" />
         </div>
-      </div>
 
-      <DzText size="sm" tone="muted" as="p" class="blurb">
-        {{ entry.blurb }}
-      </DzText>
-
-      <div class="actions">
-        <DzButton
-          size="sm"
-          variant="text"
-          tone="neutral"
-          :aria-expanded="showCode"
-          @click="showCode = !showCode"
-        >
-          <template #prefix>
-            <Code2 :size="15" aria-hidden="true" />
-          </template>
-          {{ showCode ? 'Hide code' : 'View code' }}
-        </DzButton>
+        <!-- Decorative dreamy glow that warms the stage on hover. -->
+        <div class="stage-glow" aria-hidden="true" />
 
         <DzButton
-          v-if="showCode"
           size="sm"
           variant="ghost"
-          tone="primary"
-          @click="copyCode"
+          tone="neutral"
+          class="replay-btn"
+          :aria-label="`Replay ${entry.title} animation`"
+          @click="replay"
         >
           <template #prefix>
-            <Check v-if="copied" :size="15" aria-hidden="true" />
-            <Copy v-else :size="15" aria-hidden="true" />
+            <!-- Keyed on replayKey so each activation remounts the span and
+               restarts the one-shot spin (TASK-AV2-03); never keyed on the
+               demo itself. -->
+            <span
+              :key="replayKey"
+              class="replay-spin"
+              :class="{ 'is-spinning': replayKey > 0 && !reduced }"
+            >
+              <RotateCcw :size="14" aria-hidden="true" />
+            </span>
           </template>
-          {{ copied ? 'Copied!' : 'Copy' }}
+          Replay
         </DzButton>
       </div>
 
-      <!-- Disclosure: built-with chips + the copy-pasteable snippet. -->
-      <div v-if="showCode" class="disclosure">
-        <div v-if="entry.components.length" class="built-with">
-          <DzText size="xs" tone="muted" as="span" class="built-label">
-            Built with
+      <!-- Quiet metadata beneath the stage. -->
+      <div class="body">
+        <div class="title-row">
+          <DzText weight="semibold" as="div" class="card-title">
+            {{ entry.title }}
           </DzText>
-          <DzBadge
-            v-for="name in entry.components"
-            :key="name"
-            variant="outline"
-            tone="neutral"
+
+          <div class="title-meta">
+            <!-- Native-API badge: names the platform API the effect upgrades to,
+               with the fallback in its tooltip. Focusable so keyboard users can
+               surface the note (and get the --dz-ring). -->
+            <span
+              v-if="entry.native"
+              class="native-badge"
+              tabindex="0"
+              :title="nativeTooltip"
+              :aria-label="nativeTooltip"
+            >
+              <Zap :size="11" aria-hidden="true" />
+              {{ entry.native.api }}
+            </span>
+
+            <DzBadge variant="subtle" :tone="typeTone" size="sm">
+              {{ entry.type }}
+            </DzBadge>
+
+            <button
+              type="button"
+              class="link-btn"
+              :aria-label="linkCopied ? 'Link copied' : `Copy link to ${entry.title}`"
+              @click="copyLink"
+            >
+              <span v-if="linkCopied" class="copy-pop" :class="{ 'is-still': reduced }">
+                <Check :size="14" aria-hidden="true" />
+              </span>
+              <Link2 v-else :size="14" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+
+        <DzText size="sm" tone="muted" as="p" class="blurb">
+          {{ entry.blurb }}
+        </DzText>
+
+        <div class="actions">
+          <DzButton
             size="sm"
+            variant="text"
+            tone="neutral"
+            :aria-expanded="showCode"
+            @click="showCode = !showCode"
           >
-            {{ name }}
-          </DzBadge>
+            <template #prefix>
+              <Code2 :size="15" aria-hidden="true" />
+            </template>
+            {{ showCode ? 'Hide code' : 'View code' }}
+          </DzButton>
+
+          <DzButton
+            v-if="showCode"
+            size="sm"
+            variant="ghost"
+            tone="primary"
+            @click="copyCode"
+          >
+            <template #prefix>
+              <span v-if="copied" class="copy-pop" :class="{ 'is-still': reduced }">
+                <Check :size="15" aria-hidden="true" />
+              </span>
+              <Copy v-else :size="15" aria-hidden="true" />
+            </template>
+            {{ copied ? 'Copied!' : 'Copy' }}
+          </DzButton>
         </div>
 
-        <!-- Variant matrix → tabs (SFC / Composable / CSS). Roving tabindex,
+        <!-- Disclosure: built-with chips + the copy-pasteable snippet. -->
+        <div v-if="showCode" class="disclosure">
+          <div v-if="entry.components.length" class="built-with">
+            <DzText size="xs" tone="muted" as="span" class="built-label">
+              Built with
+            </DzText>
+            <DzBadge
+              v-for="name in entry.components"
+              :key="name"
+              variant="outline"
+              tone="neutral"
+              size="sm"
+            >
+              {{ name }}
+            </DzBadge>
+          </div>
+
+          <!-- Variant matrix → tabs (SFC / Composable / CSS). Roving tabindex,
              arrow/Home/End move selection + focus. Absent ⇒ single code block. -->
-        <div
-          v-if="hasVariants"
-          ref="tablist"
-          class="code-tabs"
-          role="tablist"
-          :aria-label="`Code variants for ${entry.title}`"
-        >
-          <button
-            v-for="(key, i) in variantTabs"
-            :id="`${anchorId}-tab-${key}`"
-            :key="key"
-            type="button"
-            role="tab"
-            class="code-tab"
-            :class="{ 'is-active': currentTab === key }"
-            :aria-selected="currentTab === key"
-            :tabindex="currentTab === key ? 0 : -1"
-            @click="selectTab(key)"
-            @keydown="onTabKeydown($event, i)"
+          <div
+            v-if="hasVariants"
+            ref="tablist"
+            class="code-tabs"
+            role="tablist"
+            :aria-label="`Code variants for ${entry.title}`"
           >
-            {{ VARIANT_LABELS[key] }}
-          </button>
-        </div>
+            <button
+              v-for="(key, i) in variantTabs"
+              :id="`${anchorId}-tab-${key}`"
+              :key="key"
+              type="button"
+              role="tab"
+              class="code-tab"
+              :class="{ 'is-active': currentTab === key }"
+              :aria-selected="currentTab === key"
+              :tabindex="currentTab === key ? 0 : -1"
+              @click="selectTab(key)"
+              @keydown="onTabKeydown($event, i)"
+            >
+              {{ VARIANT_LABELS[key] }}
+            </button>
+          </div>
 
-        <pre
-          class="code"
-          :role="hasVariants ? 'tabpanel' : undefined"
-          :aria-labelledby="hasVariants && currentTab ? `${anchorId}-tab-${currentTab}` : undefined"
-        ><code>{{ displayedCode }}</code></pre>
+          <pre
+            class="code"
+            :role="hasVariants ? 'tabpanel' : undefined"
+            :aria-labelledby="hasVariants && currentTab ? `${anchorId}-tab-${currentTab}` : undefined"
+          ><code>{{ displayedCode }}</code></pre>
+        </div>
       </div>
     </div>
   </article>
@@ -325,6 +377,26 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
 
 <style scoped>
 .anim-card {
+  position: relative;
+  height: 100%;
+  /* Skip rendering work for off-screen cards so the larger (~57-card) gallery
+     stays cheap to scroll (docs/animations.md §3.5). `auto` makes the browser
+     remember each card's real size after first render, so the intrinsic-size
+     estimate only seeds never-yet-seen cards and the scrollbar never jumps.
+     content-visibility un-skips on a wider margin than the demo loop's IO, so
+     the off-screen loop cap is unaffected. NOTE (TASK-AV2-03): the paint
+     containment this implies is a grouping property that flattens preserve-3d,
+     which is exactly why the tilt + planes live on `.card-shell` below, never
+     on this element. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 460px;
+}
+
+/* The 3D visual shell (TASK-AV2-03): border, glass, shadow and the tilt all
+   live here. No `overflow: hidden` — that would flatten the translateZ planes;
+   the stage rounds/clips itself instead, and every other layer inherits or
+   sets its own radius. */
+.card-shell {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -335,24 +407,48 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   background: color-mix(in oklch, var(--dz-surface, #ffffff) 80%, transparent);
   backdrop-filter: blur(10px) saturate(1.1);
   box-shadow: var(--lp-shadow-sm), var(--lp-highlight);
-  overflow: hidden;
-  /* Skip rendering work for off-screen cards so the larger (~57-card) gallery
-     stays cheap to scroll (docs/animations.md §3.5). `auto` makes the browser
-     remember each card's real size after first render, so the intrinsic-size
-     estimate only seeds never-yet-seen cards and the scrollbar never jumps.
-     content-visibility un-skips on a wider margin than the demo loop's IO, so
-     the off-screen loop cap is unaffected. */
-  content-visibility: auto;
-  contain-intrinsic-size: auto 460px;
   transition:
     transform var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
     box-shadow var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out),
     border-color var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
 }
 
+/* Chrome planes: only tiltable cards get real depth — the tilt rotation is
+   written on the shell, so children with translateZ read as separate planes.
+   Invisible at rest (no rotation → no perspective), so touch and reduced
+   motion keep today's flat card. Clamped while the code disclosure is open so
+   the snippet stays perfectly legible. */
+.is-tiltable .card-shell {
+  transform-style: preserve-3d;
+}
+
+.is-tiltable:not(.is-open) .stage-wrap {
+  transform: translateZ(18px);
+}
+
+.is-tiltable:not(.is-open) .title-row {
+  transform: translateZ(12px);
+}
+
+.is-tiltable:not(.is-open) .actions {
+  transform: translateZ(8px);
+}
+
+/* Permalink spotlight lap (TASK-AV2-03): the `.dz-border-beam` conic arc rides
+   this overlay's border band once per highlight window. */
+.av2-spotlight-lap {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: var(--dz-radius-xl, 0.875rem);
+  --dz-anim-beam-width: 2.5px;
+  --dz-anim-beam-duration: 2.2s;
+}
+
 /* Permalink target pulse — when the page deep-links to this card, ring + lift it
    briefly so the reader can spot it. Token-only; calmed under reduced motion. */
-.anim-card.is-highlighted {
+.anim-card.is-highlighted .card-shell {
   border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 60%, var(--lp-hairline));
   box-shadow:
     var(--lp-shadow-lg),
@@ -373,15 +469,39 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   }
 }
 
-.anim-card:hover {
+.anim-card:hover .card-shell {
   transform: translateY(-4px);
   box-shadow: var(--lp-shadow-lg), var(--lp-highlight);
   border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 40%, var(--lp-hairline));
 }
 
-/* Preview stage — tinted, layered backdrop so previews read in light + dark. */
+/* Stage-light hover (TASK-AV2-03): pointer-driven demos never tilt — instead
+   the whole display case lights up harder in its own accent, so both card
+   classes respond to the hand while staying indistinguishable at rest. */
+.anim-card.is-stage-live:hover .card-shell {
+  border-color: color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 55%, var(--lp-hairline));
+  box-shadow:
+    0 18px 42px -18px color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 55%, transparent),
+    var(--lp-shadow-lg),
+    var(--lp-highlight);
+}
+
+.anim-card.is-stage-live:hover .stage-glow {
+  background: radial-gradient(
+    120% 90% at 50% 120%,
+    color-mix(in oklch, var(--accent, var(--dz-primary, #0766ee)) 34%, transparent),
+    transparent 72%
+  );
+}
+
+/* Preview stage — tinted, layered backdrop so previews read in light + dark.
+   The wrap owns the card's top rounding + clipping now that the shell no
+   longer hides overflow (TASK-AV2-03). */
 .stage-wrap {
   position: relative;
+  border-start-start-radius: calc(var(--dz-radius-xl, 0.875rem) - 1px);
+  border-start-end-radius: calc(var(--dz-radius-xl, 0.875rem) - 1px);
+  overflow: hidden;
 }
 
 .stage {
@@ -609,20 +729,74 @@ const accentStyle = computed(() => categoryAccentStyle(props.entry.category))
   white-space: pre;
 }
 
+/* One-shot micro-feedback (TASK-AV2-03). */
+.replay-spin {
+  display: inline-flex;
+}
+
+.replay-spin.is-spinning {
+  animation: av2-replay-spin 480ms var(--dz-ease-out, ease-out) 1;
+}
+
+@keyframes av2-replay-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.copy-pop {
+  display: inline-flex;
+}
+
+.copy-pop:not(.is-still) {
+  animation: av2-copy-pop 260ms var(--dz-ease-out, ease-out) 1;
+}
+
+@keyframes av2-copy-pop {
+  0% {
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Press feedback on the quiet icon buttons. */
+.link-btn:active {
+  transform: scale(0.88);
+}
+
 /* Honour reduced motion: drop the hover lift/glow to a quiet state change. */
 @media (prefers-reduced-motion: reduce) {
-  .anim-card,
+  .card-shell,
   .stage-glow,
   .replay-btn {
     transition-duration: 0.01ms;
   }
 
-  .anim-card:hover {
+  .anim-card:hover .card-shell {
     transform: none;
   }
 
+  .is-tiltable:not(.is-open) .stage-wrap,
+  .is-tiltable:not(.is-open) .title-row,
+  .is-tiltable:not(.is-open) .actions {
+    transform: none;
+  }
+
+  .replay-spin.is-spinning,
+  .copy-pop:not(.is-still) {
+    animation: none;
+  }
+
   /* Keep the static ring (the permalink still reads as "this one"); drop the pulse. */
-  .anim-card.is-highlighted {
+  .anim-card.is-highlighted .card-shell {
     animation: none;
   }
 }
