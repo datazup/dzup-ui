@@ -392,6 +392,47 @@ describe('useSidebar', () => {
     vi.unstubAllGlobals()
   })
 
+  it('does not close a drawer opened while entering mobile mode', async () => {
+    let changeHandler: ((event: MediaQueryListEvent) => void) | undefined
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
+      matches: false,
+      addEventListener: (_event: string, handler: (event: MediaQueryListEvent) => void) => {
+        changeHandler = handler
+      },
+      removeEventListener: vi.fn(),
+    }))
+
+    const { wrapper, getSidebar } = mountSidebar()
+    const sidebar = getSidebar()
+    changeHandler?.({ matches: true } as MediaQueryListEvent)
+    sidebar.openMobile()
+    await nextTick()
+
+    expect(sidebar.mobileOpen.value).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('closes an open drawer when leaving mobile mode', async () => {
+    let changeHandler: ((event: MediaQueryListEvent) => void) | undefined
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
+      matches: true,
+      addEventListener: (_event: string, handler: (event: MediaQueryListEvent) => void) => {
+        changeHandler = handler
+      },
+      removeEventListener: vi.fn(),
+    }))
+
+    const { wrapper, getSidebar } = mountSidebar()
+    const sidebar = getSidebar()
+    await nextTick()
+    sidebar.openMobile()
+    changeHandler?.({ matches: false } as MediaQueryListEvent)
+    await nextTick()
+
+    expect(sidebar.mobileOpen.value).toBe(false)
+    wrapper.unmount()
+  })
+
   it('default mobileBreakpoint is 1024', () => {
     const matchMediaSpy = vi.spyOn(window, 'matchMedia')
     const { wrapper } = mountSidebar()
@@ -409,6 +450,19 @@ describe('useSidebar', () => {
     routeKey.value = '/b'
     await nextTick()
     expect(sb.mobileOpen.value).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('does not apply a queued route close after the drawer is opened', async () => {
+    const routeKey = ref('/a')
+    const { getSidebar, wrapper } = mountSidebar({ closeMobileOn: routeKey })
+    const sb = getSidebar()
+
+    routeKey.value = '/b'
+    sb.openMobile()
+    await nextTick()
+
+    expect(sb.mobileOpen.value).toBe(true)
     wrapper.unmount()
   })
 })
