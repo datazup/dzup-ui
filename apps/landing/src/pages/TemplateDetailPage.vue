@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TemplateRawFile } from '../templates/rawSources.ts'
+import type { TemplateMeta } from '../templates/registry.ts'
 /**
  * Template detail / preview surface (/templates/:slug) — the conversion page
  * (docs/templates.md §5). It frames a single LIVE preview of the template:
@@ -29,11 +30,13 @@ import {
   DzText,
 } from '@dzup-ui/core'
 import { ArrowLeft, ArrowRight, ExternalLink, Github, Moon, RotateCcw, Sun, Zap } from 'lucide-vue-next'
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Section from '../components/Section.vue'
 import { useTheme } from '../composables/useTheme.ts'
 import { componentDocs, LINKS } from '../config.ts'
 import { openInStackblitz, stackblitzEnabled, UNPUBLISHED_NOTE } from '../lib/stackblitz.ts'
+import { useReducedMotion, vMagnetic, vReveal } from '../motion/index.ts'
+import { resolveTemplateAccent } from '../templates/accent.ts'
 import { paletteSwatchColor, PREVIEW_PALETTES } from '../templates/previewCustomiser.ts'
 import { resolveTemplateSources } from '../templates/rawSources.ts'
 import { getTemplate, TEMPLATES } from '../templates/registry.ts'
@@ -57,6 +60,48 @@ const nextTemplate = computed(() => {
   return TEMPLATES[(i + 1) % TEMPLATES.length]
 })
 
+// ── Stage presence (TASK-TV2-06) ─────────────────────────────────
+
+const reduced = useReducedMotion()
+
+/**
+ * The template's decorative accent (same resolution the gallery tiles use, via
+ * the shared helper) — drives the stage glow and the beam tint.
+ */
+const accentStyle = computed(() =>
+  template.value
+    ? { '--tpl-accent': `var(--dz-colors-${resolveTemplateAccent(template.value)}-500)` }
+    : undefined,
+)
+
+/** Destination accents for the pager — each button tints toward where it goes. */
+function pagerAccentStyle(t: TemplateMeta | undefined) {
+  return t ? { '--pager-accent': `var(--dz-colors-${resolveTemplateAccent(t)}-500)` } : undefined
+}
+
+/**
+ * Border-beam intro: one lap on arrival, then rest (it re-runs on stage hover
+ * via CSS). Mirrors BlockPreview (TASK-BV2-06): JS-gated under reduced motion —
+ * the static accent glow is the whole story there.
+ */
+const BEAM_INTRO_MS = 4000 // exactly one lap of --dz-anim-beam-duration
+const beamIntro = ref(false)
+let beamTimer: number | undefined
+
+onMounted(() => {
+  if (reduced.value || typeof window === 'undefined')
+    return
+  beamIntro.value = true
+  beamTimer = window.setTimeout(() => {
+    beamIntro.value = false
+  }, BEAM_INTRO_MS)
+})
+
+onBeforeUnmount(() => {
+  if (beamTimer !== undefined && typeof window !== 'undefined')
+    window.clearTimeout(beamTimer)
+})
+
 // ── Device switcher ──────────────────────────────────────────────
 // `DzSegmented` models a plain string (ADR-16), so `device` is a string keyed
 // into the width map rather than a narrow union.
@@ -73,6 +118,36 @@ const DEVICE_WIDTH: Record<string, string> = {
   desktop: '100%',
 }
 const frameWidth = computed(() => DEVICE_WIDTH[device.value] ?? '100%')
+
+/**
+ * Device-switch settle (TASK-TV2-06): a brief 3D ease on the stage while the
+ * iframe width tweens, so the size change reads as the display turning to face
+ * you. The class is removed after the animation (and never added under reduced
+ * motion), so the stage always ends transform-free — the iframe re-rasterizes
+ * crisp.
+ */
+const deviceSettling = ref(false)
+let settleTimer: number | undefined
+
+watch(device, () => {
+  if (reduced.value || typeof window === 'undefined')
+    return
+  deviceSettling.value = false
+  if (settleTimer !== undefined)
+    window.clearTimeout(settleTimer)
+  // Restart the animation on rapid switches: drop the class for one frame.
+  requestAnimationFrame(() => {
+    deviceSettling.value = true
+    settleTimer = window.setTimeout(() => {
+      deviceSettling.value = false
+    }, 420)
+  })
+})
+
+onBeforeUnmount(() => {
+  if (settleTimer !== undefined && typeof window !== 'undefined')
+    window.clearTimeout(settleTimer)
+})
 
 // ── Independent preview customisation (docs/templates.md §2 #9, #10) ──
 // The toolbar writes theme / primary-colour / direction onto the iframe's query
@@ -252,15 +327,19 @@ const llmBundle = computed(() => {
     heading-id="template-detail-title"
     :heading-level="1"
   >
-    <div class="detail">
+    <!-- TASK-TV2-06: the page carries its template's accent (same resolution as
+         the gallery tile, via the shared helper) for the stage glow + beam. -->
+    <div class="detail" :style="accentStyle">
       <!-- Meta strip: built-with chips + source actions. -->
       <div class="detail-meta">
         <div class="built-with">
           <DzText size="sm" tone="muted" weight="medium" as="span" class="built-with-label">
             Built with
           </DzText>
+          <!-- Chips stagger in on arrival (TASK-TV2-06); v-reveal degrades to an
+               opacity fade under reduced motion (central tokens.css block). -->
           <ul class="chip-row">
-            <li v-for="component in template.stack" :key="component">
+            <li v-for="(component, i) in template.stack" :key="component" v-reveal="i * 30">
               <a
                 class="chip"
                 :href="componentDocs(component)"
@@ -433,14 +512,22 @@ const llmBundle = computed(() => {
             {{ announcement }}
           </p>
 
-          <!-- Live preview stage. -->
-          <div class="stage" :data-device="device">
+          <!-- Live preview stage: accent glow + mount rise + a border beam that
+               laps once on arrival and runs while hovered (TASK-TV2-06). The
+               beam overlay is inert chrome — aria-hidden, no pointer, gone
+               under reduced motion (JS-gated intro, centrally-stilled run). -->
+          <div class="stage" :class="{ 'is-settling': deviceSettling }" :data-device="device">
             <iframe
               :src="previewSrc"
               :title="`Live preview of the ${template.name} template`"
               class="preview-frame"
               :style="{ width: frameWidth }"
               loading="lazy"
+            />
+            <span
+              class="dz-border-beam tpl-beam"
+              :class="{ 'is-intro': beamIntro }"
+              aria-hidden="true"
             />
           </div>
         </DzTabContent>
@@ -496,8 +583,10 @@ const llmBundle = computed(() => {
       <nav class="pager" aria-label="Template navigation">
         <RouterLink
           v-if="prevTemplate"
+          v-magnetic="{ strength: 0.25, radius: 8, disabled: reduced }"
           class="pager-link is-prev"
           :to="`/templates/${prevTemplate.slug}`"
+          :style="pagerAccentStyle(prevTemplate)"
         >
           <ArrowLeft :size="16" aria-hidden="true" />
           <span class="pager-meta">
@@ -509,8 +598,10 @@ const llmBundle = computed(() => {
 
         <RouterLink
           v-if="nextTemplate"
+          v-magnetic="{ strength: 0.25, radius: 8, disabled: reduced }"
           class="pager-link is-next"
           :to="`/templates/${nextTemplate.slug}`"
+          :style="pagerAccentStyle(nextTemplate)"
         >
           <span class="pager-meta">
             <span class="pager-eyebrow">Next</span>
@@ -698,15 +789,92 @@ const llmBundle = computed(() => {
 
 /* ── Stage + frame ────────────────────────────────────────────── */
 .stage {
+  position: relative;
   display: flex;
   justify-content: center;
   padding: clamp(12px, 2vw, 24px);
   border: 1px solid var(--dz-border);
   border-radius: var(--dz-radius-xl);
   background:
-    radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--dz-primary) 5%, transparent), transparent 60%),
+    radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--tpl-accent, var(--dz-primary)) 7%, transparent), transparent 60%),
     var(--dz-muted);
   overflow: hidden;
+  /* TASK-TV2-06: the stage rests in a soft glow of the template's own accent,
+     deepening on hover/focus-within — box-shadow only, transform-free. */
+  box-shadow: 0 0 56px -26px color-mix(in oklch, var(--tpl-accent, var(--dz-primary, #0766ee)) 45%, transparent);
+  transition: box-shadow var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+  /* Mount rise: the conversion surface materialises instead of appearing. */
+  animation: tpl-rise var(--dz-duration-slow, 320ms) var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+}
+
+.stage:hover,
+.stage:focus-within {
+  box-shadow: 0 0 64px -18px color-mix(in oklch, var(--tpl-accent, var(--dz-primary, #0766ee)) 60%, transparent);
+}
+
+@keyframes tpl-rise {
+  from {
+    opacity: 0;
+    transform: perspective(900px) translateY(24px) rotateX(2deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) rotateX(0deg);
+  }
+}
+
+/* Device-switch settle: a brief turn-to-face-you while the width tweens. Ends
+   at identity, so the iframe re-rasterizes crisp after every switch. */
+.stage.is-settling {
+  animation: tpl-settle 420ms var(--dz-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+}
+
+@keyframes tpl-settle {
+  0% {
+    transform: perspective(1100px) rotateY(0deg) scale(1);
+  }
+  40% {
+    transform: perspective(1100px) rotateY(1.1deg) scale(0.994);
+  }
+  100% {
+    transform: perspective(1100px) rotateY(0deg) scale(1);
+  }
+}
+
+/* The border beam overlay: rests invisible with its angle animation PAUSED;
+   the mount intro and a fine-pointer stage hover fade it in and let it run.
+   Tinted by the template's accent. */
+.tpl-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dz-duration-normal, 240ms) var(--dz-ease-out, ease-out);
+  --dz-colors-primary-400: var(--tpl-accent, var(--dz-primary, #0766ee));
+}
+
+.tpl-beam::before {
+  animation-play-state: paused;
+}
+
+.tpl-beam.is-intro {
+  opacity: 1;
+}
+
+.tpl-beam.is-intro::before {
+  animation-play-state: running;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stage:hover .tpl-beam {
+    opacity: 1;
+  }
+
+  .stage:hover .tpl-beam::before {
+    animation-play-state: running;
+  }
 }
 
 .preview-frame {
@@ -742,8 +910,15 @@ const llmBundle = computed(() => {
   transition: border-color var(--dz-duration-fast, 150ms) var(--dz-ease-out, ease-out);
 }
 
+/* TASK-TV2-06: each pager button previews its DESTINATION template's accent —
+   hover tints border and surface toward where the link will take you. */
 .pager-link:hover {
-  border-color: var(--dz-border-hover);
+  border-color: color-mix(in oklch, var(--pager-accent, var(--dz-primary, #0766ee)) 45%, var(--dz-border));
+  background: color-mix(in oklch, var(--pager-accent, var(--dz-primary, #0766ee)) 7%, var(--dz-surface));
+}
+
+.pager-link:hover .pager-eyebrow {
+  color: color-mix(in oklch, var(--pager-accent, var(--dz-primary, #0766ee)) 62%, var(--dz-foreground));
 }
 
 .pager-link:focus-visible {
@@ -776,6 +951,15 @@ const llmBundle = computed(() => {
 @media (prefers-reduced-motion: reduce) {
   .preview-frame {
     transition: none;
+  }
+  /* TASK-TV2-06: the stage neither rises nor settles; the beam never shows
+     (its intro is also JS-gated). The static accent glow is the whole story. */
+  .stage,
+  .stage.is-settling {
+    animation: none;
+  }
+  .tpl-beam {
+    display: none;
   }
 }
 
