@@ -476,3 +476,116 @@ export const BindableModel: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / item-disabled / root-disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the only state DzAccordion declares, and it has two reachable
+ * scopes that look identical in a screenshot: the whole accordion (`disabled` on
+ * the root, which also stamps `data-state="disabled"`) and a single item
+ * (`disabled` on `DzAccordionItem`, which leaves its siblings live).
+ *
+ * The play function separates them: an enabled trigger toggles `aria-expanded`,
+ * a disabled one is `disabled` in the DOM and stays collapsed. Disabled triggers
+ * are asserted rather than clicked — `dz-disabled-control` sets
+ * `pointer-events: none`, so the browser would never deliver the click at all.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzAccordion, DzAccordionItem, DzAccordionTrigger, DzAccordionContent },
+    template: `
+      <div class="grid max-w-5xl gap-6 lg:grid-cols-3">
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Enabled</p>
+          <DzAccordion
+            collapsible
+            variant="bordered"
+            data-testid="acc-enabled"
+            aria-label="Enabled accordion"
+          >
+            <DzAccordionItem value="a1">
+              <DzAccordionTrigger>Enabled section</DzAccordionTrigger>
+              <DzAccordionContent>This panel opens and closes.</DzAccordionContent>
+            </DzAccordionItem>
+            <DzAccordionItem value="a2">
+              <DzAccordionTrigger>Second enabled section</DzAccordionTrigger>
+              <DzAccordionContent>So does this one.</DzAccordionContent>
+            </DzAccordionItem>
+          </DzAccordion>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">One item disabled</p>
+          <DzAccordion
+            collapsible
+            variant="bordered"
+            data-testid="acc-item-disabled"
+            aria-label="Accordion with one disabled item"
+          >
+            <DzAccordionItem value="b1">
+              <DzAccordionTrigger>Open section</DzAccordionTrigger>
+              <DzAccordionContent>Still interactive.</DzAccordionContent>
+            </DzAccordionItem>
+            <DzAccordionItem value="b2" disabled>
+              <DzAccordionTrigger>Locked section</DzAccordionTrigger>
+              <DzAccordionContent>Unreachable while the item is disabled.</DzAccordionContent>
+            </DzAccordionItem>
+          </DzAccordion>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Whole accordion disabled</p>
+          <DzAccordion
+            collapsible
+            disabled
+            variant="bordered"
+            data-testid="acc-disabled"
+            aria-label="Disabled accordion"
+          >
+            <DzAccordionItem value="c1">
+              <DzAccordionTrigger>Frozen section</DzAccordionTrigger>
+              <DzAccordionContent>Never expands.</DzAccordionContent>
+            </DzAccordionItem>
+            <DzAccordionItem value="c2">
+              <DzAccordionTrigger>Also frozen</DzAccordionTrigger>
+              <DzAccordionContent>Nor does this.</DzAccordionContent>
+            </DzAccordionItem>
+          </DzAccordion>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Root-level state is reflected on the root element.
+    await expect(canvas.getByTestId('acc-enabled')).toHaveAttribute('data-state', 'ready')
+    await expect(canvas.getByTestId('acc-disabled')).toHaveAttribute('data-state', 'disabled')
+
+    // Enabled: the trigger toggles and the panel appears.
+    const enabledTrigger = canvas.getByRole('button', { name: 'Enabled section' })
+    await expect(enabledTrigger).toBeEnabled()
+    await expect(enabledTrigger).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.click(enabledTrigger)
+    await waitFor(() => expect(enabledTrigger).toHaveAttribute('aria-expanded', 'true'))
+    await expect(canvas.getByText('This panel opens and closes.')).toBeVisible()
+
+    // Item-level: the locked item is disabled, its sibling is not.
+    const lockedTrigger = canvas.getByRole('button', { name: 'Locked section' })
+    await expect(lockedTrigger).toBeDisabled()
+    await expect(lockedTrigger).toHaveAttribute('aria-expanded', 'false')
+    const openTrigger = canvas.getByRole('button', { name: 'Open section' })
+    await expect(openTrigger).toBeEnabled()
+    await userEvent.click(openTrigger)
+    await waitFor(() => expect(openTrigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // Root-level: every trigger is disabled and collapsed.
+    for (const name of ['Frozen section', 'Also frozen']) {
+      const trigger = canvas.getByRole('button', { name })
+      await expect(trigger).toBeDisabled()
+      await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    }
+  },
+}

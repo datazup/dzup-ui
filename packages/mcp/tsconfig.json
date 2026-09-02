@@ -23,6 +23,7 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
+  "//exclude": "TASK-N2-A1. This project EMITS to dist/, and dist/ is what npm publishes -- so anything excluded here is excluded from the shipped tarball, and anything forgotten here ships. Specs and the fixture catalog are test-time only. `src/**/*.test.ts` is kept alongside `*.spec.ts` so a file that drifts back to the old name is still not published; the spec that must not drift back is `yarn validate:mcp`, which fails when a tool has no `*.spec.ts` block. Typechecking of the excluded files is tsconfig.test.json, wired into `yarn typecheck:all`.",
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.spec.ts", "src/__fixtures__/**"]
 }

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "note": "Class-level security evidence (TASK-N1-O5). Thirteen components declare the same `url` boundary and cross it in the same two ways, so their threat model is one document and their corpus is one suite driven by shared fixture data. The capability-matrix generator resolves security evidence by the filename convention `{Component}.{kind}.{md,spec.ts}`, which cannot see either; the alternative was thirteen stub documents whose only content is a pointer, which is the box-ticking this matrix exists to expose. So the coverage is declared here and the generator checks both that the file exists and that the claim is about a real component. DzFileUpload is absent on purpose: it is the Tier D component and carries its own four per-component artifacts.",
+  "artifacts": [
+    {
+      "kind": "threat-model",
+      "path": "packages/core/security/url-boundary.threat-model.md",
+      "covers": [
+        "DzAnchor",
+        "DzAvatar",
+        "DzAvatarGroup",
+        "DzBreadcrumb",
+        "DzButton",
+        "DzImage",
+        "DzImageCard",
+        "DzImageComparison",
+        "DzLightbox",
+        "DzMegaMenu",
+        "DzMenu",
+        "DzPersonaSelector",
+        "DzQRCode",
+        "DzSidebar"
+      ],
+      "why": "One document, two threat models (navigation vs subresource) plus the payload boundary. Writing it fourteen times would hide the distinction that is the finding."
+    },
+    {
+      "kind": "url-policy",
+      "path": "packages/core/security/url-boundary.url-policy.spec.ts",
+      "covers": [
+        "DzAnchor",
+        "DzAvatar",
+        "DzAvatarGroup",
+        "DzBreadcrumb",
+        "DzButton",
+        "DzImage",
+        "DzImageCard",
+        "DzImageComparison",
+        "DzLightbox",
+        "DzMegaMenu",
+        "DzMenu",
+        "DzPersonaSelector",
+        "DzSidebar"
+      ],
+      "why": "Every url declarer is bound to its own sink in boundary-bindings.ts and measured against the shared url-scheme fixtures. DzQRCode is not covered: its declared boundary is `payload`, which owes no url-policy row — though its undeclared `icon` sink is asserted in the same file (finding U3)."
+    },
+    {
+      "kind": "malicious-corpus",
+      "path": "packages/core/security/url-boundary.malicious-corpus.spec.ts",
+      "covers": [
+        "DzAnchor",
+        "DzAvatar",
+        "DzAvatarGroup",
+        "DzBreadcrumb",
+        "DzButton",
+        "DzImage",
+        "DzImageCard",
+        "DzImageComparison",
+        "DzLightbox",
+        "DzMegaMenu",
+        "DzMenu",
+        "DzPersonaSelector",
+        "DzQRCode",
+        "DzSidebar"
+      ],
+      "why": "Hostile content — markup injection and degenerate input — through each component's own label, alt, caption or fallback prop, plus the CSS-injection cases on DzQRCode's `color`."
+    }
+  ]
+}

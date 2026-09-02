@@ -13,6 +13,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzIconButtonUi } from './DzIconButton.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -38,6 +39,17 @@ export interface DzIconButtonProps {
   type?: 'button' | 'submit' | 'reset'
   /** Unique element ID */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzIconButton.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzIconButton :icon="X" :ui="{ spinner: 'text-[var(--dz-primary)]' }" />
+   * ```
+   */
+  ui?: DzIconButtonUi
 }
 
 // ---------------------------------------------------------------------------

@@ -57,7 +57,7 @@ export const orderListVariants = tv({
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
       },
       sm: {
-        item: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1-5)] text-[length:var(--dz-text-sm)]',
+        item: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
       },
       md: {
         item: 'px-[var(--dz-spacing-4)] py-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)]',

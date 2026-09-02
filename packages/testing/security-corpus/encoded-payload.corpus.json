@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "category": "encoded-payload",
+  "description": "Values a component encodes into something another system decodes and acts on. The defining property is that the browser is not in the loop: a QR code is read by a camera, and whatever the value turns out to be is followed with none of the protections a page would have applied. The required outcome is therefore never about the page's own safety — inside the document these values are geometry. It is about the component encoding exactly what it was given, refusing what it cannot encode correctly, and never letting the value become live in the page as well.",
+  "fixtures": [
+    {
+      "id": "encoded-payload.url.javascript",
+      "category": "encoded-payload",
+      "title": "javascript: URL as the encoded value",
+      "payload": "javascript:alert(1)",
+      "outcomes": {
+        "encoded-payload": "inert",
+        "text": "escaped"
+      },
+      "rationale": "`inert` inside the document, and the reason has to be stated rather than assumed: the value becomes path geometry in an SVG, it is never written to an `href` or a `src`, and nothing in the page can activate it. What it is outside the document is not the component's to neutralise — no encoder can decide whether a payload is legitimate, and one that silently rewrote it would be a worse component. This is a documentation obligation on the host, recorded here so the corpus is not read as a claim that the QR content was made safe.",
+      "provenance": "Boundary justification for DzQRCode in packages/core/docs/quality-matrix.json."
+    },
+    {
+      "id": "encoded-payload.url.off-origin",
+      "category": "encoded-payload",
+      "title": "off-origin https URL as the encoded value",
+      "payload": "https://evil.example.test/",
+      "outcomes": {
+        "encoded-payload": "inert",
+        "text": "escaped"
+      },
+      "rationale": "The realistic case, and the one that shows why an origin allowlist does not belong in the component: a QR code that only encodes its own origin is useless, and the person scanning it is not protected by anything the page decided. Present so the corpus states the outcome explicitly instead of leaving the honest answer unwritten.",
+      "provenance": "Phishing-by-QR ('quishing') literature; standard payload-boundary case."
+    },
+    {
+      "id": "encoded-payload.length.over-capacity",
+      "category": "encoded-payload",
+      "title": "value longer than the encoder's capacity at the selected error level",
+      "payload": "A",
+      "repeat": 4096,
+      "outcomes": {
+        "encoded-payload": "rejected"
+      },
+      "rationale": "QR capacity is bounded by version and error-correction level. Over capacity there are exactly two behaviours: refuse, or emit something that is not a valid code. The second is the dangerous one — it looks like a code, it scans as nothing or as a truncation, and no error reaches the developer. `rejected` means the component declines to render rather than rendering a lie.",
+      "provenance": "ISO/IEC 18004 capacity tables."
+    }
+  ]
+}

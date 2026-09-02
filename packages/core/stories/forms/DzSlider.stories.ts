@@ -101,7 +101,7 @@ export const Default: Story = {
     setup() {
       return { args }
     },
-    template: '<DzSlider v-bind="args" class="w-[480px]" />',
+    template: '<DzSlider v-bind="args" class="w-[480px] max-w-full" />',
   }),
 }
 
@@ -114,7 +114,7 @@ export const AllSizes: Story = {
   render: () => ({
     components: { DzSlider },
     template: `
-      <div class="space-y-6 w-[480px]">
+      <div class="space-y-6 w-[480px] max-w-full">
         <div v-for="size in ['xs', 'sm', 'md', 'lg', 'xl']" :key="size">
           <p class="text-sm font-medium mb-2 capitalize">{{ size }}</p>
           <DzSlider :size="size" :model-value="50" />
@@ -133,7 +133,7 @@ export const AllTones: Story = {
   render: () => ({
     components: { DzSlider },
     template: `
-      <div class="space-y-6 w-[480px]">
+      <div class="space-y-6 w-[480px] max-w-full">
         <div v-for="tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']" :key="tone">
           <p class="text-sm font-medium mb-2 capitalize">{{ tone }}</p>
           <DzSlider :tone="tone" :model-value="60" />
@@ -155,7 +155,7 @@ export const WithSteps: Story = {
       return { value: 50 }
     },
     template: `
-      <div class="space-y-4 w-[480px]">
+      <div class="space-y-4 w-[480px] max-w-full">
         <DzSlider v-model="value" :min="0" :max="100" :step="10" />
         <p class="text-sm text-[var(--dz-muted-foreground)]">Value: <strong>{{ value }}</strong> (step: 10)</p>
       </div>
@@ -191,7 +191,7 @@ export const Disabled: Story = {
     setup() {
       return { args }
     },
-    template: '<DzSlider v-bind="args" :model-value="40" class="w-[480px]" />',
+    template: '<DzSlider v-bind="args" :model-value="40" class="w-[480px] max-w-full" />',
   }),
 }
 
@@ -203,7 +203,7 @@ export const States: Story = {
   render: () => ({
     components: { DzSlider },
     template: `
-      <div class="space-y-6 w-[480px]">
+      <div class="space-y-6 w-[480px] max-w-full">
         <div>
           <p class="text-sm mb-1">Default</p>
           <DzSlider :model-value="50" />
@@ -233,7 +233,7 @@ export const WithLabel: Story = {
       return { value: 50 }
     },
     template: `
-      <div class="space-y-8 w-[480px]">
+      <div class="space-y-8 w-[480px] max-w-full">
         <DzSlider v-model="value" tone="primary">Volume</DzSlider>
         <div class="flex gap-8 h-72">
           <DzSlider :model-value="60" orientation="vertical" tone="success">Bass</DzSlider>
@@ -256,7 +256,7 @@ export const DarkMode: Story = {
   render: () => ({
     components: { DzSlider },
     template: `
-      <div class="space-y-6 w-[480px]">
+      <div class="space-y-6 w-[480px] max-w-full">
         <DzSlider :model-value="30" tone="primary" />
         <DzSlider :model-value="60" tone="success" />
         <DzSlider :model-value="80" tone="danger" />
@@ -276,7 +276,7 @@ export const Interactive: Story = {
       return { volume: 50 }
     },
     template: `
-      <div class="space-y-4 w-[480px]">
+      <div class="space-y-4 w-[480px] max-w-full">
         <DzSlider v-model="volume" :min="0" :max="100" aria-label="Volume" />
         <p class="text-sm text-[var(--dz-muted-foreground)]">Volume: <strong>{{ volume }}%</strong></p>
       </div>
@@ -303,7 +303,7 @@ export const Accessibility: Story = {
   render: () => ({
     components: { DzSlider },
     template: `
-      <div class="space-y-4 w-[480px]">
+      <div class="space-y-4 w-[480px] max-w-full">
         <p class="text-sm text-[var(--dz-muted-foreground)]">Tab to focus the thumb, arrow keys to adjust value.</p>
         <DzSlider aria-label="Brightness" :model-value="50" />
       </div>
@@ -323,7 +323,7 @@ export const RealWorldVolume: Story = {
       return { volume: 75 }
     },
     template: `
-      <div class="w-[480px]">
+      <div class="w-[480px] max-w-full">
         <label class="block text-sm font-medium mb-2">Volume</label>
         <DzSlider v-model="volume" :min="0" :max="100" tone="primary" aria-label="Volume" />
         <div class="flex justify-between text-xs text-[var(--dz-muted-foreground)] mt-1">

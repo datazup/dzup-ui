@@ -1,0 +1,675 @@
+{
+  "generator": "yarn generate:docs-pages (TASK-N2-D1, evidence layer TASK-N2-D2)",
+  "artifactSha256": "76a69d79026c5f6203a2b8fa31cd61db359110257d1acbc71fc730e6475a3cb2",
+  "schemaVersion": "1.2.0",
+  "extractor": "vue-component-meta@3.3.7",
+  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "publicComponents": 144,
+  "compoundParts": 64,
+  "groups": [
+    {
+      "key": "buttons",
+      "text": "Buttons",
+      "items": [
+        {
+          "text": "DzButton",
+          "link": "/components/DzButton"
+        },
+        {
+          "text": "DzButtonGroup",
+          "link": "/components/DzButtonGroup"
+        },
+        {
+          "text": "DzCopyButton",
+          "link": "/components/DzCopyButton"
+        },
+        {
+          "text": "DzFab",
+          "link": "/components/DzFab"
+        },
+        {
+          "text": "DzIconButton",
+          "link": "/components/DzIconButton"
+        },
+        {
+          "text": "DzSpeedDial",
+          "link": "/components/DzSpeedDial"
+        },
+        {
+          "text": "DzSplitButton",
+          "link": "/components/DzSplitButton"
+        },
+        {
+          "text": "DzToggleButton",
+          "link": "/components/DzToggleButton"
+        }
+      ]
+    },
+    {
+      "key": "inputs",
+      "text": "Inputs",
+      "items": [
+        {
+          "text": "DzInput",
+          "link": "/components/DzInput"
+        },
+        {
+          "text": "DzInputGroup",
+          "link": "/components/DzInputGroup"
+        },
+        {
+          "text": "DzInputMask",
+          "link": "/components/DzInputMask"
+        },
+        {
+          "text": "DzNumberInput",
+          "link": "/components/DzNumberInput"
+        },
+        {
+          "text": "DzOtpInput",
+          "link": "/components/DzOtpInput"
+        },
+        {
+          "text": "DzPasswordInput",
+          "link": "/components/DzPasswordInput"
+        },
+        {
+          "text": "DzSearchInput",
+          "link": "/components/DzSearchInput"
+        },
+        {
+          "text": "DzTextarea",
+          "link": "/components/DzTextarea"
+        }
+      ]
+    },
+    {
+      "key": "forms",
+      "text": "Forms",
+      "items": [
+        {
+          "text": "DzCascader",
+          "link": "/components/DzCascader"
+        },
+        {
+          "text": "DzCheckbox",
+          "link": "/components/DzCheckbox"
+        },
+        {
+          "text": "DzCheckboxGroup",
+          "link": "/components/DzCheckboxGroup"
+        },
+        {
+          "text": "DzColorPicker",
+          "link": "/components/DzColorPicker"
+        },
+        {
+          "text": "DzCombobox",
+          "link": "/components/DzCombobox"
+        },
+        {
+          "text": "DzDatePicker",
+          "link": "/components/DzDatePicker"
+        },
+        {
+          "text": "DzDateRangePicker",
+          "link": "/components/DzDateRangePicker"
+        },
+        {
+          "text": "DzFieldArray",
+          "link": "/components/DzFieldArray"
+        },
+        {
+          "text": "DzFileUpload",
+          "link": "/components/DzFileUpload"
+        },
+        {
+          "text": "DzFloatLabel",
+          "link": "/components/DzFloatLabel"
+        },
+        {
+          "text": "DzFormField",
+          "link": "/components/DzFormField"
+        },
+        {
+          "text": "DzInplace",
+          "link": "/components/DzInplace"
+        },
+        {
+          "text": "DzKnob",
+          "link": "/components/DzKnob"
+        },
+        {
+          "text": "DzListbox",
+          "link": "/components/DzListbox"
+        },
+        {
+          "text": "DzMention",
+          "link": "/components/DzMention"
+        },
+        {
+          "text": "DzMultiSelect",
+          "link": "/components/DzMultiSelect"
+        },
+        {
+          "text": "DzPersonaSelector",
+          "link": "/components/DzPersonaSelector"
+        },
+        {
+          "text": "DzRadio",
+          "link": "/components/DzRadio"
+        },
+        {
+          "text": "DzRadioGroup",
+          "link": "/components/DzRadioGroup"
+        },
+        {
+          "text": "DzRangeSlider",
+          "link": "/components/DzRangeSlider"
+        },
+        {
+          "text": "DzRating",
+          "link": "/components/DzRating"
+        },
+        {
+          "text": "DzSelect",
+          "link": "/components/DzSelect"
+        },
+        {
+          "text": "DzSlider",
+          "link": "/components/DzSlider"
+        },
+        {
+          "text": "DzSwitch",
+          "link": "/components/DzSwitch"
+        },
+        {
+          "text": "DzTagsInput",
+          "link": "/components/DzTagsInput"
+        },
+        {
+          "text": "DzTimePicker",
+          "link": "/components/DzTimePicker"
+        },
+        {
+          "text": "DzTransfer",
+          "link": "/components/DzTransfer"
+        },
+        {
+          "text": "DzTreeSelect",
+          "link": "/components/DzTreeSelect"
+        }
+      ]
+    },
+    {
+      "key": "cards",
+      "text": "Cards",
+      "items": [
+        {
+          "text": "DzCard",
+          "link": "/components/DzCard"
+        },
+        {
+          "text": "DzImageCard",
+          "link": "/components/DzImageCard"
+        },
+        {
+          "text": "DzStatCard",
+          "link": "/components/DzStatCard"
+        }
+      ]
+    },
+    {
+      "key": "layout",
+      "text": "Layout",
+      "items": [
+        {
+          "text": "DzAffix",
+          "link": "/components/DzAffix"
+        },
+        {
+          "text": "DzAppShell",
+          "link": "/components/DzAppShell"
+        },
+        {
+          "text": "DzAspectRatio",
+          "link": "/components/DzAspectRatio"
+        },
+        {
+          "text": "DzCollapse",
+          "link": "/components/DzCollapse"
+        },
+        {
+          "text": "DzContainer",
+          "link": "/components/DzContainer"
+        },
+        {
+          "text": "DzDeferredContent",
+          "link": "/components/DzDeferredContent"
+        },
+        {
+          "text": "DzDivider",
+          "link": "/components/DzDivider"
+        },
+        {
+          "text": "DzFlex",
+          "link": "/components/DzFlex"
+        },
+        {
+          "text": "DzGrid",
+          "link": "/components/DzGrid"
+        },
+        {
+          "text": "DzMasonry",
+          "link": "/components/DzMasonry"
+        },
+        {
+          "text": "DzPageHero",
+          "link": "/components/DzPageHero"
+        },
+        {
+          "text": "DzPanel",
+          "link": "/components/DzPanel"
+        },
+        {
+          "text": "DzResizable",
+          "link": "/components/DzResizable"
+        },
+        {
+          "text": "DzScrollArea",
+          "link": "/components/DzScrollArea"
+        },
+        {
+          "text": "DzSpacer",
+          "link": "/components/DzSpacer"
+        },
+        {
+          "text": "DzSplitter",
+          "link": "/components/DzSplitter"
+        },
+        {
+          "text": "DzStack",
+          "link": "/components/DzStack"
+        },
+        {
+          "text": "DzToolbar",
+          "link": "/components/DzToolbar"
+        }
+      ]
+    },
+    {
+      "key": "navigation",
+      "text": "Navigation",
+      "items": [
+        {
+          "text": "DzAnchor",
+          "link": "/components/DzAnchor"
+        },
+        {
+          "text": "DzBackTop",
+          "link": "/components/DzBackTop"
+        },
+        {
+          "text": "DzBreadcrumb",
+          "link": "/components/DzBreadcrumb"
+        },
+        {
+          "text": "DzColorModeToggle",
+          "link": "/components/DzColorModeToggle"
+        },
+        {
+          "text": "DzMegaMenu",
+          "link": "/components/DzMegaMenu"
+        },
+        {
+          "text": "DzMenu",
+          "link": "/components/DzMenu"
+        },
+        {
+          "text": "DzPagination",
+          "link": "/components/DzPagination"
+        },
+        {
+          "text": "DzSegmented",
+          "link": "/components/DzSegmented"
+        },
+        {
+          "text": "DzSidebar",
+          "link": "/components/DzSidebar"
+        },
+        {
+          "text": "DzStepper",
+          "link": "/components/DzStepper"
+        },
+        {
+          "text": "DzStepperItem",
+          "link": "/components/DzStepperItem"
+        },
+        {
+          "text": "DzTabs",
+          "link": "/components/DzTabs"
+        }
+      ]
+    },
+    {
+      "key": "overlays",
+      "text": "Overlays",
+      "items": [
+        {
+          "text": "DzCommandPalette",
+          "link": "/components/DzCommandPalette"
+        },
+        {
+          "text": "DzConfirmDialog",
+          "link": "/components/DzConfirmDialog"
+        },
+        {
+          "text": "DzContextMenu",
+          "link": "/components/DzContextMenu"
+        },
+        {
+          "text": "DzDialog",
+          "link": "/components/DzDialog"
+        },
+        {
+          "text": "DzDropdownMenu",
+          "link": "/components/DzDropdownMenu"
+        },
+        {
+          "text": "DzPopconfirm",
+          "link": "/components/DzPopconfirm"
+        },
+        {
+          "text": "DzPopover",
+          "link": "/components/DzPopover"
+        },
+        {
+          "text": "DzSheet",
+          "link": "/components/DzSheet"
+        },
+        {
+          "text": "DzTooltip",
+          "link": "/components/DzTooltip"
+        },
+        {
+          "text": "DzTour",
+          "link": "/components/DzTour"
+        }
+      ]
+    },
+    {
+      "key": "feedback",
+      "text": "Feedback",
+      "items": [
+        {
+          "text": "DzAlert",
+          "link": "/components/DzAlert"
+        },
+        {
+          "text": "DzAsyncBoundary",
+          "link": "/components/DzAsyncBoundary"
+        },
+        {
+          "text": "DzBadge",
+          "link": "/components/DzBadge"
+        },
+        {
+          "text": "DzBlockUI",
+          "link": "/components/DzBlockUI"
+        },
+        {
+          "text": "DzEmpty",
+          "link": "/components/DzEmpty"
+        },
+        {
+          "text": "DzErrorBoundary",
+          "link": "/components/DzErrorBoundary"
+        },
+        {
+          "text": "DzMeterGroup",
+          "link": "/components/DzMeterGroup"
+        },
+        {
+          "text": "DzNotification",
+          "link": "/components/DzNotification"
+        },
+        {
+          "text": "DzProgress",
+          "link": "/components/DzProgress"
+        },
+        {
+          "text": "DzResult",
+          "link": "/components/DzResult"
+        },
+        {
+          "text": "DzRunStatusBadge",
+          "link": "/components/DzRunStatusBadge"
+        },
+        {
+          "text": "DzScrollProgress",
+          "link": "/components/DzScrollProgress"
+        },
+        {
+          "text": "DzSkeleton",
+          "link": "/components/DzSkeleton"
+        },
+        {
+          "text": "DzSpinner",
+          "link": "/components/DzSpinner"
+        },
+        {
+          "text": "DzToast",
+          "link": "/components/DzToast"
+        },
+        {
+          "text": "DzTokenProgressBar",
+          "link": "/components/DzTokenProgressBar"
+        },
+        {
+          "text": "GovernanceBadge",
+          "link": "/components/GovernanceBadge"
+        },
+        {
+          "text": "TeamMemberBadge",
+          "link": "/components/TeamMemberBadge"
+        }
+      ]
+    },
+    {
+      "key": "data",
+      "text": "Data display",
+      "items": [
+        {
+          "text": "DzAccordion",
+          "link": "/components/DzAccordion"
+        },
+        {
+          "text": "DzAnimatedNumber",
+          "link": "/components/DzAnimatedNumber"
+        },
+        {
+          "text": "DzCalendar",
+          "link": "/components/DzCalendar"
+        },
+        {
+          "text": "DzChip",
+          "link": "/components/DzChip"
+        },
+        {
+          "text": "DzCodeBlock",
+          "link": "/components/DzCodeBlock"
+        },
+        {
+          "text": "DzCountdown",
+          "link": "/components/DzCountdown"
+        },
+        {
+          "text": "DzDataGrid",
+          "link": "/components/DzDataGrid"
+        },
+        {
+          "text": "DzDataView",
+          "link": "/components/DzDataView"
+        },
+        {
+          "text": "DzDescriptions",
+          "link": "/components/DzDescriptions"
+        },
+        {
+          "text": "DzInfiniteScroll",
+          "link": "/components/DzInfiniteScroll"
+        },
+        {
+          "text": "DzList",
+          "link": "/components/DzList"
+        },
+        {
+          "text": "DzListItem",
+          "link": "/components/DzListItem"
+        },
+        {
+          "text": "DzOrderList",
+          "link": "/components/DzOrderList"
+        },
+        {
+          "text": "DzTable",
+          "link": "/components/DzTable"
+        },
+        {
+          "text": "DzTag",
+          "link": "/components/DzTag"
+        },
+        {
+          "text": "DzTimeline",
+          "link": "/components/DzTimeline"
+        },
+        {
+          "text": "DzTimelineItem",
+          "link": "/components/DzTimelineItem"
+        },
+        {
+          "text": "DzTree",
+          "link": "/components/DzTree"
+        },
+        {
+          "text": "DzTreeItem",
+          "link": "/components/DzTreeItem"
+        }
+      ]
+    },
+    {
+      "key": "media",
+      "text": "Media",
+      "items": [
+        {
+          "text": "DzAvatar",
+          "link": "/components/DzAvatar"
+        },
+        {
+          "text": "DzAvatarGroup",
+          "link": "/components/DzAvatarGroup"
+        },
+        {
+          "text": "DzCarousel",
+          "link": "/components/DzCarousel"
+        },
+        {
+          "text": "DzEmoji",
+          "link": "/components/DzEmoji"
+        },
+        {
+          "text": "DzIcon",
+          "link": "/components/DzIcon"
+        },
+        {
+          "text": "DzImage",
+          "link": "/components/DzImage"
+        },
+        {
+          "text": "DzImageComparison",
+          "link": "/components/DzImageComparison"
+        },
+        {
+          "text": "DzLightbox",
+          "link": "/components/DzLightbox"
+        },
+        {
+          "text": "DzQRCode",
+          "link": "/components/DzQRCode"
+        },
+        {
+          "text": "DzWatermark",
+          "link": "/components/DzWatermark"
+        }
+      ]
+    },
+    {
+      "key": "typography",
+      "text": "Typography",
+      "items": [
+        {
+          "text": "DzBlockquote",
+          "link": "/components/DzBlockquote"
+        },
+        {
+          "text": "DzCaption",
+          "link": "/components/DzCaption"
+        },
+        {
+          "text": "DzCode",
+          "link": "/components/DzCode"
+        },
+        {
+          "text": "DzHeading",
+          "link": "/components/DzHeading"
+        },
+        {
+          "text": "DzKbd",
+          "link": "/components/DzKbd"
+        },
+        {
+          "text": "DzRelativeTime",
+          "link": "/components/DzRelativeTime"
+        },
+        {
+          "text": "DzText",
+          "link": "/components/DzText"
+        },
+        {
+          "text": "DzVisuallyHidden",
+          "link": "/components/DzVisuallyHidden"
+        }
+      ]
+    },
+    {
+      "key": "providers",
+      "text": "Providers",
+      "items": [
+        {
+          "text": "DzProvider",
+          "link": "/components/DzProvider"
+        },
+        {
+          "text": "DzThemeProvider",
+          "link": "/components/DzThemeProvider"
+        }
+      ]
+    }
+  ],
+  "evidenceSha256": {
+    "packages/core/docs/quality-matrix.json": "69fd88d079d8a1fc4dd17dc260eb7cff5f9ad896fd4bb6e4cbdebfd8c4757bde",
+    "packages/core/docs/capability-matrix.json": "02993453b1d97cee036c6fbdb127996012b6fb29885014e54fd7409b6ea45f2e",
+    "e2e/at-matrix/index.json": "9d3a42652df31ea400e621b6b209ddee8ddeec427e26d80f953e1676d282f949",
+    "packages/core/docs/wcag-deviations.json": "c3fdab5ea679fbb0f39d0be91bcf0edcc6442c5021fb5a240e48153c89f1fcb8",
+    "e2e/matrix/engine-ratchets.json": "cbcb8ba4657f5270b12bba458715cffdd59d343830eb13d7ebdda9d64e5183e4",
+    "e2e/matrix/known-failures.json": "d579c5e0ea41a1560b76ef9be2570535910a588304982a0ca4ab9297c992bf83",
+    "packages/core/security/security-deviations.json": "3d8470b437208355c868fba46d11c3f1bf4c7355bdbc50b5f38b3f00047b61b8",
+    "packages/core/src/styles/base.css": "a7de1afe7bbc24fa9fdc92801624f149c1548941758e62261ac15614403fd533"
+  },
+  "evidence": {
+    "cells": 1661,
+    "unrunCells": 494,
+    "atCells": 534,
+    "atExecuted": 0
+  }
+}

@@ -53,6 +53,7 @@ const classes = computed(() =>
   >
     <slot>
       <button
+        data-part="trigger"
         type="button"
         :class="classes"
         :disabled="ctx?.disabled.value || undefined"

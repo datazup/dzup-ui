@@ -1,0 +1,27 @@
+{
+  "name": "@dzup-ui/docs",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Public documentation site for dzup-ui (TASK-N2-D1) — a renderer over packages/core/docs/component-meta.json, never a second source of API facts",
+  "scripts": {
+    "//generate": "TASK-N2-D1. Emits every generated page under apps/docs/components/ from packages/core/docs/component-meta.json. Asserts the artifact is FRESH first (the same re-extract-and-compare clause `yarn validate:component-meta` runs), so a stale artifact stops the site build before a single page is written.",
+    "generate": "yarn --cwd ../.. generate:docs-pages",
+    "check": "yarn --cwd ../.. validate:docs-pages",
+    "dev": "yarn generate && yarn playground && vitepress dev",
+    "//build": "The generate step is part of the build on purpose: a stale metadata artifact must turn the SITE build red, not just a separate validator.",
+    "build": "yarn generate && yarn playground && vitepress build",
+    "preview": "vitepress preview",
+    "size": "node scripts/report-size.mjs",
+    "//playground": "TASK-N2-D3. Runs the SINGLE playground bundle producer (apps/storybook/scripts/build-playground.mjs) and copies its three assets here. Not a second bundler -- the same one-producer/N-consumers shape TASK-N2-A3 gave apps/storybook/scripts/build-llms.mjs. --check asserts the copies are byte-identical to the producer output.",
+    "playground": "node scripts/sync-playground-assets.mjs",
+    "playground:check": "node scripts/sync-playground-assets.mjs --check"
+  },
+  "devDependencies": {
+    "@dzup-ui/tokens": "workspace:*",
+    "@dzup-ui/tooling": "workspace:*",
+    "@vue/repl": "4.7.2",
+    "vitepress": "1.6.4",
+    "vue": "^3.5.13"
+  }
+}

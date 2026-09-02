@@ -23,11 +23,11 @@ export const ratingTokens = {
   },
   /** Inter-item gap per size */
   gap: {
-    xs: 'var(--dz-spacing-0-5, 0.125rem)',
-    sm: 'var(--dz-spacing-0-5, 0.125rem)',
+    xs: 'var(--dz-spacing-0_5, 0.125rem)',
+    sm: 'var(--dz-spacing-0_5, 0.125rem)',
     md: 'var(--dz-spacing-1, 0.25rem)',
     lg: 'var(--dz-spacing-1, 0.25rem)',
-    xl: 'var(--dz-spacing-1-5, 0.375rem)',
+    xl: 'var(--dz-spacing-1_5, 0.375rem)',
   },
   /** Icon dimension per size (mirrors DzIcon size scale) */
   size: {

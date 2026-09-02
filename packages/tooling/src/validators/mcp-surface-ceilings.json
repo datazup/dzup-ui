@@ -1,0 +1,11 @@
+{
+  "//": "TASK-N2-A1. Ratcheted debt for the @dzup-ui/mcp public surface. Both numbers may only FALL; validate:mcp fails when one rises and tells you to lower it when it drops. Measured at 51dec93 with the uncommitted N1+T1 working tree.",
+  "catalogVisibilityUnreachable": {
+    "//": "Symbols the ownership manifest calls `public-component` that this package's own parseComponentIndex cannot find in packages/core/docs/llms.txt -- the file list_components/get_component answer from. Was 43 at TASK-N2-A1: llms.txt was rendered from public-api.manifest.json, which omits 43 of the 144, so a third of the catalog was invisible to every MCP client. TASK-N2-A3 re-rendered llms.txt from component-meta.json (43 -> 2) and widened this package's Dz-only component-name pattern so the two public components with no Dz prefix, GovernanceBadge and TeamMemberBadge, parse too (2 -> 0). Closed WITHOUT running `generate:exports`, which B3 forbids: public-api.manifest.json is untouched and still stale -- it simply no longer feeds this surface.",
+    "ceiling": 0
+  },
+  "toolsWithoutE2eSmoke": {
+    "//": "Tools that scripts/e2e-smoke.mjs never CALLS against the built dist/. It asserts the full tool list, so all twelve are named there; seven are exercised. Not a failure -- an unrun cell, kept visible. Fell 6 -> 5 at TASK-N2-A3, which added a real get_component(DzRating) call: that tool is the one A1's finding F1 was about, so an end-to-end assertion that it now answers is the regression test for the fix.",
+    "ceiling": 5
+  }
+}

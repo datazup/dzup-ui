@@ -22,10 +22,10 @@
 
 | Verdict | Count | Meaning |
 | --- | ---: | --- |
-| ✅ pass | 238 | satisfies the clause today |
+| ✅ pass | 245 | satisfies the clause today |
 | ⛔ gap | 6 | fails the clause; work for TASK-FORM-OSS-02 |
 | 🕓 future | 5 | the seam does not exist yet; work for TASK-FORM-OSS-03 |
-| ◻ unrun | 54 | the check exists and has not been run for this control |
+| ◻ unrun | 47 | the check exists and has not been run for this control |
 | – n-a | 93 | the clause does not apply to this kind of control |
 
 | Clause | | ✅ | ⛔ | 🕓 | ◻ | – |
@@ -35,7 +35,7 @@
 | C3 | states | 44 | 0 | 0 | 0 | 0 |
 | C4 | messages | 35 | 0 | 0 | 0 | 9 |
 | C5 | SSR | 44 | 0 | 0 | 0 | 0 |
-| C6 | RTL | 3 | 0 | 0 | 41 | 0 |
+| C6 | RTL | 10 | 0 | 0 | 34 | 0 |
 | C7 | motion | 5 | 0 | 0 | 0 | 39 |
 | C8 | keyboard | 30 | 0 | 0 | 3 | 11 |
 | C9 | async | 8 | 0 | 5 | 5 | 26 |
@@ -43,6 +43,13 @@
 ## Pro may rely on today
 
 - `DzInput`
+- `DzInputGroup`
+- `DzInputMask`
+- `DzNumberInput`
+- `DzOtpInput`
+- `DzPasswordInput`
+- `DzSearchInput`
+- `DzTextarea`
 - `DzFileUpload`
 - `DzSelect`
 
@@ -53,13 +60,13 @@
 | Control | kind | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | specs c/a/s | story states |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `DzInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/✓/✓ | Disabled, Invalid |
-| `DzInputGroup` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled |
-| `DzInputMask` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/·/✓ | Readonly |
-| `DzNumberInput` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Readonly, Invalid |
-| `DzOtpInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled, Invalid |
-| `DzPasswordInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled, Readonly, Invalid |
-| `DzSearchInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled, Readonly, Invalid |
-| `DzTextarea` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/✓/✓ | Disabled, Readonly, Loading, Invalid |
+| `DzInputGroup` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled |
+| `DzInputMask` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/·/✓ | Readonly |
+| `DzNumberInput` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Readonly, Invalid |
+| `DzOtpInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled, Invalid |
+| `DzPasswordInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled, Readonly, Invalid |
+| `DzSearchInput` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/·/✓ | Disabled, Readonly, Invalid |
+| `DzTextarea` | text | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | – n-a | – n-a | ✓/✓/✓ | Disabled, Readonly, Loading, Invalid |
 
 ### `packages/core/src/components/forms/`
 

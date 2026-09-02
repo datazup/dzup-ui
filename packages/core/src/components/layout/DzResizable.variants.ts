@@ -13,13 +13,32 @@ export const resizableVariants = tv({
   slots: {
     group: 'flex h-full w-full',
     panel: 'flex items-stretch overflow-auto',
+    /**
+     * TASK-N1-O3 / WCAG 2.2 SC 2.5.8 Target Size (Minimum).
+     *
+     * The handle carries `role="separator"` and is the drag target. It measured
+     * `div 1x72` — a one-pixel-wide pointer target — on chromium, firefox and
+     * webkit. It cannot simply be grown: a 24px-wide handle is a 24px gap
+     * between the panes.
+     *
+     * So the handle's own box grows to the 24px floor across the axis it is
+     * thin in, `dz-target-min-tight-{inline,block}` gives that growth back to
+     * the layout with a negative margin on the same axis, and the hairline it
+     * paints moves to a pseudo-element at `--dz-control-visual-size`. The panes
+     * keep their geometry to the pixel; the handle accepts a pointer 24px wide.
+     *
+     * The cost, recorded rather than hidden: the handle now overhangs each pane
+     * by half the growth, so a pointer within ~11px of the divider hits the
+     * handle rather than the pane content behind it.
+     */
     handle: [
       'relative flex shrink-0 items-center justify-center',
-      'bg-[var(--dz-border)]',
       'transition-colors duration-150',
-      'hover:bg-[var(--dz-primary)]',
       'dz-focus-ring-control dz-disabled-control',
-      'after:absolute after:inset-0',
+      'before:absolute before:inset-0 before:m-auto before:-z-10',
+      'before:bg-[var(--dz-border)]',
+      'before:transition-colors before:duration-150',
+      'hover:before:bg-[var(--dz-primary)]',
     ].join(' '),
     handleIndicator: [
       'z-10 flex items-center justify-center',
@@ -33,32 +52,36 @@ export const resizableVariants = tv({
     direction: {
       horizontal: {
         group: 'flex-row',
-        handle: 'w-px',
+        // The hairline is vertical: full height, `--dz-control-visual-size` wide.
+        handle: 'dz-target-min-tight-inline w-px before:h-full before:w-[var(--dz-control-visual-size)]',
         handleIndicator: 'h-4 w-3 rotate-90',
       },
       vertical: {
         group: 'flex-col',
-        handle: 'h-px',
+        handle: 'dz-target-min-tight-block h-px before:w-full before:h-[var(--dz-control-visual-size)]',
         handleIndicator: 'h-3 w-4',
       },
     },
 
     size: {
       icon: '',
+      // `--dz-control-visual-size` is the hairline's thickness. The `w-*`/`h-*`
+      // classes stay so the declared size is still readable at the call site;
+      // the `min-*-size` floor from the utility is what actually wins.
       xs: {
-        handle: 'data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
+        handle: '[--dz-control-visual-size:1px] data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
       },
       sm: {
-        handle: 'data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
+        handle: '[--dz-control-visual-size:1px] data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
       },
       md: {
-        handle: 'data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
+        handle: '[--dz-control-visual-size:1px] data-[direction=horizontal]:w-px data-[direction=vertical]:h-px',
       },
       lg: {
-        handle: 'data-[direction=horizontal]:w-0.5 data-[direction=vertical]:h-0.5',
+        handle: '[--dz-control-visual-size:0.125rem] data-[direction=horizontal]:w-0.5 data-[direction=vertical]:h-0.5',
       },
       xl: {
-        handle: 'data-[direction=horizontal]:w-1 data-[direction=vertical]:h-1',
+        handle: '[--dz-control-visual-size:0.25rem] data-[direction=horizontal]:w-1 data-[direction=vertical]:h-1',
       },
     },
   },

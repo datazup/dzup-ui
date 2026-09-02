@@ -229,3 +229,91 @@ export const DarkMode: Story = {
     template: '<div class="w-[32rem] max-w-full"><DzImageComparison v-bind="args" /></div>',
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the state DzImageComparison declares, and for a slider it has
+ * to mean three separate things at once, all of which this story pins:
+ *
+ * - the grip is announced as `aria-disabled`,
+ * - it is taken out of the tab order (`tabindex="-1"`), so keyboard users are
+ *   not stranded on a control that does nothing,
+ * - and the Arrow keys no longer move `aria-valuenow`.
+ *
+ * The enabled slider is driven through the same keys first, so the disabled
+ * result is measured rather than assumed.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzImageComparison },
+    setup() {
+      return { BEFORE, AFTER }
+    },
+    template: `
+      <div class="grid gap-8 lg:grid-cols-2">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Enabled</p>
+          <div class="w-[26rem] max-w-full" data-testid="ic-enabled">
+            <DzImageComparison
+              :before-src="BEFORE"
+              :after-src="AFTER"
+              before-alt="Original, unedited photo"
+              after-alt="Color-graded edit of the same photo"
+              aria-label="Enabled comparison"
+            />
+          </div>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled</p>
+          <div class="w-[26rem] max-w-full" data-testid="ic-disabled">
+            <DzImageComparison
+              disabled
+              :before-src="BEFORE"
+              :after-src="AFTER"
+              before-alt="Original, unedited photo"
+              after-alt="Color-graded edit of the same photo"
+              aria-label="Disabled comparison"
+            />
+          </div>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = within(canvas.getByTestId('ic-enabled')).getByRole('slider')
+    const disabled = within(canvas.getByTestId('ic-disabled')).getByRole('slider')
+
+    // Both start at the midpoint and report the full ARIA slider contract.
+    for (const slider of [enabled, disabled]) {
+      await expect(slider).toHaveAttribute('aria-valuemin', '0')
+      await expect(slider).toHaveAttribute('aria-valuemax', '100')
+      await expect(slider).toHaveAttribute('aria-valuenow', '50')
+      await expect(slider).toHaveAttribute('aria-valuetext')
+    }
+
+    // Enabled: in the tab order, not flagged, and the Arrow keys move it.
+    await expect(enabled).toHaveAttribute('tabindex', '0')
+    await expect(enabled).not.toHaveAttribute('aria-disabled')
+    enabled.focus()
+    await expect(enabled).toHaveFocus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() =>
+      expect(Number(enabled.getAttribute('aria-valuenow'))).toBeGreaterThan(50),
+    )
+
+    // Disabled: flagged, out of the tab order, and inert under the same keys.
+    await expect(canvas.getByTestId('ic-disabled').firstElementChild)
+      .toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('aria-disabled', 'true')
+    await expect(disabled).toHaveAttribute('tabindex', '-1')
+    disabled.focus()
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}{End}')
+    await expect(disabled).toHaveAttribute('aria-valuenow', '50')
+  },
+}

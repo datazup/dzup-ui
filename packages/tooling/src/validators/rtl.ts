@@ -39,6 +39,26 @@ export const MATRIX_PATH = resolve(ROOT, 'packages/core/docs/rtl-matrix.md')
  *
  * Deliberately narrow. `rounded-lg`, `arrow-right` and `left-align-icon` are
  * not layout, and a rule that flagged them would be switched off within a week.
+ *
+ * **Known gap, measured by TASK-N2-S1 and NOT closed here (owner decision).**
+ * Two things are wrong with the alternation above and they cancel out into a
+ * false sense of coverage:
+ *
+ * 1. `inset-[lr]-` names `inset-l-` / `inset-r-`, which **Tailwind 4 does not
+ *    have**. Its inset utilities are `top/right/bottom/left` (physical) and
+ *    `inset-s-` / `inset-e-` (logical). So that clause can never match.
+ * 2. The utilities that *do* express a physical inset — `left-…`, `right-…` —
+ *    are not matched at all.
+ *
+ * Adding `(?:^|[\s'"`])-?(?:left|right)-` was tried and reports **14 sites
+ * across 5 components**, of which several are true defects (`DzDialog`'s close
+ * control is pinned `right-[var(--dz-spacing-4)]` while its anatomy declares
+ * `mirrors: 'layout'`) and several are the centring idiom `left-1/2` paired
+ * with `-translate-x-1/2`, which is symmetric and correct. The token scanner
+ * splits `left-1/2` into `left-1`, so the two cases are indistinguishable
+ * without a real parse. Widening the regex therefore needs the true defects
+ * fixed and the centring idiom excluded in the same change — a packet, not a
+ * line. The measured list is in the TASK-N2-S1 handoff.
  */
 const PHYSICAL
   = /(?:^|[\s'"`])-?(?:m[lr]|p[lr]|border-[lr]|rounded-[lr]|inset-[lr])-|(?:^|[\s'"`])text-(?:left|right)\b|(?:^|[\s'"`])-?border-[lr]\b/
@@ -72,6 +92,30 @@ export function variantsFor(evidence: readonly string[] | undefined): string | u
   return existsSync(resolve(ROOT, variants)) ? variants : undefined
 }
 
+/**
+ * Every source that can carry a physical utility for one component: its
+ * `.variants.ts` **and its `.vue` template** (TASK-N2-S1).
+ *
+ * The template half was a measured blind spot, not a theoretical one. This gate
+ * read `.variants.ts` alone, and **14 templates across the catalog write a
+ * physical layout utility inline** — 19 occurrences. `DzTextarea` pinned its
+ * loading spinner with `absolute right-…` in the template, so a component whose
+ * anatomy declares `mirrors: 'layout'` put the spinner on the wrong edge in an
+ * RTL document and this gate could not see it. Same class as N1-O3's finding
+ * G2 (`validate:tokens` reading `DESIGN.md` instead of component source): the
+ * gate reads a different file from the one the defect lives in.
+ *
+ * Each file is checked separately rather than concatenated, so an
+ * `rtl-physical-ok` marker in one does not silently excuse the other.
+ */
+export function rtlSourcesFor(evidence: readonly string[] | undefined): string[] {
+  const vue = evidence?.find(path => path.endsWith('.vue'))
+  if (vue === undefined)
+    return []
+  const variants = variantsFor(evidence)
+  return variants === undefined ? [vue] : [variants, vue]
+}
+
 /** Physical utilities in a variants source, minus the ones declared deliberate. */
 export function physicalUtilitiesIn(source: string): { line: number, utility: string }[] {
   if (source.includes(PHYSICAL_OK))
@@ -100,12 +144,12 @@ export function checkRtlDeclarations(): RtlViolation[] {
     if (rtl === undefined || rtl.mirrors !== 'layout')
       continue
 
-    const variants = variantsFor(entry.evidence)
-    if (variants === undefined)
-      continue
-
-    for (const hit of physicalUtilitiesIn(readFileSync(resolve(ROOT, variants), 'utf8'))) {
-      violations.push({ symbol: entry.symbol, file: variants, line: hit.line, utility: hit.utility })
+    for (const file of rtlSourcesFor(entry.evidence)) {
+      const full = resolve(ROOT, file)
+      if (!existsSync(full))
+        continue
+      for (const hit of physicalUtilitiesIn(readFileSync(full, 'utf8')))
+        violations.push({ symbol: entry.symbol, file, line: hit.line, utility: hit.utility })
     }
   }
 

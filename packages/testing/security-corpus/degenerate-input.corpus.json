@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0.0",
+  "category": "degenerate-input",
+  "description": "Input that is not an exploit and is still hostile: too long, invisible, or shaped to be read differently by the person than by the program. Nothing here executes anything. Every case is about a component staying legible and contained when a value it was never sized for arrives — which is a real availability and deception surface, and the one class a corpus built only from XSS strings misses entirely.",
+  "fixtures": [
+    {
+      "id": "degenerate-input.length.four-kilobyte-run",
+      "category": "degenerate-input",
+      "title": "4 096-character single-token run",
+      "payload": "a",
+      "repeat": 4096,
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "One unbroken token, so no wrapping opportunity exists and the layout has to be what contains it. `escaped` is the honest outcome — the string is data and stays data — and the containment property is asserted alongside it, because a value that escapes its container can cover the control next to it. Resolve it with `payloadOf`, never by reading `payload`.",
+      "provenance": "Standard oversized-input case; the length the existing DzFileUpload corpus already used."
+    },
+    {
+      "id": "degenerate-input.null.embedded",
+      "category": "degenerate-input",
+      "title": "embedded NUL inside an otherwise ordinary value",
+      "payload": "report\u0000.png",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "A NUL truncates the string in a C-string consumer and does not truncate it in JavaScript, so the name a server stores and the name the person saw can differ. The component cannot fix that; what it owes is to render the value without the NUL changing what the surrounding markup means.",
+      "provenance": "Classic poison-NUL-byte case; OWASP input-validation guidance."
+    },
+    {
+      "id": "degenerate-input.bidi.right-to-left-override",
+      "category": "degenerate-input",
+      "title": "right-to-left override reversing a visible extension",
+      "payload": "invoice‮gnp.exe",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "U+202E makes the tail render as `exe.png` while the value remains `…gnp.exe`. The deception is the point, and it is not an escaping failure — a correctly escaped text node still shows the reversed text. Recorded so a reviewer knows the corpus has seen it and that the mitigation (isolating or stripping bidi controls in file names) is a product decision, not a bug fix.",
+      "provenance": "Unicode bidi-override filename spoofing; CVE-2021-42574 'Trojan Source' family."
+    },
+    {
+      "id": "degenerate-input.combining.stacked-marks",
+      "category": "degenerate-input",
+      "title": "stacked combining marks that overflow the line box",
+      "payload": "é́́́́́́́",
+      "repeat": 24,
+      "outcomes": {
+        "text": "escaped"
+      },
+      "rationale": "Combining marks stack vertically without advancing the inline axis, so a short string paints far outside its own line box and over whatever is above it. The only defence a component has is containment, which is exactly what the four-kilobyte case also tests — in the other axis.",
+      "provenance": "Unicode combining-mark rendering ('Zalgo'); standard text-rendering robustness case."
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.0.0",
+  "category": "url-scheme",
+  "description": "Host-supplied URLs whose scheme decides whether the value is a resource reference or an execution vector. The split that matters is navigation versus subresource: a `javascript:` URL in an `<a href>` runs the moment somebody clicks it, and the same string in an `<img src>` has been unable to run in any shipping engine for well over a decade. Every case below therefore states both.",
+  "fixtures": [
+    {
+      "id": "url-scheme.javascript.plain",
+      "category": "url-scheme",
+      "title": "javascript: URL, unobfuscated",
+      "payload": "javascript:alert(1)",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert",
+        "attribute": "escaped",
+        "text": "escaped"
+      },
+      "rationale": "In a navigation sink this is script execution in the page's own origin on activation, so nothing weaker than `rejected` is safe. In a subresource sink it is `inert`: the image loader has no script context, fetching `javascript:` is not defined, and the element fires `error`. `inert` here is a statement about the sink, not about the string — the same string one element over is the strongest case in this file.",
+      "provenance": "The canonical case in every public XSS suite (OWASP filter-evasion cheat sheet; cure53's DOMPurify URI tests)."
+    },
+    {
+      "id": "url-scheme.javascript.mixed-case",
+      "category": "url-scheme",
+      "title": "javascript: URL with mixed-case scheme",
+      "payload": "JaVaScRiPt:alert(1)",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "URL schemes are ASCII case-insensitive (WHATWG URL §4.2). A policy that lowercases nothing before comparing rejects the plain case and admits this one, which is the single most common way a hand-rolled allowlist fails.",
+      "provenance": "WHATWG URL scheme-parsing rules; standard filter-evasion case."
+    },
+    {
+      "id": "url-scheme.javascript.leading-control",
+      "category": "url-scheme",
+      "title": "javascript: URL behind a leading C0 control character",
+      "payload": "\u0001javascript:alert(1)",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "The URL parser strips leading C0 controls and spaces before it looks for a scheme, so the browser sees `javascript:` while a naive `startsWith('javascript:')` check sees something else entirely. The policy has to trim the same characters the parser does.",
+      "provenance": "WHATWG URL §4.4 'basic URL parser', leading/trailing C0-control-or-space removal."
+    },
+    {
+      "id": "url-scheme.javascript.embedded-tab",
+      "category": "url-scheme",
+      "title": "javascript: URL with a tab inside the scheme",
+      "payload": "java\tscript:alert(1)",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "Tab, LF and CR are removed from anywhere in a URL by the parser, so this reaches the engine as `javascript:alert(1)`. A policy that compares the raw string sees a relative path with a tab in it.",
+      "provenance": "WHATWG URL §4.4, tab-and-newline removal; long-standing filter-evasion case."
+    },
+    {
+      "id": "url-scheme.vbscript.plain",
+      "category": "url-scheme",
+      "title": "vbscript: URL",
+      "payload": "vbscript:msgbox(1)",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "No engine still in support executes it, but it belongs in the corpus because it is the case that shows whether a policy is an allowlist or a denylist: a denylist that names `javascript` and `data` admits this, and admits the next scheme nobody has thought of.",
+      "provenance": "OWASP filter-evasion cheat sheet."
+    },
+    {
+      "id": "url-scheme.data.html",
+      "category": "url-scheme",
+      "title": "data: URL carrying an HTML document",
+      "payload": "data:text/html,<script>alert(1)</script>",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "Top-level navigation to `data:` has been blocked by engines since 2017, but a `data:text/html` URL is still live in a frame, in a `window.open`, and in any host that forwards the value somewhere else — the component must not be the thing that made it plausible. In an image sink the decoder refuses a `text/html` payload outright.",
+      "provenance": "Chrome 60 / Firefox 59 top-level data: navigation block; cure53 DOMPurify URI tests."
+    },
+    {
+      "id": "url-scheme.data.svg-onload",
+      "category": "url-scheme",
+      "title": "data: URL carrying an SVG with an onload handler",
+      "payload": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" onload=\"alert(1)\"/>",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "This is the case people get wrong in both directions. Inside `<img src>` it is genuinely inert — an image-loaded SVG has scripting disabled by specification. Inside `<object>`, `<embed>`, `<iframe>` or a CSS `url()` on some engines it is not. The `inert` outcome is scoped to the subresource sink as this catalog uses it (`<img>` only), and a component that starts loading SVG through any other element invalidates it.",
+      "provenance": "SVG 1.1 secure-static/animated processing modes; cure53 SVG sanitizer cases."
+    },
+    {
+      "id": "url-scheme.file.local",
+      "category": "url-scheme",
+      "title": "file: URL pointing at a local path",
+      "payload": "file:///etc/passwd",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "Not script execution — an information-disclosure and user-confusion case. A page cannot navigate to `file:` and an image cannot load it, so the practical harm is a link that looks like it does something and a URL bar that shows a local path. Included because an allowlist that admits it admits a scheme with no business in a web document.",
+      "provenance": "WHATWG URL special-scheme list; standard allowlist test."
+    },
+    {
+      "id": "url-scheme.blob.foreign-origin",
+      "category": "url-scheme",
+      "title": "blob: URL minted by another origin",
+      "payload": "blob:https://evil.example.test/00000000-0000-4000-8000-000000000000",
+      "outcomes": {
+        "navigation": "rejected",
+        "subresource": "inert"
+      },
+      "rationale": "A blob URL is only resolvable in the origin that created it, so this one resolves to nothing anywhere. It is here because `blob:` is the scheme a file-preview feature reaches for first, and the day a component starts calling `createObjectURL` its URL policy has to already have an opinion about which blob URLs it will render.",
+      "provenance": "File API blob URL store, origin-partitioned."
+    }
+  ]
+}

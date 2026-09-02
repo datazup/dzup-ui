@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1.0.0",
+  "category": "markup-injection",
+  "description": "Host-supplied strings that are markup. In this catalog they arrive as labels, alt text, captions, file names and accessible names — values a component renders as text or writes into an attribute. The required outcome for a text or attribute sink is `escaped`, and `escaped` is asserted against the DOM, never against serialized HTML: `wrapper.html()` re-serializes, so a correctly escaped text node still contains the substring `onerror` while containing no element and no handler. An assertion on the string fails the component that got it right.",
+  "fixtures": [
+    {
+      "id": "markup-injection.img.onerror",
+      "category": "markup-injection",
+      "title": "img element with an onerror handler",
+      "payload": "<img src=x onerror=\"alert(1)\">",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "The shortest string that both creates an element and attaches a handler, so one assertion covers element creation and event-attribute creation. In an HTML sink a sanitizer keeps the `<img>` and drops `onerror`, which is why the outcome there is `stripped` and not `rejected`.",
+      "provenance": "cure53 DOMPurify test corpus; OWASP filter-evasion cheat sheet."
+    },
+    {
+      "id": "markup-injection.script.close-and-reopen",
+      "category": "markup-injection",
+      "title": "closing an enclosing script element and opening a new one",
+      "payload": "</script><script>alert(1)</script>",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "The case for any value that might be interpolated into a script context — SSR state serialization, a JSON island, a story fixture. The HTML tokenizer ends a script element on the literal characters `</script`, regardless of quoting or JavaScript syntax.",
+      "provenance": "cure53 markup cases; HTML Standard script-data-end-tag tokenizer states."
+    },
+    {
+      "id": "markup-injection.svg.onload",
+      "category": "markup-injection",
+      "title": "attribute break-out into an svg element with onload",
+      "payload": "\"><svg onload=\"alert(1)\">",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "Two vectors in one string: the leading `\">` closes an attribute and its start tag, and `<svg onload>` fires without needing a load failure the way `<img onerror>` does. A component that escapes element content but writes an attribute by string concatenation fails only this one.",
+      "provenance": "cure53 DOMPurify SVG cases; OWASP filter-evasion cheat sheet."
+    },
+    {
+      "id": "markup-injection.attribute.break-out",
+      "category": "markup-injection",
+      "title": "quote break-out adding an event attribute and a decoy attribute",
+      "payload": "\" onmouseover=\"alert(1)\" x=\"",
+      "outcomes": {
+        "attribute": "escaped",
+        "text": "escaped"
+      },
+      "rationale": "Pure attribute-context payload: no element is created, so an assertion that only counts injected elements passes a component that is broken. The check has to be that the target element gained neither `onmouseover` nor `x` — the decoy `x` is there so a passing result cannot come from an `on*`-only filter.",
+      "provenance": "OWASP filter-evasion cheat sheet, attribute-context section."
+    },
+    {
+      "id": "markup-injection.anchor.javascript-href",
+      "category": "markup-injection",
+      "title": "anchor element carrying a javascript: URL",
+      "payload": "<a href=\"javascript:alert(1)\">click</a>",
+      "outcomes": {
+        "text": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "Where the markup and URL categories meet. It is in this file rather than in `url-scheme` because the value arrives as markup, not as a URL prop: a component that renders it as text is safe even though it never looked at a scheme.",
+      "provenance": "cure53 DOMPurify URI-in-markup cases."
+    },
+    {
+      "id": "markup-injection.entity.encoded-colon",
+      "category": "markup-injection",
+      "title": "javascript URL with the colon written as an HTML entity",
+      "payload": "<a href=\"javascript&colon;alert(1)\">click</a>",
+      "outcomes": {
+        "text": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "The HTML parser decodes `&colon;` inside an attribute value, so the scheme check must run after parsing, not on the source text. A sanitizer that inspects the raw string before the parser sees it admits this and rejects the previous case.",
+      "provenance": "cure53 DOMPurify entity-decoding regression cases."
+    },
+    {
+      "id": "markup-injection.comment.hidden-element",
+      "category": "markup-injection",
+      "title": "element hidden inside an HTML comment",
+      "payload": "<!--<img src=x onerror=\"alert(1)\">-->",
+      "outcomes": {
+        "text": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "Included for the sanitizer sinks Pro owns rather than for anything in this catalog: a sanitizer that preserves comments and a downstream step that re-parses the output brings the element back. In a text sink the whole string is inert content and the outcome is the ordinary one.",
+      "provenance": "cure53 DOMPurify comment-handling cases (mXSS class)."
+    }
+  ]
+}

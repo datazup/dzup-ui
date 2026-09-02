@@ -52,6 +52,13 @@ export default defineConfig({
       'packages/*/security/**/*.spec.ts',
       'apps/*/src/**/*.spec.ts',
       'apps/*/scripts/**/*.test.mjs',
+      // apps/docs has no src/ — VitePress owns the layout, and the docs site's
+      // only TypeScript lives under .vitepress/. TASK-N2-D3 put the theme
+      // builder's URL round trip there, so the glob is widened deliberately
+      // rather than the spec being moved somewhere the existing globs happen to
+      // reach. Same reasoning as constraint B6: a new app is outside a gate by
+      // default, and joining one is a decision, not an accident.
+      'apps/*/.vitepress/**/*.spec.ts',
     ],
     exclude: [
       '**/node_modules/**',

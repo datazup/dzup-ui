@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "sourceCommit": "8d80bc39653e50a6da458d005b7691d2fb833edb",
+  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
     "packages/contracts/src/quality-tiers.ts",
@@ -973,7 +973,7 @@
       },
       "source": "packages/core/src/components/typography/DzBlockquote.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzBreadcrumb",
@@ -1156,7 +1156,7 @@
       },
       "source": "packages/core/src/components/buttons/DzButtonGroup.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCalendar",
@@ -1264,7 +1264,7 @@
       },
       "source": "packages/core/src/components/typography/DzCaption.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCard",
@@ -1705,7 +1705,7 @@
       },
       "source": "packages/core/src/components/typography/DzCode.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCodeBlock",
@@ -1743,7 +1743,7 @@
       },
       "source": "packages/core/src/components/data/DzCodeBlock.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCollapse",
@@ -2332,7 +2332,7 @@
       },
       "source": "packages/core/src/components/buttons/DzCopyButton.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzCountdown",
@@ -3116,7 +3116,7 @@
       },
       "source": "packages/core/src/components/buttons/DzFab.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzFieldArray",
@@ -3248,10 +3248,6 @@
         "url-policy",
         "csp-fixture"
       ],
-      "exceptions": {
-        "url-policy": "The component accepts no URL of any kind: no `href`, no `src`, no `createObjectURL`, no download link. There is no URL for a policy to be about. Asserted in packages/core/security/DzFileUpload.malicious-corpus.spec.ts.",
-        "csp-fixture": "No inline style, no inline script, no `blob:` or `data:` URL, no HTML sink and no worker — so there is no CSP directive whose absence changes its behaviour. Reading file contents for a preview would change this immediately; see the \"What would change this document\" section of the threat model."
-      },
       "evidenceOrigin": {
         "contract-spec": "tier A",
         "unit-spec": "tier A",
@@ -3475,7 +3471,7 @@
       },
       "source": "packages/core/src/components/typography/DzHeading.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzIcon",
@@ -3574,7 +3570,7 @@
       },
       "source": "packages/core/src/components/buttons/DzIconButton.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzImage",
@@ -3972,7 +3968,7 @@
       },
       "source": "packages/core/src/components/inputs/DzInputGroup.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzInputMask",
@@ -4037,7 +4033,7 @@
       },
       "source": "packages/core/src/components/inputs/DzInputMask.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzKbd",
@@ -4075,7 +4071,7 @@
       },
       "source": "packages/core/src/components/typography/DzKbd.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzKnob",
@@ -4901,7 +4897,7 @@
       },
       "source": "packages/core/src/components/inputs/DzNumberInput.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzOrderList",
@@ -5046,7 +5042,7 @@
       },
       "source": "packages/core/src/components/inputs/DzOtpInput.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzPageHero",
@@ -5274,7 +5270,7 @@
       },
       "source": "packages/core/src/components/inputs/DzPasswordInput.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzPersonaSelector",
@@ -5940,7 +5936,7 @@
       },
       "source": "packages/core/src/components/typography/DzRelativeTime.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzResizable",
@@ -6251,7 +6247,7 @@
       },
       "source": "packages/core/src/components/inputs/DzSearchInput.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSegmented",
@@ -6759,7 +6755,7 @@
       },
       "source": "packages/core/src/components/buttons/DzSpeedDial.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSpinner",
@@ -6863,7 +6859,7 @@
         "DzSplitButtonAction",
         "DzSplitButtonMenu"
       ],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzSplitter",
@@ -7513,7 +7509,7 @@
       },
       "source": "packages/core/src/components/typography/DzText.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTextarea",
@@ -7577,7 +7573,7 @@
       },
       "source": "packages/core/src/components/inputs/DzTextarea.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzThemeProvider",
@@ -7927,7 +7923,7 @@
       },
       "source": "packages/core/src/components/buttons/DzToggleButton.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzTokenProgressBar",
@@ -8504,7 +8500,7 @@
       },
       "source": "packages/core/src/components/typography/DzVisuallyHidden.vue",
       "parts": [],
-      "hasAnatomy": false
+      "hasAnatomy": true
     },
     {
       "component": "DzWatermark",

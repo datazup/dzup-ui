@@ -5,6 +5,8 @@
  */
 
 /** Semantic heading level (renders <h1> through <h6>) */
+import type { DzHeadingUi } from './DzHeading.anatomy.ts'
+
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
 /** Visual size of the heading, independent of semantic level */
@@ -29,6 +31,17 @@ export interface DzHeadingProps {
   align?: HeadingAlign
   /** Accessible identifier */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzHeading.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzHeading tag="h2" :ui="{ root: 'tracking-tight' }">Title</DzHeading>
+   * ```
+   */
+  ui?: DzHeadingUi
 }
 
 export interface DzHeadingSlots {

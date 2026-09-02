@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, userEvent, within } from 'storybook/test'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzCheckbox, DzCheckboxGroup } from '../../src/components/forms'
 import { darkModeDecorator } from '../_shared'
 
@@ -271,4 +271,109 @@ export const RealWorldNotifications: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// States — enabled / group-disabled / one-box-disabled (tier B `states` item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the state DzCheckboxGroup declares, and its whole point is that
+ * it *propagates*: setting it on the group disables every DzCheckbox inside
+ * through the injected context (ADR-08), while a single box can also opt out on
+ * its own without touching its siblings.
+ *
+ * The group also exposes the resolved state as `data-state`/`data-disabled` on
+ * its `role="group"` root so a consumer can style the whole cluster. The play
+ * function asserts propagation in both directions rather than showing a greyed
+ * screenshot.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzCheckboxGroup, DzCheckbox },
+    data() {
+      return { enabled: ['apple'] as string[], mixed: [] as string[] }
+    },
+    template: `
+      <div class="grid gap-8 md:grid-cols-3">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Enabled</p>
+          <DzCheckboxGroup
+            v-model="enabled"
+            aria-label="Enabled preferences"
+            data-testid="cbg-enabled"
+          >
+            <DzCheckbox value="apple">Apple</DzCheckbox>
+            <DzCheckbox value="banana">Banana</DzCheckbox>
+          </DzCheckboxGroup>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Selected: <strong data-testid="cbg-value">{{ enabled.join(', ') || 'none' }}</strong>
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Group disabled</p>
+          <DzCheckboxGroup
+            disabled
+            aria-label="Disabled preferences"
+            data-testid="cbg-disabled"
+          >
+            <DzCheckbox value="cherry">Cherry</DzCheckbox>
+            <DzCheckbox value="date">Date</DzCheckbox>
+          </DzCheckboxGroup>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">One box disabled</p>
+          <DzCheckboxGroup
+            v-model="mixed"
+            aria-label="Mixed preferences"
+            data-testid="cbg-mixed"
+          >
+            <DzCheckbox value="elderberry">Elderberry</DzCheckbox>
+            <DzCheckbox value="fig" disabled>Fig (out of stock)</DzCheckbox>
+          </DzCheckboxGroup>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = canvas.getByTestId('cbg-enabled')
+    const disabled = canvas.getByTestId('cbg-disabled')
+    const mixed = canvas.getByTestId('cbg-mixed')
+
+    // Group-level state is exposed on the `role="group"` root.
+    await expect(enabled).toHaveAttribute('role', 'group')
+    await expect(enabled).toHaveAttribute('data-state', 'ready')
+    await expect(disabled).toHaveAttribute('data-state', 'disabled')
+    await expect(disabled).toHaveAttribute('data-disabled')
+
+    // Enabled: the pre-checked box reports it, and toggling reaches the model.
+    const apple = within(enabled).getByRole('checkbox', { name: /^apple$/i })
+    const banana = within(enabled).getByRole('checkbox', { name: /^banana$/i })
+    await expect(apple).toHaveAttribute('aria-checked', 'true')
+    await expect(banana).toHaveAttribute('aria-checked', 'false')
+    await userEvent.click(banana)
+    await waitFor(() =>
+      expect(canvas.getByTestId('cbg-value')).toHaveTextContent('apple, banana'),
+    )
+
+    // Group disabled propagates to every child through the injected context.
+    for (const name of [/^cherry$/i, /^date$/i]) {
+      const box = within(disabled).getByRole('checkbox', { name })
+      await expect(box).toBeDisabled()
+      await expect(box).toHaveAttribute('data-disabled')
+    }
+
+    // A single disabled box leaves its sibling live.
+    const fig = within(mixed).getByRole('checkbox', { name: /^fig/i })
+    const elderberry = within(mixed).getByRole('checkbox', { name: /^elderberry$/i })
+    await expect(fig).toBeDisabled()
+    await expect(elderberry).toBeEnabled()
+    await userEvent.click(elderberry)
+    await waitFor(() => expect(elderberry).toHaveAttribute('aria-checked', 'true'))
+    await expect(fig).toHaveAttribute('aria-checked', 'false')
+  },
 }

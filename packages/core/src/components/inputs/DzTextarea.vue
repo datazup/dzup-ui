@@ -38,6 +38,7 @@ const props = withDefaults(defineProps<DzTextareaProps>(), {
   autoResize: false,
   maxRows: undefined,
   loadingLabel: undefined,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzTextareaEmits>()
@@ -80,8 +81,29 @@ const classes = computed(() =>
     // resizing/scrollbars.
     props.autoResize ? 'resize-none overflow-hidden min-h-0' : '',
     attrs.class as string | undefined,
+    props.ui?.input,
   ),
 )
+
+/** Per-part class values (ADR-19 §5). `class` keeps landing on the field itself. */
+const rootClasses = computed(() => cn('relative', props.ui?.root))
+const spinnerClasses = computed(() => cn(
+  // Logical inset: the field mirrors with the document (see DzTextarea.anatomy.ts),
+  // and the physical form pinned the spinner to the wrong edge in RTL.
+  // `validate:rtl` could not see it -- it read `.variants.ts` only, and this
+  // class is written in the template; TASK-N2-S1 widened the gate's source set.
+  //
+  // NOTE the spelling. Tailwind 4.2.2 names the logical insets `inset-s-` and
+  // `inset-e-`; there is NO `start-`/`end-` inset utility, so the obvious
+  // `end-[…]` would have generated no CSS at all and silently unpinned the
+  // spinner -- the same shape as N1-O3 finding G2.
+  'absolute inset-e-[var(--dz-spacing-2)] top-[var(--dz-spacing-2)]',
+  props.ui?.spinner,
+))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /**
  * Spinner size mapped down from the field size so the indicator stays
@@ -188,19 +210,21 @@ defineExpose({ textareaRef })
 
 <template>
   <div
+    data-part="root"
+    :class="rootClasses"
     :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-readonly="readonly ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
-    class="relative"
     style="contain: layout style"
   >
     <textarea
       :id="resolvedId"
       ref="textareaRef"
       v-model="model"
+      data-part="input"
       :class="classes"
       :name="name"
       :placeholder="placeholder"
@@ -225,7 +249,8 @@ defineExpose({ textareaRef })
     <!-- Loading spinner -->
     <DzSpinner
       v-if="loading"
-      class="absolute right-[var(--dz-spacing-2)] top-[var(--dz-spacing-2)]"
+      data-part="spinner"
+      :class="spinnerClasses"
       :size="spinnerSize"
       :tone="tone ?? 'neutral'"
       :label="resolvedLoadingLabel"
@@ -235,7 +260,8 @@ defineExpose({ textareaRef })
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

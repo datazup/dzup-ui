@@ -45,9 +45,9 @@ export const accordionTokens = {
   /** Size scale */
   size: {
     xs: {
-      triggerPaddingY: 'var(--dz-spacing-1-5)',
+      triggerPaddingY: 'var(--dz-spacing-1_5)',
       triggerFontSize: 'var(--dz-text-xs)',
-      contentPaddingBottom: 'var(--dz-spacing-1-5)',
+      contentPaddingBottom: 'var(--dz-spacing-1_5)',
       contentFontSize: 'var(--dz-text-xs)',
     },
     sm: {

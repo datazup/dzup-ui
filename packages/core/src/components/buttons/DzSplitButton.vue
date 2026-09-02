@@ -30,6 +30,7 @@ const props = withDefaults(defineProps<DzSplitButtonProps>(), {
   tone: 'primary',
   disabled: false,
   loading: false,
+  ui: undefined,
 })
 
 defineSlots<DzSplitButtonSlots>()
@@ -50,6 +51,7 @@ const classes = computed(() =>
   cn(
     'inline-flex items-center',
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -57,6 +59,7 @@ const classes = computed(() =>
 <template>
   <div
     :id="id"
+    data-part="root"
     role="group"
     :class="classes"
     :aria-label="ariaLabel"

@@ -126,7 +126,7 @@ depth channel below.
 - **Semantic roles:** 115 (light + dark)
 - **Type scale:** 13 sizes · **spacing:** 34 steps · **radius:** 8 · **elevation:** 8
 - **Motion:** 4 durations · 5 easing curves · **layers:** 9 · **breakpoints:** 5
-- **Component token families:** 9 (151 tokens)
+- **Component token families:** 9 (152 tokens)
 
 ## Personality
 
@@ -364,7 +364,7 @@ the MCP or the Storybook catalog for props, slots, and events.
 | DzButton | `--dz-button-*` | 31 | Variants: solid · outline · ghost · text · link — sizes xs–xl |
 | DzCard | `--dz-card-*` | 6 | Variants: elevated · outlined · flat |
 | DzCodeBlock | `--dz-codeblock-*` | 15 | Mono display with header + line numbers |
-| DzCheckbox · DzRadio · DzSwitch | `--dz-control-*` | 5 | Shared focus-ring + disabled tokens for selection controls |
+| DzCheckbox · DzRadio · DzSwitch | `--dz-control-*` | 6 | Shared focus-ring + disabled tokens for selection controls |
 | DzDialog / DzModal | `--dz-dialog-*` | 14 | Sizes sm · md · lg · xl · full |
 | DzInput · DzTextarea · DzSelect | `--dz-input-*` | 23 | Variants: outline · filled · underlined — sizes xs–xl |
 | DzSidebar | `--dz-sidebar-*` | 36 | Collapsible nav: items · sections · header · footer |

@@ -70,6 +70,7 @@ const contentStyles = computed(() => {
 <template>
   <div
     :id="id"
+    data-part="root"
     :class="rootClasses"
     :aria-label="ariaLabel"
     role="region"

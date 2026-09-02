@@ -9,7 +9,10 @@ public/playground/
 # by scripts/build-releases.mjs before every `storybook dev` / `build`.
 stories/_data/releases.generated.ts
 
-# Generated component-API llms.txt — rebuilt from packages/core + contracts by
-# scripts/build-llms.mjs before every `storybook dev` / `build`.
+# Served copies of the generated component-API llms docs. Since TASK-N2-A3 the
+# SOURCE of truth is committed at packages/core/docs/llms{,-full}.txt (rendered
+# from component-meta.json by `yarn generate:llms` and gated by
+# `yarn validate:llms`); scripts/build-llms.mjs only copies it here before every
+# `storybook dev` / `build`. These two stay ignored because they are copies.
 public/llms.txt
 public/llms-full.txt

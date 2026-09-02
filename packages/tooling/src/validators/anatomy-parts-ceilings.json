@@ -1,0 +1,7 @@
+{
+  "$comment": "Ceilings for `yarn validate:anatomy-parts` (TASK-N2-S1, ADR-19). Both ratchet DOWN, never up -- raising one is how a styling contract quietly stops being one, which is the same rule `maxWithoutAnatomy` in ../ownership/unclassified-ceiling.json follows.",
+  "$comment.maxUndeclaredEmissions": "Static `data-part=\"x\"` sites that no anatomy declares -- neither the emitting component's own, nor a composing parent's, nor (for an unexported internal) every component that renders it. Initialised on 2026-09-02 at the measured value on this tree. The whole population is DzOptionsState.vue: an UNEXPORTED internal, absent from the ownership manifest and from component-meta.json, which emits `options-state`, `options-message` and `options-retry` into DzCascader, DzCombobox, DzListbox, DzMultiSelect, DzSelect, DzTransfer and DzTreeSelect. DzSelect is an ADR-19 PILOT and declares none of the three. It falls to 0 when the forms family slice completes; it cannot be closed component-by-component, because the internal's parts are governed only when EVERY host declares them.",
+  "maxUndeclaredEmissions": 3,
+  "$comment.maxUnemittedDeclarations": "A declared, non-optional part that no source emits -- a promise with nothing behind it. Ceiling ZERO from the start: there was exactly one on this tree (DzFileUpload declared `parts: ['root']` and its template emitted no data-part at all), it was fixed in the same change that added this gate, and there is no reading under which a second one is acceptable.",
+  "maxUnemittedDeclarations": 0
+}

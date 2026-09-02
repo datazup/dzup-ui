@@ -1,0 +1,11 @@
+{
+  "//": "TASK-N2-A1. The emit config (tsconfig.json) EXCLUDES specs, fixtures and scripts so they never reach the published dist/ -- which also meant `yarn typecheck:all` never typechecked a line of this package's tests. This project typechecks exactly those files, with no emit, and is wired into `yarn typecheck:all` next to the emit config.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "types": ["node", "vitest/globals"],
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

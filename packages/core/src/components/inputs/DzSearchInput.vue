@@ -40,6 +40,7 @@ const props = withDefaults(defineProps<DzSearchInputProps>(), {
   clearable: true,
   debounce: 0,
   loadingLabel: undefined,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzSearchInputEmits>()
@@ -86,12 +87,29 @@ const wrapperClasses = computed(() =>
       invalid: isInvalid.value,
     }),
     attrs.class as string | undefined,
+    props.ui?.control,
   ),
 )
 
 // `dz-search-input` suppresses the browser's native clear/decoration affordances
 // so the only clear control is our own, gated on `clearable` (styles/base.css § 4c).
-const inputClasses = computed(() => cn(inputElementVariants(), 'dz-search-input'))
+const inputClasses = computed(() => cn(inputElementVariants(), 'dz-search-input', props.ui?.input))
+
+/** Per-part class values (ADR-19 §5). */
+const iconClasses = computed(() => cn(
+  'flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]',
+  props.ui?.icon,
+))
+const spinnerClasses = computed(() => cn('shrink-0', props.ui?.spinner))
+const clearClasses = computed(() => cn(
+  'flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] '
+  + 'hover:text-[var(--dz-foreground)] transition-colors',
+  props.ui?.clear,
+))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /**
  * Spinner size mapped down from the input size so the indicator stays
@@ -164,6 +182,8 @@ defineExpose({ inputRef })
 
 <template>
   <div
+    data-part="root"
+    :class="cn(ui?.root)"
     :data-state="resolvedDisabled ? 'disabled' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
@@ -173,9 +193,9 @@ defineExpose({ inputRef })
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <div :class="wrapperClasses">
+    <div data-part="control" :class="wrapperClasses">
       <!-- Search icon -->
-      <span class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]">
+      <span data-part="icon" :class="iconClasses">
         <svg
           class="h-4 w-4"
           xmlns="http://www.w3.org/2000/svg"
@@ -197,6 +217,7 @@ defineExpose({ inputRef })
         :id="resolvedId"
         ref="inputRef"
         v-model="model"
+        data-part="input"
         type="search"
         :class="inputClasses"
         :name="name"
@@ -219,7 +240,8 @@ defineExpose({ inputRef })
       <!-- Loading spinner -->
       <DzSpinner
         v-if="loading"
-        class="shrink-0"
+        data-part="spinner"
+        :class="spinnerClasses"
         :size="spinnerSize"
         :tone="tone ?? 'neutral'"
         :label="resolvedLoadingLabel"
@@ -229,7 +251,8 @@ defineExpose({ inputRef })
       <button
         v-if="clearable && model && !resolvedDisabled && !readonly && !loading"
         type="button"
-        class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
+        data-part="clear"
+        :class="clearClasses"
         :aria-label="dzMessages.clear"
         tabindex="-1"
         @click="handleClear"
@@ -258,7 +281,8 @@ defineExpose({ inputRef })
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

@@ -392,3 +392,87 @@ export const RealWorldInputTags: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — idle vs disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the one state DzChip declares, and it changes three things at
+ * once: the root stamps `data-state="disabled"` and `data-disabled`, the close
+ * button becomes `disabled`, and the Delete/Backspace shortcut stops emitting
+ * `close`.
+ *
+ * The play function drives all three. The disabled chip is asserted rather than
+ * clicked: `dz-disabled-control` sets `pointer-events: none` on the root, so a
+ * pointer event would never reach it in a real browser either.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzChip },
+    data() {
+      return { idleCloses: 0, disabledCloses: 0 }
+    },
+    template: `
+      <div class="space-y-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <DzChip
+            closable
+            tone="primary"
+            aria-label="Idle chip"
+            data-testid="chip-idle"
+            @close="idleCloses++"
+          >Idle</DzChip>
+          <DzChip
+            closable
+            disabled
+            tone="primary"
+            aria-label="Disabled chip"
+            data-testid="chip-disabled"
+            @close="disabledCloses++"
+          >Disabled</DzChip>
+          <DzChip tone="neutral" aria-label="Static chip">Not closable</DzChip>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          close events — idle: <strong data-testid="idle-closes">{{ idleCloses }}</strong>,
+          disabled: <strong data-testid="disabled-closes">{{ disabledCloses }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const idle = canvas.getByTestId('chip-idle')
+    const disabled = canvas.getByTestId('chip-disabled')
+
+    // State is exposed on the anatomy attributes, not only in the paint.
+    await expect(idle).toHaveAttribute('data-state', 'idle')
+    await expect(idle).not.toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('data-state', 'disabled')
+    await expect(disabled).toHaveAttribute('data-disabled')
+
+    // The disabled chip's remove button is disabled; the idle one is not.
+    await expect(within(disabled).getByRole('button')).toBeDisabled()
+    const idleClose = within(idle).getByRole('button')
+    await expect(idleClose).toBeEnabled()
+
+    // Pointer path: the idle chip emits `close`.
+    await userEvent.click(idleClose)
+    await waitFor(() => expect(canvas.getByTestId('idle-closes')).toHaveTextContent('1'))
+
+    // Keyboard path: Delete on a focused closable chip also emits `close`…
+    idle.focus()
+    await expect(idle).toHaveFocus()
+    await userEvent.keyboard('{Delete}')
+    await waitFor(() => expect(canvas.getByTestId('idle-closes')).toHaveTextContent('2'))
+
+    // …and is suppressed while disabled, even though the chip is still focusable.
+    disabled.focus()
+    await userEvent.keyboard('{Delete}')
+    await expect(canvas.getByTestId('disabled-closes')).toHaveTextContent('0')
+
+    // A non-closable chip has no remove control at all.
+    await expect(within(canvas.getByLabelText('Static chip')).queryByRole('button')).toBeNull()
+  },
+}

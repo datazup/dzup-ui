@@ -205,3 +205,102 @@ export const CustomEditor: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — display / edit / disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * DzInplace has two states at once: the declared `disabled` prop, and the
+ * display ⇄ edit mode it swaps between, which it publishes as
+ * `data-state="display" | "edit"` on its root.
+ *
+ * They interact, which is the part worth a story: `disabled` does not merely
+ * grey the trigger, it removes the affordance entirely — the pencil hint is not
+ * rendered, the trigger is a `disabled` button, and `activate()` refuses, so the
+ * component can never reach `edit`. The play function drives the enabled control
+ * through display → edit → display and asserts the disabled one stays put.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzInplace },
+    setup() {
+      const editable = ref('Jane Doe')
+      const locked = ref('System owner')
+      return { editable, locked }
+    },
+    template: `
+      <div class="grid max-w-2xl gap-8 p-8 md:grid-cols-2">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Editable</p>
+          <DzInplace
+            v-model:value="editable"
+            aria-label="Edit display name"
+            placeholder="Enter a name"
+            data-testid="inplace-editable"
+          />
+          <p class="text-xs text-[var(--dz-muted-foreground)]">
+            Value: <strong data-testid="editable-value">{{ editable }}</strong>
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled</p>
+          <DzInplace
+            disabled
+            v-model:value="locked"
+            aria-label="Edit system owner"
+            data-testid="inplace-disabled"
+          />
+          <p class="text-xs text-[var(--dz-muted-foreground)]">
+            Value: <strong data-testid="disabled-value">{{ locked }}</strong>
+          </p>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const editable = canvas.getByTestId('inplace-editable')
+    const disabled = canvas.getByTestId('inplace-disabled')
+
+    // Both start in `display`; only the disabled one is flagged.
+    await expect(editable).toHaveAttribute('data-state', 'display')
+    await expect(editable).not.toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('data-state', 'display')
+    await expect(disabled).toHaveAttribute('data-disabled')
+
+    // Disabled: the trigger is a disabled button and carries no edit affordance.
+    const lockedTrigger = within(disabled).getByRole('button', { name: /edit system owner/i })
+    await expect(lockedTrigger).toBeDisabled()
+    await expect(lockedTrigger.querySelector('svg')).toBeNull()
+
+    // Editable: activating swaps display → edit and moves focus into the field.
+    const trigger = within(editable).getByRole('button', { name: /edit display name/i })
+    await expect(trigger.querySelector('svg')).not.toBeNull()
+    await userEvent.click(trigger)
+    await waitFor(() => expect(editable).toHaveAttribute('data-state', 'edit'))
+    const field = await within(editable).findByRole('textbox')
+    await expect(field).toHaveFocus()
+
+    // Escape returns to `display` without committing.
+    await userEvent.clear(field)
+    await userEvent.keyboard('Discarded{Escape}')
+    await waitFor(() => expect(editable).toHaveAttribute('data-state', 'display'))
+    await expect(canvas.getByTestId('editable-value')).toHaveTextContent('Jane Doe')
+
+    // Enter commits, and the display view shows the committed value.
+    await userEvent.click(within(editable).getByRole('button', { name: /edit display name/i }))
+    const field2 = await within(editable).findByRole('textbox')
+    await userEvent.clear(field2)
+    await userEvent.keyboard('Ada Lovelace{Enter}')
+    await waitFor(() => expect(editable).toHaveAttribute('data-state', 'display'))
+    await expect(canvas.getByTestId('editable-value')).toHaveTextContent('Ada Lovelace')
+
+    // The disabled control never left `display`.
+    await expect(disabled).toHaveAttribute('data-state', 'display')
+    await expect(within(disabled).queryByRole('textbox')).toBeNull()
+    await expect(canvas.getByTestId('disabled-value')).toHaveTextContent('System owner')
+  },
+}

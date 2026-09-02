@@ -1,0 +1,1120 @@
+{
+  "schemaVersion": "1.0.0",
+  "package": "@dzup-ui/mcp",
+  "version": "0.2.0",
+  "serverName": "dzup-ui",
+  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "generatedFrom": [
+    "packages/core/manifests/component-ownership.manifest.json",
+    "packages/core/manifests/public-api.manifest.json",
+    "packages/mcp/package.json",
+    "packages/mcp/scripts/e2e-smoke.mjs",
+    "packages/mcp/src/__fixtures__/catalog.ts",
+    "packages/mcp/src/index.ts (live tools/list over InMemoryTransport)",
+    "packages/mcp/src/server.spec.ts",
+    "packages/mcp/src/tools.contract.spec.ts",
+    "packages/mcp/src/tools.spec.ts"
+  ],
+  "totals": {
+    "tools": 12,
+    "withUnitSpec": 12,
+    "withMalformedInputSpec": 12,
+    "withProtocolRoundtrip": 12,
+    "withE2eSmoke": 7,
+    "answeringFromNoDataSource": 0
+  },
+  "catalogVisibility": {
+    "publicComponents": 144,
+    "reachable": 144,
+    "unreachable": 0,
+    "unreachableSymbols": [],
+    "note": "Components classified `public-component` by the ownership manifest that this package's own `parseComponentIndex` cannot find in packages/core/docs/llms.txt — the file `yarn generate:llms` renders from component-meta.json and apps/storybook copies to /storybook/llms.txt, and the file list_components/get_component answer from. Every symbol listed here is invisible to every MCP client. Ratcheted by yarn validate:mcp."
+  },
+  "tools": [
+    {
+      "name": "get_block",
+      "title": "Get block source",
+      "description": "Fetch a block's real .vue source, its npm dependencies and the `shadcn add` install command. Use the result to drop the block into a project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Block name from list_blocks, e.g. \"pricing-3\", \"hero-centered\""
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "name"
+      ],
+      "optional": [],
+      "dataSource": {
+        "reads": [
+          "/r/hero-centered.json"
+        ],
+        "readPatterns": [
+          "/r/<name>.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": true,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/hero-centered.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "get_component",
+      "title": "Get component API",
+      "description": "Get the full public API for one component: import path, frozen variant/size/tone taxonomy, props/emits/slots tables and a usage snippet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9]*$",
+            "description": "Component name, e.g. \"DzButton\" or \"button\""
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "name"
+      ],
+      "optional": [],
+      "dataSource": {
+        "reads": [
+          "/storybook/llms-full.txt"
+        ],
+        "readPatterns": [
+          "/storybook/llms-full.txt"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": true,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/storybook/llms-full.txt"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "get_component_example",
+      "title": "Get component usage example",
+      "description": "Get real usage source for a component, taken verbatim from its Storybook story — never synthesised. Returns the story's markup and its full source. A component with no story returns an explicit \"no example published\" rather than invented code.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9]*$",
+            "description": "Component name, e.g. \"DzButton\" or \"button\""
+          },
+          "story": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9]*$",
+            "description": "A specific story export name; omit for the component's primary example"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "name"
+      ],
+      "optional": [
+        "story"
+      ],
+      "dataSource": {
+        "reads": [
+          "/r/component-meta.json"
+        ],
+        "readPatterns": [
+          "/r/component-meta.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": true,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/component-meta.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "get_component_metadata",
+      "title": "Get component metadata",
+      "description": "Get one component's complete machine-extracted API: props with resolved types, declared defaults and descriptions; events with payload types; slots with slot-prop types; exposed members; plus its family, risk tier, ADR-19 anatomy parts and evidence-cell state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[A-Za-z][A-Za-z0-9]*$",
+            "description": "Component name, e.g. \"DzButton\" or \"button\""
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "name"
+      ],
+      "optional": [],
+      "dataSource": {
+        "reads": [
+          "/r/component-meta.json"
+        ],
+        "readPatterns": [
+          "/r/component-meta.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": true,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/component-meta.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "get_install_command",
+      "title": "Get install command",
+      "description": "Get the exact terminal commands to install a block, template or the token theme into a project, for a chosen package manager.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Block/template name (ignored for type=\"tokens\")"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "block",
+              "template",
+              "tokens"
+            ],
+            "description": "What to install (default: block)"
+          },
+          "packageManager": {
+            "type": "string",
+            "enum": [
+              "npm",
+              "pnpm",
+              "yarn",
+              "bun"
+            ],
+            "description": "npm | pnpm | yarn | bun (default: npm)"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "name"
+      ],
+      "optional": [
+        "packageManager",
+        "type"
+      ],
+      "dataSource": {
+        "reads": [
+          "/r/registry.json"
+        ],
+        "readPatterns": [
+          "/r/registry.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/registry.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "unrun",
+          "artifacts": [],
+          "note": "Named in the smoke script's tools/list assertion but never called against the built dist/."
+        }
+      ]
+    },
+    {
+      "name": "get_template",
+      "title": "Get template source",
+      "description": "Fetch a full-page template's real .vue source, its npm dependencies and the `shadcn add` install command.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Template name from list_templates, e.g. \"analytics-dashboard\""
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "name"
+      ],
+      "optional": [],
+      "dataSource": {
+        "reads": [
+          "/r/templates/analytics-dashboard.json"
+        ],
+        "readPatterns": [
+          "/r/templates/<name>.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": true,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/templates/analytics-dashboard.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "unrun",
+          "artifacts": [],
+          "note": "Named in the smoke script's tools/list assertion but never called against the built dist/."
+        }
+      ]
+    },
+    {
+      "name": "list_blocks",
+      "title": "List blocks",
+      "description": "List pre-composed UI blocks (heroes, pricing, navbars, forms…) built from @dzup-ui/core. Filter by category or free-text query.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Block category, e.g. \"marketing\", \"forms\", \"commerce\""
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Free-text filter over name/title/description/components"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [],
+      "optional": [
+        "category",
+        "query"
+      ],
+      "dataSource": {
+        "reads": [
+          "/r/registry.json"
+        ],
+        "readPatterns": [
+          "/r/registry.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/registry.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "unrun",
+          "artifacts": [],
+          "note": "Named in the smoke script's tools/list assertion but never called against the built dist/."
+        }
+      ]
+    },
+    {
+      "name": "list_components",
+      "title": "List components",
+      "description": "List @dzup-ui/core components with a one-line summary, optionally filtered by family (e.g. \"Buttons\", \"Forms\") or a free-text query. Start here to discover what exists.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "family": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Component family, e.g. \"Buttons\", \"Forms\", \"Data\""
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Free-text filter over name/description"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [],
+      "optional": [
+        "family",
+        "query"
+      ],
+      "dataSource": {
+        "reads": [
+          "/storybook/llms.txt"
+        ],
+        "readPatterns": [
+          "/storybook/llms.txt"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/storybook/llms.txt"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "list_templates",
+      "title": "List templates",
+      "description": "List full-page templates (dashboards, auth pages, settings, marketing pages…). Filter by category or free-text query.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Template category, e.g. \"dashboards\", \"auth\", \"marketing\""
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Free-text filter over name/title/description/components"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [],
+      "optional": [
+        "category",
+        "query"
+      ],
+      "dataSource": {
+        "reads": [
+          "/r/templates/registry.json"
+        ],
+        "readPatterns": [
+          "/r/templates/registry.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/templates/registry.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "unrun",
+          "artifacts": [],
+          "note": "Named in the smoke script's tools/list assertion but never called against the built dist/."
+        }
+      ]
+    },
+    {
+      "name": "list_tokens",
+      "title": "List design tokens",
+      "description": "List the --dz-* design tokens (OKLCH colors, spacing, radii, shadows…) as light/dark CSS variables. Filter by theme or a name/value query.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "theme": {
+            "type": "string",
+            "enum": [
+              "light",
+              "dark"
+            ],
+            "description": "Restrict to one theme; omit for both"
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Filter tokens by name or value, e.g. \"primary\", \"radius\""
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [],
+      "optional": [
+        "query",
+        "theme"
+      ],
+      "dataSource": {
+        "reads": [
+          "/r/tokens.json"
+        ],
+        "readPatterns": [
+          "/r/tokens.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/tokens.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "unrun",
+          "artifacts": [],
+          "note": "Named in the smoke script's tools/list assertion but never called against the built dist/."
+        }
+      ]
+    },
+    {
+      "name": "search",
+      "title": "Search catalog",
+      "description": "One free-text search across components, blocks and templates at once. Returns the top matches in each category with the tool to call next.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "What you are looking for, e.g. \"pricing\", \"date picker\", \"sidebar\""
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [
+        "query"
+      ],
+      "optional": [],
+      "dataSource": {
+        "reads": [
+          "/r/registry.json",
+          "/r/templates/registry.json",
+          "/storybook/llms.txt"
+        ],
+        "readPatterns": [
+          "/r/registry.json",
+          "/r/templates/registry.json",
+          "/storybook/llms.txt"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/registry.json",
+            "/r/templates/registry.json",
+            "/storybook/llms.txt"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "search_components",
+      "title": "Search component metadata",
+      "description": "Search every @dzup-ui/core component by name, family, risk tier or free text over its props, events and slots. Answers from the generated metadata artifact, so it covers all 144 public components plus their compound parts.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Free text matched against name, family, prop/event/slot names and descriptions"
+          },
+          "family": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Component family, e.g. \"buttons\", \"forms\", \"data\", \"providers\""
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "description": "Risk tier from the quality matrix (A = highest evidence bar)"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "required": [],
+      "optional": [
+        "family",
+        "query",
+        "tier"
+      ],
+      "dataSource": {
+        "reads": [
+          "/r/component-meta.json"
+        ],
+        "readPatterns": [
+          "/r/component-meta.json"
+        ],
+        "kind": "generated-artifact"
+      },
+      "errorsOnUnknown": null,
+      "cells": [
+        {
+          "kind": "contract-spec",
+          "scope": "corpus",
+          "state": "pass",
+          "artifacts": [
+            "packages/mcp/src/tools.contract.spec.ts"
+          ],
+          "note": "Corpus gate: the contract suite enumerates the live `tools/list` response, so it covers every registered tool by construction rather than by a per-tool row."
+        },
+        {
+          "kind": "unit-spec",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "malformed-input",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/tools.spec.ts"
+          ]
+        },
+        {
+          "kind": "data-source",
+          "scope": "tool",
+          "state": "pass",
+          "artifacts": [
+            "/r/component-meta.json"
+          ]
+        },
+        {
+          "kind": "protocol-roundtrip",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/src/server.spec.ts"
+          ]
+        },
+        {
+          "kind": "e2e-smoke",
+          "scope": "tool",
+          "state": "present",
+          "artifacts": [
+            "packages/mcp/scripts/e2e-smoke.mjs"
+          ]
+        }
+      ]
+    }
+  ]
+}

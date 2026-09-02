@@ -13,6 +13,8 @@
  * or block content (`div`). Common interactive/structural elements are listed
  * for editor autocompletion; any string tag is accepted.
  */
+import type { DzVisuallyHiddenUi } from './DzVisuallyHidden.anatomy.ts'
+
 export type VisuallyHiddenElement
   = | 'span'
     | 'div'
@@ -33,6 +35,17 @@ export interface DzVisuallyHiddenProps {
   focusable?: boolean
   /** Accessible identifier (e.g. for `aria-labelledby`/`aria-describedby` references). */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzVisuallyHidden.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzVisuallyHidden :ui="{ root: 'not-sr-only' }">Skip</DzVisuallyHidden>
+   * ```
+   */
+  ui?: DzVisuallyHiddenUi
 }
 
 export interface DzVisuallyHiddenSlots {

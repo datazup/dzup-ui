@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, waitFor, within } from 'storybook/test'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { DzAnchor } from '../../src/components/navigation'
 import { darkModeDecorator } from '../_shared'
 
@@ -83,8 +83,8 @@ export const Default: Story = {
       return { items, article: articleTemplate() }
     },
     template: `
-      <div class="flex gap-8">
-        <DzAnchor :items="items" class="w-48 shrink-0" />
+      <div class="flex flex-wrap gap-8">
+        <DzAnchor :items="items" class="w-48 max-w-full shrink-0" />
         <div class="flex-1 space-y-8" v-html="article" />
       </div>
     `,
@@ -139,7 +139,7 @@ export const Nested: Story = {
       return { items, article: articleTemplate() }
     },
     template: `
-      <div class="flex gap-8">
+      <div class="flex flex-wrap gap-8">
         <DzAnchor :items="items" class="w-56 shrink-0" />
         <div class="flex-1 space-y-8" v-html="article" />
       </div>
@@ -160,7 +160,7 @@ export const Affixed: Story = {
       return { items, article: articleTemplate() }
     },
     template: `
-      <div class="flex gap-8">
+      <div class="flex flex-wrap gap-8">
         <DzAnchor
           :items="items"
           :offset-top="16"
@@ -193,7 +193,7 @@ export const Controlled: Story = {
       },
     },
     template: `
-      <div class="flex gap-8">
+      <div class="flex flex-wrap gap-8">
         <div class="w-48 shrink-0 space-y-3">
           <DzAnchor v-model:active="active" :items="items" />
           <p class="text-sm text-[var(--dz-muted-foreground)]">Active: <strong>{{ active || 'none' }}</strong></p>
@@ -218,10 +218,97 @@ export const DarkMode: Story = {
       return { items, article: articleTemplate() }
     },
     template: `
-      <div class="flex gap-8">
-        <DzAnchor :items="items" class="w-48 shrink-0" />
+      <div class="flex flex-wrap gap-8">
+        <DzAnchor :items="items" class="w-48 max-w-full shrink-0" />
         <div class="flex-1 space-y-8" v-html="article" />
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// States — active / inactive / disabled entry (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The states a table-of-contents entry can be in. `disabled` is declared per
+ * entry (`DzAnchorItem.disabled`), not on the nav, because a section that is not
+ * ready yet is the real case — a whole disabled table of contents is not.
+ *
+ * Each state is exposed twice: to assistive technology
+ * (`aria-current="location"`, `aria-disabled`, `tabindex="-1"`) and to the
+ * styling contract (`data-active`). The play function asserts both, and that a
+ * disabled entry refuses activation while its siblings still work.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzAnchor },
+    setup() {
+      const items = [
+        { href: '#introduction', label: 'Introduction' },
+        { href: '#installation', label: 'Installation' },
+        { href: '#draft', label: 'Draft section', disabled: true },
+        { href: '#usage', label: 'Usage' },
+      ]
+      return { items }
+    },
+    data() {
+      return { active: '#introduction' }
+    },
+    template: `
+      <div class="flex flex-wrap gap-8">
+        <DzAnchor
+          :items="items"
+          v-model:active="active"
+          class="w-56 shrink-0"
+          aria-label="States table of contents"
+          data-testid="an-states"
+        />
+        <div class="flex-1 space-y-2">
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            The third entry is disabled — its section has not been published yet.
+          </p>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Active: <strong data-testid="an-active">{{ active }}</strong>
+          </p>
+        </div>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const nav = canvas.getByTestId('an-states')
+
+    await expect(nav).toHaveAttribute('data-state', 'ready')
+
+    const intro = within(nav).getByRole('link', { name: 'Introduction' })
+    const install = within(nav).getByRole('link', { name: 'Installation' })
+    const draft = within(nav).getByRole('link', { name: 'Draft section' })
+
+    // Active: announced with `aria-current="location"` and flagged for CSS.
+    await expect(intro).toHaveAttribute('aria-current', 'location')
+    await expect(intro).toHaveAttribute('data-active')
+
+    // Inactive: neither.
+    await expect(install).not.toHaveAttribute('aria-current')
+    await expect(install).not.toHaveAttribute('data-active')
+
+    // Disabled: announced, and taken out of the tab order so a keyboard user is
+    // not offered a link that goes nowhere.
+    await expect(draft).toHaveAttribute('aria-disabled', 'true')
+    await expect(draft).toHaveAttribute('tabindex', '-1')
+
+    // Activating a live entry moves the active state…
+    await userEvent.click(install)
+    await waitFor(() => expect(install).toHaveAttribute('aria-current', 'location'))
+    await expect(intro).not.toHaveAttribute('aria-current')
+    await expect(canvas.getByTestId('an-active')).toHaveTextContent('#installation')
+
+    // …while the disabled entry is unreachable by pointer as well: its variant
+    // sets `pointer-events: none`, so the browser never delivers the click, and
+    // the model stays where the last live activation left it.
+    await expect(getComputedStyle(draft).pointerEvents).toBe('none')
+    await expect(draft).not.toHaveAttribute('aria-current')
+    await expect(canvas.getByTestId('an-active')).toHaveTextContent('#installation')
+  },
 }

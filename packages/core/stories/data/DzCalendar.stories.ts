@@ -266,3 +266,300 @@ export const DarkMode: Story = {
     template: `<DzCalendar v-model:value="value" v-model:focusedDate="focused" />`,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / read-only / disabled (tier C `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The two states DzCalendar declares in `DzCalendar.types.ts` (`disabled`,
+ * `readonly`) side by side with the plain enabled surface, so the difference is
+ * reviewable rather than asserted in prose.
+ *
+ * `readonly` keeps the grid navigable and its cells focusable but refuses
+ * selection; `disabled` additionally turns off the header controls and marks the
+ * grid `aria-disabled`. Both are exercised by the play function below.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzCalendar },
+    data() {
+      return {
+        enabledValue: '2026-06-15',
+        readonlyValue: '2026-06-15',
+        disabledValue: '2026-06-15',
+        enabledFocus: '2026-06-15',
+        readonlyFocus: '2026-06-15',
+        disabledFocus: '2026-06-15',
+      }
+    },
+    template: `
+      <div class="grid gap-8 lg:grid-cols-3">
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Enabled</p>
+          <DzCalendar
+            aria-label="Enabled calendar"
+            v-model:value="enabledValue"
+            v-model:focused-date="enabledFocus"
+          />
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Value: <strong data-testid="enabled-value">{{ enabledValue }}</strong>
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Read-only</p>
+          <DzCalendar
+            readonly
+            aria-label="Read-only calendar"
+            v-model:value="readonlyValue"
+            v-model:focused-date="readonlyFocus"
+          />
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Value: <strong data-testid="readonly-value">{{ readonlyValue }}</strong>
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Disabled</p>
+          <DzCalendar
+            disabled
+            aria-label="Disabled calendar"
+            v-model:value="disabledValue"
+            v-model:focused-date="disabledFocus"
+          />
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Value: <strong data-testid="disabled-value">{{ disabledValue }}</strong>
+          </p>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = canvas.getByRole('grid', { name: 'Enabled calendar' })
+    const readonly = canvas.getByRole('grid', { name: 'Read-only calendar' })
+    const disabled = canvas.getByRole('grid', { name: 'Disabled calendar' })
+
+    // The states are exposed to assistive technology, not only painted.
+    await expect(enabled).not.toHaveAttribute('aria-readonly')
+    await expect(enabled).not.toHaveAttribute('aria-disabled')
+    await expect(readonly).toHaveAttribute('aria-readonly', 'true')
+    await expect(disabled).toHaveAttribute('aria-disabled', 'true')
+
+    // `disabled` also turns the period controls off; `readonly` leaves them live.
+    const disabledNext = within(disabled.parentElement as HTMLElement)
+      .getByRole('button', { name: /next month/i })
+    await expect(disabledNext).toBeDisabled()
+    const readonlyNext = within(readonly.parentElement as HTMLElement)
+      .getByRole('button', { name: /next month/i })
+    await expect(readonlyNext).toBeEnabled()
+
+    // Enabled: clicking a day commits it to the model.
+    const enabledDay = enabled.querySelector<HTMLButtonElement>('[data-iso="2026-06-10"]')
+    await expect(enabledDay).not.toBeNull()
+    await userEvent.click(enabledDay!)
+    await waitFor(() =>
+      expect(canvas.getByTestId('enabled-value')).toHaveTextContent('2026-06-10'),
+    )
+
+    // Read-only: the same click is refused — the model is unchanged.
+    const readonlyDay = readonly.querySelector<HTMLButtonElement>('[data-iso="2026-06-10"]')
+    await userEvent.click(readonlyDay!)
+    await expect(canvas.getByTestId('readonly-value')).toHaveTextContent('2026-06-15')
+
+    // Disabled: every day carries `data-disabled`, which the base stylesheet
+    // turns into `pointer-events: none` — the cell is unreachable by pointer at
+    // all, so the assertion is on the state rather than on a click that the
+    // browser would never deliver.
+    const disabledDay = disabled.querySelector<HTMLButtonElement>('[data-iso="2026-06-10"]')
+    await expect(disabledDay).toHaveAttribute('data-disabled')
+    await expect(disabledDay).toHaveAttribute('aria-disabled', 'true')
+    await expect(canvas.getByTestId('disabled-value')).toHaveTextContent('2026-06-15')
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility — keyboard-only roving grid (tier C `accessibility` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The APG `grid` keyboard contract, driven end to end without a pointer.
+ *
+ * DzCalendar exposes a single tabbable day (roving tabindex): Tab reaches the
+ * grid once, then Arrow keys move day-by-day and week-by-week, Home jumps to the
+ * start of the week, PageDown to the next month, and Enter commits the focused
+ * day. The play function performs exactly that sequence and asserts on the
+ * focused element and the bound model after each step.
+ */
+export const Accessibility: Story = {
+  name: 'Accessibility: Keyboard-Only Grid',
+  render: () => ({
+    components: { DzCalendar },
+    data() {
+      return { value: '2026-06-15', focused: '2026-06-15' }
+    },
+    template: `
+      <div class="space-y-3">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Tab reaches the grid once (roving tabindex). Arrow keys move by day and
+          by week, Home/End jump within the week, PageUp/PageDown change month,
+          Enter selects the focused day.
+        </p>
+        <DzCalendar
+          aria-label="Keyboard navigable calendar"
+          v-model:value="value"
+          v-model:focused-date="focused"
+        />
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Selected: <strong data-testid="kbd-value">{{ value }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const grid = canvas.getByRole('grid', { name: 'Keyboard navigable calendar' })
+
+    // Roving tabindex: exactly one day button is in the tab order.
+    await expect(grid.querySelectorAll('button[tabindex="0"]')).toHaveLength(1)
+
+    // Reach that day using the keyboard only — the header controls come first.
+    for (let i = 0; i < 8 && !grid.contains(document.activeElement); i++)
+      await userEvent.tab()
+    await expect(grid.contains(document.activeElement)).toBe(true)
+    await expect(document.activeElement).toHaveAttribute('data-iso', '2026-06-15')
+
+    // ArrowRight → next day; ArrowDown → same weekday next week.
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() =>
+      expect(document.activeElement).toHaveAttribute('data-iso', '2026-06-16'),
+    )
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() =>
+      expect(document.activeElement).toHaveAttribute('data-iso', '2026-06-23'),
+    )
+
+    // Home → first day of the focused week (this grid starts on Sunday).
+    await userEvent.keyboard('{Home}')
+    await waitFor(() =>
+      expect(document.activeElement).toHaveAttribute('data-iso', '2026-06-21'),
+    )
+
+    // Enter commits the focused day, without a pointer ever being used.
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() =>
+      expect(canvas.getByTestId('kbd-value')).toHaveTextContent('2026-06-21'),
+    )
+
+    // PageDown moves the visible period a month forward and keeps focus in grid.
+    await userEvent.keyboard('{PageDown}')
+    await waitFor(() =>
+      expect(document.activeElement).toHaveAttribute('data-iso', '2026-07-21'),
+    )
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Real world — booking availability (tier C `real-world` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * A booking surface: the calendar is bounded to a release window, weekends are
+ * closed, each open day renders its remaining-slot count through the `#day`
+ * slot, and the chosen day drives a summary panel beside it.
+ *
+ * This is the composition the component exists for — a bare month grid never
+ * exercises `minDate`/`maxDate`, `disabledDate` and the `#day` slot together.
+ */
+export const RealWorldBooking: Story = {
+  name: 'Real World: Booking Availability',
+  render: () => ({
+    components: { DzCalendar },
+    setup() {
+      const slots: Record<string, number> = {
+        '2026-06-08': 4,
+        '2026-06-09': 0,
+        '2026-06-10': 2,
+        '2026-06-11': 6,
+        '2026-06-12': 1,
+        '2026-06-15': 3,
+        '2026-06-16': 5,
+        '2026-06-17': 0,
+        '2026-06-18': 2,
+        '2026-06-19': 4,
+      }
+      const iso = (d: Date) =>
+        `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+      const disabledDate = (d: Date) =>
+        d.getDay() === 0 || d.getDay() === 6 || (slots[iso(d)] ?? 0) === 0
+      return { slots, iso, disabledDate }
+    },
+    data() {
+      return { value: '2026-06-10', focused: '2026-06-10' }
+    },
+    template: `
+      <div class="grid gap-6 md:grid-cols-[auto_16rem]">
+        <DzCalendar
+          aria-label="Choose an appointment day"
+          min-date="2026-06-08"
+          max-date="2026-06-19"
+          :disabled-date="disabledDate"
+          v-model:value="value"
+          v-model:focused-date="focused"
+        >
+          <template #day="{ date, dayNumber, isDisabled }">
+            <span>{{ dayNumber }}</span>
+            <span
+              v-if="!isDisabled"
+              class="text-[0.625rem] leading-none text-[var(--dz-muted-foreground)]"
+            >{{ slots[iso(date)] }}</span>
+          </template>
+        </DzCalendar>
+
+        <aside class="rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] bg-[var(--dz-card)] p-4">
+          <h3 class="text-sm font-semibold text-[var(--dz-foreground)]">Your appointment</h3>
+          <p class="mt-2 text-sm text-[var(--dz-muted-foreground)]">
+            Day: <strong data-testid="booking-day" class="text-[var(--dz-foreground)]">{{ value }}</strong>
+          </p>
+          <p class="mt-1 text-sm text-[var(--dz-muted-foreground)]">
+            Slots left: <strong data-testid="booking-slots" class="text-[var(--dz-foreground)]">{{ slots[value] ?? 0 }}</strong>
+          </p>
+          <p class="mt-3 text-xs text-[var(--dz-muted-foreground)]">
+            Weekends and fully booked days are closed; the window is limited to
+            8–19 June 2026.
+          </p>
+        </aside>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const grid = canvas.getByRole('grid', { name: 'Choose an appointment day' })
+
+    // The summary starts on the pre-selected day.
+    await expect(canvas.getByTestId('booking-day')).toHaveTextContent('2026-06-10')
+    await expect(canvas.getByTestId('booking-slots')).toHaveTextContent('2')
+
+    // A day outside the release window is refused by `maxDate`.
+    const outOfWindow = grid.querySelector<HTMLButtonElement>('[data-iso="2026-06-25"]')
+    await expect(outOfWindow).toHaveAttribute('aria-disabled', 'true')
+
+    // A fully booked open day is refused by `disabledDate` — and, because the
+    // disabled styling removes pointer events, cannot even be clicked.
+    const fullyBooked = grid.querySelector<HTMLButtonElement>('[data-iso="2026-06-17"]')
+    await expect(fullyBooked).toHaveAttribute('aria-disabled', 'true')
+    await expect(fullyBooked).toHaveAttribute('data-disabled')
+    await expect(canvas.getByTestId('booking-day')).toHaveTextContent('2026-06-10')
+
+    // An available day books, and the summary follows it.
+    const available = grid.querySelector<HTMLButtonElement>('[data-iso="2026-06-16"]')
+    await expect(available).not.toHaveAttribute('aria-disabled')
+    await userEvent.click(available!)
+    await waitFor(() =>
+      expect(canvas.getByTestId('booking-day')).toHaveTextContent('2026-06-16'),
+    )
+    await expect(canvas.getByTestId('booking-slots')).toHaveTextContent('5')
+  },
+}

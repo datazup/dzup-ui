@@ -7,7 +7,12 @@ import { createDzupResolution } from '../../packages/tooling/src/resolution/dzup
 
 const dirname = fileURLToPath(new URL('.', import.meta.url))
 const appDir = dirname
-const pkgRoot = resolve(dirname, '../../..')
+// Two levels up from `apps/storybook/`, i.e. the monorepo root that holds
+// `packages/` — the same derivation `apps/landing/vite.config.ts` uses.
+// `'../../..'` walked one level too far (to the directory ABOVE the repo) and
+// made `createDzupResolution` throw before vitest could load this config at
+// all, so `yarn storybook:test` could not start. TASK-N1-O1.
+const pkgRoot = resolve(dirname, '../..')
 const dzup = createDzupResolution({ mode: 'merged-source', root: pkgRoot })
 const ignoredVueCompilerWarning
   = '[@vue/compiler-core] decodeEntities option is passed but will be ignored in non-browser builds.'

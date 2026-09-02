@@ -69,8 +69,8 @@ export const accordionVariants = tv({
     size: {
       icon: '',
       xs: {
-        trigger: 'py-[var(--dz-spacing-1-5)] text-[length:var(--dz-text-xs)]',
-        content: 'pb-[var(--dz-spacing-1-5)] text-[length:var(--dz-text-xs)]',
+        trigger: 'py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-xs)]',
+        content: 'pb-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-xs)]',
       },
       sm: {
         trigger: 'py-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)]',

@@ -53,6 +53,18 @@ const resolvedPortalTo = computed(() => props.portalTo ?? dzPortalTarget.value)
 
 const attrs = useAttrs()
 const currentIndex = ref(props.startIndex)
+/**
+ * TASK-N1-O3. `tv({ slots })` returns a map of FUNCTIONS, and every binding in
+ * the template below used to read `styles.closeButton` rather than
+ * `styles.closeButton()`. Vue's `normalizeClass` has no case for a function, so
+ * it produced the empty string: DzLightbox rendered with **no classes at all**
+ * on its overlay, content, image, caption, counter, close button and both nav
+ * buttons. The browser matrix caught it as a WCAG 2.5.8 failure -- the close
+ * control measured 16x16 and the nav controls 20x20, which is the size of the
+ * bare SVG inside them, against the 32x32 and 40x40 the variants declare -- and
+ * it was only intermittent because the overlay is teleported and mounts for a
+ * few frames. It was never a timing artefact; it was this.
+ */
 const styles = lightboxVariants()
 
 watch(open, (val) => {
@@ -126,11 +138,11 @@ const dzMessages = useComponentMessages('DzLightbox')
       :disabled="portalDisabled"
       :defer="portalDefer"
     >
-      <DialogOverlay :class="styles.overlay" />
+      <DialogOverlay :class="styles.overlay()" />
 
       <DialogContent
         :id="id"
-        :class="cn(styles.content, attrs.class as string | undefined)"
+        :class="cn(styles.content(), attrs.class as string | undefined)"
         style="contain: layout style"
         v-bind="{ ...contentAria, ...$attrs, class: undefined }"
         @keydown="handleKeydown"
@@ -142,14 +154,14 @@ const dzMessages = useComponentMessages('DzLightbox')
           {{ fallbackDescription }}
         </DialogDescription>
         <!-- Counter -->
-        <span v-if="images.length > 1" :class="styles.counter">
+        <span v-if="images.length > 1" :class="styles.counter()">
           {{ currentIndex + 1 }} / {{ images.length }}
         </span>
 
         <!-- Close button -->
         <button
           type="button"
-          :class="styles.closeButton"
+          :class="styles.closeButton()"
           :aria-label="dzMessages.close"
           @click="open = false"
         >
@@ -173,7 +185,7 @@ const dzMessages = useComponentMessages('DzLightbox')
         <button
           v-if="images.length > 1"
           type="button"
-          :class="cn(styles.navButton, styles.prevButton)"
+          :class="cn(styles.navButton(), styles.prevButton())"
           :disabled="!hasPrev"
           :aria-label="dzMessages.previous"
           @click="prev"
@@ -198,14 +210,14 @@ const dzMessages = useComponentMessages('DzLightbox')
           v-if="currentImage"
           :src="currentImage.src"
           :alt="currentImage.alt ?? ''"
-          :class="styles.image"
+          :class="styles.image()"
         >
 
         <!-- Next -->
         <button
           v-if="images.length > 1"
           type="button"
-          :class="cn(styles.navButton, styles.nextButton)"
+          :class="cn(styles.navButton(), styles.nextButton())"
           :disabled="!hasNext"
           :aria-label="dzMessages.next"
           @click="next"
@@ -226,7 +238,7 @@ const dzMessages = useComponentMessages('DzLightbox')
         </button>
 
         <!-- Caption -->
-        <div v-if="currentImage?.caption" :class="styles.caption">
+        <div v-if="currentImage?.caption" :class="styles.caption()">
           <slot name="caption" :image="currentImage" :index="currentIndex">
             {{ currentImage.caption }}
           </slot>

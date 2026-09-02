@@ -26,6 +26,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<DzCodeProps>(), {
   variant: 'inline',
+  ui: undefined,
 })
 
 defineSlots<DzCodeSlots>()
@@ -36,6 +37,7 @@ const classes = computed(() =>
   cn(
     codeVariants({ variant: props.variant }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -44,6 +46,7 @@ const classes = computed(() =>
   <pre
     v-if="variant === 'block'"
     :id="id"
+    data-part="root"
     :class="classes"
     :data-language="language"
     v-bind="{ ...$attrs, class: undefined }"
@@ -51,6 +54,7 @@ const classes = computed(() =>
   <code
     v-else
     :id="id"
+    data-part="root"
     :class="classes"
     :data-language="language"
     v-bind="{ ...$attrs, class: undefined }"

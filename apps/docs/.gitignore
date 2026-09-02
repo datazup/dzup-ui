@@ -1,0 +1,19 @@
+# VitePress build output and its dev cache. The GENERATED PAGES under
+# components/ are deliberately NOT ignored: they are committed generated truth,
+# the same as packages/core/docs/llms.txt and component-meta.json, so a change to
+# what the site publishes shows up in a diff and `yarn validate:docs-pages`
+# has a committed output to compare a fresh render against. TASK-N2-A3's finding
+# F-4 is exactly the failure of git-ignoring a generated document a consumer reads.
+.vitepress/dist/
+.vitepress/cache/
+
+# TASK-N2-D3. The playground sandbox assets are BUILD OUTPUT copied from
+# apps/storybook/public/playground (the single producer), regenerated from
+# current source on every build, and git-ignored there for the same reason.
+# public/playground/seeds.json is deliberately NOT ignored: it is generated
+# truth written by `yarn generate:docs-pages`, and `yarn validate:docs-pages`
+# needs a committed copy to compare a fresh render against.
+public/playground/dzup-core.mjs
+public/playground/tokens.css
+public/playground/core.css
+public/playground/repl/

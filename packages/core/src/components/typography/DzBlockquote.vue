@@ -22,7 +22,9 @@ defineOptions({
   inheritAttrs: false,
 })
 
-defineProps<DzBlockquoteProps>()
+const props = withDefaults(defineProps<DzBlockquoteProps>(), {
+  ui: undefined,
+})
 defineSlots<DzBlockquoteSlots>()
 
 const attrs = useAttrs()
@@ -31,23 +33,34 @@ const classes = computed(() =>
   cn(
     blockquoteVariants(),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
+
+/** Per-part class values (ADR-19 §5). */
+const contentClasses = computed(() => cn(props.ui?.content))
+const footerClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)] not-italic '
+  + 'text-[var(--dz-muted-foreground)]',
+  props.ui?.footer,
+))
 </script>
 
 <template>
   <blockquote
     :id="id"
+    data-part="root"
     :class="classes"
     :cite="cite"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <div>
+    <div data-part="content" :class="contentClasses">
       <slot />
     </div>
     <footer
       v-if="$slots.footer"
-      class="mt-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)] not-italic text-[var(--dz-muted-foreground)]"
+      data-part="footer"
+      :class="footerClasses"
     >
       <slot name="footer" />
     </footer>

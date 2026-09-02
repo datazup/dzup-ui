@@ -312,21 +312,16 @@ export const COMPONENT_TIERS: Readonly<Record<string, TierAssignment>> = {
       + 'documentation has to say that a server must revalidate and scan.',
     traits: ['drags'],
     wcag: ['2.5.1', '3.3.1', '3.3.2', '4.1.3'],
-    exceptions: {
-      // Both are Tier D rows the cumulative ladder hands this component, and
-      // neither has anything to be about. They are excepted rather than
-      // deleted so the capability matrix still prints the cell with the
-      // reasoning next to it, and the malicious corpus asserts the premise of
-      // each — `no URL and no HTML sink, asserted` — so an exception cannot
-      // outlive the fact it rests on.
-      'url-policy': 'The component accepts no URL of any kind: no `href`, no `src`, no '
-        + '`createObjectURL`, no download link. There is no URL for a policy to be about. '
-        + 'Asserted in packages/core/security/DzFileUpload.malicious-corpus.spec.ts.',
-      'csp-fixture': 'No inline style, no inline script, no `blob:` or `data:` URL, no HTML '
-        + 'sink and no worker — so there is no CSP directive whose absence changes its '
-        + 'behaviour. Reading file contents for a preview would change this immediately; see '
-        + 'the "What would change this document" section of the threat model.',
-    },
+    // No exceptions. Both Tier D rows the cumulative ladder hands this
+    // component were excepted until TASK-N1-O5 and are now real specs in
+    // packages/core/security/. `url-policy` became the deny-all policy the
+    // exception was really describing (an allowlist of zero schemes, asserted
+    // against the whole corpus rather than believed); `csp-fixture` became a
+    // strict-CSP conformance suite, which immediately found that the
+    // exception's first clause -- "no inline style" -- was false: the template
+    // root carried `style="contain: layout style"`, which `style-src-attr`
+    // blocks. A tier rule whose only member is excepted from it is a rule that
+    // does not exist.
   },
   DzFloatLabel: { tier: 'A', pattern: 'none', wcag: ['3.3.2'] },
   DzFormField: { tier: 'A', pattern: 'none', wcag: ['3.3.1', '3.3.2'] },

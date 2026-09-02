@@ -5,6 +5,8 @@
  */
 
 /** Allowed HTML elements for the text component */
+import type { DzTextUi } from './DzText.anatomy.ts'
+
 export type TextElement = 'p' | 'span' | 'div' | 'label' | 'small' | 'strong' | 'em'
 
 /** Text size */
@@ -34,6 +36,17 @@ export interface DzTextProps {
   align?: TextAlign
   /** Accessible identifier */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzText.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzText :ui="{ root: 'max-w-prose' }">Body</DzText>
+   * ```
+   */
+  ui?: DzTextUi
 }
 
 export interface DzTextSlots {

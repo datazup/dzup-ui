@@ -90,16 +90,21 @@ function handleKeyDown(event: KeyboardEvent): void {
     <slot />
 
     <!-- Close button -->
+    <!--
+      TASK-N1-O3 / WCAG 2.2 SC 2.5.8 Target Size (Minimum) — same treatment as
+      DzTag: the button's box reaches the 24px floor, the growth is returned to
+      the layout, and the hover pill paints at `--dz-control-visual-size`.
+    -->
     <button
       v-if="closable"
       type="button"
       :disabled="disabled || undefined"
       :aria-label="`Remove ${ariaLabel ?? ''}`"
-      class="dz-focus-ring-button dz-disabled-button inline-flex items-center justify-center rounded-full hover:bg-[var(--dz-foreground)]/10"
+      class="dz-focus-ring-button dz-disabled-button dz-target-min-tight relative inline-flex items-center justify-center before:absolute before:inset-0 before:m-auto before:-z-10 before:size-[var(--dz-control-visual-size)] before:rounded-full hover:before:bg-[var(--dz-foreground)]/10"
       :class="[
-        size === 'sm' ? 'h-3.5 w-3.5' : '',
-        size === 'md' ? 'h-4 w-4' : '',
-        size === 'lg' ? 'h-5 w-5' : '',
+        size === 'sm' ? 'h-3.5 w-3.5 [--dz-control-visual-size:0.875rem]' : '',
+        size === 'md' ? 'h-4 w-4 [--dz-control-visual-size:1rem]' : '',
+        size === 'lg' ? 'h-5 w-5 [--dz-control-visual-size:1.25rem]' : '',
       ]"
       @click.stop="handleClose"
     >

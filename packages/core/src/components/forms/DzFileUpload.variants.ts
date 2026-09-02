@@ -14,6 +14,13 @@ export const fileUploadVariants = tv({
     root: [
       'flex flex-col',
       'gap-[var(--dz-spacing-2)]',
+      // Containment as a CLASS, not as `style="contain: layout style"` on the
+      // template root. A strict CSP without `unsafe-inline` in `style-src`
+      // blocks style ATTRIBUTES via `style-src-attr`, so the inline form is
+      // dropped exactly when the host is most careful — and the file list's
+      // only defence against a 4 096-character file name goes with it. Same
+      // shape DzCard and DzPanel already use. (TASK-N1-O5, csp-fixture.)
+      '[contain:layout_style]',
     ].join(' '),
     dropzone: [
       'relative flex flex-col items-center justify-center',

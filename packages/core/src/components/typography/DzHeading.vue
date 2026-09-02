@@ -22,6 +22,7 @@ defineOptions({
 const props = withDefaults(defineProps<DzHeadingProps>(), {
   level: 2,
   truncate: false,
+  ui: undefined,
 })
 
 defineSlots<{
@@ -54,6 +55,7 @@ const classes = computed(() =>
       truncate: props.truncate,
     }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -62,6 +64,7 @@ const classes = computed(() =>
   <component
     :is="tag"
     :id="id"
+    data-part="root"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"
   >

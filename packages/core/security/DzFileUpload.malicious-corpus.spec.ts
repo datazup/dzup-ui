@@ -238,7 +238,7 @@ describe('the file name is data, and is rendered as data', () => {
     await drop(wrapper, [file(`${'a'.repeat(4_000)}.txt`, 'text/plain')])
     await nextTick()
 
-    expect(wrapper.element.getAttribute('style')).toContain('contain: layout style')
+    expect(wrapper.classes().join(' ')).toContain('[contain:layout_style]')
   })
 })
 

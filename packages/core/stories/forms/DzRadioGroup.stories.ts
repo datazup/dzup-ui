@@ -271,3 +271,108 @@ export const RealWorldPaymentMethod: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / required / group-disabled / option-disabled (tier B)
+// ---------------------------------------------------------------------------
+
+/**
+ * Both states DzRadioGroup declares — `disabled` and `required` — plus the
+ * per-radio `disabled` that a real form reaches for far more often than the
+ * group-wide one.
+ *
+ * Each resolves to something a screen reader can perceive rather than only a
+ * paler pixel: `aria-required` on the `role="radiogroup"` root,
+ * `data-state`/`data-disabled` for the styling contract, and a `disabled`
+ * attribute on each radio the state reaches. The play function asserts the
+ * announced form of every one of them.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzRadioGroup, DzRadio },
+    data() {
+      return { plan: 'basic', tier: '' }
+    },
+    template: `
+      <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Enabled</p>
+          <DzRadioGroup v-model="plan" aria-label="Enabled plan" data-testid="rg-enabled">
+            <DzRadio value="basic">Basic</DzRadio>
+            <DzRadio value="pro">Pro</DzRadio>
+          </DzRadioGroup>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            Selected: <strong data-testid="rg-value">{{ plan }}</strong>
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Required</p>
+          <DzRadioGroup v-model="tier" required aria-label="Required tier" data-testid="rg-required">
+            <DzRadio value="silver">Silver</DzRadio>
+            <DzRadio value="gold">Gold</DzRadio>
+          </DzRadioGroup>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Group disabled</p>
+          <DzRadioGroup disabled aria-label="Disabled plan" data-testid="rg-disabled">
+            <DzRadio value="basic">Basic</DzRadio>
+            <DzRadio value="pro">Pro</DzRadio>
+          </DzRadioGroup>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">One option disabled</p>
+          <DzRadioGroup aria-label="Mixed plan" data-testid="rg-mixed">
+            <DzRadio value="basic">Basic</DzRadio>
+            <DzRadio value="enterprise" disabled>Enterprise (contact sales)</DzRadio>
+          </DzRadioGroup>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = canvas.getByTestId('rg-enabled')
+    const required = canvas.getByTestId('rg-required')
+    const disabled = canvas.getByTestId('rg-disabled')
+    const mixed = canvas.getByTestId('rg-mixed')
+
+    // Group-level state, as the styling contract and AT both see it.
+    await expect(enabled).toHaveAttribute('data-state', 'ready')
+    await expect(enabled).not.toHaveAttribute('data-required')
+    await expect(required).toHaveAttribute('data-required')
+    await expect(required).toHaveAttribute('aria-required', 'true')
+    await expect(disabled).toHaveAttribute('data-state', 'disabled')
+    await expect(disabled).toHaveAttribute('data-disabled')
+
+    // Enabled: selection is exclusive — choosing Pro clears Basic.
+    const basic = within(enabled).getByRole('radio', { name: /^basic$/i })
+    const pro = within(enabled).getByRole('radio', { name: /^pro$/i })
+    await expect(basic).toHaveAttribute('aria-checked', 'true')
+    await userEvent.click(pro)
+    await waitFor(() => expect(pro).toHaveAttribute('aria-checked', 'true'))
+    await expect(basic).toHaveAttribute('aria-checked', 'false')
+    await expect(canvas.getByTestId('rg-value')).toHaveTextContent('pro')
+
+    // Required: nothing is chosen yet, which is exactly what makes the
+    // `aria-required` announcement above load-bearing.
+    for (const radio of within(required).getAllByRole('radio'))
+      await expect(radio).toHaveAttribute('aria-checked', 'false')
+
+    // Group disabled propagates to every radio.
+    for (const radio of within(disabled).getAllByRole('radio'))
+      await expect(radio).toBeDisabled()
+
+    // One disabled option leaves its sibling selectable.
+    const enterprise = within(mixed).getByRole('radio', { name: /^enterprise/i })
+    const mixedBasic = within(mixed).getByRole('radio', { name: /^basic$/i })
+    await expect(enterprise).toBeDisabled()
+    await expect(mixedBasic).toBeEnabled()
+    await userEvent.click(mixedBasic)
+    await waitFor(() => expect(mixedBasic).toHaveAttribute('aria-checked', 'true'))
+    await expect(enterprise).toHaveAttribute('aria-checked', 'false')
+  },
+}

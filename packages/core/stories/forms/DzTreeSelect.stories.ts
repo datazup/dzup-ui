@@ -347,3 +347,212 @@ export const DarkMode: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// Accessibility — combobox + tree, keyboard only (tier C `accessibility` item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The whole combobox-over-a-tree contract, driven from the keyboard alone.
+ *
+ * ArrowDown on the closed trigger opens the panel; the trigger publishes the
+ * active node through `aria-activedescendant`; ArrowRight expands a branch
+ * rather than committing it; ArrowDown steps into the revealed children; Enter
+ * commits and closes; Escape dismisses without changing the selection. Every
+ * step is asserted against `aria-expanded`, the id `aria-activedescendant`
+ * names, and the bound model — no pointer is used.
+ *
+ * The story deliberately asserts nothing about **where DOM focus sits** once the
+ * panel is open: the popover moves focus onto the tree's roving row while the
+ * trigger keeps `aria-activedescendant`, which is two focus mechanisms at once.
+ * That is recorded in the TASK-N1-O1 handoff (D10) for its owner rather than
+ * pinned here as if it were the intended contract.
+ */
+export const Accessibility: Story = {
+  name: 'Accessibility: Keyboard-Only Tree Combobox',
+  render: () => ({
+    components: { DzTreeSelect },
+    setup() {
+      return { categories }
+    },
+    data() {
+      return { value: undefined as string | undefined }
+    },
+    template: `
+      <div class="max-w-xs space-y-3">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          ArrowDown opens the tree, ArrowRight expands a branch, ArrowUp/Down
+          move the active node, Enter commits it, Escape dismisses. Focus never
+          leaves the trigger — the active node is announced through
+          <code>aria-activedescendant</code>.
+        </p>
+        <div data-testid="ts-a11y">
+          <DzTreeSelect
+            :nodes="categories"
+            v-model:value="value"
+            aria-label="Keyboard category"
+            placeholder="Choose a category"
+          />
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Selected: <strong data-testid="ts-a11y-value">{{ value || 'none' }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(document.body)
+    const trigger = within(canvas.getByTestId('ts-a11y')).getByRole('combobox')
+
+    // The closed trigger advertises the tree popup it owns.
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'tree')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Reach it with Tab only.
+    for (let i = 0; i < 6 && document.activeElement !== trigger; i++)
+      await userEvent.tab()
+    await expect(trigger).toHaveFocus()
+
+    // ArrowDown opens the panel and activates the first node, which the trigger
+    // publishes through `aria-activedescendant`.
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
+    await expect(trigger).toHaveAttribute('aria-controls')
+
+    const activeId = trigger.getAttribute('aria-activedescendant')
+    await expect(activeId).toBeTruthy()
+    await expect(document.getElementById(activeId!)).toHaveTextContent(/Fruit/)
+
+    // ArrowRight expands the active branch rather than committing it.
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => {
+      const fruit = body.getByText('Fruit').closest('[role="treeitem"]')
+      expect(fruit).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    // ArrowDown steps into the newly revealed children.
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() =>
+      expect(trigger.getAttribute('aria-activedescendant')).not.toBe(activeId),
+    )
+    const appleId = trigger.getAttribute('aria-activedescendant')!
+    await expect(document.getElementById(appleId)).toHaveTextContent(/Apple/)
+
+    // Enter commits the active node and closes the panel.
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(canvas.getByTestId('ts-a11y-value')).toHaveTextContent('apple'))
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+
+    // Escape dismisses a re-opened panel without changing the selection.
+    trigger.focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    await expect(canvas.getByTestId('ts-a11y-value')).toHaveTextContent('apple')
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Real world — catalog category filter (tier C `real-world` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The composition DzTreeSelect exists for: the category facet of a catalog
+ * filter — checkbox selection with parent/child propagation, chips in the
+ * trigger for what is currently on, and a result count that reacts to the
+ * selection.
+ *
+ * A single-select demo never shows the interesting behaviour: checking a parent
+ * commits its whole subtree, which is what makes this control worth using
+ * instead of a flat multi-select.
+ */
+export const RealWorldCatalogFilter: Story = {
+  name: 'Real World: Catalog Category Filter',
+  render: () => ({
+    components: { DzTreeSelect },
+    setup() {
+      const inventory: Record<string, number> = {
+        apple: 12,
+        banana: 8,
+        orange: 5,
+        lemon: 3,
+        carrot: 9,
+        potato: 14,
+        dairy: 6,
+      }
+      return { categories, inventory }
+    },
+    data() {
+      return { value: [] as string[] }
+    },
+    template: `
+      <div class="max-w-sm space-y-4">
+        <h3 class="text-base font-semibold">Filter catalog</h3>
+        <div class="space-y-1">
+          <label id="ts-rw-label" class="block text-sm font-medium">Categories</label>
+          <div data-testid="ts-rw">
+            <DzTreeSelect
+              :nodes="categories"
+              v-model:value="value"
+              selection-mode="checkbox"
+              :expanded-keys="['fruit', 'citrus', 'vegetable']"
+              aria-labelledby="ts-rw-label"
+              placeholder="All categories"
+            />
+          </div>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Showing
+          <strong data-testid="ts-rw-count">{{
+            value.length === 0
+              ? Object.values(inventory).reduce((a, b) => a + b, 0)
+              : value.reduce((sum, key) => sum + (inventory[key] ?? 0), 0)
+          }}</strong>
+          products across
+          <strong data-testid="ts-rw-keys">{{ value.length }}</strong>
+          selected categories.
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(document.body)
+    const root = canvas.getByTestId('ts-rw')
+    const trigger = within(root).getByRole('combobox')
+
+    // Nothing filtered: the whole catalog is shown.
+    await expect(canvas.getByTestId('ts-rw-count')).toHaveTextContent('57')
+    await expect(canvas.getByTestId('ts-rw-keys')).toHaveTextContent('0')
+
+    await userEvent.click(trigger)
+    await waitFor(() => expect(body.getByRole('tree')).toBeVisible())
+
+    // Checking the "Vegetable" parent commits its whole subtree — the behaviour
+    // a flat multi-select cannot express.
+    const vegetable = body
+      .getAllByRole('treeitem', { name: /vegetable/i })
+      .find(el => el.hasAttribute('aria-expanded'))!
+    await userEvent.click(
+      (vegetable.querySelector('[data-dz-tree-row]') as HTMLElement) ?? vegetable,
+    )
+    await waitFor(() =>
+      expect(within(root).getByRole('button', { name: /remove carrot/i })).toBeInTheDocument(),
+    )
+    await expect(within(root).getByRole('button', { name: /remove potato/i }))
+      .toBeInTheDocument()
+
+    // The result count follows the selection.
+    await waitFor(() => expect(canvas.getByTestId('ts-rw-count')).toHaveTextContent('23'))
+
+    // A chip removes just its own category, leaving the rest of the filter.
+    await userEvent.click(within(root).getByRole('button', { name: /remove potato/i }))
+    await waitFor(() => expect(canvas.getByTestId('ts-rw-count')).toHaveTextContent('9'))
+    await expect(within(root).queryByRole('button', { name: /remove potato/i })).toBeNull()
+    await expect(within(root).getByRole('button', { name: /remove carrot/i }))
+      .toBeInTheDocument()
+  },
+}

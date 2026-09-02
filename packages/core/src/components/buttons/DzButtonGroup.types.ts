@@ -9,6 +9,7 @@
 
 import type { ButtonVariant, CanonicalSize, CanonicalTone, Orientation } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzButtonGroupUi } from './DzButtonGroup.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -51,6 +52,17 @@ export interface DzButtonGroupProps {
   id?: string
   /** Accessible label for the group */
   ariaLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzButtonGroup.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzButtonGroup :ui="{ root: 'shadow-none' }" />
+   * ```
+   */
+  ui?: DzButtonGroupUi
 }
 
 // ---------------------------------------------------------------------------

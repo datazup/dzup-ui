@@ -8,6 +8,7 @@
 
 import type { BaseAccessibilityProps, CanonicalSize } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzInputGroupUi } from './DzInputGroup.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Context (ADR-08)
@@ -41,6 +42,17 @@ export interface DzInputGroupProps extends BaseAccessibilityProps {
   size?: CanonicalSize
   /** Disabled state */
   disabled?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzInputGroup.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzInputGroup :ui="{ prefix: 'bg-[var(--dz-muted)]' }"><DzInput /></DzInputGroup>
+   * ```
+   */
+  ui?: DzInputGroupUi
 }
 
 // ---------------------------------------------------------------------------

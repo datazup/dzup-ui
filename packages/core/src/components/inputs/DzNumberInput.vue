@@ -34,6 +34,7 @@ const props = withDefaults(defineProps<DzNumberInputProps>(), {
   loading: false,
   invalid: false,
   required: false,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzNumberInputEmits>()
@@ -90,13 +91,34 @@ const wrapperClasses = computed(() =>
       invalid: isInvalid.value,
     }),
     attrs.class as string | undefined,
+    props.ui?.control,
   ),
 )
 
 /** Inner input element classes */
 const inputClasses = computed(() =>
-  cn(inputElementVariants(), 'text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'),
+  cn(inputElementVariants(), 'text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none', props.ui?.input),
 )
+
+/**
+ * Per-part class values (ADR-19 §5). The two stepper buttons share a base and
+ * are overridable apart, which is the whole reason they are separate parts:
+ * `decrement` and `increment` are not interchangeable to a consumer styling
+ * "cannot go lower".
+ */
+const STEPPER_BASE = 'dz-focus-ring-button dz-disabled-button dz-target-min-tight '
+  + '[--dz-control-visual-size:1rem] flex shrink-0 items-center justify-center '
+  + 'text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors'
+const decrementClasses = computed(() => cn(STEPPER_BASE, props.ui?.decrement))
+const incrementClasses = computed(() => cn(STEPPER_BASE, props.ui?.increment))
+const prefixClasses = computed(() => cn(
+  'flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]',
+  props.ui?.prefix,
+))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /** ID for error element */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -194,6 +216,8 @@ const dzMessages = useComponentMessages('DzNumberInput')
 
 <template>
   <div
+    data-part="root"
+    :class="cn(ui?.root)"
     :data-state="resolvedDisabled ? 'disabled' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-loading="loading ? '' : undefined"
@@ -204,11 +228,12 @@ const dzMessages = useComponentMessages('DzNumberInput')
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Input wrapper with variant styling -->
-    <div :class="wrapperClasses">
+    <div data-part="control" :class="wrapperClasses">
       <!-- Prefix slot -->
       <span
         v-if="$slots.prefix"
-        class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]"
+        data-part="prefix"
+        :class="prefixClasses"
       >
         <slot name="prefix" />
       </span>
@@ -227,7 +252,8 @@ const dzMessages = useComponentMessages('DzNumberInput')
       -->
       <button
         type="button"
-        class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
+        data-part="decrement"
+        :class="decrementClasses"
         :aria-disabled="!canDecrement || undefined"
         :aria-label="dzMessages.decrease"
         tabindex="-1"
@@ -254,6 +280,7 @@ const dzMessages = useComponentMessages('DzNumberInput')
         ref="inputRef"
         type="text"
         inputmode="numeric"
+        data-part="input"
         :value="displayValue"
         :class="inputClasses"
         :name="name"
@@ -280,7 +307,8 @@ const dzMessages = useComponentMessages('DzNumberInput')
       <!-- aria-disabled (not native disabled) — same single model as the decrement button above. -->
       <button
         type="button"
-        class="dz-focus-ring-button dz-disabled-button flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-500)] hover:text-[var(--dz-foreground)] transition-colors"
+        data-part="increment"
+        :class="incrementClasses"
         :aria-disabled="!canIncrement || undefined"
         :aria-label="dzMessages.increase"
         tabindex="-1"
@@ -307,7 +335,8 @@ const dzMessages = useComponentMessages('DzNumberInput')
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

@@ -103,3 +103,29 @@ export function installDzupUiDomTestEnvironment(): () => void {
       restore()
   }
 }
+
+/**
+ * The security-fixture corpus schema (TASK-N1-O5).
+ *
+ * **Types only from this barrel.** The loader reads JSON from disk with
+ * `node:fs`, and `@dzup-ui/testing` is imported from setup files that a
+ * consumer may bundle for a browser runner; a Node built-in in the barrel would
+ * make that a build error for everyone rather than only for the callers that
+ * want fixture data. Import the runtime from the subpath instead:
+ *
+ * ```ts
+ * import { fixturesForSink, payloadOf } from '@dzup-ui/testing/security-corpus'
+ * ```
+ *
+ * The schema is shared by design with `ui/dzup-ui-pro`'s QUAL-04
+ * (TASK-N1-P1): its sink registry names a `SecuritySink` per entry and reads
+ * the required outcome for that sink out of these same fixture files.
+ */
+export type {
+  CorpusViolation,
+  NeutralizationOutcome,
+  SecurityCategory,
+  SecurityCorpusFile,
+  SecurityFixture,
+  SecuritySink,
+} from './security-corpus.js'

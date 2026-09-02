@@ -12,6 +12,7 @@ import type {
   BaseValidationProps,
   CanonicalSize,
 } from '@dzup-ui/contracts'
+import type { DzOtpInputUi } from './DzOtpInput.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -31,6 +32,17 @@ export interface DzOtpInputProps extends BaseAccessibilityProps, BaseValidationP
   size?: CanonicalSize
   /** Form field name */
   name?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzOtpInput.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzOtpInput v-model="code" :ui="{ input: 'rounded-full' }" />
+   * ```
+   */
+  ui?: DzOtpInputUi
 }
 
 // ---------------------------------------------------------------------------

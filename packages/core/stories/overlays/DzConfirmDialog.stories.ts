@@ -458,3 +458,84 @@ export const Interactive: Story = {
     })
   },
 }
+
+// ---------------------------------------------------------------------------
+// States — closed / open / loading (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `loading` is the state DzConfirmDialog declares, and it is the one that
+ * carries a promise to the user: while an async confirm is in flight the dialog
+ * **stays open**, the confirm button reports itself busy, and the cancel button
+ * is taken out of service so the request cannot be abandoned half-way.
+ *
+ * Shown against the closed and idle-open states, and driven end to end by the
+ * play function so the transition — not just the pixels — is the evidence.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzConfirmDialog, DzButton },
+    data() {
+      return { isOpen: false, loading: false, saved: false }
+    },
+    methods: {
+      async handleConfirm() {
+        this.loading = true
+        await new Promise((resolve) => {
+          setTimeout(resolve, 800)
+        })
+        this.loading = false
+        this.saved = true
+        this.isOpen = false
+      },
+    },
+    template: `
+      <div class="space-y-4">
+        <div class="flex items-center gap-4">
+          <DzButton @click="isOpen = true; saved = false">Save changes</DzButton>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">
+            Result: <strong data-testid="cd-result">{{ saved ? 'saved' : 'pending' }}</strong>
+          </span>
+        </div>
+        <DzConfirmDialog
+          v-model:open="isOpen"
+          title="Save changes?"
+          message="Your changes will be written to the server."
+          confirm-label="Save"
+          :loading="loading"
+          @confirm="handleConfirm"
+          @cancel="isOpen = false"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Closed: the dialog is not in the document at all.
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+
+    // Open (idle): both actions are live.
+    await userEvent.click(canvas.getByRole('button', { name: /save changes/i }))
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toHaveTextContent(/save changes\?/i)
+    const confirm = within(dialog).getByTestId('confirm-dialog-confirm')
+    const cancel = within(dialog).getByTestId('confirm-dialog-cancel')
+    await expect(confirm).toBeEnabled()
+    await expect(cancel).toBeEnabled()
+
+    // Loading: the dialog stays open, the confirm button reports itself busy,
+    // and cancel is withdrawn so the in-flight request cannot be abandoned.
+    await userEvent.click(confirm)
+    await waitFor(() => expect(confirm).toHaveAttribute('aria-busy', 'true'))
+    await expect(screen.getByRole('dialog')).toBeInTheDocument()
+    await expect(confirm).toBeDisabled()
+    await expect(cancel).toBeDisabled()
+
+    // Settled: the dialog closes and the outcome reaches the page.
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), {
+      timeout: 5000,
+    })
+    await expect(canvas.getByTestId('cd-result')).toHaveTextContent('saved')
+  },
+}

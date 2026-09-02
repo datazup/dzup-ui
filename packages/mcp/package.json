@@ -36,9 +36,11 @@
   "bin": {
     "dzup-ui-mcp": "./dist/index.js"
   },
+  "//files": "TASK-N2-A1. `docs` was added so docs/mcp-tool-surface.json reaches the tarball: the published README links to it, and the file is the machine-readable form of this package's own tool surface -- per-tool JSON Schema, observed data source and evidence state. For an AI-facing package that is payload, not metadata. `yarn validate:mcp` fails when a relative README link points at something `files` does not ship.",
   "files": [
     "README.md",
     "dist",
+    "docs",
     "server.json"
   ],
   "engines": {

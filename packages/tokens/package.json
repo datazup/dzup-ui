@@ -10,6 +10,7 @@
       "import": "./dist/index.js"
     },
     "./css": "./dist/tokens.css",
+    "./dtcg": "./dist/tokens.dtcg.json",
     "./tailwind": {
       "types": "./dist/tailwind-theme.d.ts",
       "import": "./dist/tailwind-theme.js"
@@ -28,10 +29,11 @@
   },
   "scripts": {
     "generate": "node --import tsx src/generate.ts",
+    "generate:dtcg": "node --import tsx src/generate-dtcg.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "yarn --cwd ../.. vitest run packages/tokens/src/theme-recipe.spec.ts",
-    "build": "vite build && node --import tsx src/generate.ts"
+    "build": "vite build && node --import tsx src/generate.ts && node --import tsx src/generate-dtcg.ts"
   },
   "devDependencies": {
     "tsx": "^4.19.0",

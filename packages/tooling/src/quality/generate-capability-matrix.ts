@@ -16,7 +16,8 @@
  */
 
 import type { EvidenceKind } from '@dzup-ui/contracts'
-import type { CapabilityMatrix, CapabilityRow, CellState, EvidenceCell } from './capability-matrix.ts'
+import type { VisualLedger } from '../validators/visual-baselines.ts'
+import type { CapabilityMatrix, CapabilityRow, CellState, EvidenceCell, VisualEvidence } from './capability-matrix.ts'
 import type { QualityMatrixRow } from './generate-quality-matrix.ts'
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
@@ -42,6 +43,49 @@ export const CAPABILITY_DATA_PATH = resolve(
 /** Playwright's JSON reporter output, when the matrix lane has been run. */
 const PLAYWRIGHT_REPORT = resolve(ROOT, 'test-results/matrix-report.json')
 const KNOWN_FAILURES = resolve(ROOT, 'e2e/matrix/known-failures.json')
+
+/**
+ * The committed per-engine browser-lane ledger (TASK-N1-O2).
+ *
+ * The Playwright report is git-ignored, so it can say *whether* a lane ran and
+ * nothing durable about *which of the eighteen projects* did. Reading engine
+ * coverage from a committed file instead is what lets a `browser-matrix` cell
+ * distinguish "chromium only, two of six conditions" from "three engines, six
+ * conditions each" — which is the whole claim the row is making.
+ */
+const ENGINE_RATCHETS = resolve(ROOT, 'e2e/matrix/engine-ratchets.json')
+
+/**
+ * The visual-baseline acceptance ledger (TASK-N1-O6) — the fifth *generated*
+ * input, and the sixth entry in `inputs`.
+ *
+ * It is read rather than the snapshot directories themselves for the same
+ * reason `browser-matrix` reads `engine-ratchets.json` rather than counting
+ * PNGs: a file on disk says an image exists, and the question the matrix is
+ * asking is whether somebody accepted it, when, and against which commit.
+ * `yarn validate:visual-baselines` is what keeps the ledger and the images in
+ * agreement, so this generator can trust one file.
+ */
+const VISUAL_BASELINES = resolve(ROOT, 'e2e/visual/visual-baselines.json')
+
+/** All six matrix conditions, in the order `playwright.config.ts` declares them. */
+const MATRIX_CONDITIONS = [
+  'default',
+  'forced-colors',
+  'reduced-motion',
+  'rtl',
+  'touch',
+  'zoom-400',
+] as const
+
+interface EngineRatchets {
+  engines: Record<string, {
+    version: string
+    conditionsRun: string[]
+    notReproducing: { component: string, condition: string }[]
+    engineOnly: { component: string, condition: string }[]
+  }>
+}
 
 // ---------------------------------------------------------------------------
 // Source scanning
@@ -87,6 +131,59 @@ interface Sources {
   baselines?: ReturnType<typeof readBaselineFile>
   playwright?: { suites?: unknown[] }
   knownFailures: Set<string>
+  engineRatchets?: EngineRatchets
+  visual?: VisualLedger
+}
+
+/**
+ * Per-engine state for one component's `browser-matrix` cell.
+ *
+ * Returns one sentence per engine that ran the lane, naming how much of the
+ * six-condition sweep that engine covered and which conditions the ledgers
+ * expect to fail on it. An engine absent from the ledger is absent from the
+ * sentence — silence here would read as a pass.
+ */
+function browserEngineNote(component: string, sources: Sources): string | undefined {
+  const ratchets = sources.engineRatchets
+  if (ratchets === undefined)
+    return undefined
+
+  const parts: string[] = []
+  for (const [engine, state] of Object.entries(ratchets.engines)) {
+    const ran = state.conditionsRun.length
+    const withdrawn = new Set(
+      state.notReproducing.filter(e => e.component === component).map(e => e.condition),
+    )
+    const expected = [
+      ...[...sources.knownFailures]
+        .filter(k => k.startsWith(`${component}:`))
+        .map(k => k.split(':')[1]!)
+        .filter(c => !withdrawn.has(c)),
+      ...state.engineOnly.filter(e => e.component === component).map(e => e.condition),
+    ].sort()
+    const failing = expected.filter(c => state.conditionsRun.includes(c))
+    // A ledger entry for a condition this engine never ran is neither a pass
+    // nor a failure here, and saying "no expected failure" would read as the
+    // former. Naming the gap is the whole point of the coverage sentence.
+    const uncovered = expected.filter(c => !state.conditionsRun.includes(c))
+
+    const coverage = ran === MATRIX_CONDITIONS.length
+      ? 'all 6 conditions'
+      : `${ran}/6 conditions (${state.conditionsRun.join(', ')})`
+    const verdict = failing.length === 0
+      ? 'no expected failure in what it ran'
+      : `expected failure in ${failing.join(', ')}`
+    const gap = uncovered.length === 0
+      ? ''
+      : `, and did not run ${uncovered.join(', ')} — where the ledger expects a failure`
+    const diverged = withdrawn.size === 0
+      ? ''
+      : `; the cross-engine expectation for ${[...withdrawn].sort().join(', ')} is withdrawn `
+        + `on this engine (measured divergence in e2e/matrix/engine-ratchets.json)`
+    parts.push(`${engine} ${state.version}: ${coverage}, ${verdict}${gap}${diverged}`)
+  }
+
+  return parts.length === 0 ? undefined : parts.join('. ')
 }
 
 function loadSources(): Sources {
@@ -134,6 +231,103 @@ function loadSources(): Sources {
       ? JSON.parse(readFileSync(PLAYWRIGHT_REPORT, 'utf8'))
       : undefined,
     knownFailures,
+    engineRatchets: existsSync(ENGINE_RATCHETS)
+      ? JSON.parse(readFileSync(ENGINE_RATCHETS, 'utf8'))
+      : undefined,
+    visual: existsSync(VISUAL_BASELINES)
+      ? JSON.parse(readFileSync(VISUAL_BASELINES, 'utf8'))
+      : undefined,
+  }
+}
+
+/**
+ * One component's visual-baseline coverage (TASK-N1-O6).
+ *
+ * The scope is declared by FAMILY in the ledger and joined here against the
+ * quality matrix, which is the same join `e2e/visual/coverage.ts` performs
+ * against `targets.generated.ts`. Two joins over the same declaration rather
+ * than one shared list, because the lane runs in Playwright and the matrix runs
+ * in tsx, and `validate:visual-baselines` fails if they ever disagree about
+ * which components a covered family contains.
+ *
+ * A component outside the scope is `not-covered` and says why, with its
+ * rollout position. It is never `unknown`: an undeclared state would be
+ * indistinguishable from a lane nobody ran, which is the exact confusion the
+ * `inputs` table at the top of this file exists to prevent.
+ */
+function resolveVisual(
+  row: QualityMatrixRow,
+  sources: Sources,
+  componentCommit: string,
+): VisualEvidence {
+  const ledger = sources.visual
+  if (ledger === undefined) {
+    return {
+      state: 'not-covered',
+      baselines: 0,
+      themes: [],
+      artifacts: [],
+      note: 'No e2e/visual/visual-baselines.json, so no component has an accepted baseline. '
+        + 'That is an absent input, not a failed one.',
+    }
+  }
+
+  const scope = `families [${ledger.scope.families.join(', ')}] on ${ledger.scope.platform}`
+  if (!ledger.scope.families.includes(row.family)) {
+    return {
+      state: 'not-covered',
+      baselines: 0,
+      themes: [],
+      artifacts: ['e2e/visual/visual-baselines.json'],
+      note: `The per-component visual lane covers ${scope}; \`${row.family}\` is not in scope `
+        + `yet. Ranked for rollout in docs/program-2026-09/reports/`
+        + `N1-O6-visual-regression-handoff.md.`,
+    }
+  }
+
+  const mine = ledger.baselines
+    .filter(b => b.component === row.component && b.platform === ledger.scope.platform)
+  const themes = [...new Set(mine.map(b => b.theme))].sort()
+  const artifacts = [
+    'e2e/visual/component-baselines.spec.ts',
+    'e2e/visual/visual-baselines.json',
+    ...mine.map(b => b.file).sort(),
+  ]
+
+  const owed = ledger.scope.themes.filter(theme => !themes.includes(theme))
+  if (owed.length > 0) {
+    return {
+      state: 'not-covered',
+      baselines: mine.length,
+      themes,
+      artifacts,
+      note: `In a covered family and missing an accepted baseline for ${owed.join(', ')}. `
+        + `\`yarn validate:visual-baselines\` fails on this.`,
+    }
+  }
+
+  const stale = mine.filter(b => !evidenceIsCurrent(b.sourceCommit, componentCommit))
+  if (stale.length > 0) {
+    return {
+      state: 'stale',
+      baselines: mine.length,
+      themes,
+      artifacts,
+      note: `${stale.length}/${mine.length} baseline(s) were captured before the component's `
+        + `last change (${componentCommit.slice(0, 8)}) — a pass about different code.`,
+    }
+  }
+
+  return {
+    state: 'covered',
+    baselines: mine.length,
+    themes,
+    artifacts,
+    note: `${mine.length} accepted baseline(s), ${themes.join(' + ')}, `
+      + `${ledger.scope.engine}/${ledger.scope.platform}, ${ledger.scope.direction}. ${
+        ledger.scope.platform === ledger.scope.ciPlatform
+          ? 'Gating platform matches CI.'
+          : `CI runs ${ledger.scope.ciPlatform}, so this is developer-local evidence, not a CI gate.`}`,
   }
 }
 
@@ -327,12 +521,18 @@ function resolveCell(
         })
       }
       const known = [...sources.knownFailures].filter(k => k.startsWith(`${row.component}:`))
+      const engines = browserEngineNote(row.component, sources)
+      const ledger = known.length > 0
+        ? `Known failures in ${known.map(k => k.split(':')[1]).join(', ')}; see the ledger.`
+        : undefined
       return cell(kind, origin, {
         state: known.length > 0 ? 'present' : 'pass',
-        artifacts: ['e2e/matrix/conditions.spec.ts', 'e2e/matrix/known-failures.json'],
-        note: known.length > 0
-          ? `Known failures in ${known.map(k => k.split(':')[1]).join(', ')}; see the ledger.`
-          : undefined,
+        artifacts: [
+          'e2e/matrix/conditions.spec.ts',
+          'e2e/matrix/known-failures.json',
+          ...(sources.engineRatchets === undefined ? [] : ['e2e/matrix/engine-ratchets.json']),
+        ],
+        note: [ledger, engines].filter(part => part !== undefined).join(' ') || undefined,
       })
     }
 
@@ -401,16 +601,93 @@ function resolveCell(
       const dir = resolve(ROOT, 'packages/core/security')
       const file = `packages/core/security/${row.component}.${kind}.md`
       const spec = `packages/core/security/${row.component}.${kind}.spec.ts`
-      const found = [file, spec].filter(p => existsSync(resolve(ROOT, p)))
+      const own = [file, spec].filter(p => existsSync(resolve(ROOT, p)))
+      // Class-level artifacts (TASK-N1-O5). Thirteen components declare the
+      // same `url` boundary and cross it the same way, so their threat model is
+      // one document and their corpus is one suite. The per-component filename
+      // convention above cannot see either, and the alternative — thirteen stub
+      // documents whose only content is a pointer — is the box-ticking this
+      // matrix exists to make visible. So a manifest declares which components
+      // a shared artifact covers, and the generator checks both the file and
+      // the claim.
+      const shared = sharedSecurityArtifacts(row.component, kind)
+      const found = [...own, ...shared]
       return cell(kind, origin, {
         state: found.length === 0 ? 'unrun' : 'present',
         artifacts: found,
         note: found.length === 0 && !existsSync(dir)
           ? 'packages/core/security/ does not exist yet.'
-          : undefined,
+          : shared.length > 0 && own.length === 0
+            ? 'Covered by a class-level artifact, not a per-component one.'
+            : undefined,
       })
     }
   }
+}
+
+/** One shared security artifact and the components it covers. */
+interface SharedSecurityArtifact {
+  readonly kind: string
+  readonly path: string
+  readonly covers: readonly string[]
+}
+
+interface SecurityCoverageManifest {
+  readonly artifacts: readonly SharedSecurityArtifact[]
+}
+
+/**
+ * Class-level security artifacts, read once from
+ * `packages/core/security/coverage.json` (TASK-N1-O5).
+ *
+ * A missing manifest is an absent input, not an error: the matrix falls back to
+ * the per-component filename convention exactly as before. A manifest naming a
+ * file that does not exist IS an error, because the whole point of the input is
+ * that a shared artifact is still an artifact somebody can open.
+ */
+const SECURITY_COVERAGE: SecurityCoverageManifest = (() => {
+  const path = resolve(ROOT, 'packages/core/security/coverage.json')
+  if (!existsSync(path))
+    return { artifacts: [] }
+  const parsed = JSON.parse(readFileSync(path, 'utf8')) as SecurityCoverageManifest
+  for (const artifact of parsed.artifacts) {
+    if (!existsSync(resolve(ROOT, artifact.path))) {
+      throw new Error(
+        `packages/core/security/coverage.json claims ${artifact.path} covers `
+        + `${artifact.covers.length} component(s); the file does not exist.`,
+      )
+    }
+  }
+  return parsed
+})()
+
+/** The shared artifacts that cover `component` for `kind`. */
+function sharedSecurityArtifacts(component: string, kind: string): string[] {
+  return SECURITY_COVERAGE.artifacts
+    .filter(a => a.kind === kind && a.covers.includes(component))
+    .map(a => a.path)
+}
+
+/** The sentence the docs page prints above the matrix for the visual input. */
+function visualInputNote(ledger: VisualLedger | undefined): string {
+  if (ledger === undefined) {
+    return 'No acceptance ledger, so no component can read `covered` — which is the absence of '
+      + 'an input, not a lane that ran and failed.'
+  }
+
+  const covered = new Set(
+    ledger.baselines.filter(b => b.platform === ledger.scope.platform).map(b => b.component),
+  )
+  const platform = ledger.scope.platform === ledger.scope.ciPlatform
+    ? 'The gating platform matches CI.'
+    : `Baselines are platform-locked and CI runs ${ledger.scope.ciPlatform}, so this lane is `
+      + `developer-local evidence until one accept pass is made there.`
+
+  return `Per-component baselines for families [${ledger.scope.families.join(', ')}]: `
+    + `${covered.size} component(s), ${ledger.scope.themes.join(' + ')}, `
+    + `${ledger.scope.engine}/${ledger.scope.platform}, ${ledger.scope.direction}. `
+    + `Every component outside those families reads \`not-covered\`, never \`unknown\`. ${
+      platform}`
 }
 
 /** Build the matrix. */
@@ -434,6 +711,7 @@ export function buildCapabilityMatrix(
       source: row.source,
       componentCommit,
       cells: row.evidence.map(kind => resolveCell(kind, row, sources, componentCommit)),
+      visual: resolveVisual(row, sources, componentCommit),
     }
   })
 
@@ -453,7 +731,9 @@ export function buildCapabilityMatrix(
       'e2e/at-matrix/index.json',
       'packages/core/perf/baselines.json',
       'e2e/matrix/known-failures.json',
+      'e2e/matrix/engine-ratchets.json',
       'test-results/matrix-report.json',
+      'e2e/visual/visual-baselines.json',
     ],
     inputs: {
       'story-dod': { available: true, path: 'packages/tooling/src/validators/story-dod.ts' },
@@ -472,6 +752,23 @@ export function buildCapabilityMatrix(
           ? 'The browser lane has not been run into a JSON report, so every browser-matrix cell '
           + 'below is `unrun` — which is not the same as "it ran and failed".'
           : undefined,
+      },
+      'visual-baselines': {
+        available: sources.visual !== undefined,
+        path: 'e2e/visual/visual-baselines.json',
+        note: visualInputNote(sources.visual),
+      },
+      'browser-engine-ratchets': {
+        available: sources.engineRatchets !== undefined,
+        path: 'e2e/matrix/engine-ratchets.json',
+        note: sources.engineRatchets === undefined
+          ? 'No committed per-engine ledger, so a `browser-matrix` cell can say the lane ran '
+          + 'and cannot say which of the eighteen projects did.'
+          : `Engine coverage of the 6-condition sweep: ${
+            Object.entries(sources.engineRatchets.engines)
+              .map(([engine, s]) => `${engine} ${s.conditionsRun.length}/6`)
+              .join(', ')
+          }.`,
       },
     },
     totals,
@@ -512,6 +809,14 @@ if (isMain) {
       + `${String(t.stale).padStart(7)}${String(t.unrun).padStart(7)}${String(t.excepted).padStart(10)}`,
     )
   }
+  const visual = { 'covered': 0, 'not-covered': 0, 'stale': 0 }
+  for (const row of matrix.rows)
+    visual[row.visual.state]++
+  console.warn(
+    `\n  visual   covered ${visual.covered}  ·  stale ${visual.stale}  ·  `
+    + `not-covered ${visual['not-covered']}`,
+  )
+
   for (const [name, input] of Object.entries(matrix.inputs)) {
     if (!input.available)
       console.warn(`\n  ! input \`${name}\` absent (${input.path})`)

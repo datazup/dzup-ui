@@ -105,7 +105,7 @@ const showContent = computed(() => !props.collapsible || isOpen.value)
     </template>
 
     <!-- Section items -->
-    <div v-if="showContent" class="flex flex-col gap-[var(--dz-spacing-0-5)]">
+    <div v-if="showContent" class="flex flex-col gap-[var(--dz-spacing-0_5)]">
       <slot />
     </div>
   </div>

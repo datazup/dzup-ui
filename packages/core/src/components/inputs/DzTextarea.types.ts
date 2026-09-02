@@ -11,6 +11,7 @@ import type {
   ChangeEvents,
   InputVariant,
 } from '@dzup-ui/contracts'
+import type { DzTextareaUi } from './DzTextarea.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -30,6 +31,17 @@ export interface DzTextareaProps extends BaseFormControlProps<InputVariant> {
   maxRows?: number
   /** Accessible label for the loading spinner shown when `loading` is true */
   loadingLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzTextarea.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzTextarea v-model="bio" :ui="{ error: 'text-[var(--dz-warning)]' }" />
+   * ```
+   */
+  ui?: DzTextareaUi
 }
 
 // ---------------------------------------------------------------------------

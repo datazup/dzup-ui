@@ -29,7 +29,7 @@ export const carouselVariants = tv({
     ].join(' '),
     navPrev: '',
     navNext: '',
-    dots: 'flex shrink-0 items-center justify-center gap-[var(--dz-spacing-1-5)]',
+    dots: 'flex shrink-0 items-center justify-center gap-[var(--dz-spacing-1_5)]',
     // The clickable target is a ≥24×24px hit area (WCAG 2.2 SC 2.5.8 target-size);
     // the visible dot is the inner `dot` span, so the indicator stays small while
     // the tappable region meets the minimum. The button grows past 24px only when

@@ -316,7 +316,8 @@ const dzMessages = useComponentMessages('DzMultiSelect')
             :aria-label="dzMessages.toggleOptions"
             :disabled="resolvedDisabled"
           >
-            <ChevronDown class="h-full w-full" aria-hidden="true" />
+            <!-- TASK-N1-O3: see DzCombobox.vue — the button is the 24px target. -->
+            <ChevronDown class="size-[var(--dz-control-visual-size)]" aria-hidden="true" />
           </button>
         </ComboboxTrigger>
       </ComboboxAnchor>

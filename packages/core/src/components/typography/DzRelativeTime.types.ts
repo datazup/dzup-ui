@@ -16,6 +16,7 @@ import type {
   RelativeTimeMode,
   RelativeTimeValue,
 } from '../../composables/useRelativeTime/index.ts'
+import type { DzRelativeTimeUi } from './DzRelativeTime.anatomy.ts'
 
 export type { RelativeTimeLocale, RelativeTimeMode, RelativeTimeValue }
 
@@ -44,6 +45,17 @@ export interface DzRelativeTimeProps extends BaseAccessibilityProps {
   tooltip?: boolean
   /** Semantic colour tone */
   tone?: RelativeTimeTone
+  /**
+   * Per-part class overrides, keyed by the names in `DzRelativeTime.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzRelativeTime :datetime="ts" :ui="{ root: 'tabular-nums' }" />
+   * ```
+   */
+  ui?: DzRelativeTimeUi
 }
 
 // ---------------------------------------------------------------------------

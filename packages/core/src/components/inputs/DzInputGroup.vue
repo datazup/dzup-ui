@@ -30,6 +30,7 @@ defineOptions({
 const props = withDefaults(defineProps<DzInputGroupProps>(), {
   size: 'md',
   disabled: false,
+  ui: undefined,
 })
 
 defineSlots<DzInputGroupSlots>()
@@ -50,13 +51,23 @@ provide(DZ_INPUT_GROUP_KEY, context)
 const styles = computed(() => inputGroupVariants({ size: props.size }))
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.root),
 )
+
+/** Per-part class values (ADR-19 §5). */
+const prefixClasses = computed(() =>
+  cn(styles.value.addon(), styles.value.addonPrefix(), props.ui?.prefix),
+)
+const suffixClasses = computed(() =>
+  cn(styles.value.addon(), styles.value.addonSuffix(), props.ui?.suffix),
+)
+const contentClasses = computed(() => cn(styles.value.field(), props.ui?.content))
 </script>
 
 <template>
   <div
     :id="resolvedId"
+    data-part="root"
     :class="rootClasses"
     role="group"
     :aria-label="ariaLabel"
@@ -70,20 +81,22 @@ const rootClasses = computed(() =>
     <!-- Prefix addon -->
     <span
       v-if="$slots.prefix"
-      :class="cn(styles.addon(), styles.addonPrefix())"
+      data-part="prefix"
+      :class="prefixClasses"
     >
       <slot name="prefix" />
     </span>
 
     <!-- Field (default slot) — fills the row; grouped fields render seamless -->
-    <div :class="styles.field()">
+    <div data-part="content" :class="contentClasses">
       <slot />
     </div>
 
     <!-- Suffix addon -->
     <span
       v-if="$slots.suffix"
-      :class="cn(styles.addon(), styles.addonSuffix())"
+      data-part="suffix"
+      :class="suffixClasses"
     >
       <slot name="suffix" />
     </span>

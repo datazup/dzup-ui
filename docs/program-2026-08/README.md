@@ -8,6 +8,23 @@
 >
 > Review date: **2026-08-20**. Reviewer verified the findings against the local
 > checkouts (see §2) before writing the tasks.
+>
+> **Addendum 2026-08-28:** this program is substantially complete — P0–P4 done,
+> P5 done except P5-02 (51 tier-required Story DoD items, 0 authored), FORM-OSS
+> and REC/SK lanes done. The §2 custody table below is historical: `main` is now
+> `51dec93` (clean), and the Pro checkout has been reconciled (esmir carries the
+> origin/main lineage, 22 ahead / 4 behind). The successor program — re-verified
+> baselines, plan challenge with external research, capability matrices, gap
+> analysis, and the N0→N6 roadmap — is
+> `workspace-docs/repos/ui/docs/architecture/dzup-ui-program-reassessment-2026-08-28/`.
+> What remains here is evidence execution (run the 12 FF/WebKit lanes, execute
+> AT cells, fix the 46 measured WCAG failures, author the 51 stories), tracked
+> as roadmap packets N1-O1…O6.
+>
+> **Successor task program (2026-08-29):** the reassessment's roadmap has been
+> turned into ready-to-run prompts at
+> [`../program-2026-09/README.md`](../program-2026-09/README.md) — start there,
+> not here.
 
 ---
 

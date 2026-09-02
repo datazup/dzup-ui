@@ -8,6 +8,7 @@
  */
 
 import type { CanonicalSize } from '@dzup-ui/contracts'
+import type { DzKbdUi } from './DzKbd.anatomy.ts'
 
 /** Props for the DzKbd component */
 export interface DzKbdProps {
@@ -34,6 +35,17 @@ export interface DzKbdProps {
   separator?: string
   /** Unique element ID */
   id?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzKbd.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzKbd :keys="['mod', 'k']" :ui="{ separator: 'opacity-40' }" />
+   * ```
+   */
+  ui?: DzKbdUi
 }
 
 /** Slot definitions for DzKbd */

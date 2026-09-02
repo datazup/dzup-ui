@@ -408,14 +408,20 @@ watch(
             :aria-label="dzMessages.toggleOptions"
             :disabled="resolvedDisabled"
           >
+            <!--
+              TASK-N1-O3: the trigger BUTTON now carries the WCAG 2.2 SC 2.5.8
+              24px target floor (`dz-target-min-tight`), so `h-full w-full`
+              would scale the glyph with the target. `--dz-control-visual-size`
+              is what the button paints, and is what the glyph must match.
+            -->
             <DzSpinner
               v-if="loading"
               size="xs"
               tone="neutral"
               :label="resolvedLoadingText"
-              class="h-full w-full"
+              class="size-[var(--dz-control-visual-size)]"
             />
-            <ChevronDown v-else class="h-full w-full" aria-hidden="true" />
+            <ChevronDown v-else class="size-[var(--dz-control-visual-size)]" aria-hidden="true" />
           </button>
         </ComboboxTrigger>
       </ComboboxAnchor>

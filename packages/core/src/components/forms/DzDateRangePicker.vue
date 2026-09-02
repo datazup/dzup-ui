@@ -245,8 +245,10 @@ const triggerClasses = computed(() =>
             </DateRangePickerInput>
           </span>
 
+          <!-- TASK-N1-O3 / WCAG 2.2 SC 2.5.8 -- see DzDatePicker.vue for why this
+               uses `dz-target-min` and not the footprint-neutral variant. -->
           <DateRangePickerTrigger
-            class="ml-auto"
+            class="ml-auto dz-target-min inline-flex items-center justify-center"
             :aria-label="ariaLabel ?? 'Open date range picker'"
           >
             <CalendarIcon :class="styles.icon()" aria-hidden="true" />

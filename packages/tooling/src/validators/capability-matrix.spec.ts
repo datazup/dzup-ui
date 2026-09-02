@@ -27,13 +27,14 @@ function row(over: Partial<CapabilityRow> = {}): CapabilityRow {
     source: 'packages/core/src/components/forms/DzThing.vue',
     componentCommit: 'abc1234',
     cells: [cell()],
+    visual: { state: 'not-covered', baselines: 0, themes: [], artifacts: [] },
     ...over,
   }
 }
 
 function matrix(rows: CapabilityRow[], inputs: CapabilityMatrix['inputs'] = {}): CapabilityMatrix {
   return {
-    schemaVersion: '1.0.0',
+    schemaVersion: '1.1.0',
     sourceCommit: 'abc1234',
     generatedFrom: [],
     inputs,

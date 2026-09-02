@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0.0",
+  "category": "file-metadata",
+  "description": "Names, MIME types and sizes attached to files a user chose. All three are attacker-influenced: the name comes from the file system, and `File.type` is a browser guess from the extension and the OS registry rather than a measurement of the bytes. The `file` sink asks whether the control's own limits held on the path they are actually enforced on; the `text` and `attribute` sinks ask whether the name is rendered as data once it is in the list.",
+  "fixtures": [
+    {
+      "id": "file-metadata.extension.executable",
+      "category": "file-metadata",
+      "title": "executable dropped into an image-only control",
+      "payload": "payload.exe",
+      "outcomes": {
+        "file": "rejected"
+      },
+      "rationale": "`accept` on `<input type=\"file\">` filters the operating system's picker and does nothing at all to `DataTransfer.files`, so the drop path is where a control's stated limit either exists or does not. `rejected` means the file never enters the model and an error is emitted — not that the upload is secure, which only a server can decide.",
+      "provenance": "HTML Standard: `accept` is a picker hint. Finding F1 in DzFileUpload.threat-model.md."
+    },
+    {
+      "id": "file-metadata.extension.double",
+      "category": "file-metadata",
+      "title": "double extension whose real type is not accepted",
+      "payload": "invoice.pdf.exe",
+      "outcomes": {
+        "file": "rejected"
+      },
+      "rationale": "Only the last extension is the extension. A check that searches the name for an accepted suffix anywhere, rather than matching the end of it, admits this.",
+      "provenance": "Standard double-extension case; OWASP file-upload guidance."
+    },
+    {
+      "id": "file-metadata.type.absent",
+      "category": "file-metadata",
+      "title": "file the browser could not type, against a MIME-only accept",
+      "payload": "mystery",
+      "outcomes": {
+        "file": "rejected"
+      },
+      "rationale": "`File.type` is frequently the empty string. With no extension to fall back on and an `accept` that names only MIME types, the conservative answer is refusal. The opposite choice — admitting anything untyped — turns the whole control into a decoration.",
+      "provenance": "Finding F3 in DzFileUpload.threat-model.md."
+    },
+    {
+      "id": "file-metadata.name.markup",
+      "category": "file-metadata",
+      "title": "file name that is an img element with a handler",
+      "payload": "<img src=x onerror=\"alert(1)\">.png",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "A file name is host-supplied content that reaches at least two escaping contexts — the visible row and the remove control's accessible name — and getting one right says nothing about the other. Asserted against the DOM: no element created, no `on*` attribute on anything.",
+      "provenance": "cure53 markup case, applied to the file-name source."
+    },
+    {
+      "id": "file-metadata.name.attribute-break-out",
+      "category": "file-metadata",
+      "title": "file name shaped to break out of an attribute value",
+      "payload": "\" onmouseover=\"alert(1)\" x=\".png",
+      "outcomes": {
+        "attribute": "escaped"
+      },
+      "rationale": "The name lands in an `aria-label`, which is attribute context. The decoy `x=` is retained from the markup file for the same reason: a pass that comes from an `on*`-only filter is not a pass.",
+      "provenance": "OWASP filter-evasion cheat sheet, attribute-context section."
+    },
+    {
+      "id": "file-metadata.path.traversal",
+      "category": "file-metadata",
+      "title": "file name containing a relative path",
+      "payload": "../../etc/passwd",
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "`File.name` is specified to hold no path, but a component must not be the reason a host believes that: the value is displayed and forwarded, and the outcome the component owes is that it is rendered as data. Whether the server joins it onto a directory is the server's finding, and this fixture is the one to point at when writing that up.",
+      "provenance": "File API `File.name` (no path); OWASP path-traversal guidance."
+    },
+    {
+      "id": "file-metadata.name.four-kilobyte",
+      "category": "file-metadata",
+      "title": "4 096-character file name",
+      "payload": "a",
+      "repeat": 4096,
+      "outcomes": {
+        "text": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "The oversized case on the file-name source specifically, because a file list is a flow container and a name that does not wrap pushes the remove control off the row it belongs to. Same containment property as the degenerate-input file, asserted where it is reachable through a real API.",
+      "provenance": "Filesystem name-length limits; the length the existing DzFileUpload corpus already used."
+    }
+  ]
+}

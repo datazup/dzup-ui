@@ -1,0 +1,150 @@
+{
+  "$comment": "Per-engine browser-matrix ratchets (TASK-N1-O2). `known-failures.json` is the CROSS-ENGINE ledger: an entry there is expected to fail on every engine, and Playwright fails the run when it unexpectedly passes anywhere. This file records only what one engine measures DIFFERENTLY. `notReproducing` withdraws a cross-engine expectation for one engine and MUST carry the measured numbers that prove the divergence; `engineOnly` adds an expectation only one engine measures. Both are ratchets: entries are removed when the divergence is resolved and never added without a measured number, an engine version and a reason. A blanket per-engine skip is not a ratchet -- it is the lane narrowing without saying so.",
+  "schemaVersion": "1.0.0",
+  "measuredAt": "2026-08-31",
+  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "worktreeDirty": true,
+  "admissibility": "locally qualified, worktree-dirty -- NOT admissible as release evidence until an owner commits this tree and re-runs. The exact working-tree contents these numbers were measured against are inventoried by SHA-256 in docs/program-2026-09/reports/N1-O2-firefox-webkit-handoff.md section 2.",
+  "playwrightVersion": "1.61.1",
+  "platform": "win32 -- Windows 11 Pro 10.0.26200, node v24.14.1",
+  "method": "Every matrix-{engine}-{condition} project was executed against all 88 runnable Tier B-D targets (1 target is `unrun`: DzThemeProvider has no story). Divergences below were then re-measured element-by-element on each engine in isolation; the numbers recorded are those measurements, not the suite's summary.",
+  "engines": {
+    "chromium": {
+      "version": "149.0.7827.55 (playwright chromium v1228)",
+      "conditionsRun": [
+        "default",
+        "forced-colors",
+        "reduced-motion",
+        "rtl",
+        "touch",
+        "zoom-400"
+      ],
+      "conditionsRunNote": "TASK-N1-O3 executed all six chromium projects in one invocation on 2026-08-31 -- the first surviving six-condition chromium run since the 2026-08-24 one that N1-O2 section 1e showed had been overwritten. It was deliberately NOT written to test-results/matrix-report.json: that file is the only copy of the 2026-08-25 record and protecting it outranked replacing it. Hardening the record is still owner decision D1 in the N1-O2 handoff.",
+      "notReproducing": [],
+      "engineOnly": [],
+      "summary": {
+        "inLane": 89,
+        "runnableTargets": 88,
+        "declaredUnrunTargets": 1,
+        "cellsRun": 1056,
+        "passed": 1056,
+        "expectedFailure": 0,
+        "unexpectedPass": 0,
+        "unexpectedFailure": 0,
+        "skipped": 6,
+        "exitCode": 0,
+        "wallClock": "12.0m",
+        "ranAt": "2026-08-31",
+        "report": "not persisted -- see conditionsRunNote",
+        "priorRecord": {
+          "report": "test-results/matrix-report.json",
+          "reportMd5": "15b4139314e12569cc160609fa0692a3",
+          "ranAt": "2026-08-25T11:35:50.423Z",
+          "conditions": [
+            "default",
+            "rtl"
+          ],
+          "note": "left untouched by TASK-N1-O3; MD5 verified unchanged at task end"
+        }
+      }
+    },
+    "firefox": {
+      "version": "151.0 (playwright firefox v1532)",
+      "conditionsRun": [
+        "default",
+        "forced-colors",
+        "reduced-motion",
+        "rtl",
+        "touch",
+        "zoom-400"
+      ],
+      "notReproducing": [],
+      "engineOnly": [],
+      "summary": {
+        "inLane": 89,
+        "runnableTargets": 88,
+        "declaredUnrunTargets": 1,
+        "cellsRun": 1056,
+        "passed": 1056,
+        "expectedFailure": 0,
+        "unexpectedPass": 0,
+        "unexpectedFailure": 0,
+        "skipped": 6,
+        "exitCode": 0,
+        "wallClock": "21.2m",
+        "ranAt": "2026-08-31"
+      },
+      "note": "TASK-N1-O2: all 46 cross-engine ledger entries reproduced on firefox with the same verdicts and, to within text-metric rounding, the same numbers. TASK-N1-O3: after the fixes, the full six-condition sweep is 1056/1056 with an empty ledger. Zero firefox-specific failures at either point."
+    },
+    "webkit": {
+      "version": "26.5 (playwright webkit v2311)",
+      "conditionsRun": [
+        "default",
+        "forced-colors",
+        "reduced-motion",
+        "rtl",
+        "touch",
+        "zoom-400"
+      ],
+      "notReproducing": [],
+      "engineOnly": [],
+      "summary": {
+        "inLane": 89,
+        "runnableTargets": 88,
+        "declaredUnrunTargets": 1,
+        "cellsRun": 1056,
+        "passed": 1056,
+        "expectedFailure": 0,
+        "unexpectedPass": 0,
+        "unexpectedFailure": 0,
+        "skipped": 6,
+        "exitCode": 0,
+        "wallClock": "16.0m",
+        "ranAt": "2026-08-31"
+      },
+      "note": "TASK-N1-O2: 44 of the 46 cross-engine entries reproduced; the two that did not are in notReproducingClosed with the reason each was closed. TASK-N1-O3: after the fixes, the full six-condition sweep is 1056/1056 with an empty ledger. notReproducing is empty and exceptions in engine-exceptions.json remain []. The engineBehaviours record for the WebKit display:none animation divergence still stands -- it is a live engine difference the harness works around, not a resolved one.",
+      "notReproducingClosed": [
+        {
+          "component": "DzOrderList",
+          "condition": "zoom-400",
+          "closedAt": "2026-08-31",
+          "closedBy": "TASK-N1-O3",
+          "closureReason": "The cross-engine ledger entry this record withdrew no longer exists: known-failures.json is empty. DzOrderList`s 2px/1px reflow divergence disappeared with the component: the overflow was the harness measuring min-content width under Storybook`s `layout: centered`, and is 0px on all three engines once the canvas is a real 320px block box.",
+          "measuredWhenOpen": "chromium/firefox/webkit document overflow at 320px: 0px each after the fix."
+        },
+        {
+          "component": "DzLightbox",
+          "condition": "touch",
+          "closedAt": "2026-08-31",
+          "closedBy": "TASK-N1-O3",
+          "closureReason": "The cross-engine ledger entry this record withdrew no longer exists: known-failures.json is empty. The DzLightbox divergence was NOT a timing artefact, which is the correction this task owes N1-O2 finding E4 and owner decision D3. The three \"transient\" controls were DzLightbox`s own close and nav buttons rendering with NO class attribute, because the template bound `styles.closeButton` (the tv() slot function) instead of `styles.closeButton()`. Vue`s normalizeClass has no case for a function, so it emitted the empty string and the buttons were sized by the bare SVG inside them: 16x16 and 20x20 against the 32x32 and 40x40 the variants declare. WebKit \"passed\" only because it had already unmounted the teleported overlay by the time the assertion ran, so it measured nothing. All ten of the component`s slot bindings are fixed.",
+          "measuredWhenOpen": "close button 32x32, nav buttons 40x40 after the fix; chromium matrix-chromium-touch cell passes."
+        }
+      ]
+    }
+  },
+  "reMeasuredBy": "TASK-N1-O3 re-ran all three engines end-to-end after fixing the 46 cross-engine entries. known-failures.json is now empty, so every summary below records a sweep in which no cell was expected to fail and none did.",
+  "crossEngineResult": {
+    "measuredAt": "2026-08-31",
+    "ledgerEntries": 0,
+    "chromium": {
+      "conditions": 6,
+      "cellsRun": 1056,
+      "passed": 1056,
+      "failed": 0
+    },
+    "firefox": {
+      "conditions": 6,
+      "cellsRun": 1056,
+      "passed": 1056,
+      "failed": 0
+    },
+    "webkit": {
+      "conditions": 6,
+      "cellsRun": 1056,
+      "passed": 1056,
+      "failed": 0
+    },
+    "note": "3168 cells across 3 engines x 6 conditions x 88 runnable targets. Zero failures, zero expected failures, zero engine exceptions, zero engine divergences. Worktree-dirty: locally qualified only."
+  }
+}

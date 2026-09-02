@@ -364,3 +364,94 @@ export const RealWorldCategories: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — idle vs disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the one state DzTag declares, and it changes three things at
+ * once: the root stamps `data-state="disabled"` and `data-disabled`, the close
+ * button becomes `disabled`, and the Delete/Backspace shortcut stops emitting
+ * `close`.
+ *
+ * The play function drives all three. The disabled tag is asserted rather than
+ * clicked: `dz-disabled-control` sets `pointer-events: none` on the root, so a
+ * pointer event would never reach it in a real browser either.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzTag },
+    data() {
+      return { idleCloses: 0, disabledCloses: 0 }
+    },
+    template: `
+      <div class="space-y-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <DzTag
+            closable
+            tone="primary"
+            aria-label="Idle tag"
+            data-testid="tag-idle"
+            @close="idleCloses++"
+          >Idle</DzTag>
+          <DzTag
+            closable
+            disabled
+            tone="primary"
+            aria-label="Disabled tag"
+            data-testid="tag-disabled"
+            @close="disabledCloses++"
+          >Disabled</DzTag>
+          <DzTag tone="neutral" data-testid="tag-static">Not closable</DzTag>
+        </div>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          close events — idle: <strong data-testid="idle-closes">{{ idleCloses }}</strong>,
+          disabled: <strong data-testid="disabled-closes">{{ disabledCloses }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const idle = canvas.getByTestId('tag-idle')
+    const disabled = canvas.getByTestId('tag-disabled')
+
+    // State is exposed on the anatomy attributes, not only in the paint.
+    await expect(idle).toHaveAttribute('data-state', 'idle')
+    await expect(idle).not.toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('data-state', 'disabled')
+    await expect(disabled).toHaveAttribute('data-disabled')
+
+    // A closable tag is focusable; the disabled one keeps its tabindex so the
+    // state is discoverable rather than silently skipped.
+    await expect(idle).toHaveAttribute('tabindex', '0')
+    await expect(disabled).toHaveAttribute('tabindex', '0')
+
+    // The disabled tag's remove button is disabled; the idle one is not.
+    await expect(within(disabled).getByRole('button')).toBeDisabled()
+    const idleClose = within(idle).getByRole('button')
+    await expect(idleClose).toBeEnabled()
+
+    // Pointer path: the idle tag emits `close`.
+    await userEvent.click(idleClose)
+    await waitFor(() => expect(canvas.getByTestId('idle-closes')).toHaveTextContent('1'))
+
+    // Keyboard path: Backspace on a focused closable tag also emits `close`…
+    idle.focus()
+    await expect(idle).toHaveFocus()
+    await userEvent.keyboard('{Backspace}')
+    await waitFor(() => expect(canvas.getByTestId('idle-closes')).toHaveTextContent('2'))
+
+    // …and is suppressed while disabled.
+    disabled.focus()
+    await userEvent.keyboard('{Backspace}')
+    await expect(canvas.getByTestId('disabled-closes')).toHaveTextContent('0')
+
+    // A non-closable tag has no remove control and is not in the tab order.
+    const staticTag = canvas.getByTestId('tag-static')
+    await expect(within(staticTag).queryByRole('button')).toBeNull()
+    await expect(staticTag).not.toHaveAttribute('tabindex')
+  },
+}

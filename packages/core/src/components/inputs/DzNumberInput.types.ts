@@ -11,6 +11,7 @@ import type {
   ChangeEvents,
   InputVariant,
 } from '@dzup-ui/contracts'
+import type { DzNumberInputUi } from './DzNumberInput.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -26,6 +27,17 @@ export interface DzNumberInputProps extends BaseFormControlProps<InputVariant> {
   max?: number
   /** Step increment for +/- buttons and arrow keys */
   step?: number
+  /**
+   * Per-part class overrides, keyed by the names in `DzNumberInput.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzNumberInput v-model="qty" :ui="{ increment: 'text-[var(--dz-primary)]' }" />
+   * ```
+   */
+  ui?: DzNumberInputUi
 }
 
 // ---------------------------------------------------------------------------

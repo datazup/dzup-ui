@@ -53,7 +53,7 @@ export const Default: Story = {
       return { args, members }
     },
     template: `
-      <div class="w-96 space-y-2">
+      <div class="w-96 max-w-full space-y-2">
         <DzFieldArray v-model="members" :min="args.min" :max="args.max">
           <template #default="{ field, index, remove, move, canRemove }">
             <div class="flex items-center gap-2">
@@ -105,7 +105,7 @@ export const MinMaxItems: Story = {
       return { args, tags }
     },
     template: `
-      <div class="w-96 space-y-2">
+      <div class="w-96 max-w-full space-y-2">
         <p class="text-sm text-[var(--dz-muted-foreground)]">
           At least {{ args.min }}, at most {{ args.max }} tags. Add is hidden at the max; Remove is disabled at the min.
         </p>
@@ -159,7 +159,7 @@ export const PerRowValidation: Story = {
       return { emails, isValid }
     },
     template: `
-      <div class="w-96 space-y-3">
+      <div class="w-96 max-w-full space-y-3">
         <DzFieldArray v-model="emails">
           <template #default="{ field, index, remove }">
             <DzFormField :invalid="!isValid(field)" :error="!isValid(field) ? 'Enter a valid email address.' : ''">
@@ -199,7 +199,7 @@ export const DarkMode: Story = {
       return { members }
     },
     template: `
-      <div class="w-96 space-y-2">
+      <div class="w-96 max-w-full space-y-2">
         <DzFieldArray v-model="members">
           <template #default="{ field, index, remove }">
             <div class="flex items-center gap-2">

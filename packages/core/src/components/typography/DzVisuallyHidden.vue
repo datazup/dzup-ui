@@ -33,6 +33,7 @@ defineOptions({
 const props = withDefaults(defineProps<DzVisuallyHiddenProps>(), {
   as: 'span',
   focusable: false,
+  ui: undefined,
 })
 
 defineSlots<{
@@ -46,6 +47,7 @@ const classes = computed(() =>
   cn(
     visuallyHiddenVariants({ focusable: props.focusable }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -54,6 +56,7 @@ const classes = computed(() =>
   <component
     :is="as"
     :id="id"
+    data-part="root"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"
   >

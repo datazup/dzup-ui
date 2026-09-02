@@ -32,7 +32,7 @@ export const popconfirmVariants = tv({
     /** Header row: icon + text block. */
     header: 'flex items-start gap-[var(--dz-spacing-2)]',
     /** Leading icon wrapper. */
-    iconWrap: 'mt-[var(--dz-spacing-0-5,0.125rem)] flex shrink-0 items-center justify-center',
+    iconWrap: 'mt-[var(--dz-spacing-0_5,0.125rem)] flex shrink-0 items-center justify-center',
     /** Text block (title + description). */
     body: 'min-w-0 flex-1',
     /** Title heading. */

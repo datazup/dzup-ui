@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0.0",
+  "note": "Measured WCAG 2.2 AA conformance gaps that survive the browser matrix. An entry is a DEFECT, not a waiver: the library owes it. This file exists because no other generated artifact in the repository can express it -- `non-drag-alternative` in the capability matrix measures whether a KEYBOARD path is asserted, and a keyboard path satisfies SC 2.1.1, not SC 2.5.7, which requires a single pointer without dragging. A component can therefore read `non-drag-alternative: present` and still fail 2.5.7, which is exactly what happens to DzTable. Rendered by the docs site (TASK-N2-D2) on every affected component page and on /evidence/accessibility.",
+  "recordedAt": {
+    "measuredBy": "TASK-N1-O3",
+    "transcribedBy": "TASK-N2-D2",
+    "source": "docs/program-2026-09/reports/N1-O3-wcag-fixes-handoff.md section 6.3",
+    "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+    "worktree": "dirty",
+    "admissibility": "locally qualified, worktree-dirty -- not release evidence"
+  },
+  "criterion": {
+    "id": "2.5.7",
+    "name": "Dragging Movements",
+    "level": "AA",
+    "since": "2.2",
+    "text": "All functionality that uses a dragging movement for operation can be achieved by a single pointer without dragging, unless dragging is essential or the functionality is determined by the user agent and not modified by the author.",
+    "url": "https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html"
+  },
+  "scope": "Every component carrying the `drags` trait in packages/core/docs/quality-matrix.json. The trait names 9; all 9 were audited. The audited set is gated against the trait, so a tenth drag surface cannot appear without this file failing.",
+  "conformanceStatement": "SC 2.5.7 AA is met for 6 of 9 drag surfaces. The three resize surfaces are keyboard-operable but require a drag for pointer operation.",
+  "ceiling": 3,
+  "openGaps": 3,
+  "surfaces": [
+    {
+      "component": "DzOrderList",
+      "operation": "reorder an item by dragging its grip",
+      "keyboardAlternative": "Space grabs the row, ArrowUp/ArrowDown move it, Space drops, Escape cancels and restores, Home/End move to the ends; each step announced in a live region.",
+      "singlePointerNoDrag": "Four always-visible controls -- move to top / up / down / bottom -- each a single tap.",
+      "state": "met",
+      "caveat": "The single-pointer path is the move controls, rendered under `v-if=\"showControls\"`. `showControls` defaults to true, so the component conforms as shipped; a consumer who sets `:show-controls=\"false\"` and keeps the drag handle leaves reorder drag-only for a pointer user, and nothing warns them. The keyboard path survives that configuration; SC 2.5.7 does not."
+    },
+    {
+      "component": "DzSlider",
+      "operation": "drag the thumb",
+      "keyboardAlternative": "Reka SliderImpl: arrows step, PageUp/PageDown, Home/End.",
+      "singlePointerNoDrag": "Reka emits slideStart on pointerdown anywhere on the track that is not a thumb, so one tap sets the value.",
+      "state": "met"
+    },
+    {
+      "component": "DzRangeSlider",
+      "operation": "drag either thumb",
+      "keyboardAlternative": "Reka SliderImpl: arrows step, PageUp/PageDown, Home/End.",
+      "singlePointerNoDrag": "Reka emits slideStart on pointerdown anywhere on the track that is not a thumb, so one tap sets the value.",
+      "state": "met"
+    },
+    {
+      "component": "DzImageComparison",
+      "operation": "drag the divider",
+      "keyboardAlternative": "role=\"slider\" with tabindex 0: ArrowLeft/Right/Up/Down, Home/End.",
+      "singlePointerNoDrag": "handlePointerDown calls updateFromPointer(event) before any move, so a tap anywhere on the image moves the divider there.",
+      "state": "met"
+    },
+    {
+      "component": "DzKnob",
+      "operation": "rotate by dragging",
+      "keyboardAlternative": "Arrows step, PageUp/PageDown move one tenth of the range, Home/End.",
+      "singlePointerNoDrag": "handlePointerDown calls updateFromPointer(event) on the tap itself.",
+      "state": "met"
+    },
+    {
+      "component": "DzFileUpload",
+      "operation": "drop files onto the zone",
+      "keyboardAlternative": "The drop zone is role=\"button\" with tabindex 0; Enter and Space open the OS picker.",
+      "singlePointerNoDrag": "A plain click does the same. The drop path is an addition to the picker, never the only path.",
+      "state": "met"
+    },
+    {
+      "component": "DzResizable",
+      "operation": "drag the separator to resize panes",
+      "keyboardAlternative": "Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6.",
+      "singlePointerNoDrag": null,
+      "state": "gap",
+      "gapReason": "SplitterResizeHandle binds only onFocus/onBlur plus the pointer drag; there is no tap, no double-tap and no stepper control. Resizing by a single pointer requires a drag.",
+      "ownerDecision": "The affordance is a design decision with no APG precedent -- the Window Splitter pattern specifies keyboard interaction only, and APG has no column-resize pattern at all. Steppers, tap-to-place and preset cycling each change the component's visual language.",
+      "notEssential": "Dragging is not essential to resizing a pane: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies."
+    },
+    {
+      "component": "DzSplitter",
+      "operation": "drag the separator to resize panes (DzSplitterHandle renders the same Reka SplitterResizeHandle)",
+      "keyboardAlternative": "Reka useWindowSplitterBehavior: ArrowLeft/Right/Up/Down, Home/End, F6.",
+      "singlePointerNoDrag": null,
+      "state": "gap",
+      "gapReason": "The same shared Reka handle, so the same absence: focus and blur plus the pointer drag, and nothing else.",
+      "ownerDecision": "One implementation closes both DzResizable and DzSplitter.",
+      "notEssential": "Dragging is not essential to resizing a pane: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies."
+    },
+    {
+      "component": "DzTable",
+      "operation": "drag the column-resize handle",
+      "keyboardAlternative": "onResizeKey on the focusable handle button: ArrowLeft/ArrowRight step 8px, 24px with Shift.",
+      "singlePointerNoDrag": null,
+      "state": "gap",
+      "gapReason": "The handle responds to pointerdown plus pointermove only.",
+      "ownerDecision": "APG has no pattern for column resizing at all, so there is no precedent to follow.",
+      "notEssential": "Dragging is not essential to resizing a column: the keyboard path proves a non-drag mechanism exists, and the functionality is authored rather than user-agent-determined, so neither of the SC's own exceptions applies."
+    }
+  ],
+  "followUp": "Add a single-pointer, non-drag path for two operations: (a) resize a splitter pane (DzResizable / DzSplitter, one shared Reka handle, so one implementation), and (b) resize a table column (DzTableCell). Each needs an affordance decision -- steppers, tap-to-place, or preset cycling -- and, if it is a rendered control, a data-part, an anatomy entry and a message id. Neither requires a public prop, and neither is a breaking change."
+}

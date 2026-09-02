@@ -8,6 +8,7 @@ The package builds to `dist/` with `tsc` and publishes via the repo's Changesets
 
 ```sh
 # from the repo root
+yarn validate:mcp                         # surface freshness, version coherence, per-tool evidence
 yarn workspace @dzup-ui/mcp build
 yarn workspace @dzup-ui/mcp test
 node packages/mcp/scripts/e2e-smoke.mjs   # end-to-end sanity over real JSON-RPC
@@ -15,6 +16,13 @@ node packages/mcp/scripts/e2e-smoke.mjs   # end-to-end sanity over real JSON-RPC
 # release (Changesets) — versions + publishes every package with a pending changeset
 yarn release
 ```
+
+> **The version is no longer typed in three places.** `src/index.ts` reads it
+> from `package.json` at runtime, so `serverInfo.version` is whatever npm
+> shipped. `server.json` still carries its own copy because the MCP registry
+> schema requires one — `yarn validate:mcp` fails when it drifts from
+> `package.json`, from the CHANGELOG, or from the generated surface artifact.
+> Bump it in `server.json` in the same commit as the Changesets version bump.
 
 `files` in `package.json` ships only `dist/`, `server.json` and `README.md`. The `bin` entry (`dzup-ui-mcp` → `dist/index.js`) is what `npx -y @dzup-ui/mcp` runs.
 
@@ -28,10 +36,15 @@ npx -y @dzup-ui/mcp   # should print "dzup-ui MCP server running (registry: http
 
 The catalog at <https://registry.modelcontextprotocol.io> is what lets MCP clients surface the server for one-click install. It reads the `server.json` in this folder.
 
-Before first publish, replace the placeholders in `server.json`:
+Before first publish, confirm the identity fields in `server.json`:
 
-- `name` — must live under a namespace you control. Either `io.github.<org>/<repo-name>` (verified by a GitHub OAuth login for that org) or a domain you own, e.g. `dev.dzup-ui/mcp` (verified by a DNS TXT record). The `io.github.dzup-ui/mcp` value is a placeholder — set it to the real, verifiable namespace.
-- `repository.url` — the real GitHub URL.
+- `name` — currently **`io.github.datazup/mcp`**. It must live under a namespace
+  you control: either `io.github.<org>/<repo-name>` (verified by a GitHub OAuth
+  login for that org) or a domain you own, e.g. `dev.dzup-ui/mcp` (verified by a
+  DNS TXT record). **`io.github.datazup/mcp` has not been verified against the
+  `datazup` GitHub org** — do that, or change it, before the first
+  `mcp-publisher publish`.
+- `repository.url` — must match `package.json`'s. `yarn validate:mcp` compares them.
 
 Then publish the manifest with the official CLI:
 

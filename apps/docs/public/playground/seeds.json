@@ -1,0 +1,1386 @@
+{
+  "schemaVersion": "1.1.0",
+  "generatedFrom": "packages/core/docs/component-meta.json",
+  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "totals": {
+    "publicComponents": 144,
+    "withSeed": 129,
+    "withoutSeed": [
+      "DzAnimatedNumber",
+      "DzAsyncBoundary",
+      "DzBlockUI",
+      "DzDataView",
+      "DzDeferredContent",
+      "DzErrorBoundary",
+      "DzMasonry",
+      "DzMenu",
+      "DzPageHero",
+      "DzPanel",
+      "DzRelativeTime",
+      "DzScrollProgress",
+      "DzThemeProvider",
+      "DzToolbar",
+      "DzTour"
+    ]
+  },
+  "representatives": [
+    "DzButton",
+    "DzCard",
+    "DzAccordion",
+    "DzAlert",
+    "DzCascader",
+    "DzInput",
+    "DzAffix",
+    "DzAvatar",
+    "DzAnchor",
+    "DzCommandPalette",
+    "DzProvider",
+    "DzBlockquote"
+  ],
+  "seeds": {
+    "DzAccordion": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAccordion, DzAccordionContent, DzAccordionItem, DzAccordionTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8 max-w-lg\">\n    <div v-for=\"v in ['default', 'bordered', 'separated', 'filled']\" :key=\"v\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">variant: {{ v }}</p>\n      <DzAccordion :variant=\"v\" collapsible :aria-label=\"v + ' accordion'\">\n        <DzAccordionItem value=\"a\">\n          <DzAccordionTrigger>First section</DzAccordionTrigger>\n          <DzAccordionContent>Content for the first section.</DzAccordionContent>\n        </DzAccordionItem>\n        <DzAccordionItem value=\"b\">\n          <DzAccordionTrigger>Second section</DzAccordionTrigger>\n          <DzAccordionContent>Content for the second section.</DzAccordionContent>\n        </DzAccordionItem>\n        <DzAccordionItem value=\"c\">\n          <DzAccordionTrigger>Third section</DzAccordionTrigger>\n          <DzAccordionContent>Content for the third section.</DzAccordionContent>\n        </DzAccordionItem>\n      </DzAccordion>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/data/DzAccordion.stories.ts",
+      "storyLines": [
+        130,
+        156
+      ]
+    },
+    "DzAffix": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAffix } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div ref=\"container\" class=\"h-64 overflow-auto border border-[var(--dz-border)] rounded-lg p-4\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)] mb-3\">Scroll this panel down ↓</p>\n    <div style=\"height: 120px\" class=\"bg-[var(--dz-muted)] rounded mb-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]\">\n      spacer\n    </div>\n    <DzAffix :offset-top=\"16\" :target=\"getTarget\" @change=\"affixed = $event\">\n      <div\n        class=\"px-4 py-2 rounded-lg shadow-md text-sm font-medium\"\n        :class=\"affixed ? 'bg-[var(--dz-primary)] text-[var(--dz-primary-foreground)]' : 'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]'\"\n      >\n        {{ affixed ? 'Pinned to top' : 'Scroll to pin me' }}\n      </div>\n    </DzAffix>\n    <div style=\"height: 600px\" class=\"bg-[var(--dz-muted)] rounded mt-4 flex items-center justify-center text-xs text-[var(--dz-muted-foreground)]\">\n      long content\n    </div>\n  </div>\n</template>\n",
+      "storyId": "DarkMode",
+      "storyName": "Dark Mode Preview",
+      "storyFile": "packages/core/stories/layout/DzAffix.stories.ts",
+      "storyLines": [
+        151,
+        184
+      ]
+    },
+    "DzAlert": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAlert } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4\">\n    <DzAlert variant=\"filled\" tone=\"primary\">Filled variant alert</DzAlert>\n    <DzAlert variant=\"outline\" tone=\"primary\">Outline variant alert</DzAlert>\n    <DzAlert variant=\"subtle\" tone=\"primary\">Subtle variant alert</DzAlert>\n    <DzAlert variant=\"ghost\" tone=\"primary\">Ghost variant alert</DzAlert>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/feedback/DzAlert.stories.ts",
+      "storyLines": [
+        97,
+        110
+      ]
+    },
+    "DzAnchor": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAnchor } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-8\">\n    <DzAnchor :items=\"items\" class=\"w-48 max-w-full shrink-0\" />\n    <div class=\"flex-1 space-y-8\" v-html=\"article\" />\n  </div>\n</template>\n",
+      "storyId": "Default",
+      "storyFile": "packages/core/stories/navigation/DzAnchor.stories.ts",
+      "storyLines": [
+        78,
+        112
+      ]
+    },
+    "DzAppShell": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAppShell } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzAppShell aria-label=\"Header slot demo\">\n    <template #sidebar>\n      <aside style=\"width:16rem;background:var(--dz-sidebar-bg);color:var(--dz-sidebar-foreground);padding:var(--dz-spacing-3);\">Sidebar</aside>\n    </template>\n    <template #header-start>\n      <span style=\"background:var(--dz-muted);padding:0.25rem 0.5rem;border-radius:var(--dz-radius-sm);font-size:var(--dz-text-xs);\">START</span>\n    </template>\n    <template #header>\n      <span style=\"background:var(--dz-muted);padding:0.25rem 0.5rem;border-radius:var(--dz-radius-sm);font-size:var(--dz-text-xs);\">CENTER (flex-1)</span>\n    </template>\n    <template #header-end>\n      <span style=\"background:var(--dz-muted);padding:0.25rem 0.5rem;border-radius:var(--dz-radius-sm);font-size:var(--dz-text-xs);\">END</span>\n    </template>\n    <div style=\"padding:var(--dz-spacing-4);\">\n      The center slot sits inside <code>flex-1 min-w-0</code> so it grows to fill, while start/end are <code>shrink-0</code>.\n      Apps put a sidebar toggle in <code>header-start</code>, a breadcrumb or page title in <code>header</code>, and user/theme/notification controls in <code>header-end</code>.\n    </div>\n  </DzAppShell>\n</template>\n",
+      "storyId": "HeaderSlots",
+      "storyFile": "packages/core/stories/layout/DzAppShell.stories.ts",
+      "storyLines": [
+        173,
+        197
+      ]
+    },
+    "DzAspectRatio": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAspectRatio } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-3 gap-6\">\n    <div v-for=\"{ label, value } in [\n      { label: '1:1 (Square)', value: 1 },\n      { label: '4:3', value: 4/3 },\n      { label: '16:9', value: 16/9 },\n      { label: '21:9 (Ultra-wide)', value: 21/9 },\n      { label: '3:4 (Portrait)', value: 3/4 },\n      { label: '2:3', value: 2/3 },\n    ]\" :key=\"label\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">{{ label }} ({{ value.toFixed(2) }})</p>\n      <DzAspectRatio :ratio=\"value\">\n        <div class=\"w-full h-full bg-gradient-to-br from-[var(--dz-colors-blue-100)] to-[var(--dz-colors-blue-200)] rounded-lg flex items-center justify-center text-[var(--dz-primary-muted-foreground)] text-sm font-medium border border-[var(--dz-primary-border)]\">\n          {{ label }}\n        </div>\n      </DzAspectRatio>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllRatios",
+      "storyName": "Ratio Gallery",
+      "storyFile": "packages/core/stories/layout/DzAspectRatio.stories.ts",
+      "storyLines": [
+        63,
+        87
+      ]
+    },
+    "DzAvatar": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAvatar } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-4\">\n    <DzAvatar size=\"xs\" fallback=\"XS\" alt=\"Extra small avatar\" />\n    <DzAvatar size=\"sm\" fallback=\"SM\" alt=\"Small avatar\" />\n    <DzAvatar size=\"md\" fallback=\"MD\" alt=\"Medium avatar\" />\n    <DzAvatar size=\"lg\" fallback=\"LG\" alt=\"Large avatar\" />\n    <DzAvatar size=\"xl\" fallback=\"XL\" alt=\"Extra large avatar\" />\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/media/DzAvatar.stories.ts",
+      "storyLines": [
+        126,
+        140
+      ]
+    },
+    "DzAvatarGroup": {
+      "code": "<script setup lang=\"ts\">\nimport { DzAvatar, DzAvatarGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzAvatarGroup :size=\"size\">\n        <DzAvatar src=\"https://i.pravatar.cc/150?u=s1\" alt=\"User 1\" />\n        <DzAvatar src=\"https://i.pravatar.cc/150?u=s2\" alt=\"User 2\" />\n        <DzAvatar src=\"https://i.pravatar.cc/150?u=s3\" alt=\"User 3\" />\n      </DzAvatarGroup>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/media/DzAvatarGroup.stories.ts",
+      "storyLines": [
+        99,
+        116
+      ]
+    },
+    "DzBackTop": {
+      "code": "<script setup lang=\"ts\">\nimport { DzBackTop } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div\n    ref=\"container\"\n    class=\"relative h-80 overflow-y-auto rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] p-4\"\n  >\n    <h2 class=\"text-xl font-semibold\">Scroll inside this box…</h2>\n    <div class=\"space-y-4\" v-html=\"filler\" />\n    <DzBackTop\n      :target=\"container ?? undefined\"\n      :visibility-height=\"150\"\n      class=\"!absolute\"\n    />\n  </div>\n</template>\n",
+      "storyId": "InScrollContainer",
+      "storyName": "In scroll container",
+      "storyFile": "packages/core/stories/navigation/DzBackTop.stories.ts",
+      "storyLines": [
+        142,
+        165
+      ]
+    },
+    "DzBadge": {
+      "code": "<script setup lang=\"ts\">\nimport { DzBadge } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzBadge variant=\"solid\">Solid</DzBadge>\n    <DzBadge variant=\"outline\">Outline</DzBadge>\n    <DzBadge variant=\"subtle\">Subtle</DzBadge>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/feedback/DzBadge.stories.ts",
+      "storyLines": [
+        73,
+        85
+      ]
+    },
+    "DzBlockquote": {
+      "code": "<script setup lang=\"ts\">\nimport { DzBlockquote } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzBlockquote cite=\"https://example.com/steve-jobs\">\n    The only way to do great work is to love what you do.\n    <template #footer>\n      &mdash; Steve Jobs\n    </template>\n  </DzBlockquote>\n</template>\n",
+      "storyId": "WithAttribution",
+      "storyName": "With Attribution",
+      "storyFile": "packages/core/stories/typography/DzBlockquote.stories.ts",
+      "storyLines": [
+        65,
+        78
+      ]
+    },
+    "DzBreadcrumb": {
+      "code": "<script setup lang=\"ts\">\nimport { DzBreadcrumb, DzBreadcrumbItem, DzBreadcrumbSeparator } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Default separator (/)</p>\n      <DzBreadcrumb>\n        <DzBreadcrumbItem href=\"/\">Home</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator />\n        <DzBreadcrumbItem href=\"/docs\">Docs</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator />\n        <DzBreadcrumbItem current>Guide</DzBreadcrumbItem>\n      </DzBreadcrumb>\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Arrow separator (>)</p>\n      <DzBreadcrumb separator=\">\">\n        <DzBreadcrumbItem href=\"/\">Home</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator />\n        <DzBreadcrumbItem href=\"/docs\">Docs</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator />\n        <DzBreadcrumbItem current>Guide</DzBreadcrumbItem>\n      </DzBreadcrumb>\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Pipe separator (|)</p>\n      <DzBreadcrumb separator=\"|\">\n        <DzBreadcrumbItem href=\"/\">Home</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator />\n        <DzBreadcrumbItem href=\"/docs\">Docs</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator />\n        <DzBreadcrumbItem current>Guide</DzBreadcrumbItem>\n      </DzBreadcrumb>\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Per-separator override</p>\n      <DzBreadcrumb>\n        <DzBreadcrumbItem href=\"/\">Home</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator separator=\"~\" />\n        <DzBreadcrumbItem href=\"/docs\">Docs</DzBreadcrumbItem>\n        <DzBreadcrumbSeparator separator=\"~\" />\n        <DzBreadcrumbItem current>Guide</DzBreadcrumbItem>\n      </DzBreadcrumb>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "CustomSeparators",
+      "storyName": "Custom Separators",
+      "storyFile": "packages/core/stories/navigation/DzBreadcrumb.stories.ts",
+      "storyLines": [
+        101,
+        150
+      ]
+    },
+    "DzButton": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzButton variant=\"solid\">Solid</DzButton>\n    <DzButton variant=\"outline\">Outline</DzButton>\n    <DzButton variant=\"ghost\">Ghost</DzButton>\n    <DzButton variant=\"text\">Text</DzButton>\n    <DzButton variant=\"link\">Link</DzButton>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/buttons/DzButton.stories.ts",
+      "storyLines": [
+        92,
+        106
+      ]
+    },
+    "DzButtonGroup": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzButtonGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzButtonGroup orientation=\"horizontal\" variant=\"outline\" aria-label=\"Horizontal group\">\n    <DzButton>Left</DzButton>\n    <DzButton>Center</DzButton>\n    <DzButton>Right</DzButton>\n  </DzButtonGroup>\n</template>\n",
+      "storyId": "Horizontal",
+      "storyFile": "packages/core/stories/buttons/DzButtonGroup.stories.ts",
+      "storyLines": [
+        98,
+        109
+      ]
+    },
+    "DzCalendar": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCalendar } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzCalendar v-model:value=\"value\" v-model:focusedDate=\"focused\" />\n</template>\n",
+      "storyId": "DarkMode",
+      "storyName": "Dark Mode Preview",
+      "storyFile": "packages/core/stories/data/DzCalendar.stories.ts",
+      "storyLines": [
+        258,
+        268
+      ]
+    },
+    "DzCaption": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCaption } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-3\">\n    <DzCaption tone=\"default\">Default tone caption</DzCaption>\n    <br />\n    <DzCaption tone=\"muted\">Muted tone caption</DzCaption>\n    <br />\n    <DzCaption tone=\"success\">Success: File uploaded successfully</DzCaption>\n    <br />\n    <DzCaption tone=\"warning\">Warning: This action cannot be undone</DzCaption>\n    <br />\n    <DzCaption tone=\"danger\">Error: This field is required</DzCaption>\n  </div>\n</template>\n",
+      "storyId": "AllTones",
+      "storyName": "Tone Gallery",
+      "storyFile": "packages/core/stories/typography/DzCaption.stories.ts",
+      "storyLines": [
+        66,
+        84
+      ]
+    },
+    "DzCard": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCard, DzCardBody, DzHeading, DzText } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-6\">\n    <DzCard variant=\"elevated\" class=\"w-64\">\n      <DzCardBody>\n        <DzHeading :level=\"4\" size=\"md\">Elevated</DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" class=\"mt-2\">Card with shadow elevation.</DzText>\n      </DzCardBody>\n    </DzCard>\n    <DzCard variant=\"outlined\" class=\"w-64\">\n      <DzCardBody>\n        <DzHeading :level=\"4\" size=\"md\">Outlined</DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" class=\"mt-2\">Card with a border outline.</DzText>\n      </DzCardBody>\n    </DzCard>\n    <DzCard variant=\"flat\" class=\"w-64\">\n      <DzCardBody>\n        <DzHeading :level=\"4\" size=\"md\">Flat</DzHeading>\n        <DzText tone=\"muted\" size=\"sm\" class=\"mt-2\">Card with no shadow or border.</DzText>\n      </DzCardBody>\n    </DzCard>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/cards/DzCard.stories.ts",
+      "storyLines": [
+        98,
+        125
+      ]
+    },
+    "DzCarousel": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCarousel, DzCarouselDots, DzCarouselNext, DzCarouselPrevious, DzCarouselSlide } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <div class=\"max-w-md\">\n        <DzCarousel :size=\"size\">\n          <DzCarouselSlide>\n            <div class=\"flex items-center justify-center h-32 bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] rounded font-medium\">1</div>\n          </DzCarouselSlide>\n          <DzCarouselSlide>\n            <div class=\"flex items-center justify-center h-32 bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] rounded font-medium\">2</div>\n          </DzCarouselSlide>\n          <DzCarouselSlide>\n            <div class=\"flex items-center justify-center h-32 bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] rounded font-medium\">3</div>\n          </DzCarouselSlide>\n          <DzCarouselPrevious />\n          <DzCarouselNext />\n          <DzCarouselDots />\n        </DzCarousel>\n      </div>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/media/DzCarousel.stories.ts",
+      "storyLines": [
+        176,
+        204
+      ]
+    },
+    "DzCascader": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCascader } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-2 max-w-xs\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Any level commits; the popover stays open to drill deeper.</p>\n    <DzCascader v-model:value=\"value\" :options=\"regions\" change-on-select placeholder=\"Select region\" />\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ value.length ? value.join(' → ') : 'none' }}</strong></p>\n  </div>\n</template>\n",
+      "storyId": "ChangeOnSelect",
+      "storyName": "Change on Select",
+      "storyFile": "packages/core/stories/forms/DzCascader.stories.ts",
+      "storyLines": [
+        212,
+        258
+      ]
+    },
+    "DzCheckbox": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCheckbox } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-5\">\n    <DzCheckbox size=\"xs\">Extra Small</DzCheckbox>\n    <DzCheckbox size=\"sm\">Small</DzCheckbox>\n    <DzCheckbox size=\"md\">Medium</DzCheckbox>\n    <DzCheckbox size=\"lg\">Large</DzCheckbox>\n    <DzCheckbox size=\"xl\">Extra Large</DzCheckbox>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzCheckbox.stories.ts",
+      "storyLines": [
+        90,
+        104
+      ]
+    },
+    "DzCheckboxGroup": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCheckbox, DzCheckboxGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzCheckboxGroup :size=\"size\" orientation=\"horizontal\" aria-label=\"Size demo\">\n        <DzCheckbox value=\"a\">Option A</DzCheckbox>\n        <DzCheckbox value=\"b\">Option B</DzCheckbox>\n        <DzCheckbox value=\"c\">Option C</DzCheckbox>\n      </DzCheckboxGroup>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzCheckboxGroup.stories.ts",
+      "storyLines": [
+        104,
+        121
+      ]
+    },
+    "DzChip": {
+      "code": "<script setup lang=\"ts\">\nimport { DzChip } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-3 items-center\">\n    <DzChip variant=\"solid\">Solid</DzChip>\n    <DzChip variant=\"outline\">Outline</DzChip>\n    <DzChip variant=\"subtle\">Subtle</DzChip>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/data/DzChip.stories.ts",
+      "storyLines": [
+        89,
+        101
+      ]
+    },
+    "DzCode": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCode } from '@dzup-ui/core'\n</script>\n\n<template>\n        <div class=\"space-y-6\">\n          <div>\n            <p class=\"text-sm font-medium mb-2\">Inline</p>\n            <p>The <DzCode>Array.from()</DzCode> method creates a new array.</p>\n          </div>\n          <div>\n            <p class=\"text-sm font-medium mb-2\">Block</p>\n            <DzCode variant=\"block\" language=\"typescript\">function greet(name: string): string {\n    return `Hello, ${name}!`\n  }\n\n  const message = greet('World')\n  console.log(message)</DzCode>\n          </div>\n        </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/typography/DzCode.stories.ts",
+      "storyLines": [
+        73,
+        95
+      ]
+    },
+    "DzCodeBlock": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCodeBlock } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6 max-w-xl\">\n    <DzCodeBlock :code=\"tsSnippet\" language=\"typescript\" filename=\"button.ts\" />\n    <DzCodeBlock :code=\"bashSnippet\" language=\"bash\" filename=\"terminal\" />\n    <DzCodeBlock :code=\"vueSnippet\" language=\"vue\" filename=\"Example.vue\" />\n    <DzCodeBlock :code=\"jsonSnippet\" language=\"json\" filename=\"package.json\" />\n  </div>\n</template>\n",
+      "storyId": "Languages",
+      "storyName": "Languages Gallery",
+      "storyFile": "packages/core/stories/data/DzCodeBlock.stories.ts",
+      "storyLines": [
+        133,
+        149
+      ]
+    },
+    "DzCollapse": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCollapse } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"d in durations\" :key=\"d\">\n      <div class=\"flex items-center gap-3 mb-2\">\n        <button\n          @click=\"states[d] = !states[d]\"\n          class=\"text-xs px-3 py-1.5 bg-[var(--dz-secondary)] rounded hover:bg-[var(--dz-secondary-hover)]\"\n        >\n          {{ states[d] ? 'Collapse' : 'Expand' }}\n        </button>\n        <p class=\"text-xs text-[var(--dz-muted-foreground)]\">duration={{ d }}ms</p>\n      </div>\n      <DzCollapse v-model=\"states[d]\" :duration=\"d\">\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded\">\n          Content with {{ d }}ms animation.\n        </div>\n      </DzCollapse>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "DurationGallery",
+      "storyName": "Duration Gallery",
+      "storyFile": "packages/core/stories/layout/DzCollapse.stories.ts",
+      "storyLines": [
+        96,
+        127
+      ]
+    },
+    "DzColorModeToggle": {
+      "code": "<script setup lang=\"ts\">\nimport { DzColorModeToggle } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">\n      This preview is pinned to <code>data-theme=\"dark\"</code>, so the surface stays\n      dark while the toggle writes the selected mode to <code>&lt;html&gt;</code>.\n    </p>\n    <div class=\"flex items-center gap-6\">\n      <DzColorModeToggle variant=\"icon\" />\n      <DzColorModeToggle variant=\"switch\" />\n    </div>\n    <DzColorModeToggle variant=\"segmented\" />\n  </div>\n</template>\n",
+      "storyId": "DarkMode",
+      "storyName": "Dark Mode Preview",
+      "storyFile": "packages/core/stories/navigation/DzColorModeToggle.stories.ts",
+      "storyLines": [
+        158,
+        177
+      ]
+    },
+    "DzColorPicker": {
+      "code": "<script setup lang=\"ts\">\nimport { DzColorPicker } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-6\">\n    <DzColorPicker size=\"xs\" :presets=\"presets\" />\n    <DzColorPicker size=\"sm\" :presets=\"presets\" />\n    <DzColorPicker size=\"md\" :presets=\"presets\" />\n    <DzColorPicker size=\"lg\" :presets=\"presets\" />\n    <DzColorPicker size=\"xl\" :presets=\"presets\" />\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzColorPicker.stories.ts",
+      "storyLines": [
+        129,
+        146
+      ]
+    },
+    "DzCombobox": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCombobox } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4 max-w-xs\">\n    <DzCombobox :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n    <DzCombobox :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n    <DzCombobox :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/forms/DzCombobox.stories.ts",
+      "storyLines": [
+        144,
+        159
+      ]
+    },
+    "DzCommandPalette": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzCommandPalette } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div>\n    <DzButton @click=\"isOpen = true\">Open Flat Palette</DzButton>\n    <DzCommandPalette\n      v-model:open=\"isOpen\"\n      :items=\"items\"\n      :groups=\"[]\"\n      placeholder=\"Search pages...\"\n      :enable-global-shortcut=\"false\"\n    />\n  </div>\n</template>\n",
+      "storyId": "FlatList",
+      "storyName": "Flat List (No Groups)",
+      "storyFile": "packages/core/stories/overlays/DzCommandPalette.stories.ts",
+      "storyLines": [
+        147,
+        176
+      ]
+    },
+    "DzConfirmDialog": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzConfirmDialog } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzButton variant=\"outline\" @click=\"defaultOpen = true\">Default Variant</DzButton>\n    <DzButton tone=\"danger\" @click=\"dangerOpen = true\">Danger Variant</DzButton>\n\n    <DzConfirmDialog\n      v-model:open=\"defaultOpen\"\n      title=\"Publish changes?\"\n      message=\"Your changes will be visible to all team members immediately.\"\n      confirm-label=\"Publish\"\n      @confirm=\"defaultOpen = false\"\n      @cancel=\"defaultOpen = false\"\n    />\n    <DzConfirmDialog\n      v-model:open=\"dangerOpen\"\n      variant=\"danger\"\n      title=\"Delete workspace?\"\n      message=\"This permanently removes the workspace and all of its data. This action cannot be undone.\"\n      confirm-label=\"Delete\"\n      @confirm=\"dangerOpen = false\"\n      @cancel=\"dangerOpen = false\"\n    />\n  </div>\n</template>\n",
+      "storyId": "VariantGallery",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/overlays/DzConfirmDialog.stories.ts",
+      "storyLines": [
+        162,
+        194
+      ]
+    },
+    "DzContainer": {
+      "code": "<script setup lang=\"ts\">\nimport { DzContainer } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4\">\n    <div v-for=\"mw in ['sm', 'md', 'lg', 'xl', '2xl', 'full']\" :key=\"mw\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-1 px-4\">maxWidth=\"{{ mw }}\"</p>\n      <DzContainer :max-width=\"mw\" class=\"border border-dashed border-[var(--dz-border)] p-4\">\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-2 rounded\">\n          Container with maxWidth=\"{{ mw }}\"\n        </div>\n      </DzContainer>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllMaxWidths",
+      "storyName": "Max-Width Gallery",
+      "storyFile": "packages/core/stories/layout/DzContainer.stories.ts",
+      "storyLines": [
+        104,
+        121
+      ]
+    },
+    "DzContextMenu": {
+      "code": "<script setup lang=\"ts\">\nimport { DzContextMenu, DzContextMenuContent, DzContextMenuItem, DzContextMenuSeparator, DzContextMenuTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzContextMenu>\n    <DzContextMenuTrigger>\n      <div class=\"border-2 border-dashed rounded-lg p-12 text-center text-sm text-[var(--dz-muted-foreground)] select-none\">\n        Right-click to see disabled items\n      </div>\n    </DzContextMenuTrigger>\n    <DzContextMenuContent>\n      <DzContextMenuItem>Copy</DzContextMenuItem>\n      <DzContextMenuItem>Cut</DzContextMenuItem>\n      <DzContextMenuItem disabled>Paste (clipboard empty)</DzContextMenuItem>\n      <DzContextMenuSeparator />\n      <DzContextMenuItem>Select All</DzContextMenuItem>\n      <DzContextMenuItem disabled>Undo (nothing to undo)</DzContextMenuItem>\n    </DzContextMenuContent>\n  </DzContextMenu>\n</template>\n",
+      "storyId": "WithDisabledItems",
+      "storyName": "With Disabled Items",
+      "storyFile": "packages/core/stories/overlays/DzContextMenu.stories.ts",
+      "storyLines": [
+        88,
+        116
+      ]
+    },
+    "DzCopyButton": {
+      "code": "<script setup lang=\"ts\">\nimport { DzCopyButton } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-4\">\n    <div class=\"text-center\">\n      <DzCopyButton value=\"xs\" size=\"xs\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">xs</p>\n    </div>\n    <div class=\"text-center\">\n      <DzCopyButton value=\"sm\" size=\"sm\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">sm</p>\n    </div>\n    <div class=\"text-center\">\n      <DzCopyButton value=\"md\" size=\"md\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">md</p>\n    </div>\n    <div class=\"text-center\">\n      <DzCopyButton value=\"lg\" size=\"lg\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">lg</p>\n    </div>\n    <div class=\"text-center\">\n      <DzCopyButton value=\"xl\" size=\"xl\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">xl</p>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/buttons/DzCopyButton.stories.ts",
+      "storyLines": [
+        116,
+        145
+      ]
+    },
+    "DzCountdown": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzCountdown } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4 p-4\">\n    <DzCountdown\n      ref=\"timer\"\n      mode=\"duration\"\n      :target=\"span\"\n      format=\"mm:ss\"\n      size=\"xl\"\n      aria-label=\"Workout timer\"\n    />\n    <div class=\"flex gap-2\">\n      <DzButton size=\"sm\" @click=\"timer?.start()\">Start</DzButton>\n      <DzButton size=\"sm\" variant=\"outline\" @click=\"timer?.pause()\">Pause</DzButton>\n      <DzButton size=\"sm\" variant=\"ghost\" @click=\"timer?.reset()\">Reset</DzButton>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "PauseResume",
+      "storyFile": "packages/core/stories/data/DzCountdown.stories.ts",
+      "storyLines": [
+        195,
+        220
+      ]
+    },
+    "DzDataGrid": {
+      "code": "<script setup lang=\"ts\">\nimport { DzDataGrid } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"s in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"s\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">size: {{ s }}</p>\n      <DzDataGrid :data=\"data\" :columns=\"columns\" :size=\"s\" :aria-label=\"'Employees ' + s\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/data/DzDataGrid.stories.ts",
+      "storyLines": [
+        137,
+        153
+      ]
+    },
+    "DzDatePicker": {
+      "code": "<script setup lang=\"ts\">\nimport { DzDatePicker } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4 max-w-xs\">\n    <DzDatePicker variant=\"outline\" placeholder=\"Outline\" />\n    <DzDatePicker variant=\"filled\" placeholder=\"Filled\" />\n    <DzDatePicker variant=\"underlined\" placeholder=\"Underlined\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/forms/DzDatePicker.stories.ts",
+      "storyLines": [
+        126,
+        138
+      ]
+    },
+    "DzDateRangePicker": {
+      "code": "<script setup lang=\"ts\">\nimport { DzDateRangePicker } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4 max-w-sm\">\n    <DzDateRangePicker variant=\"outline\" placeholder=\"Outline\" />\n    <DzDateRangePicker variant=\"filled\" placeholder=\"Filled\" />\n    <DzDateRangePicker variant=\"underlined\" placeholder=\"Underlined\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/forms/DzDateRangePicker.stories.ts",
+      "storyLines": [
+        126,
+        138
+      ]
+    },
+    "DzDescriptions": {
+      "code": "<script setup lang=\"ts\">\nimport { DzDescriptions } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-2\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">\n      Resize the viewport: 1 column on mobile, 2 from <code>sm</code>, 3 from <code>lg</code>.\n    </p>\n    <DzDescriptions\n      bordered\n      :columns=\"{ base: 1, sm: 2, lg: 3 }\"\n      :items=\"items\"\n      aria-label=\"Responsive profile\"\n    />\n  </div>\n</template>\n",
+      "storyId": "ResponsiveColumns",
+      "storyName": "Responsive Columns",
+      "storyFile": "packages/core/stories/data/DzDescriptions.stories.ts",
+      "storyLines": [
+        157,
+        178
+      ]
+    },
+    "DzDialog": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzDialog, DzDialogClose, DzDialogContent, DzDialogDescription, DzDialogTitle, DzDialogTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzDialog v-for=\"size in ['sm', 'md', 'lg', 'xl', 'full']\" :key=\"size\">\n      <DzDialogTrigger as-child>\n        <DzButton variant=\"outline\">{{ size.toUpperCase() }}</DzButton>\n      </DzDialogTrigger>\n      <DzDialogContent :size=\"size\">\n        <DzDialogTitle>{{ size.toUpperCase() }} Dialog</DzDialogTitle>\n        <DzDialogDescription>\n          This dialog uses the \"{{ size }}\" size variant.\n        </DzDialogDescription>\n        <DzDialogClose as-child>\n          <DzButton variant=\"outline\" tone=\"neutral\" class=\"mt-4\">Close</DzButton>\n        </DzDialogClose>\n      </DzDialogContent>\n    </DzDialog>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/overlays/DzDialog.stories.ts",
+      "storyLines": [
+        103,
+        134
+      ]
+    },
+    "DzDivider": {
+      "code": "<script setup lang=\"ts\">\nimport { DzDivider, DzFlex } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">orientation=\"horizontal\"</p>\n      <div class=\"space-y-3\">\n        <p class=\"text-sm\">Above</p>\n        <DzDivider orientation=\"horizontal\" />\n        <p class=\"text-sm\">Below</p>\n      </div>\n    </div>\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">orientation=\"vertical\"</p>\n      <DzFlex gap=\"md\" align=\"center\" class=\"h-12\">\n        <span class=\"text-sm\">Left</span>\n        <DzDivider orientation=\"vertical\" />\n        <span class=\"text-sm\">Right</span>\n      </DzFlex>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllOrientations",
+      "storyName": "Orientation Gallery",
+      "storyFile": "packages/core/stories/layout/DzDivider.stories.ts",
+      "storyLines": [
+        92,
+        117
+      ]
+    },
+    "DzDropdownMenu": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzDropdownMenu, DzDropdownMenuContent, DzDropdownMenuItem, DzDropdownMenuTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-8 items-center justify-center py-24\">\n    <DzDropdownMenu v-for=\"side in ['top', 'right', 'bottom', 'left']\" :key=\"side\">\n      <DzDropdownMenuTrigger as-child>\n        <DzButton variant=\"outline\">{{ side.charAt(0).toUpperCase() + side.slice(1) }}</DzButton>\n      </DzDropdownMenuTrigger>\n      <DzDropdownMenuContent :side=\"side\">\n        <DzDropdownMenuItem>Action One</DzDropdownMenuItem>\n        <DzDropdownMenuItem>Action Two</DzDropdownMenuItem>\n        <DzDropdownMenuItem>Action Three</DzDropdownMenuItem>\n      </DzDropdownMenuContent>\n    </DzDropdownMenu>\n  </div>\n</template>\n",
+      "storyId": "AllSides",
+      "storyName": "Side Gallery",
+      "storyFile": "packages/core/stories/overlays/DzDropdownMenu.stories.ts",
+      "storyLines": [
+        100,
+        125
+      ]
+    },
+    "DzEmoji": {
+      "code": "<script setup lang=\"ts\">\nimport { DzEmoji } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-6\">\n    <div class=\"text-center\">\n      <DzEmoji emoji=\"🚀\" size=\"xs\" label=\"Rocket\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">xs</p>\n    </div>\n    <div class=\"text-center\">\n      <DzEmoji emoji=\"🚀\" size=\"sm\" label=\"Rocket\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">sm</p>\n    </div>\n    <div class=\"text-center\">\n      <DzEmoji emoji=\"🚀\" size=\"md\" label=\"Rocket\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">md</p>\n    </div>\n    <div class=\"text-center\">\n      <DzEmoji emoji=\"🚀\" size=\"lg\" label=\"Rocket\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">lg</p>\n    </div>\n    <div class=\"text-center\">\n      <DzEmoji emoji=\"🚀\" size=\"xl\" label=\"Rocket\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">xl</p>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/media/DzEmoji.stories.ts",
+      "storyLines": [
+        68,
+        97
+      ]
+    },
+    "DzEmpty": {
+      "code": "<script setup lang=\"ts\">\nimport { DzEmpty } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <DzEmpty title=\"No search results\" description=\"Try different keywords.\" :icon=\"Search\" />\n    <DzEmpty title=\"Inbox empty\" description=\"You're all caught up.\" :icon=\"Inbox\" />\n    <DzEmpty title=\"No files\" description=\"Upload your first file to get started.\" :icon=\"FileX\" />\n  </div>\n</template>\n",
+      "storyId": "WithIcon",
+      "storyName": "With Icon",
+      "storyFile": "packages/core/stories/feedback/DzEmpty.stories.ts",
+      "storyLines": [
+        77,
+        92
+      ]
+    },
+    "DzFab": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFab } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <div class=\"flex flex-col items-center gap-2\">\n      <DzFab tone=\"neutral\" aria-label=\"Neutral\">+</DzFab>\n      <span class=\"text-xs text-[var(--dz-muted-foreground)]\">neutral</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <DzFab tone=\"primary\" aria-label=\"Primary\">+</DzFab>\n      <span class=\"text-xs text-[var(--dz-muted-foreground)]\">primary</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <DzFab tone=\"success\" aria-label=\"Success\">+</DzFab>\n      <span class=\"text-xs text-[var(--dz-muted-foreground)]\">success</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <DzFab tone=\"warning\" aria-label=\"Warning\">+</DzFab>\n      <span class=\"text-xs text-[var(--dz-muted-foreground)]\">warning</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <DzFab tone=\"danger\" aria-label=\"Danger\">+</DzFab>\n      <span class=\"text-xs text-[var(--dz-muted-foreground)]\">danger</span>\n    </div>\n    <div class=\"flex flex-col items-center gap-2\">\n      <DzFab tone=\"info\" aria-label=\"Info\">+</DzFab>\n      <span class=\"text-xs text-[var(--dz-muted-foreground)]\">info</span>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "ToneGallery",
+      "storyName": "Tone Gallery",
+      "storyFile": "packages/core/stories/buttons/DzFab.stories.ts",
+      "storyLines": [
+        105,
+        138
+      ]
+    },
+    "DzFieldArray": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzFieldArray, DzFormField, DzFormLabel, DzFormMessage, DzInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"w-96 max-w-full space-y-3\">\n    <DzFieldArray v-model=\"emails\">\n      <template #default=\"{ field, index, remove }\">\n        <DzFormField :invalid=\"!isValid(field)\" :error=\"!isValid(field) ? 'Enter a valid email address.' : ''\">\n          <DzFormLabel>Invitee {{ index + 1 }}</DzFormLabel>\n          <div class=\"flex items-center gap-2\">\n            <DzInput\n              :model-value=\"field\"\n              type=\"email\"\n              aria-label=\"Invitee email\"\n              @update:model-value=\"(v) => (emails[index] = v)\"\n            />\n            <DzButton size=\"sm\" variant=\"ghost\" tone=\"danger\" @click=\"remove()\">Remove</DzButton>\n          </div>\n          <DzFormMessage />\n        </DzFormField>\n      </template>\n      <template #append=\"{ append }\">\n        <DzButton size=\"sm\" variant=\"outline\" @click=\"append('')\">+ Add invitee</DzButton>\n      </template>\n    </DzFieldArray>\n  </div>\n</template>\n",
+      "storyId": "PerRowValidation",
+      "storyName": "Per-Row Validation",
+      "storyFile": "packages/core/stories/forms/DzFieldArray.stories.ts",
+      "storyLines": [
+        152,
+        186
+      ]
+    },
+    "DzFileUpload": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFileUpload } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6 max-w-md\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzFileUpload :size=\"size\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzFileUpload.stories.ts",
+      "storyLines": [
+        106,
+        119
+      ]
+    },
+    "DzFlex": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFlex } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"dir in ['row', 'column', 'row-reverse', 'column-reverse']\" :key=\"dir\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">direction=\"{{ dir }}\"</p>\n      <DzFlex :direction=\"dir\" gap=\"sm\" class=\"border border-dashed border-[var(--dz-border)] p-3 rounded\">\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-4 py-2 rounded\">A</div>\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-4 py-2 rounded\">B</div>\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-4 py-2 rounded\">C</div>\n      </DzFlex>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllDirections",
+      "storyName": "Direction Gallery",
+      "storyFile": "packages/core/stories/layout/DzFlex.stories.ts",
+      "storyLines": [
+        127,
+        144
+      ]
+    },
+    "DzFloatLabel": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFloatLabel, DzSelect } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"max-w-xs pt-6 space-y-3\">\n    <DzFloatLabel label=\"Country\" :filled=\"!!country\">\n      <DzSelect v-model=\"country\" :items=\"items\" />\n    </DzFloatLabel>\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Value: <strong>{{ country || 'none' }}</strong></p>\n  </div>\n</template>\n",
+      "storyId": "WithSelect",
+      "storyName": "With Select",
+      "storyFile": "packages/core/stories/forms/DzFloatLabel.stories.ts",
+      "storyLines": [
+        103,
+        126
+      ]
+    },
+    "DzFormField": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFormDescription, DzFormField, DzFormLabel, DzFormMessage, DzSelect } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8 max-w-xs\">\n    <DzFormField>\n      <DzFormLabel>Default</DzFormLabel>\n      <DzSelect :items=\"countryItems\" placeholder=\"Select...\" />\n      <DzFormDescription>Helper text here.</DzFormDescription>\n      <DzFormMessage />\n    </DzFormField>\n\n    <DzFormField required>\n      <DzFormLabel>Required</DzFormLabel>\n      <DzSelect :items=\"countryItems\" placeholder=\"Select...\" />\n      <DzFormDescription>This field is required.</DzFormDescription>\n      <DzFormMessage />\n    </DzFormField>\n\n    <DzFormField disabled>\n      <DzFormLabel>Disabled</DzFormLabel>\n      <DzSelect :items=\"countryItems\" placeholder=\"Select...\" />\n      <DzFormDescription>This field is disabled.</DzFormDescription>\n      <DzFormMessage />\n    </DzFormField>\n\n    <DzFormField invalid error=\"Please select a value.\">\n      <DzFormLabel>Invalid</DzFormLabel>\n      <DzSelect :items=\"countryItems\" placeholder=\"Select...\" />\n      <DzFormDescription>Helper text here.</DzFormDescription>\n      <DzFormMessage />\n    </DzFormField>\n  </div>\n</template>\n",
+      "storyId": "States",
+      "storyFile": "packages/core/stories/forms/DzFormField.stories.ts",
+      "storyLines": [
+        189,
+        227
+      ]
+    },
+    "DzGrid": {
+      "code": "<script setup lang=\"ts\">\nimport { DzGrid } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"c in [1, 2, 3, 4, 6, 12]\" :key=\"c\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">cols={{ c }}</p>\n      <DzGrid :cols=\"c\" gap=\"sm\">\n        <div v-for=\"i in c\" :key=\"i\"\n          class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm p-3 rounded text-center\">\n          {{ i }}\n        </div>\n      </DzGrid>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllColumns",
+      "storyName": "Column Gallery",
+      "storyFile": "packages/core/stories/layout/DzGrid.stories.ts",
+      "storyLines": [
+        113,
+        131
+      ]
+    },
+    "DzHeading": {
+      "code": "<script setup lang=\"ts\">\nimport { DzHeading } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4\">\n    <DzHeading :level=\"1\">Heading Level 1</DzHeading>\n    <DzHeading :level=\"2\">Heading Level 2</DzHeading>\n    <DzHeading :level=\"3\">Heading Level 3</DzHeading>\n    <DzHeading :level=\"4\">Heading Level 4</DzHeading>\n    <DzHeading :level=\"5\">Heading Level 5</DzHeading>\n    <DzHeading :level=\"6\">Heading Level 6</DzHeading>\n  </div>\n</template>\n",
+      "storyId": "AllLevels",
+      "storyName": "All Heading Levels (h1-h6)",
+      "storyFile": "packages/core/stories/typography/DzHeading.stories.ts",
+      "storyLines": [
+        88,
+        103
+      ]
+    },
+    "DzIcon": {
+      "code": "<script setup lang=\"ts\">\nimport { DzIcon } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-6\">\n    <div class=\"text-center\">\n      <DzIcon :icon=\"Heart\" size=\"xs\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">xs</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIcon :icon=\"Heart\" size=\"sm\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">sm</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIcon :icon=\"Heart\" size=\"md\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">md</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIcon :icon=\"Heart\" size=\"lg\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">lg</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIcon :icon=\"Heart\" size=\"xl\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">xl</p>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/media/DzIcon.stories.ts",
+      "storyLines": [
+        83,
+        113
+      ]
+    },
+    "DzIconButton": {
+      "code": "<script setup lang=\"ts\">\nimport { DzIconButton } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-4\">\n    <div class=\"text-center\">\n      <DzIconButton :icon=\"Plus\" aria-label=\"Add (xs)\" size=\"xs\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">xs</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIconButton :icon=\"Plus\" aria-label=\"Add (sm)\" size=\"sm\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">sm</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIconButton :icon=\"Plus\" aria-label=\"Add (md)\" size=\"md\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">md</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIconButton :icon=\"Plus\" aria-label=\"Add (lg)\" size=\"lg\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">lg</p>\n    </div>\n    <div class=\"text-center\">\n      <DzIconButton :icon=\"Plus\" aria-label=\"Add (xl)\" size=\"xl\" />\n      <p class=\"text-xs mt-1 text-[var(--dz-muted-foreground)]\">xl</p>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/buttons/DzIconButton.stories.ts",
+      "storyLines": [
+        118,
+        150
+      ]
+    },
+    "DzImage": {
+      "code": "<script setup lang=\"ts\">\nimport { DzImage } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-6 max-w-2xl\">\n    <div v-for=\"fit in ['cover', 'contain', 'fill', 'none']\" :key=\"fit\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ fit }}</p>\n      <div class=\"w-full h-48 border border-[var(--dz-border)] rounded overflow-hidden\">\n        <DzImage\n          src=\"https://picsum.photos/seed/fit/600/400\"\n          :alt=\"'Fit mode: ' + fit\"\n          :fit=\"fit\"\n          aspect-ratio=\"16/9\"\n        />\n      </div>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllFitModes",
+      "storyName": "Object Fit Gallery",
+      "storyFile": "packages/core/stories/media/DzImage.stories.ts",
+      "storyLines": [
+        112,
+        132
+      ]
+    },
+    "DzImageCard": {
+      "code": "<script setup lang=\"ts\">\nimport { DzImageCard } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-6 max-w-2xl\">\n    <DzImageCard variant=\"elevated\" :src=\"images.mountain\" alt=\"Mountain\">\n      <h3 class=\"text-lg font-semibold\">Elevated</h3>\n      <p class=\"text-sm text-[var(--dz-muted-foreground)] mt-1\">Card with shadow.</p>\n    </DzImageCard>\n    <DzImageCard variant=\"outlined\" :src=\"images.city\" alt=\"City\">\n      <h3 class=\"text-lg font-semibold\">Outlined</h3>\n      <p class=\"text-sm text-[var(--dz-muted-foreground)] mt-1\">Card with border.</p>\n    </DzImageCard>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/cards/DzImageCard.stories.ts",
+      "storyLines": [
+        109,
+        129
+      ]
+    },
+    "DzImageComparison": {
+      "code": "<script setup lang=\"ts\">\nimport { DzImageComparison } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid gap-8 lg:grid-cols-2\">\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Enabled</p>\n      <div class=\"w-[26rem] max-w-full\" data-testid=\"ic-enabled\">\n        <DzImageComparison\n          :before-src=\"BEFORE\"\n          :after-src=\"AFTER\"\n          before-alt=\"Original, unedited photo\"\n          after-alt=\"Color-graded edit of the same photo\"\n          aria-label=\"Enabled comparison\"\n        />\n      </div>\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Disabled</p>\n      <div class=\"w-[26rem] max-w-full\" data-testid=\"ic-disabled\">\n        <DzImageComparison\n          disabled\n          :before-src=\"BEFORE\"\n          :after-src=\"AFTER\"\n          before-alt=\"Original, unedited photo\"\n          after-alt=\"Color-graded edit of the same photo\"\n          aria-label=\"Disabled comparison\"\n        />\n      </div>\n    </section>\n  </div>\n</template>\n",
+      "storyId": "States",
+      "storyFile": "packages/core/stories/media/DzImageComparison.stories.ts",
+      "storyLines": [
+        237,
+        319
+      ]
+    },
+    "DzInfiniteScroll": {
+      "code": "<script setup lang=\"ts\">\nimport { DzInfiniteScroll } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"h-[420px] overflow-auto p-4\">\n    <DzInfiniteScroll\n      :loading=\"loading\"\n      :has-more=\"hasMore\"\n      :distance=\"120\"\n      aria-label=\"Activity feed\"\n      @load-more=\"fetchNext\"\n    >\n      <ul class=\"flex flex-col gap-2\">\n        <li v-for=\"row in rows\" :key=\"row.id\" :class=\"rowClass\">{{ row.title }}</li>\n      </ul>\n    </DzInfiniteScroll>\n  </div>\n</template>\n",
+      "storyId": "BasicFeed",
+      "storyFile": "packages/core/stories/data/DzInfiniteScroll.stories.ts",
+      "storyLines": [
+        95,
+        132
+      ]
+    },
+    "DzInplace": {
+      "code": "<script setup lang=\"ts\">\nimport { DzInplace } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid max-w-2xl gap-8 p-8 md:grid-cols-2\">\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Editable</p>\n      <DzInplace\n        v-model:value=\"editable\"\n        aria-label=\"Edit display name\"\n        placeholder=\"Enter a name\"\n        data-testid=\"inplace-editable\"\n      />\n      <p class=\"text-xs text-[var(--dz-muted-foreground)]\">\n        Value: <strong data-testid=\"editable-value\">{{ editable }}</strong>\n      </p>\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Disabled</p>\n      <DzInplace\n        disabled\n        v-model:value=\"locked\"\n        aria-label=\"Edit system owner\"\n        data-testid=\"inplace-disabled\"\n      />\n      <p class=\"text-xs text-[var(--dz-muted-foreground)]\">\n        Value: <strong data-testid=\"disabled-value\">{{ locked }}</strong>\n      </p>\n    </section>\n  </div>\n</template>\n",
+      "storyId": "States",
+      "storyFile": "packages/core/stories/forms/DzInplace.stories.ts",
+      "storyLines": [
+        213,
+        306
+      ]
+    },
+    "DzInput": {
+      "code": "<script setup lang=\"ts\">\nimport { DzInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-xs\">\n    <DzInput variant=\"outline\" placeholder=\"Outline variant\" />\n    <DzInput variant=\"filled\" placeholder=\"Filled variant\" />\n    <DzInput variant=\"underlined\" placeholder=\"Underlined variant\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/inputs/DzInput.stories.ts",
+      "storyLines": [
+        154,
+        166
+      ]
+    },
+    "DzInputGroup": {
+      "code": "<script setup lang=\"ts\">\nimport { DzInput, DzInputGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-sm\">\n    <DzInputGroup size=\"xs\">\n      <template #prefix>https://</template>\n      <DzInput placeholder=\"example.com\" />\n    </DzInputGroup>\n    <DzInputGroup size=\"sm\">\n      <template #prefix>https://</template>\n      <DzInput placeholder=\"example.com\" />\n    </DzInputGroup>\n    <DzInputGroup size=\"md\">\n      <template #prefix>https://</template>\n      <DzInput placeholder=\"example.com\" />\n    </DzInputGroup>\n    <DzInputGroup size=\"lg\">\n      <template #prefix>https://</template>\n      <DzInput placeholder=\"example.com\" />\n    </DzInputGroup>\n    <DzInputGroup size=\"xl\">\n      <template #prefix>https://</template>\n      <DzInput placeholder=\"example.com\" />\n    </DzInputGroup>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/inputs/DzInputGroup.stories.ts",
+      "storyLines": [
+        89,
+        118
+      ]
+    },
+    "DzInputMask": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFormDescription, DzFormField, DzFormLabel, DzFormMessage, DzInputMask } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzFormField required class=\"max-w-sm\">\n    <DzFormLabel>Phone Number</DzFormLabel>\n    <DzInputMask mask=\"(999) 999-9999\" />\n    <DzFormDescription>Format: (123) 456-7890</DzFormDescription>\n    <DzFormMessage />\n  </DzFormField>\n</template>\n",
+      "storyId": "WithFormField",
+      "storyName": "With Form Field",
+      "storyFile": "packages/core/stories/inputs/DzInputMask.stories.ts",
+      "storyLines": [
+        226,
+        239
+      ]
+    },
+    "DzKbd": {
+      "code": "<script setup lang=\"ts\">\nimport { DzKbd } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-3 max-w-lg\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">\n      The same markup adapts to the host OS. On macOS the modifier renders as\n      ⌘; on Windows/Linux it renders as Ctrl. Set <code>:platform-aware=\"false\"</code>\n      to display the literal tokens instead.\n    </p>\n    <p>Platform aware: <DzKbd :keys=\"['mod', 'alt', 'k']\" /></p>\n    <p>Literal: <DzKbd :keys=\"['mod', 'alt', 'k']\" :platform-aware=\"false\" /></p>\n    <p>Arrows &amp; specials: <DzKbd :keys=\"['shift', 'enter']\" /> &nbsp; <DzKbd :keys=\"['alt', 'left']\" /></p>\n  </div>\n</template>\n",
+      "storyId": "PlatformAware",
+      "storyName": "Platform Aware",
+      "storyFile": "packages/core/stories/typography/DzKbd.stories.ts",
+      "storyLines": [
+        110,
+        127
+      ]
+    },
+    "DzKnob": {
+      "code": "<script setup lang=\"ts\">\nimport { DzKnob } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-6\">\n    <div\n      v-for=\"tone in ['neutral', 'primary', 'success', 'warning', 'danger', 'info']\"\n      :key=\"tone\"\n      class=\"flex flex-col items-center gap-2\"\n    >\n      <DzKnob :tone=\"tone\" :value=\"70\" value-template=\"{value}%\" aria-label=\"Level\" />\n      <span class=\"text-xs font-medium capitalize\">{{ tone }}</span>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "Tones",
+      "storyName": "Tone Gallery",
+      "storyFile": "packages/core/stories/forms/DzKnob.stories.ts",
+      "storyLines": [
+        170,
+        187
+      ]
+    },
+    "DzLightbox": {
+      "code": "<script setup lang=\"ts\">\nimport { DzLightbox } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div>\n    <DzLightbox v-model=\"isOpen\" :images=\"images\">\n      <button class=\"px-4 py-2 text-sm rounded border border-[var(--dz-border)]\" @click=\"isOpen = true\">\n        Open with Custom Captions\n      </button>\n      <template #caption=\"{ image, index }\">\n        <div class=\"text-center\">\n          <p class=\"text-[var(--dz-colors-neutral-50)] font-medium\">{{ image.caption }}</p>\n          <p class=\"text-[var(--dz-muted-foreground)] text-xs mt-1\">Taken on March {{ 15 + index }}, 2026</p>\n        </div>\n      </template>\n    </DzLightbox>\n  </div>\n</template>\n",
+      "storyId": "WithSlots",
+      "storyName": "With Slots: Custom Caption",
+      "storyFile": "packages/core/stories/media/DzLightbox.stories.ts",
+      "storyLines": [
+        227,
+        257
+      ]
+    },
+    "DzList": {
+      "code": "<script setup lang=\"ts\">\nimport { DzList, DzListItem } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-8\">\n    <div v-for=\"v in ['plain', 'bordered', 'divided']\" :key=\"v\" class=\"w-64\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ v }}</p>\n      <DzList :variant=\"v\" :aria-label=\"v + ' list'\">\n        <DzListItem>First item</DzListItem>\n        <DzListItem>Second item</DzListItem>\n        <DzListItem>Third item</DzListItem>\n      </DzList>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/data/DzList.stories.ts",
+      "storyLines": [
+        104,
+        121
+      ]
+    },
+    "DzListbox": {
+      "code": "<script setup lang=\"ts\">\nimport { DzListbox } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid max-w-5xl gap-6 lg:grid-cols-3\">\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Enabled</p>\n      <DzListbox\n        v-model=\"enabled\"\n        :options=\"options.slice(0, 2)\"\n        aria-label=\"Enabled city list\"\n        data-testid=\"lb-enabled\"\n      />\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Disabled control</p>\n      <DzListbox\n        disabled\n        :options=\"options.slice(0, 2)\"\n        aria-label=\"Disabled city list\"\n        data-testid=\"lb-disabled\"\n      />\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Disabled option + invalid</p>\n      <DzListbox\n        v-model=\"partial\"\n        invalid\n        error=\"Pick a city that is still available.\"\n        :options=\"options\"\n        aria-label=\"Partly available city list\"\n        data-testid=\"lb-invalid\"\n      />\n    </section>\n  </div>\n</template>\n",
+      "storyId": "States",
+      "storyFile": "packages/core/stories/forms/DzListbox.stories.ts",
+      "storyLines": [
+        282,
+        385
+      ]
+    },
+    "DzListItem": {
+      "code": "<script setup lang=\"ts\">\nimport { DzList, DzListItem } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzList variant=\"divided\" aria-label=\"Tones gallery\">\n    <DzListItem tone=\"neutral\">Neutral tone</DzListItem>\n    <DzListItem tone=\"primary\">Primary tone</DzListItem>\n    <DzListItem tone=\"success\">Success tone</DzListItem>\n    <DzListItem tone=\"warning\">Warning tone</DzListItem>\n    <DzListItem tone=\"danger\">Danger tone</DzListItem>\n    <DzListItem tone=\"info\">Info tone</DzListItem>\n  </DzList>\n</template>\n",
+      "storyId": "AllTones",
+      "storyName": "All Tones",
+      "storyFile": "packages/core/stories/data/DzListItem.stories.ts",
+      "storyLines": [
+        73,
+        89
+      ]
+    },
+    "DzMegaMenu": {
+      "code": "<script setup lang=\"ts\">\nimport { DzMegaMenu } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"pb-64\">\n    <DzMegaMenu :items=\"items\" aria-label=\"Primary\" />\n  </div>\n</template>\n",
+      "storyId": "DarkMode",
+      "storyName": "Dark Mode Preview",
+      "storyFile": "packages/core/stories/navigation/DzMegaMenu.stories.ts",
+      "storyLines": [
+        274,
+        288
+      ]
+    },
+    "DzMention": {
+      "code": "<script setup lang=\"ts\">\nimport { DzMention } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"max-w-md p-4\">\n    <DzMention v-model:value=\"value\" :triggers=\"triggers\" placeholder=\"Type @ to mention…\" aria-label=\"Comment\" />\n  </div>\n</template>\n",
+      "storyId": "Default",
+      "storyFile": "packages/core/stories/forms/DzMention.stories.ts",
+      "storyLines": [
+        110,
+        147
+      ]
+    },
+    "DzMeterGroup": {
+      "code": "<script setup lang=\"ts\">\nimport { DzMeterGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"max-w-md space-y-2\">\n    <DzMeterGroup :values=\"values\" :max=\"128\" aria-label=\"Disk usage by type\">\n      <template #label=\"{ total, max }\">\n        <div class=\"flex justify-between text-sm font-medium\">\n          <span>Storage</span>\n          <span class=\"text-[var(--dz-muted-foreground)]\">{{ total }} GB of {{ max }} GB</span>\n        </div>\n      </template>\n    </DzMeterGroup>\n  </div>\n</template>\n",
+      "storyId": "StorageBreakdown",
+      "storyName": "Storage Breakdown",
+      "storyFile": "packages/core/stories/feedback/DzMeterGroup.stories.ts",
+      "storyLines": [
+        114,
+        141
+      ]
+    },
+    "DzMultiSelect": {
+      "code": "<script setup lang=\"ts\">\nimport { DzMultiSelect } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4 max-w-sm\">\n    <DzMultiSelect :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n    <DzMultiSelect :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n    <DzMultiSelect :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/forms/DzMultiSelect.stories.ts",
+      "storyLines": [
+        134,
+        149
+      ]
+    },
+    "DzNotification": {
+      "code": "<script setup lang=\"ts\">\nimport { DzNotification } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4 max-w-md\">\n    <DzNotification tone=\"neutral\" title=\"Neutral\" description=\"A neutral notification.\" />\n    <DzNotification tone=\"primary\" title=\"Primary\" description=\"A primary notification.\" />\n    <DzNotification tone=\"success\" title=\"Success\" description=\"Operation completed successfully.\" />\n    <DzNotification tone=\"warning\" title=\"Warning\" description=\"Proceed with caution.\" />\n    <DzNotification tone=\"danger\" title=\"Danger\" description=\"Something went wrong.\" />\n    <DzNotification tone=\"info\" title=\"Info\" description=\"Here is some useful information.\" />\n  </div>\n</template>\n",
+      "storyId": "AllTones",
+      "storyName": "Tone Gallery",
+      "storyFile": "packages/core/stories/feedback/DzNotification.stories.ts",
+      "storyLines": [
+        104,
+        119
+      ]
+    },
+    "DzNumberInput": {
+      "code": "<script setup lang=\"ts\">\nimport { DzNumberInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-[200px]\">\n    <DzNumberInput variant=\"outline\" placeholder=\"Outline\" />\n    <DzNumberInput variant=\"filled\" placeholder=\"Filled\" />\n    <DzNumberInput variant=\"underlined\" placeholder=\"Underlined\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/inputs/DzNumberInput.stories.ts",
+      "storyLines": [
+        151,
+        163
+      ]
+    },
+    "DzOrderList": {
+      "code": "<script setup lang=\"ts\">\nimport { DzOrderList } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid gap-8 lg:grid-cols-3\">\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Enabled</p>\n      <DzOrderList v-model:value=\"enabled\" data-key=\"id\" data-testid=\"ol-enabled\">\n        <template #item=\"{ item }\">{{ item.label }}</template>\n      </DzOrderList>\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Disabled</p>\n      <DzOrderList disabled v-model:value=\"disabled\" data-key=\"id\" data-testid=\"ol-disabled\">\n        <template #item=\"{ item }\">{{ item.label }}</template>\n      </DzOrderList>\n    </section>\n\n    <section class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Selectable — selected rows</p>\n      <DzOrderList selectable v-model:value=\"selectable\" data-key=\"id\" data-testid=\"ol-selectable\">\n        <template #item=\"{ item }\">{{ item.label }}</template>\n      </DzOrderList>\n    </section>\n  </div>\n</template>\n",
+      "storyId": "States",
+      "storyFile": "packages/core/stories/data/DzOrderList.stories.ts",
+      "storyLines": [
+        214,
+        310
+      ]
+    },
+    "DzOtpInput": {
+      "code": "<script setup lang=\"ts\">\nimport { DzOtpInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Extra Small (xs)</p>\n      <DzOtpInput size=\"xs\" :length=\"6\" />\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Small (sm)</p>\n      <DzOtpInput size=\"sm\" :length=\"6\" />\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Medium (md)</p>\n      <DzOtpInput size=\"md\" :length=\"6\" />\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Large (lg)</p>\n      <DzOtpInput size=\"lg\" :length=\"6\" />\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-2\">Extra Large (xl)</p>\n      <DzOtpInput size=\"xl\" :length=\"6\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/inputs/DzOtpInput.stories.ts",
+      "storyLines": [
+        123,
+        152
+      ]
+    },
+    "DzPagination": {
+      "code": "<script setup lang=\"ts\">\nimport { DzPagination } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 uppercase\">{{ size }}</p>\n      <DzPagination :total=\"100\" :size=\"size\" :model-value=\"3\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/navigation/DzPagination.stories.ts",
+      "storyLines": [
+        111,
+        124
+      ]
+    },
+    "DzPasswordInput": {
+      "code": "<script setup lang=\"ts\">\nimport { DzPasswordInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-xs\">\n    <DzPasswordInput variant=\"outline\" placeholder=\"Outline variant\" />\n    <DzPasswordInput variant=\"filled\" placeholder=\"Filled variant\" />\n    <DzPasswordInput variant=\"underlined\" placeholder=\"Underlined variant\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/inputs/DzPasswordInput.stories.ts",
+      "storyLines": [
+        141,
+        153
+      ]
+    },
+    "DzPersonaSelector": {
+      "code": "<script setup lang=\"ts\">\nimport { DzPersonaSelector } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"w-80 max-w-full\">\n    <p class=\"mb-2 text-sm text-[var(--dz-muted-foreground)]\">\n      Ada and Linus have avatars; Grace and Alan fall back to initials.\n    </p>\n    <DzPersonaSelector :personas=\"personas\" placeholder=\"Search teammates…\" />\n  </div>\n</template>\n",
+      "storyId": "WithAvatars",
+      "storyName": "Avatars & Initials Fallback",
+      "storyFile": "packages/core/stories/forms/DzPersonaSelector.stories.ts",
+      "storyLines": [
+        76,
+        92
+      ]
+    },
+    "DzPopconfirm": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzPopconfirm } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-16 place-items-center p-24\">\n    <DzPopconfirm\n      v-for=\"p in placements\"\n      :key=\"p\"\n      :title=\"'Confirm (' + p + ')?'\"\n      :placement=\"p\"\n    >\n      <DzButton variant=\"outline\">{{ p }}</DzButton>\n    </DzPopconfirm>\n  </div>\n</template>\n",
+      "storyId": "PlacementMatrix",
+      "storyFile": "packages/core/stories/overlays/DzPopconfirm.stories.ts",
+      "storyLines": [
+        178,
+        198
+      ]
+    },
+    "DzPopover": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzPopover, DzPopoverContent, DzPopoverTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-8 items-center justify-center py-24\">\n    <DzPopover v-for=\"side in ['top', 'right', 'bottom', 'left']\" :key=\"side\">\n      <DzPopoverTrigger as-child>\n        <DzButton variant=\"outline\">{{ side.charAt(0).toUpperCase() + side.slice(1) }}</DzButton>\n      </DzPopoverTrigger>\n      <DzPopoverContent :side=\"side\">\n        <p class=\"text-sm\">Popover on the {{ side }}.</p>\n      </DzPopoverContent>\n    </DzPopover>\n  </div>\n</template>\n",
+      "storyId": "AllSides",
+      "storyName": "Side Gallery",
+      "storyFile": "packages/core/stories/overlays/DzPopover.stories.ts",
+      "storyLines": [
+        80,
+        97
+      ]
+    },
+    "DzProgress": {
+      "code": "<script setup lang=\"ts\">\nimport { DzProgress } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-8\">\n    <div class=\"flex-1 space-y-2\">\n      <p class=\"text-sm font-medium\">Bar</p>\n      <DzProgress variant=\"bar\" :value=\"65\" />\n    </div>\n    <div class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Circular</p>\n      <DzProgress variant=\"circular\" :value=\"65\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/feedback/DzProgress.stories.ts",
+      "storyLines": [
+        114,
+        131
+      ]
+    },
+    "DzProvider": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzProvider } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzProvider locale=\"ar-EG\" portal=\"#dz-portal\">\n    <div dir=\"rtl\" class=\"grid gap-3 rounded border border-[var(--dz-border)] p-4\">\n      <p class=\"text-sm text-[var(--dz-muted-foreground)]\">locale: ar-EG · direction: rtl</p>\n      <DzButton tone=\"primary\">حفظ</DzButton>\n\n      <DzProvider locale=\"bs-BA\">\n        <div dir=\"ltr\" class=\"grid gap-3 rounded border border-dashed border-[var(--dz-border)] p-4\">\n          <p class=\"text-sm text-[var(--dz-muted-foreground)]\">\n            locale: bs-BA · direction: ltr · portal still #dz-portal\n          </p>\n          <DzButton variant=\"outline\">Sačuvaj</DzButton>\n        </div>\n      </DzProvider>\n    </div>\n  </DzProvider>\n</template>\n",
+      "storyId": "NestedProviders",
+      "storyFile": "packages/core/stories/providers/DzProvider.stories.ts",
+      "storyLines": [
+        111,
+        145
+      ]
+    },
+    "DzQRCode": {
+      "code": "<script setup lang=\"ts\">\nimport { DzQRCode } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-6 items-start\">\n    <div v-for=\"level in ['L', 'M', 'Q', 'H']\" :key=\"level\" class=\"text-center space-y-2\">\n      <p class=\"text-sm font-medium\">Level {{ level }}</p>\n      <DzQRCode\n        value=\"https://dzup.dev\"\n        :error-level=\"level\"\n        :size=\"140\"\n        :aria-label=\"'QR code at error level ' + level\"\n      />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "ErrorLevels",
+      "storyName": "Error Levels",
+      "storyFile": "packages/core/stories/media/DzQRCode.stories.ts",
+      "storyLines": [
+        148,
+        166
+      ]
+    },
+    "DzRadio": {
+      "code": "<script setup lang=\"ts\">\nimport { DzRadio, DzRadioGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzRadioGroup orientation=\"horizontal\" aria-label=\"Size demo\">\n        <DzRadio :value=\"size + '-a'\" :size=\"size\">Option A</DzRadio>\n        <DzRadio :value=\"size + '-b'\" :size=\"size\">Option B</DzRadio>\n      </DzRadioGroup>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzRadio.stories.ts",
+      "storyLines": [
+        79,
+        95
+      ]
+    },
+    "DzRadioGroup": {
+      "code": "<script setup lang=\"ts\">\nimport { DzRadio, DzRadioGroup } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzRadioGroup :size=\"size\" orientation=\"horizontal\" aria-label=\"Size demo\">\n        <DzRadio value=\"a\">Option A</DzRadio>\n        <DzRadio value=\"b\">Option B</DzRadio>\n        <DzRadio value=\"c\">Option C</DzRadio>\n      </DzRadioGroup>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzRadioGroup.stories.ts",
+      "storyLines": [
+        113,
+        130
+      ]
+    },
+    "DzRangeSlider": {
+      "code": "<script setup lang=\"ts\">\nimport { DzRangeSlider } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6 w-[480px] max-w-full\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzRangeSlider :size=\"size\" :model-value=\"[20, 80]\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzRangeSlider.stories.ts",
+      "storyLines": [
+        112,
+        125
+      ]
+    },
+    "DzRating": {
+      "code": "<script setup lang=\"ts\">\nimport { DzRating } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\" class=\"flex items-center gap-4\">\n      <span class=\"w-8 text-sm font-medium capitalize\">{{ size }}</span>\n      <DzRating :size=\"size\" :value=\"3\" aria-label=\"Rating\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "Sizes",
+      "storyName": "Size Matrix",
+      "storyFile": "packages/core/stories/forms/DzRating.stories.ts",
+      "storyLines": [
+        168,
+        181
+      ]
+    },
+    "DzResizable": {
+      "code": "<script setup lang=\"ts\">\nimport { DzResizable, DzResizableHandle, DzResizablePanel } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">direction=\"horizontal\"</p>\n      <DzResizable direction=\"horizontal\" class=\"h-40 border border-[var(--dz-border)] rounded-lg\">\n        <DzResizablePanel :default-size=\"50\">\n          <div class=\"h-full flex items-center justify-center bg-[var(--dz-primary-muted)] text-sm\">Left</div>\n        </DzResizablePanel>\n        <DzResizableHandle with-handle />\n        <DzResizablePanel :default-size=\"50\">\n          <div class=\"h-full flex items-center justify-center bg-[var(--dz-success-muted)] text-sm\">Right</div>\n        </DzResizablePanel>\n      </DzResizable>\n    </div>\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">direction=\"vertical\"</p>\n      <DzResizable direction=\"vertical\" class=\"h-64 border border-[var(--dz-border)] rounded-lg\">\n        <DzResizablePanel :default-size=\"50\">\n          <div class=\"h-full flex items-center justify-center bg-[var(--dz-warning-muted)] text-sm\">Top</div>\n        </DzResizablePanel>\n        <DzResizableHandle with-handle />\n        <DzResizablePanel :default-size=\"50\">\n          <div class=\"h-full flex items-center justify-center bg-[var(--dz-colors-purple-50)] text-sm\">Bottom</div>\n        </DzResizablePanel>\n      </DzResizable>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllDirections",
+      "storyName": "Direction Gallery",
+      "storyFile": "packages/core/stories/layout/DzResizable.stories.ts",
+      "storyLines": [
+        112,
+        145
+      ]
+    },
+    "DzResult": {
+      "code": "<script setup lang=\"ts\">\nimport { DzResult } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-6 max-w-2xl\">\n    <DzResult status=\"success\" title=\"Success\" description=\"Payment processed successfully.\" />\n    <DzResult status=\"error\" title=\"Error\" description=\"Failed to submit the form.\" />\n    <DzResult status=\"warning\" title=\"Warning\" description=\"Your session is about to expire.\" />\n    <DzResult status=\"info\" title=\"Info\" description=\"Your account has been updated.\" />\n  </div>\n</template>\n",
+      "storyId": "AllStatuses",
+      "storyName": "Status Gallery",
+      "storyFile": "packages/core/stories/feedback/DzResult.stories.ts",
+      "storyLines": [
+        82,
+        95
+      ]
+    },
+    "DzRunStatusBadge": {
+      "code": "<script setup lang=\"ts\">\nimport { DzRunStatusBadge } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-3\">\n    <DzRunStatusBadge v-for=\"s in STATUSES\" :key=\"s\" :status=\"s\" />\n  </div>\n</template>\n",
+      "storyId": "AllStatuses",
+      "storyName": "Status Gallery",
+      "storyFile": "packages/core/stories/_app-specific/DzRunStatusBadge.stories.ts",
+      "storyLines": [
+        69,
+        82
+      ]
+    },
+    "DzScrollArea": {
+      "code": "<script setup lang=\"ts\">\nimport { DzScrollArea } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">orientation=\"vertical\"</p>\n      <DzScrollArea orientation=\"vertical\" class=\"h-40 w-64 border border-[var(--dz-border)] rounded-lg\">\n        <div class=\"p-4 space-y-2\">\n          <p v-for=\"i in 15\" :key=\"i\" class=\"text-sm text-[var(--dz-muted-foreground)]\">Vertical line {{ i }}</p>\n        </div>\n      </DzScrollArea>\n    </div>\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">orientation=\"horizontal\"</p>\n      <DzScrollArea orientation=\"horizontal\" class=\"h-20 w-64 border border-[var(--dz-border)] rounded-lg\">\n        <div class=\"p-4 flex gap-4\" style=\"width: 800px;\">\n          <div v-for=\"i in 12\" :key=\"i\"\n            class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-6 py-2 rounded shrink-0\">\n            Item {{ i }}\n          </div>\n        </div>\n      </DzScrollArea>\n    </div>\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">orientation=\"both\"</p>\n      <DzScrollArea orientation=\"both\" class=\"h-40 w-64 border border-[var(--dz-border)] rounded-lg\">\n        <div class=\"p-4\" style=\"width: 600px;\">\n          <p v-for=\"i in 15\" :key=\"i\" class=\"text-sm text-[var(--dz-muted-foreground)] whitespace-nowrap\">\n            Line {{ i }}: This is a very long line of text that extends well beyond the visible area of the scroll container.\n          </p>\n        </div>\n      </DzScrollArea>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllOrientations",
+      "storyName": "Orientation Gallery",
+      "storyFile": "packages/core/stories/layout/DzScrollArea.stories.ts",
+      "storyLines": [
+        77,
+        115
+      ]
+    },
+    "DzSearchInput": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSearchInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-xs\">\n    <DzSearchInput variant=\"outline\" placeholder=\"Outline search...\" />\n    <DzSearchInput variant=\"filled\" placeholder=\"Filled search...\" />\n    <DzSearchInput variant=\"underlined\" placeholder=\"Underlined search...\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/inputs/DzSearchInput.stories.ts",
+      "storyLines": [
+        142,
+        154
+      ]
+    },
+    "DzSegmented": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSegmented } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 uppercase\">{{ size }}</p>\n      <DzSegmented :items=\"items\" :size=\"size\" model-value=\"a\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/navigation/DzSegmented.stories.ts",
+      "storyLines": [
+        121,
+        142
+      ]
+    },
+    "DzSelect": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSelect } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4 max-w-xs\">\n    <DzSelect :items=\"items\" variant=\"outline\" placeholder=\"Outline\" />\n    <DzSelect :items=\"items\" variant=\"filled\" placeholder=\"Filled\" />\n    <DzSelect :items=\"items\" variant=\"underlined\" placeholder=\"Underlined\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/forms/DzSelect.stories.ts",
+      "storyLines": [
+        146,
+        161
+      ]
+    },
+    "DzSheet": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzSheet, DzSheetClose, DzSheetContent, DzSheetDescription, DzSheetTitle, DzSheetTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzSheet v-for=\"side in ['top', 'right', 'bottom', 'left']\" :key=\"side\">\n      <DzSheetTrigger as-child>\n        <DzButton variant=\"outline\">{{ side.charAt(0).toUpperCase() + side.slice(1) }}</DzButton>\n      </DzSheetTrigger>\n      <DzSheetContent :side=\"side\">\n        <DzSheetTitle>{{ side.charAt(0).toUpperCase() + side.slice(1) }} Sheet</DzSheetTitle>\n        <DzSheetDescription>This sheet slides in from the {{ side }}.</DzSheetDescription>\n        <DzSheetClose as-child>\n          <DzButton variant=\"outline\" tone=\"neutral\" class=\"mt-4\">Close</DzButton>\n        </DzSheetClose>\n      </DzSheetContent>\n    </DzSheet>\n  </div>\n</template>\n",
+      "storyId": "AllSides",
+      "storyName": "Side Gallery",
+      "storyFile": "packages/core/stories/overlays/DzSheet.stories.ts",
+      "storyLines": [
+        90,
+        111
+      ]
+    },
+    "DzSidebar": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSidebar, DzSidebarFooter, DzSidebarHeader, DzSidebarItem, DzSidebarSection } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div style=\"height:32rem;display:flex;background:var(--dz-background);\">\n    <DzSidebar v-model:collapsed=\"collapsed\">\n      <DzSidebarHeader>{{ collapsed ? 'D' : 'Datazup' }}</DzSidebarHeader>\n      <DzSidebarSection title=\"Workspace\">\n        <DzSidebarItem :active=\"true\" aria-label=\"Dashboard\">{{ collapsed ? '⌂' : 'Dashboard' }}</DzSidebarItem>\n        <DzSidebarItem aria-label=\"Drafts\">{{ collapsed ? '📄' : 'Drafts' }}</DzSidebarItem>\n      </DzSidebarSection>\n      <DzSidebarFooter>\n        <button type=\"button\" @click=\"toggle\" style=\"background:transparent;border:none;color:var(--dz-sidebar-foreground);cursor:pointer;font-size:var(--dz-text-xs);\">\n          {{ collapsed ? 'Expand →' : '← Collapse' }}\n        </button>\n      </DzSidebarFooter>\n    </DzSidebar>\n    <div style=\"flex:1;padding:var(--dz-spacing-6);color:var(--dz-foreground);\">Click the footer button to toggle. v-model:collapsed drives the width transition.</div>\n  </div>\n</template>\n",
+      "storyId": "Interactive",
+      "storyFile": "packages/core/stories/navigation/DzSidebar.stories.ts",
+      "storyLines": [
+        283,
+        322
+      ]
+    },
+    "DzSkeleton": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSkeleton } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6\">\n    <div class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Text</p>\n      <DzSkeleton variant=\"text\" />\n    </div>\n    <div class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Circular</p>\n      <DzSkeleton variant=\"circular\" width=\"48px\" height=\"48px\" />\n    </div>\n    <div class=\"space-y-2\">\n      <p class=\"text-sm font-medium\">Rectangular</p>\n      <DzSkeleton variant=\"rectangular\" width=\"100%\" height=\"120px\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/feedback/DzSkeleton.stories.ts",
+      "storyLines": [
+        82,
+        103
+      ]
+    },
+    "DzSlider": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSlider } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-6 w-[480px] max-w-full\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzSlider :size=\"size\" :model-value=\"50\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzSlider.stories.ts",
+      "storyLines": [
+        112,
+        125
+      ]
+    },
+    "DzSpacer": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFlex, DzSpacer } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4\">\n    <div v-for=\"s in ['xs', 'sm', 'md', 'lg', 'xl', 'auto']\" :key=\"s\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-1\">size=\"{{ s }}\"</p>\n      <DzFlex align=\"center\" class=\"border border-dashed border-[var(--dz-border)] p-3 rounded\">\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-3 py-1 rounded\">A</div>\n        <DzSpacer :size=\"s\" class=\"bg-[var(--dz-danger-muted)] border border-[var(--dz-danger-border)] border-dashed rounded\" />\n        <div class=\"bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)] text-sm px-3 py-1 rounded\">B</div>\n      </DzFlex>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/layout/DzSpacer.stories.ts",
+      "storyLines": [
+        66,
+        83
+      ]
+    },
+    "DzSpeedDial": {
+      "code": "<script setup lang=\"ts\">\nimport { DzFab } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-6 p-8\">\n    <div class=\"text-center\">\n      <DzFab :icon=\"Plus\" aria-label=\"Add\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">solid / primary</p>\n    </div>\n    <div class=\"text-center\">\n      <DzFab :icon=\"Sparkles\" aria-label=\"Ask AI\" tone=\"info\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">info</p>\n    </div>\n    <div class=\"text-center\">\n      <DzFab :icon=\"Plus\" aria-label=\"Add\" variant=\"outline\" tone=\"neutral\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">outline</p>\n    </div>\n    <div class=\"text-center\">\n      <DzFab :icon=\"Plus\" aria-label=\"Add\" size=\"sm\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">sm</p>\n    </div>\n    <div class=\"text-center\">\n      <DzFab :icon=\"Plus\" aria-label=\"Add\" size=\"xl\" />\n      <p class=\"text-xs mt-2 text-[var(--dz-muted-foreground)]\">xl</p>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "Fab",
+      "storyName": "DzFab (standalone)",
+      "storyFile": "packages/core/stories/buttons/DzSpeedDial.stories.ts",
+      "storyLines": [
+        104,
+        136
+      ]
+    },
+    "DzSpinner": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSpinner } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex items-end gap-6\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\" class=\"flex flex-col items-center gap-2\">\n      <DzSpinner :size=\"size\" />\n      <span class=\"text-xs text-[var(--dz-muted-foreground)] uppercase\">{{ size }}</span>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/feedback/DzSpinner.stories.ts",
+      "storyLines": [
+        74,
+        87
+      ]
+    },
+    "DzSplitButton": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSplitButton, DzSplitButtonAction, DzSplitButtonMenu } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzSplitButton variant=\"solid\" aria-label=\"Solid split\">\n      <DzSplitButtonAction>Solid</DzSplitButtonAction>\n      <DzSplitButtonMenu />\n    </DzSplitButton>\n    <DzSplitButton variant=\"outline\" aria-label=\"Outline split\">\n      <DzSplitButtonAction>Outline</DzSplitButtonAction>\n      <DzSplitButtonMenu />\n    </DzSplitButton>\n    <DzSplitButton variant=\"ghost\" aria-label=\"Ghost split\">\n      <DzSplitButtonAction>Ghost</DzSplitButtonAction>\n      <DzSplitButtonMenu />\n    </DzSplitButton>\n    <DzSplitButton variant=\"text\" aria-label=\"Text split\">\n      <DzSplitButtonAction>Text</DzSplitButtonAction>\n      <DzSplitButtonMenu />\n    </DzSplitButton>\n    <DzSplitButton variant=\"link\" aria-label=\"Link split\">\n      <DzSplitButtonAction>Link</DzSplitButtonAction>\n      <DzSplitButtonMenu />\n    </DzSplitButton>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/buttons/DzSplitButton.stories.ts",
+      "storyLines": [
+        116,
+        145
+      ]
+    },
+    "DzSplitter": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSplitter, DzSplitterHandle, DzSplitterPanel } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzSplitter direction=\"vertical\" class=\"h-64 border border-[var(--dz-border)] rounded-lg\">\n    <DzSplitterPanel :default-size=\"50\">\n      <div class=\"h-full flex items-center justify-center bg-[var(--dz-warning-muted)] text-[var(--dz-warning-muted-foreground)] text-sm\">Top</div>\n    </DzSplitterPanel>\n    <DzSplitterHandle with-handle />\n    <DzSplitterPanel :default-size=\"50\">\n      <div class=\"h-full flex items-center justify-center bg-[var(--dz-colors-purple-50)] text-[var(--dz-colors-purple-800)] text-sm\">Bottom</div>\n    </DzSplitterPanel>\n  </DzSplitter>\n</template>\n",
+      "storyId": "VerticalSplitter",
+      "storyName": "Vertical Direction",
+      "storyFile": "packages/core/stories/layout/DzSplitter.stories.ts",
+      "storyLines": [
+        115,
+        131
+      ]
+    },
+    "DzStack": {
+      "code": "<script setup lang=\"ts\">\nimport { DzStack } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">direction=\"vertical\" (default)</p>\n      <DzStack direction=\"vertical\" gap=\"sm\" class=\"border border-dashed border-[var(--dz-border)] p-3 rounded\">\n        <div class=\"bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded\">A</div>\n        <div class=\"bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded\">B</div>\n        <div class=\"bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded\">C</div>\n      </DzStack>\n    </div>\n    <div>\n      <p class=\"text-xs text-[var(--dz-muted-foreground)] mb-2\">direction=\"horizontal\"</p>\n      <DzStack direction=\"horizontal\" gap=\"sm\" class=\"border border-dashed border-[var(--dz-border)] p-3 rounded\">\n        <div class=\"bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded\">A</div>\n        <div class=\"bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded\">B</div>\n        <div class=\"bg-[var(--dz-success-muted)] text-[var(--dz-success-muted-foreground)] text-sm p-3 rounded\">C</div>\n      </DzStack>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllDirections",
+      "storyName": "Direction Gallery",
+      "storyFile": "packages/core/stories/layout/DzStack.stories.ts",
+      "storyLines": [
+        107,
+        132
+      ]
+    },
+    "DzStatCard": {
+      "code": "<script setup lang=\"ts\">\nimport { DzStatCard } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-4 max-w-lg\">\n    <DzStatCard variant=\"elevated\" title=\"Elevated\" value=\"$12,450\" description=\"vs. last month\" trend=\"up\" trend-value=\"+12.5%\" />\n    <DzStatCard variant=\"outlined\" title=\"Outlined\" value=\"$12,450\" description=\"vs. last month\" trend=\"up\" trend-value=\"+12.5%\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/cards/DzStatCard.stories.ts",
+      "storyLines": [
+        97,
+        108
+      ]
+    },
+    "DzStepper": {
+      "code": "<script setup lang=\"ts\">\nimport { DzStepper, DzStepperItem } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div>\n      <p class=\"text-sm font-medium mb-4\">Step 0 active (first step)</p>\n      <DzStepper :model-value=\"0\">\n        <DzStepperItem title=\"Account\" description=\"Create your account\" />\n        <DzStepperItem title=\"Profile\" description=\"Complete your profile\" />\n        <DzStepperItem title=\"Review\" description=\"Review and submit\" />\n      </DzStepper>\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-4\">Step 1 active (middle step)</p>\n      <DzStepper :model-value=\"1\">\n        <DzStepperItem title=\"Account\" description=\"Create your account\" />\n        <DzStepperItem title=\"Profile\" description=\"Complete your profile\" />\n        <DzStepperItem title=\"Review\" description=\"Review and submit\" />\n      </DzStepper>\n    </div>\n    <div>\n      <p class=\"text-sm font-medium mb-4\">Step 2 active (last step)</p>\n      <DzStepper :model-value=\"2\">\n        <DzStepperItem title=\"Account\" description=\"Create your account\" />\n        <DzStepperItem title=\"Profile\" description=\"Complete your profile\" />\n        <DzStepperItem title=\"Review\" description=\"Review and submit\" />\n      </DzStepper>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllStepStates",
+      "storyName": "All Step States",
+      "storyFile": "packages/core/stories/navigation/DzStepper.stories.ts",
+      "storyLines": [
+        86,
+        119
+      ]
+    },
+    "DzStepperItem": {
+      "code": "<script setup lang=\"ts\">\nimport { DzStepper, DzStepperItem } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzStepper :model-value=\"1\" aria-label=\"Registration steps\">\n    <DzStepperItem title=\"Account\" description=\"Create your account\" />\n    <DzStepperItem title=\"Profile\" description=\"Fill in your profile\" />\n    <DzStepperItem title=\"Review\" description=\"Review and submit\" />\n  </DzStepper>\n</template>\n",
+      "storyId": "Default",
+      "storyFile": "packages/core/stories/navigation/DzStepperItem.stories.ts",
+      "storyLines": [
+        47,
+        70
+      ]
+    },
+    "DzSwitch": {
+      "code": "<script setup lang=\"ts\">\nimport { DzSwitch } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <DzSwitch size=\"xs\">Extra Small</DzSwitch>\n    <DzSwitch size=\"sm\">Small</DzSwitch>\n    <DzSwitch size=\"md\">Medium</DzSwitch>\n    <DzSwitch size=\"lg\">Large</DzSwitch>\n    <DzSwitch size=\"xl\">Extra Large</DzSwitch>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzSwitch.stories.ts",
+      "storyLines": [
+        79,
+        93
+      ]
+    },
+    "DzTable": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTable, DzTableBody, DzTableCell, DzTableHeader, DzTableRow } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"v in ['default', 'bordered', 'striped']\" :key=\"v\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">variant: {{ v }}</p>\n      <DzTable :variant=\"v\" :aria-label=\"v + ' table'\">\n        <DzTableHeader>\n          <DzTableRow>\n            <DzTableCell header>Name</DzTableCell>\n            <DzTableCell header>Role</DzTableCell>\n          </DzTableRow>\n        </DzTableHeader>\n        <DzTableBody>\n          <DzTableRow>\n            <DzTableCell>Alice</DzTableCell>\n            <DzTableCell>Engineer</DzTableCell>\n          </DzTableRow>\n          <DzTableRow>\n            <DzTableCell>Bob</DzTableCell>\n            <DzTableCell>Designer</DzTableCell>\n          </DzTableRow>\n          <DzTableRow>\n            <DzTableCell>Charlie</DzTableCell>\n            <DzTableCell>PM</DzTableCell>\n          </DzTableRow>\n        </DzTableBody>\n      </DzTable>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/data/DzTable.stories.ts",
+      "storyLines": [
+        131,
+        170
+      ]
+    },
+    "DzTabs": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTabContent, DzTabList, DzTabTrigger, DzTabs } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"variant in ['line', 'enclosed', 'pills']\" :key=\"variant\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ variant }}</p>\n      <DzTabs :variant=\"variant\" model-value=\"tab1\">\n        <DzTabList>\n          <DzTabTrigger value=\"tab1\">Overview</DzTabTrigger>\n          <DzTabTrigger value=\"tab2\">Details</DzTabTrigger>\n          <DzTabTrigger value=\"tab3\">Settings</DzTabTrigger>\n        </DzTabList>\n        <DzTabContent value=\"tab1\">\n          <p class=\"p-4 text-sm\">Overview content for {{ variant }} variant.</p>\n        </DzTabContent>\n        <DzTabContent value=\"tab2\">\n          <p class=\"p-4 text-sm\">Details content for {{ variant }} variant.</p>\n        </DzTabContent>\n        <DzTabContent value=\"tab3\">\n          <p class=\"p-4 text-sm\">Settings content for {{ variant }} variant.</p>\n        </DzTabContent>\n      </DzTabs>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/navigation/DzTabs.stories.ts",
+      "storyLines": [
+        124,
+        152
+      ]
+    },
+    "DzTag": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTag } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-3 items-center\">\n    <DzTag variant=\"solid\">Solid</DzTag>\n    <DzTag variant=\"outline\">Outline</DzTag>\n    <DzTag variant=\"subtle\">Subtle</DzTag>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/data/DzTag.stories.ts",
+      "storyLines": [
+        91,
+        103
+      ]
+    },
+    "DzTagsInput": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTagsInput } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-2 max-w-sm\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Only valid email addresses are accepted — try an invalid one to see the danger flash.</p>\n    <DzTagsInput\n      v-model:value=\"emails\"\n      :validate=\"isEmail\"\n      placeholder=\"recipient@example.com\"\n      add-on-blur\n    />\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Recipients: <strong>{{ emails.length ? emails.join(', ') : 'none' }}</strong></p>\n  </div>\n</template>\n",
+      "storyId": "EmailValidation",
+      "storyName": "Email Validation",
+      "storyFile": "packages/core/stories/forms/DzTagsInput.stories.ts",
+      "storyLines": [
+        148,
+        173
+      ]
+    },
+    "DzText": {
+      "code": "<script setup lang=\"ts\">\nimport { DzText } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-3\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\" class=\"flex items-baseline gap-4\">\n      <span class=\"text-xs font-mono w-8 text-[var(--dz-muted-foreground)] shrink-0\">{{ size }}</span>\n      <DzText :size=\"size\">The quick brown fox jumps over the lazy dog.</DzText>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/typography/DzText.stories.ts",
+      "storyLines": [
+        97,
+        110
+      ]
+    },
+    "DzTextarea": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTextarea } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-sm\">\n    <DzTextarea variant=\"outline\" placeholder=\"Outline variant\" />\n    <DzTextarea variant=\"filled\" placeholder=\"Filled variant\" />\n    <DzTextarea variant=\"underlined\" placeholder=\"Underlined variant\" />\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/inputs/DzTextarea.stories.ts",
+      "storyLines": [
+        161,
+        173
+      ]
+    },
+    "DzTimeline": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTimeline, DzTimelineItem } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"s in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"s\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">size: {{ s }}</p>\n      <DzTimeline :size=\"s\" :aria-label=\"s + ' timeline'\">\n        <DzTimelineItem status=\"Step 1\">First event</DzTimelineItem>\n        <DzTimelineItem status=\"Step 2\">Second event</DzTimelineItem>\n        <DzTimelineItem status=\"Step 3\">Third event</DzTimelineItem>\n      </DzTimeline>\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/data/DzTimeline.stories.ts",
+      "storyLines": [
+        106,
+        123
+      ]
+    },
+    "DzTimelineItem": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTimeline, DzTimelineItem } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzTimeline aria-label=\"Tone gallery\">\n    <DzTimelineItem tone=\"neutral\" status=\"Neutral\">Default neutral indicator.</DzTimelineItem>\n    <DzTimelineItem tone=\"primary\" status=\"Primary\">Primary tone indicator.</DzTimelineItem>\n    <DzTimelineItem tone=\"success\" status=\"Success\">Success tone indicator.</DzTimelineItem>\n    <DzTimelineItem tone=\"warning\" status=\"Warning\">Warning tone indicator.</DzTimelineItem>\n    <DzTimelineItem tone=\"danger\" status=\"Danger\">Danger tone indicator.</DzTimelineItem>\n    <DzTimelineItem tone=\"info\" status=\"Info\">Info tone indicator.</DzTimelineItem>\n  </DzTimeline>\n</template>\n",
+      "storyId": "AllTones",
+      "storyName": "All Tones",
+      "storyFile": "packages/core/stories/data/DzTimelineItem.stories.ts",
+      "storyLines": [
+        75,
+        91
+      ]
+    },
+    "DzTimePicker": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTimePicker } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex gap-8 max-w-md\">\n    <div class=\"flex-1 space-y-2\">\n      <p class=\"text-sm font-medium\">Roll (wheel)</p>\n      <DzTimePicker selection=\"roll\" placeholder=\"Roll\" />\n    </div>\n    <div class=\"flex-1 space-y-2\">\n      <p class=\"text-sm font-medium\">Select (dropdowns)</p>\n      <DzTimePicker selection=\"select\" placeholder=\"Select\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "SelectionLayouts",
+      "storyName": "Roll vs Select Layout",
+      "storyFile": "packages/core/stories/forms/DzTimePicker.stories.ts",
+      "storyLines": [
+        184,
+        201
+      ]
+    },
+    "DzToast": {
+      "code": "<script setup lang=\"ts\">\nimport { DzToast, DzToastProvider, DzToastViewport } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzToastProvider :duration=\"5000\">\n    <div class=\"flex flex-wrap gap-3\">\n      <button v-for=\"tone in tones\"\n        :key=\"tone\"\n        class=\"px-3 py-1.5 text-sm border border-[var(--dz-border)] rounded capitalize\"\n        @click=\"fire(tone)\">\n        {{ tone }}\n      </button>\n    </div>\n    <DzToast v-for=\"toast in toasts\" :key=\"toast.id\" :toast=\"toast\" open />\n    <DzToastViewport position=\"bottom-right\" />\n  </DzToastProvider>\n</template>\n",
+      "storyId": "Default",
+      "storyFile": "packages/core/stories/feedback/DzToast.stories.ts",
+      "storyLines": [
+        67,
+        103
+      ]
+    },
+    "DzToggleButton": {
+      "code": "<script setup lang=\"ts\">\nimport { DzToggleButton } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-4 items-center\">\n    <DzToggleButton variant=\"solid\" aria-label=\"Solid toggle\">Solid</DzToggleButton>\n    <DzToggleButton variant=\"outline\" aria-label=\"Outline toggle\">Outline</DzToggleButton>\n    <DzToggleButton variant=\"ghost\" aria-label=\"Ghost toggle\">Ghost</DzToggleButton>\n    <DzToggleButton variant=\"text\" aria-label=\"Text toggle\">Text</DzToggleButton>\n    <DzToggleButton variant=\"link\" aria-label=\"Link toggle\">Link</DzToggleButton>\n  </div>\n</template>\n",
+      "storyId": "AllVariants",
+      "storyName": "Variant Gallery",
+      "storyFile": "packages/core/stories/buttons/DzToggleButton.stories.ts",
+      "storyLines": [
+        112,
+        126
+      ]
+    },
+    "DzTokenProgressBar": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTokenProgressBar } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"max-w-sm space-y-5\">\n    <div class=\"space-y-1\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)]\">Normal (&lt; 70%)</p>\n      <DzTokenProgressBar :used=\"3000\" :total=\"10000\" />\n    </div>\n    <div class=\"space-y-1\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)]\">Warn (≥ 70%) — amber</p>\n      <DzTokenProgressBar :used=\"7500\" :total=\"10000\" />\n    </div>\n    <div class=\"space-y-1\">\n      <p class=\"text-xs text-[var(--dz-muted-foreground)]\">Danger (≥ 90%) — red</p>\n      <DzTokenProgressBar :used=\"9400\" :total=\"10000\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "Thresholds",
+      "storyName": "Threshold States",
+      "storyFile": "packages/core/stories/_app-specific/DzTokenProgressBar.stories.ts",
+      "storyLines": [
+        71,
+        92
+      ]
+    },
+    "DzTooltip": {
+      "code": "<script setup lang=\"ts\">\nimport { DzButton, DzTooltip, DzTooltipContent, DzTooltipTrigger } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-8 items-center justify-center py-24\">\n    <DzTooltip v-for=\"side in ['top', 'right', 'bottom', 'left']\" :key=\"side\" :delay-duration=\"0\">\n      <DzTooltipTrigger as-child>\n        <DzButton variant=\"outline\">{{ side.charAt(0).toUpperCase() + side.slice(1) }}</DzButton>\n      </DzTooltipTrigger>\n      <DzTooltipContent :side=\"side\">Tooltip on {{ side }}</DzTooltipContent>\n    </DzTooltip>\n  </div>\n</template>\n",
+      "storyId": "AllSides",
+      "storyName": "Side Gallery",
+      "storyFile": "packages/core/stories/overlays/DzTooltip.stories.ts",
+      "storyLines": [
+        80,
+        95
+      ]
+    },
+    "DzTransfer": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTransfer } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"size in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"size\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">{{ size }}</p>\n      <DzTransfer :source=\"small\" :size=\"size\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/forms/DzTransfer.stories.ts",
+      "storyLines": [
+        109,
+        130
+      ]
+    },
+    "DzTree": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTree } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-8\">\n    <div v-for=\"s in ['xs', 'sm', 'md', 'lg', 'xl']\" :key=\"s\">\n      <p class=\"text-sm font-medium mb-2 capitalize\">size: {{ s }}</p>\n      <DzTree :items=\"smallTree\" :size=\"s\" :expanded-keys=\"['root', 'child-3']\" :aria-label=\"s + ' tree'\" />\n    </div>\n  </div>\n</template>\n",
+      "storyId": "AllSizes",
+      "storyName": "Size Gallery",
+      "storyFile": "packages/core/stories/data/DzTree.stories.ts",
+      "storyLines": [
+        179,
+        210
+      ]
+    },
+    "DzTreeItem": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTree } from '@dzup-ui/core'\n</script>\n\n<template>\n  <DzTree\n    :items=\"items\"\n    :expanded-keys=\"['root', 'child-2']\"\n    aria-label=\"Tree with visible items\"\n  />\n</template>\n",
+      "storyId": "Default",
+      "storyFile": "packages/core/stories/data/DzTreeItem.stories.ts",
+      "storyLines": [
+        61,
+        87
+      ]
+    },
+    "DzTreeSelect": {
+      "code": "<script setup lang=\"ts\">\nimport { DzTreeSelect } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"max-w-xs space-y-3\">\n    <DzTreeSelect\n      :nodes=\"categories\"\n      v-model:value=\"value\"\n      selection-mode=\"multiple\"\n      :expanded-keys=\"['fruit', 'vegetable']\"\n      placeholder=\"Select categories...\"\n    />\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">Selected: <strong>{{ value.join(', ') || 'none' }}</strong></p>\n  </div>\n</template>\n",
+      "storyId": "MultipleChips",
+      "storyName": "Multiple (chips)",
+      "storyFile": "packages/core/stories/forms/DzTreeSelect.stories.ts",
+      "storyLines": [
+        156,
+        204
+      ]
+    },
+    "DzVisuallyHidden": {
+      "code": "<script setup lang=\"ts\">\nimport { DzVisuallyHidden } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-3 max-w-md\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">\n      The button below shows only an icon visually, but exposes the text\n      \"Save document\" to assistive technology. Inspect with the a11y panel —\n      the accessible name is computed from the hidden text.\n    </p>\n    <button type=\"button\" class=\"inline-flex items-center justify-center w-10 h-10 border border-[var(--dz-border)] rounded\">\n      <span aria-hidden=\"true\">💾</span>\n      <DzVisuallyHidden>Save document</DzVisuallyHidden>\n    </button>\n  </div>\n</template>\n",
+      "storyId": "HiddenLabel",
+      "storyName": "Hidden Label",
+      "storyFile": "packages/core/stories/typography/DzVisuallyHidden.stories.ts",
+      "storyLines": [
+        94,
+        112
+      ]
+    },
+    "DzWatermark": {
+      "code": "<script setup lang=\"ts\">\nimport { DzWatermark } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"space-y-4\">\n    <p class=\"text-sm text-[var(--dz-muted-foreground)]\">\n      <code>--dz-watermark-color</code> resolves to <code>--dz-muted-foreground</code>,\n      so the mark re-tints for the dark surface on its own — no per-theme\n      <code>color</code> override is needed.\n    </p>\n    <DzWatermark content=\"CONFIDENTIAL\" :rotate=\"-22\" :font-size=\"16\">\n      <div v-html=\"SAMPLE\" />\n    </DzWatermark>\n  </div>\n</template>\n",
+      "storyId": "DarkMode",
+      "storyName": "Dark Mode Preview",
+      "storyFile": "packages/core/stories/media/DzWatermark.stories.ts",
+      "storyLines": [
+        176,
+        197
+      ]
+    },
+    "GovernanceBadge": {
+      "code": "<script setup lang=\"ts\">\nimport { GovernanceBadge } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-3\">\n    <GovernanceBadge v-for=\"p in PATTERNS\" :key=\"p\" :pattern=\"p\" />\n  </div>\n</template>\n",
+      "storyId": "AllPatterns",
+      "storyName": "Pattern Gallery",
+      "storyFile": "packages/core/stories/_app-specific/GovernanceBadge.stories.ts",
+      "storyLines": [
+        79,
+        92
+      ]
+    },
+    "TeamMemberBadge": {
+      "code": "<script setup lang=\"ts\">\nimport { TeamMemberBadge } from '@dzup-ui/core'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-3\">\n    <TeamMemberBadge\n      v-for=\"s in STATUSES\"\n      :key=\"s\"\n      :participant-id=\"'p-' + s\"\n      role=\"executor\"\n      :status=\"s\"\n    />\n  </div>\n</template>\n",
+      "storyId": "AllStatuses",
+      "storyName": "Status Gallery",
+      "storyFile": "packages/core/stories/_app-specific/TeamMemberBadge.stories.ts",
+      "storyLines": [
+        78,
+        97
+      ]
+    }
+  },
+  "refusals": {
+    "DzAnimatedNumber": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/data/DzAnimatedNumber.stories.ts"
+    },
+    "DzAsyncBoundary": {
+      "reason": "unexported-tags",
+      "file": "packages/core/stories/feedback/DzAsyncBoundary.stories.ts",
+      "tags": [
+        "AsyncChild"
+      ]
+    },
+    "DzBlockUI": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/feedback/DzBlockUI.stories.ts"
+    },
+    "DzDataView": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/data/DzDataView.stories.ts"
+    },
+    "DzDeferredContent": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/layout/DzDeferredContent.stories.ts"
+    },
+    "DzErrorBoundary": {
+      "reason": "unexported-tags",
+      "file": "packages/core/stories/feedback/DzErrorBoundary.stories.ts",
+      "tags": [
+        "Bomb"
+      ]
+    },
+    "DzMasonry": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/layout/DzMasonry.stories.ts"
+    },
+    "DzMenu": {
+      "reason": "unexported-tags",
+      "file": "packages/core/stories/navigation/DzMenu.stories.ts",
+      "tags": [
+        "Home",
+        "Settings"
+      ]
+    },
+    "DzPageHero": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/layout/DzPageHero.stories.ts"
+    },
+    "DzPanel": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/layout/DzPanel.stories.ts"
+    },
+    "DzRelativeTime": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/typography/DzRelativeTime.stories.ts"
+    },
+    "DzScrollProgress": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/feedback/DzScrollProgress.stories.ts"
+    },
+    "DzThemeProvider": {
+      "reason": "no-stories-file"
+    },
+    "DzToolbar": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/layout/DzToolbar.stories.ts"
+    },
+    "DzTour": {
+      "reason": "no-runnable-story",
+      "file": "packages/core/stories/overlays/DzTour.stories.ts"
+    }
+  }
+}

@@ -62,6 +62,7 @@ const props = withDefaults(defineProps<DzSpeedDialProps>(), {
   openOnHover: false,
   disabled: false,
   radius: 112,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzSpeedDialEmits>()
@@ -86,8 +87,12 @@ const rootPositionClass = computed(() => {
 })
 
 const rootClasses = computed(() =>
-  cn(styles.root(), rootPositionClass.value, attrs.class as string | undefined),
+  cn(styles.root(), rootPositionClass.value, attrs.class as string | undefined, props.ui?.root),
 )
+
+/** Per-part class values (ADR-19 §5). */
+const listClasses = computed(() => cn(styles.menu(), props.ui?.list))
+const itemClasses = computed(() => cn(styles.item(), props.ui?.item))
 
 /** Component instance of the trigger FAB (its `$el` is the <button>). */
 const triggerRef = ref<InstanceType<typeof DzFab>>()
@@ -277,6 +282,7 @@ function onRootKeydown(event: KeyboardEvent): void {
 
 <template>
   <div
+    data-part="root"
     :class="rootClasses"
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
@@ -288,7 +294,8 @@ function onRootKeydown(event: KeyboardEvent): void {
     <div
       :id="menuId"
       ref="menuEl"
-      :class="styles.menu()"
+      data-part="list"
+      :class="listClasses"
       role="menu"
       :aria-orientation="isVertical ? 'vertical' : 'horizontal'"
       :aria-hidden="!open || undefined"
@@ -297,7 +304,8 @@ function onRootKeydown(event: KeyboardEvent): void {
       <div
         v-for="(item, index) in items"
         :key="item.key ?? index"
-        :class="styles.item()"
+        data-part="item"
+        :class="itemClasses"
         :style="itemStyle(index)"
       >
         <DzTooltip>

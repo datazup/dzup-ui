@@ -32,6 +32,7 @@ const props = withDefaults(defineProps<DzFabProps>(), {
   loading: false,
   position: 'static',
   type: 'button',
+  ui: undefined,
 })
 
 const emit = defineEmits<DzFabEmits>()
@@ -52,8 +53,17 @@ const classes = computed(() =>
     // Listed second so the FAB shape/size wins over button defaults via cn().
     fabVariants({ position: props.position }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
+
+/** Per-part class values (ADR-19 §5). */
+const spinnerClasses = computed(() => cn('animate-spin', iconSizeClass, props.ui?.spinner))
+const iconWrapperClasses = computed(() => cn(
+  'inline-flex items-center justify-center',
+  iconSizeClass,
+  props.ui?.icon,
+))
 
 function handleClick(event: MouseEvent): void {
   if (isInert.value) {
@@ -76,6 +86,7 @@ function handleBlur(event: FocusEvent): void {
 <template>
   <button
     :id="id"
+    data-part="root"
     :type="type"
     :class="classes"
     :data-size="size"
@@ -96,8 +107,8 @@ function handleBlur(event: FocusEvent): void {
     <!-- Loading spinner -->
     <svg
       v-if="loading"
-      class="animate-spin"
-      :class="iconSizeClass"
+      data-part="spinner"
+      :class="spinnerClasses"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -112,7 +123,7 @@ function handleBlur(event: FocusEvent): void {
     </svg>
 
     <!-- Icon: default slot wins over the `icon` prop -->
-    <span v-else class="inline-flex items-center justify-center" :class="iconSizeClass">
+    <span v-else data-part="icon" :class="iconWrapperClasses">
       <slot>
         <component :is="icon" v-if="icon" :class="iconSizeClass" aria-hidden="true" />
       </slot>

@@ -19,7 +19,7 @@ export const tagTokens = {
   size: {
     sm: {
       height: 'var(--dz-spacing-5)',
-      paddingX: 'var(--dz-spacing-1-5)',
+      paddingX: 'var(--dz-spacing-1_5)',
       fontSize: 'var(--dz-text-xs)',
     },
     md: {

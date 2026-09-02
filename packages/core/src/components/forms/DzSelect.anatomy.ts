@@ -35,6 +35,22 @@ export const anatomy = {
     'item-label',
     'empty',
     'error',
+
+    /**
+     * TASK-N2-S1. These three were **emitted and undeclared** — by this
+     * component's own template *and* by `DzOptionsState.vue`, the unexported
+     * internal it renders for the async loading/error/retry states. Nothing
+     * could see it: `expectAnatomy` only checks the branches a spec mounts, and
+     * no spec mounts the failed-async branch, so a pilot shipped three parts
+     * outside its own contract for the life of the pilot.
+     *
+     * They are declared here rather than renamed. Renaming a shipped
+     * `data-part` is breaking (ADR-19 §3) and belongs to the owner lane; see
+     * the S1 handoff §4.2 for the naming question these three raise.
+     */
+    'options-state',
+    'options-message',
+    'options-retry',
   ],
 
   /**
@@ -53,6 +69,9 @@ export const anatomy = {
     'item-label',
     'empty',
     'error',
+    'options-state',
+    'options-message',
+    'options-retry',
   ],
 
   /**

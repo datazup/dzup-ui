@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import {
   DzDropdownMenu,
@@ -380,4 +380,89 @@ export const RealWorldAccountMenu: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// States — closed / open / disabled item (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The three states a dropdown menu has: closed (the panel is unmounted, not
+ * hidden), open (the trigger reports `aria-expanded` and a real `role="menu"`
+ * exists), and `disabled` on an individual item.
+ *
+ * `disabled` is the state the component declares, and its contract is specific:
+ * the item stays listed and announced with `aria-disabled` — so the user learns
+ * the action exists but is unavailable — while the roving highlight steps over
+ * it and activation does nothing. The play function drives all three.
+ */
+export const States: Story = {
+  render: () => ({
+    components: {
+      DzDropdownMenu,
+      DzDropdownMenuTrigger,
+      DzDropdownMenuContent,
+      DzDropdownMenuItem,
+      DzDropdownMenuSeparator,
+      DzButton,
+    },
+    data() {
+      return { chosen: 'nothing' }
+    },
+    template: `
+      <div class="flex flex-col items-center gap-4 py-8">
+        <DzDropdownMenu>
+          <DzDropdownMenuTrigger as-child>
+            <DzButton variant="outline">Row actions</DzButton>
+          </DzDropdownMenuTrigger>
+          <DzDropdownMenuContent>
+            <DzDropdownMenuItem @select="chosen = 'Edit'">Edit</DzDropdownMenuItem>
+            <DzDropdownMenuItem disabled @select="chosen = 'Move'">Move (no permission)</DzDropdownMenuItem>
+            <DzDropdownMenuSeparator />
+            <DzDropdownMenuItem @select="chosen = 'Duplicate'">Duplicate</DzDropdownMenuItem>
+          </DzDropdownMenuContent>
+        </DzDropdownMenu>
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Chose: <strong data-testid="dm-chosen">{{ chosen }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /row actions/i })
+
+    // Closed: the menu is not in the document, and the trigger says so.
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+
+    // Open: the trigger flips `aria-expanded` and a real `role="menu"` appears.
+    await userEvent.click(trigger)
+    const menu = await screen.findByRole('menu')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'menu')
+    await expect(menu).toBeVisible()
+
+    // Disabled: listed, announced, and flagged for the styling contract.
+    const move = within(menu).getByRole('menuitem', { name: /move \(no permission\)/i })
+    await expect(move).toHaveAttribute('aria-disabled', 'true')
+    await expect(move).toHaveAttribute('data-disabled')
+
+    // The roving highlight steps over it — ArrowDown twice reaches `Duplicate`,
+    // never the disabled row between them.
+    await userEvent.keyboard('{ArrowDown}')
+    await expect(move).not.toHaveAttribute('data-highlighted')
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() =>
+      expect(within(menu).getByRole('menuitem', { name: /duplicate/i }))
+        .toHaveAttribute('data-highlighted'),
+    )
+    await expect(move).not.toHaveAttribute('data-highlighted')
+
+    // Activating the highlighted item closes the menu and reaches the page.
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument())
+    await expect(canvas.getByTestId('dm-chosen')).toHaveTextContent('Duplicate')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+  },
 }

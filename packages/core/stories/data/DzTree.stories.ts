@@ -515,3 +515,129 @@ export const RealWorldOrgChart: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — ready / loading / tree-disabled / node-disabled (tier C `states`)
+// ---------------------------------------------------------------------------
+
+/**
+ * The two states DzTree declares (`disabled`, `loading`) plus the per-node
+ * `disabled` flag, which is the one a file browser actually reaches for.
+ *
+ * They resolve into a single `data-state` on the `role="tree"` root —
+ * `disabled` wins over `loading`, which wins over `ready` — while a disabled
+ * node* is announced individually with `aria-disabled` and taken out of the
+ * roving tab order. The play function asserts both levels, since a screenshot
+ * cannot tell "greyed out" from "actually unreachable".
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzTree },
+    setup() {
+      const mixed: TreeNode[] = [
+        {
+          key: 'open',
+          label: 'Open folder',
+          children: [
+            { key: 'editable', label: 'editable.ts' },
+            { key: 'locked', label: 'locked.ts', disabled: true },
+          ],
+        },
+        { key: 'archived', label: 'Archived folder', disabled: true },
+      ]
+      return { fileTree, mixed }
+    },
+    template: `
+      <div class="grid gap-8 lg:grid-cols-2">
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Ready</p>
+          <DzTree
+            :items="fileTree"
+            :expanded-keys="['src']"
+            aria-label="Ready file tree"
+            data-testid="tree-ready"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Loading</p>
+          <DzTree
+            loading
+            :items="fileTree"
+            aria-label="Loading file tree"
+            data-testid="tree-loading"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Disabled tree</p>
+          <DzTree
+            disabled
+            :items="fileTree"
+            :expanded-keys="['src']"
+            aria-label="Disabled file tree"
+            data-testid="tree-disabled"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Disabled nodes</p>
+          <DzTree
+            selectable
+            :items="mixed"
+            :expanded-keys="['open']"
+            aria-label="Tree with disabled nodes"
+            data-testid="tree-nodes"
+          />
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const ready = canvas.getByTestId('tree-ready')
+    const loading = canvas.getByTestId('tree-loading')
+    const disabled = canvas.getByTestId('tree-disabled')
+    const nodes = canvas.getByTestId('tree-nodes')
+
+    // One `data-state` carries the resolved root state, in priority order.
+    await expect(ready).toHaveAttribute('data-state', 'ready')
+    await expect(ready).not.toHaveAttribute('data-loading')
+    await expect(ready).not.toHaveAttribute('data-disabled')
+
+    await expect(loading).toHaveAttribute('data-state', 'loading')
+    await expect(loading).toHaveAttribute('data-loading')
+
+    await expect(disabled).toHaveAttribute('data-state', 'disabled')
+    await expect(disabled).toHaveAttribute('data-disabled')
+
+    // `role="treeitem"` sits on the <li>, whose text content includes its whole
+    // subtree — so nodes are located by their own label and walked up to the
+    // owning treeitem rather than matched on an accessible name.
+    const itemFor = (root: HTMLElement, label: string) =>
+      within(root).getByText(label).closest('[role="treeitem"]') as HTMLElement
+
+    // Ready: real APG tree semantics — expandable nodes report `aria-expanded`
+    // and a roving tabindex leaves exactly one row reachable by Tab.
+    const src = itemFor(ready, 'src')
+    await expect(src).toHaveAttribute('aria-expanded', 'true')
+    await expect(src).toHaveAttribute('aria-level', '1')
+    await expect(ready.querySelectorAll('[data-dz-tree-row][tabindex="0"]')).toHaveLength(1)
+
+    // Node-level disabled is announced per node and removed from the tab order,
+    // while its enabled sibling stays reachable.
+    const locked = itemFor(nodes, 'locked.ts')
+    await expect(locked).toHaveAttribute('aria-disabled', 'true')
+    await expect(locked).toHaveAttribute('data-disabled')
+    await expect(locked.querySelector('[data-dz-tree-row]')).toHaveAttribute('tabindex', '-1')
+
+    const editable = itemFor(nodes, 'editable.ts')
+    await expect(editable).not.toHaveAttribute('aria-disabled')
+
+    // A disabled node refuses selection; its enabled sibling accepts it.
+    await userEvent.click(editable.querySelector<HTMLElement>('[data-dz-tree-row]')!)
+    await waitFor(() => expect(editable).toHaveAttribute('aria-selected', 'true'))
+    await expect(locked).toHaveAttribute('aria-selected', 'false')
+  },
+}

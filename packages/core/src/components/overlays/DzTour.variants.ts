@@ -57,10 +57,10 @@ export const tourVariants = tv({
     /** Control buttons cluster. */
     controls: 'flex items-center gap-[var(--dz-spacing-2)]',
     /** Step indicator dots container. */
-    indicators: 'flex items-center gap-[var(--dz-spacing-1-5)]',
+    indicators: 'flex items-center gap-[var(--dz-spacing-1_5)]',
     /** A single indicator dot. */
     dot: [
-      'h-[var(--dz-spacing-1-5,0.375rem)] w-[var(--dz-spacing-1-5,0.375rem)]',
+      'h-[var(--dz-spacing-1_5,0.375rem)] w-[var(--dz-spacing-1_5,0.375rem)]',
       'rounded-full',
       'transition-colors',
       '@media(prefers-reduced-motion:reduce){transition:none}',

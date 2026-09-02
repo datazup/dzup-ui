@@ -305,10 +305,10 @@ const viewportClasses = computed(() => cn(styles.value.viewport(), props.ui?.vie
 const searchInputClasses = computed(() => cn(styles.value.searchInput(), props.ui?.input))
 const itemClasses = computed(() => cn(styles.value.item(), props.ui?.item))
 const itemIndicatorClasses = computed(() => cn(
-  'absolute left-1 flex items-center justify-center',
+  'absolute inset-s-1 flex items-center justify-center',
   props.ui?.['item-indicator'],
 ))
-const itemLabelClasses = computed(() => cn('pl-6', props.ui?.['item-label']))
+const itemLabelClasses = computed(() => cn('ps-6', props.ui?.['item-label']))
 const noResultsClasses = computed(() => cn(styles.value.noResults(), props.ui?.empty))
 /** The async-options row reuses the `empty` part so a consumer styles one thing. */
 const optionsStateClasses = computed(() => cn(styles.value.optionsState(), props.ui?.empty))

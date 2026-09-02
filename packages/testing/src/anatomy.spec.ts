@@ -277,3 +277,72 @@ describe('expectAnatomy', () => {
     expect(() => expectAnatomy(element, anatomyOf())).toThrow(/1 problem\b/)
   })
 })
+
+describe('composition boundary (TASK-N2-S1)', () => {
+  /**
+   * A nested `data-part="root"` is another component's root, and everything
+   * under it belongs to that component's anatomy, not to this one.
+   *
+   * The regression these pin is real: `DzSpeedDial` renders a `DzFab` and one
+   * `DzIconButton` per action, and the day those two declared their anatomies
+   * `DzSpeedDial` started reporting *"part 'root' appears 5 times"* plus an
+   * `icon` part and two `data-state` values it does not own. Without a
+   * boundary, the rollout is self-limiting: every component that composes a
+   * declared one either breaks or has to re-declare the child's whole surface.
+   */
+  it('does not count a nested component root as a repeat of this one', () => {
+    const element = dom(
+      '<div data-part="root"><div data-part="item"><button data-part="root"></button></div></div>',
+    )
+
+    expect(checkAnatomy(element, anatomyOf({ parts: ['root', 'item'] }))).toEqual([])
+  })
+
+  it('does not report a nested component\'s parts as undeclared here', () => {
+    const element = dom(
+      '<div data-part="root"><button data-part="root"><span data-part="icon"></span></button></div>',
+    )
+
+    expect(checkAnatomy(element, anatomyOf())).toEqual([])
+  })
+
+  it('does not report a nested component\'s data-state as undeclared here', () => {
+    const element = dom(
+      '<div data-part="root"><button data-part="root" data-state="loading"></button></div>',
+    )
+
+    expect(checkAnatomy(element, anatomyOf())).toEqual([])
+  })
+
+  it('does not read a nested component\'s boolean state as this one\'s', () => {
+    const element = dom(
+      '<div data-part="root"><button data-part="root" data-disabled=""></button></div>',
+    )
+
+    expect(checkAnatomy(element, anatomyOf())).toEqual([])
+  })
+
+  it('reports an undeclared part inside this component\'s own boundary — the boundary is not a hole', () => {
+    // The boundary must not become a hole: a stray part on this component's own
+    // markup is exactly what the check exists for.
+    const element = dom('<div data-part="root"><span data-part="ghost"></span></div>')
+
+    expect(checkAnatomy(element, anatomyOf())).toHaveLength(1)
+    expect(checkAnatomy(element, anatomyOf())[0]).toContain('data-part="ghost"')
+  })
+
+  it('does NOT treat a compound part as a boundary', () => {
+    // DzTableRow emits `row`, not `root`, precisely so DzTable keeps owning it.
+    const element = dom(
+      '<div data-part="root"><tr data-part="row"><td data-part="ghost"></td></tr></div>',
+    )
+
+    expect(checkAnatomy(element, anatomyOf({ parts: ['root', 'row'] }))).toHaveLength(1)
+  })
+
+  it('still descends past a plain wrapper with no data-part', () => {
+    const element = dom('<div data-part="root"><div><span data-part="icon"></span></div></div>')
+
+    expect(checkAnatomy(element, anatomyOf({ parts: ['root', 'icon'] }))).toEqual([])
+  })
+})

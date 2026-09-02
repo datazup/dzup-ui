@@ -57,6 +57,7 @@ function handleClick(event: MouseEvent): void {
 
 <template>
   <button
+    data-part="action"
     type="button"
     :class="classes"
     :disabled="ctx?.disabled.value || undefined"

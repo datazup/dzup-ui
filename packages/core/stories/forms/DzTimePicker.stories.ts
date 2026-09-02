@@ -469,3 +469,173 @@ export const RealWorldMeetingScheduler: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / disabled / invalid (tier C `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the state DzTimePicker declares, shown against the live control
+ * and the invalid one so the three renderings a form has to handle sit side by
+ * side.
+ *
+ * The behavioural difference behind the paint: a disabled picker withdraws the
+ * clear button, so a value it already holds cannot be emptied, and its trigger
+ * is a `disabled` button that the popover can never open. The play function
+ * asserts each of those against the enabled control as a baseline.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzTimePicker },
+    template: `
+      <div class="grid max-w-4xl gap-6 lg:grid-cols-3">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Enabled — with a value</p>
+          <DzTimePicker
+            model-value="10:30"
+            aria-label="Enabled time"
+            data-testid="tp-enabled"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled — same value</p>
+          <DzTimePicker
+            disabled
+            model-value="10:30"
+            aria-label="Disabled time"
+            data-testid="tp-disabled"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Invalid</p>
+          <DzTimePicker
+            invalid
+            error="Please select a valid time"
+            aria-label="Invalid time"
+            data-testid="tp-invalid"
+          />
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = canvas.getByTestId('tp-enabled')
+    const disabled = canvas.getByTestId('tp-disabled')
+    const invalid = canvas.getByTestId('tp-invalid')
+
+    // Root state attributes — what the styling contract targets.
+    await expect(enabled).not.toHaveAttribute('data-disabled')
+    await expect(enabled).not.toHaveAttribute('data-invalid')
+    await expect(disabled).toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('data-state', 'disabled')
+    await expect(invalid).toHaveAttribute('data-invalid')
+
+    // Both hold the same value, but only the enabled one offers to clear it.
+    const enabledTrigger = within(enabled).getByRole('combobox', { name: 'Enabled time' })
+    const disabledTrigger = within(disabled).getByRole('combobox', { name: 'Disabled time' })
+    await expect(enabledTrigger).toHaveTextContent('10:30')
+    await expect(disabledTrigger).toHaveTextContent('10:30')
+    await expect(within(enabled).getByRole('button', { name: /clear time/i })).toBeInTheDocument()
+    await expect(within(disabled).queryByRole('button', { name: /clear time/i })).toBeNull()
+
+    // Disabled: the trigger is out of service and can never expand.
+    await expect(disabledTrigger).toBeDisabled()
+    await expect(disabledTrigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Enabled: the same trigger really opens, so the negative above is measured.
+    await userEvent.click(enabledTrigger)
+    await waitFor(() => expect(enabledTrigger).toHaveAttribute('aria-expanded', 'true'))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(enabledTrigger).toHaveAttribute('aria-expanded', 'false'))
+
+    // Invalid: announced on the combobox and explained in a live alert.
+    const invalidTrigger = within(invalid).getByRole('combobox', { name: 'Invalid time' })
+    await expect(invalidTrigger).toHaveAttribute('aria-invalid', 'true')
+    await expect(within(invalid).getByRole('alert'))
+      .toHaveTextContent('Please select a valid time')
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility — keyboard-only, named panel controls (tier C item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The keyboard contract of a picker whose panel is a dialog: Tab reaches the
+ * trigger, Enter opens the panel, Escape closes it and **returns focus to the
+ * trigger** — the step that, when missing, strands a keyboard user at the end of
+ * the document.
+ *
+ * The `select` layout is used deliberately: it gives the panel native form
+ * controls, so this story also asserts that every control inside the popup has
+ * an accessible name (`Select hours`, `Select minutes`, and the footer actions)
+ * rather than being an unlabelled column of numbers.
+ */
+export const Accessibility: Story = {
+  name: 'Accessibility: Keyboard-Only Panel',
+  render: () => ({
+    components: { DzTimePicker },
+    data() {
+      return { time: '' }
+    },
+    template: `
+      <div class="max-w-xs space-y-3">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Tab to the trigger, Enter to open the panel, Escape to close it —
+          focus returns to the trigger. Every control in the panel is named.
+        </p>
+        <DzTimePicker
+          v-model="time"
+          selection="select"
+          aria-label="Appointment time"
+          placeholder="Pick a time"
+          data-testid="tp-a11y"
+        />
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Selected: <strong data-testid="tp-a11y-value">{{ time || 'none' }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const root = canvas.getByTestId('tp-a11y')
+    const trigger = within(root).getByRole('combobox', { name: 'Appointment time' })
+
+    // The closed trigger advertises a dialog popup and claims none is open.
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Reach it with Tab only, then open it with Enter.
+    for (let i = 0; i < 6 && document.activeElement !== trigger; i++)
+      await userEvent.tab()
+    await expect(trigger).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+
+    // Every control in the panel is named — no unlabelled number columns.
+    const hours = await screen.findByRole('combobox', { name: /select hours/i })
+    const minutes = screen.getByRole('combobox', { name: /select minutes/i })
+    await expect(hours).toBeVisible()
+    await expect(minutes).toBeVisible()
+
+    // The panel's controls are operable and commit through the footer.
+    await userEvent.selectOptions(hours, '14')
+    await userEvent.selectOptions(minutes, '30')
+    await userEvent.click(screen.getByRole('button', { name: /^ok$/i }))
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    await expect(canvas.getByTestId('tp-a11y-value')).toHaveTextContent('14:30')
+
+    // Re-open, then Escape: the panel closes and focus comes back to the
+    // trigger rather than being lost to the document.
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'))
+    await waitFor(() => expect(trigger).toHaveFocus())
+  },
+}

@@ -9,6 +9,7 @@ import type {
   ChangeEvents,
   InputVariant,
 } from '@dzup-ui/contracts'
+import type { DzPasswordInputUi } from './DzPasswordInput.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -22,6 +23,17 @@ export interface DzPasswordInputProps extends BaseFormControlProps<InputVariant>
   maxlength?: number
   /** Accessible label for the loading spinner shown when `loading` is true */
   loadingLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzPasswordInput.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzPasswordInput v-model="pw" :ui="{ toggle: 'hidden' }" />
+   * ```
+   */
+  ui?: DzPasswordInputUi
 }
 
 // ---------------------------------------------------------------------------

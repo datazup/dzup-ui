@@ -33,7 +33,7 @@ export const listTokens = {
     },
     sm: {
       paddingX: 'var(--dz-spacing-3)',
-      paddingY: 'var(--dz-spacing-1-5)',
+      paddingY: 'var(--dz-spacing-1_5)',
       fontSize: 'var(--dz-text-sm)',
     },
     md: {

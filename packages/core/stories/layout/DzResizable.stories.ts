@@ -487,3 +487,101 @@ export const Accessibility: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — resizable / handle-disabled / group-disabled (tier B `states` item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the state DzResizable declares, and it exists at **two levels**
+ * that are easy to confuse: on `DzResizableHandle`, where it takes the separator
+ * out of service, and on the `DzResizable` group, where today it only stamps
+ * `data-disabled` for the styling contract.
+ *
+ * Both are shown, because a consumer who sets `disabled` on the group alone gets
+ * a greyed layout whose handles still resize — so the story sets it on the
+ * handle as well, which is the combination that actually freezes the layout.
+ * (The group→handle propagation gap is recorded in the TASK-N1-O1 handoff for
+ * its owner; it is a behavioural change, not a story fix.)
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzResizable, DzResizablePanel, DzResizableHandle },
+    template: `
+      <div class="space-y-8">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Resizable</p>
+          <DzResizable
+            direction="horizontal"
+            aria-label="Resizable layout"
+            data-testid="rs-enabled"
+            class="h-32 rounded-lg border border-[var(--dz-border)]"
+          >
+            <DzResizablePanel :default-size="50">
+              <div class="flex h-full items-center justify-center bg-[var(--dz-primary-muted)] p-2 text-sm text-[var(--dz-primary-muted-foreground)]" data-testid="rs-enabled-a">Panel A</div>
+            </DzResizablePanel>
+            <DzResizableHandle with-handle />
+            <DzResizablePanel :default-size="50">
+              <div class="flex h-full items-center justify-center bg-[var(--dz-success-muted)] p-2 text-sm text-[var(--dz-success-muted-foreground)]">Panel B</div>
+            </DzResizablePanel>
+          </DzResizable>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Frozen — disabled on the group AND the handle</p>
+          <DzResizable
+            direction="horizontal"
+            disabled
+            aria-label="Frozen layout"
+            data-testid="rs-disabled"
+            class="h-32 rounded-lg border border-[var(--dz-border)]"
+          >
+            <DzResizablePanel :default-size="50">
+              <div class="flex h-full items-center justify-center bg-[var(--dz-muted)] p-2 text-sm text-[var(--dz-muted-foreground)]" data-testid="rs-disabled-a">Panel A</div>
+            </DzResizablePanel>
+            <DzResizableHandle disabled with-handle />
+            <DzResizablePanel :default-size="50">
+              <div class="flex h-full items-center justify-center bg-[var(--dz-muted)] p-2 text-sm text-[var(--dz-muted-foreground)]">Panel B</div>
+            </DzResizablePanel>
+          </DzResizable>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabledGroup = canvas.getByTestId('rs-enabled')
+    const disabledGroup = canvas.getByTestId('rs-disabled')
+
+    // Group-level state is exposed for the styling contract.
+    await expect(enabledGroup).not.toHaveAttribute('data-disabled')
+    await expect(disabledGroup).toHaveAttribute('data-disabled')
+
+    // Handle-level state is exposed on the `role="separator"` itself.
+    const enabledHandle = within(enabledGroup).getByRole('separator')
+    const disabledHandle = within(disabledGroup).getByRole('separator')
+    await expect(enabledHandle).toHaveAttribute('data-panel-resize-handle-enabled', 'true')
+    await expect(enabledHandle).toHaveAttribute('aria-orientation', 'vertical')
+    await expect(disabledHandle).toHaveAttribute('data-disabled')
+    await expect(disabledHandle).toHaveAttribute('data-panel-resize-handle-enabled', 'false')
+
+    // Resizable: focusing the separator and pressing an Arrow key really
+    // changes the panel geometry.
+    const panelA = canvas.getByTestId('rs-enabled-a').parentElement as HTMLElement
+    const beforeWidth = panelA.getBoundingClientRect().width
+    enabledHandle.focus()
+    await expect(enabledHandle).toHaveFocus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() =>
+      expect(panelA.getBoundingClientRect().width).toBeGreaterThan(beforeWidth),
+    )
+
+    // Frozen: the same keys leave the geometry exactly where it was.
+    const frozenA = canvas.getByTestId('rs-disabled-a').parentElement as HTMLElement
+    const frozenWidth = frozenA.getBoundingClientRect().width
+    disabledHandle.focus()
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}')
+    await expect(frozenA.getBoundingClientRect().width).toBe(frozenWidth)
+  },
+}

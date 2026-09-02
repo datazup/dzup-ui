@@ -38,6 +38,7 @@ const props = withDefaults(defineProps<DzPasswordInputProps>(), {
   invalid: false,
   required: false,
   loadingLabel: undefined,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzPasswordInputEmits>()
@@ -70,12 +71,34 @@ const wrapperClasses = computed(() =>
       invalid: isInvalid.value,
     }),
     attrs.class as string | undefined,
+    props.ui?.control,
   ),
 )
 
 // The outer shell paints the field surface, so the autofill cover stays clear
 // rather than repainting --dz-input-bg over it (styles/base.css § 4c).
-const inputClasses = computed(() => cn(inputElementVariants(), 'dz-native-input-autofill-clear'))
+const inputClasses = computed(() => cn(
+  inputElementVariants(),
+  'dz-native-input-autofill-clear',
+  props.ui?.input,
+))
+
+/** Per-part class values (ADR-19 §5). */
+const prefixClasses = computed(() => cn(
+  'flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]',
+  props.ui?.prefix,
+))
+const spinnerClasses = computed(() => cn('shrink-0', props.ui?.spinner))
+const toggleClasses = computed(() => cn(
+  'dz-target-min-tight [--dz-control-visual-size:1rem] flex shrink-0 items-center '
+  + 'justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] '
+  + 'transition-colors',
+  props.ui?.toggle,
+))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /**
  * Spinner size mapped down from the field size so the indicator stays
@@ -126,6 +149,8 @@ defineExpose({ inputRef })
 
 <template>
   <div
+    data-part="root"
+    :class="cn(ui?.root)"
     :data-state="
       resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined
     "
@@ -137,11 +162,12 @@ defineExpose({ inputRef })
     style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
-    <div :class="wrapperClasses">
+    <div data-part="control" :class="wrapperClasses">
       <!-- Prefix slot -->
       <span
         v-if="$slots.prefix"
-        class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]"
+        data-part="prefix"
+        :class="prefixClasses"
       >
         <slot name="prefix" />
       </span>
@@ -151,6 +177,7 @@ defineExpose({ inputRef })
         :id="resolvedId"
         ref="inputRef"
         v-model="model"
+        data-part="input"
         :type="showPassword ? 'text' : 'password'"
         :class="inputClasses"
         :name="name"
@@ -174,7 +201,8 @@ defineExpose({ inputRef })
       <!-- Loading spinner -->
       <DzSpinner
         v-if="loading"
-        class="shrink-0"
+        data-part="spinner"
+        :class="spinnerClasses"
         :size="spinnerSize"
         :tone="tone ?? 'neutral'"
         :label="resolvedLoadingLabel"
@@ -183,7 +211,8 @@ defineExpose({ inputRef })
       <!-- Toggle visibility button -->
       <button
         type="button"
-        class="flex shrink-0 items-center justify-center text-[var(--dz-colors-neutral-400)] hover:text-[var(--dz-foreground)] transition-colors"
+        data-part="toggle"
+        :class="toggleClasses"
         :aria-label="showPassword ? 'Hide password' : 'Show password'"
         :aria-pressed="showPassword"
         :disabled="resolvedDisabled || loading"
@@ -231,7 +260,8 @@ defineExpose({ inputRef })
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

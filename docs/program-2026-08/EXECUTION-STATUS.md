@@ -37,12 +37,17 @@
 | TASK-OSS-P4-03 | `[x]` | One catalog: 54 `aria-label`s across 27 components (which **no** application could change) + 39 prop defaults across 24, all byte-identical to the literals they replaced — 3,442 component tests pass **unedited**. `validate:hardcoded-strings` added to `validate:all`; global Storybook pseudo-locale toolbar; all `Intl` construction cached in one framework-free module. **Three findings**: this packet's own first inventory swept up 11 JSDoc `@example` strings; `DzOrderList.dragHandleLabel` is a documented public prop nothing renders; `DzCommandPalette` held a second copy of a literal as an inline fallback. **One behaviour change** — three components formatted with `Intl`'s ambient locale, which differs between server and browser, so they could hydrate into a different language |
 | TASK-OSS-P4-04 | `[x]` | **19 portal consumers, not the 15 the reassessment counted**: four (`DzBlockUI`, `DzSidebar`, `DzPopconfirm`, `DzTour`) teleported to a hard-coded `body` with **no prop to override** — the case the cookbook twice documented as unsolvable. All 19 now follow instance → provider → `document.body`; the four gained a `portalTo`. 6 precedence specs + 2 SSR specs; new *Portals & Embedding* guide. Found that `apps/landing/src/claims.spec.ts` treats every entry under `src/components/` as a family directory and throws `ENOTDIR` on a loose file — hardened |
 | TASK-OSS-P4-05 | `[x]` | **55 lines across 26 variants files were physical `left`/`right`** — an Arabic document mirrored while borders, padding and text alignment stayed pinned to the physical left. Now logical. `DzTable`'s cells were `text-left`, so every cell aligned against the wrong edge. **`useTabs` hard-coded ArrowRight as "next"**, so an Arabic user pressing the key pointing at the next tab got the previous one. New `rtl` anatomy field (3 axes), `validate:rtl` gate, generated `rtl-matrix.md`, `expectRtl`/`expectRtlComputed` in `@dzup-ui/testing`, Storybook Direction toolbar. **7/144 declare an RTL contract because 7/144 declare an anatomy** — same rollout |
-| TASK-OSS-P5-01 | `[ ]` | |
-| TASK-OSS-P5-02 | `[ ]` | |
-| TASK-OSS-P5-03 | `[ ]` | |
-| TASK-OSS-P5-04 | `[ ]` | |
-| TASK-OSS-P5-05 | `[ ]` | |
-| TASK-OSS-P5-06 | `[ ]` | |
+| TASK-OSS-P5-01 | `[x]` | 144/144 tiered (A 55 · B 67 · C 21 · D 1); tier scale found inverted vs six docs and corrected; `SecurityBoundary` added as an orthogonal axis (13 declarers); `validate:quality-tiers` |
+| TASK-OSS-P5-02 | `[~]` | Join + ratchet done (`validate:story-dod-tiers` in `validate:all`); 366 advisory → **51 tier-required across 32 components, 0 authored** — the only open foundation task |
+| TASK-OSS-P5-03 | `[x]` | 18 Playwright projects (3 engines × 6 conditions); chromium run: 144 targets, 89 in lane, **46 measured failures ratcheted** (28 target-size, 18 reflow); 12 Firefox/WebKit projects configured, unrun |
+| TASK-OSS-P5-04 | `[x]` | 89 AT-matrix files + index, 534 cells, **0 executed** (recorded-unrun per stop condition; execution needs a human owner) |
+| TASK-OSS-P5-05 | `[x]` | `packages/core/perf/baselines.json`: ≥5 runs, median + max(3σ, 5%), downward-only ratchet, 35 samples/metric; runtime gate behind `DZUP_PERF_GATE` after three false regressions |
+| TASK-OSS-P5-06 | `[x]` | `capability-matrix.json` 144 rows × 1,661 cells, four declared inputs, staleness detection; rendered at `Capability-Matrix.mdx` |
+
+> **Table repaired 2026-08-28.** The six P5 rows above previously read `[ ]`
+> while this file's own handoff sections (below) and `foundation-tasks.md`
+> recorded them complete; the rows now match the body. Successor program:
+> `workspace-docs/repos/ui/docs/architecture/dzup-ui-program-reassessment-2026-08-28/`.
 
 ---
 

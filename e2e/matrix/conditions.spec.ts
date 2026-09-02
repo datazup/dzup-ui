@@ -75,12 +75,42 @@ for (const target of RUNNABLE_TARGETS) {
           // `getAnimations` sees CSS animations, transitions and the Web
           // Animations API alike, which is the only way to catch a component
           // that honours the media query in its CSS and then animates in JS.
+          //
+          // **Why the visibility filter (TASK-N1-O2).** The document also
+          // contains Storybook's own chrome. `.sb-preparing-story` keeps a
+          // `.sb-loader` spinner running `sb-rotate360` forever and is hidden
+          // with `display: none` once the story is shown, never removed.
+          // CSS Animations Level 1 says setting `display: none` "will terminate
+          // any running animation applied to the element and its descendants" —
+          // chromium and firefox do; **WebKit 26.5 does not**, and reports the
+          // spinner as `running`. Measured: 84 of 88 Tier B–D components failed
+          // this condition on WebKit, every one of them naming Storybook's
+          // `DIV.sb-loader` and none naming anything the component rendered.
+          //
+          // Filtering on `checkVisibility()` (all three engines support it)
+          // states the real rule rather than special-casing a class name: an
+          // animation on an element with no box cannot be perceived, so it
+          // cannot violate prefers-reduced-motion. Portalled overlays stay in
+          // scope, because they have boxes.
           await page.waitForTimeout(1_000)
           const running = await page.evaluate(() =>
             document
               .getAnimations()
-              .filter(a => a.playState === 'running')
-              .map(a => (a.effect as KeyframeEffect | null)?.target?.nodeName ?? 'unknown'),
+              .filter((a) => {
+                if (a.playState !== 'running')
+                  return false
+                const node = (a.effect as KeyframeEffect | null)?.target ?? null
+                if (node === null)
+                  return true
+                return node.isConnected && node.checkVisibility()
+              })
+              .map((a) => {
+                const node = (a.effect as KeyframeEffect | null)?.target ?? null
+                if (node === null)
+                  return 'unknown'
+                const cls = node.getAttribute('class')
+                return cls === null || cls === '' ? node.nodeName : `${node.nodeName}.${cls}`
+              }),
           )
           expect(
             running,
@@ -93,6 +123,41 @@ for (const target of RUNNABLE_TARGETS) {
           // WCAG 1.4.10 Reflow: at 320 CSS px there must be no horizontal
           // scroll. Measured on the document, not on the component, because a
           // component that overflows its container is exactly the failure.
+          //
+          // **Why the canvas is constrained first (TASK-N1-O3, harness defect
+          // H2).** The Storybook preview sets `layout: 'centered'` globally,
+          // which makes `<body>` a flex container and `#storybook-root` a flex
+          // ITEM with the initial `min-width: auto`. A flex item may not shrink
+          // below its min-content width, so the canvas is sized by the story's
+          // MIN-CONTENT WIDTH and the component is never given a 320px
+          // containing block to reflow into. What the document then measures is
+          // not reflow at all — it is min-content width, which is a different
+          // and much stricter property.
+          //
+          // Measured, on the story pages this lane drives:
+          //
+          //   DzTable    canvas 421px, its own `overflow-auto` wrapper 341.5px
+          //              — the wrapper was never squeezed, so the scroller that
+          //              exists for exactly this case never engaged. Constrain
+          //              the canvas and the document overflow is 0 while the
+          //              table scrolls inside its box: the component reflows,
+          //              and the harness was reporting that it does not.
+          //   DzDataGrid, DzImageComparison, DzMenu, DzOrderList, DzOtpInput,
+          //   DzPopconfirm, DzTabs, DzToolbar, DzTour, DzTransfer — same shape,
+          //              0px overflow once the canvas is a normal block box.
+          //
+          // An internal scroll container is the technique WCAG's own guidance
+          // names for content that requires two-dimensional layout, so a lane
+          // that cannot see it working is measuring the wrong thing. The three
+          // declarations below reproduce what a 320px page actually does: a
+          // block canvas at the viewport width. They do NOT relax anything
+          // inside the story — `#storybook-root *` is untouched, so a component
+          // whose own flex children refuse to shrink still fails, which is how
+          // DzSpeedDial's 96px was found and kept.
+          await page.addStyleTag({
+            content: 'body.sb-main-centered{display:block}'
+              + '#storybook-root{inline-size:100%;min-inline-size:0}',
+          })
           const overflow = await page.evaluate(() => {
             const el = document.documentElement
             return el.scrollWidth - el.clientWidth

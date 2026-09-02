@@ -68,11 +68,51 @@ function rootOf(target: AnatomyTarget): Element {
   return 'element' in target ? target.element : target
 }
 
+/**
+ * Every element inside **this component's own anatomy boundary**: the target
+ * plus its descendants, stopping at any descendant that carries
+ * `data-part="root"`.
+ *
+ * A nested `data-part="root"` is another component's root — ADR-19 §3 makes the
+ * root part universal, so it is a real, mechanical boundary marker rather than
+ * a convention this helper invented.
+ *
+ * **Why this exists (TASK-N2-S1).** Without it, the conformance check descends
+ * into composed components and reports their declarations as the parent's
+ * violations. `DzSpeedDial` is the catalogue's first composition of two
+ * anatomy-declaring components — it renders a `DzFab` trigger and a `DzIconButton`
+ * per action — and the moment those two declared their anatomies, `DzSpeedDial`
+ * reported *"part 'root' appears 5 times"*, an undeclared `icon` part it does
+ * not own, and two `data-state` values emitted by its children.
+ *
+ * That failure mode makes the rollout self-limiting: every component that
+ * composes a declared one would either break or have to re-declare the child's
+ * entire surface as its own, which is the opposite of what parts are for. The
+ * boundary is the fix, and it is the same rule a consumer reads intuitively —
+ * `[data-part="item"] [data-part="root"]` is *the nested component*, not a
+ * second copy of this one.
+ *
+ * Compound parts are deliberately **not** boundaries: `DzTableRow` emits
+ * `data-part="row"`, not `root`, precisely because `DzTable` owns that name.
+ */
+function withinBoundary(root: Element): Element[] {
+  const nodes: Element[] = [root]
+  const walk = (element: Element): void => {
+    for (const child of Array.from(element.children)) {
+      if (child.getAttribute('data-part') === 'root')
+        continue
+      nodes.push(child)
+      walk(child)
+    }
+  }
+  walk(root)
+  return nodes
+}
+
 function partsIn(root: Element): Map<string, number> {
   const counts = new Map<string, number>()
-  const nodes: Element[] = [root, ...Array.from(root.querySelectorAll('[data-part]'))]
 
-  for (const node of nodes) {
+  for (const node of withinBoundary(root)) {
     const part = node.getAttribute('data-part')
     if (part === null)
       continue
@@ -92,9 +132,8 @@ function partsIn(root: Element): Map<string, number> {
 function booleanStatesIn(root: Element, anatomy: CheckableAnatomy): Set<string> {
   const found = new Set<string>()
   const names = [...BOOLEAN_STATE_ATTRIBUTES, ...anatomy.states]
-  const nodes: Element[] = [root, ...Array.from(root.querySelectorAll('*'))]
 
-  for (const node of nodes) {
+  for (const node of withinBoundary(root)) {
     for (const name of names) {
       const value = node.getAttribute(`data-${name}`)
       if (value === '' || value === 'true')
@@ -107,9 +146,8 @@ function booleanStatesIn(root: Element, anatomy: CheckableAnatomy): Set<string> 
 /** Every `data-state` value in the subtree. */
 function stateValuesIn(root: Element): Set<string> {
   const found = new Set<string>()
-  const nodes: Element[] = [root, ...Array.from(root.querySelectorAll('[data-state]'))]
 
-  for (const node of nodes) {
+  for (const node of withinBoundary(root)) {
     const value = node.getAttribute('data-state')
     if (value !== null && value !== '')
       found.add(value)

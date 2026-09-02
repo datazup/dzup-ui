@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<DzToggleButtonProps>(), {
   size: 'md',
   tone: undefined,
   disabled: false,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzToggleButtonEmits>()
@@ -48,6 +49,7 @@ const classes = computed(() =>
       pressed: model.value,
     }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 
@@ -70,6 +72,7 @@ function handleBlur(event: FocusEvent): void {
 <template>
   <button
     :id="id"
+    data-part="root"
     type="button"
     :class="classes"
     :disabled="disabled || undefined"

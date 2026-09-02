@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { DzTourStep } from '../../src/components/overlays'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzTour } from '../../src/components/overlays'
 import { a11yError, darkModeDecorator } from '../_shared'
@@ -312,5 +312,173 @@ export const Interactive: Story = {
     await userEvent.click(screen.getByTestId('dz-tour-next'))
     await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     await expect(canvas.getByText(/tour finished/i)).toBeInTheDocument()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility — modal dialog, focus trap, live region (tier C item)
+// ---------------------------------------------------------------------------
+
+/**
+ * What a tour owes a screen-reader and keyboard user, asserted step by step.
+ *
+ * The spotlight popover is a real `role="dialog" aria-modal="true"` named by the
+ * step title and described by its body, focus is trapped inside it (Tab cycles
+ * through Skip/Back/Next and never escapes to the page underneath), a polite
+ * live region announces `Step N of M` on every move, and Escape dismisses the
+ * whole tour. Every one of those is driven from the keyboard here.
+ */
+export const Accessibility: Story = {
+  name: 'Accessibility: Modal Dialog & Focus Trap',
+  render: () => ({
+    components: { DzTour, DzButton },
+    setup() {
+      return { steps }
+    },
+    data() {
+      return { open: false, current: 0 }
+    },
+    template: `
+      <div>
+        ${demoToolbar}
+        <p class="mb-3 text-sm text-[var(--dz-muted-foreground)]">
+          The spotlight is a modal dialog: focus is trapped in it, each step is
+          announced politely, and Escape dismisses the tour.
+        </p>
+        <DzButton @click="open = true; current = 0">Start accessible tour</DzButton>
+        <DzTour v-model:open="open" v-model:current="current" :steps="steps" />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: /start accessible tour/i }))
+    const dialog = await screen.findByRole('dialog')
+
+    // A modal dialog named by the step title and described by its body.
+    await expect(dialog).toHaveAttribute('aria-modal', 'true')
+    await expect(dialog).toHaveAccessibleName('Create a project')
+    await expect(dialog).toHaveAccessibleDescription(/spin up a new workspace/i)
+
+    // The polite live region reports the position in the tour.
+    const live = dialog.querySelector('[aria-live="polite"]')
+    await expect(live).toHaveTextContent('Step 1 of 3')
+
+    // Focus is inside the popover as soon as it opens.
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true))
+
+    // …and is trapped: tabbing past the last control wraps back to the first
+    // rather than landing on the page underneath.
+    const controls = [...dialog.querySelectorAll<HTMLElement>('button')]
+    await expect(controls.length).toBeGreaterThanOrEqual(2)
+    for (let i = 0; i < controls.length + 1; i++) {
+      await userEvent.tab()
+      await expect(dialog.contains(document.activeElement)).toBe(true)
+    }
+
+    // Advancing with the keyboard moves the step and re-announces it.
+    screen.getByTestId('dz-tour-next').focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAccessibleName('Invite teammates'),
+    )
+    await expect(screen.getByRole('dialog').querySelector('[aria-live="polite"]'))
+      .toHaveTextContent('Step 2 of 3')
+
+    // Escape dismisses the whole tour, not just the current step.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Real world — first-run onboarding (tier C `real-world` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The one thing a tour is ever built for: a first-run walkthrough of an app's
+ * own chrome, started automatically for a new workspace, with the "seen" flag a
+ * product would persist and a way to replay it later.
+ *
+ * The composition is the point — a tour rendered beside a bare row of buttons
+ * never shows the two things that decide whether it ships: that finishing and
+ * skipping have to be told apart (one marks onboarding complete, the other does
+ * not), and that the tour must be restartable afterwards.
+ */
+export const RealWorldOnboarding: Story = {
+  name: 'Real World: First-Run Onboarding',
+  render: () => ({
+    components: { DzTour, DzButton },
+    setup() {
+      return { steps }
+    },
+    data() {
+      return { open: false, current: 0, onboarded: false, dismissed: false }
+    },
+    template: `
+      <div class="space-y-4">
+        <header class="flex items-center justify-between rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] p-4">
+          <span class="font-semibold">Acme workspace</span>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">
+            Onboarding: <strong data-testid="tr-status">{{ onboarded ? 'complete' : dismissed ? 'skipped' : 'not started' }}</strong>
+          </span>
+        </header>
+
+        ${demoToolbar}
+
+        <DzButton data-testid="tr-start" @click="open = true; current = 0">
+          {{ onboarded || dismissed ? 'Replay the tour' : 'Take the tour' }}
+        </DzButton>
+
+        <DzTour
+          v-model:open="open"
+          v-model:current="current"
+          :steps="steps"
+          @finish="onboarded = true; dismissed = false"
+          @close="dismissed = true"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // A brand-new workspace has not been onboarded.
+    await expect(canvas.getByTestId('tr-status')).toHaveTextContent('not started')
+
+    // Skipping is NOT completing — the product must be able to tell them apart.
+    await userEvent.click(canvas.getByTestId('tr-start'))
+    await screen.findByRole('dialog')
+    await userEvent.click(screen.getByTestId('dz-tour-skip'))
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(canvas.getByTestId('tr-status')).toHaveTextContent('skipped')
+
+    // The tour is restartable, and its step counter starts over.
+    await expect(canvas.getByTestId('tr-start')).toHaveTextContent(/replay the tour/i)
+    await userEvent.click(canvas.getByTestId('tr-start'))
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog.querySelector('[aria-live="polite"]')).toHaveTextContent('Step 1 of 3')
+
+    // Walking it to the end marks onboarding complete. `Back` is offered from
+    // step 2 onwards and returns to the previous step without leaving the tour.
+    await userEvent.click(screen.getByTestId('dz-tour-next'))
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAccessibleName('Invite teammates'),
+    )
+    await userEvent.click(screen.getByTestId('dz-tour-back'))
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAccessibleName('Create a project'),
+    )
+
+    await userEvent.click(screen.getByTestId('dz-tour-next'))
+    await userEvent.click(screen.getByTestId('dz-tour-next'))
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAccessibleName('Tune your settings'),
+    )
+    await userEvent.click(screen.getByTestId('dz-tour-next'))
+
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(canvas.getByTestId('tr-status')).toHaveTextContent('complete')
   },
 }

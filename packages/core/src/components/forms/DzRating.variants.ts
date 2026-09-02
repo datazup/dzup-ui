@@ -11,8 +11,15 @@ import { tv } from 'tailwind-variants'
 
 export const ratingVariants = tv({
   slots: {
+    /**
+     * TASK-N1-O3 / WCAG 2.2 SC 2.5.8. The root carries `role="slider"` and the
+     * roving tabindex, so it is the pointer target; it measured `div 116x20`,
+     * the height of the icons inside it. `dz-target-min` floors the block axis
+     * at 24px (the inline axis is already past it) and `items-center` keeps the
+     * stars where they were.
+     */
     root: [
-      'inline-flex w-fit items-center',
+      'dz-target-min inline-flex w-fit items-center',
       'rounded-[var(--dz-radius-sm)]',
       'dz-focus-ring-control',
     ].join(' '),

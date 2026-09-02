@@ -49,7 +49,7 @@ import type { BlockDef, BlockSourceLookup, CategoryMeta } from '../src/blocks/re
 import type { ResolvedTemplateFile, TemplateRegistryItem } from '../src/blocks/templatesItem.ts'
 import type { resolveTemplateSources } from '../src/templates/rawSources.ts'
 import type { TemplateMeta } from '../src/templates/registry.ts'
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -90,6 +90,20 @@ const TEMPLATES_OUT_DIR = resolve(OUT_DIR, 'templates')
 
 /** The generated `@dzup-ui/tokens` stylesheet the tokens theme item is parsed from. */
 const TOKENS_CSS = resolve(LANDING_ROOT, '../../packages/tokens/dist/tokens.css')
+
+/**
+ * The generated component-metadata artifact (TASK-N2-A2), served verbatim at
+ * `/r/component-meta.json`.
+ *
+ * Copied, never re-derived: `packages/core/docs/component-meta.json` is the one
+ * extraction of every component's props/slots/emits/exposed, and
+ * `yarn validate:component-meta` gates it against the sources. This directory is
+ * wiped and rewritten on every build, so the copy has to happen HERE — and
+ * `validate:component-meta` fails if this file stops making it, because
+ * `@dzup-ui/mcp`'s `RegistryClient` reads that site path in HTTP mode and would
+ * otherwise 404 in production while working locally.
+ */
+const COMPONENT_META_SRC = resolve(LANDING_ROOT, '../../packages/core/docs/component-meta.json')
 
 /** Pretty JSON with a trailing newline (POSIX-friendly, clean diffs). */
 function toJson(value: unknown): string {
@@ -174,7 +188,69 @@ async function loadTemplates(server: ViteDevServer): Promise<Catalog['templates'
   return out
 }
 
+/**
+ * `--check-llms` — READ-ONLY freshness probe for the two AI-facing block docs
+ * (`public/llms.txt`, `public/llms-full.txt`), for `yarn validate:llms`
+ * (TASK-N2-A3).
+ *
+ * WHY a flag here rather than a validator that re-derives the markdown:
+ * `packages/tooling` may not depend on `@dzup-ui/*`, and the blocks catalog is
+ * only loadable through a Vite SSR transform (`import.meta.glob`). So the gate
+ * delegates freshness to this generator in check mode — exactly the pattern
+ * `validate:mcp` uses for `packages/mcp` (TASK-N2-A1).
+ *
+ * WHY read-only matters: `main()` below `rm -rf`s and rewrites `public/r/`
+ * (282 tracked files). A freshness gate must never do that, so this path
+ * returns before any of it and writes nothing at all.
+ */
+async function checkLlms(): Promise<void> {
+  const { blocks, categories, getSource } = await loadCatalog()
+  if (blocks.length === 0) {
+    throw new Error('Registry has no blocks — nothing to check.')
+  }
+  const expected: Array<[string, string]> = [
+    [LLMS_TXT, llmsTxt(blocks, categories)],
+    [LLMS_FULL_TXT, llmsFullTxt(blocks, categories, getSource)],
+  ]
+  const stale: string[] = []
+  for (const [name, fresh] of expected) {
+    let onDisk: string
+    try {
+      onDisk = await readFile(resolve(PUBLIC_DIR, name), 'utf8')
+    }
+    catch {
+      stale.push(`apps/landing/public/${name} does not exist`)
+      continue
+    }
+    if (onDisk !== fresh) {
+      const a = onDisk.split('\n')
+      const b = fresh.split('\n')
+      let line = 0
+      while (line < Math.max(a.length, b.length) && a[line] === b[line]) line++
+      stale.push(
+        `apps/landing/public/${name} is STALE — it disagrees with a fresh render of the BLOCKS catalog `
+        + `(committed ${onDisk.length} chars, fresh ${fresh.length} chars; first difference at line ${line + 1}). `
+        + `Run \`yarn workspace @dzup-ui/landing build:registry\`.`,
+      )
+    }
+  }
+  if (stale.length > 0) {
+    for (const s of stale) console.error(`  ✗ ${s}`)
+    process.exitCode = 1
+    return
+  }
+  console.log(
+    `  ✓ blocks llms docs fresh — ${blocks.length} blocks across ${categories.length} categories `
+    + `→ ${LLMS_TXT}, ${LLMS_FULL_TXT}`,
+  )
+}
+
 async function main(): Promise<void> {
+  if (process.argv.includes('--check-llms')) {
+    await checkLlms()
+    return
+  }
+
   const { blocks, categories, getSource, templates } = await loadCatalog()
   if (blocks.length === 0) {
     throw new Error('Registry has no blocks — nothing to generate.')
@@ -194,6 +270,11 @@ async function main(): Promise<void> {
   // via `shadcn add …/r/tokens.json`, and referenced from the index directory.
   const tokensItem = toTokensItem(await readFile(TOKENS_CSS, 'utf8'))
   await writeFile(resolve(OUT_DIR, `${tokensItem.name}.json`), toJson(tokensItem))
+
+  // The component-metadata artifact, verbatim (TASK-N2-A2). Deliberately NOT in
+  // `registry.json`: it is not a `shadcn add`-able item, it is the machine-readable
+  // component API the docs site, llms-full.txt and the MCP metadata tools read.
+  await copyFile(COMPONENT_META_SRC, resolve(OUT_DIR, 'component-meta.json'))
 
   // The top-level registry index: every block + the tokens theme entry.
   const index = buildRegistryIndex(blocks, getSource)

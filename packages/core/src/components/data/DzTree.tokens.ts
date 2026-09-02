@@ -40,31 +40,31 @@ export const treeTokens = {
   size: {
     xs: {
       paddingX: 'var(--dz-spacing-1)',
-      paddingY: 'var(--dz-spacing-0-5)',
+      paddingY: 'var(--dz-spacing-0_5)',
       fontSize: 'var(--dz-text-xs)',
       indent: 'var(--dz-spacing-3)',
     },
     sm: {
-      paddingX: 'var(--dz-spacing-1-5)',
+      paddingX: 'var(--dz-spacing-1_5)',
       paddingY: 'var(--dz-spacing-1)',
       fontSize: 'var(--dz-text-sm)',
       indent: 'var(--dz-spacing-4)',
     },
     md: {
       paddingX: 'var(--dz-spacing-2)',
-      paddingY: 'var(--dz-spacing-1-5)',
+      paddingY: 'var(--dz-spacing-1_5)',
       fontSize: 'var(--dz-text-sm)',
       indent: 'var(--dz-spacing-5)',
     },
     lg: {
-      paddingX: 'var(--dz-spacing-2-5)',
+      paddingX: 'var(--dz-spacing-2_5)',
       paddingY: 'var(--dz-spacing-2)',
       fontSize: 'var(--dz-text-base)',
       indent: 'var(--dz-spacing-6)',
     },
     xl: {
       paddingX: 'var(--dz-spacing-3)',
-      paddingY: 'var(--dz-spacing-2-5)',
+      paddingY: 'var(--dz-spacing-2_5)',
       fontSize: 'var(--dz-text-lg)',
       indent: 'var(--dz-spacing-8)',
     },

@@ -66,7 +66,13 @@ export const multiSelectVariants = tv({
       'text-center',
       'text-[var(--dz-muted-foreground)]',
     ].join(' '),
-    icon: 'shrink-0 text-[var(--dz-muted-foreground)]',
+    /**
+     * TASK-N1-O3 / WCAG 2.2 SC 2.5.8. This slot dresses the clear and toggle
+     * BUTTONS, not a glyph, so it carries the 24px target floor; the growth is
+     * handed back to the layout by `dz-target-min-tight` and the glyph inside
+     * is sized from `--dz-control-visual-size`.
+     */
+    icon: 'dz-target-min-tight shrink-0 inline-flex items-center justify-center text-[var(--dz-muted-foreground)]',
     checkIcon: 'shrink-0 text-[var(--dz-primary)]',
   },
   variants: {
@@ -81,35 +87,35 @@ export const multiSelectVariants = tv({
         root: 'min-h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-input-xs-font-size)]',
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
         tag: 'text-[length:var(--dz-text-xs)] py-0',
-        icon: 'h-3 w-3',
+        icon: 'h-3 w-3 [--dz-control-visual-size:0.75rem]',
         checkIcon: 'h-3 w-3',
       },
       sm: {
         root: 'min-h-[var(--dz-input-sm-height)] px-[var(--dz-input-sm-padding-x)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-input-sm-font-size)]',
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         tag: 'text-[length:var(--dz-text-xs)] py-0.5',
-        icon: 'h-3.5 w-3.5',
+        icon: 'h-3.5 w-3.5 [--dz-control-visual-size:0.875rem]',
         checkIcon: 'h-3.5 w-3.5',
       },
       md: {
         root: 'min-h-[var(--dz-input-md-height)] px-[var(--dz-input-md-padding-x)] py-[var(--dz-spacing-1)] text-[length:var(--dz-input-md-font-size)]',
         item: 'px-[var(--dz-spacing-2)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         tag: 'text-[length:var(--dz-text-xs)] py-0.5',
-        icon: 'h-4 w-4',
+        icon: 'h-4 w-4 [--dz-control-visual-size:1rem]',
         checkIcon: 'h-4 w-4',
       },
       lg: {
         root: 'min-h-[var(--dz-input-lg-height)] px-[var(--dz-input-lg-padding-x)] py-[var(--dz-spacing-1)] text-[length:var(--dz-input-lg-font-size)]',
         item: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-2)] text-[length:var(--dz-text-base)]',
         tag: 'text-[length:var(--dz-text-sm)] py-0.5',
-        icon: 'h-5 w-5',
+        icon: 'h-5 w-5 [--dz-control-visual-size:1.25rem]',
         checkIcon: 'h-5 w-5',
       },
       xl: {
         root: 'min-h-[var(--dz-input-xl-height)] px-[var(--dz-input-xl-padding-x)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-input-xl-font-size)]',
         item: 'px-[var(--dz-spacing-3)] py-[var(--dz-spacing-2)] text-[length:var(--dz-text-lg)]',
         tag: 'text-[length:var(--dz-text-sm)] py-1',
-        icon: 'h-5 w-5',
+        icon: 'h-5 w-5 [--dz-control-visual-size:1.25rem]',
         checkIcon: 'h-5 w-5',
       },
     },

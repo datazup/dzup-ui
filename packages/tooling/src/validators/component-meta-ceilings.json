@@ -1,0 +1,42 @@
+{
+  "//": "TASK-N2-A2. Ratcheted extraction debt for packages/core/docs/component-meta.json. Every number may only FALL; validate:component-meta fails when one rises, and tells you to lower it when it drops. Measured at 51dec93 with the uncommitted N1+T1+A1 working tree, over 208 components (144 public-component + 64 compound-part).",
+
+  "unclassifiable": {
+    "//": "Components vue-component-meta could not process at all. Zero today -- the task's <stop_conditions> unclassifiable branch was never reached. A rise means a source change broke extraction for a component, which is exactly the signal this gate exists to give.",
+    "ceiling": 0
+  },
+  "unresolvedTypes": {
+    "//": "Member types the extractor printed as unusable -- empty, bare `any`, a leaked `__VLS_*` internal, or an `import(...)` module reference. Zero today. NOT a synonym for 'contains the word unknown': Record<string, unknown> and TreeNode<unknown> are fully resolved and are not counted.",
+    "ceiling": 0
+  },
+  "publicComponentsWithoutRecord": {
+    "//": "public-component symbols in the ownership manifest with no metadata record. Zero -- this is the success criterion 'all 144 public components have metadata records', held as a ratchet so it cannot silently regress.",
+    "ceiling": 0
+  },
+
+  "propsWithoutDescription": {
+    "//": "Own props whose declaring member carries no JSDoc. 63 of 1,712. This is a SOURCE gap, not an extraction gap: vue-component-meta reads the JSDoc that is there. Falls as component authors document props.",
+    "ceiling": 63
+  },
+  "slotsWithoutDescription": {
+    "//": "Slots with no JSDoc on the DzXSlots member. 21 of 326. Same class as propsWithoutDescription.",
+    "ceiling": 21
+  },
+  "eventsWithoutDescription": {
+    "//": "Events with no description from either source. 106 of 359. 71 of those are `update:*` events defineModel synthesises (ADR-16) -- there is no authored member anywhere in the repo to carry prose for them. The other 35 are real authored emits whose DzXEmits interface does not exist or does not document the member (mostly Reka-forwarded compound-part events: escapeKeyDown, pointerDownOutside, interactOutside). See finding F-1 and owner decision D2.",
+    "ceiling": 106
+  },
+  "exposedWithoutDescription": {
+    "//": "defineExpose members with no description. 26 of 26 -- every exposed member in the catalog is undocumented. The prose that exists sits on the defineExpose() CALL, not on the members, so no extractor can attribute it. A consumer calling ref.value.start() is using public API with zero published documentation. See finding F-3.",
+    "ceiling": 26
+  },
+
+  "publicComponentsWithoutExample": {
+    "//": "public-component symbols with no usable story to draw a real example from. Exactly one: DzThemeProvider, which has no stories file at all -- it is the only public component in the catalog without one. get_component_example returns an explicit 'no example is published' for it rather than fabricating markup.",
+    "ceiling": 1
+  },
+  "componentsWithoutStaticTemplate": {
+    "//": "Components whose primary story's template is not a static string literal, so no paste-ready markup can be sliced out verbatim. 80 of 208 -- the primary story SOURCE is still published for all 143 that have a story, so these are still answerable, just not one-line-pasteable. 64 of the 80 are compound parts, which have no stories of their own by design.",
+    "ceiling": 80
+  }
+}

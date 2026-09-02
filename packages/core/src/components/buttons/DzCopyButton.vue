@@ -31,6 +31,7 @@ const props = withDefaults(defineProps<DzCopyButtonProps>(), {
   tone: 'neutral',
   size: 'sm',
   disabled: false,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzCopyButtonEmits>()
@@ -60,6 +61,7 @@ const classes = computed(() =>
       ? 'gap-1.5'
       : copyButtonVariants({ size: props.size }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 
@@ -134,6 +136,7 @@ function fallbackCopy(text: string): void {
 <template>
   <button
     :id="id"
+    data-part="root"
     type="button"
     :class="classes"
     :disabled="disabled || undefined"

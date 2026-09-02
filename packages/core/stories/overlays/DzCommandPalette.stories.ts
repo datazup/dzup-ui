@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import type { CommandGroup, CommandItem } from '../../src/components/overlays'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton } from '../../src/components/buttons'
 import { DzCommandPalette } from '../../src/components/overlays'
 import { a11yError, darkModeDecorator } from '../_shared'
@@ -484,5 +484,98 @@ export const RealWorldIDE: Story = {
     await userEvent.keyboard('{Escape}')
     await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
     await expect(trigger).toHaveFocus()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// States — closed / open / disabled command / no results (tier C `states`)
+// ---------------------------------------------------------------------------
+
+/**
+ * The states a command palette moves through in one session: closed (nothing in
+ * the DOM at all — the panel is portalled and unmounted), open with results, a
+ * command that is present but `disabled`, and a query that matches nothing.
+ *
+ * `disabled` is the state the component declares, and for a palette it has a
+ * precise meaning worth asserting: the command stays listed and findable, but it
+ * carries `data-disabled`, is skipped by the roving highlight, and cannot be
+ * selected — a palette that silently hides unavailable commands teaches the user
+ * they do not exist.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzCommandPalette, DzButton },
+    data() {
+      return {
+        isOpen: false,
+        selected: null as CommandItem | null,
+        items: [
+          { id: 'new-file', label: 'New File' },
+          { id: 'save', label: 'Save', disabled: true },
+          { id: 'search', label: 'Search' },
+        ] as CommandItem[],
+      }
+    },
+    template: `
+      <div class="space-y-4">
+        <div class="flex items-center gap-4">
+          <DzButton @click="isOpen = true">Open palette</DzButton>
+          <span class="text-sm text-[var(--dz-muted-foreground)]">
+            Ran: <strong data-testid="cp-ran">{{ selected ? selected.label : 'nothing' }}</strong>
+          </span>
+        </div>
+        <DzCommandPalette
+          v-model:open="isOpen"
+          :items="items"
+          :groups="[]"
+          :enable-global-shortcut="false"
+          aria-label="States palette"
+          @select="selected = $event"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Closed: the palette is not merely hidden, it is not in the document.
+    await expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+
+    // Open: a modal dialog with an auto-focused search field.
+    await userEvent.click(canvas.getByRole('button', { name: /open palette/i }))
+    const dialog = await screen.findByRole('dialog')
+    const search = await screen.findByRole('combobox')
+    await waitFor(() => expect(search).toHaveFocus())
+
+    // Disabled: the command is still listed and findable…
+    const save = within(dialog).getByRole('option', { name: /save/i })
+    await expect(save).toHaveAttribute('data-disabled')
+    // …while its live siblings are not flagged.
+    await expect(within(dialog).getByRole('option', { name: /new file/i }))
+      .not
+      .toHaveAttribute('data-disabled')
+
+    // …and the roving highlight steps straight over it: however many times the
+    // list is advanced, the disabled row is never the highlighted one, and one
+    // of its live siblings always is.
+    for (let i = 0; i < 3; i++) {
+      await userEvent.keyboard('{ArrowDown}')
+      await expect(save).not.toHaveAttribute('data-highlighted')
+    }
+    await waitFor(() =>
+      expect(dialog.querySelectorAll('[role="option"][data-highlighted]')).toHaveLength(1),
+    )
+
+    // No results: a query matching nothing renders the empty copy rather than a
+    // blank panel.
+    await userEvent.type(search, 'zzzznope')
+    await waitFor(() => expect(within(dialog).getByText(/no results found/i)).toBeVisible())
+    await expect(within(dialog).queryAllByRole('option')).toHaveLength(0)
+
+    // Escape returns to the closed state, and nothing was run.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(canvas.getByTestId('cp-ran')).toHaveTextContent('nothing')
   },
 }

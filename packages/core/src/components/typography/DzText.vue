@@ -25,6 +25,7 @@ const props = withDefaults(defineProps<DzTextProps>(), {
   size: 'md',
   tone: 'default',
   truncate: false,
+  ui: undefined,
 })
 
 defineSlots<{
@@ -44,6 +45,7 @@ const classes = computed(() =>
       truncate: props.truncate,
     }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -52,6 +54,7 @@ const classes = computed(() =>
   <component
     :is="as"
     :id="id"
+    data-part="root"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"
   >

@@ -586,3 +586,100 @@ export const RealWorldTestimonials: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — ready / disabled / empty (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the state DzCarousel declares, next to the `ready`/`empty`
+ * lifecycle its root publishes as `data-state` when slides register themselves.
+ *
+ * The distinction a screenshot cannot make: a `disabled` carousel still renders
+ * its controls, but `goTo()` refuses, so the active slide never changes. That is
+ * what the play function measures — the enabled carousel advances on the same
+ * click that leaves the disabled one where it was.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzCarousel, DzCarouselSlide, DzCarouselPrevious, DzCarouselNext, DzCarouselDots },
+    template: `
+      <div class="space-y-8">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Ready</p>
+          <div class="max-w-lg">
+            <DzCarousel aria-label="Ready carousel" data-testid="cr-ready">
+              <DzCarouselSlide>
+                <div class="flex h-40 items-center justify-center rounded-lg bg-[var(--dz-primary-muted)] font-medium text-[var(--dz-primary-muted-foreground)]">Ready slide 1</div>
+              </DzCarouselSlide>
+              <DzCarouselSlide>
+                <div class="flex h-40 items-center justify-center rounded-lg bg-[var(--dz-success-muted)] font-medium text-[var(--dz-success-muted-foreground)]">Ready slide 2</div>
+              </DzCarouselSlide>
+              <DzCarouselPrevious />
+              <DzCarouselNext />
+              <DzCarouselDots />
+            </DzCarousel>
+          </div>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled — controls render, navigation refuses</p>
+          <div class="max-w-lg">
+            <DzCarousel disabled aria-label="Disabled carousel" data-testid="cr-disabled">
+              <DzCarouselSlide>
+                <div class="flex h-40 items-center justify-center rounded-lg bg-[var(--dz-muted)] font-medium text-[var(--dz-muted-foreground)]">Frozen slide 1</div>
+              </DzCarouselSlide>
+              <DzCarouselSlide>
+                <div class="flex h-40 items-center justify-center rounded-lg bg-[var(--dz-muted)] font-medium text-[var(--dz-muted-foreground)]">Frozen slide 2</div>
+              </DzCarouselSlide>
+              <DzCarouselPrevious />
+              <DzCarouselNext />
+              <DzCarouselDots />
+            </DzCarousel>
+          </div>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Empty — no slides registered</p>
+          <div class="max-w-lg">
+            <DzCarousel aria-label="Empty carousel" data-testid="cr-empty" />
+          </div>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const ready = canvas.getByTestId('cr-ready')
+    const disabled = canvas.getByTestId('cr-disabled')
+    const empty = canvas.getByTestId('cr-empty')
+
+    // The lifecycle state follows slide registration, not a prop.
+    await waitFor(() => expect(ready).toHaveAttribute('data-state', 'ready'))
+    await expect(empty).toHaveAttribute('data-state', 'empty')
+
+    // Only the disabled carousel is flagged for the styling contract.
+    await expect(ready).not.toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('data-disabled')
+    await expect(disabled).toHaveAttribute('data-state', 'ready')
+
+    // Ready: the Next control really advances the active slide.
+    const readyDots = within(ready).getAllByRole('tab')
+    await expect(readyDots[0]).toHaveAttribute('aria-selected', 'true')
+    await userEvent.click(within(ready).getByRole('button', { name: /next slide/i }))
+    await waitFor(() => expect(readyDots[1]).toHaveAttribute('aria-selected', 'true'))
+
+    // Disabled: the same click is refused — the active slide never moves.
+    const disabledDots = within(disabled).getAllByRole('tab')
+    await expect(disabledDots[0]).toHaveAttribute('aria-selected', 'true')
+    await userEvent.click(within(disabled).getByRole('button', { name: /next slide/i }))
+    await expect(disabledDots[0]).toHaveAttribute('aria-selected', 'true')
+    await expect(disabledDots[1]).toHaveAttribute('aria-selected', 'false')
+
+    // …and a dot click is refused too, so the refusal is in the model rather
+    // than in one control.
+    await userEvent.click(disabledDots[1]!)
+    await expect(disabledDots[0]).toHaveAttribute('aria-selected', 'true')
+  },
+}

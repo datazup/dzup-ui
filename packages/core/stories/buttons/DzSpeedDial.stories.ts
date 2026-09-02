@@ -109,7 +109,7 @@ export const Fab: Story = {
       return { Plus, Sparkles }
     },
     template: `
-      <div class="flex items-center gap-6 p-8">
+      <div class="flex flex-wrap items-center gap-6 p-8">
         <div class="text-center">
           <DzFab :icon="Plus" aria-label="Add" />
           <p class="text-xs mt-2 text-[var(--dz-muted-foreground)]">solid / primary</p>
@@ -307,4 +307,89 @@ export const DarkMode: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// States — closed / open / item-disabled / disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `disabled` is the state DzSpeedDial declares, and the fan-out adds an
+ * open/closed state on top of it that is part of the ARIA contract rather than
+ * decoration: while closed, the `role="menu"` is `aria-hidden` and its actions
+ * carry `tabindex="-1"` so they are neither announced nor tabbable; opening
+ * flips both.
+ *
+ * A single action can also be disabled without touching the rest of the dial.
+ * The play function asserts each of those, and that a disabled trigger never
+ * expands.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzSpeedDial },
+    setup() {
+      const items = [
+        { icon: Pencil, label: 'Edit' },
+        { icon: Copy, label: 'Duplicate' },
+        { icon: Trash2, label: 'Delete', tone: 'danger' as const, disabled: true },
+      ]
+      return { items }
+    },
+    template: `
+      <div class="grid grid-cols-3 place-items-end gap-8 p-8" style="min-height: 360px;">
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Closed</p>
+          <DzSpeedDial :items="items" aria-label="Closed dial" data-testid="sd-closed" />
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Open — one action disabled</p>
+          <DzSpeedDial :items="items" :open="true" aria-label="Open dial" data-testid="sd-open" />
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-xs text-[var(--dz-muted-foreground)]">Disabled</p>
+          <DzSpeedDial :items="items" disabled aria-label="Disabled dial" data-testid="sd-disabled" />
+        </div>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const closed = canvas.getByTestId('sd-closed')
+    const open = canvas.getByTestId('sd-open')
+    const disabledDial = canvas.getByTestId('sd-disabled')
+
+    // Closed: the menu is hidden from AT and its actions are out of the tab
+    // order — a fan-out that is only visually collapsed would fail both.
+    const closedTrigger = within(closed).getByRole('button', { name: 'Closed dial' })
+    await expect(closedTrigger).toHaveAttribute('aria-expanded', 'false')
+    const closedMenu = closed.querySelector('[role="menu"]')!
+    await expect(closedMenu).toHaveAttribute('aria-hidden', 'true')
+    for (const action of closedMenu.querySelectorAll('button[data-index]'))
+      await expect(action).toHaveAttribute('tabindex', '-1')
+
+    // Open: the menu is exposed and every enabled action is tabbable.
+    const openTrigger = within(open).getByRole('button', { name: 'Open dial' })
+    await expect(openTrigger).toHaveAttribute('aria-expanded', 'true')
+    const openMenu = open.querySelector('[role="menu"]')!
+    await expect(openMenu).not.toHaveAttribute('aria-hidden')
+    await expect(within(open).getByRole('menuitem', { name: 'Edit' }))
+      .toHaveAttribute('tabindex', '0')
+
+    // A single disabled action is out of service while its siblings are live.
+    await expect(within(open).getByRole('menuitem', { name: 'Delete' })).toBeDisabled()
+    await expect(within(open).getByRole('menuitem', { name: 'Duplicate' })).toBeEnabled()
+
+    // Disabled dial: the trigger is disabled and can never expand.
+    const disabledTrigger = within(disabledDial).getByRole('button', { name: 'Disabled dial' })
+    await expect(disabledTrigger).toBeDisabled()
+    await expect(disabledTrigger).toHaveAttribute('aria-expanded', 'false')
+
+    // Opening the live dial really works, so the negatives above are measured
+    // against a working baseline rather than asserted in isolation.
+    await userEvent.click(closedTrigger)
+    await waitFor(() => expect(closedTrigger).toHaveAttribute('aria-expanded', 'true'))
+    await userEvent.click(closedTrigger)
+    await waitFor(() => expect(closedTrigger).toHaveAttribute('aria-expanded', 'false'))
+  },
 }

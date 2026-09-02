@@ -1,8 +1,8 @@
 {
   "ceilings": {
-    "states": 30,
-    "accessibility": 11,
-    "real-world": 10
+    "states": 0,
+    "accessibility": 0,
+    "real-world": 0
   },
   "waived": {}
 }

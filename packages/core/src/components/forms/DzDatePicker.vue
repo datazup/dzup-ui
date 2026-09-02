@@ -206,8 +206,18 @@ const triggerClasses = computed(() =>
             </DatePickerInput>
           </span>
 
+          <!--
+            TASK-N1-O3 / WCAG 2.2 SC 2.5.8: the calendar trigger measured 16x16.
+            Plain `dz-target-min` rather than the footprint-neutral `-tight`
+            variant: the trigger relies on `ml-auto` to sit at the end of the
+            field, and `.dz-target-min-tight`'s `margin` shorthand lives in
+            `@layer dz-base`, which in this build sorts AFTER Tailwind's
+            utilities and would therefore overwrite `ml-auto`. The cost is
+            recorded instead of hidden: the glyph shifts <= 4px along the inline
+            axis, inside a field whose height does not change.
+          -->
           <DatePickerTrigger
-            class="ml-auto inline-flex items-center justify-center bg-transparent border-0 outline-none cursor-pointer dz-focus-ring-button"
+            class="ml-auto dz-target-min inline-flex items-center justify-center bg-transparent border-0 outline-none cursor-pointer dz-focus-ring-button"
             :aria-label="ariaLabel ?? 'Open date picker'"
           >
             <CalendarIcon :class="styles.icon()" aria-hidden="true" />

@@ -1,0 +1,19 @@
+{
+  "//": "TASK-N2-A3. Ratcheted debt for the agent-facing llms.txt / llms-full.txt documents. Every number may only FALL; validate:llms fails when one rises AND when one drops without the ceiling being lowered, so an improvement is held rather than quietly re-lost. Measured at 51dec93 with the uncommitted N1 + N2-T1 + N2-A1 + N2-A2 working tree.",
+  "publicComponentsUnreachableFromLlms": {
+    "//": "Components the ownership manifest classifies `public-component` that an MCP client cannot discover -- absent from packages/core/docs/llms.txt's family bullets, or absent from llms-full.txt's `### Name` sections, or present but unparseable. Was 43 before this packet: apps/storybook/scripts/build-llms.mjs rendered the index from public-api.manifest.json, which omits 43 of the 144 (TASK-N2-A1 finding F1), so list_components and get_component could not see them. Rendering from component-meta.json took it to 2, and widening the MCP parser's Dz-only name pattern (TASK-N2-A2 finding F-5: GovernanceBadge and TeamMemberBadge are public components with no Dz prefix) took it to 0.",
+    "ceiling": 0
+  },
+  "componentsWithoutDescription": {
+    "//": "Index bullets rendered with no ` -- description` after the bold name, because no prose exists in the component's SFC header. All three are public components with no documentation header at all: DzAsyncBoundary, DzErrorBoundary, DzFieldArray. A source gap, not an extraction gap -- it falls the moment someone writes the header line.",
+    "ceiling": 3
+  },
+  "publicComponentsWithNoMembers": {
+    "//": "Public components whose llms-full.txt section carries NO props, events or slots table, because the extractor returned an empty member set for them. One: DzAccordion, whose props type is the discriminated union `DzAccordionSingleProps | DzAccordionMultipleProps` -- `vue-component-meta` cannot resolve `defineProps<Union>()` and returns nothing, even though the component declares defineProps, defineEmits, defineSlots and defineModel. It is the only union-typed props in the catalog and the only empty record. A2's `unclassifiable` ratchet cannot see it: the extractor did not fail, it succeeded and returned nothing. An agent asking about DzAccordion is told it has no API at all, which is worse than being told nothing. Held at 1 so a second one cannot appear unnoticed. See handoff finding F-1.",
+    "ceiling": 1
+  },
+  "publicComponentsWithoutExampleInLlms": {
+    "//": "Public components whose llms-full.txt section carries neither a usage snippet nor the explicit `No published Storybook story` sentence. Zero, and it must stay zero: a section that silently omits the usage block reads to an agent as `this component has no example`, which is a different claim from `no story exists`. The one component with no story at all (DzThemeProvider, TASK-N2-A2 ratchet publicComponentsWithoutExample=1) states the absence and therefore does not count here.",
+    "ceiling": 0
+  }
+}

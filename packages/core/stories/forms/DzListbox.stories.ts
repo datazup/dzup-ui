@@ -274,3 +274,112 @@ export const DarkMode: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / disabled / option-disabled / invalid (tier B `states`)
+// ---------------------------------------------------------------------------
+
+/**
+ * The states DzListbox can be in, and the difference a screenshot hides: a
+ * disabled listbox* takes the whole control out of the tab order, while a
+ * disabled option* leaves the list navigable and only refuses that one row.
+ * The invalid case adds `data-invalid` for the styling contract, `aria-invalid`
+ * on the `role="listbox"` itself, and a `role="alert"` message beneath it.
+ *
+ * The play function asserts each of those, and confirms that selection still
+ * works in the enabled control so "disabled" is measured against a live
+ * baseline rather than asserted in isolation.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzListbox },
+    setup() {
+      const enabled = ref<string | null>('ber')
+      const partial = ref<string | null>(null)
+      const options: DzListboxOption[] = [
+        { label: 'Amsterdam', value: 'ams' },
+        { label: 'Berlin', value: 'ber' },
+        { label: 'Copenhagen (unavailable)', value: 'cph', disabled: true },
+      ]
+      return { enabled, partial, options }
+    },
+    template: `
+      <div class="grid max-w-5xl gap-6 lg:grid-cols-3">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Enabled</p>
+          <DzListbox
+            v-model="enabled"
+            :options="options.slice(0, 2)"
+            aria-label="Enabled city list"
+            data-testid="lb-enabled"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled control</p>
+          <DzListbox
+            disabled
+            :options="options.slice(0, 2)"
+            aria-label="Disabled city list"
+            data-testid="lb-disabled"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled option + invalid</p>
+          <DzListbox
+            v-model="partial"
+            invalid
+            error="Pick a city that is still available."
+            :options="options"
+            aria-label="Partly available city list"
+            data-testid="lb-invalid"
+          />
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = canvas.getByTestId('lb-enabled')
+    const disabled = canvas.getByTestId('lb-disabled')
+    const invalid = canvas.getByTestId('lb-invalid')
+
+    // Enabled: nothing is flagged, and the bound value is reflected as selected.
+    await expect(enabled).not.toHaveAttribute('data-disabled')
+    await expect(enabled).not.toHaveAttribute('data-invalid')
+    await expect(within(enabled).getByRole('option', { name: 'Berlin' }))
+      .toHaveAttribute('aria-selected', 'true')
+
+    // …and selection still moves, so the disabled cases below mean something.
+    await userEvent.click(within(enabled).getByRole('option', { name: 'Amsterdam' }))
+    await waitFor(() =>
+      expect(within(enabled).getByRole('option', { name: 'Amsterdam' }))
+        .toHaveAttribute('aria-selected', 'true'),
+    )
+
+    // Disabled control: flagged on the root, and every option inherits it.
+    await expect(disabled).toHaveAttribute('data-disabled')
+    for (const option of within(disabled).getAllByRole('option'))
+      await expect(option).toHaveAttribute('data-disabled')
+
+    // Invalid: flagged for CSS, announced to AT, and explained in an alert.
+    // The error message is a sibling of the listbox root, so it is looked up on
+    // the component's outer wrapper rather than inside the root.
+    await expect(invalid).toHaveAttribute('data-invalid')
+    await expect(within(invalid).getByRole('listbox'))
+      .toHaveAttribute('aria-invalid', 'true')
+    await expect(within(invalid.parentElement as HTMLElement).getByRole('alert'))
+      .toHaveTextContent('Pick a city that is still available.')
+
+    // A disabled *option* is the only one refused — its siblings still work.
+    const unavailable = within(invalid).getByRole('option', { name: /copenhagen/i })
+    await expect(unavailable).toHaveAttribute('data-disabled')
+    const available = within(invalid).getByRole('option', { name: 'Amsterdam' })
+    await expect(available).not.toHaveAttribute('data-disabled')
+    await userEvent.click(available)
+    await waitFor(() => expect(available).toHaveAttribute('aria-selected', 'true'))
+    await expect(unavailable).toHaveAttribute('aria-selected', 'false')
+  },
+}

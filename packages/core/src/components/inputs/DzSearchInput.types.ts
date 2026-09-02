@@ -9,6 +9,7 @@ import type {
   ChangeEvents,
   InputVariant,
 } from '@dzup-ui/contracts'
+import type { DzSearchInputUi } from './DzSearchInput.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -24,6 +25,17 @@ export interface DzSearchInputProps extends BaseFormControlProps<InputVariant> {
   debounce?: number
   /** Accessible label for the loading spinner shown when `loading` is true */
   loadingLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzSearchInput.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzSearchInput v-model="q" :ui="{ icon: 'text-[var(--dz-primary)]' }" />
+   * ```
+   */
+  ui?: DzSearchInputUi
 }
 
 // ---------------------------------------------------------------------------

@@ -15,6 +15,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
+import type { DzFabUi } from './DzFab.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Variant / position unions
@@ -65,6 +66,17 @@ export interface DzFabProps extends BaseAccessibilityProps {
   position?: DzFabPosition
   /** HTML button type attribute */
   type?: 'button' | 'submit' | 'reset'
+  /**
+   * Per-part class overrides, keyed by the names in `DzFab.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzFab :icon="Plus" :ui="{ icon: 'scale-125' }" />
+   * ```
+   */
+  ui?: DzFabUi
 }
 
 // ---------------------------------------------------------------------------

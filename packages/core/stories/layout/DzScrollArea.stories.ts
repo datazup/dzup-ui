@@ -59,7 +59,7 @@ export const Default: Story = {
       return { args }
     },
     template: `
-      <DzScrollArea v-bind="args" class="h-48 w-72 border border-[var(--dz-border)] rounded-lg">
+      <DzScrollArea v-bind="args" class="h-48 w-72 max-w-full border border-[var(--dz-border)] rounded-lg">
         <div class="p-4 space-y-2">
           <p v-for="i in 20" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">
             Line {{ i }}: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -146,7 +146,7 @@ export const HorizontalTagList: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea orientation="horizontal" class="w-80 border border-[var(--dz-border)] rounded-lg">
+      <DzScrollArea orientation="horizontal" class="w-80 max-w-full border border-[var(--dz-border)] rounded-lg">
         <div class="flex gap-2 p-3" style="width: max-content;">
           <span v-for="tag in ['Vue', 'React', 'Angular', 'Svelte', 'Solid', 'Qwik', 'Astro', 'Nuxt', 'Next', 'Remix', 'SvelteKit']"
             :key="tag"
@@ -222,7 +222,7 @@ export const RealWorldCodeBlock: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea orientation="both" class="h-48 w-96 bg-[var(--dz-colors-neutral-900)] rounded-lg">
+      <DzScrollArea orientation="both" class="h-48 w-96 max-w-full bg-[var(--dz-colors-neutral-900)] rounded-lg">
         <pre v-pre class="p-4 text-sm text-[var(--dz-muted-foreground)] font-mono"><code>import { createApp } from 'vue'
 import { DzScrollArea, DzContainer, DzGrid, DzFlex, DzStack } from '@dzup-ui/core'
 
@@ -253,7 +253,7 @@ export const OverflowScroll: Story = {
   render: () => ({
     components: { DzScrollArea },
     template: `
-      <DzScrollArea class="h-48 w-72 border border-[var(--dz-border)] rounded-lg">
+      <DzScrollArea class="h-48 w-72 max-w-full border border-[var(--dz-border)] rounded-lg">
         <div class="p-4 space-y-2">
           <p v-for="i in 40" :key="i" class="text-sm text-[var(--dz-muted-foreground)]">
             Row {{ i }} — content overflows the fixed-height viewport.

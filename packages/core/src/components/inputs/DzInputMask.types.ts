@@ -9,6 +9,7 @@
  */
 
 import type { BaseEvents, BaseFormControlProps, InputVariant } from '@dzup-ui/contracts'
+import type { DzInputMaskUi } from './DzInputMask.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -47,6 +48,17 @@ export interface DzInputMaskProps extends BaseFormControlProps<InputVariant> {
    * @default 'masked'
    */
   modelMode?: 'masked' | 'unmasked'
+  /**
+   * Per-part class overrides, keyed by the names in `DzInputMask.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzInputMask v-model="card" :ui="{ control: 'ring-2' }" />
+   * ```
+   */
+  ui?: DzInputMaskUi
 }
 
 // ---------------------------------------------------------------------------

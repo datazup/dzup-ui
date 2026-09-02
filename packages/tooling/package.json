@@ -16,6 +16,10 @@
     "./resolution": {
       "types": "./src/resolution/dzup-resolution.ts",
       "import": "./src/resolution/dzup-resolution.ts"
+    },
+    "./playground": {
+      "types": "./src/playground/playground-contract.ts",
+      "import": "./src/playground/playground-contract.ts"
     }
   },
   "scripts": {

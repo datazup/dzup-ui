@@ -8,10 +8,40 @@
  */
 
 import type { RegistryClient, RegistryIndexItem, RegistryItem } from './registry.js'
+import { isRegistryId, REGISTRY_ID_MAX_LENGTH } from './registry.js'
 
 export interface ToolResult {
   text: string
   isError?: boolean
+}
+
+/**
+ * Refuse a name that is not a registry id, with the same wording every tool
+ * uses (TASK-N2-A1).
+ *
+ * The zod schemas in `index.ts` reject these at the protocol boundary, so an
+ * MCP client never reaches this. It exists because `registerTools`,
+ * `createServer` and the whole of `./registry` are PUBLIC exports of this
+ * package: a consumer calling `getBlock` directly gets the same guarantee as
+ * one calling it over stdio, instead of the guarantee living only in the
+ * transport wiring.
+ */
+function rejectBadId(name: unknown, kind: 'block' | 'template'): ToolResult | null {
+  if (isRegistryId(name))
+    return null
+  // The rejected value is deliberately NOT echoed. Every other message in this
+  // module quotes its argument back, which is fine for a value that passed
+  // validation and wrong for one that did not: the caller's own text would be
+  // re-emitted as part of an authoritative-looking answer from the dzup-ui
+  // server, and the whole reason this check exists is that the caller's text is
+  // not trustworthy. The caller already knows what it sent.
+  return {
+    text:
+      `That is not a valid ${kind} name. `
+      + `Names are lowercase kebab-case (a-z, 0-9 and single hyphens), at most ${REGISTRY_ID_MAX_LENGTH} characters — `
+      + `e.g. "hero-centered". Use list_${kind}s to browse the real names.`,
+    isError: true,
+  }
 }
 
 /** The package managers we can print an install one-liner for. */
@@ -189,6 +219,9 @@ export async function getBlock(
   client: RegistryClient,
   args: { name: string },
 ): Promise<ToolResult> {
+  const bad = rejectBadId(args.name, 'block')
+  if (bad)
+    return bad
   try {
     const item = await client.block(args.name)
     return renderItem(item, client.blockUrl(args.name), 'block')
@@ -202,6 +235,9 @@ export async function getTemplate(
   client: RegistryClient,
   args: { name: string },
 ): Promise<ToolResult> {
+  const bad = rejectBadId(args.name, 'template')
+  if (bad)
+    return bad
   try {
     const item = await client.template(args.name)
     return renderItem(item, client.templateUrl(args.name), 'template')
@@ -249,6 +285,23 @@ export async function listTokens(
 
 // ── Install command ───────────────────────────────────────────────────────────
 
+/**
+ * The install one-liner for a block, template or the token theme.
+ *
+ * Two properties this tool did NOT have before TASK-N2-A1, both of which matter
+ * because its output is a ```sh block an assistant is instructed to hand a user
+ * to run:
+ *
+ *   1. the name is validated as a registry id — an unvalidated name was
+ *      interpolated straight into the `shadcn add <url>` line, so a name
+ *      containing a space appended a second, arbitrary URL to a command that
+ *      installs whatever it is pointed at;
+ *   2. the item is CHECKED AGAINST THE GENERATED INDEX before a command is
+ *      printed. It used to build the URL from a string template alone, so it
+ *      would confidently emit an install command for a block that does not
+ *      exist — the one tool in this package that answered without reading the
+ *      catalog at all.
+ */
 export async function getInstallCommand(
   client: RegistryClient,
   args: { name: string, type?: 'block' | 'template' | 'tokens', packageManager?: PackageManager },
@@ -256,11 +309,24 @@ export async function getInstallCommand(
   const pm = args.packageManager ?? 'npm'
   const type = args.type ?? 'block'
   let url: string
-  if (type === 'tokens')
+  if (type === 'tokens') {
+    // Reading it proves the theme item exists rather than asserting it.
+    await client.tokens()
     url = client.tokensUrl()
-  else if (type === 'template')
-    url = client.templateUrl(args.name)
-  else url = client.blockUrl(args.name)
+  }
+  else {
+    const bad = rejectBadId(args.name, type)
+    if (bad)
+      return bad
+    const index = type === 'template' ? await client.templatesIndex() : await client.blocksIndex()
+    if (!index.items.some(it => it.name === args.name)) {
+      return {
+        text: `${type === 'template' ? 'Template' : 'Block'} "${args.name}" is not in the dzup-ui registry (${index.items.length} ${type}s). Use list_${type}s to browse; no install command was produced.`,
+        isError: true,
+      }
+    }
+    url = type === 'template' ? client.templateUrl(args.name) : client.blockUrl(args.name)
+  }
 
   const runtime = `${ADD[pm]} @dzup-ui/core @dzup-ui/tokens`
   const parts = [
@@ -308,5 +374,279 @@ export async function search(
   section('Components', componentHits.slice(0, 25).map(c => `- **${c.name}** (${c.family}) — ${c.description} · \`get_component\``))
   section('Blocks', blockHits.slice(0, 25).map(it => `- **${it.name}** — ${it.title ?? ''} · \`get_block\``))
   section('Templates', templateHits.slice(0, 25).map(it => `- **${it.name}** — ${it.title ?? ''} · \`get_template\``))
+  return { text: parts.join('\n').trimEnd() }
+}
+
+// ── Component metadata (TASK-N2-A2) ───────────────────────────────────────────
+//
+// Three tools, all answering from ONE artifact: the generated
+// `component-meta.json` that `yarn generate:component-meta` extracts from the
+// real `.vue` / `.types.ts` sources with `vue-component-meta`. Nothing here
+// parses a component; nothing here synthesises an example.
+//
+// They deliberately do NOT replace `list_components` / `get_component`, which
+// answer from the storybook `llms*.txt` projection in markdown. Those two used
+// to be limited by `public-api.manifest.json`, which TASK-N2-A1 measured stale
+// by 43 symbols (finding F-1). TASK-N2-A3 re-rendered that projection from THIS
+// artifact, so all four tools now cover the same 144 public components; what
+// differs is the shape of the answer — typed rows and verbatim story source
+// here, prose there. Neither path reads `public-api.manifest.json` any more,
+// and it was not regenerated to achieve that (constraint B3 still holds).
+
+/** Cap on how many rows a search answer may contain. Bounded output, like every list tool. */
+const META_SEARCH_LIMIT = 50
+
+/** How a description came to exist, rendered for a reader that cares. */
+function provenanceNote(source: string): string {
+  return source === 'emits-interface' ? ' _(from the emits interface)_' : ''
+}
+
+export async function searchComponents(
+  client: RegistryClient,
+  args: { query?: string, family?: string, tier?: string } = {},
+): Promise<ToolResult> {
+  const artifact = await client.componentMeta()
+  const all = artifact.components
+  const rows = all.filter(
+    c =>
+      matches(args.family, c.family)
+      && (args.tier === undefined || (c.tier ?? '').toLowerCase() === args.tier.toLowerCase())
+      && matches(
+        args.query,
+        c.name,
+        c.family,
+        c.kind,
+        c.parentComponent,
+        c.status,
+        ...c.props.map(p => `${p.name} ${p.description}`),
+        ...c.slots.map(s => `${s.name} ${s.description}`),
+        ...c.events.map(e => `${e.name} ${e.description}`),
+      ),
+  )
+  if (!rows.length) {
+    return {
+      text:
+        `No components matched (query=${args.query ?? '—'}, family=${args.family ?? '—'}, `
+        + `tier=${args.tier ?? '—'}). ${all.length} components in the metadata artifact `
+        + `(${artifact.totals.publicComponents} public, ${artifact.totals.compoundParts} compound parts).`,
+    }
+  }
+  const shown = rows.slice(0, META_SEARCH_LIMIT)
+  const parts: string[] = [
+    `# Component search (${shown.length}${shown.length === rows.length ? '' : ` of ${rows.length} matched`}; ${all.length} total)`,
+    '',
+    'Call `get_component_metadata` for a full props/emits/slots record, or '
+    + '`get_component_example` for real usage source from the component\'s Storybook story.',
+    '',
+  ]
+  const byFamily = new Map<string, typeof shown>()
+  for (const c of shown) {
+    const list = byFamily.get(c.family) ?? []
+    list.push(c)
+    byFamily.set(c.family, list)
+  }
+  for (const family of [...byFamily.keys()].sort()) {
+    parts.push(`## ${family}`)
+    for (const c of byFamily.get(family)!) {
+      const bits = [
+        c.tier === undefined ? undefined : `tier ${c.tier}`,
+        c.status,
+        c.kind === 'compound-part' ? `part of ${c.parentComponent ?? '—'}` : undefined,
+      ].filter(Boolean)
+      parts.push(
+        `- **${c.name}**${bits.length ? ` _(${bits.join(' · ')})_` : ''} — `
+        + `${c.props.length} props, ${c.events.length} events, ${c.slots.length} slots`
+        + `${c.stories.primary ? '' : ' · no published example'}`,
+      )
+    }
+    parts.push('')
+  }
+  if (shown.length < rows.length)
+    parts.push(`_${rows.length - shown.length} more matched; narrow the query._`)
+  return { text: parts.join('\n').trimEnd() }
+}
+
+/** Markdown table rows, or an explicit `_none_`. Never an empty section. */
+function metaTable(header: string[], rows: string[][]): string[] {
+  if (!rows.length)
+    return ['_none_', '']
+  return [
+    `| ${header.join(' | ')} |`,
+    `| ${header.map(() => '---').join(' | ')} |`,
+    ...rows.map(r => `| ${r.join(' | ')} |`),
+    '',
+  ]
+}
+
+/** Escape a cell so a type containing `|` cannot break the table. */
+function cell(value: string): string {
+  return value.replaceAll('|', '\\|').replaceAll('\n', ' ')
+}
+
+export async function getComponentMetadata(
+  client: RegistryClient,
+  args: { name: string },
+): Promise<ToolResult> {
+  const record = await client.componentMetaFor(args.name)
+  if (!record) {
+    const artifact = await client.componentMeta()
+    const needle = args.name.replace(/^dz/i, '').toLowerCase()
+    const near = artifact.components
+      .filter(c => c.name.toLowerCase().includes(needle))
+      .slice(0, 8)
+      .map(c => c.name)
+    return {
+      text:
+        `Component "${args.name}" not found in the generated metadata artifact.`
+        + `${near.length ? ` Did you mean: ${near.join(', ')}?` : ' Use search_components to browse.'}`,
+      isError: true,
+    }
+  }
+
+  const alt = record.subpaths.find(s => s !== '.')
+  const parts: string[] = [
+    `# ${record.name}`,
+    '',
+    `- **Import:** \`import { ${record.name} } from '@dzup-ui/core'\``
+    + `${alt === undefined ? '' : ` (also \`@dzup-ui/core${alt.replace(/^\./, '')}\`)`}`,
+    `- **Family:** ${record.family}${record.tier === undefined ? '' : ` · **Risk tier:** ${record.tier}`}`
+    + `${record.status === undefined ? '' : ` · **Status:** ${record.status}`}`,
+    `- **Kind:** ${record.kind}${record.parentComponent === undefined ? '' : ` of ${record.parentComponent}`}`,
+    `- **Source:** \`${record.source}\``,
+  ]
+  if (record.anatomy.state === 'declared' && record.anatomy.parts.length) {
+    parts.push(
+      `- **Anatomy parts (ADR-19):** ${record.anatomy.parts.map(p => `\`${p}\``).join(', ')} — `
+      + 'target them with the `ui` prop or `[data-part]`.',
+    )
+  }
+  if (record.capability) {
+    const cells = Object.entries(record.capability.cells).map(([state, n]) => `${n} ${state}`).join(', ')
+    parts.push(
+      `- **Evidence cells:** ${cells}`
+      + `${record.capability.unrun.length ? ` · unrun: ${record.capability.unrun.join(', ')}` : ''}`,
+    )
+  }
+  parts.push('')
+
+  parts.push('## Props', '')
+  parts.push(...metaTable(
+    ['Prop', 'Type', 'Required', 'Default', 'Description'],
+    record.props.map(p => [
+      `\`${cell(p.name)}\``,
+      `\`${cell(p.type)}\``,
+      p.required ? 'yes' : 'no',
+      p.default === null ? '—' : `\`${cell(p.default)}\``,
+      cell(p.description) || '—',
+    ]),
+  ))
+  if (record.globalPropCount > 0) {
+    parts.push(
+      `_Plus ${record.globalPropCount} global props Vue gives every component `
+      + '(`key`, `ref`, `class`, `style`, native listeners…), not listed._',
+      '',
+    )
+  }
+
+  parts.push('## Events', '')
+  parts.push(...metaTable(
+    ['Event', 'Payload', 'Description'],
+    record.events.map(e => [
+      `\`${cell(e.name)}\``,
+      `\`${cell(e.type)}\``,
+      (cell(e.description) || (e.modelDerived ? '_synthesised by `defineModel`_' : '—'))
+      + provenanceNote(e.descriptionSource),
+    ]),
+  ))
+
+  parts.push('## Slots', '')
+  parts.push(...metaTable(
+    ['Slot', 'Slot props', 'Description'],
+    record.slots.map(s => [
+      `\`${cell(s.name)}\``,
+      s.hasPayload ? `\`${cell(s.type)}\`` : '—',
+      cell(s.description) || '—',
+    ]),
+  ))
+
+  if (record.exposed.length) {
+    parts.push('## Exposed (via template ref)', '')
+    parts.push(...metaTable(
+      ['Member', 'Type', 'Description'],
+      record.exposed.map(x => [`\`${cell(x.name)}\``, `\`${cell(x.type)}\``, cell(x.description) || '—']),
+    ))
+  }
+
+  parts.push(
+    record.stories.primary === undefined
+      ? '_No published Storybook story, so no usage example is available for this component._'
+      : `Call \`get_component_example\` with \`${record.name}\` for real usage source `
+        + `(story \`${record.stories.primary.id}\`).`,
+  )
+  return { text: parts.join('\n').trimEnd() }
+}
+
+export async function getComponentExample(
+  client: RegistryClient,
+  args: { name: string, story?: string },
+): Promise<ToolResult> {
+  const record = await client.componentMetaFor(args.name)
+  if (!record) {
+    return {
+      text: `Component "${args.name}" not found in the generated metadata artifact. Use search_components to browse.`,
+      isError: true,
+    }
+  }
+  const primary = record.stories.primary
+  if (primary === undefined || record.stories.file === undefined) {
+    // The honest answer. An absent example is a fact about the catalog; a
+    // fabricated one would be this server inventing source no lane has ever
+    // run, in a package whose whole premise is that it reports only what the
+    // repository generates.
+    return {
+      text:
+        `${record.name} has no published Storybook story, so there is no real usage example to `
+        + `return. Its full API is available from \`get_component_metadata\`. `
+        + `This server never synthesises example markup.`,
+      isError: true,
+    }
+  }
+  if (args.story !== undefined && args.story !== primary.id) {
+    const known = record.stories.stories.map(s => s.id)
+    const hit = record.stories.stories.find(s => s.id === args.story)
+    if (hit === undefined) {
+      return {
+        text: `${record.name} has no story "${args.story}". Stories: ${known.join(', ')}.`,
+        isError: true,
+      }
+    }
+    // The artifact publishes the SOURCE of the primary story only — one example
+    // per component. Naming another story gets its location, never invented source.
+    return {
+      text:
+        `# ${record.name} — story \`${hit.id}\`${hit.name === undefined ? '' : ` ("${hit.name}")`}\n\n`
+        + `Source: \`${record.stories.file}\` lines ${hit.lines[0]}–${hit.lines[1]}.\n\n`
+        + `Only the primary story's source is published in the metadata artifact. `
+        + `The published example for ${record.name} is \`${primary.id}\` — call this tool without `
+        + `\`story\` to get it.`,
+    }
+  }
+
+  const parts: string[] = [
+    `# ${record.name} — usage example`,
+    '',
+    `Real Storybook story \`${primary.id}\`${primary.name === undefined ? '' : ` ("${primary.name}")`} from `
+    + `\`${record.stories.file}\` (lines ${primary.lines[0]}–${primary.lines[1]}), verbatim. Not synthesised.`,
+    '',
+  ]
+  if (primary.template !== undefined)
+    parts.push('## Markup', '', '```vue', primary.template.trim(), '```', '')
+  parts.push('## Story source', '', '```ts', primary.source, '```', '')
+  parts.push(
+    `- **Import:** \`import { ${record.name} } from '@dzup-ui/core'\``,
+    `- Other stories in the same file: ${
+      record.stories.stories.filter(s => s.id !== primary.id).map(s => s.id).join(', ') || '_none_'
+    }`,
+  )
   return { text: parts.join('\n').trimEnd() }
 }

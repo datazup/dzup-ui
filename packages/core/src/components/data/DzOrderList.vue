@@ -546,7 +546,7 @@ function handleBlur(event: FocusEvent): void {
         :class="styles.list()"
         :role="selectable ? 'listbox' : 'list'"
         :aria-multiselectable="selectable || undefined"
-        :ariaLabel="ariaLabel"
+        :aria-label="ariaLabel"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="ariaDescribedby"
         @focusin="handleFocus"

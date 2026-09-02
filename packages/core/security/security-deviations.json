@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "1.0.0",
+  "corpusSchemaVersion": "1.0.0",
+  "note": "Measured failures to meet a required neutralization outcome. An entry is a DEFECT, not a waiver: the suite pins the recorded measurement, so a component that regresses further fails and a component that is fixed fails until its entry is deleted and the ceiling lowered. Nothing here is excused; everything here is owed. `publicBehaviourChange: true` marks the entries whose fix is breaking and therefore belongs to the release lane, not to a security packet.",
+  "recordedAt": {
+    "task": "TASK-N1-O5",
+    "sourceCommit": "51dec93",
+    "worktree": "dirty",
+    "admissibility": "locally qualified, worktree-dirty — not release evidence"
+  },
+  "ceiling": 54,
+  "deviations": [
+    {
+      "id": "S1",
+      "component": "DzButton",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.javascript.plain",
+        "url-scheme.javascript.mixed-case",
+        "url-scheme.javascript.leading-control",
+        "url-scheme.javascript.embedded-tab",
+        "url-scheme.vbscript.plain",
+        "url-scheme.data.html",
+        "url-scheme.data.svg-onload"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "high",
+      "publicBehaviourChange": true,
+      "reason": "No URL policy exists anywhere in packages/core/src — no scheme check, no allowlist, no normalization — so the `href` prop is written to the anchor `href` with no inspection (DzButton.vue template, `:href=\"isAnchor && !resolvedDisabled ? …\"`). A `javascript:` URL supplied by whatever populates this component's items therefore executes in the host's own origin when a person clicks the link. Not fixed here: refusing these schemes is a breaking change, because `javascript:void(0)` is a widespread legacy idiom that today renders and would then stop, so the fix belongs to the release lane (TASK-N5-02) alongside the ARIA-prop gaps rather than to a fixture packet."
+    },
+    {
+      "id": "S2",
+      "component": "DzButton",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.file.local",
+        "url-scheme.blob.foreign-origin"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "low",
+      "publicBehaviourChange": true,
+      "reason": "The same absent policy, on the two schemes that cannot execute: `file:` cannot be navigated to from a web page and a foreign-origin `blob:` resolves to nothing. The residual harm is a link that looks operable and is not, and an allowlist that would admit a scheme with no business in a web document. Recorded separately from the executable schemes so that closing the high-severity half does not appear to close this half with it."
+    },
+    {
+      "id": "S3",
+      "component": "DzAnchor",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.javascript.plain",
+        "url-scheme.javascript.mixed-case",
+        "url-scheme.javascript.leading-control",
+        "url-scheme.javascript.embedded-tab",
+        "url-scheme.vbscript.plain",
+        "url-scheme.data.html",
+        "url-scheme.data.svg-onload"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "high",
+      "publicBehaviourChange": true,
+      "reason": "No URL policy exists anywhere in packages/core/src — no scheme check, no allowlist, no normalization — so `items[].href` is passed to `h('a', { href: item.href })` in the recursive list renderer. A `javascript:` URL supplied by whatever populates this component's items therefore executes in the host's own origin when a person clicks the link. Not fixed here: refusing these schemes is a breaking change, because `javascript:void(0)` is a widespread legacy idiom that today renders and would then stop, so the fix belongs to the release lane (TASK-N5-02) alongside the ARIA-prop gaps rather than to a fixture packet."
+    },
+    {
+      "id": "S4",
+      "component": "DzAnchor",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.file.local",
+        "url-scheme.blob.foreign-origin"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "low",
+      "publicBehaviourChange": true,
+      "reason": "The same absent policy, on the two schemes that cannot execute: `file:` cannot be navigated to from a web page and a foreign-origin `blob:` resolves to nothing. The residual harm is a link that looks operable and is not, and an allowlist that would admit a scheme with no business in a web document. Recorded separately from the executable schemes so that closing the high-severity half does not appear to close this half with it."
+    },
+    {
+      "id": "S5",
+      "component": "DzBreadcrumb",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.javascript.plain",
+        "url-scheme.javascript.mixed-case",
+        "url-scheme.javascript.leading-control",
+        "url-scheme.javascript.embedded-tab",
+        "url-scheme.vbscript.plain",
+        "url-scheme.data.html",
+        "url-scheme.data.svg-onload"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "high",
+      "publicBehaviourChange": true,
+      "reason": "No URL policy exists anywhere in packages/core/src — no scheme check, no allowlist, no normalization — so `DzBreadcrumbItem` binds `:href=\"href\"` directly. A `javascript:` URL supplied by whatever populates this component's items therefore executes in the host's own origin when a person clicks the link. Not fixed here: refusing these schemes is a breaking change, because `javascript:void(0)` is a widespread legacy idiom that today renders and would then stop, so the fix belongs to the release lane (TASK-N5-02) alongside the ARIA-prop gaps rather than to a fixture packet."
+    },
+    {
+      "id": "S6",
+      "component": "DzBreadcrumb",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.file.local",
+        "url-scheme.blob.foreign-origin"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "low",
+      "publicBehaviourChange": true,
+      "reason": "The same absent policy, on the two schemes that cannot execute: `file:` cannot be navigated to from a web page and a foreign-origin `blob:` resolves to nothing. The residual harm is a link that looks operable and is not, and an allowlist that would admit a scheme with no business in a web document. Recorded separately from the executable schemes so that closing the high-severity half does not appear to close this half with it."
+    },
+    {
+      "id": "S7",
+      "component": "DzMenu",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.javascript.plain",
+        "url-scheme.javascript.mixed-case",
+        "url-scheme.javascript.leading-control",
+        "url-scheme.javascript.embedded-tab",
+        "url-scheme.vbscript.plain",
+        "url-scheme.data.html",
+        "url-scheme.data.svg-onload"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "high",
+      "publicBehaviourChange": true,
+      "reason": "No URL policy exists anywhere in packages/core/src — no scheme check, no allowlist, no normalization — so `DzMenuItem` binds `:href=\"href\"` directly. A `javascript:` URL supplied by whatever populates this component's items therefore executes in the host's own origin when a person clicks the link. Not fixed here: refusing these schemes is a breaking change, because `javascript:void(0)` is a widespread legacy idiom that today renders and would then stop, so the fix belongs to the release lane (TASK-N5-02) alongside the ARIA-prop gaps rather than to a fixture packet."
+    },
+    {
+      "id": "S8",
+      "component": "DzMenu",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.file.local",
+        "url-scheme.blob.foreign-origin"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "low",
+      "publicBehaviourChange": true,
+      "reason": "The same absent policy, on the two schemes that cannot execute: `file:` cannot be navigated to from a web page and a foreign-origin `blob:` resolves to nothing. The residual harm is a link that looks operable and is not, and an allowlist that would admit a scheme with no business in a web document. Recorded separately from the executable schemes so that closing the high-severity half does not appear to close this half with it."
+    },
+    {
+      "id": "S9",
+      "component": "DzSidebar",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.javascript.plain",
+        "url-scheme.javascript.mixed-case",
+        "url-scheme.javascript.leading-control",
+        "url-scheme.javascript.embedded-tab",
+        "url-scheme.vbscript.plain",
+        "url-scheme.data.html",
+        "url-scheme.data.svg-onload"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "high",
+      "publicBehaviourChange": true,
+      "reason": "No URL policy exists anywhere in packages/core/src — no scheme check, no allowlist, no normalization — so `DzSidebarItem` copies `props.href` into the rendered attribute map. A `javascript:` URL supplied by whatever populates this component's items therefore executes in the host's own origin when a person clicks the link. Not fixed here: refusing these schemes is a breaking change, because `javascript:void(0)` is a widespread legacy idiom that today renders and would then stop, so the fix belongs to the release lane (TASK-N5-02) alongside the ARIA-prop gaps rather than to a fixture packet."
+    },
+    {
+      "id": "S10",
+      "component": "DzSidebar",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.file.local",
+        "url-scheme.blob.foreign-origin"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "low",
+      "publicBehaviourChange": true,
+      "reason": "The same absent policy, on the two schemes that cannot execute: `file:` cannot be navigated to from a web page and a foreign-origin `blob:` resolves to nothing. The residual harm is a link that looks operable and is not, and an allowlist that would admit a scheme with no business in a web document. Recorded separately from the executable schemes so that closing the high-severity half does not appear to close this half with it."
+    },
+    {
+      "id": "S11",
+      "component": "DzMegaMenu",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.javascript.plain",
+        "url-scheme.javascript.mixed-case",
+        "url-scheme.javascript.leading-control",
+        "url-scheme.javascript.embedded-tab",
+        "url-scheme.vbscript.plain",
+        "url-scheme.data.html",
+        "url-scheme.data.svg-onload"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "high",
+      "publicBehaviourChange": true,
+      "reason": "No URL policy exists anywhere in packages/core/src — no scheme check, no allowlist, no normalization — so `items[].href` and `groups[].items[].href` are bound at four sites in the template. A `javascript:` URL supplied by whatever populates this component's items therefore executes in the host's own origin when a person clicks the link. Not fixed here: refusing these schemes is a breaking change, because `javascript:void(0)` is a widespread legacy idiom that today renders and would then stop, so the fix belongs to the release lane (TASK-N5-02) alongside the ARIA-prop gaps rather than to a fixture packet."
+    },
+    {
+      "id": "S12",
+      "component": "DzMegaMenu",
+      "sink": "navigation",
+      "fixtures": [
+        "url-scheme.file.local",
+        "url-scheme.blob.foreign-origin"
+      ],
+      "required": "rejected",
+      "measured": "passed-through",
+      "severity": "low",
+      "publicBehaviourChange": true,
+      "reason": "The same absent policy, on the two schemes that cannot execute: `file:` cannot be navigated to from a web page and a foreign-origin `blob:` resolves to nothing. The residual harm is a link that looks operable and is not, and an allowlist that would admit a scheme with no business in a web document. Recorded separately from the executable schemes so that closing the high-severity half does not appear to close this half with it."
+    }
+  ]
+}

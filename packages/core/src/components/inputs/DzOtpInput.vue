@@ -38,6 +38,7 @@ const props = withDefaults(defineProps<DzOtpInputProps>(), {
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
   ariaInvalid: undefined,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzOtpInputEmits>()
@@ -92,8 +93,22 @@ const styles = computed(() =>
 )
 
 const rootClasses = computed(() =>
-  cn(styles.value.root(), attrs.class as string | undefined),
+  cn(styles.value.root(), attrs.class as string | undefined, props.ui?.control),
 )
+
+/**
+ * Per-part class values (ADR-19 §5).
+ *
+ * `control` rather than `root` for the recipe above: `<PinInputRoot>` is the
+ * flex row that carries the layout and is where `class` has always landed, and
+ * the outer `<div>` is the state-bearing wrapper. Same split as DzInput.
+ */
+const outerClasses = computed(() => cn(props.ui?.root))
+const cellClasses = computed(() => cn(styles.value.input(), props.ui?.input))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /** Reka UI PinInput works with string arrays */
 const pinValues = computed(() => model.value.split(''))
@@ -148,6 +163,8 @@ watch(() => props.length, () => void nextTick(normalizeAggregateInput))
 <template>
   <div
     ref="rootRef"
+    data-part="root"
+    :class="outerClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
@@ -155,6 +172,7 @@ watch(() => props.length, () => void nextTick(normalizeAggregateInput))
   >
     <PinInputRoot
       :id="resolvedId"
+      data-part="control"
       :model-value="pinValues"
       :disabled="resolvedDisabled"
       :name="name"
@@ -174,7 +192,8 @@ watch(() => props.length, () => void nextTick(normalizeAggregateInput))
         v-for="idx in inputIndices"
         :key="idx"
         :index="idx"
-        :class="styles.input()"
+        data-part="input"
+        :class="cellClasses"
         :disabled="resolvedDisabled"
         @focus="handleFocus"
         @blur="handleBlur"
@@ -185,7 +204,8 @@ watch(() => props.length, () => void nextTick(normalizeAggregateInput))
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

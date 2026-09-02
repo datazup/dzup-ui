@@ -28,6 +28,7 @@ const props = withDefaults(defineProps<DzIconButtonProps>(), {
   disabled: false,
   loading: false,
   type: 'button',
+  ui: undefined,
 })
 
 const emit = defineEmits<DzIconButtonEmits>()
@@ -76,8 +77,12 @@ const classes = computed(() =>
     'p-0',
     squareSizeClass.value,
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
+
+/** Per-part class values (ADR-19 §5). */
+const spinnerClasses = computed(() => cn('animate-spin', iconSizeClass.value, props.ui?.spinner))
 
 function handleClick(event: MouseEvent): void {
   if (isInert.value) {
@@ -100,6 +105,7 @@ function handleBlur(event: FocusEvent): void {
 <template>
   <button
     :id="id"
+    data-part="root"
     :type="type"
     :class="classes"
     :disabled="resolvedDisabled || undefined"
@@ -119,8 +125,8 @@ function handleBlur(event: FocusEvent): void {
     <!-- Loading spinner -->
     <svg
       v-if="loading"
-      class="animate-spin"
-      :class="iconSizeClass"
+      data-part="spinner"
+      :class="spinnerClasses"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

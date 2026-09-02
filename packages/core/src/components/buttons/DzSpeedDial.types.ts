@@ -17,6 +17,7 @@ import type {
 } from '@dzup-ui/contracts'
 import type { Component } from 'vue'
 import type { DzFabPosition, DzFabVariant } from './DzFab.types.ts'
+import type { DzSpeedDialUi } from './DzSpeedDial.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Item shape
@@ -83,6 +84,17 @@ export interface DzSpeedDialProps extends BaseAccessibilityProps {
    * (Inherited as optional from BaseAccessibilityProps; redeclared required.)
    */
   ariaLabel?: string
+  /**
+   * Per-part class overrides, keyed by the names in `DzSpeedDial.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzSpeedDial :items="items" :ui="{ list: 'gap-4' }" />
+   * ```
+   */
+  ui?: DzSpeedDialUi
 }
 
 // ---------------------------------------------------------------------------

@@ -48,6 +48,14 @@ const DOC_ROOTS = [
   'packages/tokens/README.md',
   'apps/storybook/stories',
   'apps/landing/src',
+  // TASK-N2-D1. The docs site's hand-written guide pages. Its GENERATED
+  // component pages are under apps/docs/components/ and carry no fixture
+  // markers by construction — every snippet there is a verbatim slice of a real
+  // story, gated by validate:docs-pages instead. What needs this gate is
+  // apps/docs/guide/getting-started.md, which reuses P1-04's validated install
+  // snippets: a docs site is the single most likely place for install
+  // instructions to drift, and it would have been outside every gate.
+  'apps/docs/guide',
 ]
 
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.nuxt', '.output', 'storybook-static'])

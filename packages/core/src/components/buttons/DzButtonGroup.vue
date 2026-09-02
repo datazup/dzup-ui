@@ -30,6 +30,7 @@ const props = withDefaults(defineProps<DzButtonGroupProps>(), {
   variant: undefined,
   tone: undefined,
   disabled: false,
+  ui: undefined,
 })
 
 defineSlots<DzButtonGroupSlots>()
@@ -50,6 +51,7 @@ const classes = computed(() =>
   cn(
     buttonGroupVariants({ orientation: props.orientation }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -57,6 +59,7 @@ const classes = computed(() =>
 <template>
   <div
     :id="id"
+    data-part="root"
     role="group"
     :class="classes"
     :aria-label="ariaLabel"

@@ -70,6 +70,39 @@ export interface EvidenceCell {
   readonly note?: string
 }
 
+/**
+ * Per-component visual-baseline coverage — the matrix's fifth generated input
+ * (TASK-N1-O6).
+ *
+ * Deliberately its own field rather than another {@link EvidenceCell}. A cell
+ * is an evidence row a component *owes*, and what a component owes is fixed by
+ * `TIER_EVIDENCE_INCREMENT` in `@dzup-ui/contracts` — a published contract
+ * transcribed from the 2026-08-11 reassessment. Promoting visual regression to
+ * a tier obligation would change what all 144 components owe, and
+ * `<generated_authority>` is explicit that a generator reports and never
+ * decides that. So this reports coverage beside the cells, and the promotion is
+ * left as an owner decision with the evidence already in hand.
+ *
+ * Three states, and no fourth:
+ *
+ * - `covered` — an accepted baseline exists for every declared theme on the
+ *   gating platform, and none of them predates the component's last change.
+ * - `stale` — baselines exist and at least one was captured before the
+ *   component moved. A pass about different code, exactly as elsewhere here.
+ * - `not-covered` — no baseline. **Never `unknown`.** The scope is declared, so
+ *   a component outside it is a known gap with a rollout rank, not a mystery;
+ *   that distinction is the whole reason the scope lives in a committed file.
+ */
+export interface VisualEvidence {
+  readonly state: 'covered' | 'not-covered' | 'stale'
+  /** How many accepted baselines back this component on the gating platform. */
+  readonly baselines: number
+  /** Themes actually covered, sorted. */
+  readonly themes: readonly string[]
+  readonly artifacts: readonly string[]
+  readonly note?: string
+}
+
 export interface CapabilityRow {
   readonly component: string
   readonly family: string
@@ -83,6 +116,8 @@ export interface CapabilityRow {
   /** The commit that last touched `source`, for staleness. */
   readonly componentCommit: string
   readonly cells: readonly EvidenceCell[]
+  /** Visual-baseline coverage. See {@link VisualEvidence}. */
+  readonly visual: VisualEvidence
 }
 
 export interface CapabilityMatrix {
@@ -102,7 +137,11 @@ export interface CapabilityMatrix {
   readonly rows: readonly CapabilityRow[]
 }
 
-export const CAPABILITY_SCHEMA_VERSION = '1.0.0'
+/**
+ * `1.1.0` — TASK-N1-O6 added the per-row `visual` field. Additive: every 1.0.0
+ * reader still finds every field it knew about.
+ */
+export const CAPABILITY_SCHEMA_VERSION = '1.1.0'
 
 /** An empty per-state tally. */
 export function emptyTally(): Record<CellState, number> {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "tier": "core",
-  "sourceCommit": "8d80bc39653e50a6da458d005b7691d2fb833edb",
+  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
   "generatedFrom": [
     "packages/compat/src/adapters/*.vue",
     "packages/compat/src/index.ts",
@@ -2318,6 +2318,23 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "content",
+          "footer"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "optionalParts": [
+          "footer"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzBlockquote.vue",
@@ -2603,6 +2620,27 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "idle",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "variant",
+          "size",
+          "tone",
+          "orientation"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzButtonGroup.vue",
@@ -2770,6 +2808,21 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzCaption.vue",
@@ -3553,6 +3606,21 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "variant"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzCode.vue",
@@ -3569,6 +3637,31 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "header",
+          "filename",
+          "language",
+          "copy-button",
+          "content",
+          "line-number"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "optionalParts": [
+          "header",
+          "filename",
+          "language",
+          "copy-button",
+          "line-number"
+        ],
+        "rtl": {
+          "mirrors": "none",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/data/index.ts",
         "packages/core/src/components/data/DzCodeBlock.vue",
@@ -4391,6 +4484,27 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "idle",
+          "copied",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzCopyButton.vue",
@@ -5891,6 +6005,40 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "spinner",
+          "icon"
+        ],
+        "states": [
+          "idle",
+          "loading",
+          "disabled"
+        ],
+        "componentTokens": [
+          "--dz-fab-icon-size",
+          "--dz-fab-offset",
+          "--dz-fab-shadow",
+          "--dz-fab-shadow-hover",
+          "--dz-fab-size",
+          "--dz-fab-z"
+        ],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "spinner",
+          "icon"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzFab.vue",
@@ -6365,6 +6513,21 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "size"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzHeading.vue",
@@ -6423,6 +6586,31 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "spinner"
+        ],
+        "states": [
+          "idle",
+          "loading",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "spinner"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzIconButton.vue",
@@ -6933,6 +7121,30 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "prefix",
+          "content",
+          "suffix"
+        ],
+        "states": [
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "prefix",
+          "suffix"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzInputGroup.vue",
@@ -6975,6 +7187,39 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "prefix",
+          "suffix",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "loading",
+          "readonly",
+          "required",
+          "completed"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "prefix",
+          "suffix",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzInputMask.vue",
@@ -7059,6 +7304,37 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "item",
+          "separator"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-kbd-bg",
+          "--dz-kbd-border",
+          "--dz-kbd-fg",
+          "--dz-kbd-font-size",
+          "--dz-kbd-gap",
+          "--dz-kbd-min-size",
+          "--dz-kbd-padding-x",
+          "--dz-kbd-radius",
+          "--dz-kbd-shadow"
+        ],
+        "riskTier": "A",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "item",
+          "separator"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzKbd.vue",
@@ -8092,6 +8368,38 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "prefix",
+          "decrement",
+          "increment",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "readonly",
+          "loading",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "prefix",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzNumberInput.vue",
@@ -8219,6 +8527,31 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "size"
+        ],
+        "optionalParts": [
+          "input",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzOtpInput.vue",
@@ -8431,6 +8764,39 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "input",
+          "prefix",
+          "spinner",
+          "toggle",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "loading",
+          "readonly",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "prefix",
+          "spinner",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzPasswordInput.vue",
@@ -9157,6 +9523,23 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [
+          "--dz-relative-time-font-size"
+        ],
+        "riskTier": "A",
+        "recipes": [
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzRelativeTime.vue",
@@ -9591,6 +9974,39 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "control",
+          "icon",
+          "input",
+          "spinner",
+          "clear",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "readonly",
+          "loading",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "spinner",
+          "clear",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzSearchInput.vue",
@@ -9713,7 +10129,10 @@
           "item-indicator",
           "item-label",
           "empty",
-          "error"
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
         ],
         "states": [
           "idle",
@@ -9739,7 +10158,10 @@
           "item-indicator",
           "item-label",
           "empty",
-          "error"
+          "error",
+          "options-state",
+          "options-message",
+          "options-retry"
         ],
         "rtl": {
           "mirrors": "layout",
@@ -10438,6 +10860,28 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root",
+          "list",
+          "item"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "item"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzSpeedDial.vue",
@@ -10553,6 +10997,33 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "action",
+          "trigger"
+        ],
+        "states": [
+          "idle",
+          "loading",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "action",
+          "trigger"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzSplitButton.vue",
@@ -11791,6 +12262,22 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "recipes": [
+          "size",
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzText.vue",
@@ -11833,6 +12320,35 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root",
+          "input",
+          "spinner",
+          "error"
+        ],
+        "states": [
+          "disabled",
+          "loading",
+          "readonly",
+          "required"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "optionalParts": [
+          "spinner",
+          "error"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/inputs/index.ts",
         "packages/core/src/components/inputs/DzTextarea.vue",
@@ -12246,6 +12762,27 @@
       ],
       "kind": "public-component",
       "status": "stable",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [
+          "idle",
+          "pressed",
+          "disabled"
+        ],
+        "componentTokens": [],
+        "riskTier": "B",
+        "recipes": [
+          "variant",
+          "size",
+          "tone"
+        ],
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/buttons/index.ts",
         "packages/core/src/components/buttons/DzToggleButton.vue",
@@ -12838,6 +13375,18 @@
       ],
       "kind": "public-component",
       "status": "experimental",
+      "anatomy": {
+        "parts": [
+          "root"
+        ],
+        "states": [],
+        "componentTokens": [],
+        "riskTier": "A",
+        "rtl": {
+          "mirrors": "layout",
+          "keyboard": "none"
+        }
+      },
       "evidence": [
         "packages/core/src/components/typography/index.ts",
         "packages/core/src/components/typography/DzVisuallyHidden.vue",

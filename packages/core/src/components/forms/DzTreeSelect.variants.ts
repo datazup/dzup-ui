@@ -30,7 +30,7 @@ export const treeSelectVariants = tv({
       'inline-flex items-center gap-[var(--dz-spacing-1)]',
       'rounded-[var(--dz-radius-sm)]',
       'bg-[var(--dz-primary-muted)] text-[var(--dz-primary-muted-foreground)]',
-      'px-[var(--dz-spacing-1_5)] py-[var(--dz-spacing-0-5)]',
+      'px-[var(--dz-spacing-1_5)] py-[var(--dz-spacing-0_5)]',
       'text-[length:var(--dz-text-xs)]',
       'max-w-full',
     ].join(' '),
@@ -91,11 +91,11 @@ export const treeSelectVariants = tv({
     size: {
       icon: { trigger: '', icon: '' },
       xs: {
-        trigger: 'min-h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] py-[var(--dz-spacing-0-5)] text-[length:var(--dz-input-xs-font-size)]',
+        trigger: 'min-h-[var(--dz-input-xs-height)] px-[var(--dz-input-xs-padding-x)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-input-xs-font-size)]',
         icon: 'h-3 w-3',
       },
       sm: {
-        trigger: 'min-h-[var(--dz-input-sm-height)] px-[var(--dz-input-sm-padding-x)] py-[var(--dz-spacing-0-5)] text-[length:var(--dz-input-sm-font-size)]',
+        trigger: 'min-h-[var(--dz-input-sm-height)] px-[var(--dz-input-sm-padding-x)] py-[var(--dz-spacing-0_5)] text-[length:var(--dz-input-sm-font-size)]',
         icon: 'h-3.5 w-3.5',
       },
       md: {

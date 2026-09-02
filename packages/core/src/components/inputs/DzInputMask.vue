@@ -44,6 +44,7 @@ const props = withDefaults(defineProps<DzInputMaskProps>(), {
   loading: false,
   invalid: false,
   required: false,
+  ui: undefined,
 })
 
 const emit = defineEmits<DzInputMaskEmits>()
@@ -92,11 +93,21 @@ const wrapperClasses = computed(() =>
       seamless: isGrouped.value,
     }),
     attrs.class as string | undefined,
+    props.ui?.control,
   ),
 )
 
 /** Inner input element classes */
-const inputClasses = computed(() => maskElementVariants())
+const inputClasses = computed(() => cn(maskElementVariants(), props.ui?.input))
+
+/** Per-part class values (ADR-19 §5). The affixes share a base, overridable apart. */
+const AFFIX_BASE = 'flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]'
+const prefixClasses = computed(() => cn(AFFIX_BASE, props.ui?.prefix))
+const suffixClasses = computed(() => cn(AFFIX_BASE, props.ui?.suffix))
+const errorClasses = computed(() => cn(
+  'mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]',
+  props.ui?.error,
+))
 
 /** ID for the error message element (for aria-describedby) */
 const errorId = computed(() => (props.error ? `${resolvedId.value}-error` : undefined))
@@ -236,6 +247,8 @@ defineExpose({ inputRef, completed, unmasked })
 
 <template>
   <div
+    data-part="root"
+    :class="cn(ui?.root)"
     :data-state="resolvedDisabled ? 'disabled' : loading ? 'loading' : readonly ? 'readonly' : undefined"
     :data-tone="tone"
     :data-completed="completed ? '' : undefined"
@@ -247,11 +260,12 @@ defineExpose({ inputRef, completed, unmasked })
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Input wrapper with variant styling -->
-    <div :class="wrapperClasses">
+    <div data-part="control" :class="wrapperClasses">
       <!-- Prefix slot -->
       <span
         v-if="$slots.prefix"
-        class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]"
+        data-part="prefix"
+        :class="prefixClasses"
       >
         <slot name="prefix" />
       </span>
@@ -261,6 +275,7 @@ defineExpose({ inputRef, completed, unmasked })
         :id="resolvedId"
         ref="inputRef"
         type="text"
+        data-part="input"
         :class="inputClasses"
         :value="displayed"
         :name="name"
@@ -287,7 +302,8 @@ defineExpose({ inputRef, completed, unmasked })
       <!-- Suffix slot -->
       <span
         v-if="$slots.suffix"
-        class="flex shrink-0 items-center text-[var(--dz-colors-neutral-400)]"
+        data-part="suffix"
+        :class="suffixClasses"
       >
         <slot name="suffix" />
       </span>
@@ -297,7 +313,8 @@ defineExpose({ inputRef, completed, unmasked })
     <p
       v-if="error"
       :id="errorId"
-      class="mt-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)] text-[var(--dz-danger)]"
+      data-part="error"
+      :class="errorClasses"
       role="alert"
     >
       {{ error }}

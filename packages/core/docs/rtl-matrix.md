@@ -22,18 +22,41 @@ get both right and still show a chevron pointing away from the panel it opens.
 
 | Component | mirrors | keyboard | direction-bearing icons |
 |---|---|---|---|
+| `DzBlockquote` | layout | none | — |
 | `DzButton` | layout | none | — |
+| `DzButtonGroup` | layout | none | — |
+| `DzCaption` | layout | none | — |
+| `DzCode` | none | none | — |
+| `DzCodeBlock` | none | none | — |
+| `DzCopyButton` | layout | none | — |
 | `DzDialog` | layout | none | — |
+| `DzFab` | layout | none | — |
 | `DzFileUpload` | layout | none | — |
+| `DzHeading` | layout | none | — |
+| `DzIconButton` | layout | none | — |
 | `DzInput` | layout | none | — |
+| `DzInputGroup` | layout | none | — |
+| `DzInputMask` | layout | none | — |
+| `DzKbd` | layout | none | — |
+| `DzNumberInput` | layout | none | — |
+| `DzOtpInput` | layout | none | — |
+| `DzPasswordInput` | layout | none | — |
 | `DzProvider` | none | none | — |
+| `DzRelativeTime` | layout | none | — |
+| `DzSearchInput` | layout | none | — |
 | `DzSelect` | layout | none | `indicator` |
+| `DzSpeedDial` | layout | none | — |
+| `DzSplitButton` | layout | none | — |
 | `DzTable` | layout | swap-horizontal | — |
+| `DzText` | layout | none | — |
+| `DzTextarea` | layout | none | — |
 | `DzThemeProvider` | none | none | — |
+| `DzToggleButton` | layout | none | — |
+| `DzVisuallyHidden` | layout | none | — |
 
-**8 of 144 public components declare an RTL contract.** The
+**31 of 144 public components declare an RTL contract.** The
 rest are silent, not compliant: the field lives in the anatomy, and only
-8 components declare an anatomy at all. The two rollouts are the
+31 components declare an anatomy at all. The two rollouts are the
 same rollout, ratcheted by `maxWithoutAnatomy` in
 `packages/tooling/src/ownership/unclassified-ceiling.json`.
 

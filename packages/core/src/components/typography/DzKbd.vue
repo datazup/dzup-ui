@@ -26,6 +26,7 @@ const props = withDefaults(defineProps<DzKbdProps>(), {
   platformAware: true,
   size: 'md',
   separator: '+',
+  ui: undefined,
 })
 
 defineSlots<DzKbdSlots>()
@@ -206,14 +207,15 @@ const ariaLabel = computed(() =>
 // ---------------------------------------------------------------------------
 
 const slots = kbdVariants()
-const rootClass = computed(() => cn(slots.root(), attrs.class as string | undefined))
-const keyClass = slots.key()
-const separatorClass = slots.separator()
+const rootClass = computed(() => cn(slots.root(), attrs.class as string | undefined, props.ui?.root))
+const keyClass = computed(() => cn(slots.key(), props.ui?.item))
+const separatorClass = computed(() => cn(slots.separator(), props.ui?.separator))
 </script>
 
 <template>
   <kbd
     :id="id"
+    data-part="root"
     :class="rootClass"
     :data-size="size"
     :role="ariaLabel ? 'img' : undefined"
@@ -222,14 +224,15 @@ const separatorClass = slots.separator()
   >
     <template v-if="renderKeys.length">
       <template v-for="(item, i) in renderKeys" :key="i">
-        <kbd :class="keyClass" aria-hidden="true">{{ item.symbol }}</kbd>
+        <kbd data-part="item" :class="keyClass" aria-hidden="true">{{ item.symbol }}</kbd>
         <span
           v-if="separator && i < renderKeys.length - 1"
+          data-part="separator"
           :class="separatorClass"
           aria-hidden="true"
         >{{ separator }}</span>
       </template>
     </template>
-    <kbd v-else :class="keyClass"><slot /></kbd>
+    <kbd v-else data-part="item" :class="keyClass"><slot /></kbd>
   </kbd>
 </template>

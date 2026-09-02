@@ -41,6 +41,7 @@ const props = withDefaults(defineProps<DzRelativeTimeProps>(), {
   ariaLabel: undefined,
   ariaLabelledby: undefined,
   ariaDescribedby: undefined,
+  ui: undefined,
 })
 
 defineSlots<DzRelativeTimeSlots>()
@@ -55,7 +56,7 @@ const { relative, absolute, datetime, display } = useRelativeTime({
 })
 
 const classes = computed(() =>
-  cn(relativeTimeVariants({ tone: props.tone }), attrs.class as string | undefined),
+  cn(relativeTimeVariants({ tone: props.tone }), attrs.class as string | undefined, props.ui?.root),
 )
 
 /**
@@ -84,6 +85,7 @@ const slotProps = computed(() => ({
     <DzTooltipTrigger>
       <time
         :id="id"
+        data-part="root"
         :datetime="datetime"
         :class="classes"
         :aria-label="accessibleLabel"
@@ -100,6 +102,7 @@ const slotProps = computed(() => ({
   <time
     v-else
     :id="id"
+    data-part="root"
     :datetime="datetime"
     :class="classes"
     :aria-label="accessibleLabel"

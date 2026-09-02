@@ -361,11 +361,11 @@ function handleBlur(event: FocusEvent): void {
 
 <template>
   <div
+    data-part="root"
     :class="rootClasses"
     :data-disabled="resolvedDisabled ? '' : undefined"
     :data-required="resolvedRequired ? '' : undefined"
     :data-state="resolvedDisabled ? 'disabled' : undefined"
-    style="contain: layout style"
     v-bind="{ ...$attrs, class: undefined }"
   >
     <!-- Hidden file input -->

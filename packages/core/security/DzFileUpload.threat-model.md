@@ -77,17 +77,52 @@ supplied. Not a defect in the component; a note for the host, recorded because
 the reassessment's rule is that components do not log document content and hosts
 should not either.
 
-## Non-applicable Tier D rows, and why
+## The two Tier D rows that were excepted, and are not any more
 
-- **`url-policy`** — the component accepts no URL of any kind. There is no
-  `href`, no `src`, no `createObjectURL`, no download link. Recorded as an
-  exception in `component-tiers.ts` rather than as an empty cell.
-- **`csp-fixture`** — no inline style, no inline script, no `blob:` or `data:`
-  URL, no HTML sink, no worker. There is no CSP directive whose absence changes
-  its behaviour. Also recorded as an exception.
+Until 2026-09-01 this section said `url-policy` and `csp-fixture` were
+**non-applicable** and recorded both as exceptions in `component-tiers.ts`. That
+was wrong twice over, and TASK-N1-O5 replaced both with real specs.
 
-Both are exceptions rather than deletions: the capability matrix still prints
-the cell, with this reasoning next to it.
+### `url-policy` — the exception was describing a policy, not an absence
+
+The claim ("the component accepts no URL of any kind") was true. Its shape was
+the problem: *"there is no URL here"* is not the absence of a policy, it **is**
+a policy, and the strictest one available — an allowlist of zero schemes. A
+policy can be asserted; an exception can only be believed.
+
+`DzFileUpload.url-policy.spec.ts` now asserts it: no URL-bearing attribute
+(`href`, `src`, `srcset`, `action`, `formaction`, `poster`, `data`, `cite`,
+`background`, `ping`, `xlink:href`) appears anywhere in the render, in any
+state, under every fixture in the hostile corpus; `URL.createObjectURL` is
+spied on and never called, on both the picker path and the drop path, in both
+model modes. The day somebody adds an image preview, that spec turns red on the
+line that says the count is zero — where the exception would have stayed
+`excepted` until a human re-read this document.
+
+### `csp-fixture` — one of the exception's five clauses was false
+
+It read: *"No inline style, no inline script, no `blob:` or `data:` URL, no HTML
+sink and no worker."* Four were true. **"No inline style" was not.** The
+template root carried `style="contain: layout style"`. A `style` **attribute**
+is governed by `style-src-attr`, which falls back to `style-src`, so a strict
+CSP without `'unsafe-inline'` blocks it — and the containment it declared is
+exactly what keeps a 4 096-character file name inside the component box. The
+hosts that configured CSP most carefully got the least contained control, and
+nothing could see it.
+
+Fixed by moving the declaration into the `tv()` recipe as
+`[contain:layout_style]` — the form `DzCard` and `DzPanel` already used, and the
+form the styling contract requires (ADR-04/ADR-19: `tv()` in `.variants.ts`,
+never a style attribute). The CSS is unchanged; only its carrier is.
+`DzFileUpload.csp-fixture.spec.ts` now asserts the whole render is free of every
+construct the policy blocks, in every state, under the hostile corpus, and
+across a real interaction sequence — plus that the component injects no `<style>`
+and therefore needs no nonce (ADR-20).
+
+**Still owed:** jsdom does not enforce CSP. These specs prove the component
+emits nothing a strict policy blocks; they do not prove a browser served with a
+real `Content-Security-Policy` header accepted the page. That is a Playwright
+lane and it is recorded as a gap, not as done.
 
 ## What would change this document
 

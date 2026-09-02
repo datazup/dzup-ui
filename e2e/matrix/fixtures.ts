@@ -113,13 +113,28 @@ export function canvas(page: Page) {
 interface KnownFailure {
   component: string
   condition: string
-  measured: { engine: string, overflowPx?: number }
+  measured: Record<string, unknown>
   reason: string
 }
 
 const KNOWN_FAILURES = JSON.parse(
   readFileSync(new URL('./known-failures.json', import.meta.url), 'utf8'),
 ) as { entries: KnownFailure[] }
+
+interface EngineRatchet {
+  version: string
+  conditionsRun: string[]
+  notReproducing: KnownFailure[]
+  engineOnly: KnownFailure[]
+}
+
+const ENGINE_RATCHETS = JSON.parse(
+  readFileSync(new URL('./engine-ratchets.json', import.meta.url), 'utf8'),
+) as { engines: Record<string, EngineRatchet | undefined> }
+
+function match(entries: readonly KnownFailure[], component: string, condition: string) {
+  return entries.find(e => e.component === component && e.condition === condition)
+}
 
 /**
  * The ledger entry for one cell, if it has one.
@@ -129,11 +144,31 @@ const KNOWN_FAILURES = JSON.parse(
  * Playwright fail the run when the cell starts passing. Fixing a component
  * therefore breaks the build until somebody deletes its line, which is the only
  * way a list like this ever gets shorter.
+ *
+ * **Two ledgers, one rule (TASK-N1-O2).** `known-failures.json` is
+ * cross-engine: its 46 entries were measured on chromium, and running the lane
+ * on firefox reproduced all 46 with the same numbers, so an entry there is an
+ * expectation for *every* engine. `engine-ratchets.json` records only what one
+ * engine measures differently — `notReproducing` withdraws a cross-engine
+ * expectation for one engine, `engineOnly` adds one. Without that split, the
+ * two WebKit divergences measured on 2026-08-31 would each fail the run as an
+ * "unexpected pass" and the only ways to silence them would be to weaken the
+ * chromium ratchet or to skip the cell. Both are the failure this file exists
+ * to prevent, so the divergence is recorded instead, with its measurement.
  */
 export function knownFailure(component: string, condition: string): KnownFailure | undefined {
-  return KNOWN_FAILURES.entries.find(
-    e => e.component === component && e.condition === condition,
-  )
+  const { engine } = matrixProject()
+  const ratchet = ENGINE_RATCHETS.engines[engine]
+
+  if (ratchet !== undefined) {
+    if (match(ratchet.notReproducing, component, condition) !== undefined)
+      return undefined
+    const own = match(ratchet.engineOnly, component, condition)
+    if (own !== undefined)
+      return own
+  }
+
+  return match(KNOWN_FAILURES.entries, component, condition)
 }
 
 /**

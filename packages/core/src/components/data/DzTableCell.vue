@@ -184,10 +184,21 @@ const dzMessages = useComponentMessages('DzTableCell')
     v-bind="{ ...$attrs, class: undefined }"
   >
     <slot />
+    <!--
+      TASK-N1-O3 / WCAG 2.2 SC 2.5.8. The column-resize handle is 8 CSS px wide.
+      It is not in the browser-matrix ledger only because no built DzTable story
+      turns `resizable` on, so the lane never measured it; the 2.5.7 drag audit
+      did. `dz-target-min` takes the pointer target to 24px across the inline
+      axis (the block axis is already the full header height) and the hover tint
+      moves to a pseudo-element at `--dz-control-visual-size` so the band the
+      user sees stays 8px wide.
+      SC 2.5.7 itself is already satisfied: `onResizeKey` resizes with
+      ArrowLeft/ArrowRight, 8px a step and 24px with Shift.
+    -->
     <button
       v-if="showResizeHandle"
       type="button"
-      class="absolute -right-1 top-0 z-10 h-full w-2 cursor-col-resize touch-none select-none bg-transparent hover:bg-[var(--dz-primary)]/40"
+      class="dz-target-min [--dz-control-visual-size:0.5rem] absolute -right-1 top-0 z-10 h-full w-2 cursor-col-resize touch-none select-none bg-transparent before:absolute before:inset-block-0 before:inset-inline-end-0 before:-z-10 before:w-[var(--dz-control-visual-size)] hover:before:bg-[var(--dz-primary)]/40"
       :aria-label="dzMessages.resizeColumn"
       data-dz-resize-handle
       @pointerdown="onResizeStart"

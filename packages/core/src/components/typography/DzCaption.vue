@@ -21,6 +21,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<DzCaptionProps>(), {
   tone: 'muted',
+  ui: undefined,
 })
 
 defineSlots<DzCaptionSlots>()
@@ -31,6 +32,7 @@ const classes = computed(() =>
   cn(
     captionVariants({ tone: props.tone }),
     attrs.class as string | undefined,
+    props.ui?.root,
   ),
 )
 </script>
@@ -38,6 +40,7 @@ const classes = computed(() =>
 <template>
   <small
     :id="id"
+    data-part="root"
     :class="classes"
     v-bind="{ ...$attrs, class: undefined }"
   >

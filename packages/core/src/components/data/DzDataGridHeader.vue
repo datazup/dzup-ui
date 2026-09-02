@@ -142,7 +142,7 @@ const dzMessages = useComponentMessages('DzDataGridHeader')
           v-if="isColumnFilterable(col) && openFilterField === col.field"
           :class="filterPopoverClasses"
           role="dialog"
-          :ariaLabel="`Filter ${col.header}`"
+          :aria-label="`Filter ${col.header}`"
           data-testid="filter-popover"
           @click.stop
           @keydown="handleFilterKeyDown"

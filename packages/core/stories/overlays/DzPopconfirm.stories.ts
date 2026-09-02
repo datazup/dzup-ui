@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { AlertTriangle, Trash2 } from 'lucide-vue-next'
-import { expect, screen, userEvent, within } from 'storybook/test'
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test'
 import { DzButton, DzIconButton } from '../../src/components/buttons'
 import { DzPopconfirm } from '../../src/components/overlays'
 import { a11yError, darkModeDecorator } from '../_shared'
@@ -285,5 +285,89 @@ export const Interactive: Story = {
     await userEvent.click(screen.getByTestId('dz-popconfirm-confirm'))
     await expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
     await expect(canvas.getByText(/confirmed/i)).toBeInTheDocument()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// States — closed / open / loading (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `loading` is the state DzPopconfirm declares, and it is the whole reason the
+ * component is more than a tooltip with two buttons: an async confirm has to
+ * keep the `role="alertdialog"` open while the request is in flight, mark the
+ * confirm button busy, and withdraw cancel so the action cannot be abandoned
+ * mid-write. When `loading` clears, the popover closes itself.
+ *
+ * Shown against closed and idle-open, and driven end to end so the transition is
+ * the evidence rather than three screenshots.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzPopconfirm, DzButton },
+    setup() {
+      return { AlertTriangle }
+    },
+    data() {
+      return { loading: false, deleted: false }
+    },
+    methods: {
+      async onConfirm() {
+        const self = this as unknown as { loading: boolean, deleted: boolean }
+        self.loading = true
+        await new Promise((resolve) => {
+          setTimeout(resolve, 800)
+        })
+        self.loading = false
+        self.deleted = true
+      },
+    },
+    template: `
+      <div class="flex flex-col items-center gap-3 p-24">
+        <DzPopconfirm
+          title="Delete this run?"
+          description="This cannot be undone."
+          confirm-text="Delete"
+          :icon="AlertTriangle"
+          :loading="loading"
+          @confirm="onConfirm"
+        >
+          <DzButton variant="outline" tone="danger">Delete run</DzButton>
+        </DzPopconfirm>
+        <span class="text-sm text-[var(--dz-muted-foreground)]">
+          Status: <strong data-testid="pc-status">{{ deleted ? 'deleted' : 'intact' }}</strong>
+        </span>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /delete run/i })
+
+    // Closed: the alertdialog is absent, not merely hidden.
+    await expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument()
+
+    // Open (idle): an alertdialog naming the action, with both buttons live.
+    await userEvent.click(trigger)
+    const panel = await screen.findByRole('alertdialog')
+    await expect(panel).toHaveTextContent(/delete this run\?/i)
+    const confirm = screen.getByTestId('dz-popconfirm-confirm')
+    const cancel = screen.getByTestId('dz-popconfirm-cancel')
+    await expect(confirm).toBeEnabled()
+    await expect(cancel).toBeEnabled()
+
+    // Loading: the popover stays open, confirm reports itself busy, and cancel
+    // is withdrawn so the in-flight request cannot be abandoned.
+    await userEvent.click(confirm)
+    await waitFor(() => expect(confirm).toHaveAttribute('aria-busy', 'true'))
+    await expect(screen.getByRole('alertdialog')).toBeInTheDocument()
+    await expect(confirm).toBeDisabled()
+    await expect(cancel).toBeDisabled()
+
+    // Settled: `loading` clearing closes the popover and the outcome lands.
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument(), {
+      timeout: 5000,
+    })
+    await expect(canvas.getByTestId('pc-status')).toHaveTextContent('deleted')
   },
 }

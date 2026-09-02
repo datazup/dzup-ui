@@ -15,11 +15,16 @@
     "./vitest": {
       "types": "./dist/vitest.d.ts",
       "import": "./dist/vitest.js"
+    },
+    "./security-corpus": {
+      "types": "./dist/security-corpus.d.ts",
+      "import": "./dist/security-corpus.js"
     }
   },
   "files": [
     "LICENSE",
-    "dist"
+    "dist",
+    "security-corpus"
   ],
   "publishConfig": {
     "access": "public"

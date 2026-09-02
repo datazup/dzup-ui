@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect, within } from 'storybook/test'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { ref } from 'vue'
 import { DzInfiniteScroll } from '../../src/components/data'
 import { darkModeDecorator } from '../_shared'
@@ -254,4 +254,130 @@ export const ReverseChat: Story = {
       </div>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// States — idle / loading / error / end / disabled (tier B `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * Every lifecycle state DzInfiniteScroll declares, side by side, because the
+ * component's whole value is in the edge cases rather than the happy path: the
+ * three declared state props (`loading`, `error`, `disabled`) plus the
+ * `hasMore: false` end state each render a different status row, announce a
+ * different string through the polite live region, and — the part a screenshot
+ * cannot show — decide whether the IntersectionObserver sentinel is mounted at
+ * all.
+ *
+ * The play function asserts the sentinel, since "does not ask for another page
+ * while one is in flight / after a failure / when disabled" is the contract.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzInfiniteScroll },
+    setup() {
+      const retries = ref(0)
+      return { rows: makePage(0, 2), rowClass, retries }
+    },
+    template: `
+      <div class="grid gap-6 lg:grid-cols-2">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Idle — more available</p>
+          <DzInfiniteScroll has-more aria-label="Idle feed" data-testid="is-idle">
+            <ul class="flex flex-col gap-2">
+              <li v-for="row in rows" :key="row.id" :class="rowClass">{{ row.title }}</li>
+            </ul>
+          </DzInfiniteScroll>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Loading</p>
+          <DzInfiniteScroll loading has-more aria-label="Loading feed" data-testid="is-loading">
+            <ul class="flex flex-col gap-2">
+              <li v-for="row in rows" :key="row.id" :class="rowClass">{{ row.title }}</li>
+            </ul>
+          </DzInfiniteScroll>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Error — retry offered</p>
+          <DzInfiniteScroll
+            error
+            has-more
+            aria-label="Failed feed"
+            data-testid="is-error"
+            @retry="retries++"
+          >
+            <ul class="flex flex-col gap-2">
+              <li v-for="row in rows" :key="row.id" :class="rowClass">{{ row.title }}</li>
+            </ul>
+          </DzInfiniteScroll>
+          <p class="text-sm text-[var(--dz-muted-foreground)]">
+            retry events: <strong data-testid="retry-count">{{ retries }}</strong>
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">End of results</p>
+          <DzInfiniteScroll :has-more="false" aria-label="Exhausted feed" data-testid="is-end">
+            <ul class="flex flex-col gap-2">
+              <li v-for="row in rows" :key="row.id" :class="rowClass">{{ row.title }}</li>
+            </ul>
+          </DzInfiniteScroll>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Disabled — paging switched off</p>
+          <DzInfiniteScroll disabled has-more aria-label="Disabled feed" data-testid="is-disabled">
+            <ul class="flex flex-col gap-2">
+              <li v-for="row in rows" :key="row.id" :class="rowClass">{{ row.title }}</li>
+            </ul>
+          </DzInfiniteScroll>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const sentinelOf = (el: HTMLElement) => el.querySelector('.dz-infinite-scroll-sentinel')
+    const liveOf = (el: HTMLElement) => el.querySelector('[aria-live="polite"]')
+
+    const idle = canvas.getByTestId('is-idle')
+    const loading = canvas.getByTestId('is-loading')
+    const errored = canvas.getByTestId('is-error')
+    const end = canvas.getByTestId('is-end')
+    const disabled = canvas.getByTestId('is-disabled')
+
+    // Idle: not busy, silent live region, and the sentinel is armed.
+    await expect(idle).not.toHaveAttribute('aria-busy')
+    await expect(liveOf(idle)?.textContent).toBe('')
+    await expect(sentinelOf(idle)).not.toBeNull()
+
+    // Loading: busy and announced. The sentinel stays mounted — the guard that
+    // stops a second request is `loading`, not unmounting the observer.
+    await expect(loading).toHaveAttribute('aria-busy', 'true')
+    await expect(liveOf(loading)).toHaveTextContent('Loading more items')
+    await expect(within(loading).getByText('Loading more…')).toBeVisible()
+    await expect(sentinelOf(loading)).not.toBeNull()
+
+    // Error: an assertive `role="alert"` row, a working Retry, and the sentinel
+    // removed so scrolling cannot re-trigger the failing request.
+    await expect(liveOf(errored)).toHaveTextContent('Failed to load more items')
+    await expect(within(errored).getByRole('alert')).toBeVisible()
+    await expect(sentinelOf(errored)).toBeNull()
+    await userEvent.click(within(errored).getByRole('button', { name: /retry/i }))
+    await waitFor(() => expect(canvas.getByTestId('retry-count')).toHaveTextContent('1'))
+
+    // End: announced, and the sentinel is gone so no further page is requested.
+    await expect(liveOf(end)).toHaveTextContent('End of results')
+    await expect(within(end).getByText(/reached the end/i)).toBeVisible()
+    await expect(sentinelOf(end)).toBeNull()
+
+    // Disabled: items still render, but paging is switched off entirely —
+    // no status row, no announcement, no sentinel.
+    await expect(disabled).toHaveAttribute('data-disabled')
+    await expect(within(disabled).getAllByRole('listitem')).toHaveLength(2)
+    await expect(liveOf(disabled)?.textContent).toBe('')
+    await expect(sentinelOf(disabled)).toBeNull()
+  },
 }

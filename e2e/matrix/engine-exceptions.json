@@ -29,5 +29,27 @@
       "default": "baseline"
     }
   },
-  "exceptions": []
+  "exceptions": [],
+  "reCheckedAt": "2026-08-31",
+  "reCheckedBy": "TASK-N1-O2",
+  "reCheckedVersions": {
+    "chromium": "149.0.7827.55 (playwright chromium v1228)",
+    "firefox": "151.0 (playwright firefox v1532)",
+    "webkit": "26.5 (playwright webkit v2311)",
+    "platform": "win32 -- Windows 11 Pro 10.0.26200"
+  },
+  "reCheckedResult": "All 12 {engine, condition} pairs for firefox and webkit were re-measured on Windows at Playwright 1.61.1 by creating the context the matrix creates and reading the media feature back. All 12 resolve as recorded on 2026-08-24, so the Linux-derived guidance the 2026-08-24 note contradicts is still contradicted on Windows: webkit accepts forcedColors and firefox accepts isMobile. Both engines then executed all six conditions against all 88 runnable targets. `exceptions` stays EMPTY: not one {engine, condition} pair had to be removed from the lane.",
+  "engineBehaviours": [
+    {
+      "engine": "webkit",
+      "version": "26.5 (playwright webkit v2311)",
+      "condition": "reduced-motion",
+      "behaviour": "WebKit keeps CSS animations in playState \"running\" on elements inside a `display: none` subtree. CSS Animations Level 1 states that setting `display` to `none` \"will terminate any running animation applied to the element and its descendants\"; chromium 149 and firefox 151 terminate, webkit 26.5 does not. Measured directly: Storybook's own `.sb-preparing-story > .sb-loader` spinner (an infinite `sb-rotate360` animation, hidden with `display: none` once the story is shown but never removed from the DOM) is reported as running by webkit and by neither other engine. `document.getAnimations()` -> 1 running on webkit, 0 on chromium, 0 on firefox, for the same page at the same moment.",
+      "impactBeforeFix": "84 of 88 Tier B-D components failed matrix-webkit-reduced-motion naming DIV.sb-loader. Not one named an element the component rendered.",
+      "resolution": "NOT an exception -- the condition is measurable on webkit once the assertion stops counting elements with no box. `e2e/matrix/conditions.spec.ts` now filters `getAnimations()` on `node.isConnected && node.checkVisibility()` (supported by all three engines). After the fix: webkit 176/176, firefox 176/176, chromium 176/176 on reduced-motion. Removing the {webkit, reduced-motion} cell from the lane instead would have hidden every real reduced-motion defect on that engine.",
+      "upstreamIssue": null,
+      "upstreamIssueNote": "No upstream WebKit bug id was verified from this offline environment; the normative spec sentence is cited instead. Confirming or filing one is an owner action (N1-O2 handoff, D5).",
+      "measuredAt": "2026-08-31"
+    }
+  ]
 }

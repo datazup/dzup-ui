@@ -4,6 +4,7 @@ import {
   DzTable,
   DzTableBody,
   DzTableCell,
+  DzTableFooter,
   DzTableHeader,
   DzTableRow,
 } from '../../src/components/data'
@@ -824,4 +825,123 @@ export const VirtualScroll: Story = {
       </DzTable>
     `,
   }),
+}
+
+// ---------------------------------------------------------------------------
+// States — ready / loading / selected row (tier C `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * DzTable is one of the nine components that declare an ADR-19 anatomy, so its
+ * states are part of a published contract rather than an implementation detail:
+ * `data-state` on `[data-part="root"]` is `ready` or `loading`, and a selected
+ * row stamps `data-state="selected"` on `[data-part="row"]`.
+ *
+ * Consumers style against exactly those selectors, so the play function asserts
+ * the declared parts and states rather than the classes that happen to render
+ * them — this is the story a theme author checks the contract against.
+ *
+ * It also pins the part of `loading` that is easy to get wrong: `DzTableBody`
+ * **replaces** its rows with `aria-hidden` skeletons, so the accessibility tree
+ * is left holding a busy table and its header rather than the previous page's
+ * values.
+ */
+export const States: Story = {
+  render: () => ({
+    components: {
+      DzTable,
+      DzTableHeader,
+      DzTableBody,
+      DzTableFooter,
+      DzTableRow,
+      DzTableCell,
+    },
+    template: `
+      <div class="space-y-8">
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Ready — with a selected row</p>
+          <DzTable variant="bordered" hoverable aria-label="Ready invoice table" data-testid="tbl-ready">
+            <template #caption>Open invoices</template>
+            <DzTableHeader>
+              <DzTableRow>
+                <DzTableCell header>Invoice</DzTableCell>
+                <DzTableCell header align="right">Amount</DzTableCell>
+              </DzTableRow>
+            </DzTableHeader>
+            <DzTableBody>
+              <DzTableRow>
+                <DzTableCell>INV-1001</DzTableCell>
+                <DzTableCell align="right">$1,200.00</DzTableCell>
+              </DzTableRow>
+              <DzTableRow selected>
+                <DzTableCell>INV-1002</DzTableCell>
+                <DzTableCell align="right">$850.50</DzTableCell>
+              </DzTableRow>
+            </DzTableBody>
+            <DzTableFooter>
+              <DzTableRow>
+                <DzTableCell header>Total</DzTableCell>
+                <DzTableCell align="right">$2,050.50</DzTableCell>
+              </DzTableRow>
+            </DzTableFooter>
+          </DzTable>
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Loading</p>
+          <DzTable loading variant="bordered" aria-label="Loading invoice table" data-testid="tbl-loading">
+            <DzTableHeader>
+              <DzTableRow>
+                <DzTableCell header>Invoice</DzTableCell>
+                <DzTableCell header align="right">Amount</DzTableCell>
+              </DzTableRow>
+            </DzTableHeader>
+            <DzTableBody>
+              <DzTableRow>
+                <DzTableCell>INV-1001</DzTableCell>
+                <DzTableCell align="right">$1,200.00</DzTableCell>
+              </DzTableRow>
+            </DzTableBody>
+          </DzTable>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const ready = canvas.getByTestId('tbl-ready')
+    const loading = canvas.getByTestId('tbl-loading')
+
+    // The declared anatomy parts are all present on the ready table.
+    await expect(ready).toHaveAttribute('data-part', 'root')
+    for (const part of ['content', 'title', 'header', 'body', 'row', 'cell', 'footer'])
+      await expect(ready.querySelector(`[data-part="${part}"]`)).not.toBeNull()
+
+    // `ready` state: not busy, no loading marker.
+    await expect(ready).toHaveAttribute('data-state', 'ready')
+    await expect(ready).not.toHaveAttribute('data-loading')
+    await expect(within(ready).getByRole('table')).not.toHaveAttribute('aria-busy')
+
+    // Exactly one row carries the declared `selected` state, and it is the
+    // second body row — the state lives on `[data-part="row"]`, not on a class.
+    const selectedRows = ready.querySelectorAll('[data-part="row"][data-state="selected"]')
+    await expect(selectedRows).toHaveLength(1)
+    await expect(selectedRows[0]).toHaveTextContent('INV-1002')
+
+    // `loading` state: the root flips and the table reports itself busy.
+    await expect(loading).toHaveAttribute('data-state', 'loading')
+    await expect(loading).toHaveAttribute('data-loading')
+    await expect(within(loading).getByRole('table')).toHaveAttribute('aria-busy', 'true')
+
+    // …and the body is swapped for `aria-hidden` skeleton rows rather than
+    // leaving stale data behind: the only row left in the accessibility tree is
+    // the header, so a screen reader hears a busy table, not last page's values.
+    await expect(within(loading).getAllByRole('row')).toHaveLength(1)
+    await expect(loading.querySelectorAll('[data-part="row"]')).toHaveLength(1)
+    await expect(
+      loading.querySelectorAll('tbody tr[aria-hidden="true"]').length,
+    ).toBeGreaterThan(0)
+    await expect(within(loading).queryByText('INV-1001')).toBeNull()
+  },
 }

@@ -113,7 +113,12 @@ function rowView(row: DocCapabilityRow) {
         { className: 'dz-cap__meta' },
         `Tier ${row.tier} · ${row.family} · APG ${row.pattern}`
         + `${row.boundary === 'none' ? '' : ` · boundary ${row.boundary}`}`
-        + ` · anatomy ${row.anatomy}`,
+        + ` · anatomy ${row.anatomy}`
+        // TASK-N1-O6. The fifth generated input, on the header line rather than
+        // as a cell: visual regression is not something a tier makes a
+        // component owe (see VisualEvidence in capability-matrix.ts), so it is
+        // reported about the component, not counted among its obligations.
+        + ` · visual ${row.visual.state}`,
       ),
     ),
     h('div', { className: 'dz-cap__cells' }, row.cells.map(cellView)),

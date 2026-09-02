@@ -40,12 +40,32 @@ export default antfu({
     // alone accounts for ~99,600 of the ~105,600 problems `eslint apps/` reports,
     // which buries every real finding. Regenerate these, don't edit them.
     'apps/storybook/public/playground/**',
+    // TASK-N2-D3: the same bundle, copied. `apps/docs/scripts/sync-playground-assets.mjs`
+    // copies the producer's output into apps/docs/public/playground/, and without this
+    // line `yarn lint` reports 98,922 errors from one 1.75 MB Vite lib bundle and the
+    // aggregate gate is red for a file nobody wrote. Git-ignores are not eslint ignores
+    // (flat config does not read .gitignore), which is why the copy needed its own entry.
+    'apps/docs/public/playground/**',
     'apps/storybook/stories/_data/*.generated.ts',
     'apps/landing/public/r/**',
     'apps/landing/public/llms*.txt',
     'apps/landing/src/generated/**',
     'apps/*/dist/**',
     'apps/*/storybook-static/**',
+
+    // TASK-N2-D1. The docs site's generated pages and its build output. The
+    // pages are markdown written by `yarn generate:docs-pages` from
+    // packages/core/docs/component-meta.json, and @antfu/eslint-config lints the
+    // fenced ts/vue blocks inside markdown — which here are VERBATIM slices of
+    // real Storybook stories. Linting them would report style findings against
+    // code this file does not own and cannot fix, and an `--fix` would be
+    // reverted by the next generate. Freshness is gated by
+    // `yarn validate:docs-pages` instead. The hand-written guide/ pages and
+    // components/_usage/ prose are NOT ignored.
+    'apps/docs/components/*.md',
+    'apps/docs/.vitepress/dist/**',
+    'apps/docs/.vitepress/cache/**',
+    'apps/docs/.vitepress/generated/**',
 
     // Nuxt consumer fixtures (TASK-OSS-P1-03): `package.json` is rendered from
     // `package.template.json` with absolute tarball paths, and `.tarballs/`
@@ -73,6 +93,20 @@ export default antfu({
   files: ['**/scripts/**'],
   rules: {
     'no-console': 'off',
+  },
+}, {
+  // TASK-N2-D1. Fenced code blocks inside the docs site's hand-written guide
+  // pages are INSTRUCTIONS, and in one of them the import order is the
+  // instruction: `import '@dzup-ui/tokens/css'` must come before the app's own
+  // imports, or the consumer gets a flash of unstyled content. `perfectionist/
+  // sort-imports` would autofix that snippet into advice that is wrong, silently
+  // — the same class as TASK-N2-A1's finding F8, where `regexp/use-ignore-case`
+  // would have rewritten a published JSON Schema pattern. A lint rule may not
+  // edit documentation into being incorrect, so it is off for these blocks only.
+  name: 'dzup/docs-guide-snippets',
+  files: ['apps/docs/guide/**/*.md/**'],
+  rules: {
+    'perfectionist/sort-imports': 'off',
   },
 }, {
   // DzPresence clones its slot's child vnode to stamp `data-state` onto it, which

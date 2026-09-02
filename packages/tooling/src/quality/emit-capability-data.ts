@@ -66,6 +66,12 @@ export function renderCapabilityData(matrix: CapabilityMatrix): string {
         `    boundary: ${str(row.securityBoundary)},`,
         `    anatomy: ${str(row.anatomy)},`,
         `    source: ${str(row.source)},`,
+        `    visual: { ${[
+          `state: ${str(row.visual.state)}`,
+          ...(row.visual.baselines === 0 ? [] : [`baselines: ${row.visual.baselines}`]),
+          ...(row.visual.themes.length === 0 ? [] : [`themes: [${row.visual.themes.map(str).join(', ')}]`]),
+          ...(row.visual.note === undefined ? [] : [`note: ${str(row.visual.note)}`]),
+        ].join(', ')} },`,
         `    cells: [`,
         ...cells,
         `    ],`,
@@ -102,6 +108,19 @@ export interface DocCapabilityRow {
   readonly boundary: string
   readonly anatomy: 'declared' | 'absent'
   readonly source: string
+  /**
+   * Visual-baseline coverage (TASK-N1-O6).
+   *
+   * \`not-covered\` is a declared state, not a missing one: the lane's scope
+   * lives in a committed ledger, so a component outside it is a known gap with
+   * a rollout rank rather than something nobody looked at.
+   */
+  readonly visual: {
+    readonly state: 'covered' | 'not-covered' | 'stale'
+    readonly baselines?: number
+    readonly themes?: readonly string[]
+    readonly note?: string
+  }
   readonly cells: readonly DocEvidenceCell[]
 }
 

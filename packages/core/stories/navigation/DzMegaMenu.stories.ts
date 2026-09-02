@@ -286,3 +286,259 @@ export const DarkMode: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — enabled / item-disabled / menu-disabled (tier C `states` DoD item)
+// ---------------------------------------------------------------------------
+
+const stateItems: DzMegaMenuItem[] = [
+  {
+    label: 'Products',
+    items: [
+      {
+        label: 'Analytics',
+        items: [
+          { label: 'Dashboards', href: '#' },
+          { label: 'Reports', href: '#', disabled: true },
+        ],
+      },
+    ],
+  },
+  { label: 'Changelog', href: '#', disabled: true },
+  { label: 'Pricing', href: '#' },
+]
+
+/**
+ * `disabled` on DzMegaMenu exists at two levels that behave differently, and a
+ * menubar is exactly where confusing them hurts.
+ *
+ * A **disabled item** is announced with `aria-disabled`, flagged with
+ * `data-disabled`, and its variant removes pointer events — it is unreachable,
+ * not merely grey. A **disabled menubar** pushes a real `disabled` attribute
+ * down to every panel-owning trigger, so none of them can be tabbed to, clicked
+ * or expanded. The play function measures both against a live menubar in the
+ * same canvas.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzMegaMenu },
+    setup() {
+      return { stateItems }
+    },
+    template: `
+      <div class="space-y-8 pb-64">
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Enabled — one item disabled</p>
+          <DzMegaMenu
+            :items="stateItems"
+            :open-on-hover="false"
+            aria-label="Enabled navigation"
+            data-testid="mm-enabled"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium">Whole menubar disabled</p>
+          <DzMegaMenu
+            disabled
+            :items="stateItems"
+            :open-on-hover="false"
+            aria-label="Disabled navigation"
+            data-testid="mm-disabled"
+          />
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const enabled = canvas.getByTestId('mm-enabled')
+    const disabled = canvas.getByTestId('mm-disabled')
+
+    // A disabled ENTRY is announced and physically unreachable.
+    const changelog = within(enabled).getByRole('menuitem', { name: /Changelog/i })
+    await expect(changelog).toHaveAttribute('aria-disabled', 'true')
+    await expect(changelog).toHaveAttribute('data-disabled')
+    await expect(getComputedStyle(changelog).pointerEvents).toBe('none')
+
+    // Its live siblings are neither.
+    const products = within(enabled).getByRole('menuitem', { name: /Products/i })
+    await expect(products).not.toHaveAttribute('aria-disabled')
+    await expect(products).toHaveAttribute('aria-expanded', 'false')
+
+    // The live menubar really opens, so the refusal below is measured.
+    await userEvent.click(products)
+    await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'true'))
+
+    // A disabled link inside the open panel carries the same announcement.
+    const reports = within(enabled).getByRole('menuitem', { name: /Reports/i })
+    await expect(reports).toHaveAttribute('aria-disabled', 'true')
+    await expect(reports).toHaveAttribute('data-disabled')
+
+    // Escape closes the panel and returns focus to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'false'))
+
+    // A disabled MENUBAR pushes the state down to every panel-owning trigger:
+    // each becomes a `disabled` button, so it is neither tabbable nor clickable
+    // and can never expand.
+    const frozen = within(disabled).getByRole('menuitem', { name: /Products/i })
+    await expect(frozen).toBeDisabled()
+    await expect(frozen).toHaveAttribute('aria-expanded', 'false')
+    await expect(getComputedStyle(frozen).pointerEvents).toBe('none')
+    // Leaf links have no `disabled` attribute to receive, so the menubar's own
+    // guard is what refuses them — `onTriggerClick` returns before toggling.
+    await expect(within(disabled).getByRole('menuitem', { name: /^Pricing/i }))
+      .toBeInTheDocument()
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Accessibility — the APG menubar keyboard contract (tier C item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The WAI-ARIA menubar pattern, driven end to end without a pointer.
+ *
+ * `role="menubar"` with a roving tabindex means Tab reaches the bar exactly
+ * once; ArrowLeft/ArrowRight then move between triggers, ArrowDown opens a panel
+ * and lands on its first link, ArrowUp/ArrowDown cycle inside it, and Escape
+ * closes the panel **and returns focus to the trigger**. Every one of those is
+ * asserted below — a mega menu that can only be opened by hovering is the
+ * failure this story exists to catch.
+ */
+export const Accessibility: Story = {
+  name: 'Accessibility: Menubar Keyboard Contract',
+  render: () => ({
+    components: { DzMegaMenu },
+    setup() {
+      return { items }
+    },
+    template: `
+      <div class="space-y-3 pb-64">
+        <p class="text-sm text-[var(--dz-muted-foreground)]">
+          Tab reaches the menubar once. ArrowLeft/ArrowRight move between
+          triggers, ArrowDown opens a panel and focuses its first link,
+          ArrowUp/ArrowDown cycle the links, Escape closes and restores focus.
+        </p>
+        <DzMegaMenu
+          :items="items"
+          :open-on-hover="false"
+          aria-label="Keyboard navigation"
+          data-testid="mm-a11y"
+        />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const root = canvas.getByTestId('mm-a11y')
+    const menubar = within(root).getByRole('menubar')
+
+    // Roving tabindex: exactly one trigger is in the tab order.
+    await expect(menubar).toHaveAttribute('aria-orientation', 'horizontal')
+    await expect(menubar.querySelectorAll('[role="menuitem"][tabindex="0"]')).toHaveLength(1)
+
+    // Reach the bar with Tab only.
+    for (let i = 0; i < 6 && !menubar.contains(document.activeElement); i++)
+      await userEvent.tab()
+    await expect(menubar.contains(document.activeElement)).toBe(true)
+    const products = within(root).getByRole('menuitem', { name: /^Products/i })
+    await expect(products).toHaveFocus()
+
+    // ArrowRight moves along the bar; ArrowLeft comes back.
+    await userEvent.keyboard('{ArrowRight}')
+    const solutions = within(root).getByRole('menuitem', { name: /^Solutions/i })
+    await waitFor(() => expect(solutions).toHaveFocus())
+    await userEvent.keyboard('{ArrowLeft}')
+    await waitFor(() => expect(products).toHaveFocus())
+
+    // ArrowDown opens the panel and lands on its first link.
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'true'))
+    const dashboards = within(root).getByRole('menuitem', { name: /Dashboards/i })
+    await waitFor(() => expect(dashboards).toHaveFocus())
+
+    // ArrowDown cycles the links inside the panel.
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() =>
+      expect(within(root).getByRole('menuitem', { name: /Reports/i })).toHaveFocus(),
+    )
+
+    // Escape closes the panel AND returns focus to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'false'))
+    await waitFor(() => expect(products).toHaveFocus())
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Real world — marketing site header (tier C `real-world` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * The only place a mega menu belongs: the primary header of a marketing site,
+ * beside a brand mark and a call to action, with a plain link (`Pricing`) next
+ * to panel-owning entries.
+ *
+ * That mix is the point — a mega menu whose every entry opens a panel never
+ * shows that a leaf entry must navigate instead of expanding, which is where
+ * the menubar pattern most often breaks.
+ */
+export const RealWorldSiteHeader: Story = {
+  name: 'Real World: Marketing Site Header',
+  render: () => ({
+    components: { DzMegaMenu },
+    setup() {
+      return { items }
+    },
+    template: `
+      <div class="pb-64">
+        <header
+          class="flex items-center gap-6 rounded-[var(--dz-radius-md)] border border-[var(--dz-border)] bg-[var(--dz-surface)] px-[var(--dz-spacing-4)] py-[var(--dz-spacing-3)]"
+          data-testid="mm-rw-header"
+        >
+          <span class="text-[length:var(--dz-text-base)] font-semibold text-[var(--dz-foreground)]">Datazup</span>
+          <DzMegaMenu
+            :items="items"
+            :open-on-hover="false"
+            aria-label="Primary site navigation"
+            data-testid="mm-rw"
+          />
+          <a
+            href="#"
+            class="ml-auto rounded-[var(--dz-radius-md)] bg-[var(--dz-primary)] px-[var(--dz-spacing-3)] py-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)] text-[var(--dz-primary-foreground)] no-underline"
+          >Start free</a>
+        </header>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const root = canvas.getByTestId('mm-rw')
+
+    // The nav is a named landmark inside the header, not an anonymous div.
+    await expect(within(root).getByRole('menubar', { name: 'Primary site navigation' }))
+      .toBeInTheDocument()
+
+    // A panel-owning entry advertises the popup it owns…
+    const products = within(root).getByRole('menuitem', { name: /^Products/i })
+    await expect(products).toHaveAttribute('aria-haspopup', 'true')
+    await userEvent.click(products)
+    await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'true'))
+    await expect(within(root).getByRole('menuitem', { name: /Pipelines/i })).toBeVisible()
+
+    // …opening a second entry closes the first, so only one panel is ever open.
+    const solutions = within(root).getByRole('menuitem', { name: /^Solutions/i })
+    await userEvent.click(solutions)
+    await waitFor(() => expect(solutions).toHaveAttribute('aria-expanded', 'true'))
+    await expect(products).toHaveAttribute('aria-expanded', 'false')
+
+    // …while a leaf entry is a real link with no popup at all.
+    const pricing = within(root).getByRole('menuitem', { name: /^Pricing/i })
+    await expect(pricing).not.toHaveAttribute('aria-haspopup')
+    await expect(pricing).not.toHaveAttribute('aria-expanded')
+    await expect(pricing.tagName).toBe('A')
+  },
+}

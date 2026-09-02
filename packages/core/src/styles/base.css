@@ -74,6 +74,7 @@
      - dz-focus-within-ring-input: composite field shells
      - dz-disabled-{button|control|input|input-shell}: semantic disabled states
      - dz-native-field-sm: small native input/select for internal filter surfaces
+     - dz-target-min / dz-target-min-tight: WCAG 2.2 SC 2.5.8 24x24 target floor
      ========================================================================== */
 
   .dz-focus-ring:focus-visible {
@@ -207,6 +208,29 @@
     appearance: none;
   }
 
+  /*
+   * WCAG 2.2 SC 2.5.8 Target Size, and a real bug behind it (TASK-N1-O3).
+   *
+   * A composite field is `flex items-center` with the HEIGHT on the shell, and
+   * the native control inside it is `flex-1 w-full` with no height at all — so
+   * the control's own box was its text line, 21 CSS px at `md` against a 38 px
+   * shell. That is two defects in one: the pointer target is under 24x24 (the
+   * browser matrix measured `input 159x21` on eleven components, on all three
+   * engines), and the 8-9 px band above and below the text was dead — clicking
+   * the visible field near its top or bottom edge placed no caret.
+   *
+   * `align-self: stretch` makes the control fill the shell it is drawn inside,
+   * which is what the field already looks like it does. Native inputs centre
+   * their text vertically, so nothing moves. The `min-block-size` floor covers
+   * the wrapping shells (tags, multi-select) where the control shares a flex
+   * LINE rather than the whole shell and stretch only reaches the line box.
+   */
+  .dz-field-input-reset,
+  .dz-native-input {
+    align-self: stretch;
+    min-block-size: var(--dz-control-target-min);
+  }
+
   /* ==========================================================================
      4c. Native Input Chrome (TASK-DS-09)
      Hoisted out of per-component <style scoped> blocks, which ADR-04 forbids.
@@ -267,7 +291,107 @@
   }
 
   /* ==========================================================================
-     4d. Screen-Reader-Only Utility
+     4d. Target Size (WCAG 2.2 SC 2.5.8) — TASK-N1-O3
+     The browser matrix measures `getBoundingClientRect()` on every pointer
+     target, so a hit area painted with a pseudo-element does NOT count: the
+     ELEMENT's own box has to reach 24x24 CSS px. These two utilities are the
+     only sanctioned way to get there, so the floor lives in one token
+     (`--dz-control-target-min`) instead of in twenty `min-h-[24px]` literals.
+
+       .dz-target-min        grows the box to the floor. Use where the control
+                             paints nothing at its own edge (an icon button:
+                             the icon is a centred child, so growing the box
+                             adds transparent margin around it). The layout
+                             around it moves by up to (24 - visual) px.
+
+       .dz-target-min-tight  grows the box AND gives the growth back to the
+                             layout through a negative margin, so the control
+                             occupies exactly what it occupied before and
+                             nothing moves. Use where growth would break a size
+                             scale (checkbox/radio indicators, slider thumbs) or
+                             a layout (a 1px splitter handle). The element must
+                             then declare what it paints in
+                             `--dz-control-visual-size` and paint it with a
+                             pseudo-element or `background-clip`, because the
+                             element's own box is now bigger than its visual.
+
+     `outline-offset` is compensated by the same amount, so a focus ring drawn
+     with `.dz-focus-ring-control` still hugs the VISUAL rather than the grown
+     box — a ring that suddenly stood 3px off every checkbox would be a visual
+     regression bought with an accessibility fix, which is not a trade this
+     library makes.
+     ========================================================================== */
+
+  .dz-target-min,
+  .dz-target-min-tight,
+  .dz-target-min-tight-inline,
+  .dz-target-min-tight-block {
+    /*
+     * `--dz-control-visual-size` is deliberately NOT given a default here, and
+     * the fallback lives inside the calc instead. Measured, not assumed: in this
+     * build Tailwind emits its utilities into `@layer utilities`, and this
+     * file's `@layer dz-tokens, dz-base, dz-components` statement is declared
+     * AFTER Tailwind's, so a `dz-base` declaration BEATS the utility. A default
+     * on this line therefore overrode every `[--dz-control-visual-size:1.125rem]`
+     * a variant wrote, the inset collapsed to zero, and the give-back silently
+     * did nothing -- the boxes grew and the layout moved with them.
+     *
+     * For the same reason there is no `position` here: `.dz-target-min` would
+     * beat a Tailwind `absolute` at the call site (DzTableCell's resize handle
+     * is one), and turning an absolutely positioned handle static is a layout
+     * bug bought with an accessibility fix. A call site whose pseudo-element
+     * needs a containing block says `relative` itself.
+     */
+    --dz-target-min-inset: calc(
+      (
+        var(--dz-control-visual-size, var(--dz-control-target-min))
+        - var(--dz-control-target-min)
+      ) / 2
+    );
+    min-inline-size: var(--dz-control-target-min);
+    min-block-size: var(--dz-control-target-min);
+  }
+
+  .dz-target-min-tight,
+  .dz-target-min-tight-inline,
+  .dz-target-min-tight-block {
+    /* The painted surface is smaller than the box, so a pseudo-element paints
+       it. `isolation` keeps a `before:-z-10` pseudo inside this element's own
+       stacking context, above the parent's background and below the icon. */
+    isolation: isolate;
+  }
+
+  .dz-target-min-tight {
+    /* Symmetric on purpose: `margin` rather than the physical pair, so there is
+       nothing for the RTL validator to flag and nothing to mirror. */
+    margin: var(--dz-target-min-inset);
+  }
+
+  /*
+   * Axis variants, for a control that is thin in ONE axis and already past the
+   * floor in the other — a splitter handle is 1px wide and the full height of
+   * the pane. Compensating both axes there would pull 11.5px off the top and
+   * bottom of a 72px handle for no reason.
+   */
+  .dz-target-min-tight-inline {
+    margin-inline: var(--dz-target-min-inset);
+  }
+
+  .dz-target-min-tight-block {
+    margin-block: var(--dz-target-min-inset);
+  }
+
+  .dz-target-min:focus-visible,
+  .dz-target-min-tight:focus-visible,
+  .dz-target-min-tight-inline:focus-visible,
+  .dz-target-min-tight-block:focus-visible {
+    outline-offset: calc(
+      var(--dz-control-focus-ring-offset) + var(--dz-target-min-inset)
+    );
+  }
+
+  /* ==========================================================================
+     4e. Screen-Reader-Only Utility
      Many core components render `.sr-only` text and, before TASK-DS-09, relied
      on the consumer's Tailwind to define it — every component except DzSpinner,
      which shipped a private copy. Declaring it here makes the library correct on

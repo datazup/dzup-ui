@@ -14,6 +14,7 @@ import type {
   CanonicalTone,
 } from '@dzup-ui/contracts'
 import type { InjectionKey, Ref } from 'vue'
+import type { DzSplitButtonUi } from './DzSplitButton.anatomy.ts'
 
 // ---------------------------------------------------------------------------
 // Compound context (ADR-08)
@@ -53,6 +54,17 @@ export interface DzSplitButtonProps extends BaseAccessibilityProps {
   disabled?: boolean
   /** Loading state -- shows spinner on primary action */
   loading?: boolean
+  /**
+   * Per-part class overrides, keyed by the names in `DzSplitButton.anatomy.ts`
+   * (ADR-19 §5). `class` keeps its existing meaning and its existing target;
+   * `ui` addresses the other parts by name, and a typo is a type error.
+   *
+   * @example
+   * ```vue
+   * <DzSplitButton :ui="{ root: 'w-full' }" />
+   * ```
+   */
+  ui?: DzSplitButtonUi
 }
 
 // ---------------------------------------------------------------------------

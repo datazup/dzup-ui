@@ -491,3 +491,90 @@ export const PerformanceLargeDataset: Story = {
     `,
   }),
 }
+
+// ---------------------------------------------------------------------------
+// States — ready / loading / empty (tier C `states` DoD item)
+// ---------------------------------------------------------------------------
+
+/**
+ * `loading` is the state DzDataGrid declares, and it is not a decoration: while
+ * it is set the root reports `aria-busy="true"` and `data-state="loading"`, and
+ * the `role="grid"` table is **replaced** by the loading slot rather than
+ * overlaid — so assistive technology sees a busy region with no grid inside it,
+ * not a stale grid.
+ *
+ * Shown beside the ready grid and the no-rows case so the three renderings that
+ * a consumer must handle are visible together.
+ */
+export const States: Story = {
+  render: () => ({
+    components: { DzDataGrid },
+    setup() {
+      return { columns, sampleData }
+    },
+    template: `
+      <div class="space-y-8">
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Ready</p>
+          <DzDataGrid
+            :data="sampleData.slice(0, 3)"
+            :columns="columns"
+            aria-label="Ready employee grid"
+            data-testid="grid-ready"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Loading</p>
+          <DzDataGrid
+            loading
+            :data="sampleData.slice(0, 3)"
+            :columns="columns"
+            aria-label="Loading employee grid"
+            data-testid="grid-loading"
+          />
+        </section>
+
+        <section class="space-y-2">
+          <p class="text-sm font-medium text-[var(--dz-foreground)]">Empty</p>
+          <DzDataGrid
+            :data="[]"
+            :columns="columns"
+            aria-label="Empty employee grid"
+            data-testid="grid-empty"
+          >
+            <template #empty>
+              <div class="py-6 text-center text-[var(--dz-muted-foreground)]">
+                No employees match the current filter.
+              </div>
+            </template>
+          </DzDataGrid>
+        </section>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const ready = canvas.getByTestId('grid-ready')
+    const loading = canvas.getByTestId('grid-loading')
+    const empty = canvas.getByTestId('grid-empty')
+
+    // Ready: not busy, and the grid is really there with its header + 3 rows.
+    await expect(ready).toHaveAttribute('data-state', 'ready')
+    await expect(ready).not.toHaveAttribute('aria-busy')
+    const readyGrid = within(ready).getByRole('grid')
+    await expect(within(readyGrid).getAllByRole('row')).toHaveLength(4)
+
+    // Loading: busy, and the grid is replaced rather than left stale underneath.
+    await expect(loading).toHaveAttribute('data-state', 'loading')
+    await expect(loading).toHaveAttribute('aria-busy', 'true')
+    await expect(loading).toHaveAttribute('data-loading')
+    await expect(within(loading).queryByRole('grid')).toBeNull()
+
+    // Empty: not busy, no grid, and the consumer's empty slot is what shows.
+    await expect(empty).toHaveAttribute('data-state', 'ready')
+    await expect(within(empty).queryByRole('grid')).toBeNull()
+    await expect(within(empty).getByText(/no employees match/i)).toBeVisible()
+  },
+}

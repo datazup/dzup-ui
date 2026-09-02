@@ -12,8 +12,18 @@ import { tv } from 'tailwind-variants'
 export const treeVariants = tv({
   slots: {
     root: 'flex flex-col',
+    /**
+     * TASK-N1-O3 / WCAG 2.2 SC 2.5.8. The node row is the pointer target and
+     * measured `div 137x21` — its own text height — because every size's
+     * `py-*` referenced `--dz-spacing-1-5`, a token that does not exist
+     * (the scale emits `--dz-spacing-1_5`, with an underscore), so the padding
+     * was dropped by the parser and the row collapsed onto its text. That
+     * misspelling is fixed across the repo in the same task; `dz-target-min`
+     * is the floor that keeps the row past 24px at the dense sizes too, where
+     * the restored padding alone does not reach it.
+     */
     item: [
-      'flex items-center gap-[var(--dz-spacing-1)]',
+      'dz-target-min flex items-center gap-[var(--dz-spacing-1)]',
       'rounded-[var(--dz-radius-sm)]',
       'cursor-pointer select-none',
       'transition-colors duration-150',
@@ -44,31 +54,31 @@ export const treeVariants = tv({
     size: {
       icon: '',
       xs: {
-        item: 'py-[var(--dz-spacing-0-5)] px-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
+        item: 'py-[var(--dz-spacing-0_5)] px-[var(--dz-spacing-1)] text-[length:var(--dz-text-xs)]',
         expandIcon: 'h-3 w-3',
         checkbox: 'h-3 w-3',
         children: 'ps-[var(--dz-spacing-3)]',
       },
       sm: {
-        item: 'py-[var(--dz-spacing-1)] px-[var(--dz-spacing-1-5)] text-[length:var(--dz-text-sm)]',
+        item: 'py-[var(--dz-spacing-1)] px-[var(--dz-spacing-1_5)] text-[length:var(--dz-text-sm)]',
         expandIcon: 'h-3.5 w-3.5',
         checkbox: 'h-3.5 w-3.5',
         children: 'ps-[var(--dz-spacing-4)]',
       },
       md: {
-        item: 'py-[var(--dz-spacing-1-5)] px-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)]',
+        item: 'py-[var(--dz-spacing-1_5)] px-[var(--dz-spacing-2)] text-[length:var(--dz-text-sm)]',
         expandIcon: 'h-4 w-4',
         checkbox: 'h-4 w-4',
         children: 'ps-[var(--dz-spacing-5)]',
       },
       lg: {
-        item: 'py-[var(--dz-spacing-2)] px-[var(--dz-spacing-2-5)] text-[length:var(--dz-text-base)]',
+        item: 'py-[var(--dz-spacing-2)] px-[var(--dz-spacing-2_5)] text-[length:var(--dz-text-base)]',
         expandIcon: 'h-5 w-5',
         checkbox: 'h-5 w-5',
         children: 'ps-[var(--dz-spacing-6)]',
       },
       xl: {
-        item: 'py-[var(--dz-spacing-2-5)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-lg)]',
+        item: 'py-[var(--dz-spacing-2_5)] px-[var(--dz-spacing-3)] text-[length:var(--dz-text-lg)]',
         expandIcon: 'h-5 w-5',
         checkbox: 'h-5 w-5',
         children: 'ps-[var(--dz-spacing-8)]',

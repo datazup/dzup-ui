@@ -21,9 +21,14 @@ describe('dzFileUpload — Unit Tests', () => {
     expect(wrapper.find('[role="button"]').exists()).toBe(true)
   })
 
-  it('has contain: layout style on root', () => {
+  it('has CSS containment on root, as a class rather than a style attribute', () => {
+    // A `style` attribute is blocked by a strict CSP's `style-src-attr`, and
+    // this containment is what keeps a hostile file name inside the component
+    // box, so it has to survive the CSP the security fixture asserts under
+    // (TASK-N1-O5). The declaration is unchanged; only its carrier is.
     const wrapper = mount(DzFileUpload)
-    expect(wrapper.find('[style*="contain: layout style"]').exists()).toBe(true)
+    expect(wrapper.classes().join(' ')).toContain('[contain:layout_style]')
+    expect(wrapper.element.getAttribute('style')).toBeNull()
   })
 
   it('sets data-disabled when disabled', () => {
