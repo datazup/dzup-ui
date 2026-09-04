@@ -42,7 +42,7 @@ const active = defineModel<boolean>('active', { default: false })
  * control in the catalog takes, and until now it silently did nothing here.
  */
 const legacyValueModel = defineModel<T>('value')
-const primaryModel = defineModel<T>({ default: undefined })
+const primaryModel = defineModel<T | undefined>({ default: undefined })
 const props = withDefaults(defineProps<DzInplaceProps>(), {
   saveOn: 'both',
   disabled: false,
