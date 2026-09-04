@@ -17,9 +17,37 @@
 > **Status legend:** `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked on owner decision
 > **Priority:** 🔴 · 🟠 · 🟢
 
+> ## Lane complete — 5/5 packets `[x]`, run 2026-09-03
+>
+> Executed synchronously (N5-05 overlapped N5-03's tail under a no-touch list).
+> **`HEAD` `6f1f653` at open and at close** — nothing committed, pushed, dispatched,
+> published or version-bumped. Live ledger:
+> [`EXECUTION-STATUS-N5.md`](./EXECUTION-STATUS-N5.md). **38 owner decisions opened.**
+>
+> The lane was scheduled as the *publication* lane; what it repeatedly found was that
+> **the gates and the consumer disagree, and only the gates were ever consulted** —
+> `changeset status` fixed since August with no gate running it; 6 ARIA gaps that were
+> 12; an ADR-debt ratchet that is status-blind; an i18n catalog unreachable from the
+> published package; and `@dzup-ui/contracts` unable to be `import()`ed by Node beneath
+> 37 green validator links and 9,187 passing tests.
+
 ---
 
-### [ ] TASK-N5-01 — 0.x semver statement, changelog system of record, changeset reconciliation 🟠
+### [x] TASK-N5-01 — 0.x semver statement, changelog system of record, changeset reconciliation 🟠
+
+> **`[x]` done 2026-09-03 · 7 `[!owner]` ·** [`N5-01-release-policy-handoff.md`](./reports/N5-01-release-policy-handoff.md)
+> · [`changelog-system-of-record-2026-09.md`](./reports/changelog-system-of-record-2026-09.md) `[!owner]`
+> · [`1-0-exit-criteria-2026-09.md`](./reports/1-0-exit-criteria-2026-09.md) `[!owner]`
+>
+> Policy shipped as `packages/contracts/VERSIONING.md`. **`changeset status` was already
+> green** — TASK-SK-1 fixed it in August; the live defect was that **no gate ever ran the
+> command**, so the deliverable became a guard: `validate:release-policy` spawns the real
+> command plus nine invariants, proven on six negative probes (including `major` on 0.x,
+> which `changeset status` exits 0 on and would ship `1.0.0`). **16 changesets, not 17**;
+> 5 correctly leveled, 10 over-declared, 0 under-declared, **0 edited** — re-levelling is
+> release behaviour, filed as D3. `validate:all` 36 → 37 links. Zero version bumps.
+> **D1 🔴:** `validate:changelog` and `validate:mcp` are mutually exclusive, so the first
+> release turns `validate:all` red.
 
 _Gap: the pre-1.0 convention (0.x minor = breaking, 0.x patch = additive) is
 industry standard but stated nowhere; two changelog systems coexist (external
@@ -60,7 +88,18 @@ industry standard but stated nowhere; two changelog systems coexist (external
 
 ---
 
-### [ ] TASK-N5-02 — Close the six ARIA-prop gaps (breaking type change, policy-gated) 🟠
+### [x] TASK-N5-02 — Close the six ARIA-prop gaps (breaking type change, policy-gated) 🟠
+
+> **`[x]` done 2026-09-03 · 6 `[!owner]` ·** [`N5-02-aria-prop-gaps-handoff.md`](./reports/N5-02-aria-prop-gaps-handoff.md)
+>
+> **The six gap cells were twelve props** — the gate counts cells, not declarations.
+> **3 implemented (`patch`) / 9 removed (`minor`)**, decided per prop: Reka proved
+> irrelevant to five of six controls, the deciding fact being the element's role under
+> ARIA 1.2. Gate **`245 pass / 6 gap` → `251 pass / 0 gap`**, C2 identity `38 → 44`, **no
+> cell converted to `n-a`**, no gate edited to hide a cell. Root cause (**D1**):
+> `ariaInvalid` sits in `BaseAccessibilityProps` instead of `BaseValidationProps`.
+> **D3 🔴** records that `0 gap` still overstates — `DzInplace`'s reviewed C2 gap can
+> never reach the matrix.
 
 _Gap: 02 §4 debt register — six form controls declare ARIA props they cannot
 honour (a promise-shaped lie to AT users), plus `DzOrderList.dragHandleLabel`
@@ -106,7 +145,21 @@ TASK-N5-01's policy exists. The FORM-OSS gate lists these as its 6 remaining
 
 ---
 
-### [ ] TASK-N5-03 — Toolchain currency: Vue 3.6-RC CI lane, Nuxt 4 retarget, Vapor statement, migration schedule 🟠
+### [x] TASK-N5-03 — Toolchain currency: Vue 3.6-RC CI lane, Nuxt 4 retarget, Vapor statement, migration schedule 🟠
+
+> **`[x]` done 2026-09-03 · 6 `[!owner]` ·** [`N5-03-toolchain-currency-handoff.md`](./reports/N5-03-toolchain-currency-handoff.md)
+> · [`N5-03-toolchain-migration-memo.md`](./reports/N5-03-toolchain-migration-memo.md)
+>
+> Ran with an added **Item 0** (N5-01 D6): `componentCommit` is git provenance inside a
+> byte comparison — **stale at birth**. Fixed via `stripComponentCommits()`, four probes,
+> **link 15 green**; **link 16 stays red on genuine content staleness** (12 cells) and is
+> filed as **D1** rather than regenerated — *the committed artifact overstates its
+> evidence*. 3.6-RC lane **exists and ran**: 9,181 pass / 2 fail, **0 library defects, 0
+> RC behaviour changes**. `@nuxt/kit` 3.14.0 → 4.5.2, `module.ts` unchanged, fixtures pass
+> on **both** majors so the Nuxt 3 floor need not drop. Vapor statement is **generated** —
+> delete the spec and the README says UNBACKED. **Untasked finding:**
+> `@dzup-ui/contracts` **could not be `import()`ed by Node**, beneath 37 green links and
+> 9,187 tests. Terminated mid-run by an HTTP 529 and **resumed, not restarted**.
 
 _Gap: 01 §A6 / 04 §6. Vue 3.6-rc (alien-signals + Vapor interop) is exactly
 the class of change that breaks libraries — a lane is cheap now. Nuxt 3 is EOL
@@ -146,7 +199,21 @@ browser-mode and tsdown/Vite 8 are scheduled hygiene, not urgent._
 
 ---
 
-### [ ] TASK-N5-04 — Peer & runtime hygiene: `reka-ui`, `lucide-vue-next`, Node 20, locale packs `[!owner]` 🟢
+### [x] TASK-N5-04 — Peer & runtime hygiene: `reka-ui`, `lucide-vue-next`, Node 20, locale packs `[!owner]` 🟢
+
+> **`[x]` done 2026-09-03 · 4 `[!owner]` · 0 dependency changes ·** [`N5-04-peer-hygiene-handoff.md`](./reports/N5-04-peer-hygiene-handoff.md)
+> · [`peer-hygiene-2026-09.md`](./reports/peer-hygiene-2026-09.md)
+>
+> Both headline claims measured and wrong in the detail. **`reka-ui`:** install true,
+> ship false — a Button-only bundle contains **zero** `reka` occurrences and the barrel
+> reaches it through **exactly one edge, `DzSpeedDial → DzTooltip`**. **`lucide`:** 22
+> modules / 18 glyphs / +1,206 B gzip for all 433 exports — and `lucide-vue-next@0.477.0`
+> is **deprecated upstream** with **two versions installed simultaneously**, invisible to
+> every gate. **The Node-floor premise this program handed it was false:**
+> `getTextInfo()` first exists in **Node 24.0.0**, so the floor is **decoupled** from
+> ADR-20 §4's RTL list (which has two errors of its own). **D4:** the i18n catalog is
+> **unreachable from the published package by every path**. `packages/core/package.json`
+> byte-identical to HEAD.
 
 _Gap: 02 §4 packaging debt — `reka-ui ^2.0.0` is a non-optional peer
 (Button-only apps must install it); `lucide-vue-next ^0.477.0` is a hard
@@ -179,7 +246,23 @@ smallest reversible implementation per decision._
 
 ---
 
-### [ ] TASK-N5-05 — ADR-19 / ADR-20 acceptance packets `[!owner]` 🟠
+### [x] TASK-N5-05 — ADR-19 / ADR-20 acceptance packets `[!owner]` 🟠
+
+> **`[x]` done 2026-09-03 · 15 `[!owner]` · 0 files modified, both ADRs still `Proposed` ·**
+> [`N5-05-adr-19-acceptance-packet.md`](./reports/N5-05-adr-19-acceptance-packet.md)
+> · [`N5-05-adr-20-acceptance-packet.md`](./reports/N5-05-adr-20-acceptance-packet.md)
+> · [`N5-05-adr-acceptance-handoff.md`](./reports/N5-05-adr-acceptance-handoff.md)
+>
+> **This task file's own figures were stale by an order of magnitude:** `ui`-prop pilots
+> **5 → 27**, anatomy files **9 → 32**; only "ten context composables" survived.
+> **The ADR-debt ceiling is not a lever** — `validate-adr-references` is **status-blind**,
+> neither ADR is in `adr-registry.json`, and *nothing in the repository gates ADR status*,
+> so acceptance moves the ceiling by **zero**. Divergences: **ADR-19 13** (8 amend / 4 fix)
+> · **ADR-20 9** (8 / 1, **no clause the code contradicts**). Blockers: ADR-19 §4's
+> `DataState` widening **was never performed**, so its own argument still describes the
+> code; ADR-20 §7's motion policy has **zero consumers in 144 components**, so accepting
+> it unamended would record an accessibility capability the library does not have. Only
+> 3 of 6 cascade layers ship.
 
 _Gap: N0-03 (OSS half). ADR-19 (styling contract) and ADR-20 (provider) are
 both **Proposed** while shipped code builds on them — 5 `ui`-prop pilots, 9
