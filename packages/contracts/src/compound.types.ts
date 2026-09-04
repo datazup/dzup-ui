@@ -13,7 +13,7 @@
  */
 
 import type { Ref } from 'vue'
-import type { CanonicalSize, CanonicalTone } from './canonical.types'
+import type { CanonicalSize, CanonicalTone } from './canonical.types.js'
 
 // ---------------------------------------------------------------------------
 // Generic compound context

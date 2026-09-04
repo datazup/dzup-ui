@@ -21,6 +21,7 @@ import type { DzGridProps, DzGridSlots, ResponsiveCols } from './DzGrid.types.ts
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { gridVariants, responsiveColsMap } from './DzGrid.variants.ts'
 
 defineOptions({
@@ -37,6 +38,13 @@ const props = withDefaults(defineProps<DzGridProps>(), {
 defineSlots<DzGridSlots>()
 
 const attrs = useAttrs()
+
+// `ariaInvalid` was declared and never forwarded; it is removed (VERSIONING.md
+// §3, minor). It now falls through to the root element as a plain attribute,
+// which is a different wrong answer rather than none — so say so.
+warnRemovedProps('DzGrid', attrs, {
+  ariaInvalid: 'A layout box is not invalid; the fields inside it are — put aria-invalid on the field, or bind `invalid` on the control.',
+})
 
 /** Whether cols is a responsive object */
 const isResponsive = computed(() =>

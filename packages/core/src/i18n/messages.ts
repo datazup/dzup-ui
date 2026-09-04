@@ -106,6 +106,7 @@ declare module '@dzup-ui/contracts' {
       moveDown: string
       moveTop: string
       moveBottom: string
+      dragHandle: string
     }
     DzPagination: {
       ariaLabel: string
@@ -228,6 +229,7 @@ export const enMessages = {
     moveDown: 'Move down',
     moveTop: 'Move to top',
     moveBottom: 'Move to bottom',
+    dragHandle: 'Drag to reorder',
   },
   DzPagination: {
     ariaLabel: 'Pagination',

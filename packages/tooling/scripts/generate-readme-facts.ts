@@ -39,10 +39,14 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../')
 /** Documents that may carry generated fact regions. */
 export const FACT_DOCUMENTS = [
   'README.md',
+  'packages/contracts/README.md',
   'packages/core/README.md',
   'packages/nuxt/README.md',
   'packages/tokens/README.md',
 ]
+
+/** The versioning policy statement (TASK-N5-01), relative to the repository root. */
+export const VERSIONING_POLICY = 'packages/contracts/VERSIONING.md'
 
 interface PackageFacts {
   name: string
@@ -131,10 +135,114 @@ export function collectCatalog(): CatalogFacts {
   }
 }
 
-/** The body of each named region. */
-export function renderRegions(): Record<string, string> {
+/**
+ * The versioning line (TASK-N5-01).
+ *
+ * Generated rather than typed because it is a claim about *every* published
+ * package's version, and that is exactly the class of sentence the packages
+ * table was wrong about for five of its six rows. If one package crosses 1.0
+ * the sentence stops saying "all", and the policy's own scope clause
+ * (`VERSIONING.md` §1, gated by `yarn validate:release-policy` R6) fires.
+ */
+export function renderVersioning(packages: PackageFacts[], link: string): string {
+  const zero = packages.filter(p => /^0\./.test(p.version))
+  const scope = zero.length === packages.length
+    ? `All ${packages.length} published \`@dzup-ui/*\` packages are \`0.x\`.`
+    : `${zero.length} of ${packages.length} published \`@dzup-ui/*\` packages are \`0.x\`; `
+      + `${packages.filter(p => !/^0\./.test(p.version)).map(p => `\`${p.name}\``).join(', ')} `
+      + 'passed 1.0, so the pre-1.0 mapping below no longer covers the whole workspace.'
+
+  return `${scope} Under the [0.x versioning policy](${link}): a **minor** bump is a `
+    + '**breaking change**, a **patch** is additive or a fix, and `major` is not used before '
+    + '1.0 — a major bump *is* the 1.0 release. The breaking surface is defined there: '
+    + 'manifest-recorded public symbols, the ADR-19 parts/states/`ui` contract, the `--dz-*` '
+    + 'token ABI and its resolved values, the package `exports` map, and the ADR-20 provider '
+    + 'contract.'
+}
+
+/** `@dzup-ui/core`'s declared Vue peer range, or `?` when it cannot be read. */
+export function readPeerVue(): string {
+  const path = resolve(ROOT, 'packages/core/package.json')
+  if (!existsSync(path))
+    return '?'
+  const json = JSON.parse(readFileSync(path, 'utf8')) as { peerDependencies?: Record<string, string> }
+  return json.peerDependencies?.vue ?? '?'
+}
+
+/** The forward-compat lane's declaration, or an empty one when the file is absent. */
+export function readVaporLane(): { channel?: string, resolutions?: Record<string, string> } {
+  const path = resolve(ROOT, 'packages/tooling/scripts/vue-next-lane.json')
+  if (!existsSync(path))
+    return {}
+  return JSON.parse(readFileSync(path, 'utf8')) as { channel?: string, resolutions?: Record<string, string> }
+}
+
+/** The Vapor-interop lane's inputs, so the README cannot state a version the lane does not pin. */
+export const VAPOR_SPEC = 'packages/core/tests/vapor-interop.spec.ts'
+export const VAPOR_LANE_CONFIG = 'packages/tooling/scripts/vue-next-lane.json'
+export const VAPOR_VERIFY_COMMAND = 'yarn test:vue-next:vapor'
+
+/**
+ * The Vapor-interop compatibility statement (TASK-N5-03).
+ *
+ * **Generated, not typed, because it is a compatibility claim** — the one class
+ * of sentence this whole generator exists for. Three of its four facts are read
+ * off disk rather than remembered:
+ *
+ *   - the peer range comes from `packages/core/package.json`, so it cannot
+ *     disagree with what the package actually declares;
+ *   - the pinned Vue and its channel come from `vue-next-lane.json`, so when
+ *     the lane moves to `3.6.0` stable the README moves with it;
+ *   - the evidence path is asserted to EXIST. Delete
+ *     `vapor-interop.spec.ts` and this block changes to say the claim is
+ *     unbacked, `yarn validate:readme-facts` goes red, and the README stops
+ *     claiming something nothing tests. That is the property a hand-typed
+ *     paragraph cannot have, and TASK-N5-03 finding F8 is about exactly this
+ *     failure mode.
+ *
+ * What it deliberately does NOT generate is the word "verified" as a bare
+ * fact. A generator can see that the evidence exists; it cannot see that
+ * anybody ran it. So the block names the spec and the command, and the run
+ * record lives in the handoff where a date and a machine can be attached to it.
+ */
+export function renderVapor(peerRange: string, lane: { channel?: string, resolutions?: Record<string, string> }): string {
+  const pinned = lane.resolutions?.vue
+  const channel = lane.channel
+  const backed = existsSync(resolve(ROOT, VAPOR_SPEC))
+
+  const evidence = backed
+    ? `Backed by [\`${VAPOR_SPEC}\`](../../${VAPOR_SPEC}), run by \`${VAPOR_VERIFY_COMMAND}\`. `
+    + 'It mounts a real Vapor application, installs the plugin, renders `DzButton` inside it, '
+    + 'and asserts the rendered `<button>` and its `data-tone` attribute. On a Vue without '
+    + 'Vapor it reports **unverified by name** rather than passing — an unrun check and a '
+    + 'passing check must not look the same.'
+    : `**UNBACKED.** \`${VAPOR_SPEC}\` does not exist, so nothing in this repository tests `
+      + 'the statement above. Treat it as a claim, not as evidence.'
+
+  const lanePin = pinned === undefined
+    ? `No Vue version is pinned in \`${VAPOR_LANE_CONFIG}\`, so the lane has nothing to run against.`
+    : `The forward-compatibility lane pins **\`vue@${pinned}\`**${
+      channel === undefined ? '' : ` (\`${channel}\` channel)`
+    }, which is **not** the version this library is built and tested against — the declared `
+    + `peer range is \`vue@${peerRange}\`. The lane is advisory until Vue 3.6 is stable.`
+
+  return `${evidence}
+
+${lanePin}`
+}
+
+/**
+ * The body of each named region.
+ *
+ * Takes the document it is rendering for, because one region — `versioning` —
+ * carries a link, and a link is only correct relative to the file it sits in.
+ */
+export function renderRegions(document: string = 'README.md'): Record<string, string> {
   const packages = collectPackages()
   const catalog = collectCatalog()
+
+  const from = resolve(ROOT, dirname(document))
+  const link = relative(from, resolve(ROOT, VERSIONING_POLICY)).replace(/\\/g, '/')
 
   const table = [
     '| Package | Version | Description |',
@@ -150,7 +258,16 @@ export function renderRegions(): Record<string, string> {
     + `**${catalog.families.length} families**, plus ${catalog.compoundParts} compound parts, `
     + `documented by ${catalog.stories} story files.`
 
-  return { packages: table, families, catalog: catalogLine }
+  const corePeer = readPeerVue()
+  const lane = readVaporLane()
+
+  return {
+    packages: table,
+    families,
+    catalog: catalogLine,
+    versioning: renderVersioning(packages, link),
+    vapor: renderVapor(corePeer, lane),
+  }
 }
 
 /** `<!-- facts:name:start -->` … `<!-- facts:name:end -->`, or the MDX form. */
@@ -176,7 +293,6 @@ export interface FactsResult {
 }
 
 export function generateFacts(write: boolean): FactsResult[] {
-  const regions = renderRegions()
   const results: FactsResult[] = []
 
   for (const relativePath of FACT_DOCUMENTS) {
@@ -184,6 +300,7 @@ export function generateFacts(write: boolean): FactsResult[] {
     if (!existsSync(full))
       continue
 
+    const regions = renderRegions(relativePath)
     const current = readFileSync(full, 'utf8')
     const markers = Object.keys(regions).filter(name => regionPattern(name).test(current)).length
     if (markers === 0) {

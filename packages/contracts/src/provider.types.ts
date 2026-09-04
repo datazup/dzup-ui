@@ -1,5 +1,5 @@
 import type { InjectionKey, Ref } from 'vue'
-import type { CanonicalDensity, CanonicalSize, CanonicalTone } from './canonical.types'
+import type { CanonicalDensity, CanonicalSize, CanonicalTone } from './canonical.types.js'
 
 /**
  * Provider contract — the concerns an application configures once

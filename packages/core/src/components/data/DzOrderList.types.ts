@@ -67,7 +67,17 @@ export interface DzOrderListProps extends BaseAccessibilityProps {
   moveTopLabel?: string
   /** Accessible label for the Move To Bottom control */
   moveBottomLabel?: string
-  /** Accessible label for each row's drag handle */
+  /**
+   * Label for each row's drag handle, rendered as the handle's `title`.
+   *
+   * The handle is a **pointer-only** affordance and stays `aria-hidden="true"`:
+   * its function is already reachable from the keyboard through the Move
+   * controls and the row's own space-to-grab, and giving it an accessible name
+   * would fold that name into every row's accessible name under `selectable`
+   * (where each row is `role="option"`, a name-from-content role). So this is a
+   * tooltip for the audience the handle actually serves, not an ARIA label —
+   * which is what the prop had always claimed to be and never was.
+   */
   dragHandleLabel?: string
 }
 

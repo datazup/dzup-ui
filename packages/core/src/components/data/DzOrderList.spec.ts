@@ -202,3 +202,52 @@ describe('dzOrderList — disabled', () => {
     expect(wrapper.emitted('update:value')).toBeUndefined()
   })
 })
+
+/**
+ * TASK-N5-02 — `dragHandleLabel` was documented and nothing rendered it.
+ *
+ * It now reaches the DOM as the handle's `title`. It is deliberately not an
+ * accessible name: the handle stays `aria-hidden="true"` because its function is
+ * already reachable from the keyboard, and naming it would fold "Drag to
+ * reorder" into the accessible name of every row under `selectable`, where each
+ * row is `role="option"` and takes its name from its contents.
+ */
+describe('dzOrderList — drag handle label', () => {
+  const handles = (wrapper: ReturnType<typeof mountList>) =>
+    wrapper.findAll('[data-dz-order-list-handle]')
+
+  it('renders the default label on every handle', () => {
+    const wrapper = mountList()
+    const found = handles(wrapper)
+    expect(found.length).toBe(4)
+    for (const handle of found)
+      expect(handle.attributes('title')).toBe('Drag to reorder')
+  })
+
+  it('renders an explicit dragHandleLabel instead of the default', () => {
+    const wrapper = mountList({ dragHandleLabel: 'Sleep vlačenjem' })
+    expect(handles(wrapper)[0]?.attributes('title')).toBe('Sleep vlačenjem')
+  })
+
+  it('keeps the handle out of the accessibility tree', () => {
+    const wrapper = mountList()
+    expect(handles(wrapper)[0]?.attributes('aria-hidden')).toBe('true')
+  })
+
+  /**
+   * The reason the handle is not given an accessible name, asserted rather than
+   * asserted-in-a-comment: under `selectable` each row is `role="option"`, a
+   * name-from-content role, so a named handle would prepend the same string to
+   * all four row names.
+   */
+  it('does not fold the label into the accessible name of a selectable row', () => {
+    const wrapper = mountList({ selectable: true })
+    const row = wrapper.findAll('li[role="option"]')[0]
+    expect(row?.text()).not.toContain('Drag to reorder')
+  })
+
+  it('renders no handle at all when dragHandle is off', () => {
+    const wrapper = mountList({ dragHandle: false })
+    expect(handles(wrapper)).toHaveLength(0)
+  })
+})

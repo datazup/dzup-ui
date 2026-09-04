@@ -38,12 +38,11 @@ never as asserted.
 :::
 
 
-## Props (9, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (8, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `as` | `string \| undefined` | no | `"div"` | HTML element to render as |
@@ -98,7 +97,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 9 | 9 | 3 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 8 | 8 | 3 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |

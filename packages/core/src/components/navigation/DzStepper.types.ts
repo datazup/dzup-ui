@@ -40,8 +40,21 @@ export const DZ_STEPPER_KEY: InjectionKey<DzStepperContext> = Symbol('dz-stepper
 // DzStepper (Root)
 // ---------------------------------------------------------------------------
 
-/** Props for the DzStepper root component */
-export interface DzStepperProps extends BaseAccessibilityProps {
+/**
+ * Props for the DzStepper root component.
+ *
+ * `ariaInvalid` is omitted from {@link BaseAccessibilityProps}: ARIA 1.2 does
+ * not support `aria-invalid` on `role="group"`, which is what the stepper root
+ * is, and a stepper is not invalid — a field inside a step is. The prop was
+ * declared and never forwarded. Its removal is a breaking type change and ships
+ * in the minor position (`packages/contracts/VERSIONING.md` §3).
+ *
+ * `ariaLabelledby` and `ariaDescribedby` are **kept**, and are now honoured on
+ * the root: both are supported on `role="group"`, and refusing the id-reference
+ * form of a name while accepting `ariaLabel` on the same element was incoherent
+ * rather than principled.
+ */
+export interface DzStepperProps extends Omit<BaseAccessibilityProps, 'ariaInvalid'> {
   /** Orientation of the stepper */
   orientation?: StepperOrientation
   /**

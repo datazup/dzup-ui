@@ -8,7 +8,7 @@
  * @module @dzup-ui/contracts/props
  */
 
-import type { CanonicalSize, CanonicalTone } from './canonical.types'
+import type { CanonicalSize, CanonicalTone } from './canonical.types.js'
 
 // ---------------------------------------------------------------------------
 // Behavior

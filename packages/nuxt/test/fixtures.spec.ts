@@ -39,6 +39,14 @@ interface StagedFixture {
   dir: string
   status: 'ready' | 'unrun'
   missing: string[]
+  /**
+   * The `nuxt` range this fixture was rendered with (TASK-N5-03).
+   *
+   * Optional because a manifest written before the field existed has no entry
+   * for it, and reading `undefined` as "Nuxt 3" would invent the one fact this
+   * field is here to stop inventing.
+   */
+  nuxt?: string | null
 }
 
 interface StageManifest {
@@ -91,13 +99,41 @@ async function generate(dir: string): Promise<{ output: string, html: string }> 
 }
 
 /**
- * The `<style>` blocks Nuxt inlines, in document order.
+ * Every stylesheet the page loads, in document order, as text.
  *
- * Nuxt inlines critical CSS rather than emitting `<link>` elements, so the
- * ordering assertion has to read the blocks, not the links.
+ * **The two Nuxt majors deliver CSS differently and the assertion has to
+ * survive both** (TASK-N5-03):
+ *
+ *   - **Nuxt 3** inlines critical CSS into `<style>` blocks in the emitted
+ *     HTML. Reading the `<link>` elements would find nothing.
+ *   - **Nuxt 4** does not. It emits one `<link rel="stylesheet">` to a bundled
+ *     `_nuxt/entry.<hash>.css`, and the page carries no `<style>` block at all.
+ *     Reading only the blocks returns `[]`, every `findIndex` returns `-1`, and
+ *     the suite reports "no token stylesheet reached the page" — for a page
+ *     whose stylesheet is right there, correctly ordered.
+ *
+ * So: blocks first, and any linked sheet resolved from `.output/public` and
+ * appended in the order the document references it. The property under test —
+ * tokens are loaded before the component sheet that reads `var(--dz-*)` — is a
+ * fact about the *concatenated* CSS either way, and stays checkable in both.
+ *
+ * A linked sheet that cannot be read is skipped rather than substituted with an
+ * empty string: a missing file must not read as a present-but-empty stylesheet.
  */
-function styleBlocks(html: string): string[] {
-  return [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(match => match[1] ?? '')
+function styleSources(html: string, dir: string): string[] {
+  const inline = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(match => match[1] ?? '')
+
+  const linked: string[] = []
+  for (const match of html.matchAll(/<link[^>]*rel="stylesheet"[^>]*>/g)) {
+    const href = /href="([^"]+)"/.exec(match[0])?.[1]
+    if (href === undefined || !href.startsWith('/'))
+      continue
+    const file = join(dir, '.output/public', href.slice(1))
+    if (existsSync(file))
+      linked.push(readFileSync(file, 'utf8'))
+  }
+
+  return [...inline, ...linked]
 }
 
 function fixtureOf(name: string): StagedFixture | undefined {
@@ -145,6 +181,26 @@ describe('fixture harness', () => {
     }
   })
 
+  it.runIf(stage !== undefined)('records which Nuxt each fixture was built against', () => {
+    // TASK-N5-03. Every assertion below this line is evidence about ONE Nuxt
+    // major — the one the fixture happened to install — and until this test
+    // existed the report could not say which. `DZUP_FIXTURE_NUXT` re-runs the
+    // same fixtures against another major; without the range recorded beside
+    // the result, two runs of the identical suite are indistinguishable and a
+    // Nuxt 4 pass could be quoted as Nuxt 3 evidence.
+    for (const entry of stage!.fixtures.filter(f => f.status === 'ready')) {
+      const range = entry.nuxt
+      if (range === undefined) {
+        console.warn(
+          `· ${entry.fixture}: the stage manifest predates the \`nuxt\` field. `
+          + 'Re-run `yarn test:nuxt-fixtures:pack` to record which Nuxt this fixture installs.',
+        )
+        continue
+      }
+      console.warn(`· ${entry.fixture}: built against nuxt ${range ?? '(none declared)'}`)
+    }
+  })
+
   it.runIf(stage !== undefined)('names the tarballs it installed, not workspace paths', () => {
     for (const [name, tarball] of Object.entries(stage!.tarballs)) {
       expect(tarball.endsWith('.tgz'), `${name} is not a tarball`).toBe(true)
@@ -185,11 +241,17 @@ describe('custom-prefix', () => {
 
 describe('css-order', () => {
   it.runIf(isRunnable('css-order'))('loads tokens before component styles', async () => {
-    const { html } = await generate(dirOf('css-order'))
-    const blocks = styleBlocks(html)
+    const dir = dirOf('css-order')
+    const { html } = await generate(dir)
+    // Every sheet the page loads, concatenated in the order the document
+    // loads it — inline blocks (Nuxt 3) then linked files (Nuxt 4). Ordering
+    // is then one search over one string, which is what the browser's cascade
+    // actually sees, rather than a search over whichever delivery mechanism
+    // this Nuxt major happens to use.
+    const css = styleSources(html, dir).join('\n/* —— next sheet —— */\n')
 
-    const tokens = blocks.findIndex(block => /--dz-primary\s*:/.test(block))
-    const components = blocks.findIndex(block => block.includes('dz-prose'))
+    const tokens = css.search(/--dz-primary\s*:/)
+    const components = css.indexOf('dz-prose')
 
     expect(tokens, 'no token stylesheet reached the page').toBeGreaterThanOrEqual(0)
     expect(components, 'no component stylesheet reached the page').toBeGreaterThanOrEqual(0)

@@ -19,11 +19,12 @@
  */
 
 import type { API, FileInfo, Options } from 'jscodeshift'
-import type { TemplateAttrExpandRule, TemplateAttrRenameRule, TemplateValueRenameRule } from '../utils/vue-template.js'
+import type { TemplateAttrExpandRule, TemplateAttrRemoveRule, TemplateAttrRenameRule, TemplateValueRenameRule } from '../utils/vue-template.js'
 import { extractScriptFromVue, isVueFile, replaceScriptInVue } from '../utils/vue-sfc.js'
 import {
   expandTemplateAttrs,
   extractTemplate,
+  removeTemplateAttrs,
   renameTemplateAttrs,
   renameTemplateAttrValues,
   replaceTemplate,
@@ -93,6 +94,35 @@ const VALUE_RENAME_RULES: TemplateValueRenameRule[] = [
   },
 ]
 
+/**
+ * ARIA props removed by TASK-N5-02, and the components that declared them.
+ *
+ * Each of these was declared, type-checked in consumer source, and **never
+ * rendered**. Removing the declaration is a breaking type change and ships in
+ * the minor position (`packages/contracts/VERSIONING.md` §3, which also requires
+ * this entry). Stripping the binding is safe in a way a rename never is: the
+ * value had no effect before the removal, so deleting it changes nothing the
+ * consumer could observe — whereas *leaving* it now lands the attribute on the
+ * root element as a Vue fall-through, on an element with no role to carry it.
+ *
+ * Nine entries across six components. Three sibling props were **not** removed —
+ * `DzInplace.ariaLabelledby`, `DzStepper.ariaLabelledby` and
+ * `DzStepper.ariaDescribedby` are now honoured — so this list is per component
+ * and per prop rather than "strip every ARIA prop from a wrapper".
+ */
+const REMOVED_ARIA_PROPS: Record<string, string[]> = {
+  DzFloatLabel: ['aria-label', 'aria-labelledby', 'aria-describedby', 'aria-invalid'],
+  DzInplace: ['aria-invalid'],
+  DzGrid: ['aria-invalid'],
+  DzStack: ['aria-invalid'],
+  DzStepper: ['aria-invalid'],
+  DzTabs: ['aria-invalid'],
+}
+
+/** {@link REMOVED_ARIA_PROPS}, flattened into the rule shape the util takes. */
+const ATTR_REMOVE_RULES: TemplateAttrRemoveRule[] = Object.entries(REMOVED_ARIA_PROPS)
+  .flatMap(([component, attrs]) => attrs.map(attr => ({ components: [component], attr })))
+
 const ATTR_EXPAND_RULES: TemplateAttrExpandRule[] = [
   {
     components: ['DzButton'],
@@ -126,6 +156,21 @@ const ALERT_ATTR_RENAME: TemplateAttrRenameRule[] = [
 // ---------------------------------------------------------------------------
 // JSX helpers (for .tsx / .jsx files)
 // ---------------------------------------------------------------------------
+
+/**
+ * Props removed per component for JSX attributes.
+ *
+ * The camelCase spelling, because that is what JSX writes — the same removal
+ * that {@link REMOVED_ARIA_PROPS} expresses in kebab for Vue templates.
+ */
+const JSX_PROP_REMOVALS: Record<string, string[]> = {
+  DzFloatLabel: ['ariaLabel', 'ariaLabelledby', 'ariaDescribedby', 'ariaInvalid'],
+  DzInplace: ['ariaInvalid'],
+  DzGrid: ['ariaInvalid'],
+  DzStack: ['ariaInvalid'],
+  DzStepper: ['ariaInvalid'],
+  DzTabs: ['ariaInvalid'],
+}
 
 /** Prop renames per component for JSX attributes. */
 const JSX_PROP_RENAMES: Record<string, Array<{ old: string, new: string }>> = {
@@ -176,6 +221,9 @@ function transformVueFile(file: FileInfo, api: API): string | null {
     // After expanding DzButton `type`, rename DzAlert `type` -> `tone`
     content = renameTemplateAttrs(content, ALERT_ATTR_RENAME)
     content = renameTemplateAttrValues(content, VALUE_RENAME_RULES)
+    // Last: a removal is unconditional, so running it before the renames above
+    // would delete an attribute one of them was about to rewrite.
+    content = removeTemplateAttrs(content, ATTR_REMOVE_RULES)
 
     if (content !== tpl.content) {
       source = replaceTemplate(source, content, tpl)
@@ -218,7 +266,8 @@ function applyJsxTransforms(file: FileInfo, api: API): string | null {
 
     const componentName = (opening.name as { name: string }).name
     const renames = JSX_PROP_RENAMES[componentName]
-    if (!renames)
+    const removals = JSX_PROP_REMOVALS[componentName]
+    if (!renames && !removals)
       return
 
     for (const attr of opening.attributes ?? []) {
@@ -226,11 +275,23 @@ function applyJsxTransforms(file: FileInfo, api: API): string | null {
         continue
       const attrName = attr.name.name as string
 
-      for (const rename of renames) {
+      for (const rename of renames ?? []) {
         if (attrName === rename.old) {
           attr.name.name = rename.new
           hasChanges = true
         }
+      }
+    }
+
+    if (removals) {
+      const kept = (opening.attributes ?? []).filter(attr =>
+        attr.type !== 'JSXAttribute'
+        || attr.name.type !== 'JSXIdentifier'
+        || !removals.includes(attr.name.name as string),
+      )
+      if (kept.length !== (opening.attributes ?? []).length) {
+        opening.attributes = kept
+        hasChanges = true
       }
     }
   })

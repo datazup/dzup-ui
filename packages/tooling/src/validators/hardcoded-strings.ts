@@ -102,9 +102,17 @@ function lineAt(source: string, offset: number): number {
  * The whole block, not just the line above, because a one-line exemption gets a
  * one-line reason and the reasons worth accepting are rarely that short. The
  * first real use of this hatch — `DzOrderList.dragHandleLabel`, a documented
- * prop whose value no element renders — took six lines to explain honestly, and
+ * prop whose value no element rendered — took six lines to explain honestly, and
  * a validator that read only the line above would have pushed that explanation
  * out of the file.
+ *
+ * **That exemption is gone.** TASK-N5-02 made the handle render the label as its
+ * `title`, so the string moved into the message catalog like every other one and
+ * the six lines of justification were deleted with it. Which is the outcome an
+ * exemption should have: a hatch that records a defect precisely enough that
+ * somebody can close it, not a permanent allowlist entry. The multi-line rule
+ * stays — it is what let the reason be written honestly in the first place, and
+ * `hardcoded-strings.spec.ts` still exercises it against that shape.
  */
 export function isAllowed(source: string, line: number): boolean {
   const lines = source.split('\n')

@@ -98,6 +98,49 @@ Tokens are delivered by `@dzup-ui/tokens/css` as CSS variables under `:root` (li
 
 See `@dzup-ui/tokens` [README](../tokens/README.md) for the dark-mode resolution order and the `prefers-color-scheme` asymmetry note.
 
+## Vue compatibility, including Vapor mode
+
+`@dzup-ui/core` is a **virtual-DOM** component library. Every component is an
+ordinary vDOM SFC and **none of them is compiled in Vapor mode** — nor is that
+planned. The declared peer range is stated in the generated block below rather
+than here, so it cannot drift from `package.json`.
+
+**That does not stop you using dzup-ui in a Vapor application.** Vue 3.6 ships
+`vaporInteropPlugin`, which lets a Vapor component render a vDOM child. Install
+it on your app and dzup-ui components work inside Vapor components:
+
+```ts
+import { createVaporApp, vaporInteropPlugin } from 'vue'
+import App from './App.vue'
+
+createVaporApp(App)
+  .use(vaporInteropPlugin) // ← lets Vapor components render vDOM children
+  .mount('#app')
+```
+
+### What backs this claim
+
+A compatibility statement is worth what its evidence is worth, so this paragraph
+is **generated** — from the peer range this package declares, from the version
+the forward-compatibility lane pins, and from whether the spec that tests the
+claim still exists. Delete the spec and this block says the claim is unbacked
+and `yarn validate:readme-facts` fails, rather than the README going on
+claiming it.
+
+<!-- facts:vapor:start -->
+
+Backed by [`packages/core/tests/vapor-interop.spec.ts`](../../packages/core/tests/vapor-interop.spec.ts), run by `yarn test:vue-next:vapor`. It mounts a real Vapor application, installs the plugin, renders `DzButton` inside it, and asserts the rendered `<button>` and its `data-tone` attribute. On a Vue without Vapor it reports **unverified by name** rather than passing — an unrun check and a passing check must not look the same.
+
+The forward-compatibility lane pins **`vue@3.6.0-rc.6`** (`rc` channel), which is **not** the version this library is built and tested against — the declared peer range is `vue@^3.5.0`. The lane is advisory until Vue 3.6 is stable.
+
+<!-- facts:vapor:end -->
+
+**Not covered by that run:** Vapor SSR and hydration; the reverse direction (a
+vDOM parent rendering a Vapor child); any component other than `DzButton`; and
+any Vue 3.6 **stable** release. See
+`docs/program-2026-09/reports/N5-03-toolchain-migration-memo.md` §5 for the
+trigger that promotes the lane from advisory to blocking.
+
 ## Package Entry Points
 
 - `@dzup-ui/core` — all components and composables

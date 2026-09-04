@@ -20,7 +20,7 @@
  * @module @dzup-ui/contracts/quality-tiers
  */
 
-import type { RiskTier } from './anatomy.types'
+import type { RiskTier } from './anatomy.types.js'
 
 // ---------------------------------------------------------------------------
 // Evidence

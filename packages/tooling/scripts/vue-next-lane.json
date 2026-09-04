@@ -1,0 +1,23 @@
+{
+  "//": "TASK-N5-03. The Vue 3.6 forward-compatibility lane, as DATA. The runner (vue-next-lane.mjs) reads this file, writes `resolutions` into the root package.json, installs, runs a command, and puts both the manifest and the lockfile back. Nothing here changes the default toolchain: the repository still resolves `vue` from the `^3.5.13` dependency in package.json, and this file is inert until the runner is invoked on purpose.",
+  "//advisory": "ADVISORY, NOT BLOCKING, until Vue 3.6 is stable. A red run here is information about an unreleased Vue, not a defect claim against this repository. It becomes blocking on the day `vue@latest` is 3.6.x -- that trigger is written down in docs/program-2026-09/reports/N5-03-toolchain-migration-memo.md, not left to whoever notices.",
+  "channel": "rc",
+  "resolutions": {
+    "//": "`resolutions` rather than a dependency bump because the whole point is to move EVERY copy of Vue in the tree at once, including the one @vitejs/plugin-vue and vue-component-meta compile against. A dependency bump moves the direct edge and leaves transitive copies on 3.5, which produces a run that is green for the wrong reason.",
+    "vue": "3.6.0-rc.6",
+    "@vue/compiler-sfc": "3.6.0-rc.6",
+    "@vue/runtime-core": "3.6.0-rc.6",
+    "@vue/runtime-dom": "3.6.0-rc.6",
+    "@vue/shared": "3.6.0-rc.6",
+    "@vue/server-renderer": "3.6.0-rc.6"
+  },
+  "//not-overridden": {
+    "vue-component-meta": "Deliberately left at its 3.3.7 pin. TASK-N5-02 ranked it as the sensitive one: component-meta.json, llms-full.txt, 144 docs pages, the playground seeds and the docs nav are all projections of its output and each is byte-compared by a gate, so moving it rewrites five artifacts in one step. This lane is about the RUNTIME under test, not about the extractor.",
+    "vue-tsc": "Same reason: vue-tsc and vue-component-meta share vue-language-core, and moving one moves the other."
+  },
+  "//gates": {
+    "//": "What the lane runs, and what it deliberately does not.",
+    "runs": "The unit + contract suite (`vitest run`), which is behaviour under a runtime.",
+    "skips": "Every generated-artifact freshness gate (validate:component-meta, validate:llms, validate:docs-pages, validate:readme-facts). Those compare committed bytes against a fresh extraction; under a different Vue they would fail on the extractor's output rather than on anything the library does, and a lane that fails for a reason it cannot act on is a lane people switch off."
+  }
+}

@@ -44,8 +44,16 @@ export const DZ_TABS_KEY: InjectionKey<DzTabsContext> = Symbol('dz-tabs')
 // DzTabs (Root) Props
 // ---------------------------------------------------------------------------
 
-/** Props for the DzTabs root component */
-export interface DzTabsProps extends BaseAccessibilityProps {
+/**
+ * Props for the DzTabs root component.
+ *
+ * `ariaInvalid` is omitted from {@link BaseAccessibilityProps}: a tab set is not
+ * invalid — a field inside a panel is, and `DzTabTrigger` is where an
+ * invalid-panel affordance would go. The prop was declared and never forwarded
+ * to `TabsRoot`. Its removal is a breaking type change and ships in the minor
+ * position (`packages/contracts/VERSIONING.md` §3).
+ */
+export interface DzTabsProps extends Omit<BaseAccessibilityProps, 'ariaInvalid'> {
   /** Layout orientation */
   orientation?: Orientation
   /** Visual style variant */

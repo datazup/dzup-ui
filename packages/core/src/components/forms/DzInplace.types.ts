@@ -26,8 +26,20 @@ export type DzInplaceSaveOn = 'enter' | 'blur' | 'both'
 // Props
 // ---------------------------------------------------------------------------
 
-/** Props for the DzInplace component */
-export interface DzInplaceProps extends BaseAccessibilityProps {
+/**
+ * Props for the DzInplace component.
+ *
+ * `ariaInvalid` is omitted from {@link BaseAccessibilityProps}: ARIA 1.2 does
+ * not support `aria-invalid` on `role="button"`, which is what the display
+ * trigger is, and validity belongs to the editor rendered into the `#edit`
+ * slot, which this wrapper cannot reach. The prop was declared and never
+ * forwarded. Its removal is a breaking type change and ships in the minor
+ * position (`packages/contracts/VERSIONING.md` §3).
+ *
+ * `ariaLabelledby` is **kept**, and is now honoured on the display trigger
+ * alongside the `ariaLabel` and `ariaDescribedby` that element already carried.
+ */
+export interface DzInplaceProps extends Omit<BaseAccessibilityProps, 'ariaInvalid'> {
   /** When the editor commits its value (default `both`) */
   saveOn?: DzInplaceSaveOn
   /** Prevents activation and interaction */

@@ -52,7 +52,7 @@ never as asserted.
 | `dataKey` | `string \| undefined` | no | `undefined` | Property name used to derive a stable key from each item (e.g. `'id'`). Falls back to the item's index when omitted — note that index-based keys do not survive reordering, so provide `dataKey` when using `selectable`. |
 | `disabled` | `boolean \| undefined` | no | `false` | Disabled state — prevents all reordering and selection |
 | `dragHandle` | `boolean \| undefined` | no | `true` | Show a drag handle and enable pointer drag-and-drop reordering |
-| `dragHandleLabel` | `string \| undefined` | no | `"Drag to reorder"` | Accessible label for each row's drag handle |
+| `dragHandleLabel` | `string \| undefined` | no | `undefined` | Label for each row's drag handle, rendered as the handle's `title`. The handle is a **pointer-only** affordance and stays `aria-hidden="true"`: its function is already reachable from the keyboard through the Move controls and the row's own space-to-grab, and giving it an accessible name would fold that name into every row's accessible name under `selectable` (where each row is `role="option"`, a name-from-content role). So this is a tooltip for the audience the handle actually serves, not an ARIA label — which is what the prop had always claimed to be and never was. |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `moveBottomLabel` | `string \| undefined` | no | `undefined` | Accessible label for the Move To Bottom control |
 | `moveDownLabel` | `string \| undefined` | no | `undefined` | Accessible label for the Move Down control |
@@ -107,7 +107,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 19 | 19 | 9 declare a default, of which 9 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 19 | 19 | 8 declare a default, of which 10 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 5 | 4 | 4 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 3 | 3 | 1 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |

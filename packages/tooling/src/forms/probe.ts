@@ -212,23 +212,53 @@ function split(source: string): { script: string, template: string, templateOffs
 }
 
 /**
+ * Keys an `extends` clause removes from a base with `Omit<Base, 'a' | 'b'>`.
+ *
+ * The base expansion below resolves an inherited interface **by name**, so
+ * `extends Omit<BaseAccessibilityProps, 'ariaInvalid'>` matches
+ * `/BaseAccessibilityProps/` and would contribute all five identity props —
+ * including the one the component just removed. That is the worst kind of false
+ * positive for this probe: it reports a prop as declared-and-unread when the
+ * source says it is not declared at all, which would leave `Omit` unusable as a
+ * removal mechanism and the C2 cell permanently red for a fixed component.
+ *
+ * Narrow on purpose. It reads string literals out of the second type argument
+ * and nothing else — no `keyof`, no aliased unions, no `Pick`. A clause it
+ * cannot read contributes nothing, which leaves the old behaviour: the prop
+ * stays reported and the cell stays red. **The probe is allowed to miss a
+ * removal; it is not allowed to invent one.**
+ */
+function omittedKeys(extendsClause: string): string[] {
+  const out: string[] = []
+  for (const omit of extendsClause.matchAll(/Omit<\s*\w+\s*,([^>]*)>/g)) {
+    for (const key of (omit[1] ?? '').matchAll(/'([^']+)'/g)) {
+      if (key[1] !== undefined)
+        out.push(key[1])
+    }
+  }
+  return out
+}
+
+/**
  * Every prop the component accepts.
  *
  * Own props come from the interface body; inherited ones from the `extends`
  * clause, which is resolved against the four base interfaces in
- * `@dzup-ui/contracts`. Resolving by name rather than by parsing the contracts
- * package keeps this a source probe rather than half a type-checker; the spec
- * beside this file pins the four expansions against the real interfaces.
+ * `@dzup-ui/contracts`, then narrowed by any {@link omittedKeys}. Resolving by
+ * name rather than by parsing the contracts package keeps this a source probe
+ * rather than half a type-checker; the spec beside this file pins the four
+ * expansions against the real interfaces.
  */
 function declaredProps(types: string, component: string): { declared: string[], extendsClause: string } {
   const header = new RegExp(`interface ${component}Props([^{]*)\\{`).exec(types)
   const extendsClause = header?.[1]?.replace(/\s+/g, ' ').trim() ?? ''
   const body = new RegExp(`interface ${component}Props[\\s\\S]*?\\n\\}`).exec(types)
-  const declared = new Set<string>()
+  const own = new Set<string>()
   for (const match of (body?.[0] ?? '').matchAll(/^ {2}(?:readonly )?'?(\w+)'?\??:/gm)) {
     if (match[1] !== undefined)
-      declared.add(match[1])
+      own.add(match[1])
   }
+  const declared = new Set<string>(own)
 
   const add = (list: readonly string[]): void => list.forEach(p => declared.add(p))
   if (/BaseFormControlProps/.test(extendsClause)) {
@@ -247,6 +277,12 @@ function declaredProps(types: string, component: string): { declared: string[], 
       add(VALIDATION_PROPS)
     if (/BaseAccessibilityProps/.test(extendsClause))
       add(IDENTITY_PROPS)
+  }
+  // A key the interface declares itself outranks an `Omit` of the same name on
+  // the base — the component re-declared it, so it is its own prop.
+  for (const key of omittedKeys(extendsClause)) {
+    if (!own.has(key))
+      declared.delete(key)
   }
   return { declared: [...declared].sort(), extendsClause }
 }

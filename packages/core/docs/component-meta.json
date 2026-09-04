@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "sourceCommit": "6f1f6533652343f76e073da2345e0b14c22913a0",
   "extractor": "vue-component-meta@3.3.7",
   "generatedFrom": [
     "packages/core/manifests/component-ownership.manifest.json",
@@ -245,9 +245,9 @@
     "publicComponents": 144,
     "compoundParts": 64,
     "unclassifiable": 0,
-    "props": 1734,
-    "propsWithDescription": 1671,
-    "propsWithDeclaredDefault": 727,
+    "props": 1725,
+    "propsWithDescription": 1662,
+    "propsWithDeclaredDefault": 726,
     "propsWithLiteralUndefinedDefault": 509,
     "events": 359,
     "eventsWithDescription": 253,
@@ -17205,47 +17205,11 @@
       },
       "props": [
         {
-          "name": "ariaDescribedby",
-          "type": "string | undefined",
-          "required": false,
-          "default": null,
-          "description": "ID of element that describes this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaLabel",
-          "type": "string | undefined",
-          "required": false,
-          "default": null,
-          "description": "Accessible label",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
-          "name": "ariaLabelledby",
-          "type": "string | undefined",
-          "required": false,
-          "default": null,
-          "description": "ID of element that labels this component",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "filled",
           "type": "boolean | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Explicit filled state. When provided, it overrides automatic detection —\nuseful for non-native controls (e.g. a combobox button) whose value cannot\nbe read from a native `input`/`select`/`textarea` element.",
+          "description": "Explicit filled state. When provided, it overrides automatic detection —\r\nuseful for non-native controls (e.g. a combobox button) whose value cannot\r\nbe read from a native `input`/`select`/`textarea` element.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/forms/DzFloatLabel.types.ts"
         },
@@ -17375,8 +17339,8 @@
         }
       },
       "extraction": {
-        "props": 8,
-        "propsWithDescription": 8,
+        "props": 4,
+        "propsWithDescription": 4,
         "propsWithDeclaredDefault": 1,
         "events": 0,
         "eventsWithDescription": 0,
@@ -17784,15 +17748,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -17987,8 +17942,8 @@
         }
       },
       "extraction": {
-        "props": 9,
-        "propsWithDescription": 9,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 3,
         "events": 0,
         "eventsWithDescription": 0,
@@ -19918,15 +19873,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -20002,7 +19948,7 @@
           "type": "T | undefined",
           "required": false,
           "default": null,
-          "description": "Both `v-model` and `v-model:value` (renderer contract C1).\n\n`v-model:value` keeps working unchanged; `v-model` is the binding every other\ncontrol in the catalog takes, and until now it silently did nothing here.",
+          "description": "Both `v-model` and `v-model:value` (renderer contract C1).\r\n\r\n`v-model:value` keeps working unchanged; `v-model` is the binding every other\r\ncontrol in the catalog takes, and until now it silently did nothing here.",
           "descriptionSource": "vue-component-meta"
         }
       ],
@@ -20126,8 +20072,8 @@
         }
       },
       "extraction": {
-        "props": 12,
-        "propsWithDescription": 11,
+        "props": 11,
+        "propsWithDescription": 10,
         "propsWithDeclaredDefault": 4,
         "events": 6,
         "eventsWithDescription": 3,
@@ -26326,7 +26272,7 @@
           "type": "string | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Property name used to derive a stable key from each item (e.g. `'id'`).\nFalls back to the item's index when omitted — note that index-based keys do\nnot survive reordering, so provide `dataKey` when using `selectable`.",
+          "description": "Property name used to derive a stable key from each item (e.g. `'id'`).\r\nFalls back to the item's index when omitted — note that index-based keys do\r\nnot survive reordering, so provide `dataKey` when using `selectable`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -26352,8 +26298,8 @@
           "name": "dragHandleLabel",
           "type": "string | undefined",
           "required": false,
-          "default": "\"Drag to reorder\"",
-          "description": "Accessible label for each row's drag handle",
+          "default": "undefined",
+          "description": "Label for each row's drag handle, rendered as the handle's `title`.\r\n\r\nThe handle is a **pointer-only** affordance and stays `aria-hidden=\"true\"`:\r\nits function is already reachable from the keyboard through the Move\r\ncontrols and the row's own space-to-grab, and giving it an accessible name\r\nwould fold that name into every row's accessible name under `selectable`\r\n(where each row is `role=\"option\"`, a name-from-content role). So this is a\r\ntooltip for the audience the handle actually serves, not an ARIA label —\r\nwhich is what the prop had always claimed to be and never was.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/data/DzOrderList.types.ts"
         },
@@ -26591,7 +26537,7 @@
       "extraction": {
         "props": 19,
         "propsWithDescription": 19,
-        "propsWithDeclaredDefault": 9,
+        "propsWithDeclaredDefault": 8,
         "events": 5,
         "eventsWithDescription": 4,
         "eventsModelDerived": 1,
@@ -37337,15 +37283,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -37500,8 +37437,8 @@
         }
       },
       "extraction": {
-        "props": 9,
-        "propsWithDescription": 9,
+        "props": 8,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 3,
         "events": 0,
         "eventsWithDescription": 0,
@@ -37796,15 +37733,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": null,
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -37827,7 +37755,7 @@
           "type": "((from: number, to: number) => boolean | Promise<boolean>) | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Guard run before the active step changes. Return `false` to block it.\n\nA wizard cannot advance past a step whose fields are invalid, and the\nstepper is the only thing that knows a change is being attempted. It is a\n**boolean guard and nothing more**: the stepper is not told what validation\nis, only whether the host permits this move. Anything richer would put form\nsemantics into a navigation primitive, which is the stop condition on this\npacket.\n\nAsync because validation usually is. While it is pending the stepper stays\nwhere it is.\n\n`revealItem()` bypasses the guard on purpose: it is how a form takes the\nuser *to* an error, and a guard that blocked it would trap them on a step\nwhose problems are somewhere else.",
+          "description": "Guard run before the active step changes. Return `false` to block it.\r\n\r\nA wizard cannot advance past a step whose fields are invalid, and the\r\nstepper is the only thing that knows a change is being attempted. It is a\r\n**boolean guard and nothing more**: the stepper is not told what validation\r\nis, only whether the host permits this move. Anything richer would put form\r\nsemantics into a navigation primitive, which is the stop condition on this\r\npacket.\r\n\r\nAsync because validation usually is. While it is pending the stepper stays\r\nwhere it is.\r\n\r\n`revealItem()` bypasses the guard on purpose: it is how a form takes the\r\nuser *to* an error, and a guard that blocked it would trap them on a step\r\nwhose problems are somewhere else.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -37836,7 +37764,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "false",
-          "description": "Allow completed/active steps to be clicked to navigate back to them.\nUpcoming steps remain non-interactive regardless. Defaults to `false`.",
+          "description": "Allow completed/active steps to be clicked to navigate back to them.\r\nUpcoming steps remain non-interactive regardless. Defaults to `false`.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -37854,7 +37782,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "false",
-          "description": "Only allow moving to an adjacent step, or back to a completed one.\n\nOff by default. A linear wizard is a policy about the flow, not about the\ncomponent, so a stepper used as a progress indicator is unaffected.",
+          "description": "Only allow moving to an adjacent step, or back to a completed one.\r\n\r\nOff by default. A linear wizard is a policy about the flow, not about the\r\ncomponent, so a stepper used as a progress indicator is unaffected.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -37882,7 +37810,7 @@
           "name": "blocked",
           "type": "[from: number, to: number, reason: \"linear\" | \"guard\"]",
           "signature": "(event: \"blocked\", from: number, to: number, reason: \"linear\" | \"guard\"): void",
-          "description": "A step change was refused — by `beforeChange`, or by `linear`.\n\nEmitted so a host can say *why* nothing happened. A wizard whose Next\nbutton silently does nothing is indistinguishable from a broken one.",
+          "description": "A step change was refused — by `beforeChange`, or by `linear`.\r\n\r\nEmitted so a host can say *why* nothing happened. A wizard whose Next\r\nbutton silently does nothing is indistinguishable from a broken one.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
@@ -37898,7 +37826,7 @@
           "name": "navigate",
           "type": "[step: number]",
           "signature": "(event: \"navigate\", step: number): void",
-          "description": "A clickable step was activated. Fired after v-model is updated; consumers\ncan use this for analytics or to trigger side effects.",
+          "description": "A clickable step was activated. Fired after v-model is updated; consumers\r\ncan use this for analytics or to trigger side effects.",
           "descriptionSource": "emits-interface",
           "modelDerived": false
         },
@@ -38047,8 +37975,8 @@
         }
       },
       "extraction": {
-        "props": 10,
-        "propsWithDescription": 9,
+        "props": 9,
+        "propsWithDescription": 8,
         "propsWithDeclaredDefault": 4,
         "events": 5,
         "eventsWithDescription": 4,
@@ -38106,7 +38034,7 @@
           "type": "boolean | undefined",
           "required": false,
           "default": "undefined",
-          "description": "Per-item override for clickability. Falls back to the parent\n<code>DzStepper.clickable</code>. Only completed/active steps respond\nregardless of this flag — upcoming steps never navigate.",
+          "description": "Per-item override for clickability. Falls back to the parent\r\n<code>DzStepper.clickable</code>. Only completed/active steps respond\r\nregardless of this flag — upcoming steps never navigate.",
           "descriptionSource": "vue-component-meta",
           "declaredIn": "packages/core/src/components/navigation/DzStepper.types.ts"
         },
@@ -39518,15 +39446,6 @@
           "declaredIn": "packages/contracts/src/props.types.ts"
         },
         {
-          "name": "ariaInvalid",
-          "type": "boolean | \"grammar\" | \"spelling\" | undefined",
-          "required": false,
-          "default": "undefined",
-          "description": "Indicates the component has invalid input",
-          "descriptionSource": "vue-component-meta",
-          "declaredIn": "packages/contracts/src/props.types.ts"
-        },
-        {
           "name": "ariaLabel",
           "type": "string | undefined",
           "required": false,
@@ -39760,8 +39679,8 @@
         }
       },
       "extraction": {
-        "props": 11,
-        "propsWithDescription": 10,
+        "props": 10,
+        "propsWithDescription": 9,
         "propsWithDeclaredDefault": 6,
         "events": 4,
         "eventsWithDescription": 3,

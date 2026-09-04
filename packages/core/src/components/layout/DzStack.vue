@@ -21,6 +21,7 @@ import type { DzStackProps, DzStackSlots } from './DzStack.types.ts'
  */
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { flexVariants } from './DzFlex.variants.ts'
 
 defineOptions({
@@ -37,6 +38,11 @@ const props = withDefaults(defineProps<DzStackProps>(), {
 defineSlots<DzStackSlots>()
 
 const attrs = useAttrs()
+
+// See DzGrid: `ariaInvalid` was declared and never forwarded (VERSIONING.md §3).
+warnRemovedProps('DzStack', attrs, {
+  ariaInvalid: 'A layout box is not invalid; the fields inside it are — put aria-invalid on the field, or bind `invalid` on the control.',
+})
 
 /** Map stack direction to flex direction */
 const flexDirection = computed(() =>

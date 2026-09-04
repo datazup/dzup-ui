@@ -62,3 +62,36 @@ export function evidenceIsCurrent(observed: string, changed: string): boolean {
     return false
   }
 }
+
+/**
+ * Blank every `componentCommit` stamp before a freshness comparison
+ * (TASK-N5-03, Item 0).
+ *
+ * `componentCommit` is `lastCommitFor(source)` — **git provenance recorded
+ * inside an artifact that is then byte-compared against a fresh build**. That
+ * combination cannot ever be green in a committed state, and the reason is an
+ * off-by-one nothing in the working tree can fix: a commit that touches
+ * `DzButton.vue` becomes the answer to `lastCommitFor('…/DzButton.vue')` the
+ * instant it lands, but the artifact regenerated *before* that commit recorded
+ * the previous hash. The artifact is stale at birth, in the same commit that
+ * created it, and the only way out is a second commit that regenerates — every
+ * time, forever, with CI red on the first one.
+ *
+ * `validate:component-meta`, `validate:ownership` and `validate:capability-matrix`
+ * already exclude the top-level `sourceCommit` for exactly this reason
+ * (`stripProvenance` in `../meta/component-meta.ts` states it). `componentCommit`
+ * is the same field one level down, and was missed because it repeats per row.
+ *
+ * **This weakens nothing.** No clause in either validator reads the *committed*
+ * `componentCommit`: the staleness clauses in `at-matrix.ts` and
+ * `capability-matrix.ts` both run against the **freshly built** index, where
+ * the value is recomputed from git on every run. The field exists in the file
+ * so a human reading the artifact can see which revision a row was measured
+ * against — which is the definition of provenance.
+ *
+ * A real content change — a row that flips `covered` → `stale`, a count that
+ * moves, a cell that gains an artifact — is untouched and still fails the gate.
+ */
+export function stripComponentCommits(json: string): string {
+  return json.replace(/"componentCommit": "[^"]*"/g, '"componentCommit": "-"')
+}

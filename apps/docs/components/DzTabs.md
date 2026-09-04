@@ -41,13 +41,12 @@ never as asserted.
 :::
 
 
-## Props (11, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (10, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `activationMode` | `"manual" \| "automatic" \| undefined` | no | `"automatic"` | Tab activation mode: automatic (on focus) or manual (on click) |
 | `ariaDescribedby` | `string \| undefined` | no | `undefined` | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | `undefined` | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | `undefined` | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | `undefined` | ID of element that labels this component |
 | `id` | `string \| undefined` | no | `undefined` | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
@@ -187,7 +186,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 11 | 10 | 6 declare a default, of which 5 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 10 | 9 | 6 declare a default, of which 4 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 4 | 3 | 3 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 1 | 0 | no description exists in source for any exposed member, catalog-wide |

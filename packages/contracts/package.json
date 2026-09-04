@@ -12,6 +12,7 @@
   },
   "files": [
     "LICENSE",
+    "VERSIONING.md",
     "dist"
   ],
   "publishConfig": {

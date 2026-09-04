@@ -4,7 +4,12 @@
  * Four gates:
  *
  *   1. **freshness** — the committed `capability-matrix.json` equals what the
- *      generator produces now.
+ *      generator produces now, with the `sourceCommit` and per-row
+ *      `componentCommit` provenance stamps excluded (TASK-N5-03: both are
+ *      git hashes recorded inside an artifact that is then byte-compared,
+ *      so a commit touching a component source makes the file stale in that
+ *      same commit). Cell states, notes, artifacts and totals still compare
+ *      byte for byte.
  *   2. **tier D** — a Tier D component may not carry an unexplained `unrun`
  *      cell. TASK-OSS-P5-06 names this one directly. Tier D is where a defect
  *      is a security defect, and "nobody has produced this evidence" is not an
@@ -36,6 +41,7 @@ import {
   CAPABILITY_MATRIX_PATH,
   serializeCapabilityMatrix,
 } from '../quality/generate-capability-matrix.ts'
+import { stripComponentCommits } from '../quality/git.ts'
 
 export interface CapabilityViolation {
   rule: 'freshness' | 'tier-d' | 'stale' | 'inputs'
@@ -119,7 +125,15 @@ if (isMain) {
     // `sourceCommit` is excluded for the reason the ownership validator states:
     // it records which checkout produced the file, and gating on it would fail
     // this on every unrelated commit while proving nothing about the cells.
-    const strip = (json: string) => json.replace(/"sourceCommit": "[^"]*"/, '"sourceCommit": "-"')
+    // `componentCommit` is excluded for the same reason one level down: it is
+    // `lastCommitFor(source)` on every row, so a commit that touches a
+    // component source makes this file stale in that same commit and the gate
+    // can never be green. See `stripComponentCommits`. Nothing reads the
+    // committed value — the `stale` clause above runs against `fresh`, where it
+    // is recomputed from git. Cell states, notes, artifacts and the per-tier
+    // totals still compare byte for byte, so real staleness still fails here.
+    const strip = (json: string) =>
+      stripComponentCommits(json.replace(/"sourceCommit": "[^"]*"/, '"sourceCommit": "-"'))
     if (strip(committed) !== strip(serializeCapabilityMatrix(fresh))) {
       violations.push({
         rule: 'freshness',

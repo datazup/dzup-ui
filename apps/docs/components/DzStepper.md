@@ -39,12 +39,11 @@ never as asserted.
 :::
 
 
-## Props (10, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (9, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `beforeChange` | `((from: number, to: number) => boolean \| Promise<boolean>) \| undefined` | no | `undefined` | Guard run before the active step changes. Return `false` to block it. A wizard cannot advance past a step whose fields are invalid, and the stepper is the only thing that knows a change is being attempted. It is a **boolean guard and nothing more**: the stepper is not told what validation is, only whether the host permits this move. Anything richer would put form semantics into a navigation primitive, which is the stop condition on this packet. Async because validation usually is. While it is pending the stepper stays where it is. `revealItem()` bypasses the guard on purpose: it is how a form takes the user *to* an error, and a guard that blocked it would trap them on a step whose problems are somewhere else. |
@@ -101,7 +100,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 10 | 9 | 4 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 9 | 8 | 4 declare a default, of which 1 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 5 | 4 | 4 recovered from the `Dz*Emits` interface · 1 synthesised by `defineModel` |
 | Slots | 1 | 1 | 0 carry slot props |
 | Exposed on `ref` | 1 | 0 | no description exists in source for any exposed member, catalog-wide |

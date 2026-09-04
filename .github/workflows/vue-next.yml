@@ -1,0 +1,143 @@
+# Forward compatibility: the unit + contract suite against an unreleased Vue.
+#
+# TASK-N5-03. Its own workflow rather than a job inside ci.yml for one reason
+# that matters: this lane needs a `schedule`, and a schedule on ci.yml would run
+# every blocking job in the repository weekly — a Storybook build, three browser
+# matrices and a coverage pass — to answer a question about somebody else's
+# prerelease. A separate file keeps the blocking CI graph exactly as it was.
+#
+# ADVISORY, NOT BLOCKING
+# ----------------------
+# Every job here is `continue-on-error: true`. A red result is a fact about an
+# unreleased Vue, not a defect claim against this repository. Gating merges on a
+# third party's release candidate hands them a veto over this project shipping.
+#
+# What it buys instead is lead time: breakage is known while 3.6 is still an RC
+# and the fix is cheap, rather than on the morning a consumer upgrades.
+#
+# WHEN IT BECOMES BLOCKING
+# ------------------------
+# The day `vue@latest` is 3.6.x. Promoting it means deleting the two
+# `continue-on-error` lines and moving the job into ci.yml. The trigger, the
+# scope and the risks are written down in
+# docs/program-2026-09/reports/N5-03-toolchain-migration-memo.md — a schedule
+# nobody wrote down is a schedule nobody keeps.
+#
+# WHY `schedule`
+# --------------
+# An RC moves without this repository changing. A lane that only ran on our own
+# commits would keep reporting a confident answer about a version nobody is on
+# any more, which is worse than no answer.
+
+name: Vue Next (advisory)
+
+on:
+  # Monday 04:00 UTC. Off the hour to avoid the top-of-hour scheduling queue,
+  # which delays cron runs by tens of minutes on a busy day.
+  schedule:
+    - cron: '0 4 * * 1'
+  # Hand-run from the Actions tab when somebody is triaging a specific RC.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Vue version to pin (default: the one in vue-next-lane.json)'
+        required: false
+        type: string
+
+concurrency:
+  group: vue-next-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  suite:
+    name: Unit + contract suite under Vue 3.6-RC
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # The repository's declared floor (ADR-18), not a floating major. The
+          # same reasoning as `validate-min-runtime` in ci.yml: a lane that runs
+          # on a Node nobody declares proves nothing about the declared one.
+          node-version: '20.19.0'
+      - name: Enable Corepack
+        run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+      - name: Install dependencies (default toolchain)
+        run: yarn install --immutable
+
+      # Printed before anything is written, so the log states what the lane was
+      # about to pin even when the install below cannot start at all.
+      - name: Show the override this lane applies
+        run: node packages/tooling/scripts/vue-next-lane.mjs --plan
+        env:
+          DZUP_VUE_NEXT: ${{ inputs.version }}
+
+      # The Vapor-interop smoke (packages/core/tests/vapor-interop.spec.ts) is
+      # inside this suite, not beside it. On the default Vue that spec reports
+      # `unverified` instead of passing; this job is the only place it runs for
+      # real, and therefore the only thing entitled to back the Vapor
+      # compatibility statement in packages/core/README.md.
+      #
+      # Exit codes from the runner:
+      #   1  the suite failed      — a result, advisory under an RC
+      #   2  the lane could not run (install/network) — NOT a result
+      #   3  the restore did not verify — the checkout is dirty
+      - name: Unit + contract suite under Vue 3.6-RC
+        run: node packages/tooling/scripts/vue-next-lane.mjs
+        env:
+          DZUP_VUE_NEXT: ${{ inputs.version }}
+
+      # `always()`, because the interesting case is the failing one. The runner
+      # restores package.json and yarn.lock in a `finally` and verifies the
+      # restore itself; this is the independent second opinion, and it is the
+      # step that would catch a runner bug rather than trusting the runner's own
+      # report of its own cleanup.
+      - name: Prove the default toolchain was restored
+        if: always()
+        run: git diff --exit-code -- package.json yarn.lock
+
+  # Separate job, separate install, on purpose: the Nuxt module's compatibility
+  # question is "does the published module work in a real consumer app", and the
+  # answer differs per Nuxt major. Running both majors is what turns the declared
+  # floor from a claim into a measurement.
+  #
+  # `nuxt` <= 4.4.5 declares `^20.19.0 || >=22.12.0`; `nuxt` >= 4.4.6 declares
+  # `^22.12.0 || ^24.11.0 || >=26.0.0`. On this repository's declared Node floor
+  # (20.19.0) the 4.4.6+ line cannot be installed at all — which is itself the
+  # evidence behind the floor decision in the N5-03 handoff, and the reason the
+  # matrix pins an exact version rather than `^4`.
+  nuxt-majors:
+    name: Nuxt consumer fixtures (nuxt ${{ matrix.nuxt }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - nuxt: '3.19.0'
+          - nuxt: '4.4.5'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.19.0'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Pack and stage the fixtures
+        run: node packages/nuxt/scripts/pack-fixtures.mjs
+        env:
+          DZUP_FIXTURE_NUXT: ${{ matrix.nuxt }}
+      - name: Install each staged fixture
+        run: node packages/nuxt/scripts/install-fixtures.mjs
+      - name: Build and assert
+        run: yarn test:nuxt-fixtures

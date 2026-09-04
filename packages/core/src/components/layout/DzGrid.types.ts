@@ -28,8 +28,16 @@ export interface ResponsiveCols {
   lg?: GridCols
 }
 
-/** Props for the DzGrid component */
-export interface DzGridProps extends BaseAccessibilityProps {
+/**
+ * Props for the DzGrid component.
+ *
+ * `ariaInvalid` is omitted from {@link BaseAccessibilityProps}: a layout box is
+ * not invalid — the fields inside it are. The prop was declared and never
+ * forwarded, so the declaration was a promise the component could not keep.
+ * Its removal is a breaking type change and ships in the minor position
+ * (`packages/contracts/VERSIONING.md` §3).
+ */
+export interface DzGridProps extends Omit<BaseAccessibilityProps, 'ariaInvalid'> {
   /** Number of columns (or responsive object) */
   cols?: GridCols | ResponsiveCols
   /** Gap between grid items */

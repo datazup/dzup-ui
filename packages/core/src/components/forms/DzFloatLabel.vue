@@ -23,6 +23,7 @@
 import type { DzFloatLabelProps, DzFloatLabelSlots } from './DzFloatLabel.types.ts'
 import { computed, onMounted, onUpdated, ref, useAttrs, useId } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { floatLabelVariants } from './DzFloatLabel.variants.ts'
 
 defineOptions({
@@ -37,6 +38,18 @@ const props = withDefaults(defineProps<DzFloatLabelProps>(), {
 
 const slots = defineSlots<DzFloatLabelSlots>()
 const attrs = useAttrs()
+
+// All four ARIA props were declared and never forwarded. A float-label wrapper
+// is a generic <div> plus a <label>: it computes no accessible name and ignores
+// aria-describedby and aria-invalid. The control it wraps owns all four and
+// merges its own error id into aria-describedby — writing them from out here
+// would clobber that merge (VERSIONING.md §3, minor).
+warnRemovedProps('DzFloatLabel', attrs, {
+  ariaLabel: 'A float-label wrapper is not a labelable element — put aria-label on the control it wraps.',
+  ariaLabelledby: 'The wrapped control owns its accessible name — put aria-labelledby on the control.',
+  ariaDescribedby: 'The description belongs on the control, which merges it with its own error id — put aria-describedby on the control, or use DzFormField.',
+  ariaInvalid: 'Validity belongs to the control, not to the element that positions its label — bind `invalid` on the control.',
+})
 
 /** Selector for the first focusable form control inside the slot */
 const CONTROL_SELECTOR = 'input, textarea, select, [contenteditable=""], [contenteditable="true"], [role="combobox"], [role="textbox"], [role="spinbutton"]'

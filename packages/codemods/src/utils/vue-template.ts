@@ -38,6 +38,23 @@ export interface TemplateAttrExpandRule {
   expansionMap: Record<string, string>
 }
 
+/**
+ * An attribute that no longer exists on the given components and is deleted.
+ *
+ * Distinct from a rename because there is nothing to rename it *to*. Used for a
+ * prop the component declared, never honoured, and has now removed
+ * (`packages/contracts/VERSIONING.md` §3) — the binding did nothing before the
+ * removal, so deleting it changes no behaviour, and leaving it in place would
+ * start rendering it as a fall-through attribute on an element with no role to
+ * carry it.
+ */
+export interface TemplateAttrRemoveRule {
+  /** Component tag names this rule applies to (PascalCase). */
+  components: string[]
+  /** Attribute name to delete (exact match, in any binding form). */
+  attr: string
+}
+
 /** An event rename rule scoped to one or more component tags. */
 export interface TemplateEventRenameRule {
   /** Component tag names this rule applies to (PascalCase). */
@@ -154,6 +171,47 @@ export function expandTemplateAttrs(
           return expansion !== undefined ? `${ws}${expansion}` : _m
         },
       )
+      return `${open}${newAttrs}${close}`
+    })
+  }
+
+  return result
+}
+
+/**
+ * Delete an attribute from matching component tags.
+ *
+ * Handles the same four binding forms {@link renameTemplateAttrs} does:
+ * - `attr="value"` and `attr='value'`
+ * - `attr` (boolean shorthand)
+ * - `:attr="expr"`
+ * - `v-bind:attr="expr"`
+ *
+ * The leading whitespace goes with the attribute, so `<DzGrid :cols="2"
+ * :aria-invalid="bad">` closes up rather than leaving a double space. A
+ * shorthand `attr` at the very end of the tag is matched by the `$` branch, so
+ * `<DzGrid aria-invalid>` is handled too.
+ *
+ * **Value-bearing forms only lose the attribute, never the expression's side
+ * effects** — there are none to lose: this is for attributes the component
+ * ignored, so an expression bound to one was already dead.
+ */
+export function removeTemplateAttrs(
+  template: string,
+  rules: TemplateAttrRemoveRule[],
+): string {
+  let result = template
+
+  for (const rule of rules) {
+    const tag = tagRegex(rule.components)
+    result = result.replace(tag, (_match, open: string, attrs: string, close: string) => {
+      const name = escapeRegex(rule.attr)
+      // Quoted value first: `:attr="expr"` / `attr='value'`. Then the bare
+      // shorthand. Doing it in one alternation would let the shorthand branch
+      // match the head of a quoted form and leave `="expr"` orphaned in the tag.
+      const withValue = new RegExp(`\\s+(?:v-bind:|:)?${name}\\s*=\\s*(["'])[\\s\\S]*?\\1`, 'g')
+      const bare = new RegExp(`\\s+(?:v-bind:|:)?${name}(?=\\s|$)`, 'g')
+      const newAttrs = attrs.replace(withValue, '').replace(bare, '')
       return `${open}${newAttrs}${close}`
     })
   }

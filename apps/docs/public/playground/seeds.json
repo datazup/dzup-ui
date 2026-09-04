@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.1.0",
   "generatedFrom": "packages/core/docs/component-meta.json",
-  "sourceCommit": "51dec93c73214af2d1e424e3454a7122691fea48",
+  "sourceCommit": "6f1f6533652343f76e073da2345e0b14c22913a0",
   "totals": {
     "publicComponents": 144,
     "withSeed": 129,

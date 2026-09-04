@@ -183,3 +183,53 @@ describe('dzStepper — Unit Tests', () => {
     })
   })
 })
+
+/**
+ * TASK-N5-02 — `ariaLabelledby` and `ariaDescribedby` were declared and never
+ * forwarded.
+ *
+ * Both are supported on `role="group"`, which is what the stepper root is, and
+ * `aria-describedby` is global to every role. The root already carried
+ * `aria-label`; refusing the id-reference form of the same name on the same
+ * element was incoherent. Implemented, not removed — a `patch` under
+ * `packages/contracts/VERSIONING.md` §3.
+ */
+describe('dzStepper — identity props', () => {
+  const withStep = { slots: { default: () => h(DzStepperItem, { title: 'Step 1' }) } }
+
+  it('forwards ariaLabelledby to the group root', () => {
+    const wrapper = mount(DzStepper, { props: { ariaLabelledby: 'wizard-heading' }, ...withStep })
+    expect(wrapper.attributes('aria-labelledby')).toBe('wizard-heading')
+  })
+
+  it('forwards ariaDescribedby to the group root', () => {
+    const wrapper = mount(DzStepper, { props: { ariaDescribedby: 'wizard-hint' }, ...withStep })
+    expect(wrapper.attributes('aria-describedby')).toBe('wizard-hint')
+  })
+
+  /**
+   * Two names on one element is not an error — accname prefers `aria-labelledby`
+   * — but shipping a fallback literal that the browser is guaranteed to discard
+   * is noise in the DOM and in every snapshot of it. The default yields.
+   */
+  it('drops the default aria-label when ariaLabelledby names the group instead', () => {
+    const wrapper = mount(DzStepper, { props: { ariaLabelledby: 'wizard-heading' }, ...withStep })
+    expect(wrapper.attributes('aria-label')).toBeUndefined()
+  })
+
+  it('keeps an explicit ariaLabel even alongside ariaLabelledby', () => {
+    const wrapper = mount(DzStepper, {
+      props: { ariaLabel: 'Checkout', ariaLabelledby: 'wizard-heading' },
+      ...withStep,
+    })
+    expect(wrapper.attributes('aria-label')).toBe('Checkout')
+    expect(wrapper.attributes('aria-labelledby')).toBe('wizard-heading')
+  })
+
+  it('keeps the default aria-label when nothing else names the group', () => {
+    const wrapper = mount(DzStepper, withStep)
+    expect(wrapper.attributes('aria-label')).toBe('Progress steps')
+    expect(wrapper.attributes('aria-labelledby')).toBeUndefined()
+    expect(wrapper.attributes('aria-describedby')).toBeUndefined()
+  })
+})

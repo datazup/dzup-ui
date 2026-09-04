@@ -22,8 +22,8 @@
 
 | Verdict | Count | Meaning |
 | --- | ---: | --- |
-| ✅ pass | 245 | satisfies the clause today |
-| ⛔ gap | 6 | fails the clause; work for TASK-FORM-OSS-02 |
+| ✅ pass | 251 | satisfies the clause today |
+| ⛔ gap | 0 | fails the clause; work for TASK-FORM-OSS-02 |
 | 🕓 future | 5 | the seam does not exist yet; work for TASK-FORM-OSS-03 |
 | ◻ unrun | 47 | the check exists and has not been run for this control |
 | – n-a | 93 | the clause does not apply to this kind of control |
@@ -31,7 +31,7 @@
 | Clause | | ✅ | ⛔ | 🕓 | ◻ | – |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | C1 | value | 31 | 0 | 0 | 5 | 8 |
-| C2 | identity | 38 | 6 | 0 | 0 | 0 |
+| C2 | identity | 44 | 0 | 0 | 0 | 0 |
 | C3 | states | 44 | 0 | 0 | 0 | 0 |
 | C4 | messages | 35 | 0 | 0 | 0 | 9 |
 | C5 | SSR | 44 | 0 | 0 | 0 | 0 |
@@ -81,12 +81,12 @@
 | `DzDateRangePicker` | datetime | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Disabled, Invalid |
 | `DzFieldArray` | array | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
 | `DzFileUpload` | file | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | – n-a | ✅ pass | ✅ pass | ✓/✓/✓ | Disabled, Invalid |
-| `DzFloatLabel` | wrapper | – n-a | ⛔ gap — declares ariaDescribedby and cannot honour it — the description belongs on the control, which this wrapper cannot reach through a slot (owner decision: remove the prop, which is a breaking type change); declares ariaInvalid and cannot honour it — validity belongs to the control, not to the element that positions its label (owner decision: remove the prop, which is a breaking type change); declares ariaLabel and cannot honour it — a float-label wrapper is not a labelable element; the control it wraps takes the label (owner decision: remove the prop, which is a breaking type change); declares ariaLabelledby and cannot honour it — same — the wrapped control owns its accessible name (owner decision: remove the prop, which is a breaking type change) | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | – n-a | – n-a | ✓/·/✓ | — |
+| `DzFloatLabel` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | – n-a | – n-a | ✓/·/✓ | — |
 | `DzFormDescription` | compound-part | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ◻ unrun — not in the quality matrix (compound parts are not assigned a tier) | – n-a | ·/·/✓ | — |
 | `DzFormField` | wrapper | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | – n-a | ✓/✓/✓ | Disabled, Invalid, Error, Required |
 | `DzFormLabel` | compound-part | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ◻ unrun — not in the quality matrix (compound parts are not assigned a tier) | – n-a | ·/✓/✓ | — |
 | `DzFormMessage` | compound-part | – n-a | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ◻ unrun — not in the quality matrix (compound parts are not assigned a tier) | – n-a | ·/·/✓ | — |
-| `DzInplace` | wrapper | – n-a | ⛔ gap — declares ariaInvalid and cannot honour it — validity belongs to the editor in the slot, which this wrapper cannot reach (owner decision: remove the prop, which is a breaking type change); declares ariaLabelledby and cannot honour it — the editor rendered into the #edit slot owns its accessible name (owner decision: remove the prop, which is a breaking type change) | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
+| `DzInplace` | wrapper | – n-a | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | — |
 | `DzKnob` | numeric | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | – n-a | ✓/·/✓ | Readonly |
 | `DzListbox` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ✅ pass | ✓/·/✓ | Disabled |
 | `DzMention` | selection | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | 🕓 future — has a loading prop and its own suggestion menu; wiring it to the shared seam needs the menu to render the state rows, which is a bigger change than the six selection controls took | ✓/·/✓ | Invalid |
@@ -109,10 +109,10 @@
 | Control | kind | C1 | C2 | C3 | C4 | C5 | C6 | C7 | C8 | C9 | specs c/a/s | story states |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `DzAccordion` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | ✅ pass | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
-| `DzGrid` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ⛔ gap — declares ariaInvalid and cannot honour it — a layout box is not invalid; the fields inside it are (owner decision: remove the prop, which is a breaking type change) | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
-| `DzStack` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ⛔ gap — declares ariaInvalid and cannot honour it — a layout box is not invalid; the fields inside it are (owner decision: remove the prop, which is a breaking type change) | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
-| `DzStepper` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ⛔ gap — declares ariaDescribedby and cannot honour it — the description belongs to the step content, which the stepper renders through a slot and cannot reach (owner decision: remove the prop, which is a breaking type change); declares ariaInvalid and cannot honour it — a stepper is not invalid; a field inside a step is (owner decision: remove the prop, which is a breaking type change); declares ariaLabelledby and cannot honour it — the steps name themselves; DzStepperItem carries the title (owner decision: remove the prop, which is a breaking type change) | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
-| `DzTabs` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ⛔ gap — declares ariaInvalid and cannot honour it — a tab set is not invalid; a field inside a panel is, and DzTabTrigger is where an invalid-panel affordance would go (owner decision: remove the prop, which is a breaking type change) | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
+| `DzGrid` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
+| `DzStack` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | – n-a | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
+| `DzStepper` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | — |
+| `DzTabs` | layout | ◻ unrun — no reviewed judgment and nothing in source decides it | ✅ pass | ✅ pass | – n-a | ✅ pass | ◻ unrun — declares no RTL contract; `yarn validate:rtl` has nothing to check for it | – n-a | ✅ pass | ◻ unrun — no reviewed judgment and nothing in source decides it | ✓/✓/✓ | Disabled |
 
 ## Gaps by family, for TASK-FORM-OSS-02
 
@@ -132,12 +132,9 @@ No open gaps.
 
 No open gaps.
 
-### Slice: compound & advanced — 2 gaps
+### Slice: compound & advanced — 0 gaps
 
-| Control | Clause | What is wrong |
-| --- | --- | --- |
-| `DzFloatLabel` | C2 identity | declares ariaDescribedby and cannot honour it — the description belongs on the control, which this wrapper cannot reach through a slot (owner decision: remove the prop, which is a breaking type change); declares ariaInvalid and cannot honour it — validity belongs to the control, not to the element that positions its label (owner decision: remove the prop, which is a breaking type change); declares ariaLabel and cannot honour it — a float-label wrapper is not a labelable element; the control it wraps takes the label (owner decision: remove the prop, which is a breaking type change); declares ariaLabelledby and cannot honour it — same — the wrapped control owns its accessible name (owner decision: remove the prop, which is a breaking type change) |
-| `DzInplace` | C2 identity | declares ariaInvalid and cannot honour it — validity belongs to the editor in the slot, which this wrapper cannot reach (owner decision: remove the prop, which is a breaking type change); declares ariaLabelledby and cannot honour it — the editor rendered into the #edit slot owns its accessible name (owner decision: remove the prop, which is a breaking type change) |
+No open gaps.
 
 ## Deferred to TASK-FORM-OSS-03
 

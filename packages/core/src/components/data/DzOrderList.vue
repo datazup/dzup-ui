@@ -59,14 +59,7 @@ const props = withDefaults(defineProps<DzOrderListProps>(), {
   moveDownLabel: undefined,
   moveTopLabel: undefined,
   moveBottomLabel: undefined,
-  // hardcoded-string-ok: never rendered. The prop is documented as "accessible
-  // label for each row's drag handle", but the handle is `aria-hidden="true"`
-  // — a pointer-only affordance, with the keyboard path exposed through the
-  // Move Up/Down controls — so no element carries this string and no assistive
-  // technology can reach it. Moving a dead string into the catalog would have
-  // translated something nobody renders; giving the handle an accessible name
-  // instead is an accessibility decision (TASK-OSS-P5-01), not a codemod.
-  dragHandleLabel: 'Drag to reorder',
+  dragHandleLabel: undefined,
   id: undefined,
   ariaLabel: undefined,
   ariaLabelledby: undefined,
@@ -82,6 +75,17 @@ const resolvedMoveUpLabel = computed(() => props.moveUpLabel ?? dzMessages.value
 const resolvedMoveDownLabel = computed(() => props.moveDownLabel ?? dzMessages.value.moveDown)
 const resolvedMoveTopLabel = computed(() => props.moveTopLabel ?? dzMessages.value.moveTop)
 const resolvedMoveBottomLabel = computed(() => props.moveBottomLabel ?? dzMessages.value.moveBottom)
+/**
+ * The drag handle's label, which until now nothing rendered.
+ *
+ * It reaches the DOM as the handle's `title` — a tooltip for the pointer users
+ * the handle exists for. It is deliberately **not** an accessible name: the
+ * handle stays `aria-hidden="true"` because its function is already reachable
+ * from the keyboard (Move controls, space-to-grab), and naming it would fold
+ * "Drag to reorder" into the accessible name of every row under `selectable`,
+ * where each row is `role="option"` and takes its name from its contents.
+ */
+const resolvedDragHandleLabel = computed(() => props.dragHandleLabel ?? dzMessages.value.dragHandle)
 
 const attrs = useAttrs()
 
@@ -575,6 +579,7 @@ function handleBlur(event: FocusEvent): void {
           <span
             v-if="dragHandle"
             :class="styles.handle()"
+            :title="resolvedDragHandleLabel"
             aria-hidden="true"
             data-dz-order-list-handle
             @pointerdown="armDrag(index)"

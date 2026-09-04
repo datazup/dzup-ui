@@ -20,8 +20,15 @@ export type StackDirection = 'vertical' | 'horizontal'
 /** Stack alignment options */
 export type StackAlign = 'start' | 'center' | 'end' | 'stretch'
 
-/** Props for the DzStack component */
-export interface DzStackProps extends BaseAccessibilityProps {
+/**
+ * Props for the DzStack component.
+ *
+ * `ariaInvalid` is omitted from {@link BaseAccessibilityProps}: a layout box is
+ * not invalid — the fields inside it are. The prop was declared and never
+ * forwarded. Its removal is a breaking type change and ships in the minor
+ * position (`packages/contracts/VERSIONING.md` §3).
+ */
+export interface DzStackProps extends Omit<BaseAccessibilityProps, 'ariaInvalid'> {
   /** Stack direction */
   direction?: StackDirection
   /** Gap between stack items */

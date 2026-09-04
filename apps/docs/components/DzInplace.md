@@ -40,13 +40,12 @@ never as asserted.
 :::
 
 
-## Props (12, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (11, of which 4 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
 | `active` | `boolean \| undefined` | no | `false` | Open state — `v-model:active` (ADR-16) |
 | `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
 | `ariaLabel` | `string \| undefined` | no | — | Accessible label |
 | `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `disabled` | `boolean \| undefined` | no | `false` | Prevents activation and interaction |
@@ -100,7 +99,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 12 | 11 | 4 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 11 | 10 | 4 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 6 | 3 | 3 recovered from the `Dz*Emits` interface · 3 synthesised by `defineModel` |
 | Slots | 2 | 2 | 2 carry slot props |
 | Exposed on `ref` | 0 | 0 | nothing is exposed on the template ref |

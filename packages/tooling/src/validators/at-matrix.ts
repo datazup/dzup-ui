@@ -16,7 +16,13 @@
  *      component's last change is **stale**, not passing. Reported, and counted
  *      separately, so a component that was qualified six months and forty
  *      commits ago cannot read as qualified now.
- *   5. **index** — `index.json` equals what the markdown files say.
+ *   5. **index** — `index.json` equals what the markdown files say, byte for
+ *      byte, with `componentCommit` excluded. That field is
+ *      `lastCommitFor(source)` — git provenance inside a byte comparison,
+ *      which makes the artifact stale in the very commit that writes it and
+ *      the gate unfailable-into-green (TASK-N5-03). Nothing reads the
+ *      committed value; clause 4 recomputes it. Same exclusion
+ *      `validate:component-meta` makes for `sourceCommit`.
  *
  * Stale and unrun are **reported, not failed**. The lane is new and every row
  * in it starts unrun; failing the build on that would mean the gate is turned
@@ -44,7 +50,7 @@ import {
   serializeIndex,
 } from '../quality/generate-at-matrix.ts'
 import { readCommittedMatrix } from '../quality/generate-quality-matrix.ts'
-import { evidenceIsCurrent } from '../quality/git.ts'
+import { evidenceIsCurrent, stripComponentCommits } from '../quality/git.ts'
 
 export interface AtViolation {
   rule: string
@@ -191,7 +197,17 @@ if (isMain) {
       message: 'e2e/at-matrix/index.json does not exist. Run `yarn generate:at-matrix`.',
     })
   }
-  else if (readFileSync(AT_MATRIX_INDEX, 'utf8') !== serializeIndex(fresh)) {
+  // `componentCommit` is excluded for the reason `stripComponentCommits`
+  // states: it is `lastCommitFor(source)`, i.e. git provenance inside an
+  // artifact that is byte-compared against a fresh build, so the file is stale
+  // in the very commit that writes it. Nothing reads the committed value — the
+  // staleness clause above runs against `fresh`, where it is recomputed. Same
+  // exclusion `validate:component-meta` and `validate:ownership` make for
+  // `sourceCommit`. Every content field still compares byte for byte.
+  else if (
+    stripComponentCommits(readFileSync(AT_MATRIX_INDEX, 'utf8'))
+    !== stripComponentCommits(serializeIndex(fresh))
+  ) {
     violations.push({
       rule: 'index',
       level: 'error',

@@ -1,0 +1,50 @@
+{
+  "$comment": "Release-machinery policy data (TASK-N5-01). Data, not code: changing what this repository considers publishable is an edit here, not a change to validate-release-policy.ts. Every workspace package must appear in exactly one of the three lists below, and the list it appears in must agree with its package.json `private` flag and with `.changeset/config.json`'s `ignore` array. A new package with no entry fails the gate — which is the point: `apps/docs` was created by TASK-N2-D1 and nothing noticed that the changesets config had never heard of it.",
+
+  "policy": "packages/contracts/VERSIONING.md",
+
+  "allowMajor": false,
+  "$allowMajor": "Under the 0.x policy a `major` bump IS the 1.0 release (0.2.0 -> 1.0.0), so a routine changeset must never declare one. Flipping this to true is part of the deliberate 1.0 act, alongside the exit criteria in docs/program-2026-09/reports/1-0-exit-criteria-2026-09.md. Do not flip it to unblock a changeset.",
+
+  "published": [
+    "@dzup-ui/contracts",
+    "@dzup-ui/core",
+    "@dzup-ui/mcp",
+    "@dzup-ui/nuxt",
+    "@dzup-ui/testing",
+    "@dzup-ui/tokens"
+  ],
+  "$published": "Public (package.json has no `private: true`) AND absent from the changesets `ignore` array. These are the packages a `changeset version` run can bump and `changeset publish` can push. Every one of them must be 0.x for VERSIONING.md to apply.",
+
+  "withheld": [
+    {
+      "name": "@dzup-ui/compat",
+      "reason": "Public and publishable (0.1.0-alpha.0, `publishConfig.access: public`, included in ci.yml's pack smoke test) but on the changesets `ignore` list, so no changeset can ever release it. VERSIONING.md 5 treats compat as migration tooling with no stable API of its own, which is a reason to withhold it, not a reason it cannot be released. Owner decision N5-01-D2."
+    },
+    {
+      "name": "@dzup-ui/codemods",
+      "reason": "Same as compat. The cost is measurable: .changeset/pro-package-is-named-dzup-ui-pro-pro.md describes a behaviour change to `@dzup-ui/codemods`' `rename-imports` in its body and cannot name it in its frontmatter, because a changeset naming an ignored package alongside a published one is refused outright (the SK-1 failure). The change ships with no changelog entry. Owner decision N5-01-D2."
+    }
+  ],
+  "$withheld": "Public packages deliberately kept out of the release plan. Each carries a reason, because 'ignored' with no reason is indistinguishable from 'forgotten' — which is what `apps/docs` was.",
+
+  "private": [
+    "@dzup-ui/docs",
+    "@dzup-ui/landing",
+    "@dzup-ui/sandbox",
+    "@dzup-ui/storybook",
+    "@dzup-ui/tooling"
+  ],
+  "$private": "package.json carries `private: true`. npm can never see these. `.changeset/config.json` sets `privatePackages: { version: false }` so they cannot enter a release plan at all; before TASK-N5-01 it did not, and `@dzup-ui/landing` was in the standing plan for a patch bump it can never publish.",
+
+  "changelogCoverageExempt": [
+    {
+      "name": "@dzup-ui/mcp",
+      "reason": "packages/tooling/scripts/validate-changelog.ts hand-lists 7 packages and `@dzup-ui/mcp` is not among them, so its CHANGELOG.md has never been checked. It cannot simply be added: mcp's changelog is in the format Changesets emits (`## 0.2.0`, no date) and validate:changelog requires an ISO date on every version heading, while packages/tooling/src/validators/mcp-surface.ts requires the OPPOSITE -- its `latestChangelogVersion` regex is anchored so a heading with a date parses as null. The two gates enforce mutually exclusive formats and mcp is the package that proves it. Resolving this is owner decision N5-01-D1 (changelog system of record)."
+    }
+  ],
+  "$changelogCoverageExempt": "Published packages that validate:changelog does not cover, each with the reason it is not simply added. The list may only shrink.",
+
+  "changelogFormatCollisionCeiling": 1,
+  "$changelogFormatCollisionCeiling": "How many PUBLISHED packages carry a newest CHANGELOG heading that `validate:changelog` would reject (a `## x.y.z` with no ISO date -- exactly what `changeset version` writes). Today: 1 (@dzup-ui/mcp). This is a RATCHET on a known, unresolved defect, not a pass: the first real `changeset version` run rewrites every bumped package's changelog into that shape and turns this number into the count of packages the release just bumped. The ceiling exists so the defect cannot spread quietly before N5-01-D1 is decided; it is not evidence the release path is safe."
+}

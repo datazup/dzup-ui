@@ -12,7 +12,7 @@
  */
 
 // Component anatomy (Contract Spec v1 styling surface, ADR-19)
-export { ANATOMY_PART_VOCABULARY } from './anatomy.types'
+export { ANATOMY_PART_VOCABULARY } from './anatomy.types.js'
 
 export type {
   AnatomyPart,
@@ -23,7 +23,7 @@ export type {
   RiskTier,
   UiOverrides,
   VocabularyPart,
-} from './anatomy.types'
+} from './anatomy.types.js'
 
 // Async option sources and file references (renderer contract C9, TASK-FORM-OSS-03)
 export type {
@@ -35,7 +35,7 @@ export type {
   LoadOptionsReason,
   LoadOptionsRequest,
   UploadRequest,
-} from './async-options.types'
+} from './async-options.types.js'
 
 // Canonical taxonomies & variant enums
 export type {
@@ -54,11 +54,11 @@ export type {
   ProgressVariant,
   TabsVariant,
   ToolbarVariant,
-} from './canonical.types'
+} from './canonical.types.js'
 // Compound component context types
-export type { CompoundContext, CompoundRegistration } from './compound.types'
+export type { CompoundContext, CompoundRegistration } from './compound.types.js'
 // Data attribute types
-export type { DataAttributes, DataState } from './data-attributes.types'
+export type { DataAttributes, DataState } from './data-attributes.types.js'
 
 // Event interfaces
 export type {
@@ -69,13 +69,13 @@ export type {
   OpenableEvents,
   SelectEvents,
   SelectOpenableEvents,
-} from './events.types'
+} from './events.types.js'
 // Value codecs a form renderer binds through (renderer contract C1).
 //
 // The second runtime export this package carries, after `assertNever`, and for
 // the same reason: pure, dependency-free, and part of the contract rather than
 // an implementation of it.
-export type { FormValueKind, JsonValue } from './form-value'
+export type { FormValueKind, JsonValue } from './form-value.js'
 
 export {
   emptyValueFor,
@@ -88,7 +88,7 @@ export {
   toIsoDate,
   toIsoTime,
   toNumberValue,
-} from './form-value'
+} from './form-value.js'
 
 // Base prop interfaces
 export type {
@@ -99,7 +99,7 @@ export type {
   BaseInteractiveProps,
   BasePortalProps,
   BaseValidationProps,
-} from './props.types'
+} from './props.types.js'
 
 // Provider contract — injection keys and concern shapes (ADR-20)
 export {
@@ -113,7 +113,7 @@ export {
   DZ_PORTAL_TARGET_KEY,
   DZ_PROVIDER_DEFAULTS,
   DZ_TEST_IDS_KEY,
-} from './provider.types'
+} from './provider.types.js'
 
 export type {
   DzDefaults,
@@ -127,7 +127,7 @@ export type {
   DzMotion,
   DzMotionPreference,
   DzTestIds,
-} from './provider.types'
+} from './provider.types.js'
 
 // Quality tiers — the evidence a component owes at its risk tier (P5-01)
 export {
@@ -148,7 +148,7 @@ export {
   TRAIT_WCAG,
   WCAG_22_CRITERIA,
   WCAG_CRITERION_IDS,
-} from './quality-tiers'
+} from './quality-tiers.js'
 
 export type {
   ApgPattern,
@@ -158,7 +158,7 @@ export type {
   SecurityBoundary,
   WcagCriterion,
   WcagLevel,
-} from './quality-tiers'
+} from './quality-tiers.js'
 
 // Slot prop interfaces
 export type {
@@ -172,10 +172,10 @@ export type {
   ItemSlotProps,
   LabelSlotProps,
   TriggerSlotProps,
-} from './slots.types'
+} from './slots.types.js'
 
 // Utility types
-export type { Branded, EmitPayload, OptionalProps, Prettify, RequireProps } from './utility.types'
+export type { Branded, EmitPayload, OptionalProps, Prettify, RequireProps } from './utility.types.js'
 
 // Runtime exports
-export { assertNever } from './utility.types'
+export { assertNever } from './utility.types.js'

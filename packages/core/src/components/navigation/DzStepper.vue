@@ -17,6 +17,7 @@ import type { DzStepperContext, DzStepperEmits, DzStepperProps, DzStepperSlots }
  */
 import { computed, nextTick, provide, ref, toRef, useAttrs, watch } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { DZ_STEPPER_KEY } from './DzStepper.types.ts'
 import { stepperVariants } from './DzStepper.variants.ts'
 
@@ -37,6 +38,12 @@ const emit = defineEmits<DzStepperEmits>()
 defineSlots<DzStepperSlots>()
 
 const attrs = useAttrs()
+
+// `ariaInvalid` was declared and never forwarded; ARIA 1.2 does not support
+// aria-invalid on role="group", which the root is (VERSIONING.md §3).
+warnRemovedProps('DzStepper', attrs, {
+  ariaInvalid: 'A stepper is not invalid; a field inside a step is. Put aria-invalid on the field.',
+})
 const stepCounter = ref(0)
 
 /**
@@ -130,7 +137,9 @@ const rootClasses = computed(() =>
   <div
     :id="id"
     :class="rootClasses"
-    :aria-label="ariaLabel ?? 'Progress steps'"
+    :aria-label="ariaLabel ?? (ariaLabelledby ? undefined : 'Progress steps')"
+    :aria-labelledby="ariaLabelledby"
+    :aria-describedby="ariaDescribedby"
     data-state="ready"
     role="group"
     style="contain: layout style"

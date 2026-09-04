@@ -23,6 +23,7 @@ import type { DzInplaceEmits, DzInplaceProps, DzInplaceSlots } from './DzInplace
 import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 import { useDualModel } from '../../composables/useDualModel/index.ts'
 import { cn } from '../../utilities/cn.ts'
+import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import DzInput from '../inputs/DzInput.vue'
 import { inplaceVariants } from './DzInplace.variants.ts'
 
@@ -56,6 +57,13 @@ const _slots = defineSlots<DzInplaceSlots<T>>()
 const value = useDualModel(primaryModel, legacyValueModel)
 
 const attrs = useAttrs()
+
+// `ariaInvalid` was declared and never forwarded; ARIA 1.2 does not support
+// aria-invalid on role="button", which the display trigger is (VERSIONING.md §3).
+// `ariaLabelledby` is kept and is now honoured on that same trigger.
+warnRemovedProps('DzInplace', attrs, {
+  ariaInvalid: 'Validity belongs to the editor rendered into #edit, which this wrapper cannot reach — set aria-invalid on that editor.',
+})
 
 const triggerRef = ref<HTMLButtonElement | null>(null)
 const editorRef = ref<HTMLElement | null>(null)
@@ -206,6 +214,7 @@ defineExpose({ activate, save, cancel })
       :class="styles.display()"
       :disabled="disabled || undefined"
       :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"
       @click="activate"
     >

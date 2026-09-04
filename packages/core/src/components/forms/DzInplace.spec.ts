@@ -147,3 +147,35 @@ describe('dzInplace — behaviour', () => {
     expect(wrapper.find('button').text()).toContain('Read me')
   })
 })
+
+/**
+ * TASK-N5-02 — `ariaLabelledby` was declared and never forwarded.
+ *
+ * The display trigger is a real `<button>` and already carried `aria-label` and
+ * `aria-describedby`; accepting one form of a name while dropping the
+ * id-reference form of the same name on the same element was incoherent rather
+ * than principled, so this is implemented rather than removed (a `patch` under
+ * `packages/contracts/VERSIONING.md` §3).
+ */
+describe('dzInplace — identity props', () => {
+  it('forwards ariaLabelledby to the display trigger', () => {
+    const wrapper = mount(DzInplace, {
+      props: { value: 'Hello', ariaLabelledby: 'field-heading' },
+    })
+    expect(wrapper.find('button').attributes('aria-labelledby')).toBe('field-heading')
+  })
+
+  it('still forwards ariaLabel and ariaDescribedby to the same element', () => {
+    const wrapper = mount(DzInplace, {
+      props: { value: 'Hello', ariaLabel: 'Edit name', ariaDescribedby: 'hint' },
+    })
+    const button = wrapper.find('button')
+    expect(button.attributes('aria-label')).toBe('Edit name')
+    expect(button.attributes('aria-describedby')).toBe('hint')
+  })
+
+  it('omits aria-labelledby entirely when the prop is not given', () => {
+    const wrapper = mount(DzInplace, { props: { value: 'Hello' } })
+    expect(wrapper.find('button').attributes('aria-labelledby')).toBeUndefined()
+  })
+})

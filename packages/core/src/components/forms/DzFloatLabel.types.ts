@@ -29,8 +29,24 @@ export type DzFloatLabelVariant = 'over' | 'in' | 'on'
 // Props
 // ---------------------------------------------------------------------------
 
-/** Props for the DzFloatLabel component */
-export interface DzFloatLabelProps extends BaseAccessibilityProps {
+/**
+ * Props for the DzFloatLabel component.
+ *
+ * Only `id` survives from {@link BaseAccessibilityProps}; the four ARIA props
+ * are omitted. A float-label wrapper renders a generic `<div>` and a `<label>`:
+ * it is not a labelable element, it computes no accessible name of its own, and
+ * a generic element ignores `aria-describedby` and `aria-invalid` entirely. The
+ * control it wraps owns all four, resolves them against `DzFormField` itself,
+ * and merges its own error id into `aria-describedby` — writing any of them onto
+ * the control from out here would clobber that merge.
+ *
+ * All four were declared and never forwarded. Their removal is a breaking type
+ * change and ships in the minor position (`packages/contracts/VERSIONING.md` §3).
+ */
+export interface DzFloatLabelProps extends Omit<
+  BaseAccessibilityProps,
+  'ariaLabel' | 'ariaLabelledby' | 'ariaDescribedby' | 'ariaInvalid'
+> {
   /** The label text rendered over / above the control */
   label?: string
   /** Label rest/float positioning style (default `over`) */

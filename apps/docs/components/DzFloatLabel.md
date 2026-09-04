@@ -38,14 +38,10 @@ never as asserted.
 :::
 
 
-## Props (8, of which 5 inherited from `@dzup-ui/contracts`)
+## Props (4, of which 1 inherited from `@dzup-ui/contracts`)
 
 | Prop | Type | Required | Declared default | Description |
 | --- | --- | --- | --- | --- |
-| `ariaDescribedby` | `string \| undefined` | no | — | ID of element that describes this component |
-| `ariaInvalid` | `boolean \| "grammar" \| "spelling" \| undefined` | no | — | Indicates the component has invalid input |
-| `ariaLabel` | `string \| undefined` | no | — | Accessible label |
-| `ariaLabelledby` | `string \| undefined` | no | — | ID of element that labels this component |
 | `filled` | `boolean \| undefined` | no | `undefined` | Explicit filled state. When provided, it overrides automatic detection — useful for non-native controls (e.g. a combobox button) whose value cannot be read from a native `input`/`select`/`textarea` element. |
 | `id` | `string \| undefined` | no | — | Unique element ID (prefer `useId()` from Vue 3.5 when auto-generated) |
 | `label` | `string \| undefined` | no | `undefined` | The label text rendered over / above the control |
@@ -89,7 +85,7 @@ extraction that produced the tables above.
 
 | Member kind | Extracted | With a description | Notes |
 | --- | --- | --- | --- |
-| Props | 8 | 8 | 1 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
+| Props | 4 | 4 | 1 declare a default, of which 2 declare `undefined` (ADR-20 provider supplies the value) |
 | Events | 0 | 0 | the component emits nothing |
 | Slots | 2 | 2 | 0 carry slot props |
 | Exposed on `ref` | 1 | 0 | no description exists in source for any exposed member, catalog-wide |

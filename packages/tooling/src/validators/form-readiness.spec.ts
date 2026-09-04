@@ -150,14 +150,64 @@ describe('form-readiness — probe details', () => {
     expect(inplace.models.map(m => m.name)).toContain('active')
   })
 
-  it('finds a prop that is declared and never read', () => {
-    // DzFloatLabel inherits four ARIA props from BaseAccessibilityProps and
-    // honours none. They are parked as `inertProps` rather than bound to a
-    // wrapper div, so this stays a live fixture until an owner removes them.
-    const unread = probeOne('forms', 'DzFloatLabel').declaredUnread.map(u => u.prop)
-    expect(unread).toContain('ariaDescribedby')
-    // …and a prop that is read is not reported.
+  /**
+   * The rule, after the fixture expired.
+   *
+   * This test used to assert that `DzFloatLabel` reported `ariaDescribedby` as
+   * declared-and-unread, with a comment saying it would stay "until an owner
+   * removes them". TASK-N5-02 removed them, so the example is gone and what is
+   * left is the invariant it was standing in for: **no control on the roster
+   * declares an identity prop it does not read.** That is the whole content of
+   * the C2 gap column, and stating it here means a regression fails a unit test
+   * rather than only a generated table.
+   */
+  it('leaves no control declaring an identity prop it never reads', () => {
+    const offenders = build().rows.flatMap(row =>
+      row.probe.declaredUnread
+        .filter(u => /^(?:id|aria)/.test(u.prop))
+        .map(u => `${row.component}.${u.prop}`),
+    )
+    expect(offenders).toEqual([])
+  })
+
+  it('still reports a prop that is declared and never read', () => {
+    // A prop that *is* read is not reported — the other half of the same rule,
+    // and the half that would silently pass if the probe reported nothing at all.
     expect(probeOne('forms', 'DzTagsInput').declaredUnread.map(u => u.prop)).not.toContain('loading')
+    expect(probeOne('forms', 'DzTagsInput').declared).toContain('loading')
+  })
+
+  /**
+   * `Omit` in an `extends` clause, in both directions.
+   *
+   * The base expansion resolves an inherited interface by name, so before
+   * TASK-N5-02 `extends Omit<BaseAccessibilityProps, 'ariaInvalid'>` still
+   * contributed `ariaInvalid` — reporting a removed prop as declared, and
+   * leaving the only removal mechanism unusable. Both directions are pinned:
+   * the omitted key is gone, and the keys that were *not* omitted survive. A
+   * probe that returned an empty set here would pass the first assertion and be
+   * completely broken.
+   */
+  it('honours an Omit in the extends clause without dropping the rest of the base', () => {
+    const grid = probeOne('layout', 'DzGrid')
+    expect(grid.extendsClause).toContain('Omit<BaseAccessibilityProps')
+    expect(grid.declared).not.toContain('ariaInvalid')
+    for (const kept of ['id', 'ariaLabel', 'ariaLabelledby', 'ariaDescribedby'])
+      expect(grid.declared, `DzGrid should still declare ${kept}`).toContain(kept)
+  })
+
+  it('honours a multi-key Omit', () => {
+    const floatLabel = probeOne('forms', 'DzFloatLabel')
+    expect(floatLabel.declared).toContain('id')
+    for (const gone of ['ariaLabel', 'ariaLabelledby', 'ariaDescribedby', 'ariaInvalid'])
+      expect(floatLabel.declared, `DzFloatLabel should no longer declare ${gone}`).not.toContain(gone)
+  })
+
+  it('leaves a control that omits nothing with the full base', () => {
+    const input = probeOne('inputs', 'DzInput')
+    expect(input.extendsClause).not.toContain('Omit<')
+    for (const prop of ['id', 'ariaLabel', 'ariaLabelledby', 'ariaDescribedby', 'ariaInvalid'])
+      expect(input.declared).toContain(prop)
   })
 })
 

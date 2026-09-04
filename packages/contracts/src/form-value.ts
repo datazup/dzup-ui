@@ -35,7 +35,7 @@
  * @module @dzup-ui/contracts/form-value
  */
 
-import type { DzFileRef } from './async-options.types'
+import type { DzFileRef } from './async-options.types.js'
 
 /**
  * The kinds of value a form control can hold.

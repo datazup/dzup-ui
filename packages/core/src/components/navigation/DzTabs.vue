@@ -22,6 +22,7 @@ import { TabsRoot } from 'reka-ui'
  */
 import { computed, nextTick, provide, toRef, useAttrs } from 'vue'
 import { cn } from '../../utilities/cn.ts'
+import { warnRemovedProps } from '../../utilities/warnRemovedProp.ts'
 import { DZ_TABS_KEY } from './DzTabs.types.ts'
 import { tabsVariants } from './DzTabs.variants.ts'
 
@@ -48,6 +49,11 @@ const emit = defineEmits<DzTabsEmits>()
 defineSlots<DzTabsSlots>()
 
 const attrs = useAttrs()
+
+// `ariaInvalid` was declared and never forwarded to TabsRoot (VERSIONING.md §3).
+warnRemovedProps('DzTabs', attrs, {
+  ariaInvalid: 'A tab set is not invalid; a field inside a panel is. DzTabTrigger is where an invalid-panel affordance belongs.',
+})
 
 function handleClose(value: string): void {
   emit('close', value)

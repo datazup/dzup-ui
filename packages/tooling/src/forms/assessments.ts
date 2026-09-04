@@ -123,6 +123,13 @@ export interface Assessment {
    * Listing them here keeps the cell a `gap` with a stated reason rather than
    * quietly passing, and the count appears in the matrix summary so the parked
    * decision stays countable instead of becoming a footnote.
+   *
+   * **The register is empty as of TASK-N5-02.** The owner decision the six
+   * entries were waiting on was made: nine props were removed and three were
+   * implemented (`docs/program-2026-09/reports/N5-02-aria-prop-gaps-handoff.md`).
+   * The field stays because the mechanism is the point — the gate in
+   * `form-readiness.ts` still fails on an entry naming a prop the source no
+   * longer leaves unread, so a parked decision cannot outlive the decision.
    */
   readonly inertProps?: Readonly<Record<string, string>>
 }
@@ -308,12 +315,6 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   },
   DzFloatLabel: {
     kind: 'wrapper',
-    inertProps: {
-      ariaLabel: 'a float-label wrapper is not a labelable element; the control it wraps takes the label',
-      ariaLabelledby: 'same — the wrapped control owns its accessible name',
-      ariaDescribedby: 'the description belongs on the control, which this wrapper cannot reach through a slot',
-      ariaInvalid: 'validity belongs to the control, not to the element that positions its label',
-    },
     reviewed: {
       C4: { verdict: 'n-a', note: 'renders no message', evidence: 'DzFloatLabel.vue template' },
     },
@@ -361,10 +362,6 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   },
   DzInplace: {
     kind: 'wrapper',
-    inertProps: {
-      ariaLabelledby: 'the editor rendered into the #edit slot owns its accessible name',
-      ariaInvalid: 'validity belongs to the editor in the slot, which this wrapper cannot reach',
-    },
     reviewed: {
       C2: {
         verdict: 'gap',
@@ -539,9 +536,6 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   // -------------------------------------------------------------------------
   DzStack: {
     kind: 'layout',
-    inertProps: {
-      ariaInvalid: 'a layout box is not invalid; the fields inside it are',
-    },
     reviewed: {
       C2: {
         verdict: 'n-a',
@@ -558,9 +552,6 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   },
   DzGrid: {
     kind: 'layout',
-    inertProps: {
-      ariaInvalid: 'a layout box is not invalid; the fields inside it are',
-    },
     reviewed: {
       C2: { verdict: 'n-a', note: 'a grid is a box around fields', evidence: 'DzGrid.vue' },
       C4: { verdict: 'n-a', note: 'renders no message', evidence: 'DzGrid.vue template' },
@@ -574,9 +565,6 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   },
   DzTabs: {
     kind: 'layout',
-    inertProps: {
-      ariaInvalid: 'a tab set is not invalid; a field inside a panel is, and DzTabTrigger is where an invalid-panel affordance would go',
-    },
     reviewed: {
       C2: {
         verdict: 'n-a',
@@ -595,11 +583,6 @@ export const ASSESSMENTS: Record<string, Assessment> = {
   },
   DzStepper: {
     kind: 'layout',
-    inertProps: {
-      ariaInvalid: 'a stepper is not invalid; a field inside a step is',
-      ariaDescribedby: 'the description belongs to the step content, which the stepper renders through a slot and cannot reach',
-      ariaLabelledby: 'the steps name themselves; DzStepperItem carries the title',
-    },
     reviewed: {
       C2: { verdict: 'n-a', note: 'the fields inside a step carry the identity', evidence: 'DzStepper.vue' },
       C4: { verdict: 'n-a', note: 'renders no message of its own', evidence: 'DzStepper.vue template' },
