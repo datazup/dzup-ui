@@ -18,22 +18,50 @@
  * JS-side contract.
  */
 
-import { fireEvent, render } from '@testing-library/vue'
+import { DzThemeProvider } from '@dzup-ui/core'
+import { cleanup, fireEvent, render } from '@testing-library/vue'
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h } from 'vue'
 import { BLOCKS, blocksByCategory, CATEGORIES } from '../blocks/registry.ts'
 import DzCountUp from '../motion/components/DzCountUp.vue'
 import BlocksIndexPage from './BlocksIndexPage.vue'
 
+// jsdom lacks the media query API used by the real theme provider.
+beforeEach(() => {
+  window.localStorage.clear()
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }))
+})
+
+afterEach(() => {
+  cleanup()
+  window.localStorage.clear()
+  vi.unstubAllGlobals()
+})
+
 /** Non-empty categories in browse order — the sections the page renders. */
 const sections = CATEGORIES.filter(c => blocksByCategory(c.id).length > 0)
+
+// Both mount paths must supply the theme context consumed by lazy previews.
+const PageWithTheme = defineComponent({
+  setup: () => () => h(DzThemeProvider, null, { default: () => h(BlocksIndexPage) }),
+})
 
 async function mountPage() {
   // The page mirrors the active category into the URL hash (replaceState), and
   // jsdom's location persists across tests in a file — clear it so every mount
   // opens on the first section rather than wherever the previous test browsed.
   window.history.replaceState(window.history.state, '', window.location.pathname)
-  const utils = render(BlocksIndexPage, {
+  const utils = render(PageWithTheme, {
     global: {
       stubs: {
         // The page reaches RouterLink through BlockCard's permalink; the router
@@ -106,7 +134,7 @@ describe('bv2 hero stats (TASK-BV2-02)', () => {
     // test-utils mount (not testing-library) so the DzCountUp *targets* are
     // assertable via props — the count-up tween is timing, the derivation
     // contract is what matters, and no literal numbers belong in this spec.
-    const wrapper = mount(BlocksIndexPage, {
+    const wrapper = mount(PageWithTheme, {
       global: { stubs: { RouterLink: { template: '<a><slot /></a>' } } },
     })
     await flushPromises()
